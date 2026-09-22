@@ -1,0 +1,11 @@
+# LF in the repository, native in the working tree. A published CSS package
+# should not ship CRLF because it was authored on Windows.
+* text=auto eol=lf
+
+# Binary — never touch, never diff as text.
+*.png binary
+*.jpg binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary

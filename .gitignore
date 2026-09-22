@@ -1,0 +1,33 @@
+# Visual reference — 12 MB of screenshots, kept locally as the extraction target.
+# See reference/README.md for how they were produced and how to re-shoot them.
+reference/
+
+# Scratch work
+scratchpad/
+*.log
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+.vite/
+coverage/
+*.tgz
+
+# Python (the Jinja package and its tests)
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Editors and OS
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
