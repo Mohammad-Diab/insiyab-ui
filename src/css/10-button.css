@@ -1,0 +1,220 @@
+/* ==========================================================================
+   Insiyab · button
+   ==========================================================================
+
+   Four things make these read as physical rather than as rectangles with labels:
+
+     * 14px radius and weight 700, not 10px and 600 — the same one-step-up in
+       softness that makes the cards read the way they do;
+     * a **shimmer sweep**: a diagonal highlight parked off the trailing edge that
+       crosses the face on hover over .6s. GPU-composited (transform only), and on
+       ::before because ::after belongs to carets and chevrons;
+     * a press that **scales** rather than nudging down — `scale(.97)` reads as the
+       control taking the touch, which a 1px translate does not;
+     * a fixed control height, so a row of buttons is a row and not a set of boxes
+       each sized by its own label.
+
+   `min-block-size`, not `block-size`: a label that wraps has to be able to grow the
+   button, and Arabic phrases are not all short.
+
+   ---------------------------------------------------------------------------
+   ONE STATE SYSTEM PER BUTTON. This is the part that had to be rebuilt rather
+   than ported. The source sheet styled `:hover` for every variant and then
+   stopped: `:focus-visible` existed for one variant, `:active` only as the shared
+   scale, `:disabled` only as an opacity. Every state it did not claim fell through
+   to Bootstrap, which was loaded alongside it and has opinions in its own palette.
+   Measured on a real page:
+
+     ghost primary   press → #0d6efd   focus → white text on its own near-white fill
+     ghost danger    press → #dc3545   focus → white text on its own near-white fill
+     secondary       press → #565e64   focus → white text on its own near-white fill
+     primary         press → #0a58ca   focus → no ring at all
+     warning / info  focus → black text where the rest state is white
+
+   Two defects in that. The brand disappears the moment anybody presses anything.
+   And four variants put white text on their own near-white fill while focused,
+   which is not a colour clash — it is a button with no legible label for as long
+   as it holds focus.
+
+   The source's fix was to hand Bootstrap `--bs-btn-*` variables and let its
+   machinery render them. With Bootstrap gone, every state is written out here
+   instead. **Hover and focus are deliberately the same appearance** — a button
+   under the pointer and a button reached by keyboard are in the same state as far
+   as the viewer is concerned, and the ring is what distinguishes them. Press is
+   one step deeper than hover, and nothing else moves, because the scale is
+   already the press.
+   ========================================================================== */
+
+.ins-btn {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  min-block-size: var(--ins-ctl-h);
+  padding: .375rem 1rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ins-text-1);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: .875rem;
+  line-height: 1.35;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform var(--ins-t-exit) var(--ins-ease),
+              box-shadow var(--ins-t-base) var(--ins-ease),
+              background var(--ins-t-exit) var(--ins-ease),
+              border-color var(--ins-t-exit) var(--ins-ease),
+              color var(--ins-t-exit) var(--ins-ease);
+}
+
+/* The sweep. Parked off the trailing edge and driven across on hover — so it is
+   mirrored for RTL, because a transform has no logical form. */
+.ins-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--ins-shimmer);
+  transform: translateX(110%);
+  transition: transform .6s var(--ins-ease);
+}
+[dir="rtl"] .ins-btn::before { transform: translateX(-110%); }
+.ins-btn:hover:not(:disabled)::before { transform: translateX(-110%); }
+[dir="rtl"] .ins-btn:hover:not(:disabled)::before { transform: translateX(110%); }
+
+.ins-btn:active:not(:disabled) { transform: scale(.97); }
+.ins-btn:disabled,
+.ins-btn.is-disabled { opacity: .5; cursor: not-allowed; }
+.ins-btn:disabled::before,
+.ins-btn.is-disabled::before { content: none; }
+
+/* `:focus-visible`, not `:focus`: a ring that survives a mouse click leaves a
+   button looking pressed after it has been used. Keyboard focus gets the ring; a
+   click gets the button back. */
+.ins-btn:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
+
+/* The lift, for a button that is the page's one action rather than one of five. */
+.ins-btn--lift:hover:not(:disabled) { transform: translateY(-2px); }
+
+/* ------------------------------------------------------------------ sizes */
+.ins-btn--sm {
+  min-block-size: var(--ins-ctl-sm-h);
+  padding: .25rem .625rem;
+  font-size: .8125rem;
+  gap: .375rem;
+  border-radius: var(--ins-r-sm);
+}
+.ins-btn--lg {
+  min-block-size: 48px;
+  padding: .625rem 1.5rem;
+  font-size: 1rem;
+  border-radius: var(--ins-r-md);
+}
+/* Square, for an icon with no label. */
+.ins-btn--icon { inline-size: var(--ins-ctl-h); padding-inline: 0; }
+.ins-btn--sm.ins-btn--icon { inline-size: var(--ins-ctl-sm-h); }
+.ins-btn--full { inline-size: 100%; }
+
+/* ------------------------------------------------------------ the filled set */
+/* Their fill is a gradient — a background-image — and their shadow is their own
+   hue at ~30% rather than a neutral drop, which is most of why a primary button
+   reads as lit instead of stuck on. */
+.ins-btn--primary {
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  border-color: transparent;
+  color: var(--ins-on-primary);
+  box-shadow: var(--ins-sh-brand-md), var(--ins-bevel-dim);
+}
+.ins-btn--primary:hover:not(:disabled),
+.ins-btn--primary:focus-visible { color: var(--ins-on-primary); box-shadow: var(--ins-sh-brand-lg), var(--ins-bevel-dim); }
+.ins-btn--primary:focus-visible { box-shadow: var(--ins-sh-brand-lg), var(--ins-bevel-dim), var(--ins-focus-ring); }
+
+.ins-btn--success { background: linear-gradient(135deg, #22C55E, #15803D); color: #fff; box-shadow: 0 8px 24px rgba(34, 197, 94, .28), var(--ins-bevel-dim); }
+.ins-btn--danger  { background: linear-gradient(135deg, #EF4444, #B91C1C); color: #fff; box-shadow: 0 8px 24px rgba(239, 68, 68, .26), var(--ins-bevel-dim); }
+.ins-btn--warning { background: linear-gradient(135deg, #F59E0B, #B45309); color: #fff; box-shadow: 0 8px 24px rgba(245, 158, 11, .26), var(--ins-bevel-dim); }
+.ins-btn--info    { background: linear-gradient(135deg, #3B82F6, #1D4ED8); color: #fff; box-shadow: 0 8px 24px rgba(59, 130, 246, .26), var(--ins-bevel-dim); }
+/* Pinned explicitly, because this is exactly where the old sheet lost the label:
+   the ink must not change on any state, only the shadow deepens. */
+.ins-btn--success:hover, .ins-btn--success:focus-visible, .ins-btn--success:active,
+.ins-btn--danger:hover,  .ins-btn--danger:focus-visible,  .ins-btn--danger:active,
+.ins-btn--warning:hover, .ins-btn--warning:focus-visible, .ins-btn--warning:active,
+.ins-btn--info:hover,    .ins-btn--info:focus-visible,    .ins-btn--info:active { color: #fff; }
+
+/* ----------------------------------------------------------- the neutral set */
+/* It keeps the *control* fill rather than a white glass, and that difference is
+   deliberate: a near-white button inside a near-white panel is the invisible-control
+   defect. Measured, on a real page, a secondary button rendered as bare text beside
+   three real buttons. A control needs a fill darker than its container, not lighter. */
+.ins-btn--secondary {
+  background: var(--ins-ctl-bg);
+  border-color: var(--ins-ctl-bd);
+  color: var(--ins-text-1);
+  box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim);
+}
+.ins-btn--secondary:hover:not(:disabled),
+.ins-btn--secondary:focus-visible { background: var(--ins-ctl-bg-hover); border-color: var(--ins-ctl-bd); color: var(--ins-text-1); }
+.ins-btn--secondary:active:not(:disabled) { background: var(--ins-ctl-bd); }
+
+/* ------------------------------------------------------------- the ghost set */
+/* Each keeps its own ink through every state — that is the whole point of a ghost
+   button — and deepens its wash by one step on press. The `-bg` and `-bd` tokens are
+   already a pair at two strengths, and both are redefined for dark, so this needs no
+   second set of values for the dark theme. */
+.ins-btn--ghost {
+  background: var(--ins-ctl-bg);
+  border-color: rgba(var(--ins-primary-rgb), .45);
+  color: var(--ins-primary-darker);
+  box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim);
+}
+.ins-btn--ghost:hover:not(:disabled),
+.ins-btn--ghost:focus-visible {
+  background: rgba(var(--ins-primary-rgb), .12);
+  border-color: var(--ins-tone-brand-soft);
+  color: var(--ins-primary-darker);
+}
+.ins-btn--ghost:active:not(:disabled) { background: rgba(var(--ins-primary-rgb), .22); }
+
+.ins-btn--ghost-danger  { background: var(--ins-ctl-bg); border-color: var(--ins-tone-bad-bd);  color: var(--ins-tone-bad);  box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim); }
+.ins-btn--ghost-success { background: var(--ins-ctl-bg); border-color: var(--ins-tone-ok-bd);   color: var(--ins-tone-ok);   box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim); }
+.ins-btn--ghost-warning { background: var(--ins-ctl-bg); border-color: var(--ins-tone-warn-bd); color: var(--ins-tone-warn); box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim); }
+.ins-btn--ghost-info    { background: var(--ins-ctl-bg); border-color: var(--ins-tone-info-bd); color: var(--ins-tone-info); box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim); }
+
+.ins-btn--ghost-danger:hover:not(:disabled),  .ins-btn--ghost-danger:focus-visible  { background: var(--ins-tone-bad-bg);  border-color: var(--ins-tone-bad);  color: var(--ins-tone-bad); }
+.ins-btn--ghost-success:hover:not(:disabled), .ins-btn--ghost-success:focus-visible { background: var(--ins-tone-ok-bg);   border-color: var(--ins-tone-ok);   color: var(--ins-tone-ok); }
+.ins-btn--ghost-warning:hover:not(:disabled), .ins-btn--ghost-warning:focus-visible { background: var(--ins-tone-warn-bg); border-color: var(--ins-tone-warn); color: var(--ins-tone-warn); }
+.ins-btn--ghost-info:hover:not(:disabled),    .ins-btn--ghost-info:focus-visible    { background: var(--ins-tone-info-bg); border-color: var(--ins-tone-info); color: var(--ins-tone-info); }
+
+.ins-btn--ghost-danger:active:not(:disabled)  { background: var(--ins-tone-bad-bd); }
+.ins-btn--ghost-success:active:not(:disabled) { background: var(--ins-tone-ok-bd); }
+.ins-btn--ghost-warning:active:not(:disabled) { background: var(--ins-tone-warn-bd); }
+.ins-btn--ghost-info:active:not(:disabled)    { background: var(--ins-tone-info-bd); }
+
+/* Light fills get the dark sweep — a white streak over a white face is nothing. */
+.ins-btn--secondary::before,
+.ins-btn--ghost::before,
+.ins-btn--ghost-danger::before,
+.ins-btn--ghost-success::before,
+.ins-btn--ghost-warning::before,
+.ins-btn--ghost-info::before { background: var(--ins-shimmer-dark); }
+
+/* ---------------------------------------------------------------- the bare one */
+/* An action that is a word, not an object. No fill in any state, and no ring box
+   drawn around nothing — it takes the ring on its text box, which is what it is. */
+.ins-btn--bare {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--ins-text-2);
+  padding: 0;
+  min-block-size: 0;
+}
+.ins-btn--bare:hover:not(:disabled),
+.ins-btn--bare:focus-visible { background: transparent; color: var(--ins-text-1); }
+.ins-btn--bare::before { content: none; }
+.ins-btn--bare:active:not(:disabled) { transform: none; }

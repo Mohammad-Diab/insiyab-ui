@@ -1,0 +1,108 @@
+/* ==========================================================================
+   Insiyab · pill, badge, money, avatar
+   ==========================================================================
+   The small marks. All of them read off the semantic triad, which is why a status
+   pill and an alert and a tinted stat chip look like three sizes of one idea
+   rather than three components that happen to be coloured.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- pill */
+/* 3px/12px, a 5px gap, .75rem at 700. A status is a label: at .6875rem in a
+   12px-padded pill it reads as a footnote next to the row it describes. */
+.ins-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .3125rem;
+  padding: .1875rem .75rem;
+  border-radius: var(--ins-r-pill);
+  border: 1px solid var(--ins-tone-mute-bd);
+  background: var(--ins-tone-mute-bg);
+  color: var(--ins-tone-mute);
+  font-size: .75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+.ins-pill--ok    { background: var(--ins-tone-ok-bg);    color: var(--ins-tone-ok);    border-color: var(--ins-tone-ok-bd); }
+.ins-pill--warn  { background: var(--ins-tone-warn-bg);  color: var(--ins-tone-warn);  border-color: var(--ins-tone-warn-bd); }
+.ins-pill--bad   { background: var(--ins-tone-bad-bg);   color: var(--ins-tone-bad);   border-color: var(--ins-tone-bad-bd); }
+.ins-pill--info  { background: var(--ins-tone-info-bg);  color: var(--ins-tone-info);  border-color: var(--ins-tone-info-bd); }
+.ins-pill--brand { background: var(--ins-tone-brand-bg); color: var(--ins-tone-brand); border-color: var(--ins-tone-brand-bd); }
+:root[data-ins-theme="dark"] .ins-pill--brand { color: var(--ins-text-1); }
+
+/* A dot in the pill's own ink, for a status that wants a mark rather than a glyph. */
+.ins-pill-dot { inline-size: .4375rem; block-size: .4375rem; border-radius: 50%; background: currentColor; }
+
+/* --------------------------------------------------------------- badge */
+/* A count, not a status: no border, no icon, and it sits on something. */
+.ins-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.375rem;
+  padding: .1875rem .5rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-brand-bg);
+  color: var(--ins-tone-brand);
+  font-family: var(--ins-font-body-en);
+  font-size: .6875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+.ins-badge--ok   { background: var(--ins-tone-ok-bg);   color: var(--ins-tone-ok); }
+.ins-badge--warn { background: var(--ins-tone-warn-bg); color: var(--ins-tone-warn); }
+.ins-badge--bad  { background: var(--ins-tone-bad-bg);  color: var(--ins-tone-bad); }
+.ins-badge--mute { background: var(--ins-tone-mute-bg); color: var(--ins-tone-mute); }
+:root[data-ins-theme="dark"] .ins-badge { color: var(--ins-text-1); }
+
+/* --------------------------------------------------------------- money */
+/* `direction: ltr` + `unicode-bidi: isolate` is not cosmetic. A negative figure is
+   `-2,375,000`, and inside RTL text the bidi algorithm moves the leading sign to the
+   other end: a reconciliation panel reported a shortfall as `2,375,000-`. Isolating
+   the figure keeps the sign where it belongs and stops a number adjacent to Arabic
+   from being reordered against it.
+
+   It goes on the FIGURE, not on the wrapper: isolating the wrapper would take the
+   currency suffix with it and put the unit on the right of the digits, which is the
+   wrong side in Arabic. `.ins-num` — phone numbers, ids, usernames — has no trailing
+   unit and is isolated outright. */
+.ins-money-val,
+.ins-num {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.ins-money {
+  font-family: var(--ins-font-body-en);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+/* The unit must never compete with the figure. At .75em of a 2rem stat value the
+   currency renders at 1.5rem and reads as part of the number. */
+.ins-money-cur {
+  font-size: .68em;
+  font-weight: 500;
+  color: var(--ins-text-2);
+  margin-inline-start: .3em;
+}
+.ins-stat-value .ins-money-cur { font-size: .42em; }
+.ins-money--pos { color: var(--ins-tone-ok); }
+.ins-money--neg { color: var(--ins-tone-bad); }
+
+/* --------------------------------------------------------------- avatar */
+/* A brand-gradient disc with an initial in it. */
+.ins-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  color: var(--ins-on-primary);
+  font-weight: 800;
+  user-select: none;
+  inline-size: 38px;
+  block-size: 38px;
+  font-size: .9375rem;
+}
+.ins-avatar--sm { inline-size: 30px; block-size: 30px; font-size: .75rem; }
+.ins-avatar--lg { inline-size: 46px; block-size: 46px; font-size: 1.125rem; }

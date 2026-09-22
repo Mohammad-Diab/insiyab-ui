@@ -24,7 +24,7 @@
 (function (window, document) {
   'use strict';
 
-  var VERSION = '0.1.0';
+  var VERSION = '0.2.0';
   var root = document.documentElement;
 
   var KEY_THEME = 'ins-theme';
@@ -291,12 +291,92 @@
     }
   }());
 
+  /* ---------------------------------------------------------------- toast */
+  /* The stylesheet hides a toast on its own, with a delayed second animation, so
+     this does not own a timer and a toast is correct even if the script dies after
+     creating it. All that is left here is inserting it and removing the node once
+     its exit has finished. */
+
+  var TONES = { ok: 'ok', bad: 'bad', warn: 'warn', info: 'info' };
+  var TONE_GLYPH = { ok: '✓', bad: '✕', warn: '!', info: 'i' };
+
+  function toastLayer() {
+    var layer = document.querySelector('.ins-toasts');
+    if (!layer) {
+      layer = document.createElement('div');
+      layer.className = 'ins-toasts';
+      /* Announced without stealing focus. `polite` because a toast is never the
+         only way to learn what happened. */
+      layer.setAttribute('role', 'status');
+      layer.setAttribute('aria-live', 'polite');
+      document.body.appendChild(layer);
+    }
+    return layer;
+  }
+
+  function toast(message, tone) {
+    if (!document.body) return null;
+    var kind = TONES[tone] || 'info';
+
+    var el = document.createElement('div');
+    el.className = 'ins-toast ins-alert--' + kind;
+
+    var ico = document.createElement('span');
+    ico.className = 'ins-toast-ico';
+    ico.setAttribute('aria-hidden', 'true');
+    ico.textContent = TONE_GLYPH[kind];
+
+    var text = document.createElement('span');
+    text.className = 'ins-toast-text';
+    /* textContent, not innerHTML: a toast very often carries a server message or a
+       user's own input, and this is the obvious place to hand someone an injection. */
+    text.textContent = message;
+
+    el.appendChild(ico);
+    el.appendChild(text);
+    el.addEventListener('click', function () { el.classList.add('is-going'); });
+    /* Two animations run on entry (in, then the delayed out), so wait for the one
+       that actually ends with the toast gone. */
+    el.addEventListener('animationend', function (e) {
+      if (e.animationName === 'ins-toast-out' && el.parentNode) el.parentNode.removeChild(el);
+    });
+
+    toastLayer().appendChild(el);
+    return el;
+  }
+
+  /* --------------------------------------------------------------- dialog */
+
+  function dialog(target, action) {
+    var el = typeof target === 'string' ? document.querySelector(target) : target;
+    if (!el) return null;
+    if (typeof el.showModal !== 'function') {
+      if (window.console) window.console.warn('[insiyab] <dialog> is not supported here:', target);
+      return el;
+    }
+    var wantOpen = action === 'close' ? false : (action === 'open' ? true : !el.open);
+    if (wantOpen && !el.open) el.showModal();
+    else if (!wantOpen && el.open) el.close();
+    return el;
+  }
+
   /* ==========================================================================
      DELEGATION — one listener, so nothing needs wiring up
      ========================================================================== */
 
+  var HANDLES = [
+    '[data-ins-theme-toggle]',
+    '[data-ins-sidebar]',
+    '[data-ins-toast]',
+    '[data-ins-dialog]',
+    '[data-ins-dialog-close]',
+    '[data-ins-fx]',
+    '.ins-seg > a',
+    '.ins-seg > button'
+  ].join(', ');
+
   document.addEventListener('click', function (event) {
-    var el = event.target.closest ? event.target.closest('[data-ins-theme-toggle], [data-ins-sidebar]') : null;
+    var el = event.target.closest ? event.target.closest(HANDLES) : null;
     if (!el) return;
 
     if (el.hasAttribute('data-ins-theme-toggle')) {
@@ -313,8 +393,62 @@
     if (el.hasAttribute('data-ins-sidebar')) {
       sidebar(el.getAttribute('data-ins-sidebar') || 'toggle');
       if (el.tagName === 'A') event.preventDefault();
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-toast')) {
+      toast(el.getAttribute('data-ins-toast'), el.getAttribute('data-ins-tone'));
+      if (el.tagName === 'A') event.preventDefault();
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-dialog')) {
+      dialog(el.getAttribute('data-ins-dialog'), 'open');
+      if (el.tagName === 'A') event.preventDefault();
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-dialog-close')) {
+      var owner = el.closest('dialog');
+      if (owner) dialog(owner, 'close');
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-fx')) {
+      var off = root.getAttribute('data-ins-fx') === 'off';
+      if (off) root.removeAttribute('data-ins-fx'); else root.setAttribute('data-ins-fx', 'off');
+      el.setAttribute('aria-pressed', String(!off));
+      return;
+    }
+
+    /* A segmented control moves its own selection. Only when the segment is not a
+       link to somewhere else: a `.ins-seg > a` with a real href is navigation, and
+       marking it active here would flash the wrong segment before the page leaves. */
+    if (el.parentNode && el.parentNode.classList.contains('ins-seg')) {
+      var href = el.getAttribute('href');
+      if (el.tagName === 'A' && href && href.charAt(0) !== '#') return;
+      var seg = el.parentNode;
+      for (var i = 0; i < seg.children.length; i++) {
+        var child = seg.children[i];
+        child.classList.toggle('is-active', child === el);
+        if (child.hasAttribute('role') || seg.getAttribute('role') === 'tablist') {
+          child.setAttribute('aria-selected', String(child === el));
+        }
+      }
+      emit('ins:seg', { value: el.getAttribute('data-ins-value') || el.textContent.trim(), el: el });
+      if (el.tagName === 'A') event.preventDefault();
     }
   }, false);
+
+  /* A popover is a <details>, so it opens, closes on Escape and is keyboard
+     reachable with no script. The one thing the platform does not give it is
+     closing when you click elsewhere, which is the whole of what this adds. */
+  document.addEventListener('click', function (event) {
+    var open = document.querySelectorAll('details.ins-pop[open]');
+    for (var i = 0; i < open.length; i++) {
+      if (!open[i].contains(event.target)) open[i].removeAttribute('open');
+    }
+  }, true);
 
   /* ==========================================================================
      INIT — only for the things that BUILD DOM rather than listen to it
@@ -386,6 +520,8 @@
     toggleTheme: toggleTheme,
     sidebar: sidebar,
     brand: brand,
+    toast: toast,
+    dialog: dialog,
     /* Exposed because they are genuinely useful on their own, and because the
        contrast maths is the part nobody should have to write twice. */
     color: {

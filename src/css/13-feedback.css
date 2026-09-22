@@ -1,0 +1,215 @@
+/* ==========================================================================
+   Insiyab · feedback
+   ==========================================================================
+   Alert, toast, empty state, skeleton, spinner — the four states most kits skip
+   and every real application needs, plus the one that says what just happened.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- alert */
+/* The notched alert: the single most distinctive small component in this design.
+   Two pieces that read as one shape — a **solid** filled circle carrying the icon,
+   and a tinted message block with a **concave bite** cut out of the edge facing it.
+   The circle nests into the bite with a hairline gap, so the two share one
+   continuous border line and the icon looks extracted from the block rather than
+   dropped on top of it.
+
+   The bite is a radial-gradient mask. Its centre is a physical edge — `at 100%` is
+   the right edge whatever `dir` says — so both directions are written out rather
+   than left to a logical property that does not exist for gradient positions.
+
+   A plain rgba border rather than `color-mix()`: a border that computes to nothing
+   on an older engine would take the shared line with it, and the shared line is the
+   whole effect.
+
+   Degrades honestly: a browser with no mask support draws a straight-edged block
+   with a circle beside it, which is a perfectly normal alert. */
+.ins-alert {
+  display: flex;
+  align-items: center;
+  font-size: .875rem;
+  font-weight: 600;
+  --ins-alert-circle: 2.75rem;
+  --ins-alert-bite: 1.65rem;   /* slightly more than half the circle — that is the gap */
+}
+.ins-alert-ico {
+  flex: 0 0 auto;
+  inline-size: var(--ins-alert-circle);
+  block-size: var(--ins-alert-circle);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 2;
+  margin-inline-end: calc(var(--ins-alert-circle) / -2);   /* nest into the bite */
+  background: var(--ins-alert-c);
+  color: var(--ins-alert-on);
+  border: 1px solid var(--ins-alert-bd);
+  font-size: 1rem;
+}
+.ins-alert-msg {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding-block: .625rem;
+  padding-inline-start: calc(var(--ins-alert-circle) / 2 + .9rem);   /* clear the bite */
+  padding-inline-end: 1rem;
+  line-height: 1.5;
+  background: var(--ins-alert-bg);
+  color: var(--ins-alert-text);
+  border: 1px solid var(--ins-alert-bd);
+  border-radius: var(--ins-r-md);
+  -webkit-mask: var(--ins-alert-mask);
+          mask: var(--ins-alert-mask);
+}
+[dir="rtl"] .ins-alert-msg {
+  --ins-alert-mask: radial-gradient(circle var(--ins-alert-bite) at 100% center,
+                    transparent calc(var(--ins-alert-bite) - .5px), #000 var(--ins-alert-bite));
+}
+[dir="ltr"] .ins-alert-msg {
+  --ins-alert-mask: radial-gradient(circle var(--ins-alert-bite) at 0% center,
+                    transparent calc(var(--ins-alert-bite) - .5px), #000 var(--ins-alert-bite));
+}
+.ins-alert-text { flex: 1 1 auto; min-width: 0; }
+.ins-alert-x {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  padding: .25rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  opacity: .55;
+  cursor: pointer;
+  border-radius: var(--ins-r-xs);
+  transition: opacity var(--ins-t-exit);
+}
+.ins-alert-x:hover { opacity: 1; }
+
+/* Per-tone: a solid circle in the saturated hue, a ~12% tinted block, and a border
+   at ~45% shared by both. These four classes are pure custom-property carriers with
+   no appearance of their own — which is why the toast below can reuse them. */
+.ins-alert--ok   { --ins-alert-c: #16A34A; --ins-alert-bg: var(--ins-tone-ok-bg);   --ins-alert-text: var(--ins-tone-ok);   --ins-alert-on: #fff; --ins-alert-bd: rgba(34, 197, 94, .45); }
+.ins-alert--bad  { --ins-alert-c: #DC2626; --ins-alert-bg: var(--ins-tone-bad-bg);  --ins-alert-text: var(--ins-tone-bad);  --ins-alert-on: #fff; --ins-alert-bd: rgba(239, 68, 68, .45); }
+.ins-alert--warn { --ins-alert-c: #D97706; --ins-alert-bg: var(--ins-tone-warn-bg); --ins-alert-text: var(--ins-tone-warn); --ins-alert-on: #fff; --ins-alert-bd: rgba(245, 158, 11, .45); }
+.ins-alert--info { --ins-alert-c: var(--ins-primary); --ins-alert-bg: var(--ins-tone-brand-bg); --ins-alert-text: var(--ins-primary-darker); --ins-alert-on: var(--ins-on-primary); --ins-alert-bd: rgba(var(--ins-primary-rgb), .45); }
+/* The message text is the 800 shade in light and the 400 in dark, but the circle is
+   a fill with a label on it and has to stay saturated in both. */
+:root[data-ins-theme="dark"] .ins-alert { --ins-alert-on: #0B1220; }
+:root[data-ins-theme="dark"] .ins-alert--info { --ins-alert-text: var(--ins-text-1); --ins-alert-on: var(--ins-on-primary); }
+
+/* --------------------------------------------------------------- toast */
+/* A message about what just happened is not part of the page's structure, so it
+   does not live in the layout. Centred on the inline axis rather than pinned to one
+   side, because a centred strip reads the same in both directions.
+
+   No icon circle and no dismiss button: the inline alert's 44px filled circle is
+   most of the height of a 26rem strip, and between that circle, an emoji in the
+   message, and a close button, one sentence arrives wearing three marks. One small
+   glyph in the tone colour, and the message. */
+.ins-toasts {
+  position: fixed;
+  inset-block-start: 1rem;
+  inset-inline: 0;
+  z-index: 1090;
+  margin-inline: auto;
+  inline-size: min(92vw, 26rem);
+  display: flex;
+  flex-direction: column;
+  /* Each toast is as wide as its sentence and no wider, centred in the strip. A
+     three-word message in a fixed 26rem bar is three words and a lot of tinted
+     nothing. The strip keeps the 26rem as the point at which a long message wraps. */
+  align-items: center;
+  gap: .5rem;
+  /* The strip spans the viewport in order to centre itself, so it must not eat
+     clicks across the whole width — only the toasts themselves are targets. */
+  pointer-events: none;
+}
+.ins-toast {
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  max-inline-size: 100%;
+  gap: .625rem;
+  padding: .8125rem 1rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-alert-bd);
+  background: var(--ins-alert-bg);
+  color: var(--ins-alert-text);
+  font-size: .875rem;
+  font-weight: 600;
+  line-height: 1.5;
+  box-shadow: var(--ins-sh-lg);
+  /* In, hold, out — and the out is a *delayed second animation* rather than late
+     keyframes in one. Two reasons, both about not needing a script to be correct. A
+     fixed toast that nobody dismisses is not a block that scrolls away, it is an
+     overlay that stays for the rest of the page view, so the hide cannot be
+     JavaScript's job. And the reduced-motion rule clamps `animation-duration` but
+     leaves `animation-delay` alone: a hold encoded as duration would collapse to
+     nothing and the message would be gone before it was read, while a hold encoded
+     as delay survives exactly as written. The script only adds click-to-dismiss. */
+  animation: ins-toast-in var(--ins-t-pop) var(--ins-ease),
+             ins-toast-out var(--ins-t-exit) var(--ins-ease) 5s forwards;
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .ins-toast { -webkit-backdrop-filter: var(--ins-blur); backdrop-filter: var(--ins-blur); }
+}
+.ins-toast-ico { flex: 0 0 auto; font-size: 1rem; color: var(--ins-alert-c); }
+.ins-toast-text { flex: 1 1 auto; min-width: 0; }
+/* Dismissed by hand: the same exit, now rather than at 5s. */
+.ins-toast.is-going { animation: ins-toast-out var(--ins-t-exit) var(--ins-ease) forwards; }
+@keyframes ins-toast-in { from { opacity: 0; transform: translateY(-12px) scale(.97); } }
+/* `visibility` is discrete but animatable, and with `forwards` it is what the ended
+   state holds. Without it the toast is a transparent 26rem strip still answering
+   clicks across the top of the page. */
+@keyframes ins-toast-out { to { opacity: 0; transform: translateY(-12px) scale(.97); visibility: hidden; } }
+
+/* --------------------------------------------------------------- empty state */
+/* An empty state is a real state and deserves composing. A faded glyph, not a
+   tinted chip — a chip reads as a button with its label missing, which on a page
+   whose entire content is the empty state is the whole screen. */
+.ins-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .625rem;
+  padding: 2.75rem 1.5rem;
+  text-align: center;
+}
+.ins-empty-ico {
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--ins-text-3);
+  opacity: .35;
+}
+.ins-empty-title { font-weight: 700; font-size: .9375rem; color: var(--ins-text-1); }
+.ins-empty-hint { font-size: .8125rem; color: var(--ins-text-2); max-inline-size: 32ch; }
+
+/* --------------------------------------------------------------- skeleton */
+.ins-skel {
+  border-radius: var(--ins-r-sm);
+  background: linear-gradient(90deg, var(--ins-skel-base), var(--ins-skel-hi), var(--ins-skel-base));
+  background-size: 240% 100%;
+  animation: ins-skel 1.8s infinite;
+}
+@keyframes ins-skel { to { background-position: -240% 0; } }
+.ins-skel--text { block-size: .75rem; margin-block: .375rem; }
+.ins-skel--title { block-size: 1.25rem; inline-size: 40%; }
+
+/* --------------------------------------------------------------- spinner */
+/* A ring of the brand tint with one quadrant in the brand colour. `infinite` is
+   allowed here for the same reason it is allowed on the skeleton: both mean
+   "waiting", which is the only thing an endless animation may mean in this library.
+   See the orb note in 04-reset.css for what endless motion costs under frost. */
+.ins-spinner {
+  inline-size: 32px;
+  block-size: 32px;
+  border: 3px solid rgba(var(--ins-primary-rgb), .18);
+  border-block-start-color: var(--ins-tone-brand-soft);
+  border-radius: 50%;
+  animation: ins-spin .7s linear infinite;
+}
+.ins-spinner--sm { inline-size: 15px; block-size: 15px; border-width: 2px; }
+@keyframes ins-spin { to { transform: rotate(360deg); } }
+.ins-loading { display: grid; place-items: center; min-block-size: 200px; }

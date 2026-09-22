@@ -1,0 +1,101 @@
+/* ==========================================================================
+   Insiyab · layout
+   ==========================================================================
+   The three arrangements every page in this design needs: a grid of tiles, a
+   strip of controls above a table, and a search field.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- card grid */
+/* auto-fit + minmax, not a twelve-column system: tiles reflow to their content
+   rather than snapping to twelfths, and one rule covers every breakpoint. */
+.ins-grid {
+  display: grid;
+  gap: .75rem;
+  grid-template-columns: repeat(auto-fit, minmax(var(--ins-col, 11rem), 1fr));
+  /* `min(…, 100%)` because a minmax() floor larger than its container does not
+     shrink — it overflows. `--ins-col: 26rem` is 416px, so on a 430px phone every
+     half-width grid pushed its panels 18px past a 398px container and gave the
+     whole page a 2px horizontal scroll. Seven pages had it and none of them looked
+     wrong; it took measuring the document's scrollWidth to see. The plain
+     declaration above stays as the fallback for a browser without min(). */
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--ins-col, 11rem), 100%), 1fr));
+  margin-block-end: 1.25rem;
+}
+.ins-grid--wide { --ins-col: 20rem; }
+.ins-grid--half { --ins-col: 26rem; }
+
+/* Staggered entrance, split into two animations on purpose.
+
+   The obvious way — one keyframe fading opacity 0→1, `backwards` fill, a delay per
+   child — hides content whenever the animation does not actually run: the fill
+   holds the from-state through the delay, so a print, a screenshot, or a WebView
+   that suppresses animations renders blank tiles. It did exactly that the first
+   time this design was photographed.
+
+   So: opacity fades once on the CONTAINER with no delay, and the per-child stagger
+   moves transform only. If either never runs, the content is still visible. */
+@keyframes ins-tile-rise { from { opacity: 0; transform: translateY(12px); } }
+.ins-grid > * { animation: ins-tile-rise .4s var(--ins-ease) backwards; }
+.ins-grid > :nth-child(2) { animation-delay: .07s; }
+.ins-grid > :nth-child(3) { animation-delay: .14s; }
+.ins-grid > :nth-child(4) { animation-delay: .21s; }
+.ins-grid > :nth-child(5) { animation-delay: .28s; }
+.ins-grid > :nth-child(6) { animation-delay: .35s; }
+.ins-grid > :nth-child(7) { animation-delay: .42s; }
+.ins-grid > :nth-child(8) { animation-delay: .49s; }
+
+/* --------------------------------------------------------------- toolbar */
+/* A row of controls above a table. Its controls are one step down from a form's,
+   so the row reads as a strip rather than as a form that happens to be sideways. */
+.ins-toolbar {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin-block-end: .875rem;
+  position: relative;
+}
+.ins-toolbar .ins-input,
+.ins-toolbar .ins-select {
+  min-block-size: var(--ins-ctl-h);
+  padding-block: .25rem;
+  font-size: .8125rem;
+}
+.ins-toolbar-grow { flex: 1 1 12rem; min-width: 0; }
+/* `margin-inline-start: auto` and not `justify-content: space-between`: the toolbar
+   wraps, and space-between spreads a wrapped last row across the whole width. */
+.ins-toolbar-end { margin-inline-start: auto; display: flex; gap: .5rem; align-items: center; }
+
+/* --------------------------------------------------------------- search */
+.ins-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.ins-search > .ins-search-ico {
+  position: absolute;
+  inset-inline-start: .875rem;
+  color: var(--ins-text-3);
+  font-size: .8125rem;
+  pointer-events: none;
+  transition: color var(--ins-t-base);
+  z-index: 1;
+}
+/* The glyph takes the brand colour while the field is focused. This is the one
+   detail that makes an icon inside a field read as part of the control rather than
+   as decoration painted on top of it. */
+.ins-search:focus-within > .ins-search-ico { color: var(--ins-tone-brand-soft); }
+.ins-search > .ins-input { padding-inline-start: 2.375rem; }
+
+/* Field and submit as one group, pushed to the far end of a toolbar and capped.
+   Without the cap the field stretches to fill the row and the button ends up the
+   width of the page away from it. */
+.ins-searchbar {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  flex: 0 1 32rem;
+  min-width: 0;
+  margin-inline-start: auto;
+}
+.ins-searchbar .ins-search { flex: 1 1 auto; }

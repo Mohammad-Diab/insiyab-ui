@@ -1,0 +1,82 @@
+/* ==========================================================================
+   Insiyab · stat tile
+   ==========================================================================
+   A figure, its label, and a tinted icon chip. Three sizes and six tones, all
+   driven from two local custom properties so a tone is one line, not a block.
+   ========================================================================== */
+
+.ins-stat {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .75rem 1rem;
+  border-radius: var(--ins-r-md);
+  --ins-c: var(--ins-tone-brand-soft);
+  --ins-c-bg: rgba(var(--ins-primary-rgb), .12);
+}
+.ins-stat--ok   { --ins-c: var(--ins-tone-ok);   --ins-c-bg: var(--ins-tone-ok-bg); }
+.ins-stat--warn { --ins-c: var(--ins-tone-warn); --ins-c-bg: var(--ins-tone-warn-bg); }
+.ins-stat--bad  { --ins-c: var(--ins-tone-bad);  --ins-c-bg: var(--ins-tone-bad-bg); }
+.ins-stat--info { --ins-c: var(--ins-tone-info); --ins-c-bg: var(--ins-tone-info-bg); }
+.ins-stat--mute,
+.ins-stat--zero { --ins-c: var(--ins-tone-mute); --ins-c-bg: var(--ins-tone-mute-bg); }
+/* Quiet, still legible: a zero is information, and at the muted tint it was
+   disappearing into the background wash entirely. */
+.ins-stat--zero .ins-stat-value { color: var(--ins-text-2); }
+
+.ins-stat-ico {
+  flex: 0 0 auto;
+  inline-size: 38px;
+  block-size: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--ins-r-md);
+  background: var(--ins-c-bg);
+  color: var(--ins-c);
+  font-size: 1rem;
+}
+.ins-stat-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+/* The label wraps. `white-space: nowrap` kept tiles tidy right up until a label was
+   longer than its tile and then it clipped — a dashboard's first tile read "Today's
+   net profit (all" at 430px, with the currency colliding with the edge. A grid row
+   stretches to its tallest tile, so a two-line label costs one row a few pixels and
+   never costs a word. */
+.ins-stat-label { font-size: .75rem; font-weight: 600; color: var(--ins-text-2); line-height: 1.3; }
+.ins-stat-value {
+  font-size: 1.5rem;
+  /* 800. It only reads as a jump from 700 at this size — which is exactly where it
+     is used. */
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ins-c);
+  font-variant-numeric: tabular-nums;
+  /* Latin digits read better in Inter even inside Arabic copy. */
+  font-family: var(--ins-font-body-en);
+}
+.ins-stat-hint { font-size: .6875rem; color: var(--ins-text-3); }
+
+.ins-stat--sm { padding: .625rem .75rem; gap: .625rem; }
+.ins-stat--sm .ins-stat-ico { inline-size: 32px; block-size: 32px; font-size: .875rem; }
+.ins-stat--sm .ins-stat-label { font-size: .6875rem; }
+.ins-stat--sm .ins-stat-value { font-size: 1.25rem; }
+
+.ins-stat--lg { padding: 1rem 1.25rem; gap: .875rem; }
+.ins-stat--lg .ins-stat-label { font-size: .8125rem; }
+.ins-stat--lg .ins-stat-value { font-size: 2rem; }
+.ins-stat--lg .ins-stat-ico { inline-size: 46px; block-size: 46px; font-size: 1.125rem; }
+
+/* A headline figure takes the whole row on a phone.
+
+   `.ins-stat` is a flex row, and a flex item does not shrink below its content — so
+   a tile holding a seven-digit figure at 2rem has a min-content width of about
+   230px and simply overflows anything narrower. Measured on a dashboard at 430px:
+   the tile ran x=221..414 while the money inside it ran x=186..333, with the
+   currency unit sitting entirely outside the card.
+
+   Fixing it here rather than by widening the grid's column floor is deliberate: it
+   keeps the two-digit counts beside it two-up, which is what a tile that small is
+   for. The tile carrying the page's headline number is the tile that should not be
+   sharing a row on a 430px screen. */
+@media (max-width: 34rem) {
+  .ins-grid > .ins-stat--lg { grid-column: 1 / -1; }
+}

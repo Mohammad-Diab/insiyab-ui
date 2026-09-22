@@ -1,0 +1,159 @@
+/* ==========================================================================
+   Insiyab · panel and card
+   ==========================================================================
+   A panel is glass with a head, a body and optionally a foot. It is the surface
+   most pages are built out of, so it is worth reading the stacking notes below
+   before changing anything here — `backdrop-filter` makes every panel its own
+   stacking context, and that has bitten this design twice.
+   ========================================================================== */
+
+/* A card is glass at the medium radius with nothing else asked of it. It exists
+   as its own name rather than as `.ins-glass` so that a page can say what a thing
+   is; the four layers are identical. */
+.ins-card {
+  position: relative;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-rim);
+  border-top-color: var(--ins-rim-top);
+  background: var(--ins-surface);
+  box-shadow: var(--ins-sh-glass), var(--ins-bevel);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-card {
+    background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .38));
+    backdrop-filter: var(--ins-blur);
+    -webkit-backdrop-filter: var(--ins-blur);
+  }
+  :root[data-ins-theme="dark"] .ins-card {
+    background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .03));
+  }
+}
+
+/* --------------------------------------------------------------- panel */
+.ins-panel {
+  position: relative;
+  border-radius: var(--ins-r-lg);
+  margin-block-end: 1.25rem;
+  border: 1px solid var(--ins-rim);
+  border-top-color: var(--ins-rim-top);
+  background: var(--ins-surface);
+  box-shadow: var(--ins-sh-glass), var(--ins-bevel);
+  /* The clip is what holds the radius over a flush table's cells and over a tinted
+     alert head, both of which paint to the edge. */
+  overflow: hidden;
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-panel {
+    background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .38));
+    backdrop-filter: var(--ins-blur);
+    -webkit-backdrop-filter: var(--ins-blur);
+  }
+  :root[data-ins-theme="dark"] .ins-panel {
+    background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .03));
+  }
+}
+
+/* A panel whose body holds something that must escape the clip — an open select, a
+   popover, a row menu. Two separate problems, and opting out of the clip only
+   solves the first.
+
+   The second is stacking. `backdrop-filter` makes **every panel its own stacking
+   context**, so a popover hanging below its panel is still painted inside that
+   context and the *next sibling panel* covers it — whatever `z-index` the popover
+   asks for, because that index resolves inside a context the sibling is not in.
+   The panel is the only element where the two can be compared, so the raise
+   belongs here. */
+.ins-panel--open { overflow: visible; z-index: 5; }
+/* And the same escape, granted automatically while something inside is actually
+   open. `:has()` is the condition because the raise has to be per-open rather than
+   per-panel: two permanently raised panels are the same tie decided by source order
+   again. Where `:has()` is unsupported this rule simply does not match, which is
+   the behaviour of the day before — so it degrades to the old bug, not to a new
+   one. Add `.ins-panel--open` by hand if you need to support those browsers. */
+.ins-panel:has([open]) { overflow: visible; z-index: 5; }
+
+.ins-panel-head {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .875rem 1.25rem;
+  border-block-end: 1px solid var(--ins-line-glass);
+  /* Above the body, not level with it. Both were `position: relative; z-index: 1`,
+     which makes two stacking contexts of equal rank — so source order decided it,
+     the body comes second, and a table painted over anything the head floated. The
+     popover's own z-index cannot help: it resolves *inside* the head's context,
+     never against the body's. Unconditional rather than `:has()`, because a head
+     belongs above its body at all times and this way it is also true on the phones
+     `:has()` misses. */
+  position: relative;
+  z-index: 2;
+}
+.ins-panel-title {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--ins-primary-darker);
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+}
+:root[data-ins-theme="dark"] .ins-panel-title { color: var(--ins-text-1); }
+/* The section icon as a tinted **chip**, not a bare glyph beside the words. A
+   14px-rounded 36px square in the brand tint is what makes a panel head read as a
+   heading rather than as a line of text with a decoration in front of it. */
+.ins-panel-ico {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: var(--ins-r-md);
+  background: rgba(var(--ins-primary-rgb), .10);
+  color: var(--ins-tone-brand-soft);
+  font-size: .9375rem;
+}
+.ins-panel-actions { margin-inline-start: auto; display: flex; gap: .5rem; align-items: center; }
+
+.ins-panel-body { padding: 1.25rem; position: relative; z-index: 1; }
+/* Not zero: a table inside a flush body is a floating header bar over a rounded
+   card of rows, and both need the panel's edge to be somewhere other than exactly
+   on them. Small — this is an inset, not padding. */
+.ins-panel-body--flush { padding: .625rem; }
+
+.ins-panel-foot {
+  padding: .75rem 1.125rem;
+  border-block-start: 1px solid var(--ins-line-glass);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* One line of guidance under a panel head. */
+.ins-panel-note {
+  margin: 0;
+  padding: .625rem 1.125rem;
+  font-size: .8125rem;
+  color: var(--ins-text-2);
+  border-block-end: 1px solid var(--ins-line);
+  position: relative;
+  z-index: 1;
+}
+/* Inside a flush body the note sits above the header bar, so it takes the body's
+   own inset rather than adding a second one on top of it. */
+.ins-panel-body--flush > .ins-panel-note { padding: .375rem .625rem .75rem; border-block-end: 0; }
+
+/* A panel whose contents are the problem. The tint is on the head only — tinting
+   the whole panel would put a red wash behind every status pill in the table below
+   it and flatten them all. */
+.ins-panel--alert .ins-panel-head {
+  background: var(--ins-tone-bad-bg);
+  border-block-end-color: var(--ins-tone-bad-bd);
+  /* Its own corners, because a panel holding an open popover no longer clips. */
+  border-start-start-radius: var(--ins-r-lg);
+  border-start-end-radius: var(--ins-r-lg);
+}
+.ins-panel--alert .ins-panel-title,
+.ins-panel--alert .ins-panel-ico { color: var(--ins-tone-bad); }
+.ins-panel--alert .ins-panel-ico { background: var(--ins-tone-bad-bg); }
