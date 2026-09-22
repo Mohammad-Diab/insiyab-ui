@@ -1,0 +1,45 @@
+{
+  "name": "insiyab",
+  "version": "0.1.0",
+  "description": "RTL-first UI library with a frosted-glass design language. One CSS file, one JS file, no build step.",
+  "keywords": [
+    "css",
+    "ui",
+    "rtl",
+    "arabic",
+    "glassmorphism",
+    "design-system",
+    "no-build",
+    "components",
+    "dark-mode"
+  ],
+  "license": "MIT",
+  "author": "Mohammad Diab",
+  "type": "module",
+  "main": "dist/insiyab.js",
+  "style": "dist/insiyab.css",
+  "sideEffects": true,
+  "exports": {
+    ".": "./dist/insiyab.js",
+    "./css": "./dist/insiyab.css",
+    "./insiyab.css": "./dist/insiyab.css",
+    "./insiyab.min.css": "./dist/insiyab.min.css",
+    "./fonts/*": "./dist/fonts/*"
+  },
+  "files": [
+    "dist",
+    "src",
+    "fonts",
+    "IDEA.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "node build.mjs --check",
+    "demo": "node build.mjs && node serve.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

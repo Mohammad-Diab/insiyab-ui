@@ -1,0 +1,119 @@
+/* ==========================================================================
+   Insiyab · tokens — dark
+   ==========================================================================
+
+   Derived, not inverted. Naive inversion of white-alpha glass gives milky grey
+   panels with glaring white rims: only the ~45 values that genuinely differ are
+   restated here, and each one is a decision rather than a flip.
+
+   **Write this block once.** `build.mjs` finds the rule below and emits a second
+   copy wrapped in `@media (prefers-color-scheme: dark)`, scoped to
+   `:root:not([data-ins-theme="light"])`, so the library follows the operating
+   system by default *and* an explicit choice always wins. Duplicating per-theme
+   values by hand is exactly how the segmented control broke in the source sheet —
+   four copies, two per theme — so there is one copy here and the build does the
+   rest. This file is valid CSS on its own; the build only adds reach.
+   ========================================================================== */
+
+:root[data-ins-theme="dark"] {
+  color-scheme: dark;
+
+  --ins-glass: rgba(255, 255, 255, .06);
+  --ins-glass-hover: rgba(255, 255, 255, .10);
+  --ins-glass-inner: rgba(255, 255, 255, .04);
+  --ins-glass-strong: rgba(255, 255, 255, .12);
+  --ins-rim: rgba(255, 255, 255, .10);          /* .85 here would be a glare */
+  --ins-rim-top: rgba(255, 255, 255, .16);
+  /* The raised segment, on dark. `--ins-surface` is a 5% overlay here, and the
+     segment has to be roughly double that to read as raised at all; the bevel that
+     carries it in light is invisible, so the shadow does the work instead. */
+  --ins-seg-on-bg: rgba(255, 255, 255, .13);
+  --ins-seg-on-fg: var(--ins-text-1);
+  --ins-seg-on-shadow: 0 2px 8px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .12);
+  --ins-blur: blur(24px) saturate(120%);        /* 140% oversaturates on dark */
+  --ins-sh-glass: 0 8px 32px rgba(0, 0, 0, .45);
+  --ins-sh-lg: 0 20px 60px rgba(0, 0, 0, .55);
+  --ins-bevel: inset 0 1px 0 rgba(255, 255, 255, .10);
+  /* A slate-tinted drop is invisible on a dark ground; the whole ladder has to get
+     both darker and stronger, which is the same correction the panel shadow needed. */
+  --ins-sh-sm: 0 1px 3px rgba(0, 0, 0, .40), 0 1px 2px rgba(0, 0, 0, .30);
+  --ins-sh-md: 0 4px 8px -1px rgba(0, 0, 0, .45), 0 2px 4px -2px rgba(0, 0, 0, .35);
+  --ins-sh-subtle: 0 2px 8px rgba(0, 0, 0, .30);
+  --ins-sh-bubble: 0 4px 16px rgba(0, 0, 0, .38);
+  /* A white streak over a 6%-white fill does nothing; on dark the sweep is the
+     light one, and the "dark sweep" for light-variant controls inverts too. */
+  --ins-shimmer: linear-gradient(90deg, transparent, rgba(255, 255, 255, .14), transparent);
+  --ins-shimmer-dark: linear-gradient(90deg, transparent, rgba(255, 255, 255, .09), transparent);
+  --ins-skel-base: rgba(255, 255, 255, .06);
+  --ins-skel-hi: rgba(255, 255, 255, .16);
+
+  --ins-text-1: #F1F5F9;
+  --ins-text-2: #94A3B8;
+  --ins-text-3: #7C8A9C;
+  /* Lighter, not darker: on the dark card's own #202228–#1F2026, `--ins-text-2`
+     already measures 6.20:1 / 6.33:1, so the move is the other way. #A3B0C2 is
+     7.23:1 / 7.38:1 there — past AAA without a label shouting on a dark ground.
+     Sampled off a render, as in the light file. */
+  --ins-label: #A3B0C2;
+
+  /* Tints must roughly double — 10% is invisible on dark; text moves to the 400
+     shade of the same hue rather than the 800. */
+  --ins-tone-ok: #4ADE80;
+  --ins-tone-ok-bg: rgba(34, 197, 94, .18);
+  --ins-tone-ok-bd: rgba(34, 197, 94, .28);
+  --ins-tone-warn: #FBBF24;
+  --ins-tone-warn-bg: rgba(245, 158, 11, .18);
+  --ins-tone-warn-bd: rgba(245, 158, 11, .28);
+  --ins-tone-bad: #FCA5A5;
+  --ins-tone-bad-bg: rgba(239, 68, 68, .18);
+  --ins-tone-bad-bd: rgba(239, 68, 68, .28);
+  --ins-tone-info: #93C5FD;
+  --ins-tone-info-bg: rgba(59, 130, 246, .18);
+  --ins-tone-info-bd: rgba(59, 130, 246, .28);
+  --ins-tone-mute: #94A3B8;
+  --ins-tone-mute-bg: rgba(148, 163, 184, .16);
+  --ins-tone-mute-bd: rgba(148, 163, 184, .22);
+  --ins-tone-brand-bg: rgba(var(--ins-primary-rgb), .20);
+  --ins-tone-brand-bd: rgba(var(--ins-primary-rgb), .32);
+  /* `--ins-primary-darker` is the *light* brand shade on dark — the derivation
+     pushes the readable shade the other way per theme — so here the secondary
+     foreground and the label's own colour meet at one value. That compression is
+     the same one the tints above take; what carries the step between them instead
+     is the label lifting to `--ins-text-1`, which is what every brand-tinted face
+     in the library already does. */
+  --ins-tone-brand-soft: var(--ins-primary-darker);
+
+  --ins-line: rgba(255, 255, 255, .08);
+  --ins-line-glass: rgba(255, 255, 255, .10);
+  --ins-ctl-bd: rgba(255, 255, 255, .16);
+  --ins-ctl-bg: rgba(255, 255, 255, .06);
+  --ins-ctl-bg-hover: rgba(255, 255, 255, .11);
+  --ins-zebra: rgba(255, 255, 255, .035);
+  --ins-row-inner: rgba(255, 255, 255, .055);
+  --ins-surface: rgba(255, 255, 255, .05);
+  --ins-surface-2: rgba(255, 255, 255, .03);
+  --ins-surface-hover: rgba(255, 255, 255, .09);
+  --ins-focus-ring: 0 0 0 3px rgba(var(--ins-primary-rgb), .60);
+
+  /* The readable brand shade flips *direction* per theme: the primary pushed 55%
+     toward black on light, 55% toward white on dark. Without this line the token
+     keeps its near-black light value on a near-black ground, and
+     `--ins-tone-brand-soft` below -- which is defined as this token -- becomes
+     invisible. The source sheet never needed the override because its server
+     injected the per-theme value into the same namespace; a stylesheet that has to
+     stand on its own does need it, and this is the kind of gap that only shows up
+     in the theme nobody screenshotted. */
+  --ins-primary-darker: #d2a0b7;
+
+  /* The page ground. The source sheet carried these on the tenant's payload rather
+     than in the sheet, so a stylesheet-only page had no dark ground at all — it
+     kept the light washes and every panel floated on pink. Declared here so the
+     dark theme stands up from the CSS alone. */
+  --ins-wash-1: #0f1115;
+  --ins-wash-2: #12141a;
+  /* Orbs dim rather than disappear: on dark they are the only thing keeping the
+     ground from reading as flat charcoal, and that is the comparison the reference
+     shots are kept for (ussd/01 against ussd/07). */
+  --ins-orb-1: rgba(var(--ins-primary-rgb), .30);
+  --ins-orb-2: rgba(var(--ins-accent-rgb), .26);
+}

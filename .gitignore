@@ -8,11 +8,15 @@ scratchpad/
 
 # Dependencies and build output
 node_modules/
-dist/
 build/
 .vite/
 coverage/
 *.tgz
+
+# dist/ is deliberately NOT ignored. It is generated, but committing it means a
+# clone can open the demo without running the build, and a CDN can serve the
+# library straight from a git tag before anything reaches npm -- both of which
+# matter for a library whose whole pitch is that no build step is needed.
 
 # Python (the Jinja package and its tests)
 __pycache__/

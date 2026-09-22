@@ -1,0 +1,261 @@
+<!doctype html>
+<!-- ==========================================================================
+     Insiyab · demo
+
+     The whole library on one page. Built before the components, and grown with
+     them: a library you cannot see all of in one place is a library you will
+     forget you have, and for anyone else this page is the entire pitch.
+
+     Serve it, do not open it. `node serve.mjs` — over file:// the self-hosted
+     faces count as cross-origin, the browser blocks them, and the typography
+     silently falls back to a system serif.
+
+     Note what is NOT in the <head> below: no init call, no inline theme snippet,
+     no font <link>. Two tags.
+     ========================================================================== -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Insiyab UI · انسياب</title>
+
+  <link rel="stylesheet" href="../dist/insiyab.css">
+  <script src="../dist/insiyab.js"></script>
+
+  <!-- Demo-page furniture only. Nothing here belongs to the library: it is the
+       scaffolding this page uses to lay the library's own parts out. -->
+  <style>
+    .page { max-width: 1100px; margin-inline: auto; padding: 24px 16px 80px; }
+    .bar {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+      justify-content: space-between; margin-bottom: 28px;
+    }
+    .bar h1 { margin: 0; font-size: 22px; }
+    .bar .sub { color: var(--ins-text-2); font-size: 13px; margin-top: 2px; }
+    .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+    section { margin-top: 40px; }
+    section > h2 {
+      font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--ins-text-3); margin: 0 0 14px;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 16px; }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .demo-pad { padding: 20px; }
+    .demo-pad h3 { margin: 0 0 6px; font-size: 15px; }
+    .demo-pad p { margin: 0; color: var(--ins-text-2); font-size: 13px; line-height: 1.6; }
+
+    /* A plain control, so the page has something to click before the button
+       component is extracted. Explicitly not a library class. */
+    .demo-btn {
+      height: 38px; padding-inline: 14px; border-radius: var(--ins-r-sm);
+      border: 1px solid var(--ins-ctl-bd); background: var(--ins-ctl-bg);
+      color: var(--ins-text-1); font-size: 13px; font-weight: 700; cursor: pointer;
+      transition: background var(--ins-t-pop) var(--ins-ease);
+    }
+    .demo-btn:hover { background: var(--ins-ctl-bg-hover); }
+    .demo-btn:focus-visible { outline: none; box-shadow: var(--ins-focus-ring); }
+
+    .swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+    .swatch {
+      width: 34px; height: 34px; border-radius: var(--ins-r-sm); cursor: pointer;
+      border: 1px solid var(--ins-rim); box-shadow: var(--ins-sh-sm);
+    }
+    .swatch:focus-visible { outline: none; box-shadow: var(--ins-focus-ring); }
+
+    .tokens { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    .token { font-size: 11px; color: var(--ins-text-2); }
+    .token i {
+      display: block; height: 40px; border-radius: var(--ins-r-xs);
+      border: 1px solid var(--ins-line); margin-bottom: 5px;
+    }
+    .radii { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+    .radii div {
+      width: 74px; height: 74px; display: grid; place-items: center;
+      background: var(--ins-tone-brand-bg); border: 1px solid var(--ins-tone-brand-bd);
+      color: var(--ins-tone-brand); font-size: 11px; font-weight: 700;
+    }
+    .note {
+      margin-top: 10px; font-size: 12px; color: var(--ins-text-3);
+      line-height: 1.7; max-width: 62ch;
+    }
+    /* Every note and card body on this page is English prose sitting inside an
+       RTL document. Without a paragraph direction of its own, the bidi algorithm
+       takes the *document's* level and moves the trailing full stop to the left
+       end of the line -- correct by the spec, and wrong on screen. `direction`
+       sets the embedding level; `dir="ltr"` on the element would do the same.
+       This is a real lesson for the component layer, not just demo dressing:
+       anything that renders app-supplied text of unknown language wants
+       `dir="auto"`, and anything numeric wants an explicit `ltr`. */
+    .note, .en { direction: ltr; text-align: start; }
+    code {
+      font-family: var(--ins-font-mono); font-size: .92em;
+      background: var(--ins-ctl-bg); padding: 1px 5px; border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="bar">
+    <div>
+      <h1>انسياب · Insiyab UI</h1>
+      <div class="sub">مكتبة واجهات بتصميم الزجاج المصنفر · RTL-first</div>
+    </div>
+    <div class="tools">
+      <!-- The entire theme switch. No handler, no init, no listener: the
+           delegated click listener in insiyab.js finds this attribute. -->
+      <button class="demo-btn" data-ins-theme-toggle>تبديل الوضع</button>
+      <button class="demo-btn" data-ins-theme-toggle="system">اتبع النظام</button>
+      <button class="demo-btn" id="dir">LTR / RTL</button>
+    </div>
+  </header>
+
+  <section>
+    <h2>Glass · الزجاج</h2>
+    <div class="grid">
+      <div class="ins-glass demo-pad">
+        <h3>سطح زجاجي</h3>
+        <p>أربع طبقات: الضباب، التعبئة المتدرجة، الحافة، والحدّ المائل. لا ضجيج ولا حبيبات.</p>
+      </div>
+      <div class="ins-glass demo-pad">
+        <h3>Nested glass</h3>
+        <p class="en">The surface below is the same <code>.ins-glass</code> class, de-nested automatically.</p>
+        <div class="ins-glass demo-pad" style="margin-top:14px">
+          <p class="en">No border, no shadow, no sheen, no second blur — by virtue of being nested at all.</p>
+        </div>
+      </div>
+      <div class="ins-glass-inner demo-pad">
+        <h3>Inner surface</h3>
+        <p class="en"><code>.ins-glass-inner</code> — the de-nested look without the nesting.</p>
+      </div>
+    </div>
+    <p class="note">
+      The nested card is the discipline that keeps this design language from turning to
+      mush: a second frost over an already frosted ground reads as fog. It is a rule at
+      zero specificity, not a class to remember, so nesting alone triggers it.
+    </p>
+  </section>
+
+  <section>
+    <h2>One brand variable · متغيّر واحد</h2>
+    <div class="ins-glass demo-pad">
+      <div class="swatches">
+        <button class="swatch" data-brand="#9B2C5E" style="background:#9B2C5E" title="#9B2C5E"></button>
+        <button class="swatch" data-brand="#0F766E" style="background:#0F766E" title="#0F766E"></button>
+        <button class="swatch" data-brand="#1D4ED8" style="background:#1D4ED8" title="#1D4ED8"></button>
+        <button class="swatch" data-brand="#B45309" style="background:#B45309" title="#B45309"></button>
+        <button class="swatch" data-brand="#C9A063" style="background:#C9A063" title="#C9A063 — pale, takes a dark label"></button>
+        <button class="swatch" data-brand="#4C1D95" style="background:#4C1D95" title="#4C1D95"></button>
+      </div>
+      <p class="note" style="margin-bottom:0">
+        Each swatch calls <code>Insiyab.brand(hex)</code> with one value. The triplet, the
+        gradient end-stop, the readable shade and both page washes are derived from it —
+        and the label colour is <em>measured</em>, not assumed, which is why the pale gold
+        takes near-black while the rest take white.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Radii · نصف القطر</h2>
+    <div class="radii">
+      <div style="border-radius:var(--ins-r-xs)">7</div>
+      <div style="border-radius:var(--ins-r-sm)">10</div>
+      <div style="border-radius:var(--ins-r-md)">14</div>
+      <div style="border-radius:var(--ins-r-lg)">22</div>
+      <div style="border-radius:var(--ins-r-xl)">32</div>
+      <div style="border-radius:var(--ins-r-pill)">999</div>
+    </div>
+    <p class="note">
+      A ×1.45 progression rather than ×2, and 14px as the default medium is the single
+      biggest source of the perceived softness. Bootstrap's default is 6px.
+    </p>
+  </section>
+
+  <section>
+    <h2>Semantic triad · الألوان الدلالية</h2>
+    <div class="tokens">
+      <div class="token"><i style="background:var(--ins-tone-ok-bg);border-color:var(--ins-tone-ok-bd)"></i><span style="color:var(--ins-tone-ok)">ok · ناجح</span></div>
+      <div class="token"><i style="background:var(--ins-tone-warn-bg);border-color:var(--ins-tone-warn-bd)"></i><span style="color:var(--ins-tone-warn)">warn · تحذير</span></div>
+      <div class="token"><i style="background:var(--ins-tone-bad-bg);border-color:var(--ins-tone-bad-bd)"></i><span style="color:var(--ins-tone-bad)">bad · خطأ</span></div>
+      <div class="token"><i style="background:var(--ins-tone-info-bg);border-color:var(--ins-tone-info-bd)"></i><span style="color:var(--ins-tone-info)">info · معلومة</span></div>
+      <div class="token"><i style="background:var(--ins-tone-mute-bg);border-color:var(--ins-tone-mute-bd)"></i><span style="color:var(--ins-tone-mute)">mute · خفيف</span></div>
+      <div class="token"><i style="background:var(--ins-tone-brand-bg);border-color:var(--ins-tone-brand-bd)"></i><span style="color:var(--ins-tone-brand)">brand · العلامة</span></div>
+    </div>
+    <p class="note">
+      Every state is the same three-part recipe: saturated text, a ~12% tint of that hue,
+      a ~20% border of it. That is why pills, alerts and glass read as one family.
+    </p>
+  </section>
+
+  <section>
+    <h2>Typography · الخطوط</h2>
+    <div class="grid">
+      <div class="ins-glass demo-pad">
+        <h3>تجوال · Tajawal</h3>
+        <p style="font-size:15px">الخط العربي هو الهوية، ويحمل مجموعته اللاتينية الخاصة — لذا كلمة MTN داخل سطر عربي تبقى في تجوال ولا تقفز إلى Inter.</p>
+      </div>
+      <div class="ins-glass demo-pad">
+        <h3>Inter · numerals</h3>
+        <p class="en" style="font-variant-numeric:tabular-nums;font-size:15px">1,240,905 · 3.14159 · 2026-09-22</p>
+        <p class="en" style="margin-top:8px">Tabular figures, so a column of numbers lines up.</p>
+      </div>
+      <div class="ins-glass demo-pad">
+        <h3>Mixed script</h3>
+        <p style="font-size:15px">العميل: Mohammad Diab — الرصيد 45,000 ل.س</p>
+        <p class="en" style="margin-top:8px">Bidi in one line, no markup, no wrapper spans.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Status · ما تم إنجازه</h2>
+    <div class="ins-glass demo-pad">
+      <p class="en">
+        Extracted so far: fonts, tokens (light and dark), the reset, the page ground and
+        orbs, and the glass primitives — plus the delivery mechanism end to end. Still to
+        come, in order: shell, panel, stat tile, table, form field, button, then the
+        interactive components.
+      </p>
+      <p class="note" style="margin-bottom:0">
+        Everything above is styled by <code>dist/insiyab.css</code> and
+        <code>dist/insiyab.js</code>. The controls in this page's own header use
+        <code>.demo-btn</code>, a local class, because the button component has not been
+        extracted yet — so nothing here is pretending to be finished.
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  /* Demo-page wiring only. The theme buttons above need none of this — they are
+     pure markup — but these two are demonstrating the JS API on purpose. */
+  document.addEventListener('click', function (e) {
+    var swatch = e.target.closest('[data-brand]');
+    if (swatch) Insiyab.brand(swatch.getAttribute('data-brand'));
+  });
+
+  document.getElementById('dir').addEventListener('click', function () {
+    var html = document.documentElement;
+    var rtl = html.getAttribute('dir') === 'rtl';
+    html.setAttribute('dir', rtl ? 'ltr' : 'rtl');
+    html.setAttribute('lang', rtl ? 'en' : 'ar');
+  });
+
+  /* `?theme=dark` / `?theme=light` / `?theme=system`, and `?brand=%23hex`. Demo
+     furniture for the screenshot harness: headless Chrome can navigate but cannot
+     click, and the whole point of keeping reference/ is comparing both themes of
+     the same screen. */
+  var q = new URLSearchParams(location.search);
+  if (q.get('theme')) Insiyab.theme(q.get('theme'));
+  if (q.get('brand')) Insiyab.brand(q.get('brand'));
+
+  /* Proof the library announced itself, and a place to read the derived set. */
+  console.log('[demo] Insiyab v' + Insiyab.version + ' · theme:', Insiyab.theme());
+</script>
+
+</body>
+</html>

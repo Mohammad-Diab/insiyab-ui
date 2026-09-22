@@ -1,0 +1,93 @@
+/* ==========================================================================
+   Insiyab · glass
+   ==========================================================================
+
+   The four stacked layers, and nothing else:
+
+     1. Frost   — backdrop-filter: blur(24px) saturate(140%). The saturate is not
+                  decoration; it is what stops the tinted ground going grey.
+     2. Fill    — a *diagonal* translucent white gradient at 145°, never a flat
+                  rgba. A flat fill is what makes glass read as plastic.
+     3. Rim     — a near-white 1px hairline, top edge brightened. Never grey.
+     4. Bevel   — inset 0 1px 0 near-white, plus one 130° specular streak.
+
+   No noise, no grain, no iridescence anywhere. The liquid quality is blur +
+   saturate + the one diagonal sheen, and adding a fifth layer is how this stops
+   looking like itself.
+
+   Every other surface in the library is this component plus a job: a panel is
+   glass with a head, a modal is glass that traps focus, a stat tile is glass with
+   a figure in it. Change something here and it reaches all of them — which is the
+   point, and the reason to be careful.
+   ========================================================================== */
+
+.ins-glass {
+  position: relative;
+  background: var(--ins-surface);
+  border: 1px solid var(--ins-rim);
+  border-top-color: var(--ins-rim-top);
+  box-shadow: var(--ins-sh-glass), var(--ins-bevel);
+  border-radius: var(--ins-r-md);
+}
+
+/* The sheen goes on ::before, not ::after. ::after is where carets, chevrons and
+   the tick on a checkbox live — putting the sheen there deletes the affordance,
+   which is a silent break because the surface still looks right. */
+.ins-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(130deg, rgba(255, 255, 255, .45), transparent 26%,
+                              rgba(255, 255, 255, .12) 55%, transparent);
+}
+:root[data-ins-theme="dark"] .ins-glass::before {
+  background: linear-gradient(130deg, rgba(255, 255, 255, .06), transparent 26%,
+                              rgba(255, 255, 255, .03) 55%, transparent);
+}
+
+/* The frost, and the diagonal fill that depends on it, are both behind
+   @supports. A browser without backdrop-filter keeps the opaque `--ins-surface`
+   fill set above and still gets a legible card — the design degrades to a solid
+   surface rather than to a transparent one with text on the page behind it. */
+@supports (backdrop-filter: blur(1px)) {
+  .ins-glass {
+    background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .38));
+    backdrop-filter: var(--ins-blur);
+    -webkit-backdrop-filter: var(--ins-blur);
+  }
+  :root[data-ins-theme="dark"] .ins-glass {
+    background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .03));
+  }
+}
+
+/* --------------------------------------------------------------- de-nesting */
+/* Whenever glass lands inside glass, the inner one strips to a flat translucent
+   fill: no border, no shadow, no sheen, no blur. A second frost over an already
+   frosted ground is what turns the effect to mush, and it is the single most
+   common way this design language gets ruined.
+
+   Written as a rule rather than as a class every nested surface has to remember,
+   so a stat tile inside a panel and a table's row card inside a panel are both
+   handled by the fact of being nested at all.
+
+   `:where()` keeps it at zero specificity, so a component that genuinely wants to
+   be a raised card inside a panel — a popover body, say — wins simply by naming
+   itself, with no `!important` anywhere in the library. */
+:where(.ins-glass .ins-glass) {
+  background: var(--ins-glass-inner);
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:where(.ins-glass .ins-glass)::before { content: none; }
+
+/* The inner surface, named: a panel's sub-panel. A fill and a hairline, no frost.
+   Use this when you want the de-nested look without nesting. */
+.ins-glass-inner {
+  background: var(--ins-glass-inner);
+  border: 1px solid var(--ins-line-glass);
+  border-radius: var(--ins-r-md);
+}

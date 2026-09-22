@@ -1,0 +1,254 @@
+/* ==========================================================================
+   Insiyab · tokens — light
+   ==========================================================================
+
+   The whole system tints from `--ins-primary` and its rgb triplet. CSS cannot
+   decompose a hex into channels, which is why the triplet exists as its own
+   token: every `rgba(var(--ins-primary-rgb), .12)` below is a tint that follows
+   your hue, and none of them could read it from the hex alone.
+
+   Setting a brand colour, two ways:
+
+     * With `insiyab.js` — put `data-ins-primary="#0F766E"` on <html>, or call
+       `Insiyab.brand('#0F766E')`. The triplet, the two darker shades and the two
+       page washes are derived and stamped for you, before first paint. One value.
+     * CSS only — set the six brand tokens below by hand. Nothing else changes.
+
+   Relative colour syntax (`rgb(from … r g b)`) would remove the triplet
+   entirely, and it is deliberately not used yet: an unsupported colour function
+   is invalid at computed-value time, so the declaration is dropped and every
+   tinted surface in the library loses its fill at once. That is a bad trade for
+   one token, and the JS path already makes it a non-problem.
+   ========================================================================== */
+
+:root {
+  /* Native UI -- scrollbars, the caret, a date input's own picker -- follows this
+     and nothing else we set. Without it a dark page keeps light scrollbars. */
+  color-scheme: light;
+
+  /* Brand. The default is a mulberry, which is what the reference screenshots in
+     reference/ are shot in — keeping it makes a side-by-side comparison during
+     extraction meaningful. Change it in one line and the rest retunes. */
+  --ins-primary: #9B2C5E;
+  --ins-primary-dark: #691E40;
+  --ins-primary-darker: #46142A;
+  --ins-primary-rgb: 155, 44, 94;
+  --ins-grad-rgb: 105, 30, 64;
+  --ins-accent-rgb: 105, 30, 64;
+  /* Derived, not picked: wash-1 is the primary at 93% toward white, wash-2 the
+     gradient end-stop at 94%. These are the values `Insiyab.brand()` computes, so
+     the stylesheet's default ground and a JS-set one are the same ground. */
+  --ins-wash-1: #f8f0f4;
+  --ins-wash-2: #f6f2f4;
+  --ins-on-primary: #ffffff;
+
+  /* Glass alpha ladder: the more "on top" a surface is, the more opaque. */
+  --ins-glass: rgba(255, 255, 255, .58);
+  --ins-glass-hover: rgba(255, 255, 255, .78);
+  --ins-glass-inner: rgba(255, 255, 255, .50);
+  --ins-glass-strong: rgba(255, 255, 255, .90);
+  --ins-rim: rgba(255, 255, 255, .85);
+  --ins-rim-top: rgba(255, 255, 255, .95);
+  /* A selected segment, as three values rather than as a rule. Every switch in the
+     library is the same component — the segmented control and the CSS-only theme
+     strip alike: a raised light card in a recessed track. It used to be written out
+     four times, twice per theme, and that is how it broke. */
+  --ins-seg-on-bg: var(--ins-surface);
+  --ins-seg-on-fg: var(--ins-primary-darker);
+  --ins-seg-on-shadow: 0 2px 8px rgba(15, 23, 42, .08), inset 0 1px 0 var(--ins-rim-top);
+
+  --ins-blur: blur(24px) saturate(140%);
+  --ins-blur-bar: blur(16px) saturate(1.6);
+
+  /* ~x1.45 progression. 14px as the default medium is the single biggest
+     contributor to the perceived softness — Bootstrap's default is 6px. */
+  --ins-r-xs: 7px;
+  --ins-r-sm: 10px;
+  --ins-r-md: 14px;
+  --ins-r-lg: 22px;
+  --ins-r-xl: 32px;
+  --ins-r-pill: 999px;
+
+  /* Shadows are cool-tinted slate, never neutral black. */
+  --ins-sh-glass: 0 8px 32px rgba(15, 23, 42, .09);
+  --ins-sh-lg: 0 20px 60px rgba(15, 23, 42, .14);
+  --ins-bevel: inset 0 1px 0 rgba(255, 255, 255, .90);   /* THE signature */
+  --ins-bevel-dim: inset 0 1px 0 rgba(255, 255, 255, .22);
+
+  /* The rest of the shadow ladder. Three of these were once *used* by the source
+     sheet and had never been declared. An undefined custom property makes the
+     whole declaration invalid at computed-value time, so those rules had no shadow
+     and no animation at all, and nothing said so. Declare the ladder completely. */
+  --ins-sh-sm: 0 1px 3px rgba(15, 23, 42, .06), 0 1px 2px rgba(15, 23, 42, .04);
+  --ins-sh-md: 0 4px 6px -1px rgba(15, 23, 42, .07), 0 2px 4px -2px rgba(15, 23, 42, .05);
+  --ins-sh-subtle: 0 2px 8px rgba(15, 23, 42, .04);
+  /* The app-bar islands. Softer and shorter than a panel's: a pill floating 12px
+     from the top of the page reads as lifted, not as a card. */
+  --ins-sh-bubble: 0 4px 16px rgba(15, 23, 42, .06);
+  /* Brand-tinted glows. A filled button's shadow is its own hue at ~30% rather
+     than a neutral drop, which is most of why a primary button reads as lit
+     instead of stuck on. */
+  --ins-sh-brand-sm: 0 6px 16px rgba(var(--ins-primary-rgb), .30);
+  --ins-sh-brand-md: 0 8px 24px rgba(var(--ins-primary-rgb), .28);
+  --ins-sh-brand-lg: 0 14px 32px rgba(var(--ins-primary-rgb), .35);
+  --ins-glow: 0 0 0 4px rgba(var(--ins-primary-rgb), .12);
+  --ins-glow-ring: 0 0 0 3px rgba(var(--ins-primary-rgb), .26);
+  /* One focus ring for every control, in your own hue. It sits on the page ground
+     rather than on the control, which is what lets a single value serve a pale
+     ghost button and a filled brand one. */
+  --ins-focus-ring: 0 0 0 3px rgba(var(--ins-primary-rgb), .45);
+  --ins-glow-bad: 0 0 0 4px rgba(239, 68, 68, .12);
+
+  /* The hover sweep on a button, and the skeleton's travelling highlight. Light
+     variants get the dark sweep, or a white streak over a white fill is invisible. */
+  --ins-shimmer: linear-gradient(90deg, transparent, rgba(255, 255, 255, .30), transparent);
+  --ins-shimmer-dark: linear-gradient(90deg, transparent, rgba(15, 23, 42, .07), transparent);
+  --ins-skel-base: rgba(15, 23, 42, .06);
+  --ins-skel-hi: rgba(255, 255, 255, .70);
+
+  /* Text ramp. Inverts as a ramp in dark mode, not value by value. */
+  --ins-text-1: #0F172A;
+  --ins-text-2: #64748B;
+  --ins-text-3: #6B7280;   /* darkened from the original #94A3B8, which failed AA */
+  /* Field labels, and the same argument one step further. 4.76:1 is what
+     `--ins-text-2` gets against pure white, and that was the number that made this
+     look like a pass. The card is not white: sampled off a render, the glass under
+     a label runs #FDF8FA at the top of the card to #FBF6F9 at the bottom, where
+     #64748B measures 4.53:1 and 4.45:1 — straddling AA rather than clearing it, at
+     12px, on the shortest and most-read text in any form. #475569 is 7.21:1 /
+     7.09:1 on the same two pixels.
+
+     Both figures come from sampling a render, not from reading the token: a glass
+     card's colour is whatever the ladder above it composited to. Measure the
+     picture, not the variable. */
+  --ins-label: #475569;
+
+  /* Semantic triad: saturated text + ~12% tint + ~20% border, same hue each.
+     That consistency is what makes pills and alerts feel like one family. */
+  --ins-tone-ok: #15803D;
+  --ins-tone-ok-bg: rgba(34, 197, 94, .12);
+  --ins-tone-ok-bd: rgba(34, 197, 94, .22);
+  --ins-tone-warn: #92400E;
+  --ins-tone-warn-bg: rgba(245, 158, 11, .12);
+  --ins-tone-warn-bd: rgba(245, 158, 11, .22);
+  --ins-tone-bad: #991B1B;
+  --ins-tone-bad-bg: rgba(239, 68, 68, .10);
+  --ins-tone-bad-bd: rgba(239, 68, 68, .20);
+  --ins-tone-info: #1E40AF;
+  --ins-tone-info-bg: rgba(59, 130, 246, .10);
+  --ins-tone-info-bd: rgba(59, 130, 246, .18);
+  --ins-tone-mute: #6B7280;
+  --ins-tone-mute-bg: rgba(100, 116, 139, .10);
+  --ins-tone-mute-bd: rgba(100, 116, 139, .15);
+  --ins-tone-brand: var(--ins-primary-darker);
+  --ins-tone-brand-bg: rgba(var(--ins-primary-rgb), .12);
+  --ins-tone-brand-bd: rgba(var(--ins-primary-rgb), .20);
+  /* The brand hue as a *secondary* foreground: the icon that sits beside a
+     `--ins-tone-brand` label one step below it. It needs its own token because
+     `--ins-primary` is the one brand value that does not vary by theme, so on dark
+     it can be darker than the ground it is painted on. Anywhere the raw brand hue
+     was spent as a foreground rather than as a tint measured, on a real render,
+     somewhere nobody could read it. */
+  --ins-tone-brand-soft: var(--ins-primary);
+
+  --ins-line: rgba(15, 23, 42, .08);
+  --ins-line-glass: rgba(255, 255, 255, .40);
+  /* Controls, as distinct from panels. `--ins-rim` is the near-white edge that
+     makes a glass panel read as raised against the tinted page mesh, and it was
+     being used for inputs and secondary buttons too. Those sit INSIDE panels,
+     which are near-white — so the edge vanished and the fill with it: a secondary
+     button rendered as bare text next to three real buttons, and every amount
+     field was an invisible white gap. A control needs a hairline and a fill that
+     is *darker* than its container, not lighter. */
+  --ins-ctl-bd: rgba(15, 23, 42, .14);
+  --ins-ctl-bg: rgba(15, 23, 42, .035);
+  --ins-ctl-bg-hover: rgba(15, 23, 42, .07);
+  /* The zebra stripe. Deliberately weak: it is a reading aid for tracking one row
+     across seven columns, not a second kind of row. Strong enough to survive the
+     de-nested fill inside a panel, which is where these tables mostly live. */
+  --ins-zebra: rgba(15, 23, 42, .032);
+  /* A table's row card, *inside a panel*. De-nesting gave it `--ins-glass-inner`,
+     a white at 50% — which over a panel that is already near-white composited to
+     (254,253,254) against a (253,251,252) ground. A difference of 5 across three
+     channels: the card's 22px corners were being drawn correctly and could not be
+     seen. There is no headroom to make it brighter in the light theme, so it reads
+     by being a shade *darker* instead; the dark theme still lifts. */
+  --ins-row-inner: rgba(15, 23, 42, .022);
+  --ins-surface: rgba(255, 255, 255, .88);
+  --ins-surface-2: rgba(255, 255, 255, .50);
+  --ins-surface-hover: rgba(255, 255, 255, .82);
+
+  /* One easing for nearly everything. Enter is longer than exit — the asymmetry is
+     deliberate, and it is the part the library's name is about. */
+  --ins-ease: cubic-bezier(.22, 1, .36, 1);
+  /* The overshoot, for the two controls whose whole job is to *travel*: the switch
+     thumb and the checkbox tick. Everything else uses `--ins-ease`. */
+  --ins-ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --ins-t-exit: .18s;
+  --ins-t-pop: .22s;
+  --ins-t-base: .25s;
+  --ins-t-enter: .28s;
+
+  /* The theme sweep's origin and reach. insiyab.js overwrites all three on the root
+     for the length of one theme change — the centre of the switch that was pressed,
+     and the distance from it to the furthest corner of the viewport. Declared here,
+     rather than left to a `var()` fallback in the keyframes, so the sheet says out
+     loud what those keyframes read; these values are what a sweep looks like if the
+     script never sets them (down the middle, from the top edge). */
+  --ins-sweep-x: 50%;
+  --ins-sweep-y: 0%;
+  --ins-sweep-r: 150vmax;
+
+  /* A dialog's own measurements. Three numbers, because the spacing inside a modal
+     was nobody's: the body set an inset, the field row set a gap, and everything
+     between two blocks was a hand-written margin at four call sites and nothing at
+     the fifth. */
+  --ins-dlg-pad: 1.5rem;    /* the modal's inset */
+  --ins-dlg-gap: 1.25rem;   /* between the blocks inside one */
+  --ins-dlg-gap-x: .75rem;  /* between two fields on the same line */
+
+  --ins-field-h: 46px;   /* the design's control height; Bootstrap's is 38px */
+  --ins-ctl-h: 38px;     /* a toolbar / table-row control, one step down */
+  /* The small step, and a token rather than three 30px literals: a small button,
+     the square icon button a row of actions is built from, and an inline icon in a
+     table cell are one unit — and that icon was 22px until somebody looked at it. */
+  --ins-ctl-sm-h: 30px;
+  --ins-appbar-h: 48px;  /* every island in the app bar is this tall */
+
+  --ins-orb-1: rgba(var(--ins-primary-rgb), .22);
+  /* The accent, not the gradient end-stop: the orbs are the one place a second
+     brand colour can be itself, because nothing is ever read on top of it. */
+  --ins-orb-2: rgba(var(--ins-accent-rgb), .20);
+
+  --ins-shell-sidebar: 252px;
+  --ins-shell-topbar: 64px;
+
+  /* Arabic first: Tajawal is the identity, and it carries its own Latin subset, so
+     a Latin acronym inside an Arabic line stays in Tajawal rather than jumping to
+     Inter. Inter is the face of the numerals — `.ins-money` asks for it explicitly,
+     with tabular figures — and of the whole page in LTR.
+
+     Tajawal appears in both Latin stacks on purpose: an English page still shows
+     Arabic *data* — a customer's name in a table cell, a title — and neither Inter
+     nor Cause has a single Arabic glyph. Without it those names fall through to the
+     system UI font, which is the exact "Arabic set in Segoe UI reads as
+     unconsidered" problem this design exists to fix, surviving in the one place
+     nobody looks: the English rendering.
+
+     A fallback stack, not a `:lang(ar)` rule — see the note in 04-reset.css for
+     what a `:lang(ar)` catch-all costs. */
+  --ins-font-arabic: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+  --ins-font-body-en: 'Inter', 'Tajawal', system-ui, sans-serif;
+  --ins-font-heading-en: 'Cause', 'Tajawal', system-ui, sans-serif;
+  /* The fourth face is the system's. One token, one stack — it was previously being
+     asked for by a name nothing declared, each time with its own inline fallback. */
+  --ins-font-mono: ui-monospace, "Cascadia Mono", "Cascadia Code", Consolas,
+                   "Courier New", monospace;
+
+  /* What the page is actually set in. Arabic is the default because the library is
+     RTL-first; an LTR page swaps it below. This is the token components inherit
+     from, so nothing downstream has to know which direction it is in. */
+  --ins-font-body: var(--ins-font-arabic);
+}
+
+html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }
