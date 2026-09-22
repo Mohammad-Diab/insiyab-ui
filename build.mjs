@@ -194,7 +194,33 @@ function verify(css) {
   const undeclared = [...used].filter((name) => !declared.has(name));
   if (undeclared.length) fail(`var() reads tokens nothing declares: ${undeclared.join(', ')}`);
 
-  return { open, declared: declared.size, used: used.size };
+  /* The same failure class one level up: an `animation` naming a keyframe set that
+     does not exist is not an error, it simply does nothing — and it does nothing
+     silently, which is how a component ends up with no entrance and nobody notices
+     for a release. Cheap to check, given the parts are concatenated in one order and
+     a keyframe defined in a later file is still in scope for an earlier rule. */
+  const frames = new Set((bare.match(/@keyframes\s+([A-Za-z0-9_-]+)/g) || [])
+    .map((m) => m.replace(/@keyframes\s+/, '')));
+  const animated = new Set();
+  for (const decl of bare.match(/animation(?:-name)?\s*:[^;}]+/g) || []) {
+    for (const word of decl.split(':')[1].split(/[,\s]+/)) {
+      /* Anything that is not a time, a count, a function or a keyword is a name. */
+      if (/^ins-[A-Za-z0-9_-]+$/.test(word)) animated.add(word);
+    }
+  }
+  const missing = [...animated].filter((name) => !frames.has(name));
+  if (missing.length) fail(`animation names keyframes nothing defines: ${missing.join(', ')}`);
+
+  /* Ambient motion is the one thing this design cannot afford — see the measurement
+     in 16-motion.css. Two exceptions, both meaning "waiting". */
+  const ALLOWED_INFINITE = ['ins-skel', 'ins-spin'];
+  for (const decl of bare.match(/animation[^;}]*infinite[^;}]*/g) || []) {
+    if (!ALLOWED_INFINITE.some((name) => decl.includes(name))) {
+      fail(`an infinite animation outside the skeleton and the spinner: ${decl.trim()}`);
+    }
+  }
+
+  return { open, declared: declared.size, used: used.size, frames: frames.size };
 }
 
 /* -------------------------------------------------------------------------- */

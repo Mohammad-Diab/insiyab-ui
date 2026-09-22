@@ -2,14 +2,13 @@
 <!-- ==========================================================================
      Insiyab · صفحة العرض
 
-     المكتبة كلها في صفحة واحدة. تُبنى قبل المكوّنات وتكبر معها: مكتبة لا تراها
-     كاملة في مكان واحد هي مكتبة ستنسى أنك تملكها.
+     المكتبة كلها في صفحة واحدة، داخل الهيكل الذي تُستعمل فيه فعلًا.
 
      Serve it, do not open it — `node serve.mjs`. Over file:// the self-hosted
      faces count as cross-origin, the browser blocks them, and the typography
      falls back to a system serif without saying so.
 
-     `?theme=dark|light|system`, `?brand=%23hex`, `?dir=ltr` — for the screenshot
+     `?theme=` `?brand=` `?dir=` `?open=dialog` `?toast=` — for the screenshot
      harness, which can navigate but cannot click.
 
      Note what is NOT in the <head>: no init call, no inline theme snippet, no
@@ -26,53 +25,49 @@
 
   <!-- أثاث الصفحة فقط. لا شيء هنا يخصّ المكتبة. -->
   <style>
-    .page { max-width: 1120px; margin-inline: auto; padding: 20px 16px 96px; }
-
-    .top {
-      display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
-      justify-content: space-between; margin-block-end: 8px;
-    }
-    .top h1 { margin: 0; font-size: 24px; }
-    .top .sub { color: var(--ins-text-2); font-size: 13px; margin-block-start: 2px; }
-    .top .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-
-    .toc { display: flex; flex-wrap: wrap; gap: 6px; margin-block: 18px 32px; }
+    .toc { display: flex; flex-wrap: wrap; gap: 6px; margin-block: 4px 30px; }
     .toc a {
       font-size: 12px; font-weight: 700; padding: 5px 11px;
       border-radius: var(--ins-r-pill); background: var(--ins-ctl-bg);
       border: 1px solid var(--ins-line); color: var(--ins-text-2);
+      transition: background var(--ins-t-pop) var(--ins-ease),
+                  color var(--ins-t-pop) var(--ins-ease),
+                  transform var(--ins-t-pop) var(--ins-ease);
     }
-    .toc a:hover { background: var(--ins-ctl-bg-hover); color: var(--ins-text-1); }
+    .toc a:hover { background: var(--ins-ctl-bg-hover); color: var(--ins-text-1); transform: translateY(-2px); }
 
-    section { margin-block-start: 44px; scroll-margin-top: 20px; }
+    section { margin-block-start: 42px; scroll-margin-top: 80px; }
     section > h2 {
       font-size: 13px; letter-spacing: .04em; color: var(--ins-text-3);
       margin: 0 0 16px; display: flex; align-items: center; gap: 10px;
     }
-    section > h2::after {
-      content: ""; flex: 1; height: 1px; background: var(--ins-line);
-    }
+    section > h2::after { content: ""; flex: 1; height: 1px; background: var(--ins-line); }
     h3.sub-h { font-size: 12px; color: var(--ins-text-3); margin: 22px 0 10px; font-weight: 700; }
 
     .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
     .cols { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
     .pad { padding: 20px; }
 
-    .note {
-      font-size: 12px; color: var(--ins-text-3); line-height: 1.8;
-      max-width: 70ch; margin-block-start: 12px;
-    }
+    .note { font-size: 12px; color: var(--ins-text-3); line-height: 1.85; max-width: 72ch; margin-block-start: 12px; }
     code {
       font-family: var(--ins-font-mono); font-size: .9em; direction: ltr;
       unicode-bidi: isolate; background: var(--ins-ctl-bg);
       padding: 1px 5px; border-radius: 5px;
+    }
+    kbd {
+      font-family: var(--ins-font-mono); font-size: .85em; direction: ltr;
+      unicode-bidi: isolate; background: var(--ins-ctl-bg);
+      border: 1px solid var(--ins-ctl-bd); border-block-end-width: 2px;
+      padding: 1px 6px; border-radius: 5px;
     }
 
     .swatches { display: flex; flex-wrap: wrap; gap: 8px; }
     .swatch {
       width: 36px; height: 36px; border-radius: var(--ins-r-sm); cursor: pointer;
       border: 1px solid var(--ins-rim); box-shadow: var(--ins-sh-sm);
+      transition: transform var(--ins-t-pop) var(--ins-ease-spring), box-shadow var(--ins-t-pop) var(--ins-ease);
     }
+    .swatch:hover { transform: scale(1.12) translateY(-2px); box-shadow: var(--ins-sh-md); }
     .swatch:focus-visible { outline: none; box-shadow: var(--ins-focus-ring); }
 
     .radii { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -81,13 +76,13 @@
       background: var(--ins-tone-brand-bg); border: 1px solid var(--ins-tone-brand-bd);
       color: var(--ins-tone-brand); font-size: 11px; font-weight: 700;
       font-family: var(--ins-font-body-en);
+      transition: transform var(--ins-t-pop) var(--ins-ease-spring);
     }
+    .radii div:hover { transform: translateY(-4px); }
     .tones { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
     .tone-chip { font-size: 11px; font-weight: 700; }
-    .tone-chip i {
-      display: block; height: 42px; border-radius: var(--ins-r-xs);
-      border: 1px solid; margin-block-end: 5px;
-    }
+    .tone-chip i { display: block; height: 42px; border-radius: var(--ins-r-xs); border: 1px solid; margin-block-end: 5px; }
+
     .ico { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2.2;
            stroke-linecap: round; stroke-linejoin: round; }
   </style>
@@ -107,749 +102,713 @@
   <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 12h5l2 3h4l2-3h5"/><path d="M4.5 6h15l1.5 6v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6Z"/></symbol>
   <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/></symbol>
   <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 21v-7h6v7"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M6 16v-5m5 5V6m5 10v-8"/></symbol>
+  <symbol id="i-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H1a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 2.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 7 2.6h.1A2 2 0 1 1 11 2.6V3a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 19.4 9H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3v4m0 10v4M3 12h4m10 0h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></symbol>
 </svg>
 
-<div class="page">
+<div class="ins-shell">
 
-  <header class="top">
-    <div>
-      <h1>انسياب · Insiyab UI</h1>
-      <div class="sub">مكتبة واجهات بتصميم الزجاج المصنفر — عربية أولًا، بملفّين اثنين</div>
-    </div>
-    <div class="tools">
-      <!-- مبدّل الوضع كاملًا. لا معالج، لا تهيئة: المستمع المفوَّض داخل
-           insiyab.js يجد هذه السمة وحده. -->
-      <button class="ins-btn ins-btn--secondary ins-btn--sm" data-ins-theme-toggle>الوضع الليلي</button>
-      <button class="ins-btn ins-btn--secondary ins-btn--sm" data-ins-theme-toggle="system">اتبع النظام</button>
-      <button class="ins-btn ins-btn--secondary ins-btn--sm" data-ins-fx>خفّف المؤثرات</button>
-      <button class="ins-btn ins-btn--secondary ins-btn--sm" id="dir-btn">LTR</button>
-    </div>
-  </header>
-
-  <nav class="toc">
-    <a href="#surfaces">الأسطح</a>
-    <a href="#stats">البطاقات الإحصائية</a>
-    <a href="#buttons">الأزرار</a>
-    <a href="#marks">الشارات</a>
-    <a href="#tables">الجداول</a>
-    <a href="#forms">الحقول</a>
-    <a href="#feedback">التنبيهات</a>
-    <a href="#states">الحالات</a>
-    <a href="#overlays">الحوارات</a>
-    <a href="#brand">الهوية</a>
-    <a href="#scales">المقاييس</a>
-  </nav>
-
-  <!-- ============================================================ الأسطح -->
-  <section id="surfaces">
-    <h2>الأسطح · Surfaces</h2>
-
-    <div class="cols">
-      <div class="ins-glass pad">
-        <h3 style="margin:0 0 6px">زجاج · <code>.ins-glass</code></h3>
-        <p style="margin:0;color:var(--ins-text-2);font-size:13px">
-          أربع طبقات: الضباب، والتعبئة المتدرّجة عند ١٤٥°، والحافة شبه البيضاء، والحدّ
-          المائل. لا ضجيج ولا حبيبات ولا انعكاس قزحي.
-        </p>
-      </div>
-
-      <div class="ins-glass pad">
-        <h3 style="margin:0 0 6px">زجاج داخل زجاج</h3>
-        <p style="margin:0 0 12px;color:var(--ins-text-2);font-size:13px">
-          السطح التالي يحمل الصنف نفسه، ويُسطَّح تلقائيًا.
-        </p>
-        <div class="ins-glass pad">
-          <p style="margin:0;color:var(--ins-text-2);font-size:13px">
-            بلا حدّ، بلا ظلّ، بلا لمعة، وبلا ضباب ثانٍ — لمجرّد أنه متداخل.
-          </p>
-        </div>
-      </div>
-
-      <div class="ins-card pad">
-        <h3 style="margin:0 0 6px">بطاقة · <code>.ins-card</code></h3>
-        <p style="margin:0;color:var(--ins-text-2);font-size:13px">
-          الطبقات نفسها باسم يقول ما هو الشيء. ونصف قطر متوسّط بدل الكبير.
-        </p>
-      </div>
+  <!-- ====================================================== الشريط الجانبي -->
+  <aside class="ins-shell-side" id="nav">
+    <div class="ins-shell-brand">
+      <span class="ins-shell-mark">ان</span>
+      <span class="ins-shell-brand-text">
+        <span class="ins-shell-brand-name">انسياب</span>
+        <span class="ins-shell-brand-role">لوحة العرض</span>
+      </span>
     </div>
 
-    <h3 class="sub-h">لوح · <code>.ins-panel</code></h3>
-    <div class="cols">
-      <div class="ins-panel">
-        <div class="ins-panel-head">
-          <span class="ins-panel-ico"><svg class="ico"><use href="#i-bolt"/></svg></span>
-          <h3 class="ins-panel-title">لوح عادي</h3>
-          <div class="ins-panel-actions">
-            <button class="ins-btn ins-btn--bare ins-btn--sm">عرض الكل</button>
-          </div>
-        </div>
-        <div class="ins-panel-body">
-          <p style="margin:0;color:var(--ins-text-2);font-size:13px">
-            رأس، وجسم، وذيل اختياري. الأيقونة رقاقة ملوّنة لا رمز عارٍ — وهذا ما يجعل
-            الرأس يُقرأ كعنوان لا كسطر نصّ أمامه زخرفة.
-          </p>
-        </div>
-        <div class="ins-panel-foot">
-          <button class="ins-btn ins-btn--primary ins-btn--sm">حفظ</button>
-          <button class="ins-btn ins-btn--bare ins-btn--sm">إلغاء</button>
-        </div>
-      </div>
+    <div class="ins-shell-group">التشغيل</div>
+    <a class="ins-shell-link is-active" href="#surfaces"><svg class="ico"><use href="#i-home"/></svg>الرئيسية</a>
+    <a class="ins-shell-link" href="#stats"><svg class="ico"><use href="#i-chart"/></svg>البطاقات<span class="ins-shell-link-badge">6</span></a>
+    <a class="ins-shell-link" href="#tables"><svg class="ico"><use href="#i-inbox"/></svg>الجداول</a>
+    <a class="ins-shell-link" href="#forms"><svg class="ico"><use href="#i-users"/></svg>الحقول</a>
 
-      <div class="ins-panel ins-panel--alert">
-        <div class="ins-panel-head">
-          <span class="ins-panel-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
-          <h3 class="ins-panel-title">لوح يحتاج تدخّلًا</h3>
-        </div>
-        <div class="ins-panel-body">
-          <p style="margin:0;color:var(--ins-text-2);font-size:13px">
-            التلوين على الرأس وحده. تلوين اللوح كلّه يضع خلفية حمراء تحت كل شارة حالة
-            في الجدول أسفله ويُسطّحها جميعًا.
-          </p>
-        </div>
-      </div>
+    <div class="ins-shell-group">الواجهة</div>
+    <a class="ins-shell-link" href="#buttons"><svg class="ico"><use href="#i-bolt"/></svg>الأزرار</a>
+    <a class="ins-shell-link" href="#feedback"><svg class="ico"><use href="#i-warn"/></svg>التنبيهات<span class="ins-shell-link-badge">4</span></a>
+    <a class="ins-shell-link" href="#overlays"><svg class="ico"><use href="#i-wallet"/></svg>الحوارات</a>
+    <a class="ins-shell-link" href="#motion"><svg class="ico"><use href="#i-sparkle"/></svg>الحركة</a>
+
+    <div class="ins-shell-group">النظام</div>
+    <a class="ins-shell-link" href="#brand"><svg class="ico"><use href="#i-cog"/></svg>الهوية</a>
+
+    <div class="ins-shell-bottom">
+      <a class="ins-shell-link" href="#"><svg class="ico"><use href="#i-out"/></svg>خروج</a>
     </div>
-  </section>
+  </aside>
+  <div class="ins-shell-scrim"></div>
 
-  <!-- ==================================================== البطاقات الإحصائية -->
-  <section id="stats">
-    <h2>البطاقات الإحصائية · Stat tiles</h2>
+  <div class="ins-shell-main">
 
-    <div class="ins-grid ins-grid--wide">
-      <div class="ins-stat ins-glass ins-stat--lg">
-        <span class="ins-stat-ico"><svg class="ico"><use href="#i-wallet"/></svg></span>
-        <span class="ins-stat-body">
-          <span class="ins-stat-label">صافي السيولة</span>
-          <span class="ins-stat-value ins-money">
-            <span class="ins-money-val">2,775,250</span><span class="ins-money-cur">ل.س</span>
+    <!-- ========================================================= الشريط العلوي -->
+    <header class="ins-topbar">
+      <div class="ins-zone ins-zone--start">
+        <button class="ins-island ins-island--icon" data-ins-sidebar aria-label="القائمة">
+          <svg class="ico"><use href="#i-menu"/></svg>
+        </button>
+        <span class="ins-island ins-island--brand">
+          <span class="ins-shell-mark" style="--ins-mark:28px;font-size:.8125rem">ان</span>
+          <b>انسياب</b>
+        </span>
+        <span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>متّصل</span>
+      </div>
+
+      <div class="ins-zone ins-zone--center">
+        <div class="ins-island ins-island--title">
+          <span class="ins-shell-head">
+            <h1 class="ins-shell-title">مكتبة انسياب</h1>
+            <p class="ins-shell-sub">كل المكوّنات في صفحة واحدة</p>
           </span>
-        </span>
-      </div>
-      <div class="ins-stat ins-glass ins-stat--ok">
-        <span class="ins-stat-ico"><svg class="ico"><use href="#i-check"/></svg></span>
-        <span class="ins-stat-body">
-          <span class="ins-stat-label">عمليات ناجحة</span>
-          <span class="ins-stat-value">١٤٨</span>
-        </span>
-      </div>
-      <div class="ins-stat ins-glass ins-stat--warn">
-        <span class="ins-stat-ico"><svg class="ico"><use href="#i-clock"/></svg></span>
-        <span class="ins-stat-body">
-          <span class="ins-stat-label">قيد التنفيذ</span>
-          <span class="ins-stat-value">11</span>
-        </span>
-      </div>
-      <div class="ins-stat ins-glass ins-stat--bad">
-        <span class="ins-stat-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
-        <span class="ins-stat-body">
-          <span class="ins-stat-label">مراجعة يدوية</span>
-          <span class="ins-stat-value">4</span>
-        </span>
-      </div>
-      <div class="ins-stat ins-glass ins-stat--info">
-        <span class="ins-stat-ico"><svg class="ico"><use href="#i-users"/></svg></span>
-        <span class="ins-stat-body">
-          <span class="ins-stat-label">الزبائن</span>
-          <span class="ins-stat-value">14</span>
-        </span>
-      </div>
-      <div class="ins-stat ins-glass ins-stat--zero">
-        <span class="ins-stat-ico"><svg class="ico"><use href="#i-inbox"/></svg></span>
-        <span class="ins-stat-body">
-          <span class="ins-stat-label">شكاوى مفتوحة</span>
-          <span class="ins-stat-value">0</span>
-        </span>
-      </div>
-    </div>
-
-    <p class="note">
-      الصفر معلومة: عند التدرّج الصامت كان يختفي تمامًا في خلفية الصفحة، فصار له لون
-      نصّ لا لون نغمة. والأرقام بخطّ Inter بأرقام جدولية حتى داخل النصّ العربي، لأن
-      عمودًا من المبالغ لا يُقارَن إلا إذا وقفت خاناته على حافة واحدة.
-    </p>
-  </section>
-
-  <!-- ============================================================ الأزرار -->
-  <section id="buttons">
-    <h2>الأزرار · Buttons</h2>
-
-    <h3 class="sub-h">المملوءة</h3>
-    <div class="row">
-      <button class="ins-btn ins-btn--primary">إجراء رئيسي</button>
-      <button class="ins-btn ins-btn--success">نجاح</button>
-      <button class="ins-btn ins-btn--danger">حذف</button>
-      <button class="ins-btn ins-btn--warning">تحذير</button>
-      <button class="ins-btn ins-btn--info">معلومة</button>
-    </div>
-
-    <h3 class="sub-h">الثانوية والشبحية</h3>
-    <div class="row">
-      <button class="ins-btn ins-btn--secondary">ثانوي</button>
-      <button class="ins-btn ins-btn--ghost">شبحي</button>
-      <button class="ins-btn ins-btn--ghost-danger">شبحي خطر</button>
-      <button class="ins-btn ins-btn--ghost-success">شبحي ناجح</button>
-      <button class="ins-btn ins-btn--ghost-warning">شبحي تحذير</button>
-      <button class="ins-btn ins-btn--ghost-info">شبحي معلومة</button>
-      <button class="ins-btn ins-btn--bare">زرّ عارٍ</button>
-    </div>
-
-    <h3 class="sub-h">المقاسات والحالات</h3>
-    <div class="row">
-      <button class="ins-btn ins-btn--primary ins-btn--lg">كبير</button>
-      <button class="ins-btn ins-btn--primary">عادي</button>
-      <button class="ins-btn ins-btn--primary ins-btn--sm">صغير</button>
-      <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="إجراءات">
-        <svg class="ico"><use href="#i-dots"/></svg>
-      </button>
-      <button class="ins-btn ins-btn--secondary ins-btn--sm ins-btn--icon" aria-label="إجراءات">
-        <svg class="ico"><use href="#i-dots"/></svg>
-      </button>
-      <button class="ins-btn ins-btn--primary" disabled>معطّل</button>
-      <button class="ins-btn ins-btn--ghost" disabled>شبحي معطّل</button>
-      <button class="ins-btn ins-btn--primary ins-btn--lift">مع ارتفاع</button>
-    </div>
-
-    <p class="note">
-      مرّر المؤشّر: لمعة قطرية تعبر الوجه في ٦٠٠ جزء من الثانية، منعكسة تلقائيًا في
-      الاتجاهين. والضغط تصغير لا إزاحة — التصغير يُقرأ كعنصر يستقبل اللمسة.
-      <br>
-      التمرير والتركيز لهما المظهر نفسه عمدًا: الزرّ تحت المؤشّر والزرّ الذي وصلته
-      لوحة المفاتيح في الحالة نفسها من وجهة نظر القارئ، وحلقة التركيز هي ما يفرّق
-      بينهما. جرّب <kbd>Tab</kbd>.
-    </p>
-  </section>
-
-  <!-- =========================================================== الشارات -->
-  <section id="marks">
-    <h2>الشارات والأرقام · Pills, badges, money</h2>
-
-    <div class="row">
-      <span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>ناجحة</span>
-      <span class="ins-pill ins-pill--warn"><span class="ins-pill-dot"></span>بانتظار</span>
-      <span class="ins-pill ins-pill--bad"><span class="ins-pill-dot"></span>ملغاة</span>
-      <span class="ins-pill ins-pill--info"><span class="ins-pill-dot"></span>معالجة</span>
-      <span class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>العلامة</span>
-      <span class="ins-pill"><span class="ins-pill-dot"></span>محايدة</span>
-    </div>
-
-    <h3 class="sub-h">شارات العدّ</h3>
-    <div class="row">
-      <span class="ins-badge">15</span>
-      <span class="ins-badge ins-badge--ok">2</span>
-      <span class="ins-badge ins-badge--warn">7</span>
-      <span class="ins-badge ins-badge--bad">99+</span>
-      <span class="ins-badge ins-badge--mute">0</span>
-      <span class="ins-avatar ins-avatar--sm">م</span>
-      <span class="ins-avatar">م د</span>
-      <span class="ins-avatar ins-avatar--lg">م</span>
-    </div>
-
-    <h3 class="sub-h">المبالغ</h3>
-    <div class="row" style="gap:20px">
-      <span class="ins-money"><span class="ins-money-val">1,240,905</span><span class="ins-money-cur">ل.س</span></span>
-      <span class="ins-money ins-money--pos"><span class="ins-money-val">+45,000</span><span class="ins-money-cur">ل.س</span></span>
-      <span class="ins-money ins-money--neg"><span class="ins-money-val">-2,375,000</span><span class="ins-money-cur">ل.س</span></span>
-      <span class="ins-num">0995067915</span>
-    </div>
-
-    <p class="note">
-      الرقم السالب أعلاه هو السبب في وجود <code>unicode-bidi: isolate</code>: داخل نصّ
-      عربي تنقل خوارزمية الاتجاهين إشارة الناقص إلى الطرف الآخر، فكان عجز الصندوق
-      يُعرَض هكذا <span dir="ltr">2,375,000-</span>. والعزل على <em>الرقم</em> لا على
-      الغلاف، وإلا لانتقلت معه وحدة العملة إلى يمين الخانات — وهي الجهة الخاطئة بالعربية.
-    </p>
-  </section>
-
-  <!-- ============================================================ الجداول -->
-  <section id="tables">
-    <h2>الجداول · Data table</h2>
-
-    <div class="ins-panel">
-      <div class="ins-panel-head">
-        <span class="ins-panel-ico"><svg class="ico"><use href="#i-clock"/></svg></span>
-        <h3 class="ins-panel-title">آخر العمليات</h3>
-        <div class="ins-panel-actions">
-          <span class="ins-badge">٦٤٥</span>
-        </div>
-      </div>
-      <div class="ins-panel-body ins-panel-body--flush">
-        <div class="ins-table-wrap">
-          <table class="ins-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>الزبون</th>
-                <th>الهدف</th>
-                <th class="ins-num">الكمية</th>
-                <th>الحالة</th>
-                <th>الوقت</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="ins-num">645</td>
-                <td>رامي الحلبي</td>
-                <td><span class="ins-num">0995067915</span></td>
-                <td class="ins-num">5,000</td>
-                <td><span class="ins-pill ins-pill--warn"><span class="ins-pill-dot"></span>بانتظار</span></td>
-                <td dir="ltr"><span class="ins-num">2026-09-21 09:48</span></td>
-                <td>
-                  <details class="ins-pop">
-                    <summary class="ins-btn ins-btn--secondary ins-btn--sm ins-btn--icon" aria-label="إجراءات">
-                      <svg class="ico"><use href="#i-dots"/></svg>
-                    </summary>
-                    <div class="ins-pop-body">
-                      <button class="ins-pop-item">إعادة المحاولة</button>
-                      <button class="ins-pop-item">عرض التفاصيل</button>
-                      <hr class="ins-pop-sep">
-                      <button class="ins-pop-item ins-pop-item--bad">إلغاء العملية</button>
-                    </div>
-                  </details>
-                </td>
-              </tr>
-              <tr>
-                <td class="ins-num">644</td>
-                <td>زبون تجريبي</td>
-                <td><span class="ins-num">0949087820</span></td>
-                <td class="ins-num">5,000</td>
-                <td><span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>ناجحة</span></td>
-                <td dir="ltr"><span class="ins-num">2026-09-21 08:15</span></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td class="ins-num">643</td>
-                <td>محمد الأحمد</td>
-                <td><span class="ins-num">0952904802</span></td>
-                <td class="ins-num">1,000</td>
-                <td><span class="ins-pill ins-pill--info"><span class="ins-pill-dot"></span>معالجة</span></td>
-                <td dir="ltr"><span class="ins-num">2026-09-21 11:05</span></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td class="ins-num">642</td>
-                <td>موبايل سيتي</td>
-                <td><span class="ins-num">0983448923</span></td>
-                <td class="ins-num">10,000</td>
-                <td><span class="ins-pill ins-pill--bad"><span class="ins-pill-dot"></span>ملغاة</span></td>
-                <td dir="ltr"><span class="ins-num">2026-09-21 09:28</span></td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <p class="note">
-      شريط العناوين ليس ملتحمًا بأعلى اللوح: إنه <em>شريط عائم</em> فوق بطاقة صفوف
-      مستقلّة، وهذا أقوى إشارة بصرية في هذا التصميم. وهو <code>&lt;table&gt;</code>
-      حقيقي — قارئ الشاشة والنسخ واللصق كلاهما يريد ذلك.
-      <br>
-      عمود الكمية يُحاذى إلى اليمين لا إلى <code>end</code>: في RTL يصير
-      <code>end</code> هو اليسار، فتصطفّ المبالغ على خانتها <em>الأكبر</em> ولا يقف
-      رقمان في المكان نفسه.
-    </p>
-  </section>
-
-  <!-- ============================================================= الحقول -->
-  <section id="forms">
-    <h2>الحقول · Form controls</h2>
-
-    <div class="cols">
-      <div class="ins-panel">
-        <div class="ins-panel-head"><h3 class="ins-panel-title">حقول نصّية</h3></div>
-        <div class="ins-panel-body">
-          <div class="ins-field-row">
-            <div class="ins-field ins-toolbar-grow">
-              <label class="ins-label" for="f-name">اسم الزبون</label>
-              <input class="ins-input" id="f-name" placeholder="مثال: رامي الحلبي">
-            </div>
-            <div class="ins-field ins-toolbar-grow">
-              <label class="ins-label" for="f-phone">رقم الهاتف</label>
-              <input class="ins-input ins-num" id="f-phone" dir="ltr" placeholder="09XXXXXXXX">
-            </div>
-          </div>
-
-          <div class="ins-field-row" style="margin-block-start:14px">
-            <div class="ins-field ins-toolbar-grow">
-              <label class="ins-label" for="f-net">الشبكة</label>
-              <select class="ins-select" id="f-net">
-                <option>سيرياتيل</option>
-                <option>إم تي إن</option>
-              </select>
-            </div>
-            <div class="ins-field ins-toolbar-grow">
-              <label class="ins-label" for="f-bad">حقل فيه خطأ</label>
-              <input class="ins-input ins-input--bad" id="f-bad" value="قيمة غير مقبولة">
-              <span class="ins-hint" style="color:var(--ins-tone-bad)">الرجاء إدخال رقم صحيح</span>
-            </div>
-          </div>
-
-          <div class="ins-field" style="margin-block-start:14px">
-            <label class="ins-label" for="f-note">ملاحظة</label>
-            <textarea class="ins-textarea" id="f-note" placeholder="اكتب ملاحظتك هنا…"></textarea>
-            <span class="ins-hint">يظهر هذا النصّ في سجلّ العملية.</span>
-          </div>
-
-          <div class="ins-form-commit">
-            <button class="ins-btn ins-btn--primary">إرسال</button>
-            <button class="ins-btn ins-btn--bare">تفريغ</button>
-          </div>
         </div>
       </div>
 
-      <div class="ins-panel">
-        <div class="ins-panel-head"><h3 class="ins-panel-title">اختيارات</h3></div>
-        <div class="ins-panel-body">
-          <h3 class="sub-h" style="margin-block-start:0">بحث</h3>
-          <div class="ins-search">
-            <svg class="ico ins-search-ico"><use href="#i-search"/></svg>
-            <input class="ins-input" placeholder="ابحث عن زبون أو رقم…">
+      <div class="ins-zone ins-zone--end">
+        <button class="ins-island ins-island--icon" data-ins-theme-toggle aria-label="تبديل الوضع">
+          <svg class="ico"><use href="#i-moon"/></svg>
+        </button>
+        <button class="ins-island ins-island--icon" data-ins-fx aria-label="تخفيف المؤثرات">
+          <svg class="ico"><use href="#i-sparkle"/></svg>
+        </button>
+        <button class="ins-island" id="dir-btn">LTR</button>
+        <details class="ins-pop">
+          <summary class="ins-island ins-island--icon" aria-label="الحساب">
+            <span class="ins-avatar ins-avatar--sm">م د</span>
+          </summary>
+          <div class="ins-pop-body">
+            <button class="ins-pop-item">الملف الشخصي</button>
+            <button class="ins-pop-item">الإعدادات</button>
+            <button class="ins-pop-item" data-ins-theme-toggle="system">اتبع النظام</button>
+            <hr class="ins-pop-sep">
+            <button class="ins-pop-item ins-pop-item--bad">تسجيل الخروج</button>
           </div>
+        </details>
+      </div>
+    </header>
 
-          <h3 class="sub-h">شريط مقسّم</h3>
-          <div class="ins-seg" role="tablist">
-            <button class="is-active" role="tab" aria-selected="true">اليوم</button>
-            <button role="tab" aria-selected="false">الأسبوع</button>
-            <button role="tab" aria-selected="false">الشهر</button>
-            <button role="tab" aria-selected="false">السنة</button>
-          </div>
+    <main class="ins-shell-content">
 
-          <h3 class="sub-h">صناديق ودوائر</h3>
-          <div class="row" style="gap:16px">
-            <label class="ins-check">
-              <input type="checkbox" checked>
-              <span class="ins-check-text">مفعّل</span>
-            </label>
-            <label class="ins-check">
-              <input type="checkbox">
-              <span class="ins-check-text">غير مفعّل</span>
-            </label>
-            <label class="ins-check">
-              <input type="checkbox" disabled>
-              <span class="ins-check-text">معطّل</span>
-            </label>
-          </div>
-          <div class="row" style="gap:16px;margin-block-start:10px">
-            <label class="ins-check">
-              <input type="radio" name="r" checked>
-              <span class="ins-check-text">فوري</span>
-            </label>
-            <label class="ins-check">
-              <input type="radio" name="r">
-              <span class="ins-check-text">مجدول</span>
-            </label>
-          </div>
+      <nav class="toc">
+        <a href="#surfaces">الأسطح</a>
+        <a href="#stats">البطاقات</a>
+        <a href="#buttons">الأزرار</a>
+        <a href="#marks">الشارات</a>
+        <a href="#tables">الجداول</a>
+        <a href="#forms">الحقول</a>
+        <a href="#feedback">التنبيهات</a>
+        <a href="#states">الحالات</a>
+        <a href="#overlays">الحوارات</a>
+        <a href="#motion">الحركة</a>
+        <a href="#brand">الهوية</a>
+        <a href="#scales">المقاييس</a>
+      </nav>
 
-          <h3 class="sub-h">مفاتيح</h3>
-          <label class="ins-switch">
-            <input type="checkbox" checked>
-            <span class="ins-switch-track"></span>
-            <span class="ins-switch-text">
-              <span class="ins-switch-label">إشعارات الرسائل</span>
+      <!-- ========================================================== الأسطح -->
+      <section id="surfaces">
+        <h2>الأسطح · Surfaces</h2>
+        <div class="cols" data-ins-reveal>
+          <div class="ins-card pad ins-hoverable">
+            <h3 style="margin:0 0 6px">زجاج · <code>.ins-card</code></h3>
+            <p style="margin:0;color:var(--ins-text-2);font-size:13px">
+              أربع طبقات: الضباب، والتعبئة المتدرّجة عند ١٤٥°، والحافة شبه البيضاء،
+              والحدّ المائل. مرّر المؤشّر: يرتفع السطح ويطول ظلّه وتضيء حافته — واللمعة
+              لا تتحرّك، لأنها التوقيع.
+            </p>
+          </div>
+          <div class="ins-glass pad">
+            <h3 style="margin:0 0 6px">زجاج داخل زجاج</h3>
+            <p style="margin:0 0 12px;color:var(--ins-text-2);font-size:13px">السطح التالي يحمل الصنف نفسه، ويُسطَّح تلقائيًا.</p>
+            <div class="ins-glass pad">
+              <p style="margin:0;color:var(--ins-text-2);font-size:13px">بلا حدّ، بلا ظلّ، بلا لمعة، وبلا ضباب ثانٍ — لمجرّد أنه متداخل.</p>
+            </div>
+          </div>
+          <div class="ins-glass-inner pad">
+            <h3 style="margin:0 0 6px">سطح داخلي</h3>
+            <p style="margin:0;color:var(--ins-text-2);font-size:13px"><code>.ins-glass-inner</code> — المظهر المُسطَّح بلا تداخل.</p>
+          </div>
+        </div>
+
+        <h3 class="sub-h">لوح · <code>.ins-panel</code></h3>
+        <div class="cols" data-ins-reveal>
+          <div class="ins-panel">
+            <div class="ins-panel-head">
+              <span class="ins-panel-ico"><svg class="ico"><use href="#i-bolt"/></svg></span>
+              <h3 class="ins-panel-title">لوح عادي</h3>
+              <div class="ins-panel-actions"><button class="ins-btn ins-btn--bare ins-btn--sm">عرض الكل</button></div>
+            </div>
+            <div class="ins-panel-body">
+              <p style="margin:0;color:var(--ins-text-2);font-size:13px">
+                اللوح لا يرتفع عند المرور — فهو حاوية لا زرّ، ورفعُه بينما المؤشّر يعبره
+                في طريقه إلى صفّ بداخله ضجيج. ما يفعله هو إضاءة حافّته فقط. جرّب المرور
+                على الرأس.
+              </p>
+            </div>
+            <div class="ins-panel-foot">
+              <button class="ins-btn ins-btn--primary ins-btn--sm">حفظ</button>
+              <button class="ins-btn ins-btn--bare ins-btn--sm">إلغاء</button>
+            </div>
+          </div>
+          <div class="ins-panel ins-panel--alert">
+            <div class="ins-panel-head">
+              <span class="ins-panel-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
+              <h3 class="ins-panel-title">لوح يحتاج تدخّلًا</h3>
+            </div>
+            <div class="ins-panel-body">
+              <p style="margin:0;color:var(--ins-text-2);font-size:13px">
+                التلوين على الرأس وحده. تلوين اللوح كلّه يضع خلفية حمراء تحت كل شارة حالة
+                في الجدول أسفله ويُسطّحها جميعًا.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== البطاقات -->
+      <section id="stats">
+        <h2>البطاقات الإحصائية · Stat tiles</h2>
+        <div class="ins-grid ins-grid--wide">
+          <div class="ins-stat ins-glass ins-stat--lg">
+            <span class="ins-stat-ico"><svg class="ico"><use href="#i-wallet"/></svg></span>
+            <span class="ins-stat-body">
+              <span class="ins-stat-label">صافي السيولة</span>
+              <span class="ins-stat-value ins-money"><span class="ins-money-val">2,775,250</span><span class="ins-money-cur">ل.س</span></span>
             </span>
+          </div>
+          <div class="ins-stat ins-glass ins-stat--ok">
+            <span class="ins-stat-ico"><svg class="ico"><use href="#i-check"/></svg></span>
+            <span class="ins-stat-body"><span class="ins-stat-label">عمليات ناجحة</span><span class="ins-stat-value">148</span></span>
+          </div>
+          <div class="ins-stat ins-glass ins-stat--warn">
+            <span class="ins-stat-ico"><svg class="ico"><use href="#i-clock"/></svg></span>
+            <span class="ins-stat-body"><span class="ins-stat-label">قيد التنفيذ</span><span class="ins-stat-value">11</span></span>
+          </div>
+          <div class="ins-stat ins-glass ins-stat--bad">
+            <span class="ins-stat-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
+            <span class="ins-stat-body"><span class="ins-stat-label">مراجعة يدوية</span><span class="ins-stat-value">4</span></span>
+          </div>
+          <div class="ins-stat ins-glass ins-stat--info">
+            <span class="ins-stat-ico"><svg class="ico"><use href="#i-users"/></svg></span>
+            <span class="ins-stat-body"><span class="ins-stat-label">الزبائن</span><span class="ins-stat-value">14</span></span>
+          </div>
+          <div class="ins-stat ins-glass ins-stat--zero">
+            <span class="ins-stat-ico"><svg class="ico"><use href="#i-inbox"/></svg></span>
+            <span class="ins-stat-body"><span class="ins-stat-label">شكاوى مفتوحة</span><span class="ins-stat-value">0</span></span>
+          </div>
+        </div>
+        <p class="note">
+          الرقاقة هي الجزء المتحرّك الوحيد في البطاقة، وتتحرّك على منحنى التجاوز.
+          والرقم يثبت ولا يتمدّد إلا بمقدار تباعد حروف ضئيل — لأن رقمًا يتغيّر حجمه يغيّر
+          عرض العمود الذي يقف فيه.
+        </p>
+      </section>
+
+      <!-- ========================================================== الأزرار -->
+      <section id="buttons">
+        <h2>الأزرار · Buttons</h2>
+        <h3 class="sub-h">المملوءة</h3>
+        <div class="row">
+          <button class="ins-btn ins-btn--primary"><svg class="ico"><use href="#i-bolt"/></svg>إجراء رئيسي</button>
+          <button class="ins-btn ins-btn--success">نجاح</button>
+          <button class="ins-btn ins-btn--danger">حذف</button>
+          <button class="ins-btn ins-btn--warning">تحذير</button>
+          <button class="ins-btn ins-btn--info">معلومة</button>
+        </div>
+        <h3 class="sub-h">الثانوية والشبحية</h3>
+        <div class="row">
+          <button class="ins-btn ins-btn--secondary">ثانوي</button>
+          <button class="ins-btn ins-btn--ghost"><svg class="ico"><use href="#i-check"/></svg>شبحي</button>
+          <button class="ins-btn ins-btn--ghost-danger">شبحي خطر</button>
+          <button class="ins-btn ins-btn--ghost-success">شبحي ناجح</button>
+          <button class="ins-btn ins-btn--ghost-warning">شبحي تحذير</button>
+          <button class="ins-btn ins-btn--ghost-info">شبحي معلومة</button>
+          <button class="ins-btn ins-btn--bare">زرّ عارٍ</button>
+        </div>
+        <h3 class="sub-h">المقاسات والحالات</h3>
+        <div class="row">
+          <button class="ins-btn ins-btn--primary ins-btn--lg">كبير</button>
+          <button class="ins-btn ins-btn--primary">عادي</button>
+          <button class="ins-btn ins-btn--primary ins-btn--sm">صغير</button>
+          <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="إجراءات"><svg class="ico"><use href="#i-dots"/></svg></button>
+          <button class="ins-btn ins-btn--secondary ins-btn--sm ins-btn--icon" aria-label="إجراءات"><svg class="ico"><use href="#i-dots"/></svg></button>
+          <button class="ins-btn ins-btn--primary" disabled>معطّل</button>
+          <button class="ins-btn ins-btn--primary ins-btn--lift">مع ارتفاع</button>
+        </div>
+        <p class="note">
+          مرّر المؤشّر: لمعة قطرية تعبر الوجه، والأيقونة تنزلق نحو الحافة الخلفية — أي في
+          الاتجاه الذي يأخذك إليه الزرّ. والزرّ الأيقوني وحده يكبر بدل أن ينزلق، لأنه لا
+          مكان له ينزلق إليه فيهتزّ بلا معنى. والضغط تصغير لا إزاحة.
+          <br>
+          التمرير والتركيز لهما المظهر نفسه عمدًا، وحلقة التركيز هي ما يفرّق بينهما.
+          جرّب <kbd>Tab</kbd>.
+        </p>
+      </section>
+
+      <!-- ========================================================= الشارات -->
+      <section id="marks">
+        <h2>الشارات والأرقام · Pills, badges, money</h2>
+        <div class="row">
+          <span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>ناجحة</span>
+          <span class="ins-pill ins-pill--warn"><span class="ins-pill-dot"></span>بانتظار</span>
+          <span class="ins-pill ins-pill--bad"><span class="ins-pill-dot"></span>ملغاة</span>
+          <span class="ins-pill ins-pill--info"><span class="ins-pill-dot"></span>معالجة</span>
+          <span class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>العلامة</span>
+          <span class="ins-pill"><span class="ins-pill-dot"></span>محايدة</span>
+          <button class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>شارة قابلة للضغط</button>
+        </div>
+        <h3 class="sub-h">شارات العدّ والصور</h3>
+        <div class="row">
+          <span class="ins-badge">15</span>
+          <span class="ins-badge ins-badge--ok">2</span>
+          <span class="ins-badge ins-badge--warn">7</span>
+          <span class="ins-badge ins-badge--bad">99+</span>
+          <span class="ins-badge ins-badge--mute">0</span>
+          <span class="ins-avatar ins-avatar--sm">م</span>
+          <span class="ins-avatar">م د</span>
+          <span class="ins-avatar ins-avatar--lg">م</span>
+        </div>
+        <h3 class="sub-h">المبالغ</h3>
+        <div class="row" style="gap:20px">
+          <span class="ins-money"><span class="ins-money-val">1,240,905</span><span class="ins-money-cur">ل.س</span></span>
+          <span class="ins-money ins-money--pos"><span class="ins-money-val">+45,000</span><span class="ins-money-cur">ل.س</span></span>
+          <span class="ins-money ins-money--neg"><span class="ins-money-val">-2,375,000</span><span class="ins-money-cur">ل.س</span></span>
+          <span class="ins-num">0995067915</span>
+        </div>
+        <p class="note">
+          الشارة الوحيدة التي ترتفع عند المرور هي القابلة للضغط فعلًا؛ أمّا النقطة فتكبر
+          في كلّ الحالات، لأن نقطة تكبر لا تَعِد بشيء لا تستطيعه.
+          <br>
+          الرقم السالب أعلاه هو السبب في وجود <code>unicode-bidi: isolate</code>: داخل نصّ
+          عربي تنقل خوارزمية الاتجاهين إشارة الناقص إلى الطرف الآخر، فكان عجز الصندوق
+          يُعرَض هكذا <span dir="ltr">2,375,000-</span>.
+        </p>
+      </section>
+
+      <!-- ========================================================== الجداول -->
+      <section id="tables">
+        <h2>الجداول · Data table</h2>
+        <div class="ins-panel">
+          <div class="ins-panel-head">
+            <span class="ins-panel-ico"><svg class="ico"><use href="#i-clock"/></svg></span>
+            <h3 class="ins-panel-title">آخر العمليات</h3>
+            <div class="ins-panel-actions"><span class="ins-badge">645</span></div>
+          </div>
+          <div class="ins-panel-body ins-panel-body--flush">
+            <div class="ins-table-wrap">
+              <table class="ins-table">
+                <thead>
+                  <tr>
+                    <th>#</th><th>الزبون</th><th>الهدف</th>
+                    <th class="ins-num">الكمية</th><th>الحالة</th><th>الوقت</th><th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="ins-num">645</td><td>رامي الحلبي</td><td><span class="ins-num">0995067915</span></td>
+                    <td class="ins-num">5,000</td>
+                    <td><span class="ins-pill ins-pill--warn"><span class="ins-pill-dot"></span>بانتظار</span></td>
+                    <td dir="ltr"><span class="ins-num">2026-09-21 09:48</span></td>
+                    <td>
+                      <details class="ins-pop">
+                        <summary class="ins-btn ins-btn--secondary ins-btn--sm ins-btn--icon" aria-label="إجراءات"><svg class="ico"><use href="#i-dots"/></svg></summary>
+                        <div class="ins-pop-body">
+                          <button class="ins-pop-item">إعادة المحاولة</button>
+                          <button class="ins-pop-item">عرض التفاصيل</button>
+                          <hr class="ins-pop-sep">
+                          <button class="ins-pop-item ins-pop-item--bad">إلغاء العملية</button>
+                        </div>
+                      </details>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="ins-num">644</td><td>زبون تجريبي</td><td><span class="ins-num">0949087820</span></td>
+                    <td class="ins-num">5,000</td>
+                    <td><span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>ناجحة</span></td>
+                    <td dir="ltr"><span class="ins-num">2026-09-21 08:15</span></td><td></td>
+                  </tr>
+                  <tr>
+                    <td class="ins-num">643</td><td>محمد الأحمد</td><td><span class="ins-num">0952904802</span></td>
+                    <td class="ins-num">1,000</td>
+                    <td><span class="ins-pill ins-pill--info"><span class="ins-pill-dot"></span>معالجة</span></td>
+                    <td dir="ltr"><span class="ins-num">2026-09-21 11:05</span></td><td></td>
+                  </tr>
+                  <tr>
+                    <td class="ins-num">642</td><td>موبايل سيتي</td><td><span class="ins-num">0983448923</span></td>
+                    <td class="ins-num">10,000</td>
+                    <td><span class="ins-pill ins-pill--bad"><span class="ins-pill-dot"></span>ملغاة</span></td>
+                    <td dir="ltr"><span class="ins-num">2026-09-21 09:28</span></td><td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <p class="note">
+          مرّر على صفّ: ينمو شريط صغير على حافته الأمامية — الشريط نفسه الذي يعلّم العنصر
+          النشط في القائمة الجانبية، فيتكلّم «ما تحت المؤشّر» و«أين أنت» لغةً واحدة. وهو
+          يكبر من مركزه لا ينزلق، لأن الصفّ عريض وشريطًا ينزلق بطوله يسحب العين <em>على
+          امتداد</em> الصفّ بدل أن يدلّها عليه.
+          <br>
+          والصفوف تدخل متدرّجة — ستّة منها فقط، لأن جدولًا بمئتي صفّ سيقضي ثماني ثوانٍ
+          وهو يرسم نفسه.
+        </p>
+      </section>
+
+      <!-- ========================================================== الحقول -->
+      <section id="forms">
+        <h2>الحقول · Form controls</h2>
+        <div class="cols">
+          <div class="ins-panel">
+            <div class="ins-panel-head"><span class="ins-panel-ico"><svg class="ico"><use href="#i-users"/></svg></span><h3 class="ins-panel-title">حقول نصّية</h3></div>
+            <div class="ins-panel-body">
+              <div class="ins-field-row">
+                <div class="ins-field ins-toolbar-grow">
+                  <label class="ins-label" for="f-name">اسم الزبون</label>
+                  <input class="ins-input" id="f-name" placeholder="مثال: رامي الحلبي">
+                </div>
+                <div class="ins-field ins-toolbar-grow">
+                  <label class="ins-label" for="f-phone">رقم الهاتف</label>
+                  <input class="ins-input ins-num" id="f-phone" dir="ltr" placeholder="09XXXXXXXX">
+                </div>
+              </div>
+              <div class="ins-field-row" style="margin-block-start:14px">
+                <div class="ins-field ins-toolbar-grow">
+                  <label class="ins-label" for="f-net">الشبكة</label>
+                  <select class="ins-select" id="f-net"><option>سيرياتيل</option><option>إم تي إن</option></select>
+                </div>
+                <div class="ins-field ins-toolbar-grow">
+                  <label class="ins-label" for="f-bad">حقل فيه خطأ</label>
+                  <input class="ins-input ins-input--bad" id="f-bad" value="قيمة غير مقبولة">
+                  <span class="ins-hint" style="color:var(--ins-tone-bad)">الرجاء إدخال رقم صحيح</span>
+                </div>
+              </div>
+              <div class="ins-field" style="margin-block-start:14px">
+                <label class="ins-label" for="f-note">ملاحظة</label>
+                <textarea class="ins-textarea" id="f-note" placeholder="اكتب ملاحظتك هنا…"></textarea>
+              </div>
+              <div class="ins-form-commit">
+                <button class="ins-btn ins-btn--primary">إرسال</button>
+                <button class="ins-btn ins-btn--bare">تفريغ</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="ins-panel">
+            <div class="ins-panel-head"><span class="ins-panel-ico"><svg class="ico"><use href="#i-cog"/></svg></span><h3 class="ins-panel-title">اختيارات</h3></div>
+            <div class="ins-panel-body">
+              <h3 class="sub-h" style="margin-block-start:0">بحث</h3>
+              <div class="ins-search">
+                <svg class="ico ins-search-ico"><use href="#i-search"/></svg>
+                <input class="ins-input" placeholder="ابحث عن زبون أو رقم…">
+              </div>
+
+              <h3 class="sub-h">شريط مقسّم</h3>
+              <div class="ins-seg" role="tablist">
+                <button class="is-active" role="tab" aria-selected="true">اليوم</button>
+                <button role="tab" aria-selected="false">الأسبوع</button>
+                <button role="tab" aria-selected="false">الشهر</button>
+                <button role="tab" aria-selected="false">السنة</button>
+              </div>
+
+              <h3 class="sub-h">صناديق ودوائر</h3>
+              <div class="row" style="gap:16px">
+                <label class="ins-check"><input type="checkbox" checked><span class="ins-check-text">مفعّل</span></label>
+                <label class="ins-check"><input type="checkbox"><span class="ins-check-text">غير مفعّل</span></label>
+                <label class="ins-check"><input type="checkbox" disabled><span class="ins-check-text">معطّل</span></label>
+              </div>
+              <div class="row" style="gap:16px;margin-block-start:10px">
+                <label class="ins-check"><input type="radio" name="r" checked><span class="ins-check-text">فوري</span></label>
+                <label class="ins-check"><input type="radio" name="r"><span class="ins-check-text">مجدول</span></label>
+              </div>
+
+              <h3 class="sub-h">مفتاح</h3>
+              <label class="ins-switch">
+                <input type="checkbox" checked>
+                <span class="ins-switch-track"></span>
+                <span class="ins-switch-text"><span class="ins-switch-label">إشعارات الرسائل</span></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="sub-h">شبكة مفاتيح · <code>.ins-switch-grid</code></h3>
+        <div class="ins-switch-grid">
+          <label class="ins-switch">
+            <input type="checkbox" checked><span class="ins-switch-track"></span>
+            <span class="ins-switch-text"><span class="ins-switch-label">تعبئة سيرياتيل</span><span class="ins-switch-desc">إيقافها يمنع كل العمليات الجديدة</span></span>
+          </label>
+          <label class="ins-switch">
+            <input type="checkbox" checked><span class="ins-switch-track"></span>
+            <span class="ins-switch-text"><span class="ins-switch-label">تعبئة إم تي إن</span></span>
+          </label>
+          <label class="ins-switch">
+            <input type="checkbox"><span class="ins-switch-track"></span>
+            <span class="ins-switch-text"><span class="ins-switch-label">وضع الصيانة</span><span class="ins-switch-desc">يُظهر صفحة توقّف للزبائن</span></span>
           </label>
         </div>
-      </div>
-    </div>
+        <p class="note">
+          المفتاح هو الشيء الوحيد في الصفحة الذي وظيفته كلّها أن <em>يتحرّك</em>، ولذلك
+          وحده — مع علامة الصحّ — يسير على منحنى التجاوز؛ كل شيء آخر على المنحنى الواحد.
+          والحقل يُضيء حدّه عند المرور ولا يرتفع: الارتفاع معناه التركيز، وإنفاقه على
+          المرور يترك التركيز بلا شيء يقوله.
+        </p>
+      </section>
 
-    <h3 class="sub-h">شبكة مفاتيح · <code>.ins-switch-grid</code></h3>
-    <div class="ins-switch-grid">
-      <label class="ins-switch">
-        <input type="checkbox" checked>
-        <span class="ins-switch-track"></span>
-        <span class="ins-switch-text">
-          <span class="ins-switch-label">تعبئة سيرياتيل</span>
-          <span class="ins-switch-desc">إيقافها يمنع كل العمليات الجديدة</span>
-        </span>
-      </label>
-      <label class="ins-switch">
-        <input type="checkbox" checked>
-        <span class="ins-switch-track"></span>
-        <span class="ins-switch-text">
-          <span class="ins-switch-label">تعبئة إم تي إن</span>
-        </span>
-      </label>
-      <label class="ins-switch">
-        <input type="checkbox">
-        <span class="ins-switch-track"></span>
-        <span class="ins-switch-text">
-          <span class="ins-switch-label">وضع الصيانة</span>
-          <span class="ins-switch-desc">يُظهر صفحة توقّف للزبائن</span>
-        </span>
-      </label>
-    </div>
-
-    <p class="note">
-      المفتاح هو الشيء الوحيد في الصفحة الذي وظيفته كلّها أن <em>يتحرّك</em>، ولذلك
-      وحده — مع علامة الصحّ — يسير على منحنى التجاوز <code>ease-spring</code>؛ كل شيء
-      آخر على المنحنى الواحد. وانزلاق خطّي يجعله يُقرأ كصندوق اختيار صار بيضاويًا.
-      <br>
-      لاحظ أن البطاقة الثانية بلا وصف ومع ذلك يقف مفتاحها في الأعلى: هذا
-      <code>align-content</code>، ولا يعمل إلا مع <code>flex-wrap</code> — بدونه كانت
-      البطاقة القصيرة تتوسّط ارتفاعًا حدّدته البطاقة المجاورة لها.
-    </p>
-  </section>
-
-  <!-- ========================================================== التنبيهات -->
-  <section id="feedback">
-    <h2>التنبيهات · Alerts &amp; toasts</h2>
-
-    <div style="display:grid;gap:12px">
-      <div class="ins-alert ins-alert--ok">
-        <span class="ins-alert-ico"><svg class="ico"><use href="#i-check"/></svg></span>
-        <div class="ins-alert-msg">
-          <span class="ins-alert-text">تمّت العملية بنجاح، وأُرسل الإشعار إلى الزبون.</span>
-          <button class="ins-alert-x" aria-label="إغلاق"><svg class="ico"><use href="#i-x"/></svg></button>
-        </div>
-      </div>
-      <div class="ins-alert ins-alert--bad">
-        <span class="ins-alert-ico"><svg class="ico"><use href="#i-x"/></svg></span>
-        <div class="ins-alert-msg">
-          <span class="ins-alert-text">فشل الاتصال بمزوّد الخدمة. أعد المحاولة بعد قليل.</span>
-        </div>
-      </div>
-      <div class="ins-alert ins-alert--warn">
-        <span class="ins-alert-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
-        <div class="ins-alert-msg">
-          <span class="ins-alert-text">رصيدك أقلّ من الحدّ الأدنى المحدَّد.</span>
-        </div>
-      </div>
-      <div class="ins-alert ins-alert--info">
-        <span class="ins-alert-ico"><svg class="ico"><use href="#i-info"/></svg></span>
-        <div class="ins-alert-msg">
-          <span class="ins-alert-text">ستُغلق الخدمة للصيانة الساعة الثانية فجرًا.</span>
-        </div>
-      </div>
-    </div>
-
-    <p class="note">
-      التنبيه قطعتان تُقرآن شكلًا واحدًا: دائرة مملوءة <em>صمّاء</em> تحمل الرمز، وكتلة
-      رسالة فيها <em>قضمة مقعّرة</em> في الحافة المواجهة لها. تتداخل الدائرة في القضمة
-      بفجوة شعرة، فيتشاركان خطًّا واحدًا متّصلًا ويبدو الرمز مستخرَجًا من الكتلة لا
-      موضوعًا فوقها. القضمة قناع تدرّج شعاعي — ومركزه حافة فيزيائية، لذا كُتب الاتجاهان
-      صراحةً. ومتصفّح بلا دعم للأقنعة يرسم كتلة مستقيمة الحافة بجانبها دائرة، وهذا
-      تنبيه عادي تمامًا.
-    </p>
-
-    <h3 class="sub-h">الرسائل الطائرة</h3>
-    <div class="row">
-      <button class="ins-btn ins-btn--ghost-success" data-ins-toast="تمّ الحفظ بنجاح" data-ins-tone="ok">رسالة نجاح</button>
-      <button class="ins-btn ins-btn--ghost-danger" data-ins-toast="تعذّر تنفيذ العملية" data-ins-tone="bad">رسالة خطأ</button>
-      <button class="ins-btn ins-btn--ghost-warning" data-ins-toast="انتبه: الرصيد منخفض" data-ins-tone="warn">رسالة تحذير</button>
-      <button class="ins-btn ins-btn--ghost" data-ins-toast="جارٍ المزامنة مع الخادم" data-ins-tone="info">رسالة معلومة</button>
-    </div>
-    <p class="note">
-      هذه أزرار وحسب: <code>data-ins-toast</code> و<code>data-ins-tone</code> ولا سطر
-      جافاسكربت في الصفحة. والإخفاء رسمٌ مؤجَّل في CSS لا مؤقّت في السكربت — لأن قاعدة
-      «قلّل الحركة» تقصّ مدّة الرسم ولا تمسّ تأخيره، فلو كان الانتظار مدّةً لاختفت
-      الرسالة قبل أن تُقرأ.
-    </p>
-  </section>
-
-  <!-- ============================================================ الحالات -->
-  <section id="states">
-    <h2>الحالات · Empty, loading</h2>
-
-    <div class="cols">
-      <div class="ins-panel">
-        <div class="ins-panel-head"><h3 class="ins-panel-title">حالة فارغة</h3></div>
-        <div class="ins-panel-body" style="padding:0">
-          <div class="ins-empty">
-            <span class="ins-empty-ico"><svg class="ico" style="width:2em;height:2em"><use href="#i-inbox"/></svg></span>
-            <span class="ins-empty-title">لا توجد رسائل</span>
-            <span class="ins-empty-hint">ستظهر هنا الرسائل الواردة من الزبائن فور وصولها.</span>
+      <!-- ======================================================= التنبيهات -->
+      <section id="feedback">
+        <h2>التنبيهات · Alerts &amp; toasts</h2>
+        <div style="display:grid;gap:12px">
+          <div class="ins-alert ins-alert--ok">
+            <span class="ins-alert-ico"><svg class="ico"><use href="#i-check"/></svg></span>
+            <div class="ins-alert-msg">
+              <span class="ins-alert-text">تمّت العملية بنجاح، وأُرسل الإشعار إلى الزبون.</span>
+              <button class="ins-alert-x" aria-label="إغلاق"><svg class="ico"><use href="#i-x"/></svg></button>
+            </div>
+          </div>
+          <div class="ins-alert ins-alert--bad">
+            <span class="ins-alert-ico"><svg class="ico"><use href="#i-x"/></svg></span>
+            <div class="ins-alert-msg"><span class="ins-alert-text">فشل الاتصال بمزوّد الخدمة. أعد المحاولة بعد قليل.</span></div>
+          </div>
+          <div class="ins-alert ins-alert--warn">
+            <span class="ins-alert-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
+            <div class="ins-alert-msg"><span class="ins-alert-text">رصيدك أقلّ من الحدّ الأدنى المحدَّد.</span></div>
+          </div>
+          <div class="ins-alert ins-alert--info">
+            <span class="ins-alert-ico"><svg class="ico"><use href="#i-info"/></svg></span>
+            <div class="ins-alert-msg"><span class="ins-alert-text">ستُغلق الخدمة للصيانة الساعة الثانية فجرًا.</span></div>
           </div>
         </div>
-      </div>
-
-      <div class="ins-panel">
-        <div class="ins-panel-head"><h3 class="ins-panel-title">هيكل التحميل</h3></div>
-        <div class="ins-panel-body">
-          <div class="ins-skel ins-skel--title"></div>
-          <div class="ins-skel ins-skel--text"></div>
-          <div class="ins-skel ins-skel--text"></div>
-          <div class="ins-skel ins-skel--text" style="width:70%"></div>
+        <p class="note">
+          التنبيه قطعتان تُقرآن شكلًا واحدًا: دائرة مملوءة <em>صمّاء</em> تحمل الرمز،
+          وكتلة رسالة فيها <em>قضمة مقعّرة</em> في الحافة المواجهة لها، فيتشاركان خطًّا
+          واحدًا متّصلًا. ومتصفّح بلا دعم للأقنعة يرسم كتلة مستقيمة الحافة بجانبها دائرة،
+          وهذا تنبيه عادي تمامًا.
+        </p>
+        <h3 class="sub-h">الرسائل الطائرة</h3>
+        <div class="row">
+          <button class="ins-btn ins-btn--ghost-success" data-ins-toast="تمّ الحفظ بنجاح" data-ins-tone="ok">رسالة نجاح</button>
+          <button class="ins-btn ins-btn--ghost-danger" data-ins-toast="تعذّر تنفيذ العملية" data-ins-tone="bad">رسالة خطأ</button>
+          <button class="ins-btn ins-btn--ghost-warning" data-ins-toast="انتبه: الرصيد منخفض" data-ins-tone="warn">رسالة تحذير</button>
+          <button class="ins-btn ins-btn--ghost" data-ins-toast="جارٍ المزامنة مع الخادم" data-ins-tone="info">رسالة معلومة</button>
         </div>
-      </div>
+      </section>
 
-      <div class="ins-panel">
-        <div class="ins-panel-head"><h3 class="ins-panel-title">دوّارة</h3></div>
-        <div class="ins-panel-body">
-          <div class="row" style="gap:20px;justify-content:center;padding:18px 0">
-            <span class="ins-spinner"></span>
-            <span class="ins-spinner ins-spinner--sm"></span>
+      <!-- ========================================================== الحالات -->
+      <section id="states">
+        <h2>الحالات · Empty, loading</h2>
+        <div class="cols" data-ins-reveal>
+          <div class="ins-panel">
+            <div class="ins-panel-head"><h3 class="ins-panel-title">حالة فارغة</h3></div>
+            <div class="ins-panel-body" style="padding:0">
+              <div class="ins-empty">
+                <span class="ins-empty-ico"><svg class="ico" style="width:2em;height:2em"><use href="#i-inbox"/></svg></span>
+                <span class="ins-empty-title">لا توجد رسائل</span>
+                <span class="ins-empty-hint">ستظهر هنا الرسائل الواردة من الزبائن فور وصولها.</span>
+              </div>
+            </div>
+          </div>
+          <div class="ins-panel">
+            <div class="ins-panel-head"><h3 class="ins-panel-title">هيكل التحميل</h3></div>
+            <div class="ins-panel-body">
+              <div class="ins-skel ins-skel--title"></div>
+              <div class="ins-skel ins-skel--text"></div>
+              <div class="ins-skel ins-skel--text"></div>
+              <div class="ins-skel ins-skel--text" style="width:70%"></div>
+            </div>
+          </div>
+          <div class="ins-panel">
+            <div class="ins-panel-head"><h3 class="ins-panel-title">دوّارة</h3></div>
+            <div class="ins-panel-body">
+              <div class="row" style="gap:20px;justify-content:center;padding:18px 0">
+                <span class="ins-spinner"></span><span class="ins-spinner ins-spinner--sm"></span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+        <p class="note">
+          الحالة الفارغة هي الشاشة الوحيدة التي لا شيء فيها، فهي الوحيدة التي تستحقّ
+          إنفاق حركة عليها: مرّر المؤشّر فيرتفع الرمز ويخرج قليلًا من بهتانه.
+        </p>
+      </section>
 
-    <p class="note">
-      الهيكل والدوّارة هما الشيئان الوحيدان في المكتبة المسموح لهما بحركة
-      <code>infinite</code>، وكلاهما يعني «ننتظر». كل ما عداهما حركة <em>عابرة</em>
-      تدفع كلفتها لمدّتها وحدها — والسبب مقيس: حركة دائمة تحت أسطح مضبّبة أعادت تضبيب
-      معظم الصفحة في كل إطار وكلّفت ٤٧٪ من نواة معالج، بلا توقّف.
-    </p>
-  </section>
-
-  <!-- =========================================================== الحوارات -->
-  <section id="overlays">
-    <h2>الحوارات والقوائم · Dialog &amp; popover</h2>
-
-    <div class="row">
-      <button class="ins-btn ins-btn--primary" data-ins-dialog="#demo-dialog">افتح الحوار</button>
-
-      <details class="ins-pop">
-        <summary class="ins-btn ins-btn--secondary">قائمة منسدلة</summary>
-        <div class="ins-pop-body">
-          <button class="ins-pop-item">تعديل</button>
-          <button class="ins-pop-item">نسخ الرابط</button>
-          <button class="ins-pop-item">أرشفة</button>
-          <hr class="ins-pop-sep">
-          <button class="ins-pop-item ins-pop-item--bad">حذف</button>
+      <!-- ========================================================= الحوارات -->
+      <section id="overlays">
+        <h2>الحوارات والقوائم · Dialog &amp; popover</h2>
+        <div class="row">
+          <button class="ins-btn ins-btn--primary" data-ins-dialog="#demo-dialog">افتح الحوار</button>
+          <details class="ins-pop">
+            <summary class="ins-btn ins-btn--secondary">قائمة منسدلة</summary>
+            <div class="ins-pop-body">
+              <button class="ins-pop-item">تعديل</button>
+              <button class="ins-pop-item">نسخ الرابط</button>
+              <button class="ins-pop-item">أرشفة</button>
+              <hr class="ins-pop-sep">
+              <button class="ins-pop-item ins-pop-item--bad">حذف</button>
+            </div>
+          </details>
         </div>
-      </details>
-    </div>
+        <p class="note">
+          افتح القائمة: تظهر أولًا ثم تمتلئ عناصرها متدرّجة — وهذا معظم ما يجعل قائمة
+          مدّتها ١٢٠ جزءًا من الثانية تبدو مدروسة لا مفاجئة. ومرّر على عنصر: يزيح نفسه
+          نحو المحتوى، الإزاحة نفسها التي تفعلها روابط القائمة الجانبية.
+        </p>
+      </section>
 
-    <dialog class="ins-dialog" id="demo-dialog">
-      <div class="ins-dialog-head">
-        <span class="ins-panel-ico"><svg class="ico"><use href="#i-users"/></svg></span>
-        <h3 class="ins-dialog-title">زبون جديد</h3>
-        <button class="ins-dialog-x" data-ins-dialog-close aria-label="إغلاق">
-          <svg class="ico"><use href="#i-x"/></svg>
-        </button>
-      </div>
-      <div class="ins-dialog-body">
-        <div class="ins-field-row">
-          <div class="ins-field ins-toolbar-grow">
-            <label class="ins-label" for="d-name">الاسم</label>
-            <input class="ins-input" id="d-name" placeholder="الاسم الكامل">
+      <!-- ========================================================== الحركة -->
+      <section id="motion">
+        <h2>الحركة · Motion</h2>
+        <div class="cols" data-ins-reveal>
+          <div class="ins-card pad ins-hoverable">
+            <h3 style="margin:0 0 6px">منحنى واحد</h3>
+            <p style="margin:0;color:var(--ins-text-2);font-size:13px">
+              <code>cubic-bezier(.22,1,.36,1)</code> لكلّ شيء تقريبًا. الدخول ٢٨٠ والخروج
+              ١٨٠ جزءًا من الثانية — عدم تماثل مقصود: الدخول يستحقّ المشاهدة، والخروج
+              يستحقّ أن يبتعد عن الطريق.
+            </p>
           </div>
-          <div class="ins-field ins-toolbar-grow">
-            <label class="ins-label" for="d-phone">الهاتف</label>
-            <input class="ins-input ins-num" id="d-phone" dir="ltr" placeholder="09XXXXXXXX">
+          <div class="ins-card pad ins-hoverable">
+            <h3 style="margin:0 0 6px">منحنى التجاوز</h3>
+            <p style="margin:0;color:var(--ins-text-2);font-size:13px">
+              <code>cubic-bezier(.34,1.56,.64,1)</code> محجوز لما وظيفته أن ينتقل: إبهام
+              المفتاح، وعلامة الصحّ، ورقاقات الأيقونات.
+            </p>
+          </div>
+          <div class="ins-card pad ins-hoverable">
+            <h3 style="margin:0 0 6px">لا حركة دائمة</h3>
+            <p style="margin:0;color:var(--ins-text-2);font-size:13px">
+              كل حركة هنا <em>عابرة</em>. الاستثناءان الوحيدان هما الهيكل والدوّارة،
+              وكلاهما يعني «ننتظر». والبناء يرفض أيّ <code>infinite</code> غيرهما.
+            </p>
           </div>
         </div>
-        <label class="ins-switch ins-switch--card">
-          <input type="checkbox" checked>
-          <span class="ins-switch-track"></span>
-          <span class="ins-switch-text">
-            <span class="ins-switch-label">تفعيل الحساب فورًا</span>
-            <span class="ins-switch-desc">يمكن للزبون الدخول مباشرة بعد الحفظ</span>
-          </span>
-        </label>
-      </div>
-      <div class="ins-dialog-foot">
-        <button class="ins-btn ins-btn--bare" data-ins-dialog-close>إلغاء</button>
-        <button class="ins-btn ins-btn--primary" data-ins-dialog-close>حفظ الزبون</button>
-      </div>
-    </dialog>
-
-    <p class="note">
-      <code>&lt;dialog&gt;</code> أصلي لا صندوق بـ<code>z-index</code>. ثلاثة أشياء
-      تأتي مجّانًا: <kbd>Esc</kbd> يغلقه، والتركيز محبوس داخله، والطبقة العليا ترفعه
-      فوق كل سياق تكديس في الصفحة بلا رقم واحد — وهذا آخرها هو الأهم هنا، لأن كل سطح
-      زجاجي يحمل <code>backdrop-filter</code> فيصير سياق تكديس بنفسه.
-      <br>
-      واسمه <code>.ins-dialog</code> لا <code>.modal</code> عمدًا: بوتستراب يملك
-      <code>.modal</code>، وقاعدته <code>display: none</code> تتفوّق على قاعدة
-      المتصفّح — فيفتح الحوار ويأخذ الطبقة العليا ولا يرسم شيئًا.
-    </p>
-  </section>
-
-  <!-- ============================================================= الهوية -->
-  <section id="brand">
-    <h2>الهوية · One brand variable</h2>
-
-    <div class="ins-panel">
-      <div class="ins-panel-body">
-        <div class="swatches">
-          <button class="swatch" data-brand="#9B2C5E" style="background:#9B2C5E" title="#9B2C5E"></button>
-          <button class="swatch" data-brand="#0F766E" style="background:#0F766E" title="#0F766E"></button>
-          <button class="swatch" data-brand="#1D4ED8" style="background:#1D4ED8" title="#1D4ED8"></button>
-          <button class="swatch" data-brand="#B45309" style="background:#B45309" title="#B45309"></button>
-          <button class="swatch" data-brand="#C9A063" style="background:#C9A063" title="#C9A063"></button>
-          <button class="swatch" data-brand="#4C1D95" style="background:#4C1D95" title="#4C1D95"></button>
-          <button class="swatch" data-brand="#047857" style="background:#047857" title="#047857"></button>
-        </div>
-        <p class="note" style="margin-block-end:0">
-          كل مربّع يستدعي <code>Insiyab.brand(hex)</code> بقيمة واحدة. الثلاثيّة، ونهاية
-          التدرّج، والدرجة المقروءة، وغَسلتا الصفحة — كلّها مشتقّة منها.
+        <p class="note">
+          السبب مقيس لا مُفترَض: ثلاث كرات مزخرفة تنجرف بحركة دائمة كلّفت <strong>٤٧٪ من
+          نواة معالج، بلا توقّف</strong>، على صفحة لا يحدث فيها شيء. والتشخيص البديهي —
+          إعادة تضبيب ثلاث طبقات ستّين مرّة في الثانية — كان خاطئًا: بإزالة الضباب عنها
+          وترك الانجراف بقيت الصفحة تحرق ٤٤٫٧٪. المُكلِف هو <em>الأسطح المضبّبة فوقها</em>:
+          السطح المصنفر يعيد تضبيب ما خلفه كلّما تغيّر، فأيّ شيء يتحرّك تحته يعيد تضبيب
+          معظم الصفحة في كلّ إطار. إيقاف الانجراف وحده أنزلها إلى ٤٫٨٪.
           <br>
-          ولون النصّ على السطح المملوء <em>مقيس</em> لا مفترَض: الأبيض على ذهبي متوسّط
-          يعطي ٢٫٤:١ وهو غير مقروء. لذلك تُختار الدرجة الأفضل بين الأبيض والأسود
-          المائل، ثمّ تُزاح نهاية التدرّج <em>بعيدًا</em> عن ذلك اللون — فتحمل التعبئة
-          كلّها نصَّها بحكم البناء لا بحكم الحظّ. جرّب الذهبي الفاتح وانظر إلى الأزرار.
+          فالخيار في تصميم مصنفر ليس «حركة رخيصة أو غالية»، بل <strong>حركة أو صنفرة</strong>
+          — والصنفرة هي التصميم. اضغط زرّ ✨ في الشريط العلوي لإطفاء كل هذا.
         </p>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- =========================================================== المقاييس -->
-  <section id="scales">
-    <h2>المقاييس · Scales</h2>
+      <!-- =========================================================== الهوية -->
+      <section id="brand">
+        <h2>الهوية · One brand variable</h2>
+        <div class="ins-panel">
+          <div class="ins-panel-body">
+            <div class="swatches">
+              <button class="swatch" data-brand="#9B2C5E" style="background:#9B2C5E" title="#9B2C5E"></button>
+              <button class="swatch" data-brand="#0F766E" style="background:#0F766E" title="#0F766E"></button>
+              <button class="swatch" data-brand="#1D4ED8" style="background:#1D4ED8" title="#1D4ED8"></button>
+              <button class="swatch" data-brand="#B45309" style="background:#B45309" title="#B45309"></button>
+              <button class="swatch" data-brand="#C9A063" style="background:#C9A063" title="#C9A063"></button>
+              <button class="swatch" data-brand="#4C1D95" style="background:#4C1D95" title="#4C1D95"></button>
+              <button class="swatch" data-brand="#047857" style="background:#047857" title="#047857"></button>
+            </div>
+            <p class="note" style="margin-block-end:0">
+              كل مربّع يستدعي <code>Insiyab.brand(hex)</code> بقيمة واحدة. الثلاثيّة،
+              ونهاية التدرّج، والدرجة المقروءة، وغَسلتا الصفحة — كلّها مشتقّة منها. ولون
+              النصّ على السطح المملوء <em>مقيس</em> لا مفترَض: جرّب الذهبي الفاتح وانظر
+              إلى الأزرار.
+            </p>
+          </div>
+        </div>
+      </section>
 
-    <h3 class="sub-h">نصف القطر</h3>
-    <div class="radii">
-      <div style="border-radius:var(--ins-r-xs)">7</div>
-      <div style="border-radius:var(--ins-r-sm)">10</div>
-      <div style="border-radius:var(--ins-r-md)">14</div>
-      <div style="border-radius:var(--ins-r-lg)">22</div>
-      <div style="border-radius:var(--ins-r-xl)">32</div>
-      <div style="border-radius:var(--ins-r-pill)">999</div>
-    </div>
-    <p class="note">
-      تدرّج ×١٫٤٥ لا ×٢، و١٤ بكسل كقيمة وسطى افتراضية هي أكبر مصدر منفرد للنعومة
-      المُدرَكة. القيمة الافتراضية في بوتستراب ٦ بكسل.
-    </p>
+      <!-- ========================================================= المقاييس -->
+      <section id="scales">
+        <h2>المقاييس · Scales</h2>
+        <h3 class="sub-h">نصف القطر</h3>
+        <div class="radii">
+          <div style="border-radius:var(--ins-r-xs)">7</div>
+          <div style="border-radius:var(--ins-r-sm)">10</div>
+          <div style="border-radius:var(--ins-r-md)">14</div>
+          <div style="border-radius:var(--ins-r-lg)">22</div>
+          <div style="border-radius:var(--ins-r-xl)">32</div>
+          <div style="border-radius:var(--ins-r-pill)">999</div>
+        </div>
+        <h3 class="sub-h">الثلاثية الدلالية</h3>
+        <div class="tones">
+          <div class="tone-chip"><i style="background:var(--ins-tone-ok-bg);border-color:var(--ins-tone-ok-bd)"></i><span style="color:var(--ins-tone-ok)">ناجح</span></div>
+          <div class="tone-chip"><i style="background:var(--ins-tone-warn-bg);border-color:var(--ins-tone-warn-bd)"></i><span style="color:var(--ins-tone-warn)">تحذير</span></div>
+          <div class="tone-chip"><i style="background:var(--ins-tone-bad-bg);border-color:var(--ins-tone-bad-bd)"></i><span style="color:var(--ins-tone-bad)">خطأ</span></div>
+          <div class="tone-chip"><i style="background:var(--ins-tone-info-bg);border-color:var(--ins-tone-info-bd)"></i><span style="color:var(--ins-tone-info)">معلومة</span></div>
+          <div class="tone-chip"><i style="background:var(--ins-tone-mute-bg);border-color:var(--ins-tone-mute-bd)"></i><span style="color:var(--ins-tone-mute)">خفيف</span></div>
+          <div class="tone-chip"><i style="background:var(--ins-tone-brand-bg);border-color:var(--ins-tone-brand-bd)"></i><span style="color:var(--ins-tone-brand)">العلامة</span></div>
+        </div>
+        <h3 class="sub-h">الخطوط</h3>
+        <div class="cols" data-ins-reveal>
+          <div class="ins-card pad">
+            <h3 style="margin:0 0 8px">تجوال · Tajawal</h3>
+            <p style="margin:0;font-size:15px;color:var(--ins-text-2)">الخطّ العربي هو الهويّة، ويحمل مجموعته اللاتينية الخاصة — لذا تبقى كلمة MTN داخل سطر عربي في تجوال.</p>
+          </div>
+          <div class="ins-card pad">
+            <h3 style="margin:0 0 8px" dir="ltr">Inter · numerals</h3>
+            <p style="margin:0;font-size:15px" class="ins-num">1,240,905 · 3.14159 · 2026-09-22</p>
+          </div>
+          <div class="ins-card pad">
+            <h3 style="margin:0 0 8px">نصّ مختلط</h3>
+            <p style="margin:0;font-size:15px">العميل: Mohammad Diab — الرصيد <span class="ins-num">45,000</span> ل.س</p>
+          </div>
+        </div>
+      </section>
 
-    <h3 class="sub-h">الثلاثية الدلالية</h3>
-    <div class="tones">
-      <div class="tone-chip"><i style="background:var(--ins-tone-ok-bg);border-color:var(--ins-tone-ok-bd)"></i><span style="color:var(--ins-tone-ok)">ناجح</span></div>
-      <div class="tone-chip"><i style="background:var(--ins-tone-warn-bg);border-color:var(--ins-tone-warn-bd)"></i><span style="color:var(--ins-tone-warn)">تحذير</span></div>
-      <div class="tone-chip"><i style="background:var(--ins-tone-bad-bg);border-color:var(--ins-tone-bad-bd)"></i><span style="color:var(--ins-tone-bad)">خطأ</span></div>
-      <div class="tone-chip"><i style="background:var(--ins-tone-info-bg);border-color:var(--ins-tone-info-bd)"></i><span style="color:var(--ins-tone-info)">معلومة</span></div>
-      <div class="tone-chip"><i style="background:var(--ins-tone-mute-bg);border-color:var(--ins-tone-mute-bd)"></i><span style="color:var(--ins-tone-mute)">خفيف</span></div>
-      <div class="tone-chip"><i style="background:var(--ins-tone-brand-bg);border-color:var(--ins-tone-brand-bd)"></i><span style="color:var(--ins-tone-brand)">العلامة</span></div>
-    </div>
-    <p class="note">
-      كل حالة هي الوصفة الثلاثية نفسها: نصّ مشبَع، وتلوين بنحو ١٢٪ من الدرجة ذاتها،
-      وحدّ بنحو ٢٠٪ منها. وهذا هو سبب قراءة الشارات والتنبيهات والزجاج كعائلة واحدة.
-    </p>
-
-    <h3 class="sub-h">الخطوط</h3>
-    <div class="cols">
-      <div class="ins-card pad">
-        <h3 style="margin:0 0 8px">تجوال · Tajawal</h3>
-        <p style="margin:0;font-size:15px;color:var(--ins-text-2)">
-          الخطّ العربي هو الهويّة، ويحمل مجموعته اللاتينية الخاصة — لذا تبقى كلمة MTN
-          داخل سطر عربي في تجوال ولا تقفز إلى Inter.
-        </p>
-      </div>
-      <div class="ins-card pad">
-        <h3 style="margin:0 0 8px" dir="ltr">Inter · numerals</h3>
-        <p style="margin:0;font-size:15px" class="ins-num">1,240,905 · 3.14159 · 2026-09-22</p>
-        <p style="margin:8px 0 0;font-size:13px;color:var(--ins-text-2)">
-          أرقام جدولية، فيقف عمود الأرقام على حافة واحدة.
-        </p>
-      </div>
-      <div class="ins-card pad">
-        <h3 style="margin:0 0 8px">نصّ مختلط</h3>
-        <p style="margin:0;font-size:15px">العميل: Mohammad Diab — الرصيد <span class="ins-num">45,000</span> ل.س</p>
-        <p style="margin:8px 0 0;font-size:13px;color:var(--ins-text-2)">
-          اتّجاهان في سطر واحد، بلا وسوم ولا أغلفة.
-        </p>
-      </div>
-    </div>
-  </section>
-
+    </main>
+  </div>
 </div>
+
+<dialog class="ins-dialog" id="demo-dialog">
+  <div class="ins-dialog-head">
+    <span class="ins-panel-ico"><svg class="ico"><use href="#i-users"/></svg></span>
+    <h3 class="ins-dialog-title">زبون جديد</h3>
+    <button class="ins-dialog-x" data-ins-dialog-close aria-label="إغلاق"><svg class="ico"><use href="#i-x"/></svg></button>
+  </div>
+  <div class="ins-dialog-body">
+    <div class="ins-field-row">
+      <div class="ins-field ins-toolbar-grow">
+        <label class="ins-label" for="d-name">الاسم</label>
+        <input class="ins-input" id="d-name" placeholder="الاسم الكامل">
+      </div>
+      <div class="ins-field ins-toolbar-grow">
+        <label class="ins-label" for="d-phone">الهاتف</label>
+        <input class="ins-input ins-num" id="d-phone" dir="ltr" placeholder="09XXXXXXXX">
+      </div>
+    </div>
+    <label class="ins-switch ins-switch--card">
+      <input type="checkbox" checked><span class="ins-switch-track"></span>
+      <span class="ins-switch-text">
+        <span class="ins-switch-label">تفعيل الحساب فورًا</span>
+        <span class="ins-switch-desc">يمكن للزبون الدخول مباشرة بعد الحفظ</span>
+      </span>
+    </label>
+  </div>
+  <div class="ins-dialog-foot">
+    <button class="ins-btn ins-btn--bare" data-ins-dialog-close>إلغاء</button>
+    <button class="ins-btn ins-btn--primary" data-ins-dialog-close>حفظ الزبون</button>
+  </div>
+</dialog>
 
 <script>
   /* أثاث الصفحة فقط — المكوّنات أعلاه لا تحتاج شيئًا من هذا. */
   document.addEventListener('click', function (e) {
     var sw = e.target.closest('[data-brand]');
     if (sw) Insiyab.brand(sw.getAttribute('data-brand'));
+
+    /* روابط القائمة الجانبية تتصرّف كتنقّل حقيقي داخل الصفحة. */
+    var link = e.target.closest('.ins-shell-link');
+    if (link && link.getAttribute('href') !== '#') {
+      document.querySelectorAll('.ins-shell-link').forEach(function (l) {
+        l.classList.toggle('is-active', l === link);
+      });
+      Insiyab.sidebar('closed');
+    }
   });
 
   var dirBtn = document.getElementById('dir-btn');
@@ -863,12 +822,13 @@
     applyDir(document.documentElement.getAttribute('dir') !== 'rtl');
   });
 
-  /* `?theme=` / `?brand=` / `?dir=` — for the screenshot harness, which can
-     navigate but cannot click. */
+  /* معاملات للقطات الشاشة: المتصفّح بلا واجهة يستطيع التنقّل ولا يستطيع الضغط. */
   var q = new URLSearchParams(location.search);
   if (q.get('theme')) Insiyab.theme(q.get('theme'));
   if (q.get('brand')) Insiyab.brand(q.get('brand'));
   if (q.get('dir')) applyDir(q.get('dir') !== 'ltr');
+  if (q.get('fx') === 'off') document.documentElement.setAttribute('data-ins-fx', 'off');
+  if (q.get('collapsed')) Insiyab.sidebar('collapsed');
   if (q.get('open') === 'dialog') Insiyab.dialog('#demo-dialog', 'open');
   if (q.get('toast')) Insiyab.toast('تمّ الحفظ بنجاح', 'ok');
 

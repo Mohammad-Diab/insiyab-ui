@@ -378,3 +378,38 @@
   .ins-seg > a,
   .ins-seg > button { padding-inline: .5rem; font-size: .75rem; gap: .25rem; }
 }
+
+/* --------------------------------------------------------------- motion */
+/* A field answers the pointer before it answers the caret: the hairline brightens
+   and the fill deepens one step. It does NOT lift on hover -- the lift is what focus
+   means here, and spending it on hover leaves focus with nothing left to say. */
+.ins-input:hover:not(:disabled):not(:focus),
+.ins-select:hover:not(:disabled):not(:focus),
+.ins-textarea:hover:not(:disabled):not(:focus) {
+  border-color: rgba(var(--ins-primary-rgb), .30);
+  background: var(--ins-ctl-bg-hover);
+}
+
+/* The box brightens and blooms a little before it is clicked. */
+.ins-check > input:hover:not(:disabled) {
+  border-color: rgba(var(--ins-primary-rgb), .45);
+  box-shadow: var(--ins-bevel-dim), var(--ins-glow);
+}
+
+.ins-switch-track { transition: background var(--ins-t-base) var(--ins-ease),
+                                border-color var(--ins-t-base),
+                                box-shadow var(--ins-t-base),
+                                filter var(--ins-t-pop) var(--ins-ease); }
+.ins-switch:hover .ins-switch-track { border-color: rgba(var(--ins-primary-rgb), .40); }
+.ins-switch:hover > input:checked + .ins-switch-track { filter: brightness(1.08); }
+
+/* A newly selected segment pops in on the overshoot curve. The class is toggled by
+   the script, so the animation replays on every selection -- which is the point: the
+   raised face is the only thing that says which pane is open, and a face that simply
+   *is* there on the next frame does not read as a selection having been made. */
+.ins-seg > .is-active { animation: ins-pop var(--ins-t-pop) var(--ins-ease-spring); }
+
+/* The search glyph grows into the brand colour as the field takes focus. */
+.ins-search > .ins-search-ico { transition: color var(--ins-t-base) var(--ins-ease),
+                                            transform var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-search:focus-within > .ins-search-ico { transform: scale(1.12); }

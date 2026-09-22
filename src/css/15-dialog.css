@@ -199,3 +199,29 @@
 .ins-pop-item--bad { color: var(--ins-tone-bad); }
 .ins-pop-item--bad:hover { background: var(--ins-tone-bad-bg); color: var(--ins-tone-bad); }
 .ins-pop-sep { block-size: 1px; background: var(--ins-line); margin: .25rem 0; border: 0; }
+
+/* --------------------------------------------------------------- motion */
+/* A menu item indents toward the content on hover -- the same directional nudge the
+   sidebar's links make, so a list of destinations gestures the same way wherever it
+   turns up. The sign is flipped by hand, as every transform in this library is. */
+.ins-pop-item { transition: background var(--ins-t-pop) var(--ins-ease),
+                            color var(--ins-t-pop) var(--ins-ease),
+                            transform var(--ins-t-pop) var(--ins-ease); }
+[dir="ltr"] .ins-pop-item:hover { transform: translateX(3px); }
+[dir="rtl"] .ins-pop-item:hover { transform: translateX(-3px); }
+
+/* The items arrive just after the body does, so the menu opens and then fills rather
+   than appearing whole -- which is most of what makes a 120ms popover feel
+   considered instead of abrupt. */
+.ins-pop-body > * { animation: ins-rise-sm var(--ins-t-pop) var(--ins-ease) backwards; }
+.ins-pop-body > :nth-child(2) { animation-delay: .03s; }
+.ins-pop-body > :nth-child(3) { animation-delay: .06s; }
+.ins-pop-body > :nth-child(4) { animation-delay: .09s; }
+.ins-pop-body > :nth-child(5) { animation-delay: .12s; }
+
+/* The close button turns. It is the one control in a dialog whose meaning is a
+   rotation already. */
+.ins-dialog-x { transition: background var(--ins-t-pop) var(--ins-ease),
+                            color var(--ins-t-pop) var(--ins-ease),
+                            transform var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-dialog-x:hover { transform: rotate(90deg); }

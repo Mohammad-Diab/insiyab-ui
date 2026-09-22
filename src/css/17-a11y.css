@@ -55,7 +55,9 @@
    Everything the library animates or frosts is listed here. An effect that is not
    gated is an effect nobody can turn off. */
 [data-ins-fx="off"] .ins-orb { display: none; }
-[data-ins-fx="off"] :is(.ins-glass, .ins-card, .ins-panel, .ins-toast, .ins-pop-body),
+[data-ins-fx="off"] :is(.ins-glass, .ins-card, .ins-panel, .ins-toast, .ins-pop-body,
+                         .ins-island, .ins-shell-side),
+[data-ins-fx="off"] :root[data-ins-scrolled] .ins-topbar,
 [data-ins-fx="off"] .ins-dialog::backdrop {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
@@ -64,14 +66,37 @@
    `animation: none` list below would never have reached it. */
 [data-ins-fx="off"] .ins-dialog,
 [data-ins-fx="off"] .ins-dialog::backdrop { transition: none; }
-[data-ins-fx="off"] .ins-grid > *,
-[data-ins-fx="off"] .ins-pop-body { animation: none; }
+
+/* Every entrance in the library. An animation that is not listed here is an
+   animation nobody can turn off. */
+[data-ins-fx="off"] :is([data-ins-reveal], [data-ins-reveal] > *,
+                         .ins-grid, .ins-grid > *,
+                         .ins-shell-content > *,
+                         .ins-table tbody tr,
+                         .ins-pop-body, .ins-pop-body > *,
+                         .ins-alert, .ins-badge, .ins-island--title,
+                         .ins-seg > .is-active, .ins-shell-scrim,
+                         .ins-anim-rise, .ins-anim-pop, .ins-anim-slide) { animation: none; }
 [data-ins-fx="off"] .ins-skel { animation: none; background: var(--ins-skel-base); }
-/* The toast keeps both animations — they are what hides it — and loses only the
+/* The spinner keeps spinning -- it is the one thing whose animation IS its meaning.
+   It loses only the fade it arrives on. */
+[data-ins-fx="off"] .ins-spinner { animation: ins-spin .7s linear infinite; }
+/* The toast keeps both animations -- they are what hides it -- and loses only the
    distance they cover. `animation: none` here would strand it on screen for ever. */
 [data-ins-fx="off"] .ins-toast { animation-duration: .001s, .001s; }
+
+/* Hovers and presses: the transform goes, the colour change stays. Somebody who
+   turned effects off still needs to see what is under the pointer. */
 [data-ins-fx="off"] .ins-btn::before { content: none; }
-[data-ins-fx="off"] .ins-btn:active:not(:disabled),
-[data-ins-fx="off"] .ins-input:focus,
-[data-ins-fx="off"] .ins-select:focus,
-[data-ins-fx="off"] .ins-textarea:focus { transform: none; }
+[data-ins-fx="off"] :is(.ins-btn:active:not(:disabled),
+                         .ins-input:focus, .ins-select:focus, .ins-textarea:focus,
+                         .ins-card:hover, .ins-stat:hover, .ins-hoverable:hover,
+                         .ins-island:hover, .ins-pill:hover, .ins-avatar:hover,
+                         .ins-shell-link:hover, .ins-pop-item:hover,
+                         .ins-dialog-x:hover, .ins-empty:hover .ins-empty-ico),
+[data-ins-fx="off"] :is(.ins-stat, .ins-panel-head, .ins-alert, .ins-btn, .ins-search,
+                         .ins-shell-brand, .ins-pill):hover :is(.ins-stat-ico,
+                         .ins-panel-ico, .ins-alert-ico, svg, .ins-ico, .ins-shell-mark,
+                         .ins-pill-dot, .ins-search-ico) { transform: none; }
+[data-ins-fx="off"] .ins-shell { transition: none; }
+[data-ins-fx="off"] .ins-shell-side { transition: none; }

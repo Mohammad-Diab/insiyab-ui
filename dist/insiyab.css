@@ -1,4 +1,4 @@
-/*! Insiyab UI v0.2.0 · insiyab · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
+/*! Insiyab UI v0.3.0 · insiyab · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
 /* ==========================================================================
    Insiyab · fonts
    ==========================================================================
@@ -882,6 +882,441 @@ a:hover { color: var(--ins-tone-brand-soft); }
 }
 
 /* ==========================================================================
+   Insiyab · application shell
+   ==========================================================================
+
+   A sidebar and a top bar, and two ideas that make it not look like every other
+   admin frame:
+
+   **The bar is islands, not a bar.** The top bar itself is *transparent* and
+   holds floating glass pills — controls at the leading edge, the page's name
+   centred, viewer controls at the trailing edge — and frosts into a solid bar
+   only once the page has scrolled under it. A conventional solid 64px header is
+   what makes two apps read as different products despite sharing every token.
+
+   **The sidebar is glass, not a brand-tinted column.** A tinted column becomes
+   the second most saturated thing on screen after the primary button, and then
+   competes with it. This is a wall the page shows through: squared off,
+   hairlined on its inner edge, no sheen.
+
+   Grid tracks follow the writing direction, so track 1 lands on the right in RTL
+   with no separate rule anywhere in this file.
+   ========================================================================== */
+
+.ins-shell {
+  display: grid;
+  grid-template-columns: var(--ins-shell-sidebar) minmax(0, 1fr);
+  min-block-size: 100vh;
+  transition: grid-template-columns .35s var(--ins-ease);
+}
+
+/* Collapsed by the burger, restored from localStorage *before first paint* — which
+   is the whole reason insiyab.js is a synchronous script in <head>. Without that
+   the sidebar swings shut a frame after the page appears.
+
+   The track goes to zero and the panel shrinks inside it: animating
+   `max-inline-size` rather than a transform, so the main column widens *with* it
+   instead of being overlapped by a sidebar that is still there but moved. */
+:root.ins-sidebar-collapsed .ins-shell { grid-template-columns: 0 minmax(0, 1fr); }
+@media (min-width: 901px) {
+  .ins-shell-side {
+    max-inline-size: var(--ins-shell-sidebar);
+    transition: max-inline-size .35s var(--ins-ease), opacity var(--ins-t-base) var(--ins-ease);
+  }
+  :root.ins-sidebar-collapsed .ins-shell-side {
+    max-inline-size: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.ins-shell-side {
+  position: sticky;
+  inset-block-start: 0;
+  align-self: start;
+  block-size: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  padding: 1.125rem .75rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--ins-glass);
+  border-inline-end: 1px solid var(--ins-rim);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-shell-side { backdrop-filter: var(--ins-blur); -webkit-backdrop-filter: var(--ins-blur); }
+}
+
+/* --------------------------------------------------------------- brand block */
+.ins-shell-brand {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  padding: 0 .375rem 1rem;
+  margin-block-end: .375rem;
+  border-block-end: 1px solid var(--ins-line-glass);
+  min-width: 0;
+  flex-shrink: 0;
+}
+/* One number, and both boxes are built from it. The mark used to be a fixed square
+   with `width: 100%; height: 100%` on the image inside it — which reads as the same
+   size and is not: **a percentage on a grid item does not resolve against a
+   definite container.** `place-items: center` leaves the implicit row `auto`-sized,
+   so `height: 100%` on the item is a cycle (the track would size the item that
+   sizes the track) and is treated as `auto`, while `width: 100%` has a definite
+   inline axis and works. A tall portrait logo therefore kept its aspect ratio and
+   grew downward — measured at 34×54, twenty pixels of logo hanging out of a box
+   with no `overflow` to catch it.
+
+   So the size is a variable, which cannot cycle, and `object-fit: contain`
+   letterboxes a portrait mark against the brand fill rather than cropping it. */
+.ins-shell-mark {
+  --ins-mark: 34px;
+  flex: 0 0 auto;
+  inline-size: var(--ins-mark);
+  block-size: var(--ins-mark);
+  display: grid;
+  place-items: center;
+  border-radius: var(--ins-r-sm);
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  color: var(--ins-on-primary);
+  font-weight: 700;
+  font-size: .9rem;
+  box-shadow: 0 4px 12px rgba(var(--ins-primary-rgb), .30), var(--ins-bevel-dim);
+  transition: transform var(--ins-t-pop) var(--ins-ease-spring),
+              box-shadow var(--ins-t-pop) var(--ins-ease);
+}
+.ins-shell-mark img {
+  inline-size: var(--ins-mark);
+  block-size: var(--ins-mark);
+  object-fit: contain;
+  border-radius: inherit;
+}
+.ins-shell-brand:hover .ins-shell-mark {
+  transform: scale(1.06) rotate(-4deg);
+  box-shadow: var(--ins-sh-brand-md), var(--ins-bevel-dim);
+}
+.ins-shell-brand-text { min-width: 0; }
+.ins-shell-brand-name {
+  display: block;
+  font-weight: 700;
+  font-size: .9375rem;
+  color: var(--ins-text-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ins-shell-brand-role { display: block; font-size: .6875rem; color: var(--ins-text-2); }
+
+/* --------------------------------------------------------------- navigation */
+.ins-shell-group {
+  padding: .875rem .625rem .375rem;
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ins-text-3);
+}
+/* Arabic joins, and both tracking and uppercasing work against that — uppercase is
+   meaningless in a script with no case at all. */
+[dir="rtl"] .ins-shell-group { text-transform: none; letter-spacing: 0; }
+
+.ins-shell-link {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  min-block-size: 44px;
+  padding: .625rem .75rem;
+  border-radius: var(--ins-r-md);
+  color: var(--ins-text-2);
+  font-size: .875rem;
+  font-weight: 700;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--ins-t-pop) var(--ins-ease),
+              color var(--ins-t-pop) var(--ins-ease),
+              transform var(--ins-t-pop) var(--ins-ease),
+              box-shadow var(--ins-t-pop) var(--ins-ease);
+}
+.ins-shell-link .ins-ico,
+.ins-shell-link svg {
+  flex: 0 0 1.125rem;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  color: var(--ins-text-3);
+  transition: color var(--ins-t-base), transform var(--ins-t-pop) var(--ins-ease-spring);
+}
+
+/* The active marker, brought back and put somewhere it can survive. The original
+   sat at `inset-inline-start: -.75rem` — exactly on the sidebar's own edge — so the
+   sidebar's `overflow-x: hidden` cut it in half. Inside the item's own box it
+   cannot be clipped, and because the item is `overflow: hidden` with a radius it
+   takes the item's rounded corner for free.
+
+   It grows rather than appearing: `scaleY` from the centre on the one curve, which
+   is the same gesture the segmented control's raised face makes. */
+.ins-shell-link::before {
+  content: "";
+  position: absolute;
+  inset-block: .5rem;
+  inset-inline-start: 0;
+  inline-size: 3px;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-brand-soft);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+.ins-shell-link:hover { background: var(--ins-glass-inner); color: var(--ins-primary-darker); }
+.ins-shell-link:hover .ins-ico,
+.ins-shell-link:hover svg { color: var(--ins-primary-darker); transform: scale(1.12); }
+.ins-shell-link:hover::before { transform: scaleY(.55); }
+/* A directional gesture — it nudges *toward the content* — and a transform has no
+   logical form, so the sign is flipped by hand per direction. */
+[dir="rtl"] .ins-shell-link:hover { transform: translateX(-2px); }
+[dir="ltr"] .ins-shell-link:hover { transform: translateX(2px); }
+
+.ins-shell-link.is-active {
+  background: var(--ins-surface-hover);
+  color: var(--ins-primary-darker);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, .06), inset 0 1px 0 var(--ins-rim-top);
+}
+.ins-shell-link.is-active::before { transform: scaleY(1); }
+.ins-shell-link.is-active .ins-ico,
+.ins-shell-link.is-active svg { color: var(--ins-tone-brand-soft); }
+:root[data-ins-theme="dark"] .ins-shell-link.is-active { color: var(--ins-text-1); }
+
+.ins-shell-link-badge {
+  margin-inline-start: auto;
+  min-inline-size: 1.25rem;
+  padding: 0 .375rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-warn-bg);
+  color: var(--ins-tone-warn);
+  font-family: var(--ins-font-body-en);
+  font-size: .6875rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* The trailing nav block, divided from the rest. Sign-out is not a destination,
+   and putting it in the same undifferentiated run as the twenty that are is how
+   somebody clicks it by accident. */
+.ins-shell-bottom {
+  margin-block-start: auto;
+  padding-block-start: .5rem;
+  border-block-start: 1px solid var(--ins-line-glass);
+  flex-shrink: 0;
+}
+
+.ins-shell-main { display: flex; flex-direction: column; min-width: 0; }
+
+/* The drawer's scrim. `display: none` HAS to be the default, not just a mobile
+   rule: the scrim is a child of the shell, so while displayed it is a grid ITEM —
+   it claims track 2 and pushes the main column onto a second row, sidebar-width and
+   below a 100vh sidebar. The whole page renders blank on desktop. */
+.ins-shell-scrim { display: none; }
+
+/* --------------------------------------------------------------- the top bar */
+/* Three columns of `1fr auto 1fr` and not flexbox, because the centre island has to
+   be centred on the *page*, not on whatever is left after the start zone. */
+.ins-topbar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1020;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: .625rem;
+  padding: .75rem 1rem;
+  background: transparent;
+  transition: background var(--ins-t-base) ease, box-shadow var(--ins-t-base) ease;
+}
+/* Stamped by insiyab.js past 8px of scroll. Without the script the bar simply stays
+   transparent, which is the correct fallback rather than a broken one: the islands
+   carry their own ground. */
+:root[data-ins-scrolled] .ins-topbar {
+  background: var(--ins-glass);
+  box-shadow: 0 1px 0 var(--ins-rim), var(--ins-sh-sm);
+  -webkit-backdrop-filter: var(--ins-blur-bar);
+          backdrop-filter: var(--ins-blur-bar);
+}
+
+.ins-zone { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+.ins-zone--start { justify-content: flex-start; }
+.ins-zone--center { justify-content: center; min-width: 0; }
+.ins-zone--end { justify-content: flex-end; }
+
+/* The island. Every element in the bar is one, so they share a height, a rim and a
+   shadow and read as one row of objects rather than as a toolbar. */
+.ins-island {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  block-size: var(--ins-appbar-h);
+  padding-inline: .875rem;
+  gap: .5rem;
+  border-radius: var(--ins-r-pill);
+  border: 1px solid var(--ins-rim);
+  border-top-color: var(--ins-rim-top);
+  background: var(--ins-glass);
+  box-shadow: var(--ins-sh-bubble), var(--ins-bevel);
+  color: var(--ins-text-1);
+  font-family: inherit;
+  font-size: .875rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background var(--ins-t-exit) var(--ins-ease),
+              box-shadow var(--ins-t-pop) var(--ins-ease),
+              transform var(--ins-t-pop) var(--ins-ease);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-island { -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+}
+.ins-island:where(a, button, [role="button"]) { cursor: pointer; }
+/* An island floats, so its hover rises rather than filling: the shadow lengthens and
+   the pill lifts a pixel. Filling it would make it a button, and the whole point of
+   the bar is that these are objects on the page, not controls in a strip. */
+.ins-island:where(a, button, [role="button"]):hover {
+  background: var(--ins-glass-hover);
+  color: var(--ins-text-1);
+  transform: translateY(-1px);
+  box-shadow: var(--ins-sh-md), var(--ins-bevel);
+}
+.ins-island:where(a, button, [role="button"]):active { transform: scale(.97); }
+
+/* Square variant — one icon, no label. */
+.ins-island--icon {
+  inline-size: var(--ins-appbar-h);
+  padding-inline: 0;
+  justify-content: center;
+  color: var(--ins-primary-darker);
+  font-size: 1.0625rem;
+}
+:root[data-ins-theme="dark"] .ins-island--icon { color: var(--ins-text-1); }
+
+/* Centre island: the page's name. Capped and ellipsised, because an Arabic page
+   title is a phrase and the bar must not grow a second line to hold one. */
+.ins-island--title {
+  padding-inline: 1.25rem;
+  justify-content: center;
+  max-inline-size: min(26rem, 46vw);
+  animation: ins-island-in var(--ins-t-enter) var(--ins-ease);
+}
+@keyframes ins-island-in { from { opacity: 0; transform: scale(.88) translateY(-6px); } }
+
+/* Brand island. Present only while the sidebar is collapsed — with the sidebar open
+   the name is already on screen 200px away, and two of it is noise. Below 900px the
+   sidebar is a drawer, so it is never on screen and the bar carries the identity
+   instead; below 640px it goes again, because at 430px the bar is already holding a
+   burger, a title and two toggles, and the brand is what squeezes the title island
+   down to nothing. */
+.ins-island--brand { display: none; padding-inline: 1rem; gap: .5rem; }
+:root.ins-sidebar-collapsed .ins-island--brand { display: inline-flex; }
+@media (max-width: 900px) { .ins-island--brand { display: inline-flex; } }
+
+.ins-shell-head {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.15;
+}
+.ins-shell-title {
+  font-size: .9375rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.2;
+  color: var(--ins-primary-darker);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-inline-size: 100%;
+}
+:root[data-ins-theme="dark"] .ins-shell-title { color: var(--ins-text-1); }
+/* `:empty`, not a conditional in a template: the subtitle is optional on every page
+   and an `if` around a wrapper is one more thing each page can get wrong. */
+.ins-shell-sub {
+  font-size: .6875rem;
+  font-weight: 600;
+  color: var(--ins-text-3);
+  margin: 0;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-inline-size: 100%;
+}
+.ins-shell-sub:empty { display: none; }
+
+/* A status pill handed to the bar rides in a zone — and becomes an island while it
+   is there, or it reads as a sticker stuck on the bar rather than as one of its
+   objects. The tone keeps its own fill; what it borrows is the height, the rim and
+   the lift. */
+.ins-zone .ins-pill {
+  block-size: var(--ins-appbar-h);
+  padding-inline: 1rem;
+  font-size: .75rem;
+  border-top-color: var(--ins-rim-top);
+  box-shadow: var(--ins-sh-bubble), var(--ins-bevel-dim);
+}
+/* A real control in the bar keeps the island height, so the row stays one row. */
+.ins-zone .ins-btn {
+  min-block-size: var(--ins-appbar-h);
+  border-radius: var(--ins-r-pill);
+  padding-inline: 1.125rem;
+}
+
+.ins-shell-content { padding: .5rem 1.75rem 2rem; }
+
+/* --------------------------------------------------------------- responsive */
+@media (max-width: 900px) {
+  .ins-shell,
+  :root.ins-sidebar-collapsed .ins-shell { grid-template-columns: minmax(0, 1fr); }
+  .ins-shell-content { padding: .5rem 1rem 1.5rem; }
+
+  /* The sidebar becomes an off-canvas drawer, opened by `:target` so it needs no
+     JavaScript at all — a cheap Android browser with a failed script still has
+     navigation. The script adds the scrim click and the Escape key on top. */
+  .ins-shell-side {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: min(84vw, var(--ins-shell-sidebar));
+    max-inline-size: none;
+    z-index: 1080;
+    transform: translateX(-102%);
+    transition: transform .3s var(--ins-ease);
+    box-shadow: var(--ins-sh-lg);
+  }
+  [dir="rtl"] .ins-shell-side { transform: translateX(102%); }
+  .ins-shell-side:target,
+  .ins-shell-side.is-open { transform: translateX(0); }
+  .ins-shell-side:target + .ins-shell-scrim,
+  .ins-shell-side.is-open + .ins-shell-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1070;
+    background: rgba(15, 23, 42, .35);
+    animation: ins-fade-in var(--ins-t-base) var(--ins-ease);
+  }
+}
+@media (max-width: 640px) {
+  .ins-island--brand,
+  :root.ins-sidebar-collapsed .ins-island--brand { display: none; }
+  .ins-topbar { padding: .625rem .75rem; gap: .375rem; grid-template-columns: auto 1fr auto; }
+  .ins-island--title { max-inline-size: none; padding-inline: .875rem; }
+  .ins-zone .ins-pill { padding-inline: .75rem; }
+}
+/* The subtitle is explanatory rather than load-bearing, and truncated to a few words
+   it reads as a defect. It goes, rather than growing a sticky bar to two lines. */
+@media (max-width: 34rem) { .ins-shell-sub { display: none; } }
+
+/* ==========================================================================
    Insiyab · layout
    ==========================================================================
    The three arrangements every page in this design needs: a grid of tiles, a
@@ -907,18 +1342,18 @@ a:hover { color: var(--ins-tone-brand-soft); }
 .ins-grid--wide { --ins-col: 20rem; }
 .ins-grid--half { --ins-col: 26rem; }
 
-/* Staggered entrance, split into two animations on purpose.
+/* A grid reveals itself: the entrance is the shared one in 16-motion.css, which
+   splits the fade onto the container and the rise onto the children.
 
-   The obvious way — one keyframe fading opacity 0→1, `backwards` fill, a delay per
-   child — hides content whenever the animation does not actually run: the fill
-   holds the from-state through the delay, so a print, a screenshot, or a WebView
-   that suppresses animations renders blank tiles. It did exactly that the first
-   time this design was photographed.
-
-   So: opacity fades once on the CONTAINER with no delay, and the per-child stagger
-   moves transform only. If either never runs, the content is still visible. */
-@keyframes ins-tile-rise { from { opacity: 0; transform: translateY(12px); } }
-.ins-grid > * { animation: ins-tile-rise .4s var(--ins-ease) backwards; }
+   That split is the whole point and it is worth saying twice. The single-animation
+   version -- one keyframe fading opacity 0→1 with a `backwards` fill and a delay per
+   child -- hides content whenever the animation does not actually run, because the
+   fill holds the from-state through the delay. A print, a screenshot taken early, or
+   a WebView that suppresses animations renders blank tiles. It did exactly that the
+   first time this design was photographed, and the sheet this was ported from
+   carried the warning in a comment above a rule that did not follow it. */
+.ins-grid { animation: ins-fade-in .4s var(--ins-ease); }
+.ins-grid > * { animation: ins-rise .4s var(--ins-ease) backwards; }
 .ins-grid > :nth-child(2) { animation-delay: .07s; }
 .ins-grid > :nth-child(3) { animation-delay: .14s; }
 .ins-grid > :nth-child(4) { animation-delay: .21s; }
@@ -1143,6 +1578,26 @@ a:hover { color: var(--ins-tone-brand-soft); }
 .ins-panel--alert .ins-panel-ico { color: var(--ins-tone-bad); }
 .ins-panel--alert .ins-panel-ico { background: var(--ins-tone-bad-bg); }
 
+/* --------------------------------------------------------------- motion */
+/* The head's icon chip answers a hover anywhere on the head, not just on itself:
+   a 36px target is small, and what the pointer is actually over is the section. */
+.ins-panel-ico {
+  transition: transform var(--ins-t-pop) var(--ins-ease-spring),
+              background var(--ins-t-pop) var(--ins-ease);
+}
+.ins-panel-head:hover .ins-panel-ico {
+  transform: scale(1.08) rotate(-4deg);
+  background: rgba(var(--ins-primary-rgb), .16);
+}
+.ins-panel--alert .ins-panel-head:hover .ins-panel-ico { background: var(--ins-tone-bad-bd); }
+
+/* A panel does not lift on hover -- see the note in 16-motion.css. What it does is
+   brighten its rim, which reads as the surface catching a little more light without
+   the container jumping under a pointer that was only crossing it on the way to a
+   row inside it. */
+.ins-panel { transition: border-color var(--ins-t-base) var(--ins-ease); }
+.ins-panel:hover { border-color: var(--ins-rim-top); }
+
 /* ==========================================================================
    Insiyab · stat tile
    ==========================================================================
@@ -1225,6 +1680,21 @@ a:hover { color: var(--ins-tone-brand-soft); }
 @media (max-width: 34rem) {
   .ins-grid > .ins-stat--lg { grid-column: 1 / -1; }
 }
+
+/* --------------------------------------------------------------- motion */
+/* The chip is the tile's one moving part. It pops on the overshoot curve, which is
+   otherwise reserved for controls whose job is to travel -- allowed here because a
+   stat tile has nothing else it can animate without moving the figure, and a figure
+   that moves is a figure you cannot read. */
+.ins-stat-ico {
+  transition: transform var(--ins-t-pop) var(--ins-ease-spring),
+              background var(--ins-t-pop) var(--ins-ease);
+}
+.ins-stat:hover .ins-stat-ico { transform: scale(1.12) rotate(-6deg); }
+/* The figure holds still and only opens up a fraction. Tracking rather than size,
+   because a number that changes size changes the width of the column it sits in. */
+.ins-stat-value { transition: letter-spacing var(--ins-t-base) var(--ins-ease); }
+.ins-stat:hover .ins-stat-value { letter-spacing: .005em; }
 
 /* ==========================================================================
    Insiyab · data table
@@ -1435,6 +1905,41 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
    the fallback is a heading strip above an empty state, which is untidy rather than
    broken. */
 .ins-table:has(.ins-empty) thead { display: none; }
+
+/* --------------------------------------------------------------- motion */
+/* A hovered row grows a marker on its leading edge -- the same 3px brand bar the
+   sidebar's active item uses, so "the thing under the pointer" and "the section you
+   are in" speak one vocabulary rather than two.
+
+   On the first cell, inside the cell's own box. The sidebar's original marker sat
+   outside its item and the container's `overflow-x: hidden` cut it in half; a table
+   wrapper scrolls sideways, so the same mistake here would be worse. It scales from
+   the centre rather than sliding, because a row is wide and a bar sliding the length
+   of one draws the eye *along* the row instead of to it. */
+.ins-table tbody td:first-child { position: relative; }
+.ins-table tbody td:first-child::before {
+  content: "";
+  position: absolute;
+  inset-block: .5rem;
+  inset-inline-start: 0;
+  inline-size: 3px;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-brand-soft);
+  transform: scaleY(0);
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+.ins-table tbody tr:hover > td:first-child::before { transform: scaleY(1); }
+
+/* Rows arrive staggered, and the delay list is short on purpose: a table can hold
+   two hundred rows, and staggering all of them would take eight seconds to finish
+   drawing. Six rows of entrance reads as "the table is arriving"; the rest simply
+   appear, which is what a reader past the fold wanted anyway. */
+.ins-table tbody tr { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease) backwards; }
+.ins-table tbody tr:nth-child(2) { animation-delay: .04s; }
+.ins-table tbody tr:nth-child(3) { animation-delay: .08s; }
+.ins-table tbody tr:nth-child(4) { animation-delay: .12s; }
+.ins-table tbody tr:nth-child(5) { animation-delay: .16s; }
+.ins-table tbody tr:nth-child(6) { animation-delay: .20s; }
 
 /* ==========================================================================
    Insiyab · button
@@ -1656,6 +2161,26 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 .ins-btn--bare:focus-visible { background: transparent; color: var(--ins-text-1); }
 .ins-btn--bare::before { content: none; }
 .ins-btn--bare:active:not(:disabled) { transform: none; }
+
+/* --------------------------------------------------------------- motion */
+/* An icon inside a button nudges toward the trailing edge on hover -- the direction
+   the button sends you. A transform has no logical form, so the sign is flipped by
+   hand. Scoped away from `.ins-btn--icon`, because a button that is *only* an icon
+   has nowhere to travel to and would just wobble. */
+.ins-btn:not(.ins-btn--icon) svg,
+.ins-btn:not(.ins-btn--icon) .ins-ico {
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+[dir="ltr"] .ins-btn:not(.ins-btn--icon):hover:not(:disabled) svg,
+[dir="ltr"] .ins-btn:not(.ins-btn--icon):hover:not(:disabled) .ins-ico { transform: translateX(2px); }
+[dir="rtl"] .ins-btn:not(.ins-btn--icon):hover:not(:disabled) svg,
+[dir="rtl"] .ins-btn:not(.ins-btn--icon):hover:not(:disabled) .ins-ico { transform: translateX(-2px); }
+
+/* An icon-only button grows instead of travelling. */
+.ins-btn--icon svg,
+.ins-btn--icon .ins-ico { transition: transform var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-btn--icon:hover:not(:disabled) svg,
+.ins-btn--icon:hover:not(:disabled) .ins-ico { transform: scale(1.15); }
 
 /* ==========================================================================
    Insiyab · form controls
@@ -2038,6 +2563,41 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
   .ins-seg > button { padding-inline: .5rem; font-size: .75rem; gap: .25rem; }
 }
 
+/* --------------------------------------------------------------- motion */
+/* A field answers the pointer before it answers the caret: the hairline brightens
+   and the fill deepens one step. It does NOT lift on hover -- the lift is what focus
+   means here, and spending it on hover leaves focus with nothing left to say. */
+.ins-input:hover:not(:disabled):not(:focus),
+.ins-select:hover:not(:disabled):not(:focus),
+.ins-textarea:hover:not(:disabled):not(:focus) {
+  border-color: rgba(var(--ins-primary-rgb), .30);
+  background: var(--ins-ctl-bg-hover);
+}
+
+/* The box brightens and blooms a little before it is clicked. */
+.ins-check > input:hover:not(:disabled) {
+  border-color: rgba(var(--ins-primary-rgb), .45);
+  box-shadow: var(--ins-bevel-dim), var(--ins-glow);
+}
+
+.ins-switch-track { transition: background var(--ins-t-base) var(--ins-ease),
+                                border-color var(--ins-t-base),
+                                box-shadow var(--ins-t-base),
+                                filter var(--ins-t-pop) var(--ins-ease); }
+.ins-switch:hover .ins-switch-track { border-color: rgba(var(--ins-primary-rgb), .40); }
+.ins-switch:hover > input:checked + .ins-switch-track { filter: brightness(1.08); }
+
+/* A newly selected segment pops in on the overshoot curve. The class is toggled by
+   the script, so the animation replays on every selection -- which is the point: the
+   raised face is the only thing that says which pane is open, and a face that simply
+   *is* there on the next frame does not read as a selection having been made. */
+.ins-seg > .is-active { animation: ins-pop var(--ins-t-pop) var(--ins-ease-spring); }
+
+/* The search glyph grows into the brand colour as the field takes focus. */
+.ins-search > .ins-search-ico { transition: color var(--ins-t-base) var(--ins-ease),
+                                            transform var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-search:focus-within > .ins-search-ico { transform: scale(1.12); }
+
 /* ==========================================================================
    Insiyab · pill, badge, money, avatar
    ==========================================================================
@@ -2146,6 +2706,29 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 }
 .ins-avatar--sm { inline-size: 30px; block-size: 30px; font-size: .75rem; }
 .ins-avatar--lg { inline-size: 46px; block-size: 46px; font-size: 1.125rem; }
+
+/* --------------------------------------------------------------- motion */
+/* A pill is usually a label, not a control, so the lift is scoped to the ones that
+   are actually pressable. A label that reacts to the pointer is a label promising
+   something it cannot do. */
+.ins-pill { transition: transform var(--ins-t-pop) var(--ins-ease),
+                        box-shadow var(--ins-t-pop) var(--ins-ease); }
+:where(a, button).ins-pill:hover { transform: translateY(-1px); box-shadow: var(--ins-sh-sm); }
+:where(a, button).ins-pill:active { transform: scale(.96); }
+
+/* The dot is the pill's smallest moving part and the cheapest place to put life --
+   and unlike the lift it is safe on a label, because a dot growing says nothing
+   about whether the thing can be pressed. */
+.ins-pill-dot { transition: transform var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-pill:hover .ins-pill-dot { transform: scale(1.35); }
+
+/* A count that changes is worth noticing. The animation is on the element, so
+   replacing the node -- which is what a re-render does -- replays it. */
+.ins-badge { animation: ins-pop var(--ins-t-pop) var(--ins-ease-spring); }
+
+.ins-avatar { transition: transform var(--ins-t-pop) var(--ins-ease-spring),
+                          box-shadow var(--ins-t-pop) var(--ins-ease); }
+.ins-avatar:hover { transform: scale(1.08); box-shadow: var(--ins-sh-brand-sm); }
 
 /* ==========================================================================
    Insiyab · feedback
@@ -2363,6 +2946,32 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 @keyframes ins-spin { to { transform: rotate(360deg); } }
 .ins-loading { display: grid; place-items: center; min-block-size: 200px; }
 
+/* --------------------------------------------------------------- motion */
+/* An alert arrives from the leading edge, because it is an interruption and a thing
+   that slides in from the side reads as one. */
+.ins-alert { animation: ins-slide-in var(--ins-t-enter) var(--ins-ease); }
+[dir="rtl"] .ins-alert { --ins-slide: 10px; }
+
+/* The circle is the alert's face. It turns slightly on hover -- the one place in the
+   library where a purely decorative element moves, allowed because the circle is
+   already where the eye lands and nothing is ever read inside it. */
+.ins-alert-ico { transition: transform var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-alert:hover .ins-alert-ico { transform: scale(1.06) rotate(-8deg); }
+
+/* An empty state is the one screen with nothing on it, so it is the one worth
+   spending a gesture on. The glyph lifts out of its fade when the pointer arrives --
+   on hover only, never ambient. */
+.ins-empty-ico { transition: transform var(--ins-t-enter) var(--ins-ease),
+                             opacity var(--ins-t-enter) var(--ins-ease); }
+.ins-empty:hover .ins-empty-ico { transform: translateY(-4px); opacity: .55; }
+
+/* Two animations, and the second is the reason this is not left alone: a spinner
+   that fades in does not flash a wheel at somebody for the 80ms a fast response
+   takes. The spin keeps `infinite` -- it means "waiting", which is the only thing an
+   endless animation may mean here. */
+.ins-spinner { animation: ins-spin .7s linear infinite,
+                          ins-fade-in var(--ins-t-enter) var(--ins-ease); }
+
 /* ==========================================================================
    Insiyab · dialog and popover
    ==========================================================================
@@ -2565,6 +3174,149 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 .ins-pop-item--bad:hover { background: var(--ins-tone-bad-bg); color: var(--ins-tone-bad); }
 .ins-pop-sep { block-size: 1px; background: var(--ins-line); margin: .25rem 0; border: 0; }
 
+/* --------------------------------------------------------------- motion */
+/* A menu item indents toward the content on hover -- the same directional nudge the
+   sidebar's links make, so a list of destinations gestures the same way wherever it
+   turns up. The sign is flipped by hand, as every transform in this library is. */
+.ins-pop-item { transition: background var(--ins-t-pop) var(--ins-ease),
+                            color var(--ins-t-pop) var(--ins-ease),
+                            transform var(--ins-t-pop) var(--ins-ease); }
+[dir="ltr"] .ins-pop-item:hover { transform: translateX(3px); }
+[dir="rtl"] .ins-pop-item:hover { transform: translateX(-3px); }
+
+/* The items arrive just after the body does, so the menu opens and then fills rather
+   than appearing whole -- which is most of what makes a 120ms popover feel
+   considered instead of abrupt. */
+.ins-pop-body > * { animation: ins-rise-sm var(--ins-t-pop) var(--ins-ease) backwards; }
+.ins-pop-body > :nth-child(2) { animation-delay: .03s; }
+.ins-pop-body > :nth-child(3) { animation-delay: .06s; }
+.ins-pop-body > :nth-child(4) { animation-delay: .09s; }
+.ins-pop-body > :nth-child(5) { animation-delay: .12s; }
+
+/* The close button turns. It is the one control in a dialog whose meaning is a
+   rotation already. */
+.ins-dialog-x { transition: background var(--ins-t-pop) var(--ins-ease),
+                            color var(--ins-t-pop) var(--ins-ease),
+                            transform var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-dialog-x:hover { transform: rotate(90deg); }
+
+/* ==========================================================================
+   Insiyab · motion
+   ==========================================================================
+
+   The shared entrance system, and the hover behaviour every glass surface gets.
+   Component-specific motion lives with its component; what is here is what more
+   than one of them needs.
+
+   ---------------------------------------------------------------------------
+   THE ONE RULE, AND IT IS NOT NEGOTIABLE: **everything here is transient.**
+
+   An entrance, a hover, a press — each pays its cost for its own duration and
+   then stops. Nothing in this library loops, with exactly two exceptions
+   (`.ins-skel` and `.ins-spinner`), and both of them mean "waiting".
+
+   That is not taste, it is a measurement. Three decorative orbs drifting on a
+   14s infinite animation cost **47% of a core, forever**, on a page where
+   nothing else was happening. The obvious diagnosis — re-blurring three blurred
+   layers 60 times a second — was wrong: with `filter: blur()` removed and the
+   drift left running the page still burned 44.7%, and pre-softened gradients on
+   a composited layer still burned 43.5%. What actually costs is the
+   **backdrop-filter surfaces above them**. A frosted surface re-blurs whatever
+   is behind it whenever that changes, so anything moving anywhere underneath
+   re-blurs most of the page every frame. Turning the frost off instead took it
+   to 12.4%; stopping the drift took it to 4.8%.
+
+   So in a frosted design the choice is never "cheap motion or expensive
+   motion" — it is motion or frost, and the frost is the design. Ambient motion
+   is the one thing this library will not have. `infinite` is the word to grep
+   for before adding anything here.
+
+   Everything below is switched off by `prefers-reduced-motion` and by
+   `data-ins-fx="off"`; see 17-a11y.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- keyframes */
+
+@keyframes ins-fade-in { from { opacity: 0; } }
+@keyframes ins-rise    { from { transform: translateY(12px); } }
+@keyframes ins-rise-sm { from { opacity: 0; transform: translateY(6px); } }
+@keyframes ins-pop     { from { transform: scale(.82); } }
+/* A directional entrance, for a row that should arrive from the leading edge.
+   Transforms have no logical form, so the sign is flipped per direction below. */
+@keyframes ins-slide-in { from { opacity: 0; transform: translateX(var(--ins-slide, -10px)); } }
+
+/* --------------------------------------------------------------- reveal */
+/* Put `data-ins-reveal` on a container and its children arrive staggered.
+
+   **The fade is on the container and the rise is on the children, and that split
+   is load-bearing.** The obvious way — one keyframe fading opacity 0→1 with a
+   `backwards` fill and a delay per child — hides content whenever the animation
+   does not actually run: the fill holds the from-state through the delay, so a
+   print, a screenshot taken early, or a WebView that suppresses animations
+   renders blank tiles. It did exactly that the first time this design was
+   photographed. Here, if the stagger never runs the children are simply at
+   opacity 1, and if the container's fade never runs nothing was hidden anyway.
+
+   The indices are written out because CSS has no way to read a child's position
+   into a calc — `sibling-index()` is too new to rely on. Ten is enough for a
+   dashboard; an eleventh child simply arrives with no delay, which is a
+   degradation nobody notices rather than an item that never appears. */
+[data-ins-reveal] { animation: ins-fade-in .4s var(--ins-ease); }
+[data-ins-reveal] > * { animation: ins-rise .4s var(--ins-ease) backwards; }
+[data-ins-reveal] > :nth-child(2)  { animation-delay: .05s; }
+[data-ins-reveal] > :nth-child(3)  { animation-delay: .10s; }
+[data-ins-reveal] > :nth-child(4)  { animation-delay: .15s; }
+[data-ins-reveal] > :nth-child(5)  { animation-delay: .20s; }
+[data-ins-reveal] > :nth-child(6)  { animation-delay: .25s; }
+[data-ins-reveal] > :nth-child(7)  { animation-delay: .30s; }
+[data-ins-reveal] > :nth-child(8)  { animation-delay: .35s; }
+[data-ins-reveal] > :nth-child(9)  { animation-delay: .40s; }
+[data-ins-reveal] > :nth-child(10) { animation-delay: .45s; }
+
+/* The page's own entrance, replayed on every navigation. On a server-rendered
+   page "on route change" and "on load" are the same moment, which makes this
+   cheaper here than in a single-page app, where it needs a key to retrigger. */
+.ins-shell-content > * { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease); }
+
+/* --------------------------------------------------------- surfaces on hover */
+/* A glass surface rises toward the light: it lifts a pixel, its shadow lengthens,
+   and its rim brightens all round to the value the top edge already carries at
+   rest. That is the whole gesture, and it is deliberately the same one for every
+   surface — a card, a stat tile and a panel are the same object at three jobs, and
+   giving each its own hover is how a design language stops being one.
+
+   Deliberately NOT a change to the sheen. The 130° specular streak is the
+   signature, and a signature that moves when you point at it is a gimmick. The
+   surface moves; the light on it stays where it is.
+
+   `:hover` is scoped to surfaces that are actually interactive, or to ones a page
+   has opted in with `.ins-hoverable`. A panel holding a table is a container, not a
+   control, and lifting it when the pointer crosses it on the way to a row is noise
+   — which is why `.ins-panel` is not in this list. */
+.ins-card,
+.ins-stat,
+.ins-hoverable {
+  transition: transform var(--ins-t-pop) var(--ins-ease),
+              box-shadow var(--ins-t-pop) var(--ins-ease),
+              border-color var(--ins-t-pop) var(--ins-ease);
+}
+:where(a, button, [role="button"], .ins-hoverable).ins-card:hover,
+.ins-grid > .ins-stat:hover,
+.ins-hoverable:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ins-sh-lg), var(--ins-bevel);
+  border-color: var(--ins-rim-top);
+}
+:where(a, button, [role="button"], .ins-hoverable).ins-card:active,
+.ins-hoverable:active { transform: translateY(0) scale(.995); }
+
+/* --------------------------------------------------------------- utilities */
+/* For anything a page wants to bring in by hand. */
+.ins-anim-rise { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease); }
+.ins-anim-pop { animation: ins-pop var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-anim-slide { animation: ins-slide-in var(--ins-t-enter) var(--ins-ease); }
+[dir="rtl"] .ins-anim-slide { --ins-slide: 10px; }
+
 /* ==========================================================================
    Insiyab · accessibility and effects
    ==========================================================================
@@ -2622,7 +3374,9 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
    Everything the library animates or frosts is listed here. An effect that is not
    gated is an effect nobody can turn off. */
 [data-ins-fx="off"] .ins-orb { display: none; }
-[data-ins-fx="off"] :is(.ins-glass, .ins-card, .ins-panel, .ins-toast, .ins-pop-body),
+[data-ins-fx="off"] :is(.ins-glass, .ins-card, .ins-panel, .ins-toast, .ins-pop-body,
+                         .ins-island, .ins-shell-side),
+[data-ins-fx="off"] :root[data-ins-scrolled] .ins-topbar,
 [data-ins-fx="off"] .ins-dialog::backdrop {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
@@ -2631,14 +3385,37 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
    `animation: none` list below would never have reached it. */
 [data-ins-fx="off"] .ins-dialog,
 [data-ins-fx="off"] .ins-dialog::backdrop { transition: none; }
-[data-ins-fx="off"] .ins-grid > *,
-[data-ins-fx="off"] .ins-pop-body { animation: none; }
+
+/* Every entrance in the library. An animation that is not listed here is an
+   animation nobody can turn off. */
+[data-ins-fx="off"] :is([data-ins-reveal], [data-ins-reveal] > *,
+                         .ins-grid, .ins-grid > *,
+                         .ins-shell-content > *,
+                         .ins-table tbody tr,
+                         .ins-pop-body, .ins-pop-body > *,
+                         .ins-alert, .ins-badge, .ins-island--title,
+                         .ins-seg > .is-active, .ins-shell-scrim,
+                         .ins-anim-rise, .ins-anim-pop, .ins-anim-slide) { animation: none; }
 [data-ins-fx="off"] .ins-skel { animation: none; background: var(--ins-skel-base); }
-/* The toast keeps both animations — they are what hides it — and loses only the
+/* The spinner keeps spinning -- it is the one thing whose animation IS its meaning.
+   It loses only the fade it arrives on. */
+[data-ins-fx="off"] .ins-spinner { animation: ins-spin .7s linear infinite; }
+/* The toast keeps both animations -- they are what hides it -- and loses only the
    distance they cover. `animation: none` here would strand it on screen for ever. */
 [data-ins-fx="off"] .ins-toast { animation-duration: .001s, .001s; }
+
+/* Hovers and presses: the transform goes, the colour change stays. Somebody who
+   turned effects off still needs to see what is under the pointer. */
 [data-ins-fx="off"] .ins-btn::before { content: none; }
-[data-ins-fx="off"] .ins-btn:active:not(:disabled),
-[data-ins-fx="off"] .ins-input:focus,
-[data-ins-fx="off"] .ins-select:focus,
-[data-ins-fx="off"] .ins-textarea:focus { transform: none; }
+[data-ins-fx="off"] :is(.ins-btn:active:not(:disabled),
+                         .ins-input:focus, .ins-select:focus, .ins-textarea:focus,
+                         .ins-card:hover, .ins-stat:hover, .ins-hoverable:hover,
+                         .ins-island:hover, .ins-pill:hover, .ins-avatar:hover,
+                         .ins-shell-link:hover, .ins-pop-item:hover,
+                         .ins-dialog-x:hover, .ins-empty:hover .ins-empty-ico),
+[data-ins-fx="off"] :is(.ins-stat, .ins-panel-head, .ins-alert, .ins-btn, .ins-search,
+                         .ins-shell-brand, .ins-pill):hover :is(.ins-stat-ico,
+                         .ins-panel-ico, .ins-alert-ico, svg, .ins-ico, .ins-shell-mark,
+                         .ins-pill-dot, .ins-search-ico) { transform: none; }
+[data-ins-fx="off"] .ins-shell { transition: none; }
+[data-ins-fx="off"] .ins-shell-side { transition: none; }
