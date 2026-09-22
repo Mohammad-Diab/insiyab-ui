@@ -1,6 +1,6 @@
 {
   "name": "insiyab",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "RTL-first UI library with a frosted-glass design language. One CSS file, one JS file, no build step.",
   "keywords": [
     "css",

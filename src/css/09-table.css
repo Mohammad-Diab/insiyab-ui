@@ -1,0 +1,209 @@
+/* ==========================================================================
+   Insiyab · data table
+   ==========================================================================
+
+   A real <table> — a screen reader and a copy-paste both want one — styled as a
+   **floating header bar above a rounded card of rows**. That detachment is the
+   strongest single signal in this design's data-heavy pages, and it is the part
+   most kits get wrong by welding the heading strip to the top of the panel.
+
+   Doing it without leaving <table> is the whole trick, and it is worth knowing
+   before touching anything here: a transparent bottom border the width of the gap
+   plus `background-clip: padding-box` means the tint stops at the padding edge, so
+   the bar ends `--ins-table-gap` above the first row while the cell still occupies
+   the space. The bottom hairline is an inset shadow, which is clipped to the
+   padding box and therefore lands on the bar's own edge rather than the cell's.
+   ========================================================================== */
+
+.ins-table-wrap { overflow-x: auto; position: relative; z-index: 1; }
+/* `overflow-x: auto` computes `auto` on *both* axes, so the wrapper cuts popovers
+   off — measured at 4 of 15 rows on one page, by up to 182px. Only while one is
+   open, so a phone keeps its sideways scroll the rest of the time. */
+.ins-table-wrap:has([open]) { overflow: visible; }
+
+.ins-table {
+  inline-size: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: .8125rem;
+  /* The gap between the header bar and the card of rows. */
+  --ins-table-gap: .5rem;
+  /* One radius for the bar and the card under it. They were two different values,
+     and measured off a render the bar's corner curved over 9px while the card's
+     curved over 18px — so a pair meant to read as one object read as two that
+     happened to be stacked.
+
+     **Ceiling: `2 × radius + gap` must not exceed the bar's border-box height**
+     (44px). Over that the two vertical radii overlap, CSS scales every corner down
+     proportionally to fit, and the scaling breaks the `+ gap` compensation below,
+     because it shrinks the compensated bottom pair and the plain top pair by the
+     same factor rather than by the same amount. 22px needs 52px of a 44px box and
+     came out visibly flattened. 18px is the largest value that fits, and it happens
+     to be exactly half the painted height, so the ends are true semicircles. */
+  --ins-table-r: 1.125rem;
+  --ins-table-rule: rgba(var(--ins-primary-rgb), .24);
+  /* Physical x offset of the header bar's *leading* hairline — see the corner rules
+     below. Positive is leftward-inset, which is the start edge in LTR. */
+  --ins-table-side: 1px;
+}
+html[dir="rtl"] .ins-table { --ins-table-side: -1px; }
+
+.ins-table thead th {
+  padding: .5rem 1.25rem;
+  text-align: start;
+  font-size: .75rem;
+  font-weight: 800;
+  color: var(--ins-primary-darker);
+  white-space: nowrap;
+  vertical-align: middle;
+  block-size: 2.375rem;
+  /* Vertical, not 135°: the bar is one `th` per column and each cell paints its own
+     copy of the gradient, so a diagonal restarts at full strength at every column
+     boundary — measured at 12–14/255, which is a visible seam in something this
+     rule calls "one bar". A `to bottom` ramp is identical in every cell, so there
+     is nothing to line up. */
+  background: linear-gradient(to bottom, rgba(var(--ins-primary-rgb), .20),
+                              rgba(var(--ins-primary-rgb), .12));
+  background-clip: padding-box;
+  border: 0;
+  border-block-end: var(--ins-table-gap) solid transparent;
+  /* All four hairlines are inset shadows, and that is a correction. The top and the
+     sides used to be real borders while the bottom was this shadow, and the two live
+     in different boxes: a border paints on the *border* box, which extends the gap
+     below the visible bar, while an inset shadow is clipped to the *padding* box,
+     which is the bar itself. So each end of the bar had a 1px vertical tail hanging
+     into the gap under it, and the bottom hairline curved at a different radius from
+     the tail it was supposed to meet. On one box, the four join. */
+  box-shadow: inset 0 1px 0 var(--ins-table-rule), inset 0 -1px 0 var(--ins-table-rule);
+}
+:root[data-ins-theme="dark"] .ins-table thead th { color: var(--ins-text-1); }
+
+/* Logical corner radii, so the leading end of the bar is the right one in both
+   directions with no `[dir]` rule.
+
+   The *bottom* pair is `+ gap` in its vertical axis and that is not a fudge: a
+   padding-box corner radius is the border-box radius minus that side's border
+   width, so a transparent bottom border would otherwise flatten the bar's bottom
+   corners by exactly that while its top stayed put. Adding the gap back cancels the
+   subtraction and the painted bar is a pill again. Two values per corner —
+   horizontal, then vertical. Verify by mirroring one corner onto the other off a
+   render, because a computed `border-radius` reports what was asked for, not what
+   the padding box painted.
+
+   `box-shadow` has no logical form, so the start edge's offset is a variable whose
+   sign the direction flips — one declaration per end either way, rather than a
+   second copy of both under an `[dir="rtl"]` selector. */
+.ins-table thead th:first-child {
+  box-shadow: inset 0 1px 0 var(--ins-table-rule), inset 0 -1px 0 var(--ins-table-rule),
+              inset var(--ins-table-side) 0 0 var(--ins-table-rule);
+  border-start-start-radius: var(--ins-table-r);
+  border-end-start-radius: var(--ins-table-r) calc(var(--ins-table-r) + var(--ins-table-gap));
+}
+.ins-table thead th:last-child {
+  box-shadow: inset 0 1px 0 var(--ins-table-rule), inset 0 -1px 0 var(--ins-table-rule),
+              inset calc(-1 * var(--ins-table-side)) 0 0 var(--ins-table-rule);
+  border-start-end-radius: var(--ins-table-r);
+  border-end-end-radius: var(--ins-table-r) calc(var(--ins-table-r) + var(--ins-table-gap));
+}
+
+/* The rows, as one card: a brighter fill than the panel it sits in, hairline
+   separators, and the four outer corners rounded. `tbody` cannot take a
+   border-radius in any shipping browser, so the corners belong to the four corner
+   cells — which is also why the row card survives `overflow-x: auto`. */
+.ins-table tbody td {
+  padding: .75rem 1.25rem;
+  background: var(--ins-surface);
+  border: 0;
+  border-block-end: 1px solid var(--ins-line-glass);
+  vertical-align: middle;
+  block-size: 3.5rem;
+  color: var(--ins-text-1);
+  transition: background var(--ins-t-exit) var(--ins-ease);
+}
+.ins-table tbody tr:first-child > td { border-block-start: 1px solid var(--ins-rim); }
+.ins-table tbody tr:last-child > td { border-block-end: 1px solid var(--ins-rim); }
+.ins-table tbody td:first-child { border-inline-start: 1px solid var(--ins-rim); }
+.ins-table tbody td:last-child { border-inline-end: 1px solid var(--ins-rim); }
+
+/* Physical corners, switched on the *page's* direction — and this is the one place
+   in the library that may not use logical properties.
+
+   A logical corner resolves against the element's **own** direction, and table
+   cells routinely carry `dir="ltr"` so a timestamp or a phone number is not mangled
+   by an RTL run around it. On those cells `border-start-end-radius` stops meaning
+   top-left and starts meaning top-right: the browser computes the radius into
+   `border-top-right-radius` and leaves `border-top-left-radius: 0`. So the card's
+   left corner is square while its right one curves, and a 22px notch is carved into
+   the middle of the first row where that cell meets its neighbour. The radius was
+   never missing — it was on the wrong corner, put there by an attribute added for
+   the text inside the cell.
+
+   The general rule both halves of this teach: a logical property describes the box
+   it is written on, so a box carrying a text direction of its own cannot be
+   positioned with one. The corner belongs to the table's geometry, not to the
+   cell's sentence. */
+html[dir="rtl"] .ins-table tbody tr:first-child td:first-child { border-top-right-radius: var(--ins-r-lg); }
+html[dir="rtl"] .ins-table tbody tr:first-child td:last-child { border-top-left-radius: var(--ins-r-lg); }
+html[dir="rtl"] .ins-table tbody tr:last-child td:first-child { border-bottom-right-radius: var(--ins-r-lg); }
+html[dir="rtl"] .ins-table tbody tr:last-child td:last-child { border-bottom-left-radius: var(--ins-r-lg); }
+html[dir="ltr"] .ins-table tbody tr:first-child td:first-child { border-top-left-radius: var(--ins-r-lg); }
+html[dir="ltr"] .ins-table tbody tr:first-child td:last-child { border-top-right-radius: var(--ins-r-lg); }
+html[dir="ltr"] .ins-table tbody tr:last-child td:first-child { border-bottom-left-radius: var(--ins-r-lg); }
+html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-right-radius: var(--ins-r-lg); }
+
+/* Inside a panel the panel *is* the card, so the row block flattens: a quieter fill
+   and no rim of its own. The de-nesting discipline from 05-glass.css, applied to the
+   one place it matters most. */
+.ins-panel .ins-table tbody td { background: var(--ins-row-inner); }
+.ins-panel .ins-table tbody tr:first-child > td { border-block-start: 0; }
+.ins-panel .ins-table tbody tr:last-child > td { border-block-end: 0; }
+.ins-panel .ins-table tbody td:first-child { border-inline-start: 0; }
+.ins-panel .ins-table tbody td:last-child { border-inline-end: 0; }
+
+/* Zebra, written as a `background-image` overlay rather than a `background-color`,
+   and that is what makes it one rule instead of two: the cell's own colour is set in
+   two places — the brighter fill for a bare table and the quieter one inside a panel
+   — and an overlay tints whichever is underneath without either needing to know
+   about striping.
+
+   It also gives the row block a fill it can be *seen* to have. Measured before this:
+   every pixel of the rows card's corners was within tolerance of the panel behind
+   it, so the card's 22px corners were correct and invisible. The radius was there;
+   the card was not. */
+.ins-table tbody tr:nth-child(even) > td {
+  background-image: linear-gradient(var(--ins-zebra), var(--ins-zebra));
+}
+/* Hover is a state and outranks the stripe, or an even row under the pointer reads
+   as both at once and lands somewhere between the two. */
+.ins-table tbody tr:hover > td { background: var(--ins-surface-hover); background-image: none; }
+.ins-panel .ins-table tbody tr:hover > td { background: var(--ins-surface-hover); }
+
+/* The figures column. `text-align: end` was two bugs at once.
+
+   In RTL it resolves to the left, so a column of amounts aligned on its *most*
+   significant digit — measured, the ink's left edges all landed on 619 while the
+   right edges came in at 664/636/644, so the units digit sat in a different place on
+   every row and no two figures could be compared at a glance. `tabular-nums` was
+   already on and could not help: equal-width digits still need a common edge.
+
+   And `end` resolves against each element's own direction, so the timestamp cells —
+   which carry `dir="ltr"` so the clock is not mangled — took `end` to mean right
+   while their header, in the page's RTL, took it to mean left. */
+.ins-table .ins-num,
+.ins-table th.ins-num {
+  font-family: var(--ins-font-body-en);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* An empty table has no columns to head. Render a real empty state in a full-width
+   cell and the heading strip goes; the `<thead>` stays in the DOM, so a screen
+   reader still gets the structure.
+
+   `:has()` earns its exception here. The alternative is a flag at every call site,
+   which is a chance to forget at each one — and on a browser too old for `:has()`
+   the fallback is a heading strip above an empty state, which is untidy rather than
+   broken. */
+.ins-table:has(.ins-empty) thead { display: none; }

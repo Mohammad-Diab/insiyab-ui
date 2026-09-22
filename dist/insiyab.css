@@ -1,4 +1,4 @@
-/*! Insiyab UI v0.1.0 · insiyab · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
+/*! Insiyab UI v0.2.0 · insiyab · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
 /* ==========================================================================
    Insiyab · fonts
    ==========================================================================
@@ -880,3 +880,1765 @@ a:hover { color: var(--ins-tone-brand-soft); }
   border: 1px solid var(--ins-line-glass);
   border-radius: var(--ins-r-md);
 }
+
+/* ==========================================================================
+   Insiyab · layout
+   ==========================================================================
+   The three arrangements every page in this design needs: a grid of tiles, a
+   strip of controls above a table, and a search field.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- card grid */
+/* auto-fit + minmax, not a twelve-column system: tiles reflow to their content
+   rather than snapping to twelfths, and one rule covers every breakpoint. */
+.ins-grid {
+  display: grid;
+  gap: .75rem;
+  grid-template-columns: repeat(auto-fit, minmax(var(--ins-col, 11rem), 1fr));
+  /* `min(…, 100%)` because a minmax() floor larger than its container does not
+     shrink — it overflows. `--ins-col: 26rem` is 416px, so on a 430px phone every
+     half-width grid pushed its panels 18px past a 398px container and gave the
+     whole page a 2px horizontal scroll. Seven pages had it and none of them looked
+     wrong; it took measuring the document's scrollWidth to see. The plain
+     declaration above stays as the fallback for a browser without min(). */
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--ins-col, 11rem), 100%), 1fr));
+  margin-block-end: 1.25rem;
+}
+.ins-grid--wide { --ins-col: 20rem; }
+.ins-grid--half { --ins-col: 26rem; }
+
+/* Staggered entrance, split into two animations on purpose.
+
+   The obvious way — one keyframe fading opacity 0→1, `backwards` fill, a delay per
+   child — hides content whenever the animation does not actually run: the fill
+   holds the from-state through the delay, so a print, a screenshot, or a WebView
+   that suppresses animations renders blank tiles. It did exactly that the first
+   time this design was photographed.
+
+   So: opacity fades once on the CONTAINER with no delay, and the per-child stagger
+   moves transform only. If either never runs, the content is still visible. */
+@keyframes ins-tile-rise { from { opacity: 0; transform: translateY(12px); } }
+.ins-grid > * { animation: ins-tile-rise .4s var(--ins-ease) backwards; }
+.ins-grid > :nth-child(2) { animation-delay: .07s; }
+.ins-grid > :nth-child(3) { animation-delay: .14s; }
+.ins-grid > :nth-child(4) { animation-delay: .21s; }
+.ins-grid > :nth-child(5) { animation-delay: .28s; }
+.ins-grid > :nth-child(6) { animation-delay: .35s; }
+.ins-grid > :nth-child(7) { animation-delay: .42s; }
+.ins-grid > :nth-child(8) { animation-delay: .49s; }
+
+/* --------------------------------------------------------------- toolbar */
+/* A row of controls above a table. Its controls are one step down from a form's,
+   so the row reads as a strip rather than as a form that happens to be sideways. */
+.ins-toolbar {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin-block-end: .875rem;
+  position: relative;
+}
+.ins-toolbar .ins-input,
+.ins-toolbar .ins-select {
+  min-block-size: var(--ins-ctl-h);
+  padding-block: .25rem;
+  font-size: .8125rem;
+}
+.ins-toolbar-grow { flex: 1 1 12rem; min-width: 0; }
+/* `margin-inline-start: auto` and not `justify-content: space-between`: the toolbar
+   wraps, and space-between spreads a wrapped last row across the whole width. */
+.ins-toolbar-end { margin-inline-start: auto; display: flex; gap: .5rem; align-items: center; }
+
+/* --------------------------------------------------------------- search */
+.ins-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.ins-search > .ins-search-ico {
+  position: absolute;
+  inset-inline-start: .875rem;
+  color: var(--ins-text-3);
+  font-size: .8125rem;
+  pointer-events: none;
+  transition: color var(--ins-t-base);
+  z-index: 1;
+}
+/* The glyph takes the brand colour while the field is focused. This is the one
+   detail that makes an icon inside a field read as part of the control rather than
+   as decoration painted on top of it. */
+.ins-search:focus-within > .ins-search-ico { color: var(--ins-tone-brand-soft); }
+.ins-search > .ins-input { padding-inline-start: 2.375rem; }
+
+/* Field and submit as one group, pushed to the far end of a toolbar and capped.
+   Without the cap the field stretches to fill the row and the button ends up the
+   width of the page away from it. */
+.ins-searchbar {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  flex: 0 1 32rem;
+  min-width: 0;
+  margin-inline-start: auto;
+}
+.ins-searchbar .ins-search { flex: 1 1 auto; }
+
+/* ==========================================================================
+   Insiyab · panel and card
+   ==========================================================================
+   A panel is glass with a head, a body and optionally a foot. It is the surface
+   most pages are built out of, so it is worth reading the stacking notes below
+   before changing anything here — `backdrop-filter` makes every panel its own
+   stacking context, and that has bitten this design twice.
+   ========================================================================== */
+
+/* A card is glass at the medium radius with nothing else asked of it. It exists
+   as its own name rather than as `.ins-glass` so that a page can say what a thing
+   is; the four layers are identical. */
+.ins-card {
+  position: relative;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-rim);
+  border-top-color: var(--ins-rim-top);
+  background: var(--ins-surface);
+  box-shadow: var(--ins-sh-glass), var(--ins-bevel);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-card {
+    background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .38));
+    backdrop-filter: var(--ins-blur);
+    -webkit-backdrop-filter: var(--ins-blur);
+  }
+  :root[data-ins-theme="dark"] .ins-card {
+    background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .03));
+  }
+}
+
+/* --------------------------------------------------------------- panel */
+.ins-panel {
+  position: relative;
+  border-radius: var(--ins-r-lg);
+  margin-block-end: 1.25rem;
+  border: 1px solid var(--ins-rim);
+  border-top-color: var(--ins-rim-top);
+  background: var(--ins-surface);
+  box-shadow: var(--ins-sh-glass), var(--ins-bevel);
+  /* The clip is what holds the radius over a flush table's cells and over a tinted
+     alert head, both of which paint to the edge. */
+  overflow: hidden;
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-panel {
+    background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .38));
+    backdrop-filter: var(--ins-blur);
+    -webkit-backdrop-filter: var(--ins-blur);
+  }
+  :root[data-ins-theme="dark"] .ins-panel {
+    background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .03));
+  }
+}
+
+/* A panel whose body holds something that must escape the clip — an open select, a
+   popover, a row menu. Two separate problems, and opting out of the clip only
+   solves the first.
+
+   The second is stacking. `backdrop-filter` makes **every panel its own stacking
+   context**, so a popover hanging below its panel is still painted inside that
+   context and the *next sibling panel* covers it — whatever `z-index` the popover
+   asks for, because that index resolves inside a context the sibling is not in.
+   The panel is the only element where the two can be compared, so the raise
+   belongs here. */
+.ins-panel--open { overflow: visible; z-index: 5; }
+/* And the same escape, granted automatically while something inside is actually
+   open. `:has()` is the condition because the raise has to be per-open rather than
+   per-panel: two permanently raised panels are the same tie decided by source order
+   again. Where `:has()` is unsupported this rule simply does not match, which is
+   the behaviour of the day before — so it degrades to the old bug, not to a new
+   one. Add `.ins-panel--open` by hand if you need to support those browsers. */
+.ins-panel:has([open]) { overflow: visible; z-index: 5; }
+
+.ins-panel-head {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .875rem 1.25rem;
+  border-block-end: 1px solid var(--ins-line-glass);
+  /* Above the body, not level with it. Both were `position: relative; z-index: 1`,
+     which makes two stacking contexts of equal rank — so source order decided it,
+     the body comes second, and a table painted over anything the head floated. The
+     popover's own z-index cannot help: it resolves *inside* the head's context,
+     never against the body's. Unconditional rather than `:has()`, because a head
+     belongs above its body at all times and this way it is also true on the phones
+     `:has()` misses. */
+  position: relative;
+  z-index: 2;
+}
+.ins-panel-title {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--ins-primary-darker);
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+}
+:root[data-ins-theme="dark"] .ins-panel-title { color: var(--ins-text-1); }
+/* The section icon as a tinted **chip**, not a bare glyph beside the words. A
+   14px-rounded 36px square in the brand tint is what makes a panel head read as a
+   heading rather than as a line of text with a decoration in front of it. */
+.ins-panel-ico {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: var(--ins-r-md);
+  background: rgba(var(--ins-primary-rgb), .10);
+  color: var(--ins-tone-brand-soft);
+  font-size: .9375rem;
+}
+.ins-panel-actions { margin-inline-start: auto; display: flex; gap: .5rem; align-items: center; }
+
+.ins-panel-body { padding: 1.25rem; position: relative; z-index: 1; }
+/* Not zero: a table inside a flush body is a floating header bar over a rounded
+   card of rows, and both need the panel's edge to be somewhere other than exactly
+   on them. Small — this is an inset, not padding. */
+.ins-panel-body--flush { padding: .625rem; }
+
+.ins-panel-foot {
+  padding: .75rem 1.125rem;
+  border-block-start: 1px solid var(--ins-line-glass);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* One line of guidance under a panel head. */
+.ins-panel-note {
+  margin: 0;
+  padding: .625rem 1.125rem;
+  font-size: .8125rem;
+  color: var(--ins-text-2);
+  border-block-end: 1px solid var(--ins-line);
+  position: relative;
+  z-index: 1;
+}
+/* Inside a flush body the note sits above the header bar, so it takes the body's
+   own inset rather than adding a second one on top of it. */
+.ins-panel-body--flush > .ins-panel-note { padding: .375rem .625rem .75rem; border-block-end: 0; }
+
+/* A panel whose contents are the problem. The tint is on the head only — tinting
+   the whole panel would put a red wash behind every status pill in the table below
+   it and flatten them all. */
+.ins-panel--alert .ins-panel-head {
+  background: var(--ins-tone-bad-bg);
+  border-block-end-color: var(--ins-tone-bad-bd);
+  /* Its own corners, because a panel holding an open popover no longer clips. */
+  border-start-start-radius: var(--ins-r-lg);
+  border-start-end-radius: var(--ins-r-lg);
+}
+.ins-panel--alert .ins-panel-title,
+.ins-panel--alert .ins-panel-ico { color: var(--ins-tone-bad); }
+.ins-panel--alert .ins-panel-ico { background: var(--ins-tone-bad-bg); }
+
+/* ==========================================================================
+   Insiyab · stat tile
+   ==========================================================================
+   A figure, its label, and a tinted icon chip. Three sizes and six tones, all
+   driven from two local custom properties so a tone is one line, not a block.
+   ========================================================================== */
+
+.ins-stat {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .75rem 1rem;
+  border-radius: var(--ins-r-md);
+  --ins-c: var(--ins-tone-brand-soft);
+  --ins-c-bg: rgba(var(--ins-primary-rgb), .12);
+}
+.ins-stat--ok   { --ins-c: var(--ins-tone-ok);   --ins-c-bg: var(--ins-tone-ok-bg); }
+.ins-stat--warn { --ins-c: var(--ins-tone-warn); --ins-c-bg: var(--ins-tone-warn-bg); }
+.ins-stat--bad  { --ins-c: var(--ins-tone-bad);  --ins-c-bg: var(--ins-tone-bad-bg); }
+.ins-stat--info { --ins-c: var(--ins-tone-info); --ins-c-bg: var(--ins-tone-info-bg); }
+.ins-stat--mute,
+.ins-stat--zero { --ins-c: var(--ins-tone-mute); --ins-c-bg: var(--ins-tone-mute-bg); }
+/* Quiet, still legible: a zero is information, and at the muted tint it was
+   disappearing into the background wash entirely. */
+.ins-stat--zero .ins-stat-value { color: var(--ins-text-2); }
+
+.ins-stat-ico {
+  flex: 0 0 auto;
+  inline-size: 38px;
+  block-size: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--ins-r-md);
+  background: var(--ins-c-bg);
+  color: var(--ins-c);
+  font-size: 1rem;
+}
+.ins-stat-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+/* The label wraps. `white-space: nowrap` kept tiles tidy right up until a label was
+   longer than its tile and then it clipped — a dashboard's first tile read "Today's
+   net profit (all" at 430px, with the currency colliding with the edge. A grid row
+   stretches to its tallest tile, so a two-line label costs one row a few pixels and
+   never costs a word. */
+.ins-stat-label { font-size: .75rem; font-weight: 600; color: var(--ins-text-2); line-height: 1.3; }
+.ins-stat-value {
+  font-size: 1.5rem;
+  /* 800. It only reads as a jump from 700 at this size — which is exactly where it
+     is used. */
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ins-c);
+  font-variant-numeric: tabular-nums;
+  /* Latin digits read better in Inter even inside Arabic copy. */
+  font-family: var(--ins-font-body-en);
+}
+.ins-stat-hint { font-size: .6875rem; color: var(--ins-text-3); }
+
+.ins-stat--sm { padding: .625rem .75rem; gap: .625rem; }
+.ins-stat--sm .ins-stat-ico { inline-size: 32px; block-size: 32px; font-size: .875rem; }
+.ins-stat--sm .ins-stat-label { font-size: .6875rem; }
+.ins-stat--sm .ins-stat-value { font-size: 1.25rem; }
+
+.ins-stat--lg { padding: 1rem 1.25rem; gap: .875rem; }
+.ins-stat--lg .ins-stat-label { font-size: .8125rem; }
+.ins-stat--lg .ins-stat-value { font-size: 2rem; }
+.ins-stat--lg .ins-stat-ico { inline-size: 46px; block-size: 46px; font-size: 1.125rem; }
+
+/* A headline figure takes the whole row on a phone.
+
+   `.ins-stat` is a flex row, and a flex item does not shrink below its content — so
+   a tile holding a seven-digit figure at 2rem has a min-content width of about
+   230px and simply overflows anything narrower. Measured on a dashboard at 430px:
+   the tile ran x=221..414 while the money inside it ran x=186..333, with the
+   currency unit sitting entirely outside the card.
+
+   Fixing it here rather than by widening the grid's column floor is deliberate: it
+   keeps the two-digit counts beside it two-up, which is what a tile that small is
+   for. The tile carrying the page's headline number is the tile that should not be
+   sharing a row on a 430px screen. */
+@media (max-width: 34rem) {
+  .ins-grid > .ins-stat--lg { grid-column: 1 / -1; }
+}
+
+/* ==========================================================================
+   Insiyab · data table
+   ==========================================================================
+
+   A real <table> — a screen reader and a copy-paste both want one — styled as a
+   **floating header bar above a rounded card of rows**. That detachment is the
+   strongest single signal in this design's data-heavy pages, and it is the part
+   most kits get wrong by welding the heading strip to the top of the panel.
+
+   Doing it without leaving <table> is the whole trick, and it is worth knowing
+   before touching anything here: a transparent bottom border the width of the gap
+   plus `background-clip: padding-box` means the tint stops at the padding edge, so
+   the bar ends `--ins-table-gap` above the first row while the cell still occupies
+   the space. The bottom hairline is an inset shadow, which is clipped to the
+   padding box and therefore lands on the bar's own edge rather than the cell's.
+   ========================================================================== */
+
+.ins-table-wrap { overflow-x: auto; position: relative; z-index: 1; }
+/* `overflow-x: auto` computes `auto` on *both* axes, so the wrapper cuts popovers
+   off — measured at 4 of 15 rows on one page, by up to 182px. Only while one is
+   open, so a phone keeps its sideways scroll the rest of the time. */
+.ins-table-wrap:has([open]) { overflow: visible; }
+
+.ins-table {
+  inline-size: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: .8125rem;
+  /* The gap between the header bar and the card of rows. */
+  --ins-table-gap: .5rem;
+  /* One radius for the bar and the card under it. They were two different values,
+     and measured off a render the bar's corner curved over 9px while the card's
+     curved over 18px — so a pair meant to read as one object read as two that
+     happened to be stacked.
+
+     **Ceiling: `2 × radius + gap` must not exceed the bar's border-box height**
+     (44px). Over that the two vertical radii overlap, CSS scales every corner down
+     proportionally to fit, and the scaling breaks the `+ gap` compensation below,
+     because it shrinks the compensated bottom pair and the plain top pair by the
+     same factor rather than by the same amount. 22px needs 52px of a 44px box and
+     came out visibly flattened. 18px is the largest value that fits, and it happens
+     to be exactly half the painted height, so the ends are true semicircles. */
+  --ins-table-r: 1.125rem;
+  --ins-table-rule: rgba(var(--ins-primary-rgb), .24);
+  /* Physical x offset of the header bar's *leading* hairline — see the corner rules
+     below. Positive is leftward-inset, which is the start edge in LTR. */
+  --ins-table-side: 1px;
+}
+html[dir="rtl"] .ins-table { --ins-table-side: -1px; }
+
+.ins-table thead th {
+  padding: .5rem 1.25rem;
+  text-align: start;
+  font-size: .75rem;
+  font-weight: 800;
+  color: var(--ins-primary-darker);
+  white-space: nowrap;
+  vertical-align: middle;
+  block-size: 2.375rem;
+  /* Vertical, not 135°: the bar is one `th` per column and each cell paints its own
+     copy of the gradient, so a diagonal restarts at full strength at every column
+     boundary — measured at 12–14/255, which is a visible seam in something this
+     rule calls "one bar". A `to bottom` ramp is identical in every cell, so there
+     is nothing to line up. */
+  background: linear-gradient(to bottom, rgba(var(--ins-primary-rgb), .20),
+                              rgba(var(--ins-primary-rgb), .12));
+  background-clip: padding-box;
+  border: 0;
+  border-block-end: var(--ins-table-gap) solid transparent;
+  /* All four hairlines are inset shadows, and that is a correction. The top and the
+     sides used to be real borders while the bottom was this shadow, and the two live
+     in different boxes: a border paints on the *border* box, which extends the gap
+     below the visible bar, while an inset shadow is clipped to the *padding* box,
+     which is the bar itself. So each end of the bar had a 1px vertical tail hanging
+     into the gap under it, and the bottom hairline curved at a different radius from
+     the tail it was supposed to meet. On one box, the four join. */
+  box-shadow: inset 0 1px 0 var(--ins-table-rule), inset 0 -1px 0 var(--ins-table-rule);
+}
+:root[data-ins-theme="dark"] .ins-table thead th { color: var(--ins-text-1); }
+
+/* Logical corner radii, so the leading end of the bar is the right one in both
+   directions with no `[dir]` rule.
+
+   The *bottom* pair is `+ gap` in its vertical axis and that is not a fudge: a
+   padding-box corner radius is the border-box radius minus that side's border
+   width, so a transparent bottom border would otherwise flatten the bar's bottom
+   corners by exactly that while its top stayed put. Adding the gap back cancels the
+   subtraction and the painted bar is a pill again. Two values per corner —
+   horizontal, then vertical. Verify by mirroring one corner onto the other off a
+   render, because a computed `border-radius` reports what was asked for, not what
+   the padding box painted.
+
+   `box-shadow` has no logical form, so the start edge's offset is a variable whose
+   sign the direction flips — one declaration per end either way, rather than a
+   second copy of both under an `[dir="rtl"]` selector. */
+.ins-table thead th:first-child {
+  box-shadow: inset 0 1px 0 var(--ins-table-rule), inset 0 -1px 0 var(--ins-table-rule),
+              inset var(--ins-table-side) 0 0 var(--ins-table-rule);
+  border-start-start-radius: var(--ins-table-r);
+  border-end-start-radius: var(--ins-table-r) calc(var(--ins-table-r) + var(--ins-table-gap));
+}
+.ins-table thead th:last-child {
+  box-shadow: inset 0 1px 0 var(--ins-table-rule), inset 0 -1px 0 var(--ins-table-rule),
+              inset calc(-1 * var(--ins-table-side)) 0 0 var(--ins-table-rule);
+  border-start-end-radius: var(--ins-table-r);
+  border-end-end-radius: var(--ins-table-r) calc(var(--ins-table-r) + var(--ins-table-gap));
+}
+
+/* The rows, as one card: a brighter fill than the panel it sits in, hairline
+   separators, and the four outer corners rounded. `tbody` cannot take a
+   border-radius in any shipping browser, so the corners belong to the four corner
+   cells — which is also why the row card survives `overflow-x: auto`. */
+.ins-table tbody td {
+  padding: .75rem 1.25rem;
+  background: var(--ins-surface);
+  border: 0;
+  border-block-end: 1px solid var(--ins-line-glass);
+  vertical-align: middle;
+  block-size: 3.5rem;
+  color: var(--ins-text-1);
+  transition: background var(--ins-t-exit) var(--ins-ease);
+}
+.ins-table tbody tr:first-child > td { border-block-start: 1px solid var(--ins-rim); }
+.ins-table tbody tr:last-child > td { border-block-end: 1px solid var(--ins-rim); }
+.ins-table tbody td:first-child { border-inline-start: 1px solid var(--ins-rim); }
+.ins-table tbody td:last-child { border-inline-end: 1px solid var(--ins-rim); }
+
+/* Physical corners, switched on the *page's* direction — and this is the one place
+   in the library that may not use logical properties.
+
+   A logical corner resolves against the element's **own** direction, and table
+   cells routinely carry `dir="ltr"` so a timestamp or a phone number is not mangled
+   by an RTL run around it. On those cells `border-start-end-radius` stops meaning
+   top-left and starts meaning top-right: the browser computes the radius into
+   `border-top-right-radius` and leaves `border-top-left-radius: 0`. So the card's
+   left corner is square while its right one curves, and a 22px notch is carved into
+   the middle of the first row where that cell meets its neighbour. The radius was
+   never missing — it was on the wrong corner, put there by an attribute added for
+   the text inside the cell.
+
+   The general rule both halves of this teach: a logical property describes the box
+   it is written on, so a box carrying a text direction of its own cannot be
+   positioned with one. The corner belongs to the table's geometry, not to the
+   cell's sentence. */
+html[dir="rtl"] .ins-table tbody tr:first-child td:first-child { border-top-right-radius: var(--ins-r-lg); }
+html[dir="rtl"] .ins-table tbody tr:first-child td:last-child { border-top-left-radius: var(--ins-r-lg); }
+html[dir="rtl"] .ins-table tbody tr:last-child td:first-child { border-bottom-right-radius: var(--ins-r-lg); }
+html[dir="rtl"] .ins-table tbody tr:last-child td:last-child { border-bottom-left-radius: var(--ins-r-lg); }
+html[dir="ltr"] .ins-table tbody tr:first-child td:first-child { border-top-left-radius: var(--ins-r-lg); }
+html[dir="ltr"] .ins-table tbody tr:first-child td:last-child { border-top-right-radius: var(--ins-r-lg); }
+html[dir="ltr"] .ins-table tbody tr:last-child td:first-child { border-bottom-left-radius: var(--ins-r-lg); }
+html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-right-radius: var(--ins-r-lg); }
+
+/* Inside a panel the panel *is* the card, so the row block flattens: a quieter fill
+   and no rim of its own. The de-nesting discipline from 05-glass.css, applied to the
+   one place it matters most. */
+.ins-panel .ins-table tbody td { background: var(--ins-row-inner); }
+.ins-panel .ins-table tbody tr:first-child > td { border-block-start: 0; }
+.ins-panel .ins-table tbody tr:last-child > td { border-block-end: 0; }
+.ins-panel .ins-table tbody td:first-child { border-inline-start: 0; }
+.ins-panel .ins-table tbody td:last-child { border-inline-end: 0; }
+
+/* Zebra, written as a `background-image` overlay rather than a `background-color`,
+   and that is what makes it one rule instead of two: the cell's own colour is set in
+   two places — the brighter fill for a bare table and the quieter one inside a panel
+   — and an overlay tints whichever is underneath without either needing to know
+   about striping.
+
+   It also gives the row block a fill it can be *seen* to have. Measured before this:
+   every pixel of the rows card's corners was within tolerance of the panel behind
+   it, so the card's 22px corners were correct and invisible. The radius was there;
+   the card was not. */
+.ins-table tbody tr:nth-child(even) > td {
+  background-image: linear-gradient(var(--ins-zebra), var(--ins-zebra));
+}
+/* Hover is a state and outranks the stripe, or an even row under the pointer reads
+   as both at once and lands somewhere between the two. */
+.ins-table tbody tr:hover > td { background: var(--ins-surface-hover); background-image: none; }
+.ins-panel .ins-table tbody tr:hover > td { background: var(--ins-surface-hover); }
+
+/* The figures column. `text-align: end` was two bugs at once.
+
+   In RTL it resolves to the left, so a column of amounts aligned on its *most*
+   significant digit — measured, the ink's left edges all landed on 619 while the
+   right edges came in at 664/636/644, so the units digit sat in a different place on
+   every row and no two figures could be compared at a glance. `tabular-nums` was
+   already on and could not help: equal-width digits still need a common edge.
+
+   And `end` resolves against each element's own direction, so the timestamp cells —
+   which carry `dir="ltr"` so the clock is not mangled — took `end` to mean right
+   while their header, in the page's RTL, took it to mean left. */
+.ins-table .ins-num,
+.ins-table th.ins-num {
+  font-family: var(--ins-font-body-en);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* An empty table has no columns to head. Render a real empty state in a full-width
+   cell and the heading strip goes; the `<thead>` stays in the DOM, so a screen
+   reader still gets the structure.
+
+   `:has()` earns its exception here. The alternative is a flag at every call site,
+   which is a chance to forget at each one — and on a browser too old for `:has()`
+   the fallback is a heading strip above an empty state, which is untidy rather than
+   broken. */
+.ins-table:has(.ins-empty) thead { display: none; }
+
+/* ==========================================================================
+   Insiyab · button
+   ==========================================================================
+
+   Four things make these read as physical rather than as rectangles with labels:
+
+     * 14px radius and weight 700, not 10px and 600 — the same one-step-up in
+       softness that makes the cards read the way they do;
+     * a **shimmer sweep**: a diagonal highlight parked off the trailing edge that
+       crosses the face on hover over .6s. GPU-composited (transform only), and on
+       ::before because ::after belongs to carets and chevrons;
+     * a press that **scales** rather than nudging down — `scale(.97)` reads as the
+       control taking the touch, which a 1px translate does not;
+     * a fixed control height, so a row of buttons is a row and not a set of boxes
+       each sized by its own label.
+
+   `min-block-size`, not `block-size`: a label that wraps has to be able to grow the
+   button, and Arabic phrases are not all short.
+
+   ---------------------------------------------------------------------------
+   ONE STATE SYSTEM PER BUTTON. This is the part that had to be rebuilt rather
+   than ported. The source sheet styled `:hover` for every variant and then
+   stopped: `:focus-visible` existed for one variant, `:active` only as the shared
+   scale, `:disabled` only as an opacity. Every state it did not claim fell through
+   to Bootstrap, which was loaded alongside it and has opinions in its own palette.
+   Measured on a real page:
+
+     ghost primary   press → #0d6efd   focus → white text on its own near-white fill
+     ghost danger    press → #dc3545   focus → white text on its own near-white fill
+     secondary       press → #565e64   focus → white text on its own near-white fill
+     primary         press → #0a58ca   focus → no ring at all
+     warning / info  focus → black text where the rest state is white
+
+   Two defects in that. The brand disappears the moment anybody presses anything.
+   And four variants put white text on their own near-white fill while focused,
+   which is not a colour clash — it is a button with no legible label for as long
+   as it holds focus.
+
+   The source's fix was to hand Bootstrap `--bs-btn-*` variables and let its
+   machinery render them. With Bootstrap gone, every state is written out here
+   instead. **Hover and focus are deliberately the same appearance** — a button
+   under the pointer and a button reached by keyboard are in the same state as far
+   as the viewer is concerned, and the ring is what distinguishes them. Press is
+   one step deeper than hover, and nothing else moves, because the scale is
+   already the press.
+   ========================================================================== */
+
+.ins-btn {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  min-block-size: var(--ins-ctl-h);
+  padding: .375rem 1rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ins-text-1);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: .875rem;
+  line-height: 1.35;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform var(--ins-t-exit) var(--ins-ease),
+              box-shadow var(--ins-t-base) var(--ins-ease),
+              background var(--ins-t-exit) var(--ins-ease),
+              border-color var(--ins-t-exit) var(--ins-ease),
+              color var(--ins-t-exit) var(--ins-ease);
+}
+
+/* The sweep. Parked off the trailing edge and driven across on hover — so it is
+   mirrored for RTL, because a transform has no logical form. */
+.ins-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--ins-shimmer);
+  transform: translateX(110%);
+  transition: transform .6s var(--ins-ease);
+}
+[dir="rtl"] .ins-btn::before { transform: translateX(-110%); }
+.ins-btn:hover:not(:disabled)::before { transform: translateX(-110%); }
+[dir="rtl"] .ins-btn:hover:not(:disabled)::before { transform: translateX(110%); }
+
+.ins-btn:active:not(:disabled) { transform: scale(.97); }
+.ins-btn:disabled,
+.ins-btn.is-disabled { opacity: .5; cursor: not-allowed; }
+.ins-btn:disabled::before,
+.ins-btn.is-disabled::before { content: none; }
+
+/* `:focus-visible`, not `:focus`: a ring that survives a mouse click leaves a
+   button looking pressed after it has been used. Keyboard focus gets the ring; a
+   click gets the button back. */
+.ins-btn:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
+
+/* The lift, for a button that is the page's one action rather than one of five. */
+.ins-btn--lift:hover:not(:disabled) { transform: translateY(-2px); }
+
+/* ------------------------------------------------------------------ sizes */
+.ins-btn--sm {
+  min-block-size: var(--ins-ctl-sm-h);
+  padding: .25rem .625rem;
+  font-size: .8125rem;
+  gap: .375rem;
+  border-radius: var(--ins-r-sm);
+}
+.ins-btn--lg {
+  min-block-size: 48px;
+  padding: .625rem 1.5rem;
+  font-size: 1rem;
+  border-radius: var(--ins-r-md);
+}
+/* Square, for an icon with no label. */
+.ins-btn--icon { inline-size: var(--ins-ctl-h); padding-inline: 0; }
+.ins-btn--sm.ins-btn--icon { inline-size: var(--ins-ctl-sm-h); }
+.ins-btn--full { inline-size: 100%; }
+
+/* ------------------------------------------------------------ the filled set */
+/* Their fill is a gradient — a background-image — and their shadow is their own
+   hue at ~30% rather than a neutral drop, which is most of why a primary button
+   reads as lit instead of stuck on. */
+.ins-btn--primary {
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  border-color: transparent;
+  color: var(--ins-on-primary);
+  box-shadow: var(--ins-sh-brand-md), var(--ins-bevel-dim);
+}
+.ins-btn--primary:hover:not(:disabled),
+.ins-btn--primary:focus-visible { color: var(--ins-on-primary); box-shadow: var(--ins-sh-brand-lg), var(--ins-bevel-dim); }
+.ins-btn--primary:focus-visible { box-shadow: var(--ins-sh-brand-lg), var(--ins-bevel-dim), var(--ins-focus-ring); }
+
+.ins-btn--success { background: linear-gradient(135deg, #22C55E, #15803D); color: #fff; box-shadow: 0 8px 24px rgba(34, 197, 94, .28), var(--ins-bevel-dim); }
+.ins-btn--danger  { background: linear-gradient(135deg, #EF4444, #B91C1C); color: #fff; box-shadow: 0 8px 24px rgba(239, 68, 68, .26), var(--ins-bevel-dim); }
+.ins-btn--warning { background: linear-gradient(135deg, #F59E0B, #B45309); color: #fff; box-shadow: 0 8px 24px rgba(245, 158, 11, .26), var(--ins-bevel-dim); }
+.ins-btn--info    { background: linear-gradient(135deg, #3B82F6, #1D4ED8); color: #fff; box-shadow: 0 8px 24px rgba(59, 130, 246, .26), var(--ins-bevel-dim); }
+/* Pinned explicitly, because this is exactly where the old sheet lost the label:
+   the ink must not change on any state, only the shadow deepens. */
+.ins-btn--success:hover, .ins-btn--success:focus-visible, .ins-btn--success:active,
+.ins-btn--danger:hover,  .ins-btn--danger:focus-visible,  .ins-btn--danger:active,
+.ins-btn--warning:hover, .ins-btn--warning:focus-visible, .ins-btn--warning:active,
+.ins-btn--info:hover,    .ins-btn--info:focus-visible,    .ins-btn--info:active { color: #fff; }
+
+/* ----------------------------------------------------------- the neutral set */
+/* It keeps the *control* fill rather than a white glass, and that difference is
+   deliberate: a near-white button inside a near-white panel is the invisible-control
+   defect. Measured, on a real page, a secondary button rendered as bare text beside
+   three real buttons. A control needs a fill darker than its container, not lighter. */
+.ins-btn--secondary {
+  background: var(--ins-ctl-bg);
+  border-color: var(--ins-ctl-bd);
+  color: var(--ins-text-1);
+  box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim);
+}
+.ins-btn--secondary:hover:not(:disabled),
+.ins-btn--secondary:focus-visible { background: var(--ins-ctl-bg-hover); border-color: var(--ins-ctl-bd); color: var(--ins-text-1); }
+.ins-btn--secondary:active:not(:disabled) { background: var(--ins-ctl-bd); }
+
+/* ------------------------------------------------------------- the ghost set */
+/* Each keeps its own ink through every state — that is the whole point of a ghost
+   button — and deepens its wash by one step on press. The `-bg` and `-bd` tokens are
+   already a pair at two strengths, and both are redefined for dark, so this needs no
+   second set of values for the dark theme. */
+.ins-btn--ghost {
+  background: var(--ins-ctl-bg);
+  border-color: rgba(var(--ins-primary-rgb), .45);
+  color: var(--ins-primary-darker);
+  box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim);
+}
+.ins-btn--ghost:hover:not(:disabled),
+.ins-btn--ghost:focus-visible {
+  background: rgba(var(--ins-primary-rgb), .12);
+  border-color: var(--ins-tone-brand-soft);
+  color: var(--ins-primary-darker);
+}
+.ins-btn--ghost:active:not(:disabled) { background: rgba(var(--ins-primary-rgb), .22); }
+
+.ins-btn--ghost-danger  { background: var(--ins-ctl-bg); border-color: var(--ins-tone-bad-bd);  color: var(--ins-tone-bad);  box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim); }
+.ins-btn--ghost-success { background: var(--ins-ctl-bg); border-color: var(--ins-tone-ok-bd);   color: var(--ins-tone-ok);   box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim); }
+.ins-btn--ghost-warning { background: var(--ins-ctl-bg); border-color: var(--ins-tone-warn-bd); color: var(--ins-tone-warn); box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim); }
+.ins-btn--ghost-info    { background: var(--ins-ctl-bg); border-color: var(--ins-tone-info-bd); color: var(--ins-tone-info); box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim); }
+
+.ins-btn--ghost-danger:hover:not(:disabled),  .ins-btn--ghost-danger:focus-visible  { background: var(--ins-tone-bad-bg);  border-color: var(--ins-tone-bad);  color: var(--ins-tone-bad); }
+.ins-btn--ghost-success:hover:not(:disabled), .ins-btn--ghost-success:focus-visible { background: var(--ins-tone-ok-bg);   border-color: var(--ins-tone-ok);   color: var(--ins-tone-ok); }
+.ins-btn--ghost-warning:hover:not(:disabled), .ins-btn--ghost-warning:focus-visible { background: var(--ins-tone-warn-bg); border-color: var(--ins-tone-warn); color: var(--ins-tone-warn); }
+.ins-btn--ghost-info:hover:not(:disabled),    .ins-btn--ghost-info:focus-visible    { background: var(--ins-tone-info-bg); border-color: var(--ins-tone-info); color: var(--ins-tone-info); }
+
+.ins-btn--ghost-danger:active:not(:disabled)  { background: var(--ins-tone-bad-bd); }
+.ins-btn--ghost-success:active:not(:disabled) { background: var(--ins-tone-ok-bd); }
+.ins-btn--ghost-warning:active:not(:disabled) { background: var(--ins-tone-warn-bd); }
+.ins-btn--ghost-info:active:not(:disabled)    { background: var(--ins-tone-info-bd); }
+
+/* Light fills get the dark sweep — a white streak over a white face is nothing. */
+.ins-btn--secondary::before,
+.ins-btn--ghost::before,
+.ins-btn--ghost-danger::before,
+.ins-btn--ghost-success::before,
+.ins-btn--ghost-warning::before,
+.ins-btn--ghost-info::before { background: var(--ins-shimmer-dark); }
+
+/* ---------------------------------------------------------------- the bare one */
+/* An action that is a word, not an object. No fill in any state, and no ring box
+   drawn around nothing — it takes the ring on its text box, which is what it is. */
+.ins-btn--bare {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--ins-text-2);
+  padding: 0;
+  min-block-size: 0;
+}
+.ins-btn--bare:hover:not(:disabled),
+.ins-btn--bare:focus-visible { background: transparent; color: var(--ins-text-1); }
+.ins-btn--bare::before { content: none; }
+.ins-btn--bare:active:not(:disabled) { transform: none; }
+
+/* ==========================================================================
+   Insiyab · form controls
+   ==========================================================================
+   Field, input, select, textarea, checkbox, radio, switch, segmented control.
+   All of them share one rule: **a control's fill is darker than its container,
+   never lighter.** A near-white field inside a near-white panel is an invisible
+   control, and that was measured before it was believed — every amount field on
+   one page was an invisible white gap.
+   ========================================================================== */
+
+.ins-field { display: flex; flex-direction: column; gap: .375rem; }
+.ins-label { font-size: .8125rem; font-weight: 700; letter-spacing: .01em; color: var(--ins-label); }
+/* Arabic joins, and tracking of any size works against that. Kept for Latin, where
+   it is what the design does. */
+[dir="rtl"] .ins-label { letter-spacing: 0; }
+.ins-hint { font-size: .6875rem; color: var(--ins-text-3); }
+
+/* **Tops, not bottoms.** `flex-end` aligns a row on its *bottom* edge, so a field
+   carrying a hint sits its label and its input a hint's height above the field
+   beside it — two controls on one line at two different heights, on every form with
+   a hint in a row.
+
+   Tops line up instead: labels are one line, so the controls under them land level
+   and a hint hangs below where it belongs. `flex-start` is also the safe direction —
+   what it can misalign is a label wrapping to two lines, and what `flex-end`
+   misaligned was a hint, which is far commoner. */
+.ins-field-row { display: flex; gap: .5rem; align-items: flex-start; flex-wrap: wrap; }
+
+/* A button standing in a row of fields takes the field height rather than the
+   toolbar height, or a form's submit sits 8px short of the input beside it and the
+   row reads as two rows that happen to overlap. It keeps its bottom edge, because a
+   button has no label above it and aligning its *top* with a labelled field's top
+   would float it a label's height above the input it stands beside.
+
+   **Do not put a hint and a button in the same row.** `flex-end` pins the button to
+   the *tallest* item's bottom, so a row holding one hinted field drops its submit by
+   the hint's height — measured at 25px. Offsetting the button was tried and
+   reverted: right on a shared line, wrong the moment the row wraps and the button is
+   alone with a phantom label's worth of margin. The real fix is that a submit should
+   not be standing in a row of fields at all; give it a line of its own. */
+.ins-field-row > .ins-btn { min-block-size: var(--ins-field-h); align-self: flex-end; }
+
+/* A run of short fields that will not fit one line. A grid, not a wrapping flex row,
+   so the inputs of a row sit level whatever their labels above them did. */
+.ins-field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
+  gap: .75rem .5rem;
+}
+.ins-field-grid > .ins-field { justify-content: flex-end; }
+
+/* A form's commit line. The button is at the start, where a panel's own controls
+   are, rather than pushed to the end: a panel is not a dialog and has no cancel to
+   be kept away from. */
+.ins-form-commit { display: flex; align-items: center; gap: .5rem; margin-block-start: 1rem; }
+
+/* ------------------------------------------------------------ input / select */
+/* The 14px radius, a bright hairline just inside the top edge, a soft outer shadow,
+   and a focus that **lifts the field a pixel** while a 4px brand halo blooms around
+   it. */
+.ins-input,
+.ins-select,
+.ins-textarea {
+  inline-size: 100%;
+  min-block-size: var(--ins-field-h);
+  padding: .5rem .875rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-ctl-bd);
+  background: var(--ins-ctl-bg);
+  color: var(--ins-text-1);
+  font-family: inherit;
+  font-size: .875rem;
+  box-shadow: var(--ins-bevel-dim), var(--ins-sh-subtle);
+  transition: border-color var(--ins-t-base) var(--ins-ease),
+              box-shadow var(--ins-t-base) var(--ins-ease),
+              background var(--ins-t-base) var(--ins-ease),
+              transform var(--ins-t-base) var(--ins-ease);
+}
+.ins-input--sm,
+.ins-select--sm {
+  min-block-size: var(--ins-ctl-h);
+  padding: .25rem .625rem;
+  font-size: .8125rem;
+  border-radius: var(--ins-r-sm);
+}
+.ins-input::placeholder,
+.ins-textarea::placeholder { color: var(--ins-text-3); }
+
+.ins-input:focus,
+.ins-select:focus,
+.ins-textarea:focus {
+  outline: 0;
+  background: var(--ins-glass-strong);
+  border-color: rgba(var(--ins-primary-rgb), .55);
+  box-shadow: var(--ins-glow), var(--ins-bevel-dim), 0 4px 16px rgba(var(--ins-primary-rgb), .10);
+  transform: translateY(-1px);
+}
+:root[data-ins-theme="dark"] .ins-input:focus,
+:root[data-ins-theme="dark"] .ins-select:focus,
+:root[data-ins-theme="dark"] .ins-textarea:focus { background: rgba(255, 255, 255, .09); }
+
+.ins-input:disabled,
+.ins-select:disabled,
+.ins-textarea:disabled { opacity: .55; cursor: not-allowed; }
+
+.ins-textarea { min-block-size: 5.5rem; resize: vertical; }
+
+/* Invalid, as the semantic triad rather than as a red border bolted on. */
+.ins-input--bad,
+.ins-select--bad { border-color: var(--ins-tone-bad-bd); background: var(--ins-tone-bad-bg); }
+.ins-input--bad:focus { box-shadow: var(--ins-glow-bad), var(--ins-bevel-dim); border-color: var(--ins-tone-bad); }
+
+/* The chevron, in the design's own grey rather than a browser slate, pointing at the
+   trailing edge in both directions. `background-position` cannot be logical, so it is
+   written out per direction. */
+.ins-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  padding-inline-end: 2.375rem;
+}
+[dir="ltr"] .ins-select { background-position: right .875rem center; }
+[dir="rtl"] .ins-select { background-position: left .875rem center; }
+:root[data-ins-theme="dark"] .ins-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------- checkbox / radio */
+/* Built rather than ported: the source leaned on Bootstrap's `.form-check` for
+   these. Designed to the same rules as everything else — the control fill, the
+   bevel, the brand gradient when on, and the spring easing on the one part whose
+   job is to travel. */
+.ins-check {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  cursor: pointer;
+  /* Hugs its label. As a block it spans the container and the empty half of the row
+     becomes a live target, so a click far from the box flips it. */
+  inline-size: max-content;
+  max-inline-size: 100%;
+}
+.ins-check > input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  margin: 0;
+  border: 1px solid var(--ins-ctl-bd);
+  background: var(--ins-ctl-bg);
+  border-radius: var(--ins-r-xs);
+  box-shadow: var(--ins-bevel-dim);
+  cursor: pointer;
+  position: relative;
+  transition: background var(--ins-t-pop) var(--ins-ease),
+              border-color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-check > input[type="radio"] { border-radius: 50%; }
+.ins-check > input:checked {
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  border-color: transparent;
+}
+/* The tick, drawn rather than imported, and scaled in on the overshoot easing —
+   the same curve the switch thumb travels on, for the same reason. */
+.ins-check > input[type="checkbox"]::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 1px;
+  inset-inline-start: 4px;
+  inline-size: .3125rem;
+  block-size: .625rem;
+  border: solid var(--ins-on-primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  transform-origin: center;
+  transition: transform .28s var(--ins-ease-spring);
+}
+.ins-check > input[type="checkbox"]:checked::after { transform: rotate(45deg) scale(1); }
+.ins-check > input[type="radio"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: .4375rem;
+  block-size: .4375rem;
+  border-radius: 50%;
+  background: var(--ins-on-primary);
+  transform: scale(0);
+  transition: transform .28s var(--ins-ease-spring);
+}
+.ins-check > input[type="radio"]:checked::after { transform: scale(1); }
+.ins-check > input:focus-visible { outline: 3px solid rgba(var(--ins-primary-rgb), .45); outline-offset: 2px; }
+.ins-check > input:disabled { opacity: .5; cursor: not-allowed; }
+.ins-check-text { font-size: .875rem; }
+
+/* --------------------------------------------------------------- switch */
+/* A two-state setting is a switch, not a two-option select: the whole point of a
+   kill switch is that its state is visible without opening anything.
+
+   A 48×26 track with a 20px thumb, a recessed inset on the off state so the track
+   reads as a groove rather than as a flat pill, and a thumb that travels on the
+   **overshoot** easing. That last one is the entire character of the control — a
+   switch is the one thing on the page whose whole job is to move, and a linear
+   glide reads as a checkbox that happens to be pill-shaped. */
+.ins-switch {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  cursor: pointer;
+  padding: .375rem 0;
+  inline-size: max-content;
+  max-inline-size: 100%;
+}
+.ins-switch > input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.ins-switch-track {
+  flex: 0 0 auto;
+  position: relative;
+  inline-size: 3rem;
+  block-size: 1.625rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-ctl-bg-hover);
+  border: 1px solid var(--ins-ctl-bd);
+  box-shadow: inset 0 2px 4px rgba(15, 23, 42, .08);
+  transition: background var(--ins-t-base) var(--ins-ease),
+              border-color var(--ins-t-base),
+              box-shadow var(--ins-t-base);
+}
+.ins-switch-track::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 2px;
+  inset-inline-start: 2px;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, .28);
+  transition: transform .32s var(--ins-ease-spring);
+}
+.ins-switch > input:checked + .ins-switch-track {
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  border-color: transparent;
+  box-shadow: var(--ins-glow-ring), inset 0 1px 0 rgba(255, 255, 255, .20);
+}
+/* `translateX` and not a logical property, because a transform has no logical form
+   — so it is mirrored by hand for RTL. This is one of the few things in the library
+   that genuinely cannot be done logically. */
+.ins-switch > input:checked + .ins-switch-track::after { transform: translateX(1.375rem); }
+[dir="rtl"] .ins-switch > input:checked + .ins-switch-track::after { transform: translateX(-1.375rem); }
+.ins-switch > input:focus-visible + .ins-switch-track {
+  outline: 3px solid rgba(var(--ins-primary-rgb), .45);
+  outline-offset: 2px;
+}
+.ins-switch-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.ins-switch-label { font-size: .875rem; font-weight: 700; }
+.ins-switch-desc { font-size: .75rem; font-weight: 400; color: var(--ins-text-2); }
+
+/* The card variant: a setting that is its own row in a bordered, tinted block,
+   rather than a line of text with a control at the end.
+
+   **The ground is ink, not a white overlay.** The inner-glass fill is white at 50%
+   and the glass hairline is white at 40%: they *lighten*, which reads on a tinted
+   page mesh and does nothing at all on a surface that is already near-white. The
+   card was not faint inside a dialog, it was absent — measured at 1.01:1 fill and
+   1.02:1 border against the dialog's own ground, which is two toggles with no
+   visible container. The control tokens are the ink pair the buttons and the panel
+   hairlines already use, and both are redefined for dark, where a white overlay *is*
+   the right direction. Re-sampled after: 1.07:1 and 1.26:1 on light, 1.19:1 and
+   1.50:1 on dark. A card boundary is a divider, not a surface — it does not want AA
+   contrast, it wants to be findable, and 1.02:1 is not. */
+.ins-switch--card {
+  padding: .75rem .875rem;
+  background: var(--ins-ctl-bg);
+  border: 1px solid var(--ins-line);
+  border-radius: var(--ins-r-md);
+  transition: background var(--ins-t-base) var(--ins-ease);
+}
+.ins-switch--card:hover { background: var(--ins-surface-hover); }
+
+.ins-switch-grid {
+  display: grid;
+  gap: .5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+}
+/* **The stagger is `align-content`, and `flex-wrap` is what makes it apply.** It is
+   ignored on a `nowrap` container, so a card without a description had no way to say
+   "top" and sat its single line in the middle of a height the card beside it had set
+   — measured, two cards at h=88 with their tracks 18px apart. */
+.ins-switch-grid > .ins-switch {
+  padding: .75rem .875rem;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  inline-size: auto;
+  background: var(--ins-ctl-bg);
+  border: 1px solid var(--ins-line);
+  border-radius: var(--ins-r-md);
+  transition: background var(--ins-t-base) var(--ins-ease);
+}
+.ins-switch-grid > .ins-switch:hover { background: var(--ins-surface-hover); }
+/* Name at the start of the card, control at its end. `order` and not a markup
+   change, because the DOM order is the one that is right: the input has to precede
+   the track for `+ .ins-switch-track` to work at all. Visual order is a presentation
+   question and belongs here. Scoped to a card — a bare switch is a checkbox in a
+   sentence, and its label belongs next to the thing it labels. */
+.ins-switch-grid > .ins-switch .ins-switch-text { order: -1; margin-inline-end: auto; }
+
+/* --------------------------------------------------------------- segmented */
+/* One control, not a row of browser tabs. The track is a recessed tint and the
+   selected segment is a *raised light card* — 14px track, 10px segments, a lifted
+   face with a bevel.
+
+   The inversion is not cosmetic. A pill track with a **brand-filled** thumb makes
+   every tab strip on a page compete with that page's actual primary button for the
+   same "this is the thing to press" reading. Here, selection reads as position
+   rather than as emphasis. */
+.ins-seg {
+  display: inline-flex;
+  gap: .1875rem;
+  padding: .25rem;
+  border-radius: var(--ins-r-md);
+  /* A 6% dark tint — a groove the selected segment sits raised inside. At 3.5% the
+     track disappears and the control reads as one floating white pill with some
+     words next to it. */
+  background: var(--ins-ctl-bg-hover);
+  border: 1px solid var(--ins-line-glass);
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+.ins-seg > a,
+.ins-seg > button {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  min-block-size: var(--ins-ctl-h);
+  padding: .5rem .875rem;
+  border: 0;
+  background: transparent;
+  border-radius: var(--ins-r-sm);
+  font-family: inherit;
+  font-size: .8125rem;
+  font-weight: 700;
+  color: var(--ins-text-2);
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background var(--ins-t-pop) var(--ins-ease),
+              color var(--ins-t-pop) var(--ins-ease),
+              box-shadow var(--ins-t-pop) var(--ins-ease);
+}
+.ins-seg > a:hover,
+.ins-seg > button:hover { color: var(--ins-primary-darker); background: var(--ins-surface-hover); }
+/* The selected segment: three tokens, once, covering both themes. It used to be
+   written out per position *and* per theme — and that is how it broke. One copy
+   stopped at position four, and positions five and six had been appended to the dark
+   rule's selector list without its theme prefix, so in the default theme a selected
+   fifth tab was byte for byte an unselected tab: nothing on screen said which pane
+   was open. A theme cannot own a partial copy of a list it should not own at all. */
+.ins-seg > .is-active,
+.ins-seg > .is-active:hover {
+  background: var(--ins-seg-on-bg);
+  color: var(--ins-seg-on-fg);
+  box-shadow: var(--ins-seg-on-shadow);
+}
+/* On a phone a strip is three or four Arabic phrases in one control. Tightening the
+   segments is what makes it fit, rather than letting it scroll with nothing to say
+   so. */
+@media (max-width: 34rem) {
+  .ins-seg { padding: .1875rem; }
+  .ins-seg > a,
+  .ins-seg > button { padding-inline: .5rem; font-size: .75rem; gap: .25rem; }
+}
+
+/* ==========================================================================
+   Insiyab · pill, badge, money, avatar
+   ==========================================================================
+   The small marks. All of them read off the semantic triad, which is why a status
+   pill and an alert and a tinted stat chip look like three sizes of one idea
+   rather than three components that happen to be coloured.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- pill */
+/* 3px/12px, a 5px gap, .75rem at 700. A status is a label: at .6875rem in a
+   12px-padded pill it reads as a footnote next to the row it describes. */
+.ins-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .3125rem;
+  padding: .1875rem .75rem;
+  border-radius: var(--ins-r-pill);
+  border: 1px solid var(--ins-tone-mute-bd);
+  background: var(--ins-tone-mute-bg);
+  color: var(--ins-tone-mute);
+  font-size: .75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+.ins-pill--ok    { background: var(--ins-tone-ok-bg);    color: var(--ins-tone-ok);    border-color: var(--ins-tone-ok-bd); }
+.ins-pill--warn  { background: var(--ins-tone-warn-bg);  color: var(--ins-tone-warn);  border-color: var(--ins-tone-warn-bd); }
+.ins-pill--bad   { background: var(--ins-tone-bad-bg);   color: var(--ins-tone-bad);   border-color: var(--ins-tone-bad-bd); }
+.ins-pill--info  { background: var(--ins-tone-info-bg);  color: var(--ins-tone-info);  border-color: var(--ins-tone-info-bd); }
+.ins-pill--brand { background: var(--ins-tone-brand-bg); color: var(--ins-tone-brand); border-color: var(--ins-tone-brand-bd); }
+:root[data-ins-theme="dark"] .ins-pill--brand { color: var(--ins-text-1); }
+
+/* A dot in the pill's own ink, for a status that wants a mark rather than a glyph. */
+.ins-pill-dot { inline-size: .4375rem; block-size: .4375rem; border-radius: 50%; background: currentColor; }
+
+/* --------------------------------------------------------------- badge */
+/* A count, not a status: no border, no icon, and it sits on something. */
+.ins-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.375rem;
+  padding: .1875rem .5rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-brand-bg);
+  color: var(--ins-tone-brand);
+  font-family: var(--ins-font-body-en);
+  font-size: .6875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+.ins-badge--ok   { background: var(--ins-tone-ok-bg);   color: var(--ins-tone-ok); }
+.ins-badge--warn { background: var(--ins-tone-warn-bg); color: var(--ins-tone-warn); }
+.ins-badge--bad  { background: var(--ins-tone-bad-bg);  color: var(--ins-tone-bad); }
+.ins-badge--mute { background: var(--ins-tone-mute-bg); color: var(--ins-tone-mute); }
+:root[data-ins-theme="dark"] .ins-badge { color: var(--ins-text-1); }
+
+/* --------------------------------------------------------------- money */
+/* `direction: ltr` + `unicode-bidi: isolate` is not cosmetic. A negative figure is
+   `-2,375,000`, and inside RTL text the bidi algorithm moves the leading sign to the
+   other end: a reconciliation panel reported a shortfall as `2,375,000-`. Isolating
+   the figure keeps the sign where it belongs and stops a number adjacent to Arabic
+   from being reordered against it.
+
+   It goes on the FIGURE, not on the wrapper: isolating the wrapper would take the
+   currency suffix with it and put the unit on the right of the digits, which is the
+   wrong side in Arabic. `.ins-num` — phone numbers, ids, usernames — has no trailing
+   unit and is isolated outright. */
+.ins-money-val,
+.ins-num {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.ins-money {
+  font-family: var(--ins-font-body-en);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+/* The unit must never compete with the figure. At .75em of a 2rem stat value the
+   currency renders at 1.5rem and reads as part of the number. */
+.ins-money-cur {
+  font-size: .68em;
+  font-weight: 500;
+  color: var(--ins-text-2);
+  margin-inline-start: .3em;
+}
+.ins-stat-value .ins-money-cur { font-size: .42em; }
+.ins-money--pos { color: var(--ins-tone-ok); }
+.ins-money--neg { color: var(--ins-tone-bad); }
+
+/* --------------------------------------------------------------- avatar */
+/* A brand-gradient disc with an initial in it. */
+.ins-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  color: var(--ins-on-primary);
+  font-weight: 800;
+  user-select: none;
+  inline-size: 38px;
+  block-size: 38px;
+  font-size: .9375rem;
+}
+.ins-avatar--sm { inline-size: 30px; block-size: 30px; font-size: .75rem; }
+.ins-avatar--lg { inline-size: 46px; block-size: 46px; font-size: 1.125rem; }
+
+/* ==========================================================================
+   Insiyab · feedback
+   ==========================================================================
+   Alert, toast, empty state, skeleton, spinner — the four states most kits skip
+   and every real application needs, plus the one that says what just happened.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- alert */
+/* The notched alert: the single most distinctive small component in this design.
+   Two pieces that read as one shape — a **solid** filled circle carrying the icon,
+   and a tinted message block with a **concave bite** cut out of the edge facing it.
+   The circle nests into the bite with a hairline gap, so the two share one
+   continuous border line and the icon looks extracted from the block rather than
+   dropped on top of it.
+
+   The bite is a radial-gradient mask. Its centre is a physical edge — `at 100%` is
+   the right edge whatever `dir` says — so both directions are written out rather
+   than left to a logical property that does not exist for gradient positions.
+
+   A plain rgba border rather than `color-mix()`: a border that computes to nothing
+   on an older engine would take the shared line with it, and the shared line is the
+   whole effect.
+
+   Degrades honestly: a browser with no mask support draws a straight-edged block
+   with a circle beside it, which is a perfectly normal alert. */
+.ins-alert {
+  display: flex;
+  align-items: center;
+  font-size: .875rem;
+  font-weight: 600;
+  --ins-alert-circle: 2.75rem;
+  --ins-alert-bite: 1.65rem;   /* slightly more than half the circle — that is the gap */
+}
+.ins-alert-ico {
+  flex: 0 0 auto;
+  inline-size: var(--ins-alert-circle);
+  block-size: var(--ins-alert-circle);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 2;
+  margin-inline-end: calc(var(--ins-alert-circle) / -2);   /* nest into the bite */
+  background: var(--ins-alert-c);
+  color: var(--ins-alert-on);
+  border: 1px solid var(--ins-alert-bd);
+  font-size: 1rem;
+}
+.ins-alert-msg {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding-block: .625rem;
+  padding-inline-start: calc(var(--ins-alert-circle) / 2 + .9rem);   /* clear the bite */
+  padding-inline-end: 1rem;
+  line-height: 1.5;
+  background: var(--ins-alert-bg);
+  color: var(--ins-alert-text);
+  border: 1px solid var(--ins-alert-bd);
+  border-radius: var(--ins-r-md);
+  -webkit-mask: var(--ins-alert-mask);
+          mask: var(--ins-alert-mask);
+}
+[dir="rtl"] .ins-alert-msg {
+  --ins-alert-mask: radial-gradient(circle var(--ins-alert-bite) at 100% center,
+                    transparent calc(var(--ins-alert-bite) - .5px), #000 var(--ins-alert-bite));
+}
+[dir="ltr"] .ins-alert-msg {
+  --ins-alert-mask: radial-gradient(circle var(--ins-alert-bite) at 0% center,
+                    transparent calc(var(--ins-alert-bite) - .5px), #000 var(--ins-alert-bite));
+}
+.ins-alert-text { flex: 1 1 auto; min-width: 0; }
+.ins-alert-x {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  padding: .25rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  opacity: .55;
+  cursor: pointer;
+  border-radius: var(--ins-r-xs);
+  transition: opacity var(--ins-t-exit);
+}
+.ins-alert-x:hover { opacity: 1; }
+
+/* Per-tone: a solid circle in the saturated hue, a ~12% tinted block, and a border
+   at ~45% shared by both. These four classes are pure custom-property carriers with
+   no appearance of their own — which is why the toast below can reuse them. */
+.ins-alert--ok   { --ins-alert-c: #16A34A; --ins-alert-bg: var(--ins-tone-ok-bg);   --ins-alert-text: var(--ins-tone-ok);   --ins-alert-on: #fff; --ins-alert-bd: rgba(34, 197, 94, .45); }
+.ins-alert--bad  { --ins-alert-c: #DC2626; --ins-alert-bg: var(--ins-tone-bad-bg);  --ins-alert-text: var(--ins-tone-bad);  --ins-alert-on: #fff; --ins-alert-bd: rgba(239, 68, 68, .45); }
+.ins-alert--warn { --ins-alert-c: #D97706; --ins-alert-bg: var(--ins-tone-warn-bg); --ins-alert-text: var(--ins-tone-warn); --ins-alert-on: #fff; --ins-alert-bd: rgba(245, 158, 11, .45); }
+.ins-alert--info { --ins-alert-c: var(--ins-primary); --ins-alert-bg: var(--ins-tone-brand-bg); --ins-alert-text: var(--ins-primary-darker); --ins-alert-on: var(--ins-on-primary); --ins-alert-bd: rgba(var(--ins-primary-rgb), .45); }
+/* The message text is the 800 shade in light and the 400 in dark, but the circle is
+   a fill with a label on it and has to stay saturated in both. */
+:root[data-ins-theme="dark"] .ins-alert { --ins-alert-on: #0B1220; }
+:root[data-ins-theme="dark"] .ins-alert--info { --ins-alert-text: var(--ins-text-1); --ins-alert-on: var(--ins-on-primary); }
+
+/* --------------------------------------------------------------- toast */
+/* A message about what just happened is not part of the page's structure, so it
+   does not live in the layout. Centred on the inline axis rather than pinned to one
+   side, because a centred strip reads the same in both directions.
+
+   No icon circle and no dismiss button: the inline alert's 44px filled circle is
+   most of the height of a 26rem strip, and between that circle, an emoji in the
+   message, and a close button, one sentence arrives wearing three marks. One small
+   glyph in the tone colour, and the message. */
+.ins-toasts {
+  position: fixed;
+  inset-block-start: 1rem;
+  inset-inline: 0;
+  z-index: 1090;
+  margin-inline: auto;
+  inline-size: min(92vw, 26rem);
+  display: flex;
+  flex-direction: column;
+  /* Each toast is as wide as its sentence and no wider, centred in the strip. A
+     three-word message in a fixed 26rem bar is three words and a lot of tinted
+     nothing. The strip keeps the 26rem as the point at which a long message wraps. */
+  align-items: center;
+  gap: .5rem;
+  /* The strip spans the viewport in order to centre itself, so it must not eat
+     clicks across the whole width — only the toasts themselves are targets. */
+  pointer-events: none;
+}
+.ins-toast {
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  max-inline-size: 100%;
+  gap: .625rem;
+  padding: .8125rem 1rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-alert-bd);
+  background: var(--ins-alert-bg);
+  color: var(--ins-alert-text);
+  font-size: .875rem;
+  font-weight: 600;
+  line-height: 1.5;
+  box-shadow: var(--ins-sh-lg);
+  /* In, hold, out — and the out is a *delayed second animation* rather than late
+     keyframes in one. Two reasons, both about not needing a script to be correct. A
+     fixed toast that nobody dismisses is not a block that scrolls away, it is an
+     overlay that stays for the rest of the page view, so the hide cannot be
+     JavaScript's job. And the reduced-motion rule clamps `animation-duration` but
+     leaves `animation-delay` alone: a hold encoded as duration would collapse to
+     nothing and the message would be gone before it was read, while a hold encoded
+     as delay survives exactly as written. The script only adds click-to-dismiss. */
+  animation: ins-toast-in var(--ins-t-pop) var(--ins-ease),
+             ins-toast-out var(--ins-t-exit) var(--ins-ease) 5s forwards;
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .ins-toast { -webkit-backdrop-filter: var(--ins-blur); backdrop-filter: var(--ins-blur); }
+}
+.ins-toast-ico { flex: 0 0 auto; font-size: 1rem; color: var(--ins-alert-c); }
+.ins-toast-text { flex: 1 1 auto; min-width: 0; }
+/* Dismissed by hand: the same exit, now rather than at 5s. */
+.ins-toast.is-going { animation: ins-toast-out var(--ins-t-exit) var(--ins-ease) forwards; }
+@keyframes ins-toast-in { from { opacity: 0; transform: translateY(-12px) scale(.97); } }
+/* `visibility` is discrete but animatable, and with `forwards` it is what the ended
+   state holds. Without it the toast is a transparent 26rem strip still answering
+   clicks across the top of the page. */
+@keyframes ins-toast-out { to { opacity: 0; transform: translateY(-12px) scale(.97); visibility: hidden; } }
+
+/* --------------------------------------------------------------- empty state */
+/* An empty state is a real state and deserves composing. A faded glyph, not a
+   tinted chip — a chip reads as a button with its label missing, which on a page
+   whose entire content is the empty state is the whole screen. */
+.ins-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .625rem;
+  padding: 2.75rem 1.5rem;
+  text-align: center;
+}
+.ins-empty-ico {
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--ins-text-3);
+  opacity: .35;
+}
+.ins-empty-title { font-weight: 700; font-size: .9375rem; color: var(--ins-text-1); }
+.ins-empty-hint { font-size: .8125rem; color: var(--ins-text-2); max-inline-size: 32ch; }
+
+/* --------------------------------------------------------------- skeleton */
+.ins-skel {
+  border-radius: var(--ins-r-sm);
+  background: linear-gradient(90deg, var(--ins-skel-base), var(--ins-skel-hi), var(--ins-skel-base));
+  background-size: 240% 100%;
+  animation: ins-skel 1.8s infinite;
+}
+@keyframes ins-skel { to { background-position: -240% 0; } }
+.ins-skel--text { block-size: .75rem; margin-block: .375rem; }
+.ins-skel--title { block-size: 1.25rem; inline-size: 40%; }
+
+/* --------------------------------------------------------------- spinner */
+/* A ring of the brand tint with one quadrant in the brand colour. `infinite` is
+   allowed here for the same reason it is allowed on the skeleton: both mean
+   "waiting", which is the only thing an endless animation may mean in this library.
+   See the orb note in 04-reset.css for what endless motion costs under frost. */
+.ins-spinner {
+  inline-size: 32px;
+  block-size: 32px;
+  border: 3px solid rgba(var(--ins-primary-rgb), .18);
+  border-block-start-color: var(--ins-tone-brand-soft);
+  border-radius: 50%;
+  animation: ins-spin .7s linear infinite;
+}
+.ins-spinner--sm { inline-size: 15px; block-size: 15px; border-width: 2px; }
+@keyframes ins-spin { to { transform: rotate(360deg); } }
+.ins-loading { display: grid; place-items: center; min-block-size: 200px; }
+
+/* ==========================================================================
+   Insiyab · dialog and popover
+   ==========================================================================
+
+   Native `<dialog>`, not a div with a z-index. Three things come free, and all
+   three are things a hand-rolled overlay has to add back by hand: Escape closes
+   it, focus is trapped inside it, and the top layer puts it above every stacking
+   context on the page without a single z-index. The last one matters more than
+   usual here — every glass surface carries a `backdrop-filter` and is therefore
+   its own stacking context, which is a lesson 07-panel.css already records.
+
+   And because the top layer sits outside every ancestor's filter, a
+   `backdrop-filter` on `::backdrop` filters the *page* — the one place in this
+   library where that works as written. The panel itself is still painted opaque
+   over the page wash rather than trusting the blur, because a dialog wants ground
+   under it.
+
+   **`.ins-dialog`, not `.modal`.** Naming it `.modal` collides with Bootstrap,
+   whose `.modal { display: none }` is a class selector and therefore outranks the
+   UA stylesheet's `dialog[open] { display: block }`. The result is a dialog that
+   opens, takes the top layer, and paints nothing at all. Since Insiyab is designed
+   to be droppable into a page that already has Bootstrap, this is not hypothetical.
+   ========================================================================== */
+
+.ins-dialog {
+  inline-size: min(38rem, calc(100vw - 2rem));
+  max-block-size: min(44rem, calc(100vh - 3rem));
+  padding: 0;
+  border: 1px solid var(--ins-rim);
+  border-top-color: var(--ins-rim-top);
+  border-radius: var(--ins-r-xl);
+  background: linear-gradient(145deg, var(--ins-glass-strong), var(--ins-glass-hover)),
+              var(--ins-wash-1);
+  box-shadow: var(--ins-sh-lg);
+  color: var(--ins-text-1);
+  overflow: visible;
+
+  /* The entrance and the exit. A modal that is simply *there* on one frame and gone
+     on the next reads as a page that jumped rather than as a surface that opened.
+
+     A `<dialog>` can transition across a display change, and this is the one place
+     the platform hands it over: `display` and `overlay` listed with `allow-discrete`
+     keep the element painted and in the top layer for the length of the exit, and
+     `@starting-style` supplies the frame before the open. That covers *every* way
+     this closes — the X, a backdrop click, Escape, a `method="dialog"` submit —
+     which a closing class in JavaScript would have had to intercept one at a time,
+     and would have missed the one it did not know about.
+
+     Nothing here is load-bearing. A browser without `@starting-style` skips the
+     entrance, one without `allow-discrete` closes on the frame it always did. */
+  opacity: 0;
+  transform: translateY(10px) scale(.98);
+  transition: opacity var(--ins-t-exit) var(--ins-ease),
+              transform var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+.ins-dialog[open] { display: flex; flex-direction: column; }
+/* Longer in than out, the ratio every other surface here uses: an entrance is worth
+   watching and a dismissal is worth getting out of the way. The duration is read
+   from the state being transitioned *to*, so dropping `open` picks the exit duration
+   back up without a second rule saying so. */
+.ins-dialog[open] {
+  opacity: 1;
+  transform: none;
+  transition-duration: var(--ins-t-enter);
+}
+@starting-style {
+  .ins-dialog[open] { opacity: 0; transform: translateY(10px) scale(.98); }
+}
+
+/* The backdrop fades through `opacity` rather than `background` — that is one
+   property doing both halves, the tint and the blur, since a filtered backdrop is
+   painted as part of the pseudo-element and takes its opacity with everything else.
+   Fading the `background` alone snaps the page behind out of focus on the first
+   frame while the darkening takes the whole duration, which is the glitch this
+   avoids. */
+.ins-dialog::backdrop {
+  background: rgba(15, 23, 42, .38);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+.ins-dialog[open]::backdrop { opacity: 1; transition-duration: var(--ins-t-enter); }
+@starting-style {
+  .ins-dialog[open]::backdrop { opacity: 0; }
+}
+
+/* `--ins-line` and not `--ins-rim`. The rim is the *highlight* — white at 85% —
+   which is a top edge catching the light, not a divider; drawn across a near-white
+   dialog it is invisible. Three separator lines in one dialog were once drawn in it,
+   and the whole surface read as one undifferentiated block. */
+.ins-dialog-head {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  padding: 1.125rem var(--ins-dlg-pad);
+  border-block-end: 1px solid var(--ins-line);
+  flex: none;
+}
+.ins-dialog-title { font-size: 1.0625rem; font-weight: 800; margin: 0; }
+.ins-dialog-x {
+  margin-inline-start: auto;
+  inline-size: var(--ins-ctl-sm-h);
+  block-size: var(--ins-ctl-sm-h);
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: var(--ins-ctl-bg);
+  color: var(--ins-text-2);
+  border-radius: var(--ins-r-sm);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-dialog-x:hover { background: var(--ins-ctl-bg-hover); color: var(--ins-text-1); }
+
+/* The panel scrolls, not the page behind it. `overscroll-behavior` so that reaching
+   the end of a long step does not start scrolling the page underneath.
+
+   `flex: 1 1 auto; min-block-size: 0` rather than a calc against the dialog's max
+   height: that calc subtracted a fixed head height, and a two-line head is taller,
+   so a long body overflowed and its own footer buttons were cut in half by the
+   bottom edge. The column makes the head's *real* height the thing subtracted. */
+.ins-dialog-body {
+  padding: var(--ins-dlg-pad);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  flex: 1 1 auto;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ins-dlg-gap);
+}
+/* For a dialog that is not scrolling anyway and holds one open select. */
+.ins-dialog-body--spill { overflow: visible; }
+
+.ins-dialog-foot {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: 1rem var(--ins-dlg-pad);
+  border-block-start: 1px solid var(--ins-line);
+  flex: none;
+}
+/* A dialog's commit sits at the *end*, away from the cancel — the opposite of a
+   panel's form, which has no cancel to be kept away from. */
+.ins-dialog-foot > .ins-btn--primary { margin-inline-start: auto; }
+
+/* --------------------------------------------------------------- popover */
+/* `<details>` + `<summary>`, so it opens, closes on Escape and is keyboard
+   reachable with no script at all. The body is a real raised card — it names itself
+   so the de-nesting rule in 05-glass.css does not flatten it, which is exactly the
+   escape hatch that rule's `:where()` was written to leave open. */
+.ins-pop { position: relative; display: inline-block; }
+.ins-pop > summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+}
+.ins-pop > summary::-webkit-details-marker { display: none; }
+.ins-pop-body {
+  position: absolute;
+  inset-block-start: calc(100% + .375rem);
+  inset-inline-end: 0;
+  z-index: 20;
+  min-inline-size: 12rem;
+  padding: .375rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-rim);
+  background: var(--ins-glass-strong);
+  box-shadow: var(--ins-sh-lg);
+  animation: ins-pop-in var(--ins-t-pop) var(--ins-ease);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-pop-body { backdrop-filter: var(--ins-blur); -webkit-backdrop-filter: var(--ins-blur); }
+}
+@keyframes ins-pop-in { from { opacity: 0; transform: translateY(-4px); } }
+.ins-pop-item {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  inline-size: 100%;
+  padding: .5rem .75rem;
+  border: 0;
+  background: none;
+  border-radius: var(--ins-r-xs);
+  font-family: inherit;
+  font-size: .875rem;
+  color: var(--ins-text-1);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+.ins-pop-item:hover { background: rgba(var(--ins-primary-rgb), .10); color: var(--ins-primary-darker); }
+:root[data-ins-theme="dark"] .ins-pop-item:hover { color: var(--ins-text-1); }
+.ins-pop-item--bad { color: var(--ins-tone-bad); }
+.ins-pop-item--bad:hover { background: var(--ins-tone-bad-bg); color: var(--ins-tone-bad); }
+.ins-pop-sep { block-size: 1px; background: var(--ins-line); margin: .25rem 0; border: 0; }
+
+/* ==========================================================================
+   Insiyab · accessibility and effects
+   ==========================================================================
+   Last in the concatenation on purpose: the focus ring has to sit after every
+   component that declares its own `box-shadow`, and the effects-off block has to
+   be able to switch off anything declared above it.
+   ========================================================================== */
+
+/* One focus ring for everything focusable. `summary` is in the list because a
+   `<summary>` is focusable without carrying a tabindex to be caught by, and the
+   popover in 14-dialog.css is built on one.
+
+   **The ring only — never a `border-radius`.** Setting one here is the single thing
+   a focus rule must not do: it reshapes the control. An `outline` already follows
+   whatever radius the element has, in every browser this ships to, so declaring one
+   bought nothing and cost the shape of every field — a 14px box snapping to 7px for
+   exactly as long as somebody was typing in it, with the 4px focus glow still drawn
+   at the old corner. On a login screen, where the field is focused on arrival, that
+   reads as a dent in the bottom edge.
+
+   `:where()` keeps this at zero specificity so a component that needs a different
+   ring can simply say so. It is last in the file, which is what makes it win against
+   the component defaults it is meant to override.
+
+   Through `--ins-tone-brand-soft` and not the raw primary: a focus indicator wants
+   3:1 against what it is drawn against, and a mid-tone brand measured 2.48:1 on the
+   dark page ground and 2.09:1 on a dark control — the ring was hardest to see
+   exactly where a keyboard is the only way in. The pale shade puts it at 6.78:1
+   there and leaves every light-mode ring at the pixel it was. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--ins-tone-brand-soft);
+  outline-offset: 2px;
+}
+
+/* Visually hidden, still announced. `clip-path` rather than `display: none`, which
+   would take the element out of the tab order along with its label. */
+.ins-sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------- effects off */
+/* `data-ins-fx="off"` on <html>, independent of the OS setting, so an application
+   can offer "reduce effects" as its own preference — and so a low-end device can be
+   given the cheap rendering deliberately. The reduced-motion query in 04-reset.css
+   handles the OS side; this handles the product's.
+
+   Everything the library animates or frosts is listed here. An effect that is not
+   gated is an effect nobody can turn off. */
+[data-ins-fx="off"] .ins-orb { display: none; }
+[data-ins-fx="off"] :is(.ins-glass, .ins-card, .ins-panel, .ins-toast, .ins-pop-body),
+[data-ins-fx="off"] .ins-dialog::backdrop {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+/* The dialog moves on a `transition` rather than an `animation`, so the
+   `animation: none` list below would never have reached it. */
+[data-ins-fx="off"] .ins-dialog,
+[data-ins-fx="off"] .ins-dialog::backdrop { transition: none; }
+[data-ins-fx="off"] .ins-grid > *,
+[data-ins-fx="off"] .ins-pop-body { animation: none; }
+[data-ins-fx="off"] .ins-skel { animation: none; background: var(--ins-skel-base); }
+/* The toast keeps both animations — they are what hides it — and loses only the
+   distance they cover. `animation: none` here would strand it on screen for ever. */
+[data-ins-fx="off"] .ins-toast { animation-duration: .001s, .001s; }
+[data-ins-fx="off"] .ins-btn::before { content: none; }
+[data-ins-fx="off"] .ins-btn:active:not(:disabled),
+[data-ins-fx="off"] .ins-input:focus,
+[data-ins-fx="off"] .ins-select:focus,
+[data-ins-fx="off"] .ins-textarea:focus { transform: none; }

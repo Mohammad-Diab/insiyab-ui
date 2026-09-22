@@ -1,0 +1,77 @@
+/* ==========================================================================
+   Insiyab · accessibility and effects
+   ==========================================================================
+   Last in the concatenation on purpose: the focus ring has to sit after every
+   component that declares its own `box-shadow`, and the effects-off block has to
+   be able to switch off anything declared above it.
+   ========================================================================== */
+
+/* One focus ring for everything focusable. `summary` is in the list because a
+   `<summary>` is focusable without carrying a tabindex to be caught by, and the
+   popover in 14-dialog.css is built on one.
+
+   **The ring only — never a `border-radius`.** Setting one here is the single thing
+   a focus rule must not do: it reshapes the control. An `outline` already follows
+   whatever radius the element has, in every browser this ships to, so declaring one
+   bought nothing and cost the shape of every field — a 14px box snapping to 7px for
+   exactly as long as somebody was typing in it, with the 4px focus glow still drawn
+   at the old corner. On a login screen, where the field is focused on arrival, that
+   reads as a dent in the bottom edge.
+
+   `:where()` keeps this at zero specificity so a component that needs a different
+   ring can simply say so. It is last in the file, which is what makes it win against
+   the component defaults it is meant to override.
+
+   Through `--ins-tone-brand-soft` and not the raw primary: a focus indicator wants
+   3:1 against what it is drawn against, and a mid-tone brand measured 2.48:1 on the
+   dark page ground and 2.09:1 on a dark control — the ring was hardest to see
+   exactly where a keyboard is the only way in. The pale shade puts it at 6.78:1
+   there and leaves every light-mode ring at the pixel it was. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--ins-tone-brand-soft);
+  outline-offset: 2px;
+}
+
+/* Visually hidden, still announced. `clip-path` rather than `display: none`, which
+   would take the element out of the tab order along with its label. */
+.ins-sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------- effects off */
+/* `data-ins-fx="off"` on <html>, independent of the OS setting, so an application
+   can offer "reduce effects" as its own preference — and so a low-end device can be
+   given the cheap rendering deliberately. The reduced-motion query in 04-reset.css
+   handles the OS side; this handles the product's.
+
+   Everything the library animates or frosts is listed here. An effect that is not
+   gated is an effect nobody can turn off. */
+[data-ins-fx="off"] .ins-orb { display: none; }
+[data-ins-fx="off"] :is(.ins-glass, .ins-card, .ins-panel, .ins-toast, .ins-pop-body),
+[data-ins-fx="off"] .ins-dialog::backdrop {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+/* The dialog moves on a `transition` rather than an `animation`, so the
+   `animation: none` list below would never have reached it. */
+[data-ins-fx="off"] .ins-dialog,
+[data-ins-fx="off"] .ins-dialog::backdrop { transition: none; }
+[data-ins-fx="off"] .ins-grid > *,
+[data-ins-fx="off"] .ins-pop-body { animation: none; }
+[data-ins-fx="off"] .ins-skel { animation: none; background: var(--ins-skel-base); }
+/* The toast keeps both animations — they are what hides it — and loses only the
+   distance they cover. `animation: none` here would strand it on screen for ever. */
+[data-ins-fx="off"] .ins-toast { animation-duration: .001s, .001s; }
+[data-ins-fx="off"] .ins-btn::before { content: none; }
+[data-ins-fx="off"] .ins-btn:active:not(:disabled),
+[data-ins-fx="off"] .ins-input:focus,
+[data-ins-fx="off"] .ins-select:focus,
+[data-ins-fx="off"] .ins-textarea:focus { transform: none; }

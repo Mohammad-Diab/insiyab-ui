@@ -1,0 +1,201 @@
+/* ==========================================================================
+   Insiyab · dialog and popover
+   ==========================================================================
+
+   Native `<dialog>`, not a div with a z-index. Three things come free, and all
+   three are things a hand-rolled overlay has to add back by hand: Escape closes
+   it, focus is trapped inside it, and the top layer puts it above every stacking
+   context on the page without a single z-index. The last one matters more than
+   usual here — every glass surface carries a `backdrop-filter` and is therefore
+   its own stacking context, which is a lesson 07-panel.css already records.
+
+   And because the top layer sits outside every ancestor's filter, a
+   `backdrop-filter` on `::backdrop` filters the *page* — the one place in this
+   library where that works as written. The panel itself is still painted opaque
+   over the page wash rather than trusting the blur, because a dialog wants ground
+   under it.
+
+   **`.ins-dialog`, not `.modal`.** Naming it `.modal` collides with Bootstrap,
+   whose `.modal { display: none }` is a class selector and therefore outranks the
+   UA stylesheet's `dialog[open] { display: block }`. The result is a dialog that
+   opens, takes the top layer, and paints nothing at all. Since Insiyab is designed
+   to be droppable into a page that already has Bootstrap, this is not hypothetical.
+   ========================================================================== */
+
+.ins-dialog {
+  inline-size: min(38rem, calc(100vw - 2rem));
+  max-block-size: min(44rem, calc(100vh - 3rem));
+  padding: 0;
+  border: 1px solid var(--ins-rim);
+  border-top-color: var(--ins-rim-top);
+  border-radius: var(--ins-r-xl);
+  background: linear-gradient(145deg, var(--ins-glass-strong), var(--ins-glass-hover)),
+              var(--ins-wash-1);
+  box-shadow: var(--ins-sh-lg);
+  color: var(--ins-text-1);
+  overflow: visible;
+
+  /* The entrance and the exit. A modal that is simply *there* on one frame and gone
+     on the next reads as a page that jumped rather than as a surface that opened.
+
+     A `<dialog>` can transition across a display change, and this is the one place
+     the platform hands it over: `display` and `overlay` listed with `allow-discrete`
+     keep the element painted and in the top layer for the length of the exit, and
+     `@starting-style` supplies the frame before the open. That covers *every* way
+     this closes — the X, a backdrop click, Escape, a `method="dialog"` submit —
+     which a closing class in JavaScript would have had to intercept one at a time,
+     and would have missed the one it did not know about.
+
+     Nothing here is load-bearing. A browser without `@starting-style` skips the
+     entrance, one without `allow-discrete` closes on the frame it always did. */
+  opacity: 0;
+  transform: translateY(10px) scale(.98);
+  transition: opacity var(--ins-t-exit) var(--ins-ease),
+              transform var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+.ins-dialog[open] { display: flex; flex-direction: column; }
+/* Longer in than out, the ratio every other surface here uses: an entrance is worth
+   watching and a dismissal is worth getting out of the way. The duration is read
+   from the state being transitioned *to*, so dropping `open` picks the exit duration
+   back up without a second rule saying so. */
+.ins-dialog[open] {
+  opacity: 1;
+  transform: none;
+  transition-duration: var(--ins-t-enter);
+}
+@starting-style {
+  .ins-dialog[open] { opacity: 0; transform: translateY(10px) scale(.98); }
+}
+
+/* The backdrop fades through `opacity` rather than `background` — that is one
+   property doing both halves, the tint and the blur, since a filtered backdrop is
+   painted as part of the pseudo-element and takes its opacity with everything else.
+   Fading the `background` alone snaps the page behind out of focus on the first
+   frame while the darkening takes the whole duration, which is the glitch this
+   avoids. */
+.ins-dialog::backdrop {
+  background: rgba(15, 23, 42, .38);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+.ins-dialog[open]::backdrop { opacity: 1; transition-duration: var(--ins-t-enter); }
+@starting-style {
+  .ins-dialog[open]::backdrop { opacity: 0; }
+}
+
+/* `--ins-line` and not `--ins-rim`. The rim is the *highlight* — white at 85% —
+   which is a top edge catching the light, not a divider; drawn across a near-white
+   dialog it is invisible. Three separator lines in one dialog were once drawn in it,
+   and the whole surface read as one undifferentiated block. */
+.ins-dialog-head {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  padding: 1.125rem var(--ins-dlg-pad);
+  border-block-end: 1px solid var(--ins-line);
+  flex: none;
+}
+.ins-dialog-title { font-size: 1.0625rem; font-weight: 800; margin: 0; }
+.ins-dialog-x {
+  margin-inline-start: auto;
+  inline-size: var(--ins-ctl-sm-h);
+  block-size: var(--ins-ctl-sm-h);
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: var(--ins-ctl-bg);
+  color: var(--ins-text-2);
+  border-radius: var(--ins-r-sm);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-dialog-x:hover { background: var(--ins-ctl-bg-hover); color: var(--ins-text-1); }
+
+/* The panel scrolls, not the page behind it. `overscroll-behavior` so that reaching
+   the end of a long step does not start scrolling the page underneath.
+
+   `flex: 1 1 auto; min-block-size: 0` rather than a calc against the dialog's max
+   height: that calc subtracted a fixed head height, and a two-line head is taller,
+   so a long body overflowed and its own footer buttons were cut in half by the
+   bottom edge. The column makes the head's *real* height the thing subtracted. */
+.ins-dialog-body {
+  padding: var(--ins-dlg-pad);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  flex: 1 1 auto;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ins-dlg-gap);
+}
+/* For a dialog that is not scrolling anyway and holds one open select. */
+.ins-dialog-body--spill { overflow: visible; }
+
+.ins-dialog-foot {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: 1rem var(--ins-dlg-pad);
+  border-block-start: 1px solid var(--ins-line);
+  flex: none;
+}
+/* A dialog's commit sits at the *end*, away from the cancel — the opposite of a
+   panel's form, which has no cancel to be kept away from. */
+.ins-dialog-foot > .ins-btn--primary { margin-inline-start: auto; }
+
+/* --------------------------------------------------------------- popover */
+/* `<details>` + `<summary>`, so it opens, closes on Escape and is keyboard
+   reachable with no script at all. The body is a real raised card — it names itself
+   so the de-nesting rule in 05-glass.css does not flatten it, which is exactly the
+   escape hatch that rule's `:where()` was written to leave open. */
+.ins-pop { position: relative; display: inline-block; }
+.ins-pop > summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+}
+.ins-pop > summary::-webkit-details-marker { display: none; }
+.ins-pop-body {
+  position: absolute;
+  inset-block-start: calc(100% + .375rem);
+  inset-inline-end: 0;
+  z-index: 20;
+  min-inline-size: 12rem;
+  padding: .375rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-rim);
+  background: var(--ins-glass-strong);
+  box-shadow: var(--ins-sh-lg);
+  animation: ins-pop-in var(--ins-t-pop) var(--ins-ease);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-pop-body { backdrop-filter: var(--ins-blur); -webkit-backdrop-filter: var(--ins-blur); }
+}
+@keyframes ins-pop-in { from { opacity: 0; transform: translateY(-4px); } }
+.ins-pop-item {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  inline-size: 100%;
+  padding: .5rem .75rem;
+  border: 0;
+  background: none;
+  border-radius: var(--ins-r-xs);
+  font-family: inherit;
+  font-size: .875rem;
+  color: var(--ins-text-1);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+.ins-pop-item:hover { background: rgba(var(--ins-primary-rgb), .10); color: var(--ins-primary-darker); }
+:root[data-ins-theme="dark"] .ins-pop-item:hover { color: var(--ins-text-1); }
+.ins-pop-item--bad { color: var(--ins-tone-bad); }
+.ins-pop-item--bad:hover { background: var(--ins-tone-bad-bg); color: var(--ins-tone-bad); }
+.ins-pop-sep { block-size: 1px; background: var(--ins-line); margin: .25rem 0; border: 0; }

@@ -29,15 +29,14 @@
 
 ---
 
-> **Status: 0.1.0 — foundation only.** Fonts, tokens (light and dark), the reset,
-> the page ground and the glass primitives are in, and the delivery path works
-> end to end. The component vocabulary — shell, panel, stat tile, table, field,
-> button, and the interactive parts — is still being extracted. See
-> [IDEA.md](IDEA.md) for the full plan and the reasoning behind every decision.
+> **Status: 0.2.0.** The component vocabulary is in and the demo page shows all
+> of it, in Arabic. Still to come: the application shell (sidebar + topbar), and
+> then the React and Jinja wrappers. See [IDEA.md](IDEA.md) for the full plan and
+> the reasoning behind every decision.
 >
-> The Arabic-first documentation pass is deliberately not done yet: the docs,
-> demo and marketing lead in Arabic by design, and that is a writing job worth
-> doing properly once the vocabulary has settled rather than twice.
+> This README is still English-first. The docs, demo and marketing lead in Arabic
+> by design — the demo page already does — and the rest is a writing job worth
+> doing properly once the vocabulary has fully settled rather than twice.
 
 ## Getting started
 
@@ -142,22 +141,58 @@ rims; here the rim drops from 85% to 10%, the frost desaturates from 140% to
 120%, the shadows go darker *and* stronger, the tints roughly double, and the
 brand's readable shade flips direction entirely.
 
-## What is in it so far
+## What is in it
 
-| Class | What it is |
+Run `node serve.mjs` and open the demo — every component below is on that one
+page, in Arabic, in both themes.
+
+| Group | Classes |
 |---|---|
-| `.ins-glass` | The frosted surface: frost, diagonal fill, near-white rim, bevel and one specular sheen. |
-| `.ins-glass-inner` | A panel's sub-panel — a fill and a hairline, no frost. |
-| `.ins-orbs` / `.ins-orb-1..3` | The soft brand-tinted blobs behind the page. Injected for you; opt out with `data-ins-orbs="off"`. |
+| **Surfaces** | `.ins-glass` · `.ins-glass-inner` · `.ins-card` · `.ins-panel` (`-head`, `-title`, `-ico`, `-body`, `-foot`, `-note`, `--alert`, `--open`) |
+| **Data** | `.ins-table` (+ `-wrap`) · `.ins-stat` (6 tones, 3 sizes) · `.ins-pill` · `.ins-badge` · `.ins-money` · `.ins-num` · `.ins-avatar` |
+| **Input** | `.ins-field` · `.ins-label` · `.ins-hint` · `.ins-input` · `.ins-select` · `.ins-textarea` · `.ins-check` · `.ins-switch` (+ `--card`, `-grid`) · `.ins-seg` · `.ins-search` |
+| **Buttons** | `.ins-btn` × `--primary` `--secondary` `--ghost[-danger/-success/-warning/-info]` `--success` `--danger` `--warning` `--info` `--bare`, × `--sm` `--lg` `--icon` `--full` `--lift` |
+| **Feedback** | `.ins-alert` (notched) · `.ins-toast` · `.ins-empty` · `.ins-skel` · `.ins-spinner` |
+| **Overlay** | `.ins-dialog` (native `<dialog>`) · `.ins-pop` (native `<details>`) |
+| **Layout** | `.ins-grid` · `.ins-toolbar` · `.ins-searchbar` |
+| **Ground** | `.ins-orbs` / `.ins-orb-1..3` — injected for you; opt out with `data-ins-orbs="off"` |
 
-Glass inside glass **de-nests itself** — the inner surface drops its border,
+Three things worth knowing about how these behave:
+
+**Glass inside glass de-nests itself.** The inner surface drops its border,
 shadow, sheen and blur automatically. A second frost over an already frosted
 ground is what turns this design language to fog, so it is a rule at zero
 specificity rather than a class anyone has to remember.
 
-Everything is namespaced: classes `ins-`, tokens `--ins-*`, attributes
+**The interactive components are built on platform elements.** The dialog is a
+real `<dialog>` — Escape closes it, focus is trapped, and the top layer puts it
+above every stacking context without a single `z-index`. The popover is a real
+`<details>` — it opens, closes on Escape and is keyboard reachable with no script
+at all. The script only adds click-outside-to-close.
+
+**Everything is namespaced** — classes `ins-`, tokens `--ins-*`, attributes
 `data-ins-*`. Insiyab can be dropped into a page that already has Bootstrap or
-Tailwind without a collision.
+Tailwind without a collision. (The dialog being `.ins-dialog` rather than
+`.modal` is not politeness: Bootstrap's `.modal { display: none }` outranks the
+UA's `dialog[open]`, so a dialog named that way opens, takes the top layer, and
+paints nothing.)
+
+## Attributes
+
+Everything below works as markup, with no JavaScript in your page:
+
+```html
+<button data-ins-theme-toggle>…</button>          <!-- toggle light/dark -->
+<button data-ins-theme-toggle="system">…</button> <!-- follow the OS again -->
+<button data-ins-fx>…</button>                    <!-- reduce effects -->
+<button data-ins-sidebar>…</button>               <!-- collapse the sidebar -->
+<button data-ins-dialog="#confirm">…</button>     <!-- open a dialog -->
+<button data-ins-dialog-close>…</button>          <!-- close the one it is in -->
+<button data-ins-toast="تم الحفظ" data-ins-tone="ok">…</button>
+```
+
+On `<html>`: `data-ins-primary="#0F766E"`, `data-ins-theme="dark|light"`,
+`data-ins-orbs="off"`, `data-ins-fx="off"`, `data-ins-scrollbar="lead"`.
 
 ## JavaScript API
 
@@ -168,6 +203,8 @@ Insiyab.version                       // '0.1.0'
 Insiyab.theme(mode?)                  // 'dark' | 'light' | 'system'
 Insiyab.toggleTheme()
 Insiyab.brand(hex?)                   // derive and apply a brand colour
+Insiyab.toast(message, tone?)         // 'ok' | 'bad' | 'warn' | 'info'
+Insiyab.dialog(target, action?)       // 'open' | 'close' | omit to toggle
 Insiyab.sidebar(state?)               // 'open' | 'collapsed' | 'toggle'
 Insiyab.init(scope?)                  // re-scan DOM you built yourself
 Insiyab.define(name, fn)              // add your own builder to that scan
@@ -183,6 +220,7 @@ Two events on `document`, both with a `detail`:
 ```js
 document.addEventListener('ins:theme', (e) => console.log(e.detail.theme));
 document.addEventListener('ins:sidebar', (e) => console.log(e.detail.state));
+document.addEventListener('ins:seg', (e) => console.log(e.detail.value));
 ```
 
 ### RTL scrollbars
