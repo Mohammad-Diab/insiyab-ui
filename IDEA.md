@@ -146,22 +146,62 @@ charts. Those belong to the app.
 
 ## How it ships
 
-Three entry points, because a library that serves only one of them is a library
-that gets ported the first time you reach for another:
+**Two files. Nothing else.** That is the whole delivery story, and it is the
+feature, not a limitation — the audience this is published for is often the one
+for whom a mandatory Node toolchain is the reason a library never gets tried.
 
-| Package | For |
+```html
+<link rel="stylesheet" href="insiyab.css">
+<script src="insiyab.js"></script>
+```
+
+Decided, so it stops being re-litigated per component:
+
+1. **No init call.** The two tags are enough. `Insiyab.init()` exists only to
+   re-scan DOM you added after load. Zero commands beats one command: a required
+   init is a dead page for everyone who forgets it, and they blame the library.
+2. **The script goes in `<head>`, synchronously.** Theme and sidebar state are
+   restored from `localStorage`, and that has to land *before first paint* or
+   every page load flashes the wrong theme. A deferred script cannot do it. So
+   `insiyab.js` stamps `<html>` at parse time and defers the rest of its wiring
+   to `DOMContentLoaded` — still one file, one tag, no flash, and no inline
+   snippet for anyone to copy.
+3. **The primary API is HTML attributes, not JavaScript.**
+   `<button data-ins-modal="#confirm">` — you write markup, the library wires
+   it. A beginner needs no JS at all. `Insiyab.modal()` is the escape hatch, not
+   the front door.
+4. **The CSS is useful alone.** Every static component works from the stylesheet
+   by itself; the JS is purely additive, for the parts that move. Two rungs: one
+   file for everything that doesn't move, add the second for what does.
+5. **Classes are prefixed `ins-`,** tokens `--ins-*`, attributes `data-ins-*`.
+   One namespace, no collisions — so Insiyab can be dropped into a page that
+   already has Bootstrap or Tailwind, which is how it gets adopted at all.
+6. **You get a build step; the user doesn't.** The stylesheet is authored in
+   parts under `src/css/` and concatenated on release. One hand-maintained
+   4,000-line file is unmaintainable by month three; a ~30-line build script is
+   not. The consumer's zero-build path is untouched.
+
+`insiyab.css` expects a `fonts/` folder beside it — the faces are self-hosted on
+purpose (see above), so "one CSS file" is one CSS file plus its fonts.
+Base64-inlining them to force the count to one would add hundreds of KB to the
+stylesheet and defeat the `unicode-range` splitting that exists to avoid exactly
+that. Drop in only the CSS and you still get a working page, just not the
+typography.
+
+### Framework wrappers: planned, not built
+
+| Package | Status |
 |---|---|
-| `insiyab` | One CSS file. Drop in a `<link>`, no build, no framework. |
-| `@insiyab/react` | Typed React components. |
-| `@insiyab/jinja` | Macro set for Flask / Django. |
+| `insiyab` | **This is the library.** One CSS file, one JS file, no build. |
+| `@insiyab/react` | Planned. Not started. |
+| `@insiyab/jinja` | Planned. Not started. |
 
-**The CSS is the source of truth.** The other two are thin wrappers over the same
-classes, never re-implementations — that rule is what stops three entry points
-becoming three libraries.
+Deliberately deferred: a wrapper written against an unfinished class vocabulary
+has to be rewritten when the vocabulary settles, so the core lands first.
 
-The zero-build path is the front door, not an afterthought. A `<link>` tag and a
-brand colour should get you 90% of the way, because that is what makes a light
-project actually light.
+**The CSS stays the source of truth.** When the wrappers do arrive they are thin
+covers over the same classes, never re-implementations — that rule is what stops
+three entry points becoming three libraries.
 
 ---
 
