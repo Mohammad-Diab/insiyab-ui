@@ -106,3 +106,26 @@
 }
 .ins-avatar--sm { inline-size: 30px; block-size: 30px; font-size: .75rem; }
 .ins-avatar--lg { inline-size: 46px; block-size: 46px; font-size: 1.125rem; }
+
+/* --------------------------------------------------------------- motion */
+/* A pill is usually a label, not a control, so the lift is scoped to the ones that
+   are actually pressable. A label that reacts to the pointer is a label promising
+   something it cannot do. */
+.ins-pill { transition: transform var(--ins-t-pop) var(--ins-ease),
+                        box-shadow var(--ins-t-pop) var(--ins-ease); }
+:where(a, button).ins-pill:hover { transform: translateY(-1px); box-shadow: var(--ins-sh-sm); }
+:where(a, button).ins-pill:active { transform: scale(.96); }
+
+/* The dot is the pill's smallest moving part and the cheapest place to put life --
+   and unlike the lift it is safe on a label, because a dot growing says nothing
+   about whether the thing can be pressed. */
+.ins-pill-dot { transition: transform var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-pill:hover .ins-pill-dot { transform: scale(1.35); }
+
+/* A count that changes is worth noticing. The animation is on the element, so
+   replacing the node -- which is what a re-render does -- replays it. */
+.ins-badge { animation: ins-pop var(--ins-t-pop) var(--ins-ease-spring); }
+
+.ins-avatar { transition: transform var(--ins-t-pop) var(--ins-ease-spring),
+                          box-shadow var(--ins-t-pop) var(--ins-ease); }
+.ins-avatar:hover { transform: scale(1.08); box-shadow: var(--ins-sh-brand-sm); }

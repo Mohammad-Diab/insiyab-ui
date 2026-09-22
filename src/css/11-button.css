@@ -218,3 +218,23 @@
 .ins-btn--bare:focus-visible { background: transparent; color: var(--ins-text-1); }
 .ins-btn--bare::before { content: none; }
 .ins-btn--bare:active:not(:disabled) { transform: none; }
+
+/* --------------------------------------------------------------- motion */
+/* An icon inside a button nudges toward the trailing edge on hover -- the direction
+   the button sends you. A transform has no logical form, so the sign is flipped by
+   hand. Scoped away from `.ins-btn--icon`, because a button that is *only* an icon
+   has nowhere to travel to and would just wobble. */
+.ins-btn:not(.ins-btn--icon) svg,
+.ins-btn:not(.ins-btn--icon) .ins-ico {
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+[dir="ltr"] .ins-btn:not(.ins-btn--icon):hover:not(:disabled) svg,
+[dir="ltr"] .ins-btn:not(.ins-btn--icon):hover:not(:disabled) .ins-ico { transform: translateX(2px); }
+[dir="rtl"] .ins-btn:not(.ins-btn--icon):hover:not(:disabled) svg,
+[dir="rtl"] .ins-btn:not(.ins-btn--icon):hover:not(:disabled) .ins-ico { transform: translateX(-2px); }
+
+/* An icon-only button grows instead of travelling. */
+.ins-btn--icon svg,
+.ins-btn--icon .ins-ico { transition: transform var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-btn--icon:hover:not(:disabled) svg,
+.ins-btn--icon:hover:not(:disabled) .ins-ico { transform: scale(1.15); }

@@ -24,7 +24,7 @@
 (function (window, document) {
   'use strict';
 
-  var VERSION = '0.2.0';
+  var VERSION = '0.3.0';
   var root = document.documentElement;
 
   var KEY_THEME = 'ins-theme';
@@ -204,15 +204,46 @@
   }
 
   /* -------------------------------------------------------------- sidebar */
+  /* The same button means two different things at two widths, and that is a
+     property of the layout rather than a shortcut here: above 900px the sidebar is
+     a column and the burger *collapses* it, below 900px it is an off-canvas drawer
+     and the burger *opens* it. One control, because to the person pressing it there
+     is only one sidebar.
+
+     The drawer state is deliberately NOT persisted. A collapsed column is a working
+     preference; a drawer that is still open when you come back is a page with its
+     content covered. */
+
+  function isDrawer() {
+    return !!(window.matchMedia && window.matchMedia('(max-width: 900px)').matches);
+  }
+
+  function drawer() { return document.querySelector('.ins-shell-side'); }
 
   function sidebar(next) {
+    var panel = drawer();
+
+    if (isDrawer() && panel) {
+      var open = panel.classList.contains('is-open');
+      if (next === undefined) return open ? 'open' : 'closed';
+      var show = next === 'open' || next === true || (next === 'toggle' && !open);
+      panel.classList.toggle('is-open', show);
+      /* `:target` opens it with no script at all, which is the point of building it
+         that way — but a leftover hash would fight the class on the next toggle. */
+      if (!show && location.hash === '#' + panel.id) {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+      emit('ins:sidebar', { state: show ? 'open' : 'closed', drawer: true });
+      return show ? 'open' : 'closed';
+    }
+
     var collapsed = root.classList.contains('ins-sidebar-collapsed');
     if (next === undefined) return collapsed ? 'collapsed' : 'open';
     var want = next === 'collapsed' || next === true ||
                (next === 'toggle' && !collapsed);
     root.classList.toggle('ins-sidebar-collapsed', want);
     if (want) write(KEY_SIDEBAR, 'collapsed'); else drop(KEY_SIDEBAR);
-    emit('ins:sidebar', { state: want ? 'collapsed' : 'open' });
+    emit('ins:sidebar', { state: want ? 'collapsed' : 'open', drawer: false });
     return want ? 'collapsed' : 'open';
   }
 
@@ -449,6 +480,39 @@
       if (!open[i].contains(event.target)) open[i].removeAttribute('open');
     }
   }, true);
+
+  /* The drawer's scrim. The CSS shows it as the sidebar's sibling, so it has no
+     handler of its own to hang this on. */
+  document.addEventListener('click', function (event) {
+    if (event.target.classList && event.target.classList.contains('ins-shell-scrim')) {
+      sidebar('closed');
+    }
+  }, false);
+
+  /* Escape closes the drawer. The dialog and the popover get this from the platform;
+     an off-canvas panel built out of a class does not, and a drawer you cannot
+     dismiss from the keyboard is a trap on a narrow screen. */
+  document.addEventListener('keydown', function (event) {
+    if (event.key !== 'Escape' && event.keyCode !== 27) return;
+    var panel = drawer();
+    if (panel && panel.classList.contains('is-open')) sidebar('closed');
+  }, false);
+
+  /* Crossing the breakpoint with the drawer open would leave a column stuck in its
+     open-drawer state, so the class is dropped on the way out. The collapsed
+     preference is untouched: it belongs to the wide layout and is still wanted when
+     the window grows back. */
+  if (window.matchMedia) {
+    var wide = window.matchMedia('(min-width: 901px)');
+    var onWide = function (e) {
+      if (e.matches) {
+        var panel = drawer();
+        if (panel) panel.classList.remove('is-open');
+      }
+    };
+    if (wide.addEventListener) wide.addEventListener('change', onWide);
+    else if (wide.addListener) wide.addListener(onWide);
+  }
 
   /* ==========================================================================
      INIT — only for the things that BUILD DOM rather than listen to it

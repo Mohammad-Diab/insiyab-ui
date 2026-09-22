@@ -1,0 +1,116 @@
+/* ==========================================================================
+   Insiyab · motion
+   ==========================================================================
+
+   The shared entrance system, and the hover behaviour every glass surface gets.
+   Component-specific motion lives with its component; what is here is what more
+   than one of them needs.
+
+   ---------------------------------------------------------------------------
+   THE ONE RULE, AND IT IS NOT NEGOTIABLE: **everything here is transient.**
+
+   An entrance, a hover, a press — each pays its cost for its own duration and
+   then stops. Nothing in this library loops, with exactly two exceptions
+   (`.ins-skel` and `.ins-spinner`), and both of them mean "waiting".
+
+   That is not taste, it is a measurement. Three decorative orbs drifting on a
+   14s infinite animation cost **47% of a core, forever**, on a page where
+   nothing else was happening. The obvious diagnosis — re-blurring three blurred
+   layers 60 times a second — was wrong: with `filter: blur()` removed and the
+   drift left running the page still burned 44.7%, and pre-softened gradients on
+   a composited layer still burned 43.5%. What actually costs is the
+   **backdrop-filter surfaces above them**. A frosted surface re-blurs whatever
+   is behind it whenever that changes, so anything moving anywhere underneath
+   re-blurs most of the page every frame. Turning the frost off instead took it
+   to 12.4%; stopping the drift took it to 4.8%.
+
+   So in a frosted design the choice is never "cheap motion or expensive
+   motion" — it is motion or frost, and the frost is the design. Ambient motion
+   is the one thing this library will not have. `infinite` is the word to grep
+   for before adding anything here.
+
+   Everything below is switched off by `prefers-reduced-motion` and by
+   `data-ins-fx="off"`; see 17-a11y.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- keyframes */
+
+@keyframes ins-fade-in { from { opacity: 0; } }
+@keyframes ins-rise    { from { transform: translateY(12px); } }
+@keyframes ins-rise-sm { from { opacity: 0; transform: translateY(6px); } }
+@keyframes ins-pop     { from { transform: scale(.82); } }
+/* A directional entrance, for a row that should arrive from the leading edge.
+   Transforms have no logical form, so the sign is flipped per direction below. */
+@keyframes ins-slide-in { from { opacity: 0; transform: translateX(var(--ins-slide, -10px)); } }
+
+/* --------------------------------------------------------------- reveal */
+/* Put `data-ins-reveal` on a container and its children arrive staggered.
+
+   **The fade is on the container and the rise is on the children, and that split
+   is load-bearing.** The obvious way — one keyframe fading opacity 0→1 with a
+   `backwards` fill and a delay per child — hides content whenever the animation
+   does not actually run: the fill holds the from-state through the delay, so a
+   print, a screenshot taken early, or a WebView that suppresses animations
+   renders blank tiles. It did exactly that the first time this design was
+   photographed. Here, if the stagger never runs the children are simply at
+   opacity 1, and if the container's fade never runs nothing was hidden anyway.
+
+   The indices are written out because CSS has no way to read a child's position
+   into a calc — `sibling-index()` is too new to rely on. Ten is enough for a
+   dashboard; an eleventh child simply arrives with no delay, which is a
+   degradation nobody notices rather than an item that never appears. */
+[data-ins-reveal] { animation: ins-fade-in .4s var(--ins-ease); }
+[data-ins-reveal] > * { animation: ins-rise .4s var(--ins-ease) backwards; }
+[data-ins-reveal] > :nth-child(2)  { animation-delay: .05s; }
+[data-ins-reveal] > :nth-child(3)  { animation-delay: .10s; }
+[data-ins-reveal] > :nth-child(4)  { animation-delay: .15s; }
+[data-ins-reveal] > :nth-child(5)  { animation-delay: .20s; }
+[data-ins-reveal] > :nth-child(6)  { animation-delay: .25s; }
+[data-ins-reveal] > :nth-child(7)  { animation-delay: .30s; }
+[data-ins-reveal] > :nth-child(8)  { animation-delay: .35s; }
+[data-ins-reveal] > :nth-child(9)  { animation-delay: .40s; }
+[data-ins-reveal] > :nth-child(10) { animation-delay: .45s; }
+
+/* The page's own entrance, replayed on every navigation. On a server-rendered
+   page "on route change" and "on load" are the same moment, which makes this
+   cheaper here than in a single-page app, where it needs a key to retrigger. */
+.ins-shell-content > * { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease); }
+
+/* --------------------------------------------------------- surfaces on hover */
+/* A glass surface rises toward the light: it lifts a pixel, its shadow lengthens,
+   and its rim brightens all round to the value the top edge already carries at
+   rest. That is the whole gesture, and it is deliberately the same one for every
+   surface — a card, a stat tile and a panel are the same object at three jobs, and
+   giving each its own hover is how a design language stops being one.
+
+   Deliberately NOT a change to the sheen. The 130° specular streak is the
+   signature, and a signature that moves when you point at it is a gimmick. The
+   surface moves; the light on it stays where it is.
+
+   `:hover` is scoped to surfaces that are actually interactive, or to ones a page
+   has opted in with `.ins-hoverable`. A panel holding a table is a container, not a
+   control, and lifting it when the pointer crosses it on the way to a row is noise
+   — which is why `.ins-panel` is not in this list. */
+.ins-card,
+.ins-stat,
+.ins-hoverable {
+  transition: transform var(--ins-t-pop) var(--ins-ease),
+              box-shadow var(--ins-t-pop) var(--ins-ease),
+              border-color var(--ins-t-pop) var(--ins-ease);
+}
+:where(a, button, [role="button"], .ins-hoverable).ins-card:hover,
+.ins-grid > .ins-stat:hover,
+.ins-hoverable:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ins-sh-lg), var(--ins-bevel);
+  border-color: var(--ins-rim-top);
+}
+:where(a, button, [role="button"], .ins-hoverable).ins-card:active,
+.ins-hoverable:active { transform: translateY(0) scale(.995); }
+
+/* --------------------------------------------------------------- utilities */
+/* For anything a page wants to bring in by hand. */
+.ins-anim-rise { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease); }
+.ins-anim-pop { animation: ins-pop var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-anim-slide { animation: ins-slide-in var(--ins-t-enter) var(--ins-ease); }
+[dir="rtl"] .ins-anim-slide { --ins-slide: 10px; }

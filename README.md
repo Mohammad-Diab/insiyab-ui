@@ -29,10 +29,10 @@
 
 ---
 
-> **Status: 0.2.0.** The component vocabulary is in and the demo page shows all
-> of it, in Arabic. Still to come: the application shell (sidebar + topbar), and
-> then the React and Jinja wrappers. See [IDEA.md](IDEA.md) for the full plan and
-> the reasoning behind every decision.
+> **Status: 0.3.0.** The vocabulary is complete: the application shell, every
+> component, and a motion layer across all of them. The demo page shows the lot,
+> in Arabic, inside the shell. Still to come: the React and Jinja wrappers. See
+> [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
 > by design — the demo page already does — and the rest is a writing job worth
@@ -154,7 +154,9 @@ page, in Arabic, in both themes.
 | **Buttons** | `.ins-btn` × `--primary` `--secondary` `--ghost[-danger/-success/-warning/-info]` `--success` `--danger` `--warning` `--info` `--bare`, × `--sm` `--lg` `--icon` `--full` `--lift` |
 | **Feedback** | `.ins-alert` (notched) · `.ins-toast` · `.ins-empty` · `.ins-skel` · `.ins-spinner` |
 | **Overlay** | `.ins-dialog` (native `<dialog>`) · `.ins-pop` (native `<details>`) |
+| **Shell** | `.ins-shell` · `.ins-shell-side` (brand, `-group`, `-link`, `-link-badge`, `-bottom`) · `.ins-topbar` · `.ins-zone` · `.ins-island` (`--icon`, `--title`, `--brand`) |
 | **Layout** | `.ins-grid` · `.ins-toolbar` · `.ins-searchbar` |
+| **Motion** | `[data-ins-reveal]` · `.ins-hoverable` · `.ins-anim-rise` · `.ins-anim-pop` · `.ins-anim-slide` |
 | **Ground** | `.ins-orbs` / `.ins-orb-1..3` — injected for you; opt out with `data-ins-orbs="off"` |
 
 Three things worth knowing about how these behave:
@@ -170,12 +172,58 @@ above every stacking context without a single `z-index`. The popover is a real
 `<details>` — it opens, closes on Escape and is keyboard reachable with no script
 at all. The script only adds click-outside-to-close.
 
+**The shell is two ideas.** The top bar is *islands, not a bar*: it is
+transparent and holds floating glass pills, and frosts into a solid bar only once
+the page scrolls under it. And the sidebar is glass rather than a brand-tinted
+column — a tinted column becomes the second most saturated thing on screen after
+the primary button, and then competes with it. Below 900px the sidebar becomes an
+off-canvas drawer opened by `:target`, so it works with no JavaScript at all.
+
 **Everything is namespaced** — classes `ins-`, tokens `--ins-*`, attributes
 `data-ins-*`. Insiyab can be dropped into a page that already has Bootstrap or
 Tailwind without a collision. (The dialog being `.ins-dialog` rather than
 `.modal` is not politeness: Bootstrap's `.modal { display: none }` outranks the
 UA's `dialog[open]`, so a dialog named that way opens, takes the top layer, and
 paints nothing.)
+
+## Motion
+
+Every component has an entrance and a hover, and all of it obeys one rule:
+**nothing loops.** An entrance, a hover, a press — each pays its cost for its own
+duration and stops. The two exceptions are the skeleton and the spinner, and both
+mean "waiting".
+
+That is a measurement, not a preference. Three decorative orbs drifting on a 14s
+infinite animation cost **47% of a core, forever**, on a page where nothing else
+was happening. The obvious diagnosis — re-blurring three blurred layers 60 times
+a second — was wrong: with the blur removed and the drift left running the page
+still burned 44.7%. What actually costs is the **backdrop-filter surfaces above
+them**, because a frosted surface re-blurs whatever is behind it whenever that
+changes, so anything moving anywhere underneath re-blurs most of the page every
+frame. Stopping the drift took it to 4.8%.
+
+So in a frosted design the choice is never cheap motion versus expensive motion —
+it is **motion or frost**, and the frost is the design. `node build.mjs` refuses
+to emit a stylesheet containing any `infinite` animation other than those two.
+
+A few of the gestures, so the vocabulary is legible:
+
+- **Surfaces** rise toward the light — lift, longer shadow, brighter rim. The
+  130° sheen deliberately does *not* move: it is the signature, and a signature
+  that moves when you point at it is a gimmick.
+- **A table row** grows a 3px brand marker on its leading edge — the same marker
+  the sidebar's active item uses, so "what is under the pointer" and "where you
+  are" speak one vocabulary. It scales from the centre rather than sliding,
+  because a bar sliding the length of a wide row draws the eye *along* it.
+- **Button icons** nudge toward the trailing edge — the direction the button
+  sends you. Icon-only buttons grow instead, having nowhere to travel to.
+- **Fields** brighten on hover but do not lift: the lift is what focus means, and
+  spending it on hover leaves focus with nothing to say.
+- **Overshoot easing** stays reserved for the parts whose whole job is to travel —
+  the switch thumb, the checkbox tick, and the icon chips.
+
+Turn it all off with `data-ins-fx="off"` on `<html>`, or a `[data-ins-fx]`
+button. `prefers-reduced-motion` is honoured separately and automatically.
 
 ## Attributes
 

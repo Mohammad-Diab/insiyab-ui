@@ -157,3 +157,23 @@
 .ins-panel--alert .ins-panel-title,
 .ins-panel--alert .ins-panel-ico { color: var(--ins-tone-bad); }
 .ins-panel--alert .ins-panel-ico { background: var(--ins-tone-bad-bg); }
+
+/* --------------------------------------------------------------- motion */
+/* The head's icon chip answers a hover anywhere on the head, not just on itself:
+   a 36px target is small, and what the pointer is actually over is the section. */
+.ins-panel-ico {
+  transition: transform var(--ins-t-pop) var(--ins-ease-spring),
+              background var(--ins-t-pop) var(--ins-ease);
+}
+.ins-panel-head:hover .ins-panel-ico {
+  transform: scale(1.08) rotate(-4deg);
+  background: rgba(var(--ins-primary-rgb), .16);
+}
+.ins-panel--alert .ins-panel-head:hover .ins-panel-ico { background: var(--ins-tone-bad-bd); }
+
+/* A panel does not lift on hover -- see the note in 16-motion.css. What it does is
+   brighten its rim, which reads as the surface catching a little more light without
+   the container jumping under a pointer that was only crossing it on the way to a
+   row inside it. */
+.ins-panel { transition: border-color var(--ins-t-base) var(--ins-ease); }
+.ins-panel:hover { border-color: var(--ins-rim-top); }

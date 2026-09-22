@@ -213,3 +213,29 @@
 .ins-spinner--sm { inline-size: 15px; block-size: 15px; border-width: 2px; }
 @keyframes ins-spin { to { transform: rotate(360deg); } }
 .ins-loading { display: grid; place-items: center; min-block-size: 200px; }
+
+/* --------------------------------------------------------------- motion */
+/* An alert arrives from the leading edge, because it is an interruption and a thing
+   that slides in from the side reads as one. */
+.ins-alert { animation: ins-slide-in var(--ins-t-enter) var(--ins-ease); }
+[dir="rtl"] .ins-alert { --ins-slide: 10px; }
+
+/* The circle is the alert's face. It turns slightly on hover -- the one place in the
+   library where a purely decorative element moves, allowed because the circle is
+   already where the eye lands and nothing is ever read inside it. */
+.ins-alert-ico { transition: transform var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-alert:hover .ins-alert-ico { transform: scale(1.06) rotate(-8deg); }
+
+/* An empty state is the one screen with nothing on it, so it is the one worth
+   spending a gesture on. The glyph lifts out of its fade when the pointer arrives --
+   on hover only, never ambient. */
+.ins-empty-ico { transition: transform var(--ins-t-enter) var(--ins-ease),
+                             opacity var(--ins-t-enter) var(--ins-ease); }
+.ins-empty:hover .ins-empty-ico { transform: translateY(-4px); opacity: .55; }
+
+/* Two animations, and the second is the reason this is not left alone: a spinner
+   that fades in does not flash a wheel at somebody for the 80ms a fast response
+   takes. The spin keeps `infinite` -- it means "waiting", which is the only thing an
+   endless animation may mean here. */
+.ins-spinner { animation: ins-spin .7s linear infinite,
+                          ins-fade-in var(--ins-t-enter) var(--ins-ease); }

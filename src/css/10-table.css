@@ -207,3 +207,38 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
    the fallback is a heading strip above an empty state, which is untidy rather than
    broken. */
 .ins-table:has(.ins-empty) thead { display: none; }
+
+/* --------------------------------------------------------------- motion */
+/* A hovered row grows a marker on its leading edge -- the same 3px brand bar the
+   sidebar's active item uses, so "the thing under the pointer" and "the section you
+   are in" speak one vocabulary rather than two.
+
+   On the first cell, inside the cell's own box. The sidebar's original marker sat
+   outside its item and the container's `overflow-x: hidden` cut it in half; a table
+   wrapper scrolls sideways, so the same mistake here would be worse. It scales from
+   the centre rather than sliding, because a row is wide and a bar sliding the length
+   of one draws the eye *along* the row instead of to it. */
+.ins-table tbody td:first-child { position: relative; }
+.ins-table tbody td:first-child::before {
+  content: "";
+  position: absolute;
+  inset-block: .5rem;
+  inset-inline-start: 0;
+  inline-size: 3px;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-brand-soft);
+  transform: scaleY(0);
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+.ins-table tbody tr:hover > td:first-child::before { transform: scaleY(1); }
+
+/* Rows arrive staggered, and the delay list is short on purpose: a table can hold
+   two hundred rows, and staggering all of them would take eight seconds to finish
+   drawing. Six rows of entrance reads as "the table is arriving"; the rest simply
+   appear, which is what a reader past the fold wanted anyway. */
+.ins-table tbody tr { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease) backwards; }
+.ins-table tbody tr:nth-child(2) { animation-delay: .04s; }
+.ins-table tbody tr:nth-child(3) { animation-delay: .08s; }
+.ins-table tbody tr:nth-child(4) { animation-delay: .12s; }
+.ins-table tbody tr:nth-child(5) { animation-delay: .16s; }
+.ins-table tbody tr:nth-child(6) { animation-delay: .20s; }
