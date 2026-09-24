@@ -33,9 +33,9 @@
 > type and utility layer, the components an application form or dashboard needs
 > (pickers, steps and confirmation included), and a motion layer across all of
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
-> the shell, with every example's markup printed under it. The plugins have
-> started with the Hijri calendar. Still to come: more plugins (command palette,
-> file upload, OTP and the like) and the React and Jinja wrappers. See
+> the shell, with every example's markup printed under it. Two plugins so far,
+> the Hijri calendar and the command palette. Still to come: more plugins (file
+> upload, OTP and the like) and the React and Jinja wrappers. See
 > [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
@@ -442,6 +442,7 @@ Insiyab.confirm(message, options?)    // Promise<boolean>; options: title, confi
 Insiyab.wizard(target, step?)         // the current step (0-based), or go to one, with no validation
 Insiyab.date(input, iso?)             // read a date field's ISO value, or set it ('' clears)
 Insiyab.calendar(name, calendar?)     // register a calendar system for date fields, or look one up
+Insiyab.norm(text)                    // text as the autocomplete compares it: no hamza seats or harakat, Latin digits
 Insiyab.init(scope?)                  // re-scan DOM you built yourself
 Insiyab.define(name, fn)              // add your own builder to that scan
 Insiyab.scrollTop()                   // reads whichever element is scrolling
@@ -527,6 +528,61 @@ of a month; the Gregorian one is built in. Another calendar registers the same
 way, with `Insiyab.calendar(name, calendar)`, documented where the interface is
 defined in `insiyab.js`.
 
+### Command palette
+
+```html
+<link rel="stylesheet" href="plugins/insiyab-palette.css">
+<script src="insiyab.js"></script>
+<script src="plugins/insiyab-palette.js"></script>
+
+<dialog class="ins-dialog ins-palette" data-ins-palette data-ins-palette-from=".ins-shell-side">
+  <div data-ins-palette-group="إجراءات">
+    <a href="/invoices/new" data-keywords="new invoice">فاتورة جديدة<kbd class="ins-kbd">N</kbd></a>
+    <button data-ins-theme-toggle>تبديل الوضع الداكن</button>
+  </div>
+</dialog>
+```
+
+One search box for every page and every command, opened with Ctrl/⌘+K, or `/`
+when the person is not typing in a field. Both also work with an Arabic keyboard
+layout on, where those keys type ن and ظ. **The items are the page's own links and
+buttons**, so choosing one is clicking it. A link goes where it points, and a
+button does whatever it already did: a `data-ins-*` attribute or a listener of
+the page's own. The palette closes before the item runs, so an item that opens a
+dialog opens it on top of the page.
+
+- **Groups**: `data-ins-palette-group="…"` on an item or around several.
+- **The navigation**: `data-ins-palette-from="selector"` also offers every link
+  in there, with its icon and under its `.ins-shell-group` heading. It is read
+  each time the palette opens. The shell's logo and any link with
+  `data-ins-palette-skip` are left out, and a link already listed by hand is not
+  listed twice.
+- **Matching**: the same Arabic-aware matching as the autocomplete, over the name,
+  then `data-keywords`, then the group. Every word typed has to match somewhere.
+  Results rank by where the match falls: the start of the name first, then the
+  start of a word (after the article ال too), then the middle, then a keyword.
+- **Recent**: with nothing typed, the last five items chosen come first, kept in
+  `localStorage`. `data-ins-palette-recent="0"` turns them off, and any other
+  number changes the count.
+- **Shortcuts**: `data-ins-palette-keys="mod+k /"` is the default, and
+  `none` turns them off. Buttons that open the palette get `aria-keyshortcuts`.
+
+```js
+Insiyab.palette.add([                            // makes the dialog too, if there is none
+  { label: 'فاتورة جديدة', group: 'إجراءات', icon: '#i-plus', hint: 'N', keywords: ['new'], run: openForm },
+  { label: 'التقارير', href: '/reports' }
+]);                                              // returns the elements; .remove() one to drop it
+Insiyab.palette('open');                         // 'close', 'toggle'; or ('#pal', 'open')
+document.addEventListener('ins:palette', (e) => {
+  e.detail.label; e.detail.key; e.detail.item;   // before the item runs; preventDefault() stops it
+});
+```
+
+For assistive technology, the field is a `combobox` and the results a `listbox` of
+labelled groups. Focus stays in the field while the arrow keys move
+`aria-activedescendant`, and the number of results is announced as the person
+types.
+
 ## Development
 
 Node 18+ for the build; nothing else, and no dependencies at all.
@@ -577,7 +633,7 @@ node test/run.mjs sidebar dark    # only the files whose names contain a word
 node test/run.mjs --verbose       # every check, not only failures
 ```
 
-About 270 checks in thirteen files, each driving a real headless Chrome with real
+About 340 checks in fourteen files, each driving a real headless Chrome with real
 key and pointer events, on a throwaway profile, against a server the runner
 starts on a free port. Needs Chrome, found in the usual places or through
 `CHROME`, and no npm packages: the driver is a small DevTools-protocol client in

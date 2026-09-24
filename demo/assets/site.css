@@ -3,7 +3,7 @@
    ==========================================================================
 
    Only what a docs site needs and the library does not ship: the page column,
-   example frames, code listings, the pager, search, and the viewer's
+   example frames, code listings, the pager, and the viewer's
    customiser in the top bar. Everything reads the library's tokens, so the
    whole site retints with the brand colour and follows the theme.
 
@@ -336,29 +336,6 @@
   :root:not([data-ins-theme="light"]) .site-theme-sun { display: block; }
   :root:not([data-ins-theme="light"]) .site-theme-moon { display: none; }
 }
-
-/* --------------------------------------------------------------- search */
-.site-search { inline-size: min(36rem, calc(100vw - 2rem)); }
-.site-search .ins-dialog-body { padding: 1rem; }
-/* A palette, not a dropdown: the results are the dialog's content, so the list
-   stays in the flow and stays visible whether or not the combobox counts itself
-   open. The keyboard, the matching and the choosing are all the library's. */
-.site-search .ins-combo-list {
-  position: static;
-  display: block;
-  margin-block-start: .75rem;
-  max-block-size: min(24rem, 60vh);
-  border: 0;
-  box-shadow: none;
-  background: none;
-  padding: 0;
-}
-.site-search .ins-combo-option { gap: .625rem; padding: .625rem .75rem; }
-.site-search .ins-combo-option .ico { color: var(--ins-text-3); font-size: 1.05rem; }
-.site-search .ins-combo-option[hidden] { display: none; }
-.site-hit-title { font-weight: 700; }
-.site-hit-meta { font-family: var(--ins-font-body-en); font-size: var(--ins-fs-xs); color: var(--ins-text-3); }
-.site-hit-group { margin-inline-start: auto; font-size: var(--ins-fs-xs); color: var(--ins-text-3); }
 
 /* --------------------------------------------------------------- helpers used by examples */
 .demo-box {

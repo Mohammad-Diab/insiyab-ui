@@ -10,7 +10,11 @@
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="../dist/insiyab.js"></script>
 
-  <!-- The documentation site's own furniture — code listings, the pager, search.
+  <!-- One plugin, the command palette: the search below is built by it. -->
+  <link rel="stylesheet" href="../dist/plugins/insiyab-palette.css">
+  <script src="../dist/plugins/insiyab-palette.js"></script>
+
+  <!-- The documentation site's own furniture — code listings, the pager.
        Nothing in it is part of the library. -->
   <link rel="stylesheet" href="assets/site.css">
   <script src="assets/site.js"></script>
@@ -177,18 +181,12 @@
 </div>
 
 <!-- ============================================================== search -->
-<dialog class="ins-dialog site-search" id="site-search" aria-label="بحث في التوثيق">
-  <div class="ins-dialog-body ins-dialog-body--spill">
-    <div class="ins-combo" id="site-search-combo">
-      <div class="ins-search">
-        <svg class="ico ins-search-ico" aria-hidden="true"><use href="#i-search"/></svg>
-        <input class="ins-input ins-input--lg" placeholder="ابحث عن مكوّن: زر، جدول، حوار… أو بالإنجليزية" aria-label="بحث في التوثيق">
-      </div>
-      <ul class="ins-combo-list">
-{{SEARCH}}
-        <li class="ins-combo-empty">لا صفحة بهذا الاسم</li>
-      </ul>
-    </div>
+<!-- The command palette plugin: every page from the sidebar, read from it when the
+     palette opens (each link carries its English name as a keyword), and one action. -->
+<dialog class="ins-dialog ins-palette" id="site-search" data-ins-palette data-ins-palette-from=".ins-shell-side"
+        data-ins-palette-placeholder="ابحث عن مكوّن: زر، جدول، حوار… أو بالإنجليزية" aria-label="بحث في التوثيق">
+  <div data-ins-palette-group="إجراءات">
+    <button data-ins-theme-toggle data-keywords="dark light theme mode داكن فاتح"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg>تبديل الوضع الداكن</button>
   </div>
 </dialog>
 
