@@ -1,0 +1,100 @@
+<link rel="stylesheet" href="../dist/plugins/insiyab-phone.css">
+<script src="../dist/plugins/insiyab-phone.js"></script>
+
+<h2 id="install">التثبيت</h2>
+<p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
+<demo-code lang="html">
+<link rel="stylesheet" href="plugins/insiyab-phone.css">
+<script src="insiyab.js"></script>
+<script src="plugins/insiyab-phone.js"></script>
+</demo-code>
+
+<h2 id="field">حقل الهاتف</h2>
+<p>
+  مجموعة حقل عادية، وحقل عليه <code>data-ins-phone</code>. الزرّ في أوّلها يختار الدولة من قائمة يُبحث فيها
+  بالعربية وبالإنجليزية وبرمز الدولة وبمفتاحها الدوليّ:
+</p>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="ph-demo">رقم الجوال</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="ph-demo" data-ins-phone name="mobile" value="+966501234567">
+    </div>
+    <div class="ins-hint">يصل إلى الخادم: <code class="ins-num" id="ph-demo-out" dir="ltr">+966501234567</code></div>
+  </div>
+</demo-example>
+<p>
+  <b>ما يُرسَل رقم E.164.</b> حقل مخفيّ يأخذ اسم الحقل، كما في حقل التاريخ، ويحمل <code>+966501234567</code> أيًّا
+  كان ما كُتب: صفر في أوّله، أو مسافات، أو أرقام عربية، أو مفتاح الدولة في أوّله. فيستلم الخادم صيغة واحدة لا
+  لبس فيها. والحقل الظاهر يكتب الرقم كما يُكتب في بلده: <code>050 123 4567</code>.
+</p>
+
+<h2 id="typing">الكتابة</h2>
+<ul>
+  <li><b>يُجمَّع أثناء الكتابة</b> — والمؤشّر يبقى بعد الرقم الذي كان بعده، و<kbd>Backspace</kbd> بعد مسافة يحذف الرقم قبلها.</li>
+  <li><b>الأرقام العربية</b> — <code>٠٥٠١٢٣٤٥٦٧</code> تُقرأ وتُكتب لاتينية.</li>
+  <li><b>رقم بـ + أو 00</b> — يختار دولته بنفسه: <code>+971…</code> تنقل الزرّ إلى الإمارات. والمفاتيح المشتركة تُميَّز
+    بما بعدها: <code>+1 876</code> جامايكا، و<code>+7 7</code> كازاخستان.</li>
+  <li><b>الطول</b> — رقم أقصر أو أطول من أرقام دولته غير صالح، برسالة تسمّيها.</li>
+</ul>
+
+<h2 id="countries">الدول</h2>
+<p>
+  كلّ دول العالم في القائمة بمفاتيحها، وأسماؤها من المتصفّح نفسه (<code>Intl.DisplayNames</code>) بلغة الصفحة،
+  فلا جدول أسماء في الإضافة. <b>الدول العربية</b>، ومعها الولايات المتحدة وكندا وبريطانيا وفرنسا وألمانيا وتركيا
+  والهند وباكستان، يُفحص طول أرقامها وتُجمَّع كما تُكتب هناك. وأيّ دولة أخرى تأخذ الحدّ الدوليّ، ١٥ رقمًا، بلا
+  تجميع.
+</p>
+<p>
+  الدولة الأولى: <code>data-ins-phone-country</code>، وإلّا دولة الرقم نفسه، وإلّا منطقة لغة الصفحة
+  (<code>lang="ar-EG"</code> ← مصر)، وإلّا السعودية. وتظهر الدولة برمزها لا بعلمها: أعلام الرموز التعبيرية حرفان
+  عاديّان على ويندوز أصلًا، والرمز يبدو واحدًا في كلّ مكان.
+</p>
+<demo-example class="row">
+  <div class="ins-field">
+    <label class="ins-label" for="ph-gulf">الخليج فقط</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="ph-gulf" data-ins-phone data-ins-phone-only="SA,AE,KW,QA,BH,OM" data-ins-phone-country="KW" name="gulf">
+    </div>
+  </div>
+  <div class="ins-field">
+    <label class="ins-label" for="ph-pref">المفضّلة أوّلًا</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="ph-pref" data-ins-phone data-ins-phone-preferred="EG,JO,SY,LB" data-ins-phone-country="EG" name="pref">
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="api">من الشيفرة</h2>
+<demo-code lang="js">
+Insiyab.phone('#mobile');                   // { value: '+966501234567', country: 'SA', valid: true }
+Insiyab.phone('#mobile', '+97142345678');   // ضبطه، والدولة معه، بهدوء
+
+document.addEventListener('ins:phone', (e) => {
+  console.log(e.detail.value, e.detail.country, e.detail.valid);   // حين تتغيّر القيمة
+});
+</demo-code>
+
+<h2 id="attributes">السمات</h2>
+<div class="ins-panel site-ref">
+  <div class="ins-panel-body ins-panel-body--flush">
+    <div class="ins-table-wrap">
+      <table class="ins-table">
+        <thead><tr><th>السمة</th><th>ما تفعله</th></tr></thead>
+        <tbody>
+          <tr><td><code>data-ins-phone</code></td><td>يجعل الحقل حقل هاتف. القيمة الأولى E.164 أو محليّة.</td></tr>
+          <tr><td><code>data-ins-phone-country="AE"</code></td><td>الدولة الأولى.</td></tr>
+          <tr><td><code>data-ins-phone-preferred="SA,AE"</code></td><td>دول في أعلى القائمة.</td></tr>
+          <tr><td><code>data-ins-phone-only="SA,AE"</code></td><td>الدول المقبولة وحدها. رقم من غيرها يُرفض برسالة.</td></tr>
+          <tr><td><code>placeholder</code></td><td>إن لم تكتبه، مثال من الدولة المختارة.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('ins:phone', function (e) {
+    if (e.detail.input.id === 'ph-demo') document.getElementById('ph-demo-out').textContent = e.detail.value || '—';
+  });
+</script>

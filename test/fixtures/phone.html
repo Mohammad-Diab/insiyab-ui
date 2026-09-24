@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- Fixtures for phone-field.test.mjs. The numbers are the examples of each
+     country's own numbering plan, not anyone's. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab phone fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <link rel="stylesheet" href="../../dist/plugins/insiyab-phone.css">
+  <script src="../../dist/insiyab.js"></script>
+  <script src="../../dist/plugins/insiyab-phone.js"></script>
+</head>
+<body>
+<main class="ins-container ins-stack" style="padding-block: 2rem 40rem; max-inline-size: 36rem">
+  <form id="pf" data-ins-validate onsubmit="event.preventDefault()">
+    <div class="ins-field">
+      <label class="ins-label" for="p-sa">الجوال</label>
+      <div class="ins-input-group"><input class="ins-input" id="p-sa" data-ins-phone name="mobile" value="+966501234567"></div>
+      <div class="ins-error"></div>
+    </div>
+  </form>
+  <div class="ins-field">
+    <label class="ins-label" for="p-plain">بلا قيمة</label>
+    <div class="ins-input-group"><input class="ins-input" id="p-plain" data-ins-phone name="p2"></div>
+  </div>
+  <div class="ins-field">
+    <label class="ins-label" for="p-ae">الإمارات أوّلًا</label>
+    <div class="ins-input-group"><input class="ins-input" id="p-ae" data-ins-phone data-ins-phone-country="AE" data-ins-phone-preferred="AE,SA,KW" name="p3"></div>
+  </div>
+  <div class="ins-field" lang="en" dir="ltr">
+    <label class="ins-label" for="p-us">US</label>
+    <div class="ins-input-group"><input class="ins-input" id="p-us" data-ins-phone data-ins-phone-country="US" name="p4" value="2015550123"></div>
+  </div>
+  <div class="ins-field">
+    <label class="ins-label" for="p-only">الخليج فقط</label>
+    <div class="ins-input-group"><input class="ins-input" id="p-only" data-ins-phone data-ins-phone-only="SA,AE" name="p5"></div>
+  </div>
+  <div class="ins-field" lang="ar-EG">
+    <label class="ins-label" for="p-eg">من لغة الصفحة</label>
+    <div class="ins-input-group"><input class="ins-input" id="p-eg" data-ins-phone name="p6"></div>
+  </div>
+  <div class="ins-field">
+    <label class="ins-label" for="p-de">ألمانيا</label>
+    <div class="ins-input-group"><input class="ins-input" id="p-de" data-ins-phone data-ins-phone-country="DE" name="p7"></div>
+  </div>
+  <div class="ins-field">
+    <label class="ins-label" for="p-br">البرازيل</label>
+    <input class="ins-input" id="p-br" data-ins-phone data-ins-phone-country="BR" name="p8">
+  </div>
+</main>
+</body>
+</html>
