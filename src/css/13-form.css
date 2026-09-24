@@ -105,11 +105,6 @@
 
 .ins-textarea { min-block-size: 5.5rem; resize: vertical; }
 
-/* Invalid, as the semantic triad rather than as a red border bolted on. */
-.ins-input--bad,
-.ins-select--bad { border-color: var(--ins-tone-bad-bd); background: var(--ins-tone-bad-bg); }
-.ins-input--bad:focus { box-shadow: var(--ins-glow-bad), var(--ins-bevel-dim); border-color: var(--ins-tone-bad); }
-
 /* The chevron, in the design's own grey rather than a browser slate, pointing at the
    trailing edge in both directions. `background-position` cannot be logical, so it is
    written out per direction. */
@@ -549,7 +544,11 @@
        reported — a wizard step checked with `reportValidity()`, which the browser does
        not count as interaction.
 
-   `.ins-input--bad` above still works; this is the same triad reached three ways.
+   And `.ins-input--bad` / `.ins-select--bad`, for markup that only has a class to
+   give. They used to be a rule of their own, one class deep — so the field hover,
+   four pseudo-classes deep, turned a bad field back to the normal hover the moment
+   the pointer crossed it, and a group holding one never turned red at all. In the
+   same selectors as the rest they get the same specificity and the same group.
 
    Three details in the selectors, each of which was a bug in the first draft:
 
@@ -566,17 +565,19 @@
        in, and it stays in the markup after the field is fixed — so its presence says
        nothing, and `:user-invalid` is the signal instead. */
 :is(:is(.ins-input, .ins-select, .ins-textarea):is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid),
+    .ins-input--bad, .ins-select--bad,
     .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty))
       :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *),
-.ins-input-group:is(:has(:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)),
+.ins-input-group:is(:has(:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid, .ins-input--bad, .ins-select--bad)),
                     .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty)) *) {
   border-color: var(--ins-tone-bad-bd);
   background: var(--ins-tone-bad-bg);
 }
 :is(:is(.ins-input, .ins-select, .ins-textarea):is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid),
+    .ins-input--bad, .ins-select--bad,
     .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty))
       :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *):focus,
-.ins-input-group:is(:has(:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)),
+.ins-input-group:is(:has(:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid, .ins-input--bad, .ins-select--bad)),
                     .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty)) *):focus-within {
   border-color: var(--ins-tone-bad);
   box-shadow: var(--ins-glow-bad), var(--ins-bevel-dim);
