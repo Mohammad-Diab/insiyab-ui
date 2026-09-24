@@ -145,6 +145,14 @@ rims; here the rim drops from 85% to 10%, the frost desaturates from 140% to
 120%, the shadows go darker *and* stronger, the tints roughly double, and the
 brand's readable shade flips direction entirely.
 
+Pressing a `data-ins-theme-toggle` switch shows the change: the new palette grows
+as a circle out of the switch until it covers the page. It is a View Transition,
+so the browser animates two snapshots of the page rather than a transition on
+every element. It costs the same whatever is on screen, and it covers gradients,
+shadows and masks that a colour transition cannot. Browsers without View
+Transitions, reduced motion and `data-ins-fx="off"` all get the instant flip, and
+so does `Insiyab.theme()`, which has no switch for the circle to start from.
+
 ## What is in it
 
 Run `node serve.mjs` and open the demo — every component below has its own page

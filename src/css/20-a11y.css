@@ -93,6 +93,9 @@
                          .ins-combo-list, .ins-progress,
                          .ins-anim-rise, .ins-anim-pop, .ins-anim-slide) { animation: none; }
 [data-ins-fx="off"] .ins-skel { animation: none; background: var(--ins-skel-base); }
+/* The script already skips the transition with effects off; this covers a page that
+   turns them off while one is running. */
+[data-ins-fx="off"].ins-theme-sweep::view-transition-new(root) { animation: none; }
 /* The spinner keeps spinning -- it is the one thing whose animation IS its meaning.
    It loses only the fade it arrives on. */
 [data-ins-fx="off"] .ins-spinner { animation: ins-spin .7s linear infinite; }
