@@ -33,10 +33,10 @@
 > type and utility layer, the components an application form or dashboard needs
 > (pickers, steps and confirmation included), and a motion layer across all of
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
-> the shell, with every example's markup printed under it. Four plugins so far:
-> the Hijri calendar, the command palette, the one-time code and the phone number.
-> Still to come: more plugins (file upload, tree, timeline and the like) and the
-> React and Jinja wrappers. See
+> the shell, with every example's markup printed under it. Five plugins so far:
+> the Hijri calendar, the command palette, the one-time code, the phone number and
+> file upload. Still to come: more plugins (tree, timeline, colour picker and the
+> like) and the React and Jinja wrappers. See
 > [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
@@ -658,6 +658,54 @@ Insiyab.phone('#mobile', '+97142345678');  // set it, country and all, quietly
 document.addEventListener('ins:phone', (e) => console.log(e.detail.value, e.detail.country, e.detail.valid));
 ```
 
+### File upload
+
+```html
+<link rel="stylesheet" href="plugins/insiyab-file.css">
+<script src="plugins/insiyab-file.js"></script>
+
+<input type="file" name="docs" multiple accept=".pdf,image/*"
+       data-ins-file data-ins-file-max="5MB" data-ins-file-count="5">
+```
+
+A drop zone, with the chosen files listed under it: a thumbnail for an image, the
+file type for anything else, the name, the size, and the library's close button to
+remove it. **The files stay in the real input.** Every change (a pick, a drop, a
+paste, a removal) is written back to the input's own `files`, so the form sends
+exactly what's listed and the server needs nothing new. The input stays in the tab
+order under its label, so the keyboard and screen readers use the browser's own
+file button; the zone is for the pointer, and it shows the input's focus.
+
+- `accept`, `data-ins-file-max` and `data-ins-file-count` are checked for drops
+  and pastes too, which never pass through the picker. A file outside the limits
+  isn't added, and the field says which file and why.
+- With `multiple`, a new pick adds to the list; without it, a new pick replaces
+  the file.
+- `data-ins-file-note="…"` replaces the small print the zone builds from the
+  limits.
+- `class="ins-file--compact"` on the input gives a button and the list, with no
+  zone.
+
+To upload on the spot, add `data-ins-file-upload`. Every file added then fires
+`ins:file`, and the page sends it with whatever request its server expects. The
+input sends no files of its own: each finished upload leaves a hidden input, under
+the field's name, holding the id the page gave. The field is invalid while any file
+is still uploading or has failed.
+
+```js
+document.addEventListener('ins:file', async (e) => {
+  if (!e.detail.upload) return;
+  const file = e.detail.file;
+  try {
+    Insiyab.file.done(file, await send(file, (f) => Insiyab.file.progress(file, f)));
+  } catch {
+    Insiyab.file.fail(file, 'تعذّر الرفع');
+  }
+});
+Insiyab.file('#docs');       // the files in the list
+Insiyab.file('#docs', []);   // empty it
+```
+
 ## Development
 
 Node 18+ for the build; nothing else, and no dependencies at all.
@@ -708,7 +756,7 @@ node test/run.mjs sidebar dark    # only the files whose names contain a word
 node test/run.mjs --verbose       # every check, not only failures
 ```
 
-About 430 checks in sixteen files, each driving a real headless Chrome with real
+About 480 checks in seventeen files, each driving a real headless Chrome with real
 key and pointer events, on a throwaway profile, against a server the runner
 starts on a free port. Needs Chrome, found in the usual places or through
 `CHROME`, and no npm packages: the driver is a small DevTools-protocol client in
