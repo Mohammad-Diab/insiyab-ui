@@ -870,6 +870,8 @@ key and pointer events, on a throwaway profile, against a server the runner
 starts on a free port. Needs Chrome, found in the usual places or through
 `CHROME`, and no npm packages: the driver is a small DevTools-protocol client in
 `test/lib/`.
+A file that hangs is stopped after three minutes, with its browser, and reported
+as failed; `INS_TEST_TIMEOUT` (seconds) changes the limit.
 
 Component behaviour is tested on `test/fixtures/`, which exists only for the
 tests, so the docs can change their examples without breaking them. The

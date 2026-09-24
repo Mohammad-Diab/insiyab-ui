@@ -57,16 +57,30 @@ const files = (await readdir(HERE))
   .filter((f) => !filters.length || filters.some((w) => f.includes(w)))
   .sort();
 
+/* A file that hangs — a DevTools promise that never settles, a Chrome that never
+   answers — would stop the whole run without a word. Past this long it is killed,
+   with its browser, and reported as failed; INS_TEST_TIMEOUT (seconds) changes it. */
+const LIMIT = (Number(process.env.INS_TEST_TIMEOUT) || 180) * 1000;
+function killTree(child) {
+  if (process.platform === 'win32') spawnSync('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore' });
+  else child.kill('SIGKILL');
+}
+
 let checks = 0, failedChecks = 0, failedFiles = 0;
 const started = Date.now();
 for (const file of files) {
   const t0 = Date.now();
   const out = await new Promise((resolve) => {
-    let text = '';
+    let text = '', timedOut = false;
     const child = spawn(NODE, [join(HERE, file)], { cwd: ROOT, env: { ...process.env, INS_BASE: BASE } });
+    const timer = setTimeout(() => { timedOut = true; killTree(child); }, LIMIT);
     child.stdout.on('data', (d) => { text += d; });
     child.stderr.on('data', (d) => { text += d; });
-    child.on('close', (code) => resolve({ text, code }));
+    child.on('close', (code) => {
+      clearTimeout(timer);
+      if (timedOut) text += `\nFAIL  timed out after ${LIMIT / 1000}s, so it was stopped\n`;
+      resolve({ text, code: timedOut ? 1 : code });
+    });
   });
   const lines = out.text.split('\n');
   const pass = lines.filter((l) => l.startsWith('PASS')).length;
