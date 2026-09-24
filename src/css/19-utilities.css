@@ -31,8 +31,12 @@
    with the primitives because it has to come after the components whose margins it
    clears; and it is above the margin utilities because those still have to be able
    to put a margin back. `ins-mt-auto` pushing the last item of a stack to the
-   bottom depends on exactly that order. */
-:is(.ins-stack, .ins-row, .ins-cols-2, .ins-cols-3, .ins-cols-4, .ins-cols-6,
+   bottom depends on exactly that order.
+
+   The card grid is one of them. It was left out, and a grid of panels spaced its
+   rows 32px apart — the 12px gap plus each panel's own 20px margin — while its
+   columns stood 12px apart. */
+:is(.ins-stack, .ins-row, .ins-grid, .ins-cols-2, .ins-cols-3, .ins-cols-4, .ins-cols-6,
     .ins-cols-12) > * {
   margin-block: 0;
 }
