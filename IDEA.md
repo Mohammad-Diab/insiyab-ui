@@ -23,8 +23,9 @@ radius scale, one brand variable. You pick a colour and start building.
 The design language isn't new — it already exists across my own projects, in
 React, in server-rendered templates, and in a zero-build single HTML file. It has
 proven it survives all three without changing its mind about what it looks like.
-This is the extraction, so it never gets rebuilt a fourth time. See
-[`reference/`](reference/) for what that looks like today.
+This is the extraction, so it never gets rebuilt a fourth time. Screenshots of
+what that looks like today are kept locally in `reference/` — 12 MB of images
+of other projects, so they are not committed.
 
 **Who it's for:** me first — the library I reach for whenever I start anything.
 It stays opinionated: if I ever disagree with a decision in it, I change the
@@ -46,7 +47,7 @@ Arabic.
 
 ---
 
-## The design language: liquid glass
+## The design language: frosted glass
 
 Four stacked layers, and nothing else:
 
@@ -284,7 +285,8 @@ Token prefix: **`--ins-*`**.
 
 The base is `ussd-topup-systems/app/static/css/ui.css` — 5,909 lines, 78
 `--dk-*` tokens, the only one of the three with dark mode, the full tone system
-and the contrast corrections. The [`reference/`](reference/) shots show why it,
+and the contrast corrections. The screenshots in `reference/` (kept locally, not
+committed) show why it,
 and not the React original, is the right starting point.
 
 1. **Foundation first** — fonts, tokens light and dark, reset, the glass

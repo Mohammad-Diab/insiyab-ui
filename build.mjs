@@ -357,7 +357,16 @@ const pkg = JSON.parse(await readFile('package.json', 'utf8'));
 const banner = `/*! Insiyab UI v${pkg.version} · ${pkg.homepage || 'insiyab'} · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */\n`;
 
 const css = banner + parts.join('\n\n') + '\n';
-const js = banner + (await readFile(SRC_JS, 'utf8'));
+
+/* The version is written once, in package.json, and stamped into the script here.
+   The source declares `var VERSION = 'dev';` — exactly that line, exactly once — so
+   a script read unbuilt says so, and a built one can never disagree with the
+   package it shipped in. */
+const VERSION_LINE = "var VERSION = 'dev';";
+const source = await readFile(SRC_JS, 'utf8');
+const versionLines = source.split(VERSION_LINE).length - 1;
+if (versionLines !== 1) fail(`${SRC_JS}: expected \`${VERSION_LINE}\` exactly once for the build to stamp, found ${versionLines}.`);
+const js = banner + source.replace(VERSION_LINE, `var VERSION = '${pkg.version}';`);
 const min = banner + minify(css);
 
 const stats = verify(css);
