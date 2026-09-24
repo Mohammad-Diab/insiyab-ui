@@ -1,0 +1,103 @@
+<script src="../dist/plugins/insiyab-hijri.js"></script>
+
+<h2 id="install">التثبيت</h2>
+<p>
+  إضافة لا جزء من الملفّين: ملفّ ثالث يُحمَّل بعد <code>insiyab.js</code>، فلا تدفع صفحةٌ لا تحتاج التقويم
+  الهجريّ ثمنه. لا جداول تواريخ داخله — المتصفّح نفسه يعرف التقويم الهجريّ عبر <code>Intl</code>، والإضافة
+  تسأله.
+</p>
+<demo-code lang="html">
+<script src="insiyab.js"></script>
+<script src="plugins/insiyab-hijri.js"></script>
+</demo-code>
+
+<h2 id="field">حقل هجري</h2>
+<p>
+  حقل التاريخ نفسه من صفحة <a href="pickers.html">المنتقيات</a>، مع <code>data-ins-calendar="hijri"</code>.
+  الحقل والشبكة بالهجريّ، وأسماء الأشهر من المتصفّح، والأرقام لاتينية كبقيّة أرقام المكتبة. وفي أسفل التقويم
+  مفتاح يقلبه إلى الميلاديّ ويعيده، ويتبعه نصّ الحقل — لمن يفكّر بالتقويم الآخر.
+</p>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="hj-date">تاريخ الإصدار</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="hj-date" type="date" data-ins-date data-ins-calendar="hijri" name="issued" value="2026-09-24">
+    </div>
+  </div>
+</demo-example>
+<p>
+  <b>ما يُرسَل لا يتغيّر.</b> الحقل المخفيّ يحمل التاريخ الميلاديّ بصيغة ISO — <code>2026-09-24</code> — كما
+  يرسله حقل تاريخ عاديّ تمامًا، فلا يحتاج الخادم ولا قاعدة البيانات شيئًا جديدًا. الهجريّ هو ما يقرؤه
+  المستخدم ويختار به، لا ما يُخزَّن. والحدود <code>min</code> و<code>max</code> والمدى بين حقلين تعمل كما هي،
+  ورسائلها بالتقويم الظاهر.
+</p>
+<p>والمدى بين حقلين، بالهجريّ:</p>
+<demo-example>
+  <div class="ins-field-row">
+    <div class="ins-field ins-grow">
+      <label class="ins-label" for="hj-from">من</label>
+      <div class="ins-input-group">
+        <input class="ins-input" id="hj-from" type="date" data-ins-date data-ins-calendar="hijri" data-ins-date-end="#hj-to" name="from" value="2026-09-12">
+      </div>
+    </div>
+    <div class="ins-field ins-grow">
+      <label class="ins-label" for="hj-to">إلى</label>
+      <div class="ins-input-group">
+        <input class="ins-input" id="hj-to" type="date" data-ins-date data-ins-calendar="hijri" data-ins-date-start="#hj-from" name="to" value="2026-10-11">
+      </div>
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="typing">الكتابة</h2>
+<ul>
+  <li><b>يوم/شهر/سنة هجرية</b> — <code>13/4/1448</code>، أو بالأرقام العربية <code>١٣/٤/١٤٤٨</code>، أو السنة أوّلًا <code>1448-04-13</code>.</li>
+  <li><b>سنة من رقمين</b> — تُقرأ في القرن الهجريّ الحاليّ: <code>13/4/48</code>.</li>
+  <li><b>سنة بعد ١٧٠٠</b> — لا يمكن أن تكون هجرية قبل قرون، فتُقرأ ميلادية: <code>24/9/2026</code> و<code>2026-09-24</code>.</li>
+  <li><b>يوم لا يوجد</b> — الثلاثون من شهر من تسعة وعشرين يومًا يُرفض برسالة داخل الحقل.</li>
+</ul>
+
+<h2 id="page">الصفحة كلّها</h2>
+<p>
+  السمة على <code>&lt;html&gt;</code> تجعل كلّ حقل تاريخ في الصفحة هجريًا، وحقل واحد يعود إلى الميلاديّ بـ
+  <code>data-ins-calendar="gregory"</code>.
+</p>
+<demo-code lang="html">
+<html lang="ar" dir="rtl" data-ins-calendar="hijri">
+…
+<input type="date" data-ins-date name="birth">                            <!-- هجري -->
+<input type="date" data-ins-date data-ins-calendar="gregory" name="due">  <!-- ميلادي -->
+</demo-code>
+
+<h2 id="civil">التقويم الحسابي</h2>
+<p>
+  <code>hijri</code> هو تقويم أمّ القرى، التقويم الرسميّ في السعودية وما يقصده أكثر الناس بالتاريخ الهجريّ.
+  و<code>hijri-civil</code> هو التقويم الهجريّ الحسابيّ (الجدوليّ)، لجهة تعتمده. قد يختلفان بيوم أو يومين:
+</p>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="hj-civil">التاريخ نفسه بالحسابيّ</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="hj-civil" type="date" data-ins-date data-ins-calendar="hijri-civil" name="civil" value="2026-09-24">
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="api">من الشيفرة</h2>
+<demo-code lang="js">
+Insiyab.date('#hj-date');                 // '2026-09-24' — ميلادي دائمًا
+Insiyab.date('#hj-date', '2026-10-01');   // يُعطى ميلاديًا ويظهر هجريًا
+
+document.addEventListener('ins:calendar', (e) => {
+  console.log(e.detail.input, e.detail.calendar);   // 'hijri' أو 'gregory' بعد المفتاح
+});
+</demo-code>
+<p>
+  والإضافة نفسها ليست إلّا تقويمًا سجّلته بـ <code>Insiyab.calendar(name, calendar)</code>: أربع إجابات صغيرة —
+  أجزاء التاريخ، والتاريخ من أجزائه، وطول الشهر، ومعرّف التقويم في <code>Intl</code>. تقويم آخر يُضاف بالطريقة
+  نفسها، والشرح في تعليق هذه الواجهة داخل <code>insiyab.js</code>.
+</p>
+<p class="site-note">
+  <b>متصفّح بلا تقويم هجريّ</b> — نادر اليوم — تبقى حقوله ميلادية تعمل، وسطر واحد في الطرفية يقول لماذا.
+  وكذلك صفحة طلبت الهجريّ ولم تحمّل الإضافة.
+</p>

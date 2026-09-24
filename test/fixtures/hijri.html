@@ -1,0 +1,38 @@
+<!doctype html>
+<!-- Fixtures for hijri-calendar.test.mjs. Every value here is one a check relies on:
+     2026-09-24 is 13 Rabiʻ al-Ākhir 1448 in Umm al-Qura and the 11th in the civil
+     calendar. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab Hijri fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <script src="../../dist/insiyab.js"></script>
+</head>
+<body>
+<main class="ins-container ins-stack" style="padding-block: 2rem 40rem; max-inline-size: 40rem">
+  <div class="ins-field">
+    <label class="ins-label" for="h-date">تاريخ الإصدار (هجري)</label>
+    <div class="ins-input-group"><input class="ins-input" id="h-date" type="date" data-ins-date data-ins-calendar="hijri" name="issued" value="2026-09-24"></div>
+  </div>
+  <div class="ins-field">
+    <label class="ins-label" for="h-civil">التقويم الحسابي</label>
+    <div class="ins-input-group"><input class="ins-input" id="h-civil" type="date" data-ins-date data-ins-calendar="hijri-civil" name="civil" value="2026-09-24"></div>
+  </div>
+  <div class="ins-field">
+    <label class="ins-label" for="h-min">بين حدّين</label>
+    <div class="ins-input-group"><input class="ins-input" id="h-min" type="date" data-ins-date data-ins-calendar="hijri" name="bounded" value="2026-09-24" min="2026-09-01" max="2026-12-31"></div>
+  </div>
+  <div class="ins-field">
+    <label class="ins-label" for="h-en">English</label>
+    <div class="ins-input-group"><input class="ins-input" id="h-en" type="date" data-ins-date data-ins-calendar="hijri" data-ins-locale="en" name="en" value="2026-09-24"></div>
+  </div>
+  <div class="ins-field">
+    <label class="ins-label" for="h-greg">ميلادي فقط</label>
+    <div class="ins-input-group"><input class="ins-input" id="h-greg" type="date" data-ins-date name="greg" value="2026-09-24"></div>
+  </div>
+</main>
+<script src="../../dist/plugins/insiyab-hijri.js"></script>
+</body>
+</html>

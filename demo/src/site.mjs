@@ -130,6 +130,10 @@ export const NAV = [
   { group: 'الأدوات', en: 'Utilities', pages: [
     { slug: 'utilities', title: 'الأدوات المساعدة', en: 'Utilities', icon: 'wrench',
       lead: 'أصناف صغيرة للنصّ والمرونة والإظهار، تُحمَّل بعد كلّ المكوّنات فتغلبها بلا !important.' }
+  ] },
+  { group: 'الإضافات', en: 'Plugins', pages: [
+    { slug: 'hijri', title: 'التقويم الهجري', en: 'Hijri calendar', icon: 'moon',
+      lead: 'حقل التاريخ بالتقويم الهجري — أمّ القرى أو الحسابي — ومفتاح إلى الميلادي. والخادم يستلم التاريخ الميلادي كما هو.' }
   ] }
 ];
 

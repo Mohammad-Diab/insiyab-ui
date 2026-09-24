@@ -33,9 +33,9 @@
 > type and utility layer, the components an application form or dashboard needs
 > (pickers, steps and confirmation included), and a motion layer across all of
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
-> the shell, with every example's markup printed under it. Still to come:
-> the plugins (command palette, file upload, Hijri calendar and the like) and the
-> React and Jinja wrappers. See
+> the shell, with every example's markup printed under it. The plugins have
+> started with the Hijri calendar. Still to come: more plugins (command palette,
+> file upload, OTP and the like) and the React and Jinja wrappers. See
 > [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
@@ -403,6 +403,7 @@ Everything below works as markup, with no JavaScript in your page:
 <input type="date" data-ins-date data-ins-date-end="#to">      <!-- the start of a range… -->
 <input type="date" data-ins-date data-ins-date-start="#from">  <!-- …and its end -->
 <input type="date" data-ins-date data-ins-locale="en">         <!-- a language other than the page's -->
+<input type="date" data-ins-date data-ins-calendar="hijri">    <!-- Hijri, with the plugin: see Plugins -->
 <button data-ins-wizard="next">…</button>         <!-- validate this step, then move; or "prev" -->
 <a href="/ops/7/delete" data-ins-confirm="حذف العملية؟">…</a>  <!-- ask first -->
 <button data-ins-confirm="أرشفة؟" data-ins-confirm-ok="أرشفة" data-ins-confirm-tone="danger">…</button>
@@ -440,6 +441,7 @@ Insiyab.sidebarSelect(link)           // move the selected sidebar item, marker 
 Insiyab.confirm(message, options?)    // Promise<boolean>; options: title, confirm, cancel, tone: 'danger'
 Insiyab.wizard(target, step?)         // the current step (0-based), or go to one, with no validation
 Insiyab.date(input, iso?)             // read a date field's ISO value, or set it ('' clears)
+Insiyab.calendar(name, calendar?)     // register a calendar system for date fields, or look one up
 Insiyab.init(scope?)                  // re-scan DOM you built yourself
 Insiyab.define(name, fn)              // add your own builder to that scan
 Insiyab.scrollTop()                   // reads whichever element is scrolling
@@ -463,6 +465,7 @@ document.addEventListener('ins:toggle', (e) => console.log(e.detail.el, e.detail
 document.addEventListener('ins:combo', (e) => console.log(e.detail.value, e.detail.label));
 document.addEventListener('ins:date', (e) => console.log(e.detail.value, e.detail.date));   // '2026-09-23', a local Date
 document.addEventListener('ins:wizard', (e) => console.log(e.detail.step, e.detail.panel));
+document.addEventListener('ins:calendar', (e) => console.log(e.detail.input, e.detail.calendar)); // after the footer switch
 ```
 
 The date field, the stepper and the autocomplete also fire an ordinary `change` on
@@ -481,6 +484,48 @@ opt-in:
 
 If you use it, read scroll offsets with `Insiyab.scrollTop()`: an element
 scroller's `scroll` event never reaches `window`.
+
+## Plugins
+
+Anything that not every page needs ships as a plugin: a third file, loaded after
+`insiyab.js`, that registers itself with it. A page that doesn't load one pays
+nothing for it. The plugins are built into `dist/plugins/` from `src/plugins/`.
+
+### Hijri calendar
+
+```html
+<script src="insiyab.js"></script>
+<script src="plugins/insiyab-hijri.js"></script>
+
+<div class="ins-input-group">
+  <input class="ins-input" type="date" data-ins-date data-ins-calendar="hijri" name="issued" value="2026-09-24">
+</div>
+```
+
+The date field, shown and picked in the Hijri calendar: Umm al-Qura with
+`hijri`, or the tabular calendar with `hijri-civil`. Put `data-ins-calendar` on
+`<html>` to make every date field on the page Hijri, and give one field
+`data-ins-calendar="gregory"` to opt it back out. A switch in the calendar's
+footer flips the field to Gregorian and back, for the person who thinks in the
+other calendar, and the field's text follows it.
+
+**What the form sends does not change.** The hidden input holds the Gregorian
+ISO date, exactly what a plain date field sends, so a server and a database need
+nothing new. `min`, `max`, ranges and `Insiyab.date()` all stay Gregorian ISO;
+their messages are written in whichever calendar is on screen. A typed Hijri date
+is read day first, in either set of digits. A four-digit year past 1700 is read
+as Gregorian, and a two-digit year as this Hijri century.
+
+No date tables ship with it. Every current browser already knows both calendars
+through `Intl`, so the plugin asks it. A browser without them, or a page that
+asks for Hijri without loading the plugin, keeps a working Gregorian field and
+says why in the console, once.
+
+The plugin is built on a small calendar interface in the core. A calendar gives
+its `Intl` id, the parts of a date, the date back from its parts, and the length
+of a month; the Gregorian one is built in. Another calendar registers the same
+way, with `Insiyab.calendar(name, calendar)`, documented where the interface is
+defined in `insiyab.js`.
 
 ## Development
 
@@ -532,7 +577,7 @@ node test/run.mjs sidebar dark    # only the files whose names contain a word
 node test/run.mjs --verbose       # every check, not only failures
 ```
 
-About 230 checks in twelve files, each driving a real headless Chrome with real
+About 270 checks in thirteen files, each driving a real headless Chrome with real
 key and pointer events, on a throwaway profile, against a server the runner
 starts on a free port. Needs Chrome, found in the usual places or through
 `CHROME`, and no npm packages: the driver is a small DevTools-protocol client in
