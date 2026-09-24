@@ -99,9 +99,12 @@
     spy.timer = setTimeout(function () { spy.held = false; }, 1200);
   }
 
+  /* The hold ends when that scroll does: at `scrollend` where the browser has it,
+     otherwise once the scroll has been still for a moment — long enough that a
+     slow frame in the middle of a smooth scroll does not count as its end. */
   function release(spy) {
     clearTimeout(spy.timer);
-    spy.timer = setTimeout(function () { spy.held = false; update(spy); }, 120);
+    spy.timer = setTimeout(function () { spy.held = false; update(spy); }, 350);
   }
 
   function current(spy) {
@@ -158,6 +161,14 @@
   }
   /* Capture, so a box's own scroll is heard too: scroll events do not bubble. */
   window.addEventListener('scroll', onScroll, true);
+  window.addEventListener('scrollend', function () {
+    for (var i = 0; i < spies.length; i++) {
+      if (!spies[i].held) continue;
+      clearTimeout(spies[i].timer);
+      spies[i].held = false;
+      update(spies[i]);
+    }
+  }, true);
   window.addEventListener('resize', function () {
     for (var i = 0; i < spies.length; i++) { spies[i].scroller = undefined; update(spies[i]); }
   }, false);
