@@ -271,7 +271,7 @@
                 </details>
               </td>
             </tr>
-            <tr>
+            <tr aria-selected="true">
               <td class="ins-num">#40217</td>
               <td>عمر خليل</td>
               <td>ساعة يد كلاسيكية</td>
@@ -335,7 +335,7 @@
               <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
             <span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span>
           <span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-          <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span>
+          <span class="hl-t">&lt;tr</span> <span class="hl-a">aria-selected</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>
             <span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>#40217<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span>
             <span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمر خليل<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span>
             <span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ساعة يد كلاسيكية<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span>
@@ -368,10 +368,12 @@
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <p>
-  مرّر على صفّ: ينمو شريط صغير على حافته الأمامية — الشريط نفسه الذي يعلّم الرابط النشط في
-  الشريط الجانبي. ويكبر من مركزه لا ينزلق، لأنّ شريطًا ينزلق بطول صفّ عريض يسحب العين <em>على امتداده</em>
-  بدل أن يدلّها عليه. والصفوف الستّة الأولى تدخل متدرّجة، لا أكثر — جدول بمئتي صفّ كان سيقضي ثماني
-  ثوانٍ يرسم نفسه.
+  مرّر على صفّ فيتلوّن خلفه، ولا شيء غير ذلك. أمّا الشريط الصغير على حافته الأمامية فللصفّ
+  المحدَّد وحده — <code>aria-selected="true"</code> أو <code>aria-current</code> أو <code>.is-selected</code>،
+  كالصفّ الثاني هنا — وهو الشريط نفسه الذي يعلّم العنصر المحدَّد في الشريط الجانبي، وبالمعنى نفسه:
+  هذا هو المختار. ويكبر من مركزه لا ينزلق، لأنّ شريطًا ينزلق بطول صفّ عريض يسحب العين
+  <em>على امتداده</em> بدل أن يدلّها عليه. والصفوف الستّة الأولى تدخل متدرّجة، لا أكثر — جدول بمئتي
+  صفّ كان سيقضي ثماني ثوانٍ يرسم نفسه.
 </p>
 
 <h2 id="numbers">الأرقام</h2>

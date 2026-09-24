@@ -161,7 +161,7 @@ there, in Arabic, in both themes, with the markup of each example under it.
 | Group | Classes |
 |---|---|
 | **Surfaces** | `.ins-glass` · `.ins-glass-inner` · `.ins-card` · `.ins-panel` (`-head`, `-title`, `-ico`, `-body`, `-foot`, `-note`, `--alert`, `--open`) |
-| **Data** | `.ins-table` (+ `-wrap`) · `.ins-stat` (6 tones, 3 sizes) · `.ins-pill` · `.ins-badge` · `.ins-money` · `.ins-num` · `.ins-avatar` · `.ins-list` (`-item`, `-text`, `-title`, `-desc`, `-end`; items can be links) |
+| **Data** | `.ins-table` (+ `-wrap`; a selected row via `aria-selected="true"`, `aria-current` or `.is-selected`) · `.ins-stat` (6 tones, 3 sizes) · `.ins-pill` · `.ins-badge` · `.ins-money` · `.ins-num` · `.ins-avatar` · `.ins-list` (`-item`, `-text`, `-title`, `-desc`, `-end`; items can be links) |
 | **Input** | `.ins-field` · `.ins-label` · `.ins-hint` · `.ins-input` / `.ins-select` (`--sm`, `--lg`) · `.ins-textarea` · `.ins-check` (indeterminate via `data-ins-indeterminate`) · `.ins-switch` (+ `--card`, `-grid`) · `.ins-seg` · `.ins-search` · `.ins-input-group` + `.ins-addon` · `.ins-password-toggle` |
 | **Pickers** | `.ins-combo` (`-list`, `-option`, `-empty`) · date and date range via `data-ins-date` (+ `.ins-date-btn`, `.ins-cal`) · `.ins-range` · number stepper `.ins-spin` in an `.ins-input-group` · `.ins-tile` (`-grid`, `-title`, `-desc`) for radio and checkbox cards |
 | **Validation** | `aria-invalid="true"` · `:user-invalid` · `.ins-error` · `.ins-input--bad` / `.ins-select--bad` · `.ins-success` · `.ins-input--ok` · `.ins-req` · `form[data-ins-validate]` |
@@ -350,10 +350,11 @@ A few of the gestures, so the vocabulary is legible:
 - **Surfaces** rise toward the light — lift, longer shadow, brighter rim. The
   130° sheen deliberately does *not* move: it is the signature, and a signature
   that moves when you point at it is a gimmick.
-- **A table row** grows a 3px brand marker on its leading edge — the same marker
-  the sidebar's active item uses, so "what is under the pointer" and "where you
-  are" speak one vocabulary. It scales from the centre rather than sliding,
-  because a bar sliding the length of a wide row draws the eye *along* it.
+- **A table row** fills on hover, and that is all. The 3px brand marker on its
+  leading edge belongs to a selected row: `aria-selected="true"`, `aria-current`
+  or `.is-selected`. It's the same marker the sidebar's selected item carries, with
+  the same meaning: *this one is chosen*. It scales from the centre rather than
+  sliding, because a bar sliding the length of a wide row draws the eye *along* it.
 - **The sidebar's marker** belongs to the selected item only. Hovering an item
   gives it a background, not a marker. When the selection moves, the marker
   travels the way the Windows 10 navigation pane's does: its far end shoots out

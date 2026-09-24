@@ -209,9 +209,16 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 .ins-table:has(.ins-empty) thead { display: none; }
 
 /* --------------------------------------------------------------- motion */
-/* A hovered row grows a marker on its leading edge -- the same 3px brand bar the
-   sidebar's active item uses, so "the thing under the pointer" and "the section you
-   are in" speak one vocabulary rather than two.
+/* A selected row carries a marker on its leading edge -- the same 3px brand bar the
+   sidebar's selected item uses, and with the same meaning: *this one is chosen*.
+   Selected is `aria-selected="true"` (a row picked in a list), `aria-current` (the
+   record this page is about) or `.is-selected`. It keeps the hover's fill as well,
+   so it still reads as picked once the pointer has gone.
+
+   It used to grow on hover. The sidebar's marker did too, until it was taken back
+   for the selected item alone — a bar under the pointer and a bar on the chosen
+   item cannot both be the same bar — and a row is held to the same rule. Hovering
+   a row still fills it.
 
    On the first cell, inside the cell's own box. The sidebar's original marker sat
    outside its item and the container's `overflow-x: hidden` cut it in half; a table
@@ -230,7 +237,13 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
   transform: scaleY(0);
   transition: transform var(--ins-t-pop) var(--ins-ease);
 }
-.ins-table tbody tr:hover > td:first-child::before { transform: scaleY(1); }
+.ins-table tbody tr:is([aria-selected="true"], [aria-current]:not([aria-current="false"]), .is-selected) > td {
+  background: var(--ins-surface-hover);
+  background-image: none;
+}
+.ins-table tbody tr:is([aria-selected="true"], [aria-current]:not([aria-current="false"]), .is-selected) > td:first-child::before {
+  transform: scaleY(1);
+}
 
 /* Rows arrive staggered, and the delay list is short on purpose: a table can hold
    two hundred rows, and staggering all of them would take eight seconds to finish
