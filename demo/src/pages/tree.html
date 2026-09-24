@@ -1,0 +1,100 @@
+<link rel="stylesheet" href="../dist/plugins/insiyab-tree.css">
+<script src="../dist/plugins/insiyab-tree.js"></script>
+
+<h2 id="install">التثبيت</h2>
+<p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
+<demo-code lang="html">
+<link rel="stylesheet" href="plugins/insiyab-tree.css">
+<script src="insiyab.js"></script>
+<script src="plugins/insiyab-tree.js"></script>
+</demo-code>
+
+<h2 id="tree">شجرة ملفّات</h2>
+<p>
+  قوائم متداخلة عليها <code>data-ins-tree</code>. أوّل عنصر في كلّ بند هو تسميته — نصّ في <code>span</code>، أو
+  رابط — والقائمة داخله فرعه، مغلق إلّا إن حمل البند <code>data-open</code>. وبلا سكربت هي القائمة المتداخلة
+  نفسها، كلّ فروعها ظاهرة.
+</p>
+<demo-example class="narrow">
+  <ul class="ins-tree" data-ins-tree aria-label="ملفّات المشروع">
+    <li data-open><span><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>العقود</span>
+      <ul>
+        <li><a href="tables.html"><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>عقد الإيجار 2026.pdf</a></li>
+        <li><span><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>الملاحق</span>
+          <ul>
+            <li><span><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>ملحق 1.pdf</span></li>
+            <li><span><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>ملحق 2.pdf</span></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><span><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>الفواتير</span><span class="ins-pill">12</span>
+      <ul>
+        <li><span><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>سبتمبر.xlsx</span></li>
+      </ul>
+    </li>
+    <li><span><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>ملاحظات.txt</span></li>
+  </ul>
+</demo-example>
+
+<h2 id="keyboard">لوحة المفاتيح</h2>
+<p>الشجرة محطّة واحدة في ترتيب التنقّل، والأسهم تمشي فيها كما في شجرة ملفّات:</p>
+<ul>
+  <li><kbd>↑</kbd> <kbd>↓</kbd> بين الصفوف الظاهرة، و<kbd>Home</kbd> <kbd>End</kbd> إلى أوّلها وآخرها.</li>
+  <li><b>السهم نحو الداخل</b> — <kbd>←</kbd> في العربية و<kbd>→</kbd> في الإنجليزية — يفتح الفرع، ثمّ يدخله.</li>
+  <li><b>السهم نحو الخارج</b> يغلق الفرع، أو يخرج إلى الأب.</li>
+  <li><kbd>*</kbd> يفتح كلّ الفروع بجانب البند، وحرف ينتقل إلى أوّل صفّ يبدأ به.</li>
+  <li><kbd>Enter</kbd> يتبع الرابط أو يختار، و<kbd>Space</kbd> يختار — أو يضع العلامة في شجرة مربّعات.</li>
+</ul>
+
+<h2 id="checks">شجرة صلاحيات</h2>
+<p>
+  <code>data-ins-tree-checks</code> وتسمية كلّ بند مربّع <code>.ins-check</code>: الفرع يعلّم كلّ ما فيه، وفرع علامته
+  جزئية يظهر مختلطًا. والنموذج يرسل المربّعات المعلَّمة كما هي، فالفرع المختلط لا يُرسَل.
+</p>
+<demo-example class="narrow">
+  <ul class="ins-tree" data-ins-tree data-ins-tree-checks aria-label="صلاحيات الدور">
+    <li data-open><label class="ins-check"><input type="checkbox" name="perm" value="sales"><span class="ins-check-text">المبيعات</span></label>
+      <ul>
+        <li><label class="ins-check"><input type="checkbox" name="perm" value="sales.view" checked><span class="ins-check-text">عرض الطلبات</span></label></li>
+        <li><label class="ins-check"><input type="checkbox" name="perm" value="sales.edit"><span class="ins-check-text">تعديل الطلبات</span></label></li>
+        <li><label class="ins-check"><input type="checkbox" name="perm" value="sales.refund"><span class="ins-check-text">الاسترداد</span></label></li>
+      </ul>
+    </li>
+    <li><label class="ins-check"><input type="checkbox" name="perm" value="hr" checked><span class="ins-check-text">الموارد البشرية</span></label>
+      <ul>
+        <li><label class="ins-check"><input type="checkbox" name="perm" value="hr.view"><span class="ins-check-text">عرض الموظّفين</span></label></li>
+        <li><label class="ins-check"><input type="checkbox" name="perm" value="hr.pay"><span class="ins-check-text">الرواتب</span></label></li>
+      </ul>
+    </li>
+  </ul>
+</demo-example>
+
+<h2 id="api">من الشيفرة</h2>
+<demo-code lang="js">
+document.addEventListener('ins:tree', (e) => {
+  console.log(e.detail.action, e.detail.label, e.detail.item);   // select · open · close · check
+});
+
+Insiyab.tree('#node-42', 'select');   // يختاره ويفتح الطريق إليه
+Insiyab.tree('#files', 'open');       // يفتح كلّ الفروع، أو 'close'
+Insiyab.tree('#files');               // البند المختار — أو المعلَّمة في شجرة مربّعات
+</demo-code>
+
+<h2 id="attributes">السمات</h2>
+<div class="ins-panel site-ref">
+  <div class="ins-panel-body ins-panel-body--flush">
+    <div class="ins-table-wrap">
+      <table class="ins-table">
+        <thead><tr><th>السمة</th><th>على</th><th>ما تفعله</th></tr></thead>
+        <tbody>
+          <tr><td><code>data-ins-tree</code></td><td><code>&lt;ul&gt;</code></td><td>يجعل القوائم المتداخلة شجرة.</td></tr>
+          <tr><td><code>data-open</code></td><td><code>&lt;li&gt;</code></td><td>فرع مفتوح من البداية.</td></tr>
+          <tr><td><code>data-selected</code></td><td><code>&lt;li&gt;</code></td><td>بند مختار من البداية.</td></tr>
+          <tr><td><code>data-ins-tree-checks</code></td><td>الشجرة</td><td>مربّعات متسلسلة، والفرع الجزئيّ مختلط.</td></tr>
+          <tr><td><code>data-ins-tree-select="none"</code></td><td>الشجرة</td><td>بلا اختيار، لشجرة تنقّل فقط.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

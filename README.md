@@ -35,8 +35,8 @@
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
 > the shell, with every example's markup printed under it. The plugins so far:
 > the Hijri calendar, the command palette, the one-time code, the phone number,
-> file upload, scrollspy and the timeline. Still to come: the tree, colour picker and
-> carousel plugins, and the React and Jinja wrappers. See
+> file upload, scrollspy, the timeline and the tree. Still to come: the colour picker
+> and carousel plugins, and the React and Jinja wrappers. See
 > [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
@@ -770,6 +770,51 @@ instead, and `data-ins-time="date"` always writes the date. The full date and ti
 go in the title, the text refreshes every minute, and `Insiyab.time()` rewrites it
 on demand.
 
+### Tree
+
+```html
+<link rel="stylesheet" href="plugins/insiyab-tree.css">
+<script src="plugins/insiyab-tree.js"></script>
+
+<ul class="ins-tree" data-ins-tree aria-label="الملفّات">
+  <li data-open>
+    <span>المستندات</span>
+    <ul>
+      <li><a href="/docs/contract.pdf">العقد.pdf</a></li>
+    </ul>
+  </li>
+</ul>
+```
+
+Nested lists as a tree (folders, categories, an org chart). Each item's first
+element is its label: text in a span, a link, or an `.ins-check` label. A nested
+list is the item's branch, closed unless the item has `data-open`. Without the
+script it's the nested list with every branch showing.
+
+The tree is one tab stop, and the arrow keys walk it like a file tree:
+
+- Up and Down move between the rows that are showing, and Home and End jump to
+  the first and last.
+- The inward arrow opens a branch, then steps into it. That's ← in Arabic and →
+  in English.
+- The outward arrow closes a branch or steps out to its parent.
+- `*` opens every sibling branch, and typing a letter jumps to the next row that
+  starts with it.
+- Enter follows a link or selects the row. Space selects it, or ticks the box in
+  a tree of checkboxes.
+
+With `data-ins-tree-checks`, the checkboxes cascade. Ticking a branch ticks
+everything in it, and a partly ticked branch shows as mixed (`aria-checked="mixed"`,
+and not sent with the form). `data-ins-tree-select="none"` gives a tree that only
+navigates.
+
+```js
+document.addEventListener('ins:tree', (e) => e.detail.action);  // select, open, close, check
+Insiyab.tree('#node-42', 'select');   // also opens the way to it
+Insiyab.tree('#files', 'open');       // every branch; or 'close'
+Insiyab.tree('#files');               // the selected item, or the ticked ones
+```
+
 ## Development
 
 Node 18+ for the build; nothing else, and no dependencies at all.
@@ -820,7 +865,7 @@ node test/run.mjs sidebar dark    # only the files whose names contain a word
 node test/run.mjs --verbose       # every check, not only failures
 ```
 
-About 525 checks in nineteen files, each driving a real headless Chrome with real
+About 570 checks in twenty files, each driving a real headless Chrome with real
 key and pointer events, on a throwaway profile, against a server the runner
 starts on a free port. Needs Chrome, found in the usual places or through
 `CHROME`, and no npm packages: the driver is a small DevTools-protocol client in
