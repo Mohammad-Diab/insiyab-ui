@@ -223,8 +223,8 @@ out, for grids whose column count *is* the content.
 </div>
 ```
 
-**The primitives own the gaps.** `.ins-stack`, `.ins-row` and `.ins-cols-*`
-space their children with `gap` and clear the children's own outer margins, so a
+**The primitives own the gaps.** `.ins-stack`, `.ins-row`, `.ins-grid` and
+`.ins-cols-*` space their children with `gap` and clear the children's own outer margins, so a
 panel's 1.25rem doesn't stack on top of the gap. A margin utility on a child still
 wins. In a stack, `ins-mt-auto` pushes an item to the bottom, and in a row,
 `ins-ms-auto` pushes it to the far end.
