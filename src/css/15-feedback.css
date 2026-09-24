@@ -328,18 +328,11 @@
 .ins-alert { animation: ins-slide-in var(--ins-t-enter) var(--ins-ease); }
 [dir="rtl"] .ins-alert { --ins-slide: 10px; }
 
-/* The circle is the alert's face. It turns slightly on hover -- the one place in the
-   library where a purely decorative element moves, allowed because the circle is
-   already where the eye lands and nothing is ever read inside it. */
-.ins-alert-ico { transition: transform var(--ins-t-pop) var(--ins-ease-spring); }
-.ins-alert:hover .ins-alert-ico { transform: scale(1.06) rotate(-8deg); }
-
-/* An empty state is the one screen with nothing on it, so it is the one worth
-   spending a gesture on. The glyph lifts out of its fade when the pointer arrives --
-   on hover only, never ambient. */
-.ins-empty-ico { transition: transform var(--ins-t-enter) var(--ins-ease),
-                             opacity var(--ins-t-enter) var(--ins-ease); }
-.ins-empty:hover .ins-empty-ico { transform: translateY(-4px); opacity: .55; }
+/* The alert's circle and the empty state's glyph stay still under the pointer. Both
+   used to move on hover, as the one allowance for a purely decorative element; the
+   allowance is gone, because an icon that moves when the pointer crosses it reads
+   as something to click, and neither can be clicked. The alert's close button and
+   the empty state's action are the controls, and they keep their own hovers. */
 
 /* Two animations, and the second is the reason this is not left alone: a spinner
    that fades in does not flash a wheel at somebody for the 80ms a fast response

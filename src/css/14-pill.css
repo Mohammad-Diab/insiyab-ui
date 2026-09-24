@@ -116,16 +116,19 @@
 :where(a, button).ins-pill:hover { transform: translateY(-1px); box-shadow: var(--ins-sh-sm); }
 :where(a, button).ins-pill:active { transform: scale(.96); }
 
-/* The dot is the pill's smallest moving part and the cheapest place to put life --
-   and unlike the lift it is safe on a label, because a dot growing says nothing
-   about whether the thing can be pressed. */
+/* The dot grows with the lift, on the same pressable pills only. It used to grow on
+   every pill, on the theory that a dot says nothing about pressing; but anything
+   that moves under the pointer reads as "this responds", and a status label must
+   not say that. */
 .ins-pill-dot { transition: transform var(--ins-t-pop) var(--ins-ease-spring); }
-.ins-pill:hover .ins-pill-dot { transform: scale(1.35); }
+:where(a, button).ins-pill:hover .ins-pill-dot { transform: scale(1.35); }
 
 /* A count that changes is worth noticing. The animation is on the element, so
    replacing the node -- which is what a re-render does -- replays it. */
 .ins-badge { animation: ins-pop var(--ins-t-pop) var(--ins-ease-spring); }
 
+/* An avatar grows only when it is itself a link or a button — a profile to open.
+   Beside a name in a list it is a picture, and stays still. */
 .ins-avatar { transition: transform var(--ins-t-pop) var(--ins-ease-spring),
                           box-shadow var(--ins-t-pop) var(--ins-ease); }
-.ins-avatar:hover { transform: scale(1.08); box-shadow: var(--ins-sh-brand-sm); }
+:where(a, button).ins-avatar:hover { transform: scale(1.08); box-shadow: var(--ins-sh-brand-sm); }

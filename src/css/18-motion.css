@@ -88,9 +88,12 @@
    surface moves; the light on it stays where it is.
 
    `:hover` is scoped to surfaces that are actually interactive, or to ones a page
-   has opted in with `.ins-hoverable`. A panel holding a table is a container, not a
-   control, and lifting it when the pointer crosses it on the way to a row is noise
-   — which is why `.ins-panel` is not in this list. */
+   has opted in with `.ins-hoverable`. That is the library's rule for every hover,
+   not only this one: **nothing that cannot be clicked moves under the pointer** —
+   no static icon, no label, no heading, no container. A panel holding a table is a
+   container, not a control, and lifting it when the pointer crosses it on the way
+   to a row is noise — which is why `.ins-panel` is not in this list, and why a stat
+   tile lifts only when it is a link or a button. */
 .ins-card,
 .ins-stat,
 .ins-hoverable {
@@ -99,7 +102,7 @@
               border-color var(--ins-t-pop) var(--ins-ease);
 }
 :where(a, button, [role="button"], .ins-hoverable).ins-card:hover,
-.ins-grid > .ins-stat:hover,
+:where(a, button, [role="button"]).ins-stat:hover,
 .ins-hoverable:hover {
   transform: translateY(-2px);
   box-shadow: var(--ins-sh-lg), var(--ins-bevel);

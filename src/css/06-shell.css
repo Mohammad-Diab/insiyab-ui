@@ -110,7 +110,9 @@
   object-fit: contain;
   border-radius: inherit;
 }
-.ins-shell-brand:hover .ins-shell-mark {
+/* Only when the brand is a link home. A mark that tilts under the pointer promises a
+   click; a brand that is only a label must not make that promise. */
+:where(a, button).ins-shell-brand:hover .ins-shell-mark {
   transform: scale(1.06) rotate(-4deg);
   box-shadow: var(--ins-sh-brand-md), var(--ins-bevel-dim);
 }

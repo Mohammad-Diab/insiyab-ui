@@ -326,6 +326,12 @@ So in a frosted design the choice is never cheap motion versus expensive motion 
 it is **motion or frost**, and the frost is the design. `node build.mjs` refuses
 to emit a stylesheet containing any `infinite` animation other than those two.
 
+A second rule sits beside it: **nothing that cannot be clicked moves under the
+pointer.** A static icon, a status pill, an avatar beside a name, a heading, a
+panel: none of them react to hover, because anything that moves under the pointer
+reads as a promise of a click. Each of those gets its hover only when it is itself
+a link or a button, or when a page opts it in with `.ins-hoverable`.
+
 A few of the gestures, so the vocabulary is legible:
 
 - **Surfaces** rise toward the light — lift, longer shadow, brighter rim. The

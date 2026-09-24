@@ -112,11 +112,10 @@
                          .ins-island:hover, .ins-pill:hover, .ins-avatar:hover,
                          .ins-shell-link:hover, .ins-pop-item:hover,
                          .ins-dialog-x:hover, .ins-close:hover, .ins-input-group:focus-within,
-                         .ins-spin:active,
-                         .ins-empty:hover .ins-empty-ico),
-[data-ins-fx="off"] :is(.ins-stat, .ins-panel-head, .ins-alert, .ins-btn, .ins-search,
+                         .ins-spin:active),
+[data-ins-fx="off"] :is(.ins-stat, .ins-panel-head, .ins-btn, .ins-search,
                          .ins-shell-brand, .ins-pill):hover :is(.ins-stat-ico,
-                         .ins-panel-ico, .ins-alert-ico, svg, .ins-ico, .ins-shell-mark,
+                         .ins-panel-ico, svg, .ins-ico, .ins-shell-mark,
                          .ins-pill-dot, .ins-search-ico) { transform: none; }
 [data-ins-fx="off"] .ins-shell { transition: none; }
 [data-ins-fx="off"] .ins-shell-side { transition: none; }
