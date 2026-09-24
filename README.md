@@ -33,10 +33,10 @@
 > type and utility layer, the components an application form or dashboard needs
 > (pickers, steps and confirmation included), and a motion layer across all of
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
-> the shell, with every example's markup printed under it. Five plugins so far:
-> the Hijri calendar, the command palette, the one-time code, the phone number and
-> file upload. Still to come: more plugins (tree, timeline, colour picker and the
-> like) and the React and Jinja wrappers. See
+> the shell, with every example's markup printed under it. The plugins so far:
+> the Hijri calendar, the command palette, the one-time code, the phone number,
+> file upload and scrollspy. Still to come: the timeline, tree, colour picker and
+> carousel plugins, and the React and Jinja wrappers. See
 > [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
@@ -706,6 +706,33 @@ Insiyab.file('#docs');       // the files in the list
 Insiyab.file('#docs', []);   // empty it
 ```
 
+### Scrollspy
+
+```html
+<link rel="stylesheet" href="plugins/insiyab-scrollspy.css">   <!-- only for .ins-toc -->
+<script src="plugins/insiyab-scrollspy.js"></script>
+
+<nav class="ins-toc" data-ins-scrollspy aria-label="في هذه الصفحة">
+  <a href="#intro">مقدّمة</a>
+  <a href="#setup">الإعداد</a>
+</nav>
+```
+
+The link whose section is being read gets `is-active` and `aria-current="location"`,
+and that's all it touches, so any nav works: a navbar, a row of tabs, a contents
+list. The current section is the last one whose top has passed a line a third of
+the way down whatever scrolls it. That can be the page, the body under
+`data-ins-scrollbar="lead"`, or a box with its own scrollbar, and it's found
+automatically. `data-ins-scrollspy-offset="80"` puts the line that many pixels from
+the top instead. At the very end of the scroll the last section is current, however
+short it is. A click marks its link at once, and the marker stays put during the
+scroll that click starts.
+
+The stylesheet is optional, and only carries `.ins-toc`: a contents list that
+sticks under the top bar (`--ins-toc-top`), with `.ins-toc-title`, `.ins-toc-sub`
+for a deeper heading, and the sidebar's brand bar on the current entry.
+`ins:scrollspy` reports each change, and `Insiyab.scrollspy(nav)` measures again.
+
 ## Development
 
 Node 18+ for the build; nothing else, and no dependencies at all.
@@ -756,7 +783,7 @@ node test/run.mjs sidebar dark    # only the files whose names contain a word
 node test/run.mjs --verbose       # every check, not only failures
 ```
 
-About 480 checks in seventeen files, each driving a real headless Chrome with real
+About 500 checks in eighteen files, each driving a real headless Chrome with real
 key and pointer events, on a throwaway profile, against a server the runner
 starts on a free port. Needs Chrome, found in the usual places or through
 `CHROME`, and no npm packages: the driver is a small DevTools-protocol client in

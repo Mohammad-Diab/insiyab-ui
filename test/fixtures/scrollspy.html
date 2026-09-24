@@ -1,0 +1,51 @@
+<!doctype html>
+<!-- Fixtures for scrollspy.test.mjs. The page's sections are tall, except the last,
+     which is too short ever to reach the line on its own; the box has its own
+     scrollbar and its own contents list. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab scrollspy fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <link rel="stylesheet" href="../../dist/plugins/insiyab-scrollspy.css">
+  <script src="../../dist/insiyab.js"></script>
+  <script src="../../dist/plugins/insiyab-scrollspy.js"></script>
+  <style>
+    .page { display: grid; grid-template-columns: 1fr 14rem; gap: 2rem; padding: 2rem; }
+    .page section { min-block-size: 900px; }
+    .page section.short { min-block-size: 120px; }
+    #box { block-size: 300px; overflow-y: auto; border: 1px solid #ccc; }
+    #box section { block-size: 400px; min-block-size: 0; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <section id="s1"><h2>الأوّل</h2></section>
+    <section id="s2"><h2>الثاني</h2></section>
+    <section id="s3"><h2>الثالث</h2></section>
+    <div style="display: flex; gap: 1rem">
+      <div id="box">
+        <section id="b1">١</section>
+        <section id="b2">٢</section>
+        <section id="b3">٣</section>
+      </div>
+      <nav id="box-toc" class="ins-toc" data-ins-scrollspy aria-label="الصندوق" style="position: static">
+        <a href="#b1">١</a><a href="#b2">٢</a><a href="#b3">٣</a>
+      </nav>
+    </div>
+    <section id="s4" class="short"><h2>الأخير</h2></section>
+  </main>
+  <nav id="toc" class="ins-toc" data-ins-scrollspy aria-label="في هذه الصفحة">
+    <div class="ins-toc-title">في هذه الصفحة</div>
+    <a href="#s1">الأوّل</a>
+    <a href="#s2">الثاني</a>
+    <a class="ins-toc-sub" href="#s3">الثالث</a>
+    <a href="#s4">الأخير</a>
+    <a href="other.html#s1">صفحة أخرى</a>
+    <a href="#nothing">لا شيء</a>
+  </nav>
+</div>
+</body>
+</html>

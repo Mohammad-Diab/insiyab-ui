@@ -484,3 +484,11 @@
 /* A directional icon points the way the reading goes: "forward" is left in Arabic.
    On the <use>, not the <svg>, so the button's own hover nudge on the svg still works. */
 [dir="rtl"] use[href="#i-arrow"] { transform: scaleX(-1); transform-origin: center; transform-box: fill-box; }
+
+/* The scrollspy page: a box with its own scrollbar beside its contents list. */
+.spy-demo { display: grid; grid-template-columns: 1fr 11rem; gap: 1.25rem; align-items: start; }
+.spy-demo-box { block-size: 16rem; overflow-y: auto; padding-inline-end: .5rem; }
+.spy-demo-box section { min-block-size: 13rem; }
+.spy-demo-box h3 { margin: 0 0 .5rem; font-size: 1rem; }
+.spy-demo .ins-toc { position: static; }
+@media (max-width: 640px) { .spy-demo { grid-template-columns: 1fr; } .spy-demo .ins-toc { order: -1; } }
