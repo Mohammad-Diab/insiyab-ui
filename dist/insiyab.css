@@ -1041,7 +1041,9 @@ a:hover { color: var(--ins-tone-brand-soft); }
   object-fit: contain;
   border-radius: inherit;
 }
-.ins-shell-brand:hover .ins-shell-mark {
+/* Only when the brand is a link home. A mark that tilts under the pointer promises a
+   click; a brand that is only a label must not make that promise. */
+:where(a, button).ins-shell-brand:hover .ins-shell-mark {
   transform: scale(1.06) rotate(-4deg);
   box-shadow: var(--ins-sh-brand-md), var(--ins-bevel-dim);
 }
@@ -2046,24 +2048,22 @@ html[dir="ltr"] .ins-prose { line-height: 1.65; }
 .ins-panel--alert .ins-panel-ico { background: var(--ins-tone-bad-bg); }
 
 /* --------------------------------------------------------------- motion */
-/* The head's icon chip answers a hover anywhere on the head, not just on itself:
-   a 36px target is small, and what the pointer is actually over is the section. */
+/* Nothing that cannot be clicked answers the pointer — the rule for the whole
+   library. A static icon that tilts, or a container whose rim lights up, when the
+   pointer only crosses it is promising a click it cannot take. So the head's chip
+   moves only when the head itself is a control (a link, a button, a `<summary>`),
+   and it answers a hover anywhere on that head: a 36px target is small, and what
+   the pointer is over is the whole control. The panel itself does not react at all;
+   an `.ins-hoverable` panel gets the shared lift from 18-motion.css. */
 .ins-panel-ico {
   transition: transform var(--ins-t-pop) var(--ins-ease-spring),
               background var(--ins-t-pop) var(--ins-ease);
 }
-.ins-panel-head:hover .ins-panel-ico {
+:where(a, button, summary).ins-panel-head:hover .ins-panel-ico {
   transform: scale(1.08) rotate(-4deg);
   background: rgba(var(--ins-primary-rgb), .16);
 }
-.ins-panel--alert .ins-panel-head:hover .ins-panel-ico { background: var(--ins-tone-bad-bd); }
-
-/* A panel does not lift on hover -- see the note in 18-motion.css. What it does is
-   brighten its rim, which reads as the surface catching a little more light without
-   the container jumping under a pointer that was only crossing it on the way to a
-   row inside it. */
-.ins-panel { transition: border-color var(--ins-t-base) var(--ins-ease); }
-.ins-panel:hover { border-color: var(--ins-rim-top); }
+.ins-panel--alert :where(a, button, summary).ins-panel-head:hover .ins-panel-ico { background: var(--ins-tone-bad-bd); }
 
 /* --------------------------------------------------------------- list */
 /* Rows of things — settings, notifications, members, recent files. Each row has
@@ -2247,19 +2247,23 @@ html[dir="ltr"] .ins-prose { line-height: 1.65; }
 }
 
 /* --------------------------------------------------------------- motion */
-/* The chip is the tile's one moving part. It pops on the overshoot curve, which is
-   otherwise reserved for controls whose job is to travel -- allowed here because a
-   stat tile has nothing else it can animate without moving the figure, and a figure
-   that moves is a figure you cannot read. */
+/* Only a tile that goes somewhere moves — a link, a button, or one a page opted in
+   with `.ins-hoverable`. Most stat tiles are a figure to read, and a figure whose
+   icon spins when the pointer crosses it is promising a click it cannot take.
+
+   On a tile that does go somewhere, the chip is its one moving part. It pops on the
+   overshoot curve, which is otherwise reserved for controls whose job is to travel
+   -- allowed here because the tile has nothing else it can animate without moving
+   the figure, and a figure that moves is a figure you cannot read. */
 .ins-stat-ico {
   transition: transform var(--ins-t-pop) var(--ins-ease-spring),
               background var(--ins-t-pop) var(--ins-ease);
 }
-.ins-stat:hover .ins-stat-ico { transform: scale(1.12) rotate(-6deg); }
+:where(a, button, .ins-hoverable).ins-stat:hover .ins-stat-ico { transform: scale(1.12) rotate(-6deg); }
 /* The figure holds still and only opens up a fraction. Tracking rather than size,
    because a number that changes size changes the width of the column it sits in. */
 .ins-stat-value { transition: letter-spacing var(--ins-t-base) var(--ins-ease); }
-.ins-stat:hover .ins-stat-value { letter-spacing: .005em; }
+:where(a, button, .ins-hoverable).ins-stat:hover .ins-stat-value { letter-spacing: .005em; }
 
 /* ==========================================================================
    Insiyab · data table
@@ -3959,19 +3963,22 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 :where(a, button).ins-pill:hover { transform: translateY(-1px); box-shadow: var(--ins-sh-sm); }
 :where(a, button).ins-pill:active { transform: scale(.96); }
 
-/* The dot is the pill's smallest moving part and the cheapest place to put life --
-   and unlike the lift it is safe on a label, because a dot growing says nothing
-   about whether the thing can be pressed. */
+/* The dot grows with the lift, on the same pressable pills only. It used to grow on
+   every pill, on the theory that a dot says nothing about pressing; but anything
+   that moves under the pointer reads as "this responds", and a status label must
+   not say that. */
 .ins-pill-dot { transition: transform var(--ins-t-pop) var(--ins-ease-spring); }
-.ins-pill:hover .ins-pill-dot { transform: scale(1.35); }
+:where(a, button).ins-pill:hover .ins-pill-dot { transform: scale(1.35); }
 
 /* A count that changes is worth noticing. The animation is on the element, so
    replacing the node -- which is what a re-render does -- replays it. */
 .ins-badge { animation: ins-pop var(--ins-t-pop) var(--ins-ease-spring); }
 
+/* An avatar grows only when it is itself a link or a button — a profile to open.
+   Beside a name in a list it is a picture, and stays still. */
 .ins-avatar { transition: transform var(--ins-t-pop) var(--ins-ease-spring),
                           box-shadow var(--ins-t-pop) var(--ins-ease); }
-.ins-avatar:hover { transform: scale(1.08); box-shadow: var(--ins-sh-brand-sm); }
+:where(a, button).ins-avatar:hover { transform: scale(1.08); box-shadow: var(--ins-sh-brand-sm); }
 
 /* ==========================================================================
    Insiyab · feedback
@@ -4303,18 +4310,11 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-alert { animation: ins-slide-in var(--ins-t-enter) var(--ins-ease); }
 [dir="rtl"] .ins-alert { --ins-slide: 10px; }
 
-/* The circle is the alert's face. It turns slightly on hover -- the one place in the
-   library where a purely decorative element moves, allowed because the circle is
-   already where the eye lands and nothing is ever read inside it. */
-.ins-alert-ico { transition: transform var(--ins-t-pop) var(--ins-ease-spring); }
-.ins-alert:hover .ins-alert-ico { transform: scale(1.06) rotate(-8deg); }
-
-/* An empty state is the one screen with nothing on it, so it is the one worth
-   spending a gesture on. The glyph lifts out of its fade when the pointer arrives --
-   on hover only, never ambient. */
-.ins-empty-ico { transition: transform var(--ins-t-enter) var(--ins-ease),
-                             opacity var(--ins-t-enter) var(--ins-ease); }
-.ins-empty:hover .ins-empty-ico { transform: translateY(-4px); opacity: .55; }
+/* The alert's circle and the empty state's glyph stay still under the pointer. Both
+   used to move on hover, as the one allowance for a purely decorative element; the
+   allowance is gone, because an icon that moves when the pointer crosses it reads
+   as something to click, and neither can be clicked. The alert's close button and
+   the empty state's action are the controls, and they keep their own hovers. */
 
 /* Two animations, and the second is the reason this is not left alone: a spinner
    that fades in does not flash a wheel at somebody for the 80ms a fast response
@@ -5629,9 +5629,12 @@ html[dir="ltr"] .ins-page-title {
    surface moves; the light on it stays where it is.
 
    `:hover` is scoped to surfaces that are actually interactive, or to ones a page
-   has opted in with `.ins-hoverable`. A panel holding a table is a container, not a
-   control, and lifting it when the pointer crosses it on the way to a row is noise
-   — which is why `.ins-panel` is not in this list. */
+   has opted in with `.ins-hoverable`. That is the library's rule for every hover,
+   not only this one: **nothing that cannot be clicked moves under the pointer** —
+   no static icon, no label, no heading, no container. A panel holding a table is a
+   container, not a control, and lifting it when the pointer crosses it on the way
+   to a row is noise — which is why `.ins-panel` is not in this list, and why a stat
+   tile lifts only when it is a link or a button. */
 .ins-card,
 .ins-stat,
 .ins-hoverable {
@@ -5640,7 +5643,7 @@ html[dir="ltr"] .ins-page-title {
               border-color var(--ins-t-pop) var(--ins-ease);
 }
 :where(a, button, [role="button"], .ins-hoverable).ins-card:hover,
-.ins-grid > .ins-stat:hover,
+:where(a, button, [role="button"]).ins-stat:hover,
 .ins-hoverable:hover {
   transform: translateY(-2px);
   box-shadow: var(--ins-sh-lg), var(--ins-bevel);
@@ -6129,11 +6132,10 @@ html[dir="ltr"] .ins-page-title {
                          .ins-island:hover, .ins-pill:hover, .ins-avatar:hover,
                          .ins-shell-link:hover, .ins-pop-item:hover,
                          .ins-dialog-x:hover, .ins-close:hover, .ins-input-group:focus-within,
-                         .ins-spin:active,
-                         .ins-empty:hover .ins-empty-ico),
-[data-ins-fx="off"] :is(.ins-stat, .ins-panel-head, .ins-alert, .ins-btn, .ins-search,
+                         .ins-spin:active),
+[data-ins-fx="off"] :is(.ins-stat, .ins-panel-head, .ins-btn, .ins-search,
                          .ins-shell-brand, .ins-pill):hover :is(.ins-stat-ico,
-                         .ins-panel-ico, .ins-alert-ico, svg, .ins-ico, .ins-shell-mark,
+                         .ins-panel-ico, svg, .ins-ico, .ins-shell-mark,
                          .ins-pill-dot, .ins-search-ico) { transform: none; }
 [data-ins-fx="off"] .ins-shell { transition: none; }
 [data-ins-fx="off"] .ins-shell-side { transition: none; }

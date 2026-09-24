@@ -82,16 +82,20 @@
 }
 
 /* --------------------------------------------------------------- motion */
-/* The chip is the tile's one moving part. It pops on the overshoot curve, which is
-   otherwise reserved for controls whose job is to travel -- allowed here because a
-   stat tile has nothing else it can animate without moving the figure, and a figure
-   that moves is a figure you cannot read. */
+/* Only a tile that goes somewhere moves — a link, a button, or one a page opted in
+   with `.ins-hoverable`. Most stat tiles are a figure to read, and a figure whose
+   icon spins when the pointer crosses it is promising a click it cannot take.
+
+   On a tile that does go somewhere, the chip is its one moving part. It pops on the
+   overshoot curve, which is otherwise reserved for controls whose job is to travel
+   -- allowed here because the tile has nothing else it can animate without moving
+   the figure, and a figure that moves is a figure you cannot read. */
 .ins-stat-ico {
   transition: transform var(--ins-t-pop) var(--ins-ease-spring),
               background var(--ins-t-pop) var(--ins-ease);
 }
-.ins-stat:hover .ins-stat-ico { transform: scale(1.12) rotate(-6deg); }
+:where(a, button, .ins-hoverable).ins-stat:hover .ins-stat-ico { transform: scale(1.12) rotate(-6deg); }
 /* The figure holds still and only opens up a fraction. Tracking rather than size,
    because a number that changes size changes the width of the column it sits in. */
 .ins-stat-value { transition: letter-spacing var(--ins-t-base) var(--ins-ease); }
-.ins-stat:hover .ins-stat-value { letter-spacing: .005em; }
+:where(a, button, .ins-hoverable).ins-stat:hover .ins-stat-value { letter-spacing: .005em; }
