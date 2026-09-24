@@ -68,6 +68,7 @@
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
   <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
   <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 3s6 6.2 6 10.5a6 6 0 0 1-12 0C6 9.2 12 3 12 3Z"/></symbol>
+  <symbol id="i-slides" viewBox="0 0 24 24"><rect x="6" y="5" width="12" height="14" rx="2"/><path d="M2 7v10M22 7v10"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
   <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.3 3.9 2.4 17.1A2 2 0 0 0 4.1 20h15.8a2 2 0 0 0 1.7-2.9L13.7 3.9a2 2 0 0 0-3.4 0Z"/></symbol>
@@ -172,6 +173,7 @@
       <a class="ins-shell-link" href="timeline.html" data-keywords="Timeline ما حدث بترتيبه: مسار طلب، أو نشاط حساب، أو تاريخ ملفّ. ومعه أوقات نسبية تُكتب كما تُقال."><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg>الخط الزمني</a>
       <a class="ins-shell-link" href="tree.html" data-keywords="Tree قوائم متداخلة شجرةً: ملفّات أو تصنيفات أو صلاحيات، بالأسهم كشجرة ملفّات، وبمربّعات متسلسلة."><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>الشجرة</a>
       <a class="ins-shell-link is-active" href="colorpicker.html" aria-current="page" data-keywords="Color picker حقل لون بمنتقٍ كامل، يقول قبل الحفظ هل يصلح اللون لنصّ: تباينه على الأبيض وعلى الأسود."><svg class="ico" aria-hidden="true"><use href="#i-droplet"/></svg>منتقي الألوان</a>
+      <a class="ins-shell-link" href="carousel.html" data-keywords="Carousel شرائح في صفّ يُسحب بالإصبع، وأزرار ونقاط وأسهم باتّجاه القراءة — ولا يتحرّك من تلقاء نفسه."><svg class="ico" aria-hidden="true"><use href="#i-slides"/></svg>عرض الشرائح</a>
   </aside>
   <div class="ins-shell-scrim"></div>
 
@@ -330,7 +332,7 @@
     if (e.detail.input.id === 'cp-brand') Insiyab.brand(e.detail.value);
   });
 </script>
-        <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="tree.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الشجرة</span></a><span></span></nav>
+        <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="tree.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الشجرة</span></a><a class="site-pager-link site-pager-link--next" href="carousel.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">عرض الشرائح</span></a></nav>
       </div>
     </main>
   </div>

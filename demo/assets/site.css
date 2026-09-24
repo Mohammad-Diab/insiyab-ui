@@ -492,3 +492,21 @@
 .spy-demo-box h3 { margin: 0 0 .5rem; font-size: 1rem; }
 .spy-demo .ins-toc { position: static; }
 @media (max-width: 640px) { .spy-demo { grid-template-columns: 1fr; } .spy-demo .ins-toc { order: -1; } }
+
+/* The carousel page: slides drawn in the brand's own gradients. */
+.car-demo {
+  display: grid;
+  align-content: end;
+  gap: .25rem;
+  block-size: 15rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--ins-r-lg);
+  color: #fff;
+  background: linear-gradient(160deg, var(--car-a), var(--car-b));
+}
+.car-demo b { font-size: 1.375rem; }
+.car-demo span { opacity: .85; font-size: var(--ins-fs-sm); }
+.car-demo--1 { --car-a: #0f766e; --car-b: #134e4a; }
+.car-demo--2 { --car-a: #9b2c5e; --car-b: #4a1530; }
+.car-demo--3 { --car-a: #1d4ed8; --car-b: #1e1b4b; }
+.car-demo--4 { --car-a: #b45309; --car-b: #451a03; }

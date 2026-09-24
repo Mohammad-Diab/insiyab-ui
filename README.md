@@ -33,10 +33,10 @@
 > type and utility layer, the components an application form or dashboard needs
 > (pickers, steps and confirmation included), and a motion layer across all of
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
-> the shell, with every example's markup printed under it. The plugins so far:
-> the Hijri calendar, the command palette, the one-time code, the phone number,
-> file upload, scrollspy, the timeline, the tree and the colour picker. Still to
-> come: the carousel plugin, and the React and Jinja wrappers. See
+> the shell, with every example's markup printed under it. Ten plugins: the
+> Hijri calendar, the command palette, the one-time code, the phone number, file
+> upload, scrollspy, the timeline, the tree, the colour picker and the carousel.
+> Still to come: the React and Jinja wrappers. See
 > [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
@@ -843,6 +843,37 @@ when the field is left. `input` fires while the colour moves, and `change` and
 `ins:color` fire when it's set. `Insiyab.colorField(field, value?)` reads or sets
 it; `Insiyab.color` stays the core's colour maths.
 
+### Carousel
+
+```html
+<link rel="stylesheet" href="plugins/insiyab-carousel.css">
+<script src="plugins/insiyab-carousel.js"></script>
+
+<div class="ins-carousel" data-ins-carousel aria-label="أعمال مختارة">
+  <div>…</div>
+  <div>…</div>
+</div>
+```
+
+Slides in a row. The row is the browser's own scroll-snap scroller, so a finger,
+a trackpad and Shift+wheel all move it, and without the script it's still a row
+that swipes. The script adds what a scroller can't say about itself:
+
+- previous and next buttons, which step aside at the ends
+- a dot for each stop
+- the arrow keys in the page's reading direction, plus Home and End
+- `role="region"` with `aria-roledescription`, and «2 من 5» on each slide for a
+  screen reader, with changes announced politely
+
+`.ins-carousel--2` and `--3` show two or three slides at a time when the carousel
+itself (not the screen) is wide enough. `--peek` shows the edge of the next slide,
+and `data-ins-carousel-dots="off"` drops the dots.
+
+**It never moves on its own.** Nothing in this library does: a slide that leaves
+while someone is reading it is the reason. Under `prefers-reduced-motion` it moves
+without sliding. `ins:carousel` reports the slide in view, and
+`Insiyab.carousel(el, n?)` reads the current stop or moves to one.
+
 ## Development
 
 Node 18+ for the build; nothing else, and no dependencies at all.
@@ -893,7 +924,7 @@ node test/run.mjs sidebar dark    # only the files whose names contain a word
 node test/run.mjs --verbose       # every check, not only failures
 ```
 
-About 600 checks in twenty-one files, each driving a real headless Chrome with real
+About 630 checks in twenty-two files, each driving a real headless Chrome with real
 key and pointer events, on a throwaway profile, against a server the runner
 starts on a free port. Needs Chrome, found in the usual places or through
 `CHROME`, and no npm packages: the driver is a small DevTools-protocol client in
