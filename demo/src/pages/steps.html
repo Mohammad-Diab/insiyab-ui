@@ -1,0 +1,81 @@
+<h2 id="steps">الخطوات</h2>
+<p>
+  <code>.ins-steps</code> قائمة مرقّمة بعدّاد CSS: تكفي عناصر القائمة. <code>.is-done</code> للخطوة المنجزة
+  و<code>aria-current="step"</code> للحالية. قائمة الخطوات وحدها تصلح لمسار من عدّة صفحات على الخادم.
+</p>
+<demo-example>
+  <ol class="ins-steps">
+    <li class="ins-steps-item is-done"><span class="ins-steps-label">السلّة</span></li>
+    <li class="ins-steps-item is-done"><span class="ins-steps-label">العنوان</span></li>
+    <li class="ins-steps-item" aria-current="step"><span class="ins-steps-label">الدفع</span></li>
+    <li class="ins-steps-item"><span class="ins-steps-label">التأكيد</span></li>
+  </ol>
+</demo-example>
+<p>
+  الخطوة المنجزة تحتفظ برقمها بدل علامة صحّ: الرقم على لون الهوية، بلون النصّ المقيس، مقروء على أيّ
+  لون بالبناء — و«أيّ خطوة كانت هذه» يبقى جوابه ظاهرًا.
+</p>
+
+<h2 id="wizard">المعالج</h2>
+<p>
+  <code>.ins-wizard</code> على نموذج بألواح <code>.ins-wizard-panel</code>: السكربت يُظهر لوحًا واحدًا ويقود
+  الخطوات فوقه. «التالي» يتحقّق من حقول الخطوة الحالية بتحقّق المتصفّح قبل أن ينتقل، فيوقفك الحقل
+  المطلوب في خطوته لا في النهاية، و<kbd class="ins-kbd">Enter</kbd> داخل حقل يعني «التالي».
+</p>
+<demo-example>
+  <form class="ins-panel ins-wizard" id="store-wizard" data-ins-validate>
+    <div class="ins-panel-body">
+      <ol class="ins-steps">
+        <li class="ins-steps-item"><span class="ins-steps-label">المتجر</span></li>
+        <li class="ins-steps-item"><span class="ins-steps-label">الخطّة</span></li>
+        <li class="ins-steps-item"><span class="ins-steps-label">التأكيد</span></li>
+      </ol>
+      <section class="ins-wizard-panel ins-stack" aria-label="المتجر">
+        <div class="ins-field">
+          <label class="ins-label" for="w-store">اسم المتجر<span class="ins-req" aria-hidden="true">*</span></label>
+          <input class="ins-input" id="w-store" required>
+          <p class="ins-error"></p>
+        </div>
+        <div class="ins-field">
+          <label class="ins-label" for="w-email">بريد التواصل<span class="ins-req" aria-hidden="true">*</span></label>
+          <input class="ins-input" id="w-email" type="email" required dir="ltr">
+          <p class="ins-error"></p>
+        </div>
+      </section>
+      <section class="ins-wizard-panel ins-stack" aria-label="الخطّة">
+        <div class="ins-tile-grid">
+          <label class="ins-tile"><input type="radio" name="w-plan" value="starter" required><span class="ins-tile-title">البداية</span><span class="ins-tile-desc">مجانًا</span></label>
+          <label class="ins-tile"><input type="radio" name="w-plan" value="growth"><span class="ins-tile-title">النموّ</span><span class="ins-tile-desc">٤٩ شهريًا</span></label>
+        </div>
+      </section>
+      <section class="ins-wizard-panel" aria-label="التأكيد">
+        <label class="ins-check"><input type="checkbox" required><span class="ins-check-text">أوافق على شروط البيع</span></label>
+      </section>
+      <div class="ins-wizard-foot">
+        <button type="button" class="ins-btn ins-btn--secondary" data-ins-wizard="prev">السابق</button>
+        <button type="button" class="ins-btn ins-btn--primary" data-ins-wizard="next">التالي</button>
+        <button class="ins-btn ins-btn--primary ins-wizard-finish">إنشاء المتجر</button>
+      </div>
+    </div>
+  </form>
+</demo-example>
+<p class="site-note">
+  <b>بلا جافاسكربت</b> يصير المعالج نموذجًا طويلًا واحدًا بزرّ إرسال في آخره — يعمل، وكلّ حقل فيه.
+</p>
+
+<h2 id="api">من الشيفرة</h2>
+<demo-code lang="js">
+Insiyab.wizard('#store-wizard');      // رقم الخطوة الحالية
+Insiyab.wizard('#store-wizard', 2);   // انتقل إلى الثالثة
+
+document.addEventListener('ins:wizard', (e) => {
+  console.log(e.detail.step, e.detail.panel);
+});
+</demo-code>
+
+<script>
+  document.getElementById('store-wizard').addEventListener('submit', function (e) {
+    e.preventDefault();
+    Insiyab.toast('أُنشئ المتجر', 'ok');
+  });
+</script>

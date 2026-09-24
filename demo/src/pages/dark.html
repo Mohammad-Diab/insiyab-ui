@@ -1,0 +1,88 @@
+<h2 id="modes">ثلاث حالات لا اثنتان</h2>
+<p>
+  <b>فاتح</b> و<b>داكن</b> اختياران صريحان يُحفظان. و<b>النظام</b> لا يحفظ شيئًا ولا يختم شيئًا،
+  فيبقى إعداد نظام التشغيل هو الحاكم — ولهذا غياب السمة له معنى. جرّب:
+</p>
+<demo-example class="row">
+  <button class="ins-btn ins-btn--secondary" data-ins-theme-toggle><svg class="ico"><use href="#i-moon"/></svg>تبديل الوضع</button>
+  <button class="ins-btn ins-btn--ghost" data-ins-theme-toggle="system">اتبع النظام</button>
+</demo-example>
+<p class="ins-muted ins-text-sm" id="theme-state"></p>
+
+<h2 id="api">من الشيفرة</h2>
+<demo-code lang="js">
+Insiyab.theme();            // 'light' | 'dark' — ما يراه المستخدم فعلًا، أيًّا كان مصدره
+Insiyab.theme('dark');      // اختيار صريح، يُحفظ
+Insiyab.theme('system');    // ينسى الاختيار ويتبع النظام من جديد
+Insiyab.toggleTheme();
+
+document.addEventListener('ins:theme', (e) => {
+  console.log(e.detail.theme, e.detail.mode);   // 'dark', 'dark' | 'system'
+});
+</demo-code>
+
+<h2 id="designed">مصمَّم، لا مقلوب</h2>
+<p>
+  قلب زجاج أبيض شفّاف يعطي ألواحًا رمادية حليبية بحواف بيضاء صارخة. الداكن هنا لوحة صُمّمت لذاتها:
+</p>
+<ul>
+  <li>الحافة تنزل من ٨٥٪ إلى ١٠٪ — حافة بيضاء ساطعة على سطح داكن تبدو إطارًا لا ضوءًا.</li>
+  <li>التشبّع في الضباب ينزل من ١٤٠٪ إلى ١٢٠٪، لأنّ الألوان خلف سطح داكن تصرخ بسرعة.</li>
+  <li>الظلال أغمق <em>وأقوى</em> معًا، والتلوينات الدلالية تتضاعف تقريبًا لتبقى مرئية.</li>
+  <li>الدرجة المقروءة من لون الهوية تنقلب اتجاهها: نحو الأبيض لا نحو الأسود.</li>
+</ul>
+<p>بدّل الوضع وانظر إلى هذه المجموعة — كلّ قيمة فيها من اللوحة الثانية، لا من فلتر فوق الأولى:</p>
+<demo-example code="none">
+  <div class="ins-cols-3">
+    <div class="ins-stat ins-glass ins-stat--ok">
+      <span class="ins-stat-ico"><svg class="ico"><use href="#i-check"/></svg></span>
+      <span class="ins-stat-body"><span class="ins-stat-label">مكتملة</span><span class="ins-stat-value">24</span></span>
+    </div>
+    <div class="ins-stat ins-glass ins-stat--warn">
+      <span class="ins-stat-ico"><svg class="ico"><use href="#i-clock"/></svg></span>
+      <span class="ins-stat-body"><span class="ins-stat-label">متأخّرة</span><span class="ins-stat-value">3</span></span>
+    </div>
+    <div class="ins-stat ins-glass ins-stat--info">
+      <span class="ins-stat-ico"><svg class="ico"><use href="#i-users"/></svg></span>
+      <span class="ins-stat-body"><span class="ins-stat-label">الأعضاء</span><span class="ins-stat-value">9</span></span>
+    </div>
+  </div>
+  <div class="ins-alert ins-alert--warn ins-mt-4">
+    <span class="ins-alert-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
+    <div class="ins-alert-msg"><span class="ins-alert-text">ثلاث مهامّ تجاوزت موعدها. الشارات تحافظ على علاقات ألوانها في الوضعين.</span></div>
+  </div>
+</demo-example>
+
+<h2 id="first-paint">قبل أوّل رسم</h2>
+<p>
+  الاختيار المحفوظ يُستعاد لحظة قراءة السكربت في <code>&lt;head&gt;</code>، قبل أن يُرسم أيّ شيء. هذا
+  هو السبب الوحيد لكون السكربت متزامنًا في الرأس: بدونه تومض كلّ صفحة بالفاتح ثمّ تنقلب.
+</p>
+
+<h2 id="your-css">في أنماطك أنت</h2>
+<p>
+  الأفضل أن تقرأ المتغيّرات، فتتبع الوضع دون قاعدة واحدة إضافية. وإن احتجت قاعدة للداكن فعلًا،
+  فاكتبها للحالتين: الاختيار الصريح، والنظام حين لا اختيار.
+</p>
+<demo-code lang="css">
+/* الأفضل: متغيّر يتبع الوضع بنفسه */
+.my-card { background: var(--ins-surface); color: var(--ins-text-1); }
+
+/* وحين يلزم فعلًا */
+:root[data-ins-theme="dark"] .my-chart { filter: brightness(.9); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .my-chart { filter: brightness(.9); }
+}
+</demo-code>
+
+<script>
+  (function () {
+    var out = document.getElementById('theme-state');
+    function show() {
+      var set = document.documentElement.getAttribute('data-ins-theme');
+      out.textContent = 'الآن: ' + (Insiyab.theme() === 'dark' ? 'داكن' : 'فاتح') + ' — ' + (set ? 'باختيار صريح محفوظ' : 'يتبع النظام');
+    }
+    document.addEventListener('ins:theme', show);
+    show();
+  })();
+</script>

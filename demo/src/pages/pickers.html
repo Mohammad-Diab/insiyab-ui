@@ -1,0 +1,102 @@
+<h2 id="combo">الإكمال التلقائي</h2>
+<p>
+  حقل وقائمة خيارات داخل <code>.ins-combo</code>. السكربت يضيف نمط combobox كاملًا — الأدوار، والأسهم،
+  و<kbd class="ins-kbd">Enter</kbd> للاختيار و<kbd class="ins-kbd">Esc</kbd> للإغلاق — ومطابقة
+  <b>تفهم العربية</b>: التشكيل مُهمَل، وصور الهمزة على الألف حرف واحد، والتاء المربوطة تطابق الهاء،
+  والألف المقصورة تطابق الياء. من يكتب «اسامة» يجد «أسامة».
+</p>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="p-city">المدينة</label>
+    <div class="ins-combo">
+      <input class="ins-input" id="p-city" placeholder="ابدأ الكتابة…" autocomplete="off">
+      <input type="hidden" name="city">
+      <ul class="ins-combo-list">
+        <li class="ins-combo-option" data-value="ruh">الرياض</li>
+        <li class="ins-combo-option" data-value="jed">جدّة</li>
+        <li class="ins-combo-option" data-value="dxb">دبي</li>
+        <li class="ins-combo-option" data-value="auh">أبوظبي</li>
+        <li class="ins-combo-option" data-value="doh">الدوحة</li>
+        <li class="ins-combo-option" data-value="kwi">الكويت</li>
+        <li class="ins-combo-option" data-value="amm">عمّان</li>
+        <li class="ins-combo-option" data-value="bey">بيروت</li>
+        <li class="ins-combo-option" data-value="cai">القاهرة</li>
+        <li class="ins-combo-option" data-value="alx">الإسكندريّة</li>
+        <li class="ins-combo-option" data-value="rba">الرباط</li>
+        <li class="ins-combo-option" data-value="tun">تونس</li>
+        <li class="ins-combo-option" data-value="mct">مسقط</li>
+        <li class="ins-combo-empty">لا مدينة بهذا الاسم</li>
+      </ul>
+    </div>
+    <span class="ins-hint">جرّب «الاسكندرية» بلا همزة ولا شدّة، أو «جده» بالهاء، أو «ابو ظبي».</span>
+  </div>
+</demo-example>
+<p>
+  القيمة تذهب إلى الحقل المخفيّ إن وُجد، ويُطلق <code>ins:combo</code> ومعه <code>value</code> و<code>label</code>.
+  والبحث في أعلى هذه الصفحة هو المكوّن نفسه.
+</p>
+
+<h2 id="date">التاريخ</h2>
+<p>
+  <code>data-ins-date</code> على حقل تاريخ أصلي داخل مجموعة. بلا سكربت هو حقل المتصفّح نفسه، وهذا بديل جيّد.
+  ومعه يصير حقلًا يكتب التاريخ بلغة الصفحة، بتقويم يبدأ أسبوعه يوم السبت في صفحة عربية، والأسهم تتنقّل
+  بين الأيّام في اتجاه الصفحة. والحقل المخفيّ يأخذ الاسم الأصلي، فيصل الخادم ما كان سيصله تمامًا:
+  <code>2026-09-23</code>.
+</p>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="p-date">تاريخ التسليم</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="p-date" type="date" data-ins-date name="delivery" value="2026-09-30" min="2026-09-23">
+    </div>
+  </div>
+</demo-example>
+
+<h3 id="date-range">مدى تاريخين</h3>
+<p><code>data-ins-date-end</code> على الأوّل و<code>data-ins-date-start</code> على الثاني يربطانهما: لا يمكن أن تنتهي الفترة قبل أن تبدأ.</p>
+<demo-example>
+  <div class="ins-field-row">
+    <div class="ins-field ins-grow">
+      <label class="ins-label" for="p-from">من</label>
+      <div class="ins-input-group">
+        <input class="ins-input" id="p-from" type="date" data-ins-date data-ins-date-end="#p-to" name="from" value="2026-09-01">
+      </div>
+    </div>
+    <div class="ins-field ins-grow">
+      <label class="ins-label" for="p-to">إلى</label>
+      <div class="ins-input-group">
+        <input class="ins-input" id="p-to" type="date" data-ins-date data-ins-date-start="#p-from" name="to" value="2026-09-23">
+      </div>
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="range">المنزلق</h2>
+<p>
+  <code>&lt;input type="range"&gt;</code> أصلي: لوحة المفاتيح والقيمة والإعلان للمنصّة، واتجاهه أيضًا — في
+  صفحة عربية الحدّ الأدنى على اليمين.
+</p>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="p-disc">نسبة الخصم · <output id="p-disc-out" class="ins-num">20</output>٪</label>
+    <input class="ins-range" id="p-disc" type="range" min="0" max="50" step="5" value="20">
+  </div>
+</demo-example>
+
+<h2 id="stepper">العدّاد</h2>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="p-guests">عدد الضيوف</label>
+    <div class="ins-input-group" style="max-inline-size:11rem">
+      <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>
+      <input class="ins-input" id="p-guests" type="number" min="1" max="12" value="4">
+      <button class="ins-spin" data-ins-spin="up" aria-label="زيادة"></button>
+    </div>
+  </div>
+</demo-example>
+
+<script>
+  document.getElementById('p-disc').addEventListener('input', function () {
+    document.getElementById('p-disc-out').value = this.value;
+  });
+</script>

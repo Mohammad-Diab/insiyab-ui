@@ -18,6 +18,7 @@
 
 import { readFile, writeFile, mkdir, readdir, copyFile, rm } from 'node:fs/promises';
 import { join, basename } from 'node:path';
+import { buildSite } from './demo/src/site.mjs';
 
 const CHECK = process.argv.includes('--check');
 const SRC_CSS = 'src/css';
@@ -253,9 +254,22 @@ if (problems.length) {
 
 const kb = (s) => `${(Buffer.byteLength(s) / 1024).toFixed(1)} KB`;
 
+/* The demo site is built from the same run, so a library change and the pages
+   that document it can never drift a build apart. Its checks — a page missing
+   from the list, a link to a page that does not exist, an unclosed example —
+   fail the build exactly as a broken stylesheet does. */
+const site = await buildSite({ check: CHECK, version: pkg.version });
+if (site.problems.length) {
+  console.error('\ndemo site failed:\n');
+  for (const p of site.problems) console.error(`  · ${p}`);
+  console.error('');
+  process.exit(1);
+}
+
 if (CHECK) {
   console.log(`check passed · ${files.length} parts · ${stats.declared} tokens declared, ${stats.used} read`);
   console.log(`               insiyab.css ${kb(css)} · min ${kb(min)} · insiyab.js ${kb(js)}`);
+  console.log(`               demo: ${site.pages} pages`);
   process.exit(0);
 }
 
@@ -277,5 +291,6 @@ console.log(`  insiyab.css      ${kb(css)}`);
 console.log(`  insiyab.min.css  ${kb(min)}`);
 console.log(`  insiyab.js       ${kb(js)}`);
 console.log(`  fonts/           ${(await readdir(join(DIST, 'fonts'))).length} files`);
+console.log(`  demo/            ${site.pages} pages`);
 console.log('\nnote: insiyab.js is shipped unminified — a hand-rolled JS minifier is not');
 console.log('      worth the risk, and a real one would break the no-dependencies rule.');

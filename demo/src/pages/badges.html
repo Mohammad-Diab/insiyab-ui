@@ -1,0 +1,62 @@
+<h2 id="pills">شارات الحالة</h2>
+<p>
+  <code>.ins-pill</code> بنقطة ونصّ، بستّ نبرات. النقطة تكبر عند المرور في كلّ الحالات، لكنّ الشارة
+  نفسها لا ترتفع إلّا إن كانت قابلة للضغط فعلًا — <code>&lt;button&gt;</code> أو <code>&lt;a&gt;</code> — لأنّ شارة
+  ترتفع تَعِد بضغطة.
+</p>
+<demo-example class="row">
+  <span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>تمّ التسليم</span>
+  <span class="ins-pill ins-pill--warn"><span class="ins-pill-dot"></span>بانتظار الدفع</span>
+  <span class="ins-pill ins-pill--bad"><span class="ins-pill-dot"></span>ملغى</span>
+  <span class="ins-pill ins-pill--info"><span class="ins-pill-dot"></span>قيد التجهيز</span>
+  <span class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>مميّز</span>
+  <span class="ins-pill"><span class="ins-pill-dot"></span>مسودّة</span>
+</demo-example>
+<demo-example class="row">
+  <button class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>حقائب</button>
+  <button class="ins-pill"><span class="ins-pill-dot"></span>ساعات</button>
+  <button class="ins-pill"><span class="ins-pill-dot"></span>إلكترونيات</button>
+</demo-example>
+
+<h2 id="count">شارات العدّ</h2>
+<p><code>.ins-badge</code> عدد صغير: في لسان، في رأس لوح، بجانب رابط.</p>
+<demo-example class="row">
+  <span class="ins-badge">12</span>
+  <span class="ins-badge ins-badge--ok">3</span>
+  <span class="ins-badge ins-badge--warn">7</span>
+  <span class="ins-badge ins-badge--bad">99+</span>
+  <span class="ins-badge ins-badge--mute">0</span>
+  <button class="ins-btn ins-btn--secondary">الرسائل <span class="ins-badge ins-badge--bad">4</span></button>
+</demo-example>
+
+<h2 id="avatar">الصورة الرمزية</h2>
+<p>حرفان أو صورة، بثلاثة مقاسات.</p>
+<demo-example class="row">
+  <span class="ins-avatar ins-avatar--sm">ع</span>
+  <span class="ins-avatar">ل ح</span>
+  <span class="ins-avatar ins-avatar--lg">س ي</span>
+</demo-example>
+
+<h2 id="money">المبالغ</h2>
+<p>
+  <code>.ins-money</code> قيمة وعملة: الرقم بخطّ Inter بأرقام متساوية العرض، والعملة بعده في اتجاه القراءة،
+  والكلّ معزول عن اتجاه السطر. <code>--pos</code> و<code>--neg</code> للتغيّر. تعمل مع أيّ عملة.
+</p>
+<demo-example class="row" >
+  <span class="ins-money"><span class="ins-money-val">1,249.00</span><span class="ins-money-cur">ر.س</span></span>
+  <span class="ins-money"><span class="ins-money-val">980</span><span class="ins-money-cur">د.إ</span></span>
+  <span class="ins-money"><span class="ins-money-val">3,500</span><span class="ins-money-cur">ج.م</span></span>
+  <span class="ins-money"><span class="ins-money-val">120.50</span><span class="ins-money-cur">USD</span></span>
+  <span class="ins-money ins-money--pos"><span class="ins-money-val">+450.00</span><span class="ins-money-cur">ر.س</span></span>
+  <span class="ins-money ins-money--neg"><span class="ins-money-val">-1,500.00</span><span class="ins-money-cur">ر.س</span></span>
+</demo-example>
+<p class="site-note">
+  المبلغ السالب هو سبب العزل: داخل نصّ عربي تنقل خوارزمية الاتجاهين إشارة الناقص إلى الطرف الآخر،
+  فيُعرض الاسترداد <span dir="ltr">1,500.00-</span> دون <code>unicode-bidi: isolate</code>.
+</p>
+
+<h2 id="num">الأرقام</h2>
+<p><code>.ins-num</code> لأيّ رقم ليس مبلغًا — رقم طلب، هاتف، تاريخ، رمز — ليُكتب بالخطّ والعزل نفسيهما.</p>
+<demo-example>
+  <p class="ins-m-0">الطلب <span class="ins-num">#40218</span> · الهاتف <span class="ins-num">+966 50 123 4567</span> · <span class="ins-num">2026-09-23</span></p>
+</demo-example>

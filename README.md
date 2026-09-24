@@ -32,13 +32,14 @@
 > **Status: 0.3.0.** The core is in place: the application shell, the layout,
 > type and utility layer, the components an application form or dashboard needs
 > (pickers, steps and confirmation included), and a motion layer across all of
-> them. The demo page shows the lot, in Arabic, inside the shell. Still to come:
+> them. The demo is a documentation site — one page per topic, in Arabic, inside
+> the shell, with every example's markup printed under it. Still to come:
 > the plugins (command palette, file upload, Hijri calendar and the like) and the
 > React and Jinja wrappers. See
 > [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
-> by design — the demo page already does — and the rest is a writing job worth
+> by design — the demo site already does — and the rest is a writing job worth
 > doing properly once the vocabulary has fully settled rather than twice.
 
 ## Getting started
@@ -146,8 +147,8 @@ brand's readable shade flips direction entirely.
 
 ## What is in it
 
-Run `node serve.mjs` and open the demo — every component below is on that one
-page, in Arabic, in both themes.
+Run `node serve.mjs` and open the demo — every component below has its own page
+there, in Arabic, in both themes, with the markup of each example under it.
 
 | Group | Classes |
 |---|---|
@@ -446,10 +447,25 @@ scroller's `scroll` event never reaches `window`.
 Node 18+ for the build; nothing else, and no dependencies at all.
 
 ```sh
-node build.mjs           # src/css/*.css + src/js → dist/
+node build.mjs           # src/css/*.css + src/js → dist/, and demo/src → demo/
 node build.mjs --check    # build and verify, write nothing
 node serve.mjs            # then open http://localhost:4173
 ```
+
+**The demo is generated.** Edit `demo/src/`, never the `demo/*.html` it writes:
+
+```
+demo/src/site.mjs         the page list — sidebar order, titles, search terms
+demo/src/layout.html      the shell every page is poured into
+demo/src/pages/<slug>.html one fragment per page, content only
+demo/assets/              the docs site's own CSS and JS — not part of the library
+```
+
+In a fragment, `<demo-example>…</demo-example>` renders its markup live and prints
+the same markup, highlighted, under it — so an example and its listing cannot
+drift apart. `<demo-code lang="js">` is a listing on its own. The build fails on a
+page missing from the list, a link to a page that does not exist, an icon the
+sprite does not have, or a section heading with no `id`.
 
 **Serve the demo, do not open the file.** Over `file://` the self-hosted faces
 count as cross-origin, the browser blocks them, and the typography silently falls

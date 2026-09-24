@@ -1,0 +1,67 @@
+<h2 id="basic">الألسنة</h2>
+<p>
+  <code>.ins-tablist</code> فيه أزرار <code>.ins-tab</code>، كلّ زرّ يسمّي لوحه بـ <code>data-ins-tab</code>.
+  السكربت يضيف الأدوار وأسهم لوحة المفاتيح — وفي العربية السهم الأيسر هو «التالي» لأنّه يشير إليه.
+  ولسان هو رابط عاديّ إلى صفحة أخرى تتركه المكتبة وشأنه.
+</p>
+<demo-example>
+  <div class="ins-tablist" aria-label="إعدادات المتجر">
+    <button class="ins-tab" data-ins-tab="#t-general">عام</button>
+    <button class="ins-tab" data-ins-tab="#t-payments">الدفع <span class="ins-badge ins-badge--warn">1</span></button>
+    <button class="ins-tab" data-ins-tab="#t-shipping">الشحن</button>
+    <a class="ins-tab" href="color.html">الهويّة</a>
+  </div>
+  <div class="ins-tabpanel" id="t-general">
+    <div class="ins-panel"><div class="ins-panel-body ins-stack ins-gap-2">
+      <b>عام</b>
+      <span class="ins-muted ins-text-sm">اسم المتجر وعملته ومنطقته الزمنية.</span>
+    </div></div>
+  </div>
+  <div class="ins-tabpanel" id="t-payments">
+    <div class="ins-panel"><div class="ins-panel-body ins-stack ins-gap-2">
+      <b>الدفع</b>
+      <span class="ins-muted ins-text-sm">وسيلة واحدة تنتظر التفعيل.</span>
+    </div></div>
+  </div>
+  <div class="ins-tabpanel" id="t-shipping">
+    <div class="ins-panel"><div class="ins-panel-body ins-stack ins-gap-2">
+      <b>الشحن</b>
+      <span class="ins-muted ins-text-sm">المناطق والأسعار ومدد التوصيل.</span>
+    </div></div>
+  </div>
+</demo-example>
+<p class="site-note">
+  <b>بلا جافاسكربت</b> تظهر الألواح الثلاثة متتالية — المحتوى كلّه موجود، ولا شيء مخفيّ إلى الأبد لأنّ
+  سكربتًا لم يُحمَّل.
+</p>
+
+<h2 id="segmented">بشكل الشريط المقسّم</h2>
+<p>الآلية نفسها على <code>.ins-seg</code>، لتبديل عرض صغير داخل لوح.</p>
+<demo-example>
+  <div class="ins-panel">
+    <div class="ins-panel-head">
+      <h3 class="ins-panel-title">المبيعات</h3>
+      <div class="ins-panel-actions">
+        <div class="ins-seg">
+          <button data-ins-tab="#s-day">اليوم</button>
+          <button data-ins-tab="#s-week">الأسبوع</button>
+          <button data-ins-tab="#s-month">الشهر</button>
+        </div>
+      </div>
+    </div>
+    <div class="ins-panel-body">
+      <div class="ins-tabpanel" id="s-day"><span class="ins-money"><span class="ins-money-val">4,820</span><span class="ins-money-cur">ر.س</span></span> <span class="ins-muted">من ٣١ طلبًا</span></div>
+      <div class="ins-tabpanel" id="s-week"><span class="ins-money"><span class="ins-money-val">31,405</span><span class="ins-money-cur">ر.س</span></span> <span class="ins-muted">من ٢١٢ طلبًا</span></div>
+      <div class="ins-tabpanel" id="s-month"><span class="ins-money"><span class="ins-money-val">128,960</span><span class="ins-money-cur">ر.س</span></span> <span class="ins-muted">من ٨٩٤ طلبًا</span></div>
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="api">من الشيفرة</h2>
+<demo-code lang="js">
+Insiyab.tab('#t-shipping');     // يختار اللسان الذي يسمّي هذا اللوح
+
+document.addEventListener('ins:tab', (e) => {
+  console.log(e.detail.tab, e.detail.panel);
+});
+</demo-code>

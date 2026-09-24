@@ -1,0 +1,118 @@
+<h2 id="basic">الحوار</h2>
+<p>
+  عنصر <code>&lt;dialog&gt;</code> حقيقي: الطبقة العليا تضعه فوق كلّ شيء دون <code>z-index</code>، والتركيز محبوس
+  فيه، و<kbd class="ins-kbd">Esc</kbd> يغلقه ويعيد التركيز إلى الزرّ الذي فتحه — كلّ ذلك من المتصفّح. زرّ فيه
+  <code>data-ins-dialog</code> يفتحه، و<code>data-ins-dialog-close</code> داخله يغلقه.
+</p>
+<demo-example class="row">
+  <button class="ins-btn ins-btn--primary" data-ins-dialog="#invite"><svg class="ico"><use href="#i-users"/></svg>دعوة عضو</button>
+
+  <dialog class="ins-dialog" id="invite">
+    <div class="ins-dialog-head">
+      <span class="ins-panel-ico"><svg class="ico"><use href="#i-mail"/></svg></span>
+      <h3 class="ins-dialog-title">دعوة عضو إلى الفريق</h3>
+      <button class="ins-dialog-x" data-ins-dialog-close aria-label="إغلاق"><svg class="ico"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="ins-dialog-body">
+      <div class="ins-field">
+        <label class="ins-label" for="d-email">البريد الإلكتروني</label>
+        <input class="ins-input" id="d-email" type="email" dir="ltr" placeholder="name@example.com">
+      </div>
+      <div class="ins-field">
+        <label class="ins-label" for="d-role">الدور</label>
+        <select class="ins-select" id="d-role"><option>محرّر</option><option>مدير</option><option>مشاهد فقط</option></select>
+      </div>
+      <label class="ins-switch ins-switch--card">
+        <input type="checkbox" checked><span class="ins-switch-track"></span>
+        <span class="ins-switch-text">
+          <span class="ins-switch-label">إرسال رسالة ترحيب</span>
+          <span class="ins-switch-desc">مع رابط لدليل البدء</span>
+        </span>
+      </label>
+    </div>
+    <div class="ins-dialog-foot">
+      <button class="ins-btn ins-btn--bare" data-ins-dialog-close>إلغاء</button>
+      <button class="ins-btn ins-btn--primary" data-ins-dialog-close data-ins-toast="أُرسلت الدعوة" data-ins-tone="ok">إرسال الدعوة</button>
+    </div>
+  </dialog>
+</demo-example>
+<p class="site-note">
+  النقر خارج الحوار <b>لا</b> يغلقه، عمدًا: الحوار غالبًا نموذج، ونقرة شاردة يجب ألّا تُضيع ما كُتب فيه.
+  الدرج يُغلق بالنقر خارجه، لأنّه ليس كذلك.
+</p>
+
+<h2 id="sizes">المقاسات</h2>
+<p><code>--sm</code> لسؤال قصير، و<code>--lg</code> لمحتوى عريض كجدول.</p>
+<demo-example class="row">
+  <button class="ins-btn ins-btn--secondary" data-ins-dialog="#dlg-sm">صغير</button>
+  <button class="ins-btn ins-btn--secondary" data-ins-dialog="#dlg-lg">كبير</button>
+
+  <dialog class="ins-dialog ins-dialog--sm" id="dlg-sm">
+    <div class="ins-dialog-head">
+      <h3 class="ins-dialog-title">أرشفة الطلب؟</h3>
+      <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
+    </div>
+    <div class="ins-dialog-body"><p class="ins-m-0">يبقى الطلب في السجلّ، ويختفي من القائمة الرئيسية.</p></div>
+    <div class="ins-dialog-foot">
+      <button class="ins-btn ins-btn--bare" data-ins-dismiss>إلغاء</button>
+      <button class="ins-btn ins-btn--primary ins-ms-auto" data-ins-dismiss>أرشفة</button>
+    </div>
+  </dialog>
+
+  <dialog class="ins-dialog ins-dialog--lg" id="dlg-lg">
+    <div class="ins-dialog-head">
+      <h3 class="ins-dialog-title">تفاصيل الطلب <span class="ins-num">#40218</span></h3>
+      <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
+    </div>
+    <div class="ins-dialog-body">
+      <div class="ins-table-wrap">
+        <table class="ins-table">
+          <thead><tr><th>المنتج</th><th class="ins-num">الكمّية</th><th class="ins-num">السعر</th></tr></thead>
+          <tbody>
+            <tr><td>حقيبة ظهر جلدية</td><td class="ins-num">1</td><td class="ins-num">249.00</td></tr>
+            <tr><td>حافظة بطاقات</td><td class="ins-num">2</td><td class="ins-num">90.00</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="ins-dialog-foot">
+      <button class="ins-btn ins-btn--secondary" data-ins-dismiss><svg class="ico"><use href="#i-download"/></svg>الفاتورة</button>
+      <button class="ins-btn ins-btn--primary ins-ms-auto" data-ins-dismiss>تمّ</button>
+    </div>
+  </dialog>
+</demo-example>
+
+<h2 id="confirm">التأكيد</h2>
+<p>
+  <code>data-ins-confirm</code> على زرّ أو رابط أو نموذج يسأل قبل أن يمضي الإجراء — والإجراء يمضي كما كان
+  سيمضي، بلا شيفرة منك. والزرّ المصمَّم خطرًا يحصل على زرّ تأكيد أحمر تلقائيًا. ومن الجافاسكربت،
+  <code>Insiyab.confirm()</code> يعيد وعدًا بـ <code>true</code> أو <code>false</code>.
+</p>
+<demo-example class="row">
+  <button class="ins-btn ins-btn--ghost-danger" id="del-btn" data-ins-confirm="حذف المنتج نهائيًا؟ لا يمكن التراجع." data-ins-confirm-ok="حذف"><svg class="ico"><use href="#i-trash"/></svg>حذف المنتج</button>
+  <button class="ins-btn ins-btn--secondary" id="archive-btn">أرشفة ٣ طلبات</button>
+</demo-example>
+<demo-code lang="js">
+const yes = await Insiyab.confirm('أرشفة ٣ طلبات؟', { title: 'تأكيد الأرشفة', confirm: 'أرشفة' });
+if (yes) archive(selected);
+</demo-code>
+
+<h2 id="api">من الشيفرة</h2>
+<demo-code lang="js">
+Insiyab.dialog('#invite', 'open');
+Insiyab.dialog('#invite', 'close');
+Insiyab.dialog('#invite');           // تبديل
+</demo-code>
+
+<script>
+  /* data-ins-confirm lets the click through only once the answer is yes, so a
+     plain click handler here is the "yes" branch. */
+  document.getElementById('del-btn').addEventListener('click', function () {
+    Insiyab.toast('حُذف المنتج', 'ok');
+  });
+  document.getElementById('archive-btn').addEventListener('click', function () {
+    Insiyab.confirm('أرشفة ٣ طلبات؟', { title: 'تأكيد الأرشفة', confirm: 'أرشفة' }).then(function (yes) {
+      Insiyab.toast(yes ? 'أُرشفت الطلبات' : 'أُلغيت الأرشفة', yes ? 'ok' : 'info');
+    });
+  });
+</script>

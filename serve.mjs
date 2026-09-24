@@ -34,7 +34,15 @@ const TYPES = {
 
 createServer(async (req, res) => {
   const url = decodeURIComponent((req.url || '/').split('?')[0]);
-  const rel = url === '/' ? 'demo/index.html' : url.replace(/^\/+/, '');
+
+  /* The demo is a set of pages linking to each other by relative path, so it has
+     to be *at* /demo/ — serving its index at / would resolve `buttons.html` to
+     /buttons.html and every link would 404. */
+  if (url === '/' || url === '/demo') {
+    res.writeHead(302, { location: '/demo/' }).end();
+    return;
+  }
+  const rel = url.replace(/^\/+/, '') + (url.endsWith('/') ? 'index.html' : '');
 
   /* Serving the repository root means path traversal is worth one line of care,
      even on localhost. */

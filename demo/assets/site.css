@@ -1,0 +1,500 @@
+/* ==========================================================================
+   Insiyab · documentation site furniture
+   ==========================================================================
+
+   Only what a docs site needs and the library does not ship: the page column,
+   example frames, code listings, the pager, search, and the viewer's
+   customiser in the top bar. Everything reads the library's tokens, so the
+   whole site retints with the brand colour and follows the theme.
+
+   Nothing here is part of Insiyab. A page that copies an example gets the
+   library's classes and none of these.
+   ========================================================================== */
+
+:root {
+  --hl-t: #9d174d;
+  --hl-a: #a14b06;
+  --hl-s: #047857;
+  --hl-c: #64748b;
+  --hl-k: #6d28d9;
+  --hl-n: #1d4ed8;
+  --code-bg: rgba(255, 255, 255, .62);
+  --code-bd: rgba(15, 23, 42, .08);
+  --view-bd: rgba(15, 23, 42, .10);
+}
+:root[data-ins-theme="dark"] {
+  --hl-t: #f9a8d4;
+  --hl-a: #fcd34d;
+  --hl-s: #6ee7b7;
+  --hl-c: #94a3b8;
+  --hl-k: #c4b5fd;
+  --hl-n: #93c5fd;
+  --code-bg: rgba(0, 0, 0, .28);
+  --code-bd: rgba(255, 255, 255, .08);
+  --view-bd: rgba(255, 255, 255, .10);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) {
+    --hl-t: #f9a8d4;
+    --hl-a: #fcd34d;
+    --hl-s: #6ee7b7;
+    --hl-c: #94a3b8;
+    --hl-k: #c4b5fd;
+    --hl-n: #93c5fd;
+    --code-bg: rgba(0, 0, 0, .28);
+    --code-bd: rgba(255, 255, 255, .08);
+    --view-bd: rgba(255, 255, 255, .10);
+  }
+}
+
+/* Arabic inside a code listing. Cascadia Mono — first in the library's mono stack
+   on Windows — carries its own fixed-width Arabic, which draws every letter at one
+   advance and breaks the joins. A face that covers the Arabic block and nothing
+   else, put in front of the mono stack, takes the Arabic and lets every Latin
+   character fall through to the monospace behind it. Same file the library
+   already loads, so it costs nothing. */
+@font-face {
+  font-family: 'site-code-arabic';
+  src: url('../../dist/fonts/tajawal-arabic-400.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFC;
+}
+:root { --site-code-font: 'site-code-arabic', var(--ins-font-mono); }
+
+.ico {
+  inline-size: 1em;
+  block-size: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 auto;
+}
+
+/* --------------------------------------------------------------- page column */
+.site-page {
+  max-inline-size: 60rem;
+  margin-inline: auto;
+  padding-block: .5rem 1rem;
+}
+.site-lead { max-inline-size: 62ch; }
+
+.site-doc .site-page > h2 {
+  margin: 3rem 0 .75rem;
+  font-size: var(--ins-fs-h3);
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--ins-text-1);
+  scroll-margin-block-start: 5.5rem;
+}
+.site-doc .site-page > h3 {
+  margin: 1.75rem 0 .5rem;
+  font-size: var(--ins-fs-lg);
+  font-weight: 700;
+  color: var(--ins-text-1);
+  scroll-margin-block-start: 5.5rem;
+}
+.site-doc .site-page > p,
+.site-doc .site-page > ul,
+.site-doc .site-page > ol {
+  margin: 0 0 1rem;
+  max-inline-size: 72ch;
+  color: var(--ins-text-2);
+  line-height: 1.9;
+}
+.site-doc .site-page > ul,
+.site-doc .site-page > ol { padding-inline-start: 1.25rem; }
+.site-doc .site-page > ul li,
+.site-doc .site-page > ol li { margin-block-end: .25rem; }
+.site-page strong { color: var(--ins-text-1); }
+/* No face here ships an italic, and a synthesised one leans Arabic the wrong way —
+   so emphasis is colour, as it is inside .ins-prose. */
+.site-page em { font-style: normal; color: var(--ins-text-1); }
+
+.site-page :not(pre) > code {
+  font-family: var(--site-code-font);
+  font-size: .86em;
+  direction: ltr;
+  unicode-bidi: isolate;
+  padding: .1em .4em;
+  border-radius: 6px;
+  background: var(--ins-ctl-bg);
+  border: 1px solid var(--code-bd);
+  color: var(--ins-text-1);
+  white-space: nowrap;
+}
+
+/* A side note: a hairline and a brand edge, deliberately quieter than an alert. */
+.site-note {
+  margin: 0 0 1.25rem;
+  padding: .875rem 1.125rem;
+  max-inline-size: 72ch;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-tone-brand-bd);
+  border-inline-start-width: 3px;
+  background: var(--ins-tone-brand-bg);
+  color: var(--ins-text-2);
+  line-height: 1.85;
+  font-size: var(--ins-fs-sm);
+}
+.site-note b { color: var(--ins-text-1); }
+.site-note--warn { border-color: var(--ins-tone-warn-bd); background: var(--ins-tone-warn-bg); }
+
+/* --------------------------------------------------------------- on this page */
+.site-toc {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .375rem;
+  margin: -.5rem 0 1.5rem;
+}
+.site-toc-label { font-size: var(--ins-fs-xs); font-weight: 700; color: var(--ins-text-3); margin-inline-end: .25rem; }
+.site-toc a {
+  font-size: .75rem;
+  font-weight: 700;
+  padding: .3rem .75rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-ctl-bg);
+  border: 1px solid var(--ins-line);
+  color: var(--ins-text-2);
+  text-decoration: none;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease), transform var(--ins-t-pop) var(--ins-ease);
+}
+.site-toc a:hover { background: var(--ins-ctl-bg-hover); color: var(--ins-text-1); transform: translateY(-1px); }
+
+/* --------------------------------------------------------------- example */
+/* The view is NOT a glass surface, on purpose: the library de-nests glass inside
+   glass, so a frosted frame would flatten every panel and card put in it. It is a
+   hairline window onto the page's own ground, which is what the components are
+   designed to sit on. */
+.dx { margin: 0 0 1.5rem; }
+.dx-view {
+  position: relative;
+  padding: 1.5rem;
+  border: 1px solid var(--view-bd);
+  border-radius: var(--ins-r-lg) var(--ins-r-lg) 0 0;
+  background: rgba(var(--ins-primary-rgb), .025);
+}
+.dx--bare .dx-view { border-radius: var(--ins-r-lg); }
+/* Not on a <dialog>: a modal is centred by the UA's `margin: auto`, and zeroing
+   one side of it pins the dialog to the bottom of the viewport. */
+.dx-view > :first-child:not(dialog) { margin-block-start: 0; }
+.dx-view > :last-child:not(dialog) { margin-block-end: 0; }
+
+.dx-view.row { display: flex; flex-wrap: wrap; align-items: center; gap: .625rem; }
+.dx-view.stack { display: flex; flex-direction: column; gap: .75rem; }
+.dx-view.center { display: grid; place-items: center; min-block-size: 9rem; }
+.dx-view.flush { padding: 0; overflow: hidden; }
+.dx-view.tall { min-block-size: 20rem; }
+.dx-view.narrow > * { max-inline-size: 30rem; }
+
+.dx-code {
+  position: relative;
+  border: 1px solid var(--view-bd);
+  border-block-start: 0;
+  border-radius: 0 0 var(--ins-r-lg) var(--ins-r-lg);
+  background: var(--code-bg);
+}
+/* A listing on its own, not under an example. */
+.site-page > .dx-code,
+.dx-code:first-child { border-block-start: 1px solid var(--view-bd); border-radius: var(--ins-r-lg); margin-block-end: 1.5rem; }
+.dx-code pre {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  max-block-size: 26rem;
+  font-family: var(--site-code-font);
+  font-size: .8125rem;
+  line-height: 1.7;
+  tab-size: 2;
+  text-align: left;
+  color: var(--ins-text-1);
+}
+.dx-code code { font: inherit; background: none; border: 0; padding: 0; white-space: pre; }
+.dx-copy {
+  position: absolute;
+  inset-block-start: .5rem;
+  inset-inline-start: .5rem;
+  z-index: 1;
+  padding: .25rem .625rem;
+  border-radius: var(--ins-r-pill);
+  border: 1px solid var(--code-bd);
+  background: var(--ins-surface);
+  color: var(--ins-text-2);
+  font: 700 .6875rem var(--ins-font-body);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--ins-t-pop) var(--ins-ease), background var(--ins-t-pop) var(--ins-ease);
+}
+.dx-code:hover .dx-copy,
+.dx-copy:focus-visible { opacity: 1; }
+.dx-copy:hover { background: var(--ins-surface-hover); color: var(--ins-text-1); }
+.dx-copy.is-done { color: var(--ins-tone-ok); opacity: 1; }
+@media (hover: none) { .dx-copy { opacity: 1; } }
+
+.hl-t { color: var(--hl-t); }
+.hl-a { color: var(--hl-a); }
+.hl-s { color: var(--hl-s); }
+.hl-c { color: var(--hl-c); font-style: normal; }
+.hl-k { color: var(--hl-k); }
+.hl-n { color: var(--hl-n); }
+
+/* A live log inside an example: what the page's own events said. */
+.site-log {
+  margin: 0;
+  min-block-size: 8.5rem;
+  padding: .875rem 1rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--code-bd);
+  background: var(--code-bg);
+  font: .75rem/1.8 var(--site-code-font);
+  color: var(--ins-text-2);
+  text-align: left;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* --------------------------------------------------------------- reference tables */
+.site-ref { margin-block-end: 1.5rem; }
+.site-ref td:first-child code { white-space: nowrap; }
+.site-ref td { vertical-align: top; line-height: 1.7; }
+
+/* --------------------------------------------------------------- pager */
+.site-pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-block-start: 4rem;
+  padding-block-start: 1.5rem;
+  border-block-start: 1px solid var(--ins-line);
+}
+.site-pager-link {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-rim);
+  background: var(--ins-glass);
+  box-shadow: var(--ins-sh-sm), var(--ins-bevel-dim);
+  text-decoration: none;
+  transition: transform var(--ins-t-pop) var(--ins-ease), box-shadow var(--ins-t-pop) var(--ins-ease), background var(--ins-t-pop) var(--ins-ease);
+}
+.site-pager-link:hover { transform: translateY(-2px); background: var(--ins-glass-hover); box-shadow: var(--ins-sh-md), var(--ins-bevel); }
+.site-pager-link--next { text-align: end; grid-column: 2; }
+.site-pager-dir { font-size: var(--ins-fs-xs); font-weight: 700; color: var(--ins-text-3); }
+.site-pager-title { font-weight: 700; color: var(--ins-primary-darker); }
+:root[data-ins-theme="dark"] .site-pager-title { color: var(--ins-text-1); }
+@media (max-width: 34rem) { .site-pager { grid-template-columns: 1fr; } .site-pager-link--next { grid-column: auto; } }
+
+/* --------------------------------------------------------------- top bar */
+.site-version { font-weight: 600; color: var(--ins-text-2); font-size: .8125rem; }
+
+.site-custom > summary { list-style: none; }
+.site-custom > summary::-webkit-details-marker { display: none; }
+.site-custom-btn { cursor: pointer; padding-inline: .625rem .875rem; }
+.site-custom-dot {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  box-shadow: 0 0 0 2px var(--ins-surface), 0 2px 6px rgba(var(--ins-primary-rgb), .45);
+}
+.site-custom-chev { color: var(--ins-text-3); transition: transform var(--ins-t-pop) var(--ins-ease); }
+.site-custom[open] .site-custom-chev { transform: rotate(180deg); }
+.site-custom-body { min-inline-size: 16rem; }
+.site-custom-body .ins-pop-label { padding-inline: .25rem; }
+.site-swatches { display: flex; flex-wrap: wrap; gap: .5rem; padding: .25rem .25rem .75rem; }
+.site-swatch {
+  inline-size: 1.875rem;
+  block-size: 1.875rem;
+  border-radius: 50%;
+  border: 2px solid var(--ins-surface);
+  background: var(--c);
+  box-shadow: var(--ins-sh-sm);
+  cursor: pointer;
+  transition: transform var(--ins-t-pop) var(--ins-ease-spring);
+}
+.site-swatch:hover { transform: scale(1.12); }
+.site-swatch:focus-visible { outline: none; box-shadow: var(--ins-focus-ring); }
+.site-swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--c), var(--ins-sh-sm); }
+.site-dir { inline-size: 100%; margin: 0 .25rem .5rem; inline-size: calc(100% - .5rem); }
+.site-dir > button { flex: 1; }
+
+.site-theme-sun { display: none; }
+:root[data-ins-theme="dark"] .site-theme-sun { display: block; }
+:root[data-ins-theme="dark"] .site-theme-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .site-theme-sun { display: block; }
+  :root:not([data-ins-theme="light"]) .site-theme-moon { display: none; }
+}
+
+/* --------------------------------------------------------------- search */
+.site-search { inline-size: min(36rem, calc(100vw - 2rem)); }
+.site-search .ins-dialog-body { padding: 1rem; }
+/* A palette, not a dropdown: the results are the dialog's content, so the list
+   stays in the flow and stays visible whether or not the combobox counts itself
+   open. The keyboard, the matching and the choosing are all the library's. */
+.site-search .ins-combo-list {
+  position: static;
+  display: block;
+  margin-block-start: .75rem;
+  max-block-size: min(24rem, 60vh);
+  border: 0;
+  box-shadow: none;
+  background: none;
+  padding: 0;
+}
+.site-search .ins-combo-option { gap: .625rem; padding: .625rem .75rem; }
+.site-search .ins-combo-option .ico { color: var(--ins-text-3); font-size: 1.05rem; }
+.site-search .ins-combo-option[hidden] { display: none; }
+.site-hit-title { font-weight: 700; }
+.site-hit-meta { font-family: var(--ins-font-body-en); font-size: var(--ins-fs-xs); color: var(--ins-text-3); }
+.site-hit-group { margin-inline-start: auto; font-size: var(--ins-fs-xs); color: var(--ins-text-3); }
+
+/* --------------------------------------------------------------- helpers used by examples */
+.demo-box {
+  padding: .75rem;
+  border-radius: var(--ins-r-sm);
+  text-align: center;
+  background: var(--ins-tone-brand-bg);
+  border: 1px dashed var(--ins-tone-brand-bd);
+  color: var(--ins-tone-brand);
+  font: 700 .75rem var(--ins-font-body-en);
+}
+.demo-box--tall { min-block-size: 5rem; display: grid; place-items: center; }
+.demo-frame { border: 1px dashed var(--ins-ctl-bd); border-radius: var(--ins-r-md); padding-block: .75rem; }
+.sp-sq { display: block; inline-size: var(--s); block-size: var(--s); background: var(--ins-tone-brand-soft); border-radius: 2px; }
+.sp-key { min-inline-size: 2.5em; text-align: center; }
+
+.radii { display: flex; flex-wrap: wrap; gap: .75rem; }
+.radii div {
+  inline-size: 4.5rem;
+  block-size: 4.5rem;
+  display: grid;
+  place-items: center;
+  background: var(--ins-tone-brand-bg);
+  border: 1px solid var(--ins-tone-brand-bd);
+  color: var(--ins-tone-brand);
+  font: 700 .75rem var(--ins-font-body-en);
+}
+.tones { display: grid; gap: .625rem; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); }
+.tone-chip { font-size: .75rem; font-weight: 700; }
+.tone-chip i { display: block; block-size: 2.75rem; border-radius: var(--ins-r-xs); border: 1px solid; margin-block-end: .375rem; }
+
+.brand-swatches { display: flex; flex-wrap: wrap; gap: .625rem; }
+.brand-swatch {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .375rem .875rem .375rem .375rem;
+  border-radius: var(--ins-r-pill);
+  border: 1px solid var(--ins-line);
+  background: var(--ins-ctl-bg);
+  font: 700 .75rem var(--ins-font-body-en);
+  color: var(--ins-text-2);
+  cursor: pointer;
+  transition: transform var(--ins-t-pop) var(--ins-ease), background var(--ins-t-pop) var(--ins-ease);
+}
+[dir="rtl"] .brand-swatch { padding: .375rem .375rem .375rem .875rem; }
+.brand-swatch:hover { transform: translateY(-2px); background: var(--ins-ctl-bg-hover); }
+.brand-swatch i { inline-size: 1.5rem; block-size: 1.5rem; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08); }
+
+.token-grid { display: grid; gap: .5rem; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); }
+.token {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  padding: .5rem;
+  border-radius: var(--ins-r-sm);
+  border: 1px solid var(--ins-line);
+  background: var(--ins-ctl-bg);
+  font: 600 .75rem var(--ins-font-mono);
+  direction: ltr;
+  color: var(--ins-text-2);
+  overflow: hidden;
+}
+.token i { flex: 0 0 auto; inline-size: 2rem; block-size: 2rem; border-radius: var(--ins-r-xs); background: var(--c); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08); }
+.token span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* --------------------------------------------------------------- home */
+.site-hero {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: center;
+  padding-block: 2rem 1rem;
+}
+.site-hero-mark {
+  --ins-mark: 3.5rem;
+  font-size: 1.375rem;
+  border-radius: var(--ins-r-md);
+  margin-block-end: 1.25rem;
+}
+.site-hero h1 {
+  margin: 0 0 .75rem;
+  font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+  line-height: 1.2;
+  font-weight: 800;
+  color: var(--ins-text-1);
+}
+.site-hero h1 span { color: var(--ins-primary-darker); }
+:root[data-ins-theme="dark"] .site-hero h1 span { color: var(--ins-primary); }
+.site-hero .ins-lead { margin: 0 0 1.5rem; max-inline-size: 36rem; }
+.site-hero-actions { display: flex; flex-wrap: wrap; gap: .625rem; margin-block-end: 1.25rem; }
+.site-install {
+  display: block;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  margin: 0;
+  padding: .75rem 1rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--code-bd);
+  background: var(--code-bg);
+  font: .8125rem/1.8 var(--site-code-font);
+  text-align: left;
+  overflow-x: auto;
+}
+.site-install code { font: inherit; white-space: pre; color: var(--ins-text-1); }
+
+/* The preview: a small composed screen, showing the design rather than describing it. */
+.site-preview { display: grid; gap: .75rem; }
+.site-preview .ins-panel { margin: 0; }
+
+.site-features {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  margin-block: 2.5rem;
+}
+.site-feature { padding: 1.25rem; }
+.site-feature h3 { margin: .75rem 0 .375rem; font-size: var(--ins-fs-lg); }
+.site-feature p { margin: 0; color: var(--ins-text-2); font-size: var(--ins-fs-sm); line-height: 1.85; }
+.site-feature .ins-panel-ico { font-size: 1.1rem; }
+
+.site-home h2.site-section {
+  margin: 3rem 0 1rem;
+  font-size: var(--ins-fs-h3);
+  color: var(--ins-text-1);
+}
+.site-groups { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr)); }
+.site-group-card {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .875rem 1rem;
+  text-decoration: none;
+  color: var(--ins-text-1);
+}
+.site-group-card b { display: block; font-size: var(--ins-fs-md); }
+.site-group-card small { display: block; color: var(--ins-text-3); font-size: var(--ins-fs-xs); }
+
+@media (max-width: 900px) {
+  .site-hero { grid-template-columns: minmax(0, 1fr); padding-block-start: 1rem; }
+}
+
+/* A directional icon points the way the reading goes: "forward" is left in Arabic.
+   On the <use>, not the <svg>, so the button's own hover nudge on the svg still works. */
+[dir="rtl"] use[href="#i-arrow"] { transform: scaleX(-1); transform-origin: center; transform-box: fill-box; }

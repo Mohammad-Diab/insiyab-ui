@@ -1,0 +1,138 @@
+<h2 id="try">جرّب لونًا</h2>
+<p>
+  كلّ زرّ هنا يستدعي <code>Insiyab.brand(hex)</code> بقيمة واحدة، والمعاينة تحته — والصفحة كلّها —
+  تتلوّن منها. أو اختر أيّ لون من المنتقي. يبقى اختيارك معك في صفحات التوثيق الأخرى.
+</p>
+<demo-example code="none" class="stack">
+  <div class="brand-swatches">
+    <button class="brand-swatch" data-brand="#0F766E" style="--c:#0F766E"><i></i><bdi>#0F766E</bdi></button>
+    <button class="brand-swatch" data-brand="#1D4ED8" style="--c:#1D4ED8"><i></i><bdi>#1D4ED8</bdi></button>
+    <button class="brand-swatch" data-brand="#9B2C5E" style="--c:#9B2C5E"><i></i><bdi>#9B2C5E</bdi></button>
+    <button class="brand-swatch" data-brand="#4C1D95" style="--c:#4C1D95"><i></i><bdi>#4C1D95</bdi></button>
+    <button class="brand-swatch" data-brand="#B45309" style="--c:#B45309"><i></i><bdi>#B45309</bdi></button>
+    <button class="brand-swatch" data-brand="#C9A063" style="--c:#C9A063"><i></i><bdi>#C9A063</bdi></button>
+    <label class="brand-swatch"><input type="color" id="brand-pick" value="#0F766E" aria-label="لون مخصّص" style="inline-size:1.5rem;block-size:1.5rem;border:0;padding:0;background:none;cursor:pointer">لون آخر</label>
+  </div>
+  <div class="ins-cols-2">
+    <div class="ins-panel">
+      <div class="ins-panel-head">
+        <span class="ins-panel-ico"><svg class="ico"><use href="#i-palette"/></svg></span>
+        <h3 class="ins-panel-title">معاينة</h3>
+      </div>
+      <div class="ins-panel-body ins-stack">
+        <div class="ins-row">
+          <button class="ins-btn ins-btn--primary">حفظ</button>
+          <button class="ins-btn ins-btn--secondary">معاينة</button>
+          <span class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>مميّز</span>
+        </div>
+        <label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مفتاح مفعّل</span></span></label>
+        <progress class="ins-progress" value="62" max="100">62%</progress>
+        <input class="ins-input" placeholder="انقر هنا لترى حلقة التركيز">
+      </div>
+    </div>
+    <div class="ins-panel">
+      <div class="ins-panel-head"><h3 class="ins-panel-title">القيم المشتقّة</h3></div>
+      <div class="ins-panel-body">
+        <div class="token-grid" id="tokens"></div>
+        <p class="ins-muted ins-text-xs ins-mb-0 ins-mt-3" id="label-note"></p>
+      </div>
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="set">التعيين</h2>
+<p>بسمة على <code>&lt;html&gt;</code>، أو بالدالّة وقت التشغيل. كلاهما يشتقّ المجموعة ويطبّقها.</p>
+<demo-code lang="html">
+<html lang="ar" dir="rtl" data-ins-primary="#0F766E">
+</demo-code>
+<demo-code lang="js">
+Insiyab.brand('#0F766E');   // يطبّق
+Insiyab.brand();            // يعيد اللون الحالي
+</demo-code>
+
+<h2 id="measured">لون النصّ مقيس، لا مفترَض</h2>
+<p>
+  كتابة الأبيض على الزرّ الرئيسي دائمًا خطأ حقيقي مع لون متوسّط الإضاءة: الأبيض على الذهبي
+  <code>#C9A063</code> تباينه قرابة <b>٢٫٤ إلى ١</b> — غير مقروء. لذلك تقيس <code>brand()</code> التباين
+  مع الأبيض ومع الأسود القريب وتأخذ الأفضل، ثمّ تُبعد الطرف الثاني من التدرّج <em>عن</em> لون النصّ،
+  فيحمل الزرّ كلّه نصّه بالبناء لا بالحظّ. جرّب الذهبي أعلاه وانظر إلى زرّ «حفظ».
+</p>
+
+<h2 id="server">من الخادم</h2>
+<p>
+  نمط مجرَّب في تطبيق حقيقي: الخادم يعيد لون العميل مع جلسة الدخول، والصفحة تطبّقه. فالتطبيق
+  الواحد يلبس هويّة كلّ عميل دون نسخة أنماط لكلّ منهم.
+</p>
+<demo-code lang="js">
+const res = await fetch('/api/session');
+const { branding } = await res.json();     // { primary: '#1D4ED8', … }
+Insiyab.brand(branding.primary);
+</demo-code>
+
+<h2 id="css-only">بلا جافاسكربت</h2>
+<p>
+  إن استعملت ملفّ الأنماط وحده، فاضبط اللون ومشتقّاته بنفسك. هذه القيم هي ما تحسبه
+  <code>brand()</code> للون <code>#0F766E</code> في الوضع الفاتح — وفي الداكن تتّجه الدرجة المقروءة
+  نحو الأبيض، فاستعمل <code>Insiyab.color.derive(hex, 'dark')</code> لتحصل على قيمها.
+</p>
+<demo-code lang="css">
+:root {
+  --ins-primary: #0F766E;
+  --ins-primary-rgb: 15, 118, 110;
+  --ins-primary-dark: #0a504b;     /* نهاية التدرّج */
+  --ins-grad-rgb: 10, 80, 75;      /* الثلاثيّة نفسها لنهاية التدرّج */
+  --ins-accent-rgb: 10, 80, 75;
+  --ins-primary-darker: #073532;   /* النصّ الملوّن المقروء */
+  --ins-on-primary: #ffffff;       /* النصّ على السطح المملوء */
+  --ins-wash-1: #eef5f5;           /* غَسلتا خلفية الصفحة */
+  --ins-wash-2: #f0f5f4;
+}
+</demo-code>
+
+<h2 id="tones">الثلاثيّة الدلالية</h2>
+<p>
+  كلّ حالة ثلاثة ألوان من صبغة واحدة: نصّ داكن مشبع، وخلفية بنسبة ١٠–١٢٪ منها، وحدّ بنسبة ١٨–٢٢٪.
+  لهذا تُقرأ الشارة والتنبيه والزجاج عائلةً واحدة لا ثلاثًا.
+</p>
+<demo-example code="none">
+  <div class="tones">
+    <div class="tone-chip"><i style="background:var(--ins-tone-ok-bg);border-color:var(--ins-tone-ok-bd)"></i><span style="color:var(--ins-tone-ok)">ok · نجاح</span></div>
+    <div class="tone-chip"><i style="background:var(--ins-tone-warn-bg);border-color:var(--ins-tone-warn-bd)"></i><span style="color:var(--ins-tone-warn)">warn · تحذير</span></div>
+    <div class="tone-chip"><i style="background:var(--ins-tone-bad-bg);border-color:var(--ins-tone-bad-bd)"></i><span style="color:var(--ins-tone-bad)">bad · خطأ</span></div>
+    <div class="tone-chip"><i style="background:var(--ins-tone-info-bg);border-color:var(--ins-tone-info-bd)"></i><span style="color:var(--ins-tone-info)">info · معلومة</span></div>
+    <div class="tone-chip"><i style="background:var(--ins-tone-mute-bg);border-color:var(--ins-tone-mute-bd)"></i><span style="color:var(--ins-tone-mute)">mute · خافت</span></div>
+    <div class="tone-chip"><i style="background:var(--ins-tone-brand-bg);border-color:var(--ins-tone-brand-bd)"></i><span style="color:var(--ins-tone-brand)">brand · الهوية</span></div>
+  </div>
+</demo-example>
+<demo-code lang="css">
+.my-badge {
+  color: var(--ins-tone-warn);
+  background: var(--ins-tone-warn-bg);
+  border: 1px solid var(--ins-tone-warn-bd);
+}
+</demo-code>
+
+<script>
+  (function () {
+    var names = ['primary', 'primary-dark', 'primary-darker', 'on-primary', 'wash-1', 'wash-2'];
+    var grid = document.getElementById('tokens'), note = document.getElementById('label-note');
+    function paint() {
+      var cs = getComputedStyle(document.documentElement);
+      grid.innerHTML = names.map(function (n) {
+        var v = cs.getPropertyValue('--ins-' + n).trim();
+        return '<div class="token"><i style="--c:' + v + '"></i><span>--ins-' + n + '<br>' + v + '</span></div>';
+      }).join('');
+      var hex = Insiyab.brand() || cs.getPropertyValue('--ins-primary').trim();
+      var label = Insiyab.color.labelFor(hex);
+      var white = Insiyab.color.contrast('#ffffff', hex).toFixed(1);
+      var dark = Insiyab.color.contrast('#111111', hex).toFixed(1);
+      note.innerHTML = 'الأبيض على هذا اللون <span class="ins-num">' + white + ':1</span>، والأسود القريب <span class="ins-num">' + dark + ':1</span> — فاختير ' + (label === '#ffffff' ? 'الأبيض' : 'الأسود القريب') + '.';
+    }
+    new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ['style', 'data-ins-theme'] });
+    document.getElementById('brand-pick').addEventListener('input', function () {
+      Insiyab.brand(this.value);
+      try { localStorage.setItem('insiyab-demo-brand', this.value); } catch (e) {}
+    });
+    paint();
+  })();
+</script>

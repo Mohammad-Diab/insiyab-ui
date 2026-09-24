@@ -1,0 +1,42 @@
+<h2 id="attribute">بالسمة</h2>
+<p>
+  <code>data-ins-toast</code> على زرّ يُظهر الرسالة حين يُضغط، و<code>data-ins-tone</code> نبرتها. تظهر في
+  ركن الصفحة وتختفي وحدها، ويُعلَن نصّها لقارئ الشاشة دون أن تأخذ التركيز.
+</p>
+<demo-example class="row">
+  <button class="ins-btn ins-btn--ghost-success" data-ins-toast="حُفظت التغييرات" data-ins-tone="ok">نجاح</button>
+  <button class="ins-btn ins-btn--ghost-danger" data-ins-toast="تعذّر الاتّصال بالخادم" data-ins-tone="bad">خطأ</button>
+  <button class="ins-btn ins-btn--ghost-warning" data-ins-toast="المخزون منخفض لثلاثة منتجات" data-ins-tone="warn">تحذير</button>
+  <button class="ins-btn ins-btn--ghost-info" data-ins-toast="جارٍ مزامنة الطلبات" data-ins-tone="info">معلومة</button>
+</demo-example>
+
+<h2 id="api">من الجافاسكربت</h2>
+<p>بعد عمليّة غير متزامنة — وهو الاستعمال الأكثر شيوعًا.</p>
+<demo-example class="row" code="none">
+  <button class="ins-btn ins-btn--primary" id="save-btn">حفظ المنتج</button>
+</demo-example>
+<demo-code lang="js">
+button.addEventListener('click', async () => {
+  try {
+    await saveProduct();
+    Insiyab.toast('حُفظ المنتج', 'ok');
+  } catch {
+    Insiyab.toast('تعذّر الحفظ — حاول مرّة أخرى', 'bad');
+  }
+});
+</demo-code>
+
+<h2 id="when">متى تستعمل الرسالة الطائرة</h2>
+<ul>
+  <li>لتأكيد ما حدث للتوّ نتيجة ما فعله المستخدم: حُفظ، أُرسل، نُسخ.</li>
+  <li>لا لخطأ يحتاج تصحيحًا في النموذج — ضعه في الحقل، حيث سيُصلَح. انظر <a href="validation.html">التحقّق</a>.</li>
+  <li>لا لرسالة يجب أن تبقى — ذلك <a href="alerts.html">تنبيه</a> في الصفحة.</li>
+</ul>
+
+<script>
+  document.getElementById('save-btn').addEventListener('click', function () {
+    var btn = this;
+    btn.disabled = true;
+    setTimeout(function () { btn.disabled = false; Insiyab.toast('حُفظ المنتج', 'ok'); }, 700);
+  });
+</script>

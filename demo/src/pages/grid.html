@@ -1,0 +1,108 @@
+<h2 id="columns">الأعمدة</h2>
+<p>
+  <code>.ins-cols-2</code> و<code>-3</code> و<code>-4</code> و<code>-6</code> و<code>-12</code>: أعمدة متساوية بفراغ
+  ثابت بينها. ضيّق النافذة لترى الانهيار.
+</p>
+<demo-example class="stack">
+  <div class="ins-cols-2"><div class="demo-box">cols-2</div><div class="demo-box">cols-2</div></div>
+  <div class="ins-cols-3"><div class="demo-box">cols-3</div><div class="demo-box">cols-3</div><div class="demo-box">cols-3</div></div>
+  <div class="ins-cols-4"><div class="demo-box">cols-4</div><div class="demo-box">cols-4</div><div class="demo-box">cols-4</div><div class="demo-box">cols-4</div></div>
+</demo-example>
+
+<h2 id="span">الامتداد</h2>
+<p>داخل <code>.ins-cols-12</code>، تأخذ الخليّة <code>.ins-span-N</code> عدد N من الأعمدة، و<code>.ins-span-full</code> السطر كلّه.</p>
+<demo-example class="stack">
+  <div class="ins-cols-12">
+    <div class="demo-box ins-span-8">span-8</div>
+    <div class="demo-box ins-span-4">span-4</div>
+  </div>
+  <div class="ins-cols-12">
+    <div class="demo-box ins-span-3">span-3</div>
+    <div class="demo-box ins-span-6">span-6</div>
+    <div class="demo-box ins-span-3">span-3</div>
+  </div>
+  <div class="ins-cols-12">
+    <div class="demo-box ins-span-full">span-full</div>
+  </div>
+</demo-example>
+
+<h2 id="collapse">الانهيار التلقائي</h2>
+<p>
+  لا أصناف لكلّ مقاس. شبكة <code>.ins-cols-*</code> تحتفظ بأعمدتها على الحاسوب، وتنزل إلى عمودين عند
+  <span class="ins-num">900px</span> — الخطّ نفسه الذي يصير عنده الشريط الجانبي درجًا — وتأخذ الخليّة
+  الممتدّة السطر كلّه، ثمّ تصير عمودًا واحدًا على الهاتف.
+</p>
+<p>وحين يكون عدد الأعمدة هو المحتوى نفسه — أيّام الأسبوع، لوحة مفاتيح أرقام — أضف <code>.ins-cols--fixed</code> فلا تنهار أبدًا:</p>
+<demo-example>
+  <div class="ins-cols-3 ins-cols--fixed">
+    <div class="demo-box">١</div><div class="demo-box">٢</div><div class="demo-box">٣</div>
+    <div class="demo-box">٤</div><div class="demo-box">٥</div><div class="demo-box">٦</div>
+  </div>
+</demo-example>
+
+<h2 id="auto">الشبكة المرنة</h2>
+<p>
+  <code>.ins-grid</code> لا عدد أعمدة فيها: تضع من الخلايا ما يتّسع، كلّ خليّة بعرض أدنى
+  <span class="ins-num">11rem</span>. <code>--wide</code> يرفعه إلى <span class="ins-num">20rem</span> و<code>--half</code>
+  إلى <span class="ins-num">26rem</span>، أو اضبط <code>--ins-col</code> بنفسك. ومناسبة للبطاقات الإحصائية
+  والمعارض، وتدخل خلاياها متدرّجة.
+</p>
+<demo-example>
+  <div class="ins-grid">
+    <div class="demo-box demo-box--tall">1</div><div class="demo-box demo-box--tall">2</div>
+    <div class="demo-box demo-box--tall">3</div><div class="demo-box demo-box--tall">4</div>
+    <div class="demo-box demo-box--tall">5</div>
+  </div>
+</demo-example>
+<demo-code lang="html">
+<div class="ins-grid" style="--ins-col: 14rem">…</div>
+</demo-code>
+
+<h2 id="container">الحاوية</h2>
+<p>
+  عمود الصفحة: <span class="ins-num">75rem</span> افتراضيًا، و<code>--narrow</code>
+  (<span class="ins-num">48rem</span>) للنماذج والمقالات، و<code>--wide</code> للوحات العريضة. والهامش
+  الجانبي ينمو مع الشاشة من ١٦ إلى ٣٢ بكسل دون نقطة انكسار.
+</p>
+<demo-example>
+  <div class="demo-frame">
+    <div class="ins-container ins-container--narrow"><div class="demo-box">container--narrow</div></div>
+  </div>
+</demo-example>
+
+<h2 id="breakpoints">نقاط الانكسار</h2>
+<div class="ins-panel site-ref">
+  <div class="ins-panel-body ins-panel-body--flush">
+    <div class="ins-table-wrap">
+      <table class="ins-table">
+        <thead><tr><th>الاسم</th><th class="ins-num">العرض</th><th>ما يتغيّر عنده</th></tr></thead>
+        <tbody>
+          <tr><td><code>sm</code></td><td class="ins-num">34rem</td><td>الشبكات عمود واحد، والسطر الفرعي في الشريط العلوي يختفي.</td></tr>
+          <tr><td><code>md</code></td><td class="ins-num">900px</td><td>الشريط الجانبي درج، والشبكات عمودان، وقائمة الموقع تنطوي.</td></tr>
+          <tr><td><code>lg</code></td><td class="ins-num">1200px</td><td>للإظهار والإخفاء فقط: <code>ins-hide-below-lg</code> و<code>ins-hide-above-lg</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<h2 id="example">صفحة نموذجية</h2>
+<p>عمود رئيسي وعمود جانبي، يصيران عمودًا واحدًا على الهاتف دون صنف إضافي.</p>
+<demo-example>
+  <div class="ins-cols-12">
+    <div class="ins-span-8 ins-panel">
+      <div class="ins-panel-head"><h3 class="ins-panel-title">وصف المنتج</h3></div>
+      <div class="ins-panel-body ins-stack">
+        <div class="ins-field"><label class="ins-label" for="g-name">الاسم</label><input class="ins-input" id="g-name" value="حقيبة ظهر جلدية"></div>
+        <div class="ins-field"><label class="ins-label" for="g-desc">الوصف</label><textarea class="ins-textarea" id="g-desc">جلد طبيعي، بجيب داخلي للحاسوب المحمول.</textarea></div>
+      </div>
+    </div>
+    <div class="ins-span-4 ins-panel">
+      <div class="ins-panel-head"><h3 class="ins-panel-title">النشر</h3></div>
+      <div class="ins-panel-body ins-stack">
+        <label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">منشور</span></span></label>
+        <button class="ins-btn ins-btn--primary ins-btn--full">حفظ</button>
+      </div>
+    </div>
+  </div>
+</demo-example>

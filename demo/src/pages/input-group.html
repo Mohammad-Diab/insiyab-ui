@@ -1,0 +1,93 @@
+<h2 id="addon">ملحق نصّي</h2>
+<p>
+  <code>.ins-input-group</code> يلحم الحقل وملحقاته في قطعة واحدة بحدّ واحد وحلقة تركيز واحدة.
+  <code>.ins-addon</code> نصّ ثابت قبل الحقل أو بعده — والترتيب في الشيفرة هو الترتيب في اتجاه القراءة.
+</p>
+<demo-example class="stack narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="g-price">السعر</label>
+    <div class="ins-input-group">
+      <input class="ins-input ins-num" id="g-price" inputmode="decimal" value="249.00">
+      <span class="ins-addon">ر.س</span>
+    </div>
+  </div>
+  <div class="ins-field">
+    <label class="ins-label" for="g-weight">الوزن</label>
+    <div class="ins-input-group">
+      <input class="ins-input ins-num" id="g-weight" inputmode="decimal" value="1.2">
+      <span class="ins-addon">كغ</span>
+    </div>
+  </div>
+</demo-example>
+
+<h3 id="ltr-group">مجموعة من اليسار</h3>
+<p>لعنوان موقع أو اسم مستخدم، ضع <code>dir="ltr"</code> على المجموعة كلّها فتبقى البادئة قبل النصّ.</p>
+<demo-example class="stack narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="g-site">رابط المتجر</label>
+    <div class="ins-input-group" dir="ltr">
+      <span class="ins-addon">https://</span>
+      <input class="ins-input" id="g-site" placeholder="my-store">
+      <span class="ins-addon">.example.com</span>
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="button">زرّ ملحق</h2>
+<demo-example class="stack narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="g-coupon">رمز الخصم</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="g-coupon" placeholder="AUTUMN26" dir="ltr">
+      <button class="ins-btn ins-btn--secondary" data-ins-toast="طُبّق الخصم ١٠٪" data-ins-tone="ok">تطبيق</button>
+    </div>
+  </div>
+  <div class="ins-field">
+    <label class="ins-label" for="g-invite">رابط الدعوة</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="g-invite" value="https://example.com/join/8f2k" readonly dir="ltr">
+      <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="نسخ" data-ins-tip data-ins-toast="نُسخ الرابط" data-ins-tone="ok"><svg class="ico"><use href="#i-copy"/></svg></button>
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="password">إظهار كلمة المرور</h2>
+<p>
+  <code>.ins-password-toggle</code> مع <code>data-ins-password</code> يبدّل نوع الحقل ويحدّث تسمية الزرّ
+  لقارئ الشاشة. وبلا جافاسكربت لا يظهر الزرّ أصلًا، بدل زرّ لا يفعل شيئًا.
+</p>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="g-pass">كلمة المرور</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="g-pass" type="password" value="correct-horse" autocomplete="new-password">
+      <button class="ins-password-toggle" data-ins-password aria-label="إظهار كلمة المرور" data-ins-tip></button>
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="stepper">العدّاد</h2>
+<p>زرّان <code>data-ins-spin</code> حول حقل رقمي، يحترمان <code>min</code> و<code>max</code> و<code>step</code>.</p>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="g-qty">الكمّية</label>
+    <div class="ins-input-group" style="max-inline-size:11rem">
+      <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>
+      <input class="ins-input" id="g-qty" type="number" min="1" max="10" value="2">
+      <button class="ins-spin" data-ins-spin="up" aria-label="زيادة"></button>
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="invalid">مع خطأ</h2>
+<p>الحالة على الحقل، والمجموعة كلّها تتلوّن.</p>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="g-code">رمز الخصم</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="g-code" value="SUMMER24" aria-invalid="true" dir="ltr">
+      <button class="ins-btn ins-btn--secondary">تطبيق</button>
+    </div>
+    <p class="ins-error">انتهت صلاحية هذا الرمز.</p>
+  </div>
+</demo-example>
