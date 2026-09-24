@@ -165,6 +165,7 @@ const next = (await pop()).active;
 ok('ArrowDown moves the highlight', next && next !== 'QA', next);
 await b.key('Escape');
 await b.sleep(150);
+ok('a closing list lets clicks through while it fades', (await E(`getComputedStyle(document.querySelector('.ins-phone-pop')).pointerEvents`)) === 'none');
 ok('Escape closes it and focuses the button, the country unchanged', !(await pop()) && (await E(`document.activeElement.classList.contains('ins-phone-cc')`)) && (await view('p-ae')).iso === 'QA');
 await b.click('.ins-phone:has(#p-ae) .ins-phone-cc');
 await b.sleep(150);
