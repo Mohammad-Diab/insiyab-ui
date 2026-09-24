@@ -468,6 +468,10 @@ html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }
    values by hand is exactly how the segmented control broke in the source sheet —
    four copies, two per theme — so there is one copy here and the build does the
    rest. This file is valid CSS on its own; the build only adds reach.
+
+   The same goes for a dark rule in any component — `:root[data-ins-theme="dark"]
+   .ins-select { … }` — write it once, keyed on the attribute, and the build emits
+   its OS twin right after it. Do not hand-write the twin.
    ========================================================================== */
 
 :root[data-ins-theme="dark"] {
@@ -725,6 +729,12 @@ a { color: var(--ins-primary-darker); text-decoration: none; }
    every other dark hover in the library takes. */
 a:hover { color: var(--ins-tone-brand-soft); }
 :root[data-ins-theme="dark"] a:hover { color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) a:hover {
+    color: var(--ins-text-1);
+  }
+}
 
 ::selection { background: rgba(var(--ins-primary-rgb), .22); }
 
@@ -883,6 +893,13 @@ a:hover { color: var(--ins-tone-brand-soft); }
   background: linear-gradient(130deg, rgba(255, 255, 255, .06), transparent 26%,
                               rgba(255, 255, 255, .03) 55%, transparent);
 }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-glass::before {
+    background: linear-gradient(130deg, rgba(255, 255, 255, .06), transparent 26%,
+    rgba(255, 255, 255, .03) 55%, transparent);
+  }
+}
 
 /* The frost, and the diagonal fill that depends on it, are both behind
    @supports. A browser without backdrop-filter keeps the opaque `--ins-surface`
@@ -896,6 +913,12 @@ a:hover { color: var(--ins-tone-brand-soft); }
   }
   :root[data-ins-theme="dark"] .ins-glass {
     background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .03));
+  }
+  /* The rule above, for an OS set to dark — emitted by build.mjs. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-ins-theme="light"]) .ins-glass {
+      background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .03));
+    }
   }
 }
 
@@ -1142,6 +1165,12 @@ a:hover { color: var(--ins-tone-brand-soft); }
 .ins-shell-link.is-active .ins-ico,
 .ins-shell-link.is-active svg { color: var(--ins-tone-brand-soft); }
 :root[data-ins-theme="dark"] .ins-shell-link.is-active { color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-shell-link.is-active {
+    color: var(--ins-text-1);
+  }
+}
 
 /* The marker in flight, between two items. insiyab.js places it and drives its top
    and height; everything that makes it look like the marker is here, so the two
@@ -1279,6 +1308,12 @@ html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
   font-size: 1.0625rem;
 }
 :root[data-ins-theme="dark"] .ins-island--icon { color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-island--icon {
+    color: var(--ins-text-1);
+  }
+}
 
 /* Centre island: the page's name. Capped and ellipsised, because an Arabic page
    title is a phrase and the bar must not grow a second line to hold one. */
@@ -1320,6 +1355,12 @@ html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
   max-inline-size: 100%;
 }
 :root[data-ins-theme="dark"] .ins-shell-title { color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-shell-title {
+    color: var(--ins-text-1);
+  }
+}
 /* `:empty`, not a conditional in a template: the subtitle is optional on every page
    and an `if` around a wrapper is one more thing each page can get wrong. */
 .ins-shell-sub {
@@ -1949,6 +1990,12 @@ html[dir="ltr"] .ins-prose { line-height: 1.65; }
   :root[data-ins-theme="dark"] .ins-card {
     background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .03));
   }
+  /* The rule above, for an OS set to dark — emitted by build.mjs. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-ins-theme="light"]) .ins-card {
+      background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .03));
+    }
+  }
 }
 
 /* --------------------------------------------------------------- panel */
@@ -1972,6 +2019,12 @@ html[dir="ltr"] .ins-prose { line-height: 1.65; }
   }
   :root[data-ins-theme="dark"] .ins-panel {
     background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .03));
+  }
+  /* The rule above, for an OS set to dark — emitted by build.mjs. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-ins-theme="light"]) .ins-panel {
+      background: linear-gradient(145deg, var(--ins-glass), rgba(255, 255, 255, .03));
+    }
   }
 }
 
@@ -2020,6 +2073,12 @@ html[dir="ltr"] .ins-prose { line-height: 1.65; }
   gap: .625rem;
 }
 :root[data-ins-theme="dark"] .ins-panel-title { color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-panel-title {
+    color: var(--ins-text-1);
+  }
+}
 /* The section icon as a tinted **chip**, not a bare glyph beside the words. A
    14px-rounded 36px square in the brand tint is what makes a panel head read as a
    heading rather than as a line of text with a decoration in front of it. */
@@ -2377,6 +2436,12 @@ html[dir="rtl"] .ins-table { --ins-table-side: -1px; }
   box-shadow: inset 0 1px 0 var(--ins-table-rule), inset 0 -1px 0 var(--ins-table-rule);
 }
 :root[data-ins-theme="dark"] .ins-table thead th { color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-table thead th {
+    color: var(--ins-text-1);
+  }
+}
 
 /* Logical corner radii, so the leading end of the bar is the right one in both
    directions with no `[dir]` rule.
@@ -2997,6 +3062,14 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 :root[data-ins-theme="dark"] .ins-input:focus,
 :root[data-ins-theme="dark"] .ins-select:focus,
 :root[data-ins-theme="dark"] .ins-textarea:focus { background: rgba(255, 255, 255, .09); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-input:focus,
+  :root:not([data-ins-theme="light"]) .ins-select:focus,
+  :root:not([data-ins-theme="light"]) .ins-textarea:focus {
+    background: rgba(255, 255, 255, .09);
+  }
+}
 
 .ins-input:disabled,
 .ins-select:disabled,
@@ -3024,6 +3097,12 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 [dir="rtl"] .ins-select { background-position: left .875rem center; }
 :root[data-ins-theme="dark"] .ins-select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  }
 }
 
 /* --------------------------------------------------------- checkbox / radio */
@@ -3909,6 +3988,12 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-pill--info  { background: var(--ins-tone-info-bg);  color: var(--ins-tone-info);  border-color: var(--ins-tone-info-bd); }
 .ins-pill--brand { background: var(--ins-tone-brand-bg); color: var(--ins-tone-brand); border-color: var(--ins-tone-brand-bd); }
 :root[data-ins-theme="dark"] .ins-pill--brand { color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-pill--brand {
+    color: var(--ins-text-1);
+  }
+}
 
 /* A dot in the pill's own ink, for a status that wants a mark rather than a glyph. */
 .ins-pill-dot { inline-size: .4375rem; block-size: .4375rem; border-radius: 50%; background: currentColor; }
@@ -3935,6 +4020,12 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-badge--bad  { background: var(--ins-tone-bad-bg);  color: var(--ins-tone-bad); }
 .ins-badge--mute { background: var(--ins-tone-mute-bg); color: var(--ins-tone-mute); }
 :root[data-ins-theme="dark"] .ins-badge { color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-badge {
+    color: var(--ins-text-1);
+  }
+}
 
 /* --------------------------------------------------------------- money */
 /* `direction: ltr` + `unicode-bidi: isolate` is not cosmetic. A negative figure is
@@ -4111,7 +4202,19 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 /* The message text is the 800 shade in light and the 400 in dark, but the circle is
    a fill with a label on it and has to stay saturated in both. */
 :root[data-ins-theme="dark"] .ins-alert { --ins-alert-on: #0B1220; }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-alert {
+    --ins-alert-on: #0B1220;
+  }
+}
 :root[data-ins-theme="dark"] .ins-alert--info { --ins-alert-text: var(--ins-text-1); --ins-alert-on: var(--ins-on-primary); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-alert--info {
+    --ins-alert-text: var(--ins-text-1); --ins-alert-on: var(--ins-on-primary);
+  }
+}
 
 /* --------------------------------------------------------------- toast */
 /* A message about what just happened is not part of the page's structure, so it
@@ -4646,6 +4749,12 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 }
 .ins-pop-item:hover { background: rgba(var(--ins-primary-rgb), .10); color: var(--ins-primary-darker); }
 :root[data-ins-theme="dark"] .ins-pop-item:hover { color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-pop-item:hover {
+    color: var(--ins-text-1);
+  }
+}
 .ins-pop-item--bad { color: var(--ins-tone-bad); }
 .ins-pop-item--bad:hover { background: var(--ins-tone-bad-bg); color: var(--ins-tone-bad); }
 .ins-pop-sep { block-size: 1px; background: var(--ins-line); margin: .25rem 0; border: 0; }

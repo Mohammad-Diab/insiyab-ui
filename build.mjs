@@ -99,6 +99,116 @@ function expandDark(css, file) {
 }
 
 /* --------------------------------------------------------------------------
+   The component rules, twinned the same way.
+
+   The palette is not the only thing that changes in the dark: nineteen rules in
+   the components are keyed on `:root[data-ins-theme="dark"]` too — the select's
+   chevron, the shell title, the active sidebar link, the glass sheen. Duplicating
+   only the palette left every one of them light on a machine set to dark with no
+   explicit choice made: 240 painted differences across nine demo pages, measured
+   against the same pages with dark chosen by hand.
+
+   So each such rule gets a twin for the operating system, emitted directly after
+   it — inside the same `@supports` block when it sits in one — so it keeps its
+   place in the cascade. `:root:not([data-ins-theme="light"])` has exactly the
+   specificity of `:root[data-ins-theme="dark"]`, so the twin also wins and loses
+   exactly where the original does. Only the dark selectors of a list are twinned.
+
+   Comments and strings are masked before any brace is looked for, so a `{` or a
+   `;` inside a `url("data:...")` or a comment cannot be mistaken for structure. A
+   dark rule with a nested block in it fails the build rather than being guessed at.
+   -------------------------------------------------------------------------- */
+
+const OS_DARK_SELECTOR = ':root:not([data-ins-theme="light"])';
+
+/* The same text, with every comment and string blanked to spaces: same length, so
+   an index into one is an index into the other. */
+function masked(css) {
+  let out = '';
+  let i = 0;
+  while (i < css.length) {
+    if (css[i] === '/' && css[i + 1] === '*') {
+      const end = css.indexOf('*/', i + 2);
+      const stop = end === -1 ? css.length : end + 2;
+      out += css.slice(i, stop).replace(/[^\n]/g, ' ');
+      i = stop;
+    } else if (css[i] === '"' || css[i] === "'") {
+      let j = i + 1;
+      while (j < css.length && css[j] !== css[i]) j += (css[j] === '\\' ? 2 : 1);
+      out += ' '.repeat(Math.min(j + 1, css.length) - i);
+      i = j + 1;
+    } else {
+      out += css[i++];
+    }
+  }
+  return out;
+}
+
+/* A selector list, split on its top-level commas only — `:is(a, b)` is one. */
+function splitSelectors(prelude) {
+  const out = [];
+  let depth = 0, cur = '';
+  for (const ch of prelude) {
+    if (ch === '(' || ch === '[') depth++;
+    if (ch === ')' || ch === ']') depth--;
+    if (ch === ',' && depth === 0) { out.push(cur); cur = ''; } else cur += ch;
+  }
+  out.push(cur);
+  return out.map((s) => s.replace(/\s+/g, ' ').trim()).filter(Boolean);
+}
+
+function twinDarkRules(css, file) {
+  const m = masked(css);
+  const starts = new Set();
+  /* Found in the original text — the selector's own `"dark"` is a string, and the
+     masked copy has blanked it — and kept only where the masked copy still has the
+     colon, which is to say outside a comment. */
+  for (let at = css.indexOf(DARK_SELECTOR); at !== -1; at = css.indexOf(DARK_SELECTOR, at + 1)) {
+    if (m[at] !== ':') continue;
+    let s = at;
+    while (s > 0 && !'{};'.includes(m[s - 1])) s--;
+    starts.add(s);
+  }
+
+  const twins = [];
+  for (const s of starts) {
+    const open = m.indexOf('{', s);
+    const close = m.indexOf('}', open);
+    const inner = m.indexOf('{', open + 1);
+    if (open === -1 || close === -1) { fail(`${file}: a ${DARK_SELECTOR} rule has no block.`); continue; }
+    if (inner !== -1 && inner < close) {
+      fail(`${file}: a ${DARK_SELECTOR} rule contains a nested block, which the OS-dark twin cannot copy safely.`);
+      continue;
+    }
+    const selectors = splitSelectors(css.slice(s, open).replace(/\/\*[\s\S]*?\*\//g, ''))
+      .filter((sel) => sel.includes(DARK_SELECTOR))
+      .map((sel) => sel.split(DARK_SELECTOR).join(OS_DARK_SELECTOR));
+    const first = s + m.slice(s).search(/\S/);
+    const indent = css.slice(css.lastIndexOf('\n', first) + 1, first).replace(/\S/g, '');
+    const declarations = css.slice(open + 1, close)
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .split('\n').map((line) => line.trim()).filter(Boolean)
+      .map((line) => `${indent}    ${line}`).join('\n');
+    twins.push({
+      at: close + 1,
+      text: [
+        '',
+        `${indent}/* The rule above, for an OS set to dark — emitted by build.mjs. */`,
+        `${indent}@media (prefers-color-scheme: dark) {`,
+        `${indent}  ${selectors.join(`,\n${indent}  `)} {`,
+        declarations,
+        `${indent}  }`,
+        `${indent}}`
+      ].join('\n')
+    });
+  }
+
+  let out = css;
+  for (const t of twins.sort((a, b) => b.at - a.at)) out = out.slice(0, t.at) + t.text + out.slice(t.at);
+  return { css: out, count: twins.length };
+}
+
+/* --------------------------------------------------------------------------
    Minify: comments out, whitespace collapsed, and nothing else.
 
    Deliberately not a real minifier. Rewriting punctuation — dropping the space
@@ -230,9 +340,16 @@ const files = (await readdir(SRC_CSS)).filter((f) => f.endsWith('.css')).sort();
 if (!files.length) fail(`${SRC_CSS}: no stylesheets found.`);
 
 const parts = [];
+let darkTwins = 0;
 for (const file of files) {
   let css = await readFile(join(SRC_CSS, file), 'utf8');
-  if (file.includes('tokens-dark')) css = expandDark(css, file);
+  if (file.includes('tokens-dark')) {
+    css = expandDark(css, file);
+  } else {
+    const twinned = twinDarkRules(css, file);
+    css = twinned.css;
+    darkTwins += twinned.count;
+  }
   parts.push(css.trimEnd());
 }
 
@@ -267,7 +384,7 @@ if (site.problems.length) {
 }
 
 if (CHECK) {
-  console.log(`check passed · ${files.length} parts · ${stats.declared} tokens declared, ${stats.used} read`);
+  console.log(`check passed · ${files.length} parts · ${stats.declared} tokens declared, ${stats.used} read · ${darkTwins} OS-dark twins`);
   console.log(`               insiyab.css ${kb(css)} · min ${kb(min)} · insiyab.js ${kb(js)}`);
   console.log(`               demo: ${site.pages} pages`);
   process.exit(0);

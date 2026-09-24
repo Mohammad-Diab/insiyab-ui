@@ -13,6 +13,10 @@
    values by hand is exactly how the segmented control broke in the source sheet —
    four copies, two per theme — so there is one copy here and the build does the
    rest. This file is valid CSS on its own; the build only adds reach.
+
+   The same goes for a dark rule in any component — `:root[data-ins-theme="dark"]
+   .ins-select { … }` — write it once, keyed on the attribute, and the build emits
+   its OS twin right after it. Do not hand-write the twin.
    ========================================================================== */
 
 :root[data-ins-theme="dark"] {
