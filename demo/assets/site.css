@@ -287,6 +287,12 @@
 .site-pager-dir { font-size: var(--ins-fs-xs); font-weight: 700; color: var(--ins-text-3); }
 .site-pager-title { font-weight: 700; color: var(--ins-primary-darker); }
 :root[data-ins-theme="dark"] .site-pager-title { color: var(--ins-text-1); }
+/* Hand-written twin: this file is not run through the library build, which emits
+   these for insiyab.css. Every dark rule here needs one, or an OS set to dark
+   with no choice made keeps the light value. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .site-pager-title { color: var(--ins-text-1); }
+}
 @media (max-width: 34rem) { .site-pager { grid-template-columns: 1fr; } .site-pager-link--next { grid-column: auto; } }
 
 /* --------------------------------------------------------------- top bar */
@@ -442,6 +448,9 @@
 }
 .site-hero h1 span { color: var(--ins-primary-darker); }
 :root[data-ins-theme="dark"] .site-hero h1 span { color: var(--ins-primary); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .site-hero h1 span { color: var(--ins-primary); }
+}
 .site-hero .ins-lead { margin: 0 0 1.5rem; max-inline-size: 36rem; }
 .site-hero-actions { display: flex; flex-wrap: wrap; gap: .625rem; margin-block-end: 1.25rem; }
 .site-install {

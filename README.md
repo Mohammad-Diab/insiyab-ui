@@ -515,7 +515,9 @@ order. One hand-maintained 4,000-line file is unmaintainable by month three; a
 build script is not. The build also:
 
 - duplicates the dark palette into a `prefers-color-scheme` variant, so it is
-  written once rather than twice;
+  written once rather than twice, and gives every component rule keyed on
+  `:root[data-ins-theme="dark"]` the same twin, in place, so an OS set to dark
+  paints exactly what an explicit dark choice does;
 - fails if any `--dk-*`, `--bs-*` or other pre-rename token survives;
 - fails if any `var()` reads a token nothing declares — an undefined custom
   property invalidates its whole declaration silently, which is how three
