@@ -1,0 +1,173 @@
+/* ==========================================================================
+   Insiyab · Timeline plugin
+   ==========================================================================
+
+   What happened, in order: an order's journey, an account's activity, a case's
+   history. A list, a rule down its start side, a dot on the rule for each event.
+
+     <ol class="ins-timeline">
+       <li class="ins-timeline-item ins-timeline-item--ok">
+         <span class="ins-timeline-title">تمّ الدفع</span>
+         <time class="ins-timeline-time" datetime="2026-09-24T09:15" data-ins-time></time>
+         <p class="ins-timeline-body">…</p>
+       </li>
+     </ol>
+
+   Tones as everywhere else — --ok, --bad, --warn, --info — plus `is-current` for
+   the step in progress and `is-pending` for one still to come. A
+   `.ins-timeline-ico` as the item's first child replaces the dot with an icon
+   chip. `.ins-timeline--compact` for a narrow column, `.ins-timeline--split` for
+   events on both sides of a centre rule once there is room. A
+   `.ins-timeline-day` item is a date heading between events.
+
+   Pure CSS: the script only writes relative times ("قبل 5 دقائق") into
+   `time[data-ins-time]`, and a timeline without it is complete. */
+
+.ins-timeline {
+  --ins-tl-dot: .75rem;                 /* the dot */
+  --ins-tl-rail: 1.75rem;               /* the column the rule runs down */
+  --ins-tl-tone: var(--ins-tone-brand-soft);
+  --ins-tl-gap: 1.375rem;
+  container-type: inline-size;
+  position: relative;
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ins-timeline-item {
+  position: relative;
+  display: grid;
+  gap: .1875rem;
+  padding-inline-start: var(--ins-tl-rail);
+  padding-block-end: var(--ins-tl-gap);
+}
+/* The rule: from this dot to the next, so it ends at the last event rather than
+   running on past it. */
+.ins-timeline-item::after {
+  content: "";
+  position: absolute;
+  inset-block: calc(var(--ins-tl-dot) + .5rem) 0;
+  inset-inline-start: calc((var(--ins-tl-dot) - 2px) / 2);
+  inline-size: 2px;
+  border-radius: 2px;
+  background: var(--ins-line);
+}
+.ins-timeline-item:last-child::after { content: none; }
+.ins-timeline-item:last-child { padding-block-end: 0; }
+
+/* The dot, ringed in the surface so it sits on the rule rather than under it. */
+.ins-timeline-item::before {
+  content: "";
+  position: absolute;
+  inset-block-start: .3125rem;
+  inset-inline-start: 0;
+  inline-size: var(--ins-tl-dot);
+  block-size: var(--ins-tl-dot);
+  border-radius: 50%;
+  background: var(--ins-tl-tone);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, .7);
+}
+:root[data-ins-theme="dark"] .ins-timeline-item::before { box-shadow: 0 0 0 3px rgba(15, 23, 42, .75); }
+
+.ins-timeline-item--ok { --ins-tl-tone: var(--ins-tone-ok); }
+.ins-timeline-item--bad { --ins-tl-tone: var(--ins-tone-bad); }
+.ins-timeline-item--warn { --ins-tl-tone: var(--ins-tone-warn); }
+.ins-timeline-item--info { --ins-tl-tone: var(--ins-tone-info); }
+
+/* The step in progress wears a halo; the ones still to come are hollow, on a
+   dashed rule. */
+.ins-timeline-item.is-current::before {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, .7), 0 0 0 6px color-mix(in srgb, var(--ins-tl-tone) 25%, transparent);
+}
+:root[data-ins-theme="dark"] .ins-timeline-item.is-current::before {
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, .75), 0 0 0 6px color-mix(in srgb, var(--ins-tl-tone) 30%, transparent);
+}
+.ins-timeline-item.is-pending::before {
+  background: var(--ins-ctl-bg);
+  border: 2px solid var(--ins-ctl-bd);
+}
+.ins-timeline-item.is-pending::after,
+.ins-timeline-item:has(+ .is-pending)::after {
+  background: repeating-linear-gradient(to bottom, var(--ins-ctl-bd) 0 4px, transparent 4px 8px);
+}
+.ins-timeline-item.is-pending > .ins-timeline-title { color: var(--ins-text-3); }
+
+.ins-timeline-title { font-weight: 700; color: var(--ins-text-1); }
+.ins-timeline-time {
+  font-size: var(--ins-fs-xs);
+  color: var(--ins-text-3);
+  font-variant-numeric: tabular-nums;
+}
+.ins-timeline-body { margin: .25rem 0 0; font-size: var(--ins-fs-sm); color: var(--ins-text-2); line-height: 1.7; }
+.ins-timeline-item > .ins-panel,
+.ins-timeline-item > .ins-card { margin-block-start: .375rem; }
+
+/* An icon chip in place of the dot: the item's first child. */
+.ins-timeline-item:has(> .ins-timeline-ico) { padding-inline-start: 3rem; }
+.ins-timeline-item:has(> .ins-timeline-ico)::before { content: none; }
+.ins-timeline-item:has(> .ins-timeline-ico)::after {
+  inset-block-start: 2.5rem;
+  inset-inline-start: calc(1rem - 1px);
+}
+.ins-timeline-ico {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ins-tl-tone) 14%, transparent);
+  color: var(--ins-tl-tone);
+}
+.ins-timeline-ico svg { inline-size: 1rem; block-size: 1rem; }
+
+/* A date heading between events, on the rule. */
+.ins-timeline-day {
+  position: relative;
+  padding-block: .25rem .875rem;
+  padding-inline-start: var(--ins-tl-rail);
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ins-text-3);
+}
+[dir="rtl"] .ins-timeline-day { text-transform: none; letter-spacing: 0; }
+.ins-timeline-day:not(:first-child) { padding-block-start: .5rem; }
+
+/* ------------------------------------------------------------- compact */
+.ins-timeline--compact { --ins-tl-dot: .5625rem; --ins-tl-rail: 1.25rem; --ins-tl-gap: .875rem; }
+.ins-timeline--compact .ins-timeline-item { gap: .0625rem; font-size: var(--ins-fs-sm); }
+.ins-timeline--compact .ins-timeline-item::before { inset-block-start: .375rem; }
+
+/* ------------------------------------------------------------- split */
+/* Both sides of a centre rule, alternating, once the list is wide enough to give
+   each side a readable column; one side below that. The container is the list,
+   not the viewport, so a split timeline in a narrow card stays one-sided. */
+@container (min-width: 40rem) {
+  .ins-timeline--split .ins-timeline-item {
+    inline-size: 50%;
+    padding-inline-start: var(--ins-tl-rail);
+    margin-inline-start: 50%;
+  }
+  .ins-timeline--split .ins-timeline-item::before { inset-inline-start: calc(var(--ins-tl-dot) / -2); }
+  .ins-timeline--split .ins-timeline-item::after { inset-inline-start: -1px; }
+  .ins-timeline--split .ins-timeline-item:nth-child(even of .ins-timeline-item) {
+    margin-inline-start: 0;
+    padding-inline: 0 var(--ins-tl-rail);
+    text-align: end;
+  }
+  .ins-timeline--split .ins-timeline-item:nth-child(even of .ins-timeline-item)::before {
+    inset-inline-start: auto;
+    inset-inline-end: calc(var(--ins-tl-dot) / -2);
+  }
+  .ins-timeline--split .ins-timeline-item:nth-child(even of .ins-timeline-item)::after {
+    inset-inline-start: auto;
+    inset-inline-end: -1px;
+  }
+  .ins-timeline--split .ins-timeline-day { padding-inline-start: 0; text-align: center; }
+}

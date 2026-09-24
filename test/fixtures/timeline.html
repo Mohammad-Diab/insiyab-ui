@@ -1,0 +1,46 @@
+<!doctype html>
+<!-- Fixtures for timeline.test.mjs. The times are written by the test, relative to
+     the moment it runs, so every one of them is a known distance from now. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab timeline fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <link rel="stylesheet" href="../../dist/plugins/insiyab-timeline.css">
+  <script src="../../dist/insiyab.js"></script>
+  <script src="../../dist/plugins/insiyab-timeline.js"></script>
+</head>
+<body>
+<main class="ins-container ins-stack" style="padding-block: 2rem; max-inline-size: 60rem">
+  <ol class="ins-timeline" id="tl">
+    <li class="ins-timeline-day">اليوم</li>
+    <li class="ins-timeline-item ins-timeline-item--ok" id="t-ok"><span class="ins-timeline-title">تمّ الدفع</span><time class="ins-timeline-time" id="t1"></time></li>
+    <li class="ins-timeline-item is-current" id="t-cur"><span class="ins-timeline-title">قيد التجهيز</span><time class="ins-timeline-time" id="t2"></time></li>
+    <li class="ins-timeline-item is-pending" id="t-pend"><span class="ins-timeline-title">الشحن</span></li>
+  </ol>
+
+  <ol class="ins-timeline" id="tl-ico">
+    <li class="ins-timeline-item ins-timeline-item--bad" id="t-ico"><span class="ins-timeline-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg></span><span class="ins-timeline-title">رُفض</span></li>
+    <li class="ins-timeline-item"><span class="ins-timeline-title">أُرسل</span></li>
+  </ol>
+
+  <div style="inline-size: 50rem"><ol class="ins-timeline ins-timeline--split" id="tl-split">
+    <li class="ins-timeline-item" id="sp1"><span class="ins-timeline-title">٢٠٢٤</span></li>
+    <li class="ins-timeline-item" id="sp2"><span class="ins-timeline-title">٢٠٢٥</span></li>
+    <li class="ins-timeline-item" id="sp3"><span class="ins-timeline-title">٢٠٢٦</span></li>
+  </ol></div>
+  <div style="inline-size: 20rem"><ol class="ins-timeline ins-timeline--split" id="tl-narrow">
+    <li class="ins-timeline-item" id="nr1"><span class="ins-timeline-title">أ</span></li>
+    <li class="ins-timeline-item" id="nr2"><span class="ins-timeline-title">ب</span></li>
+  </ol></div>
+
+  <p>
+    <time id="r-yesterday"></time> · <time id="r-hours"></time> · <time id="r-now"></time> · <time id="r-soon"></time> ·
+    <time id="r-old"></time> · <time id="r-date"></time> · <time id="r-day"></time>
+    <span lang="en"><time id="r-en"></time></span>
+    <span lang="ar-SA"><time id="r-sa"></time></span>
+  </p>
+</main>
+</body>
+</html>
