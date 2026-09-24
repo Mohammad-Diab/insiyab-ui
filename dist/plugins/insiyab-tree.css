@@ -1,0 +1,91 @@
+/*! Insiyab UI v0.5.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
+/* ==========================================================================
+   Insiyab · Tree plugin
+   ==========================================================================
+
+   Rows the height of a comfortable target, an indent guide down each open
+   branch, a chevron that points into a closed branch and down an open one, and
+   the selected row in the brand wash the autocomplete and the palette use. The
+   focus ring is drawn on the row, because the focus is on the item around it. */
+
+.ins-tree,
+.ins-tree ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ins-tree ul {
+  margin-inline-start: .875rem;
+  padding-inline-start: .5rem;
+  border-inline-start: 1px solid var(--ins-line);
+}
+.ins-tree ul:not([hidden]) { animation: ins-pop-in var(--ins-t-pop) var(--ins-ease); }
+
+.ins-tree [role="treeitem"] { outline: 0; }
+.ins-tree-row {
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+  min-block-size: 2.125rem;
+  padding: .1875rem .5rem .1875rem .375rem;
+  border-radius: var(--ins-r-sm);
+  color: var(--ins-text-1);
+  font-size: var(--ins-fs-md);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-tree-row:hover { background: var(--ins-ctl-bg); }
+.ins-tree [role="treeitem"]:focus-visible > .ins-tree-row {
+  outline: 2px solid var(--ins-tone-brand-soft);
+  outline-offset: -2px;
+}
+.ins-tree [aria-selected="true"] > .ins-tree-row {
+  background: rgba(var(--ins-primary-rgb), .10);
+  color: var(--ins-primary-darker);
+  font-weight: 700;
+}
+
+.ins-tree-label { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ins-tree-row > a.ins-tree-label { flex: 1 1 auto; color: inherit; text-decoration: none; }
+.ins-tree-row > .ins-check { flex: 1 1 auto; min-inline-size: 0; }
+.ins-tree-row > svg,
+.ins-tree-row > .ins-tree-label > svg:first-child {
+  flex: none;
+  inline-size: 1rem;
+  block-size: 1rem;
+  color: var(--ins-text-3);
+}
+/* An icon inside the label keeps a gap to its text, and sits on its line. */
+.ins-tree-label > svg:first-child { margin-inline-end: .5rem; vertical-align: -.1875em; }
+/* A count or a badge at the far end of the row. */
+.ins-tree-row > :is(.ins-pill, .ins-badge, .ins-tree-end) { margin-inline-start: auto; }
+
+/* The chevron: into a closed branch — right in English, left in Arabic — and down
+   once open. A leaf keeps the space, so every label starts on the same line. */
+.ins-tree-toggle {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  border-radius: var(--ins-r-xs);
+  color: var(--ins-text-3);
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-tree-toggle::before {
+  content: "";
+  inline-size: .4375rem;
+  block-size: .4375rem;
+  border-inline-end: 1.5px solid currentColor;
+  border-block-end: 1.5px solid currentColor;
+  transform: translateX(-1px) rotate(-45deg);
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+[dir="rtl"] .ins-tree-toggle::before { transform: translateX(1px) rotate(45deg); }
+.ins-tree [aria-expanded="true"] > .ins-tree-row > .ins-tree-toggle::before { transform: translateY(-2px) rotate(45deg); }
+[dir="rtl"] .ins-tree [aria-expanded="true"] > .ins-tree-row > .ins-tree-toggle::before { transform: translateY(-2px) rotate(-45deg); }
+.ins-tree-toggle:hover { background: var(--ins-ctl-bg-hover); color: var(--ins-text-1); }
+.ins-tree-toggle.is-leaf { visibility: hidden; }
+
+/* Without the script the chevrons are not there, and every branch shows. */
+:root:not([data-ins-js]) .ins-tree-toggle { display: none; }

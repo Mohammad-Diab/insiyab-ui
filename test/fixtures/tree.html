@@ -1,0 +1,59 @@
+<!doctype html>
+<!-- Fixtures for tree.test.mjs: a file tree with links and one branch open, a
+     permissions tree of checkboxes with one branch ticked in the markup, and an
+     English tree read left to right. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab tree fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <link rel="stylesheet" href="../../dist/plugins/insiyab-tree.css">
+  <script src="../../dist/insiyab.js"></script>
+  <script src="../../dist/plugins/insiyab-tree.js"></script>
+</head>
+<body>
+<main class="ins-container ins-stack" style="padding-block: 2rem; max-inline-size: 32rem">
+  <button class="ins-btn" id="before">قبل</button>
+  <ul class="ins-tree" id="files" data-ins-tree aria-label="الملفّات">
+    <li data-open id="docs"><span>المستندات</span>
+      <ul>
+        <li id="contract"><a href="#contract-file">العقد.pdf</a></li>
+        <li id="invoices"><span>الفواتير</span>
+          <ul>
+            <li id="inv1"><a href="#inv-1">فاتورة 1</a></li>
+            <li id="inv2"><a href="#inv-2">فاتورة 2</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li id="photos"><span>الصور</span>
+      <ul><li id="logo"><span>الشعار.png</span></li></ul>
+    </li>
+    <li id="notes"><span>ملاحظات.txt</span></li>
+  </ul>
+  <button class="ins-btn" id="after">بعد</button>
+
+  <form id="perm-form">
+  <ul class="ins-tree" id="perms" data-ins-tree data-ins-tree-checks aria-label="الصلاحيات">
+    <li data-open id="p-sales"><label class="ins-check"><input type="checkbox" name="p" value="sales"><span class="ins-check-text">المبيعات</span></label>
+      <ul>
+        <li id="p-view"><label class="ins-check"><input type="checkbox" name="p" value="sales.view"><span class="ins-check-text">عرض</span></label></li>
+        <li id="p-edit"><label class="ins-check"><input type="checkbox" name="p" value="sales.edit"><span class="ins-check-text">تعديل</span></label></li>
+      </ul>
+    </li>
+    <li data-open id="p-hr"><label class="ins-check"><input type="checkbox" name="p" value="hr" checked><span class="ins-check-text">الموارد البشرية</span></label>
+      <ul>
+        <li id="p-hr-view"><label class="ins-check"><input type="checkbox" name="p" value="hr.view"><span class="ins-check-text">عرض</span></label></li>
+      </ul>
+    </li>
+  </ul>
+  </form>
+
+  <ul class="ins-tree" id="en" data-ins-tree data-ins-tree-select="none" lang="en" dir="ltr" aria-label="English">
+    <li id="en-a"><span>Alpha</span><ul><li id="en-a1"><span>One</span></li></ul></li>
+    <li id="en-b"><span>Beta</span></li>
+  </ul>
+</main>
+</body>
+</html>
