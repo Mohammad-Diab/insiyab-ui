@@ -1,0 +1,36 @@
+<!doctype html>
+<!-- Fixtures for otp-field.test.mjs. Every form counts its submissions and never
+     leaves the page. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab OTP fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <link rel="stylesheet" href="../../dist/plugins/insiyab-otp.css">
+  <script src="../../dist/insiyab.js"></script>
+  <script src="../../dist/plugins/insiyab-otp.js"></script>
+</head>
+<body>
+<main class="ins-container ins-stack" style="padding-block: 2rem">
+  <form id="f1" data-ins-validate onsubmit="event.preventDefault(); window.__sent1 = (window.__sent1 || 0) + 1">
+    <div class="ins-field">
+      <label class="ins-label" for="otp">رمز التحقق</label>
+      <input class="ins-input" id="otp" data-ins-otp="6" name="code" required>
+      <div class="ins-error"></div>
+    </div>
+    <button class="ins-btn" id="f1-reset" type="reset">مسح</button>
+  </form>
+
+  <form id="f2" onsubmit="event.preventDefault(); window.__sent2 = (window.__sent2 || 0) + 1">
+    <input id="otp-submit" data-ins-otp data-ins-otp-submit name="code2" aria-label="رمز يرسل وحده">
+  </form>
+
+  <input id="otp-alnum" data-ins-otp="4" data-ins-otp-chars="alnum" aria-label="رمز بحروف">
+  <input id="otp-max" maxlength="5" data-ins-otp aria-label="من maxlength">
+  <input id="otp-en" data-ins-otp="4" lang="en" aria-label="English code">
+  <input id="otp-ten" data-ins-otp="10" aria-label="عشر خانات">
+  <input id="otp-off" data-ins-otp="4" disabled aria-label="معطّل">
+</main>
+</body>
+</html>
