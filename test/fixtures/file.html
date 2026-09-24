@@ -1,0 +1,49 @@
+<!doctype html>
+<!-- Fixtures for file-upload.test.mjs. The limits are tiny (1 KB, 3 files) so the
+     test can make its files in the page. Every form stays on the page. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab file fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <link rel="stylesheet" href="../../dist/plugins/insiyab-file.css">
+  <script src="../../dist/insiyab.js"></script>
+  <script src="../../dist/plugins/insiyab-file.js"></script>
+</head>
+<body>
+<main class="ins-container ins-stack" style="padding-block: 2rem 30rem; max-inline-size: 36rem">
+  <form id="ff" onsubmit="event.preventDefault()">
+    <button class="ins-btn" type="button" id="before">قبل</button>
+    <div class="ins-field">
+      <label class="ins-label" for="f-docs">المرفقات</label>
+      <input type="file" id="f-docs" name="docs" multiple accept=".pdf,image/*" data-ins-file data-ins-file-max="1KB" data-ins-file-count="3">
+    </div>
+    <div class="ins-field">
+      <label class="ins-label" for="f-one">ملف واحد</label>
+      <input type="file" id="f-one" name="one" data-ins-file>
+    </div>
+  </form>
+
+  <form id="fu" onsubmit="event.preventDefault()">
+    <div class="ins-field">
+      <label class="ins-label" for="f-up">يُرفع فورًا</label>
+      <input type="file" id="f-up" name="ids" multiple data-ins-file data-ins-file-upload>
+    </div>
+  </form>
+
+  <form id="fr" data-ins-validate onsubmit="event.preventDefault(); window.__sentR = true">
+    <div class="ins-field">
+      <label class="ins-label" for="f-req">مطلوب</label>
+      <input type="file" id="f-req" name="req" required data-ins-file data-ins-file-note="صورة الهوية">
+      <div class="ins-error"></div>
+    </div>
+    <button class="ins-btn" id="fr-send">إرسال</button>
+  </form>
+
+  <input type="file" id="f-compact" class="ins-file--compact" multiple data-ins-file aria-label="مضغوط">
+  <div lang="en" dir="ltr"><input type="file" id="f-en" multiple data-ins-file data-ins-file-max="2MB" aria-label="English"></div>
+  <input type="file" id="f-off" disabled data-ins-file aria-label="معطّل">
+</main>
+</body>
+</html>

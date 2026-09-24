@@ -1,0 +1,115 @@
+<link rel="stylesheet" href="../dist/plugins/insiyab-file.css">
+<script src="../dist/plugins/insiyab-file.js"></script>
+
+<h2 id="install">التثبيت</h2>
+<p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
+<demo-code lang="html">
+<link rel="stylesheet" href="plugins/insiyab-file.css">
+<script src="insiyab.js"></script>
+<script src="plugins/insiyab-file.js"></script>
+</demo-code>
+
+<h2 id="field">منطقة الإفلات</h2>
+<p>
+  حقل ملفّات عاديّ عليه <code>data-ins-file</code>. تُسحب الملفّات إليه أو تُختار أو تُلصق، وتظهر تحته: صورة مصغّرة
+  للصور، ونوع الملفّ لغيرها، والاسم والحجم وزرّ الإزالة.
+</p>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="fl-docs">المرفقات</label>
+    <input type="file" id="fl-docs" name="docs" multiple accept=".pdf,image/*" data-ins-file data-ins-file-max="5MB" data-ins-file-count="5">
+    <div class="ins-hint">ملفّات PDF أو صور.</div>
+  </div>
+</demo-example>
+<p>
+  <b>الملفّات تبقى في الحقل الحقيقيّ.</b> كلّ تغيير — اختيار أو إفلات أو لصق أو إزالة — يُكتب في <code>files</code>
+  الحقل نفسه، فيرسلها النموذج كما كان سيرسلها بلا الإضافة، ولا يحتاج الخادم شيئًا جديدًا. والحقل باقٍ في ترتيب
+  التنقّل تحت تسميته: لوحة المفاتيح وقارئ الشاشة يستعملان زرّ الملفّات الذي في المتصفّح، والمنطقة حوله للفأرة.
+</p>
+
+<h2 id="limits">الحدود</h2>
+<ul>
+  <li><b><code>accept</code></b> — كما يقرؤه المنتقي، ويُطبَّق على الإفلات واللصق أيضًا، وهما لا يمرّان به.</li>
+  <li><b><code>data-ins-file-max</code></b> — أكبر حجم للملفّ: <code>500KB</code>، <code>5MB</code>.</li>
+  <li><b><code>data-ins-file-count</code></b> — أكبر عدد للملفّات، مع <code>multiple</code>.</li>
+</ul>
+<p>
+  ملفّ خارج الحدود لا يُضاف، ويقول الحقل أيّ ملفّ ولماذا. ومع <code>multiple</code> يضيف الاختيار الجديد إلى القائمة
+  ولا يستبدلها؛ وبدونه يستبدل. والسطر الصغير في المنطقة يُكتب من الحدود، أو من <code>data-ins-file-note</code>.
+</p>
+
+<h2 id="compact">المضغوط</h2>
+<p>لنموذج ضيّق: <code>class="ins-file--compact"</code> على الحقل، زرّ وقائمة بلا منطقة. والإفلات على الزرّ يعمل.</p>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="fl-cv">السيرة الذاتية</label>
+    <input type="file" id="fl-cv" class="ins-file--compact" name="cv" accept=".pdf" data-ins-file>
+  </div>
+</demo-example>
+
+<h2 id="upload">الرفع الفوريّ</h2>
+<p>
+  الرفع عند الإضافة شأن الصفحة، بالطلب الذي يريده خادمها. مع <code>data-ins-file-upload</code> يطلق كلّ ملفّ يُضاف
+  <code>ins:file</code>، فترسله الصفحة وتبلّغ الإضافة بما جرى. عندها لا يرسل الحقل ملفّات: كلّ رفع تمّ يترك حقلًا
+  مخفيًا باسم الحقل يحمل المعرّف الذي أعطته الصفحة، والحقل غير صالح ما دام ملفّ في الطريق أو تعذّر رفعه.
+  في هذا المثال رفع مصطنع، وملفّ في اسمه «خطأ» يتعذّر عمدًا:
+</p>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="fl-up">صور المنتج</label>
+    <input type="file" id="fl-up" name="photos" multiple accept="image/*" data-ins-file data-ins-file-upload>
+  </div>
+</demo-example>
+<demo-code lang="js">
+document.addEventListener('ins:file', async (e) => {
+  if (!e.detail.upload) return;
+  const file = e.detail.file;
+  try {
+    const id = await send(file, (fraction) => Insiyab.file.progress(file, fraction));
+    Insiyab.file.done(file, id);          // حقل مخفيّ باسم الحقل يحمل المعرّف
+  } catch (err) {
+    Insiyab.file.fail(file, 'تعذّر الرفع، أزِل الملفّ أو أعد إضافته.');
+  }
+});
+
+Insiyab.file('#docs');         // الملفّات في القائمة
+Insiyab.file('#docs', []);     // أفرغها
+</demo-code>
+
+<h2 id="attributes">السمات</h2>
+<div class="ins-panel site-ref">
+  <div class="ins-panel-body ins-panel-body--flush">
+    <div class="ins-table-wrap">
+      <table class="ins-table">
+        <thead><tr><th>السمة</th><th>ما تفعله</th></tr></thead>
+        <tbody>
+          <tr><td><code>data-ins-file</code></td><td>على <code>&lt;input type="file"&gt;</code>: منطقة إفلات وقائمة.</td></tr>
+          <tr><td><code>data-ins-file-max="5MB"</code></td><td>أكبر حجم للملفّ.</td></tr>
+          <tr><td><code>data-ins-file-count="5"</code></td><td>أكبر عدد، مع <code>multiple</code>.</td></tr>
+          <tr><td><code>data-ins-file-note="…"</code></td><td>السطر الصغير في المنطقة، بدل المكتوب من الحدود.</td></tr>
+          <tr><td><code>data-ins-file-upload</code></td><td>الرفع عند الإضافة، بيد الصفحة.</td></tr>
+          <tr><td><code>class="ins-file--compact"</code></td><td>زرّ وقائمة بلا منطقة.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* A pretend upload: a second and a half of progress, and a file with «خطأ» in
+     its name fails on purpose. */
+  document.addEventListener('ins:file', function (e) {
+    if (!e.detail.upload || e.detail.input.id !== 'fl-up') return;
+    var file = e.detail.file, done = 0;
+    var timer = setInterval(function () {
+      done += 0.2;
+      if (done >= 1) {
+        clearInterval(timer);
+        if (/خطأ/.test(file.name)) Insiyab.file.fail(file, 'تعذّر الرفع، أزِل الملفّ أو أعد إضافته.');
+        else Insiyab.file.done(file, 'photo-' + Math.round(Math.random() * 1e6));
+      } else if (!Insiyab.file.progress(file, done)) {
+        clearInterval(timer);                /* removed while on its way */
+      }
+    }, 300);
+  });
+</script>
