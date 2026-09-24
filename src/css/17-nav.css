@@ -1,0 +1,631 @@
+/* ==========================================================================
+   Insiyab · navigation and disclosure
+   ==========================================================================
+   Page header, tabs, pagination, the site navbar, and the accordion.
+
+   One marker runs through all of it. The sidebar's active link, the table row
+   under the pointer, the current tab and the current navbar link all carry the same
+   3px brand bar, and it always *grows from the centre* rather than sliding in — so
+   "where you are" and "what you are pointing at" read as one vocabulary wherever
+   they turn up, and a bar sliding the length of a wide tab strip never drags the
+   eye along with it.
+
+   Several of these need the script to *behave* — tabs switch, the navbar's menu
+   opens on a phone — and every one of them is written so that without it the page is
+   still complete: all the tab panels shown one after another, all the navbar's links
+   shown and wrapping. The switch is `data-ins-js` on <html>, which insiyab.js stamps
+   before first paint, so the collapsed state never flashes open and the open state
+   never flashes collapsed.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- page header */
+/* The top of a page: its name, a line under it, and the page's own actions at the
+   far end. The actions wrap under the title on a narrow screen rather than squeezing
+   it, because an Arabic page title is a phrase and deserves the line. */
+.ins-page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--ins-sp-3) var(--ins-sp-4);
+  margin-block-end: var(--ins-sp-6);
+}
+.ins-page-head-text { flex: 1 1 18rem; min-inline-size: 0; }
+.ins-page-title {
+  margin: 0;
+  font-size: var(--ins-fs-h1);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ins-text-1);
+}
+html[dir="ltr"] .ins-page-title {
+  font-family: var(--ins-font-heading-en);
+  letter-spacing: -.02em;
+}
+.ins-page-sub {
+  margin: .375rem 0 0;
+  font-size: var(--ins-fs-md);
+  line-height: 1.7;
+  color: var(--ins-label);
+}
+.ins-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ins-sp-2);
+}
+
+/* --------------------------------------------------------------- tabs */
+/* Tabs that switch panels on the page:
+
+     <div class="ins-tablist" aria-label="…">
+       <button class="ins-tab" data-ins-tab="#general">عام</button>
+       <button class="ins-tab" data-ins-tab="#security">الأمان</button>
+     </div>
+     <div class="ins-tabpanel" id="general">…</div>
+     <div class="ins-tabpanel" id="security">…</div>
+
+   The script supplies every ARIA attribute — the roles, `aria-selected`,
+   `aria-controls`, the roving tab stop — and the arrow keys, mirrored for RTL so
+   that the arrow pointing at the next tab is the one that moves to it. An `<a
+   class="ins-tab" href="/other-page">` is a navigation tab instead: it is left
+   alone and simply marked with `aria-current`.
+
+   A segmented control can drive panels too — put `data-ins-tab` on its buttons.
+   That is the other look for the same behaviour: a strip of peers where this is a
+   row of sections. */
+.ins-tablist {
+  display: flex;
+  gap: .25rem;
+  margin-block-end: var(--ins-sp-4);
+  border-block-end: 1px solid var(--ins-line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ins-tablist::-webkit-scrollbar { display: none; }
+.ins-tab {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  min-block-size: var(--ins-ctl-h);
+  padding: .5rem .875rem;
+  border: 0;
+  border-start-start-radius: var(--ins-r-sm);
+  border-start-end-radius: var(--ins-r-sm);
+  background: none;
+  font-family: inherit;
+  font-size: var(--ins-fs-sm);
+  font-weight: 700;
+  color: var(--ins-label);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-tab::after {
+  content: "";
+  position: absolute;
+  inset-inline: .625rem;
+  inset-block-end: -1px;
+  block-size: 3px;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-brand-soft);
+  transform: scaleX(0);
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+.ins-tab:hover { background: var(--ins-ctl-bg); color: var(--ins-text-1); }
+.ins-tab:hover::after { transform: scaleX(.35); }
+.ins-tab:focus-visible { outline-offset: -2px; }
+.ins-tab:is([aria-selected="true"], [aria-current="page"], .is-active) { color: var(--ins-tone-brand); }
+.ins-tab:is([aria-selected="true"], [aria-current="page"], .is-active)::after { transform: scaleX(1); }
+
+/* Without the script every panel is shown, one after another, so the content is
+   all still there. With it, only the selected one — and it arrives with the page's
+   own entrance, so switching reads as the section changing rather than as a flash. */
+:root[data-ins-js] .ins-tabpanel:not(.is-active) { display: none; }
+:root[data-ins-js] .ins-tabpanel.is-active { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease); }
+.ins-tabpanel:focus-visible { outline-offset: 4px; border-radius: var(--ins-r-sm); }
+
+/* --------------------------------------------------------------- pagination */
+/* A recessed track with the current page raised out of it — the segmented
+   control's grammar, because it is the same question: which one of these am I on.
+   The current page reads by position, not by being the loudest thing in the row.
+
+     <nav class="ins-pagination" aria-label="الصفحات">
+       <a class="ins-page ins-page--prev" href="?p=2">السابق</a>
+       <a class="ins-page" href="?p=1">1</a>
+       <a class="ins-page" aria-current="page">3</a>
+       <span class="ins-page-gap">…</span>
+       <a class="ins-page ins-page--next" href="?p=4">التالي</a>
+     </nav>
+
+   The numbers are Inter with tabular figures, so a row does not shift width as you
+   page from 9 to 10. The arrows point toward the start and the end of the reading
+   direction — "previous" points right on an Arabic page. */
+.ins-pagination {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .1875rem;
+  max-inline-size: 100%;
+  padding: .25rem;
+  border-radius: var(--ins-r-md);
+  background: var(--ins-ctl-bg-hover);
+  border: 1px solid var(--ins-line-glass);
+}
+.ins-page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .375rem;
+  min-inline-size: 2.125rem;
+  min-block-size: 2.125rem;
+  padding-inline: .5rem;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: transparent;
+  font-family: var(--ins-font-body-en);
+  font-size: var(--ins-fs-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ins-label);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease),
+              color var(--ins-t-pop) var(--ins-ease),
+              box-shadow var(--ins-t-pop) var(--ins-ease);
+}
+/* The words on the arrows are Arabic as often as not; set them in the page's face,
+   not the numerals'. */
+.ins-page--prev,
+.ins-page--next { font-family: inherit; padding-inline: .75rem; }
+.ins-page:hover { background: var(--ins-surface-hover); color: var(--ins-text-1); }
+.ins-page:is([aria-current="page"], .is-active) {
+  background: var(--ins-seg-on-bg);
+  color: var(--ins-seg-on-fg);
+  box-shadow: var(--ins-seg-on-shadow);
+  cursor: default;
+}
+.ins-page:is(:disabled, [aria-disabled="true"]) { opacity: .4; pointer-events: none; }
+.ins-page-gap {
+  min-inline-size: 1.5rem;
+  text-align: center;
+  font-family: var(--ins-font-body-en);
+  color: var(--ins-text-3);
+}
+/* The chevrons, drawn as two borders of a rotated square. Physical `border-top` and
+   `border-right`, and a rotation flipped by hand per direction: a transform has no
+   logical form, and a chevron's whole job is to point one physical way. */
+.ins-page--prev::before,
+.ins-page--next::after {
+  content: "";
+  inline-size: .4375rem;
+  block-size: .4375rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+[dir="ltr"] .ins-page--next::after,
+[dir="rtl"] .ins-page--prev::before { transform: rotate(45deg); }
+[dir="ltr"] .ins-page--prev::before,
+[dir="rtl"] .ins-page--next::after { transform: rotate(-135deg); }
+
+/* --------------------------------------------------------------- navbar */
+/* The public site's bar — the application has the shell. It follows the shell's
+   idea rather than its markup: a floating glass **island** inset from the edges of
+   the page, not a slab welded to the top of it.
+
+     <header class="ins-navbar">
+       <a class="ins-navbar-brand" href="/">…</a>
+       <button class="ins-navbar-toggle" data-ins-navbar aria-label="القائمة"></button>
+       <nav class="ins-navbar-menu">
+         <a class="ins-navbar-link" href="/" aria-current="page">الرئيسية</a>
+         …
+         <div class="ins-navbar-end">…buttons…</div>
+       </nav>
+     </header>
+
+   Below 900px the menu folds away behind the toggle and opens as a column inside the
+   same island, which grows to hold it. Without the script there is no toggle and
+   the links simply wrap onto the island's second line — every link still one tap
+   away, which is the fallback that matters on the connections this is built for. */
+.ins-navbar {
+  position: sticky;
+  inset-block-start: var(--ins-sp-3);
+  z-index: 1020;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ins-sp-2) var(--ins-sp-4);
+  inline-size: min(100% - 2rem, var(--ins-container));
+  min-block-size: 3.5rem;
+  margin: var(--ins-sp-3) auto;
+  padding-block: .375rem;
+  padding-inline: 1rem .375rem;
+  border-radius: var(--ins-r-lg);
+  border: 1px solid var(--ins-rim);
+  border-top-color: var(--ins-rim-top);
+  background: var(--ins-glass);
+  box-shadow: var(--ins-sh-bubble), var(--ins-bevel);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-navbar { -webkit-backdrop-filter: var(--ins-blur-bar); backdrop-filter: var(--ins-blur-bar); }
+}
+/* Not every site wants its bar to follow the page down. */
+.ins-navbar--static { position: relative; inset-block-start: auto; }
+
+.ins-navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: var(--ins-fs-lg);
+  font-weight: 700;
+  color: var(--ins-text-1);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.ins-navbar-brand:hover { color: var(--ins-text-1); }
+.ins-navbar-menu {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .125rem;
+  min-inline-size: 0;
+}
+.ins-navbar-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  min-block-size: 2.5rem;
+  padding: .5rem .75rem;
+  border-radius: var(--ins-r-sm);
+  font-size: var(--ins-fs-sm);
+  font-weight: 700;
+  color: var(--ins-label);
+  text-decoration: none;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-navbar-link::after {
+  content: "";
+  position: absolute;
+  inset-inline: .75rem;
+  inset-block-end: .25rem;
+  block-size: 2px;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-brand-soft);
+  transform: scaleX(0);
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+.ins-navbar-link:hover { background: var(--ins-ctl-bg); color: var(--ins-text-1); }
+.ins-navbar-link:hover::after { transform: scaleX(.35); }
+.ins-navbar-link:is([aria-current="page"], .is-active) { color: var(--ins-tone-brand); }
+.ins-navbar-link:is([aria-current="page"], .is-active)::after { transform: scaleX(1); }
+/* The trailing actions — sign in, a primary call to action, the theme switch. */
+.ins-navbar-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .375rem;
+  margin-inline-start: auto;
+}
+
+/* The toggle: three bars drawn with one line and two shadows, which fold into a
+   cross while the menu is open. */
+.ins-navbar-toggle {
+  position: relative;
+  display: none;
+  flex: 0 0 auto;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  margin-inline-start: auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-ctl-bg);
+  color: var(--ins-text-1);
+  cursor: pointer;
+}
+.ins-navbar-toggle::before,
+.ins-navbar-toggle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: 1.125rem;
+  block-size: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform var(--ins-t-base) var(--ins-ease),
+              box-shadow var(--ins-t-base) var(--ins-ease),
+              opacity var(--ins-t-base) var(--ins-ease);
+}
+.ins-navbar-toggle::before { box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor; }
+.ins-navbar-toggle::after { opacity: 0; }
+.ins-navbar.is-open .ins-navbar-toggle::before { box-shadow: none; transform: rotate(45deg); }
+.ins-navbar.is-open .ins-navbar-toggle::after { opacity: 1; transform: rotate(-45deg); }
+
+@media (max-width: 900px) {
+  :root[data-ins-js] .ins-navbar-toggle { display: inline-grid; }
+  .ins-navbar-menu {
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    padding-block: .375rem .25rem;
+    border-block-start: 1px solid var(--ins-line);
+  }
+  :root[data-ins-js] .ins-navbar:not(.is-open) .ins-navbar-menu { display: none; }
+  :root[data-ins-js] .ins-navbar.is-open .ins-navbar-menu { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease); }
+  /* In a column the marker would underline a whole row; the current link takes the
+     raised face instead. */
+  .ins-navbar-link::after { content: none; }
+  .ins-navbar-link:is([aria-current="page"], .is-active) { background: var(--ins-tone-brand-bg); }
+  .ins-navbar-end { margin-inline-start: 0; padding-block-start: .375rem; }
+}
+
+/* --------------------------------------------------------------- accordion */
+/* A `<details>`, so it opens and closes with no script at all, and so the one
+   behaviour everybody reaches for — only one section open at a time — is an
+   attribute: give the sections the same `name="…"` and the browser closes the others.
+
+     <div class="ins-accordion">
+       <details class="ins-collapse" name="faq" open>
+         <summary>هل تعمل المكتبة دون جافاسكربت؟</summary>
+         <div class="ins-collapse-body">نعم …</div>
+       </details>
+       …
+     </div>
+
+   `.ins-collapse` alone is a single collapsible section; `.ins-accordion` is only
+   the dividers between several. It has no surface of its own — put it in a panel or
+   a card, which is where it nearly always is. */
+.ins-collapse > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .875rem 1rem;
+  border-radius: var(--ins-r-md);
+  font-size: var(--ins-fs-md);
+  font-weight: 700;
+  color: var(--ins-text-1);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-collapse > summary::-webkit-details-marker { display: none; }
+.ins-collapse > summary:hover { background: var(--ins-ctl-bg); }
+.ins-collapse > summary:focus-visible { outline-offset: -2px; }
+.ins-collapse[open] > summary { color: var(--ins-tone-brand); }
+/* The chevron points down and turns to point up. Physical borders on purpose: a
+   downward chevron is the same in both directions, and logical ones would draw it
+   pointing sideways in RTL. */
+.ins-collapse > summary::after {
+  content: "";
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  inline-size: .5rem;
+  block-size: .5rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  color: var(--ins-text-3);
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform var(--ins-t-base) var(--ins-ease);
+}
+.ins-collapse[open] > summary::after { color: var(--ins-tone-brand-soft); transform: translateY(2px) rotate(-135deg); }
+.ins-collapse-body {
+  padding: 0 1rem 1rem;
+  font-size: var(--ins-fs-md);
+  line-height: 1.8;
+  color: var(--ins-text-1);
+}
+
+/* The height animates where the engine can do it, and snaps where it cannot — which
+   is the whole of the difference. `interpolate-size` is what lets `block-size` go
+   from 0 to `auto`; `::details-content` is the part of a <details> that hides. Each
+   in a rule of its own: an engine that does not know the pseudo-element discards
+   every selector in the rule it appears in. */
+.ins-collapse { interpolate-size: allow-keywords; }
+.ins-collapse::details-content {
+  block-size: 0;
+  overflow-y: clip;
+  transition: block-size var(--ins-t-exit) var(--ins-ease),
+              content-visibility var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+.ins-collapse[open]::details-content {
+  block-size: auto;
+  transition-duration: var(--ins-t-enter);
+}
+
+.ins-accordion > .ins-collapse + .ins-collapse { border-block-start: 1px solid var(--ins-line); }
+.ins-accordion > .ins-collapse > summary { border-radius: var(--ins-r-sm); }
+
+/* --------------------------------------------------------------- breadcrumb */
+/*   <nav class="ins-breadcrumb" aria-label="مسار التنقّل">
+       <ol>
+         <li><a href="/">الرئيسية</a></li>
+         <li><a href="/settings">الإعدادات</a></li>
+         <li><span aria-current="page">الأمان</span></li>
+       </ol>
+     </nav>
+
+   The separator is drawn, not typed, so it is not read aloud as "greater than"
+   between every crumb, and it points the way the trail runs: toward the end of the
+   line, which is the left on an Arabic page. Inside a page header it takes a line
+   of its own above the title. */
+.ins-breadcrumb ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .125rem;
+  font-size: var(--ins-fs-sm);
+}
+.ins-breadcrumb li { display: inline-flex; align-items: center; gap: .125rem; min-inline-size: 0; }
+.ins-breadcrumb li + li::before {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: .375rem;
+  block-size: .375rem;
+  margin-inline: .375rem;
+  border-top: 1.5px solid var(--ins-text-3);
+  border-right: 1.5px solid var(--ins-text-3);
+}
+[dir="ltr"] .ins-breadcrumb li + li::before { transform: rotate(45deg); }
+[dir="rtl"] .ins-breadcrumb li + li::before { transform: rotate(-135deg); }
+.ins-breadcrumb a {
+  padding: .125rem .375rem;
+  border-radius: var(--ins-r-xs);
+  font-weight: 600;
+  color: var(--ins-label);
+  text-decoration: none;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-breadcrumb a:hover { background: var(--ins-ctl-bg); color: var(--ins-text-1); }
+.ins-breadcrumb [aria-current="page"] {
+  padding-inline: .375rem;
+  font-weight: 700;
+  color: var(--ins-text-1);
+  max-inline-size: 24ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ins-page-head > .ins-breadcrumb { flex-basis: 100%; margin-block-end: calc(var(--ins-sp-3) * -1); }
+
+/* --------------------------------------------------------------- steps */
+/* Where you are in a sequence: a checkout, a signup, an import. Numbered by a CSS
+   counter, so the markup is just the list:
+
+     <ol class="ins-steps">
+       <li class="ins-steps-item is-done"><span class="ins-steps-label">البيانات</span></li>
+       <li class="ins-steps-item" aria-current="step"><span class="ins-steps-label">الدفع</span></li>
+       <li class="ins-steps-item"><span class="ins-steps-label">التأكيد</span></li>
+     </ol>
+
+   It stands on its own for a flow that is several pages on the server, and
+   `.ins-wizard` below drives it for one that is several panels on one page.
+
+   A finished step keeps its number rather than trading it for a tick. The tick
+   would be a glyph in a font, or a mask whose colour cannot follow a pale brand's
+   dark label; the number on the brand fill, in the measured `--ins-on-primary`, is
+   legible on every brand by construction, and "which step was this" is still
+   answered. The line that joins a finished step to the next takes the brand too, so
+   the trail behind you reads as one line. */
+.ins-steps {
+  list-style: none;
+  margin: 0 0 var(--ins-sp-6);
+  padding: 0;
+  display: flex;
+  counter-reset: ins-step;
+}
+.ins-steps-item {
+  position: relative;
+  flex: 1 1 0;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .375rem;
+  text-align: center;
+  counter-increment: ins-step;
+  font-size: var(--ins-fs-xs);
+  font-weight: 700;
+  color: var(--ins-label);
+}
+.ins-steps-item::before {
+  content: counter(ins-step);
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: 50%;
+  border: 1px solid var(--ins-ctl-bd);
+  background: var(--ins-surface);
+  box-shadow: var(--ins-bevel-dim);
+  font-family: var(--ins-font-body-en);
+  font-size: var(--ins-fs-sm);
+  color: var(--ins-label);
+  transition: background var(--ins-t-base) var(--ins-ease),
+              color var(--ins-t-base) var(--ins-ease),
+              box-shadow var(--ins-t-base) var(--ins-ease);
+}
+/* The joining line, from the previous circle's edge to this one's, on the side the
+   previous step is on — logical insets, so it joins right-to-left in Arabic. */
+.ins-steps-item + .ins-steps-item::after {
+  content: "";
+  position: absolute;
+  inset-block-start: calc(1rem - 1px);
+  inset-inline-start: calc(-50% + 1.375rem);
+  inset-inline-end: calc(50% + 1.375rem);
+  block-size: 2px;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-line);
+  transition: background var(--ins-t-base) var(--ins-ease);
+}
+.ins-steps-item.is-done::before {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  color: var(--ins-on-primary);
+}
+.ins-steps-item.is-done + .ins-steps-item::after { background: var(--ins-tone-brand-soft); }
+.ins-steps-item[aria-current="step"] { color: var(--ins-tone-brand); }
+.ins-steps-item[aria-current="step"]::before {
+  border-color: var(--ins-tone-brand-soft);
+  color: var(--ins-tone-brand);
+  box-shadow: var(--ins-glow-ring);
+}
+/* On a phone four step names do not fit under four circles. The current one keeps
+   its name; the rest keep their numbers, and their names stay for screen readers. */
+@media (max-width: 34rem) {
+  .ins-steps-item:not([aria-current="step"]) .ins-steps-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* --------------------------------------------------------------- wizard */
+/* Several panels of one form, one at a time:
+
+     <form class="ins-wizard">
+       <ol class="ins-steps">…</ol>
+       <section class="ins-wizard-panel">…fields…</section>
+       <section class="ins-wizard-panel">…fields…</section>
+       <div class="ins-wizard-foot">
+         <button type="button" class="ins-btn ins-btn--secondary" data-ins-wizard="prev">السابق</button>
+         <button type="button" class="ins-btn ins-btn--primary" data-ins-wizard="next">التالي</button>
+         <button class="ins-btn ins-btn--primary ins-wizard-finish">إرسال</button>
+       </div>
+     </form>
+
+   "Next" checks the panel it is leaving with the browser's own validation before
+   it moves, so a required field stops you on the step it belongs to rather than at
+   the end. It is one form, so the last button submits all of it.
+
+   **Without the script it is simply the whole form** — every panel shown, the step
+   buttons gone, the finish button at the bottom — which is a long form, not a broken
+   one. */
+:root[data-ins-js] .ins-wizard-panel:not(.is-active) { display: none; }
+:root[data-ins-js] .ins-wizard-panel.is-active { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease); }
+.ins-wizard-panel:focus-visible { outline-offset: 4px; border-radius: var(--ins-r-sm); }
+.ins-wizard-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  margin-block-start: var(--ins-sp-5);
+}
+.ins-wizard-foot > :is([data-ins-wizard="next"], .ins-wizard-finish) { margin-inline-start: auto; }
+:root:not([data-ins-js]) [data-ins-wizard="prev"],
+:root:not([data-ins-js]) [data-ins-wizard="next"] { display: none; }
+:root[data-ins-js] .ins-wizard:not([data-ins-last]) .ins-wizard-finish,
+:root[data-ins-js] .ins-wizard[data-ins-last] [data-ins-wizard="next"] { display: none; }
+:root[data-ins-js] .ins-wizard[data-ins-first] [data-ins-wizard="prev"] { visibility: hidden; }

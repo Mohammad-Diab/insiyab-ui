@@ -212,7 +212,7 @@ function verify(css) {
   if (missing.length) fail(`animation names keyframes nothing defines: ${missing.join(', ')}`);
 
   /* Ambient motion is the one thing this design cannot afford — see the measurement
-     in 16-motion.css. Two exceptions, both meaning "waiting". */
+     in 18-motion.css. Two exceptions, both meaning "waiting". */
   const ALLOWED_INFINITE = ['ins-skel', 'ins-spin'];
   for (const decl of bare.match(/animation[^;}]*infinite[^;}]*/g) || []) {
     if (!ALLOWED_INFINITE.some((name) => decl.includes(name))) {

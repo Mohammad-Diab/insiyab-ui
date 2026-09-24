@@ -1,8 +1,17 @@
 /* ==========================================================================
    Insiyab · layout
    ==========================================================================
-   The three arrangements every page in this design needs: a grid of tiles, a
-   strip of controls above a table, and a search field.
+   The arrangements every page in this design needs: a grid of tiles, a strip of
+   controls above a table, and a search field — and underneath them the four plain
+   primitives any page is built from: a container, a stack, a row, and a grid with
+   a fixed number of columns.
+
+   The primitives own the spacing *between* their children, through `gap`. That
+   only works if the children stop bringing their own outer margins — a panel's
+   1.25rem under a stack's 1rem gap is 2.25rem, and it reads as a mistake. The
+   rule that clears them is in 19-utilities.css rather than here, and the reason is
+   order: it has to come after every component that declares a margin, or the
+   component's own rule wins the tie.
    ========================================================================== */
 
 /* --------------------------------------------------------------- card grid */
@@ -24,7 +33,7 @@
 .ins-grid--wide { --ins-col: 20rem; }
 .ins-grid--half { --ins-col: 26rem; }
 
-/* A grid reveals itself: the entrance is the shared one in 16-motion.css, which
+/* A grid reveals itself: the entrance is the shared one in 18-motion.css, which
    splits the fade onto the container and the rise onto the children.
 
    That split is the whole point and it is worth saying twice. The single-animation
@@ -99,3 +108,108 @@
   margin-inline-start: auto;
 }
 .ins-searchbar .ins-search { flex: 1 1 auto; }
+
+/* --------------------------------------------------------------- container */
+/* A page's column. The inset grows with the viewport rather than stepping at a
+   breakpoint: 16px is right on a phone and looks cramped at 1440px, where 32px is
+   right, and `clamp()` gets both without a media query. */
+.ins-container {
+  inline-size: 100%;
+  max-inline-size: var(--ins-container);
+  margin-inline: auto;
+  padding-inline: clamp(var(--ins-sp-4), 4vw, var(--ins-sp-8));
+}
+/* Forms, articles, settings. 48rem is the widest a single column of fields gets
+   before the label and the far end of the input stop reading as one line. */
+.ins-container--narrow { --ins-container: 48rem; }
+.ins-container--wide { --ins-container: 90rem; }
+
+/* --------------------------------------------------------------- stack / row */
+/* Vertical and horizontal flow. Flex rather than margins between siblings, so the
+   gap is one declaration a `.ins-gap-*` utility can replace, and so a hidden child
+   leaves no orphaned margin behind.
+
+   A stack stretches its children across its width, as a column of blocks should.
+   An inline control inside one — a single button — stretches with them; put
+   `.ins-items-start` on the stack when that is not what you want. */
+.ins-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ins-sp-4);
+}
+/* Wraps, and centres on the cross axis: a row is nearly always a line of controls
+   of mixed heights — a button beside a pill beside a select — and top-aligning
+   those is the one arrangement nobody wants. The gap is the toolbar's. */
+.ins-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ins-sp-3);
+}
+
+/* --------------------------------------------------------------- fixed columns */
+/* For layouts that are about a number of columns rather than about tile width:
+   a form in two columns, a page scaffold on twelve. `.ins-grid` above is still the
+   right answer for a set of cards, which should reflow by width.
+
+   `minmax(0, 1fr)` and not `1fr`: a bare `1fr` has an automatic minimum, so one
+   long unbroken string — an IBAN, a URL — widens its column and squeezes the
+   others instead of wrapping. */
+.ins-cols-2,
+.ins-cols-3,
+.ins-cols-4,
+.ins-cols-6,
+.ins-cols-12 {
+  display: grid;
+  gap: var(--ins-sp-4);
+}
+.ins-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ins-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ins-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.ins-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.ins-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+.ins-span-2 { grid-column: span 2; }
+.ins-span-3 { grid-column: span 3; }
+.ins-span-4 { grid-column: span 4; }
+.ins-span-5 { grid-column: span 5; }
+.ins-span-6 { grid-column: span 6; }
+.ins-span-7 { grid-column: span 7; }
+.ins-span-8 { grid-column: span 8; }
+.ins-span-9 { grid-column: span 9; }
+.ins-span-10 { grid-column: span 10; }
+.ins-span-11 { grid-column: span 11; }
+.ins-span-12 { grid-column: span 12; }
+.ins-span-full { grid-column: 1 / -1; }
+
+/* The grids collapse on their own, so a page needs no responsive column classes.
+   At tablet width — 900px, the same line at which the shell's sidebar becomes a
+   drawer — anything wider than two columns becomes two, and a spanned cell goes
+   full width. On a phone every grid is one column.
+
+   The spans have to be reset along with the columns, not left alone: a
+   `span 8` cell in a grid that now has two columns does not clamp, it creates six
+   implicit columns and pushes the page sideways.
+
+   `.ins-cols--fixed` opts out, for the grids whose column count is the content —
+   three figures side by side, a keypad. */
+@media (max-width: 900px) {
+  :is(.ins-cols-3, .ins-cols-4, .ins-cols-6, .ins-cols-12):not(.ins-cols--fixed) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  :is(.ins-cols-3, .ins-cols-4, .ins-cols-6, .ins-cols-12):not(.ins-cols--fixed)
+    > :is(.ins-span-3, .ins-span-4, .ins-span-5, .ins-span-6, .ins-span-7, .ins-span-8,
+          .ins-span-9, .ins-span-10, .ins-span-11, .ins-span-12) {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 34rem) {
+  :is(.ins-cols-2, .ins-cols-3, .ins-cols-4, .ins-cols-6, .ins-cols-12):not(.ins-cols--fixed) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  :is(.ins-cols-2, .ins-cols-3, .ins-cols-4, .ins-cols-6, .ins-cols-12):not(.ins-cols--fixed)
+    > :is(.ins-span-2, .ins-span-3, .ins-span-4, .ins-span-5, .ins-span-6, .ins-span-7,
+          .ins-span-8, .ins-span-9, .ins-span-10, .ins-span-11, .ins-span-12) {
+    grid-column: auto;
+  }
+}

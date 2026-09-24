@@ -207,6 +207,12 @@
   --ins-dlg-gap: 1.25rem;   /* between the blocks inside one */
   --ins-dlg-gap-x: .75rem;  /* between two fields on the same line */
 
+  /* The tooltip is the one surface that is *not* glass: a solid inverted chip. It
+     floats over whatever is under the pointer, which is exactly where a frosted
+     surface has nothing reliable to be read against. Inverted per theme below. */
+  --ins-tip-bg: rgba(15, 23, 42, .94);
+  --ins-tip-fg: #F8FAFC;
+
   --ins-field-h: 46px;   /* the design's control height; Bootstrap's is 38px */
   --ins-ctl-h: 38px;     /* a toolbar / table-row control, one step down */
   /* The small step, and a token rather than three 30px literals: a small button,
@@ -222,6 +228,27 @@
 
   --ins-shell-sidebar: 252px;
   --ins-shell-topbar: 64px;
+
+  /* Spacing. One rule to remember: step N is N × 4px. The steps are the ones the
+     components were already spending — .25, .5, .75, 1, 1.25 and 1.5rem are all in
+     the sheet as literals — plus the two larger steps a page layout needs and a
+     component never does. Every `ins-gap-*`, `ins-m*-*` and `ins-p*-*` utility
+     reads these, so the utilities and the components cannot drift apart. */
+  --ins-sp-1: .25rem;
+  --ins-sp-2: .5rem;
+  --ins-sp-3: .75rem;
+  --ins-sp-4: 1rem;
+  --ins-sp-5: 1.25rem;
+  --ins-sp-6: 1.5rem;
+  --ins-sp-8: 2rem;
+  --ins-sp-12: 3rem;
+
+  /* A page's width, and a paragraph's. The measure is in `ch`, which is the width
+     of the zero glyph and so an approximation in Arabic — but a consistent one, and
+     70 of them lands a Tajawal line at the 60–75 characters long-form text is
+     comfortable at. `.ins-container--narrow` and `--wide` swap the first. */
+  --ins-container: 75rem;
+  --ins-measure: 70ch;
 
   /* Arabic first: Tajawal is the identity, and it carries its own Latin subset, so
      a Latin acronym inside an Arabic line stays in Tajawal rather than jumping to
@@ -249,6 +276,23 @@
      RTL-first; an LTR page swaps it below. This is the token components inherit
      from, so nothing downstream has to know which direction it is in. */
   --ins-font-body: var(--ins-font-arabic);
+
+  /* Type scale. The body is 14px, set on <body> in 04-reset.css, and the steps
+     either side of it are the sizes the components already use: 12 and 13px for
+     hints and toolbars, 16 and 20px above. Headings climb faster than the text
+     steps do, because a heading is read as a position in the page before it is
+     read as words. The display size is fluid — the one size on a page that has to
+     work on a 390px phone and a 1440px screen both. */
+  --ins-fs-xs: .75rem;
+  --ins-fs-sm: .8125rem;
+  --ins-fs-md: .875rem;
+  --ins-fs-lg: 1rem;
+  --ins-fs-xl: 1.25rem;
+  --ins-fs-h4: 1rem;
+  --ins-fs-h3: 1.125rem;
+  --ins-fs-h2: 1.375rem;
+  --ins-fs-h1: 1.75rem;
+  --ins-fs-display: clamp(2rem, 1.25rem + 3vw, 3rem);
 }
 
 html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }

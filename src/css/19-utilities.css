@@ -1,0 +1,320 @@
+/* ==========================================================================
+   Insiyab · utilities
+   ==========================================================================
+   Single-purpose classes for the adjustments a component should not have to grow
+   a modifier for: this gap is too wide, this label should be muted, this button
+   hides on a phone.
+
+   **A small, regular set, not a utility framework.** The line is drawn at things a
+   page genuinely needs every day — spacing, alignment, visibility, a few text
+   treatments — and every family is complete across its scale rather than curated,
+   because a set you can predict is a set you do not have to look up. `ins-mt-4`
+   existing and `ins-mt-5` not would be worse than both existing.
+
+   **Logical, not physical.** `s` and `e` are the inline start and end, and `t` and
+   `b` the block start and end: `ins-ms-4` is a right margin on an Arabic page and a
+   left one on an English page, from the same class. There is no `ml` or `mr`, and
+   that is the RTL-first promise applied to the one layer where it is easiest to
+   break.
+
+   **Late in the concatenation, and without `!important`.** A utility and a
+   component rule are both a single class, so the tie goes to whichever comes
+   later — and this file comes after every component, so `ins-mb-0` on a panel
+   wins without needing to shout. The one `!important` in the file is on the
+   `hidden` attribute, and it is explained where it is.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- primitives own their gaps */
+/* The rule 07-layout.css defers to here. A stack, a row and a fixed grid space
+   their children with `gap`, so a child that brings its own outer margin — a
+   panel, a grid of cards, an `<h2>` — would be spaced twice. It is here and not
+   with the primitives because it has to come after the components whose margins it
+   clears; and it is above the margin utilities because those still have to be able
+   to put a margin back. `ins-mt-auto` pushing the last item of a stack to the
+   bottom depends on exactly that order. */
+:is(.ins-stack, .ins-row, .ins-cols-2, .ins-cols-3, .ins-cols-4, .ins-cols-6,
+    .ins-cols-12) > * {
+  margin-block: 0;
+}
+
+/* --------------------------------------------------------------- display */
+.ins-block { display: block; }
+.ins-inline { display: inline; }
+.ins-inline-block { display: inline-block; }
+.ins-flex { display: flex; }
+.ins-inline-flex { display: inline-flex; }
+
+/* --------------------------------------------------------------- flex */
+.ins-flex-wrap { flex-wrap: wrap; }
+.ins-flex-nowrap { flex-wrap: nowrap; }
+/* `min-inline-size: 0` is the half of "grow" everybody forgets: a flex item will
+   not shrink below its content without it, so a growing field beside a button
+   pushes the button out of the row instead of getting narrower. */
+.ins-grow { flex: 1 1 0%; min-inline-size: 0; }
+.ins-shrink-0 { flex-shrink: 0; }
+
+.ins-items-start { align-items: flex-start; }
+.ins-items-center { align-items: center; }
+.ins-items-end { align-items: flex-end; }
+.ins-items-baseline { align-items: baseline; }
+.ins-items-stretch { align-items: stretch; }
+
+/* `flex-start` and `flex-end` follow the direction, so these mirror in RTL with no
+   help — `start` is the right edge of an Arabic row. */
+.ins-justify-start { justify-content: flex-start; }
+.ins-justify-center { justify-content: center; }
+.ins-justify-end { justify-content: flex-end; }
+.ins-justify-between { justify-content: space-between; }
+
+/* --------------------------------------------------------------- spacing */
+/* Step N is N × 4px, from the `--ins-sp-*` tokens. Nine steps, seven sides. */
+.ins-gap-0 { gap: 0; }
+.ins-gap-1 { gap: var(--ins-sp-1); }
+.ins-gap-2 { gap: var(--ins-sp-2); }
+.ins-gap-3 { gap: var(--ins-sp-3); }
+.ins-gap-4 { gap: var(--ins-sp-4); }
+.ins-gap-5 { gap: var(--ins-sp-5); }
+.ins-gap-6 { gap: var(--ins-sp-6); }
+.ins-gap-8 { gap: var(--ins-sp-8); }
+.ins-gap-12 { gap: var(--ins-sp-12); }
+
+.ins-m-0 { margin: 0; }
+.ins-m-1 { margin: var(--ins-sp-1); }
+.ins-m-2 { margin: var(--ins-sp-2); }
+.ins-m-3 { margin: var(--ins-sp-3); }
+.ins-m-4 { margin: var(--ins-sp-4); }
+.ins-m-5 { margin: var(--ins-sp-5); }
+.ins-m-6 { margin: var(--ins-sp-6); }
+.ins-m-8 { margin: var(--ins-sp-8); }
+.ins-m-12 { margin: var(--ins-sp-12); }
+
+.ins-mt-0 { margin-block-start: 0; }
+.ins-mt-1 { margin-block-start: var(--ins-sp-1); }
+.ins-mt-2 { margin-block-start: var(--ins-sp-2); }
+.ins-mt-3 { margin-block-start: var(--ins-sp-3); }
+.ins-mt-4 { margin-block-start: var(--ins-sp-4); }
+.ins-mt-5 { margin-block-start: var(--ins-sp-5); }
+.ins-mt-6 { margin-block-start: var(--ins-sp-6); }
+.ins-mt-8 { margin-block-start: var(--ins-sp-8); }
+.ins-mt-12 { margin-block-start: var(--ins-sp-12); }
+
+.ins-mb-0 { margin-block-end: 0; }
+.ins-mb-1 { margin-block-end: var(--ins-sp-1); }
+.ins-mb-2 { margin-block-end: var(--ins-sp-2); }
+.ins-mb-3 { margin-block-end: var(--ins-sp-3); }
+.ins-mb-4 { margin-block-end: var(--ins-sp-4); }
+.ins-mb-5 { margin-block-end: var(--ins-sp-5); }
+.ins-mb-6 { margin-block-end: var(--ins-sp-6); }
+.ins-mb-8 { margin-block-end: var(--ins-sp-8); }
+.ins-mb-12 { margin-block-end: var(--ins-sp-12); }
+
+.ins-ms-0 { margin-inline-start: 0; }
+.ins-ms-1 { margin-inline-start: var(--ins-sp-1); }
+.ins-ms-2 { margin-inline-start: var(--ins-sp-2); }
+.ins-ms-3 { margin-inline-start: var(--ins-sp-3); }
+.ins-ms-4 { margin-inline-start: var(--ins-sp-4); }
+.ins-ms-5 { margin-inline-start: var(--ins-sp-5); }
+.ins-ms-6 { margin-inline-start: var(--ins-sp-6); }
+.ins-ms-8 { margin-inline-start: var(--ins-sp-8); }
+.ins-ms-12 { margin-inline-start: var(--ins-sp-12); }
+
+.ins-me-0 { margin-inline-end: 0; }
+.ins-me-1 { margin-inline-end: var(--ins-sp-1); }
+.ins-me-2 { margin-inline-end: var(--ins-sp-2); }
+.ins-me-3 { margin-inline-end: var(--ins-sp-3); }
+.ins-me-4 { margin-inline-end: var(--ins-sp-4); }
+.ins-me-5 { margin-inline-end: var(--ins-sp-5); }
+.ins-me-6 { margin-inline-end: var(--ins-sp-6); }
+.ins-me-8 { margin-inline-end: var(--ins-sp-8); }
+.ins-me-12 { margin-inline-end: var(--ins-sp-12); }
+
+.ins-mx-0 { margin-inline: 0; }
+.ins-mx-1 { margin-inline: var(--ins-sp-1); }
+.ins-mx-2 { margin-inline: var(--ins-sp-2); }
+.ins-mx-3 { margin-inline: var(--ins-sp-3); }
+.ins-mx-4 { margin-inline: var(--ins-sp-4); }
+.ins-mx-5 { margin-inline: var(--ins-sp-5); }
+.ins-mx-6 { margin-inline: var(--ins-sp-6); }
+.ins-mx-8 { margin-inline: var(--ins-sp-8); }
+.ins-mx-12 { margin-inline: var(--ins-sp-12); }
+
+.ins-my-0 { margin-block: 0; }
+.ins-my-1 { margin-block: var(--ins-sp-1); }
+.ins-my-2 { margin-block: var(--ins-sp-2); }
+.ins-my-3 { margin-block: var(--ins-sp-3); }
+.ins-my-4 { margin-block: var(--ins-sp-4); }
+.ins-my-5 { margin-block: var(--ins-sp-5); }
+.ins-my-6 { margin-block: var(--ins-sp-6); }
+.ins-my-8 { margin-block: var(--ins-sp-8); }
+.ins-my-12 { margin-block: var(--ins-sp-12); }
+
+/* Auto margins: in a row, `ins-ms-auto` pushes an item — and everything after it —
+   to the far end. In a stack, `ins-mt-auto` pushes an item to the bottom. */
+.ins-m-auto { margin: auto; }
+.ins-mx-auto { margin-inline: auto; }
+.ins-ms-auto { margin-inline-start: auto; }
+.ins-me-auto { margin-inline-end: auto; }
+.ins-mt-auto { margin-block-start: auto; }
+
+.ins-p-0 { padding: 0; }
+.ins-p-1 { padding: var(--ins-sp-1); }
+.ins-p-2 { padding: var(--ins-sp-2); }
+.ins-p-3 { padding: var(--ins-sp-3); }
+.ins-p-4 { padding: var(--ins-sp-4); }
+.ins-p-5 { padding: var(--ins-sp-5); }
+.ins-p-6 { padding: var(--ins-sp-6); }
+.ins-p-8 { padding: var(--ins-sp-8); }
+.ins-p-12 { padding: var(--ins-sp-12); }
+
+.ins-pt-0 { padding-block-start: 0; }
+.ins-pt-1 { padding-block-start: var(--ins-sp-1); }
+.ins-pt-2 { padding-block-start: var(--ins-sp-2); }
+.ins-pt-3 { padding-block-start: var(--ins-sp-3); }
+.ins-pt-4 { padding-block-start: var(--ins-sp-4); }
+.ins-pt-5 { padding-block-start: var(--ins-sp-5); }
+.ins-pt-6 { padding-block-start: var(--ins-sp-6); }
+.ins-pt-8 { padding-block-start: var(--ins-sp-8); }
+.ins-pt-12 { padding-block-start: var(--ins-sp-12); }
+
+.ins-pb-0 { padding-block-end: 0; }
+.ins-pb-1 { padding-block-end: var(--ins-sp-1); }
+.ins-pb-2 { padding-block-end: var(--ins-sp-2); }
+.ins-pb-3 { padding-block-end: var(--ins-sp-3); }
+.ins-pb-4 { padding-block-end: var(--ins-sp-4); }
+.ins-pb-5 { padding-block-end: var(--ins-sp-5); }
+.ins-pb-6 { padding-block-end: var(--ins-sp-6); }
+.ins-pb-8 { padding-block-end: var(--ins-sp-8); }
+.ins-pb-12 { padding-block-end: var(--ins-sp-12); }
+
+.ins-ps-0 { padding-inline-start: 0; }
+.ins-ps-1 { padding-inline-start: var(--ins-sp-1); }
+.ins-ps-2 { padding-inline-start: var(--ins-sp-2); }
+.ins-ps-3 { padding-inline-start: var(--ins-sp-3); }
+.ins-ps-4 { padding-inline-start: var(--ins-sp-4); }
+.ins-ps-5 { padding-inline-start: var(--ins-sp-5); }
+.ins-ps-6 { padding-inline-start: var(--ins-sp-6); }
+.ins-ps-8 { padding-inline-start: var(--ins-sp-8); }
+.ins-ps-12 { padding-inline-start: var(--ins-sp-12); }
+
+.ins-pe-0 { padding-inline-end: 0; }
+.ins-pe-1 { padding-inline-end: var(--ins-sp-1); }
+.ins-pe-2 { padding-inline-end: var(--ins-sp-2); }
+.ins-pe-3 { padding-inline-end: var(--ins-sp-3); }
+.ins-pe-4 { padding-inline-end: var(--ins-sp-4); }
+.ins-pe-5 { padding-inline-end: var(--ins-sp-5); }
+.ins-pe-6 { padding-inline-end: var(--ins-sp-6); }
+.ins-pe-8 { padding-inline-end: var(--ins-sp-8); }
+.ins-pe-12 { padding-inline-end: var(--ins-sp-12); }
+
+.ins-px-0 { padding-inline: 0; }
+.ins-px-1 { padding-inline: var(--ins-sp-1); }
+.ins-px-2 { padding-inline: var(--ins-sp-2); }
+.ins-px-3 { padding-inline: var(--ins-sp-3); }
+.ins-px-4 { padding-inline: var(--ins-sp-4); }
+.ins-px-5 { padding-inline: var(--ins-sp-5); }
+.ins-px-6 { padding-inline: var(--ins-sp-6); }
+.ins-px-8 { padding-inline: var(--ins-sp-8); }
+.ins-px-12 { padding-inline: var(--ins-sp-12); }
+
+.ins-py-0 { padding-block: 0; }
+.ins-py-1 { padding-block: var(--ins-sp-1); }
+.ins-py-2 { padding-block: var(--ins-sp-2); }
+.ins-py-3 { padding-block: var(--ins-sp-3); }
+.ins-py-4 { padding-block: var(--ins-sp-4); }
+.ins-py-5 { padding-block: var(--ins-sp-5); }
+.ins-py-6 { padding-block: var(--ins-sp-6); }
+.ins-py-8 { padding-block: var(--ins-sp-8); }
+.ins-py-12 { padding-block: var(--ins-sp-12); }
+
+/* --------------------------------------------------------------- sizing */
+.ins-w-full { inline-size: 100%; }
+
+/* --------------------------------------------------------------- text */
+.ins-text-start { text-align: start; }
+.ins-text-center { text-align: center; }
+.ins-text-end { text-align: end; }
+
+.ins-text-xs { font-size: var(--ins-fs-xs); }
+.ins-text-sm { font-size: var(--ins-fs-sm); }
+.ins-text-md { font-size: var(--ins-fs-md); }
+.ins-text-lg { font-size: var(--ins-fs-lg); }
+.ins-text-xl { font-size: var(--ins-fs-xl); }
+
+/* The four weights the faces actually carry. Tajawal ships 300, 400, 500 and
+   700 — a 600 would be rendered as 700 anyway, and saying so is kinder than a
+   class that silently does the same thing as its neighbour. */
+.ins-fw-300 { font-weight: 300; }
+.ins-fw-400 { font-weight: 400; }
+.ins-fw-500 { font-weight: 500; }
+.ins-fw-700 { font-weight: 700; }
+
+/* Secondary text. Through `--ins-label`, not `--ins-text-2`: the latter measured
+   4.45:1 on the glass, just under AA — see 02-tokens.css. A muted class is used
+   for exactly the small, secondary text that can least afford to fail. There is
+   deliberately no fainter step; anything fainter than this is decoration, and
+   decoration is not text. */
+.ins-muted { color: var(--ins-label); }
+.ins-text-ok { color: var(--ins-tone-ok); }
+.ins-text-warn { color: var(--ins-tone-warn); }
+.ins-text-bad { color: var(--ins-tone-bad); }
+.ins-text-info { color: var(--ins-tone-info); }
+.ins-text-brand { color: var(--ins-tone-brand); }
+
+.ins-nowrap { white-space: nowrap; }
+/* One line with an ellipsis. It sits at the end of the line in either direction —
+   the left edge of an Arabic label — because `text-overflow` follows the text, not
+   the screen. The `min-inline-size: 0` is for the flex item case, which is most of
+   them: without it the item never gets narrower than its text and nothing is ever
+   clipped. */
+.ins-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-inline-size: 0;
+}
+/* A number of lines, then an ellipsis. The prefixed box model is still the only
+   one every engine clamps with; the unprefixed `line-clamp` is here for when that
+   stops being true. */
+.ins-clamp-2,
+.ins-clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ins-clamp-2 { -webkit-line-clamp: 2; line-clamp: 2; }
+.ins-clamp-3 { -webkit-line-clamp: 3; line-clamp: 3; }
+
+/* --------------------------------------------------------------- visibility */
+/* The `hidden` attribute is the one thing in this file allowed to shout. The UA
+   rule behind it is `display: none` at the lowest priority there is, so any
+   author rule that sets `display` beats it — and every component in this library
+   sets one. `<button class="ins-btn" hidden>` would render as a perfectly visible
+   button. The attribute means one thing, and `!important` is how it keeps meaning
+   it. `until-found` is left alone: it hides with `content-visibility`, so that
+   find-in-page can still reveal it, and `display: none` would break that. */
+[hidden]:not([hidden="until-found"]) { display: none !important; }
+
+/* Hide at a width. The three lines are the ones the components already break at:
+   34rem is a phone, 900px is where the shell's sidebar becomes a drawer, 1200px is
+   the container's width. "Below" is up to and including the line; "above" is
+   written as the exact negation of the same query rather than as `min-width` plus
+   a fraction, so there is no width — a zoomed 900.5px — at which both or neither
+   of a pair apply.
+
+   Last in the file so they win over the display utilities above: `ins-flex
+   ins-hide-below-md` is a flex row that hides on a tablet, which is what anyone
+   writing it means. */
+@media (max-width: 34rem) { .ins-hide-below-sm { display: none; } }
+@media (max-width: 900px) { .ins-hide-below-md { display: none; } }
+@media (max-width: 1200px) { .ins-hide-below-lg { display: none; } }
+@media not all and (max-width: 34rem) { .ins-hide-above-sm { display: none; } }
+@media not all and (max-width: 900px) { .ins-hide-above-md { display: none; } }
+@media not all and (max-width: 1200px) { .ins-hide-above-lg { display: none; } }
+
+/* On paper. `revert` hands an element back its own display — block for a <div>,
+   inline for a <span> — rather than guessing one for it. */
+.ins-print-only { display: none; }
+@media print {
+  .ins-hide-print { display: none; }
+  .ins-print-only { display: revert; }
+}

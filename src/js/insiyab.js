@@ -298,6 +298,14 @@
      ========================================================================== */
 
   (function prePaint() {
+    /* "The script is running." The stylesheet keys every script-dependent state
+       on this — a tab panel that is hidden until chosen, a navbar menu that is
+       folded until opened, a show-password button that does nothing without us —
+       so that a page whose script failed shows all of it instead of hiding it for
+       ever. Stamped here, before first paint, so the folded states never flash
+       open on the way in. */
+    root.setAttribute('data-ins-js', '');
+
     var stored = read(KEY_THEME);
     if (stored === 'dark' || stored === 'light') stampTheme(stored);
 
@@ -391,6 +399,1130 @@
     return el;
   }
 
+  var uidCount = 0;
+  function uid(prefix) { return prefix + '-' + (++uidCount); }
+
+  function resolve(target) {
+    if (typeof target !== 'string') return target || null;
+    try { return document.querySelector(target); } catch (e) { return null; }
+  }
+
+  /* -------------------------------------------------------------- dismiss */
+  /* `data-ins-dismiss` closes whatever the control sits in — the nearest dialog,
+     drawer, popover, menu, open navbar, alert or toast — or the one it names:
+     `data-ins-dismiss="#notice"`. One attribute, so a close button does not need to
+     know what kind of thing it is closing. An alert is hidden rather than removed,
+     so a page that wants it back only has to clear `hidden`. */
+  function dismiss(from) {
+    var el = resolve(from);
+    if (!el) return null;
+    var named = el.getAttribute && el.getAttribute('data-ins-dismiss');
+    var target = named ? resolve(named) : null;
+    if (!target && el.closest) {
+      target = el.closest('dialog, [popover], details, .ins-navbar.is-open, .ins-alert, .ins-toast');
+    }
+    if (!target) return null;
+
+    if (target.tagName === 'DIALOG') dialog(target, 'close');
+    else if (target.hasAttribute('popover') && target.hidePopover) {
+      try { target.hidePopover(); } catch (e) { /* already hidden */ }
+    } else if (target.tagName === 'DETAILS') target.open = false;
+    else if (target.classList.contains('ins-navbar')) navbar(target, false);
+    else if (target.classList.contains('ins-toast')) target.classList.add('is-going');
+    else target.hidden = true;
+
+    emit('ins:dismiss', { target: target });
+    return target;
+  }
+
+  /* ----------------------------------------------------------------- tabs */
+  /* A tab is anything carrying `data-ins-tab="#panel"`, or an `.ins-tab` link whose
+     href points at an `.ins-tabpanel` on this page. Any other `.ins-tab` — one
+     pointing at another page, or at a section of this one — is navigation, not a
+     tab, and is left entirely alone. That is what lets one class serve both a panel
+     switcher and a row of section links; and the panel's class is what decides,
+     because "is a fragment" alone would have made every in-page link in a strip
+     into a tab and stamped `role="tabpanel"` on the section it jumps to. */
+  var TAB = '[data-ins-tab], .ins-tab';
+
+  function tabPanel(tab) {
+    var own = tab.getAttribute('data-ins-tab');
+    var ref = own || tab.getAttribute('href') || '';
+    if (ref.length < 2 || ref.charAt(0) !== '#') return null;
+    var panel = resolve(ref);
+    if (panel && !own && !panel.classList.contains('ins-tabpanel')) return null;
+    return panel;
+  }
+
+  function tabList(tab) {
+    return tab.closest('.ins-tablist, [role="tablist"], .ins-seg') || tab.parentNode;
+  }
+
+  function tabsIn(list) {
+    var all = list.querySelectorAll(TAB), out = [];
+    for (var i = 0; i < all.length; i++) {
+      if (tabList(all[i]) === list && tabPanel(all[i])) out.push(all[i]);
+    }
+    return out;
+  }
+
+  function selectTab(target, focus, quiet) {
+    var tab = resolve(target);
+    if (!tab || !tabPanel(tab)) return null;
+    var tabs = tabsIn(tabList(tab));
+    for (var i = 0; i < tabs.length; i++) {
+      var on = tabs[i] === tab;
+      var panel = tabPanel(tabs[i]);
+      tabs[i].classList.toggle('is-active', on);
+      tabs[i].setAttribute('aria-selected', String(on));
+      /* The roving tab stop: one tab in the tab order, the arrows for the rest. A
+         strip of eight tabs is otherwise eight Tab presses between the page and the
+         panel it controls. */
+      tabs[i].setAttribute('tabindex', on ? '0' : '-1');
+      if (panel) panel.classList.toggle('is-active', on);
+    }
+    if (focus) tab.focus();
+    if (!quiet) emit('ins:tab', { tab: tab, panel: tabPanel(tab) });
+    return tab;
+  }
+
+  /* The arrows follow the strip, not the keyboard: in RTL the next tab is to the
+     *left*, so ArrowLeft is "next". Activation follows focus — the panels are
+     already in the page, so there is nothing to wait for. */
+  function onTabKey(event) {
+    var tab = event.target.closest ? event.target.closest(TAB) : null;
+    if (!tab || !tabPanel(tab)) return;
+    var list = tabList(tab);
+    var tabs = tabsIn(list);
+    var i = tabs.indexOf(tab);
+    var rtl = window.getComputedStyle(list).direction === 'rtl';
+    var next;
+    switch (event.key) {
+      case 'ArrowRight': next = rtl ? i - 1 : i + 1; break;
+      case 'ArrowLeft': next = rtl ? i + 1 : i - 1; break;
+      case 'Home': next = 0; break;
+      case 'End': next = tabs.length - 1; break;
+      default: return;
+    }
+    event.preventDefault();
+    selectTab(tabs[(next + tabs.length) % tabs.length], true);
+  }
+
+  /* --------------------------------------------------------------- navbar */
+  function navbar(target, open) {
+    var bar = resolve(target);
+    if (bar && !bar.classList.contains('ins-navbar')) bar = bar.closest('.ins-navbar');
+    if (!bar) return null;
+    var want = open === undefined ? !bar.classList.contains('is-open') : !!open;
+    bar.classList.toggle('is-open', want);
+    var toggles = bar.querySelectorAll('[data-ins-navbar]');
+    for (var i = 0; i < toggles.length; i++) toggles[i].setAttribute('aria-expanded', String(want));
+    emit('ins:navbar', { open: want, el: bar });
+    return want;
+  }
+
+  /* ------------------------------------------------------------- password */
+  /* The input is found by the button's own attribute, or as the password field in
+     the same group. It is marked on the first press, because once it is showing its
+     `type` is "text" and it would no longer be found as a password field. */
+  function togglePassword(btn) {
+    var input = resolve(btn.getAttribute('data-ins-password'));
+    if (!input) {
+      var host = btn.closest('.ins-input-group, .ins-field') || btn.parentNode;
+      input = host && host.querySelector('input[type="password"], input[data-ins-secret]');
+    }
+    if (!input) return null;
+    input.setAttribute('data-ins-secret', '');
+    var show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    btn.setAttribute('aria-pressed', String(show));
+    return show;
+  }
+
+  /* -------------------------------------------------------------- tooltip */
+  /* One tooltip element for the page, in the top layer, moved to whichever control
+     asked. The text is `data-ins-tip`, or the control's own `aria-label` when the
+     attribute is empty — which is the common case: an icon button's tip *is* its
+     name. When the tip says something the name does not, it is also linked as the
+     control's description, so a screen reader hears it too; when it only repeats
+     the name it is not, or it would be announced twice.
+
+     Hover waits 400ms, so sweeping the pointer across a toolbar does not strobe a
+     tip over every button; once one is showing the next appears at once. Keyboard
+     focus shows it immediately. It closes on Escape, on scroll, on a press, and when
+     the pointer leaves both the control and the tip — the last so it can be read. */
+  var TIP = '[data-ins-tip]';
+  var tipEl = null, tipOwner = null, tipTimer = 0, tipWarmUntil = 0;
+  var hasPopover = typeof HTMLElement !== 'undefined' &&
+                   Object.prototype.hasOwnProperty.call(HTMLElement.prototype, 'popover');
+
+  function tipLayer() {
+    if (tipEl) return tipEl;
+    tipEl = document.createElement('div');
+    tipEl.className = 'ins-tooltip';
+    tipEl.id = 'ins-tooltip';
+    tipEl.setAttribute('role', 'tooltip');
+    if (hasPopover) tipEl.setAttribute('popover', 'manual');
+    else tipEl.hidden = true;
+    tipEl.addEventListener('pointerenter', function () { clearTimeout(tipTimer); });
+    tipEl.addEventListener('pointerleave', hideTipSoon);
+    document.body.appendChild(tipEl);
+    return tipEl;
+  }
+
+  function describedBy(el, add) {
+    var ids = (el.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+    var at = ids.indexOf('ins-tooltip');
+    if (add && at === -1) ids.push('ins-tooltip');
+    if (!add && at !== -1) ids.splice(at, 1);
+    if (ids.length) el.setAttribute('aria-describedby', ids.join(' '));
+    else el.removeAttribute('aria-describedby');
+  }
+
+  function placeTip(el, tip) {
+    var r = el.getBoundingClientRect();
+    var gap = 8, pad = 8;
+    var vw = root.clientWidth, vh = window.innerHeight;
+    tip.style.left = '0px';
+    tip.style.top = '0px';
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+
+    var side = el.getAttribute('data-ins-tip-side') || 'top';
+    var rtl = window.getComputedStyle(el).direction === 'rtl';
+    if (side === 'start') side = rtl ? 'right' : 'left';
+    if (side === 'end') side = rtl ? 'left' : 'right';
+    /* Flip to the opposite side when there is no room, then clamp into the viewport:
+       a tip on an icon at the very edge of the page slides along rather than being
+       cut off. */
+    if (side === 'top' && r.top - gap - h < pad) side = 'bottom';
+    else if (side === 'bottom' && r.bottom + gap + h > vh - pad) side = 'top';
+    else if (side === 'left' && r.left - gap - w < pad) side = 'right';
+    else if (side === 'right' && r.right + gap + w > vw - pad) side = 'left';
+
+    var x, y;
+    if (side === 'top' || side === 'bottom') {
+      x = r.left + r.width / 2 - w / 2;
+      y = side === 'top' ? r.top - gap - h : r.bottom + gap;
+    } else {
+      x = side === 'left' ? r.left - gap - w : r.right + gap;
+      y = r.top + r.height / 2 - h / 2;
+    }
+    x = Math.max(pad, Math.min(x, vw - w - pad));
+    y = Math.max(pad, Math.min(y, vh - h - pad));
+    tip.style.left = Math.round(x) + 'px';
+    tip.style.top = Math.round(y) + 'px';
+    tip.style.setProperty('--ins-tip-dy', side === 'top' ? '4px' : (side === 'bottom' ? '-4px' : '0px'));
+    tip.setAttribute('data-side', side);
+  }
+
+  function showTip(el) {
+    clearTimeout(tipTimer);
+    var own = el.getAttribute('data-ins-tip');
+    var name = el.getAttribute('aria-label') || '';
+    var text = own || name;
+    if (!text) return;
+    var tip = tipLayer();
+    if (tipOwner && tipOwner !== el) describedBy(tipOwner, false);
+    tipOwner = el;
+    /* textContent, as everywhere else a string reaches the page. */
+    tip.textContent = text;
+    describedBy(el, !!own && own !== name && own !== (el.textContent || '').trim());
+    if (hasPopover) {
+      try { if (!tip.matches(':popover-open')) tip.showPopover(); } catch (e) { /* not connected yet */ }
+    } else {
+      tip.hidden = false;
+      tip.classList.add('is-open');
+    }
+    placeTip(el, tip);
+  }
+
+  function hideTip() {
+    clearTimeout(tipTimer);
+    if (!tipEl || !tipOwner) return;
+    describedBy(tipOwner, false);
+    tipOwner = null;
+    tipWarmUntil = Date.now() + 400;
+    if (hasPopover) {
+      try { tipEl.hidePopover(); } catch (e) { /* already hidden */ }
+    } else {
+      tipEl.classList.remove('is-open');
+      tipEl.hidden = true;
+    }
+  }
+
+  function hideTipSoon() {
+    clearTimeout(tipTimer);
+    tipTimer = setTimeout(hideTip, 120);
+  }
+
+  /* ---------------------------------------------------------------- menus */
+  /* A `.ins-pop` is a working disclosure without any of this. What the script adds
+     is everything a *menu* needs that a <details> does not have: Escape (which the
+     platform does not give it — tested, it does nothing), the arrow keys between
+     items, opening onto the first item, closing when an item is chosen or focus
+     tabs away, one menu open at a time, and turning to open upward or the other way
+     when the viewport's edge is in the way. */
+  var POP = 'details.ins-pop';
+
+  function popItems(pop) {
+    var all = pop.querySelectorAll('.ins-pop-body .ins-pop-item'), out = [];
+    for (var i = 0; i < all.length; i++) {
+      var it = all[i];
+      if (it.disabled || it.getAttribute('aria-disabled') === 'true') continue;
+      if (it.closest(POP) === pop) out.push(it);
+    }
+    return out;
+  }
+
+  function focusItem(items, i) {
+    if (items.length) items[(i + items.length) % items.length].focus();
+  }
+
+  function closePop(pop, refocus) {
+    if (!pop.open) return;
+    pop.open = false;
+    var summary = refocus && pop.querySelector('summary');
+    if (summary) summary.focus();
+  }
+
+  /* Measured once, on open. The body is placed by the stylesheet, and this only
+     decides between the four placements it already has: below or above, and
+     toward the start or toward the end. */
+  function flipPop(pop) {
+    pop.removeAttribute('data-ins-flip');
+    var body = pop.querySelector('.ins-pop-body');
+    if (!body) return;
+    var b = body.getBoundingClientRect();
+    var s = pop.getBoundingClientRect();
+    var vw = root.clientWidth, vh = window.innerHeight, flips = [];
+    if (b.bottom > vh - 8 && s.top - b.height - 6 > 8) flips.push('up');
+    if (b.left < 8 || b.right > vw - 8) flips.push('inline');
+    if (flips.length) pop.setAttribute('data-ins-flip', flips.join(' '));
+  }
+
+  function onPopKey(event) {
+    var pop = event.target.closest ? event.target.closest(POP) : null;
+    if (!pop) return;
+    var summary = pop.querySelector('summary');
+    var onSummary = event.target === summary;
+    var items = popItems(pop);
+    var at = items.indexOf(document.activeElement);
+
+    switch (event.key) {
+      case 'Escape':
+        if (!pop.open) return;
+        /* Prevented, so a menu inside a dialog closes the menu and not the dialog. */
+        event.preventDefault();
+        closePop(pop, true);
+        return;
+      case 'ArrowDown':
+      case 'ArrowUp':
+        if (!items.length) return;
+        event.preventDefault();
+        if (!pop.open) pop.open = true;
+        if (event.key === 'ArrowDown') focusItem(items, onSummary ? 0 : at + 1);
+        else focusItem(items, onSummary ? items.length - 1 : at - 1);
+        return;
+      case 'Home':
+      case 'End':
+        if (onSummary || !pop.open || !items.length) return;
+        event.preventDefault();
+        focusItem(items, event.key === 'Home' ? 0 : items.length - 1);
+        return;
+      case 'Enter':
+      case ' ':
+        /* Opening from the keyboard lands on the first item, as a menu button does.
+           Closing is left to the platform. */
+        if (!onSummary || pop.open || !items.length) return;
+        event.preventDefault();
+        pop.open = true;
+        focusItem(items, 0);
+        return;
+    }
+  }
+
+  /* ----------------------------------------------------------- validation */
+  /* In a form marked `data-ins-validate`, the browser's own constraint validation
+     does the checking and the field's `.ins-error` does the telling. An empty
+     message is filled with the browser's `validationMessage` — already in the
+     visitor's own language, which is most of the reason to use it — and a message
+     the page wrote is left as written. The browser's bubble is suppressed for the
+     fields that have a message of their own, and the first of them takes focus,
+     which the browser stops doing once its own report is cancelled. */
+  function fieldMessage(control) {
+    var field = control.closest && control.closest('.ins-field');
+    if (!field) return null;
+    for (var i = 0; i < field.children.length; i++) {
+      if (field.children[i].classList.contains('ins-error')) return field.children[i];
+    }
+    return null;
+  }
+
+  var firstInvalid = null;
+
+  /* An event a page's own listeners will see, as if the person had done it. */
+  function fire(el, type) {
+    var event;
+    try {
+      event = new Event(type, { bubbles: true });
+    } catch (e) {                                  /* very old WebView */
+      event = document.createEvent('Event');
+      event.initEvent(type, true, false);
+    }
+    el.dispatchEvent(event);
+  }
+
+  /* The few words the library itself has to say — on a calendar, in a confirmation.
+     Arabic and English, chosen by the nearest `lang`; anything else gets English,
+     and every one of them can be overridden where it is used. */
+  var STRINGS = {
+    ar: {
+      ok: 'تأكيد', cancel: 'إلغاء', choose: 'اختر تاريخًا', calendar: 'التقويم',
+      prevMonth: 'الشهر السابق', nextMonth: 'الشهر التالي', month: 'الشهر', year: 'السنة',
+      today: 'اليوم', clear: 'مسح', badDate: 'اكتب تاريخًا صحيحًا.',
+      early: 'اختر {date} أو ما بعده.', late: 'اختر {date} أو ما قبله.'
+    },
+    en: {
+      ok: 'OK', cancel: 'Cancel', choose: 'Choose a date', calendar: 'Calendar',
+      prevMonth: 'Previous month', nextMonth: 'Next month', month: 'Month', year: 'Year',
+      today: 'Today', clear: 'Clear', badDate: 'Enter a valid date.',
+      early: 'Choose {date} or later.', late: 'Choose {date} or earlier.'
+    }
+  };
+
+  function langOf(el) {
+    var own = el && el.getAttribute && el.getAttribute('data-ins-locale');
+    if (own) return own;
+    var host = (el && el.closest && el.closest('[lang]')) || root;
+    return host.getAttribute('lang') || window.navigator.language || 'en';
+  }
+
+  function strings(el) {
+    return STRINGS[langOf(el).slice(0, 2).toLowerCase()] || STRINGS.en;
+  }
+
+  /* --------------------------------------------------------------- toggle */
+  function toggleButton(el) {
+    var on = el.getAttribute('aria-pressed') !== 'true';
+    el.setAttribute('aria-pressed', String(on));
+    emit('ins:toggle', { el: el, pressed: on });
+    return on;
+  }
+
+  /* ---------------------------------------------------------------- range */
+  /* The fill's edge has to sit under the thumb's centre, and the thumb's centre
+     does not travel the whole track: it stops half a thumb short of each end. So the
+     stop is the percentage plus a correction of up to half a thumb — without it the
+     fill runs ahead of the thumb near one end and behind it near the other. */
+  var THUMB_REM = 1.25;
+
+  function rangeFill(input) {
+    var min = parseFloat(input.min), max = parseFloat(input.max), value = parseFloat(input.value);
+    if (isNaN(min)) min = 0;
+    if (isNaN(max)) max = 100;
+    var pct = max > min ? Math.max(0, Math.min(100, (value - min) / (max - min) * 100)) : 0;
+    var nudge = (0.5 - pct / 100) * THUMB_REM;
+    input.style.setProperty('--ins-fill', 'calc(' + pct.toFixed(3) + '% + ' + nudge.toFixed(4) + 'rem)');
+  }
+
+  /* -------------------------------------------------------- number stepper */
+  function spinInput(btn) {
+    var group = btn.closest('.ins-input-group') || btn.parentNode;
+    return group ? group.querySelector('input') : null;
+  }
+
+  function syncSpin(input) {
+    var group = input.closest('.ins-input-group') || input.parentNode;
+    var value = parseFloat(input.value), min = parseFloat(input.min), max = parseFloat(input.max);
+    var btns = group.querySelectorAll('.ins-spin');
+    for (var i = 0; i < btns.length; i++) {
+      var down = btns[i].getAttribute('data-ins-spin') === 'down';
+      btns[i].disabled = input.disabled || (!isNaN(value) && (down ? (!isNaN(min) && value <= min) : (!isNaN(max) && value >= max)));
+    }
+  }
+
+  function spin(btn) {
+    var input = spinInput(btn);
+    if (!input || input.disabled || input.readOnly) return null;
+    try {
+      if (btn.getAttribute('data-ins-spin') === 'down') input.stepDown(); else input.stepUp();
+    } catch (e) {
+      return null;                                 /* not a number field */
+    }
+    fire(input, 'input');
+    fire(input, 'change');
+    syncSpin(input);
+    return input.value;
+  }
+
+  /* ---------------------------------------------------------- autocomplete */
+  /* The matching. Lower case, and then the Arabic that a person types differently
+     from how a database stored it made to meet in the middle: canonical
+     decomposition splits every hamza off its seat (أ إ آ into ا, ؤ into و, ئ into
+     ي) and the combining-mark range then drops it along with every other haraka and
+     the tatweel; ة is read as ه and ى as ي; Arabic-Indic and Persian digits are read
+     as Latin ones. The same decomposition takes the accents off Latin letters, so
+     "Beyrouth" finds "Beyrouth" however it was typed. */
+  function norm(text) {
+    var s = String(text || '').toLowerCase();
+    if (s.normalize) s = s.normalize('NFD');
+    return s
+      .replace(/[\u0300-\u036f\u064b-\u065f\u0670\u0640]/g, '')
+      .replace(/\u0629/g, '\u0647')
+      .replace(/\u0649/g, '\u064a')
+      .replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); })
+      .replace(/[\u06f0-\u06f9]/g, function (d) { return String(d.charCodeAt(0) - 0x06f0); })
+      .trim();
+  }
+
+  var COMBO = '.ins-combo';
+
+  function comboInput(combo) { return combo.querySelector('input:not([type="hidden"])'); }
+  function comboList(combo) { return combo.querySelector('.ins-combo-list'); }
+
+  function comboOptions(combo, visible) {
+    var all = combo.querySelectorAll('.ins-combo-option'), out = [];
+    for (var i = 0; i < all.length; i++) {
+      if (visible && (all[i].hidden || all[i].getAttribute('aria-disabled') === 'true')) continue;
+      out.push(all[i]);
+    }
+    return out;
+  }
+
+  function comboActive(combo) { return combo.querySelector('.ins-combo-option.is-active'); }
+
+  function comboActivate(combo, opt) {
+    var input = comboInput(combo), prev = comboActive(combo);
+    if (prev) prev.classList.remove('is-active');
+    if (opt) {
+      opt.classList.add('is-active');
+      input.setAttribute('aria-activedescendant', opt.id);
+      if (opt.scrollIntoView) opt.scrollIntoView({ block: 'nearest' });
+    } else {
+      input.removeAttribute('aria-activedescendant');
+    }
+  }
+
+  function comboOpen(combo, open) {
+    var list = comboList(combo), input = comboInput(combo);
+    if (!list || !input) return;
+    if (open) {
+      list.setAttribute('data-ins-open', '');
+      input.setAttribute('aria-expanded', 'true');
+      combo.removeAttribute('data-ins-flip');
+      var r = list.getBoundingClientRect(), s = input.getBoundingClientRect();
+      if (r.bottom > window.innerHeight - 8 && s.top - r.height - 6 > 8) combo.setAttribute('data-ins-flip', 'up');
+    } else {
+      list.removeAttribute('data-ins-open');
+      input.setAttribute('aria-expanded', 'false');
+      comboActivate(combo, null);
+    }
+  }
+
+  function comboFilter(combo) {
+    var q = norm(comboInput(combo).value), any = false;
+    var opts = comboOptions(combo, false);
+    for (var i = 0; i < opts.length; i++) {
+      var hit = !q || norm(opts[i].textContent).indexOf(q) !== -1 ||
+                norm(opts[i].getAttribute('data-value')).indexOf(q) !== -1;
+      opts[i].hidden = !hit;
+      if (hit) any = true;
+    }
+    var empty = combo.querySelector('.ins-combo-empty');
+    if (empty) empty.hidden = any;
+    return any || !!empty;
+  }
+
+  function comboChoose(combo, opt) {
+    var input = comboInput(combo);
+    var label = opt.getAttribute('data-label') || opt.textContent.trim();
+    var value = opt.hasAttribute('data-value') ? opt.getAttribute('data-value') : label;
+    input.value = label;
+    var opts = comboOptions(combo, false);
+    for (var i = 0; i < opts.length; i++) opts[i].setAttribute('aria-selected', String(opts[i] === opt));
+    var hidden = combo.querySelector('input[type="hidden"]');
+    if (hidden) hidden.value = value;
+    comboOpen(combo, false);
+    fire(input, 'change');
+    emit('ins:combo', { el: combo, value: value, label: label, option: opt });
+  }
+
+  function onComboKey(event) {
+    var input = event.target;
+    var combo = input.closest ? input.closest(COMBO) : null;
+    if (!combo || input !== comboInput(combo)) return;
+    var open = comboList(combo) && comboList(combo).hasAttribute('data-ins-open');
+    var opts = comboOptions(combo, true);
+    var at = opts.indexOf(comboActive(combo));
+    switch (event.key) {
+      case 'ArrowDown':
+      case 'ArrowUp':
+        event.preventDefault();
+        if (!open) { comboFilter(combo); comboOpen(combo, true); if (event.altKey) return; }
+        if (!opts.length) return;
+        if (event.key === 'ArrowDown') comboActivate(combo, opts[(at + 1) % opts.length]);
+        else comboActivate(combo, opts[at <= 0 ? opts.length - 1 : at - 1]);
+        return;
+      case 'Enter':
+        /* Prevented only when it chooses something: an Enter with nothing highlighted
+           is the person submitting the form, and that is theirs to do. */
+        if (open && at !== -1) { event.preventDefault(); comboChoose(combo, opts[at]); }
+        return;
+      case 'Escape':
+        if (open) { event.preventDefault(); comboOpen(combo, false); }
+        else if (input.value) { event.preventDefault(); input.value = ''; comboFilter(combo); fire(input, 'input'); }
+        return;
+      case 'Tab':
+        if (open) comboOpen(combo, false);
+        return;
+    }
+  }
+
+  /* ----------------------------------------------------------------- date */
+  /* A date is a local calendar day, not an instant, so it is kept as one: a Date at
+     local midnight, built from its three numbers and moved by adding to the day of
+     the month. Nothing here goes near a timezone offset, which is how a date picker
+     ends up choosing the day before for everybody west of UTC. */
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function isoOf(d) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+  function day(y, m, d) { return new Date(y, m, d); }
+  function today() { var t = new Date(); return day(t.getFullYear(), t.getMonth(), t.getDate()); }
+  function sameDay(a, b) { return !!a && !!b && a.getTime() === b.getTime(); }
+  function addDays(d, n) { return day(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function addMonths(d, n) {
+    var last = day(d.getFullYear(), d.getMonth() + n + 1, 0).getDate();
+    return day(d.getFullYear(), d.getMonth() + n, Math.min(d.getDate(), last));
+  }
+
+  function parseIso(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
+    if (!m) return null;
+    var d = day(+m[1], +m[2] - 1, +m[3]);
+    return d.getMonth() === +m[2] - 1 ? d : null;
+  }
+
+  /* Latin digits unless the page asked for others. Every figure in this library is
+     set in Inter's Latin numerals — the money, the tables, the stat tiles — and a
+     calendar in Arabic-Indic digits beside them would be the one thing on the page in
+     a different hand. `lang="ar-u-nu-arab"` asks for them explicitly. */
+  function dateFormat(locale, options) {
+    var opts = {};
+    for (var k in options) if (Object.prototype.hasOwnProperty.call(options, k)) opts[k] = options[k];
+    var own = null;
+    try { own = new Intl.Locale(locale).numberingSystem; } catch (e) { /* no Intl.Locale */ }
+    if (!own) opts.numberingSystem = 'latn';
+    try { return new Intl.DateTimeFormat(locale, opts); }
+    catch (e) { return new Intl.DateTimeFormat('en', opts); }
+  }
+
+  /* Where the week starts, as a JavaScript day number (Sunday is 0). The locale
+     knows, where the engine will say; otherwise Arabic and Persian start on Saturday,
+     the United States on Sunday, and nearly everywhere else on Monday. */
+  function weekStart(locale) {
+    try {
+      var loc = new Intl.Locale(locale);
+      var info = loc.getWeekInfo ? loc.getWeekInfo() : loc.weekInfo;
+      if (info && info.firstDay) return info.firstDay % 7;
+    } catch (e) { /* no Intl.Locale */ }
+    var lang = locale.toLowerCase();
+    if (/^(ar|fa)\b/.test(lang)) return 6;
+    if (/^en-us\b|^he\b|^ja\b|^ko\b/.test(lang)) return 0;
+    return 1;
+  }
+
+  /* Is day written before month in this locale's numeric dates? Asked of the locale
+     rather than assumed, because "3/4" is the third of April or the fourth of March
+     depending on who typed it. */
+  function monthFirst(locale) {
+    try {
+      var parts = dateFormat(locale, { day: 'numeric', month: 'numeric', year: 'numeric' }).formatToParts(day(2001, 10, 22));
+      for (var i = 0; i < parts.length; i++) {
+        if (parts[i].type === 'day') return false;
+        if (parts[i].type === 'month') return true;
+      }
+    } catch (e) { /* no formatToParts */ }
+    return false;
+  }
+
+  function toLatin(s) {
+    return String(s || '')
+      .replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); })
+      .replace(/[\u06f0-\u06f9]/g, function (d) { return String(d.charCodeAt(0) - 0x06f0); });
+  }
+
+  /* What a person typed: an ISO date, or three numbers in the locale's own order,
+     in either set of digits. Anything else is not guessed at. */
+  function parseTyped(text, locale) {
+    var s = toLatin(text).trim();
+    var iso = parseIso(s);
+    if (iso) return iso;
+    var parts = s.split(/[^0-9]+/).filter(Boolean);
+    if (parts.length !== 3) return null;
+    var y, m, d;
+    if (parts[0].length === 4) { y = +parts[0]; m = +parts[1]; d = +parts[2]; }
+    else if (monthFirst(locale)) { m = +parts[0]; d = +parts[1]; y = +parts[2]; }
+    else { d = +parts[0]; m = +parts[1]; y = +parts[2]; }
+    if (y < 100) y += 2000;
+    var out = day(y, m - 1, d);
+    return (out.getMonth() === m - 1 && out.getDate() === d) ? out : null;
+  }
+
+  function dateValue(input) { return resolve(input.getAttribute('data-ins-date-value')); }
+  function dateOf(input) { var h = dateValue(input); return h ? parseIso(h.value) : null; }
+  function dateLocale(input) { return langOf(input); }
+  function formatDay(input, d) {
+    return dateFormat(dateLocale(input), { day: 'numeric', month: 'long', year: 'numeric' }).format(d);
+  }
+
+  /* The bounds that apply to a field right now: its own `min` and `max`, and for the
+     end of a range, its start — the end cannot come before it.
+
+     Only the end is narrowed, never the start. The first version capped the start
+     at the end as well, and that made the obvious correction impossible: to move a
+     range a week later you pick the new start first, and with the start capped at
+     the old end the new start was greyed out. Now any start can be picked, and one
+     that falls after the end clears the end and opens it (`calChoose`). */
+  function dateBounds(input) {
+    var min = parseIso(input.getAttribute('data-ins-min'));
+    var max = parseIso(input.getAttribute('data-ins-max'));
+    var start = resolve(input.getAttribute('data-ins-date-start'));
+    var from = start && dateOf(start);
+    if (from && (!min || from > min)) min = from;
+    return { min: min, max: max };
+  }
+
+  function dateRange(input) {
+    var start = resolve(input.getAttribute('data-ins-date-start'));
+    var end = resolve(input.getAttribute('data-ins-date-end'));
+    if (start) return { from: dateOf(start), to: dateOf(input) };
+    if (end) return { from: dateOf(input), to: dateOf(end) };
+    return null;
+  }
+
+  function checkDate(input, d) {
+    var t = strings(input), b = dateBounds(input), msg = '';
+    if (d === null) msg = t.badDate;
+    else if (d && b.min && d < b.min) msg = t.early.replace('{date}', formatDay(input, b.min));
+    else if (d && b.max && d > b.max) msg = t.late.replace('{date}', formatDay(input, b.max));
+    input.setCustomValidity(msg);
+    return !msg;
+  }
+
+  function setDate(input, d, quiet) {
+    var hidden = dateValue(input);
+    if (!hidden) return;
+    var value = d ? isoOf(d) : '';
+    var changed = hidden.value !== value;
+    hidden.value = value;
+    input.value = d ? formatDay(input, d) : '';
+    checkDate(input, d || undefined);
+    if (!quiet && changed) {
+      fire(input, 'input');
+      fire(input, 'change');
+      emit('ins:date', { input: input, value: value, date: d });
+    }
+  }
+
+  /* Read what was typed, when the person leaves the field or presses Enter. Text
+     that is still exactly the formatted value is the value, untouched. */
+  function commitTyped(input) {
+    var current = dateOf(input);
+    var text = input.value.trim();
+    if (current && text === formatDay(input, current)) return;
+    if (!text) { setDate(input, null); return; }
+    var d = parseTyped(text, dateLocale(input));
+    if (d) setDate(input, d);
+    else checkDate(input, null);
+  }
+
+  /* The calendar, one for the page. */
+  var calEl = null, calFor = null, calView = null, calFocus = null;
+
+  function calLayer() {
+    if (calEl) return calEl;
+    calEl = document.createElement('div');
+    calEl.className = 'ins-cal';
+    calEl.setAttribute('role', 'dialog');
+    if (hasPopover) calEl.setAttribute('popover', 'manual');
+    else calEl.hidden = true;
+    calEl.addEventListener('keydown', onCalKey);
+    calEl.addEventListener('click', onCalClick);
+    calEl.addEventListener('change', onCalChange);
+    document.body.appendChild(calEl);
+    return calEl;
+  }
+
+  function calButton(input) {
+    var group = input.closest('.ins-input-group') || input.parentNode;
+    return group.querySelector('.ins-date-btn');
+  }
+
+  function el(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function renderCal() {
+    var cal = calLayer(), input = calFor, t = strings(input), locale = dateLocale(input);
+    var y = calView.getFullYear(), m = calView.getMonth();
+    var selected = dateOf(input), now = today(), bounds = dateBounds(input), range = dateRange(input);
+    var fd = weekStart(locale);
+
+    cal.textContent = '';
+    cal.setAttribute('aria-label', t.calendar);
+    cal.setAttribute('lang', locale);
+    cal.dir = window.getComputedStyle(input).direction;
+
+    var head = el('div', 'ins-cal-head');
+    var prev = el('button', 'ins-cal-nav ins-cal-nav--prev');
+    prev.type = 'button'; prev.setAttribute('aria-label', t.prevMonth); prev.setAttribute('data-ins-cal', 'prev');
+    var next = el('button', 'ins-cal-nav ins-cal-nav--next');
+    next.type = 'button'; next.setAttribute('aria-label', t.nextMonth); next.setAttribute('data-ins-cal', 'next');
+
+    var title = el('div', 'ins-cal-title');
+    var months = el('select', 'ins-select ins-select--sm');
+    months.setAttribute('aria-label', t.month); months.setAttribute('data-ins-cal', 'month');
+    var monthName = dateFormat(locale, { month: 'long' });
+    for (var i = 0; i < 12; i++) {
+      var o = el('option', '', monthName.format(day(2001, i, 1)));
+      o.value = String(i);
+      if (i === m) o.selected = true;
+      months.appendChild(o);
+    }
+    var years = el('select', 'ins-select ins-select--sm');
+    years.setAttribute('aria-label', t.year); years.setAttribute('data-ins-cal', 'year');
+    var yearName = dateFormat(locale, { year: 'numeric' });
+    var y0 = bounds.min ? bounds.min.getFullYear() : Math.min(y, now.getFullYear()) - 100;
+    var y1 = bounds.max ? bounds.max.getFullYear() : Math.max(y, now.getFullYear()) + 20;
+    for (var yy = y1; yy >= y0; yy--) {
+      var oy = el('option', '', yearName.format(day(yy, 6, 1)));
+      oy.value = String(yy);
+      if (yy === y) oy.selected = true;
+      years.appendChild(oy);
+    }
+    title.appendChild(months);
+    title.appendChild(years);
+    head.appendChild(prev);
+    head.appendChild(title);
+    head.appendChild(next);
+    cal.appendChild(head);
+
+    var grid = el('table', 'ins-cal-grid');
+    grid.setAttribute('role', 'grid');
+    var thead = el('thead'), hr = el('tr');
+    var narrow = dateFormat(locale, { weekday: 'narrow' }), long = dateFormat(locale, { weekday: 'long' });
+    for (var c = 0; c < 7; c++) {
+      var wd = day(2023, 0, 1 + (fd + c) % 7);        /* 1 Jan 2023 was a Sunday */
+      var th = el('th', '', narrow.format(wd));
+      th.scope = 'col';
+      th.abbr = long.format(wd);
+      hr.appendChild(th);
+    }
+    thead.appendChild(hr);
+    grid.appendChild(thead);
+
+    var tbody = el('tbody');
+    var first = day(y, m, 1);
+    var cell = addDays(first, -((first.getDay() - fd + 7) % 7));
+    var dayNum = dateFormat(locale, { day: 'numeric' });
+    var full = dateFormat(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    for (var r = 0; r < 6; r++) {
+      var tr = el('tr');
+      for (var k = 0; k < 7; k++) {
+        var td = el('td');
+        var btn = el('button', 'ins-cal-day', dayNum.format(cell));
+        btn.type = 'button';
+        btn.setAttribute('data-date', isoOf(cell));
+        btn.setAttribute('aria-label', full.format(cell));
+        btn.tabIndex = sameDay(cell, calFocus) ? 0 : -1;
+        if (cell.getMonth() !== m) btn.classList.add('is-outside');
+        if (sameDay(cell, now)) btn.setAttribute('aria-current', 'date');
+        if (sameDay(cell, selected)) btn.setAttribute('aria-selected', 'true');
+        if ((bounds.min && cell < bounds.min) || (bounds.max && cell > bounds.max)) btn.setAttribute('aria-disabled', 'true');
+        if (range && range.from && range.to && cell >= range.from && cell <= range.to) {
+          td.classList.add('is-in-range');
+          if (sameDay(cell, range.from)) td.classList.add('is-range-start');
+          if (sameDay(cell, range.to)) td.classList.add('is-range-end');
+        }
+        if (range && !sameDay(cell, selected) && (sameDay(cell, range.from) || sameDay(cell, range.to))) {
+          btn.classList.add('is-range-edge');
+        }
+        td.appendChild(btn);
+        tr.appendChild(td);
+        cell = addDays(cell, 1);
+      }
+      tbody.appendChild(tr);
+    }
+    grid.appendChild(tbody);
+    cal.appendChild(grid);
+
+    var foot = el('div', 'ins-cal-foot');
+    var todayBtn = el('button', 'ins-btn ins-btn--bare ins-btn--sm', t.today);
+    todayBtn.type = 'button'; todayBtn.setAttribute('data-ins-cal', 'today');
+    foot.appendChild(todayBtn);
+    if (!input.required) {
+      var clear = el('button', 'ins-btn ins-btn--bare ins-btn--sm', t.clear);
+      clear.type = 'button'; clear.setAttribute('data-ins-cal', 'clear');
+      foot.appendChild(clear);
+    }
+    cal.appendChild(foot);
+  }
+
+  /* Below the field, aligned to its leading edge — the right edge on an Arabic page
+     — and above it when there is no room below. */
+  function placeCal() {
+    if (!calEl || !calFor) return;
+    var anchor = (calFor.closest('.ins-input-group') || calFor).getBoundingClientRect();
+    var gap = 6, pad = 8, vw = root.clientWidth, vh = window.innerHeight;
+    calEl.style.left = '0px';
+    calEl.style.top = '0px';
+    var w = calEl.offsetWidth, h = calEl.offsetHeight;
+    var y = anchor.bottom + gap;
+    if (y + h > vh - pad && anchor.top - gap - h >= pad) y = anchor.top - gap - h;
+    var x = calEl.dir === 'rtl' ? anchor.right - w : anchor.left;
+    x = Math.max(pad, Math.min(x, vw - w - pad));
+    y = Math.max(pad, Math.min(y, vh - h - pad));
+    calEl.style.left = Math.round(x) + 'px';
+    calEl.style.top = Math.round(y) + 'px';
+  }
+
+  function focusCalDay() {
+    var btn = calEl && calEl.querySelector('.ins-cal-day[tabindex="0"]');
+    if (btn) btn.focus();
+  }
+
+  function openCal(input, focusGrid) {
+    if (calFor && calFor !== input) closeCal(false);
+    calFor = input;
+    var start = dateOf(input) || today();
+    var b = dateBounds(input);
+    if (b.min && start < b.min) start = b.min;
+    if (b.max && start > b.max) start = b.max;
+    calFocus = start;
+    calView = day(start.getFullYear(), start.getMonth(), 1);
+    renderCal();
+    if (hasPopover) {
+      try { if (!calEl.matches(':popover-open')) calEl.showPopover(); } catch (e) { /* not connected */ }
+    } else {
+      calEl.hidden = false;
+      calEl.classList.add('is-open');
+    }
+    placeCal();
+    var btn = calButton(input);
+    if (btn) btn.setAttribute('aria-expanded', 'true');
+    if (focusGrid) focusCalDay();
+  }
+
+  function closeCal(refocus) {
+    if (!calEl || !calFor) return;
+    var input = calFor;
+    calFor = null;
+    if (hasPopover) {
+      try { calEl.hidePopover(); } catch (e) { /* already hidden */ }
+    } else {
+      calEl.classList.remove('is-open');
+      calEl.hidden = true;
+    }
+    var btn = calButton(input);
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+    if (refocus) input.focus();
+  }
+
+  function calMove(d) {
+    calFocus = d;
+    if (d.getMonth() !== calView.getMonth() || d.getFullYear() !== calView.getFullYear()) {
+      calView = day(d.getFullYear(), d.getMonth(), 1);
+      renderCal();
+    } else {
+      var btns = calEl.querySelectorAll('.ins-cal-day');
+      for (var i = 0; i < btns.length; i++) btns[i].tabIndex = btns[i].getAttribute('data-date') === isoOf(d) ? 0 : -1;
+    }
+    focusCalDay();
+  }
+
+  function calChoose(d) {
+    var input = calFor;
+    setDate(input, d);
+    closeCal(true);
+    /* The start of a range hands straight on to its end, when the end is empty or
+       now falls before it. */
+    var end = resolve(input.getAttribute('data-ins-date-end'));
+    if (d && end) {
+      var to = dateOf(end);
+      if (!to || to < d) { if (to) setDate(end, null); openCal(end, true); }
+    }
+  }
+
+  function onCalKey(event) {
+    var target = event.target;
+    if (event.key === 'Escape') { event.preventDefault(); closeCal(true); return; }
+    if (!target.classList.contains('ins-cal-day')) return;
+    var d = parseIso(target.getAttribute('data-date'));
+    var rtl = calEl.dir === 'rtl';
+    var next = null;
+    switch (event.key) {
+      case 'ArrowRight': next = addDays(d, rtl ? -1 : 1); break;
+      case 'ArrowLeft': next = addDays(d, rtl ? 1 : -1); break;
+      case 'ArrowDown': next = addDays(d, 7); break;
+      case 'ArrowUp': next = addDays(d, -7); break;
+      case 'Home': next = addDays(d, -((d.getDay() - weekStart(dateLocale(calFor)) + 7) % 7)); break;
+      case 'End': next = addDays(d, 6 - ((d.getDay() - weekStart(dateLocale(calFor)) + 7) % 7)); break;
+      case 'PageUp': next = addMonths(d, event.shiftKey ? -12 : -1); break;
+      case 'PageDown': next = addMonths(d, event.shiftKey ? 12 : 1); break;
+      default: return;
+    }
+    event.preventDefault();
+    calMove(next);
+  }
+
+  function onCalClick(event) {
+    var t = event.target.closest ? event.target.closest('button') : null;
+    if (!t || !calFor) return;
+    if (t.classList.contains('ins-cal-day')) {
+      if (t.getAttribute('aria-disabled') === 'true') return;
+      calChoose(parseIso(t.getAttribute('data-date')));
+      return;
+    }
+    var act = t.getAttribute('data-ins-cal');
+    if (act === 'prev' || act === 'next') {
+      calFocus = addMonths(calFocus, act === 'prev' ? -1 : 1);
+      calView = day(calFocus.getFullYear(), calFocus.getMonth(), 1);
+      renderCal();
+      var again = calEl.querySelector('[data-ins-cal="' + act + '"]');
+      if (again) again.focus();
+    } else if (act === 'today') {
+      var now = today(), b = dateBounds(calFor);
+      if ((!b.min || now >= b.min) && (!b.max || now <= b.max)) calChoose(now);
+      else calMove(now);
+    } else if (act === 'clear') {
+      setDate(calFor, null);
+      closeCal(true);
+    }
+  }
+
+  function onCalChange(event) {
+    var sel = event.target, act = sel.getAttribute('data-ins-cal');
+    if (act !== 'month' && act !== 'year') return;
+    var y = act === 'year' ? +sel.value : calView.getFullYear();
+    var m = act === 'month' ? +sel.value : calView.getMonth();
+    var last = day(y, m + 1, 0).getDate();
+    calFocus = day(y, m, Math.min(calFocus.getDate(), last));
+    calView = day(y, m, 1);
+    renderCal();
+    var again = calEl.querySelector('[data-ins-cal="' + act + '"]');
+    if (again) again.focus();
+  }
+
+  /* --------------------------------------------------------------- wizard */
+  function wizardPanels(w) {
+    var all = w.querySelectorAll('.ins-wizard-panel'), out = [];
+    for (var i = 0; i < all.length; i++) if (all[i].closest('.ins-wizard') === w) out.push(all[i]);
+    return out;
+  }
+
+  function wizardIndex(w) {
+    var panels = wizardPanels(w);
+    for (var i = 0; i < panels.length; i++) if (panels[i].classList.contains('is-active')) return i;
+    return 0;
+  }
+
+  /* Check the panel being left with the browser's own validation. In a
+     `data-ins-validate` form every invalid field is reported, so each shows its own
+     message; elsewhere only the first, because the browser's bubble can only point at
+     one field at a time. */
+  function panelValid(panel) {
+    var form = panel.closest('form');
+    var inline = !!(form && form.hasAttribute('data-ins-validate'));
+    var controls = panel.querySelectorAll('input, select, textarea'), bad = null;
+    for (var i = 0; i < controls.length; i++) {
+      var c = controls[i];
+      if (!c.willValidate || c.validity.valid) continue;
+      if (!bad) bad = c;
+      if (inline) c.reportValidity();
+    }
+    if (bad && !inline) bad.reportValidity();
+    return !bad;
+  }
+
+  function wizardGo(target, index, opts) {
+    var w = resolve(target);
+    if (w && !w.classList.contains('ins-wizard')) w = w.closest('.ins-wizard');
+    if (!w) return null;
+    var o = opts || {};
+    var panels = wizardPanels(w), cur = wizardIndex(w);
+    if (!panels.length) return null;
+    var to = Math.max(0, Math.min(panels.length - 1, index));
+    if (o.validate && to > cur && !panelValid(panels[cur])) return cur;
+    for (var i = 0; i < panels.length; i++) panels[i].classList.toggle('is-active', i === to);
+    var steps = w.querySelectorAll('.ins-steps-item');
+    for (var j = 0; j < steps.length; j++) {
+      steps[j].classList.toggle('is-done', j < to);
+      if (j === to) steps[j].setAttribute('aria-current', 'step');
+      else steps[j].removeAttribute('aria-current');
+    }
+    w.toggleAttribute('data-ins-first', to === 0);
+    w.toggleAttribute('data-ins-last', to === panels.length - 1);
+    /* Focus moves to the panel that just arrived, so a screen reader starts reading
+       the new step instead of staying on a button that has changed underneath it. */
+    if (o.focus) panels[to].focus();
+    if (!o.quiet) emit('ins:wizard', { el: w, step: to, panel: panels[to] });
+    return to;
+  }
+
+  /* -------------------------------------------------------------- confirm */
+  /* `Insiyab.confirm('حذف العملية؟')` — a small modal with two buttons and a promise
+     of which was pressed. It is a real `<dialog>` with a `method="dialog"` form, so
+     Escape, the focus trap and the return value are all the platform's. Focus lands
+     on Cancel, the button that does nothing: the confirmation that defaults to the
+     destructive answer is the one somebody presses Enter through. */
+  function confirmDialog(message, options) {
+    var o = options || {};
+    var t = strings(document.body);
+    if (typeof window.Promise !== 'function' || !document.body) return null;
+    return new window.Promise(function (done) {
+      var dlg = el('dialog', 'ins-dialog ins-dialog--sm');
+      var form = el('form');
+      form.method = 'dialog';
+      var textId = uid('ins-confirm');
+      if (o.title) {
+        var head = el('div', 'ins-dialog-head');
+        var h = el('h2', 'ins-dialog-title', o.title);
+        h.id = textId + '-title';
+        head.appendChild(h);
+        form.appendChild(head);
+        dlg.setAttribute('aria-labelledby', h.id);
+      } else {
+        dlg.setAttribute('aria-label', t.ok);
+      }
+      var body = el('div', 'ins-dialog-body');
+      var p = el('p', '', String(message));
+      p.id = textId;
+      p.style.margin = '0';
+      body.appendChild(p);
+      form.appendChild(body);
+      dlg.setAttribute('aria-describedby', textId);
+      var foot = el('div', 'ins-dialog-foot');
+      var no = el('button', 'ins-btn ins-btn--bare', o.cancel || t.cancel);
+      no.value = 'cancel';
+      var yes = el('button', 'ins-btn ' + (o.tone === 'danger' ? 'ins-btn--danger' : 'ins-btn--primary'), o.confirm || t.ok);
+      yes.value = 'ok';
+      yes.style.marginInlineStart = 'auto';
+      foot.appendChild(no);
+      foot.appendChild(yes);
+      form.appendChild(foot);
+      dlg.appendChild(form);
+      dlg.addEventListener('close', function () {
+        done(dlg.returnValue === 'ok');
+        setTimeout(function () { if (dlg.parentNode) dlg.parentNode.removeChild(dlg); }, 400);
+      });
+      document.body.appendChild(dlg);
+      dlg.showModal();
+      no.focus();
+    });
+  }
+
   /* ==========================================================================
      DELEGATION — one listener, so nothing needs wiring up
      ========================================================================== */
@@ -402,6 +1534,15 @@
     '[data-ins-dialog]',
     '[data-ins-dialog-close]',
     '[data-ins-fx]',
+    '[data-ins-dismiss]',
+    '[data-ins-navbar]',
+    '[data-ins-password]',
+    '[data-ins-toggle]',
+    '[data-ins-spin]',
+    '[data-ins-wizard="next"]',
+    '[data-ins-wizard="prev"]',
+    '.ins-date-btn',
+    TAB,
     '.ins-seg > a',
     '.ins-seg > button'
   ].join(', ');
@@ -452,6 +1593,61 @@
       return;
     }
 
+    if (el.hasAttribute('data-ins-dismiss')) {
+      dismiss(el);
+      if (el.tagName === 'A') event.preventDefault();
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-navbar')) {
+      navbar(el.getAttribute('data-ins-navbar') || el);
+      return;
+    }
+
+    /* Prevented whatever the element is: a <button> inside a <form> is a submit
+       button unless it says otherwise, and showing a password must not send it. */
+    if (el.hasAttribute('data-ins-password')) {
+      event.preventDefault();
+      togglePassword(el);
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-toggle')) {
+      toggleButton(el);
+      return;
+    }
+
+    /* Prevented for the same reason as the password toggle: a stepper's buttons sit
+       inside a form, and a − that submits it is not a −. */
+    if (el.hasAttribute('data-ins-spin')) {
+      event.preventDefault();
+      spin(el);
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-wizard')) {
+      event.preventDefault();
+      var w = el.closest('.ins-wizard');
+      if (w) wizardGo(w, wizardIndex(w) + (el.getAttribute('data-ins-wizard') === 'next' ? 1 : -1), { validate: true, focus: true });
+      return;
+    }
+
+    if (el.classList.contains('ins-date-btn')) {
+      event.preventDefault();
+      var field = (el.closest('.ins-input-group') || el.parentNode).querySelector('[data-ins-date-ready]');
+      if (field && calFor === field) closeCal(true);
+      else if (field) openCal(field, true);
+      return;
+    }
+
+    /* A tab with a panel on this page. Checked before the segmented control, because
+       a segment can be a tab; `selectTab` moves the segment's selection as well. */
+    if (el.matches(TAB) && tabPanel(el)) {
+      selectTab(el);
+      if (el.tagName === 'A') event.preventDefault();
+      return;
+    }
+
     /* A segmented control moves its own selection. Only when the segment is not a
        link to somewhere else: a `.ins-seg > a` with a real href is navigation, and
        marking it active here would flash the wrong segment before the page leaves. */
@@ -471,14 +1667,303 @@
     }
   }, false);
 
-  /* A popover is a <details>, so it opens, closes on Escape and is keyboard
-     reachable with no script. The one thing the platform does not give it is
-     closing when you click elsewhere, which is the whole of what this adds. */
+  /* A popover is a <details>, so it opens and is keyboard reachable with no script.
+     Clicking elsewhere closes it here; Escape and the arrow keys are `onPopKey`
+     above — this comment used to say the platform supplied Escape, and it does not. */
   document.addEventListener('click', function (event) {
     var open = document.querySelectorAll('details.ins-pop[open]');
     for (var i = 0; i < open.length; i++) {
       if (!open[i].contains(event.target)) open[i].removeAttribute('open');
     }
+  }, true);
+
+  /* Choosing an item closes its menu and hands focus back to the trigger — except a
+     checkbox item, which is a setting being flipped, and whose menu stays open for
+     the next one. A radio item moves the check within its group, or within the
+     menu when it has none. */
+  document.addEventListener('click', function (event) {
+    var item = event.target.closest ? event.target.closest('.ins-pop-item') : null;
+    var pop = item && item.closest(POP);
+    if (!pop) return;
+    var role = item.getAttribute('role');
+    if (role === 'menuitemcheckbox') {
+      var on = item.getAttribute('aria-checked') !== 'true';
+      item.setAttribute('aria-checked', String(on));
+      emit('ins:menu', { item: item, checked: on });
+      return;
+    }
+    if (role === 'menuitemradio') {
+      var group = item.closest('[role="group"]') || item.closest('.ins-pop-body');
+      var radios = group.querySelectorAll('[role="menuitemradio"]');
+      for (var i = 0; i < radios.length; i++) radios[i].setAttribute('aria-checked', String(radios[i] === item));
+      emit('ins:menu', { item: item, checked: true });
+    }
+    closePop(pop, true);
+  }, false);
+
+  /* `toggle` does not bubble, so it is caught on the way down. One menu open at a
+     time, however it was opened, and each one measured against the viewport as it
+     opens. */
+  document.addEventListener('toggle', function (event) {
+    var pop = event.target;
+    if (!pop.matches || !pop.matches(POP)) return;
+    if (!pop.open) { pop.removeAttribute('data-ins-flip'); return; }
+    var open = document.querySelectorAll(POP + '[open]');
+    for (var i = 0; i < open.length; i++) {
+      if (open[i] !== pop && !open[i].contains(pop)) open[i].open = false;
+    }
+    flipPop(pop);
+  }, true);
+
+  /* Tabbing out of an open menu closes it. Only when focus has actually gone
+     somewhere: a click on the menu's own padding moves focus to nothing, and
+     closing on that would shut the menu under the pointer. */
+  document.addEventListener('focusout', function (event) {
+    var pop = event.target.closest ? event.target.closest(POP + '[open]') : null;
+    var to = event.relatedTarget;
+    if (pop && to && !pop.contains(to)) pop.open = false;
+  }, false);
+
+  /* A drawer closes on a click outside it. The click lands on the <dialog> itself
+     — that is where a backdrop's clicks go — so the test is whether it fell outside
+     the drawer's own box. A modal dialog does not do this, deliberately: it is
+     usually a form, and a stray click should not throw one away. */
+  document.addEventListener('click', function (event) {
+    var d = event.target;
+    if (!d || d.tagName !== 'DIALOG' || !d.open || !d.classList.contains('ins-drawer')) return;
+    var r = d.getBoundingClientRect();
+    if (event.clientX < r.left || event.clientX > r.right ||
+        event.clientY < r.top || event.clientY > r.bottom) dialog(d, 'close');
+  }, false);
+
+  /* Following a link in an open navbar menu closes it — on a page that does not
+     navigate away, a fragment link, the menu would otherwise stay over the content
+     it just scrolled to. */
+  document.addEventListener('click', function (event) {
+    var link = event.target.closest ? event.target.closest('.ins-navbar-link') : null;
+    var bar = link && link.closest('.ins-navbar.is-open');
+    if (bar) navbar(bar, false);
+  }, false);
+
+  /* The tooltip's triggers. Pointer events rather than mouse events, so a pen gets
+     tips and a finger does not — a touch has no hover to reveal one, and a tip that
+     appears under the finger that just pressed is covering the thing it describes. */
+  document.addEventListener('pointerover', function (event) {
+    if (event.pointerType === 'touch') return;
+    var el = event.target.closest ? event.target.closest(TIP) : null;
+    if (!el) return;
+    clearTimeout(tipTimer);
+    if (el === tipOwner) return;
+    var delay = (tipOwner || Date.now() < tipWarmUntil) ? 0 : 400;
+    tipTimer = setTimeout(function () { showTip(el); }, delay);
+  }, false);
+
+  document.addEventListener('pointerout', function (event) {
+    var el = event.target.closest ? event.target.closest(TIP) : null;
+    if (!el) return;
+    var to = event.relatedTarget;
+    if (to && (el.contains(to) || (tipEl && tipEl.contains(to)))) return;
+    if (el === tipOwner) hideTipSoon();
+    else clearTimeout(tipTimer);
+  }, false);
+
+  /* Keyboard focus only: a click also focuses a button, and a tip that appears on
+     every click is a tip in the way. */
+  document.addEventListener('focusin', function (event) {
+    var el = event.target.closest ? event.target.closest(TIP) : null;
+    if (!el) return;
+    var keyboard = true;
+    try { keyboard = el.matches(':focus-visible'); } catch (e) { /* old engine: show it */ }
+    if (keyboard) showTip(el);
+  }, false);
+
+  document.addEventListener('focusout', function (event) {
+    if (tipOwner && tipOwner.contains(event.target)) hideTip();
+  }, false);
+
+  document.addEventListener('pointerdown', function () { if (tipOwner) hideTip(); }, true);
+  /* Captured, so a scroll inside any element scroller hides it too — the tip is
+     fixed to the viewport and would otherwise be left floating over the wrong row. */
+  window.addEventListener('scroll', function () { if (tipOwner) hideTip(); }, true);
+
+  /* Validation: see `fieldMessage` above. `invalid` does not bubble either. */
+  document.addEventListener('invalid', function (event) {
+    var control = event.target;
+    /* A field in a wizard step that is not showing cannot be focused or pointed at,
+       so the browser's report would say nothing and the submit would simply not
+       happen. Go to its step first — whether or not this form reports inline. */
+    var panel = control.closest && control.closest('.ins-wizard-panel');
+    if (panel && !panel.classList.contains('is-active')) {
+      var wiz = panel.closest('.ins-wizard');
+      wizardGo(wiz, wizardPanels(wiz).indexOf(panel), { quiet: false });
+    }
+    if (!control.form || !control.form.hasAttribute('data-ins-validate')) return;
+    /* Marked as reported, so the stylesheet can show it as invalid from now on. The
+       browser's own `:user-invalid` would do, but it is only set by a submit attempt
+       or by the person editing the field — not by `reportValidity()`, which is how a
+       wizard checks one step. Tested: after a blocked "next" every field in the step
+       was invalid and none of them said so. The mark clears itself: the stylesheet
+       reads it together with `:invalid`. */
+    control.setAttribute('data-ins-reported', '');
+    var msg = fieldMessage(control);
+    if (!msg) return;
+    event.preventDefault();
+    if (msg.hasAttribute('data-ins-auto') || !msg.textContent.trim()) {
+      msg.setAttribute('data-ins-auto', '');
+      /* The browser's message is in the *browser's* language, which need not be
+         the page's: an English Chrome on an Arabic page says "Please fill out this
+         field." `dir="auto"` lets the sentence take its own direction, so its full
+         stop and its mark land at the right ends rather than mirrored. */
+      msg.setAttribute('dir', 'auto');
+      msg.textContent = control.validationMessage;
+    }
+    if (!firstInvalid) {
+      firstInvalid = control;
+      setTimeout(function () {
+        if (firstInvalid) firstInvalid.focus();
+        firstInvalid = null;
+      }, 0);
+    }
+  }, true);
+
+  /* Keep a filled-in message current as the person types — "required" becomes
+     "not an email address" becomes nothing. */
+  document.addEventListener('input', function (event) {
+    var control = event.target;
+    if (!control.form || !control.form.hasAttribute('data-ins-validate')) return;
+    var msg = fieldMessage(control);
+    if (msg && msg.hasAttribute('data-ins-auto')) msg.textContent = control.validationMessage;
+  }, true);
+
+  /* Pressing Enter in a wizard's field submits the form — that is what Enter in a
+     form does — so a submit that arrives before the last step is taken as "next". */
+  document.addEventListener('submit', function (event) {
+    var w = event.target.classList && event.target.classList.contains('ins-wizard') ? event.target : null;
+    if (!w || w.hasAttribute('data-ins-last')) return;
+    var panels = wizardPanels(w);
+    if (panels.length < 2) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    wizardGo(w, wizardIndex(w) + 1, { validate: true, focus: true });
+  }, true);
+
+  /* A confirmation in front of a click: `data-ins-confirm="حذف هذه العملية؟"`. The
+     click is stopped before anything else sees it, the question is asked, and on a
+     yes the very same click is replayed — so a link still navigates, a submit button
+     still submits its form with its own name and value, and a `data-ins-*` control
+     still does what it does, none of them knowing they were asked about. A control
+     already styled as dangerous gets a dangerous confirm button. */
+  document.addEventListener('click', function (event) {
+    var el = event.target.closest ? event.target.closest('[data-ins-confirm]') : null;
+    if (!el) return;
+    if (el.hasAttribute('data-ins-confirmed')) { el.removeAttribute('data-ins-confirmed'); return; }
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    var danger = /\bins-(btn--danger|btn--ghost-danger|pop-item--bad)\b/.test(el.className);
+    var asked = confirmDialog(el.getAttribute('data-ins-confirm'), {
+      tone: danger ? 'danger' : el.getAttribute('data-ins-confirm-tone'),
+      confirm: el.getAttribute('data-ins-confirm-ok') || undefined
+    });
+    if (!asked) return;
+    asked.then(function (yes) {
+      if (!yes) return;
+      el.setAttribute('data-ins-confirmed', '');
+      el.click();
+    });
+  }, true);
+
+  /* Everything the new form controls listen for as the person types. */
+  document.addEventListener('input', function (event) {
+    var t = event.target;
+    if (!t.classList) return;
+    if (t.classList.contains('ins-range')) rangeFill(t);
+    if (t.type === 'number' && t.closest('.ins-input-group') && t.closest('.ins-input-group').querySelector('.ins-spin')) syncSpin(t);
+    var combo = t.closest && t.closest(COMBO);
+    if (combo && t === comboInput(combo) && event.isTrusted !== false) {
+      var any = comboFilter(combo);
+      comboActivate(combo, null);
+      comboOpen(combo, any);
+    }
+  }, false);
+
+  /* The keyboard for the autocomplete and the date field. Registered on its own so
+     neither has to know about the menus and tabs that own their arrow keys above. */
+  document.addEventListener('keydown', function (event) {
+    onComboKey(event);
+    var t = event.target;
+    if (!t.hasAttribute || !t.hasAttribute('data-ins-date-ready')) return;
+    if (event.key === 'ArrowDown') { event.preventDefault(); openCal(t, true); }
+    else if (event.key === 'Escape' && calFor === t) { event.preventDefault(); closeCal(false); }
+    else if (event.key === 'Enter') { commitTyped(t); if (calFor === t) closeCal(false); }
+  }, false);
+
+  /* An autocomplete opens when its field is clicked, and chooses when an option is.
+     A date field opens its calendar on a click too — but leaves the caret in the
+     field, so a person who would rather type still can. */
+  document.addEventListener('click', function (event) {
+    var t = event.target;
+    var opt = t.closest ? t.closest('.ins-combo-option') : null;
+    if (opt) {
+      var combo = opt.closest(COMBO);
+      if (combo && opt.getAttribute('aria-disabled') !== 'true') { comboChoose(combo, opt); comboInput(combo).focus(); }
+      return;
+    }
+    var box = t.closest && t.closest(COMBO);
+    if (box && t === comboInput(box)) {
+      var shown = comboList(box) && comboList(box).hasAttribute('data-ins-open');
+      if (!shown) comboOpen(box, comboFilter(box));
+      return;
+    }
+    if (t.hasAttribute && t.hasAttribute('data-ins-date-ready') && calFor !== t) openCal(t, false);
+  }, false);
+
+  /* A press on the list must not take focus from the field, or the field's blur
+     would close the list before the click that was choosing from it arrived. */
+  document.addEventListener('mousedown', function (event) {
+    if (event.target.closest && event.target.closest('.ins-combo-list')) event.preventDefault();
+  }, false);
+
+  document.addEventListener('focusout', function (event) {
+    var t = event.target, to = event.relatedTarget;
+    var combo = t.closest && t.closest(COMBO);
+    if (combo && (!to || !combo.contains(to))) comboOpen(combo, false);
+    /* A date field reads what was typed as focus leaves it — unless it is leaving
+       for its own calendar, which will set the value itself. */
+    if (t.hasAttribute && t.hasAttribute('data-ins-date-ready') && !(to && calEl && calEl.contains(to))) commitTyped(t);
+    if (calFor && calEl && calEl.contains(t) && to && !calEl.contains(to) && to !== calFor && to !== calButton(calFor)) closeCal(false);
+  }, false);
+
+  /* A press anywhere outside the calendar, its field and its button closes it. */
+  document.addEventListener('pointerdown', function (event) {
+    if (!calFor || !calEl) return;
+    var t = event.target;
+    if (calEl.contains(t) || t === calFor || calButton(calFor) === t || (calButton(calFor) && calButton(calFor).contains(t))) return;
+    closeCal(false);
+  }, true);
+
+  /* It is fixed to the viewport, so it follows its field as the page moves. */
+  window.addEventListener('scroll', function () { if (calFor) placeCal(); }, true);
+  window.addEventListener('resize', function () { if (calFor) placeCal(); }, false);
+
+  /* A form reset puts the native values back, and neither a slider's fill nor a date
+     field's text is a native value — so they are redrawn once the reset has run. */
+  document.addEventListener('reset', function (event) {
+    var form = event.target;
+    setTimeout(function () {
+      var ranges = form.querySelectorAll('.ins-range');
+      for (var i = 0; i < ranges.length; i++) rangeFill(ranges[i]);
+      var dates = form.querySelectorAll('[data-ins-date-ready]');
+      for (var j = 0; j < dates.length; j++) setDate(dates[j], dateOf(dates[j]), true);
+    }, 0);
+  }, true);
+
+  /* A password left showing is put back before the form goes, so the browser's
+     password manager sees a password field and offers to save it. */
+  document.addEventListener('submit', function (event) {
+    var shown = event.target.querySelectorAll ? event.target.querySelectorAll('input[data-ins-secret]') : [];
+    for (var i = 0; i < shown.length; i++) shown[i].type = 'password';
+    var toggles = event.target.querySelectorAll ? event.target.querySelectorAll('[data-ins-password]') : [];
+    for (var j = 0; j < toggles.length; j++) toggles[j].setAttribute('aria-pressed', 'false');
   }, true);
 
   /* The drawer's scrim. The CSS shows it as the sidebar's sibling, so it has no
@@ -489,13 +1974,30 @@
     }
   }, false);
 
-  /* Escape closes the drawer. The dialog and the popover get this from the platform;
-     an off-canvas panel built out of a class does not, and a drawer you cannot
+  /* The keyboard. Menus and tabs first, because they own their arrow keys; then
+     Escape for everything that is not a <dialog> — which gets Escape from the
+     platform, as the drawer does, being one. The shell's sidebar drawer, the navbar
+     menu and the tooltip are built out of classes and do not, and a panel you cannot
      dismiss from the keyboard is a trap on a narrow screen. */
   document.addEventListener('keydown', function (event) {
+    /* An Escape already spent — by a calendar, an autocomplete, a dialog's menu — is
+       not also a request to close the drawer behind it. */
+    if (event.defaultPrevented) return;
+    onPopKey(event);
+    if (event.defaultPrevented) return;
+    onTabKey(event);
+    if (event.defaultPrevented) return;
+
     if (event.key !== 'Escape' && event.keyCode !== 27) return;
+    if (tipOwner) hideTip();
     var panel = drawer();
     if (panel && panel.classList.contains('is-open')) sidebar('closed');
+    var bars = document.querySelectorAll('.ins-navbar.is-open');
+    for (var i = 0; i < bars.length; i++) {
+      navbar(bars[i], false);
+      var toggle = bars[i].querySelector('[data-ins-navbar]');
+      if (toggle && bars[i].contains(document.activeElement)) toggle.focus();
+    }
   }, false);
 
   /* Crossing the breakpoint with the drawer open would leave a column stuck in its
@@ -508,6 +2010,10 @@
       if (e.matches) {
         var panel = drawer();
         if (panel) panel.classList.remove('is-open');
+        /* The navbar's folded menu is the same case: above the line it is a row
+           again, and an `is-open` left behind would reopen it on the way back down. */
+        var bars = document.querySelectorAll('.ins-navbar.is-open');
+        for (var i = 0; i < bars.length; i++) navbar(bars[i], false);
       }
     };
     if (wide.addEventListener) wide.addEventListener('change', onWide);
@@ -560,6 +2066,209 @@
     for (var i = 0; i < nodes.length; i++) nodes[i].setAttribute('aria-pressed', String(dark));
   });
 
+  /* Tabs: every role and relationship the pattern needs, written once from the
+     markup's own `data-ins-tab` references, and the first tab selected when the
+     page did not say which. The markup stays two attributes deep. */
+  define('tabs', function (scope) {
+    var seen = [];
+    var nodes = scope.querySelectorAll(TAB);
+    for (var i = 0; i < nodes.length; i++) {
+      var list = tabList(nodes[i]);
+      if (seen.indexOf(list) !== -1) continue;
+      seen.push(list);
+      var tabs = tabsIn(list);
+      if (!tabs.length) continue;
+      list.setAttribute('role', 'tablist');
+      var active = null;
+      for (var j = 0; j < tabs.length; j++) {
+        var tab = tabs[j], panel = tabPanel(tabs[j]);
+        if (!tab.id) tab.id = uid('ins-tab');
+        tab.setAttribute('role', 'tab');
+        tab.setAttribute('aria-controls', panel.id);
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('aria-labelledby', tab.id);
+        /* A panel of plain text has nothing in it to Tab to, so the panel itself is
+           the stop after the strip — the pattern's own recommendation. */
+        if (!panel.hasAttribute('tabindex')) panel.setAttribute('tabindex', '0');
+        if (!active && (tab.classList.contains('is-active') || tab.getAttribute('aria-selected') === 'true')) active = tab;
+      }
+      selectTab(active || tabs[0], false, true);
+    }
+  });
+
+  /* Menus: a `.ins-pop` whose body holds items is a menu button, so it is marked as
+     one. The items leave the tab order because the arrow keys now reach them; a
+     popover holding anything else — a card, a form — is left as the disclosure it
+     is. */
+  define('menus', function (scope) {
+    var pops = scope.querySelectorAll(POP);
+    for (var i = 0; i < pops.length; i++) {
+      var summary = pops[i].querySelector('summary');
+      var body = pops[i].querySelector('.ins-pop-body');
+      if (!summary || !body || !body.querySelector('.ins-pop-item')) continue;
+      summary.setAttribute('aria-haspopup', 'menu');
+      body.setAttribute('role', 'menu');
+      var items = body.querySelectorAll('.ins-pop-item');
+      for (var j = 0; j < items.length; j++) {
+        if (!items[j].hasAttribute('role')) items[j].setAttribute('role', 'menuitem');
+        items[j].setAttribute('tabindex', '-1');
+      }
+      var seps = body.querySelectorAll('.ins-pop-sep');
+      for (var k = 0; k < seps.length; k++) seps[k].setAttribute('role', 'separator');
+    }
+  });
+
+  define('navbar', function (scope) {
+    var toggles = scope.querySelectorAll('[data-ins-navbar]');
+    for (var i = 0; i < toggles.length; i++) {
+      var bar = toggles[i].closest('.ins-navbar');
+      var menu = bar && bar.querySelector('.ins-navbar-menu');
+      toggles[i].setAttribute('aria-expanded', String(!!(bar && bar.classList.contains('is-open'))));
+      if (menu) {
+        if (!menu.id) menu.id = uid('ins-navbar-menu');
+        toggles[i].setAttribute('aria-controls', menu.id);
+      }
+    }
+  });
+
+  /* A show-password control is a toggle, and a <button> in a form is a submit
+     button until it is told otherwise. */
+  define('password', function (scope) {
+    var toggles = scope.querySelectorAll('[data-ins-password]');
+    for (var i = 0; i < toggles.length; i++) {
+      if (toggles[i].tagName === 'BUTTON' && !toggles[i].hasAttribute('type')) toggles[i].type = 'button';
+      if (!toggles[i].hasAttribute('aria-pressed')) toggles[i].setAttribute('aria-pressed', 'false');
+    }
+  });
+
+  define('toggles', function (scope) {
+    var nodes = scope.querySelectorAll('[data-ins-toggle]');
+    for (var i = 0; i < nodes.length; i++) {
+      if (!nodes[i].hasAttribute('aria-pressed')) nodes[i].setAttribute('aria-pressed', 'false');
+      if (nodes[i].tagName === 'BUTTON' && !nodes[i].hasAttribute('type')) nodes[i].type = 'button';
+    }
+  });
+
+  /* `indeterminate` is a property with no attribute, so markup cannot say it. */
+  define('indeterminate', function (scope) {
+    var nodes = scope.querySelectorAll('input[type="checkbox"][data-ins-indeterminate]');
+    for (var i = 0; i < nodes.length; i++) nodes[i].indeterminate = true;
+  });
+
+  define('ranges', function (scope) {
+    var nodes = scope.querySelectorAll('.ins-range');
+    for (var i = 0; i < nodes.length; i++) rangeFill(nodes[i]);
+  });
+
+  define('steppers', function (scope) {
+    var btns = scope.querySelectorAll('.ins-spin');
+    for (var i = 0; i < btns.length; i++) {
+      if (btns[i].tagName === 'BUTTON' && !btns[i].hasAttribute('type')) btns[i].type = 'button';
+      var input = spinInput(btns[i]);
+      if (!input) continue;
+      if (!input.id) input.id = uid('ins-number');
+      btns[i].setAttribute('aria-controls', input.id);
+      syncSpin(input);
+    }
+  });
+
+  /* The combobox pattern, stamped from the markup: the field is the combobox, the
+     list its listbox, and every option gets an id for `aria-activedescendant` to
+     point at. An option already matching the field's value is marked chosen. */
+  define('combos', function (scope) {
+    var combos = scope.querySelectorAll(COMBO);
+    for (var i = 0; i < combos.length; i++) {
+      var input = comboInput(combos[i]), list = comboList(combos[i]);
+      if (!input || !list) continue;
+      if (!list.id) list.id = uid('ins-combo-list');
+      input.setAttribute('role', 'combobox');
+      input.setAttribute('aria-autocomplete', 'list');
+      input.setAttribute('aria-controls', list.id);
+      input.setAttribute('aria-expanded', 'false');
+      if (!input.hasAttribute('autocomplete')) input.setAttribute('autocomplete', 'off');
+      list.setAttribute('role', 'listbox');
+      var opts = comboOptions(combos[i], false);
+      for (var j = 0; j < opts.length; j++) {
+        if (!opts[j].id) opts[j].id = uid('ins-opt');
+        opts[j].setAttribute('role', 'option');
+        var label = opts[j].getAttribute('data-label') || opts[j].textContent.trim();
+        opts[j].setAttribute('aria-selected', String(!!input.value && label === input.value));
+      }
+      var empty = combos[i].querySelector('.ins-combo-empty');
+      if (empty) { empty.setAttribute('role', 'presentation'); empty.hidden = true; }
+    }
+  });
+
+  /* The date field, which is the one builder here that changes the markup it was
+     given. The native date input is turned into a text field showing the date in the
+     page's language; a hidden input takes over its `name`, so what reaches the server
+     is the same ISO string the native field would have sent; and the calendar button
+     is added to the group. The hidden input's *default* value is set too, so that a
+     form reset puts the original date back. */
+  define('dates', function (scope) {
+    var nodes = scope.querySelectorAll('input[data-ins-date]:not([data-ins-date-ready])');
+    for (var i = 0; i < nodes.length; i++) {
+      var input = nodes[i];
+      var value = input.value || input.getAttribute('value') || '';
+      var hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      hidden.id = uid('ins-date-value');
+      if (input.name) { hidden.name = input.name; input.removeAttribute('name'); }
+      hidden.setAttribute('value', parseIso(value) ? value : '');
+      hidden.value = parseIso(value) ? value : '';
+      input.parentNode.insertBefore(hidden, input.nextSibling);
+
+      if (input.min) input.setAttribute('data-ins-min', input.min);
+      if (input.max) input.setAttribute('data-ins-max', input.max);
+      input.removeAttribute('min');
+      input.removeAttribute('max');
+      input.type = 'text';
+      input.setAttribute('autocomplete', 'off');
+      input.setAttribute('data-ins-date-value', '#' + hidden.id);
+      input.setAttribute('data-ins-date-ready', '');
+      setDate(input, parseIso(hidden.value), true);
+      input.setCustomValidity('');
+
+      var group = input.closest('.ins-input-group');
+      if (group && !group.querySelector('.ins-date-btn')) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ins-date-btn';
+        btn.setAttribute('aria-label', strings(input).choose);
+        btn.setAttribute('aria-haspopup', 'dialog');
+        btn.setAttribute('aria-expanded', 'false');
+        group.appendChild(btn);
+      }
+    }
+  });
+
+  define('wizards', function (scope) {
+    var wizards = scope.querySelectorAll('.ins-wizard');
+    for (var i = 0; i < wizards.length; i++) {
+      var panels = wizardPanels(wizards[i]);
+      for (var j = 0; j < panels.length; j++) {
+        if (!panels[j].hasAttribute('tabindex')) panels[j].setAttribute('tabindex', '-1');
+      }
+      wizardGo(wizards[i], wizardIndex(wizards[i]), { quiet: true });
+    }
+  });
+
+  /* A field's hint and its message describe its control. Without the link a screen
+     reader announces a red border, which is to say nothing at all. */
+  define('field-messages', function (scope) {
+    var msgs = scope.querySelectorAll('.ins-field > .ins-hint, .ins-field > .ins-error, .ins-field > .ins-success');
+    for (var i = 0; i < msgs.length; i++) {
+      var control = msgs[i].parentNode.querySelector('input, select, textarea');
+      if (!control) continue;
+      if (!msgs[i].id) msgs[i].id = uid('ins-msg');
+      var ids = (control.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+      if (ids.indexOf(msgs[i].id) === -1) {
+        ids.push(msgs[i].id);
+        control.setAttribute('aria-describedby', ids.join(' '));
+      }
+    }
+  });
+
   function ready() {
     init(document);
     watchScroll();
@@ -586,6 +2295,23 @@
     brand: brand,
     toast: toast,
     dialog: dialog,
+    dismiss: dismiss,
+    tab: function (target) { return selectTab(target, false); },
+    navbar: navbar,
+    confirm: confirmDialog,
+    wizard: function (target, step) {
+      var w = resolve(target);
+      if (w && !w.classList.contains('ins-wizard')) w = w.closest('.ins-wizard');
+      if (!w) return null;
+      return step === undefined ? wizardIndex(w) : wizardGo(w, step, { focus: false });
+    },
+    date: function (target, value) {
+      var input = resolve(target);
+      if (!input || !input.hasAttribute('data-ins-date-ready')) return null;
+      if (value === undefined) { var h = dateValue(input); return h ? h.value : null; }
+      setDate(input, value ? parseIso(value) : null);
+      return value;
+    },
     /* Exposed because they are genuinely useful on their own, and because the
        contrast maths is the part nobody should have to write twice. */
     color: {
