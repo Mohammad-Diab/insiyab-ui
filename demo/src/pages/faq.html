@@ -1,0 +1,119 @@
+<h2 id="using">الاستعمال</h2>
+<div class="ins-panel">
+  <div class="ins-accordion">
+    <details class="ins-collapse" name="faq-use" open>
+      <summary>هل أحتاج إلى npm أو أداة بناء؟</summary>
+      <div class="ins-collapse-body">
+        لا. وسما <code>&lt;link&gt;</code> و<code>&lt;script&gt;</code> ومجلّد الخطوط بجانبهما، وهذا كلّ شيء.
+        المستودع فيه سكربت بناء يجمع الأجزاء في ملفّ واحد — لك أنت أن تتجاهله.
+      </div>
+    </details>
+    <details class="ins-collapse" name="faq-use">
+      <summary>هل تعمل دون جافاسكربت؟</summary>
+      <div class="ins-collapse-body">
+        كلّ ما لا يتحرّك يعمل من ملفّ الأنماط وحده. وما يحتاج السكربت ليتصرّف — الألسنة، قائمة
+        الموقع على الهاتف، المعالج — مكتوب بحيث تبقى الصفحة كاملة بدونه: تظهر الألواح متتالية
+        بدل أن تختفي. وهذا الأكورديون نفسه عنصر <code>&lt;details&gt;</code> عاديّ.
+      </div>
+    </details>
+    <details class="ins-collapse" name="faq-use">
+      <summary>هل تصلح لصفحة إنجليزية؟</summary>
+      <div class="ins-collapse-body">
+        نعم. «العربية أوّلًا» اختيار في الجمهور لا حدّ تقني: مكتبة مبنيّة بالخصائص المنطقية تعمل
+        في الاتجاهين من الأصناف نفسها. جرّب اتجاه LTR من زرّ <b>المظهر</b> في أعلى الصفحة.
+      </div>
+    </details>
+    <details class="ins-collapse" name="faq-use">
+      <summary>هل تتعارض مع Bootstrap أو Tailwind؟</summary>
+      <div class="ins-collapse-body">
+        لا. كلّ شيء مسبوق: الأصناف <code>ins-</code>، والمتغيّرات <code>--ins-*</code>، والسمات
+        <code>data-ins-*</code>. واسم الحوار <code>.ins-dialog</code> لا <code>.modal</code> ليس
+        تهذيبًا: قاعدة Bootstrap <code>.modal { display: none }</code> تغلب قاعدة المتصفّح لعنصر
+        <code>dialog[open]</code>، فيُفتح الحوار ولا يُرسم شيء.
+      </div>
+    </details>
+    <details class="ins-collapse" name="faq-use">
+      <summary>هل هناك نسخة لـ React أو لقوالب Jinja؟</summary>
+      <div class="ins-collapse-body">
+        مخطّط لهما، ولم تصدرا بعد. والأصناف تعمل اليوم في أيّ منهما كما هي — ما سيضيفه الغلاف هو
+        مكوّنات جاهزة بدل الشيفرة، لا مظهرًا مختلفًا.
+      </div>
+    </details>
+  </div>
+</div>
+
+<h2 id="design">التصميم</h2>
+<div class="ins-panel">
+  <div class="ins-accordion">
+    <details class="ins-collapse" name="faq-design">
+      <summary>كيف أغيّر لون الهوية؟</summary>
+      <div class="ins-collapse-body">
+        سمة <code>data-ins-primary="#0F766E"</code> على <code>&lt;html&gt;</code>، أو
+        <code>Insiyab.brand('#0F766E')</code> وقت التشغيل. يُشتقّ من اللون الواحد كلّ ما عداه. التفاصيل
+        في <a href="color.html">اللون والهوية</a>.
+      </div>
+    </details>
+    <details class="ins-collapse" name="faq-design">
+      <summary>لماذا لا تتحرّك الكرات الملوّنة في الخلفية؟</summary>
+      <div class="ins-collapse-body">
+        لأنّها كلّفت <b>٤٧٪ من نواة معالج</b> وهي تنجرف، على صفحة لا يحدث فيها شيء. المُكلِف ليس الكرات
+        بل الأسطح المصنفرة فوقها: السطح يعيد تضبيب ما خلفه كلّما تغيّر، فأيّ حركة تحته تعيد تضبيب
+        معظم الصفحة في كلّ إطار. إيقاف الانجراف أنزلها إلى ٤٫٨٪. القصّة كاملة في <a href="motion.html">الحركة</a>.
+      </div>
+    </details>
+    <details class="ins-collapse" name="faq-design">
+      <summary>لماذا لا يوجد خطّ مائل؟</summary>
+      <div class="ins-collapse-body">
+        لا خطّ من الثلاثة يحمل وجهًا مائلًا، والمائل الذي يصطنعه المتصفّح يُميل العربية في الاتجاه الخطأ.
+        لذلك التوكيد في المكتبة باللون والوزن.
+      </div>
+    </details>
+    <details class="ins-collapse" name="faq-design">
+      <summary>هل يمكن إيقاف الحركة كلّها؟</summary>
+      <div class="ins-collapse-body">
+        <code>data-ins-fx="off"</code> على <code>&lt;html&gt;</code>، أو زرّ فيه <code>data-ins-fx</code>.
+        وإعداد النظام «تقليل الحركة» محترم تلقائيًا ومنفصلًا عن ذلك.
+      </div>
+    </details>
+  </div>
+</div>
+
+<h2 id="trouble">مشكلات شائعة</h2>
+<div class="ins-panel">
+  <div class="ins-accordion">
+    <details class="ins-collapse" name="faq-trouble">
+      <summary>الخطّ يظهر بخطّ النظام لا بتجوال</summary>
+      <div class="ins-collapse-body">
+        إمّا أنّ مجلّد <code>fonts/</code> ليس بجانب ملفّ الأنماط، وإمّا أنّ الصفحة مفتوحة عبر
+        <code>file://</code>، حيث يحجب المتصفّح الخطوط المحلّية لأنّها من أصل آخر. افتحها عبر أيّ خادم محلّي.
+      </div>
+    </details>
+    <details class="ins-collapse" name="faq-trouble">
+      <summary>الصفحة تومض بالوضع الفاتح قبل الداكن</summary>
+      <div class="ins-collapse-body">
+        السكربت محمَّل بـ <code>defer</code> أو في آخر الصفحة. ضعه في <code>&lt;head&gt;</code> دون
+        <code>defer</code> ليختم الوضع قبل أوّل رسم.
+      </div>
+    </details>
+    <details class="ins-collapse" name="faq-trouble">
+      <summary>زرّ عليه <code>hidden</code> ما زال ظاهرًا</summary>
+      <div class="ins-collapse-body">
+        لن يحدث مع المكتبة: كلّ مكوّن يضبط <code>display</code>، فتعيد المكتبة لسمة <code>hidden</code>
+        غلبتها صراحةً. إن رأيته فقاعدة في صفحتك تضبط <code>display</code> بأولويّة أعلى.
+      </div>
+    </details>
+    <details class="ins-collapse" name="faq-trouble">
+      <summary>القائمة المنبثقة تُقصّ داخل اللوح</summary>
+      <div class="ins-collapse-body">
+        اللوح يقصّ ما يفيض منه ليحافظ على زواياه. المتصفّحات الحديثة ترفعه تلقائيًا حين تُفتح قائمة
+        داخله؛ ولمتصفّح أقدم أضف <code>.ins-panel--open</code> إلى اللوح.
+      </div>
+    </details>
+  </div>
+</div>
+
+<h2 id="licence">الترخيص</h2>
+<p>
+  الشيفرة بترخيص MIT. والخطوط الثلاثة بترخيص SIL Open Font License 1.1، وتراخيصها في مجلّد
+  <code>fonts/</code> لأنّ الترخيص يشترط أن يرافق الخطّ أينما ذهب.
+</p>

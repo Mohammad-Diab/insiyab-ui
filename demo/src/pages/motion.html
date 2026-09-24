@@ -1,0 +1,95 @@
+<h2 id="curves">منحنيان</h2>
+<p>
+  <code>cubic-bezier(.22, 1, .36, 1)</code> لكلّ شيء تقريبًا. الدخول ٢٨٠ جزءًا من الثانية والخروج ١٨٠ —
+  عدم تماثل مقصود: الدخول يستحقّ أن يُرى، والخروج يستحقّ أن يبتعد عن الطريق. ومنحنى التجاوز
+  <code>cubic-bezier(.34, 1.56, .64, 1)</code> محجوز لما وظيفته أن ينتقل: إبهام المفتاح، وعلامة الصحّ،
+  ورقاقات الأيقونات.
+</p>
+<demo-code lang="css">
+.my-thing {
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+.my-toggle-thumb {
+  transition: transform var(--ins-t-pop) var(--ins-ease-spring);
+}
+</demo-code>
+
+<h2 id="entrances">الدخول</h2>
+<p>
+  <code>data-ins-reveal</code> على حاوية يُدخل أبناءها متدرّجين. والأصناف الثلاثة تعطي عنصرًا واحدًا
+  دخولًا. اضغط «أعد» لتراها مرّة أخرى.
+</p>
+<demo-example class="stack">
+  <div class="ins-cols-4" data-ins-reveal id="reveal-demo">
+    <div class="ins-card ins-p-4 ins-text-center">١</div>
+    <div class="ins-card ins-p-4 ins-text-center">٢</div>
+    <div class="ins-card ins-p-4 ins-text-center">٣</div>
+    <div class="ins-card ins-p-4 ins-text-center">٤</div>
+  </div>
+  <div class="ins-row" id="anim-demo">
+    <span class="ins-pill ins-pill--brand ins-anim-rise">ins-anim-rise</span>
+    <span class="ins-pill ins-pill--brand ins-anim-pop">ins-anim-pop</span>
+    <span class="ins-pill ins-pill--brand ins-anim-slide">ins-anim-slide</span>
+    <button class="ins-btn ins-btn--secondary ins-btn--sm ins-ms-auto" id="replay">أعد</button>
+  </div>
+</demo-example>
+
+<h2 id="gestures">إشارات المرور</h2>
+<p>لكلّ مكوّن حركة عند المرور، وكلّها تقول الشيء نفسه بطريقتها. مرّر على كلّ عنصر:</p>
+<demo-example class="stack">
+  <div class="ins-cols-3">
+    <div class="ins-card ins-p-5 ins-hoverable">
+      <b>سطح</b>
+      <p class="ins-muted ins-text-sm ins-mb-0">يرتفع نحو الضوء: ظلّ أطول وحافة أسطع. واللمعة القطرية لا تتحرّك — إنّها التوقيع.</p>
+    </div>
+    <div class="ins-stack ins-gap-3">
+      <button class="ins-btn ins-btn--primary">متابعة<svg class="ico"><use href="#i-arrow"/></svg></button>
+      <p class="ins-muted ins-text-sm ins-m-0">أيقونة الزرّ تنزلق نحو الحافة التي يأخذك إليها.</p>
+    </div>
+    <div class="ins-stack ins-gap-3">
+      <input class="ins-input" placeholder="حقل">
+      <p class="ins-muted ins-text-sm ins-m-0">الحقل يضيء ولا يرتفع: الارتفاع معناه التركيز.</p>
+    </div>
+  </div>
+</demo-example>
+<demo-code lang="html">
+<div class="ins-card ins-hoverable">…</div>   <!-- البطاقة ترتفع فقط حين تطلب ذلك -->
+</demo-code>
+
+<h2 id="nothing-loops">لا شيء يتكرّر</h2>
+<p>
+  كلّ حركة هنا عابرة: تدفع كلفتها مدّة ظهورها وتتوقّف. الاستثناءان هيكل التحميل والدوّارة، وكلاهما
+  يعني «ننتظر».
+</p>
+<p>
+  والسبب مقيس لا مُفترَض. ثلاث كرات زخرفية تنجرف بحركة دائمة كلّفت <strong>٤٧٪ من نواة معالج، بلا
+  توقّف</strong>، على صفحة لا يحدث فيها شيء. التشخيص البديهي — إعادة تضبيب ثلاث طبقات ستّين مرّة في الثانية
+  — كان خاطئًا: بإزالة الضباب عنها وترك الانجراف بقيت الصفحة تحرق ٤٤٫٧٪. المُكلِف هو <em>الأسطح المصنفرة
+  فوقها</em>، لأنّ السطح يعيد تضبيب ما خلفه كلّما تغيّر، فأيّ حركة تحته تعيد تضبيب معظم الصفحة في كلّ إطار.
+  إيقاف الانجراف وحده أنزلها إلى ٤٫٨٪.
+</p>
+<p class="site-note">
+  فالخيار في تصميم مصنفر ليس «حركة رخيصة أو غالية» بل <b>حركة أو صنفرة</b> — والصنفرة هي التصميم.
+  ولهذا يرفض سكربت البناء إصدار ملفّ أنماط فيه أيّ <code>infinite</code> غير الاثنين.
+</p>
+
+<h2 id="off">الإيقاف</h2>
+<p>
+  <code>data-ins-fx="off"</code> على <code>&lt;html&gt;</code> يوقف المؤثرات كلّها، وزرّ فيه
+  <code>data-ins-fx</code> يبدّلها ويحفظ الاختيار. وإعداد النظام «تقليل الحركة» محترم تلقائيًا ومنفصلًا.
+</p>
+<demo-example class="row">
+  <button class="ins-btn ins-btn--secondary" data-ins-fx><svg class="ico"><use href="#i-sparkle"/></svg>تخفيف المؤثرات</button>
+</demo-example>
+
+<script>
+  /* A fresh copy of each element is the only way to run a CSS entrance again.
+     Delegated, because the button is inside one of the copies. */
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('#replay')) return;
+    ['reveal-demo', 'anim-demo'].forEach(function (id) {
+      var el = document.getElementById(id);
+      el.replaceWith(el.cloneNode(true));
+    });
+  });
+</script>

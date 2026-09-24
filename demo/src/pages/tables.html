@@ -1,0 +1,132 @@
+<h2 id="basic">جدول بيانات</h2>
+<p>
+  <code>.ins-table</code> داخل <code>.ins-table-wrap</code>، والغلاف يتمرّر أفقيًا حين يضيق عن الجدول
+  بدل أن يمدّ الصفحة كلّها. في لوح، ضع الغلاف في <code>.ins-panel-body--flush</code> ليصل إلى حوافه.
+</p>
+<demo-example>
+  <div class="ins-panel">
+    <div class="ins-panel-head">
+      <span class="ins-panel-ico"><svg class="ico"><use href="#i-cart"/></svg></span>
+      <h3 class="ins-panel-title">الطلبات الأخيرة</h3>
+      <div class="ins-panel-actions"><span class="ins-badge">128</span></div>
+    </div>
+    <div class="ins-panel-body ins-panel-body--flush">
+      <div class="ins-table-wrap">
+        <table class="ins-table">
+          <thead>
+            <tr><th>الطلب</th><th>العميل</th><th>المنتج</th><th class="ins-num">المبلغ</th><th>الحالة</th><th>التاريخ</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="ins-num">#40218</td>
+              <td>ليلى حسن</td>
+              <td>حقيبة ظهر جلدية</td>
+              <td class="ins-num">249.00</td>
+              <td><span class="ins-pill ins-pill--info"><span class="ins-pill-dot"></span>قيد التجهيز</span></td>
+              <td><span class="ins-num">2026-09-23</span></td>
+              <td>
+                <details class="ins-pop">
+                  <summary class="ins-btn ins-btn--secondary ins-btn--sm ins-btn--icon" aria-label="إجراءات"><svg class="ico"><use href="#i-dots"/></svg></summary>
+                  <div class="ins-pop-body">
+                    <button class="ins-pop-item">عرض الطلب</button>
+                    <button class="ins-pop-item">طباعة الفاتورة</button>
+                    <hr class="ins-pop-sep">
+                    <button class="ins-pop-item ins-pop-item--bad">إلغاء الطلب</button>
+                  </div>
+                </details>
+              </td>
+            </tr>
+            <tr>
+              <td class="ins-num">#40217</td>
+              <td>عمر خليل</td>
+              <td>ساعة يد كلاسيكية</td>
+              <td class="ins-num">1,180.00</td>
+              <td><span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>تمّ التسليم</span></td>
+              <td><span class="ins-num">2026-09-22</span></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="ins-num">#40216</td>
+              <td>سارة يوسف</td>
+              <td>سمّاعات لاسلكية</td>
+              <td class="ins-num">399.00</td>
+              <td><span class="ins-pill ins-pill--warn"><span class="ins-pill-dot"></span>بانتظار الدفع</span></td>
+              <td><span class="ins-num">2026-09-22</span></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="ins-num">#40215</td>
+              <td>كريم نصّار</td>
+              <td>مصباح مكتب</td>
+              <td class="ins-num">89.50</td>
+              <td><span class="ins-pill ins-pill--bad"><span class="ins-pill-dot"></span>مُسترجَع</span></td>
+              <td><span class="ins-num">2026-09-21</span></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</demo-example>
+<p>
+  مرّر على صفّ: ينمو شريط صغير على حافته الأمامية — الشريط نفسه الذي يعلّم الرابط النشط في
+  الشريط الجانبي. ويكبر من مركزه لا ينزلق، لأنّ شريطًا ينزلق بطول صفّ عريض يسحب العين <em>على امتداده</em>
+  بدل أن يدلّها عليه. والصفوف الستّة الأولى تدخل متدرّجة، لا أكثر — جدول بمئتي صفّ كان سيقضي ثماني
+  ثوانٍ يرسم نفسه.
+</p>
+
+<h2 id="numbers">الأرقام</h2>
+<p>
+  <code>.ins-num</code> على الخليّة يكتب الرقم بخطّ Inter بأرقام متساوية العرض ويعزله عن اتجاه السطر،
+  فتصطفّ الأعمدة الرقمية ولا تنتقل إشارة الناقص. ضعه على رأس العمود أيضًا ليصطفّ معه.
+</p>
+
+<h2 id="toolbar">مع شريط أدوات وترقيم</h2>
+<p>التركيب الكامل الذي تحتاجه أغلب صفحات القوائم: بحث وتصفية فوق الجدول، وترقيم تحته.</p>
+<demo-example>
+  <div class="ins-toolbar">
+    <div class="ins-search ins-toolbar-grow">
+      <svg class="ico ins-search-ico"><use href="#i-search"/></svg>
+      <input class="ins-input" placeholder="ابحث باسم العضو أو بريده…" aria-label="بحث">
+    </div>
+    <select class="ins-select" aria-label="الدور" style="inline-size:auto"><option>كلّ الأدوار</option><option>مدير</option><option>محرّر</option></select>
+  </div>
+  <div class="ins-panel">
+    <div class="ins-panel-body ins-panel-body--flush">
+      <div class="ins-table-wrap">
+        <table class="ins-table">
+          <thead><tr><th>العضو</th><th>الدور</th><th>آخر نشاط</th></tr></thead>
+          <tbody>
+            <tr><td><span class="ins-row ins-gap-2 ins-flex-nowrap"><span class="ins-avatar ins-avatar--sm">ه م</span>هدى منصور</span></td><td><span class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>مديرة</span></td><td class="ins-muted">قبل دقائق</td></tr>
+            <tr><td><span class="ins-row ins-gap-2 ins-flex-nowrap"><span class="ins-avatar ins-avatar--sm">ي ع</span>يوسف عادل</span></td><td><span class="ins-pill"><span class="ins-pill-dot"></span>محرّر</span></td><td class="ins-muted">أمس</td></tr>
+            <tr><td><span class="ins-row ins-gap-2 ins-flex-nowrap"><span class="ins-avatar ins-avatar--sm">ر ف</span>رنا فهد</span></td><td><span class="ins-pill"><span class="ins-pill-dot"></span>محرّرة</span></td><td class="ins-muted">قبل ٣ أيّام</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="ins-row ins-justify-between">
+    <span class="ins-muted ins-text-sm">عرض <span class="ins-num">1–3</span> من <span class="ins-num">9</span></span>
+    <nav class="ins-pagination" aria-label="صفحات الأعضاء">
+      <a class="ins-page ins-page--prev" aria-disabled="true">السابق</a>
+      <a class="ins-page" aria-current="page">1</a>
+      <a class="ins-page" href="#toolbar">2</a>
+      <a class="ins-page" href="#toolbar">3</a>
+      <a class="ins-page ins-page--next" href="#toolbar">التالي</a>
+    </nav>
+  </div>
+</demo-example>
+
+<h2 id="empty">جدول فارغ</h2>
+<p>حين لا بيانات، الحالة الفارغة مكان الجدول لا جدول برأس فقط.</p>
+<demo-example>
+  <div class="ins-panel">
+    <div class="ins-panel-head"><h3 class="ins-panel-title">المرتجعات</h3></div>
+    <div class="ins-empty">
+      <span class="ins-empty-ico"><svg class="ico" style="font-size:2rem"><use href="#i-inbox"/></svg></span>
+      <span class="ins-empty-title">لا مرتجعات هذا الشهر</span>
+      <span class="ins-empty-hint">ستظهر هنا طلبات الاسترجاع فور وصولها.</span>
+    </div>
+  </div>
+</demo-example>

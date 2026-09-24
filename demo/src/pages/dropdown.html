@@ -1,0 +1,74 @@
+<h2 id="basic">قائمة إجراءات</h2>
+<p>
+  <code>&lt;details class="ins-pop"&gt;</code>: الملخّص زرّ، والجسم القائمة. تُفتح بلا جافاسكربت؛ والسكربت يضيف
+  ما لا يعطيه <code>&lt;details&gt;</code> — <kbd class="ins-kbd">Esc</kbd> يغلقها ويعيد التركيز إلى زرّها،
+  والأسهم تتنقّل وتتخطّى المعطّل، والنقر خارجها يغلقها، وتنقلب عند حافة الشاشة.
+</p>
+<demo-example class="row">
+  <details class="ins-pop ins-pop--start">
+    <summary class="ins-btn ins-btn--secondary">إجراءات<svg class="ico"><use href="#i-chev-down"/></svg></summary>
+    <div class="ins-pop-body">
+      <div class="ins-pop-label">المنتج</div>
+      <button class="ins-pop-item"><svg class="ico"><use href="#i-edit"/></svg>تعديل <kbd class="ins-kbd">E</kbd></button>
+      <button class="ins-pop-item"><svg class="ico"><use href="#i-copy"/></svg>تكرار</button>
+      <button class="ins-pop-item" disabled>نقل إلى متجر آخر</button>
+      <hr class="ins-pop-sep">
+      <button class="ins-pop-item ins-pop-item--bad"><svg class="ico"><use href="#i-trash"/></svg>حذف</button>
+    </div>
+  </details>
+</demo-example>
+<p>
+  <code>--start</code> يحاذي القائمة ببداية زرّها، والافتراضي محاذاتها بنهايته — المناسب لزرّ في نهاية صفّ
+  أو شريط.
+</p>
+
+<h2 id="checkable">عناصر قابلة للتأشير</h2>
+<p>
+  <code>role="menuitemcheckbox"</code> أو <code>menuitemradio</code> مع <code>aria-checked</code>. والقائمة تبقى
+  مفتوحة وأنت تبدّلها، لأنّ كلّ نقرة إعداد لا اختيار. والحدث <code>ins:menu</code> يحمل الحالة.
+</p>
+<demo-example class="row">
+  <details class="ins-pop ins-pop--start">
+    <summary class="ins-btn ins-btn--secondary"><svg class="ico"><use href="#i-table"/></svg>الأعمدة</summary>
+    <div class="ins-pop-body">
+      <div class="ins-pop-label">إظهار</div>
+      <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="true">العميل</button>
+      <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="true">المبلغ</button>
+      <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="false">طريقة الدفع</button>
+      <hr class="ins-pop-sep">
+      <div class="ins-pop-label">الترتيب</div>
+      <div role="group">
+        <button class="ins-pop-item" role="menuitemradio" aria-checked="true">الأحدث أوّلًا</button>
+        <button class="ins-pop-item" role="menuitemradio" aria-checked="false">الأعلى مبلغًا</button>
+      </div>
+    </div>
+  </details>
+</demo-example>
+
+<h2 id="card">بطاقة منبثقة</h2>
+<p><code>.ins-pop-body--card</code> لمحتوى حرّ بدل العناصر، بكلّ سلوك القائمة.</p>
+<demo-example class="row">
+  <details class="ins-pop ins-pop--start">
+    <summary class="ins-btn ins-btn--ghost"><span class="ins-avatar ins-avatar--sm">ه م</span>هدى منصور</summary>
+    <div class="ins-pop-body ins-pop-body--card">
+      <div class="ins-row ins-gap-3 ins-mb-3">
+        <span class="ins-avatar">ه م</span>
+        <span class="ins-stack ins-gap-0"><b>هدى منصور</b><span class="ins-muted ins-text-xs">مديرة المتجر · الرياض</span></span>
+      </div>
+      <p class="ins-pop-text">تدير الطلبات والفريق منذ آذار ٢٠٢٤. متاحة من الأحد إلى الخميس.</p>
+      <button class="ins-btn ins-btn--secondary ins-btn--sm ins-btn--full ins-mt-3">إرسال رسالة</button>
+    </div>
+  </details>
+</demo-example>
+
+<h2 id="menu-link">عناصر روابط</h2>
+<p><code>.ins-pop-item</code> يصلح على <code>&lt;a&gt;</code> كما على <code>&lt;button&gt;</code>.</p>
+<demo-example class="row">
+  <details class="ins-pop ins-pop--start">
+    <summary class="ins-btn ins-btn--secondary">المساعدة</summary>
+    <div class="ins-pop-body">
+      <a class="ins-pop-item" href="start.html">البدء السريع</a>
+      <a class="ins-pop-item" href="faq.html">أسئلة شائعة</a>
+    </div>
+  </details>
+</demo-example>

@@ -1,0 +1,103 @@
+<h2 id="faces">الخطوط الثلاثة</h2>
+<demo-example code="none">
+  <div class="ins-cols-3">
+    <div class="ins-card ins-p-5">
+      <span class="ins-eyebrow">العربية</span>
+      <p class="ins-h3 ins-mt-2">تجوال · Tajawal</p>
+      <p class="ins-muted ins-mb-0">الخطّ العربي هو الهويّة، ويحمل مجموعته اللاتينية، فتبقى كلمة مثل API في سطر عربي بخطّه.</p>
+    </div>
+    <div class="ins-card ins-p-5">
+      <span class="ins-eyebrow">الأرقام والنصّ اللاتيني</span>
+      <p class="ins-h3 ins-mt-2" dir="ltr">Inter</p>
+      <p class="ins-num ins-mb-0">1,240,905 · 3.14 · 2026-09-23</p>
+    </div>
+    <div class="ins-card ins-p-5">
+      <span class="ins-eyebrow">العناوين اللاتينية</span>
+      <p class="ins-h3 ins-mt-2" dir="ltr" style="font-family:var(--ins-font-heading-en)">Cause</p>
+      <p class="ins-muted ins-mb-0">للعناوين حين يكون اتجاه الصفحة من اليسار.</p>
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="headings">العناوين</h2>
+<p>
+  مظهر العنوان منفصل عن مستواه. مستوى العنوان يخصّ بنية الصفحة وقارئ الشاشة، ومظهره يخصّ التصميم،
+  فـ <code>&lt;h2 class="ins-h4"&gt;</code> استعمال عاديّ تمامًا، ولا سبب بعده لتخطّي مستوى في البنية.
+</p>
+<demo-example>
+  <p class="ins-display">انسياب</p>
+  <p class="ins-h1">تقرير المبيعات السنوي</p>
+  <p class="ins-h2">الربع الثالث</p>
+  <p class="ins-h3">المنطقة الوسطى</p>
+  <p class="ins-h4">ملاحظات الفريق</p>
+</demo-example>
+
+<h2 id="lead">التمهيد والعنوان الصغير</h2>
+<demo-example>
+  <span class="ins-eyebrow">الإعدادات</span>
+  <p class="ins-h2 ins-mt-1">حساب المتجر</p>
+  <p class="ins-lead ins-mb-0">الاسم والعنوان وطرق الدفع، في مكان واحد. التغييرات تُطبَّق على الطلبات الجديدة فقط.</p>
+</demo-example>
+
+<h2 id="prose">النصّ الطويل</h2>
+<p>
+  <code>.ins-prose</code> ينسّق الفقرات والقوائم والاقتباسات والشيفرة والجداول داخله، ولا يلمس شيئًا
+  خارجه — قواعد على <code>ul</code> أو <code>p</code> المجرّدة كانت ستغيّر قوائم الصفحة المضيفة. ولا
+  تباعد بين الحروف العربية، ولا خطّ مائل: التوكيد هنا باللون.
+</p>
+<demo-example>
+  <article class="ins-prose">
+    <h2>سياسة الاسترجاع</h2>
+    <p>
+      يمكنك إرجاع أيّ منتج خلال <strong>١٤ يومًا</strong> من استلامه، بحالته الأصلية ومع فاتورته.
+      يُعاد المبلغ إلى وسيلة الدفع نفسها خلال خمسة أيّام عمل، و<em>لا</em> تُحتسب رسوم الشحن
+      إلّا إن كان <mark>المنتج معيبًا</mark>.
+    </p>
+    <h3>الخطوات</h3>
+    <ol>
+      <li>افتح <a href="#prose">طلباتي</a> واختر الطلب.</li>
+      <li>اضغط «طلب استرجاع» واختر السبب:
+        <ul>
+          <li>المنتج معيب أو تالف،</li>
+          <li>أو وصل منتج غير المطلوب.</li>
+        </ul>
+      </li>
+      <li>سلّم الطرد لمندوب الشحن.</li>
+    </ol>
+    <blockquote>المنتج الذي لا يناسبك لا يجب أن يكلّفك شيئًا لتعيده.</blockquote>
+    <p>للمطوّرين، حالة الطلب متاحة عبر الواجهة البرمجية:</p>
+    <pre><code>GET /api/orders/40218/return
+{ "status": "approved", "refund": 249.00 }</code></pre>
+    <dl>
+      <dt>مدّة الاسترجاع</dt><dd>١٤ يومًا</dd>
+      <dt>استرداد المبلغ</dt><dd>خمسة أيّام عمل</dd>
+    </dl>
+  </article>
+</demo-example>
+
+<h2 id="divider">الفاصل</h2>
+<demo-example class="stack">
+  <hr class="ins-divider">
+  <div class="ins-divider">أو</div>
+  <div class="ins-divider ins-divider--start">معلومات الشحن</div>
+  <div class="ins-row ins-text-sm">
+    <span>ملف</span>
+    <hr class="ins-divider ins-divider--v" aria-orientation="vertical">
+    <span>تعديل</span>
+    <hr class="ins-divider ins-divider--v" aria-orientation="vertical">
+    <span>عرض</span>
+  </div>
+</demo-example>
+
+<h2 id="kbd">المفاتيح</h2>
+<demo-example>
+  <p class="ins-m-0">اضغط <kbd class="ins-kbd">Ctrl</kbd> + <kbd class="ins-kbd">K</kbd> للبحث، و<kbd class="ins-kbd">Esc</kbd> للإغلاق.</p>
+</demo-example>
+
+<h2 id="tokens">المقاسات</h2>
+<p>متاحة متغيّراتٍ لأنماطك، وأصنافًا في <a href="utilities.html#text">الأدوات المساعدة</a>.</p>
+<demo-code lang="css">
+--ins-fs-xs  --ins-fs-sm  --ins-fs-md  --ins-fs-lg  --ins-fs-xl
+--ins-fs-h4  --ins-fs-h3  --ins-fs-h2  --ins-fs-h1  --ins-fs-display
+--ins-font-body  --ins-font-arabic  --ins-font-body-en  --ins-font-heading-en  --ins-font-mono
+</demo-code>

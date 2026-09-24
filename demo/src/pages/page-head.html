@@ -1,0 +1,53 @@
+<h2 id="head">رأس الصفحة</h2>
+<p>
+  اسم الصفحة وسطر تحته، وإجراءاتها في النهاية. الإجراءات تلتفّ تحت العنوان على الشاشة الضيّقة بدل أن
+  تضغطه، لأنّ عنوان الصفحة العربي جملة ويستحقّ سطره. رأس هذه الصفحة نفسه مبنيّ به.
+</p>
+<demo-example>
+  <header class="ins-page-head ins-mb-0">
+    <nav class="ins-breadcrumb" aria-label="مسار التنقّل">
+      <ol>
+        <li><a href="#head">المتجر</a></li>
+        <li><a href="#head">المنتجات</a></li>
+        <li><span aria-current="page">حقيبة ظهر جلدية</span></li>
+      </ol>
+    </nav>
+    <div class="ins-page-head-text">
+      <span class="ins-eyebrow">منتج</span>
+      <h3 class="ins-page-title">حقيبة ظهر جلدية</h3>
+      <p class="ins-page-sub">آخر تعديل قبل ساعتين · <span class="ins-num">14</span> قطعة في المخزون</p>
+    </div>
+    <div class="ins-page-actions">
+      <button class="ins-btn ins-btn--secondary">معاينة</button>
+      <button class="ins-btn ins-btn--primary">حفظ التغييرات</button>
+    </div>
+  </header>
+</demo-example>
+
+<h2 id="breadcrumb">مسار التنقّل</h2>
+<p>
+  <code>&lt;nav class="ins-breadcrumb"&gt;</code> حول قائمة مرتّبة. الفاصل مرسوم لا حرف، وينقلب مع الاتجاه،
+  والعنصر الأخير <code>aria-current="page"</code> بلا رابط.
+</p>
+<demo-example>
+  <nav class="ins-breadcrumb" aria-label="مسار التنقّل">
+    <ol>
+      <li><a href="#breadcrumb">الرئيسية</a></li>
+      <li><a href="#breadcrumb">الإعدادات</a></li>
+      <li><span aria-current="page">الفواتير</span></li>
+    </ol>
+  </nav>
+</demo-example>
+
+<h2 id="minimal">عنوان فقط</h2>
+<demo-example>
+  <header class="ins-page-head ins-mb-0">
+    <div class="ins-page-head-text">
+      <h3 class="ins-page-title">الطلبات</h3>
+      <p class="ins-page-sub">كلّ طلبات المتجر، الأحدث أوّلًا.</p>
+    </div>
+    <div class="ins-page-actions">
+      <button class="ins-btn ins-btn--primary"><svg class="ico"><use href="#i-plus"/></svg>طلب جديد</button>
+    </div>
+  </header>
+</demo-example>

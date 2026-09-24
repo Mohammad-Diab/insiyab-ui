@@ -1,0 +1,41 @@
+<h2 id="basic">الترقيم</h2>
+<p>
+  روابط حقيقية بعناوين حقيقية، لا أزرار تحتاج سكربتًا. مسار غائر والصفحة الحالية وجه مرتفع منه — لغة
+  الشريط المقسّم نفسها، لأنّ السؤال نفسه: أيّ هذه أنا عليه. والأرقام بخطّ Inter متساوية العرض، فلا
+  يتغيّر عرض الصفّ من الصفحة ٩ إلى ١٠.
+</p>
+<demo-example>
+  <nav class="ins-pagination" aria-label="صفحات الطلبات">
+    <a class="ins-page ins-page--prev" href="?page=2">السابق</a>
+    <a class="ins-page" href="?page=1">1</a>
+    <a class="ins-page" href="?page=2">2</a>
+    <a class="ins-page" aria-current="page">3</a>
+    <a class="ins-page" href="?page=4">4</a>
+    <span class="ins-page-gap">…</span>
+    <a class="ins-page" href="?page=12">12</a>
+    <a class="ins-page ins-page--next" href="?page=4">التالي</a>
+  </nav>
+</demo-example>
+<p>السهمان يشيران إلى بداية اتجاه القراءة ونهايته — «السابق» يشير يمينًا في صفحة عربية.</p>
+
+<h2 id="edges">عند الطرفين</h2>
+<p>في الصفحة الأولى «السابق» لا وجهة له: <code>aria-disabled="true"</code> وبلا <code>href</code>.</p>
+<demo-example>
+  <nav class="ins-pagination" aria-label="صفحات المنتجات">
+    <a class="ins-page ins-page--prev" aria-disabled="true">السابق</a>
+    <a class="ins-page" aria-current="page">1</a>
+    <a class="ins-page" href="?page=2">2</a>
+    <a class="ins-page" href="?page=3">3</a>
+    <a class="ins-page ins-page--next" href="?page=2">التالي</a>
+  </nav>
+</demo-example>
+
+<h2 id="compact">مختصر</h2>
+<p>للهاتف أو لقائمة جانبية: السهمان والموضع فقط.</p>
+<demo-example>
+  <nav class="ins-pagination" aria-label="صفحات التعليقات">
+    <a class="ins-page ins-page--prev" href="?page=2">السابق</a>
+    <span class="ins-page-gap"><span class="ins-num">3</span> من <span class="ins-num">12</span></span>
+    <a class="ins-page ins-page--next" href="?page=4">التالي</a>
+  </nav>
+</demo-example>

@@ -1,0 +1,113 @@
+<p class="site-note">
+  <b>هذه الصفحة هي المثال.</b> الشريط الجانبي على يمينك والشريط العلوي فوقك هما الهيكل نفسه،
+  من المكتبة ودون أنماط خاصّة. اضغط زرّ القائمة في الشريط العلوي لتطويه، وضيّق النافذة تحت
+  <span class="ins-num">900px</span> ليصير درجًا.
+</p>
+
+<h2 id="structure">البنية</h2>
+<p>
+  شبكة من عمودين يتبعان اتجاه الكتابة: العمود الأوّل يقع يمينًا في العربية دون قاعدة منفصلة. في
+  الشريط الجانبي هويّة ومجموعات وروابط، وفي العمود الثاني الشريط العلوي والمحتوى.
+</p>
+<demo-code lang="html">
+<div class="ins-shell">
+  <aside class="ins-shell-side" id="nav">
+    <div class="ins-shell-brand">
+      <span class="ins-shell-mark">م</span>
+      <span class="ins-shell-brand-text">
+        <span class="ins-shell-brand-name">متجري</span>
+        <span class="ins-shell-brand-role">لوحة الإدارة</span>
+      </span>
+    </div>
+
+    <div class="ins-shell-group">المبيعات</div>
+    <a class="ins-shell-link is-active" href="/"><svg>…</svg>الرئيسية</a>
+    <a class="ins-shell-link" href="/orders"><svg>…</svg>الطلبات<span class="ins-shell-link-badge">8</span></a>
+
+    <div class="ins-shell-bottom">
+      <a class="ins-shell-link" href="/logout"><svg>…</svg>خروج</a>
+    </div>
+  </aside>
+  <div class="ins-shell-scrim"></div>
+
+  <div class="ins-shell-main">
+    <header class="ins-topbar">…</header>
+    <main class="ins-shell-content">…</main>
+  </div>
+</div>
+</demo-code>
+
+<h2 id="topbar">الشريط العلوي: جزر لا شريط</h2>
+<p>
+  الشريط نفسه <b>شفّاف</b>، ويحمل حبوبًا زجاجية عائمة في ثلاث مناطق: أدوات في البداية، واسم الصفحة
+  في الوسط، وأدوات المستخدم في النهاية. ولا يتحوّل إلى شريط مصنفر مصمت إلّا حين تتمرّر الصفحة تحته.
+  والمنطقة الوسطى في وسط <em>الصفحة</em> لا في وسط ما يتبقّى، لذلك الشبكة <code>1fr auto 1fr</code>
+  لا المرونة.
+</p>
+<demo-example class="flush">
+  <header class="ins-topbar" style="position:relative">
+    <div class="ins-zone ins-zone--start">
+      <button class="ins-island ins-island--icon" aria-label="القائمة"><svg class="ico"><use href="#i-menu"/></svg></button>
+      <span class="ins-island">الثلاثاء <span class="ins-num">23</span> أيلول</span>
+    </div>
+    <div class="ins-zone ins-zone--center">
+      <div class="ins-island ins-island--title">
+        <span class="ins-shell-head">
+          <span class="ins-shell-title">الطلبات</span>
+          <span class="ins-shell-sub">٨ بانتظار الشحن</span>
+        </span>
+      </div>
+      <button class="ins-island ins-island--icon" aria-label="بحث"><svg class="ico"><use href="#i-search"/></svg></button>
+    </div>
+    <div class="ins-zone ins-zone--end">
+      <button class="ins-island ins-island--icon" aria-label="الإشعارات"><svg class="ico"><use href="#i-bell"/></svg></button>
+      <button class="ins-island">
+        <span class="ins-avatar ins-avatar--sm">ه م</span>
+        <span>هدى منصور</span>
+      </button>
+    </div>
+  </header>
+</demo-example>
+
+<h3 id="islands">أنواع الجزر</h3>
+<ul>
+  <li><code>.ins-island</code> — حبّة بنصّ أو بأيّ محتوى. زرًّا أو رابطًا ترتفع عند المرور.</li>
+  <li><code>.ins-island--icon</code> — مربّعة لأيقونة واحدة.</li>
+  <li><code>.ins-island--title</code> — اسم الصفحة وسطر اختياري تحته، يُقصّ بنقاط ولا ينكسر سطرين.</li>
+  <li><code>.ins-island--brand</code> — الهويّة، تظهر وحدها حين يكون الشريط الجانبي مطويًّا أو درجًا.</li>
+  <li>و<code>.ins-pill</code> أو <code>.ins-btn</code> داخل منطقة يأخذان ارتفاع الجزيرة تلقائيًا.</li>
+</ul>
+
+<h2 id="sidebar">الشريط الجانبي</h2>
+<p>
+  زجاج لا عمود ملوّن بلون الهوية: العمود الملوّن يصير ثاني أكثر شيء تشبّعًا في الشاشة بعد الزرّ
+  الرئيسي، ثمّ ينافسه. والرابط النشط يحمل شريطًا بعرض ثلاثة بكسل في حافته، هو نفسه الذي يعلّم الصفّ
+  تحت المؤشّر في الجدول واللسان الحالي — «أين أنت» و«ما تحت المؤشّر» لغة واحدة.
+</p>
+<p>
+  <code>.ins-shell-link-badge</code> عدّاد في نهاية الرابط، و<code>.ins-shell-bottom</code> يفصل ما ليس
+  وجهة — كالخروج — عن بقيّة الروابط كي لا يُضغط خطأً.
+</p>
+
+<h2 id="collapse">الطيّ والدرج</h2>
+<p>
+  زرّ فيه <code>data-ins-sidebar</code> يطوي الشريط على الحاسوب ويحفظ الحالة، فتُستعاد قبل أوّل رسم.
+  وتحت <span class="ins-num">900px</span> يصير الشريط درجًا يُفتح بـ <code>:target</code> — أي يعمل دون
+  جافاسكربت: رابط إلى <code>#nav</code> يكفي. والسكربت يضيف الإغلاق بالنقر على الخلفية وبـ <kbd class="ins-kbd">Esc</kbd>.
+</p>
+<demo-example class="row">
+  <button class="ins-btn ins-btn--secondary" data-ins-sidebar><svg class="ico"><use href="#i-sidebar"/></svg>اطوِ الشريط الجانبي</button>
+</demo-example>
+<demo-code lang="js">
+Insiyab.sidebar('collapsed');   // أو 'open' أو 'toggle'
+document.addEventListener('ins:sidebar', (e) => e.detail.state);
+</demo-code>
+
+<h2 id="ground">الخلفية</h2>
+<p>
+  ثلاث كرات ملوّنة من لون الهوية تُحقن خلف الصفحة تلقائيًا، وهي ما يعطي الزجاج شيئًا يصنفره. لا
+  تتحرّك — والسبب في <a href="motion.html#nothing-loops">الحركة</a>. لإيقافها:
+</p>
+<demo-code lang="html">
+<html data-ins-orbs="off">
+</demo-code>

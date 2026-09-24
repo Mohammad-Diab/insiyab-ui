@@ -1,0 +1,146 @@
+<h2 id="attributes">السمات</h2>
+<p>
+  كلّ ما يلي يعمل بالسمة وحدها في الشيفرة، دون سطر جافاسكربت في صفحتك. هذا هو الباب الأمامي؛
+  الواجهة البرمجية تحته مخرج طوارئ لما لا تصل إليه سمة.
+</p>
+<div class="ins-panel site-ref">
+  <div class="ins-panel-body ins-panel-body--flush">
+    <div class="ins-table-wrap">
+      <table class="ins-table">
+        <thead><tr><th>السمة</th><th>على</th><th>ما تفعله</th></tr></thead>
+        <tbody>
+          <tr><td><code>data-ins-theme-toggle</code></td><td>زرّ</td><td>يبدّل بين الفاتح والداكن. بالقيمة <code>system</code> يعيد اتّباع النظام.</td></tr>
+          <tr><td><code>data-ins-fx</code></td><td>زرّ</td><td>يخفّف المؤثرات أو يعيدها.</td></tr>
+          <tr><td><code>data-ins-sidebar</code></td><td>زرّ</td><td>يطوي الشريط الجانبي، أو يفتح الدرج على الهاتف.</td></tr>
+          <tr><td><code>data-ins-dialog="#id"</code></td><td>زرّ</td><td>يفتح حوارًا أو درجًا.</td></tr>
+          <tr><td><code>data-ins-dialog-close</code></td><td>زرّ</td><td>يغلق الحوار الذي هو فيه.</td></tr>
+          <tr><td><code>data-ins-dismiss</code></td><td>زرّ</td><td>يغلق أقرب ما يمكن إغلاقه: تنبيه، حوار، درج. أو ما تسمّيه بقيمة <code>#id</code>.</td></tr>
+          <tr><td><code>data-ins-confirm="نص"</code></td><td>زرّ، رابط، نموذج</td><td>يسأل قبل أن يمضي الإجراء. زرّ الموافقة بـ <code>data-ins-confirm-ok</code>، والخطر بـ <code>data-ins-confirm-tone="danger"</code>.</td></tr>
+          <tr><td><code>data-ins-toast="نص"</code></td><td>زرّ</td><td>يُظهر رسالة طائرة. النبرة بـ <code>data-ins-tone</code>.</td></tr>
+          <tr><td><code>data-ins-tab="#id"</code></td><td><code>.ins-tab</code></td><td>يبدّل لوح الألسنة.</td></tr>
+          <tr><td><code>data-ins-tip</code></td><td>أيّ عنصر</td><td>تلميح. فارغًا يعيد استعمال <code>aria-label</code>. الجهة بـ <code>data-ins-tip-side</code>.</td></tr>
+          <tr><td><code>data-ins-toggle</code></td><td>زرّ</td><td>زرّ تبديل يحفظ حالته في <code>aria-pressed</code>.</td></tr>
+          <tr><td><code>data-ins-navbar</code></td><td><code>.ins-navbar-toggle</code></td><td>يفتح قائمة الموقع على الهاتف.</td></tr>
+          <tr><td><code>data-ins-password</code></td><td><code>.ins-password-toggle</code></td><td>يُظهر كلمة المرور ويخفيها.</td></tr>
+          <tr><td><code>data-ins-validate</code></td><td><code>&lt;form&gt;</code></td><td>تحقّق المتصفّح برسائل داخل الحقل.</td></tr>
+          <tr><td><code>data-ins-date</code></td><td><code>input[type=date]</code></td><td>منتقي تاريخ بلغة الصفحة. للمدى: <code>data-ins-date-start</code> و<code>-end</code>.</td></tr>
+          <tr><td><code>data-ins-spin="up|down"</code></td><td>زرّ</td><td>يزيد الحقل الرقمي المجاور أو ينقصه.</td></tr>
+          <tr><td><code>data-ins-indeterminate</code></td><td>مربّع اختيار</td><td>حالة «بعضها محدّد».</td></tr>
+          <tr><td><code>data-ins-wizard="next|prev"</code></td><td>زرّ داخل <code>.ins-wizard</code></td><td>ينتقل بين خطوات المعالج بعد التحقّق.</td></tr>
+          <tr><td><code>data-ins-reveal</code></td><td>حاوية</td><td>يدخل أبناؤها متدرّجين.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<h3 id="root-attributes">على عنصر <code>&lt;html&gt;</code></h3>
+<demo-code lang="html">
+<html data-ins-primary="#0F766E">   <!-- لون الهوية -->
+<html data-ins-theme="dark">        <!-- يثبّت الوضع، أو light. بلا السمة يتبع النظام -->
+<html data-ins-orbs="off">          <!-- بلا الكرات الملوّنة في الخلفية -->
+<html data-ins-fx="off">            <!-- بلا مؤثرات الحركة -->
+<html data-ins-scrollbar="lead">    <!-- شريط التمرير في جهة البداية -->
+</demo-code>
+<p>
+  والسكربت يختم <code>data-ins-js</code> على <code>&lt;html&gt;</code> بنفسه قبل أوّل رسم. كلّ حالة
+  تحتاج السكربت معلّقة بهذه السمة — لوح لسان مخفيّ، قائمة موقع مطويّة — فإن فشل السكربت ظهر
+  كلّ شيء بدل أن يختفي.
+</p>
+
+<h2 id="api">الواجهة البرمجية</h2>
+<demo-code lang="js">
+Insiyab.version                        // '0.3.0'
+
+Insiyab.theme()                        // 'light' | 'dark' — ما يراه المستخدم فعلًا
+Insiyab.theme('dark' | 'light' | 'system')
+Insiyab.toggleTheme()
+Insiyab.brand('#0F766E')               // يشتقّ لون الهوية ويطبّقه
+Insiyab.sidebar('open' | 'collapsed' | 'toggle')
+
+Insiyab.toast('تمّ الحفظ', 'ok')        // 'ok' | 'bad' | 'warn' | 'info'
+Insiyab.dialog('#invite', 'open')      // 'open' | 'close' | بلا قيمة للتبديل
+Insiyab.confirm('حذف الملفّ؟', { title: 'تأكيد', confirm: 'حذف', cancel: 'تراجع', tone: 'danger' })
+  .then((yes) => { /* true | false */ })
+Insiyab.dismiss(el)                    // يغلق ما يحويه، كما تفعل data-ins-dismiss
+Insiyab.tab('#tab-billing')
+Insiyab.navbar(el, true)
+Insiyab.wizard('#signup', 2)           // ينتقل إلى الخطوة الثالثة
+Insiyab.date('#from', '2026-10-01')
+
+Insiyab.init(scope)                    // يبني المكوّنات داخل عناصر أضفتها أنت
+Insiyab.define('chart', (scope) => {}) // يضيف منشئًا خاصًّا بك إلى ذلك المسح
+Insiyab.scrollTop()                    // موضع التمرير، أيًّا كان العنصر المتمرِّر
+
+Insiyab.color.derive('#0F766E', 'dark') // المجموعة كاملة دون تطبيقها
+Insiyab.color.contrast('#fff', '#0F766E')
+Insiyab.color.labelFor('#C9A063')      // '#111111' — مقيس
+Insiyab.color.shift('#0F766E', -0.3)
+</demo-code>
+
+<h2 id="events">الأحداث</h2>
+<p>
+  كلّ حدث يُطلَق على <code>document</code> ومعه <code>detail</code>. جرّب الأزرار: السجلّ تحتها
+  يستمع إلى الأحداث الحقيقية ويكتب ما يصله.
+</p>
+<demo-example code="none" class="stack">
+  <div class="ins-row">
+    <button class="ins-btn ins-btn--secondary ins-btn--sm" data-ins-theme-toggle>تبديل الوضع</button>
+    <div class="ins-seg">
+      <button class="is-active" data-ins-value="day">يوم</button>
+      <button data-ins-value="week">أسبوع</button>
+      <button data-ins-value="month">شهر</button>
+    </div>
+    <button class="ins-btn ins-btn--secondary ins-btn--sm" data-ins-toggle>تبديل</button>
+    <details class="ins-pop ins-pop--start">
+      <summary class="ins-btn ins-btn--secondary ins-btn--sm">قائمة</summary>
+      <div class="ins-pop-body">
+        <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="true">عرض المؤرشف</button>
+        <button class="ins-pop-item">تصدير</button>
+      </div>
+    </details>
+  </div>
+  <pre class="site-log" id="event-log" dir="ltr"><code>// الأحداث تظهر هنا</code></pre>
+</demo-example>
+<demo-code lang="js">
+document.addEventListener('ins:theme',   (e) => e.detail.theme)     // 'dark'
+document.addEventListener('ins:seg',     (e) => e.detail.value)     // 'week'
+document.addEventListener('ins:toggle',  (e) => e.detail.pressed)   // true
+document.addEventListener('ins:menu',    (e) => e.detail.checked)
+document.addEventListener('ins:tab',     (e) => e.detail.panel)
+document.addEventListener('ins:sidebar', (e) => e.detail.state)     // 'collapsed'
+document.addEventListener('ins:combo',   (e) => e.detail.value)
+document.addEventListener('ins:date',    (e) => e.detail.value)     // '2026-10-01'
+document.addEventListener('ins:wizard',  (e) => e.detail.step)
+document.addEventListener('ins:navbar',  (e) => e.detail.open)
+document.addEventListener('ins:dismiss', (e) => e.detail.target)
+</demo-code>
+
+<h2 id="define">منشئ خاصّ بك</h2>
+<p>
+  <code>Insiyab.define</code> يسجّل دالّة تُستدعى في مسح التهيئة نفسه — عند التحميل، ومع كلّ
+  <code>Insiyab.init(scope)</code>. فمكوّنك يُبنى حيث تُبنى مكوّنات المكتبة، ولا تحتاج نظامًا ثانيًا.
+</p>
+<demo-code lang="js">
+Insiyab.define('sparkline', (scope) => {
+  scope.querySelectorAll('[data-sparkline]').forEach((el) => {
+    if (el.dataset.ready) return;          // المسح قد يتكرّر على العنصر نفسه
+    el.dataset.ready = '1';
+    drawSparkline(el, el.dataset.sparkline.split(',').map(Number));
+  });
+});
+</demo-code>
+
+<script>
+  (function () {
+    var log = document.querySelector('#event-log code'), lines = [];
+    ['ins:theme', 'ins:seg', 'ins:toggle', 'ins:menu'].forEach(function (name) {
+      document.addEventListener(name, function (e) {
+        var d = e.detail, v = {};
+        for (var k in d) if (d[k] == null || typeof d[k] !== 'object') v[k] = d[k];
+        lines.unshift(name.padEnd(11) + JSON.stringify(v));
+        log.textContent = lines.slice(0, 6).join('\n');
+      });
+    });
+  })();
+</script>

@@ -1,0 +1,98 @@
+<h2 id="filled">المملوءة</h2>
+<p>للإجراء الرئيسي في الشاشة ولإجراءات الحالات. زرّ رئيسي واحد في كلّ منطقة — اثنان يعنيان أنّ أحدهما ليس رئيسيًا.</p>
+<demo-example class="row">
+  <button class="ins-btn ins-btn--primary"><svg class="ico"><use href="#i-check"/></svg>حفظ التغييرات</button>
+  <button class="ins-btn ins-btn--success">تأكيد الطلب</button>
+  <button class="ins-btn ins-btn--danger">حذف المنتج</button>
+  <button class="ins-btn ins-btn--warning">إيقاف مؤقّت</button>
+  <button class="ins-btn ins-btn--info">عرض التفاصيل</button>
+</demo-example>
+
+<h2 id="secondary">الثانوية والشبحية</h2>
+<p>
+  <code>--secondary</code> لما بجانب الرئيسي، و<code>--ghost</code> لما هو أهدأ منه، و<code>--bare</code> لإجراء
+  يكاد يكون رابطًا — «إلغاء» بجانب «حفظ».
+</p>
+<demo-example class="row">
+  <button class="ins-btn ins-btn--secondary">معاينة</button>
+  <button class="ins-btn ins-btn--ghost"><svg class="ico"><use href="#i-download"/></svg>تصدير</button>
+  <button class="ins-btn ins-btn--ghost-success">قبول</button>
+  <button class="ins-btn ins-btn--ghost-danger">رفض</button>
+  <button class="ins-btn ins-btn--ghost-warning">تأجيل</button>
+  <button class="ins-btn ins-btn--ghost-info">مساعدة</button>
+  <button class="ins-btn ins-btn--bare">إلغاء</button>
+</demo-example>
+
+<h2 id="sizes">المقاسات</h2>
+<demo-example class="row">
+  <button class="ins-btn ins-btn--primary ins-btn--lg">كبير</button>
+  <button class="ins-btn ins-btn--primary">عادي</button>
+  <button class="ins-btn ins-btn--primary ins-btn--sm">صغير</button>
+</demo-example>
+<demo-example class="stack narrow">
+  <button class="ins-btn ins-btn--primary ins-btn--full">بعرض الحاوية · ins-btn--full</button>
+</demo-example>
+
+<h2 id="icon">بأيقونة فقط</h2>
+<p><code>--icon</code> زرّ مربّع لأيقونة واحدة. تسمية <code>aria-label</code> مطلوبة، ومع <code>data-ins-tip</code> تصير تلميحًا أيضًا.</p>
+<demo-example class="row">
+  <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="تعديل" data-ins-tip><svg class="ico"><use href="#i-edit"/></svg></button>
+  <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="مشاركة" data-ins-tip><svg class="ico"><use href="#i-share"/></svg></button>
+  <button class="ins-btn ins-btn--ghost-danger ins-btn--icon" aria-label="حذف" data-ins-tip><svg class="ico"><use href="#i-trash"/></svg></button>
+  <button class="ins-btn ins-btn--secondary ins-btn--sm ins-btn--icon" aria-label="المزيد" data-ins-tip><svg class="ico"><use href="#i-dots"/></svg></button>
+</demo-example>
+
+<h2 id="states">الحالات</h2>
+<demo-example class="row">
+  <button class="ins-btn ins-btn--primary" disabled>معطّل</button>
+  <button class="ins-btn ins-btn--secondary" disabled>معطّل</button>
+  <button class="ins-btn ins-btn--primary ins-btn--lift">مع ارتفاع · --lift</button>
+  <a class="ins-btn ins-btn--secondary" href="#states">رابط بشكل زرّ</a>
+</demo-example>
+<p>
+  مرّر المؤشّر: لمعة قطرية تعبر الوجه، والأيقونة تنزلق نحو الحافة الخلفية — في الاتجاه الذي يأخذك إليه
+  الزرّ. الزرّ الأيقوني يكبر بدل أن ينزلق، لأنّه لا مكان له ينزلق إليه. والضغط تصغير لا إزاحة. والتمرير
+  والتركيز لهما المظهر نفسه عمدًا، وحلقة التركيز هي الفرق: جرّب <kbd class="ins-kbd">Tab</kbd>.
+</p>
+
+<h2 id="toggle">أزرار التبديل</h2>
+<p><code>data-ins-toggle</code> يحفظ الحالة في <code>aria-pressed</code> ويُطلق <code>ins:toggle</code>.</p>
+<demo-example class="row">
+  <div class="ins-btn-group" role="group" aria-label="تنسيق النصّ">
+    <button class="ins-btn ins-btn--secondary ins-btn--icon" data-ins-toggle aria-pressed="true" aria-label="عريض" data-ins-tip><b>B</b></button>
+    <button class="ins-btn ins-btn--secondary ins-btn--icon" data-ins-toggle aria-label="تسطير" data-ins-tip><u>U</u></button>
+    <button class="ins-btn ins-btn--secondary ins-btn--icon" data-ins-toggle aria-label="يتوسّطه خطّ" data-ins-tip><s>S</s></button>
+  </div>
+  <button class="ins-btn ins-btn--ghost" data-ins-toggle><svg class="ico"><use href="#i-star"/></svg>مفضّل</button>
+</demo-example>
+
+<h2 id="group">المجموعات</h2>
+<p><code>.ins-btn-group</code> يلحم الأزرار المتجاورة، و<code>--sm</code> لمقاسها الصغير. وزرّ بقائمة منبثقة لإجراء له بدائل:</p>
+<demo-example class="row">
+  <div class="ins-btn-group">
+    <button class="ins-btn ins-btn--secondary">السابق</button>
+    <button class="ins-btn ins-btn--secondary">اليوم</button>
+    <button class="ins-btn ins-btn--secondary">التالي</button>
+  </div>
+  <div class="ins-btn-group">
+    <button class="ins-btn ins-btn--primary">نشر</button>
+    <details class="ins-pop">
+      <summary class="ins-btn ins-btn--primary ins-btn--icon" aria-label="خيارات النشر"><svg class="ico"><use href="#i-chev-down"/></svg></summary>
+      <div class="ins-pop-body">
+        <button class="ins-pop-item">جدولة النشر</button>
+        <button class="ins-pop-item">حفظ كمسودّة</button>
+      </div>
+    </details>
+  </div>
+</demo-example>
+
+<h2 id="close">زرّ الإغلاق</h2>
+<p>
+  زرّ واحد لكلّ ما يُغلق. العلامة مرسومة بعنصرين زائفين، فلا يحتاج أيقونة ولا محتوى. ومع
+  <code>data-ins-dismiss</code> يغلق أقرب ما يحتويه — تنبيهًا أو حوارًا أو درجًا — دون أن يعرف أيّها.
+</p>
+<demo-example class="row">
+  <button class="ins-close" aria-label="إغلاق"></button>
+  <button class="ins-close ins-close--sm" aria-label="إغلاق"></button>
+  <button class="ins-close ins-close--bare" aria-label="إغلاق"></button>
+</demo-example>

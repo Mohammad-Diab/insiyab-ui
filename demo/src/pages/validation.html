@@ -1,0 +1,86 @@
+<h2 id="browser">تحقّق المتصفّح</h2>
+<p>
+  <code>data-ins-validate</code> على النموذج، وقيود HTML العادية على الحقول: <code>required</code>
+  و<code>type="email"</code> و<code>minlength</code> و<code>pattern</code>. المكتبة لا تتحقّق بنفسها — تأخذ
+  حكم المتصفّح وتكتب رسالته داخل الحقل بدل الفقاعة. اضغط «إنشاء الحساب» والحقول فارغة:
+</p>
+<demo-example>
+  <form class="ins-panel" data-ins-validate id="v-form">
+    <div class="ins-panel-head"><h3 class="ins-panel-title">حساب جديد</h3></div>
+    <div class="ins-panel-body ins-stack">
+      <div class="ins-field">
+        <label class="ins-label" for="v-name">الاسم<span class="ins-req" aria-hidden="true">*</span></label>
+        <input class="ins-input" id="v-name" required autocomplete="name">
+        <p class="ins-error"></p>
+      </div>
+      <div class="ins-field">
+        <label class="ins-label" for="v-email">البريد الإلكتروني<span class="ins-req" aria-hidden="true">*</span></label>
+        <input class="ins-input" id="v-email" type="email" required dir="ltr" autocomplete="email" placeholder="name@example.com">
+        <p class="ins-error"></p>
+      </div>
+      <div class="ins-field">
+        <label class="ins-label" for="v-pass">كلمة المرور<span class="ins-req" aria-hidden="true">*</span></label>
+        <div class="ins-input-group">
+          <input class="ins-input" id="v-pass" type="password" required minlength="8" autocomplete="new-password">
+          <button class="ins-password-toggle" data-ins-password aria-label="إظهار كلمة المرور" type="button"></button>
+        </div>
+        <span class="ins-hint">ثمانية أحرف على الأقل.</span>
+        <p class="ins-error">كلمة المرور قصيرة — ثمانية أحرف على الأقل.</p>
+      </div>
+      <label class="ins-check">
+        <input type="checkbox" required><span class="ins-check-text">أوافق على شروط الاستخدام</span>
+      </label>
+      <div class="ins-form-commit">
+        <button class="ins-btn ins-btn--primary">إنشاء الحساب</button>
+      </div>
+    </div>
+  </form>
+</demo-example>
+
+<h2 id="messages">رسالتان: المتصفّح أو أنت</h2>
+<ul>
+  <li><b><code>&lt;p class="ins-error"&gt;</code> فارغ</b> — يُملأ برسالة المتصفّح، بلغة المتصفّح، وتتحدّث وأنت تكتب.</li>
+  <li><b>فيه نصّ</b> — رسالتك أنت تظهر كما هي. انظر حقل كلمة المرور أعلاه.</li>
+</ul>
+<p>
+  والخطأ يظهر بعد أن يلمس المستخدم الحقل، لا لحظة فتح الصفحة: حقل مطلوب فارغ لم يُكتب فيه شيء بعد
+  ليس خطأً. يظهر حين يغادر المستخدم حقلًا غيّره (<code>:user-invalid</code>)، أو حين يحاول الإرسال.
+</p>
+
+<h2 id="server">أخطاء من الخادم</h2>
+<p>
+  خطأ لا يعرفه المتصفّح — اسم مستخدم محجوز، رمز منتهٍ — تضعه أنت: <code>aria-invalid="true"</code> على
+  الحقل ونصّ في <code>.ins-error</code>. والقبول بـ <code>.ins-input--ok</code> و<code>.ins-success</code>.
+</p>
+<demo-example>
+  <div class="ins-cols-2">
+    <div class="ins-field">
+      <label class="ins-label" for="v-user">اسم المستخدم</label>
+      <input class="ins-input" id="v-user" value="admin" aria-invalid="true" dir="ltr">
+      <p class="ins-error">هذا الاسم محجوز.</p>
+    </div>
+    <div class="ins-field">
+      <label class="ins-label" for="v-user2">اسم المستخدم</label>
+      <input class="ins-input ins-input--ok" id="v-user2" value="huda.m" dir="ltr">
+      <p class="ins-success">الاسم متاح.</p>
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="select">القوائم</h2>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="v-plan">الخطّة</label>
+    <select class="ins-select ins-select--bad" id="v-plan" aria-invalid="true">
+      <option value="">اختر خطّة…</option><option>البداية</option><option>النموّ</option>
+    </select>
+    <p class="ins-error">اختر خطّة للمتابعة.</p>
+  </div>
+</demo-example>
+
+<script>
+  document.getElementById('v-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    Insiyab.toast('أُنشئ الحساب', 'ok');
+  });
+</script>

@@ -1,0 +1,116 @@
+<h2 id="files">الملفّات</h2>
+<p>
+  المكتبة كلّها في مجلّد <code>dist/</code>. انسخ ثلاثة أشياء إلى مشروعك وضعها متجاورة —
+  ملفّ الأنماط يطلب الخطوط بمسار نسبي، فمجلّد <code>fonts/</code> يجب أن يبقى بجانبه.
+</p>
+<demo-code lang="sh">
+your-project/
+├── insiyab.css        ← أو insiyab.min.css
+├── insiyab.js
+└── fonts/             ← ١٦ ملفّ woff2 وتراخيصها
+</demo-code>
+
+<h2 id="template">قالب البداية</h2>
+<p>صفحة كاملة تعمل. لاحظ ما ليس فيها: لا استدعاء تهيئة، ولا مقتطف للوضع الداكن، ولا وسم لخطوط خارجية.</p>
+<demo-code lang="html">
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تطبيقي</title>
+
+  <link rel="stylesheet" href="insiyab.css">
+  <script src="insiyab.js"></script>
+</head>
+<body>
+  <main class="ins-container ins-py-8">
+    <div class="ins-panel">
+      <div class="ins-panel-head">
+        <h1 class="ins-panel-title">مرحبًا</h1>
+      </div>
+      <div class="ins-panel-body">
+        <button class="ins-btn ins-btn--primary" data-ins-toast="أهلًا بك">جرّبني</button>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
+</demo-code>
+<p>وهذا ما يرسمه القالب أعلاه، حرفيًّا:</p>
+<demo-example code="none" class="narrow">
+  <div class="ins-panel">
+    <div class="ins-panel-head">
+      <h3 class="ins-panel-title">مرحبًا</h3>
+    </div>
+    <div class="ins-panel-body">
+      <button class="ins-btn ins-btn--primary" data-ins-toast="أهلًا بك">جرّبني</button>
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="head">السكربت في الرأس، بلا <code>defer</code></h2>
+<p>
+  الوضع الداكن وحالة الشريط الجانبي محفوظان في <code>localStorage</code>، واستعادتهما يجب أن
+  تسبق أوّل رسم للصفحة، وإلّا ومضت كلّ صفحة بالوضع الخطأ لحظةً عند فتحها. لذلك يعمل النصف
+  الأعلى من السكربت لحظة قراءته — قبل وجود <code>&lt;body&gt;</code> — فيختم عنصر
+  <code>&lt;html&gt;</code>، وينتظر الباقي <code>DOMContentLoaded</code>.
+</p>
+<p class="site-note">
+  <b>يعمل مؤجَّلًا أيضًا</b> — بـ <code>defer</code> أو في آخر <code>&lt;body&gt;</code> أو محقونًا
+  لاحقًا. كلّ ما تخسره هو الومضة الأولى.
+</p>
+
+<h2 id="no-init">لا استدعاء تهيئة</h2>
+<p>
+  الأحداث مفوَّضة من <code>document</code> لا مربوطة بكلّ عنصر، فزرّ فيه <code>data-ins-*</code>
+  يُضاف إلى الصفحة بعد ساعة يعمل دون مساعدة. <code>Insiyab.init()</code> موجودة لما يبني عناصر
+  بنفسه فقط — كحقل التاريخ والإكمال التلقائي — حين تضيفه أنت إلى الصفحة من الجافاسكربت.
+</p>
+<demo-code lang="js">
+const row = document.createElement('div');
+row.innerHTML = '<input class="ins-input" type="date" data-ins-date>';
+list.append(row);
+
+Insiyab.init(row);   // يبني منتقي التاريخ داخل ما أضفته، ولا يلمس غيره
+</demo-code>
+
+<h2 id="css-only">الأنماط وحدها</h2>
+<p>
+  كلّ مكوّن ثابت يعمل من ملفّ الأنماط وحده، والسكربت إضافة خالصة لما يتحرّك. وما يحتاج السكربت
+  ليتصرّف مبنيّ بحيث تبقى الصفحة كاملة بدونه: الألسنة تظهر ألواحها متتالية، وقائمة الموقع تلتفّ
+  روابطها في سطر ثانٍ، والمعالج يصبح نموذجًا طويلًا واحدًا. لا شيء يختفي إلى الأبد لأنّ سكربتًا
+  تعطّل.
+</p>
+
+<h2 id="fonts">الخطوط</h2>
+<p>
+  ثلاثة خطوط مستضافة مع المكتبة: <b>تجوال</b> للعربية، و<b>Inter</b> للنصّ اللاتيني والأرقام،
+  و<b>Cause</b> للعناوين اللاتينية. مستضافة محليًا عن قصد: خادم خطوط محجوب أو بطيء يعني صفحة
+  مرسومة بخطّ احتياطي، وهذا يحدث فعلًا على الاتصالات التي كُتبت المكتبة لها.
+</p>
+<p class="site-note site-note--warn">
+  <b>افتح الصفحة عبر خادم، لا من الملفّ مباشرة.</b> عبر <code>file://</code> تُعَدّ الخطوط المحلّية
+  من أصل آخر فيحجبها المتصفّح، وتُرسم الصفحة بخطّ النظام دون أيّ رسالة خطأ. في هذا المستودع:
+  <code>node serve.mjs</code>.
+</p>
+
+<h2 id="brand">لون مشروعك</h2>
+<p>سمة واحدة على <code>&lt;html&gt;</code>، ويُشتقّ الباقي. التفاصيل في صفحة <a href="color.html">اللون والهوية</a>.</p>
+<demo-code lang="html">
+<html lang="ar" dir="rtl" data-ins-primary="#0F766E">
+</demo-code>
+
+<h2 id="browsers">المتصفّحات</h2>
+<p>
+  آخر نسختين من كروم وإيدج وفايرفوكس وسفاري، على الحاسوب والهاتف. المكتبة تعتمد على
+  <code>&lt;dialog&gt;</code> والخصائص المنطقية و<code>backdrop-filter</code>؛ والمتصفّح الذي لا
+  يدعم الأخير يرسم أسطحًا شبه معتمة بدل المصنفرة، وتبقى مقروءة.
+</p>
+
+<h2 id="next">ماذا بعد</h2>
+<ul>
+  <li><a href="shell.html">هيكل التطبيق</a> — الشريط الجانبي والشريط العلوي الذي ترى هذه الصفحة داخله.</li>
+  <li><a href="grid.html">الشبكة</a> و<a href="spacing.html">المسافات</a> — ترتيب الصفحة.</li>
+  <li><a href="buttons.html">المكوّنات</a> — واحدًا واحدًا، بأمثلة تنسخها كما هي.</li>
+</ul>
