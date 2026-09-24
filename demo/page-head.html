@@ -11,7 +11,11 @@
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="../dist/insiyab.js"></script>
 
-  <!-- The documentation site's own furniture — code listings, the pager, search.
+  <!-- One plugin, the command palette: the search below is built by it. -->
+  <link rel="stylesheet" href="../dist/plugins/insiyab-palette.css">
+  <script src="../dist/plugins/insiyab-palette.js"></script>
+
+  <!-- The documentation site's own furniture — code listings, the pager.
        Nothing in it is part of the library. -->
   <link rel="stylesheet" href="assets/site.css">
   <script src="assets/site.js"></script>
@@ -101,59 +105,60 @@
     </a>
 
       <div class="ins-shell-group">البداية</div>
-      <a class="ins-shell-link" href="index.html"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg>مقدّمة</a>
-      <a class="ins-shell-link" href="start.html"><svg class="ico" aria-hidden="true"><use href="#i-rocket"/></svg>البدء السريع</a>
-      <a class="ins-shell-link" href="javascript.html"><svg class="ico" aria-hidden="true"><use href="#i-code"/></svg>الجافاسكربت</a>
-      <a class="ins-shell-link" href="faq.html"><svg class="ico" aria-hidden="true"><use href="#i-help"/></svg>أسئلة شائعة</a>
+      <a class="ins-shell-link" href="index.html" data-keywords="Introduction"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg>مقدّمة</a>
+      <a class="ins-shell-link" href="start.html" data-keywords="Quick start ملفّان ومجلّد خطوط، ولا شيء غيرها. من الصفر إلى صفحة كاملة في دقيقة."><svg class="ico" aria-hidden="true"><use href="#i-rocket"/></svg>البدء السريع</a>
+      <a class="ins-shell-link" href="javascript.html" data-keywords="JavaScript السمات أوّلًا، والواجهة البرمجية مخرج طوارئ. كلّ ما يتحرّك في المكتبة يعمل بسمة في الشيفرة، دون سطر جافاسكربت منك."><svg class="ico" aria-hidden="true"><use href="#i-code"/></svg>الجافاسكربت</a>
+      <a class="ins-shell-link" href="faq.html" data-keywords="FAQ ما يسأل عنه الناس قبل أن يعتمدوا المكتبة، بإجابات قصيرة."><svg class="ico" aria-hidden="true"><use href="#i-help"/></svg>أسئلة شائعة</a>
 
       <div class="ins-shell-group">التخصيص</div>
-      <a class="ins-shell-link" href="color.html"><svg class="ico" aria-hidden="true"><use href="#i-palette"/></svg>اللون والهوية</a>
-      <a class="ins-shell-link" href="dark.html"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg>الوضع الداكن</a>
-      <a class="ins-shell-link" href="rtl.html"><svg class="ico" aria-hidden="true"><use href="#i-languages"/></svg>العربية والاتجاه</a>
-      <a class="ins-shell-link" href="motion.html"><svg class="ico" aria-hidden="true"><use href="#i-sparkle"/></svg>الحركة</a>
+      <a class="ins-shell-link" href="color.html" data-keywords="Color لون واحد، وكلّ ما عداه مشتقّ منه: التدرّج، والظلال، وحلقات التركيز، وخلفية الصفحة."><svg class="ico" aria-hidden="true"><use href="#i-palette"/></svg>اللون والهوية</a>
+      <a class="ins-shell-link" href="dark.html" data-keywords="Color modes لوحة ثانية صُمّمت لذاتها، لا قلبٌ للأولى. تتبع النظام افتراضيًا، ويُحفظ اختيار المستخدم."><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg>الوضع الداكن</a>
+      <a class="ins-shell-link" href="rtl.html" data-keywords="RTL من اليمين إلى اليسار افتراضًا أصيلًا لا إضافة: خصائص منطقية في كلّ مكان، ولا ملفّ انعكاس."><svg class="ico" aria-hidden="true"><use href="#i-languages"/></svg>العربية والاتجاه</a>
+      <a class="ins-shell-link" href="motion.html" data-keywords="Motion منحنى واحد، ودخول أبطأ من الخروج، ولا شيء يتكرّر إلى الأبد."><svg class="ico" aria-hidden="true"><use href="#i-sparkle"/></svg>الحركة</a>
 
       <div class="ins-shell-group">التخطيط</div>
-      <a class="ins-shell-link" href="shell.html"><svg class="ico" aria-hidden="true"><use href="#i-layout"/></svg>هيكل التطبيق</a>
-      <a class="ins-shell-link" href="grid.html"><svg class="ico" aria-hidden="true"><use href="#i-grid"/></svg>الشبكة</a>
-      <a class="ins-shell-link" href="spacing.html"><svg class="ico" aria-hidden="true"><use href="#i-sliders"/></svg>المسافات والترتيب</a>
+      <a class="ins-shell-link" href="shell.html" data-keywords="App shell شريط جانبي زجاجي وشريط علوي من جزر عائمة. هذه الصفحة نفسها مبنيّة به."><svg class="ico" aria-hidden="true"><use href="#i-layout"/></svg>هيكل التطبيق</a>
+      <a class="ins-shell-link" href="grid.html" data-keywords="Grid أعمدة تنهار وحدها عند الشاشات الضيّقة، فلا أصناف لكلّ مقاس."><svg class="ico" aria-hidden="true"><use href="#i-grid"/></svg>الشبكة</a>
+      <a class="ins-shell-link" href="spacing.html" data-keywords="Spacing &amp; stacks سلّم واحد، الخطوة فيه ٤ بكسل، وجهات منطقية لا يمين ولا يسار."><svg class="ico" aria-hidden="true"><use href="#i-sliders"/></svg>المسافات والترتيب</a>
 
       <div class="ins-shell-group">المحتوى</div>
-      <a class="ins-shell-link" href="typography.html"><svg class="ico" aria-hidden="true"><use href="#i-type"/></svg>الطباعة</a>
-      <a class="ins-shell-link" href="surfaces.html"><svg class="ico" aria-hidden="true"><use href="#i-layers"/></svg>الأسطح والألواح</a>
-      <a class="ins-shell-link" href="tables.html"><svg class="ico" aria-hidden="true"><use href="#i-table"/></svg>الجداول</a>
+      <a class="ins-shell-link" href="typography.html" data-keywords="Typography ثلاثة خطوط مستضافة محليًا ومقسّمة حسب النطاق، وسلّم عناوين، ونصّ طويل محصور في صنفه."><svg class="ico" aria-hidden="true"><use href="#i-type"/></svg>الطباعة</a>
+      <a class="ins-shell-link" href="surfaces.html" data-keywords="Surfaces &amp; panels الزجاج المصنفر بطبقاته الأربع، وما يُبنى عليه: البطاقة واللوح."><svg class="ico" aria-hidden="true"><use href="#i-layers"/></svg>الأسطح والألواح</a>
+      <a class="ins-shell-link" href="tables.html" data-keywords="Tables جدول بيانات يقرأ الأرقام بخطّها، ويتمرّر أفقيًا داخل حاويته لا في الصفحة."><svg class="ico" aria-hidden="true"><use href="#i-table"/></svg>الجداول</a>
 
       <div class="ins-shell-group">النماذج</div>
-      <a class="ins-shell-link" href="inputs.html"><svg class="ico" aria-hidden="true"><use href="#i-edit"/></svg>الحقول</a>
-      <a class="ins-shell-link" href="checks.html"><svg class="ico" aria-hidden="true"><use href="#i-check-square"/></svg>الاختيار والمفاتيح</a>
-      <a class="ins-shell-link" href="input-group.html"><svg class="ico" aria-hidden="true"><use href="#i-link"/></svg>مجموعات الحقول</a>
-      <a class="ins-shell-link" href="pickers.html"><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg>المنتقيات</a>
-      <a class="ins-shell-link" href="validation.html"><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg>التحقّق</a>
+      <a class="ins-shell-link" href="inputs.html" data-keywords="Form controls حقل النصّ والقائمة والمنطقة النصّية، بالمقاسات الثلاثة وبالتسمية والتلميح."><svg class="ico" aria-hidden="true"><use href="#i-edit"/></svg>الحقول</a>
+      <a class="ins-shell-link" href="checks.html" data-keywords="Checks &amp; switches مربّعات ودوائر ومفاتيح وبطاقات اختيار، كلّها عناصر إدخال حقيقية تحت التصميم."><svg class="ico" aria-hidden="true"><use href="#i-check-square"/></svg>الاختيار والمفاتيح</a>
+      <a class="ins-shell-link" href="input-group.html" data-keywords="Input group حقل وملحقاته في قطعة واحدة: وحدة، أو بادئة، أو زرّ، أو إظهار كلمة المرور."><svg class="ico" aria-hidden="true"><use href="#i-link"/></svg>مجموعات الحقول</a>
+      <a class="ins-shell-link" href="pickers.html" data-keywords="Pickers الإكمال التلقائي والتاريخ والمنزلق والعدّاد — أدوات إدخال يحتاجها كلّ نموذج جادّ."><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg>المنتقيات</a>
+      <a class="ins-shell-link" href="validation.html" data-keywords="Validation تحقّق المتصفّح نفسه، برسائل داخل الحقل بدل الفقاعة، ودون مكتبة تحقّق."><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg>التحقّق</a>
 
       <div class="ins-shell-group">المكوّنات</div>
-      <a class="ins-shell-link" href="buttons.html"><svg class="ico" aria-hidden="true"><use href="#i-pointer"/></svg>الأزرار</a>
-      <a class="ins-shell-link" href="accordion.html"><svg class="ico" aria-hidden="true"><use href="#i-chevrons"/></svg>الأكورديون</a>
-      <a class="ins-shell-link" href="tabs.html"><svg class="ico" aria-hidden="true"><use href="#i-tabs"/></svg>الألسنة</a>
-      <a class="ins-shell-link" href="stats.html"><svg class="ico" aria-hidden="true"><use href="#i-chart"/></svg>البطاقات الإحصائية</a>
-      <a class="ins-shell-link" href="loading.html"><svg class="ico" aria-hidden="true"><use href="#i-loader"/></svg>التحميل والفراغ</a>
-      <a class="ins-shell-link" href="progress.html"><svg class="ico" aria-hidden="true"><use href="#i-gauge"/></svg>التقدّم</a>
-      <a class="ins-shell-link" href="tooltips.html"><svg class="ico" aria-hidden="true"><use href="#i-message"/></svg>التلميحات</a>
-      <a class="ins-shell-link" href="alerts.html"><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg>التنبيهات</a>
-      <a class="ins-shell-link" href="dialog.html"><svg class="ico" aria-hidden="true"><use href="#i-window"/></svg>الحوار</a>
-      <a class="ins-shell-link" href="drawer.html"><svg class="ico" aria-hidden="true"><use href="#i-sidebar"/></svg>الدرج</a>
-      <a class="ins-shell-link" href="toasts.html"><svg class="ico" aria-hidden="true"><use href="#i-bell"/></svg>الرسائل الطائرة</a>
-      <a class="ins-shell-link" href="badges.html"><svg class="ico" aria-hidden="true"><use href="#i-tag"/></svg>الشارات والأرقام</a>
-      <a class="ins-shell-link" href="list.html"><svg class="ico" aria-hidden="true"><use href="#i-list"/></svg>القوائم</a>
-      <a class="ins-shell-link" href="dropdown.html"><svg class="ico" aria-hidden="true"><use href="#i-menu-down"/></svg>القوائم المنبثقة</a>
-      <a class="ins-shell-link" href="steps.html"><svg class="ico" aria-hidden="true"><use href="#i-steps"/></svg>المعالج</a>
-      <a class="ins-shell-link" href="pagination.html"><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>ترقيم الصفحات</a>
-      <a class="ins-shell-link is-active" href="page-head.html" aria-current="page"><svg class="ico" aria-hidden="true"><use href="#i-route"/></svg>رأس الصفحة والمسار</a>
-      <a class="ins-shell-link" href="navbar.html"><svg class="ico" aria-hidden="true"><use href="#i-compass"/></svg>شريط الموقع</a>
+      <a class="ins-shell-link" href="buttons.html" data-keywords="Buttons الألوان والأنماط والمقاسات، وأزرار التبديل والمجموعات، وزرّ الإغلاق."><svg class="ico" aria-hidden="true"><use href="#i-pointer"/></svg>الأزرار</a>
+      <a class="ins-shell-link" href="accordion.html" data-keywords="Accordion أقسام قابلة للطيّ مبنيّة على عنصر details نفسه، فتعمل بلا جافاسكربت."><svg class="ico" aria-hidden="true"><use href="#i-chevrons"/></svg>الأكورديون</a>
+      <a class="ins-shell-link" href="tabs.html" data-keywords="Tabs ألسنة تبدّل الألواح، بالأسهم وبالنقر، وبشكلين: الشريط والمقسّم."><svg class="ico" aria-hidden="true"><use href="#i-tabs"/></svg>الألسنة</a>
+      <a class="ins-shell-link" href="stats.html" data-keywords="Stat tiles رقم ومعناه ورقاقة أيقونة، بستّ نبرات وثلاثة مقاسات."><svg class="ico" aria-hidden="true"><use href="#i-chart"/></svg>البطاقات الإحصائية</a>
+      <a class="ins-shell-link" href="loading.html" data-keywords="Loading &amp; empty هيكل التحميل والدوّارة والحالة الفارغة — ما يراه المستخدم قبل البيانات وبدلها."><svg class="ico" aria-hidden="true"><use href="#i-loader"/></svg>التحميل والفراغ</a>
+      <a class="ins-shell-link" href="progress.html" data-keywords="Progress شريط تقدّم على عنصر progress الأصلي، وحلقة للنسب المئوية."><svg class="ico" aria-hidden="true"><use href="#i-gauge"/></svg>التقدّم</a>
+      <a class="ins-shell-link" href="tooltips.html" data-keywords="Tooltips تلميح واحد للصفحة كلّها في الطبقة العليا، بسمة واحدة على العنصر."><svg class="ico" aria-hidden="true"><use href="#i-message"/></svg>التلميحات</a>
+      <a class="ins-shell-link" href="alerts.html" data-keywords="Alerts رسالة ثابتة في الصفحة بأربع نبرات، قابلة للإغلاق."><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg>التنبيهات</a>
+      <a class="ins-shell-link" href="dialog.html" data-keywords="Dialog عنصر dialog الأصلي: الطبقة العليا وحبس التركيز والإغلاق بـ Esc، كلّها من المتصفّح."><svg class="ico" aria-hidden="true"><use href="#i-window"/></svg>الحوار</a>
+      <a class="ins-shell-link" href="drawer.html" data-keywords="Drawer الحوار نفسه ملتصقًا بحافة: البداية أو النهاية أو الأسفل."><svg class="ico" aria-hidden="true"><use href="#i-sidebar"/></svg>الدرج</a>
+      <a class="ins-shell-link" href="toasts.html" data-keywords="Toasts إشعار عابر يظهر ويختفي وحده، بسمة على زرّ أو بسطر جافاسكربت."><svg class="ico" aria-hidden="true"><use href="#i-bell"/></svg>الرسائل الطائرة</a>
+      <a class="ins-shell-link" href="badges.html" data-keywords="Badges &amp; numbers شارات الحالة وشارات العدّ والصور الرمزية، والمبالغ والأرقام في سطر عربي."><svg class="ico" aria-hidden="true"><use href="#i-tag"/></svg>الشارات والأرقام</a>
+      <a class="ins-shell-link" href="list.html" data-keywords="List group صفوف متتالية بصورة ونصّين ونهاية، ثابتة أو قابلة للنقر."><svg class="ico" aria-hidden="true"><use href="#i-list"/></svg>القوائم</a>
+      <a class="ins-shell-link" href="dropdown.html" data-keywords="Dropdowns قائمة على عنصر details، بالأسهم والإغلاق بـ Esc وعناصر قابلة للتأشير."><svg class="ico" aria-hidden="true"><use href="#i-menu-down"/></svg>القوائم المنبثقة</a>
+      <a class="ins-shell-link" href="steps.html" data-keywords="Steps &amp; wizard نموذج مقسّم إلى خطوات، يتحقّق من كلّ خطوة قبل أن ينتقل منها."><svg class="ico" aria-hidden="true"><use href="#i-steps"/></svg>المعالج</a>
+      <a class="ins-shell-link" href="pagination.html" data-keywords="Pagination روابط صفحات حقيقية بأسهم تتبع اتجاه النصّ."><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>ترقيم الصفحات</a>
+      <a class="ins-shell-link is-active" href="page-head.html" aria-current="page" data-keywords="Page header &amp; breadcrumb عنوان الصفحة وسطر تحته وإجراءاتها، ومسار التنقّل فوقها."><svg class="ico" aria-hidden="true"><use href="#i-route"/></svg>رأس الصفحة والمسار</a>
+      <a class="ins-shell-link" href="navbar.html" data-keywords="Navbar شريط تنقّل لموقع لا لتطبيق: جزيرة زجاجية تنطوي خلف زرّ على الهاتف."><svg class="ico" aria-hidden="true"><use href="#i-compass"/></svg>شريط الموقع</a>
 
       <div class="ins-shell-group">الأدوات</div>
-      <a class="ins-shell-link" href="utilities.html"><svg class="ico" aria-hidden="true"><use href="#i-wrench"/></svg>الأدوات المساعدة</a>
+      <a class="ins-shell-link" href="utilities.html" data-keywords="Utilities أصناف صغيرة للنصّ والمرونة والإظهار، تُحمَّل بعد كلّ المكوّنات فتغلبها بلا !important."><svg class="ico" aria-hidden="true"><use href="#i-wrench"/></svg>الأدوات المساعدة</a>
 
       <div class="ins-shell-group">الإضافات</div>
-      <a class="ins-shell-link" href="hijri.html"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg>التقويم الهجري</a>
+      <a class="ins-shell-link" href="hijri.html" data-keywords="Hijri calendar حقل التاريخ بالتقويم الهجري — أمّ القرى أو الحسابي — ومفتاح إلى الميلادي. والخادم يستلم التاريخ الميلادي كما هو."><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg>التقويم الهجري</a>
+      <a class="ins-shell-link" href="palette.html" data-keywords="Command palette بحث واحد عن كلّ صفحة وكلّ أمر، يُفتح بـ Ctrl+K. عناصره روابط الصفحة وأزرارها كما هي، ويجمع روابط القائمة الجانبية بنفسه."><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg>لوحة الأوامر</a>
   </aside>
   <div class="ins-shell-scrim"></div>
 
@@ -327,56 +332,12 @@
 </div>
 
 <!-- ============================================================== search -->
-<dialog class="ins-dialog site-search" id="site-search" aria-label="بحث في التوثيق">
-  <div class="ins-dialog-body ins-dialog-body--spill">
-    <div class="ins-combo" id="site-search-combo">
-      <div class="ins-search">
-        <svg class="ico ins-search-ico" aria-hidden="true"><use href="#i-search"/></svg>
-        <input class="ins-input ins-input--lg" placeholder="ابحث عن مكوّن: زر، جدول، حوار… أو بالإنجليزية" aria-label="بحث في التوثيق">
-      </div>
-      <ul class="ins-combo-list">
-        <li class="ins-combo-option" data-value="index.html"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg><span class="site-hit-title">مقدّمة</span><span class="site-hit-meta" dir="ltr">Introduction</span><span class="site-hit-group">البداية</span></li>
-        <li class="ins-combo-option" data-value="start.html"><svg class="ico" aria-hidden="true"><use href="#i-rocket"/></svg><span class="site-hit-title">البدء السريع</span><span class="site-hit-meta" dir="ltr">Quick start</span><span class="site-hit-group">البداية</span></li>
-        <li class="ins-combo-option" data-value="javascript.html"><svg class="ico" aria-hidden="true"><use href="#i-code"/></svg><span class="site-hit-title">الجافاسكربت</span><span class="site-hit-meta" dir="ltr">JavaScript</span><span class="site-hit-group">البداية</span></li>
-        <li class="ins-combo-option" data-value="faq.html"><svg class="ico" aria-hidden="true"><use href="#i-help"/></svg><span class="site-hit-title">أسئلة شائعة</span><span class="site-hit-meta" dir="ltr">FAQ</span><span class="site-hit-group">البداية</span></li>
-        <li class="ins-combo-option" data-value="color.html"><svg class="ico" aria-hidden="true"><use href="#i-palette"/></svg><span class="site-hit-title">اللون والهوية</span><span class="site-hit-meta" dir="ltr">Color</span><span class="site-hit-group">التخصيص</span></li>
-        <li class="ins-combo-option" data-value="dark.html"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg><span class="site-hit-title">الوضع الداكن</span><span class="site-hit-meta" dir="ltr">Color modes</span><span class="site-hit-group">التخصيص</span></li>
-        <li class="ins-combo-option" data-value="rtl.html"><svg class="ico" aria-hidden="true"><use href="#i-languages"/></svg><span class="site-hit-title">العربية والاتجاه</span><span class="site-hit-meta" dir="ltr">RTL</span><span class="site-hit-group">التخصيص</span></li>
-        <li class="ins-combo-option" data-value="motion.html"><svg class="ico" aria-hidden="true"><use href="#i-sparkle"/></svg><span class="site-hit-title">الحركة</span><span class="site-hit-meta" dir="ltr">Motion</span><span class="site-hit-group">التخصيص</span></li>
-        <li class="ins-combo-option" data-value="shell.html"><svg class="ico" aria-hidden="true"><use href="#i-layout"/></svg><span class="site-hit-title">هيكل التطبيق</span><span class="site-hit-meta" dir="ltr">App shell</span><span class="site-hit-group">التخطيط</span></li>
-        <li class="ins-combo-option" data-value="grid.html"><svg class="ico" aria-hidden="true"><use href="#i-grid"/></svg><span class="site-hit-title">الشبكة</span><span class="site-hit-meta" dir="ltr">Grid</span><span class="site-hit-group">التخطيط</span></li>
-        <li class="ins-combo-option" data-value="spacing.html"><svg class="ico" aria-hidden="true"><use href="#i-sliders"/></svg><span class="site-hit-title">المسافات والترتيب</span><span class="site-hit-meta" dir="ltr">Spacing & stacks</span><span class="site-hit-group">التخطيط</span></li>
-        <li class="ins-combo-option" data-value="typography.html"><svg class="ico" aria-hidden="true"><use href="#i-type"/></svg><span class="site-hit-title">الطباعة</span><span class="site-hit-meta" dir="ltr">Typography</span><span class="site-hit-group">المحتوى</span></li>
-        <li class="ins-combo-option" data-value="surfaces.html"><svg class="ico" aria-hidden="true"><use href="#i-layers"/></svg><span class="site-hit-title">الأسطح والألواح</span><span class="site-hit-meta" dir="ltr">Surfaces & panels</span><span class="site-hit-group">المحتوى</span></li>
-        <li class="ins-combo-option" data-value="tables.html"><svg class="ico" aria-hidden="true"><use href="#i-table"/></svg><span class="site-hit-title">الجداول</span><span class="site-hit-meta" dir="ltr">Tables</span><span class="site-hit-group">المحتوى</span></li>
-        <li class="ins-combo-option" data-value="inputs.html"><svg class="ico" aria-hidden="true"><use href="#i-edit"/></svg><span class="site-hit-title">الحقول</span><span class="site-hit-meta" dir="ltr">Form controls</span><span class="site-hit-group">النماذج</span></li>
-        <li class="ins-combo-option" data-value="checks.html"><svg class="ico" aria-hidden="true"><use href="#i-check-square"/></svg><span class="site-hit-title">الاختيار والمفاتيح</span><span class="site-hit-meta" dir="ltr">Checks & switches</span><span class="site-hit-group">النماذج</span></li>
-        <li class="ins-combo-option" data-value="input-group.html"><svg class="ico" aria-hidden="true"><use href="#i-link"/></svg><span class="site-hit-title">مجموعات الحقول</span><span class="site-hit-meta" dir="ltr">Input group</span><span class="site-hit-group">النماذج</span></li>
-        <li class="ins-combo-option" data-value="pickers.html"><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg><span class="site-hit-title">المنتقيات</span><span class="site-hit-meta" dir="ltr">Pickers</span><span class="site-hit-group">النماذج</span></li>
-        <li class="ins-combo-option" data-value="validation.html"><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg><span class="site-hit-title">التحقّق</span><span class="site-hit-meta" dir="ltr">Validation</span><span class="site-hit-group">النماذج</span></li>
-        <li class="ins-combo-option" data-value="buttons.html"><svg class="ico" aria-hidden="true"><use href="#i-pointer"/></svg><span class="site-hit-title">الأزرار</span><span class="site-hit-meta" dir="ltr">Buttons</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="accordion.html"><svg class="ico" aria-hidden="true"><use href="#i-chevrons"/></svg><span class="site-hit-title">الأكورديون</span><span class="site-hit-meta" dir="ltr">Accordion</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="tabs.html"><svg class="ico" aria-hidden="true"><use href="#i-tabs"/></svg><span class="site-hit-title">الألسنة</span><span class="site-hit-meta" dir="ltr">Tabs</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="stats.html"><svg class="ico" aria-hidden="true"><use href="#i-chart"/></svg><span class="site-hit-title">البطاقات الإحصائية</span><span class="site-hit-meta" dir="ltr">Stat tiles</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="loading.html"><svg class="ico" aria-hidden="true"><use href="#i-loader"/></svg><span class="site-hit-title">التحميل والفراغ</span><span class="site-hit-meta" dir="ltr">Loading & empty</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="progress.html"><svg class="ico" aria-hidden="true"><use href="#i-gauge"/></svg><span class="site-hit-title">التقدّم</span><span class="site-hit-meta" dir="ltr">Progress</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="tooltips.html"><svg class="ico" aria-hidden="true"><use href="#i-message"/></svg><span class="site-hit-title">التلميحات</span><span class="site-hit-meta" dir="ltr">Tooltips</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="alerts.html"><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg><span class="site-hit-title">التنبيهات</span><span class="site-hit-meta" dir="ltr">Alerts</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="dialog.html"><svg class="ico" aria-hidden="true"><use href="#i-window"/></svg><span class="site-hit-title">الحوار</span><span class="site-hit-meta" dir="ltr">Dialog</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="drawer.html"><svg class="ico" aria-hidden="true"><use href="#i-sidebar"/></svg><span class="site-hit-title">الدرج</span><span class="site-hit-meta" dir="ltr">Drawer</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="toasts.html"><svg class="ico" aria-hidden="true"><use href="#i-bell"/></svg><span class="site-hit-title">الرسائل الطائرة</span><span class="site-hit-meta" dir="ltr">Toasts</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="badges.html"><svg class="ico" aria-hidden="true"><use href="#i-tag"/></svg><span class="site-hit-title">الشارات والأرقام</span><span class="site-hit-meta" dir="ltr">Badges & numbers</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="list.html"><svg class="ico" aria-hidden="true"><use href="#i-list"/></svg><span class="site-hit-title">القوائم</span><span class="site-hit-meta" dir="ltr">List group</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="dropdown.html"><svg class="ico" aria-hidden="true"><use href="#i-menu-down"/></svg><span class="site-hit-title">القوائم المنبثقة</span><span class="site-hit-meta" dir="ltr">Dropdowns</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="steps.html"><svg class="ico" aria-hidden="true"><use href="#i-steps"/></svg><span class="site-hit-title">المعالج</span><span class="site-hit-meta" dir="ltr">Steps & wizard</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="pagination.html"><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg><span class="site-hit-title">ترقيم الصفحات</span><span class="site-hit-meta" dir="ltr">Pagination</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="page-head.html"><svg class="ico" aria-hidden="true"><use href="#i-route"/></svg><span class="site-hit-title">رأس الصفحة والمسار</span><span class="site-hit-meta" dir="ltr">Page header & breadcrumb</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="navbar.html"><svg class="ico" aria-hidden="true"><use href="#i-compass"/></svg><span class="site-hit-title">شريط الموقع</span><span class="site-hit-meta" dir="ltr">Navbar</span><span class="site-hit-group">المكوّنات</span></li>
-        <li class="ins-combo-option" data-value="utilities.html"><svg class="ico" aria-hidden="true"><use href="#i-wrench"/></svg><span class="site-hit-title">الأدوات المساعدة</span><span class="site-hit-meta" dir="ltr">Utilities</span><span class="site-hit-group">الأدوات</span></li>
-        <li class="ins-combo-option" data-value="hijri.html"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg><span class="site-hit-title">التقويم الهجري</span><span class="site-hit-meta" dir="ltr">Hijri calendar</span><span class="site-hit-group">الإضافات</span></li>
-        <li class="ins-combo-empty">لا صفحة بهذا الاسم</li>
-      </ul>
-    </div>
+<!-- The command palette plugin: every page from the sidebar, read from it when the
+     palette opens (each link carries its English name as a keyword), and one action. -->
+<dialog class="ins-dialog ins-palette" id="site-search" data-ins-palette data-ins-palette-from=".ins-shell-side"
+        data-ins-palette-placeholder="ابحث عن مكوّن: زر، جدول، حوار… أو بالإنجليزية" aria-label="بحث في التوثيق">
+  <div data-ins-palette-group="إجراءات">
+    <button data-ins-theme-toggle data-keywords="dark light theme mode داكن فاتح"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg>تبديل الوضع الداكن</button>
   </div>
 </dialog>
 

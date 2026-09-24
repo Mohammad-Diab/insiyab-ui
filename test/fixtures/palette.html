@@ -1,0 +1,62 @@
+<!doctype html>
+<!-- Fixtures for command-palette.test.mjs. The names are chosen for the ranking
+     checks: "فاتورة" starts one item's name, starts a word after the article in
+     another, and is only a keyword of a third. Every link is a fragment, so choosing
+     one moves the hash and never leaves the page. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab palette fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <link rel="stylesheet" href="../../dist/plugins/insiyab-palette.css">
+  <script src="../../dist/insiyab.js"></script>
+  <script src="../../dist/plugins/insiyab-palette.js"></script>
+</head>
+<body>
+<svg hidden aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v9H3Z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/></symbol>
+</svg>
+
+<aside class="ins-shell-side" id="nav">
+  <div class="ins-shell-group">الصفحات</div>
+  <a class="ins-shell-link" href="#dash" data-keywords="dashboard"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg>لوحة التحكم</a>
+  <a class="ins-shell-link" href="#tables" aria-current="page">الجداول</a>
+  <div class="ins-shell-group">الإدارة</div>
+  <a class="ins-shell-link" href="#settings">الإعدادات</a>
+  <a class="ins-shell-link" href="#users" data-keywords="people accounts">المستخدمون</a>
+  <a class="ins-shell-link" href="javascript:void(0)">لا شيء</a>
+</aside>
+
+<main class="ins-container ins-stack" style="padding-block: 2rem">
+  <button class="ins-btn" id="open" data-ins-dialog="#pal">بحث</button>
+  <button class="ins-btn" id="open2" data-ins-dialog="#pal2">الثانية</button>
+  <input class="ins-input" id="field" aria-label="حقل">
+</main>
+
+<dialog id="pal" data-ins-palette data-ins-palette-from="#nav" aria-label="لوحة الاختبار">
+  <div data-ins-palette-group="الفواتير">
+    <a href="#monthly">فاتورة شهرية</a>
+    <a href="#returned">الفاتورة المرتجعة</a>
+    <a href="#new-invoice" data-keywords="new invoice">إضافة فاتورة<kbd class="ins-kbd">N</kbd></a>
+    <a href="#reports" data-keywords="فاتورة">التقارير</a>
+  </div>
+  <div data-ins-palette-group="إجراءات">
+    <button id="act-toast" data-ins-toast="تمّ من اللوحة" data-ins-tone="ok">إشعار تجريبي</button>
+    <button id="act-dialog" data-ins-dialog="#other">فتح حوار</button>
+  </div>
+  <a href="#settings">الإعدادات<kbd class="ins-kbd">,</kbd></a>
+  <a href="#help">مساعدة</a>
+</dialog>
+
+<dialog id="pal2" data-ins-palette data-ins-palette-keys="none" data-ins-palette-recent="0" lang="en" dir="ltr">
+  <a href="#alpha">Alpha</a>
+  <a href="#beta">Beta</a>
+</dialog>
+
+<dialog class="ins-dialog" id="other" aria-label="حوار آخر">
+  <div class="ins-dialog-body"><button class="ins-btn" data-ins-dialog-close>إغلاق</button></div>
+</dialog>
+</body>
+</html>

@@ -77,19 +77,8 @@
      first paint. This file used to centre the active link on DOMContentLoaded, which
      was after the first paint — the sidebar flashed at the top and then jumped. */
 
-  function resetSearch() {
-    var combo = document.getElementById('site-search-combo');
-    if (!combo) return;
-    var input = combo.querySelector('input');
-    input.value = '';
-    combo.querySelectorAll('.ins-combo-option').forEach(function (o) { o.hidden = false; o.classList.remove('is-active'); });
-    var empty = combo.querySelector('.ins-combo-empty');
-    if (empty) empty.hidden = true;
-  }
-
   function ready() {
     syncCustomiser();
-    resetSearch();
 
     document.addEventListener('click', function (e) {
       var sw = e.target.closest('[data-brand]');
@@ -130,21 +119,7 @@
       }
     });
 
-    /* Search: Ctrl+K anywhere, or "/" when not typing. */
-    document.addEventListener('keydown', function (e) {
-      var typing = /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable;
-      if (((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') || (e.key === '/' && !typing)) {
-        e.preventDefault();
-        Insiyab.dialog('#site-search', 'open');
-      }
-    });
-
-    var dlg = document.getElementById('site-search');
-    if (dlg) dlg.addEventListener('close', resetSearch);
-
-    document.addEventListener('ins:combo', function (e) {
-      if (e.detail.el && e.detail.el.id === 'site-search-combo') location.href = e.detail.value;
-    });
+    /* Search is the command palette plugin, shortcuts and all: see layout.html. */
 
     if (q.get('open')) Insiyab.dialog('#' + q.get('open'), 'open');
     if (q.get('toast')) Insiyab.toast('تمّ الحفظ بنجاح', 'ok');

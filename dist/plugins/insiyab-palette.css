@@ -1,0 +1,124 @@
+/*! Insiyab UI v0.4.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
+/* ==========================================================================
+   Insiyab · Command palette plugin
+   ==========================================================================
+
+   The dialog is the library's own `.ins-dialog`, glass, entrance and exit
+   included; this sheet only lays out what the plugin builds inside it. Nothing here
+   names a colour: every value is a token, so the dark theme, the brand colour and
+   the OS-dark twin all follow without a rule of their own. */
+
+.ins-palette {
+  inline-size: min(36rem, calc(100vw - 2rem));
+  /* High on the screen rather than centred: the results grow downwards as the
+     person types, and a centred box would move its own field up and down under them
+     as the list changed length. */
+  margin-block: min(12vh, 6rem) auto;
+  max-block-size: min(34rem, calc(100vh - min(12vh, 6rem) - 1rem));
+  overflow: hidden;
+}
+
+.ins-palette-top { padding: .875rem .875rem .5rem; }
+.ins-palette-top > .ins-search > .ins-search-ico { inline-size: 1.125rem; block-size: 1.125rem; }
+
+.ins-palette-list {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: .25rem .5rem .5rem;
+}
+
+.ins-palette-head {
+  padding: .75rem .75rem .375rem;
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ins-text-3);
+}
+[dir="rtl"] .ins-palette-head { text-transform: none; letter-spacing: 0; }
+
+/* An item is a link or a button the page wrote, so every trace of either — the
+   underline, the button face, the centred label — is taken off it. */
+.ins-palette-item {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  inline-size: 100%;
+  min-block-size: 44px;
+  margin: 0;
+  padding: .5rem .75rem;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: none;
+  color: var(--ins-text-1);
+  font: inherit;
+  font-size: var(--ins-fs-md);
+  font-weight: 600;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  scroll-margin-block: .5rem;
+}
+/* One highlight, moved by the arrow keys and by the pointer alike, so there is never
+   a hovered row and a different chosen one at the same time. Focus stays in the
+   field, which is why this is not :focus. */
+.ins-palette-item.is-active { background: rgba(var(--ins-primary-rgb), .10); color: var(--ins-primary-darker); }
+.ins-palette-item:focus-visible { outline-offset: -2px; }
+
+.ins-palette-item > svg {
+  flex: none;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  color: var(--ins-text-3);
+}
+.ins-palette-item.is-active > svg { color: currentColor; }
+/* An icon given to Insiyab.palette.add() as a sprite id: drawn as a line icon,
+   which is what the library's own icons are. The page's own `.ico` or similar
+   still wins on an icon it cloned from its navigation. */
+.ins-palette-ico {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ins-palette-item[aria-current="page"] { font-weight: 800; }
+
+.ins-palette-item > .ins-kbd { margin-inline-start: auto; }
+/* The group, named at the end of each result while searching, when the headings
+   are gone. */
+.ins-palette-where {
+  display: none;
+  margin-inline-start: auto;
+  font-size: var(--ins-fs-xs);
+  font-weight: 500;
+  color: var(--ins-text-3);
+  white-space: nowrap;
+}
+.ins-palette.is-searching .ins-palette-where { display: inline; }
+.ins-kbd ~ .ins-palette-where { margin-inline-start: .5rem; }
+
+.ins-palette-empty {
+  padding: 1.75rem 1rem 2rem;
+  text-align: center;
+  font-size: var(--ins-fs-sm);
+  color: var(--ins-label);
+}
+
+.ins-palette-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .375rem 1.25rem;
+  padding: .625rem 1rem;
+  border-block-start: 1px solid var(--ins-line);
+  font-size: var(--ins-fs-xs);
+  color: var(--ins-text-3);
+}
+.ins-palette-foot .ins-kbd { margin-inline-end: .25rem; }
+/* No keyboard, no keyboard hints. */
+@media (pointer: coarse) {
+  .ins-palette-foot { display: none; }
+}
