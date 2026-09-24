@@ -1,4 +1,4 @@
-/*! Insiyab UI v0.4.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
+/*! Insiyab UI v0.5.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
 /* ==========================================================================
    Insiyab · insiyab.js
    ==========================================================================
@@ -28,7 +28,7 @@
   /* Stamped by build.mjs from package.json, which is the one place the version is
      written. It used to be typed here as well, and the two could drift; this file
      read on its own, unbuilt, reports 'dev'. */
-  var VERSION = '0.4.0';
+  var VERSION = '0.5.0';
   var root = document.documentElement;
 
   var KEY_THEME = 'ins-theme';
