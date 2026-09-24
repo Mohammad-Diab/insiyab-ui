@@ -4963,6 +4963,9 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 @starting-style {
   .ins-cal:is(:popover-open, .is-open) { opacity: 0; transform: translateY(-4px) scale(.98); }
 }
+/* Closing, it stays painted for its exit; it must not catch the click meant for
+   whatever is under it while it fades. */
+.ins-cal:not(:popover-open, .is-open) { pointer-events: none; }
 .ins-cal-head { display: flex; align-items: center; gap: .375rem; margin-block-end: .5rem; }
 .ins-cal-title { flex: 1 1 auto; display: flex; justify-content: center; gap: .375rem; min-inline-size: 0; }
 .ins-cal-title .ins-select {

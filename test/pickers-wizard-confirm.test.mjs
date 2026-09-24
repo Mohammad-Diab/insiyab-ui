@@ -119,6 +119,7 @@ ok('range: days before the start are blocked', r0.beforeBlocked === 'true', JSON
 ok('range: band drawn from start to end', r0.inRange === 12 && r0.startEdge, JSON.stringify(r0));
 await b.key('Escape');
 ok('date: Escape closes and refocuses', await E(`!document.querySelector('.ins-cal').matches(':popover-open') && document.activeElement.id === 'p-to'`));
+ok('date: a closing calendar lets clicks through while it fades', (await E(`getComputedStyle(document.querySelector('.ins-cal')).pointerEvents`)) === 'none');
 await b.click('#p-from ~ .ins-date-btn');
 await b.sleep(200);
 await b.click('.ins-cal [data-date="2026-09-25"]');

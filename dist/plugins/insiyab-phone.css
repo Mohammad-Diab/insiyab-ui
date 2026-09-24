@@ -96,6 +96,8 @@
 @starting-style {
   .ins-phone-pop:popover-open { opacity: 0; transform: translateY(-4px) scale(.98); }
 }
+/* Closing, it lets clicks through to what is under it while it fades. */
+.ins-phone-pop:not(:popover-open, .is-open) { pointer-events: none; }
 /* No popover support: a plain layer, shown by class. */
 .ins-phone-pop:not([popover]) { z-index: 1000; }
 
