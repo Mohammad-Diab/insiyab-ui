@@ -72,16 +72,10 @@
     });
   }
 
-  /* The active link, in view: a sidebar of forty links opened on the thirtieth
-     would otherwise show the first ten and leave you hunting. Scrolled by hand
-     rather than with scrollIntoView, which would scroll the page too. */
-  function revealActiveLink() {
-    var side = document.querySelector('.ins-shell-side');
-    var link = side && side.querySelector('.ins-shell-link.is-active');
-    if (!link) return;
-    var target = link.offsetTop - side.clientHeight / 2 + link.offsetHeight / 2;
-    if (target > 0) side.scrollTop = target;
-  }
+  /* The sidebar's scroll is the library's job now: insiyab.js keeps it where it was
+     between pages and brings the active link into view on a fresh visit, both before
+     first paint. This file used to centre the active link on DOMContentLoaded, which
+     was after the first paint — the sidebar flashed at the top and then jumped. */
 
   function resetSearch() {
     var combo = document.getElementById('site-search-combo');
@@ -95,7 +89,6 @@
 
   function ready() {
     syncCustomiser();
-    revealActiveLink();
     resetSearch();
 
     document.addEventListener('click', function (e) {

@@ -316,6 +316,175 @@
     return want ? 'collapsed' : 'open';
   }
 
+  /* ---------------------------------------------------- sidebar selection */
+  /* The active marker travels to a new item the way the Windows 10 navigation pane's
+     does: in two beats, like an inchworm. For the first third its far end shoots out
+     to the new item, accelerating, while the near end holds — the bar spans both
+     items for an instant. For the rest, the near end catches up, decelerating, and
+     the bar is its own size again on the new item. The two curves are the ones
+     WinUI's NavigationView uses, and so is the 600ms.
+
+     The marker is a pseudo-element inside each link, clipped by the link's own
+     rounded box, so it cannot leave it. The journey is made by a stand-in: one bar,
+     absolutely placed in the sidebar (positioned, and the scroller, so the bar
+     scrolls and clips with the links), measured from the two real markers, and
+     removed when it lands. The real markers are hidden while it flies.
+
+     A sidebar on a server-rendered site is links, and a click loads the next page,
+     where the old marker no longer exists. So the click writes down which item was
+     selected, and the next page, finding the note, flies the bar from that item to
+     its own. The note lasts one page load and five seconds — a stale one from some
+     earlier visit must not replay a journey nobody just made. */
+  var NAV_KEY = 'ins-nav-from';
+  var NAV_EASE_OUT = 'cubic-bezier(.9, .1, 1, .2)';
+  var NAV_EASE_IN = 'cubic-bezier(.1, .9, .2, 1)';
+
+  function navActive(side) { return side.querySelector('.ins-shell-link.is-active'); }
+
+  /* The previous page's note, if there is a fresh one: which item was selected
+     (`from`, absent when none was) and how far the sidebar was scrolled (`top`).
+     Read at parse time to hide the markers and place the sidebar before first
+     paint, and again on arrival to fly the marker. */
+  function navNote() {
+    var note = null;
+    try { note = JSON.parse(window.sessionStorage.getItem(NAV_KEY) || 'null'); } catch (e) { return null; }
+    return note && Date.now() - note.t < 5000 ? note : null;
+  }
+
+  function navArrived() { root.classList.remove('ins-nav-arriving'); }
+
+  /* Where the sidebar is scrolled to on arrival — decided before it is ever painted.
+     Scrolling it after the page appeared is what made it flash: painted at the top,
+     then jumped to wherever it belonged.
+
+     Clicked from the sidebar, it stays exactly where it was, so the list does not
+     move under the pointer between pages — and the marker's flight starts from an
+     item that is where the eye left it. Arrived any other way, it is left at the
+     top unless the selected item is out of sight, and then that item is brought to
+     the middle.
+
+     At parse time the sidebar does not exist yet, so this watches the document
+     being built and places the sidebar as its links arrive. Mutation callbacks run
+     before the browser is allowed to paint, so no frame shows it anywhere else.
+     It stops as soon as the position has been reached — it must never fight the
+     person's own scrolling — or when the page is parsed. */
+  function navPlace(side, note, state) {
+    if (state.done) return;
+    if (note && typeof note.top === 'number') {
+      side.scrollTop = note.top;
+      if (Math.abs(side.scrollTop - note.top) < 1) state.done = true;
+      return;
+    }
+    var link = navActive(side);
+    if (!link) return;
+    var bottom = link.offsetTop + link.offsetHeight;
+    if (bottom > side.clientHeight) side.scrollTop = link.offsetTop - side.clientHeight / 2 + link.offsetHeight / 2;
+    state.done = true;
+  }
+
+  function navWatch(note) {
+    var state = { done: false }, side = null;
+    var place = function () {
+      side = side || document.querySelector('.ins-shell-side');
+      if (side) navPlace(side, note, state);
+    };
+    var finish = function () { place(); state.done = true; if (mo) mo.disconnect(); };
+    var mo = window.MutationObserver ? new MutationObserver(function () {
+      place();
+      if (state.done || (side && side.nextElementSibling)) finish();
+    }) : null;
+    if (mo) mo.observe(root, { childList: true, subtree: true });
+    document.addEventListener('DOMContentLoaded', finish);
+  }
+
+  /* Where a link's marker is, in the sidebar's scrolling coordinates. */
+  function navMarker(side, s, link) {
+    var r = link.getBoundingClientRect();
+    var cs = window.getComputedStyle(link, '::before');
+    var top = parseFloat(cs.top) || 0, bottom = parseFloat(cs.bottom) || 0;
+    var w = parseFloat(cs.width) || 3;
+    var rtl = window.getComputedStyle(link).direction === 'rtl';
+    return {
+      x: (rtl ? r.right - w : r.left) - s.left - side.clientLeft,
+      y: r.top + top - s.top - side.clientTop + side.scrollTop,
+      w: w,
+      h: r.height - top - bottom
+    };
+  }
+
+  /* Returns whether it flew. Whenever it does not, or once it lands, the markers
+     the arrival hid before first paint are shown again. */
+  function navFly(side, from, to) {
+    if (!from || !to || from === to || !side.contains(from) || !to.animate || motionless()) return false;
+    var s = side.getBoundingClientRect();
+    /* A collapsed column or a closed drawer: nobody is looking. */
+    if (s.width < 8 || s.right <= 0 || s.left >= window.innerWidth) return false;
+    var a = navMarker(side, s, from), b = navMarker(side, s, to);
+    if (a.h <= 0 || b.h <= 0) return false;
+
+    var bar = el('span', 'ins-shell-indicator');
+    bar.setAttribute('aria-hidden', 'true');
+    bar.style.left = b.x + 'px';
+    bar.style.width = b.w + 'px';
+    side.appendChild(bar);
+    side.classList.add('ins-shell-moving');
+
+    var down = b.y > a.y;
+    var span = down ? { top: a.y, height: b.y + b.h - a.y }
+                    : { top: b.y, height: a.y + a.h - b.y };
+    var landed = function () {
+      if (bar.parentNode) bar.parentNode.removeChild(bar);
+      side.classList.remove('ins-shell-moving');
+      navArrived();
+    };
+    var run;
+    try {
+      run = bar.animate([
+        { top: a.y + 'px', height: a.h + 'px', easing: NAV_EASE_OUT },
+        { top: span.top + 'px', height: span.height + 'px', offset: 1 / 3, easing: NAV_EASE_IN },
+        { top: b.y + 'px', height: b.h + 'px' }
+      ], { duration: 600, fill: 'both' });
+    } catch (e) {
+      landed();
+      return false;
+    }
+    run.onfinish = landed;
+    run.oncancel = landed;
+    return true;
+  }
+
+  /* Select a sidebar item on this page — for a same-page link, or a single-page app
+     that swaps the content itself. A server-rendered page marks its own item. */
+  function sidebarSelect(target) {
+    var link = resolve(target);
+    var side = link && link.closest ? link.closest('.ins-shell-side') : null;
+    if (!side) return null;
+    var old = navActive(side);
+    if (old === link) return link;
+    if (old) {
+      old.classList.remove('is-active');
+      if (old.getAttribute('aria-current') === 'page') old.removeAttribute('aria-current');
+    }
+    link.classList.add('is-active');
+    link.setAttribute('aria-current', 'page');
+    navFly(side, old, link);
+    return link;
+  }
+
+  /* Is this click about to load another page, in this tab? */
+  function navigates(event, link) {
+    if (event.defaultPrevented || event.button !== 0 ||
+        event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+    if (link.hasAttribute('download')) return false;
+    var target = link.getAttribute('target');
+    if (target && target !== '_self') return false;
+    return link.origin === location.origin;
+  }
+
+  function samePage(link) {
+    return link.pathname === location.pathname && link.search === location.search && !!link.hash;
+  }
+
   /* --------------------------------------------------------------- events */
 
   function emit(name, detail) {
@@ -379,6 +548,20 @@
     if (stored === 'dark' || stored === 'light') stampTheme(stored);
 
     if (read(KEY_SIDEBAR) === 'collapsed') root.classList.add('ins-sidebar-collapsed');
+
+    /* A sidebar marker about to fly in from the previous page. This page's own
+       marker must not paint first: the browser paints before `DOMContentLoaded`
+       whenever it can, and the flight cannot start until then, so without this the
+       marker showed at its destination for a frame, vanished, and then arrived.
+       Hidden from the first paint instead, until the flight takes over — and never
+       for longer than two seconds, whatever goes wrong after this line. */
+    var note = navNote();
+    if (note && note.from && !motionless()) {
+      root.classList.add('ins-nav-arriving');
+      window.setTimeout(navArrived, 2000);
+    }
+    /* And the sidebar's scroll, placed before its first paint as well. */
+    if (document.readyState === 'loading') navWatch(note);
 
     /* `data-ins-primary` on <html> is the declarative form of brand(): it is read
        here so a custom brand colour is live for the first paint too, rather than
@@ -1798,6 +1981,20 @@
     if (pop && to && !pop.contains(to)) pop.open = false;
   }, false);
 
+  /* A sidebar link: a same-page one moves the selection here and now; one that loads
+     another page leaves a note for that page to fly the marker from. */
+  document.addEventListener('click', function (event) {
+    var link = event.target.closest ? event.target.closest('.ins-shell-side a.ins-shell-link[href]') : null;
+    if (!link || !navigates(event, link)) return;
+    if (samePage(link)) { sidebarSelect(link); return; }
+    var side = link.closest('.ins-shell-side'), old = navActive(side);
+    var note = { top: side.scrollTop, t: Date.now() };
+    if (old && old !== link && old.href) note.from = old.href;
+    try {
+      window.sessionStorage.setItem(NAV_KEY, JSON.stringify(note));
+    } catch (e) { /* no storage: the page simply arrives with its marker in place */ }
+  }, false);
+
   /* A drawer closes on a click outside it. The click lands on the <dialog> itself
      — that is where a backdrop's clicks go — so the test is whether it fell outside
      the drawer's own box. A modal dialog does not do this, deliberately: it is
@@ -2327,6 +2524,21 @@
     }
   });
 
+  /* The arrival half of the sidebar's journey: the previous page's note, read once
+     and thrown away, and the marker flown from the item it names to this page's. */
+  define('nav-arrival', function (scope) {
+    if (scope !== document) return;
+    var note = navNote();
+    try { window.sessionStorage.removeItem(NAV_KEY); } catch (e) { /* read-only storage */ }
+    var side = note && document.querySelector('.ins-shell-side');
+    var to = side && navActive(side), from = null;
+    if (to && note.from && to.href !== note.from) {
+      var links = side.querySelectorAll('a.ins-shell-link[href]');
+      for (var i = 0; i < links.length; i++) if (links[i].href === note.from) { from = links[i]; break; }
+    }
+    if (!navFly(side, from, to)) navArrived();
+  });
+
   /* A field's hint and its message describe its control. Without the link a screen
      reader announces a red border, which is to say nothing at all. */
   define('field-messages', function (scope) {
@@ -2366,6 +2578,7 @@
     theme: theme,
     toggleTheme: toggleTheme,
     sidebar: sidebar,
+    sidebarSelect: sidebarSelect,
     brand: brand,
     toast: toast,
     dialog: dialog,
