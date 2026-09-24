@@ -1,0 +1,42 @@
+<!doctype html>
+<!-- Fixtures for carousel.test.mjs: an Arabic carousel of five one-up slides, the
+     same three-up in a wide and a narrow container, an English one, and one with a
+     single slide. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab carousel fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <link rel="stylesheet" href="../../dist/plugins/insiyab-carousel.css">
+  <script src="../../dist/insiyab.js"></script>
+  <script src="../../dist/plugins/insiyab-carousel.js"></script>
+  <style>
+    .s { block-size: 8rem; display: grid; place-items: center; background: #e2e8f0; border-radius: 12px; font-size: 2rem; }
+    html { scroll-behavior: auto; }
+  </style>
+</head>
+<body>
+<main class="ins-container ins-stack" style="padding-block: 2rem; max-inline-size: 64rem">
+  <div class="ins-carousel" id="c1" data-ins-carousel aria-label="أعمال">
+    <div class="s" id="c1-1">١</div><div class="s">٢</div><div class="s">٣</div><div class="s">٤</div><div class="s" id="c1-5">٥</div>
+  </div>
+  <div class="ins-carousel ins-carousel--3" id="c3" data-ins-carousel aria-label="ثلاثة">
+    <div class="ins-carousel-track">
+      <div class="s">١</div><div class="s">٢</div><div class="s">٣</div><div class="s">٤</div><div class="s">٥</div>
+    </div>
+  </div>
+  <div style="inline-size: 22rem">
+    <div class="ins-carousel ins-carousel--3" id="c3n" data-ins-carousel aria-label="ضيّق" data-ins-carousel-dots="off">
+      <div class="s">١</div><div class="s">٢</div>
+    </div>
+  </div>
+  <div lang="en" dir="ltr">
+    <div class="ins-carousel" id="ce" data-ins-carousel aria-label="English">
+      <div class="s">1</div><div class="s">2</div><div class="s">3</div>
+    </div>
+  </div>
+  <div class="ins-carousel" id="c-one" data-ins-carousel aria-label="واحدة"><div class="s">١</div></div>
+</main>
+</body>
+</html>

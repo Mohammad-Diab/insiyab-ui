@@ -1,0 +1,118 @@
+/* ==========================================================================
+   Insiyab · Carousel plugin
+   ==========================================================================
+
+   The row is a native scroll-snap scroller; the buttons float over its edges in
+   the glass of the top bar's islands, and the current dot stretches into a bar.
+   Nothing here animates on its own: the only motion is the row scrolling where it
+   was asked to. */
+
+.ins-carousel {
+  --ins-carousel-per: 1;
+  --ins-carousel-gap: 1rem;
+  position: relative;
+  container-type: inline-size;
+}
+
+.ins-carousel-track {
+  display: flex;
+  gap: var(--ins-carousel-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-radius: var(--ins-r-lg);
+  outline: 0;
+}
+.ins-carousel-track::-webkit-scrollbar { display: none; }
+.ins-carousel-track:focus-visible { box-shadow: 0 0 0 2px var(--ins-tone-brand-soft); }
+
+.ins-carousel-slide {
+  flex: 0 0 calc((100% - (var(--ins-carousel-per) - 1) * var(--ins-carousel-gap)) / var(--ins-carousel-per));
+  min-inline-size: 0;
+  scroll-snap-align: start;
+}
+.ins-carousel-slide > img { display: block; inline-size: 100%; block-size: auto; border-radius: var(--ins-r-lg); }
+
+/* Two or three at a time where the carousel itself is wide enough — its own
+   width, not the screen's, so one in a sidebar stays one-up. */
+@container (min-width: 36rem) {
+  .ins-carousel--2 > .ins-carousel-track > .ins-carousel-slide,
+  .ins-carousel--3 > .ins-carousel-track > .ins-carousel-slide { --ins-carousel-per: 2; }
+}
+@container (min-width: 56rem) {
+  .ins-carousel--3 > .ins-carousel-track > .ins-carousel-slide { --ins-carousel-per: 3; }
+}
+/* The edge of the next slide showing, which is itself the sign there is more. */
+.ins-carousel--peek > .ins-carousel-track > .ins-carousel-slide { flex-basis: 86%; }
+
+/* ------------------------------------------------------------- buttons */
+.ins-carousel-btn {
+  --ins-carousel-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 5 7 7-7 7'/%3E%3C/svg%3E");
+  position: absolute;
+  inset-block-start: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--ins-rim);
+  border-radius: 50%;
+  background: var(--ins-glass-strong);
+  box-shadow: var(--ins-sh-lg);
+  color: var(--ins-text-1);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: opacity var(--ins-t-base) var(--ins-ease), transform var(--ins-t-pop) var(--ins-ease-spring), background var(--ins-t-pop) var(--ins-ease);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-carousel-btn { backdrop-filter: var(--ins-blur); -webkit-backdrop-filter: var(--ins-blur); }
+}
+.ins-carousel-btn::before {
+  content: "";
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  background: currentColor;
+  -webkit-mask: var(--ins-carousel-chevron) center / contain no-repeat;
+          mask: var(--ins-carousel-chevron) center / contain no-repeat;
+}
+.ins-carousel-btn--prev { inset-inline-start: .625rem; }
+.ins-carousel-btn--next { inset-inline-end: .625rem; }
+/* The chevron points along the row: next is toward the end the page reads to. */
+.ins-carousel-btn--prev::before { transform: scaleX(-1); }
+[dir="rtl"] .ins-carousel-btn--prev::before { transform: none; }
+[dir="rtl"] .ins-carousel-btn--next::before { transform: scaleX(-1); }
+.ins-carousel-btn:hover:not(:disabled) { transform: translateY(-50%) scale(1.06); }
+/* At an end there is nowhere to go: the button steps aside rather than sitting
+   there greyed out over the slide. */
+.ins-carousel-btn:disabled { opacity: 0; pointer-events: none; }
+
+/* ------------------------------------------------------------- dots */
+.ins-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: .125rem;
+  margin-block-start: .5rem;
+}
+/* A 24px target around an 8px dot. */
+.ins-carousel-dot {
+  display: grid;
+  place-items: center;
+  min-inline-size: 1.5rem;
+  block-size: 1.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.ins-carousel-dot::before {
+  content: "";
+  inline-size: .5rem;
+  block-size: .5rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-ctl-bd);
+  transition: inline-size var(--ins-t-pop) var(--ins-ease), background var(--ins-t-pop) var(--ins-ease);
+}
+.ins-carousel-dot:hover::before { background: var(--ins-text-3); }
+.ins-carousel-dot[aria-current="true"]::before { inline-size: 1.25rem; background: var(--ins-tone-brand-soft); }

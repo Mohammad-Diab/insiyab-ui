@@ -1,0 +1,76 @@
+<link rel="stylesheet" href="../dist/plugins/insiyab-carousel.css">
+<script src="../dist/plugins/insiyab-carousel.js"></script>
+
+<h2 id="install">التثبيت</h2>
+<p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
+<demo-code lang="html">
+<link rel="stylesheet" href="plugins/insiyab-carousel.css">
+<script src="insiyab.js"></script>
+<script src="plugins/insiyab-carousel.js"></script>
+</demo-code>
+
+<h2 id="carousel">عرض الشرائح</h2>
+<p>
+  عنصر عليه <code>data-ins-carousel</code> وشرائحه فيه. الصفّ نفسه تمرير المتصفّح بالتقاط الشرائح — فالإصبع
+  ولوحة اللمس و<kbd>Shift</kbd> مع العجلة كلّها تحرّكه، وبلا سكربت يبقى صفًّا يُسحب. والسكربت يضيف ما لا يقوله
+  التمرير عن نفسه: زرّي السابق والتالي، ونقطة لكلّ موقف، والأسهم باتّجاه القراءة، و«2 من 5» على كلّ شريحة لقارئ
+  الشاشة.
+</p>
+<demo-example>
+  <div class="ins-carousel" data-ins-carousel aria-label="مشاريع مختارة">
+    <div class="car-demo car-demo--1"><b>مجمّع الواحة</b><span>الرياض · 2025</span></div>
+    <div class="car-demo car-demo--2"><b>برج المرسى</b><span>جدّة · 2024</span></div>
+    <div class="car-demo car-demo--3"><b>حديقة السلام</b><span>الدمّام · 2024</span></div>
+    <div class="car-demo car-demo--4"><b>سوق الحرفيّين</b><span>المدينة · 2023</span></div>
+  </div>
+</demo-example>
+
+<h2 id="many">أكثر من شريحة</h2>
+<p>
+  <code>.ins-carousel--3</code> ثلاث شرائح معًا حين يتّسع العرض نفسه لها — بعرض حاويته لا الشاشة — واثنتان ثمّ
+  واحدة كلّما ضاق، و<code>--2</code> مثلها باثنتين. و<code>.ins-carousel--peek</code> يُظهر طرف الشريحة التالية، وهو
+  وحده علامة أنّ هناك المزيد.
+</p>
+<demo-example>
+  <div class="ins-carousel ins-carousel--3" data-ins-carousel aria-label="منتجات">
+    <div class="ins-card ins-p-5"><b>باقة الأعمال</b><p class="ins-muted">فواتير غير محدودة ومستخدمان.</p></div>
+    <div class="ins-card ins-p-5"><b>باقة المتاجر</b><p class="ins-muted">ربط المتجر وتقارير المبيعات.</p></div>
+    <div class="ins-card ins-p-5"><b>باقة الشركات</b><p class="ins-muted">فروع متعدّدة وصلاحيات مفصّلة.</p></div>
+    <div class="ins-card ins-p-5"><b>باقة المحاسبين</b><p class="ins-muted">عملاء متعدّدون من حساب واحد.</p></div>
+    <div class="ins-card ins-p-5"><b>باقة الجمعيات</b><p class="ins-muted">سندات القبض والتبرّعات.</p></div>
+  </div>
+</demo-example>
+
+<h2 id="motion">لا يتحرّك وحده</h2>
+<p>
+  لا تشغيل تلقائيّ، عمدًا: لا شيء في هذه المكتبة يتحرّك من تلقاء نفسه، وشريحة ترحل وأحدهم يقرؤها هي السبب. من
+  يريد أن يرى المزيد يضغط التالي. وتحت <code>prefers-reduced-motion</code> ينتقل الصفّ فورًا بلا انزلاق.
+</p>
+
+<h2 id="api">من الشيفرة</h2>
+<demo-code lang="js">
+document.addEventListener('ins:carousel', (e) => {
+  console.log(e.detail.index);        // الشريحة في أوّل العرض
+});
+
+Insiyab.carousel('#projects');        // الموقف الحاليّ، من الصفر
+Insiyab.carousel('#projects', 2);     // انتقل إلى الموقف الثالث
+</demo-code>
+
+<h2 id="attributes">السمات والأصناف</h2>
+<div class="ins-panel site-ref">
+  <div class="ins-panel-body ins-panel-body--flush">
+    <div class="ins-table-wrap">
+      <table class="ins-table">
+        <thead><tr><th>السمة أو الصنف</th><th>ما تفعله</th></tr></thead>
+        <tbody>
+          <tr><td><code>data-ins-carousel</code></td><td>عرض شرائح، وأبناؤه شرائحه.</td></tr>
+          <tr><td><code>.ins-carousel--2</code> <code>.ins-carousel--3</code></td><td>اثنتان أو ثلاث معًا حيث يتّسع.</td></tr>
+          <tr><td><code>.ins-carousel--peek</code></td><td>طرف الشريحة التالية ظاهر.</td></tr>
+          <tr><td><code>data-ins-carousel-dots="off"</code></td><td>بلا نقاط.</td></tr>
+          <tr><td><code>--ins-carousel-gap</code></td><td>المسافة بين الشرائح.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
