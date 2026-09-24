@@ -35,7 +35,7 @@
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
 > the shell, with every example's markup printed under it. The plugins so far:
 > the Hijri calendar, the command palette, the one-time code, the phone number,
-> file upload and scrollspy. Still to come: the timeline, tree, colour picker and
+> file upload, scrollspy and the timeline. Still to come: the tree, colour picker and
 > carousel plugins, and the React and Jinja wrappers. See
 > [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
@@ -733,6 +733,43 @@ sticks under the top bar (`--ins-toc-top`), with `.ins-toc-title`, `.ins-toc-sub
 for a deeper heading, and the sidebar's brand bar on the current entry.
 `ins:scrollspy` reports each change, and `Insiyab.scrollspy(nav)` measures again.
 
+### Timeline
+
+```html
+<link rel="stylesheet" href="plugins/insiyab-timeline.css">
+<script src="plugins/insiyab-timeline.js"></script>   <!-- only for relative times -->
+
+<ol class="ins-timeline">
+  <li class="ins-timeline-item ins-timeline-item--ok">
+    <span class="ins-timeline-title">تمّ الدفع</span>
+    <time class="ins-timeline-time" datetime="2026-09-24T09:15" data-ins-time></time>
+    <p class="ins-timeline-body">…</p>
+  </li>
+  <li class="ins-timeline-item is-current">…</li>
+  <li class="ins-timeline-item is-pending">…</li>
+</ol>
+```
+
+What happened, in order: a list, a rule down its start side, and a dot on the rule
+for each event, with the rule ending at the last one. It uses the usual tones
+(`--ok`, `--bad`, `--warn`, `--info`), plus `is-current` for the step in progress
+(a halo) and `is-pending` for steps still to come (hollow dots on a dashed rule).
+Other pieces:
+
+- A `.ins-timeline-ico` as an item's first child replaces the dot with an icon chip
+  in the tone.
+- A `.ins-timeline-day` item is a date heading.
+- `.ins-timeline--compact` is for a narrow column.
+- `.ins-timeline--split` puts events on both sides of a centre rule once the
+  timeline itself (not the screen) is wide enough.
+
+The timeline is pure CSS. The script only writes relative times into any
+`<time datetime data-ins-time>` on the page, in the page's language and from
+`Intl` («قبل 5 دقائق», «أمس», «خلال ساعتين»). Past a week it writes the date
+instead, and `data-ins-time="date"` always writes the date. The full date and time
+go in the title, the text refreshes every minute, and `Insiyab.time()` rewrites it
+on demand.
+
 ## Development
 
 Node 18+ for the build; nothing else, and no dependencies at all.
@@ -783,7 +820,7 @@ node test/run.mjs sidebar dark    # only the files whose names contain a word
 node test/run.mjs --verbose       # every check, not only failures
 ```
 
-About 500 checks in eighteen files, each driving a real headless Chrome with real
+About 525 checks in nineteen files, each driving a real headless Chrome with real
 key and pointer events, on a throwaway profile, against a server the runner
 starts on a free port. Needs Chrome, found in the usual places or through
 `CHROME`, and no npm packages: the driver is a small DevTools-protocol client in
