@@ -369,6 +369,21 @@ if (versionLines !== 1) fail(`${SRC_JS}: expected \`${VERSION_LINE}\` exactly on
 const js = banner + source.replace(VERSION_LINE, `var VERSION = '${pkg.version}';`);
 const min = banner + minify(css);
 
+/* Plugins: one file per plugin in src/plugins/, shipped beside the core as
+   dist/plugins/insiyab-<name>.js (and .css, with a minified copy, when a plugin
+   has styles). Each is loaded after insiyab.js and registers itself with it; none
+   is part of the two files, so a page pays only for the plugins it loads. */
+const SRC_PLUGINS = 'src/plugins';
+const plugins = [];
+for (const file of (await readdir(SRC_PLUGINS).catch(() => [])).sort()) {
+  const ext = file.slice(file.lastIndexOf('.'));
+  if (ext !== '.js' && ext !== '.css') continue;
+  const base = `insiyab-${file.slice(0, -ext.length)}`;
+  const text = banner + await readFile(join(SRC_PLUGINS, file), 'utf8');
+  plugins.push({ name: base + ext, text });
+  if (ext === '.css') plugins.push({ name: `${base}.min.css`, text: banner + minify(text) });
+}
+
 const stats = verify(css);
 
 if (problems.length) {
@@ -395,6 +410,7 @@ if (site.problems.length) {
 if (CHECK) {
   console.log(`check passed · ${files.length} parts · ${stats.declared} tokens declared, ${stats.used} read · ${darkTwins} OS-dark twins`);
   console.log(`               insiyab.css ${kb(css)} · min ${kb(min)} · insiyab.js ${kb(js)}`);
+  console.log(`               plugins: ${plugins.map((p) => p.name).join(', ') || 'none'}`);
   console.log(`               demo: ${site.pages} pages`);
   process.exit(0);
 }
@@ -405,6 +421,10 @@ await mkdir(join(DIST, 'fonts'), { recursive: true });
 await writeFile(join(DIST, 'insiyab.css'), css, 'utf8');
 await writeFile(join(DIST, 'insiyab.min.css'), min, 'utf8');
 await writeFile(join(DIST, 'insiyab.js'), js, 'utf8');
+if (plugins.length) {
+  await mkdir(join(DIST, 'plugins'), { recursive: true });
+  for (const p of plugins) await writeFile(join(DIST, 'plugins', p.name), p.text, 'utf8');
+}
 
 /* The fonts ship with the package because insiyab.css asks for them by relative
    path, and the licences ship because the OFL requires them to travel along. */
@@ -417,6 +437,7 @@ console.log(`  insiyab.css      ${kb(css)}`);
 console.log(`  insiyab.min.css  ${kb(min)}`);
 console.log(`  insiyab.js       ${kb(js)}`);
 console.log(`  fonts/           ${(await readdir(join(DIST, 'fonts'))).length} files`);
+for (const p of plugins) console.log(`  plugins/${p.name.padEnd(8)} ${kb(p.text)}`);
 console.log(`  demo/            ${site.pages} pages`);
 console.log('\nnote: insiyab.js is shipped unminified — a hand-rolled JS minifier is not');
 console.log('      worth the risk, and a real one would break the no-dependencies rule.');

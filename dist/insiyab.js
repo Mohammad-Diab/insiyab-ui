@@ -1035,13 +1035,13 @@
     ar: {
       ok: 'تأكيد', cancel: 'إلغاء', choose: 'اختر تاريخًا', calendar: 'التقويم',
       prevMonth: 'الشهر السابق', nextMonth: 'الشهر التالي', month: 'الشهر', year: 'السنة',
-      today: 'اليوم', clear: 'مسح', badDate: 'اكتب تاريخًا صحيحًا.',
+      today: 'اليوم', clear: 'مسح', badDate: 'اكتب تاريخًا صحيحًا.', calendarSystem: 'نظام التقويم',
       early: 'اختر {date} أو ما بعده.', late: 'اختر {date} أو ما قبله.'
     },
     en: {
       ok: 'OK', cancel: 'Cancel', choose: 'Choose a date', calendar: 'Calendar',
       prevMonth: 'Previous month', nextMonth: 'Next month', month: 'Month', year: 'Year',
-      today: 'Today', clear: 'Clear', badDate: 'Enter a valid date.',
+      today: 'Today', clear: 'Clear', badDate: 'Enter a valid date.', calendarSystem: 'Calendar system',
       early: 'Choose {date} or later.', late: 'Choose {date} or earlier.'
     }
   };
@@ -1245,16 +1245,107 @@
   function today() { var t = new Date(); return day(t.getFullYear(), t.getMonth(), t.getDate()); }
   function sameDay(a, b) { return !!a && !!b && a.getTime() === b.getTime(); }
   function addDays(d, n) { return day(d.getFullYear(), d.getMonth(), d.getDate() + n); }
-  function addMonths(d, n) {
-    var last = day(d.getFullYear(), d.getMonth() + n + 1, 0).getDate();
-    return day(d.getFullYear(), d.getMonth() + n, Math.min(d.getDate(), last));
-  }
 
   function parseIso(s) {
     var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
     if (!m) return null;
     var d = day(+m[1], +m[2] - 1, +m[3]);
     return d.getMonth() === +m[2] - 1 ? d : null;
+  }
+
+  /* ----------------------------------------------------- calendar systems */
+  /* The picker shows days in a calendar system, and keeps them as Gregorian days
+     whatever it shows. A day button's `data-date`, the range, `min` and `max`, and
+     what the form sends are all Gregorian ISO in every calendar; only how a date is
+     labelled, how the grid is cut into months and how a typed date is read change.
+
+     So a calendar is four small answers, and Gregorian is the one built in:
+
+       intl               the Intl calendar id, for every label — month and day
+                          names, the year, the field's text
+       parts(d)           { y, m, d } of a local-midnight Date, m from 0
+       fromParts(y, m, d) that Date back; m may run past 11 or below 0, and d past
+                          the end of the month, the way `new Date()` allows
+       monthLength(y, m)
+       label              { ar, en } for the switch in the calendar's footer
+       parse(text, loc)   optional: a typed date in this calendar — a Date, null for
+                          "not a date", or undefined to fall back to the numbers
+
+     Others register with `Insiyab.calendar(name, calendar)`; insiyab-hijri.js adds
+     `hijri` (Umm al-Qura) and `hijri-civil`. A field asks for one with
+     `data-ins-calendar`, or a whole page does on <html>. And every label passes the
+     calendar to Intl explicitly, Gregorian included: `ar-SA` defaults to Umm al-Qura,
+     and a Gregorian grid under Hijri month names is what leaving it implicit gave. */
+  var GREGORY = {
+    intl: 'gregory',
+    label: { ar: 'ميلادي', en: 'Gregorian' },
+    parts: function (d) { return { y: d.getFullYear(), m: d.getMonth(), d: d.getDate() }; },
+    fromParts: function (y, m, d) { return day(y, m, d); },
+    monthLength: function (y, m) { return day(y, m + 1, 0).getDate(); }
+  };
+  var CALENDARS = { gregory: GREGORY };
+  var warnedCalendar = {};
+
+  function registerCalendar(name, cal) {
+    if (cal === undefined) return CALENDARS[name] || null;
+    CALENDARS[name] = cal;
+    /* Registered after the page was built — a plugin loaded late, or async. Its
+       fields were written in Gregorian meanwhile, so they are written again. */
+    var fields = document.querySelectorAll('[data-ins-date-ready]');
+    for (var i = 0; i < fields.length; i++) {
+      if (homeCalendarName(fields[i]) !== name) continue;
+      var d = dateOf(fields[i]);
+      if (d) fields[i].value = formatDay(fields[i], d);
+    }
+    return cal;
+  }
+
+  function homeCalendarName(input) {
+    var own = input.getAttribute('data-ins-calendar');
+    return own || root.getAttribute('data-ins-calendar') || 'gregory';
+  }
+
+  /* The field's own calendar. One that is asked for and not registered falls back
+     to Gregorian, said once in the console: a Hijri page whose plugin failed to load
+     should still be a working date field, not a broken one. */
+  function homeCalendar(input) {
+    var name = homeCalendarName(input);
+    if (CALENDARS[name]) return CALENDARS[name];
+    if (!warnedCalendar[name] && window.console) {
+      warnedCalendar[name] = true;
+      window.console.warn('[insiyab] no calendar called "' + name + '" is registered — showing Gregorian. Load its plugin (insiyab-hijri.js for hijri) after insiyab.js.');
+    }
+    return GREGORY;
+  }
+
+  /* The calendar the field is shown in right now: its own, or Gregorian when the
+     person has flipped the footer switch. */
+  function viewCalendar(input) {
+    return input.getAttribute('data-ins-calendar-view') === 'gregory' ? GREGORY : homeCalendar(input);
+  }
+
+  function sysFormat(cal, locale, options) {
+    options.calendar = cal.intl;
+    return dateFormat(locale, options);
+  }
+
+  function sameMonthIn(cal, a, b) {
+    var p = cal.parts(a), q = cal.parts(b);
+    return p.y === q.y && p.m === q.m;
+  }
+
+  function monthStartIn(cal, d) {
+    var p = cal.parts(d);
+    return cal.fromParts(p.y, p.m, 1);
+  }
+
+  /* A month on, or back, in the calendar on screen — the same day of the month where
+     it exists, the last day where it does not. */
+  function addMonthsIn(cal, d, n) {
+    var p = cal.parts(d), y = p.y, m = p.m + n;
+    y += Math.floor(m / 12);
+    m = ((m % 12) + 12) % 12;
+    return cal.fromParts(y, m, Math.min(p.d, cal.monthLength(y, m)));
   }
 
   /* Latin digits unless the page asked for others. Every figure in this library is
@@ -1306,11 +1397,23 @@
       .replace(/[\u06f0-\u06f9]/g, function (d) { return String(d.charCodeAt(0) - 0x06f0); });
   }
 
-  /* What a person typed: an ISO date, or three numbers in the locale's own order,
-     in either set of digits. Anything else is not guessed at. */
-  function parseTyped(text, locale) {
+  /* What a person typed: an ISO date, or three numbers in the locale's own order, in
+     either set of digits, read in the calendar on screen. Anything else is not
+     guessed at.
+
+     Another calendar reads the text first, ISO-shaped or not: `1448-09-01` typed
+     into a Hijri field is the first of Ramadan, not a day in the fifteenth century.
+     The Hijri reader passes a year past 1700 back as Gregorian, so `2026-09-24`
+     still means what it says there. */
+  function parseTyped(text, input) {
+    var locale = dateLocale(input), cal = viewCalendar(input);
     var s = toLatin(text).trim();
     var iso = parseIso(s);
+    if (iso && cal === GREGORY) return iso;
+    if (cal.parse) {
+      var own = cal.parse(s, locale);
+      if (own !== undefined) return own;
+    }
     if (iso) return iso;
     var parts = s.split(/[^0-9]+/).filter(Boolean);
     if (parts.length !== 3) return null;
@@ -1318,16 +1421,17 @@
     if (parts[0].length === 4) { y = +parts[0]; m = +parts[1]; d = +parts[2]; }
     else if (monthFirst(locale)) { m = +parts[0]; d = +parts[1]; y = +parts[2]; }
     else { d = +parts[0]; m = +parts[1]; y = +parts[2]; }
-    if (y < 100) y += 2000;
-    var out = day(y, m - 1, d);
-    return (out.getMonth() === m - 1 && out.getDate() === d) ? out : null;
+    if (cal === GREGORY && y < 100) y += 2000;
+    if (m < 1 || m > 12 || d < 1) return null;
+    var out = cal.fromParts(y, m - 1, d), back = out && cal.parts(out);
+    return back && back.y === y && back.m === m - 1 && back.d === d ? out : null;
   }
 
   function dateValue(input) { return resolve(input.getAttribute('data-ins-date-value')); }
   function dateOf(input) { var h = dateValue(input); return h ? parseIso(h.value) : null; }
   function dateLocale(input) { return langOf(input); }
   function formatDay(input, d) {
-    return dateFormat(dateLocale(input), { day: 'numeric', month: 'long', year: 'numeric' }).format(d);
+    return sysFormat(viewCalendar(input), dateLocale(input), { day: 'numeric', month: 'long', year: 'numeric' }).format(d);
   }
 
   /* The bounds that apply to a field right now: its own `min` and `max`, and for the
@@ -1386,7 +1490,7 @@
     var text = input.value.trim();
     if (current && text === formatDay(input, current)) return;
     if (!text) { setDate(input, null); return; }
-    var d = parseTyped(text, dateLocale(input));
+    var d = parseTyped(text, input);
     if (d) setDate(input, d);
     else checkDate(input, null);
   }
@@ -1422,7 +1526,8 @@
 
   function renderCal() {
     var cal = calLayer(), input = calFor, t = strings(input), locale = dateLocale(input);
-    var y = calView.getFullYear(), m = calView.getMonth();
+    var sys = viewCalendar(input), vp = sys.parts(calView);
+    var y = vp.y, m = vp.m;
     var selected = dateOf(input), now = today(), bounds = dateBounds(input), range = dateRange(input);
     var fd = weekStart(locale);
 
@@ -1440,20 +1545,21 @@
     var title = el('div', 'ins-cal-title');
     var months = el('select', 'ins-select ins-select--sm');
     months.setAttribute('aria-label', t.month); months.setAttribute('data-ins-cal', 'month');
-    var monthName = dateFormat(locale, { month: 'long' });
+    var monthName = sysFormat(sys, locale, { month: 'long' });
     for (var i = 0; i < 12; i++) {
-      var o = el('option', '', monthName.format(day(2001, i, 1)));
+      var o = el('option', '', monthName.format(sys.fromParts(y, i, 1)));
       o.value = String(i);
       if (i === m) o.selected = true;
       months.appendChild(o);
     }
     var years = el('select', 'ins-select ins-select--sm');
     years.setAttribute('aria-label', t.year); years.setAttribute('data-ins-cal', 'year');
-    var yearName = dateFormat(locale, { year: 'numeric' });
-    var y0 = bounds.min ? bounds.min.getFullYear() : Math.min(y, now.getFullYear()) - 100;
-    var y1 = bounds.max ? bounds.max.getFullYear() : Math.max(y, now.getFullYear()) + 20;
+    var yearName = sysFormat(sys, locale, { year: 'numeric' });
+    var nowY = sys.parts(now).y;
+    var y0 = bounds.min ? sys.parts(bounds.min).y : Math.min(y, nowY) - 100;
+    var y1 = bounds.max ? sys.parts(bounds.max).y : Math.max(y, nowY) + 20;
     for (var yy = y1; yy >= y0; yy--) {
-      var oy = el('option', '', yearName.format(day(yy, 6, 1)));
+      var oy = el('option', '', yearName.format(sys.fromParts(yy, 0, 1)));
       oy.value = String(yy);
       if (yy === y) oy.selected = true;
       years.appendChild(oy);
@@ -1480,10 +1586,10 @@
     grid.appendChild(thead);
 
     var tbody = el('tbody');
-    var first = day(y, m, 1);
+    var first = sys.fromParts(y, m, 1);
     var cell = addDays(first, -((first.getDay() - fd + 7) % 7));
-    var dayNum = dateFormat(locale, { day: 'numeric' });
-    var full = dateFormat(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    var dayNum = sysFormat(sys, locale, { day: 'numeric' });
+    var full = sysFormat(sys, locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     for (var r = 0; r < 6; r++) {
       var tr = el('tr');
       for (var k = 0; k < 7; k++) {
@@ -1493,7 +1599,7 @@
         btn.setAttribute('data-date', isoOf(cell));
         btn.setAttribute('aria-label', full.format(cell));
         btn.tabIndex = sameDay(cell, calFocus) ? 0 : -1;
-        if (cell.getMonth() !== m) btn.classList.add('is-outside');
+        if (!sameMonthIn(sys, cell, first)) btn.classList.add('is-outside');
         if (sameDay(cell, now)) btn.setAttribute('aria-current', 'date');
         if (sameDay(cell, selected)) btn.setAttribute('aria-selected', 'true');
         if ((bounds.min && cell < bounds.min) || (bounds.max && cell > bounds.max)) btn.setAttribute('aria-disabled', 'true');
@@ -1518,6 +1624,26 @@
     var todayBtn = el('button', 'ins-btn ins-btn--bare ins-btn--sm', t.today);
     todayBtn.type = 'button'; todayBtn.setAttribute('data-ins-cal', 'today');
     foot.appendChild(todayBtn);
+    /* A field in another calendar can be flipped to Gregorian and back, for the
+       person who thinks in the other one. Only then: a Gregorian field has nothing
+       to switch to. The field's text follows the calendar on screen. */
+    var home = homeCalendar(input);
+    if (home !== GREGORY) {
+      var lang = langOf(input).slice(0, 2).toLowerCase();
+      var sw = el('div', 'ins-seg ins-cal-switch');
+      sw.setAttribute('role', 'group');
+      sw.setAttribute('aria-label', t.calendarSystem);
+      var pair = [[homeCalendarName(input), home], ['gregory', GREGORY]];
+      for (var s = 0; s < 2; s++) {
+        var opt = el('button', sys === pair[s][1] ? 'is-active' : '', pair[s][1].label[lang] || pair[s][1].label.en);
+        opt.type = 'button';
+        opt.setAttribute('data-ins-cal', 'system');
+        opt.setAttribute('data-value', pair[s][0]);
+        opt.setAttribute('aria-pressed', String(sys === pair[s][1]));
+        sw.appendChild(opt);
+      }
+      foot.appendChild(sw);
+    }
     if (!input.required) {
       var clear = el('button', 'ins-btn ins-btn--bare ins-btn--sm', t.clear);
       clear.type = 'button'; clear.setAttribute('data-ins-cal', 'clear');
@@ -1557,7 +1683,7 @@
     if (b.min && start < b.min) start = b.min;
     if (b.max && start > b.max) start = b.max;
     calFocus = start;
-    calView = day(start.getFullYear(), start.getMonth(), 1);
+    calView = monthStartIn(viewCalendar(input), start);
     renderCal();
     if (hasPopover) {
       try { if (!calEl.matches(':popover-open')) calEl.showPopover(); } catch (e) { /* not connected */ }
@@ -1588,8 +1714,9 @@
 
   function calMove(d) {
     calFocus = d;
-    if (d.getMonth() !== calView.getMonth() || d.getFullYear() !== calView.getFullYear()) {
-      calView = day(d.getFullYear(), d.getMonth(), 1);
+    var sys = viewCalendar(calFor);
+    if (!sameMonthIn(sys, d, calView)) {
+      calView = monthStartIn(sys, d);
       renderCal();
     } else {
       var btns = calEl.querySelectorAll('.ins-cal-day');
@@ -1625,8 +1752,8 @@
       case 'ArrowUp': next = addDays(d, -7); break;
       case 'Home': next = addDays(d, -((d.getDay() - weekStart(dateLocale(calFor)) + 7) % 7)); break;
       case 'End': next = addDays(d, 6 - ((d.getDay() - weekStart(dateLocale(calFor)) + 7) % 7)); break;
-      case 'PageUp': next = addMonths(d, event.shiftKey ? -12 : -1); break;
-      case 'PageDown': next = addMonths(d, event.shiftKey ? 12 : 1); break;
+      case 'PageUp': next = addMonthsIn(viewCalendar(calFor), d, event.shiftKey ? -12 : -1); break;
+      case 'PageDown': next = addMonthsIn(viewCalendar(calFor), d, event.shiftKey ? 12 : 1); break;
       default: return;
     }
     event.preventDefault();
@@ -1643,11 +1770,28 @@
     }
     var act = t.getAttribute('data-ins-cal');
     if (act === 'prev' || act === 'next') {
-      calFocus = addMonths(calFocus, act === 'prev' ? -1 : 1);
-      calView = day(calFocus.getFullYear(), calFocus.getMonth(), 1);
+      var sys = viewCalendar(calFor);
+      calFocus = addMonthsIn(sys, calFocus, act === 'prev' ? -1 : 1);
+      calView = monthStartIn(sys, calFocus);
       renderCal();
       var again = calEl.querySelector('[data-ins-cal="' + act + '"]');
       if (again) again.focus();
+    } else if (act === 'system') {
+      /* Stopped here: the switch is drawn as a segmented control, and the page's
+         own segmented-control handler has nothing to do with it. */
+      event.stopPropagation();
+      var input = calFor, want = t.getAttribute('data-value');
+      if (want === 'gregory') input.setAttribute('data-ins-calendar-view', 'gregory');
+      else input.removeAttribute('data-ins-calendar-view');
+      calView = monthStartIn(viewCalendar(input), calFocus);
+      renderCal();
+      /* The field says the same day in the calendar now on screen, and so do its
+         min and max messages. */
+      var chosen = dateOf(input);
+      if (chosen) { input.value = formatDay(input, chosen); checkDate(input, chosen); }
+      emit('ins:calendar', { input: input, calendar: want });
+      var back = calEl.querySelector('[data-ins-cal="system"][data-value="' + want + '"]');
+      if (back) back.focus();
     } else if (act === 'today') {
       var now = today(), b = dateBounds(calFor);
       if ((!b.min || now >= b.min) && (!b.max || now <= b.max)) calChoose(now);
@@ -1661,11 +1805,11 @@
   function onCalChange(event) {
     var sel = event.target, act = sel.getAttribute('data-ins-cal');
     if (act !== 'month' && act !== 'year') return;
-    var y = act === 'year' ? +sel.value : calView.getFullYear();
-    var m = act === 'month' ? +sel.value : calView.getMonth();
-    var last = day(y, m + 1, 0).getDate();
-    calFocus = day(y, m, Math.min(calFocus.getDate(), last));
-    calView = day(y, m, 1);
+    var sys = viewCalendar(calFor), vp = sys.parts(calView);
+    var y = act === 'year' ? +sel.value : vp.y;
+    var m = act === 'month' ? +sel.value : vp.m;
+    calFocus = sys.fromParts(y, m, Math.min(sys.parts(calFocus).d, sys.monthLength(y, m)));
+    calView = sys.fromParts(y, m, 1);
     renderCal();
     var again = calEl.querySelector('[data-ins-cal="' + act + '"]');
     if (again) again.focus();
@@ -2590,6 +2734,7 @@
     tab: function (target) { return selectTab(target, false); },
     navbar: navbar,
     confirm: confirmDialog,
+    calendar: registerCalendar,
     wizard: function (target, step) {
       var w = resolve(target);
       if (w && !w.classList.contains('ins-wizard')) w = w.closest('.ins-wizard');
