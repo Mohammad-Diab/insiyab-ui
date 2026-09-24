@@ -1,0 +1,114 @@
+<link rel="stylesheet" href="../dist/plugins/insiyab-otp.css">
+<script src="../dist/plugins/insiyab-otp.js"></script>
+
+<h2 id="install">التثبيت</h2>
+<p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
+<demo-code lang="html">
+<link rel="stylesheet" href="plugins/insiyab-otp.css">
+<script src="insiyab.js"></script>
+<script src="plugins/insiyab-otp.js"></script>
+</demo-code>
+
+<h2 id="field">حقل الرمز</h2>
+<p>
+  حقل واحد عليه <code>data-ins-otp</code> وعدد الخانات. الرمز الصحيح في هذا المثال <code>123456</code>، وأيّ رمز
+  آخر يُرفض كما يرفضه خادم:
+</p>
+<demo-example class="narrow">
+  <form class="ins-stack" id="otp-demo-form">
+    <div class="ins-field">
+      <label class="ins-label" for="otp-demo">رمز التحقق</label>
+      <input id="otp-demo" data-ins-otp="6" name="code" required>
+      <div class="ins-hint" id="otp-demo-hint">أرسلنا رمزًا من ستّة أرقام إلى <span class="ins-num" dir="ltr">050 ••• ••67</span>.</div>
+    </div>
+    <button class="ins-btn ins-btn--primary" type="submit">تحقّق</button>
+  </form>
+</demo-example>
+<p>
+  <b>يبقى حقلًا واحدًا.</b> المربّعات مرسومة فوق حقل حقيقيّ واحد، فاقتراح الهاتف للرمز من الرسائل، ولصق الرمز
+  كاملًا، ومدير كلمات المرور، وقارئ الشاشة — كلّها تلقى حقلًا نصّيًا عاديًا، وهو ما بُنيت له. ستّة حقول منفصلة
+  كانت ستكسر واحدًا منها على الأقلّ. وبلا سكربت هو ذلك الحقل نفسه.
+</p>
+
+<h2 id="typing">الكتابة</h2>
+<ul>
+  <li><b>في الخانة التالية دائمًا</b> — النقر على أيّ مربّع يضع المؤشّر بعد آخر رقم، و<kbd>Backspace</kbd> يحذف الأخير.</li>
+  <li><b>الأرقام العربية</b> — <code>١٢٣٤٥٦</code> تُقرأ <code>123456</code>.</li>
+  <li><b>اللصق</b> — يبقى الرمز وحده: «رمزك هو ١٢٣ ٤٥٦ صالح لخمس دقائق» تملأ <code>123456</code>.</li>
+  <li><b>ناقص</b> — الحقل غير صالح برسالة «أدخل الرمز كاملًا» حتّى تمتلئ الخانات، والفارغ يتولّاه <code>required</code>.</li>
+</ul>
+
+<h2 id="options">العدد والحروف والإرسال</h2>
+<p>
+  من ٤ إلى ١٠ خانات، و<code>data-ins-otp-chars="alnum"</code> لرمز بحروف لاتينية وأرقام، تُكتب كبيرة.
+  و<code>data-ins-otp-submit</code> يرسل النموذج حين تمتلئ آخر خانة:
+</p>
+<demo-example class="row">
+  <div class="ins-field">
+    <label class="ins-label" for="otp-four">أربعة أرقام</label>
+    <input id="otp-four" data-ins-otp="4">
+  </div>
+  <div class="ins-field">
+    <label class="ins-label" for="otp-alnum">رمز بحروف</label>
+    <input id="otp-alnum" data-ins-otp="6" data-ins-otp-chars="alnum">
+  </div>
+  <form class="ins-field" id="otp-auto-form">
+    <label class="ins-label" for="otp-auto">يُرسل وحده</label>
+    <input id="otp-auto" data-ins-otp="4" data-ins-otp-submit name="code">
+  </form>
+</demo-example>
+
+<h2 id="api">من الشيفرة</h2>
+<demo-code lang="js">
+document.addEventListener('ins:otp', async (e) => {    // اكتمل الرمز
+  const ok = await verify(e.detail.value);
+  if (!ok) {
+    e.detail.input.setAttribute('aria-invalid', 'true');  // المربّعات حمراء، وتعود مع الكتابة
+    Insiyab.otp(e.detail.input, '');                      // وافرغ الحقل لمحاولة جديدة
+  }
+});
+
+Insiyab.otp('#code');              // الرمز المكتوب
+Insiyab.otp('#code', '123456');    // ضبطه بهدوء، دون حدث
+</demo-code>
+
+<h2 id="attributes">السمات</h2>
+<div class="ins-panel site-ref">
+  <div class="ins-panel-body ins-panel-body--flush">
+    <div class="ins-table-wrap">
+      <table class="ins-table">
+        <thead><tr><th>السمة</th><th>ما تفعله</th></tr></thead>
+        <tbody>
+          <tr><td><code>data-ins-otp="6"</code></td><td>يجعل الحقل حقل رمز بهذا العدد من الخانات (٤–١٠). بلا قيمة: <code>maxlength</code>، وإلّا ستّة.</td></tr>
+          <tr><td><code>data-ins-otp-chars="alnum"</code></td><td>حروف وأرقام بدل الأرقام وحدها.</td></tr>
+          <tr><td><code>data-ins-otp-submit</code></td><td>يرسل النموذج حين يكتمل الرمز.</td></tr>
+          <tr><td><code>aria-invalid="true"</code></td><td>رمز رفضه الخادم: المربّعات حمراء حتّى يُكتب من جديد.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<p class="site-note">
+  <b>لقارئ الشاشة</b> حقل نصّيّ واحد باسمه وتلميحه، والمربّعات مخفيّة عنه. وتسمية الحقل عليك: <code>&lt;label&gt;</code>
+  أو <code>aria-label</code>.
+</p>
+
+<script>
+  document.getElementById('otp-demo-form').addEventListener('submit', function (e) { e.preventDefault(); });
+  document.getElementById('otp-auto-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    Insiyab.toast('أُرسل النموذج بالرمز ' + Insiyab.otp('#otp-auto'), 'ok');
+    Insiyab.otp('#otp-auto', '');
+  });
+  document.addEventListener('ins:otp', function (e) {
+    if (e.detail.input.id !== 'otp-demo') return;
+    var hint = document.getElementById('otp-demo-hint');
+    if (e.detail.value === '123456') {
+      hint.textContent = 'الرمز صحيح.';
+      Insiyab.toast('تمّ التحقّق', 'ok');
+    } else {
+      e.detail.input.setAttribute('aria-invalid', 'true');
+      hint.textContent = 'الرمز غير صحيح. جرّب 123456.';
+    }
+  });
+</script>

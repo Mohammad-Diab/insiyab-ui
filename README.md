@@ -33,9 +33,10 @@
 > type and utility layer, the components an application form or dashboard needs
 > (pickers, steps and confirmation included), and a motion layer across all of
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
-> the shell, with every example's markup printed under it. Two plugins so far,
-> the Hijri calendar and the command palette. Still to come: more plugins (file
-> upload, OTP and the like) and the React and Jinja wrappers. See
+> the shell, with every example's markup printed under it. Three plugins so far:
+> the Hijri calendar, the command palette and the one-time code. Still to come:
+> more plugins (phone input, file upload, tree and the like) and the React and
+> Jinja wrappers. See
 > [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
@@ -583,6 +584,38 @@ labelled groups. Focus stays in the field while the arrow keys move
 `aria-activedescendant`, and the number of results is announced as the person
 types.
 
+### One-time code
+
+```html
+<link rel="stylesheet" href="plugins/insiyab-otp.css">
+<script src="plugins/insiyab-otp.js"></script>
+
+<input data-ins-otp="6" name="code" aria-label="رمز التحقق" required>
+```
+
+The verification-code field, drawn as one box per digit. **It stays one input**:
+the boxes are drawn over a single real field. The phone's "code from Messages"
+suggestion (`autocomplete="one-time-code"`), a paste of the whole code, a password
+manager and a screen reader all see one ordinary text field. Without the script,
+that plain field is all there is.
+
+Typing always goes at the end, and Backspace takes the last character off.
+Arabic-Indic digits are read as Latin ones, and a paste keeps only the code, so
+«رمزك هو ١٢٣ ٤٥٦» fills 123456. An incomplete code is invalid, with a message.
+
+- `data-ins-otp="6"`: the number of boxes, 4 to 10. Without a value, the field's
+  `maxlength` is used, or 6.
+- `data-ins-otp-chars="alnum"`: letters too, upper-cased.
+- `data-ins-otp-submit`: submits the form when the last box fills.
+- `aria-invalid="true"` after the server turns a code down: the boxes turn red,
+  and the mark comes off by itself as the code is typed again.
+
+```js
+document.addEventListener('ins:otp', (e) => verify(e.detail.value));   // the code is complete
+Insiyab.otp('#code');           // read it
+Insiyab.otp('#code', '');       // clear it, quietly
+```
+
 ## Development
 
 Node 18+ for the build; nothing else, and no dependencies at all.
@@ -633,7 +666,7 @@ node test/run.mjs sidebar dark    # only the files whose names contain a word
 node test/run.mjs --verbose       # every check, not only failures
 ```
 
-About 340 checks in fourteen files, each driving a real headless Chrome with real
+About 375 checks in fifteen files, each driving a real headless Chrome with real
 key and pointer events, on a throwaway profile, against a server the runner
 starts on a free port. Needs Chrome, found in the usual places or through
 `CHROME`, and no npm packages: the driver is a small DevTools-protocol client in
