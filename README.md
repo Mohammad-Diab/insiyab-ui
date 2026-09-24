@@ -524,6 +524,26 @@ build script is not. The build also:
   property invalidates its whole declaration silently, which is how three
   shadows in the original sheet were dead for months.
 
+### Tests
+
+```sh
+node test/run.mjs                 # build, then every test/*.test.mjs
+node test/run.mjs sidebar dark    # only the files whose names contain a word
+node test/run.mjs --verbose       # every check, not only failures
+```
+
+About 230 checks in twelve files, each driving a real headless Chrome with real
+key and pointer events, on a throwaway profile, against a server the runner
+starts on a free port. Needs Chrome, found in the usual places or through
+`CHROME`, and no npm packages: the driver is a small DevTools-protocol client in
+`test/lib/`.
+
+Component behaviour is tested on `test/fixtures/`, which exists only for the
+tests, so the docs can change their examples without breaking them. The
+shell-level behaviour is tested on the docs site, because it needs a real
+multi-page shell: the theme sweep, the sidebar marker and its scroll, and OS dark
+mode compared element by element with an explicit dark choice.
+
 ## Licence
 
 MIT for the code — see [LICENSE](LICENSE). The bundled fonts are SIL Open Font

@@ -1,0 +1,311 @@
+<!doctype html>
+<!--
+  Fixtures for core-interactions.test.mjs and pickers-wizard-confirm.test.mjs.
+
+  Not documentation: the docs site can change its examples freely, and these must
+  not change unless a test does. Every id, label and order here is something a
+  test relies on — the second button group is the three-button one, the
+  validation form comes before the wizard, the action menu has a disabled item
+  between "تكرار" and "حذف". Change one and run the tests.
+-->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab test fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <script src="../../dist/insiyab.js"></script>
+</head>
+<body>
+
+<header class="ins-topbar">
+  <div class="ins-zone ins-zone--start"></div>
+  <div class="ins-zone ins-zone--center">
+    <div class="ins-island ins-island--title"><span class="ins-shell-head"><h1 class="ins-shell-title">اختبارات</h1></span></div>
+  </div>
+  <div class="ins-zone ins-zone--end">
+    <button class="ins-island ins-island--icon" data-ins-theme-toggle aria-label="تبديل الوضع" data-ins-tip data-ins-tip-side="bottom">◐</button>
+  </div>
+</header>
+
+<main class="ins-container ins-stack" style="padding-block: 1rem 70rem">
+
+  <!-- ============================================================ tabs -->
+  <section>
+    <div class="ins-tablist" aria-label="الإعدادات">
+      <button class="ins-tab" data-ins-tab="#tab-general">عام</button>
+      <button class="ins-tab" data-ins-tab="#tab-security">الأمان</button>
+      <button class="ins-tab" data-ins-tab="#tab-notify">الإشعارات</button>
+      <a class="ins-tab" href="#brand">الهوية</a>
+    </div>
+    <div class="ins-tabpanel" id="tab-general"><div class="ins-panel"><div class="ins-panel-body">عام</div></div></div>
+    <div class="ins-tabpanel" id="tab-security"><div class="ins-panel"><div class="ins-panel-body">الأمان</div></div></div>
+    <div class="ins-tabpanel" id="tab-notify"><div class="ins-panel"><div class="ins-panel-body">الإشعارات</div></div></div>
+
+    <div class="ins-seg">
+      <button data-ins-tab="#seg-day">اليوم</button>
+      <button data-ins-tab="#seg-week">الأسبوع</button>
+      <button data-ins-tab="#seg-month">الشهر</button>
+    </div>
+    <div class="ins-tabpanel" id="seg-day">عمليات اليوم</div>
+    <div class="ins-tabpanel" id="seg-week">عمليات الأسبوع</div>
+    <div class="ins-tabpanel" id="seg-month">عمليات الشهر</div>
+  </section>
+
+  <!-- ============================================================ menus, tooltip -->
+  <section class="ins-row">
+    <details class="ins-pop ins-pop--start" id="menu-actions">
+      <summary class="ins-btn ins-btn--secondary">إجراءات</summary>
+      <div class="ins-pop-body">
+        <div class="ins-pop-label">المنتج</div>
+        <button class="ins-pop-item">تعديل <kbd class="ins-kbd">E</kbd></button>
+        <button class="ins-pop-item">تكرار</button>
+        <button class="ins-pop-item" disabled>نقل إلى متجر آخر</button>
+        <hr class="ins-pop-sep">
+        <button class="ins-pop-item ins-pop-item--bad">حذف</button>
+      </div>
+    </details>
+
+    <details class="ins-pop ins-pop--start" id="menu-columns">
+      <summary class="ins-btn ins-btn--secondary">الأعمدة</summary>
+      <div class="ins-pop-body">
+        <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="true">العميل</button>
+        <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="true">المبلغ</button>
+        <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="false">طريقة الدفع</button>
+        <hr class="ins-pop-sep">
+        <div role="group">
+          <button class="ins-pop-item" role="menuitemradio" aria-checked="true">الأحدث أوّلًا</button>
+          <button class="ins-pop-item" role="menuitemradio" aria-checked="false">الأعلى مبلغًا</button>
+        </div>
+      </div>
+    </details>
+
+    <button class="ins-btn ins-btn--ghost-danger ins-btn--icon" aria-label="حذف" data-ins-tip="حذف نهائي — لا يمكن التراجع">✕</button>
+  </section>
+
+  <!-- ============================================================ overlays -->
+  <section class="ins-row">
+    <button class="ins-btn ins-btn--secondary" data-ins-dialog="#drawer-start">درج من البداية</button>
+    <button class="ins-btn ins-btn--secondary" data-ins-dialog="#drawer-end">درج من النهاية</button>
+    <button class="ins-btn ins-btn--secondary" data-ins-dialog="#demo-confirm">حوار</button>
+  </section>
+
+  <dialog class="ins-drawer" id="drawer-start">
+    <div class="ins-dialog-head"><h3 class="ins-dialog-title">تصفية</h3><button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button></div>
+    <div class="ins-dialog-body">محتوى الدرج</div>
+  </dialog>
+  <dialog class="ins-drawer ins-drawer--end" id="drawer-end">
+    <div class="ins-dialog-head"><h3 class="ins-dialog-title">الإشعارات</h3><button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button></div>
+    <div class="ins-dialog-body">محتوى الدرج</div>
+  </dialog>
+  <dialog class="ins-dialog ins-dialog--sm" id="demo-confirm">
+    <div class="ins-dialog-head"><h3 class="ins-dialog-title">تأكيد</h3></div>
+    <div class="ins-dialog-body">هل أنت متأكّد؟</div>
+    <div class="ins-dialog-foot">
+      <button class="ins-btn ins-btn--bare" data-ins-dismiss>إلغاء</button>
+      <button class="ins-btn ins-btn--primary" data-ins-dialog-close>تأكيد</button>
+    </div>
+  </dialog>
+
+  <div class="ins-alert ins-alert--info" id="dismiss-me">
+    <span class="ins-alert-ico">i</span>
+    <div class="ins-alert-msg">
+      <span class="ins-alert-text">تنبيه يمكن إغلاقه.</span>
+      <button class="ins-close ins-close--sm ins-close--bare" data-ins-dismiss aria-label="إغلاق التنبيه"></button>
+    </div>
+  </div>
+
+  <!-- ============================================================ validation (before the wizard) -->
+  <form class="ins-panel" data-ins-validate id="v-form">
+    <div class="ins-panel-body ins-stack">
+      <div class="ins-field">
+        <label class="ins-label" for="v-email">البريد الإلكتروني</label>
+        <input class="ins-input" id="v-email" type="email" required dir="ltr">
+        <p class="ins-error"></p>
+      </div>
+      <div class="ins-field">
+        <label class="ins-label" for="v-pass">كلمة المرور</label>
+        <div class="ins-input-group">
+          <input class="ins-input" id="v-pass" type="password" required minlength="8">
+          <button class="ins-password-toggle" data-ins-password aria-label="إظهار كلمة المرور"></button>
+        </div>
+        <span class="ins-hint">ثمانية أحرف على الأقل.</span>
+        <p class="ins-error">كلمة المرور قصيرة — ثمانية أحرف على الأقل.</p>
+      </div>
+      <div class="ins-form-commit"><button class="ins-btn ins-btn--primary">إنشاء الحساب</button></div>
+    </div>
+  </form>
+
+  <div class="ins-cols-2">
+    <div class="ins-field">
+      <label class="ins-label" for="g-code">رمز الخصم</label>
+      <div class="ins-input-group">
+        <input class="ins-input" id="g-code" value="SUMMER24" dir="ltr">
+        <button class="ins-btn ins-btn--secondary">تطبيق</button>
+      </div>
+      <p class="ins-error">انتهت صلاحية هذا الرمز.</p>
+    </div>
+    <div class="ins-field">
+      <label class="ins-label" for="g-user">اسم المستخدم</label>
+      <input class="ins-input" id="g-user" value="huda.m" dir="ltr">
+      <p class="ins-success">الاسم متاح.</p>
+    </div>
+  </div>
+
+  <!-- ============================================================ navbar -->
+  <header class="ins-navbar ins-navbar--static">
+    <a class="ins-navbar-brand" href="#brand">الورّاق</a>
+    <button class="ins-navbar-toggle" data-ins-navbar aria-label="القائمة"></button>
+    <nav class="ins-navbar-menu" aria-label="الموقع">
+      <a class="ins-navbar-link" href="#brand" aria-current="page">الرئيسية</a>
+      <a class="ins-navbar-link" href="#brand">الكتب</a>
+      <div class="ins-navbar-end"><button class="ins-btn ins-btn--primary ins-btn--sm">إنشاء حساب</button></div>
+    </nav>
+  </header>
+
+  <section id="brand"><h2>الهوية</h2></section>
+
+  <!-- ============================================================ toggles and groups -->
+  <section class="ins-row">
+    <div class="ins-btn-group" role="group" aria-label="تنسيق">
+      <button class="ins-btn ins-btn--secondary ins-btn--icon" data-ins-toggle aria-pressed="true" aria-label="عريض"><b>B</b></button>
+      <button class="ins-btn ins-btn--secondary ins-btn--icon" data-ins-toggle aria-label="مائل"><i>I</i></button>
+      <button class="ins-btn ins-btn--secondary ins-btn--icon" data-ins-toggle aria-label="تسطير"><u>U</u></button>
+    </div>
+    <div class="ins-btn-group">
+      <button class="ins-btn ins-btn--secondary">اليوم</button>
+      <button class="ins-btn ins-btn--secondary">الأسبوع</button>
+      <button class="ins-btn ins-btn--secondary">الشهر</button>
+    </div>
+    <button class="ins-btn ins-btn--ghost-danger" id="confirm-attr" data-ins-confirm="حذف العملية؟ لا يمكن التراجع.">حذف مع تأكيد</button>
+    <button class="ins-btn ins-btn--secondary" id="confirm-api">Insiyab.confirm()</button>
+  </section>
+
+  <!-- ============================================================ pickers -->
+  <div class="ins-cols-2">
+    <div class="ins-panel">
+      <div class="ins-panel-body ins-stack">
+        <div class="ins-field">
+          <label class="ins-label" for="p-city">المدينة</label>
+          <div class="ins-combo" id="combo-city">
+            <input class="ins-input" id="p-city">
+            <input type="hidden" name="city">
+            <ul class="ins-combo-list">
+              <li class="ins-combo-option" data-value="dam">دمشق</li>
+              <li class="ins-combo-option" data-value="alp">حلب</li>
+              <li class="ins-combo-option" data-value="hom">حِمْص</li>
+              <li class="ins-combo-option" data-value="lat">اللاذقيّة</li>
+              <li class="ins-combo-option" data-value="tar">طرطوس</li>
+              <li class="ins-combo-option" data-value="ham">حماة</li>
+              <li class="ins-combo-option" data-value="idl">إدلب</li>
+              <li class="ins-combo-option" data-value="bei">Beyrouth · بيروت</li>
+              <li class="ins-combo-empty">لا توجد مدينة بهذا الاسم</li>
+            </ul>
+          </div>
+        </div>
+        <div class="ins-field">
+          <label class="ins-label" for="p-date">تاريخ الإصدار</label>
+          <div class="ins-input-group">
+            <input class="ins-input" id="p-date" type="date" data-ins-date name="issued" value="2026-09-23">
+          </div>
+        </div>
+        <div class="ins-field-row">
+          <div class="ins-field ins-grow">
+            <label class="ins-label" for="p-from">من</label>
+            <div class="ins-input-group">
+              <input class="ins-input" id="p-from" type="date" data-ins-date data-ins-date-end="#p-to" name="from" value="2026-09-08">
+            </div>
+          </div>
+          <div class="ins-field ins-grow">
+            <label class="ins-label" for="p-to">إلى</label>
+            <div class="ins-input-group">
+              <input class="ins-input" id="p-to" type="date" data-ins-date data-ins-date-start="#p-from" name="to" value="2026-09-19" max="2026-12-31">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ins-panel">
+      <div class="ins-panel-body ins-stack">
+        <div class="ins-field">
+          <label class="ins-label" for="p-vol">نسبة الخصم · <output id="p-vol-out" class="ins-num">30</output>٪</label>
+          <input class="ins-range" id="p-vol" type="range" min="0" max="100" value="30">
+        </div>
+        <div class="ins-field">
+          <label class="ins-label" for="p-qty">الكمّية</label>
+          <div class="ins-input-group" style="max-inline-size:11rem">
+            <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>
+            <input class="ins-input" id="p-qty" type="number" min="1" max="10" value="1">
+            <button class="ins-spin" data-ins-spin="up" aria-label="زيادة"></button>
+          </div>
+        </div>
+        <label class="ins-check"><input type="checkbox" id="p-all" data-ins-indeterminate><span class="ins-check-text">تحديد الكلّ</span></label>
+        <div class="ins-tile-grid" role="radiogroup" aria-label="الخطّة">
+          <label class="ins-tile"><input type="radio" name="plan" value="basic"><span class="ins-tile-title">أساسي</span><span class="ins-tile-desc">مستخدم واحد</span></label>
+          <label class="ins-tile"><input type="radio" name="plan" value="pro" checked><span class="ins-tile-title">احترافي</span><span class="ins-tile-desc">حتى عشرة مستخدمين</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ wizard -->
+  <form class="ins-panel ins-wizard" id="demo-wizard" data-ins-validate>
+    <div class="ins-panel-body">
+      <ol class="ins-steps">
+        <li class="ins-steps-item"><span class="ins-steps-label">البيانات</span></li>
+        <li class="ins-steps-item"><span class="ins-steps-label">الخطّة</span></li>
+        <li class="ins-steps-item"><span class="ins-steps-label">التأكيد</span></li>
+      </ol>
+      <section class="ins-wizard-panel ins-stack" aria-label="البيانات">
+        <div class="ins-field">
+          <label class="ins-label" for="w-name">الاسم الكامل</label>
+          <input class="ins-input" id="w-name" required>
+          <p class="ins-error"></p>
+        </div>
+        <div class="ins-field">
+          <label class="ins-label" for="w-mail">البريد الإلكتروني</label>
+          <input class="ins-input" id="w-mail" type="email" required dir="ltr">
+          <p class="ins-error"></p>
+        </div>
+      </section>
+      <section class="ins-wizard-panel ins-stack" aria-label="الخطّة">
+        <div class="ins-tile-grid">
+          <label class="ins-tile"><input type="radio" name="w-plan" value="basic" required><span class="ins-tile-title">أساسي</span><span class="ins-tile-desc">مجاني</span></label>
+          <label class="ins-tile"><input type="radio" name="w-plan" value="pro"><span class="ins-tile-title">احترافي</span><span class="ins-tile-desc">شهري</span></label>
+        </div>
+      </section>
+      <section class="ins-wizard-panel" aria-label="التأكيد">
+        <label class="ins-check"><input type="checkbox" id="w-terms" required><span class="ins-check-text">أوافق على الشروط</span></label>
+      </section>
+      <div class="ins-wizard-foot">
+        <button type="button" class="ins-btn ins-btn--secondary" data-ins-wizard="prev">السابق</button>
+        <button type="button" class="ins-btn ins-btn--primary" data-ins-wizard="next">التالي</button>
+        <button class="ins-btn ins-btn--primary ins-wizard-finish">إنشاء الحساب</button>
+      </div>
+    </div>
+  </form>
+
+</main>
+
+<script>
+  /* What the page itself does with the components — the reactions the tests wait
+     for. A confirmed click reaching its own handler, a wizard's final submit
+     reaching the page. */
+  document.getElementById('confirm-attr').addEventListener('click', function () {
+    Insiyab.toast('حُذفت العملية', 'ok');
+  });
+  document.getElementById('p-vol').addEventListener('input', function () {
+    document.getElementById('p-vol-out').value = this.value;
+  });
+  document.getElementById('demo-wizard').addEventListener('submit', function (e) {
+    e.preventDefault();
+    Insiyab.toast('تمّ إنشاء الحساب', 'ok');
+  });
+  document.getElementById('v-form').addEventListener('submit', function (e) { e.preventDefault(); });
+  document.getElementById('confirm-api').addEventListener('click', function () {
+    Insiyab.confirm('أرشفة ٣ عمليات؟', { title: 'تأكيد الأرشفة', confirm: 'أرشفة' });
+  });
+</script>
+</body>
+</html>
