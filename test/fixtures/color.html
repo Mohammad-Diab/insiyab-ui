@@ -1,0 +1,29 @@
+<!doctype html>
+<!-- Fixtures for color-picker.test.mjs. #9b2c5e is the brand colour; #0f766e is
+     a teal that clears 4.5:1 on white and not on black. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab colour fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <link rel="stylesheet" href="../../dist/plugins/insiyab-color.css">
+  <script src="../../dist/insiyab.js"></script>
+  <script src="../../dist/plugins/insiyab-color.js"></script>
+</head>
+<body>
+<main class="ins-container ins-stack" style="padding-block: 2rem 30rem; max-inline-size: 30rem">
+  <form id="cf" onsubmit="event.preventDefault()">
+    <div class="ins-field">
+      <label class="ins-label" for="c-brand">لون الهوية</label>
+      <div class="ins-input-group"><input type="color" id="c-brand" name="brand" value="#9b2c5e" data-ins-color></div>
+    </div>
+    <div class="ins-field">
+      <label class="ins-label" for="c-bare">بلا مجموعة</label>
+      <input type="color" id="c-bare" name="bare" value="#0F766E" data-ins-color data-ins-color-swatches="#ff0000,#00ff00,#zzz,#ff0000">
+    </div>
+  </form>
+  <div lang="en" dir="ltr"><input type="color" id="c-en" value="#000000" data-ins-color data-ins-color-swatches="none" aria-label="English"></div>
+</main>
+</body>
+</html>

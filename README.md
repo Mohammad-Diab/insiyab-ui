@@ -35,8 +35,8 @@
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
 > the shell, with every example's markup printed under it. The plugins so far:
 > the Hijri calendar, the command palette, the one-time code, the phone number,
-> file upload, scrollspy, the timeline and the tree. Still to come: the colour picker
-> and carousel plugins, and the React and Jinja wrappers. See
+> file upload, scrollspy, the timeline, the tree and the colour picker. Still to
+> come: the carousel plugin, and the React and Jinja wrappers. See
 > [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
@@ -815,6 +815,34 @@ Insiyab.tree('#files', 'open');       // every branch; or 'close'
 Insiyab.tree('#files');               // the selected item, or the ticked ones
 ```
 
+### Colour picker
+
+```html
+<link rel="stylesheet" href="plugins/insiyab-color.css">
+<script src="plugins/insiyab-color.js"></script>
+
+<input type="color" data-ins-color name="brand" value="#9b2c5e">
+```
+
+A colour field that tells you whether the colour can carry text. The field becomes
+a hex field with a swatch in front of it, in an input group. It keeps its name and
+sends `#rrggbb`, exactly what the browser's own colour input sends. The swatch
+opens the picker:
+
+- a square for saturation and brightness, which you can drag, or use with the
+  arrow keys (Shift for steps of ten)
+- a hue slider
+- preset swatches: the page's brand colour and a palette around it, or your own
+  list in `data-ins-color-swatches`, or none with `none`
+- the eyedropper, where the browser has one
+- the colour's **contrast** against white and against black, from the core's
+  `Insiyab.color.contrast`, marked against the 4.5:1 that body text needs
+
+A hex can also be typed as `#abc`, `abc` or `aabbcc`, and is written out in full
+when the field is left. `input` fires while the colour moves, and `change` and
+`ins:color` fire when it's set. `Insiyab.colorField(field, value?)` reads or sets
+it; `Insiyab.color` stays the core's colour maths.
+
 ## Development
 
 Node 18+ for the build; nothing else, and no dependencies at all.
@@ -865,7 +893,7 @@ node test/run.mjs sidebar dark    # only the files whose names contain a word
 node test/run.mjs --verbose       # every check, not only failures
 ```
 
-About 570 checks in twenty files, each driving a real headless Chrome with real
+About 600 checks in twenty-one files, each driving a real headless Chrome with real
 key and pointer events, on a throwaway profile, against a server the runner
 starts on a free port. Needs Chrome, found in the usual places or through
 `CHROME`, and no npm packages: the driver is a small DevTools-protocol client in
