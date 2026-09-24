@@ -1,0 +1,71 @@
+<link rel="stylesheet" href="../dist/plugins/insiyab-color.css">
+<script src="../dist/plugins/insiyab-color.js"></script>
+
+<h2 id="install">التثبيت</h2>
+<p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
+<demo-code lang="html">
+<link rel="stylesheet" href="plugins/insiyab-color.css">
+<script src="insiyab.js"></script>
+<script src="plugins/insiyab-color.js"></script>
+</demo-code>
+
+<h2 id="field">حقل اللون</h2>
+<p>
+  حقل اللون الأصليّ عليه <code>data-ins-color</code>. يصير حقل رمز سداسيّ وأمامه عيّنة، في مجموعة حقل. يبقى
+  اسمه ويرسل <code>#rrggbb</code> كما يرسله حقل المتصفّح نفسه، فلا يحتاج الخادم شيئًا جديدًا. والعيّنة تفتح
+  المنتقي:
+</p>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="cp-brand">لون الهوية</label>
+    <div class="ins-input-group">
+      <input type="color" id="cp-brand" name="brand" value="#9b2c5e" data-ins-color>
+    </div>
+    <div class="ins-hint">جرّب لونًا فاتحًا وانظر التباين في أسفل المنتقي.</div>
+  </div>
+</demo-example>
+
+<h2 id="contrast">التباين</h2>
+<p>
+  في أسفل المنتقي اللون نصًّا على الأبيض وعلى الأسود، ونسبة التباين من حساب المكتبة نفسه
+  (<code>Insiyab.color.contrast</code>)، وهل يبلغ 4.5:1 الذي يحتاجه نصّ الفقرات. فمن يختار لون الهوية يعرف قبل أن
+  يحفظ هل يصلح لزرّ أو لرابط.
+</p>
+
+<h2 id="picker">المنتقي</h2>
+<ul>
+  <li><b>المربّع</b> للتشبّع والسطوع، بالسحب أو بلوحة المفاتيح: <kbd>←</kbd> <kbd>→</kbd> للتشبّع و<kbd>↑</kbd> <kbd>↓</kbd>
+    للسطوع، ومع <kbd>Shift</kbd> بخطوات من عشرة.</li>
+  <li><b>شريط الدرجة</b> — حقل مدى أصليّ، بلوحة المفاتيح كما هو.</li>
+  <li><b>ألوان جاهزة</b> — لون الهوية ولوحة حوله، أو ما يقوله <code>data-ins-color-swatches</code>،
+    و<code>none</code> يخفيها.</li>
+  <li><b>القطّارة</b> تلتقط لونًا من الشاشة، حيث يوفّرها المتصفّح.</li>
+  <li><b>الكتابة</b> — <code>#abc</code> أو <code>abc</code> أو <code>aabbcc</code>، ويُكتب كاملًا عند مغادرة الحقل. وما
+    ليس لونًا يُرفض برسالة.</li>
+</ul>
+<demo-example class="narrow">
+  <div class="ins-field">
+    <label class="ins-label" for="cp-set">لون الحالة</label>
+    <input type="color" id="cp-set" name="status" value="#0f766e" data-ins-color data-ins-color-swatches="#15803d,#a16207,#b91c1c,#0369a1,#475569">
+  </div>
+</demo-example>
+
+<h2 id="api">من الشيفرة</h2>
+<demo-code lang="js">
+document.addEventListener('ins:color', (e) => {
+  Insiyab.brand(e.detail.value);        // لوّن الصفحة كلّها باللون المختار
+});
+
+Insiyab.colorField('#brand');              // اللون
+Insiyab.colorField('#brand', '#0f766e');   // ضبطه بهدوء، دون حدث
+</demo-code>
+<p>
+  <code>input</code> في أثناء حركة اللون، و<code>change</code> و<code>ins:color</code> حين يُضبط. ومع
+  <code>Insiyab.brand()</code> يصير الحقل منتقي هوية حيًّا — جرّب الأوّل أعلاه:
+</p>
+
+<script>
+  document.addEventListener('ins:color', function (e) {
+    if (e.detail.input.id === 'cp-brand') Insiyab.brand(e.detail.value);
+  });
+</script>
