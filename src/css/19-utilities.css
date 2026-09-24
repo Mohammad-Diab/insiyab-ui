@@ -284,6 +284,23 @@
 .ins-clamp-2 { -webkit-line-clamp: 2; line-clamp: 2; }
 .ins-clamp-3 { -webkit-line-clamp: 3; line-clamp: 3; }
 
+/* --------------------------------------------------------------- scroll */
+/* Smooth scrolling, opted into rather than given: `.ins-scroll-smooth` on <html>
+   for the page — an anchor link glides to its target instead of jumping — or on
+   any box that scrolls itself: a table wrap, a dialog body, a long sidebar.
+
+   Not the default, because a glide is only right for some pages. On a long
+   document with a table of contents it tells you which way you went; on a page
+   whose links jump between distant screens, it is a second of motion standing
+   between a person and the thing they asked for.
+
+   `scroll-behavior` belongs to the box that scrolls and is not inherited, so under
+   `data-ins-scrollbar="lead"` — where <body> scrolls instead of the viewport — the
+   class on <html> has to be carried down to it. Reduced motion turns it off in
+   04-reset.css and `data-ins-fx="off"` in 20-a11y.css. */
+.ins-scroll-smooth,
+.ins-scroll-smooth[data-ins-scrollbar="lead"] > body { scroll-behavior: smooth; }
+
 /* --------------------------------------------------------------- visibility */
 /* The `hidden` attribute is the one thing in this file allowed to shout. The UA
    rule behind it is `display: none` at the lowest priority there is, so any

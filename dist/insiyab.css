@@ -1184,6 +1184,16 @@ a:hover { color: var(--ins-tone-brand-soft); }
   background: transparent;
   transition: background var(--ins-t-base) ease, box-shadow var(--ins-t-base) ease;
 }
+/* An anchor lands below the bar, not under it. The bar is sticky, so without this a
+   jump to `#section` puts the section's heading behind the islands — and with
+   `.ins-scroll-smooth` it would glide there and then stop out of sight. The height
+   is the islands plus the bar's own padding. On the scroller: the viewport, or
+   <body> under `data-ins-scrollbar="lead"`. */
+html:has(.ins-topbar),
+html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
+  scroll-padding-block-start: calc(var(--ins-appbar-h) + 1.5rem + .5rem);
+}
+
 /* Stamped by insiyab.js past 8px of scroll. Without the script the bar simply stays
    transparent, which is the correct fallback rather than a broken one: the islands
    carry their own ground. */
@@ -5983,6 +5993,23 @@ html[dir="ltr"] .ins-page-title {
 .ins-clamp-2 { -webkit-line-clamp: 2; line-clamp: 2; }
 .ins-clamp-3 { -webkit-line-clamp: 3; line-clamp: 3; }
 
+/* --------------------------------------------------------------- scroll */
+/* Smooth scrolling, opted into rather than given: `.ins-scroll-smooth` on <html>
+   for the page — an anchor link glides to its target instead of jumping — or on
+   any box that scrolls itself: a table wrap, a dialog body, a long sidebar.
+
+   Not the default, because a glide is only right for some pages. On a long
+   document with a table of contents it tells you which way you went; on a page
+   whose links jump between distant screens, it is a second of motion standing
+   between a person and the thing they asked for.
+
+   `scroll-behavior` belongs to the box that scrolls and is not inherited, so under
+   `data-ins-scrollbar="lead"` — where <body> scrolls instead of the viewport — the
+   class on <html> has to be carried down to it. Reduced motion turns it off in
+   04-reset.css and `data-ins-fx="off"` in 20-a11y.css. */
+.ins-scroll-smooth,
+.ins-scroll-smooth[data-ins-scrollbar="lead"] > body { scroll-behavior: smooth; }
+
 /* --------------------------------------------------------------- visibility */
 /* The `hidden` attribute is the one thing in this file allowed to shout. The UA
    rule behind it is `display: none` at the lowest priority there is, so any
@@ -6137,6 +6164,11 @@ html[dir="ltr"] .ins-page-title {
                          .ins-shell-brand, .ins-pill):hover :is(.ins-stat-ico,
                          .ins-panel-ico, svg, .ins-ico, .ins-shell-mark,
                          .ins-pill-dot, .ins-search-ico) { transform: none; }
+/* Scrolling jumps again. The class may sit on <html> itself, which is also where
+   the switch is, or on a scroller further down. */
+[data-ins-fx="off"].ins-scroll-smooth,
+[data-ins-fx="off"].ins-scroll-smooth > body,
+[data-ins-fx="off"] .ins-scroll-smooth { scroll-behavior: auto; }
 [data-ins-fx="off"] .ins-shell { transition: none; }
 [data-ins-fx="off"] .ins-shell-side { transition: none; }
 /* The slider's thumb grows under the pointer. Its own rules, one per engine, for the

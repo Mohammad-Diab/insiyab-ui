@@ -253,6 +253,16 @@
   background: transparent;
   transition: background var(--ins-t-base) ease, box-shadow var(--ins-t-base) ease;
 }
+/* An anchor lands below the bar, not under it. The bar is sticky, so without this a
+   jump to `#section` puts the section's heading behind the islands — and with
+   `.ins-scroll-smooth` it would glide there and then stop out of sight. The height
+   is the islands plus the bar's own padding. On the scroller: the viewport, or
+   <body> under `data-ins-scrollbar="lead"`. */
+html:has(.ins-topbar),
+html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
+  scroll-padding-block-start: calc(var(--ins-appbar-h) + 1.5rem + .5rem);
+}
+
 /* Stamped by insiyab.js past 8px of scroll. Without the script the bar simply stays
    transparent, which is the correct fallback rather than a broken one: the islands
    carry their own ground. */
