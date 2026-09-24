@@ -45,7 +45,7 @@ Arabic.
 
 ---
 
-## The design language: liquid glass
+## The design language: frosted glass
 
 Four stacked layers, and nothing else:
 

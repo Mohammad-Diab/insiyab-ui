@@ -1,6 +1,6 @@
 {
   "name": "insiyab",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "RTL-first UI library with a frosted-glass design language. One CSS file, one JS file, no build step.",
   "keywords": [
     "css",
@@ -15,6 +15,14 @@
   ],
   "license": "MIT",
   "author": "Mohammad Diab",
+  "homepage": "https://github.com/Mohammad-Diab/insiyab-ui#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mohammad-Diab/insiyab-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Mohammad-Diab/insiyab-ui/issues"
+  },
   "type": "module",
   "main": "dist/insiyab.js",
   "style": "dist/insiyab.css",

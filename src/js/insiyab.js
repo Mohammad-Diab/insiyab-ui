@@ -24,7 +24,10 @@
 (function (window, document) {
   'use strict';
 
-  var VERSION = '0.3.0';
+  /* Stamped by build.mjs from package.json, which is the one place the version is
+     written. It used to be typed here as well, and the two could drift; this file
+     read on its own, unbuilt, reports 'dev'. */
+  var VERSION = 'dev';
   var root = document.documentElement;
 
   var KEY_THEME = 'ins-theme';
