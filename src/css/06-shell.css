@@ -426,7 +426,10 @@
   .ins-island--brand,
   :root.ins-sidebar-collapsed .ins-island--brand { display: none; }
   .ins-topbar { padding: .625rem .75rem; gap: .375rem; grid-template-columns: auto 1fr auto; }
-  .ins-island--title { max-inline-size: none; padding-inline: .875rem; }
+  /* `min-inline-size: 0`, or the island is a flex item that will not shrink below its
+     unwrapped title: the zone narrowed, the island did not, and it slid under the
+     buttons beside it instead of ellipsising. */
+  .ins-island--title { max-inline-size: none; min-inline-size: 0; padding-inline: .875rem; }
   .ins-zone .ins-pill { padding-inline: .75rem; }
 }
 /* The subtitle is explanatory rather than load-bearing, and truncated to a few words

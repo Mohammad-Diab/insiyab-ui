@@ -42,7 +42,7 @@
      the platform hands it over: `display` and `overlay` listed with `allow-discrete`
      keep the element painted and in the top layer for the length of the exit, and
      `@starting-style` supplies the frame before the open. That covers *every* way
-     this closes — the X, a backdrop click, Escape, a `method="dialog"` submit —
+     this closes — the X, a drawer's backdrop click, Escape, a `method="dialog"` submit —
      which a closing class in JavaScript would have had to intercept one at a time,
      and would have missed the one it did not know about.
 
