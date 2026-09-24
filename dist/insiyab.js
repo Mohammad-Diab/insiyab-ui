@@ -2735,6 +2735,9 @@
     navbar: navbar,
     confirm: confirmDialog,
     calendar: registerCalendar,
+    /* Text the way the autocomplete compares it, for a plugin that searches, so a
+       query finds the same things in both. */
+    norm: norm,
     wizard: function (target, step) {
       var w = resolve(target);
       if (w && !w.classList.contains('ins-wizard')) w = w.closest('.ins-wizard');
