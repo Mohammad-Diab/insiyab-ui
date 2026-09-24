@@ -375,13 +375,26 @@ const min = banner + minify(css);
    is part of the two files, so a page pays only for the plugins it loads. */
 const SRC_PLUGINS = 'src/plugins';
 const plugins = [];
+/* A plugin's stylesheet is held to the core's rules: an explicit-dark rule gets its
+   OS-dark twin, and every token it reads must be declared — by the core, which is
+   always loaded under it, or by the plugin itself. */
+const coreTokens = new Set(css.replace(/\/\*[\s\S]*?\*\//g, '').match(/--ins-[a-z0-9-]+(?=\s*:)/g) || []);
 for (const file of (await readdir(SRC_PLUGINS).catch(() => [])).sort()) {
   const ext = file.slice(file.lastIndexOf('.'));
   if (ext !== '.js' && ext !== '.css') continue;
   const base = `insiyab-${file.slice(0, -ext.length)}`;
-  const text = banner + await readFile(join(SRC_PLUGINS, file), 'utf8');
+  let source = await readFile(join(SRC_PLUGINS, file), 'utf8');
+  if (ext === '.css') {
+    source = twinDarkRules(source, file).css;
+    const bare = source.replace(/\/\*[\s\S]*?\*\//g, '');
+    const own = new Set(bare.match(/--ins-[a-z0-9-]+(?=\s*:)/g) || []);
+    const unread = [...new Set((bare.match(/var\(\s*(--ins-[a-z0-9-]+)/g) || []).map((m) => m.replace(/var\(\s*/, '')))]
+      .filter((name) => !coreTokens.has(name) && !own.has(name));
+    if (unread.length) fail(`${SRC_PLUGINS}/${file}: var() reads tokens nothing declares: ${unread.join(', ')}`);
+  }
+  const text = banner + source;
   plugins.push({ name: base + ext, text });
-  if (ext === '.css') plugins.push({ name: `${base}.min.css`, text: banner + minify(text) });
+  if (ext === '.css') plugins.push({ name: `${base}.min.css`, text: banner + minify(source) });
 }
 
 const stats = verify(css);
