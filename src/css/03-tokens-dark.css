@@ -116,4 +116,6 @@
      shots are kept for (ussd/01 against ussd/07). */
   --ins-orb-1: rgba(var(--ins-primary-rgb), .30);
   --ins-orb-2: rgba(var(--ins-accent-rgb), .26);
+  --ins-tip-bg: rgba(241, 245, 249, .96);
+  --ins-tip-fg: #0F172A;
 }

@@ -238,3 +238,116 @@
 .ins-btn--icon .ins-ico { transition: transform var(--ins-t-pop) var(--ins-ease-spring); }
 .ins-btn--icon:hover:not(:disabled) svg,
 .ins-btn--icon:hover:not(:disabled) .ins-ico { transform: scale(1.15); }
+
+/* --------------------------------------------------------------- close */
+/* One close button for everything that closes — a dialog, a drawer, an alert, a
+   navbar menu. The cross is drawn by the two pseudo-elements, so it needs no icon
+   set and no markup inside it: `<button class="ins-close" aria-label="إغلاق">`.
+   Put an icon in it instead and the drawn cross steps aside.
+
+   It is the dialog's `.ins-dialog-x` generalised, and looks the same on purpose:
+   that one predates it and stays for compatibility. The label is not optional — a
+   cross is not a word, and an unlabelled one is announced as "button".
+
+   `data-ins-dismiss` on it closes whatever it sits in; see insiyab.js. */
+.ins-close {
+  --ins-close: var(--ins-ctl-sm-h);
+  position: relative;
+  flex: 0 0 auto;
+  inline-size: var(--ins-close);
+  block-size: var(--ins-close);
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-ctl-bg);
+  color: var(--ins-text-2);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease),
+              color var(--ins-t-pop) var(--ins-ease),
+              transform var(--ins-t-pop) var(--ins-ease-spring);
+}
+.ins-close::before,
+.ins-close::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: 44%;
+  block-size: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transform: rotate(45deg);
+}
+.ins-close::after { transform: rotate(-45deg); }
+.ins-close:has(> *)::before,
+.ins-close:has(> *)::after { content: none; }
+/* It turns: the one control whose meaning is already a rotation. */
+.ins-close:hover { background: var(--ins-ctl-bg-hover); color: var(--ins-text-1); transform: rotate(90deg); }
+.ins-close--sm { --ins-close: 1.5rem; }
+/* No chip, for a cross that sits on a tinted surface of its own — an alert, a
+   toast — where a second fill inside the first reads as a button on a button. */
+.ins-close--bare { background: transparent; color: inherit; opacity: .6; }
+.ins-close--bare:hover { background: transparent; color: inherit; opacity: 1; }
+
+/* --------------------------------------------------------------- toggle */
+/* A button that stays down: bold in a toolbar, a filter that is on, "show
+   archived". The state is `aria-pressed`, which is what a screen reader announces,
+   so the appearance keys on the same attribute and the two cannot disagree;
+   `data-ins-toggle` flips it on a click.
+
+   Pressed reads as *pressed in* — the brand tint and an inset shade — rather than
+   as filled. A filled brand face is what the primary button means, and a row of
+   three pressed toggles would otherwise be three primary buttons. */
+.ins-btn[aria-pressed="true"]:not(.ins-btn--primary),
+.ins-btn[aria-pressed="true"]:not(.ins-btn--primary):hover:not(:disabled) {
+  background: rgba(var(--ins-primary-rgb), .14);
+  border-color: rgba(var(--ins-primary-rgb), .40);
+  color: var(--ins-primary-darker);
+  box-shadow: inset 0 1px 3px rgba(15, 23, 42, .12);
+}
+
+/* --------------------------------------------------------------- group */
+/* Buttons joined into one object — a split button, a pager, a set of alignment
+   toggles. The corners that face a neighbour are squared and the borders overlap
+   by a pixel, so two hairlines never sit side by side; the outer corners keep the
+   14px radius. All logical, so the first button is the rightmost on an Arabic page
+   and still has its round corners on the outside.
+
+   A `<details class="ins-pop">` in a group is a split button's menu half: its
+   summary is the button that takes the corners. For a strip of peers where exactly
+   one is chosen, `.ins-seg` is the better component; this is for actions. */
+.ins-btn-group { display: inline-flex; align-items: stretch; }
+.ins-btn-group > .ins-btn,
+.ins-btn-group > .ins-pop > .ins-btn { border-radius: 0; }
+.ins-btn-group > :first-child,
+.ins-btn-group > .ins-pop:first-child > .ins-btn {
+  border-start-start-radius: var(--ins-r-md);
+  border-end-start-radius: var(--ins-r-md);
+}
+.ins-btn-group > :last-child,
+.ins-btn-group > .ins-pop:last-child > .ins-btn {
+  border-start-end-radius: var(--ins-r-md);
+  border-end-end-radius: var(--ins-r-md);
+}
+.ins-btn-group > * + * { margin-inline-start: -1px; }
+/* The one under the pointer or the focus comes to the front, so its whole border
+   and its ring are drawn over its neighbours' rather than under them. */
+.ins-btn-group > :is(:hover, :focus-visible, :focus-within) { z-index: 2; }
+.ins-btn-group--sm > :first-child,
+.ins-btn-group--sm > .ins-pop:first-child > .ins-btn {
+  border-start-start-radius: var(--ins-r-sm);
+  border-end-start-radius: var(--ins-r-sm);
+}
+.ins-btn-group--sm > :last-child,
+.ins-btn-group--sm > .ins-pop:last-child > .ins-btn {
+  border-start-end-radius: var(--ins-r-sm);
+  border-end-end-radius: var(--ins-r-sm);
+}
+/* A filled button carries no border of its own, so between two of them the seam is
+   a hairline of the fill's own shade instead. */
+.ins-btn-group > .ins-btn--primary + .ins-btn--primary,
+.ins-btn-group > .ins-btn--primary + .ins-pop > .ins-btn--primary {
+  border-inline-start: 1px solid rgba(255, 255, 255, .28);
+}

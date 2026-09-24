@@ -1,0 +1,980 @@
+/* ==========================================================================
+   Insiyab · form controls
+   ==========================================================================
+   Field, input, select, textarea, checkbox, radio, switch, segmented control.
+   All of them share one rule: **a control's fill is darker than its container,
+   never lighter.** A near-white field inside a near-white panel is an invisible
+   control, and that was measured before it was believed — every amount field on
+   one page was an invisible white gap.
+   ========================================================================== */
+
+.ins-field { display: flex; flex-direction: column; gap: .375rem; }
+.ins-label { font-size: .8125rem; font-weight: 700; letter-spacing: .01em; color: var(--ins-label); }
+/* Arabic joins, and tracking of any size works against that. Kept for Latin, where
+   it is what the design does. */
+[dir="rtl"] .ins-label { letter-spacing: 0; }
+.ins-hint { font-size: .6875rem; color: var(--ins-text-3); }
+
+/* **Tops, not bottoms.** `flex-end` aligns a row on its *bottom* edge, so a field
+   carrying a hint sits its label and its input a hint's height above the field
+   beside it — two controls on one line at two different heights, on every form with
+   a hint in a row.
+
+   Tops line up instead: labels are one line, so the controls under them land level
+   and a hint hangs below where it belongs. `flex-start` is also the safe direction —
+   what it can misalign is a label wrapping to two lines, and what `flex-end`
+   misaligned was a hint, which is far commoner. */
+.ins-field-row { display: flex; gap: .5rem; align-items: flex-start; flex-wrap: wrap; }
+
+/* A button standing in a row of fields takes the field height rather than the
+   toolbar height, or a form's submit sits 8px short of the input beside it and the
+   row reads as two rows that happen to overlap. It keeps its bottom edge, because a
+   button has no label above it and aligning its *top* with a labelled field's top
+   would float it a label's height above the input it stands beside.
+
+   **Do not put a hint and a button in the same row.** `flex-end` pins the button to
+   the *tallest* item's bottom, so a row holding one hinted field drops its submit by
+   the hint's height — measured at 25px. Offsetting the button was tried and
+   reverted: right on a shared line, wrong the moment the row wraps and the button is
+   alone with a phantom label's worth of margin. The real fix is that a submit should
+   not be standing in a row of fields at all; give it a line of its own. */
+.ins-field-row > .ins-btn { min-block-size: var(--ins-field-h); align-self: flex-end; }
+
+/* A run of short fields that will not fit one line. A grid, not a wrapping flex row,
+   so the inputs of a row sit level whatever their labels above them did. */
+.ins-field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
+  gap: .75rem .5rem;
+}
+.ins-field-grid > .ins-field { justify-content: flex-end; }
+
+/* A form's commit line. The button is at the start, where a panel's own controls
+   are, rather than pushed to the end: a panel is not a dialog and has no cancel to
+   be kept away from. */
+.ins-form-commit { display: flex; align-items: center; gap: .5rem; margin-block-start: 1rem; }
+
+/* ------------------------------------------------------------ input / select */
+/* The 14px radius, a bright hairline just inside the top edge, a soft outer shadow,
+   and a focus that **lifts the field a pixel** while a 4px brand halo blooms around
+   it. */
+.ins-input,
+.ins-select,
+.ins-textarea {
+  inline-size: 100%;
+  min-block-size: var(--ins-field-h);
+  padding: .5rem .875rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-ctl-bd);
+  background: var(--ins-ctl-bg);
+  color: var(--ins-text-1);
+  font-family: inherit;
+  font-size: .875rem;
+  box-shadow: var(--ins-bevel-dim), var(--ins-sh-subtle);
+  transition: border-color var(--ins-t-base) var(--ins-ease),
+              box-shadow var(--ins-t-base) var(--ins-ease),
+              background var(--ins-t-base) var(--ins-ease),
+              transform var(--ins-t-base) var(--ins-ease);
+}
+.ins-input--sm,
+.ins-select--sm {
+  min-block-size: var(--ins-ctl-h);
+  padding: .25rem .625rem;
+  font-size: .8125rem;
+  border-radius: var(--ins-r-sm);
+}
+.ins-input::placeholder,
+.ins-textarea::placeholder { color: var(--ins-text-3); }
+
+.ins-input:focus,
+.ins-select:focus,
+.ins-textarea:focus {
+  outline: 0;
+  background: var(--ins-glass-strong);
+  border-color: rgba(var(--ins-primary-rgb), .55);
+  box-shadow: var(--ins-glow), var(--ins-bevel-dim), 0 4px 16px rgba(var(--ins-primary-rgb), .10);
+  transform: translateY(-1px);
+}
+:root[data-ins-theme="dark"] .ins-input:focus,
+:root[data-ins-theme="dark"] .ins-select:focus,
+:root[data-ins-theme="dark"] .ins-textarea:focus { background: rgba(255, 255, 255, .09); }
+
+.ins-input:disabled,
+.ins-select:disabled,
+.ins-textarea:disabled { opacity: .55; cursor: not-allowed; }
+
+.ins-textarea { min-block-size: 5.5rem; resize: vertical; }
+
+/* Invalid, as the semantic triad rather than as a red border bolted on. */
+.ins-input--bad,
+.ins-select--bad { border-color: var(--ins-tone-bad-bd); background: var(--ins-tone-bad-bg); }
+.ins-input--bad:focus { box-shadow: var(--ins-glow-bad), var(--ins-bevel-dim); border-color: var(--ins-tone-bad); }
+
+/* The chevron, in the design's own grey rather than a browser slate, pointing at the
+   trailing edge in both directions. `background-position` cannot be logical, so it is
+   written out per direction. */
+.ins-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  padding-inline-end: 2.375rem;
+}
+[dir="ltr"] .ins-select { background-position: right .875rem center; }
+[dir="rtl"] .ins-select { background-position: left .875rem center; }
+:root[data-ins-theme="dark"] .ins-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------- checkbox / radio */
+/* Built rather than ported: the source leaned on Bootstrap's `.form-check` for
+   these. Designed to the same rules as everything else — the control fill, the
+   bevel, the brand gradient when on, and the spring easing on the one part whose
+   job is to travel. */
+.ins-check {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  cursor: pointer;
+  /* Hugs its label. As a block it spans the container and the empty half of the row
+     becomes a live target, so a click far from the box flips it. */
+  inline-size: max-content;
+  max-inline-size: 100%;
+}
+.ins-check > input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  margin: 0;
+  border: 1px solid var(--ins-ctl-bd);
+  background: var(--ins-ctl-bg);
+  border-radius: var(--ins-r-xs);
+  box-shadow: var(--ins-bevel-dim);
+  cursor: pointer;
+  position: relative;
+  transition: background var(--ins-t-pop) var(--ins-ease),
+              border-color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-check > input[type="radio"] { border-radius: 50%; }
+.ins-check > input:checked {
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  border-color: transparent;
+}
+/* The tick, drawn rather than imported, and scaled in on the overshoot easing —
+   the same curve the switch thumb travels on, for the same reason. */
+.ins-check > input[type="checkbox"]::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 1px;
+  inset-inline-start: 4px;
+  inline-size: .3125rem;
+  block-size: .625rem;
+  border: solid var(--ins-on-primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  transform-origin: center;
+  transition: transform .28s var(--ins-ease-spring);
+}
+.ins-check > input[type="checkbox"]:checked::after { transform: rotate(45deg) scale(1); }
+.ins-check > input[type="radio"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: .4375rem;
+  block-size: .4375rem;
+  border-radius: 50%;
+  background: var(--ins-on-primary);
+  transform: scale(0);
+  transition: transform .28s var(--ins-ease-spring);
+}
+.ins-check > input[type="radio"]:checked::after { transform: scale(1); }
+.ins-check > input:focus-visible { outline: 3px solid rgba(var(--ins-primary-rgb), .45); outline-offset: 2px; }
+.ins-check > input:disabled { opacity: .5; cursor: not-allowed; }
+.ins-check-text { font-size: .875rem; }
+
+/* --------------------------------------------------------------- switch */
+/* A two-state setting is a switch, not a two-option select: the whole point of a
+   kill switch is that its state is visible without opening anything.
+
+   A 48×26 track with a 20px thumb, a recessed inset on the off state so the track
+   reads as a groove rather than as a flat pill, and a thumb that travels on the
+   **overshoot** easing. That last one is the entire character of the control — a
+   switch is the one thing on the page whose whole job is to move, and a linear
+   glide reads as a checkbox that happens to be pill-shaped. */
+.ins-switch {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  cursor: pointer;
+  padding: .375rem 0;
+  inline-size: max-content;
+  max-inline-size: 100%;
+}
+.ins-switch > input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.ins-switch-track {
+  flex: 0 0 auto;
+  position: relative;
+  inline-size: 3rem;
+  block-size: 1.625rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-ctl-bg-hover);
+  border: 1px solid var(--ins-ctl-bd);
+  box-shadow: inset 0 2px 4px rgba(15, 23, 42, .08);
+  transition: background var(--ins-t-base) var(--ins-ease),
+              border-color var(--ins-t-base),
+              box-shadow var(--ins-t-base);
+}
+.ins-switch-track::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 2px;
+  inset-inline-start: 2px;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, .28);
+  transition: transform .32s var(--ins-ease-spring);
+}
+.ins-switch > input:checked + .ins-switch-track {
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  border-color: transparent;
+  box-shadow: var(--ins-glow-ring), inset 0 1px 0 rgba(255, 255, 255, .20);
+}
+/* `translateX` and not a logical property, because a transform has no logical form
+   — so it is mirrored by hand for RTL. This is one of the few things in the library
+   that genuinely cannot be done logically. */
+.ins-switch > input:checked + .ins-switch-track::after { transform: translateX(1.375rem); }
+[dir="rtl"] .ins-switch > input:checked + .ins-switch-track::after { transform: translateX(-1.375rem); }
+.ins-switch > input:focus-visible + .ins-switch-track {
+  outline: 3px solid rgba(var(--ins-primary-rgb), .45);
+  outline-offset: 2px;
+}
+.ins-switch-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.ins-switch-label { font-size: .875rem; font-weight: 700; }
+.ins-switch-desc { font-size: .75rem; font-weight: 400; color: var(--ins-text-2); }
+
+/* The card variant: a setting that is its own row in a bordered, tinted block,
+   rather than a line of text with a control at the end.
+
+   **The ground is ink, not a white overlay.** The inner-glass fill is white at 50%
+   and the glass hairline is white at 40%: they *lighten*, which reads on a tinted
+   page mesh and does nothing at all on a surface that is already near-white. The
+   card was not faint inside a dialog, it was absent — measured at 1.01:1 fill and
+   1.02:1 border against the dialog's own ground, which is two toggles with no
+   visible container. The control tokens are the ink pair the buttons and the panel
+   hairlines already use, and both are redefined for dark, where a white overlay *is*
+   the right direction. Re-sampled after: 1.07:1 and 1.26:1 on light, 1.19:1 and
+   1.50:1 on dark. A card boundary is a divider, not a surface — it does not want AA
+   contrast, it wants to be findable, and 1.02:1 is not. */
+.ins-switch--card {
+  padding: .75rem .875rem;
+  background: var(--ins-ctl-bg);
+  border: 1px solid var(--ins-line);
+  border-radius: var(--ins-r-md);
+  transition: background var(--ins-t-base) var(--ins-ease);
+}
+.ins-switch--card:hover { background: var(--ins-surface-hover); }
+
+.ins-switch-grid {
+  display: grid;
+  gap: .5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+}
+/* **The stagger is `align-content`, and `flex-wrap` is what makes it apply.** It is
+   ignored on a `nowrap` container, so a card without a description had no way to say
+   "top" and sat its single line in the middle of a height the card beside it had set
+   — measured, two cards at h=88 with their tracks 18px apart. */
+.ins-switch-grid > .ins-switch {
+  padding: .75rem .875rem;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  inline-size: auto;
+  background: var(--ins-ctl-bg);
+  border: 1px solid var(--ins-line);
+  border-radius: var(--ins-r-md);
+  transition: background var(--ins-t-base) var(--ins-ease);
+}
+.ins-switch-grid > .ins-switch:hover { background: var(--ins-surface-hover); }
+/* Name at the start of the card, control at its end. `order` and not a markup
+   change, because the DOM order is the one that is right: the input has to precede
+   the track for `+ .ins-switch-track` to work at all. Visual order is a presentation
+   question and belongs here. Scoped to a card — a bare switch is a checkbox in a
+   sentence, and its label belongs next to the thing it labels. */
+.ins-switch-grid > .ins-switch .ins-switch-text { order: -1; margin-inline-end: auto; }
+
+/* --------------------------------------------------------------- segmented */
+/* One control, not a row of browser tabs. The track is a recessed tint and the
+   selected segment is a *raised light card* — 14px track, 10px segments, a lifted
+   face with a bevel.
+
+   The inversion is not cosmetic. A pill track with a **brand-filled** thumb makes
+   every tab strip on a page compete with that page's actual primary button for the
+   same "this is the thing to press" reading. Here, selection reads as position
+   rather than as emphasis. */
+.ins-seg {
+  display: inline-flex;
+  gap: .1875rem;
+  padding: .25rem;
+  border-radius: var(--ins-r-md);
+  /* A 6% dark tint — a groove the selected segment sits raised inside. At 3.5% the
+     track disappears and the control reads as one floating white pill with some
+     words next to it. */
+  background: var(--ins-ctl-bg-hover);
+  border: 1px solid var(--ins-line-glass);
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+.ins-seg > a,
+.ins-seg > button {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  min-block-size: var(--ins-ctl-h);
+  padding: .5rem .875rem;
+  border: 0;
+  background: transparent;
+  border-radius: var(--ins-r-sm);
+  font-family: inherit;
+  font-size: .8125rem;
+  font-weight: 700;
+  color: var(--ins-text-2);
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background var(--ins-t-pop) var(--ins-ease),
+              color var(--ins-t-pop) var(--ins-ease),
+              box-shadow var(--ins-t-pop) var(--ins-ease);
+}
+.ins-seg > a:hover,
+.ins-seg > button:hover { color: var(--ins-primary-darker); background: var(--ins-surface-hover); }
+/* The selected segment: three tokens, once, covering both themes. It used to be
+   written out per position *and* per theme — and that is how it broke. One copy
+   stopped at position four, and positions five and six had been appended to the dark
+   rule's selector list without its theme prefix, so in the default theme a selected
+   fifth tab was byte for byte an unselected tab: nothing on screen said which pane
+   was open. A theme cannot own a partial copy of a list it should not own at all. */
+.ins-seg > .is-active,
+.ins-seg > .is-active:hover {
+  background: var(--ins-seg-on-bg);
+  color: var(--ins-seg-on-fg);
+  box-shadow: var(--ins-seg-on-shadow);
+}
+/* On a phone a strip is three or four Arabic phrases in one control. Tightening the
+   segments is what makes it fit, rather than letting it scroll with nothing to say
+   so. */
+@media (max-width: 34rem) {
+  .ins-seg { padding: .1875rem; }
+  .ins-seg > a,
+  .ins-seg > button { padding-inline: .5rem; font-size: .75rem; gap: .25rem; }
+}
+
+/* --------------------------------------------------------------- motion */
+/* A field answers the pointer before it answers the caret: the hairline brightens
+   and the fill deepens one step. It does NOT lift on hover -- the lift is what focus
+   means here, and spending it on hover leaves focus with nothing left to say. */
+.ins-input:hover:not(:disabled):not(:focus),
+.ins-select:hover:not(:disabled):not(:focus),
+.ins-textarea:hover:not(:disabled):not(:focus) {
+  border-color: rgba(var(--ins-primary-rgb), .30);
+  background: var(--ins-ctl-bg-hover);
+}
+
+/* The box brightens and blooms a little before it is clicked. */
+.ins-check > input:hover:not(:disabled) {
+  border-color: rgba(var(--ins-primary-rgb), .45);
+  box-shadow: var(--ins-bevel-dim), var(--ins-glow);
+}
+
+.ins-switch-track { transition: background var(--ins-t-base) var(--ins-ease),
+                                border-color var(--ins-t-base),
+                                box-shadow var(--ins-t-base),
+                                filter var(--ins-t-pop) var(--ins-ease); }
+.ins-switch:hover .ins-switch-track { border-color: rgba(var(--ins-primary-rgb), .40); }
+.ins-switch:hover > input:checked + .ins-switch-track { filter: brightness(1.08); }
+
+/* A newly selected segment pops in on the overshoot curve. The class is toggled by
+   the script, so the animation replays on every selection -- which is the point: the
+   raised face is the only thing that says which pane is open, and a face that simply
+   *is* there on the next frame does not read as a selection having been made. */
+.ins-seg > .is-active { animation: ins-pop var(--ins-t-pop) var(--ins-ease-spring); }
+
+/* The search glyph grows into the brand colour as the field takes focus. */
+.ins-search > .ins-search-ico { transition: color var(--ins-t-base) var(--ins-ease),
+                                            transform var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-search:focus-within > .ins-search-ico { transform: scale(1.12); }
+
+/* --------------------------------------------------------------- input group */
+/* A field with things attached — a currency, a unit, a prefix, a button — built as
+   **one control that holds them**, rather than as boxes with their touching borders
+   squared off. The group draws the border, the fill and the focus; the input inside
+   it gives all three up. So the whole group lifts and glows when the caret is in
+   it, which is what a person sees as the field: the "ل.س" beside an amount is part
+   of the amount.
+
+   Written after the motion section above on purpose. The field hover there is
+   four pseudo-classes deep, and it would otherwise paint a darker rectangle inside
+   the group every time the pointer crossed the input. */
+.ins-input-group {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+  min-block-size: var(--ins-field-h);
+  padding-inline: .375rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-ctl-bd);
+  background: var(--ins-ctl-bg);
+  box-shadow: var(--ins-bevel-dim), var(--ins-sh-subtle);
+  transition: border-color var(--ins-t-base) var(--ins-ease),
+              box-shadow var(--ins-t-base) var(--ins-ease),
+              background var(--ins-t-base) var(--ins-ease),
+              transform var(--ins-t-base) var(--ins-ease);
+}
+.ins-input-group:hover:not(:focus-within) {
+  border-color: rgba(var(--ins-primary-rgb), .30);
+  background: var(--ins-ctl-bg-hover);
+}
+.ins-input-group:focus-within {
+  background: var(--ins-glass-strong);
+  border-color: rgba(var(--ins-primary-rgb), .55);
+  box-shadow: var(--ins-glow), var(--ins-bevel-dim), 0 4px 16px rgba(var(--ins-primary-rgb), .10);
+  transform: translateY(-1px);
+}
+.ins-input-group > :is(.ins-input, .ins-select),
+.ins-input-group > :is(.ins-input, .ins-select):focus,
+.ins-input-group > :is(.ins-input, .ins-select):hover:not(:disabled):not(:focus) {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  min-block-size: calc(var(--ins-field-h) - 2px);
+  padding-inline: .5rem;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+/* Text, a symbol or an icon attached to the field. Muted and in the label's weight,
+   so it reads as part of the question rather than as part of the answer. A hairline
+   separates it from the input on whichever side the input is. */
+.ins-addon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  align-self: stretch;
+  padding-inline: .5rem;
+  color: var(--ins-label);
+  font-size: var(--ins-fs-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.ins-addon:first-child { border-inline-end: 1px solid var(--ins-line); margin-block: .5rem; }
+.ins-addon:last-child { border-inline-start: 1px solid var(--ins-line); margin-block: .5rem; }
+.ins-addon svg { inline-size: 1rem; block-size: 1rem; }
+/* A button inside the field is inset rather than flush: a step smaller than the
+   field, with its own radius a step smaller than the field's, so the two corners
+   stay concentric. */
+.ins-input-group > .ins-btn {
+  min-block-size: calc(var(--ins-field-h) - .75rem);
+  padding-inline: .75rem;
+  border-radius: var(--ins-r-sm);
+}
+.ins-input-group > .ins-btn--icon { inline-size: calc(var(--ins-field-h) - .75rem); padding-inline: 0; }
+
+/* --------------------------------------------------------------- password */
+/* Show and hide, as a pressed state rather than as a label that changes: the name
+   stays "Show password" and `aria-pressed` says whether it is, which is how a screen
+   reader expects a toggle to behave. The eye is drawn by a mask, so it takes the
+   text colour in both themes with no icon set.
+
+   It needs the script to do anything, so without the script it is not there — a
+   button that does nothing is worse than no button. */
+.ins-password-toggle {
+  --ins-eye: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+  --ins-eye-off: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M4 4l16 16'/%3E%3C/svg%3E");
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: transparent;
+  color: var(--ins-text-3);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-password-toggle::before {
+  content: "";
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  background: currentColor;
+  -webkit-mask: var(--ins-eye) center / contain no-repeat;
+          mask: var(--ins-eye) center / contain no-repeat;
+}
+.ins-password-toggle[aria-pressed="true"]::before {
+  -webkit-mask-image: var(--ins-eye-off);
+          mask-image: var(--ins-eye-off);
+}
+.ins-password-toggle:hover { background: var(--ins-ctl-bg-hover); color: var(--ins-text-1); }
+.ins-password-toggle[aria-pressed="true"] { color: var(--ins-tone-brand-soft); }
+:root:not([data-ins-js]) .ins-password-toggle { display: none; }
+/* Edge draws its own eye inside every password field. Two eyes, one of which
+   ignores the other's state, is the kind of thing people screenshot. A separate
+   rule, because a pseudo-element another engine does not know invalidates every
+   selector in its list. */
+.ins-input-group:has(.ins-password-toggle) .ins-input::-ms-reveal { display: none; }
+
+/* --------------------------------------------------------------- validation */
+/* Three ways a field is marked invalid, and one appearance for all of them:
+
+     * `aria-invalid="true"` on the control — what a server-rendered form sets, and
+       the one a screen reader announces;
+     * an `.ins-error` inside the field — if the message is there, the field is in
+       error, so the two cannot disagree;
+     * `:user-invalid` — the browser's own constraint validation, but only once the
+       person has actually interacted with the field or tried to submit. `:invalid`
+       would paint an empty required field red before anybody has typed a letter.
+       `[data-ins-reported]:invalid` is the same state for a field the script has
+       reported — a wizard step checked with `reportValidity()`, which the browser does
+       not count as interaction.
+
+   `.ins-input--bad` above still works; this is the same triad reached three ways.
+
+   Three details in the selectors, each of which was a bug in the first draft:
+
+     * **The lists are inside `:is()`**, whose argument list is *forgiving*: an
+       engine that does not know `:user-invalid` or `:has()` drops that one branch
+       instead of the whole rule.
+     * **A grouped input is excluded** with `:not(.ins-input-group > *)`, rather
+       than painted red and then painted back. `:is()` takes the specificity of its
+       most specific branch, so an override for the inner input would have had to
+       out-shout a selector six classes deep. The group is the field; the group is
+       what turns red.
+     * **An empty message does not count**, and neither does any message inside a
+       `data-ins-validate` form. There the message is a placeholder the script fills
+       in, and it stays in the markup after the field is fixed — so its presence says
+       nothing, and `:user-invalid` is the signal instead. */
+:is(:is(.ins-input, .ins-select, .ins-textarea):is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid),
+    .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty))
+      :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *),
+.ins-input-group:is(:has(:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)),
+                    .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty)) *) {
+  border-color: var(--ins-tone-bad-bd);
+  background: var(--ins-tone-bad-bg);
+}
+:is(:is(.ins-input, .ins-select, .ins-textarea):is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid),
+    .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty))
+      :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *):focus,
+.ins-input-group:is(:has(:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)),
+                    .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty)) *):focus-within {
+  border-color: var(--ins-tone-bad);
+  box-shadow: var(--ins-glow-bad), var(--ins-bevel-dim);
+}
+
+/* Valid, for the field worth confirming — a username that is free, a code that
+   matched. Not applied automatically: a form that turns every field green as you
+   fill it in is congratulating you for typing. */
+:is(.ins-input--ok,
+    .ins-field:has(> .ins-success:not(:empty)) :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *),
+.ins-input-group:is(.ins-field:has(> .ins-success:not(:empty)) *) { border-color: rgba(34, 197, 94, .45); }
+
+/* The message under a field. The mark is a mask like the eye above, so it is the
+   message's own colour in both themes, and it sits against the first line rather
+   than the middle of a wrapped message. Link it with `aria-describedby` — the
+   script does that for you — or a screen reader hears the red border and nothing
+   else. */
+.ins-error,
+.ins-success {
+  display: flex;
+  align-items: flex-start;
+  gap: .375rem;
+  margin: 0;
+  font-size: var(--ins-fs-xs);
+  font-weight: 600;
+  line-height: 1.6;
+}
+.ins-error { color: var(--ins-tone-bad); }
+.ins-success { color: var(--ins-tone-ok); }
+.ins-error::before,
+.ins-success::before {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: .9375rem;
+  block-size: .9375rem;
+  margin-block-start: .1em;
+  background: currentColor;
+  -webkit-mask: var(--ins-field-mark) center / contain no-repeat;
+          mask: var(--ins-field-mark) center / contain no-repeat;
+}
+.ins-error {
+  --ins-field-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7.5v5.5M12 16.5v.01'/%3E%3C/svg%3E");
+}
+.ins-success {
+  --ins-field-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='m8 12.5 2.5 2.5L16 9.5'/%3E%3C/svg%3E");
+}
+.ins-error:empty,
+.ins-success:empty { display: none; }
+
+/* Client-side validation, opted into with `data-ins-validate` on the form: each
+   message waits until its field is actually invalid. Without the attribute a
+   message is shown whenever it is in the markup, which is what a server-rendered
+   form wants — the server only renders the message when there is an error. */
+form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:invalid)) > .ins-error { display: none; }
+
+/* The required mark after a label. `aria-hidden` on it, and `required` on the
+   control: the attribute is what is announced, the asterisk is for the eye. */
+.ins-req { color: var(--ins-tone-bad); margin-inline-start: .125rem; }
+
+/* --------------------------------------------------------------- large */
+/* The step up from the default, for a login or a search that is the whole page. */
+.ins-input--lg,
+.ins-select--lg {
+  min-block-size: 3.25rem;
+  padding-inline: 1rem;
+  font-size: var(--ins-fs-lg);
+}
+.ins-select--lg { padding-inline-end: 2.625rem; }
+
+/* --------------------------------------------------------------- indeterminate */
+/* "Some of these": the select-all box over a partly selected table. There is no
+   HTML attribute for it — it is a property only script can set — so
+   `data-ins-indeterminate` on the input is the markup form, and insiyab.js turns it
+   into the property. The tick becomes a bar, on the same fill. */
+.ins-check > input[type="checkbox"]:indeterminate {
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  border-color: transparent;
+}
+.ins-check > input[type="checkbox"]:indeterminate::after {
+  inset: 0;
+  margin: auto;
+  inline-size: .5625rem;
+  block-size: 2px;
+  border: 0;
+  border-radius: 1px;
+  background: var(--ins-on-primary);
+  transform: none;
+}
+
+/* --------------------------------------------------------------- range */
+/* A native `<input type="range">`, so the keyboard, the value and the announcement
+   are the platform's. RTL is the platform's too: in an Arabic page the minimum is at
+   the right and the thumb travels left, with nothing here to say so.
+
+   The filled part of the track is the one thing the engines disagree about. Firefox
+   draws it (`::-moz-range-progress`); Chromium and WebKit have no such part, so the
+   fill is a gradient stop at `--ins-fill`, which insiyab.js keeps in step with the
+   value — flipped per direction by hand, as a gradient has no logical form. Without
+   the script those two engines show the track without its fill, and the slider
+   still works. Every pseudo-element is in a rule of its own; see the progress bar. */
+.ins-range {
+  --ins-fill: 0%;
+  -webkit-appearance: none;
+          appearance: none;
+  inline-size: 100%;
+  block-size: 1.5rem;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.ins-range:focus-visible { outline: none; }
+.ins-range::-webkit-slider-runnable-track {
+  block-size: .375rem;
+  border-radius: var(--ins-r-pill);
+  background: linear-gradient(to right, var(--ins-tone-brand-soft) var(--ins-fill), var(--ins-ctl-bg-hover) var(--ins-fill));
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, .08);
+}
+[dir="rtl"] .ins-range::-webkit-slider-runnable-track {
+  background: linear-gradient(to left, var(--ins-tone-brand-soft) var(--ins-fill), var(--ins-ctl-bg-hover) var(--ins-fill));
+}
+.ins-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  margin-block-start: -.4375rem;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, .28), 0 0 0 1px rgba(var(--ins-primary-rgb), .30);
+  transition: transform var(--ins-t-pop) var(--ins-ease-spring), box-shadow var(--ins-t-pop) var(--ins-ease);
+}
+.ins-range:hover::-webkit-slider-thumb { transform: scale(1.1); }
+.ins-range:active::-webkit-slider-thumb { transform: scale(1.18); box-shadow: 0 2px 6px rgba(15, 23, 42, .28), var(--ins-glow); }
+.ins-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 2px 6px rgba(15, 23, 42, .28), var(--ins-focus-ring); }
+.ins-range::-moz-range-track {
+  block-size: .375rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-ctl-bg-hover);
+}
+.ins-range::-moz-range-progress {
+  block-size: .375rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-brand-soft);
+}
+.ins-range::-moz-range-thumb {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, .28), 0 0 0 1px rgba(var(--ins-primary-rgb), .30);
+}
+.ins-range:focus-visible::-moz-range-thumb { box-shadow: 0 2px 6px rgba(15, 23, 42, .28), var(--ins-focus-ring); }
+.ins-range:disabled { opacity: .5; cursor: not-allowed; }
+
+/* --------------------------------------------------------------- number stepper */
+/* A number between − and + buttons, inside an input group:
+
+     <div class="ins-input-group">
+       <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>
+       <input class="ins-input" type="number" min="1" max="99" value="1">
+       <button class="ins-spin" data-ins-spin="up" aria-label="زيادة"></button>
+     </div>
+
+   The buttons call the input's own `stepDown()` and `stepUp()`, so `step`, `min`
+   and `max` mean exactly what they mean to the browser, and each press fires the
+   same `input` and `change` events typing would. In DOM order they mirror with the
+   page: − at the start, + at the end, so on an Arabic page the + is on the left —
+   the direction the numbers grow in, as on the slider above.
+
+   The browser's own spin arrows are hidden only while the script is running;
+   without it they are the stepper, and the − and + step aside. */
+.ins-spin {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-ctl-bg-hover);
+  color: var(--ins-text-1);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), transform var(--ins-t-exit) var(--ins-ease);
+}
+.ins-spin::before,
+.ins-spin[data-ins-spin="up"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: .75rem;
+  block-size: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.ins-spin[data-ins-spin="up"]::after { transform: rotate(90deg); }
+.ins-spin:hover:not(:disabled) { background: var(--ins-ctl-bd); }
+.ins-spin:active:not(:disabled) { transform: scale(.92); }
+.ins-spin:disabled { opacity: .35; cursor: not-allowed; }
+:root:not([data-ins-js]) .ins-spin { display: none; }
+.ins-input-group:has(> .ins-spin) > .ins-input { text-align: center; font-variant-numeric: tabular-nums; }
+:root[data-ins-js] .ins-input-group:has(> .ins-spin) > .ins-input { -moz-appearance: textfield; appearance: textfield; }
+:root[data-ins-js] .ins-input-group:has(> .ins-spin) > .ins-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+:root[data-ins-js] .ins-input-group:has(> .ins-spin) > .ins-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* --------------------------------------------------------------- tiles */
+/* A choice that deserves more than a line — a plan, a delivery speed, a payment
+   method. A real radio or checkbox inside a label, so the keyboard, the form value
+   and the grouping are all the platform's; the tile only draws what `:checked` and
+   `:focus-visible` already know.
+
+     <label class="ins-tile">
+       <input type="radio" name="plan" value="pro">
+       <span class="ins-tile-title">احترافي</span>
+       <span class="ins-tile-desc">حتى عشرة مستخدمين</span>
+     </label>
+
+   The mark sits at the trailing top corner. It is drawn in two pieces — the ring on
+   `::before`, the tick or dot on `::after` — because the tick is a mask filled with
+   `--ins-on-primary`, the measured label colour, and a mask on the ring would cut the
+   ring away along with it. */
+.ins-tile-grid {
+  display: grid;
+  gap: .625rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+}
+.ins-tile {
+  --ins-tile-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5.5 12.5 4 4 9-9'/%3E%3C/svg%3E");
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .1875rem;
+  padding: .875rem 1rem;
+  padding-inline-end: 2.75rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-ctl-bd);
+  background: var(--ins-ctl-bg);
+  cursor: pointer;
+  transition: border-color var(--ins-t-pop) var(--ins-ease),
+              background var(--ins-t-pop) var(--ins-ease),
+              box-shadow var(--ins-t-pop) var(--ins-ease);
+}
+.ins-tile:has(> input[type="radio"]) {
+  --ins-tile-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='5' fill='black'/%3E%3C/svg%3E");
+}
+.ins-tile > input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.ins-tile::before,
+.ins-tile::after {
+  content: "";
+  position: absolute;
+  inset-block-start: .875rem;
+  inset-inline-end: .875rem;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+}
+.ins-tile::before {
+  border-radius: 50%;
+  border: 1px solid var(--ins-ctl-bd);
+  background: var(--ins-surface);
+  box-shadow: var(--ins-bevel-dim);
+  transition: background var(--ins-t-pop) var(--ins-ease), border-color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-tile:has(> input[type="checkbox"])::before { border-radius: var(--ins-r-xs); }
+.ins-tile::after {
+  background: var(--ins-on-primary);
+  -webkit-mask: var(--ins-tile-mark) center / .75rem no-repeat;
+          mask: var(--ins-tile-mark) center / .75rem no-repeat;
+  transform: scale(0);
+  transition: transform .28s var(--ins-ease-spring);
+}
+.ins-tile-title { font-size: var(--ins-fs-md); font-weight: 700; color: var(--ins-text-1); }
+.ins-tile-desc { font-size: var(--ins-fs-xs); color: var(--ins-label); line-height: 1.6; }
+.ins-tile:hover { border-color: rgba(var(--ins-primary-rgb), .35); background: var(--ins-ctl-bg-hover); }
+.ins-tile:has(> input:checked) {
+  border-color: var(--ins-tone-brand-soft);
+  background: var(--ins-tone-brand-bg);
+  box-shadow: inset 0 0 0 1px var(--ins-tone-brand-soft);
+}
+.ins-tile:has(> input:checked)::before {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+}
+.ins-tile:has(> input:checked)::after { transform: scale(1); }
+.ins-tile:has(> input:checked) .ins-tile-title { color: var(--ins-tone-brand); }
+.ins-tile:has(> input:focus-visible) { outline: 2px solid var(--ins-tone-brand-soft); outline-offset: 2px; }
+.ins-tile:has(> input:disabled) { opacity: .5; cursor: not-allowed; }
+
+/* --------------------------------------------------------------- autocomplete */
+/* A text field that suggests from a list it carries:
+
+     <div class="ins-combo">
+       <input class="ins-input" id="city" autocomplete="off">
+       <ul class="ins-combo-list">
+         <li class="ins-combo-option" data-value="dam">دمشق</li>
+         …
+         <li class="ins-combo-empty">لا نتائج</li>
+       </ul>
+     </div>
+
+   The script supplies the combobox pattern — the roles, `aria-expanded`,
+   `aria-activedescendant`, the arrow keys, Enter to choose and Escape to close — and
+   the matching, which is **Arabic-aware**: the diacritics are ignored, the hamza
+   forms of alef are one letter, and ة and ه, ى and ي match each other. Somebody
+   typing "اسامة" finds "أسامة", which is the difference between an autocomplete that
+   works in Arabic and one that only works when you spell it the way the database
+   did. Without the script it is a text field, which is what it is anyway.
+
+   `data-ins-open` rather than a class marks it open, because that is what the
+   panel's and the table's clipping escape looks for. */
+.ins-combo { position: relative; }
+.ins-combo-list {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: calc(100% + .375rem);
+  z-index: 30;
+  margin: 0;
+  padding: .375rem;
+  list-style: none;
+  max-block-size: min(18rem, 50vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-rim);
+  background: var(--ins-glass-strong);
+  box-shadow: var(--ins-sh-lg);
+  animation: ins-pop-in var(--ins-t-pop) var(--ins-ease);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-combo-list { backdrop-filter: var(--ins-blur); -webkit-backdrop-filter: var(--ins-blur); }
+}
+.ins-combo-list:not([data-ins-open]) { display: none; }
+.ins-combo[data-ins-flip~="up"] > .ins-combo-list {
+  inset-block-start: auto;
+  inset-block-end: calc(100% + .375rem);
+}
+.ins-combo-option {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .75rem;
+  border-radius: var(--ins-r-xs);
+  font-size: var(--ins-fs-md);
+  color: var(--ins-text-1);
+  cursor: pointer;
+}
+.ins-combo-option:hover,
+.ins-combo-option.is-active { background: rgba(var(--ins-primary-rgb), .10); color: var(--ins-primary-darker); }
+.ins-combo-option[aria-selected="true"] { font-weight: 700; }
+.ins-combo-option[aria-disabled="true"] { opacity: .45; pointer-events: none; }
+.ins-combo-empty { padding: .5rem .75rem; font-size: var(--ins-fs-sm); color: var(--ins-label); }
+
+/* --------------------------------------------------------------- date */
+/* Write a native date input inside a group, and give it `data-ins-date`:
+
+     <div class="ins-input-group">
+       <input class="ins-input" type="date" data-ins-date name="from" value="2026-09-23">
+     </div>
+
+   Without the script that is the browser's own date field, which is a perfectly
+   good fallback. With it, the field becomes a text field showing the date the way
+   the page's language writes it — "23 أيلول 2026" on a Syrian page, in the Latin
+   digits the library sets every figure in (`.ins-num`, `.ins-money`); give the page
+   `lang="ar-u-nu-arab"` for Arabic-Indic ones — a hidden input carries the ISO value under the
+   original `name`, so the server receives exactly what the native field would
+   have sent, and this button opens the calendar. Why replace a native control at
+   all: its display order and language are the *browser's*, not the page's, so an
+   Arabic page on an English browser showed mm/dd/yyyy running left to right. */
+.ins-date-btn {
+  --ins-cal-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4.5' width='18' height='16.5' rx='3'/%3E%3Cpath d='M3 9.5h18M8 3v3M16 3v3'/%3E%3C/svg%3E");
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: transparent;
+  color: var(--ins-text-3);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-date-btn::before {
+  content: "";
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  background: currentColor;
+  -webkit-mask: var(--ins-cal-icon) center / contain no-repeat;
+          mask: var(--ins-cal-icon) center / contain no-repeat;
+}
+.ins-date-btn:hover,
+.ins-date-btn[aria-expanded="true"] { background: var(--ins-ctl-bg-hover); color: var(--ins-tone-brand-soft); }

@@ -70,7 +70,7 @@
    again. Where `:has()` is unsupported this rule simply does not match, which is
    the behaviour of the day before — so it degrades to the old bug, not to a new
    one. Add `.ins-panel--open` by hand if you need to support those browsers. */
-.ins-panel:has([open]) { overflow: visible; z-index: 5; }
+.ins-panel:has([open], [data-ins-open]) { overflow: visible; z-index: 5; }
 
 .ins-panel-head {
   display: flex;
@@ -171,9 +171,107 @@
 }
 .ins-panel--alert .ins-panel-head:hover .ins-panel-ico { background: var(--ins-tone-bad-bd); }
 
-/* A panel does not lift on hover -- see the note in 16-motion.css. What it does is
+/* A panel does not lift on hover -- see the note in 18-motion.css. What it does is
    brighten its rim, which reads as the surface catching a little more light without
    the container jumping under a pointer that was only crossing it on the way to a
    row inside it. */
 .ins-panel { transition: border-color var(--ins-t-base) var(--ins-ease); }
 .ins-panel:hover { border-color: var(--ins-rim-top); }
+
+/* --------------------------------------------------------------- list */
+/* Rows of things — settings, notifications, members, recent files. Each row has
+   three slots, all optional: something at the leading edge (an icon chip, an
+   avatar), the text (a title and a line under it), and something at the trailing
+   edge (a badge, an amount, a switch, a time).
+
+     <ul class="ins-list">
+       <li class="ins-list-item">
+         <span class="ins-panel-ico">…</span>
+         <span class="ins-list-text">
+           <span class="ins-list-title">…</span>
+           <span class="ins-list-desc">…</span>
+         </span>
+         <span class="ins-list-end">…</span>
+       </li>
+     </ul>
+
+   A row that is an `<a>` or a `<button>` is a destination, and gets a chevron
+   pointing where it takes you — toward the end of the line, so to the left on an
+   Arabic page. Like `.ins-accordion`, the list has no surface of its own; it goes in
+   a panel or a card. */
+.ins-list {
+  list-style: none;
+  margin: 0;
+  padding: .25rem;
+  display: flex;
+  flex-direction: column;
+}
+.ins-list-item {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  min-block-size: 3.25rem;
+  padding: .625rem .75rem;
+  border-radius: var(--ins-r-md);
+  color: var(--ins-text-1);
+  text-decoration: none;
+}
+.ins-list > .ins-list-item + .ins-list-item,
+.ins-list > li + li > .ins-list-item { border-block-start: 1px solid var(--ins-line); }
+.ins-list-text { flex: 1 1 auto; min-inline-size: 0; display: flex; flex-direction: column; gap: .125rem; }
+.ins-list-title {
+  font-size: var(--ins-fs-md);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ins-list-desc { font-size: var(--ins-fs-xs); color: var(--ins-label); }
+.ins-list-end {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: var(--ins-fs-xs);
+  color: var(--ins-label);
+}
+
+/* Interactive rows. The divider is a border, so a hovered row's tint would stop a
+   pixel short of the one above; the tint is drawn with a radius instead and the
+   dividers either side of it are hidden, which reads as the row lifting out of the
+   list rather than as a highlighter drawn across it. */
+:is(a, button).ins-list-item {
+  inline-size: 100%;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease);
+}
+.ins-list > :is(a, button).ins-list-item + :is(a, button).ins-list-item { border-block-start: 1px solid var(--ins-line); }
+:is(a, button).ins-list-item:hover,
+:is(a, button).ins-list-item:is([aria-current="page"], .is-active) {
+  background: var(--ins-ctl-bg);
+  border-color: transparent;
+}
+:is(a, button).ins-list-item:hover + .ins-list-item,
+:is(a, button).ins-list-item:is([aria-current="page"], .is-active) + .ins-list-item { border-color: transparent; }
+:is(a, button).ins-list-item:focus-visible { outline-offset: -2px; }
+:is(a, button).ins-list-item:is([aria-current="page"], .is-active) .ins-list-title { color: var(--ins-tone-brand); }
+/* The chevron: two borders of a rotated square, turned by hand per direction. */
+:is(a, button).ins-list-item::after {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: .4375rem;
+  block-size: .4375rem;
+  border-top: 2px solid var(--ins-text-3);
+  border-right: 2px solid var(--ins-text-3);
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+[dir="ltr"] :is(a, button).ins-list-item::after { transform: rotate(45deg); }
+[dir="rtl"] :is(a, button).ins-list-item::after { transform: rotate(-135deg); }
+/* It nudges toward where it points on hover, the gesture every destination in the
+   library makes. */
+[dir="ltr"] :is(a, button).ins-list-item:hover::after { transform: translateX(2px) rotate(45deg); }
+[dir="rtl"] :is(a, button).ins-list-item:hover::after { transform: translateX(-2px) rotate(-135deg); }

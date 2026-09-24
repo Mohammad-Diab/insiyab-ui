@@ -1,0 +1,583 @@
+/* ==========================================================================
+   Insiyab · overlays — dialog, drawer, menu, tooltip
+   ==========================================================================
+
+   Native `<dialog>`, not a div with a z-index. Three things come free, and all
+   three are things a hand-rolled overlay has to add back by hand: Escape closes
+   it, focus is trapped inside it, and the top layer puts it above every stacking
+   context on the page without a single z-index. The last one matters more than
+   usual here — every glass surface carries a `backdrop-filter` and is therefore
+   its own stacking context, which is a lesson 09-panel.css already records.
+
+   And because the top layer sits outside every ancestor's filter, a
+   `backdrop-filter` on `::backdrop` filters the *page* — the one place in this
+   library where that works as written. The panel itself is still painted opaque
+   over the page wash rather than trusting the blur, because a dialog wants ground
+   under it.
+
+   **`.ins-dialog`, not `.modal`.** Naming it `.modal` collides with Bootstrap,
+   whose `.modal { display: none }` is a class selector and therefore outranks the
+   UA stylesheet's `dialog[open] { display: block }`. The result is a dialog that
+   opens, takes the top layer, and paints nothing at all. Since Insiyab is designed
+   to be droppable into a page that already has Bootstrap, this is not hypothetical.
+   ========================================================================== */
+
+.ins-dialog {
+  inline-size: min(38rem, calc(100vw - 2rem));
+  max-block-size: min(44rem, calc(100vh - 3rem));
+  padding: 0;
+  border: 1px solid var(--ins-rim);
+  border-top-color: var(--ins-rim-top);
+  border-radius: var(--ins-r-xl);
+  background: linear-gradient(145deg, var(--ins-glass-strong), var(--ins-glass-hover)),
+              var(--ins-wash-1);
+  box-shadow: var(--ins-sh-lg);
+  color: var(--ins-text-1);
+  overflow: visible;
+
+  /* The entrance and the exit. A modal that is simply *there* on one frame and gone
+     on the next reads as a page that jumped rather than as a surface that opened.
+
+     A `<dialog>` can transition across a display change, and this is the one place
+     the platform hands it over: `display` and `overlay` listed with `allow-discrete`
+     keep the element painted and in the top layer for the length of the exit, and
+     `@starting-style` supplies the frame before the open. That covers *every* way
+     this closes — the X, a backdrop click, Escape, a `method="dialog"` submit —
+     which a closing class in JavaScript would have had to intercept one at a time,
+     and would have missed the one it did not know about.
+
+     Nothing here is load-bearing. A browser without `@starting-style` skips the
+     entrance, one without `allow-discrete` closes on the frame it always did. */
+  opacity: 0;
+  transform: translateY(10px) scale(.98);
+  transition: opacity var(--ins-t-exit) var(--ins-ease),
+              transform var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+.ins-dialog[open] { display: flex; flex-direction: column; }
+/* Longer in than out, the ratio every other surface here uses: an entrance is worth
+   watching and a dismissal is worth getting out of the way. The duration is read
+   from the state being transitioned *to*, so dropping `open` picks the exit duration
+   back up without a second rule saying so. */
+.ins-dialog[open] {
+  opacity: 1;
+  transform: none;
+  transition-duration: var(--ins-t-enter);
+}
+@starting-style {
+  .ins-dialog[open] { opacity: 0; transform: translateY(10px) scale(.98); }
+}
+
+/* The backdrop fades through `opacity` rather than `background` — that is one
+   property doing both halves, the tint and the blur, since a filtered backdrop is
+   painted as part of the pseudo-element and takes its opacity with everything else.
+   Fading the `background` alone snaps the page behind out of focus on the first
+   frame while the darkening takes the whole duration, which is the glitch this
+   avoids. */
+.ins-dialog::backdrop,
+.ins-drawer::backdrop {
+  background: rgba(15, 23, 42, .38);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+.ins-dialog[open]::backdrop,
+.ins-drawer[open]::backdrop { opacity: 1; transition-duration: var(--ins-t-enter); }
+@starting-style {
+  .ins-dialog[open]::backdrop,
+  .ins-drawer[open]::backdrop { opacity: 0; }
+}
+
+/* `--ins-line` and not `--ins-rim`. The rim is the *highlight* — white at 85% —
+   which is a top edge catching the light, not a divider; drawn across a near-white
+   dialog it is invisible. Three separator lines in one dialog were once drawn in it,
+   and the whole surface read as one undifferentiated block. */
+.ins-dialog-head {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  padding: 1.125rem var(--ins-dlg-pad);
+  border-block-end: 1px solid var(--ins-line);
+  flex: none;
+}
+.ins-dialog-title { font-size: 1.0625rem; font-weight: 800; margin: 0; }
+.ins-dialog-x {
+  margin-inline-start: auto;
+  inline-size: var(--ins-ctl-sm-h);
+  block-size: var(--ins-ctl-sm-h);
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: var(--ins-ctl-bg);
+  color: var(--ins-text-2);
+  border-radius: var(--ins-r-sm);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-dialog-x:hover { background: var(--ins-ctl-bg-hover); color: var(--ins-text-1); }
+
+/* The panel scrolls, not the page behind it. `overscroll-behavior` so that reaching
+   the end of a long step does not start scrolling the page underneath.
+
+   `flex: 1 1 auto; min-block-size: 0` rather than a calc against the dialog's max
+   height: that calc subtracted a fixed head height, and a two-line head is taller,
+   so a long body overflowed and its own footer buttons were cut in half by the
+   bottom edge. The column makes the head's *real* height the thing subtracted. */
+.ins-dialog-body {
+  padding: var(--ins-dlg-pad);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  flex: 1 1 auto;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ins-dlg-gap);
+}
+/* For a dialog that is not scrolling anyway and holds one open select. */
+.ins-dialog-body--spill { overflow: visible; }
+
+.ins-dialog-foot {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: 1rem var(--ins-dlg-pad);
+  border-block-start: 1px solid var(--ins-line);
+  flex: none;
+}
+/* A dialog's commit sits at the *end*, away from the cancel — the opposite of a
+   panel's form, which has no cancel to be kept away from. */
+.ins-dialog-foot > .ins-btn--primary { margin-inline-start: auto; }
+/* The generic close button takes the dialog cross's place at the end of a head. */
+.ins-dialog-head > .ins-close { margin-inline-start: auto; }
+
+/* Three widths. The default is a form; `--sm` is a confirmation, which should be
+   short enough that the two buttons sit under the question they answer; `--lg` is a
+   table or a two-column form. */
+.ins-dialog--sm { inline-size: min(26rem, calc(100vw - 2rem)); }
+.ins-dialog--lg { inline-size: min(56rem, calc(100vw - 2rem)); }
+
+/* --------------------------------------------------------------- drawer */
+/* A panel that slides in from an edge — navigation on a phone, filters beside a
+   table, the detail of a row. It is a `<dialog>` for the same three reasons the
+   modal is: Escape, a focus trap, and the top layer. So it opens with the same
+   attribute, `data-ins-dialog="#id"`, and it is built from the same head, body and
+   foot. What it adds is the edge.
+
+   It comes in from the *leading* edge by default — the right on an Arabic page —
+   because that is where the navigation it most often carries already lives. The
+   direction is one custom property, flipped by hand per direction, because a
+   transform has no logical form. The inner corners are rounded and the outer ones
+   are square: a drawer is attached to the edge it came out of. */
+.ins-drawer {
+  --ins-drawer-from: translateX(-100%);
+  position: fixed;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  margin: 0;
+  inline-size: min(24rem, 88vw);
+  max-inline-size: none;
+  block-size: 100%;
+  max-block-size: none;
+  padding: 0;
+  border: 0;
+  border-inline-end: 1px solid var(--ins-rim);
+  border-start-end-radius: var(--ins-r-xl);
+  border-end-end-radius: var(--ins-r-xl);
+  background: linear-gradient(145deg, var(--ins-glass-strong), var(--ins-glass-hover)),
+              var(--ins-wash-1);
+  box-shadow: var(--ins-sh-lg);
+  color: var(--ins-text-1);
+  overflow: hidden;
+  transform: var(--ins-drawer-from);
+  transition: transform var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+[dir="rtl"] .ins-drawer { --ins-drawer-from: translateX(100%); }
+.ins-drawer[open] {
+  display: flex;
+  flex-direction: column;
+  transform: none;
+  transition-duration: .3s;   /* the shell drawer's, which travels the same distance */
+}
+@starting-style {
+  .ins-drawer[open] { transform: var(--ins-drawer-from); }
+}
+.ins-drawer--end {
+  --ins-drawer-from: translateX(100%);
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+  border-inline-end: 0;
+  border-inline-start: 1px solid var(--ins-rim);
+  border-radius: 0;
+  border-start-start-radius: var(--ins-r-xl);
+  border-end-start-radius: var(--ins-r-xl);
+}
+[dir="rtl"] .ins-drawer--end { --ins-drawer-from: translateX(-100%); }
+/* A sheet from the bottom, for a phone: actions for a row, a short form. */
+.ins-drawer--bottom {
+  --ins-drawer-from: translateY(100%);
+  inset-block-start: auto;
+  inset-inline: 0;
+  inline-size: 100%;
+  block-size: auto;
+  max-block-size: 85vh;
+  border: 0;
+  border-block-start: 1px solid var(--ins-rim);
+  border-radius: var(--ins-r-xl) var(--ins-r-xl) 0 0;
+}
+[dir="rtl"] .ins-drawer--bottom { --ins-drawer-from: translateY(100%); }
+.ins-drawer .ins-dialog-body { flex: 1 1 auto; }
+
+/* --------------------------------------------------------------- popover */
+/* `<details>` + `<summary>`, so it opens, closes and is keyboard reachable with no
+   script at all — Enter or Space on the summary, and every item a real button in
+   the tab order. The body is a real raised card — it names itself so the de-nesting
+   rule in 05-glass.css does not flatten it, which is exactly the escape hatch that
+   rule's `:where()` was written to leave open.
+
+   **What the platform does *not* give it is Escape.** This comment used to say it
+   did, and so did the README; tested, a bare `<details>` ignores Escape both on its
+   summary and from inside its body. Escape, arrow keys between items, closing when
+   focus leaves and when an item is chosen, and flipping at the viewport's edge are
+   all insiyab.js. Without the script it is still a working disclosure. */
+.ins-pop { position: relative; display: inline-block; }
+.ins-pop > summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+}
+.ins-pop > summary::-webkit-details-marker { display: none; }
+.ins-pop-body {
+  position: absolute;
+  inset-block-start: calc(100% + .375rem);
+  inset-inline-end: 0;
+  z-index: 20;
+  min-inline-size: 12rem;
+  padding: .375rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-rim);
+  background: var(--ins-glass-strong);
+  box-shadow: var(--ins-sh-lg);
+  animation: ins-pop-in var(--ins-t-pop) var(--ins-ease);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-pop-body { backdrop-filter: var(--ins-blur); -webkit-backdrop-filter: var(--ins-blur); }
+}
+@keyframes ins-pop-in { from { opacity: 0; transform: translateY(-4px); } }
+.ins-pop-item {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  inline-size: 100%;
+  padding: .5rem .75rem;
+  border: 0;
+  background: none;
+  border-radius: var(--ins-r-xs);
+  font-family: inherit;
+  font-size: .875rem;
+  color: var(--ins-text-1);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+.ins-pop-item:hover { background: rgba(var(--ins-primary-rgb), .10); color: var(--ins-primary-darker); }
+:root[data-ins-theme="dark"] .ins-pop-item:hover { color: var(--ins-text-1); }
+.ins-pop-item--bad { color: var(--ins-tone-bad); }
+.ins-pop-item--bad:hover { background: var(--ins-tone-bad-bg); color: var(--ins-tone-bad); }
+.ins-pop-sep { block-size: 1px; background: var(--ins-line); margin: .25rem 0; border: 0; }
+
+/* A long menu scrolls inside itself rather than running off the page. */
+.ins-pop-body { max-block-size: min(24rem, 70vh); overflow-y: auto; overscroll-behavior: contain; }
+
+/* A heading over a run of items. `--ins-label`, the measured secondary ink — a
+   group label is the smallest text in the menu and the one read first. */
+.ins-pop-label {
+  padding: .5rem .75rem .25rem;
+  font-size: var(--ins-fs-xs);
+  font-weight: 700;
+  color: var(--ins-label);
+}
+/* A shortcut at the trailing end of an item: `<kbd class="ins-kbd">Ctrl K</kbd>`. */
+.ins-pop-item > .ins-kbd { margin-inline-start: auto; }
+.ins-pop-item:disabled,
+.ins-pop-item[aria-disabled="true"] { opacity: .45; pointer-events: none; }
+/* Keyboard focus looks like the pointer's hover, because it is the same state: the
+   item a keypress would choose. The ring is drawn inside the item so the menu's own
+   padding does not clip it. */
+.ins-pop-item:focus-visible {
+  outline-offset: -2px;
+  background: rgba(var(--ins-primary-rgb), .10);
+  color: var(--ins-primary-darker);
+}
+
+/* A checkable item — a column to show, a filter to apply. The mark sits in a
+   column of its own at the leading edge whether or not it is on, so a list of them
+   lines up. `role="menuitemcheckbox"` or `menuitemradio`, with `aria-checked`; the
+   script flips it on a click. */
+.ins-pop-item[aria-checked]::before {
+  content: "";
+  flex: 0 0 1rem;
+  inline-size: 1rem;
+  block-size: 1rem;
+  background: currentColor;
+  -webkit-mask: var(--ins-pop-mark) center / contain no-repeat;
+          mask: var(--ins-pop-mark) center / contain no-repeat;
+  opacity: 0;
+  transform: scale(.5);
+  transition: opacity var(--ins-t-pop) var(--ins-ease),
+              transform var(--ins-t-pop) var(--ins-ease-spring);
+}
+.ins-pop-item[aria-checked] {
+  --ins-pop-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+}
+.ins-pop-item[role="menuitemradio"][aria-checked] {
+  --ins-pop-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='4.5' fill='black'/%3E%3C/svg%3E");
+}
+.ins-pop-item[aria-checked="true"]::before { opacity: 1; transform: none; }
+
+/* Which way the menu opens. By default its trailing edge lines up with the
+   trigger's and it grows toward the start — the right way for the menu at the end of
+   a table row. `.ins-pop--start` lines it up the other way, for a trigger at the
+   leading edge. The script flips either one, and flips it downward-to-upward, when
+   the menu would leave the viewport; those are the `data-ins-flip` rules. */
+.ins-pop--start > .ins-pop-body { inset-inline-end: auto; inset-inline-start: 0; }
+.ins-pop[data-ins-flip~="up"] > .ins-pop-body {
+  inset-block-start: auto;
+  inset-block-end: calc(100% + .375rem);
+}
+.ins-pop[data-ins-flip~="inline"] > .ins-pop-body { inset-inline-end: auto; inset-inline-start: 0; }
+.ins-pop--start[data-ins-flip~="inline"] > .ins-pop-body { inset-inline-start: auto; inset-inline-end: 0; }
+
+/* --------------------------------------------------------------- motion */
+/* A menu item indents toward the content on hover -- the same directional nudge the
+   sidebar's links make, so a list of destinations gestures the same way wherever it
+   turns up. The sign is flipped by hand, as every transform in this library is. */
+.ins-pop-item { transition: background var(--ins-t-pop) var(--ins-ease),
+                            color var(--ins-t-pop) var(--ins-ease),
+                            transform var(--ins-t-pop) var(--ins-ease); }
+[dir="ltr"] .ins-pop-item:hover { transform: translateX(3px); }
+[dir="rtl"] .ins-pop-item:hover { transform: translateX(-3px); }
+
+/* The items arrive just after the body does, so the menu opens and then fills rather
+   than appearing whole -- which is most of what makes a 120ms popover feel
+   considered instead of abrupt. */
+.ins-pop-body > * { animation: ins-rise-sm var(--ins-t-pop) var(--ins-ease) backwards; }
+.ins-pop-body > :nth-child(2) { animation-delay: .03s; }
+.ins-pop-body > :nth-child(3) { animation-delay: .06s; }
+.ins-pop-body > :nth-child(4) { animation-delay: .09s; }
+.ins-pop-body > :nth-child(5) { animation-delay: .12s; }
+
+/* The close button turns. It is the one control in a dialog whose meaning is a
+   rotation already. */
+.ins-dialog-x { transition: background var(--ins-t-pop) var(--ins-ease),
+                            color var(--ins-t-pop) var(--ins-ease),
+                            transform var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-dialog-x:hover { transform: rotate(90deg); }
+
+/* --------------------------------------------------------------- tooltip */
+/* One element for the whole page, built by insiyab.js the first time a
+   `data-ins-tip` is pointed at, and moved to whichever control asked. It lives in
+   the **top layer** (`popover="manual"`), and that is the entire reason it is a
+   separate element rather than a pseudo-element on the control. A pseudo-element
+   tooltip is clipped by every `overflow: hidden` above it — and in this library that
+   is the button itself, whose shimmer needs the clip, and the panel around it, which
+   needs it for its radius. A tip that cannot leave the button it describes is not a
+   tip.
+
+   Not interactive, not a place to put a link: it describes a control. It stays up
+   while the pointer moves onto it and closes on Escape, which is what WCAG 1.4.13
+   asks of content that appears on hover.
+
+   The popover's UA box — fixed, centred on the viewport, with a border and a canvas
+   fill — is undone here; the script places it with `left` and `top`. */
+.ins-tooltip {
+  /* Which way it arrives from: down onto a control from above, up from below. The
+     script flips it along with the side it places the tip on. */
+  --ins-tip-dy: 4px;
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  max-inline-size: min(18rem, calc(100vw - 1rem));
+  padding: .375rem .625rem;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-tip-bg);
+  color: var(--ins-tip-fg);
+  font-family: var(--ins-font-body);
+  font-size: var(--ins-fs-xs);
+  font-weight: 600;
+  line-height: 1.5;
+  box-shadow: var(--ins-sh-md);
+  overflow: visible;
+  opacity: 0;
+  transform: translateY(var(--ins-tip-dy)) scale(.96);
+  transition: opacity var(--ins-t-exit) var(--ins-ease),
+              transform var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+/* `.is-open` is the same state for an engine with no Popover API, where the script
+   falls back to a plain fixed element. Inside `:is()` so that engine does not throw
+   the whole rule away over a pseudo-class it has never heard of. */
+.ins-tooltip:is(:popover-open, .is-open) {
+  opacity: 1;
+  transform: none;
+  transition-duration: var(--ins-t-pop);
+}
+@starting-style {
+  .ins-tooltip:is(:popover-open, .is-open) { opacity: 0; transform: translateY(var(--ins-tip-dy)) scale(.96); }
+}
+
+/* --------------------------------------------------------------- popover card */
+/* A `.ins-pop` whose body is not a menu but a small card — a user's details, an
+   explanation, a short form. It keeps every behaviour the menu has (Escape, closing
+   on an outside click, flipping at the edge) and gets room to hold a paragraph. */
+.ins-pop-body--card {
+  inline-size: min(20rem, calc(100vw - 2rem));
+  padding: 1rem;
+}
+.ins-pop-title { margin: 0 0 .25rem; font-size: var(--ins-fs-md); font-weight: 700; color: var(--ins-text-1); }
+.ins-pop-text { margin: 0; font-size: var(--ins-fs-sm); line-height: 1.7; color: var(--ins-label); }
+
+/* --------------------------------------------------------------- calendar */
+/* The date field's calendar. Like the tooltip it is one element for the page, in the
+   top layer, built by insiyab.js the first time a date field is opened and moved to
+   whichever field asked — so it cannot be clipped by the panel a filter bar sits in.
+
+   A `role="grid"` of day buttons with one tab stop and the arrow keys, laid out in
+   the page's direction: in Arabic the week runs right to left and ArrowLeft is the
+   next day. The week starts where the locale says it does — Saturday for Arabic,
+   Monday for most of Europe, Sunday for the United States — and the month and day
+   names are the locale's own. */
+.ins-cal {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  inline-size: min(19rem, calc(100vw - 1rem));
+  padding: .75rem;
+  border: 1px solid var(--ins-rim);
+  border-radius: var(--ins-r-lg);
+  background: linear-gradient(145deg, var(--ins-glass-strong), var(--ins-glass-hover)), var(--ins-wash-1);
+  box-shadow: var(--ins-sh-lg);
+  color: var(--ins-text-1);
+  font-family: var(--ins-font-body);
+  overflow: visible;
+  opacity: 0;
+  transform: translateY(-4px) scale(.98);
+  transition: opacity var(--ins-t-exit) var(--ins-ease),
+              transform var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+.ins-cal:is(:popover-open, .is-open) {
+  opacity: 1;
+  transform: none;
+  transition-duration: var(--ins-t-enter);
+}
+@starting-style {
+  .ins-cal:is(:popover-open, .is-open) { opacity: 0; transform: translateY(-4px) scale(.98); }
+}
+.ins-cal-head { display: flex; align-items: center; gap: .375rem; margin-block-end: .5rem; }
+.ins-cal-title { flex: 1 1 auto; display: flex; justify-content: center; gap: .375rem; min-inline-size: 0; }
+.ins-cal-title .ins-select {
+  inline-size: auto;
+  min-block-size: 2rem;
+  padding-block: 0;
+  font-size: var(--ins-fs-sm);
+  font-weight: 700;
+}
+/* Previous and next month: chevrons pointing toward the start and the end of the
+   line, so "previous" points right on an Arabic page. Turned by hand per direction. */
+.ins-cal-nav {
+  position: relative;
+  flex: 0 0 auto;
+  inline-size: 2rem;
+  block-size: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-ctl-bg);
+  color: var(--ins-text-1);
+  cursor: pointer;
+}
+.ins-cal-nav:hover { background: var(--ins-ctl-bg-hover); }
+.ins-cal-nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: .4375rem;
+  block-size: .4375rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+[dir="ltr"] .ins-cal-nav--next::before,
+[dir="rtl"] .ins-cal-nav--prev::before { transform: translateX(-1px) rotate(45deg); }
+[dir="ltr"] .ins-cal-nav--prev::before,
+[dir="rtl"] .ins-cal-nav--next::before { transform: translateX(1px) rotate(-135deg); }
+
+/* Separate borders with no spacing, not collapsed: under `border-collapse:
+   collapse` a cell ignores `border-radius`, and the rounded ends of a range are
+   drawn on the cells. */
+.ins-cal-grid { inline-size: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.ins-cal-grid th {
+  padding-block: .25rem .375rem;
+  font-size: var(--ins-fs-xs);
+  font-weight: 700;
+  color: var(--ins-label);
+}
+.ins-cal-grid td { padding: 1px 0; text-align: center; }
+.ins-cal-day {
+  inline-size: 100%;
+  aspect-ratio: 1;
+  max-block-size: 2.375rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: none;
+  font-family: var(--ins-font-body-en);
+  font-size: var(--ins-fs-sm);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--ins-text-1);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-cal-day:hover:not([aria-disabled="true"]) { background: var(--ins-ctl-bg-hover); }
+.ins-cal-day:focus-visible { outline-offset: -2px; }
+.ins-cal-day.is-outside { color: var(--ins-text-3); }
+.ins-cal-day[aria-current="date"] { color: var(--ins-tone-brand); font-weight: 700; box-shadow: inset 0 0 0 1px var(--ins-tone-brand-bd); }
+/* The chosen day — and, in a range, the day at the other end, which belongs to the
+   partner field but is just as much an end of what is being chosen. */
+.ins-cal-day:is([aria-selected="true"], .is-range-edge),
+.ins-cal-day:is([aria-selected="true"], .is-range-edge):hover {
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  color: var(--ins-on-primary);
+  font-weight: 700;
+  box-shadow: var(--ins-sh-brand-sm);
+}
+/* Out of the allowed range. `aria-disabled` and not `disabled`: a disabled button
+   cannot take focus, and the arrow keys have to be able to walk across a blocked
+   week to the open one beyond it. */
+.ins-cal-day[aria-disabled="true"] { opacity: .3; cursor: not-allowed; }
+/* A range is tinted across the cells between its two ends, and the tint runs
+   under the gaps between days so it reads as one band; its ends are rounded on
+   their outer side, logically, so the band starts at the right in Arabic. */
+.ins-cal-grid td.is-in-range { background: var(--ins-tone-brand-bg); }
+.ins-cal-grid td.is-range-start { border-start-start-radius: var(--ins-r-sm); border-end-start-radius: var(--ins-r-sm); }
+.ins-cal-grid td.is-range-end { border-start-end-radius: var(--ins-r-sm); border-end-end-radius: var(--ins-r-sm); }
+.ins-cal-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-block-start: .5rem;
+  padding-block-start: .5rem;
+  border-block-start: 1px solid var(--ins-line);
+}

@@ -1,0 +1,301 @@
+/* ==========================================================================
+   Insiyab · type and content
+   ==========================================================================
+   Heading and text classes, the long-form content wrapper, the key cap and the
+   divider.
+
+   **Long-form typography is scoped to `.ins-prose`, never applied to bare
+   elements.** The reset in 04-reset.css stops at headings and links on purpose:
+   Insiyab has to be droppable into a page that already has Bootstrap or Tailwind,
+   and a rule on bare `ul` or `p` restyles every nav, card and menu the host page
+   already built out of them. Wrap written content — an article, a help page, a
+   terms screen — in `.ins-prose`, and it gets the whole treatment; everything
+   outside it is left exactly as it was.
+
+   Three rules run through this file, and all three are about Arabic:
+
+     * **Nothing here sets `letter-spacing` on Arabic.** Arabic is a joined script,
+       and tracking pulls the joins apart — a word set with `.08em` reads as a row
+       of disconnected letters. The tracked styles below are gated on LTR.
+     * **Nothing here is set in italic, in either direction.** None of the three
+       faces ships an italic, so every italic the browser shows is a synthetic
+       oblique — tolerable on Latin, and on Arabic a slant that leans a
+       right-to-left script the wrong way. Emphasis is carried by colour instead.
+     * **Code is always an LTR island.** `direction: ltr` alone would reorder the
+       code relative to the Arabic around it; `unicode-bidi: isolate` is what keeps
+       `array[0]` from being read inside-out in the middle of an Arabic sentence.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- headings */
+/* A heading's look, detached from its level. The document outline is `h1`–`h6`,
+   and it should be chosen for the outline; how big the text is should not be the
+   reason a page skips from h2 to h4. So `<h2 class="ins-h4">` is a normal thing to
+   write. The same sizes apply to the real elements inside `.ins-prose`. */
+.ins-display,
+.ins-h1,
+.ins-h2,
+.ins-h3,
+.ins-h4 {
+  font-weight: 700;
+  color: var(--ins-text-1);
+  line-height: 1.3;
+  margin-block: 0 .5em;
+}
+.ins-display { font-size: var(--ins-fs-display); line-height: 1.2; }
+.ins-h1, .ins-prose h1 { font-size: var(--ins-fs-h1); }
+.ins-h2, .ins-prose h2 { font-size: var(--ins-fs-h2); }
+.ins-h3, .ins-prose h3 { font-size: var(--ins-fs-h3); }
+.ins-h4, .ins-prose h4 { font-size: var(--ins-fs-h4); }
+
+/* The display face, in LTR only, exactly as 04-reset.css gives it to h1–h3. A class
+   that looks like a heading has to be set like one, or `<p class="ins-h1">` is in a
+   different typeface from the `<h1>` beside it. */
+html[dir="ltr"] :is(.ins-display, .ins-h1, .ins-h2, .ins-h3) {
+  font-family: var(--ins-font-heading-en);
+  letter-spacing: -.02em;
+}
+
+/* The paragraph under a page title. `--ins-label` and not `--ins-text-2`, and that
+   is a measured choice rather than a preference: `--ins-text-2` straddles AA on
+   the glass (4.53:1 to 4.45:1 — the numbers are in 02-tokens.css), and at 18px
+   regular this is not large text by WCAG's definition, so it gets no allowance. */
+.ins-lead {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--ins-label);
+  margin-block: 0 1em;
+}
+
+/* The small label above a heading. `--ins-tone-brand`, the brand's *readable*
+   shade, rather than the primary: `Insiyab.brand()` derives that one against its
+   ground, and a pale brand set as 12px text on a pale page is the case that needs
+   it most. Tracked and in capitals in LTR only — see the header. */
+.ins-eyebrow {
+  display: block;
+  font-size: var(--ins-fs-xs);
+  font-weight: 700;
+  color: var(--ins-tone-brand);
+  margin-block-end: .5em;
+}
+html[dir="ltr"] .ins-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+/* --------------------------------------------------------------- prose */
+/* The flow is set on the children rather than on each element: everything
+   directly inside is 1em from what came before it, and headings take more room
+   above and less below, so a heading belongs to the text it introduces rather
+   than floating halfway between two paragraphs. */
+.ins-prose {
+  max-inline-size: var(--ins-measure);
+  font-size: var(--ins-fs-lg);
+  line-height: 1.8;
+  color: var(--ins-text-1);
+}
+/* Latin text needs less leading than Arabic at the same size; 1.8 set in Inter
+   reads as double spacing. */
+html[dir="ltr"] .ins-prose { line-height: 1.65; }
+
+.ins-prose > * { margin-block: 0; }
+.ins-prose > * + * { margin-block-start: 1em; }
+.ins-prose > * + :is(h1, h2, h3, h4) { margin-block-start: 1.75em; }
+.ins-prose > :is(h1, h2, h3, h4) + * { margin-block-start: .5em; }
+
+/* Links in running text are underlined. Colour alone is not enough to pick a link
+   out of a paragraph — WCAG asks for 3:1 against the surrounding text as well as
+   against the ground, which a brand shade next to near-black body text rarely
+   has. The offset clears the dots and descenders of Arabic letters, which a
+   default underline cuts straight through. */
+.ins-prose a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .3em;
+  text-decoration-color: var(--ins-tone-brand-bd);
+  transition: text-decoration-color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-prose a:hover { text-decoration-color: currentColor; }
+
+.ins-prose strong { font-weight: 700; }
+/* Colour in both directions, and not italic in LTR alone. The first version keyed
+   this on `:dir(rtl)`, and a render of the English page showed why that is not
+   enough: Arabic *text* on an LTR page resolves to `ltr`, so an Arabic word in an
+   English paragraph got the synthetic slant after all. Neither `:dir()` nor
+   `:lang()` can see a script the author has not marked, and an English page
+   showing Arabic data is the case this design exists for. With no italic face to
+   show in any case, colour is the one emphasis that reads the same in both. */
+.ins-prose em { font-style: normal; color: var(--ins-tone-brand); }
+
+.ins-prose mark {
+  background: var(--ins-tone-brand-bg);
+  color: inherit;
+  padding-inline: .2em;
+  border-radius: 4px;
+}
+
+.ins-prose :is(ul, ol) { padding-inline-start: 1.5em; }
+.ins-prose li + li { margin-block-start: .375em; }
+.ins-prose li > :is(ul, ol) { margin-block-start: .375em; }
+.ins-prose li::marker { color: var(--ins-tone-brand-soft); }
+
+/* The bar is on the leading edge and the rounding on the trailing one, both as
+   logical properties, so the quote mirrors without a rule of its own. A physical
+   `border-radius: 0 10px 10px 0` would put the round corners against the bar in
+   RTL. Upright, not italic — see the header. */
+.ins-prose blockquote {
+  margin-inline: 0;
+  padding: .75em 1.25em;
+  border-inline-start: 3px solid var(--ins-tone-brand-soft);
+  border-start-end-radius: var(--ins-r-sm);
+  border-end-end-radius: var(--ins-r-sm);
+  background: var(--ins-tone-brand-bg);
+}
+
+.ins-prose hr {
+  border: 0;
+  block-size: 1px;
+  background: var(--ins-line);
+  margin-block: 2em;
+}
+
+.ins-prose :not(pre) > code {
+  font-family: var(--ins-font-mono);
+  font-size: .875em;
+  padding: .125em .375em;
+  border-radius: 5px;
+  background: var(--ins-ctl-bg);
+  border: 1px solid var(--ins-line);
+  direction: ltr;
+  unicode-bidi: isolate;
+  overflow-wrap: anywhere;
+}
+/* A code block is left-aligned in either direction, and that is a physical
+   `left` on purpose: code is LTR text, and `text-align: start` would inherit the
+   page's direction and push it to the right edge of an Arabic page. */
+.ins-prose pre {
+  direction: ltr;
+  text-align: left;
+  font-family: var(--ins-font-mono);
+  font-size: var(--ins-fs-sm);
+  line-height: 1.6;
+  tab-size: 2;
+  padding: 1em 1.25em;
+  border-radius: var(--ins-r-md);
+  background: var(--ins-ctl-bg);
+  border: 1px solid var(--ins-ctl-bd);
+  overflow-x: auto;
+}
+/* Reset in full rather than by `font` alone. The inline rule above never reaches
+   code inside a <pre>, but the host page's own `code` rule does — a render of the
+   demo, which styles bare `code` for its own notes, showed each line of a code
+   block wearing a chip of its own. */
+.ins-prose pre code {
+  font: inherit;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.ins-prose :is(img, video) {
+  max-inline-size: 100%;
+  block-size: auto;
+  border-radius: var(--ins-r-md);
+}
+.ins-prose figure { margin-inline: 0; }
+.ins-prose figcaption {
+  margin-block-start: .5em;
+  font-size: var(--ins-fs-sm);
+  color: var(--ins-label);
+  text-align: center;
+}
+
+.ins-prose dt { font-weight: 700; }
+.ins-prose dd { margin-inline-start: 0; margin-block-end: .5em; color: var(--ins-label); }
+
+/* A plain table, for the one that turns up in the middle of an article. A data
+   table in an application is `.ins-table`, which has the glass, the zebra and the
+   row marker; this one is deliberately just rules and alignment. Wrap it in
+   `.ins-table-wrap` if it can be wider than the text. */
+.ins-prose table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--ins-fs-md);
+}
+.ins-prose :is(th, td) {
+  padding: .5em .75em;
+  text-align: start;
+  vertical-align: top;
+  border-block-end: 1px solid var(--ins-line);
+}
+.ins-prose th { font-weight: 700; color: var(--ins-label); }
+.ins-prose thead th { border-block-end-color: var(--ins-ctl-bd); }
+
+/* --------------------------------------------------------------- key cap */
+/* Standalone as well as inside prose, because shortcut hints turn up in menus and
+   tooltips far more often than in articles. Inter rather than the monospace face:
+   key names are words — Ctrl, Enter — not code, and Tajawal behind it in the
+   stack still sets an Arabic key name. The heavier bottom edge is the whole
+   illusion of a key. */
+.ins-kbd,
+.ins-prose kbd {
+  display: inline-block;
+  min-inline-size: 1.75em;
+  padding: .05em .45em;
+  font-family: var(--ins-font-body-en);
+  font-size: var(--ins-fs-xs);
+  font-weight: 500;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--ins-text-1);
+  background: var(--ins-ctl-bg);
+  border: 1px solid var(--ins-ctl-bd);
+  border-block-end-width: 2px;
+  border-radius: 5px;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* --------------------------------------------------------------- divider */
+/* One element, three shapes. The rule is drawn by the two pseudo-elements rather
+   than by a border on the element itself, which is what lets the same class carry
+   a label: `<div class="ins-divider">أو</div>` puts the text between two lines,
+   and an empty `<hr class="ins-divider">` closes the gap to a single line.
+
+   Leave `role="separator"` off a labelled one. A separator's children are
+   presentational, so a screen reader would announce "separator" and swallow the
+   word the line is there to carry. An `<hr>` is already a separator. */
+.ins-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--ins-sp-3);
+  margin-block: var(--ins-sp-4);
+  border: 0;
+  font-size: var(--ins-fs-xs);
+  font-weight: 700;
+  color: var(--ins-label);
+}
+.ins-divider::before,
+.ins-divider::after {
+  content: "";
+  flex: 1 1 0;
+  border-block-start: 1px solid var(--ins-line);
+}
+.ins-divider:empty { gap: 0; }
+/* The label at the leading edge: a section title that runs into its rule. */
+.ins-divider--start::before { content: none; }
+
+/* Between items in a row. `align-self: stretch` makes it as tall as the row it is
+   in, so it needs no height of its own. On an `<hr>`, add
+   `aria-orientation="vertical"`. */
+.ins-divider--v {
+  display: block;
+  align-self: stretch;
+  inline-size: 1px;
+  min-block-size: 1em;
+  margin-block: 0;
+  margin-inline: var(--ins-sp-1);
+  background: var(--ins-line);
+}
+.ins-divider--v::before,
+.ins-divider--v::after { content: none; }

@@ -363,6 +363,12 @@
   --ins-dlg-gap: 1.25rem;   /* between the blocks inside one */
   --ins-dlg-gap-x: .75rem;  /* between two fields on the same line */
 
+  /* The tooltip is the one surface that is *not* glass: a solid inverted chip. It
+     floats over whatever is under the pointer, which is exactly where a frosted
+     surface has nothing reliable to be read against. Inverted per theme below. */
+  --ins-tip-bg: rgba(15, 23, 42, .94);
+  --ins-tip-fg: #F8FAFC;
+
   --ins-field-h: 46px;   /* the design's control height; Bootstrap's is 38px */
   --ins-ctl-h: 38px;     /* a toolbar / table-row control, one step down */
   /* The small step, and a token rather than three 30px literals: a small button,
@@ -378,6 +384,27 @@
 
   --ins-shell-sidebar: 252px;
   --ins-shell-topbar: 64px;
+
+  /* Spacing. One rule to remember: step N is N × 4px. The steps are the ones the
+     components were already spending — .25, .5, .75, 1, 1.25 and 1.5rem are all in
+     the sheet as literals — plus the two larger steps a page layout needs and a
+     component never does. Every `ins-gap-*`, `ins-m*-*` and `ins-p*-*` utility
+     reads these, so the utilities and the components cannot drift apart. */
+  --ins-sp-1: .25rem;
+  --ins-sp-2: .5rem;
+  --ins-sp-3: .75rem;
+  --ins-sp-4: 1rem;
+  --ins-sp-5: 1.25rem;
+  --ins-sp-6: 1.5rem;
+  --ins-sp-8: 2rem;
+  --ins-sp-12: 3rem;
+
+  /* A page's width, and a paragraph's. The measure is in `ch`, which is the width
+     of the zero glyph and so an approximation in Arabic — but a consistent one, and
+     70 of them lands a Tajawal line at the 60–75 characters long-form text is
+     comfortable at. `.ins-container--narrow` and `--wide` swap the first. */
+  --ins-container: 75rem;
+  --ins-measure: 70ch;
 
   /* Arabic first: Tajawal is the identity, and it carries its own Latin subset, so
      a Latin acronym inside an Arabic line stays in Tajawal rather than jumping to
@@ -405,6 +432,23 @@
      RTL-first; an LTR page swaps it below. This is the token components inherit
      from, so nothing downstream has to know which direction it is in. */
   --ins-font-body: var(--ins-font-arabic);
+
+  /* Type scale. The body is 14px, set on <body> in 04-reset.css, and the steps
+     either side of it are the sizes the components already use: 12 and 13px for
+     hints and toolbars, 16 and 20px above. Headings climb faster than the text
+     steps do, because a heading is read as a position in the page before it is
+     read as words. The display size is fluid — the one size on a page that has to
+     work on a 390px phone and a 1440px screen both. */
+  --ins-fs-xs: .75rem;
+  --ins-fs-sm: .8125rem;
+  --ins-fs-md: .875rem;
+  --ins-fs-lg: 1rem;
+  --ins-fs-xl: 1.25rem;
+  --ins-fs-h4: 1rem;
+  --ins-fs-h3: 1.125rem;
+  --ins-fs-h2: 1.375rem;
+  --ins-fs-h1: 1.75rem;
+  --ins-fs-display: clamp(2rem, 1.25rem + 3vw, 3rem);
 }
 
 html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }
@@ -527,6 +571,8 @@ html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }
      shots are kept for (ussd/01 against ussd/07). */
   --ins-orb-1: rgba(var(--ins-primary-rgb), .30);
   --ins-orb-2: rgba(var(--ins-accent-rgb), .26);
+  --ins-tip-bg: rgba(241, 245, 249, .96);
+  --ins-tip-fg: #0F172A;
 }
 
 /* The same block, reached by the operating system instead of by an explicit
@@ -596,6 +642,8 @@ html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }
     --ins-wash-2: #12141a;
     --ins-orb-1: rgba(var(--ins-primary-rgb), .30);
     --ins-orb-2: rgba(var(--ins-accent-rgb), .26);
+    --ins-tip-bg: rgba(241, 245, 249, .96);
+    --ins-tip-fg: #0F172A;
   }
 }
 
@@ -1319,8 +1367,17 @@ a:hover { color: var(--ins-tone-brand-soft); }
 /* ==========================================================================
    Insiyab · layout
    ==========================================================================
-   The three arrangements every page in this design needs: a grid of tiles, a
-   strip of controls above a table, and a search field.
+   The arrangements every page in this design needs: a grid of tiles, a strip of
+   controls above a table, and a search field — and underneath them the four plain
+   primitives any page is built from: a container, a stack, a row, and a grid with
+   a fixed number of columns.
+
+   The primitives own the spacing *between* their children, through `gap`. That
+   only works if the children stop bringing their own outer margins — a panel's
+   1.25rem under a stack's 1rem gap is 2.25rem, and it reads as a mistake. The
+   rule that clears them is in 19-utilities.css rather than here, and the reason is
+   order: it has to come after every component that declares a margin, or the
+   component's own rule wins the tie.
    ========================================================================== */
 
 /* --------------------------------------------------------------- card grid */
@@ -1342,7 +1399,7 @@ a:hover { color: var(--ins-tone-brand-soft); }
 .ins-grid--wide { --ins-col: 20rem; }
 .ins-grid--half { --ins-col: 26rem; }
 
-/* A grid reveals itself: the entrance is the shared one in 16-motion.css, which
+/* A grid reveals itself: the entrance is the shared one in 18-motion.css, which
    splits the fade onto the container and the rise onto the children.
 
    That split is the whole point and it is worth saying twice. The single-animation
@@ -1418,6 +1475,413 @@ a:hover { color: var(--ins-tone-brand-soft); }
 }
 .ins-searchbar .ins-search { flex: 1 1 auto; }
 
+/* --------------------------------------------------------------- container */
+/* A page's column. The inset grows with the viewport rather than stepping at a
+   breakpoint: 16px is right on a phone and looks cramped at 1440px, where 32px is
+   right, and `clamp()` gets both without a media query. */
+.ins-container {
+  inline-size: 100%;
+  max-inline-size: var(--ins-container);
+  margin-inline: auto;
+  padding-inline: clamp(var(--ins-sp-4), 4vw, var(--ins-sp-8));
+}
+/* Forms, articles, settings. 48rem is the widest a single column of fields gets
+   before the label and the far end of the input stop reading as one line. */
+.ins-container--narrow { --ins-container: 48rem; }
+.ins-container--wide { --ins-container: 90rem; }
+
+/* --------------------------------------------------------------- stack / row */
+/* Vertical and horizontal flow. Flex rather than margins between siblings, so the
+   gap is one declaration a `.ins-gap-*` utility can replace, and so a hidden child
+   leaves no orphaned margin behind.
+
+   A stack stretches its children across its width, as a column of blocks should.
+   An inline control inside one — a single button — stretches with them; put
+   `.ins-items-start` on the stack when that is not what you want. */
+.ins-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ins-sp-4);
+}
+/* Wraps, and centres on the cross axis: a row is nearly always a line of controls
+   of mixed heights — a button beside a pill beside a select — and top-aligning
+   those is the one arrangement nobody wants. The gap is the toolbar's. */
+.ins-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ins-sp-3);
+}
+
+/* --------------------------------------------------------------- fixed columns */
+/* For layouts that are about a number of columns rather than about tile width:
+   a form in two columns, a page scaffold on twelve. `.ins-grid` above is still the
+   right answer for a set of cards, which should reflow by width.
+
+   `minmax(0, 1fr)` and not `1fr`: a bare `1fr` has an automatic minimum, so one
+   long unbroken string — an IBAN, a URL — widens its column and squeezes the
+   others instead of wrapping. */
+.ins-cols-2,
+.ins-cols-3,
+.ins-cols-4,
+.ins-cols-6,
+.ins-cols-12 {
+  display: grid;
+  gap: var(--ins-sp-4);
+}
+.ins-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ins-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ins-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.ins-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.ins-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+.ins-span-2 { grid-column: span 2; }
+.ins-span-3 { grid-column: span 3; }
+.ins-span-4 { grid-column: span 4; }
+.ins-span-5 { grid-column: span 5; }
+.ins-span-6 { grid-column: span 6; }
+.ins-span-7 { grid-column: span 7; }
+.ins-span-8 { grid-column: span 8; }
+.ins-span-9 { grid-column: span 9; }
+.ins-span-10 { grid-column: span 10; }
+.ins-span-11 { grid-column: span 11; }
+.ins-span-12 { grid-column: span 12; }
+.ins-span-full { grid-column: 1 / -1; }
+
+/* The grids collapse on their own, so a page needs no responsive column classes.
+   At tablet width — 900px, the same line at which the shell's sidebar becomes a
+   drawer — anything wider than two columns becomes two, and a spanned cell goes
+   full width. On a phone every grid is one column.
+
+   The spans have to be reset along with the columns, not left alone: a
+   `span 8` cell in a grid that now has two columns does not clamp, it creates six
+   implicit columns and pushes the page sideways.
+
+   `.ins-cols--fixed` opts out, for the grids whose column count is the content —
+   three figures side by side, a keypad. */
+@media (max-width: 900px) {
+  :is(.ins-cols-3, .ins-cols-4, .ins-cols-6, .ins-cols-12):not(.ins-cols--fixed) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  :is(.ins-cols-3, .ins-cols-4, .ins-cols-6, .ins-cols-12):not(.ins-cols--fixed)
+    > :is(.ins-span-3, .ins-span-4, .ins-span-5, .ins-span-6, .ins-span-7, .ins-span-8,
+          .ins-span-9, .ins-span-10, .ins-span-11, .ins-span-12) {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 34rem) {
+  :is(.ins-cols-2, .ins-cols-3, .ins-cols-4, .ins-cols-6, .ins-cols-12):not(.ins-cols--fixed) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  :is(.ins-cols-2, .ins-cols-3, .ins-cols-4, .ins-cols-6, .ins-cols-12):not(.ins-cols--fixed)
+    > :is(.ins-span-2, .ins-span-3, .ins-span-4, .ins-span-5, .ins-span-6, .ins-span-7,
+          .ins-span-8, .ins-span-9, .ins-span-10, .ins-span-11, .ins-span-12) {
+    grid-column: auto;
+  }
+}
+
+/* ==========================================================================
+   Insiyab · type and content
+   ==========================================================================
+   Heading and text classes, the long-form content wrapper, the key cap and the
+   divider.
+
+   **Long-form typography is scoped to `.ins-prose`, never applied to bare
+   elements.** The reset in 04-reset.css stops at headings and links on purpose:
+   Insiyab has to be droppable into a page that already has Bootstrap or Tailwind,
+   and a rule on bare `ul` or `p` restyles every nav, card and menu the host page
+   already built out of them. Wrap written content — an article, a help page, a
+   terms screen — in `.ins-prose`, and it gets the whole treatment; everything
+   outside it is left exactly as it was.
+
+   Three rules run through this file, and all three are about Arabic:
+
+     * **Nothing here sets `letter-spacing` on Arabic.** Arabic is a joined script,
+       and tracking pulls the joins apart — a word set with `.08em` reads as a row
+       of disconnected letters. The tracked styles below are gated on LTR.
+     * **Nothing here is set in italic, in either direction.** None of the three
+       faces ships an italic, so every italic the browser shows is a synthetic
+       oblique — tolerable on Latin, and on Arabic a slant that leans a
+       right-to-left script the wrong way. Emphasis is carried by colour instead.
+     * **Code is always an LTR island.** `direction: ltr` alone would reorder the
+       code relative to the Arabic around it; `unicode-bidi: isolate` is what keeps
+       `array[0]` from being read inside-out in the middle of an Arabic sentence.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- headings */
+/* A heading's look, detached from its level. The document outline is `h1`–`h6`,
+   and it should be chosen for the outline; how big the text is should not be the
+   reason a page skips from h2 to h4. So `<h2 class="ins-h4">` is a normal thing to
+   write. The same sizes apply to the real elements inside `.ins-prose`. */
+.ins-display,
+.ins-h1,
+.ins-h2,
+.ins-h3,
+.ins-h4 {
+  font-weight: 700;
+  color: var(--ins-text-1);
+  line-height: 1.3;
+  margin-block: 0 .5em;
+}
+.ins-display { font-size: var(--ins-fs-display); line-height: 1.2; }
+.ins-h1, .ins-prose h1 { font-size: var(--ins-fs-h1); }
+.ins-h2, .ins-prose h2 { font-size: var(--ins-fs-h2); }
+.ins-h3, .ins-prose h3 { font-size: var(--ins-fs-h3); }
+.ins-h4, .ins-prose h4 { font-size: var(--ins-fs-h4); }
+
+/* The display face, in LTR only, exactly as 04-reset.css gives it to h1–h3. A class
+   that looks like a heading has to be set like one, or `<p class="ins-h1">` is in a
+   different typeface from the `<h1>` beside it. */
+html[dir="ltr"] :is(.ins-display, .ins-h1, .ins-h2, .ins-h3) {
+  font-family: var(--ins-font-heading-en);
+  letter-spacing: -.02em;
+}
+
+/* The paragraph under a page title. `--ins-label` and not `--ins-text-2`, and that
+   is a measured choice rather than a preference: `--ins-text-2` straddles AA on
+   the glass (4.53:1 to 4.45:1 — the numbers are in 02-tokens.css), and at 18px
+   regular this is not large text by WCAG's definition, so it gets no allowance. */
+.ins-lead {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--ins-label);
+  margin-block: 0 1em;
+}
+
+/* The small label above a heading. `--ins-tone-brand`, the brand's *readable*
+   shade, rather than the primary: `Insiyab.brand()` derives that one against its
+   ground, and a pale brand set as 12px text on a pale page is the case that needs
+   it most. Tracked and in capitals in LTR only — see the header. */
+.ins-eyebrow {
+  display: block;
+  font-size: var(--ins-fs-xs);
+  font-weight: 700;
+  color: var(--ins-tone-brand);
+  margin-block-end: .5em;
+}
+html[dir="ltr"] .ins-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+/* --------------------------------------------------------------- prose */
+/* The flow is set on the children rather than on each element: everything
+   directly inside is 1em from what came before it, and headings take more room
+   above and less below, so a heading belongs to the text it introduces rather
+   than floating halfway between two paragraphs. */
+.ins-prose {
+  max-inline-size: var(--ins-measure);
+  font-size: var(--ins-fs-lg);
+  line-height: 1.8;
+  color: var(--ins-text-1);
+}
+/* Latin text needs less leading than Arabic at the same size; 1.8 set in Inter
+   reads as double spacing. */
+html[dir="ltr"] .ins-prose { line-height: 1.65; }
+
+.ins-prose > * { margin-block: 0; }
+.ins-prose > * + * { margin-block-start: 1em; }
+.ins-prose > * + :is(h1, h2, h3, h4) { margin-block-start: 1.75em; }
+.ins-prose > :is(h1, h2, h3, h4) + * { margin-block-start: .5em; }
+
+/* Links in running text are underlined. Colour alone is not enough to pick a link
+   out of a paragraph — WCAG asks for 3:1 against the surrounding text as well as
+   against the ground, which a brand shade next to near-black body text rarely
+   has. The offset clears the dots and descenders of Arabic letters, which a
+   default underline cuts straight through. */
+.ins-prose a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .3em;
+  text-decoration-color: var(--ins-tone-brand-bd);
+  transition: text-decoration-color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-prose a:hover { text-decoration-color: currentColor; }
+
+.ins-prose strong { font-weight: 700; }
+/* Colour in both directions, and not italic in LTR alone. The first version keyed
+   this on `:dir(rtl)`, and a render of the English page showed why that is not
+   enough: Arabic *text* on an LTR page resolves to `ltr`, so an Arabic word in an
+   English paragraph got the synthetic slant after all. Neither `:dir()` nor
+   `:lang()` can see a script the author has not marked, and an English page
+   showing Arabic data is the case this design exists for. With no italic face to
+   show in any case, colour is the one emphasis that reads the same in both. */
+.ins-prose em { font-style: normal; color: var(--ins-tone-brand); }
+
+.ins-prose mark {
+  background: var(--ins-tone-brand-bg);
+  color: inherit;
+  padding-inline: .2em;
+  border-radius: 4px;
+}
+
+.ins-prose :is(ul, ol) { padding-inline-start: 1.5em; }
+.ins-prose li + li { margin-block-start: .375em; }
+.ins-prose li > :is(ul, ol) { margin-block-start: .375em; }
+.ins-prose li::marker { color: var(--ins-tone-brand-soft); }
+
+/* The bar is on the leading edge and the rounding on the trailing one, both as
+   logical properties, so the quote mirrors without a rule of its own. A physical
+   `border-radius: 0 10px 10px 0` would put the round corners against the bar in
+   RTL. Upright, not italic — see the header. */
+.ins-prose blockquote {
+  margin-inline: 0;
+  padding: .75em 1.25em;
+  border-inline-start: 3px solid var(--ins-tone-brand-soft);
+  border-start-end-radius: var(--ins-r-sm);
+  border-end-end-radius: var(--ins-r-sm);
+  background: var(--ins-tone-brand-bg);
+}
+
+.ins-prose hr {
+  border: 0;
+  block-size: 1px;
+  background: var(--ins-line);
+  margin-block: 2em;
+}
+
+.ins-prose :not(pre) > code {
+  font-family: var(--ins-font-mono);
+  font-size: .875em;
+  padding: .125em .375em;
+  border-radius: 5px;
+  background: var(--ins-ctl-bg);
+  border: 1px solid var(--ins-line);
+  direction: ltr;
+  unicode-bidi: isolate;
+  overflow-wrap: anywhere;
+}
+/* A code block is left-aligned in either direction, and that is a physical
+   `left` on purpose: code is LTR text, and `text-align: start` would inherit the
+   page's direction and push it to the right edge of an Arabic page. */
+.ins-prose pre {
+  direction: ltr;
+  text-align: left;
+  font-family: var(--ins-font-mono);
+  font-size: var(--ins-fs-sm);
+  line-height: 1.6;
+  tab-size: 2;
+  padding: 1em 1.25em;
+  border-radius: var(--ins-r-md);
+  background: var(--ins-ctl-bg);
+  border: 1px solid var(--ins-ctl-bd);
+  overflow-x: auto;
+}
+/* Reset in full rather than by `font` alone. The inline rule above never reaches
+   code inside a <pre>, but the host page's own `code` rule does — a render of the
+   demo, which styles bare `code` for its own notes, showed each line of a code
+   block wearing a chip of its own. */
+.ins-prose pre code {
+  font: inherit;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.ins-prose :is(img, video) {
+  max-inline-size: 100%;
+  block-size: auto;
+  border-radius: var(--ins-r-md);
+}
+.ins-prose figure { margin-inline: 0; }
+.ins-prose figcaption {
+  margin-block-start: .5em;
+  font-size: var(--ins-fs-sm);
+  color: var(--ins-label);
+  text-align: center;
+}
+
+.ins-prose dt { font-weight: 700; }
+.ins-prose dd { margin-inline-start: 0; margin-block-end: .5em; color: var(--ins-label); }
+
+/* A plain table, for the one that turns up in the middle of an article. A data
+   table in an application is `.ins-table`, which has the glass, the zebra and the
+   row marker; this one is deliberately just rules and alignment. Wrap it in
+   `.ins-table-wrap` if it can be wider than the text. */
+.ins-prose table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--ins-fs-md);
+}
+.ins-prose :is(th, td) {
+  padding: .5em .75em;
+  text-align: start;
+  vertical-align: top;
+  border-block-end: 1px solid var(--ins-line);
+}
+.ins-prose th { font-weight: 700; color: var(--ins-label); }
+.ins-prose thead th { border-block-end-color: var(--ins-ctl-bd); }
+
+/* --------------------------------------------------------------- key cap */
+/* Standalone as well as inside prose, because shortcut hints turn up in menus and
+   tooltips far more often than in articles. Inter rather than the monospace face:
+   key names are words — Ctrl, Enter — not code, and Tajawal behind it in the
+   stack still sets an Arabic key name. The heavier bottom edge is the whole
+   illusion of a key. */
+.ins-kbd,
+.ins-prose kbd {
+  display: inline-block;
+  min-inline-size: 1.75em;
+  padding: .05em .45em;
+  font-family: var(--ins-font-body-en);
+  font-size: var(--ins-fs-xs);
+  font-weight: 500;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--ins-text-1);
+  background: var(--ins-ctl-bg);
+  border: 1px solid var(--ins-ctl-bd);
+  border-block-end-width: 2px;
+  border-radius: 5px;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* --------------------------------------------------------------- divider */
+/* One element, three shapes. The rule is drawn by the two pseudo-elements rather
+   than by a border on the element itself, which is what lets the same class carry
+   a label: `<div class="ins-divider">أو</div>` puts the text between two lines,
+   and an empty `<hr class="ins-divider">` closes the gap to a single line.
+
+   Leave `role="separator"` off a labelled one. A separator's children are
+   presentational, so a screen reader would announce "separator" and swallow the
+   word the line is there to carry. An `<hr>` is already a separator. */
+.ins-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--ins-sp-3);
+  margin-block: var(--ins-sp-4);
+  border: 0;
+  font-size: var(--ins-fs-xs);
+  font-weight: 700;
+  color: var(--ins-label);
+}
+.ins-divider::before,
+.ins-divider::after {
+  content: "";
+  flex: 1 1 0;
+  border-block-start: 1px solid var(--ins-line);
+}
+.ins-divider:empty { gap: 0; }
+/* The label at the leading edge: a section title that runs into its rule. */
+.ins-divider--start::before { content: none; }
+
+/* Between items in a row. `align-self: stretch` makes it as tall as the row it is
+   in, so it needs no height of its own. On an `<hr>`, add
+   `aria-orientation="vertical"`. */
+.ins-divider--v {
+  display: block;
+  align-self: stretch;
+  inline-size: 1px;
+  min-block-size: 1em;
+  margin-block: 0;
+  margin-inline: var(--ins-sp-1);
+  background: var(--ins-line);
+}
+.ins-divider--v::before,
+.ins-divider--v::after { content: none; }
+
 /* ==========================================================================
    Insiyab · panel and card
    ==========================================================================
@@ -1490,7 +1954,7 @@ a:hover { color: var(--ins-tone-brand-soft); }
    again. Where `:has()` is unsupported this rule simply does not match, which is
    the behaviour of the day before — so it degrades to the old bug, not to a new
    one. Add `.ins-panel--open` by hand if you need to support those browsers. */
-.ins-panel:has([open]) { overflow: visible; z-index: 5; }
+.ins-panel:has([open], [data-ins-open]) { overflow: visible; z-index: 5; }
 
 .ins-panel-head {
   display: flex;
@@ -1591,12 +2055,110 @@ a:hover { color: var(--ins-tone-brand-soft); }
 }
 .ins-panel--alert .ins-panel-head:hover .ins-panel-ico { background: var(--ins-tone-bad-bd); }
 
-/* A panel does not lift on hover -- see the note in 16-motion.css. What it does is
+/* A panel does not lift on hover -- see the note in 18-motion.css. What it does is
    brighten its rim, which reads as the surface catching a little more light without
    the container jumping under a pointer that was only crossing it on the way to a
    row inside it. */
 .ins-panel { transition: border-color var(--ins-t-base) var(--ins-ease); }
 .ins-panel:hover { border-color: var(--ins-rim-top); }
+
+/* --------------------------------------------------------------- list */
+/* Rows of things — settings, notifications, members, recent files. Each row has
+   three slots, all optional: something at the leading edge (an icon chip, an
+   avatar), the text (a title and a line under it), and something at the trailing
+   edge (a badge, an amount, a switch, a time).
+
+     <ul class="ins-list">
+       <li class="ins-list-item">
+         <span class="ins-panel-ico">…</span>
+         <span class="ins-list-text">
+           <span class="ins-list-title">…</span>
+           <span class="ins-list-desc">…</span>
+         </span>
+         <span class="ins-list-end">…</span>
+       </li>
+     </ul>
+
+   A row that is an `<a>` or a `<button>` is a destination, and gets a chevron
+   pointing where it takes you — toward the end of the line, so to the left on an
+   Arabic page. Like `.ins-accordion`, the list has no surface of its own; it goes in
+   a panel or a card. */
+.ins-list {
+  list-style: none;
+  margin: 0;
+  padding: .25rem;
+  display: flex;
+  flex-direction: column;
+}
+.ins-list-item {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  min-block-size: 3.25rem;
+  padding: .625rem .75rem;
+  border-radius: var(--ins-r-md);
+  color: var(--ins-text-1);
+  text-decoration: none;
+}
+.ins-list > .ins-list-item + .ins-list-item,
+.ins-list > li + li > .ins-list-item { border-block-start: 1px solid var(--ins-line); }
+.ins-list-text { flex: 1 1 auto; min-inline-size: 0; display: flex; flex-direction: column; gap: .125rem; }
+.ins-list-title {
+  font-size: var(--ins-fs-md);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ins-list-desc { font-size: var(--ins-fs-xs); color: var(--ins-label); }
+.ins-list-end {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: var(--ins-fs-xs);
+  color: var(--ins-label);
+}
+
+/* Interactive rows. The divider is a border, so a hovered row's tint would stop a
+   pixel short of the one above; the tint is drawn with a radius instead and the
+   dividers either side of it are hidden, which reads as the row lifting out of the
+   list rather than as a highlighter drawn across it. */
+:is(a, button).ins-list-item {
+  inline-size: 100%;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease);
+}
+.ins-list > :is(a, button).ins-list-item + :is(a, button).ins-list-item { border-block-start: 1px solid var(--ins-line); }
+:is(a, button).ins-list-item:hover,
+:is(a, button).ins-list-item:is([aria-current="page"], .is-active) {
+  background: var(--ins-ctl-bg);
+  border-color: transparent;
+}
+:is(a, button).ins-list-item:hover + .ins-list-item,
+:is(a, button).ins-list-item:is([aria-current="page"], .is-active) + .ins-list-item { border-color: transparent; }
+:is(a, button).ins-list-item:focus-visible { outline-offset: -2px; }
+:is(a, button).ins-list-item:is([aria-current="page"], .is-active) .ins-list-title { color: var(--ins-tone-brand); }
+/* The chevron: two borders of a rotated square, turned by hand per direction. */
+:is(a, button).ins-list-item::after {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: .4375rem;
+  block-size: .4375rem;
+  border-top: 2px solid var(--ins-text-3);
+  border-right: 2px solid var(--ins-text-3);
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+[dir="ltr"] :is(a, button).ins-list-item::after { transform: rotate(45deg); }
+[dir="rtl"] :is(a, button).ins-list-item::after { transform: rotate(-135deg); }
+/* It nudges toward where it points on hover, the gesture every destination in the
+   library makes. */
+[dir="ltr"] :is(a, button).ins-list-item:hover::after { transform: translateX(2px) rotate(45deg); }
+[dir="rtl"] :is(a, button).ins-list-item:hover::after { transform: translateX(-2px) rotate(-135deg); }
 
 /* ==========================================================================
    Insiyab · stat tile
@@ -1717,7 +2279,7 @@ a:hover { color: var(--ins-tone-brand-soft); }
 /* `overflow-x: auto` computes `auto` on *both* axes, so the wrapper cuts popovers
    off — measured at 4 of 15 rows on one page, by up to 182px. Only while one is
    open, so a phone keeps its sideways scroll the rest of the time. */
-.ins-table-wrap:has([open]) { overflow: visible; }
+.ins-table-wrap:has([open], [data-ins-open]) { overflow: visible; }
 
 .ins-table {
   inline-size: 100%;
@@ -2182,6 +2744,119 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 .ins-btn--icon:hover:not(:disabled) svg,
 .ins-btn--icon:hover:not(:disabled) .ins-ico { transform: scale(1.15); }
 
+/* --------------------------------------------------------------- close */
+/* One close button for everything that closes — a dialog, a drawer, an alert, a
+   navbar menu. The cross is drawn by the two pseudo-elements, so it needs no icon
+   set and no markup inside it: `<button class="ins-close" aria-label="إغلاق">`.
+   Put an icon in it instead and the drawn cross steps aside.
+
+   It is the dialog's `.ins-dialog-x` generalised, and looks the same on purpose:
+   that one predates it and stays for compatibility. The label is not optional — a
+   cross is not a word, and an unlabelled one is announced as "button".
+
+   `data-ins-dismiss` on it closes whatever it sits in; see insiyab.js. */
+.ins-close {
+  --ins-close: var(--ins-ctl-sm-h);
+  position: relative;
+  flex: 0 0 auto;
+  inline-size: var(--ins-close);
+  block-size: var(--ins-close);
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-ctl-bg);
+  color: var(--ins-text-2);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease),
+              color var(--ins-t-pop) var(--ins-ease),
+              transform var(--ins-t-pop) var(--ins-ease-spring);
+}
+.ins-close::before,
+.ins-close::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: 44%;
+  block-size: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transform: rotate(45deg);
+}
+.ins-close::after { transform: rotate(-45deg); }
+.ins-close:has(> *)::before,
+.ins-close:has(> *)::after { content: none; }
+/* It turns: the one control whose meaning is already a rotation. */
+.ins-close:hover { background: var(--ins-ctl-bg-hover); color: var(--ins-text-1); transform: rotate(90deg); }
+.ins-close--sm { --ins-close: 1.5rem; }
+/* No chip, for a cross that sits on a tinted surface of its own — an alert, a
+   toast — where a second fill inside the first reads as a button on a button. */
+.ins-close--bare { background: transparent; color: inherit; opacity: .6; }
+.ins-close--bare:hover { background: transparent; color: inherit; opacity: 1; }
+
+/* --------------------------------------------------------------- toggle */
+/* A button that stays down: bold in a toolbar, a filter that is on, "show
+   archived". The state is `aria-pressed`, which is what a screen reader announces,
+   so the appearance keys on the same attribute and the two cannot disagree;
+   `data-ins-toggle` flips it on a click.
+
+   Pressed reads as *pressed in* — the brand tint and an inset shade — rather than
+   as filled. A filled brand face is what the primary button means, and a row of
+   three pressed toggles would otherwise be three primary buttons. */
+.ins-btn[aria-pressed="true"]:not(.ins-btn--primary),
+.ins-btn[aria-pressed="true"]:not(.ins-btn--primary):hover:not(:disabled) {
+  background: rgba(var(--ins-primary-rgb), .14);
+  border-color: rgba(var(--ins-primary-rgb), .40);
+  color: var(--ins-primary-darker);
+  box-shadow: inset 0 1px 3px rgba(15, 23, 42, .12);
+}
+
+/* --------------------------------------------------------------- group */
+/* Buttons joined into one object — a split button, a pager, a set of alignment
+   toggles. The corners that face a neighbour are squared and the borders overlap
+   by a pixel, so two hairlines never sit side by side; the outer corners keep the
+   14px radius. All logical, so the first button is the rightmost on an Arabic page
+   and still has its round corners on the outside.
+
+   A `<details class="ins-pop">` in a group is a split button's menu half: its
+   summary is the button that takes the corners. For a strip of peers where exactly
+   one is chosen, `.ins-seg` is the better component; this is for actions. */
+.ins-btn-group { display: inline-flex; align-items: stretch; }
+.ins-btn-group > .ins-btn,
+.ins-btn-group > .ins-pop > .ins-btn { border-radius: 0; }
+.ins-btn-group > :first-child,
+.ins-btn-group > .ins-pop:first-child > .ins-btn {
+  border-start-start-radius: var(--ins-r-md);
+  border-end-start-radius: var(--ins-r-md);
+}
+.ins-btn-group > :last-child,
+.ins-btn-group > .ins-pop:last-child > .ins-btn {
+  border-start-end-radius: var(--ins-r-md);
+  border-end-end-radius: var(--ins-r-md);
+}
+.ins-btn-group > * + * { margin-inline-start: -1px; }
+/* The one under the pointer or the focus comes to the front, so its whole border
+   and its ring are drawn over its neighbours' rather than under them. */
+.ins-btn-group > :is(:hover, :focus-visible, :focus-within) { z-index: 2; }
+.ins-btn-group--sm > :first-child,
+.ins-btn-group--sm > .ins-pop:first-child > .ins-btn {
+  border-start-start-radius: var(--ins-r-sm);
+  border-end-start-radius: var(--ins-r-sm);
+}
+.ins-btn-group--sm > :last-child,
+.ins-btn-group--sm > .ins-pop:last-child > .ins-btn {
+  border-start-end-radius: var(--ins-r-sm);
+  border-end-end-radius: var(--ins-r-sm);
+}
+/* A filled button carries no border of its own, so between two of them the seam is
+   a hairline of the fill's own shade instead. */
+.ins-btn-group > .ins-btn--primary + .ins-btn--primary,
+.ins-btn-group > .ins-btn--primary + .ins-pop > .ins-btn--primary {
+  border-inline-start: 1px solid rgba(255, 255, 255, .28);
+}
+
 /* ==========================================================================
    Insiyab · form controls
    ==========================================================================
@@ -2598,6 +3273,571 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
                                             transform var(--ins-t-pop) var(--ins-ease-spring); }
 .ins-search:focus-within > .ins-search-ico { transform: scale(1.12); }
 
+/* --------------------------------------------------------------- input group */
+/* A field with things attached — a currency, a unit, a prefix, a button — built as
+   **one control that holds them**, rather than as boxes with their touching borders
+   squared off. The group draws the border, the fill and the focus; the input inside
+   it gives all three up. So the whole group lifts and glows when the caret is in
+   it, which is what a person sees as the field: the "ل.س" beside an amount is part
+   of the amount.
+
+   Written after the motion section above on purpose. The field hover there is
+   four pseudo-classes deep, and it would otherwise paint a darker rectangle inside
+   the group every time the pointer crossed the input. */
+.ins-input-group {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+  min-block-size: var(--ins-field-h);
+  padding-inline: .375rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-ctl-bd);
+  background: var(--ins-ctl-bg);
+  box-shadow: var(--ins-bevel-dim), var(--ins-sh-subtle);
+  transition: border-color var(--ins-t-base) var(--ins-ease),
+              box-shadow var(--ins-t-base) var(--ins-ease),
+              background var(--ins-t-base) var(--ins-ease),
+              transform var(--ins-t-base) var(--ins-ease);
+}
+.ins-input-group:hover:not(:focus-within) {
+  border-color: rgba(var(--ins-primary-rgb), .30);
+  background: var(--ins-ctl-bg-hover);
+}
+.ins-input-group:focus-within {
+  background: var(--ins-glass-strong);
+  border-color: rgba(var(--ins-primary-rgb), .55);
+  box-shadow: var(--ins-glow), var(--ins-bevel-dim), 0 4px 16px rgba(var(--ins-primary-rgb), .10);
+  transform: translateY(-1px);
+}
+.ins-input-group > :is(.ins-input, .ins-select),
+.ins-input-group > :is(.ins-input, .ins-select):focus,
+.ins-input-group > :is(.ins-input, .ins-select):hover:not(:disabled):not(:focus) {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  min-block-size: calc(var(--ins-field-h) - 2px);
+  padding-inline: .5rem;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+/* Text, a symbol or an icon attached to the field. Muted and in the label's weight,
+   so it reads as part of the question rather than as part of the answer. A hairline
+   separates it from the input on whichever side the input is. */
+.ins-addon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  align-self: stretch;
+  padding-inline: .5rem;
+  color: var(--ins-label);
+  font-size: var(--ins-fs-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.ins-addon:first-child { border-inline-end: 1px solid var(--ins-line); margin-block: .5rem; }
+.ins-addon:last-child { border-inline-start: 1px solid var(--ins-line); margin-block: .5rem; }
+.ins-addon svg { inline-size: 1rem; block-size: 1rem; }
+/* A button inside the field is inset rather than flush: a step smaller than the
+   field, with its own radius a step smaller than the field's, so the two corners
+   stay concentric. */
+.ins-input-group > .ins-btn {
+  min-block-size: calc(var(--ins-field-h) - .75rem);
+  padding-inline: .75rem;
+  border-radius: var(--ins-r-sm);
+}
+.ins-input-group > .ins-btn--icon { inline-size: calc(var(--ins-field-h) - .75rem); padding-inline: 0; }
+
+/* --------------------------------------------------------------- password */
+/* Show and hide, as a pressed state rather than as a label that changes: the name
+   stays "Show password" and `aria-pressed` says whether it is, which is how a screen
+   reader expects a toggle to behave. The eye is drawn by a mask, so it takes the
+   text colour in both themes with no icon set.
+
+   It needs the script to do anything, so without the script it is not there — a
+   button that does nothing is worse than no button. */
+.ins-password-toggle {
+  --ins-eye: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+  --ins-eye-off: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M4 4l16 16'/%3E%3C/svg%3E");
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: transparent;
+  color: var(--ins-text-3);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-password-toggle::before {
+  content: "";
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  background: currentColor;
+  -webkit-mask: var(--ins-eye) center / contain no-repeat;
+          mask: var(--ins-eye) center / contain no-repeat;
+}
+.ins-password-toggle[aria-pressed="true"]::before {
+  -webkit-mask-image: var(--ins-eye-off);
+          mask-image: var(--ins-eye-off);
+}
+.ins-password-toggle:hover { background: var(--ins-ctl-bg-hover); color: var(--ins-text-1); }
+.ins-password-toggle[aria-pressed="true"] { color: var(--ins-tone-brand-soft); }
+:root:not([data-ins-js]) .ins-password-toggle { display: none; }
+/* Edge draws its own eye inside every password field. Two eyes, one of which
+   ignores the other's state, is the kind of thing people screenshot. A separate
+   rule, because a pseudo-element another engine does not know invalidates every
+   selector in its list. */
+.ins-input-group:has(.ins-password-toggle) .ins-input::-ms-reveal { display: none; }
+
+/* --------------------------------------------------------------- validation */
+/* Three ways a field is marked invalid, and one appearance for all of them:
+
+     * `aria-invalid="true"` on the control — what a server-rendered form sets, and
+       the one a screen reader announces;
+     * an `.ins-error` inside the field — if the message is there, the field is in
+       error, so the two cannot disagree;
+     * `:user-invalid` — the browser's own constraint validation, but only once the
+       person has actually interacted with the field or tried to submit. `:invalid`
+       would paint an empty required field red before anybody has typed a letter.
+       `[data-ins-reported]:invalid` is the same state for a field the script has
+       reported — a wizard step checked with `reportValidity()`, which the browser does
+       not count as interaction.
+
+   `.ins-input--bad` above still works; this is the same triad reached three ways.
+
+   Three details in the selectors, each of which was a bug in the first draft:
+
+     * **The lists are inside `:is()`**, whose argument list is *forgiving*: an
+       engine that does not know `:user-invalid` or `:has()` drops that one branch
+       instead of the whole rule.
+     * **A grouped input is excluded** with `:not(.ins-input-group > *)`, rather
+       than painted red and then painted back. `:is()` takes the specificity of its
+       most specific branch, so an override for the inner input would have had to
+       out-shout a selector six classes deep. The group is the field; the group is
+       what turns red.
+     * **An empty message does not count**, and neither does any message inside a
+       `data-ins-validate` form. There the message is a placeholder the script fills
+       in, and it stays in the markup after the field is fixed — so its presence says
+       nothing, and `:user-invalid` is the signal instead. */
+:is(:is(.ins-input, .ins-select, .ins-textarea):is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid),
+    .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty))
+      :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *),
+.ins-input-group:is(:has(:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)),
+                    .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty)) *) {
+  border-color: var(--ins-tone-bad-bd);
+  background: var(--ins-tone-bad-bg);
+}
+:is(:is(.ins-input, .ins-select, .ins-textarea):is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid),
+    .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty))
+      :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *):focus,
+.ins-input-group:is(:has(:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)),
+                    .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty)) *):focus-within {
+  border-color: var(--ins-tone-bad);
+  box-shadow: var(--ins-glow-bad), var(--ins-bevel-dim);
+}
+
+/* Valid, for the field worth confirming — a username that is free, a code that
+   matched. Not applied automatically: a form that turns every field green as you
+   fill it in is congratulating you for typing. */
+:is(.ins-input--ok,
+    .ins-field:has(> .ins-success:not(:empty)) :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *),
+.ins-input-group:is(.ins-field:has(> .ins-success:not(:empty)) *) { border-color: rgba(34, 197, 94, .45); }
+
+/* The message under a field. The mark is a mask like the eye above, so it is the
+   message's own colour in both themes, and it sits against the first line rather
+   than the middle of a wrapped message. Link it with `aria-describedby` — the
+   script does that for you — or a screen reader hears the red border and nothing
+   else. */
+.ins-error,
+.ins-success {
+  display: flex;
+  align-items: flex-start;
+  gap: .375rem;
+  margin: 0;
+  font-size: var(--ins-fs-xs);
+  font-weight: 600;
+  line-height: 1.6;
+}
+.ins-error { color: var(--ins-tone-bad); }
+.ins-success { color: var(--ins-tone-ok); }
+.ins-error::before,
+.ins-success::before {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: .9375rem;
+  block-size: .9375rem;
+  margin-block-start: .1em;
+  background: currentColor;
+  -webkit-mask: var(--ins-field-mark) center / contain no-repeat;
+          mask: var(--ins-field-mark) center / contain no-repeat;
+}
+.ins-error {
+  --ins-field-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7.5v5.5M12 16.5v.01'/%3E%3C/svg%3E");
+}
+.ins-success {
+  --ins-field-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='m8 12.5 2.5 2.5L16 9.5'/%3E%3C/svg%3E");
+}
+.ins-error:empty,
+.ins-success:empty { display: none; }
+
+/* Client-side validation, opted into with `data-ins-validate` on the form: each
+   message waits until its field is actually invalid. Without the attribute a
+   message is shown whenever it is in the markup, which is what a server-rendered
+   form wants — the server only renders the message when there is an error. */
+form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:invalid)) > .ins-error { display: none; }
+
+/* The required mark after a label. `aria-hidden` on it, and `required` on the
+   control: the attribute is what is announced, the asterisk is for the eye. */
+.ins-req { color: var(--ins-tone-bad); margin-inline-start: .125rem; }
+
+/* --------------------------------------------------------------- large */
+/* The step up from the default, for a login or a search that is the whole page. */
+.ins-input--lg,
+.ins-select--lg {
+  min-block-size: 3.25rem;
+  padding-inline: 1rem;
+  font-size: var(--ins-fs-lg);
+}
+.ins-select--lg { padding-inline-end: 2.625rem; }
+
+/* --------------------------------------------------------------- indeterminate */
+/* "Some of these": the select-all box over a partly selected table. There is no
+   HTML attribute for it — it is a property only script can set — so
+   `data-ins-indeterminate` on the input is the markup form, and insiyab.js turns it
+   into the property. The tick becomes a bar, on the same fill. */
+.ins-check > input[type="checkbox"]:indeterminate {
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  border-color: transparent;
+}
+.ins-check > input[type="checkbox"]:indeterminate::after {
+  inset: 0;
+  margin: auto;
+  inline-size: .5625rem;
+  block-size: 2px;
+  border: 0;
+  border-radius: 1px;
+  background: var(--ins-on-primary);
+  transform: none;
+}
+
+/* --------------------------------------------------------------- range */
+/* A native `<input type="range">`, so the keyboard, the value and the announcement
+   are the platform's. RTL is the platform's too: in an Arabic page the minimum is at
+   the right and the thumb travels left, with nothing here to say so.
+
+   The filled part of the track is the one thing the engines disagree about. Firefox
+   draws it (`::-moz-range-progress`); Chromium and WebKit have no such part, so the
+   fill is a gradient stop at `--ins-fill`, which insiyab.js keeps in step with the
+   value — flipped per direction by hand, as a gradient has no logical form. Without
+   the script those two engines show the track without its fill, and the slider
+   still works. Every pseudo-element is in a rule of its own; see the progress bar. */
+.ins-range {
+  --ins-fill: 0%;
+  -webkit-appearance: none;
+          appearance: none;
+  inline-size: 100%;
+  block-size: 1.5rem;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.ins-range:focus-visible { outline: none; }
+.ins-range::-webkit-slider-runnable-track {
+  block-size: .375rem;
+  border-radius: var(--ins-r-pill);
+  background: linear-gradient(to right, var(--ins-tone-brand-soft) var(--ins-fill), var(--ins-ctl-bg-hover) var(--ins-fill));
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, .08);
+}
+[dir="rtl"] .ins-range::-webkit-slider-runnable-track {
+  background: linear-gradient(to left, var(--ins-tone-brand-soft) var(--ins-fill), var(--ins-ctl-bg-hover) var(--ins-fill));
+}
+.ins-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  margin-block-start: -.4375rem;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, .28), 0 0 0 1px rgba(var(--ins-primary-rgb), .30);
+  transition: transform var(--ins-t-pop) var(--ins-ease-spring), box-shadow var(--ins-t-pop) var(--ins-ease);
+}
+.ins-range:hover::-webkit-slider-thumb { transform: scale(1.1); }
+.ins-range:active::-webkit-slider-thumb { transform: scale(1.18); box-shadow: 0 2px 6px rgba(15, 23, 42, .28), var(--ins-glow); }
+.ins-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 2px 6px rgba(15, 23, 42, .28), var(--ins-focus-ring); }
+.ins-range::-moz-range-track {
+  block-size: .375rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-ctl-bg-hover);
+}
+.ins-range::-moz-range-progress {
+  block-size: .375rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-brand-soft);
+}
+.ins-range::-moz-range-thumb {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, .28), 0 0 0 1px rgba(var(--ins-primary-rgb), .30);
+}
+.ins-range:focus-visible::-moz-range-thumb { box-shadow: 0 2px 6px rgba(15, 23, 42, .28), var(--ins-focus-ring); }
+.ins-range:disabled { opacity: .5; cursor: not-allowed; }
+
+/* --------------------------------------------------------------- number stepper */
+/* A number between − and + buttons, inside an input group:
+
+     <div class="ins-input-group">
+       <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>
+       <input class="ins-input" type="number" min="1" max="99" value="1">
+       <button class="ins-spin" data-ins-spin="up" aria-label="زيادة"></button>
+     </div>
+
+   The buttons call the input's own `stepDown()` and `stepUp()`, so `step`, `min`
+   and `max` mean exactly what they mean to the browser, and each press fires the
+   same `input` and `change` events typing would. In DOM order they mirror with the
+   page: − at the start, + at the end, so on an Arabic page the + is on the left —
+   the direction the numbers grow in, as on the slider above.
+
+   The browser's own spin arrows are hidden only while the script is running;
+   without it they are the stepper, and the − and + step aside. */
+.ins-spin {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-ctl-bg-hover);
+  color: var(--ins-text-1);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), transform var(--ins-t-exit) var(--ins-ease);
+}
+.ins-spin::before,
+.ins-spin[data-ins-spin="up"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: .75rem;
+  block-size: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.ins-spin[data-ins-spin="up"]::after { transform: rotate(90deg); }
+.ins-spin:hover:not(:disabled) { background: var(--ins-ctl-bd); }
+.ins-spin:active:not(:disabled) { transform: scale(.92); }
+.ins-spin:disabled { opacity: .35; cursor: not-allowed; }
+:root:not([data-ins-js]) .ins-spin { display: none; }
+.ins-input-group:has(> .ins-spin) > .ins-input { text-align: center; font-variant-numeric: tabular-nums; }
+:root[data-ins-js] .ins-input-group:has(> .ins-spin) > .ins-input { -moz-appearance: textfield; appearance: textfield; }
+:root[data-ins-js] .ins-input-group:has(> .ins-spin) > .ins-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+:root[data-ins-js] .ins-input-group:has(> .ins-spin) > .ins-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* --------------------------------------------------------------- tiles */
+/* A choice that deserves more than a line — a plan, a delivery speed, a payment
+   method. A real radio or checkbox inside a label, so the keyboard, the form value
+   and the grouping are all the platform's; the tile only draws what `:checked` and
+   `:focus-visible` already know.
+
+     <label class="ins-tile">
+       <input type="radio" name="plan" value="pro">
+       <span class="ins-tile-title">احترافي</span>
+       <span class="ins-tile-desc">حتى عشرة مستخدمين</span>
+     </label>
+
+   The mark sits at the trailing top corner. It is drawn in two pieces — the ring on
+   `::before`, the tick or dot on `::after` — because the tick is a mask filled with
+   `--ins-on-primary`, the measured label colour, and a mask on the ring would cut the
+   ring away along with it. */
+.ins-tile-grid {
+  display: grid;
+  gap: .625rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+}
+.ins-tile {
+  --ins-tile-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5.5 12.5 4 4 9-9'/%3E%3C/svg%3E");
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .1875rem;
+  padding: .875rem 1rem;
+  padding-inline-end: 2.75rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-ctl-bd);
+  background: var(--ins-ctl-bg);
+  cursor: pointer;
+  transition: border-color var(--ins-t-pop) var(--ins-ease),
+              background var(--ins-t-pop) var(--ins-ease),
+              box-shadow var(--ins-t-pop) var(--ins-ease);
+}
+.ins-tile:has(> input[type="radio"]) {
+  --ins-tile-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='5' fill='black'/%3E%3C/svg%3E");
+}
+.ins-tile > input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.ins-tile::before,
+.ins-tile::after {
+  content: "";
+  position: absolute;
+  inset-block-start: .875rem;
+  inset-inline-end: .875rem;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+}
+.ins-tile::before {
+  border-radius: 50%;
+  border: 1px solid var(--ins-ctl-bd);
+  background: var(--ins-surface);
+  box-shadow: var(--ins-bevel-dim);
+  transition: background var(--ins-t-pop) var(--ins-ease), border-color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-tile:has(> input[type="checkbox"])::before { border-radius: var(--ins-r-xs); }
+.ins-tile::after {
+  background: var(--ins-on-primary);
+  -webkit-mask: var(--ins-tile-mark) center / .75rem no-repeat;
+          mask: var(--ins-tile-mark) center / .75rem no-repeat;
+  transform: scale(0);
+  transition: transform .28s var(--ins-ease-spring);
+}
+.ins-tile-title { font-size: var(--ins-fs-md); font-weight: 700; color: var(--ins-text-1); }
+.ins-tile-desc { font-size: var(--ins-fs-xs); color: var(--ins-label); line-height: 1.6; }
+.ins-tile:hover { border-color: rgba(var(--ins-primary-rgb), .35); background: var(--ins-ctl-bg-hover); }
+.ins-tile:has(> input:checked) {
+  border-color: var(--ins-tone-brand-soft);
+  background: var(--ins-tone-brand-bg);
+  box-shadow: inset 0 0 0 1px var(--ins-tone-brand-soft);
+}
+.ins-tile:has(> input:checked)::before {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+}
+.ins-tile:has(> input:checked)::after { transform: scale(1); }
+.ins-tile:has(> input:checked) .ins-tile-title { color: var(--ins-tone-brand); }
+.ins-tile:has(> input:focus-visible) { outline: 2px solid var(--ins-tone-brand-soft); outline-offset: 2px; }
+.ins-tile:has(> input:disabled) { opacity: .5; cursor: not-allowed; }
+
+/* --------------------------------------------------------------- autocomplete */
+/* A text field that suggests from a list it carries:
+
+     <div class="ins-combo">
+       <input class="ins-input" id="city" autocomplete="off">
+       <ul class="ins-combo-list">
+         <li class="ins-combo-option" data-value="dam">دمشق</li>
+         …
+         <li class="ins-combo-empty">لا نتائج</li>
+       </ul>
+     </div>
+
+   The script supplies the combobox pattern — the roles, `aria-expanded`,
+   `aria-activedescendant`, the arrow keys, Enter to choose and Escape to close — and
+   the matching, which is **Arabic-aware**: the diacritics are ignored, the hamza
+   forms of alef are one letter, and ة and ه, ى and ي match each other. Somebody
+   typing "اسامة" finds "أسامة", which is the difference between an autocomplete that
+   works in Arabic and one that only works when you spell it the way the database
+   did. Without the script it is a text field, which is what it is anyway.
+
+   `data-ins-open` rather than a class marks it open, because that is what the
+   panel's and the table's clipping escape looks for. */
+.ins-combo { position: relative; }
+.ins-combo-list {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: calc(100% + .375rem);
+  z-index: 30;
+  margin: 0;
+  padding: .375rem;
+  list-style: none;
+  max-block-size: min(18rem, 50vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-rim);
+  background: var(--ins-glass-strong);
+  box-shadow: var(--ins-sh-lg);
+  animation: ins-pop-in var(--ins-t-pop) var(--ins-ease);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-combo-list { backdrop-filter: var(--ins-blur); -webkit-backdrop-filter: var(--ins-blur); }
+}
+.ins-combo-list:not([data-ins-open]) { display: none; }
+.ins-combo[data-ins-flip~="up"] > .ins-combo-list {
+  inset-block-start: auto;
+  inset-block-end: calc(100% + .375rem);
+}
+.ins-combo-option {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .75rem;
+  border-radius: var(--ins-r-xs);
+  font-size: var(--ins-fs-md);
+  color: var(--ins-text-1);
+  cursor: pointer;
+}
+.ins-combo-option:hover,
+.ins-combo-option.is-active { background: rgba(var(--ins-primary-rgb), .10); color: var(--ins-primary-darker); }
+.ins-combo-option[aria-selected="true"] { font-weight: 700; }
+.ins-combo-option[aria-disabled="true"] { opacity: .45; pointer-events: none; }
+.ins-combo-empty { padding: .5rem .75rem; font-size: var(--ins-fs-sm); color: var(--ins-label); }
+
+/* --------------------------------------------------------------- date */
+/* Write a native date input inside a group, and give it `data-ins-date`:
+
+     <div class="ins-input-group">
+       <input class="ins-input" type="date" data-ins-date name="from" value="2026-09-23">
+     </div>
+
+   Without the script that is the browser's own date field, which is a perfectly
+   good fallback. With it, the field becomes a text field showing the date the way
+   the page's language writes it — "23 أيلول 2026" on a Syrian page, in the Latin
+   digits the library sets every figure in (`.ins-num`, `.ins-money`); give the page
+   `lang="ar-u-nu-arab"` for Arabic-Indic ones — a hidden input carries the ISO value under the
+   original `name`, so the server receives exactly what the native field would
+   have sent, and this button opens the calendar. Why replace a native control at
+   all: its display order and language are the *browser's*, not the page's, so an
+   Arabic page on an English browser showed mm/dd/yyyy running left to right. */
+.ins-date-btn {
+  --ins-cal-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4.5' width='18' height='16.5' rx='3'/%3E%3Cpath d='M3 9.5h18M8 3v3M16 3v3'/%3E%3C/svg%3E");
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: transparent;
+  color: var(--ins-text-3);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-date-btn::before {
+  content: "";
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  background: currentColor;
+  -webkit-mask: var(--ins-cal-icon) center / contain no-repeat;
+          mask: var(--ins-cal-icon) center / contain no-repeat;
+}
+.ins-date-btn:hover,
+.ins-date-btn[aria-expanded="true"] { background: var(--ins-ctl-bg-hover); color: var(--ins-tone-brand-soft); }
+
 /* ==========================================================================
    Insiyab · pill, badge, money, avatar
    ==========================================================================
@@ -2928,6 +4168,107 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 @keyframes ins-skel { to { background-position: -240% 0; } }
 .ins-skel--text { block-size: .75rem; margin-block: .375rem; }
 .ins-skel--title { block-size: 1.25rem; inline-size: 40%; }
+/* A paragraph's last line is short. Without this a block of text lines reads as a
+   table of grey bars rather than as text that has not arrived yet. */
+.ins-skel--text:last-child:not(:first-child) { inline-size: 60%; }
+/* An avatar, an icon chip. Set `--ins-skel-size` to match what is loading. */
+.ins-skel--circle {
+  --ins-skel-size: 2.5rem;
+  flex: 0 0 auto;
+  inline-size: var(--ins-skel-size);
+  block-size: var(--ins-skel-size);
+  border-radius: 50%;
+}
+/* An image, a chart, a card that has not arrived. */
+.ins-skel--block { block-size: 8rem; border-radius: var(--ins-r-md); }
+
+/* --------------------------------------------------------------- progress */
+/* A native `<progress>`, so it is announced with its value and needs no ARIA: give
+   it `value` and `max`, or leave `value` off for "working, no idea how long".
+
+   Three engines, three ways in. Chromium and WebKit draw the bar with two
+   pseudo-elements, Firefox with one and the element itself as the track. Each
+   pseudo-element is in a rule of its own, because a selector list that names one
+   an engine does not know is thrown away whole — the Firefox fill would take the
+   Chromium one with it.
+
+   The **indeterminate** bar moves for ever, which this library allows exactly twice
+   — the skeleton and the spinner, both of which mean "waiting". So does this, and
+   it is built from the skeleton's own keyframes rather than being given a third
+   exception: `build.mjs` names the two animations that may loop, and this is one of
+   them wearing the brand tint. */
+.ins-progress {
+  --ins-progress-a: var(--ins-primary);
+  --ins-progress-b: var(--ins-primary-dark);
+  -webkit-appearance: none;
+          appearance: none;
+  display: block;
+  inline-size: 100%;
+  block-size: .5rem;
+  border: 0;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-ctl-bg-hover);
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, .08);
+  overflow: hidden;
+}
+.ins-progress::-webkit-progress-bar { background: transparent; border-radius: inherit; }
+.ins-progress::-webkit-progress-value {
+  background: linear-gradient(90deg, var(--ins-progress-a), var(--ins-progress-b));
+  border-radius: inherit;
+  transition: inline-size var(--ins-t-enter) var(--ins-ease);
+}
+.ins-progress::-moz-progress-bar {
+  background: linear-gradient(90deg, var(--ins-progress-a), var(--ins-progress-b));
+  border-radius: inherit;
+}
+.ins-progress:indeterminate {
+  background: linear-gradient(90deg, transparent 30%, rgba(var(--ins-primary-rgb), .55) 50%, transparent 70%) 0 0 / 240% 100%,
+              var(--ins-ctl-bg-hover);
+  animation: ins-skel 1.8s infinite;
+}
+.ins-progress:indeterminate::-webkit-progress-bar { background: transparent; }
+.ins-progress:indeterminate::-moz-progress-bar { background: transparent; }
+.ins-progress--sm { block-size: .25rem; }
+.ins-progress--lg { block-size: .75rem; }
+/* The tone follows the meaning: a quota at 95% is a warning, not a brand moment. */
+.ins-progress--ok { --ins-progress-a: #22C55E; --ins-progress-b: #15803D; }
+.ins-progress--warn { --ins-progress-a: #F59E0B; --ins-progress-b: #B45309; }
+.ins-progress--bad { --ins-progress-a: #EF4444; --ins-progress-b: #B91C1C; }
+
+/* The ring, for a figure in a tile or beside a heading. Not a native element, so
+   it carries its own role and value:
+
+     <div class="ins-ring" role="progressbar" aria-valuenow="72" aria-valuemin="0"
+          aria-valuemax="100" style="--ins-value: 72">72%</div>
+
+   The arc is a conic gradient cut into a ring by a mask, on a pseudo-element so the
+   mask does not cut the label out as well. It runs clockwise in both directions: a
+   dial is a clock face, and clocks do not mirror. */
+.ins-ring {
+  --ins-value: 0;
+  --ins-ring: 3.25rem;
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  inline-size: var(--ins-ring);
+  block-size: var(--ins-ring);
+  font-family: var(--ins-font-body-en);
+  font-size: var(--ins-fs-xs);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ins-text-1);
+}
+.ins-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(var(--ins-tone-brand-soft) calc(var(--ins-value) * 1%), var(--ins-ctl-bg-hover) 0);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - .375rem), #000 calc(100% - .375rem + .5px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - .375rem), #000 calc(100% - .375rem + .5px));
+}
+.ins-ring--lg { --ins-ring: 5rem; font-size: var(--ins-fs-lg); }
 
 /* --------------------------------------------------------------- spinner */
 /* A ring of the brand tint with one quadrant in the brand colour. `infinite` is
@@ -2973,7 +4314,7 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
                           ins-fade-in var(--ins-t-enter) var(--ins-ease); }
 
 /* ==========================================================================
-   Insiyab · dialog and popover
+   Insiyab · overlays — dialog, drawer, menu, tooltip
    ==========================================================================
 
    Native `<dialog>`, not a div with a z-index. Three things come free, and all
@@ -2981,7 +4322,7 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
    it, focus is trapped inside it, and the top layer puts it above every stacking
    context on the page without a single z-index. The last one matters more than
    usual here — every glass surface carries a `backdrop-filter` and is therefore
-   its own stacking context, which is a lesson 07-panel.css already records.
+   its own stacking context, which is a lesson 09-panel.css already records.
 
    And because the top layer sits outside every ancestor's filter, a
    `backdrop-filter` on `::backdrop` filters the *page* — the one place in this
@@ -3049,7 +4390,8 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
    Fading the `background` alone snaps the page behind out of focus on the first
    frame while the darkening takes the whole duration, which is the glitch this
    avoids. */
-.ins-dialog::backdrop {
+.ins-dialog::backdrop,
+.ins-drawer::backdrop {
   background: rgba(15, 23, 42, .38);
   -webkit-backdrop-filter: blur(3px);
           backdrop-filter: blur(3px);
@@ -3058,9 +4400,11 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
               overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
               display var(--ins-t-exit) var(--ins-ease) allow-discrete;
 }
-.ins-dialog[open]::backdrop { opacity: 1; transition-duration: var(--ins-t-enter); }
+.ins-dialog[open]::backdrop,
+.ins-drawer[open]::backdrop { opacity: 1; transition-duration: var(--ins-t-enter); }
 @starting-style {
-  .ins-dialog[open]::backdrop { opacity: 0; }
+  .ins-dialog[open]::backdrop,
+  .ins-drawer[open]::backdrop { opacity: 0; }
 }
 
 /* `--ins-line` and not `--ins-rim`. The rim is the *highlight* — white at 85% —
@@ -3122,12 +4466,101 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 /* A dialog's commit sits at the *end*, away from the cancel — the opposite of a
    panel's form, which has no cancel to be kept away from. */
 .ins-dialog-foot > .ins-btn--primary { margin-inline-start: auto; }
+/* The generic close button takes the dialog cross's place at the end of a head. */
+.ins-dialog-head > .ins-close { margin-inline-start: auto; }
+
+/* Three widths. The default is a form; `--sm` is a confirmation, which should be
+   short enough that the two buttons sit under the question they answer; `--lg` is a
+   table or a two-column form. */
+.ins-dialog--sm { inline-size: min(26rem, calc(100vw - 2rem)); }
+.ins-dialog--lg { inline-size: min(56rem, calc(100vw - 2rem)); }
+
+/* --------------------------------------------------------------- drawer */
+/* A panel that slides in from an edge — navigation on a phone, filters beside a
+   table, the detail of a row. It is a `<dialog>` for the same three reasons the
+   modal is: Escape, a focus trap, and the top layer. So it opens with the same
+   attribute, `data-ins-dialog="#id"`, and it is built from the same head, body and
+   foot. What it adds is the edge.
+
+   It comes in from the *leading* edge by default — the right on an Arabic page —
+   because that is where the navigation it most often carries already lives. The
+   direction is one custom property, flipped by hand per direction, because a
+   transform has no logical form. The inner corners are rounded and the outer ones
+   are square: a drawer is attached to the edge it came out of. */
+.ins-drawer {
+  --ins-drawer-from: translateX(-100%);
+  position: fixed;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  margin: 0;
+  inline-size: min(24rem, 88vw);
+  max-inline-size: none;
+  block-size: 100%;
+  max-block-size: none;
+  padding: 0;
+  border: 0;
+  border-inline-end: 1px solid var(--ins-rim);
+  border-start-end-radius: var(--ins-r-xl);
+  border-end-end-radius: var(--ins-r-xl);
+  background: linear-gradient(145deg, var(--ins-glass-strong), var(--ins-glass-hover)),
+              var(--ins-wash-1);
+  box-shadow: var(--ins-sh-lg);
+  color: var(--ins-text-1);
+  overflow: hidden;
+  transform: var(--ins-drawer-from);
+  transition: transform var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+[dir="rtl"] .ins-drawer { --ins-drawer-from: translateX(100%); }
+.ins-drawer[open] {
+  display: flex;
+  flex-direction: column;
+  transform: none;
+  transition-duration: .3s;   /* the shell drawer's, which travels the same distance */
+}
+@starting-style {
+  .ins-drawer[open] { transform: var(--ins-drawer-from); }
+}
+.ins-drawer--end {
+  --ins-drawer-from: translateX(100%);
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+  border-inline-end: 0;
+  border-inline-start: 1px solid var(--ins-rim);
+  border-radius: 0;
+  border-start-start-radius: var(--ins-r-xl);
+  border-end-start-radius: var(--ins-r-xl);
+}
+[dir="rtl"] .ins-drawer--end { --ins-drawer-from: translateX(-100%); }
+/* A sheet from the bottom, for a phone: actions for a row, a short form. */
+.ins-drawer--bottom {
+  --ins-drawer-from: translateY(100%);
+  inset-block-start: auto;
+  inset-inline: 0;
+  inline-size: 100%;
+  block-size: auto;
+  max-block-size: 85vh;
+  border: 0;
+  border-block-start: 1px solid var(--ins-rim);
+  border-radius: var(--ins-r-xl) var(--ins-r-xl) 0 0;
+}
+[dir="rtl"] .ins-drawer--bottom { --ins-drawer-from: translateY(100%); }
+.ins-drawer .ins-dialog-body { flex: 1 1 auto; }
 
 /* --------------------------------------------------------------- popover */
-/* `<details>` + `<summary>`, so it opens, closes on Escape and is keyboard
-   reachable with no script at all. The body is a real raised card — it names itself
-   so the de-nesting rule in 05-glass.css does not flatten it, which is exactly the
-   escape hatch that rule's `:where()` was written to leave open. */
+/* `<details>` + `<summary>`, so it opens, closes and is keyboard reachable with no
+   script at all — Enter or Space on the summary, and every item a real button in
+   the tab order. The body is a real raised card — it names itself so the de-nesting
+   rule in 05-glass.css does not flatten it, which is exactly the escape hatch that
+   rule's `:where()` was written to leave open.
+
+   **What the platform does *not* give it is Escape.** This comment used to say it
+   did, and so did the README; tested, a bare `<details>` ignores Escape both on its
+   summary and from inside its body. Escape, arrow keys between items, closing when
+   focus leaves and when an item is chosen, and flipping at the viewport's edge are
+   all insiyab.js. Without the script it is still a working disclosure. */
 .ins-pop { position: relative; display: inline-block; }
 .ins-pop > summary {
   list-style: none;
@@ -3174,6 +4607,68 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 .ins-pop-item--bad:hover { background: var(--ins-tone-bad-bg); color: var(--ins-tone-bad); }
 .ins-pop-sep { block-size: 1px; background: var(--ins-line); margin: .25rem 0; border: 0; }
 
+/* A long menu scrolls inside itself rather than running off the page. */
+.ins-pop-body { max-block-size: min(24rem, 70vh); overflow-y: auto; overscroll-behavior: contain; }
+
+/* A heading over a run of items. `--ins-label`, the measured secondary ink — a
+   group label is the smallest text in the menu and the one read first. */
+.ins-pop-label {
+  padding: .5rem .75rem .25rem;
+  font-size: var(--ins-fs-xs);
+  font-weight: 700;
+  color: var(--ins-label);
+}
+/* A shortcut at the trailing end of an item: `<kbd class="ins-kbd">Ctrl K</kbd>`. */
+.ins-pop-item > .ins-kbd { margin-inline-start: auto; }
+.ins-pop-item:disabled,
+.ins-pop-item[aria-disabled="true"] { opacity: .45; pointer-events: none; }
+/* Keyboard focus looks like the pointer's hover, because it is the same state: the
+   item a keypress would choose. The ring is drawn inside the item so the menu's own
+   padding does not clip it. */
+.ins-pop-item:focus-visible {
+  outline-offset: -2px;
+  background: rgba(var(--ins-primary-rgb), .10);
+  color: var(--ins-primary-darker);
+}
+
+/* A checkable item — a column to show, a filter to apply. The mark sits in a
+   column of its own at the leading edge whether or not it is on, so a list of them
+   lines up. `role="menuitemcheckbox"` or `menuitemradio`, with `aria-checked`; the
+   script flips it on a click. */
+.ins-pop-item[aria-checked]::before {
+  content: "";
+  flex: 0 0 1rem;
+  inline-size: 1rem;
+  block-size: 1rem;
+  background: currentColor;
+  -webkit-mask: var(--ins-pop-mark) center / contain no-repeat;
+          mask: var(--ins-pop-mark) center / contain no-repeat;
+  opacity: 0;
+  transform: scale(.5);
+  transition: opacity var(--ins-t-pop) var(--ins-ease),
+              transform var(--ins-t-pop) var(--ins-ease-spring);
+}
+.ins-pop-item[aria-checked] {
+  --ins-pop-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+}
+.ins-pop-item[role="menuitemradio"][aria-checked] {
+  --ins-pop-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='4.5' fill='black'/%3E%3C/svg%3E");
+}
+.ins-pop-item[aria-checked="true"]::before { opacity: 1; transform: none; }
+
+/* Which way the menu opens. By default its trailing edge lines up with the
+   trigger's and it grows toward the start — the right way for the menu at the end of
+   a table row. `.ins-pop--start` lines it up the other way, for a trigger at the
+   leading edge. The script flips either one, and flips it downward-to-upward, when
+   the menu would leave the viewport; those are the `data-ins-flip` rules. */
+.ins-pop--start > .ins-pop-body { inset-inline-end: auto; inset-inline-start: 0; }
+.ins-pop[data-ins-flip~="up"] > .ins-pop-body {
+  inset-block-start: auto;
+  inset-block-end: calc(100% + .375rem);
+}
+.ins-pop[data-ins-flip~="inline"] > .ins-pop-body { inset-inline-end: auto; inset-inline-start: 0; }
+.ins-pop--start[data-ins-flip~="inline"] > .ins-pop-body { inset-inline-start: auto; inset-inline-end: 0; }
+
 /* --------------------------------------------------------------- motion */
 /* A menu item indents toward the content on hover -- the same directional nudge the
    sidebar's links make, so a list of destinations gestures the same way wherever it
@@ -3199,6 +4694,840 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
                             color var(--ins-t-pop) var(--ins-ease),
                             transform var(--ins-t-pop) var(--ins-ease-spring); }
 .ins-dialog-x:hover { transform: rotate(90deg); }
+
+/* --------------------------------------------------------------- tooltip */
+/* One element for the whole page, built by insiyab.js the first time a
+   `data-ins-tip` is pointed at, and moved to whichever control asked. It lives in
+   the **top layer** (`popover="manual"`), and that is the entire reason it is a
+   separate element rather than a pseudo-element on the control. A pseudo-element
+   tooltip is clipped by every `overflow: hidden` above it — and in this library that
+   is the button itself, whose shimmer needs the clip, and the panel around it, which
+   needs it for its radius. A tip that cannot leave the button it describes is not a
+   tip.
+
+   Not interactive, not a place to put a link: it describes a control. It stays up
+   while the pointer moves onto it and closes on Escape, which is what WCAG 1.4.13
+   asks of content that appears on hover.
+
+   The popover's UA box — fixed, centred on the viewport, with a border and a canvas
+   fill — is undone here; the script places it with `left` and `top`. */
+.ins-tooltip {
+  /* Which way it arrives from: down onto a control from above, up from below. The
+     script flips it along with the side it places the tip on. */
+  --ins-tip-dy: 4px;
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  max-inline-size: min(18rem, calc(100vw - 1rem));
+  padding: .375rem .625rem;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-tip-bg);
+  color: var(--ins-tip-fg);
+  font-family: var(--ins-font-body);
+  font-size: var(--ins-fs-xs);
+  font-weight: 600;
+  line-height: 1.5;
+  box-shadow: var(--ins-sh-md);
+  overflow: visible;
+  opacity: 0;
+  transform: translateY(var(--ins-tip-dy)) scale(.96);
+  transition: opacity var(--ins-t-exit) var(--ins-ease),
+              transform var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+/* `.is-open` is the same state for an engine with no Popover API, where the script
+   falls back to a plain fixed element. Inside `:is()` so that engine does not throw
+   the whole rule away over a pseudo-class it has never heard of. */
+.ins-tooltip:is(:popover-open, .is-open) {
+  opacity: 1;
+  transform: none;
+  transition-duration: var(--ins-t-pop);
+}
+@starting-style {
+  .ins-tooltip:is(:popover-open, .is-open) { opacity: 0; transform: translateY(var(--ins-tip-dy)) scale(.96); }
+}
+
+/* --------------------------------------------------------------- popover card */
+/* A `.ins-pop` whose body is not a menu but a small card — a user's details, an
+   explanation, a short form. It keeps every behaviour the menu has (Escape, closing
+   on an outside click, flipping at the edge) and gets room to hold a paragraph. */
+.ins-pop-body--card {
+  inline-size: min(20rem, calc(100vw - 2rem));
+  padding: 1rem;
+}
+.ins-pop-title { margin: 0 0 .25rem; font-size: var(--ins-fs-md); font-weight: 700; color: var(--ins-text-1); }
+.ins-pop-text { margin: 0; font-size: var(--ins-fs-sm); line-height: 1.7; color: var(--ins-label); }
+
+/* --------------------------------------------------------------- calendar */
+/* The date field's calendar. Like the tooltip it is one element for the page, in the
+   top layer, built by insiyab.js the first time a date field is opened and moved to
+   whichever field asked — so it cannot be clipped by the panel a filter bar sits in.
+
+   A `role="grid"` of day buttons with one tab stop and the arrow keys, laid out in
+   the page's direction: in Arabic the week runs right to left and ArrowLeft is the
+   next day. The week starts where the locale says it does — Saturday for Arabic,
+   Monday for most of Europe, Sunday for the United States — and the month and day
+   names are the locale's own. */
+.ins-cal {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  inline-size: min(19rem, calc(100vw - 1rem));
+  padding: .75rem;
+  border: 1px solid var(--ins-rim);
+  border-radius: var(--ins-r-lg);
+  background: linear-gradient(145deg, var(--ins-glass-strong), var(--ins-glass-hover)), var(--ins-wash-1);
+  box-shadow: var(--ins-sh-lg);
+  color: var(--ins-text-1);
+  font-family: var(--ins-font-body);
+  overflow: visible;
+  opacity: 0;
+  transform: translateY(-4px) scale(.98);
+  transition: opacity var(--ins-t-exit) var(--ins-ease),
+              transform var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+.ins-cal:is(:popover-open, .is-open) {
+  opacity: 1;
+  transform: none;
+  transition-duration: var(--ins-t-enter);
+}
+@starting-style {
+  .ins-cal:is(:popover-open, .is-open) { opacity: 0; transform: translateY(-4px) scale(.98); }
+}
+.ins-cal-head { display: flex; align-items: center; gap: .375rem; margin-block-end: .5rem; }
+.ins-cal-title { flex: 1 1 auto; display: flex; justify-content: center; gap: .375rem; min-inline-size: 0; }
+.ins-cal-title .ins-select {
+  inline-size: auto;
+  min-block-size: 2rem;
+  padding-block: 0;
+  font-size: var(--ins-fs-sm);
+  font-weight: 700;
+}
+/* Previous and next month: chevrons pointing toward the start and the end of the
+   line, so "previous" points right on an Arabic page. Turned by hand per direction. */
+.ins-cal-nav {
+  position: relative;
+  flex: 0 0 auto;
+  inline-size: 2rem;
+  block-size: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-ctl-bg);
+  color: var(--ins-text-1);
+  cursor: pointer;
+}
+.ins-cal-nav:hover { background: var(--ins-ctl-bg-hover); }
+.ins-cal-nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: .4375rem;
+  block-size: .4375rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+[dir="ltr"] .ins-cal-nav--next::before,
+[dir="rtl"] .ins-cal-nav--prev::before { transform: translateX(-1px) rotate(45deg); }
+[dir="ltr"] .ins-cal-nav--prev::before,
+[dir="rtl"] .ins-cal-nav--next::before { transform: translateX(1px) rotate(-135deg); }
+
+/* Separate borders with no spacing, not collapsed: under `border-collapse:
+   collapse` a cell ignores `border-radius`, and the rounded ends of a range are
+   drawn on the cells. */
+.ins-cal-grid { inline-size: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.ins-cal-grid th {
+  padding-block: .25rem .375rem;
+  font-size: var(--ins-fs-xs);
+  font-weight: 700;
+  color: var(--ins-label);
+}
+.ins-cal-grid td { padding: 1px 0; text-align: center; }
+.ins-cal-day {
+  inline-size: 100%;
+  aspect-ratio: 1;
+  max-block-size: 2.375rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: none;
+  font-family: var(--ins-font-body-en);
+  font-size: var(--ins-fs-sm);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--ins-text-1);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-cal-day:hover:not([aria-disabled="true"]) { background: var(--ins-ctl-bg-hover); }
+.ins-cal-day:focus-visible { outline-offset: -2px; }
+.ins-cal-day.is-outside { color: var(--ins-text-3); }
+.ins-cal-day[aria-current="date"] { color: var(--ins-tone-brand); font-weight: 700; box-shadow: inset 0 0 0 1px var(--ins-tone-brand-bd); }
+/* The chosen day — and, in a range, the day at the other end, which belongs to the
+   partner field but is just as much an end of what is being chosen. */
+.ins-cal-day:is([aria-selected="true"], .is-range-edge),
+.ins-cal-day:is([aria-selected="true"], .is-range-edge):hover {
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  color: var(--ins-on-primary);
+  font-weight: 700;
+  box-shadow: var(--ins-sh-brand-sm);
+}
+/* Out of the allowed range. `aria-disabled` and not `disabled`: a disabled button
+   cannot take focus, and the arrow keys have to be able to walk across a blocked
+   week to the open one beyond it. */
+.ins-cal-day[aria-disabled="true"] { opacity: .3; cursor: not-allowed; }
+/* A range is tinted across the cells between its two ends, and the tint runs
+   under the gaps between days so it reads as one band; its ends are rounded on
+   their outer side, logically, so the band starts at the right in Arabic. */
+.ins-cal-grid td.is-in-range { background: var(--ins-tone-brand-bg); }
+.ins-cal-grid td.is-range-start { border-start-start-radius: var(--ins-r-sm); border-end-start-radius: var(--ins-r-sm); }
+.ins-cal-grid td.is-range-end { border-start-end-radius: var(--ins-r-sm); border-end-end-radius: var(--ins-r-sm); }
+.ins-cal-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-block-start: .5rem;
+  padding-block-start: .5rem;
+  border-block-start: 1px solid var(--ins-line);
+}
+
+/* ==========================================================================
+   Insiyab · navigation and disclosure
+   ==========================================================================
+   Page header, tabs, pagination, the site navbar, and the accordion.
+
+   One marker runs through all of it. The sidebar's active link, the table row
+   under the pointer, the current tab and the current navbar link all carry the same
+   3px brand bar, and it always *grows from the centre* rather than sliding in — so
+   "where you are" and "what you are pointing at" read as one vocabulary wherever
+   they turn up, and a bar sliding the length of a wide tab strip never drags the
+   eye along with it.
+
+   Several of these need the script to *behave* — tabs switch, the navbar's menu
+   opens on a phone — and every one of them is written so that without it the page is
+   still complete: all the tab panels shown one after another, all the navbar's links
+   shown and wrapping. The switch is `data-ins-js` on <html>, which insiyab.js stamps
+   before first paint, so the collapsed state never flashes open and the open state
+   never flashes collapsed.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- page header */
+/* The top of a page: its name, a line under it, and the page's own actions at the
+   far end. The actions wrap under the title on a narrow screen rather than squeezing
+   it, because an Arabic page title is a phrase and deserves the line. */
+.ins-page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--ins-sp-3) var(--ins-sp-4);
+  margin-block-end: var(--ins-sp-6);
+}
+.ins-page-head-text { flex: 1 1 18rem; min-inline-size: 0; }
+.ins-page-title {
+  margin: 0;
+  font-size: var(--ins-fs-h1);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ins-text-1);
+}
+html[dir="ltr"] .ins-page-title {
+  font-family: var(--ins-font-heading-en);
+  letter-spacing: -.02em;
+}
+.ins-page-sub {
+  margin: .375rem 0 0;
+  font-size: var(--ins-fs-md);
+  line-height: 1.7;
+  color: var(--ins-label);
+}
+.ins-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ins-sp-2);
+}
+
+/* --------------------------------------------------------------- tabs */
+/* Tabs that switch panels on the page:
+
+     <div class="ins-tablist" aria-label="…">
+       <button class="ins-tab" data-ins-tab="#general">عام</button>
+       <button class="ins-tab" data-ins-tab="#security">الأمان</button>
+     </div>
+     <div class="ins-tabpanel" id="general">…</div>
+     <div class="ins-tabpanel" id="security">…</div>
+
+   The script supplies every ARIA attribute — the roles, `aria-selected`,
+   `aria-controls`, the roving tab stop — and the arrow keys, mirrored for RTL so
+   that the arrow pointing at the next tab is the one that moves to it. An `<a
+   class="ins-tab" href="/other-page">` is a navigation tab instead: it is left
+   alone and simply marked with `aria-current`.
+
+   A segmented control can drive panels too — put `data-ins-tab` on its buttons.
+   That is the other look for the same behaviour: a strip of peers where this is a
+   row of sections. */
+.ins-tablist {
+  display: flex;
+  gap: .25rem;
+  margin-block-end: var(--ins-sp-4);
+  border-block-end: 1px solid var(--ins-line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ins-tablist::-webkit-scrollbar { display: none; }
+.ins-tab {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  min-block-size: var(--ins-ctl-h);
+  padding: .5rem .875rem;
+  border: 0;
+  border-start-start-radius: var(--ins-r-sm);
+  border-start-end-radius: var(--ins-r-sm);
+  background: none;
+  font-family: inherit;
+  font-size: var(--ins-fs-sm);
+  font-weight: 700;
+  color: var(--ins-label);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-tab::after {
+  content: "";
+  position: absolute;
+  inset-inline: .625rem;
+  inset-block-end: -1px;
+  block-size: 3px;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-brand-soft);
+  transform: scaleX(0);
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+.ins-tab:hover { background: var(--ins-ctl-bg); color: var(--ins-text-1); }
+.ins-tab:hover::after { transform: scaleX(.35); }
+.ins-tab:focus-visible { outline-offset: -2px; }
+.ins-tab:is([aria-selected="true"], [aria-current="page"], .is-active) { color: var(--ins-tone-brand); }
+.ins-tab:is([aria-selected="true"], [aria-current="page"], .is-active)::after { transform: scaleX(1); }
+
+/* Without the script every panel is shown, one after another, so the content is
+   all still there. With it, only the selected one — and it arrives with the page's
+   own entrance, so switching reads as the section changing rather than as a flash. */
+:root[data-ins-js] .ins-tabpanel:not(.is-active) { display: none; }
+:root[data-ins-js] .ins-tabpanel.is-active { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease); }
+.ins-tabpanel:focus-visible { outline-offset: 4px; border-radius: var(--ins-r-sm); }
+
+/* --------------------------------------------------------------- pagination */
+/* A recessed track with the current page raised out of it — the segmented
+   control's grammar, because it is the same question: which one of these am I on.
+   The current page reads by position, not by being the loudest thing in the row.
+
+     <nav class="ins-pagination" aria-label="الصفحات">
+       <a class="ins-page ins-page--prev" href="?p=2">السابق</a>
+       <a class="ins-page" href="?p=1">1</a>
+       <a class="ins-page" aria-current="page">3</a>
+       <span class="ins-page-gap">…</span>
+       <a class="ins-page ins-page--next" href="?p=4">التالي</a>
+     </nav>
+
+   The numbers are Inter with tabular figures, so a row does not shift width as you
+   page from 9 to 10. The arrows point toward the start and the end of the reading
+   direction — "previous" points right on an Arabic page. */
+.ins-pagination {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .1875rem;
+  max-inline-size: 100%;
+  padding: .25rem;
+  border-radius: var(--ins-r-md);
+  background: var(--ins-ctl-bg-hover);
+  border: 1px solid var(--ins-line-glass);
+}
+.ins-page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .375rem;
+  min-inline-size: 2.125rem;
+  min-block-size: 2.125rem;
+  padding-inline: .5rem;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: transparent;
+  font-family: var(--ins-font-body-en);
+  font-size: var(--ins-fs-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ins-label);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease),
+              color var(--ins-t-pop) var(--ins-ease),
+              box-shadow var(--ins-t-pop) var(--ins-ease);
+}
+/* The words on the arrows are Arabic as often as not; set them in the page's face,
+   not the numerals'. */
+.ins-page--prev,
+.ins-page--next { font-family: inherit; padding-inline: .75rem; }
+.ins-page:hover { background: var(--ins-surface-hover); color: var(--ins-text-1); }
+.ins-page:is([aria-current="page"], .is-active) {
+  background: var(--ins-seg-on-bg);
+  color: var(--ins-seg-on-fg);
+  box-shadow: var(--ins-seg-on-shadow);
+  cursor: default;
+}
+.ins-page:is(:disabled, [aria-disabled="true"]) { opacity: .4; pointer-events: none; }
+.ins-page-gap {
+  min-inline-size: 1.5rem;
+  text-align: center;
+  font-family: var(--ins-font-body-en);
+  color: var(--ins-text-3);
+}
+/* The chevrons, drawn as two borders of a rotated square. Physical `border-top` and
+   `border-right`, and a rotation flipped by hand per direction: a transform has no
+   logical form, and a chevron's whole job is to point one physical way. */
+.ins-page--prev::before,
+.ins-page--next::after {
+  content: "";
+  inline-size: .4375rem;
+  block-size: .4375rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+[dir="ltr"] .ins-page--next::after,
+[dir="rtl"] .ins-page--prev::before { transform: rotate(45deg); }
+[dir="ltr"] .ins-page--prev::before,
+[dir="rtl"] .ins-page--next::after { transform: rotate(-135deg); }
+
+/* --------------------------------------------------------------- navbar */
+/* The public site's bar — the application has the shell. It follows the shell's
+   idea rather than its markup: a floating glass **island** inset from the edges of
+   the page, not a slab welded to the top of it.
+
+     <header class="ins-navbar">
+       <a class="ins-navbar-brand" href="/">…</a>
+       <button class="ins-navbar-toggle" data-ins-navbar aria-label="القائمة"></button>
+       <nav class="ins-navbar-menu">
+         <a class="ins-navbar-link" href="/" aria-current="page">الرئيسية</a>
+         …
+         <div class="ins-navbar-end">…buttons…</div>
+       </nav>
+     </header>
+
+   Below 900px the menu folds away behind the toggle and opens as a column inside the
+   same island, which grows to hold it. Without the script there is no toggle and
+   the links simply wrap onto the island's second line — every link still one tap
+   away, which is the fallback that matters on the connections this is built for. */
+.ins-navbar {
+  position: sticky;
+  inset-block-start: var(--ins-sp-3);
+  z-index: 1020;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ins-sp-2) var(--ins-sp-4);
+  inline-size: min(100% - 2rem, var(--ins-container));
+  min-block-size: 3.5rem;
+  margin: var(--ins-sp-3) auto;
+  padding-block: .375rem;
+  padding-inline: 1rem .375rem;
+  border-radius: var(--ins-r-lg);
+  border: 1px solid var(--ins-rim);
+  border-top-color: var(--ins-rim-top);
+  background: var(--ins-glass);
+  box-shadow: var(--ins-sh-bubble), var(--ins-bevel);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-navbar { -webkit-backdrop-filter: var(--ins-blur-bar); backdrop-filter: var(--ins-blur-bar); }
+}
+/* Not every site wants its bar to follow the page down. */
+.ins-navbar--static { position: relative; inset-block-start: auto; }
+
+.ins-navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: var(--ins-fs-lg);
+  font-weight: 700;
+  color: var(--ins-text-1);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.ins-navbar-brand:hover { color: var(--ins-text-1); }
+.ins-navbar-menu {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .125rem;
+  min-inline-size: 0;
+}
+.ins-navbar-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  min-block-size: 2.5rem;
+  padding: .5rem .75rem;
+  border-radius: var(--ins-r-sm);
+  font-size: var(--ins-fs-sm);
+  font-weight: 700;
+  color: var(--ins-label);
+  text-decoration: none;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-navbar-link::after {
+  content: "";
+  position: absolute;
+  inset-inline: .75rem;
+  inset-block-end: .25rem;
+  block-size: 2px;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-brand-soft);
+  transform: scaleX(0);
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+.ins-navbar-link:hover { background: var(--ins-ctl-bg); color: var(--ins-text-1); }
+.ins-navbar-link:hover::after { transform: scaleX(.35); }
+.ins-navbar-link:is([aria-current="page"], .is-active) { color: var(--ins-tone-brand); }
+.ins-navbar-link:is([aria-current="page"], .is-active)::after { transform: scaleX(1); }
+/* The trailing actions — sign in, a primary call to action, the theme switch. */
+.ins-navbar-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .375rem;
+  margin-inline-start: auto;
+}
+
+/* The toggle: three bars drawn with one line and two shadows, which fold into a
+   cross while the menu is open. */
+.ins-navbar-toggle {
+  position: relative;
+  display: none;
+  flex: 0 0 auto;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  margin-inline-start: auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-ctl-bg);
+  color: var(--ins-text-1);
+  cursor: pointer;
+}
+.ins-navbar-toggle::before,
+.ins-navbar-toggle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: 1.125rem;
+  block-size: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform var(--ins-t-base) var(--ins-ease),
+              box-shadow var(--ins-t-base) var(--ins-ease),
+              opacity var(--ins-t-base) var(--ins-ease);
+}
+.ins-navbar-toggle::before { box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor; }
+.ins-navbar-toggle::after { opacity: 0; }
+.ins-navbar.is-open .ins-navbar-toggle::before { box-shadow: none; transform: rotate(45deg); }
+.ins-navbar.is-open .ins-navbar-toggle::after { opacity: 1; transform: rotate(-45deg); }
+
+@media (max-width: 900px) {
+  :root[data-ins-js] .ins-navbar-toggle { display: inline-grid; }
+  .ins-navbar-menu {
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    padding-block: .375rem .25rem;
+    border-block-start: 1px solid var(--ins-line);
+  }
+  :root[data-ins-js] .ins-navbar:not(.is-open) .ins-navbar-menu { display: none; }
+  :root[data-ins-js] .ins-navbar.is-open .ins-navbar-menu { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease); }
+  /* In a column the marker would underline a whole row; the current link takes the
+     raised face instead. */
+  .ins-navbar-link::after { content: none; }
+  .ins-navbar-link:is([aria-current="page"], .is-active) { background: var(--ins-tone-brand-bg); }
+  .ins-navbar-end { margin-inline-start: 0; padding-block-start: .375rem; }
+}
+
+/* --------------------------------------------------------------- accordion */
+/* A `<details>`, so it opens and closes with no script at all, and so the one
+   behaviour everybody reaches for — only one section open at a time — is an
+   attribute: give the sections the same `name="…"` and the browser closes the others.
+
+     <div class="ins-accordion">
+       <details class="ins-collapse" name="faq" open>
+         <summary>هل تعمل المكتبة دون جافاسكربت؟</summary>
+         <div class="ins-collapse-body">نعم …</div>
+       </details>
+       …
+     </div>
+
+   `.ins-collapse` alone is a single collapsible section; `.ins-accordion` is only
+   the dividers between several. It has no surface of its own — put it in a panel or
+   a card, which is where it nearly always is. */
+.ins-collapse > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .875rem 1rem;
+  border-radius: var(--ins-r-md);
+  font-size: var(--ins-fs-md);
+  font-weight: 700;
+  color: var(--ins-text-1);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-collapse > summary::-webkit-details-marker { display: none; }
+.ins-collapse > summary:hover { background: var(--ins-ctl-bg); }
+.ins-collapse > summary:focus-visible { outline-offset: -2px; }
+.ins-collapse[open] > summary { color: var(--ins-tone-brand); }
+/* The chevron points down and turns to point up. Physical borders on purpose: a
+   downward chevron is the same in both directions, and logical ones would draw it
+   pointing sideways in RTL. */
+.ins-collapse > summary::after {
+  content: "";
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  inline-size: .5rem;
+  block-size: .5rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  color: var(--ins-text-3);
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform var(--ins-t-base) var(--ins-ease);
+}
+.ins-collapse[open] > summary::after { color: var(--ins-tone-brand-soft); transform: translateY(2px) rotate(-135deg); }
+.ins-collapse-body {
+  padding: 0 1rem 1rem;
+  font-size: var(--ins-fs-md);
+  line-height: 1.8;
+  color: var(--ins-text-1);
+}
+
+/* The height animates where the engine can do it, and snaps where it cannot — which
+   is the whole of the difference. `interpolate-size` is what lets `block-size` go
+   from 0 to `auto`; `::details-content` is the part of a <details> that hides. Each
+   in a rule of its own: an engine that does not know the pseudo-element discards
+   every selector in the rule it appears in. */
+.ins-collapse { interpolate-size: allow-keywords; }
+.ins-collapse::details-content {
+  block-size: 0;
+  overflow-y: clip;
+  transition: block-size var(--ins-t-exit) var(--ins-ease),
+              content-visibility var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+.ins-collapse[open]::details-content {
+  block-size: auto;
+  transition-duration: var(--ins-t-enter);
+}
+
+.ins-accordion > .ins-collapse + .ins-collapse { border-block-start: 1px solid var(--ins-line); }
+.ins-accordion > .ins-collapse > summary { border-radius: var(--ins-r-sm); }
+
+/* --------------------------------------------------------------- breadcrumb */
+/*   <nav class="ins-breadcrumb" aria-label="مسار التنقّل">
+       <ol>
+         <li><a href="/">الرئيسية</a></li>
+         <li><a href="/settings">الإعدادات</a></li>
+         <li><span aria-current="page">الأمان</span></li>
+       </ol>
+     </nav>
+
+   The separator is drawn, not typed, so it is not read aloud as "greater than"
+   between every crumb, and it points the way the trail runs: toward the end of the
+   line, which is the left on an Arabic page. Inside a page header it takes a line
+   of its own above the title. */
+.ins-breadcrumb ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .125rem;
+  font-size: var(--ins-fs-sm);
+}
+.ins-breadcrumb li { display: inline-flex; align-items: center; gap: .125rem; min-inline-size: 0; }
+.ins-breadcrumb li + li::before {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: .375rem;
+  block-size: .375rem;
+  margin-inline: .375rem;
+  border-top: 1.5px solid var(--ins-text-3);
+  border-right: 1.5px solid var(--ins-text-3);
+}
+[dir="ltr"] .ins-breadcrumb li + li::before { transform: rotate(45deg); }
+[dir="rtl"] .ins-breadcrumb li + li::before { transform: rotate(-135deg); }
+.ins-breadcrumb a {
+  padding: .125rem .375rem;
+  border-radius: var(--ins-r-xs);
+  font-weight: 600;
+  color: var(--ins-label);
+  text-decoration: none;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-breadcrumb a:hover { background: var(--ins-ctl-bg); color: var(--ins-text-1); }
+.ins-breadcrumb [aria-current="page"] {
+  padding-inline: .375rem;
+  font-weight: 700;
+  color: var(--ins-text-1);
+  max-inline-size: 24ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ins-page-head > .ins-breadcrumb { flex-basis: 100%; margin-block-end: calc(var(--ins-sp-3) * -1); }
+
+/* --------------------------------------------------------------- steps */
+/* Where you are in a sequence: a checkout, a signup, an import. Numbered by a CSS
+   counter, so the markup is just the list:
+
+     <ol class="ins-steps">
+       <li class="ins-steps-item is-done"><span class="ins-steps-label">البيانات</span></li>
+       <li class="ins-steps-item" aria-current="step"><span class="ins-steps-label">الدفع</span></li>
+       <li class="ins-steps-item"><span class="ins-steps-label">التأكيد</span></li>
+     </ol>
+
+   It stands on its own for a flow that is several pages on the server, and
+   `.ins-wizard` below drives it for one that is several panels on one page.
+
+   A finished step keeps its number rather than trading it for a tick. The tick
+   would be a glyph in a font, or a mask whose colour cannot follow a pale brand's
+   dark label; the number on the brand fill, in the measured `--ins-on-primary`, is
+   legible on every brand by construction, and "which step was this" is still
+   answered. The line that joins a finished step to the next takes the brand too, so
+   the trail behind you reads as one line. */
+.ins-steps {
+  list-style: none;
+  margin: 0 0 var(--ins-sp-6);
+  padding: 0;
+  display: flex;
+  counter-reset: ins-step;
+}
+.ins-steps-item {
+  position: relative;
+  flex: 1 1 0;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .375rem;
+  text-align: center;
+  counter-increment: ins-step;
+  font-size: var(--ins-fs-xs);
+  font-weight: 700;
+  color: var(--ins-label);
+}
+.ins-steps-item::before {
+  content: counter(ins-step);
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: 50%;
+  border: 1px solid var(--ins-ctl-bd);
+  background: var(--ins-surface);
+  box-shadow: var(--ins-bevel-dim);
+  font-family: var(--ins-font-body-en);
+  font-size: var(--ins-fs-sm);
+  color: var(--ins-label);
+  transition: background var(--ins-t-base) var(--ins-ease),
+              color var(--ins-t-base) var(--ins-ease),
+              box-shadow var(--ins-t-base) var(--ins-ease);
+}
+/* The joining line, from the previous circle's edge to this one's, on the side the
+   previous step is on — logical insets, so it joins right-to-left in Arabic. */
+.ins-steps-item + .ins-steps-item::after {
+  content: "";
+  position: absolute;
+  inset-block-start: calc(1rem - 1px);
+  inset-inline-start: calc(-50% + 1.375rem);
+  inset-inline-end: calc(50% + 1.375rem);
+  block-size: 2px;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-line);
+  transition: background var(--ins-t-base) var(--ins-ease);
+}
+.ins-steps-item.is-done::before {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  color: var(--ins-on-primary);
+}
+.ins-steps-item.is-done + .ins-steps-item::after { background: var(--ins-tone-brand-soft); }
+.ins-steps-item[aria-current="step"] { color: var(--ins-tone-brand); }
+.ins-steps-item[aria-current="step"]::before {
+  border-color: var(--ins-tone-brand-soft);
+  color: var(--ins-tone-brand);
+  box-shadow: var(--ins-glow-ring);
+}
+/* On a phone four step names do not fit under four circles. The current one keeps
+   its name; the rest keep their numbers, and their names stay for screen readers. */
+@media (max-width: 34rem) {
+  .ins-steps-item:not([aria-current="step"]) .ins-steps-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* --------------------------------------------------------------- wizard */
+/* Several panels of one form, one at a time:
+
+     <form class="ins-wizard">
+       <ol class="ins-steps">…</ol>
+       <section class="ins-wizard-panel">…fields…</section>
+       <section class="ins-wizard-panel">…fields…</section>
+       <div class="ins-wizard-foot">
+         <button type="button" class="ins-btn ins-btn--secondary" data-ins-wizard="prev">السابق</button>
+         <button type="button" class="ins-btn ins-btn--primary" data-ins-wizard="next">التالي</button>
+         <button class="ins-btn ins-btn--primary ins-wizard-finish">إرسال</button>
+       </div>
+     </form>
+
+   "Next" checks the panel it is leaving with the browser's own validation before
+   it moves, so a required field stops you on the step it belongs to rather than at
+   the end. It is one form, so the last button submits all of it.
+
+   **Without the script it is simply the whole form** — every panel shown, the step
+   buttons gone, the finish button at the bottom — which is a long form, not a broken
+   one. */
+:root[data-ins-js] .ins-wizard-panel:not(.is-active) { display: none; }
+:root[data-ins-js] .ins-wizard-panel.is-active { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease); }
+.ins-wizard-panel:focus-visible { outline-offset: 4px; border-radius: var(--ins-r-sm); }
+.ins-wizard-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  margin-block-start: var(--ins-sp-5);
+}
+.ins-wizard-foot > :is([data-ins-wizard="next"], .ins-wizard-finish) { margin-inline-start: auto; }
+:root:not([data-ins-js]) [data-ins-wizard="prev"],
+:root:not([data-ins-js]) [data-ins-wizard="next"] { display: none; }
+:root[data-ins-js] .ins-wizard:not([data-ins-last]) .ins-wizard-finish,
+:root[data-ins-js] .ins-wizard[data-ins-last] [data-ins-wizard="next"] { display: none; }
+:root[data-ins-js] .ins-wizard[data-ins-first] [data-ins-wizard="prev"] { visibility: hidden; }
 
 /* ==========================================================================
    Insiyab · motion
@@ -3232,7 +5561,7 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
    for before adding anything here.
 
    Everything below is switched off by `prefers-reduced-motion` and by
-   `data-ins-fx="off"`; see 17-a11y.css.
+   `data-ins-fx="off"`; see 20-a11y.css.
    ========================================================================== */
 
 /* --------------------------------------------------------------- keyframes */
@@ -3318,6 +5647,327 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 [dir="rtl"] .ins-anim-slide { --ins-slide: 10px; }
 
 /* ==========================================================================
+   Insiyab · utilities
+   ==========================================================================
+   Single-purpose classes for the adjustments a component should not have to grow
+   a modifier for: this gap is too wide, this label should be muted, this button
+   hides on a phone.
+
+   **A small, regular set, not a utility framework.** The line is drawn at things a
+   page genuinely needs every day — spacing, alignment, visibility, a few text
+   treatments — and every family is complete across its scale rather than curated,
+   because a set you can predict is a set you do not have to look up. `ins-mt-4`
+   existing and `ins-mt-5` not would be worse than both existing.
+
+   **Logical, not physical.** `s` and `e` are the inline start and end, and `t` and
+   `b` the block start and end: `ins-ms-4` is a right margin on an Arabic page and a
+   left one on an English page, from the same class. There is no `ml` or `mr`, and
+   that is the RTL-first promise applied to the one layer where it is easiest to
+   break.
+
+   **Late in the concatenation, and without `!important`.** A utility and a
+   component rule are both a single class, so the tie goes to whichever comes
+   later — and this file comes after every component, so `ins-mb-0` on a panel
+   wins without needing to shout. The one `!important` in the file is on the
+   `hidden` attribute, and it is explained where it is.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- primitives own their gaps */
+/* The rule 07-layout.css defers to here. A stack, a row and a fixed grid space
+   their children with `gap`, so a child that brings its own outer margin — a
+   panel, a grid of cards, an `<h2>` — would be spaced twice. It is here and not
+   with the primitives because it has to come after the components whose margins it
+   clears; and it is above the margin utilities because those still have to be able
+   to put a margin back. `ins-mt-auto` pushing the last item of a stack to the
+   bottom depends on exactly that order. */
+:is(.ins-stack, .ins-row, .ins-cols-2, .ins-cols-3, .ins-cols-4, .ins-cols-6,
+    .ins-cols-12) > * {
+  margin-block: 0;
+}
+
+/* --------------------------------------------------------------- display */
+.ins-block { display: block; }
+.ins-inline { display: inline; }
+.ins-inline-block { display: inline-block; }
+.ins-flex { display: flex; }
+.ins-inline-flex { display: inline-flex; }
+
+/* --------------------------------------------------------------- flex */
+.ins-flex-wrap { flex-wrap: wrap; }
+.ins-flex-nowrap { flex-wrap: nowrap; }
+/* `min-inline-size: 0` is the half of "grow" everybody forgets: a flex item will
+   not shrink below its content without it, so a growing field beside a button
+   pushes the button out of the row instead of getting narrower. */
+.ins-grow { flex: 1 1 0%; min-inline-size: 0; }
+.ins-shrink-0 { flex-shrink: 0; }
+
+.ins-items-start { align-items: flex-start; }
+.ins-items-center { align-items: center; }
+.ins-items-end { align-items: flex-end; }
+.ins-items-baseline { align-items: baseline; }
+.ins-items-stretch { align-items: stretch; }
+
+/* `flex-start` and `flex-end` follow the direction, so these mirror in RTL with no
+   help — `start` is the right edge of an Arabic row. */
+.ins-justify-start { justify-content: flex-start; }
+.ins-justify-center { justify-content: center; }
+.ins-justify-end { justify-content: flex-end; }
+.ins-justify-between { justify-content: space-between; }
+
+/* --------------------------------------------------------------- spacing */
+/* Step N is N × 4px, from the `--ins-sp-*` tokens. Nine steps, seven sides. */
+.ins-gap-0 { gap: 0; }
+.ins-gap-1 { gap: var(--ins-sp-1); }
+.ins-gap-2 { gap: var(--ins-sp-2); }
+.ins-gap-3 { gap: var(--ins-sp-3); }
+.ins-gap-4 { gap: var(--ins-sp-4); }
+.ins-gap-5 { gap: var(--ins-sp-5); }
+.ins-gap-6 { gap: var(--ins-sp-6); }
+.ins-gap-8 { gap: var(--ins-sp-8); }
+.ins-gap-12 { gap: var(--ins-sp-12); }
+
+.ins-m-0 { margin: 0; }
+.ins-m-1 { margin: var(--ins-sp-1); }
+.ins-m-2 { margin: var(--ins-sp-2); }
+.ins-m-3 { margin: var(--ins-sp-3); }
+.ins-m-4 { margin: var(--ins-sp-4); }
+.ins-m-5 { margin: var(--ins-sp-5); }
+.ins-m-6 { margin: var(--ins-sp-6); }
+.ins-m-8 { margin: var(--ins-sp-8); }
+.ins-m-12 { margin: var(--ins-sp-12); }
+
+.ins-mt-0 { margin-block-start: 0; }
+.ins-mt-1 { margin-block-start: var(--ins-sp-1); }
+.ins-mt-2 { margin-block-start: var(--ins-sp-2); }
+.ins-mt-3 { margin-block-start: var(--ins-sp-3); }
+.ins-mt-4 { margin-block-start: var(--ins-sp-4); }
+.ins-mt-5 { margin-block-start: var(--ins-sp-5); }
+.ins-mt-6 { margin-block-start: var(--ins-sp-6); }
+.ins-mt-8 { margin-block-start: var(--ins-sp-8); }
+.ins-mt-12 { margin-block-start: var(--ins-sp-12); }
+
+.ins-mb-0 { margin-block-end: 0; }
+.ins-mb-1 { margin-block-end: var(--ins-sp-1); }
+.ins-mb-2 { margin-block-end: var(--ins-sp-2); }
+.ins-mb-3 { margin-block-end: var(--ins-sp-3); }
+.ins-mb-4 { margin-block-end: var(--ins-sp-4); }
+.ins-mb-5 { margin-block-end: var(--ins-sp-5); }
+.ins-mb-6 { margin-block-end: var(--ins-sp-6); }
+.ins-mb-8 { margin-block-end: var(--ins-sp-8); }
+.ins-mb-12 { margin-block-end: var(--ins-sp-12); }
+
+.ins-ms-0 { margin-inline-start: 0; }
+.ins-ms-1 { margin-inline-start: var(--ins-sp-1); }
+.ins-ms-2 { margin-inline-start: var(--ins-sp-2); }
+.ins-ms-3 { margin-inline-start: var(--ins-sp-3); }
+.ins-ms-4 { margin-inline-start: var(--ins-sp-4); }
+.ins-ms-5 { margin-inline-start: var(--ins-sp-5); }
+.ins-ms-6 { margin-inline-start: var(--ins-sp-6); }
+.ins-ms-8 { margin-inline-start: var(--ins-sp-8); }
+.ins-ms-12 { margin-inline-start: var(--ins-sp-12); }
+
+.ins-me-0 { margin-inline-end: 0; }
+.ins-me-1 { margin-inline-end: var(--ins-sp-1); }
+.ins-me-2 { margin-inline-end: var(--ins-sp-2); }
+.ins-me-3 { margin-inline-end: var(--ins-sp-3); }
+.ins-me-4 { margin-inline-end: var(--ins-sp-4); }
+.ins-me-5 { margin-inline-end: var(--ins-sp-5); }
+.ins-me-6 { margin-inline-end: var(--ins-sp-6); }
+.ins-me-8 { margin-inline-end: var(--ins-sp-8); }
+.ins-me-12 { margin-inline-end: var(--ins-sp-12); }
+
+.ins-mx-0 { margin-inline: 0; }
+.ins-mx-1 { margin-inline: var(--ins-sp-1); }
+.ins-mx-2 { margin-inline: var(--ins-sp-2); }
+.ins-mx-3 { margin-inline: var(--ins-sp-3); }
+.ins-mx-4 { margin-inline: var(--ins-sp-4); }
+.ins-mx-5 { margin-inline: var(--ins-sp-5); }
+.ins-mx-6 { margin-inline: var(--ins-sp-6); }
+.ins-mx-8 { margin-inline: var(--ins-sp-8); }
+.ins-mx-12 { margin-inline: var(--ins-sp-12); }
+
+.ins-my-0 { margin-block: 0; }
+.ins-my-1 { margin-block: var(--ins-sp-1); }
+.ins-my-2 { margin-block: var(--ins-sp-2); }
+.ins-my-3 { margin-block: var(--ins-sp-3); }
+.ins-my-4 { margin-block: var(--ins-sp-4); }
+.ins-my-5 { margin-block: var(--ins-sp-5); }
+.ins-my-6 { margin-block: var(--ins-sp-6); }
+.ins-my-8 { margin-block: var(--ins-sp-8); }
+.ins-my-12 { margin-block: var(--ins-sp-12); }
+
+/* Auto margins: in a row, `ins-ms-auto` pushes an item — and everything after it —
+   to the far end. In a stack, `ins-mt-auto` pushes an item to the bottom. */
+.ins-m-auto { margin: auto; }
+.ins-mx-auto { margin-inline: auto; }
+.ins-ms-auto { margin-inline-start: auto; }
+.ins-me-auto { margin-inline-end: auto; }
+.ins-mt-auto { margin-block-start: auto; }
+
+.ins-p-0 { padding: 0; }
+.ins-p-1 { padding: var(--ins-sp-1); }
+.ins-p-2 { padding: var(--ins-sp-2); }
+.ins-p-3 { padding: var(--ins-sp-3); }
+.ins-p-4 { padding: var(--ins-sp-4); }
+.ins-p-5 { padding: var(--ins-sp-5); }
+.ins-p-6 { padding: var(--ins-sp-6); }
+.ins-p-8 { padding: var(--ins-sp-8); }
+.ins-p-12 { padding: var(--ins-sp-12); }
+
+.ins-pt-0 { padding-block-start: 0; }
+.ins-pt-1 { padding-block-start: var(--ins-sp-1); }
+.ins-pt-2 { padding-block-start: var(--ins-sp-2); }
+.ins-pt-3 { padding-block-start: var(--ins-sp-3); }
+.ins-pt-4 { padding-block-start: var(--ins-sp-4); }
+.ins-pt-5 { padding-block-start: var(--ins-sp-5); }
+.ins-pt-6 { padding-block-start: var(--ins-sp-6); }
+.ins-pt-8 { padding-block-start: var(--ins-sp-8); }
+.ins-pt-12 { padding-block-start: var(--ins-sp-12); }
+
+.ins-pb-0 { padding-block-end: 0; }
+.ins-pb-1 { padding-block-end: var(--ins-sp-1); }
+.ins-pb-2 { padding-block-end: var(--ins-sp-2); }
+.ins-pb-3 { padding-block-end: var(--ins-sp-3); }
+.ins-pb-4 { padding-block-end: var(--ins-sp-4); }
+.ins-pb-5 { padding-block-end: var(--ins-sp-5); }
+.ins-pb-6 { padding-block-end: var(--ins-sp-6); }
+.ins-pb-8 { padding-block-end: var(--ins-sp-8); }
+.ins-pb-12 { padding-block-end: var(--ins-sp-12); }
+
+.ins-ps-0 { padding-inline-start: 0; }
+.ins-ps-1 { padding-inline-start: var(--ins-sp-1); }
+.ins-ps-2 { padding-inline-start: var(--ins-sp-2); }
+.ins-ps-3 { padding-inline-start: var(--ins-sp-3); }
+.ins-ps-4 { padding-inline-start: var(--ins-sp-4); }
+.ins-ps-5 { padding-inline-start: var(--ins-sp-5); }
+.ins-ps-6 { padding-inline-start: var(--ins-sp-6); }
+.ins-ps-8 { padding-inline-start: var(--ins-sp-8); }
+.ins-ps-12 { padding-inline-start: var(--ins-sp-12); }
+
+.ins-pe-0 { padding-inline-end: 0; }
+.ins-pe-1 { padding-inline-end: var(--ins-sp-1); }
+.ins-pe-2 { padding-inline-end: var(--ins-sp-2); }
+.ins-pe-3 { padding-inline-end: var(--ins-sp-3); }
+.ins-pe-4 { padding-inline-end: var(--ins-sp-4); }
+.ins-pe-5 { padding-inline-end: var(--ins-sp-5); }
+.ins-pe-6 { padding-inline-end: var(--ins-sp-6); }
+.ins-pe-8 { padding-inline-end: var(--ins-sp-8); }
+.ins-pe-12 { padding-inline-end: var(--ins-sp-12); }
+
+.ins-px-0 { padding-inline: 0; }
+.ins-px-1 { padding-inline: var(--ins-sp-1); }
+.ins-px-2 { padding-inline: var(--ins-sp-2); }
+.ins-px-3 { padding-inline: var(--ins-sp-3); }
+.ins-px-4 { padding-inline: var(--ins-sp-4); }
+.ins-px-5 { padding-inline: var(--ins-sp-5); }
+.ins-px-6 { padding-inline: var(--ins-sp-6); }
+.ins-px-8 { padding-inline: var(--ins-sp-8); }
+.ins-px-12 { padding-inline: var(--ins-sp-12); }
+
+.ins-py-0 { padding-block: 0; }
+.ins-py-1 { padding-block: var(--ins-sp-1); }
+.ins-py-2 { padding-block: var(--ins-sp-2); }
+.ins-py-3 { padding-block: var(--ins-sp-3); }
+.ins-py-4 { padding-block: var(--ins-sp-4); }
+.ins-py-5 { padding-block: var(--ins-sp-5); }
+.ins-py-6 { padding-block: var(--ins-sp-6); }
+.ins-py-8 { padding-block: var(--ins-sp-8); }
+.ins-py-12 { padding-block: var(--ins-sp-12); }
+
+/* --------------------------------------------------------------- sizing */
+.ins-w-full { inline-size: 100%; }
+
+/* --------------------------------------------------------------- text */
+.ins-text-start { text-align: start; }
+.ins-text-center { text-align: center; }
+.ins-text-end { text-align: end; }
+
+.ins-text-xs { font-size: var(--ins-fs-xs); }
+.ins-text-sm { font-size: var(--ins-fs-sm); }
+.ins-text-md { font-size: var(--ins-fs-md); }
+.ins-text-lg { font-size: var(--ins-fs-lg); }
+.ins-text-xl { font-size: var(--ins-fs-xl); }
+
+/* The four weights the faces actually carry. Tajawal ships 300, 400, 500 and
+   700 — a 600 would be rendered as 700 anyway, and saying so is kinder than a
+   class that silently does the same thing as its neighbour. */
+.ins-fw-300 { font-weight: 300; }
+.ins-fw-400 { font-weight: 400; }
+.ins-fw-500 { font-weight: 500; }
+.ins-fw-700 { font-weight: 700; }
+
+/* Secondary text. Through `--ins-label`, not `--ins-text-2`: the latter measured
+   4.45:1 on the glass, just under AA — see 02-tokens.css. A muted class is used
+   for exactly the small, secondary text that can least afford to fail. There is
+   deliberately no fainter step; anything fainter than this is decoration, and
+   decoration is not text. */
+.ins-muted { color: var(--ins-label); }
+.ins-text-ok { color: var(--ins-tone-ok); }
+.ins-text-warn { color: var(--ins-tone-warn); }
+.ins-text-bad { color: var(--ins-tone-bad); }
+.ins-text-info { color: var(--ins-tone-info); }
+.ins-text-brand { color: var(--ins-tone-brand); }
+
+.ins-nowrap { white-space: nowrap; }
+/* One line with an ellipsis. It sits at the end of the line in either direction —
+   the left edge of an Arabic label — because `text-overflow` follows the text, not
+   the screen. The `min-inline-size: 0` is for the flex item case, which is most of
+   them: without it the item never gets narrower than its text and nothing is ever
+   clipped. */
+.ins-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-inline-size: 0;
+}
+/* A number of lines, then an ellipsis. The prefixed box model is still the only
+   one every engine clamps with; the unprefixed `line-clamp` is here for when that
+   stops being true. */
+.ins-clamp-2,
+.ins-clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ins-clamp-2 { -webkit-line-clamp: 2; line-clamp: 2; }
+.ins-clamp-3 { -webkit-line-clamp: 3; line-clamp: 3; }
+
+/* --------------------------------------------------------------- visibility */
+/* The `hidden` attribute is the one thing in this file allowed to shout. The UA
+   rule behind it is `display: none` at the lowest priority there is, so any
+   author rule that sets `display` beats it — and every component in this library
+   sets one. `<button class="ins-btn" hidden>` would render as a perfectly visible
+   button. The attribute means one thing, and `!important` is how it keeps meaning
+   it. `until-found` is left alone: it hides with `content-visibility`, so that
+   find-in-page can still reveal it, and `display: none` would break that. */
+[hidden]:not([hidden="until-found"]) { display: none !important; }
+
+/* Hide at a width. The three lines are the ones the components already break at:
+   34rem is a phone, 900px is where the shell's sidebar becomes a drawer, 1200px is
+   the container's width. "Below" is up to and including the line; "above" is
+   written as the exact negation of the same query rather than as `min-width` plus
+   a fraction, so there is no width — a zoomed 900.5px — at which both or neither
+   of a pair apply.
+
+   Last in the file so they win over the display utilities above: `ins-flex
+   ins-hide-below-md` is a flex row that hides on a tablet, which is what anyone
+   writing it means. */
+@media (max-width: 34rem) { .ins-hide-below-sm { display: none; } }
+@media (max-width: 900px) { .ins-hide-below-md { display: none; } }
+@media (max-width: 1200px) { .ins-hide-below-lg { display: none; } }
+@media not all and (max-width: 34rem) { .ins-hide-above-sm { display: none; } }
+@media not all and (max-width: 900px) { .ins-hide-above-md { display: none; } }
+@media not all and (max-width: 1200px) { .ins-hide-above-lg { display: none; } }
+
+/* On paper. `revert` hands an element back its own display — block for a <div>,
+   inline for a <span> — rather than guessing one for it. */
+.ins-print-only { display: none; }
+@media print {
+  .ins-hide-print { display: none; }
+  .ins-print-only { display: revert; }
+}
+
+/* ==========================================================================
    Insiyab · accessibility and effects
    ==========================================================================
    Last in the concatenation on purpose: the focus ring has to sit after every
@@ -3327,7 +5977,7 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 
 /* One focus ring for everything focusable. `summary` is in the list because a
    `<summary>` is focusable without carrying a tabindex to be caught by, and the
-   popover in 14-dialog.css is built on one.
+   popover in 16-dialog.css is built on one.
 
    **The ring only — never a `border-radius`.** Setting one here is the single thing
    a focus rule must not do: it reshapes the control. An `outline` already follows
@@ -3374,17 +6024,30 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
    Everything the library animates or frosts is listed here. An effect that is not
    gated is an effect nobody can turn off. */
 [data-ins-fx="off"] .ins-orb { display: none; }
+/* The top bar's frost is keyed on two attributes of the *same* element, so it is
+   written as one compound selector on :root. It used to be `[data-ins-fx="off"]
+   :root[data-ins-scrolled]` — a descendant combinator in front of :root, which
+   nothing can ever be a descendant of, so the rule never matched and the scrolled
+   bar kept its blur with effects off. */
 [data-ins-fx="off"] :is(.ins-glass, .ins-card, .ins-panel, .ins-toast, .ins-pop-body,
-                         .ins-island, .ins-shell-side),
-[data-ins-fx="off"] :root[data-ins-scrolled] .ins-topbar,
-[data-ins-fx="off"] .ins-dialog::backdrop {
+                         .ins-island, .ins-shell-side, .ins-navbar),
+:root[data-ins-fx="off"][data-ins-scrolled] .ins-topbar,
+[data-ins-fx="off"] .ins-dialog::backdrop,
+[data-ins-fx="off"] .ins-drawer::backdrop {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
-/* The dialog moves on a `transition` rather than an `animation`, so the
-   `animation: none` list below would never have reached it. */
+/* The dialog, the drawer and the tooltip move on a `transition` rather than an
+   `animation`, so the `animation: none` list below would never have reached them. */
 [data-ins-fx="off"] .ins-dialog,
-[data-ins-fx="off"] .ins-dialog::backdrop { transition: none; }
+[data-ins-fx="off"] .ins-dialog::backdrop,
+[data-ins-fx="off"] .ins-drawer,
+[data-ins-fx="off"] .ins-drawer::backdrop,
+[data-ins-fx="off"] .ins-tooltip,
+[data-ins-fx="off"] .ins-cal { transition: none; }
+/* Its own rule: an engine that does not know the pseudo-element would discard the
+   whole list above along with it. */
+[data-ins-fx="off"] .ins-collapse::details-content { transition: none; }
 
 /* Every entrance in the library. An animation that is not listed here is an
    animation nobody can turn off. */
@@ -3395,6 +6058,8 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
                          .ins-pop-body, .ins-pop-body > *,
                          .ins-alert, .ins-badge, .ins-island--title,
                          .ins-seg > .is-active, .ins-shell-scrim,
+                         .ins-tabpanel, .ins-navbar-menu, .ins-wizard-panel,
+                         .ins-combo-list, .ins-progress,
                          .ins-anim-rise, .ins-anim-pop, .ins-anim-slide) { animation: none; }
 [data-ins-fx="off"] .ins-skel { animation: none; background: var(--ins-skel-base); }
 /* The spinner keeps spinning -- it is the one thing whose animation IS its meaning.
@@ -3412,10 +6077,15 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
                          .ins-card:hover, .ins-stat:hover, .ins-hoverable:hover,
                          .ins-island:hover, .ins-pill:hover, .ins-avatar:hover,
                          .ins-shell-link:hover, .ins-pop-item:hover,
-                         .ins-dialog-x:hover, .ins-empty:hover .ins-empty-ico),
+                         .ins-dialog-x:hover, .ins-close:hover, .ins-input-group:focus-within,
+                         .ins-spin:active,
+                         .ins-empty:hover .ins-empty-ico),
 [data-ins-fx="off"] :is(.ins-stat, .ins-panel-head, .ins-alert, .ins-btn, .ins-search,
                          .ins-shell-brand, .ins-pill):hover :is(.ins-stat-ico,
                          .ins-panel-ico, .ins-alert-ico, svg, .ins-ico, .ins-shell-mark,
                          .ins-pill-dot, .ins-search-ico) { transform: none; }
 [data-ins-fx="off"] .ins-shell { transition: none; }
 [data-ins-fx="off"] .ins-shell-side { transition: none; }
+/* The slider's thumb grows under the pointer. Its own rules, one per engine, for the
+   reason every pseudo-element in this library has its own. */
+[data-ins-fx="off"] .ins-range::-webkit-slider-thumb { transform: none; }

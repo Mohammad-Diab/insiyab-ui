@@ -196,6 +196,107 @@
 @keyframes ins-skel { to { background-position: -240% 0; } }
 .ins-skel--text { block-size: .75rem; margin-block: .375rem; }
 .ins-skel--title { block-size: 1.25rem; inline-size: 40%; }
+/* A paragraph's last line is short. Without this a block of text lines reads as a
+   table of grey bars rather than as text that has not arrived yet. */
+.ins-skel--text:last-child:not(:first-child) { inline-size: 60%; }
+/* An avatar, an icon chip. Set `--ins-skel-size` to match what is loading. */
+.ins-skel--circle {
+  --ins-skel-size: 2.5rem;
+  flex: 0 0 auto;
+  inline-size: var(--ins-skel-size);
+  block-size: var(--ins-skel-size);
+  border-radius: 50%;
+}
+/* An image, a chart, a card that has not arrived. */
+.ins-skel--block { block-size: 8rem; border-radius: var(--ins-r-md); }
+
+/* --------------------------------------------------------------- progress */
+/* A native `<progress>`, so it is announced with its value and needs no ARIA: give
+   it `value` and `max`, or leave `value` off for "working, no idea how long".
+
+   Three engines, three ways in. Chromium and WebKit draw the bar with two
+   pseudo-elements, Firefox with one and the element itself as the track. Each
+   pseudo-element is in a rule of its own, because a selector list that names one
+   an engine does not know is thrown away whole — the Firefox fill would take the
+   Chromium one with it.
+
+   The **indeterminate** bar moves for ever, which this library allows exactly twice
+   — the skeleton and the spinner, both of which mean "waiting". So does this, and
+   it is built from the skeleton's own keyframes rather than being given a third
+   exception: `build.mjs` names the two animations that may loop, and this is one of
+   them wearing the brand tint. */
+.ins-progress {
+  --ins-progress-a: var(--ins-primary);
+  --ins-progress-b: var(--ins-primary-dark);
+  -webkit-appearance: none;
+          appearance: none;
+  display: block;
+  inline-size: 100%;
+  block-size: .5rem;
+  border: 0;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-ctl-bg-hover);
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, .08);
+  overflow: hidden;
+}
+.ins-progress::-webkit-progress-bar { background: transparent; border-radius: inherit; }
+.ins-progress::-webkit-progress-value {
+  background: linear-gradient(90deg, var(--ins-progress-a), var(--ins-progress-b));
+  border-radius: inherit;
+  transition: inline-size var(--ins-t-enter) var(--ins-ease);
+}
+.ins-progress::-moz-progress-bar {
+  background: linear-gradient(90deg, var(--ins-progress-a), var(--ins-progress-b));
+  border-radius: inherit;
+}
+.ins-progress:indeterminate {
+  background: linear-gradient(90deg, transparent 30%, rgba(var(--ins-primary-rgb), .55) 50%, transparent 70%) 0 0 / 240% 100%,
+              var(--ins-ctl-bg-hover);
+  animation: ins-skel 1.8s infinite;
+}
+.ins-progress:indeterminate::-webkit-progress-bar { background: transparent; }
+.ins-progress:indeterminate::-moz-progress-bar { background: transparent; }
+.ins-progress--sm { block-size: .25rem; }
+.ins-progress--lg { block-size: .75rem; }
+/* The tone follows the meaning: a quota at 95% is a warning, not a brand moment. */
+.ins-progress--ok { --ins-progress-a: #22C55E; --ins-progress-b: #15803D; }
+.ins-progress--warn { --ins-progress-a: #F59E0B; --ins-progress-b: #B45309; }
+.ins-progress--bad { --ins-progress-a: #EF4444; --ins-progress-b: #B91C1C; }
+
+/* The ring, for a figure in a tile or beside a heading. Not a native element, so
+   it carries its own role and value:
+
+     <div class="ins-ring" role="progressbar" aria-valuenow="72" aria-valuemin="0"
+          aria-valuemax="100" style="--ins-value: 72">72%</div>
+
+   The arc is a conic gradient cut into a ring by a mask, on a pseudo-element so the
+   mask does not cut the label out as well. It runs clockwise in both directions: a
+   dial is a clock face, and clocks do not mirror. */
+.ins-ring {
+  --ins-value: 0;
+  --ins-ring: 3.25rem;
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  inline-size: var(--ins-ring);
+  block-size: var(--ins-ring);
+  font-family: var(--ins-font-body-en);
+  font-size: var(--ins-fs-xs);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ins-text-1);
+}
+.ins-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(var(--ins-tone-brand-soft) calc(var(--ins-value) * 1%), var(--ins-ctl-bg-hover) 0);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - .375rem), #000 calc(100% - .375rem + .5px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - .375rem), #000 calc(100% - .375rem + .5px));
+}
+.ins-ring--lg { --ins-ring: 5rem; font-size: var(--ins-fs-lg); }
 
 /* --------------------------------------------------------------- spinner */
 /* A ring of the brand tint with one quadrant in the brand colour. `infinite` is

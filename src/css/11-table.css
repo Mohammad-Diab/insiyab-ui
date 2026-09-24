@@ -19,7 +19,7 @@
 /* `overflow-x: auto` computes `auto` on *both* axes, so the wrapper cuts popovers
    off — measured at 4 of 15 rows on one page, by up to 182px. Only while one is
    open, so a phone keeps its sideways scroll the rest of the time. */
-.ins-table-wrap:has([open]) { overflow: visible; }
+.ins-table-wrap:has([open], [data-ins-open]) { overflow: visible; }
 
 .ins-table {
   inline-size: 100%;
