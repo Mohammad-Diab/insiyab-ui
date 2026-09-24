@@ -3072,14 +3072,13 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
   box-shadow: var(--ins-glow), var(--ins-bevel-dim), 0 4px 16px rgba(var(--ins-primary-rgb), .10);
   transform: translateY(-1px);
 }
-:root[data-ins-theme="dark"] .ins-input:focus,
-:root[data-ins-theme="dark"] .ins-select:focus,
-:root[data-ins-theme="dark"] .ins-textarea:focus { background: rgba(255, 255, 255, .09); }
+/* Not inside a group: there the group is the field and takes the focus, and this
+   rule — four parts deep against the group's three — painted a lighter box inside
+   it on every focus in the dark theme. */
+:root[data-ins-theme="dark"] :is(.ins-input, .ins-select, .ins-textarea):not(.ins-input-group > *):focus { background: rgba(255, 255, 255, .09); }
 /* The rule above, for an OS set to dark — emitted by build.mjs. */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-ins-theme="light"]) .ins-input:focus,
-  :root:not([data-ins-theme="light"]) .ins-select:focus,
-  :root:not([data-ins-theme="light"]) .ins-textarea:focus {
+  :root:not([data-ins-theme="light"]) :is(.ins-input, .ins-select, .ins-textarea):not(.ins-input-group > *):focus {
     background: rgba(255, 255, 255, .09);
   }
 }
