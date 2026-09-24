@@ -174,8 +174,14 @@
    cannot be clipped, and because the item is `overflow: hidden` with a radius it
    takes the item's rounded corner for free.
 
-   It grows rather than appearing: `scaleY` from the centre on the one curve, which
-   is the same gesture the segmented control's raised face makes. */
+   It belongs to the selected item only. Hovering an item used to grow a half-height
+   marker on it as well, which put two markers in the sidebar at once — and the
+   marker's one job is to say which item you are on, not which one the pointer is
+   over. The hover keeps its background.
+
+   Selecting an item on the same page grows it with `scaleY` from the centre. Moving
+   between items, it travels instead: insiyab.js flies a stand-in bar from the old
+   marker to the new one (`.ins-shell-indicator`, below). */
 .ins-shell-link::before {
   content: "";
   position: absolute;
@@ -191,7 +197,6 @@
 .ins-shell-link:hover { background: var(--ins-glass-inner); color: var(--ins-primary-darker); }
 .ins-shell-link:hover .ins-ico,
 .ins-shell-link:hover svg { color: var(--ins-primary-darker); transform: scale(1.12); }
-.ins-shell-link:hover::before { transform: scaleY(.55); }
 /* A directional gesture — it nudges *toward the content* — and a transform has no
    logical form, so the sign is flipped by hand per direction. */
 [dir="rtl"] .ins-shell-link:hover { transform: translateX(-2px); }
@@ -206,6 +211,24 @@
 .ins-shell-link.is-active .ins-ico,
 .ins-shell-link.is-active svg { color: var(--ins-tone-brand-soft); }
 :root[data-ins-theme="dark"] .ins-shell-link.is-active { color: var(--ins-text-1); }
+
+/* The marker in flight, between two items. insiyab.js places it and drives its top
+   and height; everything that makes it look like the marker is here, so the two
+   cannot drift. While it flies the real markers are hidden, or the new item's would
+   be waiting at the destination before the bar arrived.
+
+   `ins-nav-arriving` is the same thing earlier: stamped on <html> at parse time when
+   a flight from the previous page is on its way, so the new page's marker is hidden
+   from its very first paint rather than from the moment the flight can start. */
+.ins-shell-indicator {
+  position: absolute;
+  z-index: 1;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-brand-soft);
+  pointer-events: none;
+}
+.ins-shell-moving .ins-shell-link::before,
+:root.ins-nav-arriving .ins-shell-link::before { visibility: hidden; transition: none; }
 
 .ins-shell-link-badge {
   margin-inline-start: auto;

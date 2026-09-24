@@ -354,6 +354,17 @@ A few of the gestures, so the vocabulary is legible:
   the sidebar's active item uses, so "what is under the pointer" and "where you
   are" speak one vocabulary. It scales from the centre rather than sliding,
   because a bar sliding the length of a wide row draws the eye *along* it.
+- **The sidebar's marker** belongs to the selected item only. Hovering an item
+  gives it a background, not a marker. When the selection moves, the marker
+  travels the way the Windows 10 navigation pane's does: its far end shoots out
+  to the new item, the near end catches up, and it settles, in 600ms with WinUI's
+  two curves. A click that loads a new page leaves a note in `sessionStorage`,
+  and the new page flies the marker from the old item to its own. A same-page
+  `#` link, or `Insiyab.sidebarSelect()` in an app that swaps its own content,
+  flies it right away. The sidebar also keeps its scroll position from page to
+  page. On a fresh visit it brings the selected item into view if it would be
+  out of sight. Both happen before the first paint, so the list never shows at
+  the top first and then jumps.
 - **Button icons** nudge toward the trailing edge — the direction the button
   sends you. Icon-only buttons grow instead, having nowhere to travel to.
 - **Fields** brighten on hover but do not lift: the lift is what focus means, and
@@ -424,6 +435,7 @@ Insiyab.dismiss(target)               // close what `target` sits in, as data-in
 Insiyab.tab(tab)                      // select a tab (element or selector)
 Insiyab.navbar(target, open?)         // open, close or toggle a navbar's menu
 Insiyab.sidebar(state?)               // 'open' | 'collapsed' | 'toggle'
+Insiyab.sidebarSelect(link)           // move the selected sidebar item, marker and all
 Insiyab.confirm(message, options?)    // Promise<boolean>; options: title, confirm, cancel, tone: 'danger'
 Insiyab.wizard(target, step?)         // the current step (0-based), or go to one, with no validation
 Insiyab.date(input, iso?)             // read a date field's ISO value, or set it ('' clears)
