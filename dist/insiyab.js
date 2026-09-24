@@ -204,6 +204,75 @@
     return theme(effectiveTheme() === 'dark' ? 'light' : 'dark');
   }
 
+  /* Show the repaint, over the whole page. Carried over from the USSD app, where it
+     was designed.
+
+     Flipping `data-ins-theme` is already the cheapest possible theme change — every
+     colour is a custom property — but it is also invisible as a *change*: one frame,
+     light page, dark page. The usual fix is a blanket `transition: background-color,
+     color` on everything, which pays for a transition on every row of a 200-row table
+     for the one moment in a session anybody switches, and still cannot animate a
+     gradient, a shadow or a mask.
+
+     A View Transition animates the page instead of its properties: the browser
+     snapshots before and after, and 18-motion.css reveals the new snapshot through a
+     circle growing out of the control that was pressed. Two snapshots and one
+     clip-path, whatever is on screen.
+
+     Everything about it is optional. No `startViewTransition`, reduced motion, or
+     `data-ins-fx="off"`, and `apply()` is simply called — the instant flip. The theme
+     change is inside the callback either way, so a failure here never leaves it
+     half-applied. */
+  function motionless() {
+    if (root.getAttribute('data-ins-fx') === 'off') return true;
+    try {
+      return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function sweep(from, apply) {
+    if (!document.startViewTransition || motionless()) { apply(); return; }
+
+    var box = from && from.getBoundingClientRect ? from.getBoundingClientRect() : null;
+    var x = box ? box.left + box.width / 2 : window.innerWidth / 2;
+    var y = box ? box.top + box.height / 2 : 0;
+    var w = window.innerWidth, h = window.innerHeight;
+    /* To the furthest corner, or the old palette survives in one corner of the screen
+       for the length of the animation. `sqrt` rather than `Math.hypot`, to stay ES5. */
+    var far = Math.max(
+      Math.sqrt(x * x + y * y),
+      Math.sqrt((w - x) * (w - x) + y * y),
+      Math.sqrt(x * x + (h - y) * (h - y)),
+      Math.sqrt((w - x) * (w - x) + (h - y) * (h - y)));
+
+    root.style.setProperty('--ins-sweep-x', x + 'px');
+    root.style.setProperty('--ins-sweep-y', y + 'px');
+    root.style.setProperty('--ins-sweep-r', Math.ceil(far) + 'px');
+    root.classList.add('ins-theme-sweep');
+
+    var clean = function () {
+      root.classList.remove('ins-theme-sweep');
+      root.style.removeProperty('--ins-sweep-x');
+      root.style.removeProperty('--ins-sweep-y');
+      root.style.removeProperty('--ins-sweep-r');
+    };
+    var run;
+    try {
+      run = document.startViewTransition(apply);
+    } catch (e) {
+      /* Refused to start — another transition mid-flight, a page being unloaded. The
+         change still has to happen. */
+      clean();
+      apply();
+      return;
+    }
+    /* `finished` rejects on a skipped transition, which is not worth having an opinion
+       about: either way the class and the three properties come back off. */
+    run.finished.then(clean, clean);
+  }
+
   /* -------------------------------------------------------------- sidebar */
   /* The same button means two different things at two widths, and that is a
      property of the layout rather than a shortcut here: above 900px the sidebar is
@@ -1555,10 +1624,15 @@
     if (el.hasAttribute('data-ins-theme-toggle')) {
       /* An explicit value sets that theme; a bare attribute toggles. */
       var want = el.getAttribute('data-ins-theme-toggle');
-      var now = want ? theme(want) : toggleTheme();
-      /* Only a real toggle carries pressed state; a set-to-dark button is not a
-         two-state control and must not claim to be one. */
-      if (!want) el.setAttribute('aria-pressed', String(now === 'dark'));
+      var pressed = el;
+      /* The switch itself is where the circle starts, so the page changes from the
+         point of contact rather than from an arbitrary corner. */
+      sweep(el, function () {
+        var now = want ? theme(want) : toggleTheme();
+        /* Only a real toggle carries pressed state; a set-to-dark button is not a
+           two-state control and must not claim to be one. */
+        if (!want) pressed.setAttribute('aria-pressed', String(now === 'dark'));
+      });
       if (el.tagName === 'A') event.preventDefault();
       return;
     }

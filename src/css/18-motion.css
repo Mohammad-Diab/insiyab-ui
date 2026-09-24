@@ -108,6 +108,44 @@
 :where(a, button, [role="button"], .ins-hoverable).ins-card:active,
 .ins-hoverable:active { transform: translateY(0) scale(.995); }
 
+/* ------------------------------------------------------------ theme sweep */
+/* Light to dark across the entire page, not just on the control. Carried over from
+   the USSD app, where it was designed.
+
+   The page is animated instead of its properties: insiyab.js wraps the theme flip in
+   a View Transition, which snapshots the page before and after, and the new palette
+   is revealed by a circle growing out of the switch that was just pressed. The dark
+   page is literally drawn over the light one from the point of contact. Nothing is
+   transitioned, so the cost is two snapshots and one clip-path, however much is on
+   screen.
+
+   `--ins-sweep-x/y` are the switch's centre and `--ins-sweep-r` the distance to the
+   furthest corner, set by insiyab.js on the root before the transition starts.
+   Scoped to a class so this is the only view transition it can ever describe, and to
+   `no-preference` so a reduced-motion viewer gets the plain flip; the script reads
+   the same query and does not open a transition at all in that case. A browser
+   without `::view-transition-*` drops these rules and flips instantly. */
+@media (prefers-reduced-motion: no-preference) {
+  /* The default is a cross-fade of the two snapshots. Both are wanted fully opaque —
+     the reveal is the clip, and a fade underneath it turns the leading edge to mush. */
+  :root.ins-theme-sweep::view-transition-old(root),
+  :root.ins-theme-sweep::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  :root.ins-theme-sweep::view-transition-old(root) { z-index: 1; }
+  :root.ins-theme-sweep::view-transition-new(root) {
+    z-index: 2;
+    /* Slower than anything else in the sheet, deliberately: this one is meant to be
+       watched, and it crosses the whole viewport rather than a control. */
+    animation: ins-theme-sweep .6s var(--ins-ease) forwards;
+  }
+}
+@keyframes ins-theme-sweep {
+  from { clip-path: circle(0 at var(--ins-sweep-x) var(--ins-sweep-y)); }
+  to   { clip-path: circle(var(--ins-sweep-r) at var(--ins-sweep-x) var(--ins-sweep-y)); }
+}
+
 /* --------------------------------------------------------------- utilities */
 /* For anything a page wants to bring in by hand. */
 .ins-anim-rise { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease); }
