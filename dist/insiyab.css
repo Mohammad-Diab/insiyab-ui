@@ -1357,7 +1357,10 @@ a:hover { color: var(--ins-tone-brand-soft); }
   .ins-island--brand,
   :root.ins-sidebar-collapsed .ins-island--brand { display: none; }
   .ins-topbar { padding: .625rem .75rem; gap: .375rem; grid-template-columns: auto 1fr auto; }
-  .ins-island--title { max-inline-size: none; padding-inline: .875rem; }
+  /* `min-inline-size: 0`, or the island is a flex item that will not shrink below its
+     unwrapped title: the zone narrowed, the island did not, and it slid under the
+     buttons beside it instead of ellipsising. */
+  .ins-island--title { max-inline-size: none; min-inline-size: 0; padding-inline: .875rem; }
   .ins-zone .ins-pill { padding-inline: .75rem; }
 }
 /* The subtitle is explanatory rather than load-bearing, and truncated to a few words
@@ -4165,7 +4168,14 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
   background-size: 240% 100%;
   animation: ins-skel 1.8s infinite;
 }
-@keyframes ins-skel { to { background-position: -240% 0; } }
+/* A percentage position on an image wider than its box moves it by (box − image) × p,
+   so on a 240% image 100% puts the highlight at −20% of the box and 0 puts it at
+   120%: the one sweep that crosses the whole box and starts and ends out of sight.
+   The keyframes used to run 0 → −240%, which carried the highlight from 120% to
+   456% — off the far edge the whole time, and nobody saw a shimmer. It sweeps with
+   the reading direction, as the button's sheen does. */
+@keyframes ins-skel { from { background-position: 100% 0; } to { background-position: 0 0; } }
+[dir="rtl"] :is(.ins-skel, .ins-progress:indeterminate) { animation-direction: reverse; }
 .ins-skel--text { block-size: .75rem; margin-block: .375rem; }
 .ins-skel--title { block-size: 1.25rem; inline-size: 40%; }
 /* A paragraph's last line is short. Without this a block of text lines reads as a
@@ -4357,7 +4367,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
      the platform hands it over: `display` and `overlay` listed with `allow-discrete`
      keep the element painted and in the top layer for the length of the exit, and
      `@starting-style` supplies the frame before the open. That covers *every* way
-     this closes — the X, a backdrop click, Escape, a `method="dialog"` submit —
+     this closes — the X, a drawer's backdrop click, Escape, a `method="dialog"` submit —
      which a closing class in JavaScript would have had to intercept one at a time,
      and would have missed the one it did not know about.
 
