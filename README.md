@@ -33,10 +33,10 @@
 > type and utility layer, the components an application form or dashboard needs
 > (pickers, steps and confirmation included), and a motion layer across all of
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
-> the shell, with every example's markup printed under it. Three plugins so far:
-> the Hijri calendar, the command palette and the one-time code. Still to come:
-> more plugins (phone input, file upload, tree and the like) and the React and
-> Jinja wrappers. See
+> the shell, with every example's markup printed under it. Four plugins so far:
+> the Hijri calendar, the command palette, the one-time code and the phone number.
+> Still to come: more plugins (file upload, tree, timeline and the like) and the
+> React and Jinja wrappers. See
 > [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
@@ -616,6 +616,48 @@ Insiyab.otp('#code');           // read it
 Insiyab.otp('#code', '');       // clear it, quietly
 ```
 
+### Phone number
+
+```html
+<link rel="stylesheet" href="plugins/insiyab-phone.css">
+<script src="plugins/insiyab-phone.js"></script>
+
+<div class="ins-input-group">
+  <input class="ins-input" data-ins-phone name="mobile" value="+966501234567">
+</div>
+```
+
+A phone field with its country. A button at the start of the group picks the
+country from a list you can search in Arabic, in English, by two-letter code or
+by dial code. The field shows the number the way it's written at home
+(050 123 4567) and groups it as it's typed, keeping the caret after the same
+digit. **What the form sends is E.164**: a hidden input takes over the field's
+`name`, as with the date field, and holds +966501234567 whatever was typed (a
+leading 0, spaces, Arabic-Indic digits, the country code in front). A number typed
+or pasted with + or 00 picks its own country. Shared codes are narrowed by what
+follows them, so +1 876 is Jamaica and +7 7 is Kazakhstan.
+
+Every country is in the list, with names from the browser (`Intl.DisplayNames`,
+in the page's language), so no name table ships. The Arab countries, plus the US
+and Canada, the UK, France, Germany, Turkey, India and Pakistan, have their number
+lengths checked and are grouped as they're written there. Any other country gets
+the international limit of 15 digits and no grouping. A number of the wrong length
+is invalid, with a message naming the country.
+
+- `data-ins-phone-country="AE"`: the country to start in. Without it, the plugin
+  uses the number's own country, then the page's region (`lang="ar-EG"`), then
+  Saudi Arabia.
+- `data-ins-phone-preferred="SA,AE,KW"`: listed first.
+- `data-ins-phone-only="SA,AE"`: the only countries offered. A number from
+  anywhere else is refused, with a message.
+- With no `placeholder` of its own, the field shows an example from its country.
+
+```js
+Insiyab.phone('#mobile');                  // { value: '+966501234567', country: 'SA', valid: true }
+Insiyab.phone('#mobile', '+97142345678');  // set it, country and all, quietly
+document.addEventListener('ins:phone', (e) => console.log(e.detail.value, e.detail.country, e.detail.valid));
+```
+
 ## Development
 
 Node 18+ for the build; nothing else, and no dependencies at all.
@@ -666,7 +708,7 @@ node test/run.mjs sidebar dark    # only the files whose names contain a word
 node test/run.mjs --verbose       # every check, not only failures
 ```
 
-About 375 checks in fifteen files, each driving a real headless Chrome with real
+About 430 checks in sixteen files, each driving a real headless Chrome with real
 key and pointer events, on a throwaway profile, against a server the runner
 starts on a free port. Needs Chrome, found in the usual places or through
 `CHROME`, and no npm packages: the driver is a small DevTools-protocol client in
