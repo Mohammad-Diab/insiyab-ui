@@ -117,6 +117,11 @@
                          .ins-shell-brand, .ins-pill):hover :is(.ins-stat-ico,
                          .ins-panel-ico, svg, .ins-ico, .ins-shell-mark,
                          .ins-pill-dot, .ins-search-ico) { transform: none; }
+/* Scrolling jumps again. The class may sit on <html> itself, which is also where
+   the switch is, or on a scroller further down. */
+[data-ins-fx="off"].ins-scroll-smooth,
+[data-ins-fx="off"].ins-scroll-smooth > body,
+[data-ins-fx="off"] .ins-scroll-smooth { scroll-behavior: auto; }
 [data-ins-fx="off"] .ins-shell { transition: none; }
 [data-ins-fx="off"] .ins-shell-side { transition: none; }
 /* The slider's thumb grows under the pointer. Its own rules, one per engine, for the

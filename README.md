@@ -172,7 +172,7 @@ there, in Arabic, in both themes, with the markup of each example under it.
 | **Shell** | `.ins-shell` · `.ins-shell-side` (brand, `-group`, `-link`, `-link-badge`, `-bottom`) · `.ins-topbar` · `.ins-zone` · `.ins-island` (`--icon`, `--title`, `--brand`) |
 | **Layout** | `.ins-container` (`--narrow`, `--wide`) · `.ins-stack` · `.ins-row` · `.ins-cols-{2,3,4,6,12}` (+ `--fixed`) · `.ins-span-{2…12,full}` · `.ins-grid` · `.ins-toolbar` · `.ins-searchbar` |
 | **Type** | `.ins-display` · `.ins-h1`–`.ins-h4` · `.ins-lead` · `.ins-eyebrow` · `.ins-prose` · `.ins-kbd` · `.ins-divider` (`--start`, `--v`) |
-| **Utilities** | spacing `ins-{gap,m,mt,mb,ms,me,mx,my,p,pt,pb,ps,pe,px,py}-{0,1,2,3,4,5,6,8,12}` · flex `ins-flex`, `-wrap`, `ins-grow`, `ins-items-*`, `ins-justify-*` · text `ins-text-{start,center,end,xs…xl,ok,warn,bad,info,brand}`, `ins-fw-*`, `ins-muted`, `ins-truncate`, `ins-clamp-{2,3}` · visibility `ins-hide-{below,above}-{sm,md,lg}`, `ins-hide-print`, `ins-print-only` |
+| **Utilities** | spacing `ins-{gap,m,mt,mb,ms,me,mx,my,p,pt,pb,ps,pe,px,py}-{0,1,2,3,4,5,6,8,12}` · flex `ins-flex`, `-wrap`, `ins-grow`, `ins-items-*`, `ins-justify-*` · text `ins-text-{start,center,end,xs…xl,ok,warn,bad,info,brand}`, `ins-fw-*`, `ins-muted`, `ins-truncate`, `ins-clamp-{2,3}` · scroll `ins-scroll-smooth` · visibility `ins-hide-{below,above}-{sm,md,lg}`, `ins-hide-print`, `ins-print-only` |
 | **Motion** | `[data-ins-reveal]` · `.ins-hoverable` · `.ins-anim-rise` · `.ins-anim-pop` · `.ins-anim-slide` |
 | **Ground** | `.ins-orbs` / `.ins-orb-1..3` — injected for you; opt out with `data-ins-orbs="off"` |
 
@@ -242,6 +242,19 @@ on bare `ul` or `p` would restyle the host page's navs and menus. Inside it, Ara
 is never tracked and nothing is set in italic. None of the faces ships an italic,
 and a synthesised one leans Arabic the wrong way, so emphasis is colour. Code is an
 isolated LTR island in either direction.
+
+**Smooth scrolling is opt-in.** Put `ins-scroll-smooth` on `<html>` and anchor
+links glide to their target instead of jumping, or put it on any box that scrolls
+by itself, such as a table wrap or a dialog body. It is off by default because a
+glide suits a long document and slows down a page whose links jump between
+distant screens. Reduced motion and `data-ins-fx="off"` turn it off again. With
+or without it, an anchor inside the shell stops below the sticky top bar, not
+behind it.
+
+```html
+<html class="ins-scroll-smooth">
+<div class="ins-table-wrap ins-scroll-smooth">…</div>
+```
 
 Breakpoints, for `ins-hide-below-*` and `ins-hide-above-*`: **sm** 34rem ·
 **md** 900px · **lg** 1200px. Each "above" class is the exact negation of its
