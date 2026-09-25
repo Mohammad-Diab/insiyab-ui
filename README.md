@@ -36,7 +36,8 @@
 > the shell, with every example's markup printed under it. Ten plugins: the
 > Hijri calendar, the command palette, the one-time code, the phone number, file
 > upload, scrollspy, the timeline, the tree, the colour picker and the carousel.
-> Still to come: the React and Jinja wrappers. See
+> The React wrapper is in [packages/react](packages/react/README.md); the Jinja
+> macros are next. See
 > [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
@@ -880,6 +881,24 @@ while someone is reading it is the reason. Under `prefers-reduced-motion` it mov
 without sliding. `ins:carousel` reports the slide in view, and
 `Insiyab.carousel(el, n?)` reads the current stop or moves to one.
 
+## React
+
+`@insiyab/react`, in [packages/react](packages/react/README.md), is a set of React
+components over the same classes and attributes: the CSS stays the source of truth,
+and the core script still does the behaviour, loaded in `<head>` as on any page.
+
+```jsx
+<Field label="التاريخ">
+  <DateField name="delivery" value={date} onValueChange={setDate} />
+</Field>
+```
+
+Each component renders the markup this README shows. What only needs attributes is
+rendered complete, so a server-rendered page hydrates without a mismatch. What the
+core rebuilds (the date field, most plugins) is handed to it only after React has
+mounted. The test for it builds every docs example with the components and compares
+the result, once the core has built both, with the example itself.
+
 ## Development
 
 Node 18+ for the build; nothing else, and no dependencies at all.
@@ -930,11 +949,13 @@ node test/run.mjs sidebar dark    # only the files whose names contain a word
 node test/run.mjs --verbose       # every check, not only failures
 ```
 
-About 630 checks in twenty-two files, each driving a real headless Chrome with real
+About 750 checks in twenty-three files, each driving a real headless Chrome with real
 key and pointer events, on a throwaway profile, against a server the runner
 starts on a free port. Needs Chrome, found in the usual places or through
-`CHROME`, and no npm packages: the driver is a small DevTools-protocol client in
-`test/lib/`.
+`CHROME`, and no npm packages for the library's own tests: the driver is a small
+DevTools-protocol client in `test/lib/`. The React wrapper's test needs its own
+packages (`npm install` in `packages/react`), and is reported as skipped without
+them.
 A file that hangs is stopped after three minutes, with its browser, and reported
 as failed; `INS_TEST_TIMEOUT` (seconds) changes the limit.
 

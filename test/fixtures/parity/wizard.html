@@ -1,0 +1,35 @@
+<form class="ins-panel ins-wizard" id="store-wizard" data-ins-validate>
+  <div class="ins-panel-body">
+    <ol class="ins-steps">
+      <li class="ins-steps-item"><span class="ins-steps-label">المتجر</span></li>
+      <li class="ins-steps-item"><span class="ins-steps-label">الخطّة</span></li>
+      <li class="ins-steps-item"><span class="ins-steps-label">التأكيد</span></li>
+    </ol>
+    <section class="ins-wizard-panel ins-stack" aria-label="المتجر">
+      <div class="ins-field">
+        <label class="ins-label" for="w-store">اسم المتجر<span class="ins-req" aria-hidden="true">*</span></label>
+        <input class="ins-input" id="w-store" required>
+        <p class="ins-error"></p>
+      </div>
+      <div class="ins-field">
+        <label class="ins-label" for="w-email">بريد التواصل<span class="ins-req" aria-hidden="true">*</span></label>
+        <input class="ins-input" id="w-email" type="email" required dir="ltr">
+        <p class="ins-error"></p>
+      </div>
+    </section>
+    <section class="ins-wizard-panel ins-stack" aria-label="الخطّة">
+      <div class="ins-tile-grid">
+        <label class="ins-tile"><input type="radio" name="w-plan" value="starter" required><span class="ins-tile-title">البداية</span><span class="ins-tile-desc">مجانًا</span></label>
+        <label class="ins-tile"><input type="radio" name="w-plan" value="growth"><span class="ins-tile-title">النموّ</span><span class="ins-tile-desc">٤٩ شهريًا</span></label>
+      </div>
+    </section>
+    <section class="ins-wizard-panel" aria-label="التأكيد">
+      <label class="ins-check"><input type="checkbox" required><span class="ins-check-text">أوافق على شروط البيع</span></label>
+    </section>
+    <div class="ins-wizard-foot">
+      <button type="button" class="ins-btn ins-btn--secondary" data-ins-wizard="prev">السابق</button>
+      <button type="button" class="ins-btn ins-btn--primary" data-ins-wizard="next">التالي</button>
+      <button class="ins-btn ins-btn--primary ins-wizard-finish">إنشاء المتجر</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,30 @@
+<form class="ins-panel" data-ins-validate id="v-form">
+  <div class="ins-panel-head"><h3 class="ins-panel-title">حساب جديد</h3></div>
+  <div class="ins-panel-body ins-stack">
+    <div class="ins-field">
+      <label class="ins-label" for="v-name">الاسم<span class="ins-req" aria-hidden="true">*</span></label>
+      <input class="ins-input" id="v-name" required autocomplete="name">
+      <p class="ins-error"></p>
+    </div>
+    <div class="ins-field">
+      <label class="ins-label" for="v-email">البريد الإلكتروني<span class="ins-req" aria-hidden="true">*</span></label>
+      <input class="ins-input" id="v-email" type="email" required dir="ltr" autocomplete="email" placeholder="name@example.com">
+      <p class="ins-error"></p>
+    </div>
+    <div class="ins-field">
+      <label class="ins-label" for="v-pass">كلمة المرور<span class="ins-req" aria-hidden="true">*</span></label>
+      <div class="ins-input-group">
+        <input class="ins-input" id="v-pass" type="password" required minlength="8" autocomplete="new-password">
+        <button class="ins-password-toggle" data-ins-password aria-label="إظهار كلمة المرور" type="button"></button>
+      </div>
+      <span class="ins-hint">ثمانية أحرف على الأقل.</span>
+      <p class="ins-error">كلمة المرور قصيرة — ثمانية أحرف على الأقل.</p>
+    </div>
+    <label class="ins-check">
+      <input type="checkbox" required><span class="ins-check-text">أوافق على شروط الاستخدام</span>
+    </label>
+    <div class="ins-form-commit">
+      <button class="ins-btn ins-btn--primary">إنشاء الحساب</button>
+    </div>
+  </div>
+</form>

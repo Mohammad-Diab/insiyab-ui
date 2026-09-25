@@ -66,7 +66,7 @@ function killTree(child) {
   else child.kill('SIGKILL');
 }
 
-let checks = 0, failedChecks = 0, failedFiles = 0;
+let checks = 0, failedChecks = 0, failedFiles = 0, skipped = 0;
 const started = Date.now();
 for (const file of files) {
   const t0 = Date.now();
@@ -90,6 +90,14 @@ for (const file of files) {
   const bad = out.code !== 0 || fail.length > 0;
   if (bad) failedFiles++;
   const secs = ((Date.now() - t0) / 1000).toFixed(1);
+  /* A file that cannot run here (a wrapper whose packages are not installed) says
+     SKIP and why, and is shown as skipped rather than as a pass with no checks. */
+  const skip = !bad && !pass && lines.find((l) => l.startsWith('SKIP'));
+  if (skip) {
+    skipped++;
+    console.log(`skip  ${file.replace('.test.mjs', '').padEnd(26)} ${skip.slice(4).trim()}`);
+    continue;
+  }
   console.log(`${bad ? 'FAIL' : 'ok  '}  ${file.replace('.test.mjs', '').padEnd(26)} ${String(pass).padStart(3)}/${pass + fail.length}  ${secs}s`);
   if (verbose) for (const l of lines.filter((l) => /^(PASS|FAIL)/.test(l))) console.log(`        ${l}`);
   else for (const l of fail) console.log(`        ${l}`);
@@ -98,5 +106,5 @@ for (const file of files) {
 
 server.kill();
 const mins = ((Date.now() - started) / 60000).toFixed(1);
-console.log(`\n${checks - failedChecks}/${checks} checks passed · ${files.length - failedFiles}/${files.length} files passed · ${mins} min`);
+console.log(`\n${checks - failedChecks}/${checks} checks passed · ${files.length - failedFiles - skipped}/${files.length - skipped} files passed${skipped ? ` · ${skipped} skipped` : ''} · ${mins} min`);
 process.exit(failedFiles ? 1 : 0);
