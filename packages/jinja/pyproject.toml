@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "insiyab"
+version = "0.6.0"
+description = "Jinja macros for Insiyab, the RTL-first UI library, with its stylesheet, script and fonts."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Mohammad Diab" }]
+requires-python = ">=3.8"
+dependencies = ["Jinja2>=3.0"]
+keywords = ["jinja", "flask", "ui", "rtl", "arabic", "components", "css"]
+classifiers = [
+  "Framework :: Flask",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: Arabic",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: User Interfaces",
+]
+
+[project.optional-dependencies]
+flask = ["Flask>=2.2"]
+
+[project.urls]
+Homepage = "https://github.com/Mohammad-Diab/insiyab-ui/tree/main/packages/jinja"
+Repository = "https://github.com/Mohammad-Diab/insiyab-ui"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+insiyab = ["templates/insiyab/*.html", "static/*", "static/**/*", "py.typed"]

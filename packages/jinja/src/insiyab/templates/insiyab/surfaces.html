@@ -1,0 +1,40 @@
+{% from "insiyab/_base.html" import attrs, cls %}
+
+{#- inner: the flat look, for a surface inside a surface. -#}
+{% macro glass(inner=false, tag='div', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-glass-inner' if inner else 'ins-glass', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</{{ tag }}>
+{%- endmacro %}
+
+{% macro card(hoverable=false, tag='div', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-card', class, 'ins-hoverable' if hoverable]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</{{ tag }}>
+{%- endmacro %}
+
+{#- A panel: a head when there is a title, an icon or actions; the block as its body
+    (with no body around it when bare); a foot when there is a footer.
+    note: small print at the top of the body. flush: a body with no padding. -#}
+{% macro panel(title=none, icon=none, actions=none, footer=none, note=none, alert=false, flush=false, bare=false, title_tag='h3', body_class=none, tag='div', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-panel', 'ins-panel--alert' if alert, class]) }}"{{ attrs(kwargs) }}>
+{%- if title is not none or icon is not none or actions is not none -%}
+{{ panel_head(title, icon=icon, actions=actions, title_tag=title_tag) }}
+{%- endif -%}
+{%- if bare -%}{{ caller() if caller }}
+{%- else -%}<div class="{{ cls(['ins-panel-body', 'ins-panel-body--flush' if flush, body_class]) }}">
+{%- if note is not none %}<p class="ins-panel-note">{{ note }}</p>{% endif -%}
+{{ caller() if caller }}</div>
+{%- endif -%}
+{%- if footer is not none %}<div class="ins-panel-foot">{{ footer }}</div>{% endif -%}
+</{{ tag }}>
+{%- endmacro %}
+
+{% macro panel_head(title=none, icon=none, actions=none, title_tag='h3', class=none) -%}
+<div class="{{ cls(['ins-panel-head', class]) }}"{{ attrs(kwargs) }}>
+{%- if icon is not none %}<span class="ins-panel-ico">{{ icon }}</span>{% endif -%}
+{%- if title is not none %}<{{ title_tag }} class="ins-panel-title">{{ title }}</{{ title_tag }}>{% endif -%}
+{{ caller() if caller }}
+{%- if actions is not none %}<div class="ins-panel-actions">{{ actions }}</div>{% endif -%}
+</div>
+{%- endmacro %}
+
+{% macro panel_body(flush=false, class=none) -%}
+<div class="{{ cls(['ins-panel-body', 'ins-panel-body--flush' if flush, class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{%- endmacro %}

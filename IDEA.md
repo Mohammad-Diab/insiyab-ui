@@ -196,7 +196,7 @@ typography.
 |---|---|
 | `insiyab` | **This is the library.** One CSS file, one JS file, no build. |
 | `@insiyab/react` | Built, in `packages/react`. TypeScript, React 18 or later. |
-| `@insiyab/jinja` | Planned. Not started. |
+| `insiyab` (PyPI) | Built, in `packages/jinja`: Jinja macros, with the library's files in the package. |
 
 Deferred until the core was done: a wrapper written against an unfinished class
 vocabulary has to be rewritten when the vocabulary settles. They live in this

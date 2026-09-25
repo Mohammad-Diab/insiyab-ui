@@ -1,0 +1,65 @@
+{#- The application shell: a glass sidebar, and a transparent top bar of islands that
+    frosts once the page scrolls under it. Below 900px the sidebar is a drawer. -#}
+{% from "insiyab/_base.html" import attrs, cls %}
+
+{#- sidebar and topbar: a sidebar() and a topbar(); the block is the page. -#}
+{% macro shell(sidebar=none, topbar=none, content_class=none, class=none) -%}
+<div class="{{ cls(['ins-shell', class]) }}"{{ attrs(kwargs) }}>
+{%- if sidebar is not none %}{{ sidebar }}<div class="ins-shell-scrim"></div>{% endif -%}
+<div class="ins-shell-main">{{ topbar if topbar is not none }}<main class="{{ cls(['ins-shell-content', content_class]) }}">{{ caller() if caller }}</main></div></div>
+{%- endmacro %}
+
+{#- id: the drawer's :target below 900px, so it works with no script. -#}
+{% macro sidebar(label=none, brand=none, bottom=none, id='nav', class=none) -%}
+<aside class="{{ cls(['ins-shell-side', class]) }}" id="{{ id|e }}"{% if label %} aria-label="{{ label|e }}"{% endif %}{{ attrs(kwargs) }}>{{ brand if brand is not none }}{{ caller() if caller }}
+{%- if bottom is not none %}<div class="ins-shell-bottom">{{ bottom }}</div>{% endif -%}
+</aside>
+{%- endmacro %}
+
+{% macro sidebar_brand(name, href='/', mark=none, sub=none, class=none) -%}
+<a class="{{ cls(['ins-shell-brand', class]) }}" href="{{ href|e }}"{{ attrs(kwargs) }}>
+{%- if mark is not none %}<span class="ins-shell-mark">{{ mark }}</span>{% endif -%}
+<span class="ins-shell-brand-text"><span class="ins-shell-brand-name">{{ name }}</span>
+{%- if sub is not none %}<span class="ins-shell-brand-role">{{ sub }}</span>{% endif %}</span></a>
+{%- endmacro %}
+
+{#- The heading over the links that follow it. -#}
+{% macro sidebar_group(label) -%}
+<div class="ins-shell-group">{{ label }}</div>
+{%- endmacro %}
+
+{#- current: this page; badge: a count at the end. -#}
+{% macro sidebar_link(label, href, icon=none, current=false, badge=none, class=none) -%}
+<a class="{{ cls(['ins-shell-link', 'is-active' if current, class]) }}" href="{{ href|e }}"{% if current %} aria-current="page"{% endif %}{{ attrs(kwargs) }}>{{ icon if icon is not none }}{{ label }}
+{%- if badge is not none %}<span class="ins-shell-link-badge">{{ badge }}</span>{% endif %}</a>
+{%- endmacro %}
+
+{% macro sidebar_toggle(label='القائمة', icon=none, class=none) -%}
+<button class="{{ cls(['ins-island', 'ins-island--icon', class]) }}" data-ins-sidebar aria-label="{{ label|e }}"{{ attrs(kwargs) }}>{{ icon if icon is not none }}</button>
+{%- endmacro %}
+
+{% macro topbar(start=none, center=none, end=none, class=none) -%}
+<header class="{{ cls(['ins-topbar', class]) }}"{{ attrs(kwargs) }}>
+{%- if start is not none %}<div class="ins-zone ins-zone--start">{{ start }}</div>{% endif -%}
+{%- if center is not none %}<div class="ins-zone ins-zone--center">{{ center }}</div>{% endif -%}
+{%- if end is not none %}<div class="ins-zone ins-zone--end">{{ end }}</div>{% endif -%}
+{{ caller() if caller }}</header>
+{%- endmacro %}
+
+{#- One floating glass pill. variant: icon, title or brand. tag: button, a (with href)
+    or span. The text, or the block. -#}
+{% macro island(text=none, variant=none, tag=none, href=none, class=none) -%}
+{%- set t = tag or ('a' if href is not none else 'span') -%}
+<{{ t }} class="{{ cls(['ins-island', 'ins-island--' ~ variant if variant, class]) }}"{% if href is not none %} href="{{ href|e }}"{% endif %}{{ attrs(kwargs) }}>{{ caller() if caller else text }}</{{ t }}>
+{%- endmacro %}
+
+{% macro topbar_title(title, sub=none, class=none) -%}
+<div class="{{ cls(['ins-island', 'ins-island--title', class]) }}"{{ attrs(kwargs) }}><span class="ins-shell-head"><span class="ins-shell-title">{{ title }}</span>
+{%- if sub is not none %}<span class="ins-shell-sub">{{ sub }}</span>{% endif %}</span></div>
+{%- endmacro %}
+
+{#- mode: system forgets the choice and follows the OS; nothing flips light and dark.
+    The label, or the block. -#}
+{% macro theme_toggle(label=none, mode=none, class=none) -%}
+<button{% if class %} class="{{ class|e }}"{% endif %} data-ins-theme-toggle{% if mode %}="{{ mode|e }}"{% endif %}{{ attrs(kwargs) }}>{{ caller() if caller else label }}</button>
+{%- endmacro %}

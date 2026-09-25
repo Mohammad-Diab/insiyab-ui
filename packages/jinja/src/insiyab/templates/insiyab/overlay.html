@@ -1,0 +1,79 @@
+{% from "insiyab/_base.html" import attrs, cls %}
+{% from "insiyab/buttons.html" import close_button %}
+
+{#- A real <dialog>: open it with button(dialog='#id') or Insiyab.dialog(). A head when
+    there is a title or an icon, with a close button unless close=false; the block as
+    the body (straight into the dialog when bare); a foot when there is a footer.
+    size: sm or lg. -#}
+{% macro dialog(id=none, title=none, icon=none, footer=none, size=none, close=true, close_label='إغلاق', bare=false, title_tag='h3', body_class=none, class=none) -%}
+{{ _modal('ins-dialog', 'ins-dialog--' ~ size if size, id, title, icon, footer, close, close_label, bare, title_tag, body_class, class, kwargs, caller) }}
+{%- endmacro %}
+
+{#- The same dialog from an edge. side: start (the default, the right in Arabic), end or bottom. -#}
+{% macro drawer(id=none, title=none, icon=none, footer=none, side='start', close=true, close_label='إغلاق', bare=false, title_tag='h3', body_class=none, class=none) -%}
+{{ _modal('ins-drawer', 'ins-drawer--' ~ side if side != 'start', id, title, icon, footer, close, close_label, bare, title_tag, body_class, class, kwargs, caller) }}
+{%- endmacro %}
+
+{% macro _modal(kind, modifier, id, title, icon, footer, close, close_label, bare, title_tag, body_class, class, extra, body) -%}
+<dialog class="{{ cls([kind, modifier, class]) }}"{% if id %} id="{{ id|e }}"{% endif %}{{ attrs(extra) }}>
+{%- if bare -%}{{ body() if body }}
+{%- else -%}
+{%- if title is not none or icon is not none -%}
+<div class="ins-dialog-head">
+{%- if icon is not none %}<span class="ins-panel-ico">{{ icon }}</span>{% endif -%}
+{%- if title is not none %}<{{ title_tag }} class="ins-dialog-title">{{ title }}</{{ title_tag }}>{% endif -%}
+{%- if close %}{{ close_button(close_label, dismiss=true) }}{% endif -%}
+</div>
+{%- endif -%}
+<div class="{{ cls(['ins-dialog-body', body_class]) }}">{{ body() if body }}</div>
+{%- if footer is not none %}<div class="ins-dialog-foot">{{ footer }}</div>{% endif -%}
+{%- endif -%}
+</dialog>
+{%- endmacro %}
+
+{#- A menu button on a <details>: it opens with no script; the core adds Escape, the
+    arrow keys, closing on a choice and flipping at the viewport's edge.
+    label: what the button says; button_label: its name for a screen reader, for an
+    icon-only button; variant, size, icon_only: the button's look; summary_class
+    replaces it. start: open towards the start edge. -#}
+{% macro menu(label, variant='secondary', size=none, icon_only=false, button_label=none, summary_class=none, start=false, body_class=none, class=none) -%}
+{{ _pop(false, label, variant, size, icon_only, button_label, summary_class, start, body_class, class, kwargs, caller) }}
+{%- endmacro %}
+
+{#- The same trigger, opening a card. -#}
+{% macro popover(label, variant='secondary', size=none, icon_only=false, button_label=none, summary_class=none, start=false, body_class=none, class=none) -%}
+{{ _pop(true, label, variant, size, icon_only, button_label, summary_class, start, body_class, class, kwargs, caller) }}
+{%- endmacro %}
+
+{% macro _pop(card, label, variant, size, icon_only, button_label, summary_class, start, body_class, class, extra, body) -%}
+<details class="{{ cls(['ins-pop', 'ins-pop--start' if start, class]) }}"{{ attrs(extra) }}><summary class="{{ summary_class or cls(['ins-btn', 'ins-btn--' ~ variant if variant, 'ins-btn--' ~ size if size, 'ins-btn--icon' if icon_only]) }}"{% if button_label %} aria-label="{{ button_label|e }}"{% endif %}>{{ label }}</summary><div class="{{ cls(['ins-pop-body', 'ins-pop-body--card' if card, body_class]) }}">{{ body() if body }}</div></details>
+{%- endmacro %}
+
+{#- tone: bad for the destructive look. href makes it a link. The label, or the block. -#}
+{% macro menu_item(label=none, tone=none, href=none, class=none) -%}
+{%- set c = cls(['ins-pop-item', 'ins-pop-item--' ~ tone if tone, class]) -%}
+{%- if href is not none -%}<a class="{{ c }}" href="{{ href|e }}"{{ attrs(kwargs) }}>{{ caller() if caller else label }}</a>
+{%- else -%}<button class="{{ c }}"{{ attrs(kwargs) }}>{{ caller() if caller else label }}</button>{%- endif -%}
+{%- endmacro %}
+
+{#- A setting; the menu stays open for the next one. -#}
+{% macro menu_checkbox(label=none, checked=false, class=none) -%}
+<button class="{{ cls(['ins-pop-item', class]) }}" role="menuitemcheckbox" aria-checked="{{ 'true' if checked else 'false' }}"{{ attrs(kwargs) }}>{{ caller() if caller else label }}</button>
+{%- endmacro %}
+
+{#- One of a set, moved within its menu_group. -#}
+{% macro menu_radio(label=none, checked=false, class=none) -%}
+<button class="{{ cls(['ins-pop-item', class]) }}" role="menuitemradio" aria-checked="{{ 'true' if checked else 'false' }}"{{ attrs(kwargs) }}>{{ caller() if caller else label }}</button>
+{%- endmacro %}
+
+{% macro menu_label(text, class=none) -%}
+<div class="{{ cls(['ins-pop-label', class]) }}"{{ attrs(kwargs) }}>{{ text }}</div>
+{%- endmacro %}
+
+{% macro menu_separator(class=none) -%}
+<hr class="{{ cls(['ins-pop-sep', class]) }}"{{ attrs(kwargs) }}>
+{%- endmacro %}
+
+{% macro menu_group() -%}
+<div role="group"{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{%- endmacro %}

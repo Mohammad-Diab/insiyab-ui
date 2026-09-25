@@ -1,0 +1,17 @@
+{#- The tags a page needs, for the <head>: the stylesheet, the script (not deferred, so
+    the theme is set before the first paint) and each plugin named, in the order the
+    plugins need. base: where the files are served, the insiyab_static global that
+    insiyab.register() sets, or /static/insiyab. plugins: names, as in dist/plugins:
+    'phone', 'palette', 'hijri'… min: the minified stylesheets. -#}
+{% macro head(plugins=[], base=none, min=false) -%}
+{%- set b = (base or insiyab_static|default('/static/insiyab')).rstrip('/') -%}
+{%- set ext = '.min.css' if min else '.css' -%}
+<link rel="stylesheet" href="{{ b }}/insiyab{{ ext }}">
+{%- for p in plugins if p != 'hijri' %}
+<link rel="stylesheet" href="{{ b }}/plugins/insiyab-{{ p }}{{ ext }}">
+{%- endfor %}
+<script src="{{ b }}/insiyab.js"></script>
+{%- for p in plugins %}
+<script src="{{ b }}/plugins/insiyab-{{ p }}.js"></script>
+{%- endfor -%}
+{%- endmacro %}

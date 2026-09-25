@@ -1,0 +1,99 @@
+{#- The plugins. Each needs its plugin's script (and stylesheet) on the page: head()
+    writes them. The markup is what the plugin starts from; without script it is a
+    working plain field. Extra keywords go on the input. -#}
+{% from "insiyab/_base.html" import attrs, cls %}
+
+{#- length: 4 to 10 boxes; alnum: letters too; auto_submit: submit when full. -#}
+{% macro otp(length=6, alnum=false, auto_submit=false) -%}
+<input data-ins-otp="{{ length }}"{% if alnum %} data-ins-otp-chars="alnum"{% endif %}{% if auto_submit %} data-ins-otp-submit{% endif %}{{ attrs(kwargs) }}>
+{%- endmacro %}
+
+{#- The form sends E.164. country: to start in; preferred and only: lists of codes. -#}
+{% macro phone(country=none, preferred=none, only=none, class=none) -%}
+<div class="{{ cls(['ins-input-group', class]) }}"><input class="ins-input" data-ins-phone{{ attrs({'data-ins-phone-country': country, 'data-ins-phone-preferred': preferred|join(',') if preferred, 'data-ins-phone-only': only|join(',') if only}) }}{{ attrs(kwargs) }}></div>
+{%- endmacro %}
+
+{#- max_size: '5MB'; max_count: with multiple; note: replaces the small print;
+    compact: a button and the list; upload: each file sent as it is added. -#}
+{% macro file(max_size=none, max_count=none, note=none, compact=false, upload=false) -%}
+<input type="file"{% if compact %} class="ins-file--compact"{% endif %} data-ins-file{{ attrs({'data-ins-file-max': max_size, 'data-ins-file-count': max_count, 'data-ins-file-note': note, 'data-ins-file-upload': upload}) }}{{ attrs(kwargs) }}>
+{%- endmacro %}
+
+{#- The colour field sends #rrggbb. swatches: a list of presets, or 'none'. In a
+    group when group is true, as in a field. -#}
+{% macro color(swatches=none, group=true, class=none) -%}
+{%- set input -%}<input type="color" data-ins-color{{ attrs({'data-ins-color-swatches': (swatches|join(',') if swatches is not string else swatches) if swatches}) }}{{ attrs(kwargs) }}>{%- endset -%}
+{%- if group %}<div class="{{ cls(['ins-input-group', class]) }}">{{ input }}</div>{% else %}{{ input }}{% endif -%}
+{%- endmacro %}
+
+{#- items: dicts with label, and optionally href, icon, end, children, open,
+    selected, value, checked, id. checks: a checkbox on every row, cascading;
+    name: the checkboxes' name; selectable=false: a tree that only navigates. -#}
+{% macro tree(items, label, checks=false, name=none, selectable=true, class=none) -%}
+<ul class="{{ cls(['ins-tree', class]) }}" data-ins-tree{% if checks %} data-ins-tree-checks{% endif %}{% if not selectable %} data-ins-tree-select="none"{% endif %} aria-label="{{ label|e }}"{{ attrs(kwargs) }}>{{ _tree_items(items, checks, name) }}</ul>
+{%- endmacro %}
+
+{% macro _tree_items(items, checks, name) -%}
+{%- for n in items -%}
+<li{% if n.id %} id="{{ n.id|e }}"{% endif %}{% if n.open %} data-open{% endif %}{% if n.selected %} data-selected{% endif %}>
+{%- if checks -%}<label class="ins-check"><input type="checkbox"{% if name %} name="{{ name|e }}"{% endif %}{% if n.value is defined %} value="{{ n.value|e }}"{% endif %}{% if n.checked %} checked{% endif %}><span class="ins-check-text">{{ n.icon if n.icon }}{{ n.label }}</span></label>
+{%- elif n.href -%}<a href="{{ n.href|e }}">{{ n.icon if n.icon }}{{ n.label }}</a>
+{%- else -%}<span>{{ n.icon if n.icon }}{{ n.label }}</span>
+{%- endif -%}
+{{ n.end if n.end }}
+{%- if n.children %}<ul>{{ _tree_items(n.children, checks, name) }}</ul>{% endif -%}
+</li>
+{%- endfor -%}
+{%- endmacro %}
+
+{#- compact: for a narrow column; split: both sides of a centre rule when wide. -#}
+{% macro timeline(compact=false, split=false, class=none) -%}
+<ol class="{{ cls(['ins-timeline', 'ins-timeline--compact' if compact, 'ins-timeline--split' if split, class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</ol>
+{%- endmacro %}
+
+{#- tone: ok, bad, warn or info; state: current (a halo) or pending (still to come);
+    icon: a chip in place of the dot; time: a relative_time(), or text. -#}
+{% macro timeline_item(title, time=none, body=none, tone=none, state=none, icon=none, class=none) -%}
+<li class="{{ cls(['ins-timeline-item', 'ins-timeline-item--' ~ tone if tone, 'is-' ~ state if state, class]) }}"{{ attrs(kwargs) }}>
+{%- if icon is not none %}<span class="ins-timeline-ico">{{ icon }}</span>{% endif -%}
+<span class="ins-timeline-title">{{ title }}</span>
+{%- if time is not none %}{% if time is string and '<time' not in time %}<span class="ins-timeline-time">{{ time }}</span>{% else %}{{ time }}{% endif %}{% endif -%}
+{%- if body is not none %}<p class="ins-timeline-body">{{ body }}</p>{% endif -%}
+{{ caller() if caller }}</li>
+{%- endmacro %}
+
+{% macro timeline_day(text, class=none) -%}
+<li class="{{ cls(['ins-timeline-day', class]) }}"{{ attrs(kwargs) }}>{{ text }}</li>
+{%- endmacro %}
+
+{#- A <time> the timeline plugin writes as «قبل 5 دقائق», «أمس». relative=false: the
+    date as the plugin writes it, always; without the plugin, the text given. -#}
+{% macro relative_time(datetime, text='', relative=true, class='ins-timeline-time') -%}
+<time{% if class %} class="{{ class|e }}"{% endif %} datetime="{{ datetime|e }}" data-ins-time{% if not relative %}="date"{% endif %}{{ attrs(kwargs) }}>{{ text }}</time>
+{%- endmacro %}
+
+{#- The slides are the block. label names it; per_view: 2 or 3 in view when wide;
+    peek: the edge of the next one; dots=false: no dots. -#}
+{% macro carousel(label, per_view=none, peek=false, dots=true, class=none) -%}
+<div class="{{ cls(['ins-carousel', 'ins-carousel--' ~ per_view if per_view and per_view > 1, 'ins-carousel--peek' if peek, class]) }}" data-ins-carousel{% if not dots %} data-ins-carousel-dots="off"{% endif %} aria-label="{{ label|e }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{%- endmacro %}
+
+{#- A contents list that follows the reading. links: dicts with href and label, and
+    sub for a deeper heading. -#}
+{% macro toc(links, title=none, label=none, offset=none, class=none) -%}
+<nav class="{{ cls(['ins-toc', class]) }}" data-ins-scrollspy{% if offset is not none %} data-ins-scrollspy-offset="{{ offset }}"{% endif %}{% if label %} aria-label="{{ label|e }}"{% endif %}{{ attrs(kwargs) }}>
+{%- if title is not none %}<div class="ins-toc-title">{{ title }}</div>{% endif -%}
+{%- for l in links %}<a{% if l.sub %} class="ins-toc-sub"{% endif %} href="{{ l.href|e }}">{{ l.label }}</a>{% endfor -%}
+</nav>
+{%- endmacro %}
+
+{#- The command palette: the block holds the page's own links and buttons, grouped
+    with palette_group(). from: also offer the links in there ('.ins-shell-side');
+    keys: 'mod+k /' by default, 'none' for none; recent: how many recent choices. -#}
+{% macro palette(id=none, label=none, from=none, keys=none, recent=none, placeholder=none, class=none) -%}
+<dialog class="{{ cls(['ins-dialog', 'ins-palette', class]) }}"{% if id %} id="{{ id|e }}"{% endif %} data-ins-palette{{ attrs({'data-ins-palette-from': from, 'data-ins-palette-keys': keys, 'data-ins-palette-recent': recent, 'data-ins-palette-placeholder': placeholder, 'aria-label': label}) }}{{ attrs(kwargs) }}>{{ caller() if caller }}</dialog>
+{%- endmacro %}
+
+{% macro palette_group(label) -%}
+<div data-ins-palette-group="{{ label|e }}">{{ caller() if caller }}</div>
+{%- endmacro %}

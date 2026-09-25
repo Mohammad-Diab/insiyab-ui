@@ -1,0 +1,47 @@
+{% from "insiyab/_base.html" import attrs, cls %}
+{% from "insiyab/buttons.html" import close_button %}
+
+{#- tone: ok, warn, bad or info. dismissible: a close button; the core hides the
+    alert. The message, or the block. -#}
+{% macro alert(text=none, tone=none, icon=none, dismissible=false, close_label='إغلاق', class=none) -%}
+<div class="{{ cls(['ins-alert', 'ins-alert--' ~ tone if tone, class]) }}"{{ attrs(kwargs) }}>
+{%- if icon is not none %}<span class="ins-alert-ico">{{ icon }}</span>{% endif -%}
+<div class="ins-alert-msg"><span class="ins-alert-text">{{ caller() if caller else text }}</span>
+{%- if dismissible %}{{ close_button(close_label, size='sm', bare=true, dismiss=true) }}{% endif -%}
+</div></div>
+{%- endmacro %}
+
+{#- The block goes under the text: the buttons that fill the space. -#}
+{% macro empty(title, hint=none, icon=none, class=none) -%}
+<div class="{{ cls(['ins-empty', class]) }}"{{ attrs(kwargs) }}>
+{%- if icon is not none %}<span class="ins-empty-ico">{{ icon }}</span>{% endif -%}
+<span class="ins-empty-title">{{ title }}</span>
+{%- if hint is not none %}<span class="ins-empty-hint">{{ hint }}</span>{% endif -%}
+{{ caller() if caller }}</div>
+{%- endmacro %}
+
+{#- The native <progress>. Leave value out for the moving "working on it" bar.
+    tone: ok, warn or bad; size: sm or lg. -#}
+{% macro progress(value=none, max=100, tone=none, size=none, class=none) -%}
+<progress class="{{ cls(['ins-progress', 'ins-progress--' ~ size if size, 'ins-progress--' ~ tone if tone, class]) }}"{% if value is not none %} value="{{ value }}" max="{{ max }}"{% endif %}{{ attrs(kwargs) }}>{% if value is not none %}{{ (value / max * 100)|round|int }}%{% endif %}</progress>
+{%- endmacro %}
+
+{#- value: 0 to 100; label: what it measures, for a screen reader. size: lg. -#}
+{% macro ring(value, label, size=none, class=none) -%}
+<div class="{{ cls(['ins-ring', 'ins-ring--' ~ size if size, class]) }}" role="progressbar" aria-label="{{ label|e }}" aria-valuenow="{{ value }}" aria-valuemin="0" aria-valuemax="100" style="--ins-value:{{ value }}"{{ attrs(kwargs) }}>{{ caller() if caller else value ~ '%' }}</div>
+{%- endmacro %}
+
+{#- shape: text, title, circle or block; block: a block of its own inside inline content. -#}
+{% macro skeleton(shape=none, block=false, tag='span', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-skel', 'ins-skel--' ~ shape if shape, 'ins-block' if block, class]) }}"{{ attrs(kwargs) }}></{{ tag }}>
+{%- endmacro %}
+
+{#- label: read out as a status. Without one it is hidden from a screen reader, for a
+    spinner beside text that says the same. -#}
+{% macro spinner(label=none, size=none, class=none) -%}
+<span class="{{ cls(['ins-spinner', 'ins-spinner--' ~ size if size, class]) }}"{% if label %} role="status" aria-label="{{ label|e }}"{% else %} aria-hidden="true"{% endif %}{{ attrs(kwargs) }}></span>
+{%- endmacro %}
+
+{% macro loading(label='جارٍ التحميل', class=none) -%}
+<div class="{{ cls(['ins-loading', class]) }}"{{ attrs(kwargs) }}>{{ spinner(label) }}</div>
+{%- endmacro %}

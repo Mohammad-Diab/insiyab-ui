@@ -12,6 +12,11 @@ node_modules/
 # loads them from the repository.
 packages/react/dist/
 packages/react/test/out/
+# The Jinja package's copy of dist/, made by sync_static.py for a wheel, and what
+# setuptools leaves behind.
+packages/jinja/src/insiyab/static/
+packages/jinja/src/*.egg-info/
+packages/jinja/wheelhouse/
 build/
 .vite/
 coverage/

@@ -1,0 +1,45 @@
+{#- Type: text either as the first argument or from a {% call %} block. -#}
+{% from "insiyab/_base.html" import attrs, cls %}
+
+{% macro display(text=none, tag='p', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-display', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller else text }}</{{ tag }}>
+{%- endmacro %}
+
+{#- level 1 to 4: the size (ins-h1…ins-h4), and the element unless tag says otherwise. -#}
+{% macro heading(text=none, level=2, tag=none, class=none) -%}
+{%- set t = tag or 'h' ~ level -%}
+<{{ t }} class="{{ cls(['ins-h' ~ level, class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller else text }}</{{ t }}>
+{%- endmacro %}
+
+{% macro lead(text=none, tag='p', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-lead', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller else text }}</{{ tag }}>
+{%- endmacro %}
+
+{% macro eyebrow(text=none, tag='span', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-eyebrow', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller else text }}</{{ tag }}>
+{%- endmacro %}
+
+{% macro prose(tag='div', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-prose', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</{{ tag }}>
+{%- endmacro %}
+
+{% macro kbd(text, class=none) -%}
+<kbd class="{{ cls(['ins-kbd', class]) }}"{{ attrs(kwargs) }}>{{ text }}</kbd>
+{%- endmacro %}
+
+{% macro num(text=none, tag='span', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-num', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller else text }}</{{ tag }}>
+{%- endmacro %}
+
+{#- sign: 'pos' or 'neg' colours a gain or a loss; the sign itself is part of value. -#}
+{% macro money(value, currency, sign=none, class=none) -%}
+<span class="{{ cls(['ins-money', 'ins-money--' ~ sign if sign, class]) }}"{{ attrs(kwargs) }}><span class="ins-money-val">{{ value }}</span><span class="ins-money-cur">{{ currency }}</span></span>
+{%- endmacro %}
+
+{#- label: a word in the line; start: the label at the start; vertical: between items in a row. -#}
+{% macro divider(label=none, start=false, vertical=false, class=none) -%}
+{%- if vertical -%}<hr class="{{ cls(['ins-divider', 'ins-divider--v', class]) }}" aria-orientation="vertical"{{ attrs(kwargs) }}>
+{%- elif label is none -%}<hr class="{{ cls(['ins-divider', class]) }}"{{ attrs(kwargs) }}>
+{%- else -%}<div class="{{ cls(['ins-divider', 'ins-divider--start' if start, class]) }}"{{ attrs(kwargs) }}>{{ label }}</div>
+{%- endif -%}
+{%- endmacro %}

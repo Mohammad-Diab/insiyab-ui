@@ -1,0 +1,18 @@
+{#- Shared by every macro file.
+
+    attrs(a): the keywords a macro does not know, written out as attributes. An
+    underscore in the name is a hyphen (aria_label is aria-label, data_ins_tip is
+    data-ins-tip); `true` writes a bare attribute; `false` and `none` leave it out.
+    Values are always escaped: an attribute never holds markup.
+
+    cls(list): the class names that are set, joined. -#}
+
+{% macro attrs(a) -%}
+{%- for k, v in a|dictsort if v is defined and v is not none and v is not sameas false -%}
+{{ ' ' }}{{ k|replace('_', '-') }}{% if v is not sameas true %}="{{ v|e }}"{% endif %}
+{%- endfor -%}
+{%- endmacro %}
+
+{% macro cls(list) -%}
+{{ list|select|join(' ') }}
+{%- endmacro %}

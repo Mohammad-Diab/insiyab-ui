@@ -11,7 +11,7 @@
 //
 // Needs packages/react/node_modules (npm install there); without it the file skips.
 import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launch, BASE } from './lib/cdp.mjs';
@@ -33,6 +33,9 @@ for (const script of ['build.mjs', 'test/build.mjs']) {
 }
 
 const { ok, end } = suite();
+
+const version = (p) => JSON.parse(readFileSync(p, 'utf8')).version;
+ok('version: the same as the library’s', version(join(PKG, 'package.json')) === version(join(ROOT, 'package.json')), version(join(PKG, 'package.json')));
 
 /* The tests themselves are typed against the package, so an API change that would
    break a user's code breaks here first. */

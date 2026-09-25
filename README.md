@@ -36,8 +36,9 @@
 > the shell, with every example's markup printed under it. Ten plugins: the
 > Hijri calendar, the command palette, the one-time code, the phone number, file
 > upload, scrollspy, the timeline, the tree, the colour picker and the carousel.
-> The React wrapper is in [packages/react](packages/react/README.md); the Jinja
-> macros are next. See
+> Two wrappers cover the same classes: React components in
+> [packages/react](packages/react/README.md), and Jinja macros in
+> [packages/jinja](packages/jinja/README.md). See
 > [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
@@ -899,6 +900,22 @@ core rebuilds (the date field, most plugins) is handed to it only after React ha
 mounted. The test for it builds every docs example with the components and compares
 the result, once the core has built both, with the example itself.
 
+## Jinja
+
+`insiyab` on PyPI, in [packages/jinja](packages/jinja/README.md), is a set of Jinja
+macros that write the markup this README shows, with the library's files in the
+package and one call to set it up: `insiyab.init_app(app)` for Flask, or
+`insiyab.register(env)` for any Jinja2 environment.
+
+```jinja
+{% import "insiyab/ui.html" as ins %}
+{{ ins.head(plugins=['phone']) }}
+{% call ins.field('الجوال', id='mobile') %}{{ ins.phone(id='mobile', name='mobile') }}{% endcall %}
+```
+
+Its test renders the same docs examples as the React wrapper's and compares them the
+same way.
+
 ## Development
 
 Node 18+ for the build; nothing else, and no dependencies at all.
@@ -949,13 +966,13 @@ node test/run.mjs sidebar dark    # only the files whose names contain a word
 node test/run.mjs --verbose       # every check, not only failures
 ```
 
-About 750 checks in twenty-three files, each driving a real headless Chrome with real
+About 860 checks in twenty-four files, each driving a real headless Chrome with real
 key and pointer events, on a throwaway profile, against a server the runner
 starts on a free port. Needs Chrome, found in the usual places or through
 `CHROME`, and no npm packages for the library's own tests: the driver is a small
-DevTools-protocol client in `test/lib/`. The React wrapper's test needs its own
-packages (`npm install` in `packages/react`), and is reported as skipped without
-them.
+DevTools-protocol client in `test/lib/`. The wrappers' tests need their own
+tools: `npm install` in `packages/react`, and Python 3.8+ with Jinja2 (and Flask)
+for `packages/jinja`. Each is reported as skipped without them.
 A file that hangs is stopped after three minutes, with its browser, and reported
 as failed; `INS_TEST_TIMEOUT` (seconds) changes the limit.
 

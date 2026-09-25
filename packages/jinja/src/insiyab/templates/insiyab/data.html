@@ -1,0 +1,61 @@
+{% from "insiyab/_base.html" import attrs, cls %}
+
+{#- The block holds <thead> and <tbody>. A selected row: <tr aria-selected="true">.
+    wrap: the scrolling wrap around it, on by default. -#}
+{% macro table(wrap=true, wrap_class=none, class=none) -%}
+{%- if wrap %}<div class="{{ cls(['ins-table-wrap', wrap_class]) }}">{% endif -%}
+<table class="{{ cls(['ins-table', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</table>
+{%- if wrap %}</div>{% endif -%}
+{%- endmacro %}
+
+{#- tone: ok, warn, bad, info, mute or zero; size: sm or lg. currency sets the value as money. -#}
+{% macro stat(label, value, icon=none, hint=none, currency=none, tone=none, size=none, glass=true, class=none) -%}
+<div class="{{ cls(['ins-stat', 'ins-glass' if glass, 'ins-stat--' ~ tone if tone, 'ins-stat--' ~ size if size, class]) }}"{{ attrs(kwargs) }}>
+{%- if icon is not none %}<span class="ins-stat-ico">{{ icon }}</span>{% endif -%}
+<span class="ins-stat-body"><span class="ins-stat-label">{{ label }}</span>
+{%- if currency is not none -%}
+<span class="ins-stat-value ins-money"><span class="ins-money-val">{{ value }}</span><span class="ins-money-cur">{{ currency }}</span></span>
+{%- else -%}
+<span class="ins-stat-value">{{ value }}</span>
+{%- endif -%}
+{%- if hint is not none %}<span class="ins-stat-hint">{{ hint }}</span>{% endif -%}
+</span></div>
+{%- endmacro %}
+
+{#- tone: ok, warn, bad, info or brand. tag='button' for a pill that filters. -#}
+{% macro pill(text=none, tone=none, dot=true, tag='span', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-pill', 'ins-pill--' ~ tone if tone, class]) }}"{{ attrs(kwargs) }}>
+{%- if dot %}<span class="ins-pill-dot"></span>{% endif %}{{ caller() if caller else text }}</{{ tag }}>
+{%- endmacro %}
+
+{#- tone: ok, warn, bad or mute. -#}
+{% macro badge(text, tone=none, class=none) -%}
+<span class="{{ cls(['ins-badge', 'ins-badge--' ~ tone if tone, class]) }}"{{ attrs(kwargs) }}>{{ text }}</span>
+{%- endmacro %}
+
+{% macro avatar(text, size=none, class=none) -%}
+<span class="{{ cls(['ins-avatar', 'ins-avatar--' ~ size if size, class]) }}"{{ attrs(kwargs) }}>{{ text }}</span>
+{%- endmacro %}
+
+{#- tag='nav' for a list of links, whose items then have an href. -#}
+{% macro list(tag='ul', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-list', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</{{ tag }}>
+{%- endmacro %}
+
+{#- start: before the text (an avatar, an icon chip); end: at the far end. With href
+    the item is a link, and current marks it as this page. The block goes after the
+    text, for an end with classes of its own. -#}
+{% macro list_item(title=none, desc=none, start=none, end=none, href=none, current=false, class=none) -%}
+{%- set t = 'a' if href is not none else 'li' -%}
+<{{ t }} class="{{ cls(['ins-list-item', class]) }}"{% if href is not none %} href="{{ href|e }}"{% endif %}{% if current %} aria-current="page"{% endif %}{{ attrs(kwargs) }}>
+{{- start if start is not none -}}
+{%- if title is not none or desc is not none -%}
+<span class="ins-list-text">
+{%- if title is not none %}<span class="ins-list-title">{{ title }}</span>{% endif -%}
+{%- if desc is not none %}<span class="ins-list-desc">{{ desc }}</span>{% endif -%}
+</span>
+{%- endif -%}
+{{ caller() if caller }}
+{%- if end is not none %}<span class="ins-list-end">{{ end }}</span>{% endif -%}
+</{{ t }}>
+{%- endmacro %}

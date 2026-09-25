@@ -1,0 +1,36 @@
+{#- Layout: each macro is one class on one element, filled from a {% call %} block. -#}
+{% from "insiyab/_base.html" import attrs, cls %}
+
+{% macro container(size=none, tag='div', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-container', 'ins-container--' ~ size if size, class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</{{ tag }}>
+{%- endmacro %}
+
+{% macro stack(gap=none, tag='div', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-stack', 'ins-gap-' ~ gap if gap is not none, class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</{{ tag }}>
+{%- endmacro %}
+
+{% macro row(gap=none, nowrap=false, justify=none, align=none, tag='div', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-row', 'ins-gap-' ~ gap if gap is not none, 'ins-flex-nowrap' if nowrap, 'ins-justify-' ~ justify if justify, 'ins-items-' ~ align if align, class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</{{ tag }}>
+{%- endmacro %}
+
+{#- n: 2, 3, 4, 6 or 12 columns on a desktop; fixed holds them at every width. -#}
+{% macro cols(n, fixed=false, gap=none, tag='div', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-cols-' ~ n, 'ins-cols--fixed' if fixed, 'ins-gap-' ~ gap if gap is not none, class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</{{ tag }}>
+{%- endmacro %}
+
+{% macro grid(wide=false, gap=none, tag='div', class=none) -%}
+<{{ tag }} class="{{ cls(['ins-grid', 'ins-grid--wide' if wide, 'ins-gap-' ~ gap if gap is not none, class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</{{ tag }}>
+{%- endmacro %}
+
+{#- end: held at the far end (.ins-toolbar-end). -#}
+{% macro toolbar(end=none, class=none) -%}
+<div class="{{ cls(['ins-toolbar', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}{% if end is not none %}<div class="ins-toolbar-end">{{ end }}</div>{% endif %}</div>
+{%- endmacro %}
+
+{% macro field_row(class=none) -%}
+<div class="{{ cls(['ins-field-row', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{%- endmacro %}
+
+{% macro form_commit(class=none) -%}
+<div class="{{ cls(['ins-form-commit', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{%- endmacro %}

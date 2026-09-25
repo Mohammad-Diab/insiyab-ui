@@ -1,0 +1,108 @@
+{% from "insiyab/_base.html" import attrs, cls %}
+
+{#- breadcrumb: a breadcrumb() above the title; actions: the page's buttons. The block
+    goes after the subtitle. -#}
+{% macro page_head(title, sub=none, eyebrow=none, breadcrumb=none, actions=none, title_tag='h1', class=none) -%}
+<header class="{{ cls(['ins-page-head', class]) }}"{{ attrs(kwargs) }}>{{ breadcrumb if breadcrumb is not none }}<div class="ins-page-head-text">
+{%- if eyebrow is not none %}<span class="ins-eyebrow">{{ eyebrow }}</span>{% endif -%}
+<{{ title_tag }} class="ins-page-title">{{ title }}</{{ title_tag }}>
+{%- if sub is not none %}<p class="ins-page-sub">{{ sub }}</p>{% endif -%}
+{{ caller() if caller }}</div>
+{%- if actions is not none %}<div class="ins-page-actions">{{ actions }}</div>{% endif -%}
+</header>
+{%- endmacro %}
+
+{#- items: (label, href) pairs or dicts; the last is the current page. -#}
+{% macro breadcrumb(items, label='مسار التنقّل', class=none) -%}
+<nav class="{{ cls(['ins-breadcrumb', class]) }}" aria-label="{{ label|e }}"{{ attrs(kwargs) }}><ol>
+{%- for c in items -%}
+{%- if c is mapping %}{% set l, h = c.label, c.href %}{% elif c is string %}{% set l, h = c, none %}{% else %}{% set l, h = c[0], c[1] %}{% endif -%}
+<li>{% if loop.last %}<span aria-current="page">{{ l }}</span>{% else %}<a href="{{ h|e }}">{{ l }}</a>{% endif %}</li>
+{%- endfor -%}
+</ol></nav>
+{%- endmacro %}
+
+{#- The strip: tab() calls in the block. seg: the segmented look. -#}
+{% macro tablist(label=none, seg=false, class=none) -%}
+<div class="{{ cls(['ins-seg' if seg else 'ins-tablist', class]) }}"{% if label %} aria-label="{{ label|e }}"{% endif %}{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{%- endmacro %}
+
+{#- panel: the id of its tabpanel(); seg: in a segmented strip. active: shown first
+    (the first tab otherwise). -#}
+{% macro tab(label, panel, active=false, seg=false, class=none) -%}
+<button{% if not seg or active or class %} class="{{ cls(['ins-tab' if not seg, 'is-active' if active, class]) }}"{% endif %} data-ins-tab="#{{ panel|e }}"{{ attrs(kwargs) }}>{{ label }}</button>
+{%- endmacro %}
+
+{% macro tabpanel(id, class=none) -%}
+<div class="{{ cls(['ins-tabpanel', class]) }}" id="{{ id|e }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{%- endmacro %}
+
+{#- page: the current page, from 1; href: the address with {n} where the number
+    goes, '?page={n}'. siblings: pages either side of the current one. -#}
+{% macro pagination(page, count, href='?page={n}', siblings=1, label=none, prev_label='السابق', next_label='التالي', class=none) -%}
+{%- set lo = [2, page - siblings]|max -%}
+{%- set hi = [count - 1, page + siblings]|min -%}
+{%- set pages = [1] -%}
+{%- if lo > 2 %}{% set pages = pages + ([2] if lo == 3 else ['gap']) %}{% endif -%}
+{%- set pages = pages + range(lo, hi + 1)|list -%}
+{%- if hi < count - 1 %}{% set pages = pages + ([count - 1] if hi == count - 2 else ['gap']) %}{% endif -%}
+{%- if count > 1 %}{% set pages = pages + [count] %}{% endif -%}
+<nav class="{{ cls(['ins-pagination', class]) }}"{% if label %} aria-label="{{ label|e }}"{% endif %}{{ attrs(kwargs) }}>
+{%- if page > 1 %}<a class="ins-page ins-page--prev" href="{{ href.replace('{n}', (page - 1)|string)|e }}">{{ prev_label }}</a>
+{%- else %}<a class="ins-page ins-page--prev" aria-disabled="true">{{ prev_label }}</a>{% endif -%}
+{%- for n in pages -%}
+{%- if n == 'gap' %}<span class="ins-page-gap">…</span>
+{%- elif n == page %}<a class="ins-page" aria-current="page">{{ n }}</a>
+{%- else %}<a class="ins-page" href="{{ href.replace('{n}', n|string)|e }}">{{ n }}</a>{% endif -%}
+{%- endfor -%}
+{%- if page < count %}<a class="ins-page ins-page--next" href="{{ href.replace('{n}', (page + 1)|string)|e }}">{{ next_label }}</a>
+{%- else %}<a class="ins-page ins-page--next" aria-disabled="true">{{ next_label }}</a>{% endif -%}
+</nav>
+{%- endmacro %}
+
+{#- A site's top bar; below 900px the links fold behind the toggle. The block holds
+    navbar_link() calls; end is held at the end of the menu. static: in the page's
+    flow instead of stuck to the top. -#}
+{% macro navbar(brand=none, brand_href='/', label=none, toggle_label='القائمة', end=none, static=false, class=none) -%}
+<header class="{{ cls(['ins-navbar', 'ins-navbar--static' if static, class]) }}"{{ attrs(kwargs) }}>
+{%- if brand is not none %}<a class="ins-navbar-brand" href="{{ brand_href|e }}">{{ brand }}</a>{% endif -%}
+<button class="ins-navbar-toggle" data-ins-navbar aria-label="{{ toggle_label|e }}"></button><nav class="ins-navbar-menu"{% if label %} aria-label="{{ label|e }}"{% endif %}>{{ caller() if caller }}
+{%- if end is not none %}<div class="ins-navbar-end">{{ end }}</div>{% endif -%}
+</nav></header>
+{%- endmacro %}
+
+{% macro navbar_link(label, href, current=false, class=none) -%}
+<a class="{{ cls(['ins-navbar-link', class]) }}" href="{{ href|e }}"{% if current %} aria-current="page"{% endif %}{{ attrs(kwargs) }}>{{ label }}</a>
+{%- endmacro %}
+
+{% macro accordion(class=none) -%}
+<div class="{{ cls(['ins-accordion', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{%- endmacro %}
+
+{#- A <details> section. name: sections sharing it open one at a time. -#}
+{% macro collapse(summary, open=false, name=none, body_class=none, class=none) -%}
+<details class="{{ cls(['ins-collapse', class]) }}"{% if name %} name="{{ name|e }}"{% endif %}{% if open %} open{% endif %}{{ attrs(kwargs) }}><summary>{{ summary }}</summary><div class="{{ cls(['ins-collapse-body', body_class]) }}">{{ caller() if caller }}</div></details>
+{%- endmacro %}
+
+{#- current: the step in progress, from 0; the ones before it are done. -#}
+{% macro steps(items, current=none, class=none) -%}
+<ol class="{{ cls(['ins-steps', class]) }}"{{ attrs(kwargs) }}>
+{%- for label in items -%}
+<li class="{{ cls(['ins-steps-item', 'is-done' if current is not none and loop.index0 < current]) }}"{% if current is not none and loop.index0 == current %} aria-current="step"{% endif %}><span class="ins-steps-label">{{ label }}</span></li>
+{%- endfor -%}
+</ol>
+{%- endmacro %}
+
+{#- A form in steps: wizard_panel() calls in the block. Next checks the step's own
+    fields before it moves on; without script it is one long form. -#}
+{% macro wizard(steps, validate=true, prev_label='السابق', next_label='التالي', finish_label='إنهاء', body_class=none, class=none) -%}
+<form class="{{ cls(['ins-panel', 'ins-wizard', class]) }}"{% if validate %} data-ins-validate{% endif %}{{ attrs(kwargs) }}><div class="{{ cls(['ins-panel-body', body_class]) }}">
+{{- _steps(steps) -}}
+{{ caller() if caller }}<div class="ins-wizard-foot"><button type="button" class="ins-btn ins-btn--secondary" data-ins-wizard="prev">{{ prev_label }}</button><button type="button" class="ins-btn ins-btn--primary" data-ins-wizard="next">{{ next_label }}</button><button class="ins-btn ins-btn--primary ins-wizard-finish">{{ finish_label }}</button></div></div></form>
+{%- endmacro %}
+
+{% macro _steps(items) -%}{{ steps(items) }}{%- endmacro %}
+
+{% macro wizard_panel(label=none, class=none) -%}
+<section class="{{ cls(['ins-wizard-panel', class]) }}"{% if label %} aria-label="{{ label|e }}"{% endif %}{{ attrs(kwargs) }}>{{ caller() if caller }}</section>
+{%- endmacro %}
