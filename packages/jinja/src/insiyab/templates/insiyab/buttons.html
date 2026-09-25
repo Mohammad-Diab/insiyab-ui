@@ -1,0 +1,47 @@
+{% from "insiyab/_base.html" import attrs, cls %}
+
+{#- The attributes the core listens for, as keywords, on button and close_button:
+    tip (true reads the aria-label, text is its own), tip_side, confirm, confirm_ok,
+    confirm_tone, toast, toast_tone, dismiss (true, or a selector), and dialog, the
+    selector of a dialog or drawer to open. -#}
+{% macro _action(tip, tip_side, confirm, confirm_ok, confirm_tone, toast, toast_tone, dismiss, dialog) -%}
+{{ attrs({'data-ins-dialog': dialog, 'data-ins-tip': tip, 'data-ins-tip-side': tip_side, 'data-ins-confirm': confirm, 'data-ins-confirm-ok': confirm_ok, 'data-ins-confirm-tone': confirm_tone, 'data-ins-toast': toast, 'data-ins-tone': toast_tone if toast, 'data-ins-dismiss': dismiss}) }}
+{%- endmacro %}
+
+{#- variant: primary, secondary, ghost, ghost-danger, ghost-success, ghost-warning,
+    ghost-info, success, danger, warning, info or bare. size: sm or lg. icon_only: a
+    square button for an icon (give it aria_label). href makes it a link. loading: a
+    spinner in front, and disabled. The label, or the block. -#}
+{% macro button(label=none, variant=none, size=none, icon_only=false, full=false, lift=false, href=none, loading=false, disabled=false, type=none, class=none, tip=none, tip_side=none, confirm=none, confirm_ok=none, confirm_tone=none, toast=none, toast_tone=none, dismiss=none, dialog=none) -%}
+{%- set c = cls(['ins-btn', 'ins-btn--' ~ variant if variant, 'ins-btn--' ~ size if size, 'ins-btn--icon' if icon_only, 'ins-btn--full' if full, 'ins-btn--lift' if lift, class]) -%}
+{%- set act = _action(tip, tip_side, confirm, confirm_ok, confirm_tone, toast, toast_tone, dismiss, dialog) -%}
+{%- if href is not none -%}
+<a class="{{ c }}" href="{{ href|e }}"{% if disabled %} aria-disabled="true"{% endif %}{{ act }}{{ attrs(kwargs) }}>
+{%- else -%}
+<button class="{{ c }}"{% if type %} type="{{ type|e }}"{% endif %}{% if disabled or loading %} disabled{% endif %}{{ act }}{{ attrs(kwargs) }}>
+{%- endif -%}
+{%- if loading %}<span class="ins-spinner ins-spinner--sm" aria-hidden="true"></span>{% endif -%}
+{{ caller() if caller else label }}
+{%- if href is not none %}</a>{% else %}</button>{% endif -%}
+{%- endmacro %}
+
+{#- label names the group, which then gets role="group". size: sm. -#}
+{% macro button_group(label=none, size=none, class=none) -%}
+<div class="{{ cls(['ins-btn-group', 'ins-btn-group--' ~ size if size, class]) }}"{% if label %} role="group" aria-label="{{ label|e }}"{% endif %}{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{%- endmacro %}
+
+{#- A button that stays down: the core flips aria-pressed. -#}
+{% macro toggle_button(label=none, pressed=false, variant=none, size=none, icon_only=false, tip=none, class=none) -%}
+<button class="{{ cls(['ins-btn', 'ins-btn--' ~ variant if variant, 'ins-btn--' ~ size if size, 'ins-btn--icon' if icon_only, class]) }}" data-ins-toggle{% if pressed %} aria-pressed="true"{% endif %}{{ attrs({'data-ins-tip': tip}) }}{{ attrs(kwargs) }}>{{ caller() if caller else label }}</button>
+{%- endmacro %}
+
+{#- size: sm; bare: no circle; label: its name for a screen reader. -#}
+{% macro close_button(label='إغلاق', size=none, bare=false, class=none, tip=none, tip_side=none, confirm=none, confirm_ok=none, confirm_tone=none, toast=none, toast_tone=none, dismiss=none, dialog=none) -%}
+<button class="{{ cls(['ins-close', 'ins-close--' ~ size if size, 'ins-close--bare' if bare, class]) }}"{{ _action(tip, tip_side, confirm, confirm_ok, confirm_tone, toast, toast_tone, dismiss, dialog) }} aria-label="{{ label|e }}"{{ attrs(kwargs) }}></button>
+{%- endmacro %}
+
+{#- An icon from the page's sprite: <svg class="ico"><use href="#name"/></svg>.
+    Insiyab ships no icons. hidden: aria-hidden, for an icon beside text that says it. -#}
+{% macro icon(name, hidden=false, class=none) -%}
+<svg class="{{ cls(['ico', class]) }}"{% if hidden %} aria-hidden="true"{% endif %}{{ attrs(kwargs) }}><use href="{{ name if name.startswith('#') else '#' ~ name }}"/></svg>
+{%- endmacro %}

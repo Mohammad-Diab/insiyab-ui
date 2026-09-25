@@ -1,0 +1,28 @@
+{% from "insiyab/_base.html" import attrs, cls %}
+
+{#- The autocomplete. options: (value, label) pairs or dicts; name: what the chosen
+    value is sent as, from the hidden input; value: the value chosen at the start;
+    empty: shown when nothing matches. Other keywords go on the text field. -#}
+{% macro combo(options, name=none, value=none, empty=none, class=none) -%}
+{%- set ns = namespace(label=none) -%}
+{%- for o in options -%}
+{%- if o is mapping %}{% set v, l = o.value, o.label %}{% else %}{% set v, l = o[0], o[1] %}{% endif -%}
+{%- if value is not none and v == value %}{% set ns.label = l %}{% endif -%}
+{%- endfor -%}
+<div class="{{ cls(['ins-combo', class]) }}"><input class="ins-input"{% if ns.label is not none %} value="{{ ns.label|e }}"{% endif %}{{ attrs(kwargs) }}><input type="hidden"{% if name %} name="{{ name|e }}"{% endif %}{% if value is not none %} value="{{ value|e }}"{% endif %}><ul class="ins-combo-list">
+{%- for o in options -%}
+{%- if o is mapping %}{% set v, l = o.value, o.label %}{% else %}{% set v, l = o[0], o[1] %}{% endif -%}
+<li class="ins-combo-option" data-value="{{ v|e }}">{{ l }}</li>
+{%- endfor -%}
+{%- if empty is not none %}<li class="ins-combo-empty">{{ empty }}</li>{% endif -%}
+</ul></div>
+{%- endmacro %}
+
+{#- The date field: a native date input until the core builds it, then the page's
+    language, the calendar, and ISO sent under the same name.
+    calendar: hijri or hijri-civil with the plugin, gregory to opt out; locale: a
+    language other than the page's; range_end / range_start: the other field's id.
+    The block goes in the group after the field. -#}
+{% macro date(calendar=none, locale=none, range_end=none, range_start=none, invalid=false, class=none) -%}
+<div class="{{ cls(['ins-input-group', class]) }}"><input class="ins-input" type="date" data-ins-date{% if invalid %} aria-invalid="true"{% endif %}{{ attrs({'data-ins-calendar': calendar, 'data-ins-locale': locale, 'data-ins-date-end': '#' ~ range_end if range_end, 'data-ins-date-start': '#' ~ range_start if range_start}) }}{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{%- endmacro %}

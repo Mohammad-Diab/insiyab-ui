@@ -1,0 +1,115 @@
+{% from "insiyab/_base.html" import attrs, cls %}
+
+{#- validate: the browser's own validation, each message in its field's .ins-error. -#}
+{% macro form(validate=false, class=none) -%}
+<form{% if class %} class="{{ class|e }}"{% endif %}{% if validate %} data-ins-validate{% endif %}{{ attrs(kwargs) }}>{{ caller() if caller }}</form>
+{%- endmacro %}
+
+{#- A field: the label, the control from the block, the hint, the message.
+    id: the control's id, for the label's `for`; give the control the same id.
+    error: a message under the field (mark the control with invalid=true), or `true`
+    for the empty one a validating form fills with the browser's own words.
+    The core links the hint and the message to the control with aria-describedby. -#}
+{% macro field(label=none, id=none, hint=none, error=none, success=none, required=false, class=none) -%}
+<div class="{{ cls(['ins-field', class]) }}"{{ attrs(kwargs) }}>
+{%- if label is not none -%}
+<label class="ins-label"{% if id %} for="{{ id|e }}"{% endif %}>{{ label }}{% if required %}<span class="ins-req" aria-hidden="true">*</span>{% endif %}</label>
+{%- endif -%}
+{{ caller() if caller }}
+{%- if hint is not none %}<span class="ins-hint">{{ hint }}</span>{% endif -%}
+{%- if error is sameas true %}<p class="ins-error"></p>
+{%- elif error is not none and error is not sameas false %}<p class="ins-error">{{ error }}</p>{% endif -%}
+{%- if success is not none %}<p class="ins-success">{{ success }}</p>{% endif -%}
+</div>
+{%- endmacro %}
+
+{#- size: sm or lg; invalid: aria-invalid; ok: the confirmed look. -#}
+{% macro input(size=none, invalid=false, ok=false, class=none) -%}
+<input class="{{ cls(['ins-input', 'ins-input--' ~ size if size, 'ins-input--ok' if ok, class]) }}"{% if invalid %} aria-invalid="true"{% endif %}{{ attrs(kwargs) }}>
+{%- endmacro %}
+
+{#- options: a list of labels, of (value, label) pairs, or of dicts with value and
+    label; selected: the value chosen. Or the block, for <option>s of your own. -#}
+{% macro select(options=none, selected=none, size=none, invalid=false, class=none) -%}
+<select class="{{ cls(['ins-select', 'ins-select--' ~ size if size, class]) }}"{% if invalid %} aria-invalid="true"{% endif %}{{ attrs(kwargs) }}>
+{%- if caller %}{{ caller() }}{% endif -%}
+{%- for o in options or [] -%}
+{%- if o is mapping %}{% set v, l = o.value, o.label %}{% elif o is string %}{% set v, l = none, o %}{% else %}{% set v, l = o[0], o[1] %}{% endif -%}
+<option{% if v is not none %} value="{{ v|e }}"{% endif %}{% if selected is not none and (v if v is not none else l) == selected %} selected{% endif %}>{{ l }}</option>
+{%- endfor -%}
+</select>
+{%- endmacro %}
+
+{% macro textarea(value='', invalid=false, class=none) -%}
+<textarea class="{{ cls(['ins-textarea', class]) }}"{% if invalid %} aria-invalid="true"{% endif %}{{ attrs(kwargs) }}>{{ value }}</textarea>
+{%- endmacro %}
+
+{% macro input_group(class=none) -%}
+<div class="{{ cls(['ins-input-group', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{%- endmacro %}
+
+{% macro addon(text, class=none) -%}
+<span class="{{ cls(['ins-addon', class]) }}"{{ attrs(kwargs) }}>{{ text }}</span>
+{%- endmacro %}
+
+{#- The fields below take their extra keywords on the input itself (name, value,
+    checked, required…), and `class` on the outer element, the one you see. -#}
+
+{#- indeterminate: "some selected", the dash. -#}
+{% macro check(label, type='checkbox', indeterminate=false, class=none) -%}
+<label class="{{ cls(['ins-check', class]) }}"><input type="{{ type }}"{% if indeterminate %} data-ins-indeterminate{% endif %}{{ attrs(kwargs) }}><span class="ins-check-text">{{ label }}</span></label>
+{%- endmacro %}
+
+{% macro radio(label, class=none) -%}
+{{ check(label, type='radio', class=class, **kwargs) }}
+{%- endmacro %}
+
+{#- desc: a second line; card: a bordered card. -#}
+{% macro switch(label, desc=none, card=false, class=none) -%}
+<label class="{{ cls(['ins-switch', 'ins-switch--card' if card, class]) }}"><input type="checkbox"{{ attrs(kwargs) }}><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">{{ label }}</span>
+{%- if desc is not none %}<span class="ins-switch-desc">{{ desc }}</span>{% endif %}</span></label>
+{%- endmacro %}
+
+{% macro switch_grid(class=none) -%}
+<div class="{{ cls(['ins-switch-grid', class]) }}"{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{%- endmacro %}
+
+{#- A radio (or checkbox) drawn as a card. -#}
+{% macro tile(title, desc=none, type='radio', class=none) -%}
+<label class="{{ cls(['ins-tile', class]) }}"><input type="{{ type }}"{{ attrs(kwargs) }}><span class="ins-tile-title">{{ title }}</span>
+{%- if desc is not none %}<span class="ins-tile-desc">{{ desc }}</span>{% endif %}</label>
+{%- endmacro %}
+
+{#- label names the choice; the grid becomes a radiogroup with it. -#}
+{% macro tile_grid(label=none, class=none) -%}
+<div class="{{ cls(['ins-tile-grid', class]) }}"{% if label %} role="radiogroup" aria-label="{{ label|e }}"{% endif %}{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{%- endmacro %}
+
+{#- icon: the magnifier, an <svg>; give it the class ins-search-ico (icon() does not). -#}
+{% macro search(icon=none, class=none) -%}
+<div class="{{ cls(['ins-search', class]) }}">{{ icon if icon is not none }}<input class="ins-input" type="search"{{ attrs(kwargs) }}></div>
+{%- endmacro %}
+
+{#- The show-password button beside the field; the core flips it. -#}
+{% macro password(toggle_label='إظهار كلمة المرور', toggle_tip=false, invalid=false, class=none) -%}
+<div class="{{ cls(['ins-input-group', class]) }}"><input class="ins-input" type="password"{% if invalid %} aria-invalid="true"{% endif %}{{ attrs(kwargs) }}><button class="ins-password-toggle" data-ins-password aria-label="{{ toggle_label|e }}"{% if toggle_tip %} data-ins-tip{% endif %}></button></div>
+{%- endmacro %}
+
+{#- A number field between − and + buttons; the core steps it. -#}
+{% macro number(down_label='إنقاص', up_label='زيادة', invalid=false, class=none, style=none) -%}
+<div class="{{ cls(['ins-input-group', class]) }}"{% if style %} style="{{ style|e }}"{% endif %}><button class="ins-spin" data-ins-spin="down" aria-label="{{ down_label|e }}"></button><input class="ins-input" type="number"{% if invalid %} aria-invalid="true"{% endif %}{{ attrs(kwargs) }}><button class="ins-spin" data-ins-spin="up" aria-label="{{ up_label|e }}"></button></div>
+{%- endmacro %}
+
+{% macro range(class=none) -%}
+<input class="{{ cls(['ins-range', class]) }}" type="range"{{ attrs(kwargs) }}>
+{%- endmacro %}
+
+{#- options: (value, label) pairs or dicts; selected: the value marked active. -#}
+{% macro seg(options, selected=none, label=none, class=none) -%}
+<div class="{{ cls(['ins-seg', class]) }}"{% if label %} role="group" aria-label="{{ label|e }}"{% endif %}{{ attrs(kwargs) }}>
+{%- for o in options -%}
+{%- if o is mapping %}{% set v, l = o.value, o.label %}{% else %}{% set v, l = o[0], o[1] %}{% endif -%}
+<button{% if v == selected %} class="is-active"{% endif %} data-ins-value="{{ v|e }}">{{ l }}</button>
+{%- endfor -%}
+</div>
+{%- endmacro %}
