@@ -29,7 +29,7 @@
 
 ---
 
-> **Status: 0.5.0.** The core is in place: the application shell, the layout,
+> **Status: 0.6.0.** The core is in place: the application shell, the layout,
 > type and utility layer, the components an application form or dashboard needs
 > (pickers, steps and confirmation included), and a motion layer across all of
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
@@ -428,7 +428,7 @@ button. So a page whose script failed shows all of it rather than hiding it.
 The escape hatch, not the front door — prefer the attributes above.
 
 ```js
-Insiyab.version                       // '0.5.0', stamped from package.json by the build
+Insiyab.version                       // '0.6.0', stamped from package.json by the build
 Insiyab.theme(mode?)                  // 'dark' | 'light' | 'system'
 Insiyab.toggleTheme()
 Insiyab.brand(hex?)                   // derive and apply a brand colour
