@@ -685,6 +685,8 @@ file button; the zone is for the pointer, and it shows the input's focus.
   limits.
 - `class="ins-file--compact"` on the input gives a button and the list, with no
   zone.
+- An `<div class="ins-file">` already around the input is kept rather than wrapped
+  again, so a framework or template that rendered it keeps owning the input.
 
 To upload on the spot, add `data-ins-file-upload`. Every file added then fires
 `ins:file`, and the page sends it with whatever request its server expects. The
@@ -802,6 +804,10 @@ The tree is one tab stop, and the arrow keys walk it like a file tree:
   starts with it.
 - Enter follows a link or selects the row. Space selects it, or ticks the box in
   a tree of checkboxes.
+
+A row can also be written out as `<div class="ins-tree-row">` holding the label;
+the plugin then keeps it instead of building one, which is what the React wrapper
+does.
 
 With `data-ins-tree-checks`, the checkboxes cascade. Ticking a branch ticks
 everything in it, and a partly ticked branch shows as mixed (`aria-checked="mixed"`,

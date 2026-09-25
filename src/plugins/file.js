@@ -309,9 +309,15 @@
     if (input.hasAttribute('data-ins-file-ready')) return;
     input.setAttribute('data-ins-file-ready', '');
     var t = text(input), multi = input.multiple;
-    var box = make('div', 'ins-file' + (input.classList.contains('ins-file--compact') ? ' ins-file--compact' : ''));
+    /* A box already around the input is kept, as the one-time code keeps its own,
+       so a framework that rendered the input never sees it moved. */
+    var box = input.parentNode, own = box.classList && box.classList.contains('ins-file');
+    if (!own) {
+      box = make('div', 'ins-file');
+      input.parentNode.insertBefore(box, input);
+    }
+    if (input.classList.contains('ins-file--compact')) box.classList.add('ins-file--compact');
     input.classList.remove('ins-file--compact');
-    input.parentNode.insertBefore(box, input);
 
     var zone = make('div', 'ins-file-zone');
     zone.setAttribute('aria-hidden', 'true');
@@ -330,7 +336,7 @@
     issues.setAttribute('role', 'alert');
     issues.hidden = true;
 
-    box.appendChild(input);
+    if (!own) box.appendChild(input);
     box.appendChild(zone);
     box.appendChild(issues);
     box.appendChild(list);
