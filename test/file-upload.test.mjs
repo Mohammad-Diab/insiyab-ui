@@ -154,6 +154,11 @@ ok('a disabled field takes no drop', (await view('f-off')).files.length === 0);
 const compact = await E(`(() => { const z = document.querySelector('#f-compact ~ .ins-file-zone');
   return { row: getComputedStyle(z).display === 'flex', narrow: z.offsetWidth < z.parentNode.offsetWidth / 2, drag: getComputedStyle(z.querySelector('.ins-file-drag')).display }; })()`);
 ok('the compact look: a button, no drag line', compact.row && compact.narrow && compact.drag === 'none', JSON.stringify(compact));
+const own = await E(`(() => { const box = document.getElementById('f-own-box'), input = document.getElementById('f-own');
+  return { kept: input.parentNode === box, first: box.firstElementChild === input, one: document.querySelectorAll('#f-own-box .ins-file').length === 0,
+    parts: [...box.children].map((c) => c.className || c.tagName).join(' '), compact: box.classList.contains('ins-file--compact') }; })()`);
+ok('a box already around the input is kept, with the input where it was', own.kept && own.first && own.one && own.compact, JSON.stringify(own));
+ok('and gets the zone, the messages and the list after the input', own.parts === 'INPUT ins-file-zone ins-file-issues ins-file-list', own.parts);
 
 ok('no console errors, warnings or exceptions', b.logs.length === 0, b.logs.join(' | '));
 await b.close();

@@ -120,10 +120,14 @@
       var li = items[i];
       var sub = null;
       for (var k = li.lastElementChild; k; k = k.previousElementSibling) if (k.tagName === 'UL' || k.tagName === 'OL') { sub = k; break; }
-      /* Everything before the branch is the row. */
-      var row = make('div', 'ins-tree-row');
-      while (li.firstChild && li.firstChild !== sub) row.appendChild(li.firstChild);
-      li.insertBefore(row, sub);
+      /* Everything before the branch is the row. A row already in the markup is
+         kept, so a framework that rendered it still owns what is in it. */
+      var row = li.firstElementChild;
+      if (!row || !row.classList.contains('ins-tree-row')) {
+        row = make('div', 'ins-tree-row');
+        while (li.firstChild && li.firstChild !== sub) row.appendChild(li.firstChild);
+        li.insertBefore(row, sub);
+      }
       var label = row.querySelector('a, button, label, span') || row;
       if (label !== row) label.classList.add('ins-tree-label');
       var focusables = row.querySelectorAll('a, button');

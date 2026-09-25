@@ -124,6 +124,12 @@ await E(`Insiyab.tree('#files', 'close'); 0`);
 ok('Insiyab.tree(tree, "close") closes every branch', (await E(`document.querySelectorAll('#files [aria-expanded="true"]').length`)) === 0);
 await E(`Insiyab.tree('#p-sales', 'check'); 0`);
 ok('Insiyab.tree(item, "check") ticks and cascades', (await checked('p-view')) === 'true' && (await checked('p-sales')) === 'true');
+const adopted = await E(`(() => { const a = document.getElementById('b-a'), row = a.firstElementChild;
+  return { rows: document.querySelectorAll('#built .ins-tree-row').length, same: row.contains(document.getElementById('b-a-label')),
+    nested: document.querySelectorAll('#built .ins-tree-row .ins-tree-row').length, toggle: row.firstElementChild.classList.contains('ins-tree-toggle'),
+    label: document.getElementById('b-a1-link').classList.contains('ins-tree-label'), role: a.getAttribute('role'), open: a.getAttribute('aria-expanded') }; })()`);
+ok('a row already in the markup is kept, not wrapped in a second one', adopted.rows === 2 && adopted.nested === 0 && adopted.same, JSON.stringify(adopted));
+ok('and is set up like one the plugin made', adopted.toggle && adopted.label && adopted.role === 'treeitem' && adopted.open === 'true', JSON.stringify(adopted));
 
 ok('no console errors, warnings or exceptions', b.logs.length === 0, b.logs.join(' | '));
 await b.close();
