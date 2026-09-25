@@ -195,11 +195,14 @@ typography.
 | Package | Status |
 |---|---|
 | `insiyab` | **This is the library.** One CSS file, one JS file, no build. |
-| `@insiyab/react` | Planned. Not started. |
+| `@insiyab/react` | Built, in `packages/react`. TypeScript, React 18 or later. |
 | `@insiyab/jinja` | Planned. Not started. |
 
-Deliberately deferred: a wrapper written against an unfinished class vocabulary
-has to be rewritten when the vocabulary settles, so the core lands first.
+Deferred until the core was done: a wrapper written against an unfinished class
+vocabulary has to be rewritten when the vocabulary settles. They live in this
+repository, under `packages/`, so a renamed class breaks a wrapper's tests in the
+same commit, and they share one parity test: every docs example, built with the
+wrapper, has to come out the same as the example.
 
 **The CSS stays the source of truth.** When the wrappers do arrive they are thin
 covers over the same classes, never re-implementations — that rule is what stops

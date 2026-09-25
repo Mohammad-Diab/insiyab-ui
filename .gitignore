@@ -8,6 +8,10 @@ scratchpad/
 
 # Dependencies and build output
 node_modules/
+# The wrappers are built when they are packed; unlike the core's dist/, nothing
+# loads them from the repository.
+packages/react/dist/
+packages/react/test/out/
 build/
 .vite/
 coverage/

@@ -1,0 +1,46 @@
+<button class="ins-btn ins-btn--secondary" data-ins-dialog="#drawer-filters"><svg class="ico"><use href="#i-sliders"/></svg>التصفية</button>
+<button class="ins-btn ins-btn--secondary" data-ins-dialog="#drawer-order">تفاصيل الطلب</button>
+<button class="ins-btn ins-btn--secondary" data-ins-dialog="#drawer-share"><svg class="ico"><use href="#i-share"/></svg>مشاركة</button>
+<dialog class="ins-drawer" id="drawer-filters">
+  <div class="ins-dialog-head">
+    <h3 class="ins-dialog-title">تصفية المنتجات</h3>
+    <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
+  </div>
+  <div class="ins-dialog-body">
+    <div class="ins-field">
+      <label class="ins-label" for="dr-cat">الفئة</label>
+      <select class="ins-select" id="dr-cat"><option>كلّ الفئات</option><option>حقائب</option><option>ساعات</option><option>إلكترونيات</option></select>
+    </div>
+    <label class="ins-check"><input type="checkbox" checked><span class="ins-check-text">المتوفّر فقط</span></label>
+    <label class="ins-check"><input type="checkbox"><span class="ins-check-text">عليه خصم</span></label>
+  </div>
+  <div class="ins-dialog-foot">
+    <button class="ins-btn ins-btn--bare" data-ins-dismiss>إعادة ضبط</button>
+    <button class="ins-btn ins-btn--primary ins-ms-auto" data-ins-dismiss>عرض النتائج</button>
+  </div>
+</dialog>
+<dialog class="ins-drawer ins-drawer--end" id="drawer-order">
+  <div class="ins-dialog-head">
+    <h3 class="ins-dialog-title">الطلب <span class="ins-num">#40218</span></h3>
+    <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
+  </div>
+  <div class="ins-dialog-body">
+    <dl class="ins-prose ins-m-0">
+      <dt>العميل</dt><dd>ليلى حسن</dd>
+      <dt>المبلغ</dt><dd><span class="ins-money"><span class="ins-money-val">249.00</span><span class="ins-money-cur">ر.س</span></span></dd>
+      <dt>الحالة</dt><dd><span class="ins-pill ins-pill--info"><span class="ins-pill-dot"></span>قيد التجهيز</span></dd>
+    </dl>
+  </div>
+</dialog>
+<dialog class="ins-drawer ins-drawer--bottom" id="drawer-share">
+  <div class="ins-dialog-head">
+    <h3 class="ins-dialog-title">مشاركة المنتج</h3>
+    <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
+  </div>
+  <div class="ins-dialog-body">
+    <div class="ins-row">
+      <button class="ins-btn ins-btn--secondary" data-ins-dismiss><svg class="ico"><use href="#i-copy"/></svg>نسخ الرابط</button>
+      <button class="ins-btn ins-btn--secondary" data-ins-dismiss><svg class="ico"><use href="#i-mail"/></svg>بالبريد</button>
+    </div>
+  </div>
+</dialog>
