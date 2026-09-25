@@ -35,6 +35,7 @@
   ],
   "scripts": {
     "build": "node build.mjs",
+    "prepublishOnly": "node build.mjs",
     "test": "node build.mjs && node ../../test/run.mjs react"
   },
   "peerDependencies": {

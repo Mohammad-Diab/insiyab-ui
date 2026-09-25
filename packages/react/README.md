@@ -1,6 +1,6 @@
 # @insiyab/react
 
-React components for [Insiyab](../../README.md). They are thin covers over the
+React components for [Insiyab](https://github.com/Mohammad-Diab/insiyab-ui#readme). They are thin covers over the
 library's classes and attributes, not a second implementation. The CSS stays the
 source of truth, and the core script (`insiyab.js`) does the behaviour: the date
 picker, the tabs' arrow keys, the menus, the dialogs, the plugins. A component
