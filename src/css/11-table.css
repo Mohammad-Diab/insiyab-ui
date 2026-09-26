@@ -96,14 +96,30 @@ html[dir="rtl"] .ins-table { --ins-table-side: -1px; }
 .ins-table thead th:first-child {
   box-shadow: inset 0 1px 0 var(--ins-table-rule), inset 0 -1px 0 var(--ins-table-rule),
               inset var(--ins-table-side) 0 0 var(--ins-table-rule);
-  border-start-start-radius: var(--ins-table-r);
-  border-end-start-radius: var(--ins-table-r) calc(var(--ins-table-r) + var(--ins-table-gap));
 }
 .ins-table thead th:last-child {
   box-shadow: inset 0 1px 0 var(--ins-table-rule), inset 0 -1px 0 var(--ins-table-rule),
               inset calc(-1 * var(--ins-table-side)) 0 0 var(--ins-table-rule);
-  border-start-end-radius: var(--ins-table-r);
-  border-end-end-radius: var(--ins-table-r) calc(var(--ins-table-r) + var(--ins-table-gap));
+}
+/* The ends are physical corners on the page's direction, for the reason the row
+   card's corners below are: a header cell with `.ins-num` carries `direction: ltr`
+   for its figures, and a logical corner on it rounded the wrong end, leaving the
+   bar square at its edge and notched between two columns. */
+html[dir="rtl"] .ins-table thead th:first-child {
+  border-top-right-radius: var(--ins-table-r);
+  border-bottom-right-radius: var(--ins-table-r) calc(var(--ins-table-r) + var(--ins-table-gap));
+}
+html[dir="rtl"] .ins-table thead th:last-child {
+  border-top-left-radius: var(--ins-table-r);
+  border-bottom-left-radius: var(--ins-table-r) calc(var(--ins-table-r) + var(--ins-table-gap));
+}
+html[dir="ltr"] .ins-table thead th:first-child {
+  border-top-left-radius: var(--ins-table-r);
+  border-bottom-left-radius: var(--ins-table-r) calc(var(--ins-table-r) + var(--ins-table-gap));
+}
+html[dir="ltr"] .ins-table thead th:last-child {
+  border-top-right-radius: var(--ins-table-r);
+  border-bottom-right-radius: var(--ins-table-r) calc(var(--ins-table-r) + var(--ins-table-gap));
 }
 
 /* The rows, as one card: a brighter fill than the panel it sits in, hairline
@@ -122,8 +138,12 @@ html[dir="rtl"] .ins-table { --ins-table-side: -1px; }
 }
 .ins-table tbody tr:first-child > td { border-block-start: 1px solid var(--ins-rim); }
 .ins-table tbody tr:last-child > td { border-block-end: 1px solid var(--ins-rim); }
-.ins-table tbody td:first-child { border-inline-start: 1px solid var(--ins-rim); }
-.ins-table tbody td:last-child { border-inline-end: 1px solid var(--ins-rim); }
+/* The card's sides, on the page's direction like its corners below: on a figures
+   cell a logical side landed between two columns instead of on the edge. */
+html[dir="rtl"] .ins-table tbody td:first-child { border-right: 1px solid var(--ins-rim); }
+html[dir="rtl"] .ins-table tbody td:last-child { border-left: 1px solid var(--ins-rim); }
+html[dir="ltr"] .ins-table tbody td:first-child { border-left: 1px solid var(--ins-rim); }
+html[dir="ltr"] .ins-table tbody td:last-child { border-right: 1px solid var(--ins-rim); }
 
 /* Physical corners, switched on the *page's* direction — and this is the one place
    in the library that may not use logical properties.
@@ -157,8 +177,7 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
 .ins-panel .ins-table tbody td { background: var(--ins-row-inner); }
 .ins-panel .ins-table tbody tr:first-child > td { border-block-start: 0; }
 .ins-panel .ins-table tbody tr:last-child > td { border-block-end: 0; }
-.ins-panel .ins-table tbody td:first-child { border-inline-start: 0; }
-.ins-panel .ins-table tbody td:last-child { border-inline-end: 0; }
+html .ins-panel .ins-table tbody td:is(:first-child, :last-child) { border-left: 0; border-right: 0; }
 
 /* Zebra, written as a `background-image` overlay rather than a `background-color`,
    and that is what makes it one rule instead of two: the cell's own colour is set in
@@ -230,16 +249,20 @@ html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-rig
   content: "";
   position: absolute;
   inset-block: .5rem;
-  inset-inline-start: 0;
   inline-size: 3px;
   border-radius: var(--ins-r-pill);
   background: var(--ins-tone-brand-soft);
   transform: scaleY(0);
   transition: transform var(--ins-t-pop) var(--ins-ease);
 }
-.ins-table tbody tr:is([aria-selected="true"], [aria-current]:not([aria-current="false"]), .is-selected) > td {
-  background: var(--ins-surface-hover);
-  background-image: none;
+/* The marker's edge, on the page's direction: a figures cell is `direction: ltr`. */
+html[dir="rtl"] .ins-table tbody td:first-child::before { right: 0; }
+html[dir="ltr"] .ins-table tbody td:first-child::before { left: 0; }
+/* The selected row is tinted with the brand, not the hover's grey: on the grey it
+   looked like every other row, and only the thin marker said it was chosen. */
+.ins-table tbody tr:is([aria-selected="true"], [aria-current]:not([aria-current="false"]), .is-selected) > td,
+.ins-panel .ins-table tbody tr:is([aria-selected="true"], [aria-current]:not([aria-current="false"]), .is-selected) > td {
+  background: linear-gradient(var(--ins-tone-brand-bg), var(--ins-tone-brand-bg)), var(--ins-surface);
 }
 .ins-table tbody tr:is([aria-selected="true"], [aria-current]:not([aria-current="false"]), .is-selected) > td:first-child::before {
   transform: scaleY(1);
