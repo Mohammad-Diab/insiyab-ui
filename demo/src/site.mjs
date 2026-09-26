@@ -68,7 +68,9 @@ export const NAV = [
     { slug: 'grid', title: 'الشبكة', en: 'Grid', icon: 'grid',
       lead: 'أعمدة تنهار وحدها عند الشاشات الضيّقة، فلا أصناف لكلّ مقاس.' },
     { slug: 'spacing', title: 'المسافات والترتيب', en: 'Spacing & page layout', icon: 'sliders',
-      lead: 'تخطيطان للصفحة: تطبيق بعرضها، وعمود في وسطها. وسلّم واحد خطوته ٤ بكسل، بجهات منطقية.' }
+      lead: 'تخطيطان للصفحة: تطبيق بعرضها، وعمود في وسطها. وسلّم واحد خطوته ٤ بكسل، بجهات منطقية.' },
+    { slug: 'split', title: 'العرض المقسوم', en: 'Split view', icon: 'sidebar', fresh: true,
+      lead: 'لوحان يتقاسمان العرض بخطّ يُسحب: مستند بجانب نموذجه، أو قائمة بجانب ما تفتحه.' }
   ] },
   { group: 'المحتوى', en: 'Content', pages: [
     { slug: 'typography', title: 'الطباعة', en: 'Typography', icon: 'type',
@@ -93,6 +95,8 @@ export const NAV = [
       lead: 'الإكمال التلقائي والتاريخ والمنزلق والعدّاد — أدوات إدخال يحتاجها كلّ نموذج جادّ.' },
     { slug: 'chips', title: 'الرقاقات والوسوم', en: 'Chips, tags and multi-select', icon: 'tag', fresh: true,
       lead: 'قيم صغيرة تُزال أو تُضغط، وحقل واحد بعدّة قيم: اختيار متعدّد من قائمة، أو وسوم تُكتب.' },
+    { slug: 'matrix', title: 'مصفوفة الاختيار', en: 'Choice matrix', icon: 'grid', fresh: true,
+      lead: 'صفوف أسئلة تتشارك إجابات واحدة: استبيان، أو معايير تُقاس بمستويات لها وصف ودرجات.' },
     { slug: 'validation', title: 'التحقّق', en: 'Validation', icon: 'shield',
       lead: 'تحقّق المتصفّح نفسه، برسائل داخل الحقل بدل الفقاعة، ودون مكتبة تحقّق.' }
   ] },
