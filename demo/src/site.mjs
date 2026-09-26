@@ -272,30 +272,27 @@ function sidebar(current) {
   }).join('\n\n');
 }
 
-function pageHead(p) {
-  if (p.hero) return '';
-  return `<header class="ins-page-head">
-          <nav class="ins-breadcrumb" aria-label="مسار التنقّل">
-            <ol>
-              <li><a href="index.html">انسياب</a></li>
-              <li><span>${p.group}</span></li>
-              <li><span aria-current="page">${p.title}</span></li>
-            </ol>
-          </nav>
-          <div class="ins-page-head-text">
-            <span class="ins-eyebrow">${p.en}</span>
-            <h1 class="ins-page-title">${p.title}</h1>
-            <p class="ins-page-sub site-lead">${p.lead}</p>
-          </div>
-        </header>`;
+/* The page's name is said once, in the top bar, where it is the page's <h1>. The
+   home page has its own <h1> in the hero, so there the top bar only labels it. A
+   page one step from the sidebar needs no breadcrumb, so the content opens with the
+   page's one-line lead. */
+function pageTitle(p) {
+  return p.hero ? `<span class="ins-shell-title">${p.title}</span>` : `<h1 class="ins-shell-title">${p.title}</h1>`;
 }
 
-/* "On this page": the page's own h2s, as chips. Only worth it from three up. */
+function pageHead(p) {
+  return p.hero ? '' : `<p class="site-lead">${p.lead}</p>`;
+}
+
+/* "On this page": the page's own h2s and h3s, in the scrollspy plugin's contents
+   list beside the content. Only worth it from three sections up. */
 function toc(html) {
-  const heads = [...html.matchAll(/<h2 id="([^"]+)"[^>]*>([\s\S]*?)<\/h2>/g)];
-  if (heads.length < 3) return '';
-  const chips = heads.map(([, id, text]) => `<a href="#${id}">${text.replace(/<[^>]+>/g, '').trim()}</a>`).join('');
-  return `<nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span>${chips}</nav>`;
+  const own = html.replace(/<figure class="dx[\s\S]*?<\/figure>/g, '');
+  const heads = [...own.matchAll(/<h([23]) id="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g)];
+  if (heads.filter(([, level]) => level === '2').length < 3) return '';
+  const links = heads.map(([, level, id, text]) =>
+    `<a${level === '3' ? ' class="ins-toc-sub"' : ''} href="#${id}">${text.replace(/<[^>]+>/g, '').trim()}</a>`).join('');
+  return `<nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div>${links}</nav>`;
 }
 
 function pager(i) {
@@ -354,7 +351,7 @@ export async function buildSite({ check = false, version = '' } = {}) {
 
     const fill = {
       SLUG: p.slug,
-      TITLE: p.title,
+      TITLE: pageTitle(p),
       DOC_TITLE: p.hero ? 'انسياب · مكتبة واجهات عربية أولًا' : `${p.title} · انسياب`,
       DESCRIPTION: attr(p.lead || 'مكتبة واجهات بتصميم الزجاج المصنفر، عربية أولًا. ملفّان، بلا أدوات بناء.'),
       VERSION: version,
