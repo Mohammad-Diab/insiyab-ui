@@ -13,25 +13,7 @@
 }
 </demo-code>
 
-<h2 id="entrances">الدخول</h2>
-<p>
-  <code>data-ins-reveal</code> على حاوية يُدخل أبناءها متدرّجين، والأصناف الثلاثة تعطي عنصرًا واحدًا
-  دخولًا. اضغط «أعد» لتراها مرّة أخرى.
-</p>
-<demo-example class="stack">
-  <div class="ins-cols-4" data-ins-reveal id="reveal-demo">
-    <div class="demo-box">١</div>
-    <div class="demo-box">٢</div>
-    <div class="demo-box">٣</div>
-    <div class="demo-box">٤</div>
-  </div>
-  <div class="ins-row" id="anim-demo">
-    <div class="demo-box ins-anim-rise">ins-anim-rise</div>
-    <div class="demo-box ins-anim-pop">ins-anim-pop</div>
-    <div class="demo-box ins-anim-slide">ins-anim-slide</div>
-    <button class="ins-btn ins-btn--secondary ins-ms-auto" id="replay">أعد</button>
-  </div>
-</demo-example>
+<p>حركات الدخول عند التمرير (<code>data-ins-reveal</code> وأصناف <code>ins-anim-*</code>) في صفحة <a href="reveal.html">حركات الدخول</a> بين الملحقات.</p>
 
 <h2 id="gestures">إشارات المرور</h2>
 <p>مرّر على كلّ عنصر:</p>
@@ -60,15 +42,3 @@
 <demo-example class="row">
   <button class="ins-btn ins-btn--secondary" data-ins-fx>تخفيف المؤثرات</button>
 </demo-example>
-
-<script>
-  /* A fresh copy of each element is the only way to run a CSS entrance again.
-     Delegated, because the button is inside one of the copies. */
-  document.addEventListener('click', function (e) {
-    if (!e.target.closest('#replay')) return;
-    ['reveal-demo', 'anim-demo'].forEach(function (id) {
-      var el = document.getElementById(id);
-      el.replaceWith(el.cloneNode(true));
-    });
-  });
-</script>

@@ -138,9 +138,7 @@ export const NAV = [
     { slug: 'pagination', title: 'ترقيم الصفحات', en: 'Pagination', icon: 'pages',
       lead: 'روابط صفحات حقيقية بأسهم تتبع اتجاه النصّ.' },
     { slug: 'page-head', title: 'رأس الصفحة والمسار', en: 'Page header & breadcrumb', icon: 'route',
-      lead: 'عنوان الصفحة وسطر تحته وإجراءاتها، ومسار التنقّل فوقها.' },
-    { slug: 'navbar', title: 'شريط الموقع', en: 'Navbar', icon: 'compass',
-      lead: 'شريط تنقّل لموقع لا لتطبيق: جزيرة زجاجية تنطوي خلف زرّ على الهاتف.' }
+      lead: 'عنوان الصفحة وسطر تحته وإجراءاتها، ومسار التنقّل فوقها.' }
   ] },
   { group: 'الأدوات', en: 'Utilities', pages: [
     { slug: 'utilities', title: 'الأدوات المساعدة', en: 'Utilities', icon: 'wrench',
@@ -163,10 +161,6 @@ export const NAV = [
       lead: 'ما حدث بترتيبه: مسار طلب، أو نشاط حساب، أو تاريخ ملفّ. ومعه أوقات نسبية تُكتب كما تُقال.' },
     { slug: 'tree', title: 'الشجرة', en: 'Tree', icon: 'folder',
       lead: 'قوائم متداخلة شجرةً: ملفّات أو تصنيفات أو صلاحيات، بالأسهم كشجرة ملفّات، وبمربّعات متسلسلة.' },
-    { slug: 'colorpicker', title: 'منتقي الألوان', en: 'Color picker', icon: 'droplet',
-      lead: 'حقل لون بمنتقٍ كامل، يقول قبل الحفظ هل يصلح اللون لنصّ: تباينه على الأبيض وعلى الأسود.' },
-    { slug: 'carousel', title: 'عرض الشرائح', en: 'Carousel', icon: 'slides',
-      lead: 'شرائح في صفّ يُسحب بالإصبع، وأزرار ونقاط وأسهم باتّجاه القراءة — ولا يتحرّك من تلقاء نفسه.' },
     { slug: 'charts', title: 'الرسوم البيانية', en: 'Charts', icon: 'chart', fresh: true,
       lead: 'أعمدة وخطوط وحلقات وتوزيعات من جدول، بألوان المكتبة واتّجاه القراءة، والأرقام تبقى لقارئ الشاشة.' },
     { slug: 'month', title: 'تقويم الشهر', en: 'Month calendar', icon: 'calendar', fresh: true,
@@ -175,6 +169,16 @@ export const NAV = [
   { group: 'القوالب', en: 'Templates', pages: [
     { slug: 'login', title: 'تسجيل الدخول', en: 'Login template', icon: 'user',
       lead: 'صفحة دخول بخطوات: الهاتف ثمّ كلمة المرور ثمّ الرمز، في بطاقة تنزلق خطواتها، من أجزاء المكتبة وحدها.' }
+  ] },
+  { group: 'الملحقات', en: 'Extras', pages: [
+    { slug: 'navbar', title: 'شريط الموقع', en: 'Navbar', icon: 'compass',
+      lead: 'شريط تنقّل لموقع لا لتطبيق: جزيرة زجاجية تنطوي خلف زرّ على الهاتف.' },
+    { slug: 'carousel', title: 'عرض الشرائح', en: 'Carousel', icon: 'slides',
+      lead: 'شرائح في صفّ يُسحب بالإصبع، وأزرار ونقاط وأسهم باتّجاه القراءة — ولا يتحرّك من تلقاء نفسه.' },
+    { slug: 'colorpicker', title: 'منتقي الألوان', en: 'Color picker', icon: 'droplet',
+      lead: 'حقل لون بمنتقٍ كامل، يقول قبل الحفظ هل يصلح اللون لنصّ: تباينه على الأبيض وعلى الأسود.' },
+    { slug: 'reveal', title: 'حركات الدخول', en: 'Entrance motion and scroll reveal', icon: 'sparkle',
+      lead: 'أبناء حاوية يدخلون متدرّجين حين تظهر، وثلاثة أصناف تعطي عنصرًا واحدًا دخولًا.' }
   ] }
 ];
 
