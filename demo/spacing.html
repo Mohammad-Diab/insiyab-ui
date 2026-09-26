@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>المسافات والترتيب · انسياب</title>
-  <meta name="description" content="سلّم واحد، الخطوة فيه ٤ بكسل، وجهات منطقية لا يمين ولا يسار.">
+  <meta name="description" content="تخطيطان للصفحة: تطبيق بعرضها، وعمود في وسطها. وسلّم واحد خطوته ٤ بكسل، بجهات منطقية.">
 
   <!-- The library: two tags, and nothing else of it is needed. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
@@ -126,7 +126,7 @@
       <div class="ins-shell-group">التخطيط</div>
       <a class="ins-shell-link" href="shell.html" data-keywords="App shell شريط جانبي زجاجي وشريط علوي من جزر عائمة. هذه الصفحة نفسها مبنيّة به."><svg class="ico" aria-hidden="true"><use href="#i-layout"/></svg>هيكل التطبيق</a>
       <a class="ins-shell-link" href="grid.html" data-keywords="Grid أعمدة تنهار وحدها عند الشاشات الضيّقة، فلا أصناف لكلّ مقاس."><svg class="ico" aria-hidden="true"><use href="#i-grid"/></svg>الشبكة</a>
-      <a class="ins-shell-link is-active" href="spacing.html" aria-current="page" data-keywords="Spacing &amp; stacks سلّم واحد، الخطوة فيه ٤ بكسل، وجهات منطقية لا يمين ولا يسار."><svg class="ico" aria-hidden="true"><use href="#i-sliders"/></svg>المسافات والترتيب</a>
+      <a class="ins-shell-link is-active" href="spacing.html" aria-current="page" data-keywords="Spacing &amp; page layout تخطيطان للصفحة: تطبيق بعرضها، وعمود في وسطها. وسلّم واحد خطوته ٤ بكسل، بجهات منطقية."><svg class="ico" aria-hidden="true"><use href="#i-sliders"/></svg>المسافات والترتيب</a>
 
       <div class="ins-shell-group">المحتوى</div>
       <a class="ins-shell-link" href="typography.html" data-keywords="Typography ثلاثة خطوط مستضافة محليًا ومقسّمة حسب النطاق، وسلّم عناوين، ونصّ طويل محصور في صنفه."><svg class="ico" aria-hidden="true"><use href="#i-type"/></svg>الطباعة</a>
@@ -250,13 +250,71 @@
             </ol>
           </nav>
           <div class="ins-page-head-text">
-            <span class="ins-eyebrow">Spacing & stacks</span>
+            <span class="ins-eyebrow">Spacing & page layout</span>
             <h1 class="ins-page-title">المسافات والترتيب</h1>
-            <p class="ins-page-sub site-lead">سلّم واحد، الخطوة فيه ٤ بكسل، وجهات منطقية لا يمين ولا يسار.</p>
+            <p class="ins-page-sub site-lead">تخطيطان للصفحة: تطبيق بعرضها، وعمود في وسطها. وسلّم واحد خطوته ٤ بكسل، بجهات منطقية.</p>
           </div>
         </header>
-        <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#scale">السلّم</a><a href="#classes">الأصناف</a><a href="#stack">الكومة والصفّ</a><a href="#toolbar">شريط الأدوات</a><a href="#field-row">صفّ الحقول</a></nav>
-        <h2 id="scale">السلّم</h2>
+        <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#layouts">تخطيط الصفحة</a><a href="#scale">السلّم</a><a href="#classes">الأصناف</a><a href="#stack">الكومة والصفّ</a><a href="#toolbar">شريط الأدوات</a><a href="#field-row">صفّ الحقول</a></nav>
+        <h2 id="layouts">تخطيط الصفحة</h2>
+<p>للصفحة تخطيطان: تطبيق يملأ عرض الشاشة، وهو الأساس، وعمود في الوسط للصفحات البسيطة.</p>
+
+<h3 id="layout-app">التطبيق: بعرض الصفحة</h3>
+<p>
+  <code>.ins-shell</code> شريط جانبي وشريط علوي، والمحتوى في <code>.ins-shell-content</code> يملأ ما بقي من
+  العرض بلا حدّ أقصى. هوامشه ٨ بكسل من الأعلى و٢٨ من الجانبين و٣٢ من الأسفل، و١٦ من الجانبين تحت 900px.
+  أضف إليه <code>.ins-stack</code> ليفصل بين أقسام الصفحة ١٦ بكسل، ورتّب كلّ قسم بالشبكة.
+</p>
+<figure class="dx dx--bare"><div class="dx-view">
+  <div class="lay lay--app" aria-hidden="true">
+    <div class="lay-side">الشريط الجانبي</div>
+    <div class="lay-main">
+      <div class="lay-bar">الشريط العلوي</div>
+      <div class="lay-content">
+        <div class="ins-cols-4 ins-cols--fixed lay-gap">
+          <div class="demo-box">قسم</div><div class="demo-box">قسم</div><div class="demo-box">قسم</div><div class="demo-box">قسم</div>
+        </div>
+        <div class="demo-box lay-tall">قسم بعرض المحتوى</div>
+      </div>
+    </div>
+  </div>
+</div></figure>
+<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-shell"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;aside</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-shell-side"</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/aside</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-shell-scrim"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-shell-main"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;header</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-topbar"</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/header</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;main</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-shell-content ins-stack"</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-4"</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;section</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/main</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div>
+<p>تفاصيل الشريطين في <a href="shell.html">هيكل التطبيق</a>.</p>
+
+<h3 id="layout-center">صفحة في الوسط</h3>
+<p>
+  للصفحات الشخصية وصفحات التعريف: <code>.ins-navbar</code> في الأعلى، والمحتوى في <code>.ins-container</code>،
+  عمود في وسط الصفحة عرضه 75rem، و<code>--narrow</code> (48rem) للنماذج والمقالات، و<code>--wide</code> (90rem).
+  والهامش الجانبي ينمو مع الشاشة من ١٦ إلى ٣٢ بكسل.
+</p>
+<figure class="dx dx--bare"><div class="dx-view">
+  <div class="lay lay--center" aria-hidden="true">
+    <div class="lay-nav">شريط الموقع</div>
+    <div class="lay-col">
+      <div class="demo-box lay-tall">القسم الأوّل</div>
+      <div class="demo-box">القسم الثاني</div>
+    </div>
+  </div>
+</div></figure>
+<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;header</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar"</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/header</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;main</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-container ins-stack"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;section</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;section</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/main</span><span class="hl-t">&gt;</span></code></pre></div>
+
+<h2 id="scale">السلّم</h2>
 <p>الخطوة N تساوي N × ٤ بكسل، في كلّ عائلة من الأصناف، ومتاحة متغيّرًا <code>--ins-sp-N</code> لأنماطك.</p>
 <figure class="dx dx--bare"><div class="dx-view">
   <div class="ins-cols-4">
@@ -321,7 +379,7 @@
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>row · 1<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>row · 2<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-ms-auto"</span><span class="hl-t">&gt;</span>ins-ms-auto<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="toolbar">شريط الأدوات</h2>
 <p>
@@ -346,7 +404,7 @@
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toolbar-end"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>إضافة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="field-row">صفّ الحقول</h2>
 <p><code>.ins-field-row</code> يضع الحقول جنبًا إلى جنب ويكدّسها على الشاشة الضيّقة. والحقل الذي يأخذ ما تبقّى يحمل <code>.ins-grow</code>.</p>
@@ -358,7 +416,7 @@
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field-row"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"s-first"</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-first"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"s-last"</span><span class="hl-t">&gt;</span>العائلة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-last"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="grid.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الشبكة</span></a><a class="site-pager-link site-pager-link--next" href="typography.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الطباعة</span></a></nav>
       </div>
     </main>

@@ -403,12 +403,22 @@
 .token span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* --------------------------------------------------------------- home */
+/* The home page uses the app layout: the full width of the content area, with the
+   shell's own padding and 1rem between sections, as an application screen does.
+   The documentation pages keep their reading column. */
+.site-home .site-page {
+  max-inline-size: none;
+  padding-block: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ins-sp-4);
+}
 .site-hero {
   display: grid;
   gap: 2rem;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
   align-items: center;
-  padding-block: 2rem 1rem;
+  padding-block: 1.5rem;
 }
 .site-hero-mark {
   --ins-mark: 3.5rem;
@@ -446,26 +456,19 @@
 .site-install code { font: inherit; white-space: pre; color: var(--ins-text-1); }
 
 /* The preview: a small composed screen, showing the design rather than describing it. */
-.site-preview { display: grid; gap: .75rem; }
+.site-preview { display: grid; gap: var(--ins-sp-4); }
 .site-preview .ins-panel { margin: 0; }
 
-.site-features {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  margin-block: 2.5rem;
-}
 .site-feature { padding: 1.25rem; }
 .site-feature h3 { margin: .75rem 0 .375rem; font-size: var(--ins-fs-lg); }
 .site-feature p { margin: 0; color: var(--ins-text-2); font-size: var(--ins-fs-sm); line-height: 1.85; }
 .site-feature .ins-panel-ico { font-size: 1.1rem; }
 
 .site-home h2.site-section {
-  margin: 3rem 0 1rem;
+  margin: 1rem 0 0;
   font-size: var(--ins-fs-h3);
   color: var(--ins-text-1);
 }
-.site-groups { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr)); }
 .site-group-card {
   display: flex;
   align-items: center;
@@ -510,3 +513,28 @@
 .car-demo--2 { --car-a: #9b2c5e; --car-b: #4a1530; }
 .car-demo--3 { --car-a: #1d4ed8; --car-b: #1e1b4b; }
 .car-demo--4 { --car-a: #b45309; --car-b: #451a03; }
+
+/* The spacing page: the two page layouts drawn small. */
+.lay { border: 1px dashed var(--ins-ctl-bd); border-radius: var(--ins-r-md); overflow: hidden; font-size: var(--ins-fs-xs); }
+.lay .demo-box { padding: .375rem; }
+.lay-tall { min-block-size: 4.5rem; display: grid; place-items: center; }
+.lay-bar, .lay-nav {
+  padding: .375rem .75rem;
+  border-radius: var(--ins-r-pill);
+  border: 1px dashed var(--ins-ctl-bd);
+  color: var(--ins-text-3);
+  text-align: center;
+}
+.lay--app { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); min-block-size: 13rem; }
+.lay-side {
+  padding: .75rem .5rem;
+  border-inline-end: 1px dashed var(--ins-ctl-bd);
+  color: var(--ins-text-3);
+  text-align: center;
+}
+.lay-main { display: flex; flex-direction: column; gap: .375rem; padding: .5rem .75rem 1rem; }
+.lay-content { display: flex; flex-direction: column; gap: .5rem; padding-inline: .5rem; }
+.lay-gap { gap: .5rem; }
+.lay--center { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding: .5rem .75rem 1rem; }
+.lay-nav { inline-size: min(100%, 60%); }
+.lay-col { inline-size: min(100%, 60%); display: flex; flex-direction: column; gap: .5rem; }

@@ -211,7 +211,20 @@ paints nothing.)
 
 ## Layout, type and utilities
 
-The plain-CSS layer every page sits on. Four decisions shape it:
+The plain-CSS layer every page sits on. Five decisions shape it:
+
+**A page has two layouts, and the application is the main one.** Inside the
+shell, `.ins-shell-content` fills the width the sidebar leaves, with no maximum:
+8px at the top, 28px at the sides (16px below 900px) and 32px at the bottom. Add
+`.ins-stack` to it to put 16px between the page's sections. For a simple page
+without the shell, such as a personal page or a landing page, `.ins-container`
+is a centred column of 75rem (`--narrow` 48rem, `--wide` 90rem), under an
+`.ins-navbar`.
+
+```html
+<main class="ins-shell-content ins-stack">…</main>   <!-- application: full width -->
+<main class="ins-container ins-stack">…</main>       <!-- simple page: centred -->
+```
 
 **The grids collapse on their own.** A `.ins-cols-*` grid holds its columns on a
 desktop, drops to two at 900px (the same line at which the shell's sidebar
