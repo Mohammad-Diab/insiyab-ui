@@ -28,11 +28,10 @@
 
 <h2 id="collapse">الانهيار التلقائي</h2>
 <p>
-  لا أصناف لكلّ مقاس. شبكة <code>.ins-cols-*</code> تحتفظ بأعمدتها على الحاسوب، وتنزل إلى عمودين عند
-  <span class="ins-num">900px</span> — الخطّ نفسه الذي يصير عنده الشريط الجانبي درجًا — وتأخذ الخليّة
-  الممتدّة السطر كلّه، ثمّ تصير عمودًا واحدًا على الهاتف.
+  لا أصناف لكلّ مقاس. شبكة <code>.ins-cols-*</code> تنزل إلى عمودين عند 900px، وتأخذ الخليّة الممتدّة
+  السطر كلّه، ثمّ تصير عمودًا واحدًا على الهاتف.
 </p>
-<p>وحين يكون عدد الأعمدة هو المحتوى نفسه — أيّام الأسبوع، لوحة مفاتيح أرقام — أضف <code>.ins-cols--fixed</code> فلا تنهار أبدًا:</p>
+<p>وحين يكون عدد الأعمدة ثابتًا بطبيعته، كأيّام الأسبوع، أضف <code>.ins-cols--fixed</code> فلا تنهار أبدًا:</p>
 <demo-example>
   <div class="ins-cols-3 ins-cols--fixed">
     <div class="demo-box">١</div><div class="demo-box">٢</div><div class="demo-box">٣</div>
@@ -42,10 +41,8 @@
 
 <h2 id="auto">الشبكة المرنة</h2>
 <p>
-  <code>.ins-grid</code> لا عدد أعمدة فيها: تضع من الخلايا ما يتّسع، كلّ خليّة بعرض أدنى
-  <span class="ins-num">11rem</span>. <code>--wide</code> يرفعه إلى <span class="ins-num">20rem</span> و<code>--half</code>
-  إلى <span class="ins-num">26rem</span>، أو اضبط <code>--ins-col</code> بنفسك. ومناسبة للبطاقات الإحصائية
-  والمعارض، وتدخل خلاياها متدرّجة.
+  <code>.ins-grid</code> تضع من الخلايا ما يتّسع، كلّ خليّة بعرض أدنى 11rem. <code>--wide</code> يرفعه
+  إلى 20rem و<code>--half</code> إلى 26rem، أو اضبط <code>--ins-col</code> بنفسك. وتدخل خلاياها متدرّجة.
 </p>
 <demo-example>
   <div class="ins-grid">
@@ -60,9 +57,8 @@
 
 <h2 id="container">الحاوية</h2>
 <p>
-  عمود الصفحة: <span class="ins-num">75rem</span> افتراضيًا، و<code>--narrow</code>
-  (<span class="ins-num">48rem</span>) للنماذج والمقالات، و<code>--wide</code> للوحات العريضة. والهامش
-  الجانبي ينمو مع الشاشة من ١٦ إلى ٣٢ بكسل دون نقطة انكسار.
+  <code>.ins-container</code> عمود الصفحة: 75rem افتراضيًا، و<code>--narrow</code> (48rem) للنماذج
+  والمقالات، و<code>--wide</code> للوحات العريضة. والهامش الجانبي ينمو مع الشاشة من ١٦ إلى ٣٢ بكسل.
 </p>
 <demo-example>
   <div class="demo-frame">
@@ -90,19 +86,7 @@
 <p>عمود رئيسي وعمود جانبي، يصيران عمودًا واحدًا على الهاتف دون صنف إضافي.</p>
 <demo-example>
   <div class="ins-cols-12">
-    <div class="ins-span-8 ins-panel">
-      <div class="ins-panel-head"><h3 class="ins-panel-title">وصف المنتج</h3></div>
-      <div class="ins-panel-body ins-stack">
-        <div class="ins-field"><label class="ins-label" for="g-name">الاسم</label><input class="ins-input" id="g-name" value="حقيبة ظهر جلدية"></div>
-        <div class="ins-field"><label class="ins-label" for="g-desc">الوصف</label><textarea class="ins-textarea" id="g-desc">جلد طبيعي، بجيب داخلي للحاسوب المحمول.</textarea></div>
-      </div>
-    </div>
-    <div class="ins-span-4 ins-panel">
-      <div class="ins-panel-head"><h3 class="ins-panel-title">النشر</h3></div>
-      <div class="ins-panel-body ins-stack">
-        <label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">منشور</span></span></label>
-        <button class="ins-btn ins-btn--primary ins-btn--full">حفظ</button>
-      </div>
-    </div>
+    <div class="demo-box demo-box--tall ins-span-8">المحتوى</div>
+    <div class="demo-box demo-box--tall ins-span-4">الجانب</div>
   </div>
 </demo-example>

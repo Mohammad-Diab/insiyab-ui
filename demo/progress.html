@@ -258,42 +258,18 @@
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#bar">الشريط</a><a href="#sizes">المقاسات</a><a href="#indeterminate">مدّة غير معروفة</a><a href="#live">تقدّم حيّ</a><a href="#ring">الحلقة</a></nav>
         <h2 id="bar">الشريط</h2>
 <p>
-  عنصر <code>&lt;progress&gt;</code> الأصلي، فالقيمة والإعلان لقارئ الشاشة للمنصّة. ويمتلئ من جهة
-  البداية: من اليمين في العربية.
+  <code>.ins-progress</code> على عنصر <code>&lt;progress&gt;</code> الأصلي، فالقيمة تُعلَن لقارئ الشاشة دون ARIA.
+  يمتلئ من جهة البداية، والنبرات <code>--ok</code> و<code>--warn</code> و<code>--bad</code>.
 </p>
 <figure class="dx"><div class="dx-view stack narrow">
-  <div class="ins-stack ins-gap-2">
-    <span class="ins-row ins-justify-between ins-text-sm"><span>رفع الصور</span><span class="ins-num">64%</span></span>
-    <progress class="ins-progress" value="64" max="100">64%</progress>
-  </div>
-  <div class="ins-stack ins-gap-2">
-    <span class="ins-row ins-justify-between ins-text-sm"><span>اكتمال الملفّ الشخصي</span><span class="ins-num ins-text-ok">100%</span></span>
-    <progress class="ins-progress ins-progress--ok" value="100" max="100">100%</progress>
-  </div>
-  <div class="ins-stack ins-gap-2">
-    <span class="ins-row ins-justify-between ins-text-sm"><span>مساحة التخزين</span><span class="ins-num ins-text-warn">88%</span></span>
-    <progress class="ins-progress ins-progress--warn" value="88" max="100">88%</progress>
-  </div>
-  <div class="ins-stack ins-gap-2">
-    <span class="ins-row ins-justify-between ins-text-sm"><span>حصّة الرسائل</span><span class="ins-num ins-text-bad">97%</span></span>
-    <progress class="ins-progress ins-progress--bad" value="97" max="100">97%</progress>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack ins-gap-2"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row ins-justify-between ins-text-sm"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span>رفع الصور<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>64%<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress"</span> <span class="hl-a">value</span>=<span class="hl-s">"64"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span><span class="hl-t">&gt;</span>64%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack ins-gap-2"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row ins-justify-between ins-text-sm"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span>اكتمال الملفّ الشخصي<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num ins-text-ok"</span><span class="hl-t">&gt;</span>100%<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress ins-progress--ok"</span> <span class="hl-a">value</span>=<span class="hl-s">"100"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span><span class="hl-t">&gt;</span>100%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack ins-gap-2"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row ins-justify-between ins-text-sm"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span>مساحة التخزين<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num ins-text-warn"</span><span class="hl-t">&gt;</span>88%<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress ins-progress--warn"</span> <span class="hl-a">value</span>=<span class="hl-s">"88"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span><span class="hl-t">&gt;</span>88%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack ins-gap-2"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row ins-justify-between ins-text-sm"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span>حصّة الرسائل<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num ins-text-bad"</span><span class="hl-t">&gt;</span>97%<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress ins-progress--bad"</span> <span class="hl-a">value</span>=<span class="hl-s">"97"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span><span class="hl-t">&gt;</span>97%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <progress class="ins-progress" value="64" max="100" aria-label="عادي">64%</progress>
+  <progress class="ins-progress ins-progress--ok" value="100" max="100" aria-label="نجاح">100%</progress>
+  <progress class="ins-progress ins-progress--warn" value="88" max="100" aria-label="تحذير">88%</progress>
+  <progress class="ins-progress ins-progress--bad" value="97" max="100" aria-label="خطر">97%</progress>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress"</span> <span class="hl-a">value</span>=<span class="hl-s">"64"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"عادي"</span><span class="hl-t">&gt;</span>64%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress ins-progress--ok"</span> <span class="hl-a">value</span>=<span class="hl-s">"100"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"نجاح"</span><span class="hl-t">&gt;</span>100%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress ins-progress--warn"</span> <span class="hl-a">value</span>=<span class="hl-s">"88"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"تحذير"</span><span class="hl-t">&gt;</span>88%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress ins-progress--bad"</span> <span class="hl-a">value</span>=<span class="hl-s">"97"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"خطر"</span><span class="hl-t">&gt;</span>97%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="sizes">المقاسات</h2>
 <figure class="dx"><div class="dx-view stack narrow">
@@ -307,45 +283,41 @@
 <h2 id="indeterminate">مدّة غير معروفة</h2>
 <p>بلا <code>value</code> يصير الشريط «جارٍ» دون نسبة.</p>
 <figure class="dx"><div class="dx-view narrow">
-  <progress class="ins-progress" aria-label="جارٍ المزامنة"></progress>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"جارٍ المزامنة"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <progress class="ins-progress" aria-label="جارٍ التحميل"></progress>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"جارٍ التحميل"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="live">تقدّم حيّ</h2>
 <p>القيمة تُضبط من الشيفرة كأيّ خاصّية، والشريط ينتقل إليها بسلاسة.</p>
-<figure class="dx"><div class="dx-view stack narrow">
-  <progress class="ins-progress" id="up-bar" value="0" max="100" aria-label="رفع الملفّ">0%</progress>
-  <div class="ins-row">
-    <button class="ins-btn ins-btn--primary ins-btn--sm" id="up-go"><svg class="ico"><use href="#i-upload"/></svg>ارفع الملفّ</button>
-    <span class="ins-muted ins-text-sm ins-num" id="up-text">0%</span>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress"</span> <span class="hl-a">id</span>=<span class="hl-s">"up-bar"</span> <span class="hl-a">value</span>=<span class="hl-s">"0"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"رفع الملفّ"</span><span class="hl-t">&gt;</span>0%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary ins-btn--sm"</span> <span class="hl-a">id</span>=<span class="hl-s">"up-go"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>ارفع الملفّ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted ins-text-sm ins-num"</span> <span class="hl-a">id</span>=<span class="hl-s">"up-text"</span><span class="hl-t">&gt;</span>0%<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<figure class="dx"><div class="dx-view narrow">
+  <progress class="ins-progress" id="up-bar" value="0" max="100" aria-label="الرفع">0%</progress>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress"</span> <span class="hl-a">id</span>=<span class="hl-s">"up-bar"</span> <span class="hl-a">value</span>=<span class="hl-s">"0"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الرفع"</span><span class="hl-t">&gt;</span>0%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<figure class="dx dx--bare"><div class="dx-view row">
+  <button class="ins-btn ins-btn--secondary" id="up-go">ابدأ</button>
+</div></figure>
 
 <h2 id="ring">الحلقة</h2>
-<p>لنسبة في مساحة صغيرة. القيمة في <code>--ins-value</code>، والدور والقيم لقارئ الشاشة على العنصر.</p>
+<p>
+  <code>.ins-ring</code> لنسبة في مساحة صغيرة، و<code>--lg</code> أكبر. القيمة في <code>--ins-value</code>،
+  والدور والقيم لقارئ الشاشة على العنصر.
+</p>
 <figure class="dx"><div class="dx-view row">
-  <div class="ins-ring" role="progressbar" aria-label="المهامّ المنجزة" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="--ins-value:72">72%</div>
-  <div class="ins-ring ins-ring--lg" role="progressbar" aria-label="هدف المبيعات" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="--ins-value:45">45%</div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-ring"</span> <span class="hl-a">role</span>=<span class="hl-s">"progressbar"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"المهامّ المنجزة"</span> <span class="hl-a">aria-valuenow</span>=<span class="hl-s">"72"</span> <span class="hl-a">aria-valuemin</span>=<span class="hl-s">"0"</span> <span class="hl-a">aria-valuemax</span>=<span class="hl-s">"100"</span> <span class="hl-a">style</span>=<span class="hl-s">"--ins-value:72"</span><span class="hl-t">&gt;</span>72%<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-ring ins-ring--lg"</span> <span class="hl-a">role</span>=<span class="hl-s">"progressbar"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"هدف المبيعات"</span> <span class="hl-a">aria-valuenow</span>=<span class="hl-s">"45"</span> <span class="hl-a">aria-valuemin</span>=<span class="hl-s">"0"</span> <span class="hl-a">aria-valuemax</span>=<span class="hl-s">"100"</span> <span class="hl-a">style</span>=<span class="hl-s">"--ins-value:45"</span><span class="hl-t">&gt;</span>45%<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <div class="ins-ring" role="progressbar" aria-label="عادية" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="--ins-value:72">72%</div>
+  <div class="ins-ring ins-ring--lg" role="progressbar" aria-label="كبيرة" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="--ins-value:45">45%</div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-ring"</span> <span class="hl-a">role</span>=<span class="hl-s">"progressbar"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"عادية"</span> <span class="hl-a">aria-valuenow</span>=<span class="hl-s">"72"</span> <span class="hl-a">aria-valuemin</span>=<span class="hl-s">"0"</span> <span class="hl-a">aria-valuemax</span>=<span class="hl-s">"100"</span> <span class="hl-a">style</span>=<span class="hl-s">"--ins-value:72"</span><span class="hl-t">&gt;</span>72%<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-ring ins-ring--lg"</span> <span class="hl-a">role</span>=<span class="hl-s">"progressbar"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"كبيرة"</span> <span class="hl-a">aria-valuenow</span>=<span class="hl-s">"45"</span> <span class="hl-a">aria-valuemin</span>=<span class="hl-s">"0"</span> <span class="hl-a">aria-valuemax</span>=<span class="hl-s">"100"</span> <span class="hl-a">style</span>=<span class="hl-s">"--ins-value:45"</span><span class="hl-t">&gt;</span>45%<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <script>
   (function () {
-    var bar = document.getElementById('up-bar'), text = document.getElementById('up-text'), btn = document.getElementById('up-go'), t;
+    var bar = document.getElementById('up-bar'), btn = document.getElementById('up-go'), t;
     btn.addEventListener('click', function () {
       clearInterval(t);
       bar.value = 0;
       btn.disabled = true;
       t = setInterval(function () {
         bar.value = Math.min(100, bar.value + Math.round(4 + Math.random() * 12));
-        text.textContent = bar.value + '%';
         if (bar.value >= 100) {
           clearInterval(t);
           btn.disabled = false;
-          Insiyab.toast('اكتمل رفع الملفّ', 'ok');
         }
       }, 220);
     });

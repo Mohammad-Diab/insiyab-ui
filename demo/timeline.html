@@ -255,65 +255,55 @@
             <p class="ins-page-sub site-lead">ما حدث بترتيبه: مسار طلب، أو نشاط حساب، أو تاريخ ملفّ. ومعه أوقات نسبية تُكتب كما تُقال.</p>
           </div>
         </header>
-        <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#install">التثبيت</a><a href="#timeline">مسار طلب</a><a href="#icons">بأيقونات</a><a href="#relative">الأوقات النسبية</a><a href="#split">على جانبين</a><a href="#api">من الشيفرة</a></nav>
+        <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#install">التثبيت</a><a href="#timeline">الخط الزمني</a><a href="#icons">بأيقونات</a><a href="#relative">الأوقات النسبية</a><a href="#split">على جانبين</a><a href="#api">من الشيفرة</a></nav>
         <link rel="stylesheet" href="../dist/plugins/insiyab-timeline.css">
 <script src="../dist/plugins/insiyab-timeline.js"></script>
 
 <h2 id="install">التثبيت</h2>
 <p>
-  إضافة لا جزء من الملفّين. الخطّ الزمنيّ نفسه CSS خالص؛ السكربت الصغير يكتب الأوقات النسبية فقط
-  («قبل 5 دقائق»)، والخطّ بدونه كامل.
+  إضافة لا جزء من الملفّين. الخطّ الزمنيّ نفسه CSS خالص، والسكربت يكتب الأوقات النسبية فقط («قبل 5 دقائق»).
 </p>
 <div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"plugins/insiyab-timeline.css"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"plugins/insiyab-timeline.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>   <span class="hl-c">&lt;!-- للأوقات النسبية فقط --&gt;</span></code></pre></div>
 
-<h2 id="timeline">مسار طلب</h2>
+<h2 id="timeline">الخط الزمني</h2>
 <p>
-  قائمة، وخطّ على جهة البداية، ونقطة لكلّ حدث. النبرات كما في كلّ مكان — <code>--ok</code> و<code>--bad</code>
-  و<code>--warn</code> و<code>--info</code> — و<code>is-current</code> للخطوة الجارية، و<code>is-pending</code> لما لم يأتِ بعد.
+  قائمة <code>.ins-timeline</code>، ونقطة لكلّ حدث، و<code>.ins-timeline-day</code> عنوان يفصل بين الأيّام. النبرات
+  <code>--ok</code> و<code>--bad</code> و<code>--warn</code> و<code>--info</code>، و<code>is-current</code> للخطوة الجارية،
+  و<code>is-pending</code> لما لم يأتِ بعد.
 </p>
 <figure class="dx"><div class="dx-view narrow">
   <ol class="ins-timeline">
-    <li class="ins-timeline-day">الطلب ‎#4821</li>
+    <li class="ins-timeline-day">24 سبتمبر</li>
     <li class="ins-timeline-item ins-timeline-item--ok">
       <span class="ins-timeline-title">استُلم الطلب</span>
-      <time class="ins-timeline-time" datetime="2026-09-24T08:02">24 سبتمبر، 8:02 ص</time>
+      <time class="ins-timeline-time" datetime="2026-09-24T08:02">8:02 ص</time>
     </li>
     <li class="ins-timeline-item ins-timeline-item--ok">
       <span class="ins-timeline-title">تمّ الدفع</span>
-      <time class="ins-timeline-time" datetime="2026-09-24T08:05">24 سبتمبر، 8:05 ص</time>
-      <p class="ins-timeline-body">بطاقة مدى تنتهي بـ 4417 — 1,250.00 ر.س</p>
+      <time class="ins-timeline-time" datetime="2026-09-24T08:05">8:05 ص</time>
+      <p class="ins-timeline-body">نصّ الحدث.</p>
     </li>
     <li class="ins-timeline-item is-current">
       <span class="ins-timeline-title">قيد التجهيز</span>
-      <span class="ins-timeline-time">المستودع الرئيسيّ، الرياض</span>
-    </li>
-    <li class="ins-timeline-item is-pending">
-      <span class="ins-timeline-title">الشحن</span>
-      <span class="ins-timeline-time">متوقّع غدًا</span>
     </li>
     <li class="ins-timeline-item is-pending">
       <span class="ins-timeline-title">التسليم</span>
     </li>
   </ol>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;ol</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-day"</span><span class="hl-t">&gt;</span>الطلب ‎#4821<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-day"</span><span class="hl-t">&gt;</span>24 سبتمبر<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item ins-timeline-item--ok"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>استُلم الطلب<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;time</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-time"</span> <span class="hl-a">datetime</span>=<span class="hl-s">"2026-09-24T08:02"</span><span class="hl-t">&gt;</span>24 سبتمبر، 8:02 ص<span class="hl-t">&lt;/time</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;time</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-time"</span> <span class="hl-a">datetime</span>=<span class="hl-s">"2026-09-24T08:02"</span><span class="hl-t">&gt;</span>8:02 ص<span class="hl-t">&lt;/time</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item ins-timeline-item--ok"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>تمّ الدفع<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;time</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-time"</span> <span class="hl-a">datetime</span>=<span class="hl-s">"2026-09-24T08:05"</span><span class="hl-t">&gt;</span>24 سبتمبر، 8:05 ص<span class="hl-t">&lt;/time</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-body"</span><span class="hl-t">&gt;</span>بطاقة مدى تنتهي بـ 4417 — 1,250.00 ر.س<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;time</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-time"</span> <span class="hl-a">datetime</span>=<span class="hl-s">"2026-09-24T08:05"</span><span class="hl-t">&gt;</span>8:05 ص<span class="hl-t">&lt;/time</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-body"</span><span class="hl-t">&gt;</span>نصّ الحدث.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item is-current"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>قيد التجهيز<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-time"</span><span class="hl-t">&gt;</span>المستودع الرئيسيّ، الرياض<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item is-pending"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>الشحن<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-time"</span><span class="hl-t">&gt;</span>متوقّع غدًا<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item is-pending"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>التسليم<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
@@ -326,72 +316,67 @@
   <ol class="ins-timeline">
     <li class="ins-timeline-item ins-timeline-item--info">
       <span class="ins-timeline-ico"><svg class="ico" aria-hidden="true"><use href="#i-message"/></svg></span>
-      <span class="ins-timeline-title">علّقت سارة على الفاتورة</span>
-      <p class="ins-timeline-body">«المبلغ يطابق العقد، يمكن اعتمادها.»</p>
+      <span class="ins-timeline-title">تعليق</span>
     </li>
     <li class="ins-timeline-item ins-timeline-item--warn">
       <span class="ins-timeline-ico"><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg></span>
-      <span class="ins-timeline-title">تأخّر الاعتماد يومين</span>
+      <span class="ins-timeline-title">تأخير</span>
     </li>
     <li class="ins-timeline-item ins-timeline-item--ok">
       <span class="ins-timeline-ico"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span>
-      <span class="ins-timeline-title">اعتُمدت الفاتورة</span>
+      <span class="ins-timeline-title">اعتماد</span>
     </li>
   </ol>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;ol</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item ins-timeline-item--info"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>علّقت سارة على الفاتورة<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-body"</span><span class="hl-t">&gt;</span>«المبلغ يطابق العقد، يمكن اعتمادها.»<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>تعليق<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item ins-timeline-item--warn"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>تأخّر الاعتماد يومين<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>تأخير<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item ins-timeline-item--ok"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>اعتُمدت الفاتورة<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>اعتماد<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/ol</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="relative">الأوقات النسبية</h2>
 <p>
-  <code>&lt;time datetime="…" data-ins-time&gt;</code> في أيّ مكان من الصفحة يُكتب كما يُقال، بلغة الصفحة ومن
-  <code>Intl</code> في المتصفّح: «قبل 5 دقائق»، «أمس»، «خلال ساعتين». بعد أسبوع يُكتب التاريخ نفسه، فهو أسهل
-  على القارئ من «قبل 23 يومًا»، و<code>data-ins-time="date"</code> يكتبه دائمًا. التاريخ والوقت كاملين في
-  <code>title</code>، والنصّ يتجدّد كلّ دقيقة.
+  <code>&lt;time datetime="…" data-ins-time&gt;</code> في أيّ مكان من الصفحة يُكتب كما يُقال، بلغة الصفحة: «قبل 5
+  دقائق»، «أمس»، «خلال ساعتين». بعد أسبوع يُكتب التاريخ نفسه، و<code>data-ins-time="date"</code> يكتبه دائمًا.
+  التاريخ والوقت كاملين في <code>title</code>، والنصّ يتجدّد كلّ دقيقة.
 </p>
 <figure class="dx"><div class="dx-view narrow">
   <ol class="ins-timeline ins-timeline--compact" id="tl-live">
-    <li class="ins-timeline-item"><span class="ins-timeline-title">سجّل خالد الدخول</span><time class="ins-timeline-time" data-ins-time data-ago="-120000"></time></li>
-    <li class="ins-timeline-item"><span class="ins-timeline-title">عُدّلت كلمة المرور</span><time class="ins-timeline-time" data-ins-time data-ago="-10800000"></time></li>
-    <li class="ins-timeline-item"><span class="ins-timeline-title">أُضيف جهاز جديد</span><time class="ins-timeline-time" data-ins-time data-ago="-93600000"></time></li>
-    <li class="ins-timeline-item"><span class="ins-timeline-title">أُنشئ الحساب</span><time class="ins-timeline-time" data-ins-time data-ago="-3456000000"></time></li>
+    <li class="ins-timeline-item"><span class="ins-timeline-title">تسجيل الدخول</span><time class="ins-timeline-time" data-ins-time data-ago="-120000"></time></li>
+    <li class="ins-timeline-item"><span class="ins-timeline-title">تعديل</span><time class="ins-timeline-time" data-ins-time data-ago="-93600000"></time></li>
+    <li class="ins-timeline-item"><span class="ins-timeline-title">إنشاء الحساب</span><time class="ins-timeline-time" data-ins-time data-ago="-3456000000"></time></li>
   </ol>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;ol</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline ins-timeline--compact"</span> <span class="hl-a">id</span>=<span class="hl-s">"tl-live"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>سجّل خالد الدخول<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;time</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-time"</span> <span class="hl-a">data-ins-time</span> <span class="hl-a">data-ago</span>=<span class="hl-s">"-120000"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/time</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>عُدّلت كلمة المرور<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;time</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-time"</span> <span class="hl-a">data-ins-time</span> <span class="hl-a">data-ago</span>=<span class="hl-s">"-10800000"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/time</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>أُضيف جهاز جديد<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;time</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-time"</span> <span class="hl-a">data-ins-time</span> <span class="hl-a">data-ago</span>=<span class="hl-s">"-93600000"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/time</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>أُنشئ الحساب<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;time</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-time"</span> <span class="hl-a">data-ins-time</span> <span class="hl-a">data-ago</span>=<span class="hl-s">"-3456000000"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/time</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>تسجيل الدخول<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;time</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-time"</span> <span class="hl-a">data-ins-time</span> <span class="hl-a">data-ago</span>=<span class="hl-s">"-120000"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/time</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>تعديل<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;time</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-time"</span> <span class="hl-a">data-ins-time</span> <span class="hl-a">data-ago</span>=<span class="hl-s">"-93600000"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/time</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>إنشاء الحساب<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;time</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-time"</span> <span class="hl-a">data-ins-time</span> <span class="hl-a">data-ago</span>=<span class="hl-s">"-3456000000"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/time</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/ol</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="split">على جانبين</h2>
 <p>
-  <code>.ins-timeline--split</code> يوزّع الأحداث على جانبي خطّ في الوسط حين يتّسع الخطّ الزمنيّ نفسه لذلك —
-  بعرض حاويته لا الشاشة — ويعود إلى جانب واحد في الضيق. و<code>.ins-timeline--compact</code> لعمود ضيّق.
+  <code>.ins-timeline--split</code> يوزّع الأحداث على جانبي خطّ في الوسط حين تتّسع حاويته، ويعود إلى جانب واحد في
+  الضيق. و<code>.ins-timeline--compact</code> لعمود ضيّق، كالمثال السابق.
 </p>
 <figure class="dx"><div class="dx-view">
   <ol class="ins-timeline ins-timeline--split">
-    <li class="ins-timeline-item"><span class="ins-timeline-title">2019 — البداية</span><p class="ins-timeline-body">متجر واحد في جدّة.</p></li>
-    <li class="ins-timeline-item"><span class="ins-timeline-title">2022 — التوسّع</span><p class="ins-timeline-body">خمسة فروع في ثلاث مدن.</p></li>
-    <li class="ins-timeline-item ins-timeline-item--ok"><span class="ins-timeline-title">2025 — المتجر الإلكترونيّ</span><p class="ins-timeline-body">نصف المبيعات عبر الإنترنت.</p></li>
-    <li class="ins-timeline-item is-pending"><span class="ins-timeline-title">2027 — الخليج</span><p class="ins-timeline-body">أوّل فرع خارج المملكة.</p></li>
+    <li class="ins-timeline-item"><span class="ins-timeline-title">2019</span><p class="ins-timeline-body">الحدث الأوّل.</p></li>
+    <li class="ins-timeline-item"><span class="ins-timeline-title">2022</span><p class="ins-timeline-body">الحدث الثاني.</p></li>
+    <li class="ins-timeline-item"><span class="ins-timeline-title">2025</span><p class="ins-timeline-body">الحدث الثالث.</p></li>
+    <li class="ins-timeline-item is-pending"><span class="ins-timeline-title">2027</span><p class="ins-timeline-body">لم يأتِ بعد.</p></li>
   </ol>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;ol</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline ins-timeline--split"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>2019 — البداية<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-body"</span><span class="hl-t">&gt;</span>متجر واحد في جدّة.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>2022 — التوسّع<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-body"</span><span class="hl-t">&gt;</span>خمسة فروع في ثلاث مدن.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item ins-timeline-item--ok"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>2025 — المتجر الإلكترونيّ<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-body"</span><span class="hl-t">&gt;</span>نصف المبيعات عبر الإنترنت.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item is-pending"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>2027 — الخليج<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-body"</span><span class="hl-t">&gt;</span>أوّل فرع خارج المملكة.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>2019<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-body"</span><span class="hl-t">&gt;</span>الحدث الأوّل.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>2022<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-body"</span><span class="hl-t">&gt;</span>الحدث الثاني.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>2025<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-body"</span><span class="hl-t">&gt;</span>الحدث الثالث.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-item is-pending"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-title"</span><span class="hl-t">&gt;</span>2027<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-timeline-body"</span><span class="hl-t">&gt;</span>لم يأتِ بعد.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/ol</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="api">من الشيفرة</h2>

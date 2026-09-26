@@ -11,15 +11,15 @@
 
 <h2 id="tree">شجرة ملفّات</h2>
 <p>
-  قوائم متداخلة عليها <code>data-ins-tree</code>. أوّل عنصر في كلّ بند هو تسميته — نصّ في <code>span</code>، أو
-  رابط — والقائمة داخله فرعه، مغلق إلّا إن حمل البند <code>data-open</code>. وبلا سكربت هي القائمة المتداخلة
-  نفسها، كلّ فروعها ظاهرة.
+  قوائم متداخلة عليها <code>data-ins-tree</code>. أوّل عنصر في كلّ بند تسميته — <code>span</code> أو رابط، وفيها
+  أيقونة إن شئت — والقائمة داخله فرعه، مغلق إلّا مع <code>data-open</code>. وعدد أو شارة بعد التسمية يذهب إلى آخر
+  الصفّ. وبلا سكربت هي القائمة المتداخلة نفسها.
 </p>
 <demo-example class="narrow">
-  <ul class="ins-tree" data-ins-tree aria-label="ملفّات المشروع">
+  <ul class="ins-tree" data-ins-tree aria-label="الملفّات">
     <li data-open><span><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>العقود</span>
       <ul>
-        <li><a href="tables.html"><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>عقد الإيجار 2026.pdf</a></li>
+        <li><a href="#tree"><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>عقد.pdf</a></li>
         <li><span><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>الملاحق</span>
           <ul>
             <li><span><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>ملحق 1.pdf</span></li>
@@ -28,9 +28,9 @@
         </li>
       </ul>
     </li>
-    <li><span><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>الفواتير</span><span class="ins-pill">12</span>
+    <li><span><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>الفواتير</span>
       <ul>
-        <li><span><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>سبتمبر.xlsx</span></li>
+        <li><span><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>فاتورة.pdf</span></li>
       </ul>
     </li>
     <li><span><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>ملاحظات.txt</span></li>
@@ -50,10 +50,10 @@
 <h2 id="checks">شجرة صلاحيات</h2>
 <p>
   <code>data-ins-tree-checks</code> وتسمية كلّ بند مربّع <code>.ins-check</code>: الفرع يعلّم كلّ ما فيه، وفرع علامته
-  جزئية يظهر مختلطًا. والنموذج يرسل المربّعات المعلَّمة كما هي، فالفرع المختلط لا يُرسَل.
+  جزئية يظهر مختلطًا ولا يُرسَل مع النموذج.
 </p>
 <demo-example class="narrow">
-  <ul class="ins-tree" data-ins-tree data-ins-tree-checks aria-label="صلاحيات الدور">
+  <ul class="ins-tree" data-ins-tree data-ins-tree-checks aria-label="الصلاحيات">
     <li data-open><label class="ins-check"><input type="checkbox" name="perm" value="sales"><span class="ins-check-text">المبيعات</span></label>
       <ul>
         <li><label class="ins-check"><input type="checkbox" name="perm" value="sales.view" checked><span class="ins-check-text">عرض الطلبات</span></label></li>

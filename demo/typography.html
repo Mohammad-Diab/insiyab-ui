@@ -257,141 +257,113 @@
         </header>
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#faces">الخطوط الثلاثة</a><a href="#headings">العناوين</a><a href="#lead">التمهيد والعنوان الصغير</a><a href="#prose">النصّ الطويل</a><a href="#divider">الفاصل</a><a href="#kbd">المفاتيح</a><a href="#tokens">المقاسات</a></nav>
         <h2 id="faces">الخطوط الثلاثة</h2>
-<figure class="dx dx--bare"><div class="dx-view">
-  <div class="ins-cols-3">
-    <div class="ins-card ins-p-5">
-      <span class="ins-eyebrow">العربية</span>
-      <p class="ins-h3 ins-mt-2">تجوال · Tajawal</p>
-      <p class="ins-muted ins-mb-0">الخطّ العربي هو الهويّة، ويحمل مجموعته اللاتينية، فتبقى كلمة مثل API في سطر عربي بخطّه.</p>
-    </div>
-    <div class="ins-card ins-p-5">
-      <span class="ins-eyebrow">الأرقام والنصّ اللاتيني</span>
-      <p class="ins-h3 ins-mt-2" dir="ltr">Inter</p>
-      <p class="ins-num ins-mb-0">1,240,905 · 3.14 · 2026-09-23</p>
-    </div>
-    <div class="ins-card ins-p-5">
-      <span class="ins-eyebrow">العناوين اللاتينية</span>
-      <p class="ins-h3 ins-mt-2" dir="ltr" style="font-family:var(--ins-font-heading-en)">Cause</p>
-      <p class="ins-muted ins-mb-0">للعناوين حين يكون اتجاه الصفحة من اليسار.</p>
-    </div>
-  </div>
+<p>
+  تجوال للعربية ومعها حروفها اللاتينية، وInter للأرقام والنصّ اللاتيني، وCause للعناوين حين يكون اتجاه
+  الصفحة من اليسار.
+</p>
+<figure class="dx dx--bare"><div class="dx-view stack">
+  <p class="ins-h3">تجوال · Tajawal</p>
+  <p class="ins-h3" dir="ltr" style="font-family:var(--ins-font-body-en)">Inter · 1,240,905</p>
+  <p class="ins-h3" dir="ltr" style="font-family:var(--ins-font-heading-en)">Cause</p>
 </div></figure>
 
 <h2 id="headings">العناوين</h2>
 <p>
-  مظهر العنوان منفصل عن مستواه. مستوى العنوان يخصّ بنية الصفحة وقارئ الشاشة، ومظهره يخصّ التصميم،
-  فـ <code>&lt;h2 class="ins-h4"&gt;</code> استعمال عاديّ تمامًا، ولا سبب بعده لتخطّي مستوى في البنية.
+  مظهر العنوان منفصل عن مستواه: المستوى لبنية الصفحة وقارئ الشاشة، والمظهر للتصميم،
+  فـ <code>&lt;h2 class="ins-h4"&gt;</code> استعمال عاديّ تمامًا.
 </p>
 <figure class="dx"><div class="dx-view">
   <p class="ins-display">انسياب</p>
-  <p class="ins-h1">تقرير المبيعات السنوي</p>
-  <p class="ins-h2">الربع الثالث</p>
-  <p class="ins-h3">المنطقة الوسطى</p>
-  <p class="ins-h4">ملاحظات الفريق</p>
+  <p class="ins-h1">عنوان أوّل</p>
+  <p class="ins-h2">عنوان ثانٍ</p>
+  <p class="ins-h3">عنوان ثالث</p>
+  <p class="ins-h4">عنوان رابع</p>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-display"</span><span class="hl-t">&gt;</span>انسياب<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h1"</span><span class="hl-t">&gt;</span>تقرير المبيعات السنوي<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h2"</span><span class="hl-t">&gt;</span>الربع الثالث<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h3"</span><span class="hl-t">&gt;</span>المنطقة الوسطى<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h4"</span><span class="hl-t">&gt;</span>ملاحظات الفريق<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h1"</span><span class="hl-t">&gt;</span>عنوان أوّل<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h2"</span><span class="hl-t">&gt;</span>عنوان ثانٍ<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h3"</span><span class="hl-t">&gt;</span>عنوان ثالث<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h4"</span><span class="hl-t">&gt;</span>عنوان رابع<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="lead">التمهيد والعنوان الصغير</h2>
+<p><code>.ins-eyebrow</code> عنوان صغير فوق العنوان، و<code>.ins-lead</code> لفقرة التمهيد تحته.</p>
 <figure class="dx"><div class="dx-view">
   <span class="ins-eyebrow">الإعدادات</span>
-  <p class="ins-h2 ins-mt-1">حساب المتجر</p>
-  <p class="ins-lead ins-mb-0">الاسم والعنوان وطرق الدفع، في مكان واحد. التغييرات تُطبَّق على الطلبات الجديدة فقط.</p>
+  <p class="ins-h2">الحساب</p>
+  <p class="ins-lead">الاسم والعنوان وطرق الدفع.</p>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-eyebrow"</span><span class="hl-t">&gt;</span>الإعدادات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h2 ins-mt-1"</span><span class="hl-t">&gt;</span>حساب المتجر<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-lead ins-mb-0"</span><span class="hl-t">&gt;</span>الاسم والعنوان وطرق الدفع، في مكان واحد. التغييرات تُطبَّق على الطلبات الجديدة فقط.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h2"</span><span class="hl-t">&gt;</span>الحساب<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-lead"</span><span class="hl-t">&gt;</span>الاسم والعنوان وطرق الدفع.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="prose">النصّ الطويل</h2>
 <p>
   <code>.ins-prose</code> ينسّق الفقرات والقوائم والاقتباسات والشيفرة والجداول داخله، ولا يلمس شيئًا
-  خارجه — قواعد على <code>ul</code> أو <code>p</code> المجرّدة كانت ستغيّر قوائم الصفحة المضيفة. ولا
-  تباعد بين الحروف العربية، ولا خطّ مائل: التوكيد هنا باللون.
+  خارجه. ولا تباعد بين الحروف العربية، ولا خطّ مائل: التوكيد باللون.
 </p>
 <figure class="dx"><div class="dx-view">
   <article class="ins-prose">
-    <h2>سياسة الاسترجاع</h2>
-    <p>
-      يمكنك إرجاع أيّ منتج خلال <strong>١٤ يومًا</strong> من استلامه، بحالته الأصلية ومع فاتورته.
-      يُعاد المبلغ إلى وسيلة الدفع نفسها خلال خمسة أيّام عمل، و<em>لا</em> تُحتسب رسوم الشحن
-      إلّا إن كان <mark>المنتج معيبًا</mark>.
-    </p>
-    <h3>الخطوات</h3>
+    <h2>عنوان</h2>
+    <p>فقرة فيها <strong>نصّ عريض</strong> و<em>توكيد</em> و<mark>تظليل</mark> و<a href="#prose">رابط</a>.</p>
+    <h3>عنوان فرعي</h3>
     <ol>
-      <li>افتح <a href="#prose">طلباتي</a> واختر الطلب.</li>
-      <li>اضغط «طلب استرجاع» واختر السبب:
+      <li>الخطوة الأولى</li>
+      <li>الخطوة الثانية
         <ul>
-          <li>المنتج معيب أو تالف،</li>
-          <li>أو وصل منتج غير المطلوب.</li>
+          <li>بند متداخل</li>
         </ul>
       </li>
-      <li>سلّم الطرد لمندوب الشحن.</li>
     </ol>
-    <blockquote>المنتج الذي لا يناسبك لا يجب أن يكلّفك شيئًا لتعيده.</blockquote>
-    <p>للمطوّرين، حالة الطلب متاحة عبر الواجهة البرمجية:</p>
-    <pre><code>GET /api/orders/40218/return
-{ "status": "approved", "refund": 249.00 }</code></pre>
+    <blockquote>اقتباس قصير.</blockquote>
+    <pre><code>GET /api/orders</code></pre>
     <dl>
-      <dt>مدّة الاسترجاع</dt><dd>١٤ يومًا</dd>
-      <dt>استرداد المبلغ</dt><dd>خمسة أيّام عمل</dd>
+      <dt>المدّة</dt><dd>١٤ يومًا</dd>
     </dl>
   </article>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code>  <span class="hl-t">&lt;article</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-prose"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;h2</span><span class="hl-t">&gt;</span>سياسة الاسترجاع<span class="hl-t">&lt;/h2</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>
-      يمكنك إرجاع أيّ منتج خلال <span class="hl-t">&lt;strong</span><span class="hl-t">&gt;</span>١٤ يومًا<span class="hl-t">&lt;/strong</span><span class="hl-t">&gt;</span> من استلامه، بحالته الأصلية ومع فاتورته.
-      يُعاد المبلغ إلى وسيلة الدفع نفسها خلال خمسة أيّام عمل، و<span class="hl-t">&lt;em</span><span class="hl-t">&gt;</span>لا<span class="hl-t">&lt;/em</span><span class="hl-t">&gt;</span> تُحتسب رسوم الشحن
-      إلّا إن كان <span class="hl-t">&lt;mark</span><span class="hl-t">&gt;</span>المنتج معيبًا<span class="hl-t">&lt;/mark</span><span class="hl-t">&gt;</span>.
-    <span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>الخطوات<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;ol</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span>افتح <span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#prose"</span><span class="hl-t">&gt;</span>طلباتي<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span> واختر الطلب.<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span>اضغط «طلب استرجاع» واختر السبب:
-        <span class="hl-t">&lt;ul</span><span class="hl-t">&gt;</span>
-          <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span>المنتج معيب أو تالف،<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-          <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span>أو وصل منتج غير المطلوب.<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span>سلّم الطرد لمندوب الشحن.<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/ol</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;blockquote</span><span class="hl-t">&gt;</span>المنتج الذي لا يناسبك لا يجب أن يكلّفك شيئًا لتعيده.<span class="hl-t">&lt;/blockquote</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>للمطوّرين، حالة الطلب متاحة عبر الواجهة البرمجية:<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;pre</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;code</span><span class="hl-t">&gt;</span>GET /api/orders/40218/return
-{ "status": "approved", "refund": 249.00 }<span class="hl-t">&lt;/code</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/pre</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;dl</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>مدّة الاسترجاع<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span><span class="hl-t">&gt;</span>١٤ يومًا<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>استرداد المبلغ<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span><span class="hl-t">&gt;</span>خمسة أيّام عمل<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/dl</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/article</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;article</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-prose"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;h2</span><span class="hl-t">&gt;</span>عنوان<span class="hl-t">&lt;/h2</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>فقرة فيها <span class="hl-t">&lt;strong</span><span class="hl-t">&gt;</span>نصّ عريض<span class="hl-t">&lt;/strong</span><span class="hl-t">&gt;</span> و<span class="hl-t">&lt;em</span><span class="hl-t">&gt;</span>توكيد<span class="hl-t">&lt;/em</span><span class="hl-t">&gt;</span> و<span class="hl-t">&lt;mark</span><span class="hl-t">&gt;</span>تظليل<span class="hl-t">&lt;/mark</span><span class="hl-t">&gt;</span> و<span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#prose"</span><span class="hl-t">&gt;</span>رابط<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>عنوان فرعي<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;ol</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span>الخطوة الأولى<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span>الخطوة الثانية
+      <span class="hl-t">&lt;ul</span><span class="hl-t">&gt;</span>
+        <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span>بند متداخل<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/ol</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;blockquote</span><span class="hl-t">&gt;</span>اقتباس قصير.<span class="hl-t">&lt;/blockquote</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;pre</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;code</span><span class="hl-t">&gt;</span>GET /api/orders<span class="hl-t">&lt;/code</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/pre</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;dl</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>المدّة<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span><span class="hl-t">&gt;</span>١٤ يومًا<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/dl</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/article</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="divider">الفاصل</h2>
+<p>
+  <code>.ins-divider</code> على <code>&lt;hr&gt;</code>، أو على عنصر فيه نصّ، و<code>--start</code> يضع النصّ في
+  البداية. و<code>--v</code> فاصل عمودي بين عناصر صفّ، مع <code>aria-orientation="vertical"</code>.
+</p>
 <figure class="dx"><div class="dx-view stack">
   <hr class="ins-divider">
   <div class="ins-divider">أو</div>
-  <div class="ins-divider ins-divider--start">معلومات الشحن</div>
-  <div class="ins-row ins-text-sm">
+  <div class="ins-divider ins-divider--start">عنوان</div>
+  <div class="ins-row">
     <span>ملف</span>
     <hr class="ins-divider ins-divider--v" aria-orientation="vertical">
     <span>تعديل</span>
-    <hr class="ins-divider ins-divider--v" aria-orientation="vertical">
-    <span>عرض</span>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;hr</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-divider"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-divider"</span><span class="hl-t">&gt;</span>أو<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-divider ins-divider--start"</span><span class="hl-t">&gt;</span>معلومات الشحن<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row ins-text-sm"</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-divider ins-divider--start"</span><span class="hl-t">&gt;</span>عنوان<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span>ملف<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;hr</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-divider ins-divider--v"</span> <span class="hl-a">aria-orientation</span>=<span class="hl-s">"vertical"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span>تعديل<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;hr</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-divider ins-divider--v"</span> <span class="hl-a">aria-orientation</span>=<span class="hl-s">"vertical"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span>عرض<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="kbd">المفاتيح</h2>
 <figure class="dx"><div class="dx-view">
-  <p class="ins-m-0">اضغط <kbd class="ins-kbd">Ctrl</kbd> + <kbd class="ins-kbd">K</kbd> للبحث، و<kbd class="ins-kbd">Esc</kbd> للإغلاق.</p>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-m-0"</span><span class="hl-t">&gt;</span>اضغط <span class="hl-t">&lt;kbd</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-kbd"</span><span class="hl-t">&gt;</span>Ctrl<span class="hl-t">&lt;/kbd</span><span class="hl-t">&gt;</span> + <span class="hl-t">&lt;kbd</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-kbd"</span><span class="hl-t">&gt;</span>K<span class="hl-t">&lt;/kbd</span><span class="hl-t">&gt;</span> للبحث، و<span class="hl-t">&lt;kbd</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-kbd"</span><span class="hl-t">&gt;</span>Esc<span class="hl-t">&lt;/kbd</span><span class="hl-t">&gt;</span> للإغلاق.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <p>اضغط <kbd class="ins-kbd">Ctrl</kbd> + <kbd class="ins-kbd">K</kbd> للبحث.</p>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>اضغط <span class="hl-t">&lt;kbd</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-kbd"</span><span class="hl-t">&gt;</span>Ctrl<span class="hl-t">&lt;/kbd</span><span class="hl-t">&gt;</span> + <span class="hl-t">&lt;kbd</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-kbd"</span><span class="hl-t">&gt;</span>K<span class="hl-t">&lt;/kbd</span><span class="hl-t">&gt;</span> للبحث.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="tokens">المقاسات</h2>
 <p>متاحة متغيّراتٍ لأنماطك، وأصنافًا في <a href="utilities.html#text">الأدوات المساعدة</a>.</p>

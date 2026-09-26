@@ -258,52 +258,47 @@
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#basic">شريط الموقع</a><a href="#phone">على الهاتف</a><a href="#current">الرابط الحالي</a></nav>
         <h2 id="basic">شريط الموقع</h2>
 <p>
-  لموقع لا لتطبيق — صفحة هبوط، مدوّنة، توثيق. جزيرة زجاجية منفصلة عن حافة الصفحة، كجزر شريط التطبيق.
-  يلتصق بأعلى الصفحة وهي تتمرّر افتراضيًا؛ <code>--static</code> يتركه في مكانه، كما في هذا المثال.
+  لموقع لا لتطبيق: صفحة هبوط، مدوّنة، توثيق. <code>-brand</code> الاسم، و<code>-menu</code> الروابط،
+  و<code>-end</code> أزرارها في النهاية. يلتصق بأعلى الصفحة افتراضيًا؛ <code>--static</code> يتركه في مكانه، كما
+  في هذا المثال.
 </p>
 <figure class="dx"><div class="dx-view">
   <header class="ins-navbar ins-navbar--static">
-    <a class="ins-navbar-brand" href="#basic"><span class="ins-shell-mark" style="--ins-mark:30px">و</span>الورّاق</a>
+    <a class="ins-navbar-brand" href="#basic">الموقع</a>
     <button class="ins-navbar-toggle" data-ins-navbar aria-label="القائمة"></button>
     <nav class="ins-navbar-menu" aria-label="الموقع">
       <a class="ins-navbar-link" href="#basic" aria-current="page">الرئيسية</a>
-      <a class="ins-navbar-link" href="#basic">الكتب</a>
-      <a class="ins-navbar-link" href="#basic">المؤلّفون</a>
       <a class="ins-navbar-link" href="#basic">المدوّنة</a>
+      <a class="ins-navbar-link" href="#basic">تواصل</a>
       <div class="ins-navbar-end">
-        <button class="ins-btn ins-btn--bare">دخول</button>
-        <button class="ins-btn ins-btn--primary ins-btn--sm">إنشاء حساب</button>
+        <button class="ins-btn ins-btn--secondary ins-btn--sm">دخول</button>
       </div>
     </nav>
   </header>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;header</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar ins-navbar--static"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-brand"</span> <span class="hl-a">href</span>=<span class="hl-s">"#basic"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-shell-mark"</span> <span class="hl-a">style</span>=<span class="hl-s">"--ins-mark:30px"</span><span class="hl-t">&gt;</span>و<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>الورّاق<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-brand"</span> <span class="hl-a">href</span>=<span class="hl-s">"#basic"</span><span class="hl-t">&gt;</span>الموقع<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-toggle"</span> <span class="hl-a">data-ins-navbar</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"القائمة"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-menu"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الموقع"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-link"</span> <span class="hl-a">href</span>=<span class="hl-s">"#basic"</span> <span class="hl-a">aria-current</span>=<span class="hl-s">"page"</span><span class="hl-t">&gt;</span>الرئيسية<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-link"</span> <span class="hl-a">href</span>=<span class="hl-s">"#basic"</span><span class="hl-t">&gt;</span>الكتب<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-link"</span> <span class="hl-a">href</span>=<span class="hl-s">"#basic"</span><span class="hl-t">&gt;</span>المؤلّفون<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-link"</span> <span class="hl-a">href</span>=<span class="hl-s">"#basic"</span><span class="hl-t">&gt;</span>المدوّنة<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-link"</span> <span class="hl-a">href</span>=<span class="hl-s">"#basic"</span><span class="hl-t">&gt;</span>تواصل<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-end"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--bare"</span><span class="hl-t">&gt;</span>دخول<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary ins-btn--sm"</span><span class="hl-t">&gt;</span>إنشاء حساب<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--sm"</span><span class="hl-t">&gt;</span>دخول<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/header</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="phone">على الهاتف</h2>
 <p>
-  تحت <span class="ins-num">900px</span> تنطوي الروابط خلف زرّ القائمة وتنفتح عمودًا داخل الجزيرة نفسها،
-  والضغط على رابط يغلقها. وبلا جافاسكربت لا يظهر الزرّ، وتلتفّ الروابط في سطر ثانٍ — فكلّ رابط يبقى
-  على بعد نقرة. ضيّق النافذة لترى.
+  تحت 900px تنطوي الروابط خلف زرّ القائمة وتنفتح عمودًا داخل الشريط، والضغط على رابط أو <kbd class="ins-kbd">Esc</kbd> يغلقها. وبلا
+  جافاسكربت لا يظهر الزرّ، وتلتفّ الروابط في سطر ثانٍ. ضيّق النافذة لترى.
 </p>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.navbar(<span class="hl-t">document</span>.querySelector(<span class="hl-s">'.ins-navbar'</span>), <span class="hl-k">true</span>);   <span class="hl-c">// افتح</span>
 <span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:navbar'</span>, (e) =&gt; e.detail.open);</code></pre></div>
 
 <h2 id="current">الرابط الحالي</h2>
 <p>
-  <code>aria-current="page"</code> على الرابط، لا صنف: قارئ الشاشة يقرأ «الصفحة الحالية»، والتصميم يرسم
-  الشريط نفسه الذي يعلّم الرابط النشط في الشريط الجانبي واللسان الحالي.
+  <code>aria-current="page"</code> على الرابط، لا صنف: قارئ الشاشة يقرأ «الصفحة الحالية»، والتصميم يعلّمه.
 </p>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="page-head.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">رأس الصفحة والمسار</span></a><a class="site-pager-link site-pager-link--next" href="utilities.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الأدوات المساعدة</span></a></nav>
       </div>

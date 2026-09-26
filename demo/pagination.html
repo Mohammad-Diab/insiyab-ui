@@ -258,12 +258,12 @@
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#basic">الترقيم</a><a href="#edges">عند الطرفين</a><a href="#compact">مختصر</a></nav>
         <h2 id="basic">الترقيم</h2>
 <p>
-  روابط حقيقية بعناوين حقيقية، لا أزرار تحتاج سكربتًا. مسار غائر والصفحة الحالية وجه مرتفع منه — لغة
-  الشريط المقسّم نفسها، لأنّ السؤال نفسه: أيّ هذه أنا عليه. والأرقام بخطّ Inter متساوية العرض، فلا
-  يتغيّر عرض الصفّ من الصفحة ٩ إلى ١٠.
+  <code>.ins-pagination</code> روابط <code>.ins-page</code> حقيقية لا تحتاج سكربتًا. <code>aria-current="page"</code>
+  للصفحة الحالية، و<code>--prev</code> و<code>--next</code> للسهمين، و<code>.ins-page-gap</code> للفجوة.
+  السهمان يتبعان اتجاه القراءة: «السابق» يشير يمينًا في صفحة عربية.
 </p>
 <figure class="dx"><div class="dx-view">
-  <nav class="ins-pagination" aria-label="صفحات الطلبات">
+  <nav class="ins-pagination" aria-label="الصفحات">
     <a class="ins-page ins-page--prev" href="?page=2">السابق</a>
     <a class="ins-page" href="?page=1">1</a>
     <a class="ins-page" href="?page=2">2</a>
@@ -273,7 +273,7 @@
     <a class="ins-page" href="?page=12">12</a>
     <a class="ins-page ins-page--next" href="?page=4">التالي</a>
   </nav>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pagination"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"صفحات الطلبات"</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pagination"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الصفحات"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page ins-page--prev"</span> <span class="hl-a">href</span>=<span class="hl-s">"?page=2"</span><span class="hl-t">&gt;</span>السابق<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page"</span> <span class="hl-a">href</span>=<span class="hl-s">"?page=1"</span><span class="hl-t">&gt;</span>1<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page"</span> <span class="hl-a">href</span>=<span class="hl-s">"?page=2"</span><span class="hl-t">&gt;</span>2<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
@@ -283,19 +283,18 @@
   <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page"</span> <span class="hl-a">href</span>=<span class="hl-s">"?page=12"</span><span class="hl-t">&gt;</span>12<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page ins-page--next"</span> <span class="hl-a">href</span>=<span class="hl-s">"?page=4"</span><span class="hl-t">&gt;</span>التالي<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p>السهمان يشيران إلى بداية اتجاه القراءة ونهايته — «السابق» يشير يمينًا في صفحة عربية.</p>
 
 <h2 id="edges">عند الطرفين</h2>
 <p>في الصفحة الأولى «السابق» لا وجهة له: <code>aria-disabled="true"</code> وبلا <code>href</code>.</p>
 <figure class="dx"><div class="dx-view">
-  <nav class="ins-pagination" aria-label="صفحات المنتجات">
+  <nav class="ins-pagination" aria-label="الصفحات">
     <a class="ins-page ins-page--prev" aria-disabled="true">السابق</a>
     <a class="ins-page" aria-current="page">1</a>
     <a class="ins-page" href="?page=2">2</a>
     <a class="ins-page" href="?page=3">3</a>
     <a class="ins-page ins-page--next" href="?page=2">التالي</a>
   </nav>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pagination"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"صفحات المنتجات"</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pagination"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الصفحات"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page ins-page--prev"</span> <span class="hl-a">aria-disabled</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>السابق<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page"</span> <span class="hl-a">aria-current</span>=<span class="hl-s">"page"</span><span class="hl-t">&gt;</span>1<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page"</span> <span class="hl-a">href</span>=<span class="hl-s">"?page=2"</span><span class="hl-t">&gt;</span>2<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
@@ -306,14 +305,14 @@
 <h2 id="compact">مختصر</h2>
 <p>للهاتف أو لقائمة جانبية: السهمان والموضع فقط.</p>
 <figure class="dx"><div class="dx-view">
-  <nav class="ins-pagination" aria-label="صفحات التعليقات">
+  <nav class="ins-pagination" aria-label="الصفحات">
     <a class="ins-page ins-page--prev" href="?page=2">السابق</a>
-    <span class="ins-page-gap"><span class="ins-num">3</span> من <span class="ins-num">12</span></span>
+    <span class="ins-page-gap">3 من 12</span>
     <a class="ins-page ins-page--next" href="?page=4">التالي</a>
   </nav>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pagination"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"صفحات التعليقات"</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pagination"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الصفحات"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page ins-page--prev"</span> <span class="hl-a">href</span>=<span class="hl-s">"?page=2"</span><span class="hl-t">&gt;</span>السابق<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page-gap"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>3<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span> من <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>12<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page-gap"</span><span class="hl-t">&gt;</span>3 من 12<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page ins-page--next"</span> <span class="hl-a">href</span>=<span class="hl-s">"?page=4"</span><span class="hl-t">&gt;</span>التالي<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span></code></pre></div></figure>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="steps.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">المعالج</span></a><a class="site-pager-link site-pager-link--next" href="page-head.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">رأس الصفحة والمسار</span></a></nav>

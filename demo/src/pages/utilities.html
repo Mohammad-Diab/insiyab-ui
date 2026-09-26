@@ -1,47 +1,45 @@
 <h2 id="text">النصّ</h2>
-<demo-example>
-  <div class="ins-cols-3">
-    <div class="ins-stack ins-gap-1">
-      <span class="ins-text-xs">ins-text-xs</span>
-      <span class="ins-text-sm">ins-text-sm</span>
-      <span class="ins-text-md">ins-text-md</span>
-      <span class="ins-text-lg">ins-text-lg</span>
-      <span class="ins-text-xl">ins-text-xl</span>
-    </div>
-    <div class="ins-stack ins-gap-1">
-      <span class="ins-fw-300">ins-fw-300 · خفيف</span>
-      <span class="ins-fw-400">ins-fw-400 · عادي</span>
-      <span class="ins-fw-500">ins-fw-500 · متوسّط</span>
-      <span class="ins-fw-700">ins-fw-700 · عريض</span>
-    </div>
-    <div class="ins-stack ins-gap-1 ins-fw-700">
-      <span class="ins-muted">ins-muted</span>
-      <span class="ins-text-ok">ins-text-ok</span>
-      <span class="ins-text-warn">ins-text-warn</span>
-      <span class="ins-text-bad">ins-text-bad</span>
-      <span class="ins-text-info">ins-text-info</span>
-      <span class="ins-text-brand">ins-text-brand</span>
-    </div>
-  </div>
+<p>المقاسات، والأوزان، والألوان.</p>
+<demo-example class="stack">
+  <span class="ins-text-xs">ins-text-xs</span>
+  <span class="ins-text-sm">ins-text-sm</span>
+  <span class="ins-text-md">ins-text-md</span>
+  <span class="ins-text-lg">ins-text-lg</span>
+  <span class="ins-text-xl">ins-text-xl</span>
+</demo-example>
+<demo-example class="stack">
+  <span class="ins-fw-300">ins-fw-300 · خفيف</span>
+  <span class="ins-fw-400">ins-fw-400 · عادي</span>
+  <span class="ins-fw-500">ins-fw-500 · متوسّط</span>
+  <span class="ins-fw-700">ins-fw-700 · عريض</span>
+</demo-example>
+<demo-example class="stack">
+  <span class="ins-muted">ins-muted</span>
+  <span class="ins-text-ok">ins-text-ok</span>
+  <span class="ins-text-warn">ins-text-warn</span>
+  <span class="ins-text-bad">ins-text-bad</span>
+  <span class="ins-text-info">ins-text-info</span>
+  <span class="ins-text-brand">ins-text-brand</span>
 </demo-example>
 
 <h3 id="align">المحاذاة</h3>
 <p>منطقية: <code>ins-text-start</code> يمين في العربية ويسار في الإنجليزية.</p>
 <demo-example class="stack">
-  <p class="ins-text-start ins-m-0">ins-text-start</p>
-  <p class="ins-text-center ins-m-0">ins-text-center</p>
-  <p class="ins-text-end ins-m-0">ins-text-end</p>
+  <div class="ins-text-start">ins-text-start</div>
+  <div class="ins-text-center">ins-text-center</div>
+  <div class="ins-text-end">ins-text-end</div>
 </demo-example>
 
 <h3 id="truncate">القصّ</h3>
-<p>النقاط في نهاية السطر أيًّا كان الاتجاه — يسار السطر في العربية — لأنّ القصّ يتبع النصّ لا الشاشة.</p>
-<demo-example>
-  <div class="ins-cols-2">
-    <div class="ins-truncate">حقيبة ظهر جلدية طبيعية بجيب داخلي مبطّن للحاسوب المحمول حتى ستّة عشر إنشًا</div>
-    <p class="ins-clamp-2 ins-m-0">
-      يقتصّ هذا الصنف الفقرة بعد سطرين ويضع النقاط في نهاية الثاني. مفيد لوصف منتج في بطاقة: كلّ البطاقات
-      بالارتفاع نفسه مهما طال الوصف، وهذا السطر الثالث لن يظهر أبدًا في البطاقة.
-    </p>
+<p>
+  <code>ins-truncate</code> يقصّ عند نهاية سطر واحد، و<code>ins-clamp-2</code> و<code>ins-clamp-3</code> بعد سطرين
+  أو ثلاثة. النقاط في نهاية السطر أيًّا كان الاتجاه.
+</p>
+<demo-example class="stack narrow">
+  <div class="ins-truncate">سطر طويل لا يتّسع له عرض الحاوية فيُقصّ عند نهايته بنقاط ثلاث، ويبقى سطرًا واحدًا مهما طال النصّ الذي فيه</div>
+  <div class="ins-clamp-2">
+    فقرة طويلة تُقصّ بعد سطرين وتوضع النقاط في نهاية الثاني. يبقى ارتفاعها ثابتًا مهما طال النصّ، فهذه
+    الجملة تكمل الفقرة حتى تتجاوز السطرين، وما بعدهما لا يظهر أبدًا مهما كان طوله أو عدد كلماته.
   </div>
 </demo-example>
 
@@ -56,7 +54,7 @@
           <tr><td><code>ins-flex-wrap</code> · <code>ins-flex-nowrap</code></td><td>الالتفاف</td></tr>
           <tr><td><code>ins-items-{start,center,end,baseline,stretch}</code></td><td>المحاذاة العمودية</td></tr>
           <tr><td><code>ins-justify-{start,center,end,between}</code></td><td>التوزيع على السطر</td></tr>
-          <tr><td><code>ins-grow</code></td><td>يأخذ ما تبقّى — ويسمح بالانكماش، وهو النصف الذي يُنسى</td></tr>
+          <tr><td><code>ins-grow</code></td><td>يأخذ ما تبقّى، ويسمح بالانكماش</td></tr>
           <tr><td><code>ins-shrink-0</code></td><td>لا ينكمش أبدًا</td></tr>
           <tr><td><code>ins-block</code> · <code>ins-inline</code> · <code>ins-inline-block</code></td><td>العرض</td></tr>
           <tr><td><code>ins-w-full</code> · <code>ins-nowrap</code></td><td>العرض الكامل، وعدم كسر السطر</td></tr>
@@ -66,40 +64,36 @@
   </div>
 </div>
 <demo-example>
-  <div class="ins-flex ins-items-center ins-justify-between ins-gap-3">
-    <span class="ins-row ins-gap-2 ins-flex-nowrap ins-grow" style="min-inline-size:0">
-      <span class="ins-avatar ins-avatar--sm ins-shrink-0">ل ح</span>
-      <span class="ins-truncate">ليلى حسن — طلب رقم ٤٠٢١٨، حقيبة ظهر جلدية مع حافظة بطاقات</span>
-    </span>
-    <button class="ins-btn ins-btn--secondary ins-btn--sm ins-shrink-0">فتح</button>
+  <div class="ins-flex ins-items-center ins-gap-3">
+    <span class="ins-grow ins-truncate">نصّ طويل يأخذ ما تبقّى من السطر ويُقصّ إن لم يتّسع له، مهما طال ومهما ضاقت النافذة</span>
+    <span class="ins-shrink-0">لا ينكمش</span>
   </div>
 </demo-example>
 
 <h2 id="visibility">الإظهار حسب العرض</h2>
 <p>
   <code>ins-hide-below-{sm,md,lg}</code> و<code>ins-hide-above-{sm,md,lg}</code>. كلّ صنف «فوق» نفيٌ تامّ
-  لصنف «تحت» المقابل، فلا عرض يُظهر الاثنين أو لا يُظهر أيًّا منهما. غيّر عرض النافذة: تبقى شارة واحدة ظاهرة.
+  لصنف «تحت» المقابل. غيّر عرض النافذة: يبقى سطر واحد ظاهرًا.
 </p>
-<demo-example class="row">
-  <span class="ins-pill ins-pill--brand ins-hide-above-sm"><span class="ins-pill-dot"></span>هاتف · حتى 34rem</span>
-  <span class="ins-pill ins-pill--brand ins-hide-below-sm ins-hide-above-md"><span class="ins-pill-dot"></span>لوحي · حتى 900px</span>
-  <span class="ins-pill ins-pill--brand ins-hide-below-md ins-hide-above-lg"><span class="ins-pill-dot"></span>حاسوب · حتى 1200px</span>
-  <span class="ins-pill ins-pill--brand ins-hide-below-lg"><span class="ins-pill-dot"></span>شاشة عريضة</span>
+<demo-example>
+  <span class="ins-hide-above-sm">هاتف · حتى 34rem</span>
+  <span class="ins-hide-below-sm ins-hide-above-md">لوحي · حتى 900px</span>
+  <span class="ins-hide-below-md ins-hide-above-lg">حاسوب · حتى 1200px</span>
+  <span class="ins-hide-below-lg">شاشة عريضة</span>
 </demo-example>
 
 <h2 id="print">الطباعة وقارئ الشاشة</h2>
 <ul>
-  <li><code>ins-hide-print</code> — يختفي من النسخة المطبوعة: الأزرار، الأشرطة.</li>
-  <li><code>ins-print-only</code> — يظهر في المطبوعة وحدها: ترويسة فاتورة، رقم صفحة.</li>
-  <li><code>ins-sr-only</code> — مخفيّ عن العين، مقروء لقارئ الشاشة: تسمية لحقل بحث مرئيّ المعنى.</li>
+  <li><code>ins-hide-print</code> — يختفي من النسخة المطبوعة.</li>
+  <li><code>ins-print-only</code> — يظهر في المطبوعة وحدها.</li>
+  <li><code>ins-sr-only</code> — مخفيّ عن العين، مقروء لقارئ الشاشة، كاسم زرّ بأيقونة وحدها.</li>
 </ul>
 <demo-example class="row">
-  <button class="ins-btn ins-btn--secondary ins-btn--icon"><svg class="ico"><use href="#i-download"/></svg><span class="ins-sr-only">تنزيل الفاتورة</span></button>
+  <button class="ins-btn ins-btn--secondary ins-btn--icon"><svg class="ico"><use href="#i-download"/></svg><span class="ins-sr-only">تنزيل</span></button>
 </demo-example>
 
 <h2 id="hidden">سمة hidden</h2>
 <p>
-  كلّ مكوّن يضبط <code>display</code>، وهذا يغلب سمة <code>hidden</code> عادةً — فيبقى
-  <code>&lt;button class="ins-btn" hidden&gt;</code> ظاهرًا. المكتبة تعيد للسمة غلبتها صراحةً، فـ
-  <code>el.hidden = true</code> يعمل على كلّ شيء.
+  كلّ مكوّن يضبط <code>display</code>، وهذا يغلب سمة <code>hidden</code> عادةً. المكتبة تعيد للسمة غلبتها
+  صراحةً، فـ<code>el.hidden = true</code> يعمل على كلّ شيء.
 </p>

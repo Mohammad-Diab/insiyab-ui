@@ -267,51 +267,47 @@
 
 <h2 id="carousel">عرض الشرائح</h2>
 <p>
-  عنصر عليه <code>data-ins-carousel</code> وشرائحه فيه. الصفّ نفسه تمرير المتصفّح بالتقاط الشرائح — فالإصبع
-  ولوحة اللمس و<kbd>Shift</kbd> مع العجلة كلّها تحرّكه، وبلا سكربت يبقى صفًّا يُسحب. والسكربت يضيف ما لا يقوله
-  التمرير عن نفسه: زرّي السابق والتالي، ونقطة لكلّ موقف، والأسهم باتّجاه القراءة، و«2 من 5» على كلّ شريحة لقارئ
-  الشاشة.
+  عنصر عليه <code>data-ins-carousel</code> وشرائحه أبناؤه. الصفّ تمرير المتصفّح بالتقاط الشرائح، فيُسحب بالإصبع
+  وبلا سكربت. والسكربت يضيف زرّي السابق والتالي، ونقطة لكلّ موقف، والأسهم باتّجاه القراءة، و«2 من 4» على كلّ
+  شريحة لقارئ الشاشة.
 </p>
 <figure class="dx"><div class="dx-view">
-  <div class="ins-carousel" data-ins-carousel aria-label="مشاريع مختارة">
-    <div class="car-demo car-demo--1"><b>مجمّع الواحة</b><span>الرياض · 2025</span></div>
-    <div class="car-demo car-demo--2"><b>برج المرسى</b><span>جدّة · 2024</span></div>
-    <div class="car-demo car-demo--3"><b>حديقة السلام</b><span>الدمّام · 2024</span></div>
-    <div class="car-demo car-demo--4"><b>سوق الحرفيّين</b><span>المدينة · 2023</span></div>
+  <div class="ins-carousel" data-ins-carousel aria-label="شرائح">
+    <div class="car-demo car-demo--1"><b>الأولى</b></div>
+    <div class="car-demo car-demo--2"><b>الثانية</b></div>
+    <div class="car-demo car-demo--3"><b>الثالثة</b></div>
+    <div class="car-demo car-demo--4"><b>الرابعة</b></div>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-carousel"</span> <span class="hl-a">data-ins-carousel</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"مشاريع مختارة"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--1"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>مجمّع الواحة<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span>الرياض · 2025<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--2"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>برج المرسى<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span>جدّة · 2024<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--3"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>حديقة السلام<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span>الدمّام · 2024<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--4"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>سوق الحرفيّين<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span>المدينة · 2023<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-carousel"</span> <span class="hl-a">data-ins-carousel</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"شرائح"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--1"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الأولى<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--2"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الثانية<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--3"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الثالثة<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--4"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الرابعة<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="many">أكثر من شريحة</h2>
 <p>
-  <code>.ins-carousel--3</code> ثلاث شرائح معًا حين يتّسع العرض نفسه لها — بعرض حاويته لا الشاشة — واثنتان ثمّ
-  واحدة كلّما ضاق، و<code>--2</code> مثلها باثنتين. و<code>.ins-carousel--peek</code> يُظهر طرف الشريحة التالية، وهو
-  وحده علامة أنّ هناك المزيد.
+  <code>.ins-carousel--3</code> ثلاث شرائح معًا حين تتّسع حاويته، ثمّ اثنتان ثمّ واحدة كلّما ضاقت، و<code>--2</code>
+  مثلها باثنتين. و<code>.ins-carousel--peek</code> يُظهر طرف الشريحة التالية.
 </p>
 <figure class="dx"><div class="dx-view">
-  <div class="ins-carousel ins-carousel--3" data-ins-carousel aria-label="منتجات">
-    <div class="ins-card ins-p-5"><b>باقة الأعمال</b><p class="ins-muted">فواتير غير محدودة ومستخدمان.</p></div>
-    <div class="ins-card ins-p-5"><b>باقة المتاجر</b><p class="ins-muted">ربط المتجر وتقارير المبيعات.</p></div>
-    <div class="ins-card ins-p-5"><b>باقة الشركات</b><p class="ins-muted">فروع متعدّدة وصلاحيات مفصّلة.</p></div>
-    <div class="ins-card ins-p-5"><b>باقة المحاسبين</b><p class="ins-muted">عملاء متعدّدون من حساب واحد.</p></div>
-    <div class="ins-card ins-p-5"><b>باقة الجمعيات</b><p class="ins-muted">سندات القبض والتبرّعات.</p></div>
+  <div class="ins-carousel ins-carousel--3" data-ins-carousel aria-label="شرائح">
+    <div class="car-demo car-demo--1"><b>الأولى</b></div>
+    <div class="car-demo car-demo--2"><b>الثانية</b></div>
+    <div class="car-demo car-demo--3"><b>الثالثة</b></div>
+    <div class="car-demo car-demo--4"><b>الرابعة</b></div>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-carousel ins-carousel--3"</span> <span class="hl-a">data-ins-carousel</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"منتجات"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-card ins-p-5"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>باقة الأعمال<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted"</span><span class="hl-t">&gt;</span>فواتير غير محدودة ومستخدمان.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-card ins-p-5"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>باقة المتاجر<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted"</span><span class="hl-t">&gt;</span>ربط المتجر وتقارير المبيعات.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-card ins-p-5"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>باقة الشركات<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted"</span><span class="hl-t">&gt;</span>فروع متعدّدة وصلاحيات مفصّلة.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-card ins-p-5"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>باقة المحاسبين<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted"</span><span class="hl-t">&gt;</span>عملاء متعدّدون من حساب واحد.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-card ins-p-5"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>باقة الجمعيات<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted"</span><span class="hl-t">&gt;</span>سندات القبض والتبرّعات.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-carousel ins-carousel--3"</span> <span class="hl-a">data-ins-carousel</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"شرائح"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--1"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الأولى<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--2"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الثانية<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--3"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الثالثة<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--4"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الرابعة<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="motion">لا يتحرّك وحده</h2>
 <p>
-  لا تشغيل تلقائيّ، عمدًا: لا شيء في هذه المكتبة يتحرّك من تلقاء نفسه، وشريحة ترحل وأحدهم يقرؤها هي السبب. من
-  يريد أن يرى المزيد يضغط التالي. وتحت <code>prefers-reduced-motion</code> ينتقل الصفّ فورًا بلا انزلاق.
+  لا تشغيل تلقائيّ: الشرائح لا تنتقل إلّا بيد المستخدم. وتحت <code>prefers-reduced-motion</code> ينتقل الصفّ فورًا
+  بلا انزلاق.
 </p>
 
 <h2 id="api">من الشيفرة</h2>

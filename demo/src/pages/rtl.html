@@ -1,8 +1,7 @@
 <h2 id="flip">اقلب الصفحة</h2>
 <p>
-  الزرّان أدناه يقلبان اتجاه هذه الصفحة كلّها — الشريط الجانبي، والشريط العلوي، وكلّ مثال في
-  التوثيق — من الأصناف نفسها ودون سطر أنماط إضافي. لا ملفّ تجاوزات لـ <code>[dir=rtl]</code> في المكتبة،
-  ولا مرحلة انعكاس.
+  الاتجاه هو سمة <code>dir</code> على <code>&lt;html&gt;</code> فقط، والأصناف نفسها تعمل في الاتجاهين.
+  الزرّان أدناه يقلبان هذه الصفحة كلّها.
 </p>
 <demo-example code="none" class="row">
   <div class="ins-seg site-dir">
@@ -14,48 +13,34 @@
 <h2 id="logical">خصائص منطقية</h2>
 <p>
   <code>s</code> تعني البداية و<code>e</code> النهاية، لا اليمين واليسار. فـ <code>ins-ms-auto</code>
-  يدفع العنصر إلى أقصى النهاية في الاتجاهين، و<code>ins-ps-4</code> حشوة يمنى في العربية ويسرى في
-  الإنجليزية. اقلب الاتجاه أعلاه وراقب:
+  يدفع العنصر إلى النهاية، و<code>ins-ps-4</code> حشوة في جهة البداية. اقلب الاتجاه أعلاه وراقب:
 </p>
 <demo-example class="stack">
   <div class="ins-row">
-    <span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>منشور</span>
-    <span class="ins-muted ins-text-sm">آخر تعديل قبل ساعة</span>
-    <button class="ins-btn ins-btn--secondary ins-btn--sm ins-ms-auto">التالي<svg class="ico"><use href="#i-arrow"/></svg></button>
+    <div class="demo-box">١</div>
+    <div class="demo-box ins-ms-auto">ins-ms-auto</div>
   </div>
-  <nav class="ins-breadcrumb" aria-label="مثال">
-    <ol>
-      <li><a href="#logical">المشاريع</a></li>
-      <li><a href="#logical">موقع المتجر</a></li>
-      <li><span aria-current="page">الإعدادات</span></li>
-    </ol>
-  </nav>
+  <div class="demo-frame ins-ps-4"><div class="demo-box">ins-ps-4</div></div>
 </demo-example>
 
 <h2 id="numbers">الأرقام في سطر عربي</h2>
 <p>
-  خوارزمية الاتجاهين تنقل إشارة الناقص في رقم سالب داخل نصّ عربي إلى الطرف الآخر، فيُقرأ العجز
-  <span dir="ltr">1,500-</span>. المكتبة تعزل كلّ رقم بـ <code>unicode-bidi: isolate</code> في
-  <code>.ins-num</code> و<code>.ins-money</code>، وتكتبه بخطّ Inter بأرقام متساوية العرض.
+  داخل نصّ عربي تنتقل إشارة الناقص إلى الطرف الآخر من الرقم، فيُقرأ <span dir="ltr">1,500-</span>.
+  <code>.ins-num</code> و<code>.ins-money</code> تعزلان الرقم وتكتبانه بأرقام متساوية العرض.
 </p>
 <demo-example class="stack">
-  <p class="ins-m-0">الرصيد بعد الاسترداد: <span class="ins-money ins-money--neg"><span class="ins-money-val">-1,500</span><span class="ins-money-cur">ر.س</span></span></p>
-  <p class="ins-m-0">رقم الطلب <span class="ins-num">#40218</span> بتاريخ <span class="ins-num">2026-09-23</span>، والكمّية <span class="ins-num">12</span>.</p>
-  <p class="ins-m-0">العميلة: Laila Hassan — البريد <span class="ins-num">laila@example.com</span></p>
+  <p class="ins-m-0">الرصيد: <span class="ins-money ins-money--neg"><span class="ins-money-val">-1,500</span><span class="ins-money-cur">ر.س</span></span></p>
+  <p class="ins-m-0">التاريخ <span class="ins-num">2026-09-23</span></p>
 </demo-example>
 
 <h2 id="fonts">الخطوط والنطاقات</h2>
 <p>
-  كلّ خطّ مقسّم بـ <code>unicode-range</code>، فالصفحة العربية لا تحمّل النصف اللاتيني من خطّ عربي
-  ولا العكس. وتجوال يحمل مجموعته اللاتينية الخاصة، فتبقى كلمة إنجليزية داخل سطر عربي في خطّ السطر
-  نفسه بدل أن تقفز إلى خطّ آخر في منتصفه.
+  كلّ خطّ مقسّم بـ <code>unicode-range</code>، فالمتصفّح لا يحمّل إلّا النطاق الذي تحتاجه الصفحة.
 </p>
 
 <h2 id="icons">الأيقونات الاتجاهية</h2>
 <p>
-  أيقونة الزرّ تنزلق عند المرور نحو الحافة التي يأخذك الزرّ إليها — يسارًا في العربية. وسهم «السابق»
-  في ترقيم الصفحات يشير يمينًا، وفاصل المسار ينقلب. أمّا الأيقونة التي ترسمها أنت، فالمكتبة لا
-  تعرف أيّ أيقوناتك اتجاهية؛ اقلبها بقاعدة على العنصر:
+  أسهم المكتبة تنقلب مع الاتجاه وحدها. أمّا أيقوناتك الاتجاهية، فاقلبها بقاعدة:
 </p>
 <demo-code lang="css">
 [dir="rtl"] .icon-forward { transform: scaleX(-1); }
@@ -63,22 +48,21 @@
 
 <h2 id="scrollbar">شريط التمرير</h2>
 <p>
-  كروم يثبّت شريط تمرير <em>النافذة</em> على اليمين أيًّا كان الاتجاه، فتحصل الصفحة العربية عليه في
-  الجهة الخطأ. الحلّ الوحيد إيقاف تمرير النافذة وتمرير عنصر بدلها، وهذا قرار على مستوى الصفحة كلّها
-  له كلفة حقيقية على الهاتف — لذلك هو اختياري:
+  كروم يضع شريط تمرير النافذة يمينًا أيًّا كان الاتجاه. لنقله إلى جهة البداية، تمرّر المكتبة عنصرًا
+  بدل النافذة، وهذا اختياري:
 </p>
 <demo-code lang="html">
 <html dir="rtl" data-ins-scrollbar="lead">
 </demo-code>
 <p class="site-note">
-  إن فعّلته فاقرأ موضع التمرير بـ <code>Insiyab.scrollTop()</code>: حدث <code>scroll</code> لعنصر
-  متمرِّر لا يصل إلى <code>window</code> أبدًا.
+  إن فعّلته فاقرأ موضع التمرير بـ <code>Insiyab.scrollTop()</code>، لأنّ حدث <code>scroll</code> لا يصل
+  إلى <code>window</code>.
 </p>
 
 <h2 id="locale">اللغة والتقويم</h2>
 <p>
-  منتقي التاريخ يكتب الشهور بلغة الصفحة ويبدأ الأسبوع حيث تبدؤه: السبت في صفحة عربية. ولصفحة
-  عربية بأسماء شهور بلد آخر، أو لحقل واحد مختلف، ضع <code>data-ins-locale</code>:
+  منتقي التاريخ يكتب الشهور بلغة الصفحة ويبدأ الأسبوع بالسبت في صفحة عربية. ولأسماء شهور بلد
+  آخر حدّد <code>lang</code> على الصفحة، أو <code>data-ins-locale</code> على حقل واحد:
 </p>
 <demo-code lang="html">
 <html lang="ar-SA">                      <!-- يناير، فبراير… -->

@@ -11,9 +11,8 @@
 
 <h2 id="field">حقل اللون</h2>
 <p>
-  حقل اللون الأصليّ عليه <code>data-ins-color</code>. يصير حقل رمز سداسيّ وأمامه عيّنة، في مجموعة حقل. يبقى
-  اسمه ويرسل <code>#rrggbb</code> كما يرسله حقل المتصفّح نفسه، فلا يحتاج الخادم شيئًا جديدًا. والعيّنة تفتح
-  المنتقي:
+  حقل اللون الأصليّ عليه <code>data-ins-color</code>، في مجموعة حقل. يصير حقل رمز سداسيّ وأمامه عيّنة تفتح المنتقي،
+  ويرسل <code>#rrggbb</code> باسمه كما يرسله حقل المتصفّح:
 </p>
 <demo-example class="narrow">
   <div class="ins-field">
@@ -21,15 +20,13 @@
     <div class="ins-input-group">
       <input type="color" id="cp-brand" name="brand" value="#9b2c5e" data-ins-color>
     </div>
-    <div class="ins-hint">جرّب لونًا فاتحًا وانظر التباين في أسفل المنتقي.</div>
   </div>
 </demo-example>
 
 <h2 id="contrast">التباين</h2>
 <p>
-  في أسفل المنتقي اللون نصًّا على الأبيض وعلى الأسود، ونسبة التباين من حساب المكتبة نفسه
-  (<code>Insiyab.color.contrast</code>)، وهل يبلغ 4.5:1 الذي يحتاجه نصّ الفقرات. فمن يختار لون الهوية يعرف قبل أن
-  يحفظ هل يصلح لزرّ أو لرابط.
+  في أسفل المنتقي اللون نصًّا على الأبيض وعلى الأسود، ونسبة التباين (<code>Insiyab.color.contrast</code>)، وهل تبلغ
+  4.5:1 الذي يحتاجه نصّ الفقرات.
 </p>
 
 <h2 id="picker">المنتقي</h2>
@@ -45,7 +42,7 @@
 </ul>
 <demo-example class="narrow">
   <div class="ins-field">
-    <label class="ins-label" for="cp-set">لون الحالة</label>
+    <label class="ins-label" for="cp-set">ألوان محدّدة</label>
     <input type="color" id="cp-set" name="status" value="#0f766e" data-ins-color data-ins-color-swatches="#15803d,#a16207,#b91c1c,#0369a1,#475569">
   </div>
 </demo-example>
@@ -60,8 +57,8 @@ Insiyab.colorField('#brand');              // اللون
 Insiyab.colorField('#brand', '#0f766e');   // ضبطه بهدوء، دون حدث
 </demo-code>
 <p>
-  <code>input</code> في أثناء حركة اللون، و<code>change</code> و<code>ins:color</code> حين يُضبط. ومع
-  <code>Insiyab.brand()</code> يصير الحقل منتقي هوية حيًّا — جرّب الأوّل أعلاه:
+  <code>input</code> في أثناء حركة اللون، و<code>change</code> و<code>ins:color</code> حين يُضبط. الحقل الأوّل أعلاه
+  موصول بـ <code>Insiyab.brand()</code> هكذا.
 </p>
 
 <script>

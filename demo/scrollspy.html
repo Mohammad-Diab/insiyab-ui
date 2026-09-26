@@ -260,10 +260,7 @@
 <script src="../dist/plugins/insiyab-scrollspy.js"></script>
 
 <h2 id="install">التثبيت</h2>
-<p>
-  إضافة لا جزء من الملفّين. ملفّ الأنماط اختياريّ: لا يحتاجه التتبّع نفسه، وفيه قائمة المحتويات الجاهزة
-  <code>.ins-toc</code>.
-</p>
+<p>إضافة لا جزء من الملفّين. ملفّ الأنماط اختياريّ، وفيه قائمة المحتويات الجاهزة <code>.ins-toc</code>.</p>
 <div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"plugins/insiyab-scrollspy.css"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"plugins/insiyab-scrollspy.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
@@ -271,38 +268,37 @@
 <h2 id="toc">قائمة تتبع القراءة</h2>
 <p>
   <code>data-ins-scrollspy</code> على أيّ تنقّل روابطه إلى أقسام في الصفحة. الرابط الذي يُقرأ قسمه يأخذ
-  <code>is-active</code> و<code>aria-current="location"</code> — ولا شيء غيرهما، فيعمل مع شريط الموقع والألسنة وأيّ
-  قائمة. مرّر الصندوق:
+  <code>is-active</code> و<code>aria-current="location"</code>. مرّر الصندوق:
 </p>
 <figure class="dx"><div class="dx-view">
   <div class="spy-demo">
     <div class="spy-demo-box" id="spy-box">
-      <section id="spy-a"><h3>الطلب</h3><p>يصل الطلب من المتجر أو من التطبيق، ويُسجَّل برقمه وتاريخه ومبلغه.</p></section>
-      <section id="spy-b"><h3>المراجعة</h3><p>يراجع الموظّف البيانات، ويطلب ما نقص منها قبل أن يمضي الطلب.</p></section>
-      <section id="spy-c"><h3>الدفع</h3><p>يُحصَّل المبلغ، ويُرسَل الإيصال إلى بريد العميل.</p></section>
-      <section id="spy-d"><h3>التسليم</h3><p>يُشحن الطلب، ويتابعه العميل حتّى يصل.</p></section>
+      <section id="spy-a"><h3>القسم الأوّل</h3></section>
+      <section id="spy-b"><h3>القسم الثاني</h3></section>
+      <section id="spy-c"><h3>قسم فرعيّ</h3></section>
+      <section id="spy-d"><h3>القسم الثالث</h3></section>
     </div>
-    <nav class="ins-toc" data-ins-scrollspy aria-label="مراحل الطلب">
-      <div class="ins-toc-title">المراحل</div>
-      <a href="#spy-a">الطلب</a>
-      <a href="#spy-b">المراجعة</a>
-      <a class="ins-toc-sub" href="#spy-c">الدفع</a>
-      <a href="#spy-d">التسليم</a>
+    <nav class="ins-toc" data-ins-scrollspy aria-label="المحتويات">
+      <div class="ins-toc-title">المحتويات</div>
+      <a href="#spy-a">القسم الأوّل</a>
+      <a href="#spy-b">القسم الثاني</a>
+      <a class="ins-toc-sub" href="#spy-c">قسم فرعيّ</a>
+      <a href="#spy-d">القسم الثالث</a>
     </nav>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"spy-demo"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"spy-demo-box"</span> <span class="hl-a">id</span>=<span class="hl-s">"spy-box"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;section</span> <span class="hl-a">id</span>=<span class="hl-s">"spy-a"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>الطلب<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>يصل الطلب من المتجر أو من التطبيق، ويُسجَّل برقمه وتاريخه ومبلغه.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;section</span> <span class="hl-a">id</span>=<span class="hl-s">"spy-b"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>المراجعة<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>يراجع الموظّف البيانات، ويطلب ما نقص منها قبل أن يمضي الطلب.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;section</span> <span class="hl-a">id</span>=<span class="hl-s">"spy-c"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>الدفع<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>يُحصَّل المبلغ، ويُرسَل الإيصال إلى بريد العميل.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;section</span> <span class="hl-a">id</span>=<span class="hl-s">"spy-d"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>التسليم<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>يُشحن الطلب، ويتابعه العميل حتّى يصل.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;section</span> <span class="hl-a">id</span>=<span class="hl-s">"spy-a"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>القسم الأوّل<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;section</span> <span class="hl-a">id</span>=<span class="hl-s">"spy-b"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>القسم الثاني<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;section</span> <span class="hl-a">id</span>=<span class="hl-s">"spy-c"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>قسم فرعيّ<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;section</span> <span class="hl-a">id</span>=<span class="hl-s">"spy-d"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>القسم الثالث<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toc"</span> <span class="hl-a">data-ins-scrollspy</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"مراحل الطلب"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toc-title"</span><span class="hl-t">&gt;</span>المراحل<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#spy-a"</span><span class="hl-t">&gt;</span>الطلب<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#spy-b"</span><span class="hl-t">&gt;</span>المراجعة<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toc-sub"</span> <span class="hl-a">href</span>=<span class="hl-s">"#spy-c"</span><span class="hl-t">&gt;</span>الدفع<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#spy-d"</span><span class="hl-t">&gt;</span>التسليم<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toc"</span> <span class="hl-a">data-ins-scrollspy</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"المحتويات"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toc-title"</span><span class="hl-t">&gt;</span>المحتويات<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#spy-a"</span><span class="hl-t">&gt;</span>القسم الأوّل<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#spy-b"</span><span class="hl-t">&gt;</span>القسم الثاني<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toc-sub"</span> <span class="hl-a">href</span>=<span class="hl-s">"#spy-c"</span><span class="hl-t">&gt;</span>قسم فرعيّ<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#spy-d"</span><span class="hl-t">&gt;</span>القسم الثالث<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
@@ -318,9 +314,8 @@
 
 <h2 id="styles">قائمة المحتويات</h2>
 <p>
-  <code>.ins-toc</code> تثبت تحت الشريط العلويّ بجانب محتوى طويل، ويُعلَّم رابطها الحاليّ بخطّ الهوية كما في
-  القائمة الجانبية. العنوان <code>.ins-toc-title</code>، ورابط لعنوان أعمق <code>.ins-toc-sub</code>. والمسافة من
-  الأعلى <code>--ins-toc-top</code>.
+  <code>.ins-toc</code> تثبت تحت الشريط العلويّ بجانب محتوى طويل، ويُعلَّم رابطها الحاليّ بخطّ الهوية. العنوان
+  <code>.ins-toc-title</code>، ورابط لعنوان أعمق <code>.ins-toc-sub</code>، والمسافة من الأعلى <code>--ins-toc-top</code>.
 </p>
 
 <h2 id="api">من الشيفرة</h2>

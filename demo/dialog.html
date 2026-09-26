@@ -258,75 +258,38 @@
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#basic">الحوار</a><a href="#sizes">المقاسات</a><a href="#confirm">التأكيد</a><a href="#api">من الشيفرة</a></nav>
         <h2 id="basic">الحوار</h2>
 <p>
-  عنصر <code>&lt;dialog&gt;</code> حقيقي: الطبقة العليا تضعه فوق كلّ شيء دون <code>z-index</code>، والتركيز محبوس
-  فيه، و<kbd class="ins-kbd">Esc</kbd> يغلقه ويعيد التركيز إلى الزرّ الذي فتحه — كلّ ذلك من المتصفّح. زرّ فيه
-  <code>data-ins-dialog</code> يفتحه، و<code>data-ins-dialog-close</code> داخله يغلقه.
+  <code>&lt;dialog class="ins-dialog"&gt;</code> فيه <code>.ins-dialog-head</code> و<code>.ins-dialog-body</code>
+  و<code>.ins-dialog-foot</code>. زرّ فيه <code>data-ins-dialog</code> يفتحه، و<code>data-ins-dialog-close</code>
+  داخله يغلقه. التركيز محبوس فيه، و<kbd class="ins-kbd">Esc</kbd> يغلقه ويعيد التركيز إلى الزرّ الذي فتحه.
+  والنقر خارجه لا يغلقه، كي لا تضيع نقرة شاردة ما كُتب فيه.
 </p>
 <figure class="dx"><div class="dx-view row">
-  <button class="ins-btn ins-btn--primary" data-ins-dialog="#invite"><svg class="ico"><use href="#i-users"/></svg>دعوة عضو</button>
+  <button class="ins-btn ins-btn--primary" data-ins-dialog="#dlg">فتح الحوار</button>
 
-  <dialog class="ins-dialog" id="invite">
+  <dialog class="ins-dialog" id="dlg">
     <div class="ins-dialog-head">
-      <span class="ins-panel-ico"><svg class="ico"><use href="#i-mail"/></svg></span>
-      <h3 class="ins-dialog-title">دعوة عضو إلى الفريق</h3>
-      <button class="ins-dialog-x" data-ins-dialog-close aria-label="إغلاق"><svg class="ico"><use href="#i-x"/></svg></button>
+      <h3 class="ins-dialog-title">عنوان الحوار</h3>
+      <button class="ins-close" data-ins-dialog-close aria-label="إغلاق"></button>
     </div>
-    <div class="ins-dialog-body">
-      <div class="ins-field">
-        <label class="ins-label" for="d-email">البريد الإلكتروني</label>
-        <input class="ins-input" id="d-email" type="email" dir="ltr" placeholder="name@example.com">
-      </div>
-      <div class="ins-field">
-        <label class="ins-label" for="d-role">الدور</label>
-        <select class="ins-select" id="d-role"><option>محرّر</option><option>مدير</option><option>مشاهد فقط</option></select>
-      </div>
-      <label class="ins-switch ins-switch--card">
-        <input type="checkbox" checked><span class="ins-switch-track"></span>
-        <span class="ins-switch-text">
-          <span class="ins-switch-label">إرسال رسالة ترحيب</span>
-          <span class="ins-switch-desc">مع رابط لدليل البدء</span>
-        </span>
-      </label>
-    </div>
+    <div class="ins-dialog-body">نصّ الحوار.</div>
     <div class="ins-dialog-foot">
       <button class="ins-btn ins-btn--bare" data-ins-dialog-close>إلغاء</button>
-      <button class="ins-btn ins-btn--primary" data-ins-dialog-close data-ins-toast="أُرسلت الدعوة" data-ins-tone="ok">إرسال الدعوة</button>
+      <button class="ins-btn ins-btn--primary" data-ins-dialog-close>موافق</button>
     </div>
   </dialog>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">data-ins-dialog</span>=<span class="hl-s">"#invite"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>دعوة عضو<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">data-ins-dialog</span>=<span class="hl-s">"#dlg"</span><span class="hl-t">&gt;</span>فتح الحوار<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 
-<span class="hl-t">&lt;dialog</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog"</span> <span class="hl-a">id</span>=<span class="hl-s">"invite"</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;dialog</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog"</span> <span class="hl-a">id</span>=<span class="hl-s">"dlg"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-head"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-title"</span><span class="hl-t">&gt;</span>دعوة عضو إلى الفريق<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-x"</span> <span class="hl-a">data-ins-dialog-close</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إغلاق"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-title"</span><span class="hl-t">&gt;</span>عنوان الحوار<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-close"</span> <span class="hl-a">data-ins-dialog-close</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إغلاق"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-body"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"d-email"</span><span class="hl-t">&gt;</span>البريد الإلكتروني<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"d-email"</span> <span class="hl-a">type</span>=<span class="hl-s">"email"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"name@example.com"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"d-role"</span><span class="hl-t">&gt;</span>الدور<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;select</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-select"</span> <span class="hl-a">id</span>=<span class="hl-s">"d-role"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>محرّر<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>مدير<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>مشاهد فقط<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/select</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-switch ins-switch--card"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">checked</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-switch-track"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-switch-text"</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-switch-label"</span><span class="hl-t">&gt;</span>إرسال رسالة ترحيب<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-switch-desc"</span><span class="hl-t">&gt;</span>مع رابط لدليل البدء<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-body"</span><span class="hl-t">&gt;</span>نصّ الحوار.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-foot"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--bare"</span> <span class="hl-a">data-ins-dialog-close</span><span class="hl-t">&gt;</span>إلغاء<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">data-ins-dialog-close</span> <span class="hl-a">data-ins-toast</span>=<span class="hl-s">"أُرسلت الدعوة"</span> <span class="hl-a">data-ins-tone</span>=<span class="hl-s">"ok"</span><span class="hl-t">&gt;</span>إرسال الدعوة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">data-ins-dialog-close</span><span class="hl-t">&gt;</span>موافق<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/dialog</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p class="site-note">
-  النقر خارج الحوار <b>لا</b> يغلقه، عمدًا: الحوار غالبًا نموذج، ونقرة شاردة يجب ألّا تُضيع ما كُتب فيه.
-  الدرج يُغلق بالنقر خارجه، لأنّه ليس كذلك.
-</p>
 
 <h2 id="sizes">المقاسات</h2>
 <p><code>--sm</code> لسؤال قصير، و<code>--lg</code> لمحتوى عريض كجدول.</p>
@@ -336,35 +299,24 @@
 
   <dialog class="ins-dialog ins-dialog--sm" id="dlg-sm">
     <div class="ins-dialog-head">
-      <h3 class="ins-dialog-title">أرشفة الطلب؟</h3>
+      <h3 class="ins-dialog-title">حوار صغير</h3>
       <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
     </div>
-    <div class="ins-dialog-body"><p class="ins-m-0">يبقى الطلب في السجلّ، ويختفي من القائمة الرئيسية.</p></div>
+    <div class="ins-dialog-body">نصّ قصير.</div>
     <div class="ins-dialog-foot">
       <button class="ins-btn ins-btn--bare" data-ins-dismiss>إلغاء</button>
-      <button class="ins-btn ins-btn--primary ins-ms-auto" data-ins-dismiss>أرشفة</button>
+      <button class="ins-btn ins-btn--primary" data-ins-dismiss>موافق</button>
     </div>
   </dialog>
 
   <dialog class="ins-dialog ins-dialog--lg" id="dlg-lg">
     <div class="ins-dialog-head">
-      <h3 class="ins-dialog-title">تفاصيل الطلب <span class="ins-num">#40218</span></h3>
+      <h3 class="ins-dialog-title">حوار كبير</h3>
       <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
     </div>
-    <div class="ins-dialog-body">
-      <div class="ins-table-wrap">
-        <table class="ins-table">
-          <thead><tr><th>المنتج</th><th class="ins-num">الكمّية</th><th class="ins-num">السعر</th></tr></thead>
-          <tbody>
-            <tr><td>حقيبة ظهر جلدية</td><td class="ins-num">1</td><td class="ins-num">249.00</td></tr>
-            <tr><td>حافظة بطاقات</td><td class="ins-num">2</td><td class="ins-num">90.00</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <div class="ins-dialog-body">محتوى عريض.</div>
     <div class="ins-dialog-foot">
-      <button class="ins-btn ins-btn--secondary" data-ins-dismiss><svg class="ico"><use href="#i-download"/></svg>الفاتورة</button>
-      <button class="ins-btn ins-btn--primary ins-ms-auto" data-ins-dismiss>تمّ</button>
+      <button class="ins-btn ins-btn--primary" data-ins-dismiss>تمّ</button>
     </div>
   </dialog>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">data-ins-dialog</span>=<span class="hl-s">"#dlg-sm"</span><span class="hl-t">&gt;</span>صغير<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
@@ -372,66 +324,55 @@
 
 <span class="hl-t">&lt;dialog</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog ins-dialog--sm"</span> <span class="hl-a">id</span>=<span class="hl-s">"dlg-sm"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-head"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-title"</span><span class="hl-t">&gt;</span>أرشفة الطلب؟<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-title"</span><span class="hl-t">&gt;</span>حوار صغير<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-close"</span> <span class="hl-a">data-ins-dismiss</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إغلاق"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-body"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-m-0"</span><span class="hl-t">&gt;</span>يبقى الطلب في السجلّ، ويختفي من القائمة الرئيسية.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-body"</span><span class="hl-t">&gt;</span>نصّ قصير.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-foot"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--bare"</span> <span class="hl-a">data-ins-dismiss</span><span class="hl-t">&gt;</span>إلغاء<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary ins-ms-auto"</span> <span class="hl-a">data-ins-dismiss</span><span class="hl-t">&gt;</span>أرشفة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">data-ins-dismiss</span><span class="hl-t">&gt;</span>موافق<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/dialog</span><span class="hl-t">&gt;</span>
 
 <span class="hl-t">&lt;dialog</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog ins-dialog--lg"</span> <span class="hl-a">id</span>=<span class="hl-s">"dlg-lg"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-head"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-title"</span><span class="hl-t">&gt;</span>تفاصيل الطلب <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>#40218<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-title"</span><span class="hl-t">&gt;</span>حوار كبير<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-close"</span> <span class="hl-a">data-ins-dismiss</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إغلاق"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-body"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>المنتج<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>الكمّية<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>السعر<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-          <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>حقيبة ظهر جلدية<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>1<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>249.00<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-          <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>حافظة بطاقات<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>2<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>90.00<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-body"</span><span class="hl-t">&gt;</span>محتوى عريض.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-foot"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">data-ins-dismiss</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>الفاتورة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary ins-ms-auto"</span> <span class="hl-a">data-ins-dismiss</span><span class="hl-t">&gt;</span>تمّ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">data-ins-dismiss</span><span class="hl-t">&gt;</span>تمّ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/dialog</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="confirm">التأكيد</h2>
 <p>
-  <code>data-ins-confirm</code> على زرّ أو رابط أو نموذج يسأل قبل أن يمضي الإجراء — والإجراء يمضي كما كان
-  سيمضي، بلا شيفرة منك. والزرّ المصمَّم خطرًا يحصل على زرّ تأكيد أحمر تلقائيًا. ومن الجافاسكربت،
+  <code>data-ins-confirm</code> على زرّ أو رابط أو نموذج يسأل قبل أن يمضي الإجراء، و<code>data-ins-confirm-ok</code>
+  نصّ زرّ التأكيد. والزرّ المصمَّم خطرًا يحصل على زرّ تأكيد أحمر تلقائيًا. ومن الجافاسكربت،
   <code>Insiyab.confirm()</code> يعيد وعدًا بـ <code>true</code> أو <code>false</code>.
 </p>
 <figure class="dx"><div class="dx-view row">
-  <button class="ins-btn ins-btn--ghost-danger" id="del-btn" data-ins-confirm="حذف المنتج نهائيًا؟ لا يمكن التراجع." data-ins-confirm-ok="حذف"><svg class="ico"><use href="#i-trash"/></svg>حذف المنتج</button>
-  <button class="ins-btn ins-btn--secondary" id="archive-btn">أرشفة ٣ طلبات</button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--ghost-danger"</span> <span class="hl-a">id</span>=<span class="hl-s">"del-btn"</span> <span class="hl-a">data-ins-confirm</span>=<span class="hl-s">"حذف المنتج نهائيًا؟ لا يمكن التراجع."</span> <span class="hl-a">data-ins-confirm-ok</span>=<span class="hl-s">"حذف"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>حذف المنتج<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">id</span>=<span class="hl-s">"archive-btn"</span><span class="hl-t">&gt;</span>أرشفة ٣ طلبات<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-k">const</span> yes = <span class="hl-k">await</span> <span class="hl-t">Insiyab</span>.confirm(<span class="hl-s">'أرشفة ٣ طلبات؟'</span>, { title: <span class="hl-s">'تأكيد الأرشفة'</span>, confirm: <span class="hl-s">'أرشفة'</span> });
-<span class="hl-k">if</span> (yes) archive(selected);</code></pre></div>
+  <button class="ins-btn ins-btn--ghost-danger" id="del-btn" data-ins-confirm="حذف العنصر نهائيًا؟" data-ins-confirm-ok="حذف">حذف</button>
+  <button class="ins-btn ins-btn--secondary" id="archive-btn">أرشفة</button>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--ghost-danger"</span> <span class="hl-a">id</span>=<span class="hl-s">"del-btn"</span> <span class="hl-a">data-ins-confirm</span>=<span class="hl-s">"حذف العنصر نهائيًا؟"</span> <span class="hl-a">data-ins-confirm-ok</span>=<span class="hl-s">"حذف"</span><span class="hl-t">&gt;</span>حذف<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">id</span>=<span class="hl-s">"archive-btn"</span><span class="hl-t">&gt;</span>أرشفة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-k">const</span> yes = <span class="hl-k">await</span> <span class="hl-t">Insiyab</span>.confirm(<span class="hl-s">'أرشفة العنصر؟'</span>, { title: <span class="hl-s">'تأكيد'</span>, confirm: <span class="hl-s">'أرشفة'</span> });
+<span class="hl-k">if</span> (yes) archive();</code></pre></div>
 
 <h2 id="api">من الشيفرة</h2>
-<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.dialog(<span class="hl-s">'#invite'</span>, <span class="hl-s">'open'</span>);
-<span class="hl-t">Insiyab</span>.dialog(<span class="hl-s">'#invite'</span>, <span class="hl-s">'close'</span>);
-<span class="hl-t">Insiyab</span>.dialog(<span class="hl-s">'#invite'</span>);           <span class="hl-c">// تبديل</span></code></pre></div>
+<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.dialog(<span class="hl-s">'#dlg'</span>, <span class="hl-s">'open'</span>);
+<span class="hl-t">Insiyab</span>.dialog(<span class="hl-s">'#dlg'</span>, <span class="hl-s">'close'</span>);
+<span class="hl-t">Insiyab</span>.dialog(<span class="hl-s">'#dlg'</span>);           <span class="hl-c">// تبديل</span></code></pre></div>
 
 <script>
   /* data-ins-confirm lets the click through only once the answer is yes, so a
      plain click handler here is the "yes" branch. */
   document.getElementById('del-btn').addEventListener('click', function () {
-    Insiyab.toast('حُذف المنتج', 'ok');
+    Insiyab.toast('حُذف', 'ok');
   });
   document.getElementById('archive-btn').addEventListener('click', function () {
-    Insiyab.confirm('أرشفة ٣ طلبات؟', { title: 'تأكيد الأرشفة', confirm: 'أرشفة' }).then(function (yes) {
-      Insiyab.toast(yes ? 'أُرشفت الطلبات' : 'أُلغيت الأرشفة', yes ? 'ok' : 'info');
+    Insiyab.confirm('أرشفة العنصر؟', { title: 'تأكيد', confirm: 'أرشفة' }).then(function (yes) {
+      Insiyab.toast(yes ? 'أُرشف' : 'أُلغي', yes ? 'ok' : 'info');
     });
   });
 </script>

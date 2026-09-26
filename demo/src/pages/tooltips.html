@@ -1,23 +1,19 @@
 <h2 id="basic">التلميح</h2>
-<p>
-  <code>data-ins-tip</code> فارغًا يعيد استعمال <code>aria-label</code> — الزرّ الأيقوني يحتاج تسمية على كلّ
-  حال، فالتلميح يأتي معها مجانًا.
-</p>
+<p><code>data-ins-tip</code> فارغًا يعيد استعمال <code>aria-label</code>، فالزرّ الأيقوني يحصل على تلميحه من تسميته.</p>
 <demo-example class="row">
   <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="تعديل" data-ins-tip><svg class="ico"><use href="#i-edit"/></svg></button>
-  <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="تنزيل الفاتورة" data-ins-tip><svg class="ico"><use href="#i-download"/></svg></button>
   <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="مشاركة" data-ins-tip><svg class="ico"><use href="#i-share"/></svg></button>
 </demo-example>
 
 <h2 id="text">نصّ مختلف</h2>
-<p>قيمة للسمة تعطي نصًّا غير التسمية، ويُربط وصفًا للعنصر فيسمعه قارئ الشاشة بعد اسمه.</p>
-<demo-example class="row">
-  <button class="ins-btn ins-btn--ghost-danger ins-btn--icon" aria-label="حذف" data-ins-tip="حذف نهائي — لا يمكن التراجع"><svg class="ico"><use href="#i-trash"/></svg></button>
-  <span class="ins-pill ins-pill--warn" tabindex="0" data-ins-tip="خمسة طلبات تنتظر الدفع منذ أكثر من يوم"><span class="ins-pill-dot"></span>بانتظار الدفع · <span class="ins-num">5</span></span>
-</demo-example>
-<p class="site-note">
-  عنصر غير قابل للتركيز — شارة، نصّ — يحتاج <code>tabindex="0"</code> ليصل إليه تلميحه من لوحة المفاتيح.
+<p>
+  قيمة للسمة تعطي نصًّا غير التسمية، ويُربط وصفًا للعنصر فيسمعه قارئ الشاشة بعد اسمه. وعنصر غير قابل للتركيز
+  يحتاج <code>tabindex="0"</code> ليصل إليه تلميحه من لوحة المفاتيح.
 </p>
+<demo-example class="row">
+  <button class="ins-btn ins-btn--secondary" data-ins-tip="لا يمكن التراجع">حذف</button>
+  <span tabindex="0" data-ins-tip="نصّ التلميح">نصّ عاديّ</span>
+</demo-example>
 
 <h2 id="sides">الجهة</h2>
 <p><code>data-ins-tip-side</code>: <code>top</code> افتراضيًا، أو <code>bottom</code> أو <code>start</code> أو <code>end</code> — منطقية، فـ <code>start</code> يمين في العربية. وينقلب تلقائيًا إن لم يتّسع مكانه.</p>
@@ -30,8 +26,8 @@
 
 <h2 id="behaviour">السلوك</h2>
 <ul>
-  <li>يظهر بعد ٤٠٠ جزء من الثانية بالمؤشّر، وفورًا بلوحة المفاتيح، وفورًا أيضًا وأنت تنتقل من تلميح إلى جاره.</li>
-  <li>لا يظهر باللمس: لا مرور في اللمس، وتلميح تحت الإصبع الذي ضغط للتوّ يغطّي ما يصفه.</li>
+  <li>يظهر بعد ٤٠٠ جزء من الثانية بالمؤشّر، وفورًا بلوحة المفاتيح، وفورًا وأنت تنتقل من تلميح إلى جاره.</li>
+  <li>لا يظهر باللمس.</li>
   <li>عنصر واحد للصفحة كلّها في الطبقة العليا، فلا يقصّه <code>overflow</code> لوح أو جدول.</li>
-  <li>يُغلق بـ <kbd class="ins-kbd">Esc</kbd> وبالتمرير وبالضغط، وحين يغادر المؤشّر العنصر والتلميح معًا — فيمكن قراءته.</li>
+  <li>يُغلق بـ <kbd class="ins-kbd">Esc</kbd> وبالتمرير وبالضغط، وحين يغادر المؤشّر العنصر والتلميح معًا.</li>
 </ul>

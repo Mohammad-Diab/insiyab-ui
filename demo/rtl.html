@@ -258,9 +258,8 @@
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#flip">اقلب الصفحة</a><a href="#logical">خصائص منطقية</a><a href="#numbers">الأرقام في سطر عربي</a><a href="#fonts">الخطوط والنطاقات</a><a href="#icons">الأيقونات الاتجاهية</a><a href="#scrollbar">شريط التمرير</a><a href="#locale">اللغة والتقويم</a></nav>
         <h2 id="flip">اقلب الصفحة</h2>
 <p>
-  الزرّان أدناه يقلبان اتجاه هذه الصفحة كلّها — الشريط الجانبي، والشريط العلوي، وكلّ مثال في
-  التوثيق — من الأصناف نفسها ودون سطر أنماط إضافي. لا ملفّ تجاوزات لـ <code>[dir=rtl]</code> في المكتبة،
-  ولا مرحلة انعكاس.
+  الاتجاه هو سمة <code>dir</code> على <code>&lt;html&gt;</code> فقط، والأصناف نفسها تعمل في الاتجاهين.
+  الزرّان أدناه يقلبان هذه الصفحة كلّها.
 </p>
 <figure class="dx dx--bare"><div class="dx-view row">
   <div class="ins-seg site-dir">
@@ -272,80 +271,57 @@
 <h2 id="logical">خصائص منطقية</h2>
 <p>
   <code>s</code> تعني البداية و<code>e</code> النهاية، لا اليمين واليسار. فـ <code>ins-ms-auto</code>
-  يدفع العنصر إلى أقصى النهاية في الاتجاهين، و<code>ins-ps-4</code> حشوة يمنى في العربية ويسرى في
-  الإنجليزية. اقلب الاتجاه أعلاه وراقب:
+  يدفع العنصر إلى النهاية، و<code>ins-ps-4</code> حشوة في جهة البداية. اقلب الاتجاه أعلاه وراقب:
 </p>
 <figure class="dx"><div class="dx-view stack">
   <div class="ins-row">
-    <span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>منشور</span>
-    <span class="ins-muted ins-text-sm">آخر تعديل قبل ساعة</span>
-    <button class="ins-btn ins-btn--secondary ins-btn--sm ins-ms-auto">التالي<svg class="ico"><use href="#i-arrow"/></svg></button>
+    <div class="demo-box">١</div>
+    <div class="demo-box ins-ms-auto">ins-ms-auto</div>
   </div>
-  <nav class="ins-breadcrumb" aria-label="مثال">
-    <ol>
-      <li><a href="#logical">المشاريع</a></li>
-      <li><a href="#logical">موقع المتجر</a></li>
-      <li><span aria-current="page">الإعدادات</span></li>
-    </ol>
-  </nav>
+  <div class="demo-frame ins-ps-4"><div class="demo-box">ins-ps-4</div></div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--ok"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>منشور<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted ins-text-sm"</span><span class="hl-t">&gt;</span>آخر تعديل قبل ساعة<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--sm ins-ms-auto"</span><span class="hl-t">&gt;</span>التالي<span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>١<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-ms-auto"</span><span class="hl-t">&gt;</span>ins-ms-auto<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-breadcrumb"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"مثال"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;ol</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#logical"</span><span class="hl-t">&gt;</span>المشاريع<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#logical"</span><span class="hl-t">&gt;</span>موقع المتجر<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">aria-current</span>=<span class="hl-s">"page"</span><span class="hl-t">&gt;</span>الإعدادات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/ol</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-frame ins-ps-4"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>ins-ps-4<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="numbers">الأرقام في سطر عربي</h2>
 <p>
-  خوارزمية الاتجاهين تنقل إشارة الناقص في رقم سالب داخل نصّ عربي إلى الطرف الآخر، فيُقرأ العجز
-  <span dir="ltr">1,500-</span>. المكتبة تعزل كلّ رقم بـ <code>unicode-bidi: isolate</code> في
-  <code>.ins-num</code> و<code>.ins-money</code>، وتكتبه بخطّ Inter بأرقام متساوية العرض.
+  داخل نصّ عربي تنتقل إشارة الناقص إلى الطرف الآخر من الرقم، فيُقرأ <span dir="ltr">1,500-</span>.
+  <code>.ins-num</code> و<code>.ins-money</code> تعزلان الرقم وتكتبانه بأرقام متساوية العرض.
 </p>
 <figure class="dx"><div class="dx-view stack">
-  <p class="ins-m-0">الرصيد بعد الاسترداد: <span class="ins-money ins-money--neg"><span class="ins-money-val">-1,500</span><span class="ins-money-cur">ر.س</span></span></p>
-  <p class="ins-m-0">رقم الطلب <span class="ins-num">#40218</span> بتاريخ <span class="ins-num">2026-09-23</span>، والكمّية <span class="ins-num">12</span>.</p>
-  <p class="ins-m-0">العميلة: Laila Hassan — البريد <span class="ins-num">laila@example.com</span></p>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-m-0"</span><span class="hl-t">&gt;</span>الرصيد بعد الاسترداد: <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money ins-money--neg"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>-1,500<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>ر.س<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-m-0"</span><span class="hl-t">&gt;</span>رقم الطلب <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>#40218<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span> بتاريخ <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>2026-09-23<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>، والكمّية <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>12<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-m-0"</span><span class="hl-t">&gt;</span>العميلة: Laila Hassan — البريد <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>laila@example.com<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <p class="ins-m-0">الرصيد: <span class="ins-money ins-money--neg"><span class="ins-money-val">-1,500</span><span class="ins-money-cur">ر.س</span></span></p>
+  <p class="ins-m-0">التاريخ <span class="ins-num">2026-09-23</span></p>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-m-0"</span><span class="hl-t">&gt;</span>الرصيد: <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money ins-money--neg"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>-1,500<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>ر.س<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-m-0"</span><span class="hl-t">&gt;</span>التاريخ <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>2026-09-23<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="fonts">الخطوط والنطاقات</h2>
 <p>
-  كلّ خطّ مقسّم بـ <code>unicode-range</code>، فالصفحة العربية لا تحمّل النصف اللاتيني من خطّ عربي
-  ولا العكس. وتجوال يحمل مجموعته اللاتينية الخاصة، فتبقى كلمة إنجليزية داخل سطر عربي في خطّ السطر
-  نفسه بدل أن تقفز إلى خطّ آخر في منتصفه.
+  كلّ خطّ مقسّم بـ <code>unicode-range</code>، فالمتصفّح لا يحمّل إلّا النطاق الذي تحتاجه الصفحة.
 </p>
 
 <h2 id="icons">الأيقونات الاتجاهية</h2>
 <p>
-  أيقونة الزرّ تنزلق عند المرور نحو الحافة التي يأخذك الزرّ إليها — يسارًا في العربية. وسهم «السابق»
-  في ترقيم الصفحات يشير يمينًا، وفاصل المسار ينقلب. أمّا الأيقونة التي ترسمها أنت، فالمكتبة لا
-  تعرف أيّ أيقوناتك اتجاهية؛ اقلبها بقاعدة على العنصر:
+  أسهم المكتبة تنقلب مع الاتجاه وحدها. أمّا أيقوناتك الاتجاهية، فاقلبها بقاعدة:
 </p>
 <div class="dx-code" data-lang="css"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code>[dir=<span class="hl-s">"rtl"</span>] .icon-forward { <span class="hl-t">transform</span>: scaleX(-<span class="hl-n">1</span>); }</code></pre></div>
 
 <h2 id="scrollbar">شريط التمرير</h2>
 <p>
-  كروم يثبّت شريط تمرير <em>النافذة</em> على اليمين أيًّا كان الاتجاه، فتحصل الصفحة العربية عليه في
-  الجهة الخطأ. الحلّ الوحيد إيقاف تمرير النافذة وتمرير عنصر بدلها، وهذا قرار على مستوى الصفحة كلّها
-  له كلفة حقيقية على الهاتف — لذلك هو اختياري:
+  كروم يضع شريط تمرير النافذة يمينًا أيًّا كان الاتجاه. لنقله إلى جهة البداية، تمرّر المكتبة عنصرًا
+  بدل النافذة، وهذا اختياري:
 </p>
 <div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;html</span> <span class="hl-a">dir</span>=<span class="hl-s">"rtl"</span> <span class="hl-a">data-ins-scrollbar</span>=<span class="hl-s">"lead"</span><span class="hl-t">&gt;</span></code></pre></div>
 <p class="site-note">
-  إن فعّلته فاقرأ موضع التمرير بـ <code>Insiyab.scrollTop()</code>: حدث <code>scroll</code> لعنصر
-  متمرِّر لا يصل إلى <code>window</code> أبدًا.
+  إن فعّلته فاقرأ موضع التمرير بـ <code>Insiyab.scrollTop()</code>، لأنّ حدث <code>scroll</code> لا يصل
+  إلى <code>window</code>.
 </p>
 
 <h2 id="locale">اللغة والتقويم</h2>
 <p>
-  منتقي التاريخ يكتب الشهور بلغة الصفحة ويبدأ الأسبوع حيث تبدؤه: السبت في صفحة عربية. ولصفحة
-  عربية بأسماء شهور بلد آخر، أو لحقل واحد مختلف، ضع <code>data-ins-locale</code>:
+  منتقي التاريخ يكتب الشهور بلغة الصفحة ويبدأ الأسبوع بالسبت في صفحة عربية. ولأسماء شهور بلد
+  آخر حدّد <code>lang</code> على الصفحة، أو <code>data-ins-locale</code> على حقل واحد:
 </p>
 <div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;html</span> <span class="hl-a">lang</span>=<span class="hl-s">"ar-SA"</span><span class="hl-t">&gt;</span>                      <span class="hl-c">&lt;!-- يناير، فبراير… --&gt;</span>
 <span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">data-ins-locale</span>=<span class="hl-s">"ar-SY"</span><span class="hl-t">&gt;</span>   <span class="hl-c">&lt;!-- كانون الثاني، شباط… --&gt;</span></code></pre></div>

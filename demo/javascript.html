@@ -257,10 +257,7 @@
         </header>
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#attributes">السمات</a><a href="#api">الواجهة البرمجية</a><a href="#events">الأحداث</a><a href="#define">منشئ خاصّ بك</a></nav>
         <h2 id="attributes">السمات</h2>
-<p>
-  كلّ ما يلي يعمل بالسمة وحدها في الشيفرة، دون سطر جافاسكربت في صفحتك. هذا هو الباب الأمامي؛
-  الواجهة البرمجية تحته مخرج طوارئ لما لا تصل إليه سمة.
-</p>
+<p>كلّ ما يلي يعمل بالسمة وحدها، دون سطر جافاسكربت في صفحتك.</p>
 <div class="ins-panel site-ref">
   <div class="ins-panel-body ins-panel-body--flush">
     <div class="ins-table-wrap">
@@ -299,13 +296,12 @@
 <span class="hl-t">&lt;html</span> <span class="hl-a">data-ins-fx</span>=<span class="hl-s">"off"</span><span class="hl-t">&gt;</span>            <span class="hl-c">&lt;!-- بلا مؤثرات الحركة --&gt;</span>
 <span class="hl-t">&lt;html</span> <span class="hl-a">data-ins-scrollbar</span>=<span class="hl-s">"lead"</span><span class="hl-t">&gt;</span>    <span class="hl-c">&lt;!-- شريط التمرير في جهة البداية --&gt;</span></code></pre></div>
 <p>
-  والسكربت يختم <code>data-ins-js</code> على <code>&lt;html&gt;</code> بنفسه قبل أوّل رسم. كلّ حالة
-  تحتاج السكربت معلّقة بهذه السمة — لوح لسان مخفيّ، قائمة موقع مطويّة — فإن فشل السكربت ظهر
-  كلّ شيء بدل أن يختفي.
+  والسكربت يختم <code>data-ins-js</code> على <code>&lt;html&gt;</code> بنفسه قبل أوّل رسم، وكلّ حالة
+  تحتاج السكربت معلّقة بها، فإن فشل السكربت ظهر كلّ شيء بدل أن يختفي.
 </p>
 
 <h2 id="api">الواجهة البرمجية</h2>
-<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.version                        <span class="hl-c">// '0.3.0'</span>
+<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.version                        <span class="hl-c">// '0.6.0'</span>
 
 <span class="hl-t">Insiyab</span>.theme()                        <span class="hl-c">// 'light' | 'dark' — ما يراه المستخدم فعلًا</span>
 <span class="hl-t">Insiyab</span>.theme(<span class="hl-s">'dark'</span> | <span class="hl-s">'light'</span> | <span class="hl-s">'system'</span>)
@@ -333,26 +329,15 @@
 <span class="hl-t">Insiyab</span>.color.shift(<span class="hl-s">'#0F766E'</span>, -<span class="hl-n">0.3</span>)</code></pre></div>
 
 <h2 id="events">الأحداث</h2>
-<p>
-  كلّ حدث يُطلَق على <code>document</code> ومعه <code>detail</code>. جرّب الأزرار: السجلّ تحتها
-  يستمع إلى الأحداث الحقيقية ويكتب ما يصله.
-</p>
+<p>كلّ حدث يُطلَق على <code>document</code> ومعه <code>detail</code>. جرّب الأزرار، والسجلّ تحتها يكتب ما يصله.</p>
 <figure class="dx dx--bare"><div class="dx-view stack">
   <div class="ins-row">
-    <button class="ins-btn ins-btn--secondary ins-btn--sm" data-ins-theme-toggle>تبديل الوضع</button>
+    <button class="ins-btn ins-btn--secondary" data-ins-theme-toggle>تبديل الوضع</button>
     <div class="ins-seg">
       <button class="is-active" data-ins-value="day">يوم</button>
       <button data-ins-value="week">أسبوع</button>
-      <button data-ins-value="month">شهر</button>
     </div>
-    <button class="ins-btn ins-btn--secondary ins-btn--sm" data-ins-toggle>تبديل</button>
-    <details class="ins-pop ins-pop--start">
-      <summary class="ins-btn ins-btn--secondary ins-btn--sm">قائمة</summary>
-      <div class="ins-pop-body">
-        <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="true">عرض المؤرشف</button>
-        <button class="ins-pop-item">تصدير</button>
-      </div>
-    </details>
+    <button class="ins-btn ins-btn--secondary" data-ins-toggle>تبديل</button>
   </div>
   <pre class="site-log" id="event-log" dir="ltr"><code>// الأحداث تظهر هنا</code></pre>
 </div></figure>
@@ -370,8 +355,8 @@
 
 <h2 id="define">منشئ خاصّ بك</h2>
 <p>
-  <code>Insiyab.define</code> يسجّل دالّة تُستدعى في مسح التهيئة نفسه — عند التحميل، ومع كلّ
-  <code>Insiyab.init(scope)</code>. فمكوّنك يُبنى حيث تُبنى مكوّنات المكتبة، ولا تحتاج نظامًا ثانيًا.
+  <code>Insiyab.define</code> يسجّل دالّة تُستدعى في مسح التهيئة نفسه: عند التحميل، ومع كلّ
+  <code>Insiyab.init(scope)</code>.
 </p>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.define(<span class="hl-s">'sparkline'</span>, (scope) =&gt; {
   scope.querySelectorAll(<span class="hl-s">'[data-sparkline]'</span>).forEach((el) =&gt; {
@@ -384,7 +369,7 @@
 <script>
   (function () {
     var log = document.querySelector('#event-log code'), lines = [];
-    ['ins:theme', 'ins:seg', 'ins:toggle', 'ins:menu'].forEach(function (name) {
+    ['ins:theme', 'ins:seg', 'ins:toggle'].forEach(function (name) {
       document.addEventListener(name, function (e) {
         var d = e.detail, v = {};
         for (var k in d) if (d[k] == null || typeof d[k] !== 'object') v[k] = d[k];

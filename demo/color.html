@@ -257,10 +257,7 @@
         </header>
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#try">جرّب لونًا</a><a href="#set">التعيين</a><a href="#measured">لون النصّ مقيس، لا مفترَض</a><a href="#server">من الخادم</a><a href="#css-only">بلا جافاسكربت</a><a href="#tones">الثلاثيّة الدلالية</a></nav>
         <h2 id="try">جرّب لونًا</h2>
-<p>
-  كلّ زرّ هنا يستدعي <code>Insiyab.brand(hex)</code> بقيمة واحدة، والمعاينة تحته — والصفحة كلّها —
-  تتلوّن منها. أو اختر أيّ لون من المنتقي. يبقى اختيارك معك في صفحات التوثيق الأخرى.
-</p>
+<p>كلّ زرّ يستدعي <code>Insiyab.brand(hex)</code>، فتتلوّن الصفحة كلّها منه. وتحتها القيم المشتقّة.</p>
 <figure class="dx dx--bare"><div class="dx-view stack">
   <div class="brand-swatches">
     <button class="brand-swatch" data-brand="#0F766E" style="--c:#0F766E"><i></i><bdi>#0F766E</bdi></button>
@@ -271,31 +268,14 @@
     <button class="brand-swatch" data-brand="#C9A063" style="--c:#C9A063"><i></i><bdi>#C9A063</bdi></button>
     <label class="brand-swatch"><input type="color" id="brand-pick" value="#0F766E" aria-label="لون مخصّص" style="inline-size:1.5rem;block-size:1.5rem;border:0;padding:0;background:none;cursor:pointer">لون آخر</label>
   </div>
-  <div class="ins-cols-2">
-    <div class="ins-panel">
-      <div class="ins-panel-head">
-        <span class="ins-panel-ico"><svg class="ico"><use href="#i-palette"/></svg></span>
-        <h3 class="ins-panel-title">معاينة</h3>
-      </div>
-      <div class="ins-panel-body ins-stack">
-        <div class="ins-row">
-          <button class="ins-btn ins-btn--primary">حفظ</button>
-          <button class="ins-btn ins-btn--secondary">معاينة</button>
-          <span class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>مميّز</span>
-        </div>
-        <label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مفتاح مفعّل</span></span></label>
-        <progress class="ins-progress" value="62" max="100">62%</progress>
-        <input class="ins-input" placeholder="انقر هنا لترى حلقة التركيز">
-      </div>
-    </div>
-    <div class="ins-panel">
-      <div class="ins-panel-head"><h3 class="ins-panel-title">القيم المشتقّة</h3></div>
-      <div class="ins-panel-body">
-        <div class="token-grid" id="tokens"></div>
-        <p class="ins-muted ins-text-xs ins-mb-0 ins-mt-3" id="label-note"></p>
-      </div>
-    </div>
+  <div class="ins-row">
+    <button class="ins-btn ins-btn--primary">حفظ</button>
+    <label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مفعّل</span></span></label>
   </div>
+  <progress class="ins-progress" value="62" max="100">62%</progress>
+  <input class="ins-input" placeholder="حلقة التركيز" aria-label="حقل">
+  <div class="token-grid" id="tokens"></div>
+  <p class="ins-muted ins-text-xs ins-m-0" id="label-note"></p>
 </div></figure>
 
 <h2 id="set">التعيين</h2>
@@ -306,26 +286,20 @@
 
 <h2 id="measured">لون النصّ مقيس، لا مفترَض</h2>
 <p>
-  كتابة الأبيض على الزرّ الرئيسي دائمًا خطأ حقيقي مع لون متوسّط الإضاءة: الأبيض على الذهبي
-  <code>#C9A063</code> تباينه قرابة <b>٢٫٤ إلى ١</b> — غير مقروء. لذلك تقيس <code>brand()</code> التباين
-  مع الأبيض ومع الأسود القريب وتأخذ الأفضل، ثمّ تُبعد الطرف الثاني من التدرّج <em>عن</em> لون النصّ،
-  فيحمل الزرّ كلّه نصّه بالبناء لا بالحظّ. جرّب الذهبي أعلاه وانظر إلى زرّ «حفظ».
+  تقيس <code>brand()</code> تباين اللون مع الأبيض ومع الأسود القريب، وتكتب النصّ بالأفضل في
+  <code>--ins-on-primary</code>. جرّب الذهبي <code>#C9A063</code> أعلاه وانظر إلى زرّ «حفظ».
 </p>
 
 <h2 id="server">من الخادم</h2>
-<p>
-  نمط مجرَّب في تطبيق حقيقي: الخادم يعيد لون العميل مع جلسة الدخول، والصفحة تطبّقه. فالتطبيق
-  الواحد يلبس هويّة كلّ عميل دون نسخة أنماط لكلّ منهم.
-</p>
+<p>لتطبيق يلبس هويّة كلّ عميل: الخادم يعيد اللون مع الجلسة، والصفحة تطبّقه.</p>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-k">const</span> res = <span class="hl-k">await</span> fetch(<span class="hl-s">'/api/session'</span>);
 <span class="hl-k">const</span> { branding } = <span class="hl-k">await</span> res.json();     <span class="hl-c">// { primary: '#1D4ED8', … }</span>
 <span class="hl-t">Insiyab</span>.brand(branding.primary);</code></pre></div>
 
 <h2 id="css-only">بلا جافاسكربت</h2>
 <p>
-  إن استعملت ملفّ الأنماط وحده، فاضبط اللون ومشتقّاته بنفسك. هذه القيم هي ما تحسبه
-  <code>brand()</code> للون <code>#0F766E</code> في الوضع الفاتح — وفي الداكن تتّجه الدرجة المقروءة
-  نحو الأبيض، فاستعمل <code>Insiyab.color.derive(hex, 'dark')</code> لتحصل على قيمها.
+  مع ملفّ الأنماط وحده، اضبط اللون ومشتقّاته بنفسك. هذه قيم <code>#0F766E</code> في الوضع الفاتح،
+  وقيم الداكن من <code>Insiyab.color.derive(hex, 'dark')</code>.
 </p>
 <div class="dx-code" data-lang="css"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code>:root {
   <span class="hl-a">--ins-primary</span>: <span class="hl-n">#0F766E</span>;
@@ -341,8 +315,8 @@
 
 <h2 id="tones">الثلاثيّة الدلالية</h2>
 <p>
-  كلّ حالة ثلاثة ألوان من صبغة واحدة: نصّ داكن مشبع، وخلفية بنسبة ١٠–١٢٪ منها، وحدّ بنسبة ١٨–٢٢٪.
-  لهذا تُقرأ الشارة والتنبيه والزجاج عائلةً واحدة لا ثلاثًا.
+  لكلّ حالة ثلاثة متغيّرات من صبغة واحدة: النصّ <code>--ins-tone-*</code>، والخلفية
+  <code>-bg</code>، والحدّ <code>-bd</code>.
 </p>
 <figure class="dx dx--bare"><div class="dx-view">
   <div class="tones">

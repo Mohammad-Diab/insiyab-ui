@@ -258,10 +258,9 @@
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#curves">منحنيان</a><a href="#entrances">الدخول</a><a href="#gestures">إشارات المرور</a><a href="#nothing-loops">لا شيء يتكرّر</a><a href="#off">الإيقاف</a></nav>
         <h2 id="curves">منحنيان</h2>
 <p>
-  <code>cubic-bezier(.22, 1, .36, 1)</code> لكلّ شيء تقريبًا. الدخول ٢٨٠ جزءًا من الثانية والخروج ١٨٠ —
-  عدم تماثل مقصود: الدخول يستحقّ أن يُرى، والخروج يستحقّ أن يبتعد عن الطريق. ومنحنى التجاوز
-  <code>cubic-bezier(.34, 1.56, .64, 1)</code> محجوز لما وظيفته أن ينتقل: إبهام المفتاح، وعلامة الصحّ،
-  ورقاقات الأيقونات.
+  <code>--ins-ease</code> (<code>cubic-bezier(.22, 1, .36, 1)</code>) لكلّ شيء تقريبًا، والدخول ٢٨٠ جزءًا
+  من الثانية والخروج ١٨٠. و<code>--ins-ease-spring</code> (<code>cubic-bezier(.34, 1.56, .64, 1)</code>)
+  لما ينتقل من مكان إلى آخر، كإبهام المفتاح.
 </p>
 <div class="dx-code" data-lang="css"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code>.my-thing {
   <span class="hl-t">transition</span>: transform var(<span class="hl-a">--ins-t-pop</span>) var(<span class="hl-a">--ins-ease</span>);
@@ -272,93 +271,64 @@
 
 <h2 id="entrances">الدخول</h2>
 <p>
-  <code>data-ins-reveal</code> على حاوية يُدخل أبناءها متدرّجين. والأصناف الثلاثة تعطي عنصرًا واحدًا
+  <code>data-ins-reveal</code> على حاوية يُدخل أبناءها متدرّجين، والأصناف الثلاثة تعطي عنصرًا واحدًا
   دخولًا. اضغط «أعد» لتراها مرّة أخرى.
 </p>
 <figure class="dx"><div class="dx-view stack">
   <div class="ins-cols-4" data-ins-reveal id="reveal-demo">
-    <div class="ins-card ins-p-4 ins-text-center">١</div>
-    <div class="ins-card ins-p-4 ins-text-center">٢</div>
-    <div class="ins-card ins-p-4 ins-text-center">٣</div>
-    <div class="ins-card ins-p-4 ins-text-center">٤</div>
+    <div class="demo-box">١</div>
+    <div class="demo-box">٢</div>
+    <div class="demo-box">٣</div>
+    <div class="demo-box">٤</div>
   </div>
   <div class="ins-row" id="anim-demo">
-    <span class="ins-pill ins-pill--brand ins-anim-rise">ins-anim-rise</span>
-    <span class="ins-pill ins-pill--brand ins-anim-pop">ins-anim-pop</span>
-    <span class="ins-pill ins-pill--brand ins-anim-slide">ins-anim-slide</span>
-    <button class="ins-btn ins-btn--secondary ins-btn--sm ins-ms-auto" id="replay">أعد</button>
+    <div class="demo-box ins-anim-rise">ins-anim-rise</div>
+    <div class="demo-box ins-anim-pop">ins-anim-pop</div>
+    <div class="demo-box ins-anim-slide">ins-anim-slide</div>
+    <button class="ins-btn ins-btn--secondary ins-ms-auto" id="replay">أعد</button>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-4"</span> <span class="hl-a">data-ins-reveal</span> <span class="hl-a">id</span>=<span class="hl-s">"reveal-demo"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-card ins-p-4 ins-text-center"</span><span class="hl-t">&gt;</span>١<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-card ins-p-4 ins-text-center"</span><span class="hl-t">&gt;</span>٢<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-card ins-p-4 ins-text-center"</span><span class="hl-t">&gt;</span>٣<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-card ins-p-4 ins-text-center"</span><span class="hl-t">&gt;</span>٤<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>١<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>٢<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>٣<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>٤<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row"</span> <span class="hl-a">id</span>=<span class="hl-s">"anim-demo"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--brand ins-anim-rise"</span><span class="hl-t">&gt;</span>ins-anim-rise<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--brand ins-anim-pop"</span><span class="hl-t">&gt;</span>ins-anim-pop<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--brand ins-anim-slide"</span><span class="hl-t">&gt;</span>ins-anim-slide<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--sm ins-ms-auto"</span> <span class="hl-a">id</span>=<span class="hl-s">"replay"</span><span class="hl-t">&gt;</span>أعد<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-anim-rise"</span><span class="hl-t">&gt;</span>ins-anim-rise<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-anim-pop"</span><span class="hl-t">&gt;</span>ins-anim-pop<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-anim-slide"</span><span class="hl-t">&gt;</span>ins-anim-slide<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-ms-auto"</span> <span class="hl-a">id</span>=<span class="hl-s">"replay"</span><span class="hl-t">&gt;</span>أعد<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="gestures">إشارات المرور</h2>
-<p>لكلّ مكوّن حركة عند المرور، وكلّها تقول الشيء نفسه بطريقتها. مرّر على كلّ عنصر:</p>
-<figure class="dx"><div class="dx-view stack">
-  <div class="ins-cols-3">
-    <div class="ins-card ins-p-5 ins-hoverable">
-      <b>سطح</b>
-      <p class="ins-muted ins-text-sm ins-mb-0">يرتفع نحو الضوء: ظلّ أطول وحافة أسطع. واللمعة القطرية لا تتحرّك — إنّها التوقيع.</p>
-    </div>
-    <div class="ins-stack ins-gap-3">
-      <button class="ins-btn ins-btn--primary">متابعة<svg class="ico"><use href="#i-arrow"/></svg></button>
-      <p class="ins-muted ins-text-sm ins-m-0">أيقونة الزرّ تنزلق نحو الحافة التي يأخذك إليها.</p>
-    </div>
-    <div class="ins-stack ins-gap-3">
-      <input class="ins-input" placeholder="حقل">
-      <p class="ins-muted ins-text-sm ins-m-0">الحقل يضيء ولا يرتفع: الارتفاع معناه التركيز.</p>
-    </div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-3"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-card ins-p-5 ins-hoverable"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>سطح<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted ins-text-sm ins-mb-0"</span><span class="hl-t">&gt;</span>يرتفع نحو الضوء: ظلّ أطول وحافة أسطع. واللمعة القطرية لا تتحرّك — إنّها التوقيع.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack ins-gap-3"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>متابعة<span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted ins-text-sm ins-m-0"</span><span class="hl-t">&gt;</span>أيقونة الزرّ تنزلق نحو الحافة التي يأخذك إليها.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack ins-gap-3"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"حقل"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted ins-text-sm ins-m-0"</span><span class="hl-t">&gt;</span>الحقل يضيء ولا يرتفع: الارتفاع معناه التركيز.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-card ins-hoverable"</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>   <span class="hl-c">&lt;!-- البطاقة ترتفع فقط حين تطلب ذلك --&gt;</span></code></pre></div>
+<p>مرّر على كلّ عنصر:</p>
+<ul>
+  <li>السطح بـ <code>.ins-hoverable</code> يرتفع: ظلّ أطول وحافة أسطع. ولا ترتفع البطاقة إلّا بهذا الصنف.</li>
+  <li>أيقونة الزرّ تنزلق نحو الحافة التي يأخذك إليها.</li>
+  <li>الحقل يضيء ولا يرتفع.</li>
+</ul>
+<figure class="dx"><div class="dx-view row">
+  <div class="ins-card ins-p-5 ins-hoverable">سطح</div>
+  <button class="ins-btn ins-btn--primary">متابعة<svg class="ico"><use href="#i-arrow"/></svg></button>
+  <input class="ins-input" placeholder="حقل" aria-label="حقل" style="inline-size:auto">
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-card ins-p-5 ins-hoverable"</span><span class="hl-t">&gt;</span>سطح<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>متابعة<span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"حقل"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"حقل"</span> <span class="hl-a">style</span>=<span class="hl-s">"inline-size:auto"</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="nothing-loops">لا شيء يتكرّر</h2>
 <p>
-  كلّ حركة هنا عابرة: تدفع كلفتها مدّة ظهورها وتتوقّف. الاستثناءان هيكل التحميل والدوّارة، وكلاهما
-  يعني «ننتظر».
-</p>
-<p>
-  والسبب مقيس لا مُفترَض. ثلاث كرات زخرفية تنجرف بحركة دائمة كلّفت <strong>٤٧٪ من نواة معالج، بلا
-  توقّف</strong>، على صفحة لا يحدث فيها شيء. التشخيص البديهي — إعادة تضبيب ثلاث طبقات ستّين مرّة في الثانية
-  — كان خاطئًا: بإزالة الضباب عنها وترك الانجراف بقيت الصفحة تحرق ٤٤٫٧٪. المُكلِف هو <em>الأسطح المصنفرة
-  فوقها</em>، لأنّ السطح يعيد تضبيب ما خلفه كلّما تغيّر، فأيّ حركة تحته تعيد تضبيب معظم الصفحة في كلّ إطار.
-  إيقاف الانجراف وحده أنزلها إلى ٤٫٨٪.
-</p>
-<p class="site-note">
-  فالخيار في تصميم مصنفر ليس «حركة رخيصة أو غالية» بل <b>حركة أو صنفرة</b> — والصنفرة هي التصميم.
-  ولهذا يرفض سكربت البناء إصدار ملفّ أنماط فيه أيّ <code>infinite</code> غير الاثنين.
+  كلّ حركة عابرة وتتوقّف، إلّا هيكل التحميل والدوّارة، وكلاهما يعني «ننتظر». فأيّ حركة دائمة تحت الأسطح
+  المصنفرة تعيد تضبيب معظم الصفحة في كلّ إطار وتستهلك المعالج بلا توقّف.
 </p>
 
 <h2 id="off">الإيقاف</h2>
 <p>
   <code>data-ins-fx="off"</code> على <code>&lt;html&gt;</code> يوقف المؤثرات كلّها، وزرّ فيه
-  <code>data-ins-fx</code> يبدّلها ويحفظ الاختيار. وإعداد النظام «تقليل الحركة» محترم تلقائيًا ومنفصلًا.
+  <code>data-ins-fx</code> يبدّلها ويحفظ الاختيار. وإعداد النظام «تقليل الحركة» محترم تلقائيًا.
 </p>
 <figure class="dx"><div class="dx-view row">
-  <button class="ins-btn ins-btn--secondary" data-ins-fx><svg class="ico"><use href="#i-sparkle"/></svg>تخفيف المؤثرات</button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">data-ins-fx</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>تخفيف المؤثرات<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <button class="ins-btn ins-btn--secondary" data-ins-fx>تخفيف المؤثرات</button>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">data-ins-fx</span><span class="hl-t">&gt;</span>تخفيف المؤثرات<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <script>
   /* A fresh copy of each element is the only way to run a CSS entrance again.
