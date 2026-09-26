@@ -260,14 +260,14 @@
 <p>الخطوة N تساوي N × ٤ بكسل، في كلّ عائلة من الأصناف، ومتاحة متغيّرًا <code>--ins-sp-N</code> لأنماطك.</p>
 <figure class="dx dx--bare"><div class="dx-view">
   <div class="ins-cols-4">
-    <div class="ins-row"><code class="sp-key">1</code><span class="sp-sq" style="--s:var(--ins-sp-1)"></span><span class="ins-muted ins-text-xs ins-num">4px</span></div>
-    <div class="ins-row"><code class="sp-key">2</code><span class="sp-sq" style="--s:var(--ins-sp-2)"></span><span class="ins-muted ins-text-xs ins-num">8px</span></div>
-    <div class="ins-row"><code class="sp-key">3</code><span class="sp-sq" style="--s:var(--ins-sp-3)"></span><span class="ins-muted ins-text-xs ins-num">12px</span></div>
-    <div class="ins-row"><code class="sp-key">4</code><span class="sp-sq" style="--s:var(--ins-sp-4)"></span><span class="ins-muted ins-text-xs ins-num">16px</span></div>
-    <div class="ins-row"><code class="sp-key">5</code><span class="sp-sq" style="--s:var(--ins-sp-5)"></span><span class="ins-muted ins-text-xs ins-num">20px</span></div>
-    <div class="ins-row"><code class="sp-key">6</code><span class="sp-sq" style="--s:var(--ins-sp-6)"></span><span class="ins-muted ins-text-xs ins-num">24px</span></div>
-    <div class="ins-row"><code class="sp-key">8</code><span class="sp-sq" style="--s:var(--ins-sp-8)"></span><span class="ins-muted ins-text-xs ins-num">32px</span></div>
-    <div class="ins-row"><code class="sp-key">12</code><span class="sp-sq" style="--s:var(--ins-sp-12)"></span><span class="ins-muted ins-text-xs ins-num">48px</span></div>
+    <div class="ins-row"><code class="sp-key">1</code><span class="sp-sq" style="--s:var(--ins-sp-1)"></span><span>4px</span></div>
+    <div class="ins-row"><code class="sp-key">2</code><span class="sp-sq" style="--s:var(--ins-sp-2)"></span><span>8px</span></div>
+    <div class="ins-row"><code class="sp-key">3</code><span class="sp-sq" style="--s:var(--ins-sp-3)"></span><span>12px</span></div>
+    <div class="ins-row"><code class="sp-key">4</code><span class="sp-sq" style="--s:var(--ins-sp-4)"></span><span>16px</span></div>
+    <div class="ins-row"><code class="sp-key">5</code><span class="sp-sq" style="--s:var(--ins-sp-5)"></span><span>20px</span></div>
+    <div class="ins-row"><code class="sp-key">6</code><span class="sp-sq" style="--s:var(--ins-sp-6)"></span><span>24px</span></div>
+    <div class="ins-row"><code class="sp-key">8</code><span class="sp-sq" style="--s:var(--ins-sp-8)"></span><span>32px</span></div>
+    <div class="ins-row"><code class="sp-key">12</code><span class="sp-sq" style="--s:var(--ins-sp-12)"></span><span>48px</span></div>
   </div>
 </div></figure>
 
@@ -291,54 +291,37 @@
   </div>
 </div>
 <p>
-  N واحد من <span class="ins-num">0 1 2 3 4 5 6 8 12</span>. ولا <code>ml</code> ولا <code>mr</code>
-  في المكتبة إطلاقًا: الصنف نفسه يعمل في الاتجاهين. والأدوات تُحمَّل بعد كلّ المكوّنات، فتغلبها دون
-  <code>!important</code>.
+  N واحد من 0 1 2 3 4 5 6 8 12. ولا <code>ml</code> ولا <code>mr</code> في المكتبة: الصنف نفسه يعمل في
+  الاتجاهين. والأدوات تغلب المكوّنات دون <code>!important</code>.
 </p>
 
 <h2 id="stack">الكومة والصفّ</h2>
 <p>
   <code>.ins-stack</code> عمودي و<code>.ins-row</code> أفقي يلتفّ. كلاهما يفصل أبناءه بـ <code>gap</code>
-  ويلغي هوامشهم الخارجية، فهامش اللوح لا يتراكم فوق الفراغ. في الكومة <code>ins-mt-auto</code> يدفع
-  العنصر إلى الأسفل، وفي الصفّ <code>ins-ms-auto</code> إلى أقصى النهاية.
+  ويلغي هوامشهم الخارجية. في الكومة <code>ins-mt-auto</code> يدفع العنصر إلى الأسفل، وفي الصفّ
+  <code>ins-ms-auto</code> إلى النهاية.
 </p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-cols-2">
-    <div class="ins-stack ins-gap-2">
-      <div class="demo-box">stack · 1</div>
-      <div class="demo-box">stack · 2</div>
-      <div class="demo-box">stack · 3</div>
-    </div>
-    <div class="ins-stack ins-gap-3">
-      <div class="ins-row">
-        <button class="ins-btn ins-btn--primary">نشر</button>
-        <button class="ins-btn ins-btn--secondary">معاينة</button>
-        <button class="ins-btn ins-btn--ghost">إلغاء</button>
-      </div>
-      <div class="ins-row">
-        <span class="ins-muted ins-text-sm">مسودّة محفوظة قبل دقيقتين</span>
-        <button class="ins-btn ins-btn--secondary ins-btn--sm ins-ms-auto">السجلّ</button>
-      </div>
-    </div>
+<figure class="dx"><div class="dx-view stack">
+  <div class="ins-stack ins-gap-2">
+    <div class="demo-box">stack · 1</div>
+    <div class="demo-box">stack · 2</div>
+    <div class="demo-box">stack · 3</div>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-2"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack ins-gap-2"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>stack · 1<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>stack · 2<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>stack · 3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack ins-gap-3"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>نشر<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span><span class="hl-t">&gt;</span>معاينة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--ghost"</span><span class="hl-t">&gt;</span>إلغاء<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted ins-text-sm"</span><span class="hl-t">&gt;</span>مسودّة محفوظة قبل دقيقتين<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--sm ins-ms-auto"</span><span class="hl-t">&gt;</span>السجلّ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <div class="ins-row">
+    <div class="demo-box">row · 1</div>
+    <div class="demo-box">row · 2</div>
+    <div class="demo-box ins-ms-auto">ins-ms-auto</div>
+  </div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack ins-gap-2"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>stack · 1<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>stack · 2<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>stack · 3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>row · 1<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>row · 2<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-ms-auto"</span><span class="hl-t">&gt;</span>ins-ms-auto<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="toolbar">شريط الأدوات</h2>
 <p>
@@ -346,44 +329,36 @@
   للعنصر الذي يأخذ ما تبقّى، و<code>.ins-toolbar-end</code> لما يُدفع إلى النهاية.
 </p>
 <figure class="dx"><div class="dx-view">
-  <div class="ins-toolbar ins-mb-0">
-    <div class="ins-search ins-toolbar-grow">
-      <svg class="ico ins-search-ico"><use href="#i-search"/></svg>
-      <input class="ins-input" placeholder="ابحث في الطلبات…" aria-label="بحث">
-    </div>
+  <div class="ins-toolbar">
+    <input class="ins-input ins-toolbar-grow" placeholder="بحث" aria-label="بحث">
     <select class="ins-select" aria-label="الحالة" style="inline-size:auto">
-      <option>كلّ الحالات</option><option>قيد التجهيز</option><option>مشحون</option>
+      <option>الكلّ</option><option>مفتوح</option><option>مغلق</option>
     </select>
     <div class="ins-toolbar-end">
-      <button class="ins-btn ins-btn--secondary"><svg class="ico"><use href="#i-download"/></svg>تصدير</button>
-      <button class="ins-btn ins-btn--primary"><svg class="ico"><use href="#i-plus"/></svg>طلب جديد</button>
+      <button class="ins-btn ins-btn--primary">إضافة</button>
     </div>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toolbar ins-mb-0"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-search ins-toolbar-grow"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;svg</span> <span class="hl-a">class</span>=<span class="hl-s">"ico ins-search-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;use</span> <span class="hl-a">href</span>=<span class="hl-s">"#i-search"</span><span class="hl-t">/&gt;</span><span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"ابحث في الطلبات…"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"بحث"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toolbar"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-toolbar-grow"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"بحث"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"بحث"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;select</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-select"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الحالة"</span> <span class="hl-a">style</span>=<span class="hl-s">"inline-size:auto"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>كلّ الحالات<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>قيد التجهيز<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>مشحون<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>الكلّ<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>مفتوح<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>مغلق<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/select</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toolbar-end"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>تصدير<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>طلب جديد<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>إضافة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="field-row">صفّ الحقول</h2>
 <p><code>.ins-field-row</code> يضع الحقول جنبًا إلى جنب ويكدّسها على الشاشة الضيّقة. والحقل الذي يأخذ ما تبقّى يحمل <code>.ins-grow</code>.</p>
 <figure class="dx"><div class="dx-view">
   <div class="ins-field-row">
-    <div class="ins-field ins-grow"><label class="ins-label" for="s-first">الاسم الأوّل</label><input class="ins-input" id="s-first"></div>
-    <div class="ins-field ins-grow"><label class="ins-label" for="s-last">اسم العائلة</label><input class="ins-input" id="s-last"></div>
+    <div class="ins-field ins-grow"><label class="ins-label" for="s-first">الاسم</label><input class="ins-input" id="s-first"></div>
+    <div class="ins-field ins-grow"><label class="ins-label" for="s-last">العائلة</label><input class="ins-input" id="s-last"></div>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field-row"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"s-first"</span><span class="hl-t">&gt;</span>الاسم الأوّل<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-first"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"s-last"</span><span class="hl-t">&gt;</span>اسم العائلة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-last"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"s-first"</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-first"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"s-last"</span><span class="hl-t">&gt;</span>العائلة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-last"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="grid.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الشبكة</span></a><a class="site-pager-link site-pager-link--next" href="typography.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الطباعة</span></a></nav>
       </div>
     </main>

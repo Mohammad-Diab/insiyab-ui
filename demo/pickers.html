@@ -261,81 +261,49 @@
   حقل وقائمة خيارات داخل <code>.ins-combo</code>. السكربت يضيف نمط combobox كاملًا — الأدوار، والأسهم،
   و<kbd class="ins-kbd">Enter</kbd> للاختيار و<kbd class="ins-kbd">Esc</kbd> للإغلاق — ومطابقة
   <b>تفهم العربية</b>: التشكيل مُهمَل، وصور الهمزة على الألف حرف واحد، والتاء المربوطة تطابق الهاء،
-  والألف المقصورة تطابق الياء. من يكتب «اسامة» يجد «أسامة».
+  والألف المقصورة تطابق الياء. جرّب «الاسكندرية» أو «جده».
 </p>
 <figure class="dx"><div class="dx-view narrow">
-  <div class="ins-field">
-    <label class="ins-label" for="p-city">المدينة</label>
-    <div class="ins-combo">
-      <input class="ins-input" id="p-city" placeholder="ابدأ الكتابة…" autocomplete="off">
-      <input type="hidden" name="city">
-      <ul class="ins-combo-list">
-        <li class="ins-combo-option" data-value="ruh">الرياض</li>
-        <li class="ins-combo-option" data-value="jed">جدّة</li>
-        <li class="ins-combo-option" data-value="dxb">دبي</li>
-        <li class="ins-combo-option" data-value="auh">أبوظبي</li>
-        <li class="ins-combo-option" data-value="doh">الدوحة</li>
-        <li class="ins-combo-option" data-value="kwi">الكويت</li>
-        <li class="ins-combo-option" data-value="amm">عمّان</li>
-        <li class="ins-combo-option" data-value="bey">بيروت</li>
-        <li class="ins-combo-option" data-value="cai">القاهرة</li>
-        <li class="ins-combo-option" data-value="alx">الإسكندريّة</li>
-        <li class="ins-combo-option" data-value="rba">الرباط</li>
-        <li class="ins-combo-option" data-value="tun">تونس</li>
-        <li class="ins-combo-option" data-value="mct">مسقط</li>
-        <li class="ins-combo-empty">لا مدينة بهذا الاسم</li>
-      </ul>
-    </div>
-    <span class="ins-hint">جرّب «الاسكندرية» بلا همزة ولا شدّة، أو «جده» بالهاء، أو «ابو ظبي».</span>
+  <div class="ins-combo">
+    <input class="ins-input" aria-label="المدينة" autocomplete="off">
+    <input type="hidden" name="city">
+    <ul class="ins-combo-list">
+      <li class="ins-combo-option" data-value="ruh">الرياض</li>
+      <li class="ins-combo-option" data-value="jed">جدّة</li>
+      <li class="ins-combo-option" data-value="cai">القاهرة</li>
+      <li class="ins-combo-option" data-value="alx">الإسكندريّة</li>
+      <li class="ins-combo-empty">لا نتائج</li>
+    </ul>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-city"</span><span class="hl-t">&gt;</span>المدينة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-city"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"ابدأ الكتابة…"</span> <span class="hl-a">autocomplete</span>=<span class="hl-s">"off"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"hidden"</span> <span class="hl-a">name</span>=<span class="hl-s">"city"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;ul</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-list"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"ruh"</span><span class="hl-t">&gt;</span>الرياض<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"jed"</span><span class="hl-t">&gt;</span>جدّة<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"dxb"</span><span class="hl-t">&gt;</span>دبي<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"auh"</span><span class="hl-t">&gt;</span>أبوظبي<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"doh"</span><span class="hl-t">&gt;</span>الدوحة<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"kwi"</span><span class="hl-t">&gt;</span>الكويت<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"amm"</span><span class="hl-t">&gt;</span>عمّان<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"bey"</span><span class="hl-t">&gt;</span>بيروت<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"cai"</span><span class="hl-t">&gt;</span>القاهرة<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"alx"</span><span class="hl-t">&gt;</span>الإسكندريّة<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"rba"</span><span class="hl-t">&gt;</span>الرباط<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"tun"</span><span class="hl-t">&gt;</span>تونس<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"mct"</span><span class="hl-t">&gt;</span>مسقط<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-empty"</span><span class="hl-t">&gt;</span>لا مدينة بهذا الاسم<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span><span class="hl-t">&gt;</span>جرّب «الاسكندرية» بلا همزة ولا شدّة، أو «جده» بالهاء، أو «ابو ظبي».<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"المدينة"</span> <span class="hl-a">autocomplete</span>=<span class="hl-s">"off"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"hidden"</span> <span class="hl-a">name</span>=<span class="hl-s">"city"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;ul</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-list"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"ruh"</span><span class="hl-t">&gt;</span>الرياض<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"jed"</span><span class="hl-t">&gt;</span>جدّة<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"cai"</span><span class="hl-t">&gt;</span>القاهرة<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span> <span class="hl-a">data-value</span>=<span class="hl-s">"alx"</span><span class="hl-t">&gt;</span>الإسكندريّة<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-empty"</span><span class="hl-t">&gt;</span>لا نتائج<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <p>
-  القيمة تذهب إلى الحقل المخفيّ إن وُجد، ويُطلق <code>ins:combo</code> ومعه <code>value</code> و<code>label</code>.
-  والبحث في أعلى هذه الصفحة هو المكوّن نفسه.
+  <code>.ins-combo-empty</code> يظهر حين لا يطابق شيء. القيمة تذهب إلى الحقل المخفيّ إن وُجد، ويُطلق
+  <code>ins:combo</code> ومعه <code>value</code> و<code>label</code>.
 </p>
 
 <h2 id="date">التاريخ</h2>
 <p>
-  <code>data-ins-date</code> على حقل تاريخ أصلي داخل مجموعة. بلا سكربت هو حقل المتصفّح نفسه، وهذا بديل جيّد.
-  ومعه يصير حقلًا يكتب التاريخ بلغة الصفحة، بتقويم يبدأ أسبوعه يوم السبت في صفحة عربية، والأسهم تتنقّل
-  بين الأيّام في اتجاه الصفحة. والحقل المخفيّ يأخذ الاسم الأصلي، فيصل الخادم ما كان سيصله تمامًا:
-  <code>2026-09-23</code>.
+  <code>data-ins-date</code> على حقل تاريخ أصلي داخل <code>.ins-input-group</code>. بلا سكربت هو حقل المتصفّح
+  نفسه؛ ومعه يكتب التاريخ بلغة الصفحة، بتقويم يبدأ أسبوعه يوم السبت في صفحة عربية، والأسهم تتنقّل بين الأيّام
+  في اتجاه الصفحة. والحقل المخفيّ يأخذ الاسم الأصلي، فيصل الخادم <code>2026-09-23</code> كما هو.
+  و<code>min</code> و<code>max</code> يعملان.
 </p>
 <figure class="dx"><div class="dx-view narrow">
-  <div class="ins-field">
-    <label class="ins-label" for="p-date">تاريخ التسليم</label>
-    <div class="ins-input-group">
-      <input class="ins-input" id="p-date" type="date" data-ins-date name="delivery" value="2026-09-30" min="2026-09-23">
-    </div>
+  <div class="ins-input-group">
+    <input class="ins-input" type="date" data-ins-date name="date" value="2026-09-30" min="2026-09-23" aria-label="التاريخ">
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-date"</span><span class="hl-t">&gt;</span>تاريخ التسليم<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-date"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">name</span>=<span class="hl-s">"delivery"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-30"</span> <span class="hl-a">min</span>=<span class="hl-s">"2026-09-23"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">name</span>=<span class="hl-s">"date"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-30"</span> <span class="hl-a">min</span>=<span class="hl-s">"2026-09-23"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"التاريخ"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h3 id="date-range">مدى تاريخين</h3>
@@ -372,43 +340,25 @@
 
 <h2 id="range">المنزلق</h2>
 <p>
-  <code>&lt;input type="range"&gt;</code> أصلي: لوحة المفاتيح والقيمة والإعلان للمنصّة، واتجاهه أيضًا — في
-  صفحة عربية الحدّ الأدنى على اليمين.
+  <code>&lt;input type="range" class="ins-range"&gt;</code> أصلي: لوحة المفاتيح والقيمة والإعلان للمنصّة،
+  واتجاهه أيضًا — في صفحة عربية الحدّ الأدنى على اليمين.
 </p>
 <figure class="dx"><div class="dx-view narrow">
-  <div class="ins-field">
-    <label class="ins-label" for="p-disc">نسبة الخصم · <output id="p-disc-out" class="ins-num">20</output>٪</label>
-    <input class="ins-range" id="p-disc" type="range" min="0" max="50" step="5" value="20">
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-disc"</span><span class="hl-t">&gt;</span>نسبة الخصم · <span class="hl-t">&lt;output</span> <span class="hl-a">id</span>=<span class="hl-s">"p-disc-out"</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>20<span class="hl-t">&lt;/output</span><span class="hl-t">&gt;</span>٪<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-range"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-disc"</span> <span class="hl-a">type</span>=<span class="hl-s">"range"</span> <span class="hl-a">min</span>=<span class="hl-s">"0"</span> <span class="hl-a">max</span>=<span class="hl-s">"50"</span> <span class="hl-a">step</span>=<span class="hl-s">"5"</span> <span class="hl-a">value</span>=<span class="hl-s">"20"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <input class="ins-range" type="range" min="0" max="50" step="5" value="20" aria-label="النسبة">
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-range"</span> <span class="hl-a">type</span>=<span class="hl-s">"range"</span> <span class="hl-a">min</span>=<span class="hl-s">"0"</span> <span class="hl-a">max</span>=<span class="hl-s">"50"</span> <span class="hl-a">step</span>=<span class="hl-s">"5"</span> <span class="hl-a">value</span>=<span class="hl-s">"20"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"النسبة"</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="stepper">العدّاد</h2>
 <figure class="dx"><div class="dx-view narrow">
-  <div class="ins-field">
-    <label class="ins-label" for="p-guests">عدد الضيوف</label>
-    <div class="ins-input-group" style="max-inline-size:11rem">
-      <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>
-      <input class="ins-input" id="p-guests" type="number" min="1" max="12" value="4">
-      <button class="ins-spin" data-ins-spin="up" aria-label="زيادة"></button>
-    </div>
+  <div class="ins-input-group" style="max-inline-size:11rem">
+    <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>
+    <input class="ins-input" type="number" min="1" max="12" value="4" aria-label="العدد">
+    <button class="ins-spin" data-ins-spin="up" aria-label="زيادة"></button>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-guests"</span><span class="hl-t">&gt;</span>عدد الضيوف<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span> <span class="hl-a">style</span>=<span class="hl-s">"max-inline-size:11rem"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spin"</span> <span class="hl-a">data-ins-spin</span>=<span class="hl-s">"down"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إنقاص"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-guests"</span> <span class="hl-a">type</span>=<span class="hl-s">"number"</span> <span class="hl-a">min</span>=<span class="hl-s">"1"</span> <span class="hl-a">max</span>=<span class="hl-s">"12"</span> <span class="hl-a">value</span>=<span class="hl-s">"4"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spin"</span> <span class="hl-a">data-ins-spin</span>=<span class="hl-s">"up"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"زيادة"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span> <span class="hl-a">style</span>=<span class="hl-s">"max-inline-size:11rem"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spin"</span> <span class="hl-a">data-ins-spin</span>=<span class="hl-s">"down"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إنقاص"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"number"</span> <span class="hl-a">min</span>=<span class="hl-s">"1"</span> <span class="hl-a">max</span>=<span class="hl-s">"12"</span> <span class="hl-a">value</span>=<span class="hl-s">"4"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"العدد"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spin"</span> <span class="hl-a">data-ins-spin</span>=<span class="hl-s">"up"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"زيادة"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<script>
-  document.getElementById('p-disc').addEventListener('input', function () {
-    document.getElementById('p-disc-out').value = this.value;
-  });
-</script>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="input-group.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">مجموعات الحقول</span></a><a class="site-pager-link site-pager-link--next" href="validation.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">التحقّق</span></a></nav>
       </div>
     </main>

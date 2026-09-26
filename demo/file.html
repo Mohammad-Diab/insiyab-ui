@@ -282,9 +282,8 @@
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span><span class="hl-t">&gt;</span>ملفّات PDF أو صور.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <p>
-  <b>الملفّات تبقى في الحقل الحقيقيّ.</b> كلّ تغيير — اختيار أو إفلات أو لصق أو إزالة — يُكتب في <code>files</code>
-  الحقل نفسه، فيرسلها النموذج كما كان سيرسلها بلا الإضافة، ولا يحتاج الخادم شيئًا جديدًا. والحقل باقٍ في ترتيب
-  التنقّل تحت تسميته: لوحة المفاتيح وقارئ الشاشة يستعملان زرّ الملفّات الذي في المتصفّح، والمنطقة حوله للفأرة.
+  <b>الملفّات تبقى في الحقل الحقيقيّ:</b> كلّ تغيير يُكتب في <code>files</code> الحقل نفسه، فيرسلها النموذج كما هي.
+  والحقل باقٍ في ترتيب التنقّل تحت تسميته، للوحة المفاتيح وقارئ الشاشة.
 </p>
 
 <h2 id="limits">الحدود</h2>
@@ -294,36 +293,35 @@
   <li><b><code>data-ins-file-count</code></b> — أكبر عدد للملفّات، مع <code>multiple</code>.</li>
 </ul>
 <p>
-  ملفّ خارج الحدود لا يُضاف، ويقول الحقل أيّ ملفّ ولماذا. ومع <code>multiple</code> يضيف الاختيار الجديد إلى القائمة
-  ولا يستبدلها؛ وبدونه يستبدل. والسطر الصغير في المنطقة يُكتب من الحدود، أو من <code>data-ins-file-note</code>.
+  ملفّ خارج الحدود لا يُضاف، ويقول الحقل أيّ ملفّ ولماذا. ومع <code>multiple</code> يُضاف الاختيار الجديد إلى القائمة،
+  وبدونه يستبدلها. والسطر الصغير في المنطقة يُكتب من الحدود، أو من <code>data-ins-file-note</code>.
 </p>
 
 <h2 id="compact">المضغوط</h2>
 <p>لنموذج ضيّق: <code>class="ins-file--compact"</code> على الحقل، زرّ وقائمة بلا منطقة. والإفلات على الزرّ يعمل.</p>
 <figure class="dx"><div class="dx-view narrow">
   <div class="ins-field">
-    <label class="ins-label" for="fl-cv">السيرة الذاتية</label>
+    <label class="ins-label" for="fl-cv">ملفّ PDF</label>
     <input type="file" id="fl-cv" class="ins-file--compact" name="cv" accept=".pdf" data-ins-file>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"fl-cv"</span><span class="hl-t">&gt;</span>السيرة الذاتية<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"fl-cv"</span><span class="hl-t">&gt;</span>ملفّ PDF<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"file"</span> <span class="hl-a">id</span>=<span class="hl-s">"fl-cv"</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-file--compact"</span> <span class="hl-a">name</span>=<span class="hl-s">"cv"</span> <span class="hl-a">accept</span>=<span class="hl-s">".pdf"</span> <span class="hl-a">data-ins-file</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="upload">الرفع الفوريّ</h2>
 <p>
-  الرفع عند الإضافة شأن الصفحة، بالطلب الذي يريده خادمها. مع <code>data-ins-file-upload</code> يطلق كلّ ملفّ يُضاف
-  <code>ins:file</code>، فترسله الصفحة وتبلّغ الإضافة بما جرى. عندها لا يرسل الحقل ملفّات: كلّ رفع تمّ يترك حقلًا
-  مخفيًا باسم الحقل يحمل المعرّف الذي أعطته الصفحة، والحقل غير صالح ما دام ملفّ في الطريق أو تعذّر رفعه.
-  في هذا المثال رفع مصطنع، وملفّ في اسمه «خطأ» يتعذّر عمدًا:
+  مع <code>data-ins-file-upload</code> يطلق كلّ ملفّ يُضاف <code>ins:file</code>، فترفعه الصفحة وتبلّغ الإضافة بما جرى.
+  عندها يرسل الحقل بدل الملفّات حقلًا مخفيًا باسمه لكلّ رفع تمّ، يحمل المعرّف الذي أعطته الصفحة، ويبقى غير صالح
+  ما دام ملفّ في الطريق أو تعذّر رفعه. الرفع هنا مصطنع، وملفّ في اسمه «خطأ» يتعذّر عمدًا:
 </p>
 <figure class="dx"><div class="dx-view narrow">
   <div class="ins-field">
-    <label class="ins-label" for="fl-up">صور المنتج</label>
+    <label class="ins-label" for="fl-up">الصور</label>
     <input type="file" id="fl-up" name="photos" multiple accept="image/*" data-ins-file data-ins-file-upload>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"fl-up"</span><span class="hl-t">&gt;</span>صور المنتج<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"fl-up"</span><span class="hl-t">&gt;</span>الصور<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"file"</span> <span class="hl-a">id</span>=<span class="hl-s">"fl-up"</span> <span class="hl-a">name</span>=<span class="hl-s">"photos"</span> <span class="hl-a">multiple</span> <span class="hl-a">accept</span>=<span class="hl-s">"image/*"</span> <span class="hl-a">data-ins-file</span> <span class="hl-a">data-ins-file-upload</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:file'</span>, <span class="hl-k">async</span> (e) =&gt; {

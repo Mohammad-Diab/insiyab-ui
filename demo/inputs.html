@@ -263,70 +263,36 @@
 </p>
 <figure class="dx"><div class="dx-view narrow">
   <div class="ins-field">
-    <label class="ins-label" for="i-store">اسم المتجر</label>
-    <input class="ins-input" id="i-store" placeholder="مثال: متجر الورّاق">
-    <span class="ins-hint">يظهر في رأس الفواتير ورسائل البريد.</span>
+    <label class="ins-label" for="i-name">الاسم</label>
+    <input class="ins-input" id="i-name">
+    <span class="ins-hint">يظهر في الفواتير.</span>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-store"</span><span class="hl-t">&gt;</span>اسم المتجر<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-store"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"مثال: متجر الورّاق"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span><span class="hl-t">&gt;</span>يظهر في رأس الفواتير ورسائل البريد.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-name"</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-name"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span><span class="hl-t">&gt;</span>يظهر في الفواتير.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="types">أنواع الحقول</h2>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-cols-2">
-    <div class="ins-field">
-      <label class="ins-label" for="i-email">البريد الإلكتروني</label>
-      <input class="ins-input" id="i-email" type="email" dir="ltr" placeholder="name@example.com">
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="i-phone">الجوّال</label>
-      <input class="ins-input ins-num" id="i-phone" type="tel" dir="ltr" placeholder="+966 5X XXX XXXX">
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="i-country">الدولة</label>
-      <select class="ins-select" id="i-country">
-        <option>السعودية</option><option>الإمارات</option><option>مصر</option><option>الأردن</option><option>المغرب</option>
-      </select>
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="i-price">السعر</label>
-      <input class="ins-input ins-num" id="i-price" type="number" min="0" step="0.01" value="249.00">
-    </div>
-  </div>
-  <div class="ins-field ins-mt-4">
-    <label class="ins-label" for="i-notes">ملاحظات التوصيل</label>
-    <textarea class="ins-textarea" id="i-notes" placeholder="الطابق الثالث، الباب الأيمن…"></textarea>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-2"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-email"</span><span class="hl-t">&gt;</span>البريد الإلكتروني<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-email"</span> <span class="hl-a">type</span>=<span class="hl-s">"email"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"name@example.com"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-phone"</span><span class="hl-t">&gt;</span>الجوّال<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-num"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-phone"</span> <span class="hl-a">type</span>=<span class="hl-s">"tel"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"+966 5X XXX XXXX"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-country"</span><span class="hl-t">&gt;</span>الدولة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;select</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-select"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-country"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>السعودية<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>الإمارات<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>مصر<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>الأردن<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>المغرب<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/select</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-price"</span><span class="hl-t">&gt;</span>السعر<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-num"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-price"</span> <span class="hl-a">type</span>=<span class="hl-s">"number"</span> <span class="hl-a">min</span>=<span class="hl-s">"0"</span> <span class="hl-a">step</span>=<span class="hl-s">"0.01"</span> <span class="hl-a">value</span>=<span class="hl-s">"249.00"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-mt-4"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-notes"</span><span class="hl-t">&gt;</span>ملاحظات التوصيل<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;textarea</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-textarea"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-notes"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"الطابق الثالث، الباب الأيمن…"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/textarea</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p class="site-note">
-  <b>البريد والهاتف من اليسار.</b> <code>dir="ltr"</code> على الحقل وحده: عنوان بريد يُكتب من اليمين يضع
-  <span class="ins-num">@</span> في المكان الخطأ وهو يُكتب. وبقيّة النموذج يبقى عربيًا.
+<p>
+  <code>.ins-input</code> لكلّ أنواع <code>&lt;input&gt;</code>، و<code>.ins-select</code> و<code>.ins-textarea</code>.
+  البريد والهاتف يأخذان <code>dir="ltr"</code> على الحقل وحده، وبقيّة النموذج يبقى عربيًا.
 </p>
+<figure class="dx"><div class="dx-view stack narrow">
+  <input class="ins-input" type="email" dir="ltr" placeholder="name@example.com" aria-label="البريد">
+  <input class="ins-input" type="tel" dir="ltr" placeholder="+966 5X XXX XXXX" aria-label="الجوّال">
+  <input class="ins-input" type="number" value="249" aria-label="السعر">
+  <select class="ins-select" aria-label="الدولة">
+    <option>السعودية</option><option>مصر</option><option>الأردن</option>
+  </select>
+  <textarea class="ins-textarea" placeholder="ملاحظات" aria-label="ملاحظات"></textarea>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"email"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"name@example.com"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"البريد"</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"tel"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"+966 5X XXX XXXX"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الجوّال"</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"number"</span> <span class="hl-a">value</span>=<span class="hl-s">"249"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"السعر"</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;select</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-select"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الدولة"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>السعودية<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>مصر<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>الأردن<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/select</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;textarea</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-textarea"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"ملاحظات"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"ملاحظات"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/textarea</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="sizes">المقاسات</h2>
 <figure class="dx"><div class="dx-view stack narrow">
@@ -342,46 +308,30 @@
 <span class="hl-t">&lt;select</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-select ins-select--lg"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"قائمة كبيرة"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>قائمة كبيرة<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/select</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="states">الحالات</h2>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-cols-2">
-    <div class="ins-field">
-      <label class="ins-label" for="i-dis">معطّل</label>
-      <input class="ins-input" id="i-dis" value="لا يمكن تعديله" disabled>
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="i-ro">للقراءة فقط</label>
-      <input class="ins-input ins-num" id="i-ro" value="STORE-0192" readonly>
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="i-bad">فيه خطأ</label>
-      <input class="ins-input" id="i-bad" value="abc" aria-invalid="true">
-      <p class="ins-error">أدخل رقمًا صحيحًا.</p>
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="i-ok">صحيح</label>
-      <input class="ins-input ins-input--ok" id="i-ok" value="alwarraq" dir="ltr">
-      <p class="ins-success">الاسم متاح.</p>
-    </div>
+<p>
+  <code>disabled</code> و<code>readonly</code>، والخطأ بـ <code>aria-invalid="true"</code> و<code>.ins-error</code>،
+  والقبول بـ <code>.ins-input--ok</code> و<code>.ins-success</code>.
+</p>
+<figure class="dx"><div class="dx-view stack narrow">
+  <input class="ins-input" value="معطّل" aria-label="معطّل" disabled>
+  <input class="ins-input" value="للقراءة فقط" aria-label="للقراءة فقط" readonly>
+  <div class="ins-field">
+    <input class="ins-input" value="abc" aria-label="خطأ" aria-invalid="true">
+    <p class="ins-error">أدخل رقمًا صحيحًا.</p>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-2"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-dis"</span><span class="hl-t">&gt;</span>معطّل<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-dis"</span> <span class="hl-a">value</span>=<span class="hl-s">"لا يمكن تعديله"</span> <span class="hl-a">disabled</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-ro"</span><span class="hl-t">&gt;</span>للقراءة فقط<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-num"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-ro"</span> <span class="hl-a">value</span>=<span class="hl-s">"STORE-0192"</span> <span class="hl-a">readonly</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-bad"</span><span class="hl-t">&gt;</span>فيه خطأ<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-bad"</span> <span class="hl-a">value</span>=<span class="hl-s">"abc"</span> <span class="hl-a">aria-invalid</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span>أدخل رقمًا صحيحًا.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-ok"</span><span class="hl-t">&gt;</span>صحيح<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-input--ok"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-ok"</span> <span class="hl-a">value</span>=<span class="hl-s">"alwarraq"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-success"</span><span class="hl-t">&gt;</span>الاسم متاح.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <div class="ins-field">
+    <input class="ins-input ins-input--ok" value="huda" aria-label="صحيح" dir="ltr">
+    <p class="ins-success">الاسم متاح.</p>
+  </div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">value</span>=<span class="hl-s">"معطّل"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"معطّل"</span> <span class="hl-a">disabled</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">value</span>=<span class="hl-s">"للقراءة فقط"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"للقراءة فقط"</span> <span class="hl-a">readonly</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">value</span>=<span class="hl-s">"abc"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"خطأ"</span> <span class="hl-a">aria-invalid</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span>أدخل رقمًا صحيحًا.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-input--ok"</span> <span class="hl-a">value</span>=<span class="hl-s">"huda"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"صحيح"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-success"</span><span class="hl-t">&gt;</span>الاسم متاح.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <p>والتحقّق التلقائي من هذه الحالات، برسائل المتصفّح داخل الحقل، في صفحة <a href="validation.html">التحقّق</a>.</p>
 
@@ -389,11 +339,11 @@
 <figure class="dx"><div class="dx-view narrow">
   <div class="ins-search">
     <svg class="ico ins-search-ico"><use href="#i-search"/></svg>
-    <input class="ins-input" type="search" placeholder="ابحث عن منتج…" aria-label="بحث">
+    <input class="ins-input" type="search" placeholder="بحث" aria-label="بحث">
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-search"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;svg</span> <span class="hl-a">class</span>=<span class="hl-s">"ico ins-search-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;use</span> <span class="hl-a">href</span>=<span class="hl-s">"#i-search"</span><span class="hl-t">/&gt;</span><span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"search"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"ابحث عن منتج…"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"بحث"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"search"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"بحث"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"بحث"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="form">نموذج كامل</h2>
@@ -401,71 +351,35 @@
   <code>.ins-field-row</code> للحقول المتجاورة، و<code>.ins-form-commit</code> لأزرار الحفظ في النهاية، و
   <code>.ins-req</code> لعلامة الحقل المطلوب.
 </p>
-<figure class="dx"><div class="dx-view">
-  <form class="ins-panel" onsubmit="event.preventDefault(); Insiyab.toast('حُفظ العنوان', 'ok')">
-    <div class="ins-panel-head"><h3 class="ins-panel-title">عنوان الشحن</h3></div>
-    <div class="ins-panel-body ins-stack">
-      <div class="ins-field-row">
-        <div class="ins-field ins-grow">
-          <label class="ins-label" for="f-name">الاسم الكامل<span class="ins-req" aria-hidden="true">*</span></label>
-          <input class="ins-input" id="f-name" required autocomplete="name">
-        </div>
-        <div class="ins-field ins-grow">
-          <label class="ins-label" for="f-tel">الجوّال<span class="ins-req" aria-hidden="true">*</span></label>
-          <input class="ins-input ins-num" id="f-tel" type="tel" dir="ltr" required autocomplete="tel">
-        </div>
+<figure class="dx"><div class="dx-view narrow">
+  <form onsubmit="event.preventDefault()">
+    <div class="ins-field-row">
+      <div class="ins-field ins-grow">
+        <label class="ins-label" for="f-name">الاسم<span class="ins-req" aria-hidden="true">*</span></label>
+        <input class="ins-input" id="f-name" required>
       </div>
-      <div class="ins-field-row">
-        <div class="ins-field ins-grow">
-          <label class="ins-label" for="f-city">المدينة</label>
-          <input class="ins-input" id="f-city" autocomplete="address-level2">
-        </div>
-        <div class="ins-field ins-grow">
-          <label class="ins-label" for="f-zip">الرمز البريدي</label>
-          <input class="ins-input ins-num" id="f-zip" inputmode="numeric" autocomplete="postal-code">
-        </div>
-      </div>
-      <div class="ins-field">
-        <label class="ins-label" for="f-street">الشارع والمبنى</label>
-        <input class="ins-input" id="f-street" autocomplete="street-address">
-      </div>
-      <div class="ins-form-commit">
-        <button class="ins-btn ins-btn--primary">حفظ العنوان</button>
-        <button class="ins-btn ins-btn--bare" type="reset">تفريغ</button>
+      <div class="ins-field ins-grow">
+        <label class="ins-label" for="f-city">المدينة</label>
+        <input class="ins-input" id="f-city">
       </div>
     </div>
+    <div class="ins-form-commit">
+      <button class="ins-btn ins-btn--primary">حفظ</button>
+    </div>
   </form>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;form</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span> <span class="hl-a">onsubmit</span>=<span class="hl-s">"event.preventDefault(); Insiyab.toast('حُفظ العنوان', 'ok')"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-head"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-title"</span><span class="hl-t">&gt;</span>عنوان الشحن<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-body ins-stack"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field-row"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"f-name"</span><span class="hl-t">&gt;</span>الاسم الكامل<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-req"</span> <span class="hl-a">aria-hidden</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>*<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"f-name"</span> <span class="hl-a">required</span> <span class="hl-a">autocomplete</span>=<span class="hl-s">"name"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"f-tel"</span><span class="hl-t">&gt;</span>الجوّال<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-req"</span> <span class="hl-a">aria-hidden</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>*<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-num"</span> <span class="hl-a">id</span>=<span class="hl-s">"f-tel"</span> <span class="hl-a">type</span>=<span class="hl-s">"tel"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span> <span class="hl-a">required</span> <span class="hl-a">autocomplete</span>=<span class="hl-s">"tel"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;form</span> <span class="hl-a">onsubmit</span>=<span class="hl-s">"event.preventDefault()"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field-row"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"f-name"</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-req"</span> <span class="hl-a">aria-hidden</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>*<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"f-name"</span> <span class="hl-a">required</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field-row"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"f-city"</span><span class="hl-t">&gt;</span>المدينة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"f-city"</span> <span class="hl-a">autocomplete</span>=<span class="hl-s">"address-level2"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"f-zip"</span><span class="hl-t">&gt;</span>الرمز البريدي<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-num"</span> <span class="hl-a">id</span>=<span class="hl-s">"f-zip"</span> <span class="hl-a">inputmode</span>=<span class="hl-s">"numeric"</span> <span class="hl-a">autocomplete</span>=<span class="hl-s">"postal-code"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"f-city"</span><span class="hl-t">&gt;</span>المدينة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"f-city"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"f-street"</span><span class="hl-t">&gt;</span>الشارع والمبنى<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"f-street"</span> <span class="hl-a">autocomplete</span>=<span class="hl-s">"street-address"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-form-commit"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>حفظ العنوان<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--bare"</span> <span class="hl-a">type</span>=<span class="hl-s">"reset"</span><span class="hl-t">&gt;</span>تفريغ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-form-commit"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>حفظ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/form</span><span class="hl-t">&gt;</span></code></pre></div></figure>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="tables.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الجداول</span></a><a class="site-pager-link site-pager-link--next" href="checks.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الاختيار والمفاتيح</span></a></nav>

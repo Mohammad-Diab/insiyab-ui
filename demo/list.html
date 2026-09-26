@@ -259,46 +259,37 @@
         <h2 id="basic">قائمة</h2>
 <p>
   <code>.ins-list</code> صفوف <code>.ins-list-item</code>، كلّ صفّ فيه ما يبدأ به (صورة، أيقونة)، ونصّ بسطرين
-  (<code>-title</code> و<code>-desc</code>)، وما ينتهي به (<code>-end</code>). داخل لوح تصل إلى حوافه.
+  (<code>-title</code> و<code>-desc</code>)، وما ينتهي به (<code>-end</code>). كلّها اختيارية، وداخل لوح تصل
+  القائمة إلى حوافه.
 </p>
 <figure class="dx"><div class="dx-view">
   <div class="ins-panel">
-    <div class="ins-panel-head"><h3 class="ins-panel-title">الفريق</h3></div>
     <ul class="ins-list">
       <li class="ins-list-item">
-        <span class="ins-avatar">ه م</span>
-        <span class="ins-list-text"><span class="ins-list-title">هدى منصور</span><span class="ins-list-desc">مديرة المتجر</span></span>
-        <span class="ins-list-end"><span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>متّصلة</span></span>
+        <span class="ins-panel-ico"><svg class="ico"><use href="#i-file"/></svg></span>
+        <span class="ins-list-text"><span class="ins-list-title">العنوان</span><span class="ins-list-desc">سطر الوصف</span></span>
+        <span class="ins-list-end">أمس</span>
       </li>
       <li class="ins-list-item">
-        <span class="ins-avatar">ي ع</span>
-        <span class="ins-list-text"><span class="ins-list-title">يوسف عادل</span><span class="ins-list-desc">خدمة العملاء</span></span>
-        <span class="ins-list-end ins-muted ins-text-sm">آخر ظهور <span class="ins-num">14:02</span></span>
+        <span class="ins-list-text"><span class="ins-list-title">العنوان</span><span class="ins-list-desc">سطر الوصف</span></span>
       </li>
       <li class="ins-list-item">
-        <span class="ins-avatar">ر ف</span>
-        <span class="ins-list-text"><span class="ins-list-title">رنا فهد</span><span class="ins-list-desc">تصوير المنتجات</span></span>
-        <span class="ins-list-end"><button class="ins-btn ins-btn--secondary ins-btn--sm">رسالة</button></span>
+        <span class="ins-list-text"><span class="ins-list-title">عنوان فقط</span></span>
       </li>
     </ul>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-head"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-title"</span><span class="hl-t">&gt;</span>الفريق<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;ul</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-item"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-avatar"</span><span class="hl-t">&gt;</span>ه م<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>هدى منصور<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-desc"</span><span class="hl-t">&gt;</span>مديرة المتجر<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-end"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--ok"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>متّصلة<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>العنوان<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-desc"</span><span class="hl-t">&gt;</span>سطر الوصف<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-end"</span><span class="hl-t">&gt;</span>أمس<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-item"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-avatar"</span><span class="hl-t">&gt;</span>ي ع<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>يوسف عادل<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-desc"</span><span class="hl-t">&gt;</span>خدمة العملاء<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-end ins-muted ins-text-sm"</span><span class="hl-t">&gt;</span>آخر ظهور <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>14:02<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>العنوان<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-desc"</span><span class="hl-t">&gt;</span>سطر الوصف<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-item"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-avatar"</span><span class="hl-t">&gt;</span>ر ف<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>رنا فهد<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-desc"</span><span class="hl-t">&gt;</span>تصوير المنتجات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-end"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--sm"</span><span class="hl-t">&gt;</span>رسالة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>عنوان فقط<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
@@ -306,66 +297,27 @@
 <h2 id="links">قائمة روابط</h2>
 <p>صفوف من <code>&lt;a&gt;</code> تصير قابلة للنقر كاملةً، و<code>aria-current="page"</code> يعلّم الحالي.</p>
 <figure class="dx"><div class="dx-view">
-  <div class="ins-panel">
-    <nav class="ins-list" aria-label="الإعدادات">
-      <a class="ins-list-item" href="#links" aria-current="page">
-        <span class="ins-panel-ico"><svg class="ico"><use href="#i-cog"/></svg></span>
-        <span class="ins-list-text"><span class="ins-list-title">عام</span><span class="ins-list-desc">الاسم واللغة والعملة</span></span>
-      </a>
-      <a class="ins-list-item" href="#links">
-        <span class="ins-panel-ico"><svg class="ico"><use href="#i-wallet"/></svg></span>
-        <span class="ins-list-text"><span class="ins-list-title">الدفع</span><span class="ins-list-desc">البطاقات والمحافظ والتحويل</span></span>
-        <span class="ins-list-end"><span class="ins-badge ins-badge--warn">1</span></span>
-      </a>
-      <a class="ins-list-item" href="#links">
-        <span class="ins-panel-ico"><svg class="ico"><use href="#i-lock"/></svg></span>
-        <span class="ins-list-text"><span class="ins-list-title">الأمان</span><span class="ins-list-desc">كلمة المرور والتحقّق بخطوتين</span></span>
-      </a>
-    </nav>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الإعدادات"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-item"</span> <span class="hl-a">href</span>=<span class="hl-s">"#links"</span> <span class="hl-a">aria-current</span>=<span class="hl-s">"page"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>عام<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-desc"</span><span class="hl-t">&gt;</span>الاسم واللغة والعملة<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-item"</span> <span class="hl-a">href</span>=<span class="hl-s">"#links"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>الدفع<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-desc"</span><span class="hl-t">&gt;</span>البطاقات والمحافظ والتحويل<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-end"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge ins-badge--warn"</span><span class="hl-t">&gt;</span>1<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-item"</span> <span class="hl-a">href</span>=<span class="hl-s">"#links"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>الأمان<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-desc"</span><span class="hl-t">&gt;</span>كلمة المرور والتحقّق بخطوتين<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <nav class="ins-list" aria-label="الإعدادات">
+    <a class="ins-list-item" href="#links" aria-current="page"><span class="ins-list-text"><span class="ins-list-title">عام</span></span></a>
+    <a class="ins-list-item" href="#links"><span class="ins-list-text"><span class="ins-list-title">الدفع</span></span></a>
+    <a class="ins-list-item" href="#links"><span class="ins-list-text"><span class="ins-list-title">الأمان</span></span></a>
+  </nav>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الإعدادات"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-item"</span> <span class="hl-a">href</span>=<span class="hl-s">"#links"</span> <span class="hl-a">aria-current</span>=<span class="hl-s">"page"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>عام<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-item"</span> <span class="hl-a">href</span>=<span class="hl-s">"#links"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>الدفع<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-item"</span> <span class="hl-a">href</span>=<span class="hl-s">"#links"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>الأمان<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="plain">بلا لوح</h2>
+<p>القائمة بلا سطح خاصّ بها، فتصلح خارج اللوح بفواصلها وحدها.</p>
 <figure class="dx"><div class="dx-view">
   <ul class="ins-list">
-    <li class="ins-list-item">
-      <span class="ins-panel-ico"><svg class="ico"><use href="#i-file"/></svg></span>
-      <span class="ins-list-text"><span class="ins-list-title">كتالوج-الخريف.pdf</span><span class="ins-list-desc"><span class="ins-num">2.4 MB</span></span></span>
-      <span class="ins-list-end"><button class="ins-btn ins-btn--bare ins-btn--sm ins-btn--icon" aria-label="تنزيل" data-ins-tip><svg class="ico"><use href="#i-download"/></svg></button></span>
-    </li>
-    <li class="ins-list-item">
-      <span class="ins-panel-ico"><svg class="ico"><use href="#i-file"/></svg></span>
-      <span class="ins-list-text"><span class="ins-list-title">قائمة-الأسعار.xlsx</span><span class="ins-list-desc"><span class="ins-num">86 KB</span></span></span>
-      <span class="ins-list-end"><button class="ins-btn ins-btn--bare ins-btn--sm ins-btn--icon" aria-label="تنزيل" data-ins-tip><svg class="ico"><use href="#i-download"/></svg></button></span>
-    </li>
+    <li class="ins-list-item"><span class="ins-list-text"><span class="ins-list-title">الأوّل</span></span></li>
+    <li class="ins-list-item"><span class="ins-list-text"><span class="ins-list-title">الثاني</span></span></li>
   </ul>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;ul</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-item"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>كتالوج-الخريف.pdf<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-desc"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>2.4 MB<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-end"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--bare ins-btn--sm ins-btn--icon"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"تنزيل"</span> <span class="hl-a">data-ins-tip</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-item"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>قائمة-الأسعار.xlsx<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-desc"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>86 KB<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-end"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--bare ins-btn--sm ins-btn--icon"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"تنزيل"</span> <span class="hl-a">data-ins-tip</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>الأوّل<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-item"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-list-title"</span><span class="hl-t">&gt;</span>الثاني<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span></code></pre></div></figure>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="badges.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الشارات والأرقام</span></a><a class="site-pager-link site-pager-link--next" href="dropdown.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">القوائم المنبثقة</span></a></nav>
       </div>

@@ -258,46 +258,43 @@
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#pills">شارات الحالة</a><a href="#count">شارات العدّ</a><a href="#avatar">الصورة الرمزية</a><a href="#money">المبالغ</a><a href="#num">الأرقام</a></nav>
         <h2 id="pills">شارات الحالة</h2>
 <p>
-  <code>.ins-pill</code> بنقطة ونصّ، بستّ نبرات. النقطة تكبر عند المرور في كلّ الحالات، لكنّ الشارة
-  نفسها لا ترتفع إلّا إن كانت قابلة للضغط فعلًا — <code>&lt;button&gt;</code> أو <code>&lt;a&gt;</code> — لأنّ شارة
-  ترتفع تَعِد بضغطة.
+  <code>.ins-pill</code> بنقطة <code>.ins-pill-dot</code> ونصّ، بستّ نبرات. لا ترتفع عند المرور إلّا إن كانت
+  <code>&lt;button&gt;</code> أو <code>&lt;a&gt;</code>.
 </p>
 <figure class="dx"><div class="dx-view row">
-  <span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>تمّ التسليم</span>
-  <span class="ins-pill ins-pill--warn"><span class="ins-pill-dot"></span>بانتظار الدفع</span>
+  <span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>مكتمل</span>
+  <span class="ins-pill ins-pill--warn"><span class="ins-pill-dot"></span>معلّق</span>
   <span class="ins-pill ins-pill--bad"><span class="ins-pill-dot"></span>ملغى</span>
-  <span class="ins-pill ins-pill--info"><span class="ins-pill-dot"></span>قيد التجهيز</span>
+  <span class="ins-pill ins-pill--info"><span class="ins-pill-dot"></span>جارٍ</span>
   <span class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>مميّز</span>
   <span class="ins-pill"><span class="ins-pill-dot"></span>مسودّة</span>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--ok"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>تمّ التسليم<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--warn"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>بانتظار الدفع<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--ok"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>مكتمل<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--warn"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>معلّق<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--bad"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>ملغى<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--info"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>قيد التجهيز<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--info"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>جارٍ<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--brand"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>مميّز<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>مسودّة<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <figure class="dx"><div class="dx-view row">
-  <button class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>حقائب</button>
-  <button class="ins-pill"><span class="ins-pill-dot"></span>ساعات</button>
-  <button class="ins-pill"><span class="ins-pill-dot"></span>إلكترونيات</button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--brand"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>حقائب<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>ساعات<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>إلكترونيات<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <button class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>الكلّ</button>
+  <button class="ins-pill"><span class="ins-pill-dot"></span>الأوّل</button>
+  <button class="ins-pill"><span class="ins-pill-dot"></span>الثاني</button>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--brand"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>الكلّ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>الأوّل<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>الثاني<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="count">شارات العدّ</h2>
-<p><code>.ins-badge</code> عدد صغير: في لسان، في رأس لوح، بجانب رابط.</p>
+<p><code>.ins-badge</code> عدد صغير، بنبرات <code>--ok</code> و<code>--warn</code> و<code>--bad</code> و<code>--mute</code>.</p>
 <figure class="dx"><div class="dx-view row">
   <span class="ins-badge">12</span>
   <span class="ins-badge ins-badge--ok">3</span>
   <span class="ins-badge ins-badge--warn">7</span>
   <span class="ins-badge ins-badge--bad">99+</span>
   <span class="ins-badge ins-badge--mute">0</span>
-  <button class="ins-btn ins-btn--secondary">الرسائل <span class="ins-badge ins-badge--bad">4</span></button>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge"</span><span class="hl-t">&gt;</span>12<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge ins-badge--ok"</span><span class="hl-t">&gt;</span>3<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge ins-badge--warn"</span><span class="hl-t">&gt;</span>7<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge ins-badge--bad"</span><span class="hl-t">&gt;</span>99+<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge ins-badge--mute"</span><span class="hl-t">&gt;</span>0<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span><span class="hl-t">&gt;</span>الرسائل <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge ins-badge--bad"</span><span class="hl-t">&gt;</span>4<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge ins-badge--mute"</span><span class="hl-t">&gt;</span>0<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="avatar">الصورة الرمزية</h2>
 <p>حرفان أو صورة، بثلاثة مقاسات.</p>
@@ -311,32 +308,24 @@
 
 <h2 id="money">المبالغ</h2>
 <p>
-  <code>.ins-money</code> قيمة وعملة: الرقم بخطّ Inter بأرقام متساوية العرض، والعملة بعده في اتجاه القراءة،
-  والكلّ معزول عن اتجاه السطر. <code>--pos</code> و<code>--neg</code> للتغيّر. تعمل مع أيّ عملة.
+  <code>.ins-money</code> قيمة <code>-val</code> وعملة <code>-cur</code> بعدها، معزولة عن اتجاه السطر فتبقى إشارة
+  الناقص في مكانها. <code>--pos</code> و<code>--neg</code> للتغيّر. تعمل مع أيّ عملة.
 </p>
 <figure class="dx"><div class="dx-view row">
   <span class="ins-money"><span class="ins-money-val">1,249.00</span><span class="ins-money-cur">ر.س</span></span>
-  <span class="ins-money"><span class="ins-money-val">980</span><span class="ins-money-cur">د.إ</span></span>
-  <span class="ins-money"><span class="ins-money-val">3,500</span><span class="ins-money-cur">ج.م</span></span>
   <span class="ins-money"><span class="ins-money-val">120.50</span><span class="ins-money-cur">USD</span></span>
   <span class="ins-money ins-money--pos"><span class="ins-money-val">+450.00</span><span class="ins-money-cur">ر.س</span></span>
   <span class="ins-money ins-money--neg"><span class="ins-money-val">-1,500.00</span><span class="ins-money-cur">ر.س</span></span>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>1,249.00<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>ر.س<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>980<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>د.إ<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>3,500<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>ج.م<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>120.50<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>USD<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money ins-money--pos"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>+450.00<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>ر.س<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money ins-money--neg"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>-1,500.00<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>ر.س<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p class="site-note">
-  المبلغ السالب هو سبب العزل: داخل نصّ عربي تنقل خوارزمية الاتجاهين إشارة الناقص إلى الطرف الآخر،
-  فيُعرض الاسترداد <span dir="ltr">1,500.00-</span> دون <code>unicode-bidi: isolate</code>.
-</p>
 
 <h2 id="num">الأرقام</h2>
-<p><code>.ins-num</code> لأيّ رقم ليس مبلغًا — رقم طلب، هاتف، تاريخ، رمز — ليُكتب بالخطّ والعزل نفسيهما.</p>
+<p><code>.ins-num</code> لأيّ رقم ليس مبلغًا — رقم طلب، هاتف، تاريخ — ليُكتب بالخطّ والعزل نفسيهما.</p>
 <figure class="dx"><div class="dx-view">
-  <p class="ins-m-0">الطلب <span class="ins-num">#40218</span> · الهاتف <span class="ins-num">+966 50 123 4567</span> · <span class="ins-num">2026-09-23</span></p>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-m-0"</span><span class="hl-t">&gt;</span>الطلب <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>#40218<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span> · الهاتف <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>+966 50 123 4567<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span> · <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>2026-09-23<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <p>الطلب <span class="ins-num">#40218</span></p>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>الطلب <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>#40218<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="toasts.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الرسائل الطائرة</span></a><a class="site-pager-link site-pager-link--next" href="list.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">القوائم</span></a></nav>
       </div>
     </main>

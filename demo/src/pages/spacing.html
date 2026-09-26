@@ -2,14 +2,14 @@
 <p>الخطوة N تساوي N × ٤ بكسل، في كلّ عائلة من الأصناف، ومتاحة متغيّرًا <code>--ins-sp-N</code> لأنماطك.</p>
 <demo-example code="none">
   <div class="ins-cols-4">
-    <div class="ins-row"><code class="sp-key">1</code><span class="sp-sq" style="--s:var(--ins-sp-1)"></span><span class="ins-muted ins-text-xs ins-num">4px</span></div>
-    <div class="ins-row"><code class="sp-key">2</code><span class="sp-sq" style="--s:var(--ins-sp-2)"></span><span class="ins-muted ins-text-xs ins-num">8px</span></div>
-    <div class="ins-row"><code class="sp-key">3</code><span class="sp-sq" style="--s:var(--ins-sp-3)"></span><span class="ins-muted ins-text-xs ins-num">12px</span></div>
-    <div class="ins-row"><code class="sp-key">4</code><span class="sp-sq" style="--s:var(--ins-sp-4)"></span><span class="ins-muted ins-text-xs ins-num">16px</span></div>
-    <div class="ins-row"><code class="sp-key">5</code><span class="sp-sq" style="--s:var(--ins-sp-5)"></span><span class="ins-muted ins-text-xs ins-num">20px</span></div>
-    <div class="ins-row"><code class="sp-key">6</code><span class="sp-sq" style="--s:var(--ins-sp-6)"></span><span class="ins-muted ins-text-xs ins-num">24px</span></div>
-    <div class="ins-row"><code class="sp-key">8</code><span class="sp-sq" style="--s:var(--ins-sp-8)"></span><span class="ins-muted ins-text-xs ins-num">32px</span></div>
-    <div class="ins-row"><code class="sp-key">12</code><span class="sp-sq" style="--s:var(--ins-sp-12)"></span><span class="ins-muted ins-text-xs ins-num">48px</span></div>
+    <div class="ins-row"><code class="sp-key">1</code><span class="sp-sq" style="--s:var(--ins-sp-1)"></span><span>4px</span></div>
+    <div class="ins-row"><code class="sp-key">2</code><span class="sp-sq" style="--s:var(--ins-sp-2)"></span><span>8px</span></div>
+    <div class="ins-row"><code class="sp-key">3</code><span class="sp-sq" style="--s:var(--ins-sp-3)"></span><span>12px</span></div>
+    <div class="ins-row"><code class="sp-key">4</code><span class="sp-sq" style="--s:var(--ins-sp-4)"></span><span>16px</span></div>
+    <div class="ins-row"><code class="sp-key">5</code><span class="sp-sq" style="--s:var(--ins-sp-5)"></span><span>20px</span></div>
+    <div class="ins-row"><code class="sp-key">6</code><span class="sp-sq" style="--s:var(--ins-sp-6)"></span><span>24px</span></div>
+    <div class="ins-row"><code class="sp-key">8</code><span class="sp-sq" style="--s:var(--ins-sp-8)"></span><span>32px</span></div>
+    <div class="ins-row"><code class="sp-key">12</code><span class="sp-sq" style="--s:var(--ins-sp-12)"></span><span>48px</span></div>
   </div>
 </demo-example>
 
@@ -33,35 +33,26 @@
   </div>
 </div>
 <p>
-  N واحد من <span class="ins-num">0 1 2 3 4 5 6 8 12</span>. ولا <code>ml</code> ولا <code>mr</code>
-  في المكتبة إطلاقًا: الصنف نفسه يعمل في الاتجاهين. والأدوات تُحمَّل بعد كلّ المكوّنات، فتغلبها دون
-  <code>!important</code>.
+  N واحد من 0 1 2 3 4 5 6 8 12. ولا <code>ml</code> ولا <code>mr</code> في المكتبة: الصنف نفسه يعمل في
+  الاتجاهين. والأدوات تغلب المكوّنات دون <code>!important</code>.
 </p>
 
 <h2 id="stack">الكومة والصفّ</h2>
 <p>
   <code>.ins-stack</code> عمودي و<code>.ins-row</code> أفقي يلتفّ. كلاهما يفصل أبناءه بـ <code>gap</code>
-  ويلغي هوامشهم الخارجية، فهامش اللوح لا يتراكم فوق الفراغ. في الكومة <code>ins-mt-auto</code> يدفع
-  العنصر إلى الأسفل، وفي الصفّ <code>ins-ms-auto</code> إلى أقصى النهاية.
+  ويلغي هوامشهم الخارجية. في الكومة <code>ins-mt-auto</code> يدفع العنصر إلى الأسفل، وفي الصفّ
+  <code>ins-ms-auto</code> إلى النهاية.
 </p>
-<demo-example>
-  <div class="ins-cols-2">
-    <div class="ins-stack ins-gap-2">
-      <div class="demo-box">stack · 1</div>
-      <div class="demo-box">stack · 2</div>
-      <div class="demo-box">stack · 3</div>
-    </div>
-    <div class="ins-stack ins-gap-3">
-      <div class="ins-row">
-        <button class="ins-btn ins-btn--primary">نشر</button>
-        <button class="ins-btn ins-btn--secondary">معاينة</button>
-        <button class="ins-btn ins-btn--ghost">إلغاء</button>
-      </div>
-      <div class="ins-row">
-        <span class="ins-muted ins-text-sm">مسودّة محفوظة قبل دقيقتين</span>
-        <button class="ins-btn ins-btn--secondary ins-btn--sm ins-ms-auto">السجلّ</button>
-      </div>
-    </div>
+<demo-example class="stack">
+  <div class="ins-stack ins-gap-2">
+    <div class="demo-box">stack · 1</div>
+    <div class="demo-box">stack · 2</div>
+    <div class="demo-box">stack · 3</div>
+  </div>
+  <div class="ins-row">
+    <div class="demo-box">row · 1</div>
+    <div class="demo-box">row · 2</div>
+    <div class="demo-box ins-ms-auto">ins-ms-auto</div>
   </div>
 </demo-example>
 
@@ -71,17 +62,13 @@
   للعنصر الذي يأخذ ما تبقّى، و<code>.ins-toolbar-end</code> لما يُدفع إلى النهاية.
 </p>
 <demo-example>
-  <div class="ins-toolbar ins-mb-0">
-    <div class="ins-search ins-toolbar-grow">
-      <svg class="ico ins-search-ico"><use href="#i-search"/></svg>
-      <input class="ins-input" placeholder="ابحث في الطلبات…" aria-label="بحث">
-    </div>
+  <div class="ins-toolbar">
+    <input class="ins-input ins-toolbar-grow" placeholder="بحث" aria-label="بحث">
     <select class="ins-select" aria-label="الحالة" style="inline-size:auto">
-      <option>كلّ الحالات</option><option>قيد التجهيز</option><option>مشحون</option>
+      <option>الكلّ</option><option>مفتوح</option><option>مغلق</option>
     </select>
     <div class="ins-toolbar-end">
-      <button class="ins-btn ins-btn--secondary"><svg class="ico"><use href="#i-download"/></svg>تصدير</button>
-      <button class="ins-btn ins-btn--primary"><svg class="ico"><use href="#i-plus"/></svg>طلب جديد</button>
+      <button class="ins-btn ins-btn--primary">إضافة</button>
     </div>
   </div>
 </demo-example>
@@ -90,7 +77,7 @@
 <p><code>.ins-field-row</code> يضع الحقول جنبًا إلى جنب ويكدّسها على الشاشة الضيّقة. والحقل الذي يأخذ ما تبقّى يحمل <code>.ins-grow</code>.</p>
 <demo-example>
   <div class="ins-field-row">
-    <div class="ins-field ins-grow"><label class="ins-label" for="s-first">الاسم الأوّل</label><input class="ins-input" id="s-first"></div>
-    <div class="ins-field ins-grow"><label class="ins-label" for="s-last">اسم العائلة</label><input class="ins-input" id="s-last"></div>
+    <div class="ins-field ins-grow"><label class="ins-label" for="s-first">الاسم</label><input class="ins-input" id="s-first"></div>
+    <div class="ins-field ins-grow"><label class="ins-label" for="s-last">العائلة</label><input class="ins-input" id="s-last"></div>
   </div>
 </demo-example>

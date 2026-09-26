@@ -1,76 +1,51 @@
 <h2 id="skeleton">هيكل التحميل</h2>
 <p>
-  شكل المحتوى قبل وصوله، فلا تقفز الصفحة حين يصل. أربعة أشكال: <code>--title</code> و<code>--text</code>
-  و<code>--circle</code> و<code>--block</code>. ولمعته أحد الاستثناءين الوحيدين من قاعدة «لا شيء يتكرّر»،
-  لأنّها تعني «ننتظر».
+  <code>.ins-skel</code> يرسم شكل المحتوى قبل وصوله، فلا تقفز الصفحة حين يصل. أربعة أشكال:
+  <code>--title</code> و<code>--text</code> و<code>--circle</code> و<code>--block</code>.
 </p>
-<demo-example>
-  <div class="ins-cols-2">
-    <div class="ins-panel">
-      <div class="ins-panel-body ins-stack">
-        <div class="ins-row ins-gap-3 ins-flex-nowrap">
-          <span class="ins-skel ins-skel--circle"></span>
-          <span class="ins-grow">
-            <span class="ins-skel ins-skel--title ins-block"></span>
-            <span class="ins-skel ins-skel--text ins-block" style="inline-size:60%"></span>
-          </span>
-        </div>
-        <div class="ins-skel ins-skel--block"></div>
-        <div class="ins-skel ins-skel--text"></div>
-        <div class="ins-skel ins-skel--text" style="inline-size:80%"></div>
-      </div>
-    </div>
-    <div class="ins-panel">
-      <div class="ins-panel-body ins-stack">
-        <div class="ins-row ins-gap-3 ins-flex-nowrap">
-          <span class="ins-avatar ins-avatar--lg">ل ح</span>
-          <span class="ins-grow"><b class="ins-block">ليلى حسن</b><span class="ins-muted ins-text-sm">مديرة المتجر</span></span>
-        </div>
-        <div class="ins-glass-inner ins-p-4 ins-text-sm">آخر طلب: حقيبة ظهر جلدية، قبل ساعتين.</div>
-        <p class="ins-muted ins-text-sm ins-m-0">تنضمّ إلى الفريق منذ آذار ٢٠٢٤، وتدير ثلاثة متاجر.</p>
-      </div>
-    </div>
-  </div>
+<demo-example class="stack narrow">
+  <div class="ins-skel ins-skel--circle"></div>
+  <div class="ins-skel ins-skel--title"></div>
+  <div class="ins-skel ins-skel--block"></div>
+  <div class="ins-skel ins-skel--text"></div>
+  <div class="ins-skel ins-skel--text"></div>
 </demo-example>
-<p>اللوح الأيمن هيكل اللوح الأيسر: الشكل نفسه، والعناصر في الأماكن نفسها.</p>
 
 <h2 id="spinner">الدوّارة</h2>
-<p>لانتظار قصير لا شكل له — حفظ، إرسال. و<code>.ins-loading</code> حاوية تضعها في وسط منطقة فارغة بارتفاع معقول.</p>
+<p>
+  <code>.ins-spinner</code> لانتظار قصير لا شكل له، و<code>--sm</code> داخل زرّ. أعطها <code>role="status"</code>
+  وتسمية، أو <code>aria-hidden</code> حين يحمل الزرّ النصّ.
+</p>
 <demo-example class="row">
   <span class="ins-spinner" role="status" aria-label="جارٍ التحميل"></span>
   <span class="ins-spinner ins-spinner--sm" role="status" aria-label="جارٍ التحميل"></span>
   <button class="ins-btn ins-btn--primary" disabled><span class="ins-spinner ins-spinner--sm" aria-hidden="true"></span>جارٍ الحفظ…</button>
 </demo-example>
+<p><code>.ins-loading</code> حاوية تضع الدوّارة في وسط منطقة فارغة بارتفاع معقول.</p>
 <demo-example>
-  <div class="ins-panel">
-    <div class="ins-loading"><span class="ins-spinner" role="status" aria-label="جارٍ تحميل الطلبات"></span></div>
-  </div>
+  <div class="ins-loading"><span class="ins-spinner" role="status" aria-label="جارٍ التحميل"></span></div>
 </demo-example>
 
 <h2 id="empty">الحالة الفارغة</h2>
 <p>
-  الشاشة الوحيدة التي لا شيء فيها، فهي الوحيدة التي تستحقّ حركة: مرّر المؤشّر فيرتفع الرمز ويخرج
-  قليلًا من بهتانه. واجعلها تقول ما سيظهر هنا، وما الخطوة التالية.
+  <code>.ins-empty</code> فيه رمز <code>.ins-empty-ico</code>، وعنوان <code>.ins-empty-title</code>، وتلميح
+  <code>.ins-empty-hint</code>. اجعلها تقول ما سيظهر هنا، وما الخطوة التالية.
 </p>
 <demo-example>
-  <div class="ins-panel">
-    <div class="ins-empty">
-      <span class="ins-empty-ico"><svg class="ico" style="font-size:2rem"><use href="#i-box"/></svg></span>
-      <span class="ins-empty-title">لا منتجات بعد</span>
-      <span class="ins-empty-hint">أضف أوّل منتج ليظهر في متجرك. يمكنك استيراد قائمة كاملة من ملفّ أيضًا.</span>
-      <div class="ins-row ins-justify-center ins-mt-4">
-        <button class="ins-btn ins-btn--primary"><svg class="ico"><use href="#i-plus"/></svg>منتج جديد</button>
-        <button class="ins-btn ins-btn--secondary"><svg class="ico"><use href="#i-upload"/></svg>استيراد</button>
-      </div>
-    </div>
+  <div class="ins-empty">
+    <span class="ins-empty-ico"><svg class="ico"><use href="#i-box"/></svg></span>
+    <span class="ins-empty-title">لا منتجات بعد</span>
+    <span class="ins-empty-hint">أضف أوّل منتج ليظهر هنا.</span>
+    <button class="ins-btn ins-btn--primary">منتج جديد</button>
   </div>
 </demo-example>
 
 <h2 id="search-empty">لا نتائج</h2>
+<p>الشكل نفسه لبحث لم يجد شيئًا، بلا زرّ.</p>
 <demo-example>
   <div class="ins-empty">
-    <span class="ins-empty-ico"><svg class="ico" style="font-size:2rem"><use href="#i-search"/></svg></span>
-    <span class="ins-empty-title">لا نتائج لـ «ساعة ذهبية»</span>
-    <span class="ins-empty-hint">جرّب كلمة أقصر، أو أزل التصفية حسب السعر.</span>
+    <span class="ins-empty-ico"><svg class="ico"><use href="#i-search"/></svg></span>
+    <span class="ins-empty-title">لا نتائج</span>
+    <span class="ins-empty-hint">جرّب كلمة أخرى.</span>
   </div>
 </demo-example>

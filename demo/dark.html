@@ -258,13 +258,13 @@
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#modes">ثلاث حالات لا اثنتان</a><a href="#api">من الشيفرة</a><a href="#designed">مصمَّم، لا مقلوب</a><a href="#first-paint">قبل أوّل رسم</a><a href="#your-css">في أنماطك أنت</a></nav>
         <h2 id="modes">ثلاث حالات لا اثنتان</h2>
 <p>
-  <b>فاتح</b> و<b>داكن</b> اختياران صريحان يُحفظان. و<b>النظام</b> لا يحفظ شيئًا ولا يختم شيئًا،
-  فيبقى إعداد نظام التشغيل هو الحاكم — ولهذا غياب السمة له معنى. جرّب:
+  <b>فاتح</b> و<b>داكن</b> اختياران صريحان يُحفظان ويُختمان بسمة <code>data-ins-theme</code> على
+  <code>&lt;html&gt;</code>. و<b>النظام</b> يزيل السمة فيتبع إعداد نظام التشغيل. جرّب:
 </p>
 <figure class="dx"><div class="dx-view row">
-  <button class="ins-btn ins-btn--secondary" data-ins-theme-toggle><svg class="ico"><use href="#i-moon"/></svg>تبديل الوضع</button>
+  <button class="ins-btn ins-btn--secondary" data-ins-theme-toggle>تبديل الوضع</button>
   <button class="ins-btn ins-btn--ghost" data-ins-theme-toggle="system">اتبع النظام</button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">data-ins-theme-toggle</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>تبديل الوضع<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">data-ins-theme-toggle</span><span class="hl-t">&gt;</span>تبديل الوضع<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--ghost"</span> <span class="hl-a">data-ins-theme-toggle</span>=<span class="hl-s">"system"</span><span class="hl-t">&gt;</span>اتبع النظام<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <p class="ins-muted ins-text-sm" id="theme-state"></p>
 
@@ -279,47 +279,23 @@
 });</code></pre></div>
 
 <h2 id="designed">مصمَّم، لا مقلوب</h2>
-<p>
-  قلب زجاج أبيض شفّاف يعطي ألواحًا رمادية حليبية بحواف بيضاء صارخة. الداكن هنا لوحة صُمّمت لذاتها:
-</p>
+<p>الداكن لوحة ثانية بقيمها الخاصة، لا فلتر فوق الأولى:</p>
 <ul>
-  <li>الحافة تنزل من ٨٥٪ إلى ١٠٪ — حافة بيضاء ساطعة على سطح داكن تبدو إطارًا لا ضوءًا.</li>
-  <li>التشبّع في الضباب ينزل من ١٤٠٪ إلى ١٢٠٪، لأنّ الألوان خلف سطح داكن تصرخ بسرعة.</li>
-  <li>الظلال أغمق <em>وأقوى</em> معًا، والتلوينات الدلالية تتضاعف تقريبًا لتبقى مرئية.</li>
-  <li>الدرجة المقروءة من لون الهوية تنقلب اتجاهها: نحو الأبيض لا نحو الأسود.</li>
+  <li>حافة الزجاج أخفت، وتشبّع الضباب أقلّ.</li>
+  <li>الظلال أغمق، والتلوينات الدلالية أقوى لتبقى مرئية.</li>
+  <li>الدرجة المقروءة من لون الهوية تتّجه نحو الأبيض لا نحو الأسود.</li>
 </ul>
-<p>بدّل الوضع وانظر إلى هذه المجموعة — كلّ قيمة فيها من اللوحة الثانية، لا من فلتر فوق الأولى:</p>
-<figure class="dx dx--bare"><div class="dx-view">
-  <div class="ins-cols-3">
-    <div class="ins-stat ins-glass ins-stat--ok">
-      <span class="ins-stat-ico"><svg class="ico"><use href="#i-check"/></svg></span>
-      <span class="ins-stat-body"><span class="ins-stat-label">مكتملة</span><span class="ins-stat-value">24</span></span>
-    </div>
-    <div class="ins-stat ins-glass ins-stat--warn">
-      <span class="ins-stat-ico"><svg class="ico"><use href="#i-clock"/></svg></span>
-      <span class="ins-stat-body"><span class="ins-stat-label">متأخّرة</span><span class="ins-stat-value">3</span></span>
-    </div>
-    <div class="ins-stat ins-glass ins-stat--info">
-      <span class="ins-stat-ico"><svg class="ico"><use href="#i-users"/></svg></span>
-      <span class="ins-stat-body"><span class="ins-stat-label">الأعضاء</span><span class="ins-stat-value">9</span></span>
-    </div>
-  </div>
-  <div class="ins-alert ins-alert--warn ins-mt-4">
-    <span class="ins-alert-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
-    <div class="ins-alert-msg"><span class="ins-alert-text">ثلاث مهامّ تجاوزت موعدها. الشارات تحافظ على علاقات ألوانها في الوضعين.</span></div>
-  </div>
-</div></figure>
 
 <h2 id="first-paint">قبل أوّل رسم</h2>
 <p>
-  الاختيار المحفوظ يُستعاد لحظة قراءة السكربت في <code>&lt;head&gt;</code>، قبل أن يُرسم أيّ شيء. هذا
-  هو السبب الوحيد لكون السكربت متزامنًا في الرأس: بدونه تومض كلّ صفحة بالفاتح ثمّ تنقلب.
+  الاختيار المحفوظ يُستعاد لحظة قراءة السكربت في <code>&lt;head&gt;</code>، فضعه هناك دون
+  <code>defer</code> وإلّا ومضت الصفحة بالفاتح ثمّ انقلبت.
 </p>
 
 <h2 id="your-css">في أنماطك أنت</h2>
 <p>
-  الأفضل أن تقرأ المتغيّرات، فتتبع الوضع دون قاعدة واحدة إضافية. وإن احتجت قاعدة للداكن فعلًا،
-  فاكتبها للحالتين: الاختيار الصريح، والنظام حين لا اختيار.
+  اقرأ المتغيّرات فتتبع الوضع وحدها. وإن احتجت قاعدة للداكن، فاكتبها للحالتين: الاختيار الصريح،
+  والنظام حين لا اختيار.
 </p>
 <div class="dx-code" data-lang="css"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-c">/* الأفضل: متغيّر يتبع الوضع بنفسه */</span>
 .my-card { <span class="hl-t">background</span>: var(<span class="hl-a">--ins-surface</span>); <span class="hl-t">color</span>: var(<span class="hl-a">--ins-text-1</span>); }

@@ -257,28 +257,23 @@
         </header>
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#basic">التلميح</a><a href="#text">نصّ مختلف</a><a href="#sides">الجهة</a><a href="#behaviour">السلوك</a></nav>
         <h2 id="basic">التلميح</h2>
-<p>
-  <code>data-ins-tip</code> فارغًا يعيد استعمال <code>aria-label</code> — الزرّ الأيقوني يحتاج تسمية على كلّ
-  حال، فالتلميح يأتي معها مجانًا.
-</p>
+<p><code>data-ins-tip</code> فارغًا يعيد استعمال <code>aria-label</code>، فالزرّ الأيقوني يحصل على تلميحه من تسميته.</p>
 <figure class="dx"><div class="dx-view row">
   <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="تعديل" data-ins-tip><svg class="ico"><use href="#i-edit"/></svg></button>
-  <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="تنزيل الفاتورة" data-ins-tip><svg class="ico"><use href="#i-download"/></svg></button>
   <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="مشاركة" data-ins-tip><svg class="ico"><use href="#i-share"/></svg></button>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--icon"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"تعديل"</span> <span class="hl-a">data-ins-tip</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--icon"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"تنزيل الفاتورة"</span> <span class="hl-a">data-ins-tip</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--icon"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"مشاركة"</span> <span class="hl-a">data-ins-tip</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="text">نصّ مختلف</h2>
-<p>قيمة للسمة تعطي نصًّا غير التسمية، ويُربط وصفًا للعنصر فيسمعه قارئ الشاشة بعد اسمه.</p>
-<figure class="dx"><div class="dx-view row">
-  <button class="ins-btn ins-btn--ghost-danger ins-btn--icon" aria-label="حذف" data-ins-tip="حذف نهائي — لا يمكن التراجع"><svg class="ico"><use href="#i-trash"/></svg></button>
-  <span class="ins-pill ins-pill--warn" tabindex="0" data-ins-tip="خمسة طلبات تنتظر الدفع منذ أكثر من يوم"><span class="ins-pill-dot"></span>بانتظار الدفع · <span class="ins-num">5</span></span>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--ghost-danger ins-btn--icon"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"حذف"</span> <span class="hl-a">data-ins-tip</span>=<span class="hl-s">"حذف نهائي — لا يمكن التراجع"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--warn"</span> <span class="hl-a">tabindex</span>=<span class="hl-s">"0"</span> <span class="hl-a">data-ins-tip</span>=<span class="hl-s">"خمسة طلبات تنتظر الدفع منذ أكثر من يوم"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>بانتظار الدفع · <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>5<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p class="site-note">
-  عنصر غير قابل للتركيز — شارة، نصّ — يحتاج <code>tabindex="0"</code> ليصل إليه تلميحه من لوحة المفاتيح.
+<p>
+  قيمة للسمة تعطي نصًّا غير التسمية، ويُربط وصفًا للعنصر فيسمعه قارئ الشاشة بعد اسمه. وعنصر غير قابل للتركيز
+  يحتاج <code>tabindex="0"</code> ليصل إليه تلميحه من لوحة المفاتيح.
 </p>
+<figure class="dx"><div class="dx-view row">
+  <button class="ins-btn ins-btn--secondary" data-ins-tip="لا يمكن التراجع">حذف</button>
+  <span tabindex="0" data-ins-tip="نصّ التلميح">نصّ عاديّ</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">data-ins-tip</span>=<span class="hl-s">"لا يمكن التراجع"</span><span class="hl-t">&gt;</span>حذف<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;span</span> <span class="hl-a">tabindex</span>=<span class="hl-s">"0"</span> <span class="hl-a">data-ins-tip</span>=<span class="hl-s">"نصّ التلميح"</span><span class="hl-t">&gt;</span>نصّ عاديّ<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="sides">الجهة</h2>
 <p><code>data-ins-tip-side</code>: <code>top</code> افتراضيًا، أو <code>bottom</code> أو <code>start</code> أو <code>end</code> — منطقية، فـ <code>start</code> يمين في العربية. وينقلب تلقائيًا إن لم يتّسع مكانه.</p>
@@ -294,10 +289,10 @@
 
 <h2 id="behaviour">السلوك</h2>
 <ul>
-  <li>يظهر بعد ٤٠٠ جزء من الثانية بالمؤشّر، وفورًا بلوحة المفاتيح، وفورًا أيضًا وأنت تنتقل من تلميح إلى جاره.</li>
-  <li>لا يظهر باللمس: لا مرور في اللمس، وتلميح تحت الإصبع الذي ضغط للتوّ يغطّي ما يصفه.</li>
+  <li>يظهر بعد ٤٠٠ جزء من الثانية بالمؤشّر، وفورًا بلوحة المفاتيح، وفورًا وأنت تنتقل من تلميح إلى جاره.</li>
+  <li>لا يظهر باللمس.</li>
   <li>عنصر واحد للصفحة كلّها في الطبقة العليا، فلا يقصّه <code>overflow</code> لوح أو جدول.</li>
-  <li>يُغلق بـ <kbd class="ins-kbd">Esc</kbd> وبالتمرير وبالضغط، وحين يغادر المؤشّر العنصر والتلميح معًا — فيمكن قراءته.</li>
+  <li>يُغلق بـ <kbd class="ins-kbd">Esc</kbd> وبالتمرير وبالضغط، وحين يغادر المؤشّر العنصر والتلميح معًا.</li>
 </ul>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="progress.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">التقدّم</span></a><a class="site-pager-link site-pager-link--next" href="alerts.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">التنبيهات</span></a></nav>
       </div>

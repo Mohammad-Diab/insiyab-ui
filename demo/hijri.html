@@ -260,39 +260,34 @@
 
 <h2 id="install">التثبيت</h2>
 <p>
-  إضافة لا جزء من الملفّين: ملفّ ثالث يُحمَّل بعد <code>insiyab.js</code>، فلا تدفع صفحةٌ لا تحتاج التقويم
-  الهجريّ ثمنه. لا جداول تواريخ داخله — المتصفّح نفسه يعرف التقويم الهجريّ عبر <code>Intl</code>، والإضافة
-  تسأله.
+  إضافة لا جزء من الملفّين: ملفّ ثالث يُحمَّل بعد <code>insiyab.js</code>. لا جداول تواريخ داخله، فالمتصفّح يعرف
+  التقويم الهجريّ عبر <code>Intl</code>.
 </p>
 <div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"plugins/insiyab-hijri.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
 
 <h2 id="field">حقل هجري</h2>
 <p>
-  حقل التاريخ نفسه من صفحة <a href="pickers.html">المنتقيات</a>، مع <code>data-ins-calendar="hijri"</code>.
-  الحقل والشبكة بالهجريّ، وأسماء الأشهر من المتصفّح، والأرقام لاتينية كبقيّة أرقام المكتبة. وفي أسفل التقويم
-  مفتاح يقلبه إلى الميلاديّ ويعيده، ويتبعه نصّ الحقل — لمن يفكّر بالتقويم الآخر.
+  حقل التاريخ من صفحة <a href="pickers.html">المنتقيات</a> مع <code>data-ins-calendar="hijri"</code>. وفي أسفل
+  التقويم مفتاح يقلبه إلى الميلاديّ ويعيده.
 </p>
 <figure class="dx"><div class="dx-view narrow">
   <div class="ins-field">
-    <label class="ins-label" for="hj-date">تاريخ الإصدار</label>
+    <label class="ins-label" for="hj-date">التاريخ</label>
     <div class="ins-input-group">
-      <input class="ins-input" id="hj-date" type="date" data-ins-date data-ins-calendar="hijri" name="issued" value="2026-09-24">
+      <input class="ins-input" id="hj-date" type="date" data-ins-date data-ins-calendar="hijri" name="date" value="2026-09-24">
     </div>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"hj-date"</span><span class="hl-t">&gt;</span>تاريخ الإصدار<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"hj-date"</span><span class="hl-t">&gt;</span>التاريخ<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"hj-date"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">data-ins-calendar</span>=<span class="hl-s">"hijri"</span> <span class="hl-a">name</span>=<span class="hl-s">"issued"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-24"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"hj-date"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">data-ins-calendar</span>=<span class="hl-s">"hijri"</span> <span class="hl-a">name</span>=<span class="hl-s">"date"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-24"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <p>
-  <b>ما يُرسَل لا يتغيّر.</b> الحقل المخفيّ يحمل التاريخ الميلاديّ بصيغة ISO — <code>2026-09-24</code> — كما
-  يرسله حقل تاريخ عاديّ تمامًا، فلا يحتاج الخادم ولا قاعدة البيانات شيئًا جديدًا. الهجريّ هو ما يقرؤه
-  المستخدم ويختار به، لا ما يُخزَّن. والحدود <code>min</code> و<code>max</code> والمدى بين حقلين تعمل كما هي،
-  ورسائلها بالتقويم الظاهر.
+  <b>ما يُرسَل لا يتغيّر:</b> الحقل المخفيّ يحمل التاريخ الميلاديّ بصيغة ISO، <code>2026-09-24</code>، كحقل تاريخ
+  عاديّ. و<code>min</code> و<code>max</code> والمدى بين حقلين تعمل كما هي، ورسائلها بالتقويم الظاهر:
 </p>
-<p>والمدى بين حقلين، بالهجريّ:</p>
 <figure class="dx"><div class="dx-view">
   <div class="ins-field-row">
     <div class="ins-field ins-grow">
@@ -325,10 +320,10 @@
 
 <h2 id="typing">الكتابة</h2>
 <ul>
-  <li><b>يوم/شهر/سنة هجرية</b> — <code>13/4/1448</code>، أو بالأرقام العربية <code>١٣/٤/١٤٤٨</code>، أو السنة أوّلًا <code>1448-04-13</code>.</li>
-  <li><b>سنة من رقمين</b> — تُقرأ في القرن الهجريّ الحاليّ: <code>13/4/48</code>.</li>
-  <li><b>سنة بعد ١٧٠٠</b> — لا يمكن أن تكون هجرية قبل قرون، فتُقرأ ميلادية: <code>24/9/2026</code> و<code>2026-09-24</code>.</li>
-  <li><b>يوم لا يوجد</b> — الثلاثون من شهر من تسعة وعشرين يومًا يُرفض برسالة داخل الحقل.</li>
+  <li><b>يوم/شهر/سنة هجرية</b> — <code>13/4/1448</code>، أو <code>١٣/٤/١٤٤٨</code>، أو السنة أوّلًا <code>1448-04-13</code>.</li>
+  <li><b>سنة من رقمين</b> — في القرن الهجريّ الحاليّ: <code>13/4/48</code>.</li>
+  <li><b>سنة بعد ١٧٠٠</b> — تُقرأ ميلادية: <code>24/9/2026</code> و<code>2026-09-24</code>.</li>
+  <li><b>يوم لا يوجد</b> — يُرفض برسالة داخل الحقل.</li>
 </ul>
 
 <h2 id="page">الصفحة كلّها</h2>
@@ -343,18 +338,18 @@
 
 <h2 id="civil">التقويم الحسابي</h2>
 <p>
-  <code>hijri</code> هو تقويم أمّ القرى، التقويم الرسميّ في السعودية وما يقصده أكثر الناس بالتاريخ الهجريّ.
-  و<code>hijri-civil</code> هو التقويم الهجريّ الحسابيّ (الجدوليّ)، لجهة تعتمده. قد يختلفان بيوم أو يومين:
+  <code>hijri</code> تقويم أمّ القرى، و<code>hijri-civil</code> التقويم الهجريّ الحسابيّ (الجدوليّ). قد يختلفان بيوم
+  أو يومين:
 </p>
 <figure class="dx"><div class="dx-view narrow">
   <div class="ins-field">
-    <label class="ins-label" for="hj-civil">التاريخ نفسه بالحسابيّ</label>
+    <label class="ins-label" for="hj-civil">التاريخ بالحسابيّ</label>
     <div class="ins-input-group">
       <input class="ins-input" id="hj-civil" type="date" data-ins-date data-ins-calendar="hijri-civil" name="civil" value="2026-09-24">
     </div>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"hj-civil"</span><span class="hl-t">&gt;</span>التاريخ نفسه بالحسابيّ<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"hj-civil"</span><span class="hl-t">&gt;</span>التاريخ بالحسابيّ<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"hj-civil"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">data-ins-calendar</span>=<span class="hl-s">"hijri-civil"</span> <span class="hl-a">name</span>=<span class="hl-s">"civil"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-24"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
@@ -368,13 +363,8 @@
   console.log(e.detail.input, e.detail.calendar);   <span class="hl-c">// 'hijri' أو 'gregory' بعد المفتاح</span>
 });</code></pre></div>
 <p>
-  والإضافة نفسها ليست إلّا تقويمًا سجّلته بـ <code>Insiyab.calendar(name, calendar)</code>: أربع إجابات صغيرة —
-  أجزاء التاريخ، والتاريخ من أجزائه، وطول الشهر، ومعرّف التقويم في <code>Intl</code>. تقويم آخر يُضاف بالطريقة
-  نفسها، والشرح في تعليق هذه الواجهة داخل <code>insiyab.js</code>.
-</p>
-<p class="site-note">
-  <b>متصفّح بلا تقويم هجريّ</b> — نادر اليوم — تبقى حقوله ميلادية تعمل، وسطر واحد في الطرفية يقول لماذا.
-  وكذلك صفحة طلبت الهجريّ ولم تحمّل الإضافة.
+  تقويم آخر يُسجَّل بـ <code>Insiyab.calendar(name, calendar)</code>، والشرح في تعليق هذه الواجهة داخل
+  <code>insiyab.js</code>. ومتصفّح بلا تقويم هجريّ، أو صفحة لم تحمّل الإضافة، تبقى حقولها ميلادية مع سطر في الطرفية.
 </p>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="utilities.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الأدوات المساعدة</span></a><a class="site-pager-link site-pager-link--next" href="palette.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">لوحة الأوامر</span></a></nav>
       </div>

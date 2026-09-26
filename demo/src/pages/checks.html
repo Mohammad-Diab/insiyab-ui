@@ -1,9 +1,9 @@
 <h2 id="checkbox">مربّعات الاختيار</h2>
 <p>عنصر <code>&lt;input type="checkbox"&gt;</code> حقيقي داخل <code>&lt;label class="ins-check"&gt;</code>، فالنقر على النصّ يبدّله، ولوحة المفاتيح وقيمة النموذج للمنصّة.</p>
-<demo-example class="row" >
-  <label class="ins-check"><input type="checkbox" checked><span class="ins-check-text">الشحن المجاني</span></label>
-  <label class="ins-check"><input type="checkbox"><span class="ins-check-text">تغليف هديّة</span></label>
-  <label class="ins-check"><input type="checkbox" disabled><span class="ins-check-text">الدفع عند الاستلام (غير متاح)</span></label>
+<demo-example class="row">
+  <label class="ins-check"><input type="checkbox" checked><span class="ins-check-text">محدّد</span></label>
+  <label class="ins-check"><input type="checkbox"><span class="ins-check-text">غير محدّد</span></label>
+  <label class="ins-check"><input type="checkbox" disabled><span class="ins-check-text">معطّل</span></label>
 </demo-example>
 
 <h3 id="indeterminate">«بعضها محدّد»</h3>
@@ -12,36 +12,34 @@
   شكلها في الشيفرة.
 </p>
 <demo-example class="stack">
-  <label class="ins-check"><input type="checkbox" id="c-all" data-ins-indeterminate><span class="ins-check-text">كلّ الإشعارات</span></label>
-  <div class="ins-stack ins-gap-2 ins-ps-6" id="c-items">
-    <label class="ins-check"><input type="checkbox" checked><span class="ins-check-text">طلب جديد</span></label>
-    <label class="ins-check"><input type="checkbox"><span class="ins-check-text">تعليق على منتج</span></label>
-    <label class="ins-check"><input type="checkbox"><span class="ins-check-text">تقرير أسبوعي</span></label>
+  <label class="ins-check"><input type="checkbox" id="c-all" data-ins-indeterminate><span class="ins-check-text">الكلّ</span></label>
+  <div class="ins-stack ins-ps-6" id="c-items">
+    <label class="ins-check"><input type="checkbox" checked><span class="ins-check-text">الأوّل</span></label>
+    <label class="ins-check"><input type="checkbox"><span class="ins-check-text">الثاني</span></label>
   </div>
 </demo-example>
 
 <h2 id="radio">الدوائر</h2>
 <demo-example class="row">
-  <label class="ins-check"><input type="radio" name="ship" checked><span class="ins-check-text">توصيل عادي</span></label>
-  <label class="ins-check"><input type="radio" name="ship"><span class="ins-check-text">توصيل سريع</span></label>
-  <label class="ins-check"><input type="radio" name="ship"><span class="ins-check-text">استلام من الفرع</span></label>
+  <label class="ins-check"><input type="radio" name="r-demo" checked><span class="ins-check-text">الأوّل</span></label>
+  <label class="ins-check"><input type="radio" name="r-demo"><span class="ins-check-text">الثاني</span></label>
+  <label class="ins-check"><input type="radio" name="r-demo"><span class="ins-check-text">الثالث</span></label>
 </demo-example>
 
 <h2 id="switch">المفتاح</h2>
 <p>
-  للإعداد ذي الحالتين مفتاح، لا قائمة بخيارين: حالته ظاهرة دون أن يُفتح شيء. وإبهامه وحده — مع علامة
-  الصحّ — يسير على منحنى التجاوز، لأنّه الشيء الوحيد في الصفحة الذي وظيفته كلّها أن يتحرّك.
+  <code>.ins-switch</code> للإعداد ذي الحالتين، بتسمية <code>-label</code> ووصف اختياري <code>-desc</code>.
 </p>
 <demo-example class="stack">
   <label class="ins-switch">
     <input type="checkbox" checked><span class="ins-switch-track"></span>
-    <span class="ins-switch-text"><span class="ins-switch-label">إشعارات البريد</span></span>
+    <span class="ins-switch-text"><span class="ins-switch-label">الإشعارات</span></span>
   </label>
   <label class="ins-switch">
     <input type="checkbox"><span class="ins-switch-track"></span>
     <span class="ins-switch-text">
       <span class="ins-switch-label">وضع الإجازة</span>
-      <span class="ins-switch-desc">يخفي المتجر من نتائج البحث ويوقف الطلبات الجديدة</span>
+      <span class="ins-switch-desc">وصف قصير</span>
     </span>
   </label>
 </demo-example>
@@ -52,8 +50,8 @@
   <label class="ins-switch ins-switch--card">
     <input type="checkbox" checked><span class="ins-switch-track"></span>
     <span class="ins-switch-text">
-      <span class="ins-switch-label">نشر المنتج فورًا</span>
-      <span class="ins-switch-desc">يظهر في المتجر بعد الحفظ مباشرة</span>
+      <span class="ins-switch-label">النشر الفوري</span>
+      <span class="ins-switch-desc">وصف قصير</span>
     </span>
   </label>
 </demo-example>
@@ -61,47 +59,40 @@
   <div class="ins-switch-grid">
     <label class="ins-switch">
       <input type="checkbox" checked><span class="ins-switch-track"></span>
-      <span class="ins-switch-text"><span class="ins-switch-label">تأكيد الطلب بالبريد</span><span class="ins-switch-desc">يُرسل فور الدفع</span></span>
-    </label>
-    <label class="ins-switch">
-      <input type="checkbox" checked><span class="ins-switch-track"></span>
-      <span class="ins-switch-text"><span class="ins-switch-label">تنبيه نفاد المخزون</span><span class="ins-switch-desc">حين تقلّ الكمّية عن خمس</span></span>
+      <span class="ins-switch-text"><span class="ins-switch-label">البريد</span><span class="ins-switch-desc">وصف قصير</span></span>
     </label>
     <label class="ins-switch">
       <input type="checkbox"><span class="ins-switch-track"></span>
-      <span class="ins-switch-text"><span class="ins-switch-label">التقرير اليومي</span><span class="ins-switch-desc">كلّ صباح الساعة الثامنة</span></span>
+      <span class="ins-switch-text"><span class="ins-switch-label">التقرير اليومي</span><span class="ins-switch-desc">وصف قصير</span></span>
     </label>
   </div>
 </demo-example>
 
 <h2 id="tiles">بطاقات الاختيار</h2>
 <p>
-  لاختيار يستحقّ أكثر من سطر: خطّة، سرعة توصيل، وسيلة دفع. دائرة أو مربّع حقيقي داخل
-  <code>.ins-tile</code>، والبطاقة ترسم ما يعرفه <code>:checked</code> أصلًا.
+  لاختيار يستحقّ أكثر من سطر: دائرة أو مربّع حقيقي داخل <code>.ins-tile</code>، والبطاقة ترسم ما يعرفه
+  <code>:checked</code> أصلًا. و<code>.ins-tile-grid</code> يصفّها.
 </p>
 <demo-example>
   <div class="ins-tile-grid" role="radiogroup" aria-label="الخطّة">
-    <label class="ins-tile"><input type="radio" name="plan" value="starter"><span class="ins-tile-title">البداية</span><span class="ins-tile-desc">حتى ٥٠ منتجًا · مجانًا</span></label>
-    <label class="ins-tile"><input type="radio" name="plan" value="growth" checked><span class="ins-tile-title">النموّ</span><span class="ins-tile-desc">منتجات بلا حدّ · ٤٩ شهريًا</span></label>
-    <label class="ins-tile"><input type="radio" name="plan" value="pro"><span class="ins-tile-title">الاحتراف</span><span class="ins-tile-desc">عدّة متاجر وفريق · ١٤٩ شهريًا</span></label>
+    <label class="ins-tile"><input type="radio" name="plan" value="a"><span class="ins-tile-title">الأولى</span><span class="ins-tile-desc">وصف قصير</span></label>
+    <label class="ins-tile"><input type="radio" name="plan" value="b" checked><span class="ins-tile-title">الثانية</span><span class="ins-tile-desc">وصف قصير</span></label>
+    <label class="ins-tile"><input type="radio" name="plan" value="c"><span class="ins-tile-title">الثالثة</span><span class="ins-tile-desc">وصف قصير</span></label>
   </div>
 </demo-example>
 
 <h2 id="segmented">الشريط المقسّم</h2>
 <p>
-  اختيار واحد من بضعة بدائل قصيرة. الجزء المختار <em>وجه فاتح مرتفع</em> لا تعبئة بلون الهوية: شريط
-  مملوء بلون الهوية سينافس الزرّ الرئيسي في الصفحة على معنى «هذا ما تضغطه». والحدث <code>ins:seg</code>
-  يحمل القيمة.
+  اختيار واحد من بضعة بدائل قصيرة، والمختار عليه <code>.is-active</code>. والحدث <code>ins:seg</code> يحمل
+  القيمة من <code>data-ins-value</code>.
 </p>
 <demo-example class="row">
   <div class="ins-seg" role="group" aria-label="الفترة">
     <button class="is-active" data-ins-value="day">اليوم</button>
     <button data-ins-value="week">الأسبوع</button>
     <button data-ins-value="month">الشهر</button>
-    <button data-ins-value="year">السنة</button>
   </div>
 </demo-example>
-<p>ولتبديل ألواح بالشريط المقسّم، انظر <a href="tabs.html#segmented">الألسنة</a>.</p>
 
 <script>
   /* The select-all box follows its children — page code, not library code. */

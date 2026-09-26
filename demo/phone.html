@@ -267,28 +267,27 @@
 
 <h2 id="field">حقل الهاتف</h2>
 <p>
-  مجموعة حقل عادية، وحقل عليه <code>data-ins-phone</code>. الزرّ في أوّلها يختار الدولة من قائمة يُبحث فيها
-  بالعربية وبالإنجليزية وبرمز الدولة وبمفتاحها الدوليّ:
+  حقل عليه <code>data-ins-phone</code> في مجموعة حقل. الزرّ في أوّلها يختار الدولة من قائمة يُبحث فيها بالعربية
+  وبالإنجليزية وبرمز الدولة وبمفتاحها:
 </p>
 <figure class="dx"><div class="dx-view narrow">
   <div class="ins-field">
-    <label class="ins-label" for="ph-demo">رقم الجوال</label>
+    <label class="ins-label" for="ph-demo">الجوال</label>
     <div class="ins-input-group">
       <input class="ins-input" id="ph-demo" data-ins-phone name="mobile" value="+966501234567">
     </div>
-    <div class="ins-hint">يصل إلى الخادم: <code class="ins-num" id="ph-demo-out" dir="ltr">+966501234567</code></div>
+    <div class="ins-hint">يُرسَل: <code id="ph-demo-out" dir="ltr">+966501234567</code></div>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"ph-demo"</span><span class="hl-t">&gt;</span>رقم الجوال<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"ph-demo"</span><span class="hl-t">&gt;</span>الجوال<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"ph-demo"</span> <span class="hl-a">data-ins-phone</span> <span class="hl-a">name</span>=<span class="hl-s">"mobile"</span> <span class="hl-a">value</span>=<span class="hl-s">"+966501234567"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span><span class="hl-t">&gt;</span>يصل إلى الخادم: <span class="hl-t">&lt;code</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span> <span class="hl-a">id</span>=<span class="hl-s">"ph-demo-out"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+966501234567<span class="hl-t">&lt;/code</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span><span class="hl-t">&gt;</span>يُرسَل: <span class="hl-t">&lt;code</span> <span class="hl-a">id</span>=<span class="hl-s">"ph-demo-out"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+966501234567<span class="hl-t">&lt;/code</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <p>
-  <b>ما يُرسَل رقم E.164.</b> حقل مخفيّ يأخذ اسم الحقل، كما في حقل التاريخ، ويحمل <code>+966501234567</code> أيًّا
-  كان ما كُتب: صفر في أوّله، أو مسافات، أو أرقام عربية، أو مفتاح الدولة في أوّله. فيستلم الخادم صيغة واحدة لا
-  لبس فيها. والحقل الظاهر يكتب الرقم كما يُكتب في بلده: <code>050 123 4567</code>.
+  <b>ما يُرسَل رقم E.164:</b> حقل مخفيّ باسم الحقل يحمل <code>+966501234567</code> أيًّا كان ما كُتب. والحقل الظاهر
+  يكتب الرقم كما يُكتب في بلده: <code>050 123 4567</code>.
 </p>
 
 <h2 id="typing">الكتابة</h2>
@@ -302,19 +301,17 @@
 
 <h2 id="countries">الدول</h2>
 <p>
-  كلّ دول العالم في القائمة بمفاتيحها، وأسماؤها من المتصفّح نفسه (<code>Intl.DisplayNames</code>) بلغة الصفحة،
-  فلا جدول أسماء في الإضافة. <b>الدول العربية</b>، ومعها الولايات المتحدة وكندا وبريطانيا وفرنسا وألمانيا وتركيا
-  والهند وباكستان، يُفحص طول أرقامها وتُجمَّع كما تُكتب هناك. وأيّ دولة أخرى تأخذ الحدّ الدوليّ، ١٥ رقمًا، بلا
-  تجميع.
+  كلّ دول العالم بمفاتيحها، وأسماؤها من المتصفّح (<code>Intl.DisplayNames</code>) بلغة الصفحة. الدول العربية، ومعها
+  الولايات المتحدة وكندا وبريطانيا وفرنسا وألمانيا وتركيا والهند وباكستان، يُفحص طول أرقامها وتُجمَّع كما تُكتب
+  هناك، وغيرها تأخذ الحدّ الدوليّ، ١٥ رقمًا، بلا تجميع.
 </p>
 <p>
   الدولة الأولى: <code>data-ins-phone-country</code>، وإلّا دولة الرقم نفسه، وإلّا منطقة لغة الصفحة
-  (<code>lang="ar-EG"</code> ← مصر)، وإلّا السعودية. وتظهر الدولة برمزها لا بعلمها: أعلام الرموز التعبيرية حرفان
-  عاديّان على ويندوز أصلًا، والرمز يبدو واحدًا في كلّ مكان.
+  (<code>lang="ar-EG"</code> ← مصر)، وإلّا السعودية. وتظهر الدولة برمزها لا بعلمها.
 </p>
 <figure class="dx"><div class="dx-view row">
   <div class="ins-field">
-    <label class="ins-label" for="ph-gulf">الخليج فقط</label>
+    <label class="ins-label" for="ph-gulf">دول محدّدة</label>
     <div class="ins-input-group">
       <input class="ins-input" id="ph-gulf" data-ins-phone data-ins-phone-only="SA,AE,KW,QA,BH,OM" data-ins-phone-country="KW" name="gulf">
     </div>
@@ -326,7 +323,7 @@
     </div>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"ph-gulf"</span><span class="hl-t">&gt;</span>الخليج فقط<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"ph-gulf"</span><span class="hl-t">&gt;</span>دول محدّدة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"ph-gulf"</span> <span class="hl-a">data-ins-phone</span> <span class="hl-a">data-ins-phone-only</span>=<span class="hl-s">"SA,AE,KW,QA,BH,OM"</span> <span class="hl-a">data-ins-phone-country</span>=<span class="hl-s">"KW"</span> <span class="hl-a">name</span>=<span class="hl-s">"gulf"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>

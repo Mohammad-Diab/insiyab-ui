@@ -258,101 +258,50 @@
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#basic">الألسنة</a><a href="#segmented">بشكل الشريط المقسّم</a><a href="#api">من الشيفرة</a></nav>
         <h2 id="basic">الألسنة</h2>
 <p>
-  <code>.ins-tablist</code> فيه أزرار <code>.ins-tab</code>، كلّ زرّ يسمّي لوحه بـ <code>data-ins-tab</code>.
-  السكربت يضيف الأدوار وأسهم لوحة المفاتيح — وفي العربية السهم الأيسر هو «التالي» لأنّه يشير إليه.
-  ولسان هو رابط عاديّ إلى صفحة أخرى تتركه المكتبة وشأنه.
+  <code>.ins-tablist</code> فيه أزرار <code>.ins-tab</code>، كلّ زرّ يسمّي لوحه <code>.ins-tabpanel</code> بـ
+  <code>data-ins-tab</code>. السكربت يضيف الأدوار وأسهم لوحة المفاتيح، وفي العربية السهم الأيسر هو «التالي».
+  ولسان هو رابط <code>&lt;a&gt;</code> تتركه المكتبة وشأنه.
 </p>
 <figure class="dx"><div class="dx-view">
-  <div class="ins-tablist" aria-label="إعدادات المتجر">
+  <div class="ins-tablist" aria-label="الإعدادات">
     <button class="ins-tab" data-ins-tab="#t-general">عام</button>
-    <button class="ins-tab" data-ins-tab="#t-payments">الدفع <span class="ins-badge ins-badge--warn">1</span></button>
+    <button class="ins-tab" data-ins-tab="#t-payments">الدفع</button>
     <button class="ins-tab" data-ins-tab="#t-shipping">الشحن</button>
-    <a class="ins-tab" href="color.html">الهويّة</a>
+    <a class="ins-tab" href="color.html">رابط</a>
   </div>
-  <div class="ins-tabpanel" id="t-general">
-    <div class="ins-panel"><div class="ins-panel-body ins-stack ins-gap-2">
-      <b>عام</b>
-      <span class="ins-muted ins-text-sm">اسم المتجر وعملته ومنطقته الزمنية.</span>
-    </div></div>
-  </div>
-  <div class="ins-tabpanel" id="t-payments">
-    <div class="ins-panel"><div class="ins-panel-body ins-stack ins-gap-2">
-      <b>الدفع</b>
-      <span class="ins-muted ins-text-sm">وسيلة واحدة تنتظر التفعيل.</span>
-    </div></div>
-  </div>
-  <div class="ins-tabpanel" id="t-shipping">
-    <div class="ins-panel"><div class="ins-panel-body ins-stack ins-gap-2">
-      <b>الشحن</b>
-      <span class="ins-muted ins-text-sm">المناطق والأسعار ومدد التوصيل.</span>
-    </div></div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tablist"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إعدادات المتجر"</span><span class="hl-t">&gt;</span>
+  <div class="ins-tabpanel" id="t-general">محتوى «عام».</div>
+  <div class="ins-tabpanel" id="t-payments">محتوى «الدفع».</div>
+  <div class="ins-tabpanel" id="t-shipping">محتوى «الشحن».</div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tablist"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الإعدادات"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tab"</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#t-general"</span><span class="hl-t">&gt;</span>عام<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tab"</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#t-payments"</span><span class="hl-t">&gt;</span>الدفع <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge ins-badge--warn"</span><span class="hl-t">&gt;</span>1<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tab"</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#t-payments"</span><span class="hl-t">&gt;</span>الدفع<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tab"</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#t-shipping"</span><span class="hl-t">&gt;</span>الشحن<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tab"</span> <span class="hl-a">href</span>=<span class="hl-s">"color.html"</span><span class="hl-t">&gt;</span>الهويّة<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tab"</span> <span class="hl-a">href</span>=<span class="hl-s">"color.html"</span><span class="hl-t">&gt;</span>رابط<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"t-general"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-body ins-stack ins-gap-2"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>عام<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted ins-text-sm"</span><span class="hl-t">&gt;</span>اسم المتجر وعملته ومنطقته الزمنية.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"t-payments"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-body ins-stack ins-gap-2"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الدفع<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted ins-text-sm"</span><span class="hl-t">&gt;</span>وسيلة واحدة تنتظر التفعيل.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"t-shipping"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-body ins-stack ins-gap-2"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الشحن<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted ins-text-sm"</span><span class="hl-t">&gt;</span>المناطق والأسعار ومدد التوصيل.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p class="site-note">
-  <b>بلا جافاسكربت</b> تظهر الألواح الثلاثة متتالية — المحتوى كلّه موجود، ولا شيء مخفيّ إلى الأبد لأنّ
-  سكربتًا لم يُحمَّل.
-</p>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"t-general"</span><span class="hl-t">&gt;</span>محتوى «عام».<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"t-payments"</span><span class="hl-t">&gt;</span>محتوى «الدفع».<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"t-shipping"</span><span class="hl-t">&gt;</span>محتوى «الشحن».<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<p>بلا جافاسكربت تظهر الألواح كلّها متتالية، فلا يُخفى شيء.</p>
 
 <h2 id="segmented">بشكل الشريط المقسّم</h2>
-<p>الآلية نفسها على <code>.ins-seg</code>، لتبديل عرض صغير داخل لوح.</p>
+<p>الآلية نفسها على <code>.ins-seg</code>، لتبديل عرض صغير.</p>
 <figure class="dx"><div class="dx-view">
-  <div class="ins-panel">
-    <div class="ins-panel-head">
-      <h3 class="ins-panel-title">المبيعات</h3>
-      <div class="ins-panel-actions">
-        <div class="ins-seg">
-          <button data-ins-tab="#s-day">اليوم</button>
-          <button data-ins-tab="#s-week">الأسبوع</button>
-          <button data-ins-tab="#s-month">الشهر</button>
-        </div>
-      </div>
-    </div>
-    <div class="ins-panel-body">
-      <div class="ins-tabpanel" id="s-day"><span class="ins-money"><span class="ins-money-val">4,820</span><span class="ins-money-cur">ر.س</span></span> <span class="ins-muted">من ٣١ طلبًا</span></div>
-      <div class="ins-tabpanel" id="s-week"><span class="ins-money"><span class="ins-money-val">31,405</span><span class="ins-money-cur">ر.س</span></span> <span class="ins-muted">من ٢١٢ طلبًا</span></div>
-      <div class="ins-tabpanel" id="s-month"><span class="ins-money"><span class="ins-money-val">128,960</span><span class="ins-money-cur">ر.س</span></span> <span class="ins-muted">من ٨٩٤ طلبًا</span></div>
-    </div>
+  <div class="ins-seg">
+    <button data-ins-tab="#s-day">اليوم</button>
+    <button data-ins-tab="#s-week">الأسبوع</button>
+    <button data-ins-tab="#s-month">الشهر</button>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-head"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-title"</span><span class="hl-t">&gt;</span>المبيعات<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-actions"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-seg"</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;button</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#s-day"</span><span class="hl-t">&gt;</span>اليوم<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;button</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#s-week"</span><span class="hl-t">&gt;</span>الأسبوع<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;button</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#s-month"</span><span class="hl-t">&gt;</span>الشهر<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-body"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-day"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>4,820<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>ر.س<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span> <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted"</span><span class="hl-t">&gt;</span>من ٣١ طلبًا<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-week"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>31,405<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>ر.س<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span> <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted"</span><span class="hl-t">&gt;</span>من ٢١٢ طلبًا<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-month"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>128,960<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>ر.س<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span> <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted"</span><span class="hl-t">&gt;</span>من ٨٩٤ طلبًا<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <p class="ins-tabpanel" id="s-day">عرض اليوم.</p>
+  <p class="ins-tabpanel" id="s-week">عرض الأسبوع.</p>
+  <p class="ins-tabpanel" id="s-month">عرض الشهر.</p>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-seg"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#s-day"</span><span class="hl-t">&gt;</span>اليوم<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#s-week"</span><span class="hl-t">&gt;</span>الأسبوع<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#s-month"</span><span class="hl-t">&gt;</span>الشهر<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-day"</span><span class="hl-t">&gt;</span>عرض اليوم.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-week"</span><span class="hl-t">&gt;</span>عرض الأسبوع.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-month"</span><span class="hl-t">&gt;</span>عرض الشهر.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="api">من الشيفرة</h2>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.tab(<span class="hl-s">'#t-shipping'</span>);     <span class="hl-c">// يختار اللسان الذي يسمّي هذا اللوح</span>

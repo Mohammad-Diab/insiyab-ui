@@ -1,64 +1,45 @@
 <h2 id="edges">الحواف الثلاث</h2>
 <p>
-  <code>.ins-drawer</code> هو الحوار نفسه ملتصقًا بحافة — كلّ ما للحوار من سلوك، وإغلاق بالنقر خارجه.
-  افتراضيًا من <b>البداية</b> (اليمين في العربية)، و<code>--end</code> من النهاية، و<code>--bottom</code> لوح
-  من الأسفل يناسب الهاتف.
+  <code>.ins-drawer</code> هو الحوار نفسه ملتصقًا بحافة، بأجزائه وسلوكه، ويُغلق بالنقر خارجه أيضًا. افتراضيًا من
+  <b>البداية</b> (اليمين في العربية)، و<code>--end</code> من النهاية، و<code>--bottom</code> لوح من الأسفل يناسب الهاتف.
 </p>
 <demo-example class="row">
-  <button class="ins-btn ins-btn--secondary" data-ins-dialog="#drawer-filters"><svg class="ico"><use href="#i-sliders"/></svg>التصفية</button>
-  <button class="ins-btn ins-btn--secondary" data-ins-dialog="#drawer-order">تفاصيل الطلب</button>
-  <button class="ins-btn ins-btn--secondary" data-ins-dialog="#drawer-share"><svg class="ico"><use href="#i-share"/></svg>مشاركة</button>
+  <button class="ins-btn ins-btn--secondary" data-ins-dialog="#drawer-start">البداية</button>
+  <button class="ins-btn ins-btn--secondary" data-ins-dialog="#drawer-end">النهاية</button>
+  <button class="ins-btn ins-btn--secondary" data-ins-dialog="#drawer-bottom">الأسفل</button>
 
-  <dialog class="ins-drawer" id="drawer-filters">
+  <dialog class="ins-drawer" id="drawer-start">
     <div class="ins-dialog-head">
-      <h3 class="ins-dialog-title">تصفية المنتجات</h3>
+      <h3 class="ins-dialog-title">درج البداية</h3>
       <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
     </div>
-    <div class="ins-dialog-body">
-      <div class="ins-field">
-        <label class="ins-label" for="dr-cat">الفئة</label>
-        <select class="ins-select" id="dr-cat"><option>كلّ الفئات</option><option>حقائب</option><option>ساعات</option><option>إلكترونيات</option></select>
-      </div>
-      <label class="ins-check"><input type="checkbox" checked><span class="ins-check-text">المتوفّر فقط</span></label>
-      <label class="ins-check"><input type="checkbox"><span class="ins-check-text">عليه خصم</span></label>
-    </div>
+    <div class="ins-dialog-body">محتوى الدرج.</div>
     <div class="ins-dialog-foot">
-      <button class="ins-btn ins-btn--bare" data-ins-dismiss>إعادة ضبط</button>
-      <button class="ins-btn ins-btn--primary ins-ms-auto" data-ins-dismiss>عرض النتائج</button>
+      <button class="ins-btn ins-btn--bare" data-ins-dismiss>إلغاء</button>
+      <button class="ins-btn ins-btn--primary" data-ins-dismiss>تطبيق</button>
     </div>
   </dialog>
 
-  <dialog class="ins-drawer ins-drawer--end" id="drawer-order">
+  <dialog class="ins-drawer ins-drawer--end" id="drawer-end">
     <div class="ins-dialog-head">
-      <h3 class="ins-dialog-title">الطلب <span class="ins-num">#40218</span></h3>
+      <h3 class="ins-dialog-title">درج النهاية</h3>
       <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
     </div>
-    <div class="ins-dialog-body">
-      <dl class="ins-prose ins-m-0">
-        <dt>العميل</dt><dd>ليلى حسن</dd>
-        <dt>المبلغ</dt><dd><span class="ins-money"><span class="ins-money-val">249.00</span><span class="ins-money-cur">ر.س</span></span></dd>
-        <dt>الحالة</dt><dd><span class="ins-pill ins-pill--info"><span class="ins-pill-dot"></span>قيد التجهيز</span></dd>
-      </dl>
-    </div>
+    <div class="ins-dialog-body">محتوى الدرج.</div>
   </dialog>
 
-  <dialog class="ins-drawer ins-drawer--bottom" id="drawer-share">
+  <dialog class="ins-drawer ins-drawer--bottom" id="drawer-bottom">
     <div class="ins-dialog-head">
-      <h3 class="ins-dialog-title">مشاركة المنتج</h3>
+      <h3 class="ins-dialog-title">لوح سفلي</h3>
       <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
     </div>
-    <div class="ins-dialog-body">
-      <div class="ins-row">
-        <button class="ins-btn ins-btn--secondary" data-ins-dismiss><svg class="ico"><use href="#i-copy"/></svg>نسخ الرابط</button>
-        <button class="ins-btn ins-btn--secondary" data-ins-dismiss><svg class="ico"><use href="#i-mail"/></svg>بالبريد</button>
-      </div>
-    </div>
+    <div class="ins-dialog-body">محتوى اللوح.</div>
   </dialog>
 </demo-example>
 
 <h2 id="when">الحوار أم الدرج؟</h2>
 <ul>
-  <li><b>الحوار</b> لسؤال أو نموذج يوقف ما تفعله: تأكيد حذف، إضافة عضو.</li>
+  <li><b>الحوار</b> لسؤال أو نموذج يوقف ما تفعله.</li>
   <li><b>الدرج</b> لما تنظر إليه وأنت ما زلت ترى الصفحة: تصفية قائمة، تفاصيل صفّ.</li>
-  <li><b>اللوح السفلي</b> لقائمة إجراءات قصيرة على الهاتف، في متناول الإبهام.</li>
+  <li><b>اللوح السفلي</b> لقائمة إجراءات قصيرة على الهاتف.</li>
 </ul>

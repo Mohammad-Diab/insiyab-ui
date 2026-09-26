@@ -258,104 +258,90 @@
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#basic">أكورديون</a><a href="#exclusive">قسم واحد مفتوح</a><a href="#collapse">قسم منفرد</a><a href="#motion">الحركة</a></nav>
         <h2 id="basic">أكورديون</h2>
 <p>
-  <code>.ins-accordion</code> يجمع أقسامًا من <code>&lt;details class="ins-collapse"&gt;</code>. كلّ قسم عنصر
-  details عاديّ: يُفتح بالنقر وبلوحة المفاتيح دون سطر جافاسكربت، ويجده البحث داخل الصفحة.
+  <code>.ins-accordion</code> يجمع أقسامًا من <code>&lt;details class="ins-collapse"&gt;</code>، كلّ قسم فيه
+  <code>summary</code> و<code>.ins-collapse-body</code>. يُفتح بالنقر وبلوحة المفاتيح دون جافاسكربت،
+  ولا سطح له، فضعه في لوح.
 </p>
 <figure class="dx"><div class="dx-view">
   <div class="ins-panel">
     <div class="ins-accordion">
       <details class="ins-collapse" open>
-        <summary>كم يستغرق الشحن؟</summary>
-        <div class="ins-collapse-body">داخل المدينة يومان، وبين المدن من ثلاثة إلى خمسة أيّام عمل. يصلك رقم التتبّع برسالة فور الشحن.</div>
+        <summary>القسم الأوّل</summary>
+        <div class="ins-collapse-body">محتوى القسم الأوّل.</div>
       </details>
       <details class="ins-collapse">
-        <summary>هل يمكنني تعديل الطلب بعد الدفع؟</summary>
-        <div class="ins-collapse-body">نعم، ما دامت حالته «قيد التجهيز». بعد الشحن يمكنك طلب الاسترجاع فقط.</div>
+        <summary>القسم الثاني</summary>
+        <div class="ins-collapse-body">محتوى القسم الثاني.</div>
       </details>
       <details class="ins-collapse">
-        <summary>ما طرق الدفع المتاحة؟</summary>
-        <div class="ins-collapse-body">البطاقات البنكية، والمحافظ الرقمية، والدفع عند الاستلام في بعض المدن.</div>
+        <summary>القسم الثالث</summary>
+        <div class="ins-collapse-body">محتوى القسم الثالث.</div>
       </details>
     </div>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-accordion"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span> <span class="hl-a">open</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>كم يستغرق الشحن؟<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>داخل المدينة يومان، وبين المدن من ثلاثة إلى خمسة أيّام عمل. يصلك رقم التتبّع برسالة فور الشحن.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>القسم الأوّل<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى القسم الأوّل.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>هل يمكنني تعديل الطلب بعد الدفع؟<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>نعم، ما دامت حالته «قيد التجهيز». بعد الشحن يمكنك طلب الاسترجاع فقط.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>القسم الثاني<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى القسم الثاني.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>ما طرق الدفع المتاحة؟<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>البطاقات البنكية، والمحافظ الرقمية، والدفع عند الاستلام في بعض المدن.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>القسم الثالث<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى القسم الثالث.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="exclusive">قسم واحد مفتوح</h2>
-<p>
-  أعطِ الأقسام كلّها <code>name</code> واحدًا — المتصفّح يغلق الباقي بنفسه حين يُفتح أحدها، بلا سطر شيفرة.
-</p>
+<p>أعطِ الأقسام كلّها <code>name</code> واحدًا، فيغلق المتصفّح الباقي حين يُفتح أحدها.</p>
 <figure class="dx"><div class="dx-view">
-  <div class="ins-panel">
-    <div class="ins-accordion">
-      <details class="ins-collapse" name="billing" open>
-        <summary>الخطّة الحالية</summary>
-        <div class="ins-collapse-body">خطّة النموّ، تتجدّد في الأوّل من تشرين الأوّل.</div>
-      </details>
-      <details class="ins-collapse" name="billing">
-        <summary>وسيلة الدفع</summary>
-        <div class="ins-collapse-body">بطاقة تنتهي بـ <span class="ins-num">4242</span>.</div>
-      </details>
-      <details class="ins-collapse" name="billing">
-        <summary>الفواتير السابقة</summary>
-        <div class="ins-collapse-body">اثنتا عشرة فاتورة، كلّها مدفوعة.</div>
-      </details>
-    </div>
+  <div class="ins-accordion">
+    <details class="ins-collapse" name="faq" open>
+      <summary>القسم الأوّل</summary>
+      <div class="ins-collapse-body">محتوى القسم الأوّل.</div>
+    </details>
+    <details class="ins-collapse" name="faq">
+      <summary>القسم الثاني</summary>
+      <div class="ins-collapse-body">محتوى القسم الثاني.</div>
+    </details>
+    <details class="ins-collapse" name="faq">
+      <summary>القسم الثالث</summary>
+      <div class="ins-collapse-body">محتوى القسم الثالث.</div>
+    </details>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-accordion"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span> <span class="hl-a">name</span>=<span class="hl-s">"billing"</span> <span class="hl-a">open</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>الخطّة الحالية<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>خطّة النموّ، تتجدّد في الأوّل من تشرين الأوّل.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span> <span class="hl-a">name</span>=<span class="hl-s">"billing"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>وسيلة الدفع<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>بطاقة تنتهي بـ <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>4242<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span> <span class="hl-a">name</span>=<span class="hl-s">"billing"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>الفواتير السابقة<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>اثنتا عشرة فاتورة، كلّها مدفوعة.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-accordion"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span> <span class="hl-a">name</span>=<span class="hl-s">"faq"</span> <span class="hl-a">open</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>القسم الأوّل<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى القسم الأوّل.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span> <span class="hl-a">name</span>=<span class="hl-s">"faq"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>القسم الثاني<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى القسم الثاني.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span> <span class="hl-a">name</span>=<span class="hl-s">"faq"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>القسم الثالث<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى القسم الثالث.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="collapse">قسم منفرد</h2>
-<p><code>.ins-collapse</code> وحده، خارج أكورديون، لتفاصيل اختيارية في نموذج.</p>
+<p><code>.ins-collapse</code> وحده، خارج أكورديون.</p>
 <figure class="dx"><div class="dx-view">
   <details class="ins-collapse">
     <summary>خيارات متقدّمة</summary>
-    <div class="ins-collapse-body ins-stack">
-      <label class="ins-check"><input type="checkbox"><span class="ins-check-text">إخفاء المنتج من محرّكات البحث</span></label>
-      <label class="ins-check"><input type="checkbox" checked><span class="ins-check-text">السماح بالتقييمات</span></label>
-    </div>
+    <div class="ins-collapse-body">محتوى إضافي.</div>
   </details>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>خيارات متقدّمة<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body ins-stack"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check-text"</span><span class="hl-t">&gt;</span>إخفاء المنتج من محرّكات البحث<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">checked</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check-text"</span><span class="hl-t">&gt;</span>السماح بالتقييمات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى إضافي.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="motion">الحركة</h2>
-<p>
-  حيث يستطيع المتصفّح تحريك الارتفاع، يتحرّك القسم وهو يُفتح. وحيث لا يستطيع ينفتح فورًا — وهذا كلّ الفرق،
-  فلا سكربت يقيس الارتفاع ولا شيء ينكسر في متصفّح أقدم.
-</p>
+<p>حيث يستطيع المتصفّح تحريك الارتفاع يتحرّك القسم وهو يُفتح، وحيث لا يستطيع ينفتح فورًا.</p>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="buttons.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الأزرار</span></a><a class="site-pager-link site-pager-link--next" href="tabs.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الألسنة</span></a></nav>
       </div>
     </main>

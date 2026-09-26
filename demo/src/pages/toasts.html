@@ -4,24 +4,24 @@
   ركن الصفحة وتختفي وحدها، ويُعلَن نصّها لقارئ الشاشة دون أن تأخذ التركيز.
 </p>
 <demo-example class="row">
-  <button class="ins-btn ins-btn--ghost-success" data-ins-toast="حُفظت التغييرات" data-ins-tone="ok">نجاح</button>
-  <button class="ins-btn ins-btn--ghost-danger" data-ins-toast="تعذّر الاتّصال بالخادم" data-ins-tone="bad">خطأ</button>
-  <button class="ins-btn ins-btn--ghost-warning" data-ins-toast="المخزون منخفض لثلاثة منتجات" data-ins-tone="warn">تحذير</button>
-  <button class="ins-btn ins-btn--ghost-info" data-ins-toast="جارٍ مزامنة الطلبات" data-ins-tone="info">معلومة</button>
+  <button class="ins-btn ins-btn--secondary" data-ins-toast="تمّ الحفظ" data-ins-tone="ok">نجاح</button>
+  <button class="ins-btn ins-btn--secondary" data-ins-toast="حدث خطأ" data-ins-tone="bad">خطأ</button>
+  <button class="ins-btn ins-btn--secondary" data-ins-toast="انتبه" data-ins-tone="warn">تحذير</button>
+  <button class="ins-btn ins-btn--secondary" data-ins-toast="للعلم" data-ins-tone="info">معلومة</button>
 </demo-example>
 
 <h2 id="api">من الجافاسكربت</h2>
-<p>بعد عمليّة غير متزامنة — وهو الاستعمال الأكثر شيوعًا.</p>
+<p><code>Insiyab.toast(text, tone)</code>، وأكثر ما يُستعمل بعد عمليّة غير متزامنة.</p>
 <demo-example class="row" code="none">
-  <button class="ins-btn ins-btn--primary" id="save-btn">حفظ المنتج</button>
+  <button class="ins-btn ins-btn--secondary" id="save-btn">حفظ</button>
 </demo-example>
 <demo-code lang="js">
 button.addEventListener('click', async () => {
   try {
-    await saveProduct();
-    Insiyab.toast('حُفظ المنتج', 'ok');
+    await save();
+    Insiyab.toast('تمّ الحفظ', 'ok');
   } catch {
-    Insiyab.toast('تعذّر الحفظ — حاول مرّة أخرى', 'bad');
+    Insiyab.toast('تعذّر الحفظ', 'bad');
   }
 });
 </demo-code>
@@ -29,7 +29,7 @@ button.addEventListener('click', async () => {
 <h2 id="when">متى تستعمل الرسالة الطائرة</h2>
 <ul>
   <li>لتأكيد ما حدث للتوّ نتيجة ما فعله المستخدم: حُفظ، أُرسل، نُسخ.</li>
-  <li>لا لخطأ يحتاج تصحيحًا في النموذج — ضعه في الحقل، حيث سيُصلَح. انظر <a href="validation.html">التحقّق</a>.</li>
+  <li>لا لخطأ في حقل — ذلك في الحقل نفسه. انظر <a href="validation.html">التحقّق</a>.</li>
   <li>لا لرسالة يجب أن تبقى — ذلك <a href="alerts.html">تنبيه</a> في الصفحة.</li>
 </ul>
 
@@ -37,6 +37,6 @@ button.addEventListener('click', async () => {
   document.getElementById('save-btn').addEventListener('click', function () {
     var btn = this;
     btn.disabled = true;
-    setTimeout(function () { btn.disabled = false; Insiyab.toast('حُفظ المنتج', 'ok'); }, 700);
+    setTimeout(function () { btn.disabled = false; Insiyab.toast('تمّ الحفظ', 'ok'); }, 700);
   });
 </script>

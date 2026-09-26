@@ -1,26 +1,26 @@
 <h2 id="basic">البطاقة</h2>
 <p>
-  رقاقة أيقونة، وتسمية، وقيمة. <code>.ins-stat</code> مع <code>.ins-glass</code> ليكون سطحًا، أو بدونه داخل
-  لوح. والرقاقة هي الجزء المتحرّك الوحيد، على منحنى التجاوز؛ والرقم لا يكبر عند المرور، لأنّ رقمًا يتغيّر
-  حجمه يغيّر عرض العمود الذي يقف فيه.
+  <code>.ins-stat</code> فيه رقاقة أيقونة <code>.ins-stat-ico</code>، وتسمية <code>.ins-stat-label</code>، وقيمة
+  <code>.ins-stat-value</code>. مع <code>.ins-glass</code> يكون سطحًا، وبدونه يوضع داخل لوح. والنبرات
+  <code>--ok</code> و<code>--warn</code> و<code>--bad</code> و<code>--info</code> و<code>--zero</code>.
 </p>
 <demo-example>
   <div class="ins-grid">
     <div class="ins-stat ins-glass">
       <span class="ins-stat-ico"><svg class="ico"><use href="#i-cart"/></svg></span>
-      <span class="ins-stat-body"><span class="ins-stat-label">طلبات اليوم</span><span class="ins-stat-value">31</span></span>
+      <span class="ins-stat-body"><span class="ins-stat-label">الطلبات</span><span class="ins-stat-value">31</span></span>
     </div>
     <div class="ins-stat ins-glass ins-stat--ok">
       <span class="ins-stat-ico"><svg class="ico"><use href="#i-check"/></svg></span>
-      <span class="ins-stat-body"><span class="ins-stat-label">تمّ تسليمها</span><span class="ins-stat-value">24</span></span>
+      <span class="ins-stat-body"><span class="ins-stat-label">مكتملة</span><span class="ins-stat-value">24</span></span>
     </div>
     <div class="ins-stat ins-glass ins-stat--warn">
       <span class="ins-stat-ico"><svg class="ico"><use href="#i-clock"/></svg></span>
-      <span class="ins-stat-body"><span class="ins-stat-label">بانتظار الدفع</span><span class="ins-stat-value">5</span></span>
+      <span class="ins-stat-body"><span class="ins-stat-label">معلّقة</span><span class="ins-stat-value">5</span></span>
     </div>
     <div class="ins-stat ins-glass ins-stat--bad">
       <span class="ins-stat-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
-      <span class="ins-stat-body"><span class="ins-stat-label">دفعات فشلت</span><span class="ins-stat-value">2</span></span>
+      <span class="ins-stat-body"><span class="ins-stat-label">فاشلة</span><span class="ins-stat-value">2</span></span>
     </div>
     <div class="ins-stat ins-glass ins-stat--info">
       <span class="ins-stat-ico"><svg class="ico"><use href="#i-users"/></svg></span>
@@ -28,36 +28,33 @@
     </div>
     <div class="ins-stat ins-glass ins-stat--zero">
       <span class="ins-stat-ico"><svg class="ico"><use href="#i-inbox"/></svg></span>
-      <span class="ins-stat-body"><span class="ins-stat-label">شكاوى مفتوحة</span><span class="ins-stat-value">0</span></span>
+      <span class="ins-stat-body"><span class="ins-stat-label">شكاوى</span><span class="ins-stat-value">0</span></span>
     </div>
   </div>
 </demo-example>
-<p>
-  <code>--zero</code> لقيمة صفرية تطمئن ولا تنبّه: «لا شكاوى» ليس خبرًا بلون أحمر. و<code>--mute</code> لقيمة
-  ثانوية.
-</p>
+<p><code>--zero</code> لقيمة صفرية تطمئن ولا تنبّه، و<code>--mute</code> لقيمة ثانوية.</p>
 
 <h2 id="sizes">المقاسات والتلميح</h2>
-<p><code>--lg</code> للرقم الأهمّ في الصفحة — غالبًا مبلغ — و<code>--sm</code> لشريط كثيف. و<code>.ins-stat-hint</code> سطر سياق تحت القيمة.</p>
+<p><code>--lg</code> للرقم الأهمّ في الصفحة، و<code>--sm</code> لشريط كثيف. و<code>.ins-stat-hint</code> سطر سياق تحت القيمة.</p>
 <demo-example>
   <div class="ins-grid ins-grid--wide">
     <div class="ins-stat ins-glass ins-stat--lg">
       <span class="ins-stat-ico"><svg class="ico"><use href="#i-wallet"/></svg></span>
       <span class="ins-stat-body">
-        <span class="ins-stat-label">إيرادات الشهر</span>
-        <span class="ins-stat-value ins-money"><span class="ins-money-val">128,960</span><span class="ins-money-cur">ر.س</span></span>
-        <span class="ins-stat-hint">أعلى بنسبة <span class="ins-num">12%</span> من آب</span>
+        <span class="ins-stat-label">الإيرادات</span>
+        <span class="ins-stat-value">128,960</span>
+        <span class="ins-stat-hint">هذا الشهر</span>
       </span>
     </div>
     <div class="ins-stat ins-glass ins-stat--sm ins-stat--mute">
       <span class="ins-stat-ico"><svg class="ico"><use href="#i-box"/></svg></span>
-      <span class="ins-stat-body"><span class="ins-stat-label">منتجات في المخزون</span><span class="ins-stat-value">412</span></span>
+      <span class="ins-stat-body"><span class="ins-stat-label">المخزون</span><span class="ins-stat-value">412</span></span>
     </div>
   </div>
 </demo-example>
 
 <h2 id="layout">في الصفحة</h2>
 <p>
-  <code>.ins-grid</code> هي الحاوية المناسبة: تضع من البطاقات ما يتّسع وتدخلها متدرّجة. <code>--wide</code>
-  لبطاقات تحمل مبالغ طويلة.
+  <code>.ins-grid</code> هي الحاوية المناسبة: تضع من البطاقات ما يتّسع. و<code>--wide</code> لبطاقات تحمل
+  أرقامًا طويلة.
 </p>

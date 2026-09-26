@@ -2,10 +2,7 @@
 <script src="../dist/plugins/insiyab-scrollspy.js"></script>
 
 <h2 id="install">التثبيت</h2>
-<p>
-  إضافة لا جزء من الملفّين. ملفّ الأنماط اختياريّ: لا يحتاجه التتبّع نفسه، وفيه قائمة المحتويات الجاهزة
-  <code>.ins-toc</code>.
-</p>
+<p>إضافة لا جزء من الملفّين. ملفّ الأنماط اختياريّ، وفيه قائمة المحتويات الجاهزة <code>.ins-toc</code>.</p>
 <demo-code lang="html">
 <link rel="stylesheet" href="plugins/insiyab-scrollspy.css">
 <script src="insiyab.js"></script>
@@ -15,23 +12,22 @@
 <h2 id="toc">قائمة تتبع القراءة</h2>
 <p>
   <code>data-ins-scrollspy</code> على أيّ تنقّل روابطه إلى أقسام في الصفحة. الرابط الذي يُقرأ قسمه يأخذ
-  <code>is-active</code> و<code>aria-current="location"</code> — ولا شيء غيرهما، فيعمل مع شريط الموقع والألسنة وأيّ
-  قائمة. مرّر الصندوق:
+  <code>is-active</code> و<code>aria-current="location"</code>. مرّر الصندوق:
 </p>
 <demo-example>
   <div class="spy-demo">
     <div class="spy-demo-box" id="spy-box">
-      <section id="spy-a"><h3>الطلب</h3><p>يصل الطلب من المتجر أو من التطبيق، ويُسجَّل برقمه وتاريخه ومبلغه.</p></section>
-      <section id="spy-b"><h3>المراجعة</h3><p>يراجع الموظّف البيانات، ويطلب ما نقص منها قبل أن يمضي الطلب.</p></section>
-      <section id="spy-c"><h3>الدفع</h3><p>يُحصَّل المبلغ، ويُرسَل الإيصال إلى بريد العميل.</p></section>
-      <section id="spy-d"><h3>التسليم</h3><p>يُشحن الطلب، ويتابعه العميل حتّى يصل.</p></section>
+      <section id="spy-a"><h3>القسم الأوّل</h3></section>
+      <section id="spy-b"><h3>القسم الثاني</h3></section>
+      <section id="spy-c"><h3>قسم فرعيّ</h3></section>
+      <section id="spy-d"><h3>القسم الثالث</h3></section>
     </div>
-    <nav class="ins-toc" data-ins-scrollspy aria-label="مراحل الطلب">
-      <div class="ins-toc-title">المراحل</div>
-      <a href="#spy-a">الطلب</a>
-      <a href="#spy-b">المراجعة</a>
-      <a class="ins-toc-sub" href="#spy-c">الدفع</a>
-      <a href="#spy-d">التسليم</a>
+    <nav class="ins-toc" data-ins-scrollspy aria-label="المحتويات">
+      <div class="ins-toc-title">المحتويات</div>
+      <a href="#spy-a">القسم الأوّل</a>
+      <a href="#spy-b">القسم الثاني</a>
+      <a class="ins-toc-sub" href="#spy-c">قسم فرعيّ</a>
+      <a href="#spy-d">القسم الثالث</a>
     </nav>
   </div>
 </demo-example>
@@ -48,9 +44,8 @@
 
 <h2 id="styles">قائمة المحتويات</h2>
 <p>
-  <code>.ins-toc</code> تثبت تحت الشريط العلويّ بجانب محتوى طويل، ويُعلَّم رابطها الحاليّ بخطّ الهوية كما في
-  القائمة الجانبية. العنوان <code>.ins-toc-title</code>، ورابط لعنوان أعمق <code>.ins-toc-sub</code>. والمسافة من
-  الأعلى <code>--ins-toc-top</code>.
+  <code>.ins-toc</code> تثبت تحت الشريط العلويّ بجانب محتوى طويل، ويُعلَّم رابطها الحاليّ بخطّ الهوية. العنوان
+  <code>.ins-toc-title</code>، ورابط لعنوان أعمق <code>.ins-toc-sub</code>، والمسافة من الأعلى <code>--ins-toc-top</code>.
 </p>
 
 <h2 id="api">من الشيفرة</h2>

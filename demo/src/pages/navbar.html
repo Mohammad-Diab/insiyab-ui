@@ -1,20 +1,19 @@
 <h2 id="basic">شريط الموقع</h2>
 <p>
-  لموقع لا لتطبيق — صفحة هبوط، مدوّنة، توثيق. جزيرة زجاجية منفصلة عن حافة الصفحة، كجزر شريط التطبيق.
-  يلتصق بأعلى الصفحة وهي تتمرّر افتراضيًا؛ <code>--static</code> يتركه في مكانه، كما في هذا المثال.
+  لموقع لا لتطبيق: صفحة هبوط، مدوّنة، توثيق. <code>-brand</code> الاسم، و<code>-menu</code> الروابط،
+  و<code>-end</code> أزرارها في النهاية. يلتصق بأعلى الصفحة افتراضيًا؛ <code>--static</code> يتركه في مكانه، كما
+  في هذا المثال.
 </p>
 <demo-example>
   <header class="ins-navbar ins-navbar--static">
-    <a class="ins-navbar-brand" href="#basic"><span class="ins-shell-mark" style="--ins-mark:30px">و</span>الورّاق</a>
+    <a class="ins-navbar-brand" href="#basic">الموقع</a>
     <button class="ins-navbar-toggle" data-ins-navbar aria-label="القائمة"></button>
     <nav class="ins-navbar-menu" aria-label="الموقع">
       <a class="ins-navbar-link" href="#basic" aria-current="page">الرئيسية</a>
-      <a class="ins-navbar-link" href="#basic">الكتب</a>
-      <a class="ins-navbar-link" href="#basic">المؤلّفون</a>
       <a class="ins-navbar-link" href="#basic">المدوّنة</a>
+      <a class="ins-navbar-link" href="#basic">تواصل</a>
       <div class="ins-navbar-end">
-        <button class="ins-btn ins-btn--bare">دخول</button>
-        <button class="ins-btn ins-btn--primary ins-btn--sm">إنشاء حساب</button>
+        <button class="ins-btn ins-btn--secondary ins-btn--sm">دخول</button>
       </div>
     </nav>
   </header>
@@ -22,9 +21,8 @@
 
 <h2 id="phone">على الهاتف</h2>
 <p>
-  تحت <span class="ins-num">900px</span> تنطوي الروابط خلف زرّ القائمة وتنفتح عمودًا داخل الجزيرة نفسها،
-  والضغط على رابط يغلقها. وبلا جافاسكربت لا يظهر الزرّ، وتلتفّ الروابط في سطر ثانٍ — فكلّ رابط يبقى
-  على بعد نقرة. ضيّق النافذة لترى.
+  تحت 900px تنطوي الروابط خلف زرّ القائمة وتنفتح عمودًا داخل الشريط، والضغط على رابط أو <kbd class="ins-kbd">Esc</kbd> يغلقها. وبلا
+  جافاسكربت لا يظهر الزرّ، وتلتفّ الروابط في سطر ثانٍ. ضيّق النافذة لترى.
 </p>
 <demo-code lang="js">
 Insiyab.navbar(document.querySelector('.ins-navbar'), true);   // افتح
@@ -33,6 +31,5 @@ document.addEventListener('ins:navbar', (e) => e.detail.open);
 
 <h2 id="current">الرابط الحالي</h2>
 <p>
-  <code>aria-current="page"</code> على الرابط، لا صنف: قارئ الشاشة يقرأ «الصفحة الحالية»، والتصميم يرسم
-  الشريط نفسه الذي يعلّم الرابط النشط في الشريط الجانبي واللسان الحالي.
+  <code>aria-current="page"</code> على الرابط، لا صنف: قارئ الشاشة يقرأ «الصفحة الحالية»، والتصميم يعلّمه.
 </p>

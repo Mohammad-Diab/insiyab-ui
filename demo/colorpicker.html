@@ -267,9 +267,8 @@
 
 <h2 id="field">حقل اللون</h2>
 <p>
-  حقل اللون الأصليّ عليه <code>data-ins-color</code>. يصير حقل رمز سداسيّ وأمامه عيّنة، في مجموعة حقل. يبقى
-  اسمه ويرسل <code>#rrggbb</code> كما يرسله حقل المتصفّح نفسه، فلا يحتاج الخادم شيئًا جديدًا. والعيّنة تفتح
-  المنتقي:
+  حقل اللون الأصليّ عليه <code>data-ins-color</code>، في مجموعة حقل. يصير حقل رمز سداسيّ وأمامه عيّنة تفتح المنتقي،
+  ويرسل <code>#rrggbb</code> باسمه كما يرسله حقل المتصفّح:
 </p>
 <figure class="dx"><div class="dx-view narrow">
   <div class="ins-field">
@@ -277,21 +276,18 @@
     <div class="ins-input-group">
       <input type="color" id="cp-brand" name="brand" value="#9b2c5e" data-ins-color>
     </div>
-    <div class="ins-hint">جرّب لونًا فاتحًا وانظر التباين في أسفل المنتقي.</div>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"cp-brand"</span><span class="hl-t">&gt;</span>لون الهوية<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"color"</span> <span class="hl-a">id</span>=<span class="hl-s">"cp-brand"</span> <span class="hl-a">name</span>=<span class="hl-s">"brand"</span> <span class="hl-a">value</span>=<span class="hl-s">"#9b2c5e"</span> <span class="hl-a">data-ins-color</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span><span class="hl-t">&gt;</span>جرّب لونًا فاتحًا وانظر التباين في أسفل المنتقي.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="contrast">التباين</h2>
 <p>
-  في أسفل المنتقي اللون نصًّا على الأبيض وعلى الأسود، ونسبة التباين من حساب المكتبة نفسه
-  (<code>Insiyab.color.contrast</code>)، وهل يبلغ 4.5:1 الذي يحتاجه نصّ الفقرات. فمن يختار لون الهوية يعرف قبل أن
-  يحفظ هل يصلح لزرّ أو لرابط.
+  في أسفل المنتقي اللون نصًّا على الأبيض وعلى الأسود، ونسبة التباين (<code>Insiyab.color.contrast</code>)، وهل تبلغ
+  4.5:1 الذي يحتاجه نصّ الفقرات.
 </p>
 
 <h2 id="picker">المنتقي</h2>
@@ -307,11 +303,11 @@
 </ul>
 <figure class="dx"><div class="dx-view narrow">
   <div class="ins-field">
-    <label class="ins-label" for="cp-set">لون الحالة</label>
+    <label class="ins-label" for="cp-set">ألوان محدّدة</label>
     <input type="color" id="cp-set" name="status" value="#0f766e" data-ins-color data-ins-color-swatches="#15803d,#a16207,#b91c1c,#0369a1,#475569">
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"cp-set"</span><span class="hl-t">&gt;</span>لون الحالة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"cp-set"</span><span class="hl-t">&gt;</span>ألوان محدّدة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"color"</span> <span class="hl-a">id</span>=<span class="hl-s">"cp-set"</span> <span class="hl-a">name</span>=<span class="hl-s">"status"</span> <span class="hl-a">value</span>=<span class="hl-s">"#0f766e"</span> <span class="hl-a">data-ins-color</span> <span class="hl-a">data-ins-color-swatches</span>=<span class="hl-s">"#15803d,#a16207,#b91c1c,#0369a1,#475569"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
@@ -323,8 +319,8 @@
 <span class="hl-t">Insiyab</span>.colorField(<span class="hl-s">'#brand'</span>);              <span class="hl-c">// اللون</span>
 <span class="hl-t">Insiyab</span>.colorField(<span class="hl-s">'#brand'</span>, <span class="hl-s">'#0f766e'</span>);   <span class="hl-c">// ضبطه بهدوء، دون حدث</span></code></pre></div>
 <p>
-  <code>input</code> في أثناء حركة اللون، و<code>change</code> و<code>ins:color</code> حين يُضبط. ومع
-  <code>Insiyab.brand()</code> يصير الحقل منتقي هوية حيًّا — جرّب الأوّل أعلاه:
+  <code>input</code> في أثناء حركة اللون، و<code>change</code> و<code>ins:color</code> حين يُضبط. الحقل الأوّل أعلاه
+  موصول بـ <code>Insiyab.brand()</code> هكذا.
 </p>
 
 <script>

@@ -5,43 +5,26 @@
 </p>
 <demo-example class="narrow">
   <div class="ins-field">
-    <label class="ins-label" for="i-store">اسم المتجر</label>
-    <input class="ins-input" id="i-store" placeholder="مثال: متجر الورّاق">
-    <span class="ins-hint">يظهر في رأس الفواتير ورسائل البريد.</span>
+    <label class="ins-label" for="i-name">الاسم</label>
+    <input class="ins-input" id="i-name">
+    <span class="ins-hint">يظهر في الفواتير.</span>
   </div>
 </demo-example>
 
 <h2 id="types">أنواع الحقول</h2>
-<demo-example>
-  <div class="ins-cols-2">
-    <div class="ins-field">
-      <label class="ins-label" for="i-email">البريد الإلكتروني</label>
-      <input class="ins-input" id="i-email" type="email" dir="ltr" placeholder="name@example.com">
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="i-phone">الجوّال</label>
-      <input class="ins-input ins-num" id="i-phone" type="tel" dir="ltr" placeholder="+966 5X XXX XXXX">
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="i-country">الدولة</label>
-      <select class="ins-select" id="i-country">
-        <option>السعودية</option><option>الإمارات</option><option>مصر</option><option>الأردن</option><option>المغرب</option>
-      </select>
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="i-price">السعر</label>
-      <input class="ins-input ins-num" id="i-price" type="number" min="0" step="0.01" value="249.00">
-    </div>
-  </div>
-  <div class="ins-field ins-mt-4">
-    <label class="ins-label" for="i-notes">ملاحظات التوصيل</label>
-    <textarea class="ins-textarea" id="i-notes" placeholder="الطابق الثالث، الباب الأيمن…"></textarea>
-  </div>
-</demo-example>
-<p class="site-note">
-  <b>البريد والهاتف من اليسار.</b> <code>dir="ltr"</code> على الحقل وحده: عنوان بريد يُكتب من اليمين يضع
-  <span class="ins-num">@</span> في المكان الخطأ وهو يُكتب. وبقيّة النموذج يبقى عربيًا.
+<p>
+  <code>.ins-input</code> لكلّ أنواع <code>&lt;input&gt;</code>، و<code>.ins-select</code> و<code>.ins-textarea</code>.
+  البريد والهاتف يأخذان <code>dir="ltr"</code> على الحقل وحده، وبقيّة النموذج يبقى عربيًا.
 </p>
+<demo-example class="stack narrow">
+  <input class="ins-input" type="email" dir="ltr" placeholder="name@example.com" aria-label="البريد">
+  <input class="ins-input" type="tel" dir="ltr" placeholder="+966 5X XXX XXXX" aria-label="الجوّال">
+  <input class="ins-input" type="number" value="249" aria-label="السعر">
+  <select class="ins-select" aria-label="الدولة">
+    <option>السعودية</option><option>مصر</option><option>الأردن</option>
+  </select>
+  <textarea class="ins-textarea" placeholder="ملاحظات" aria-label="ملاحظات"></textarea>
+</demo-example>
 
 <h2 id="sizes">المقاسات</h2>
 <demo-example class="stack narrow">
@@ -53,26 +36,20 @@
 </demo-example>
 
 <h2 id="states">الحالات</h2>
-<demo-example>
-  <div class="ins-cols-2">
-    <div class="ins-field">
-      <label class="ins-label" for="i-dis">معطّل</label>
-      <input class="ins-input" id="i-dis" value="لا يمكن تعديله" disabled>
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="i-ro">للقراءة فقط</label>
-      <input class="ins-input ins-num" id="i-ro" value="STORE-0192" readonly>
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="i-bad">فيه خطأ</label>
-      <input class="ins-input" id="i-bad" value="abc" aria-invalid="true">
-      <p class="ins-error">أدخل رقمًا صحيحًا.</p>
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="i-ok">صحيح</label>
-      <input class="ins-input ins-input--ok" id="i-ok" value="alwarraq" dir="ltr">
-      <p class="ins-success">الاسم متاح.</p>
-    </div>
+<p>
+  <code>disabled</code> و<code>readonly</code>، والخطأ بـ <code>aria-invalid="true"</code> و<code>.ins-error</code>،
+  والقبول بـ <code>.ins-input--ok</code> و<code>.ins-success</code>.
+</p>
+<demo-example class="stack narrow">
+  <input class="ins-input" value="معطّل" aria-label="معطّل" disabled>
+  <input class="ins-input" value="للقراءة فقط" aria-label="للقراءة فقط" readonly>
+  <div class="ins-field">
+    <input class="ins-input" value="abc" aria-label="خطأ" aria-invalid="true">
+    <p class="ins-error">أدخل رقمًا صحيحًا.</p>
+  </div>
+  <div class="ins-field">
+    <input class="ins-input ins-input--ok" value="huda" aria-label="صحيح" dir="ltr">
+    <p class="ins-success">الاسم متاح.</p>
   </div>
 </demo-example>
 <p>والتحقّق التلقائي من هذه الحالات، برسائل المتصفّح داخل الحقل، في صفحة <a href="validation.html">التحقّق</a>.</p>
@@ -81,7 +58,7 @@
 <demo-example class="narrow">
   <div class="ins-search">
     <svg class="ico ins-search-ico"><use href="#i-search"/></svg>
-    <input class="ins-input" type="search" placeholder="ابحث عن منتج…" aria-label="بحث">
+    <input class="ins-input" type="search" placeholder="بحث" aria-label="بحث">
   </div>
 </demo-example>
 
@@ -90,38 +67,20 @@
   <code>.ins-field-row</code> للحقول المتجاورة، و<code>.ins-form-commit</code> لأزرار الحفظ في النهاية، و
   <code>.ins-req</code> لعلامة الحقل المطلوب.
 </p>
-<demo-example>
-  <form class="ins-panel" onsubmit="event.preventDefault(); Insiyab.toast('حُفظ العنوان', 'ok')">
-    <div class="ins-panel-head"><h3 class="ins-panel-title">عنوان الشحن</h3></div>
-    <div class="ins-panel-body ins-stack">
-      <div class="ins-field-row">
-        <div class="ins-field ins-grow">
-          <label class="ins-label" for="f-name">الاسم الكامل<span class="ins-req" aria-hidden="true">*</span></label>
-          <input class="ins-input" id="f-name" required autocomplete="name">
-        </div>
-        <div class="ins-field ins-grow">
-          <label class="ins-label" for="f-tel">الجوّال<span class="ins-req" aria-hidden="true">*</span></label>
-          <input class="ins-input ins-num" id="f-tel" type="tel" dir="ltr" required autocomplete="tel">
-        </div>
+<demo-example class="narrow">
+  <form onsubmit="event.preventDefault()">
+    <div class="ins-field-row">
+      <div class="ins-field ins-grow">
+        <label class="ins-label" for="f-name">الاسم<span class="ins-req" aria-hidden="true">*</span></label>
+        <input class="ins-input" id="f-name" required>
       </div>
-      <div class="ins-field-row">
-        <div class="ins-field ins-grow">
-          <label class="ins-label" for="f-city">المدينة</label>
-          <input class="ins-input" id="f-city" autocomplete="address-level2">
-        </div>
-        <div class="ins-field ins-grow">
-          <label class="ins-label" for="f-zip">الرمز البريدي</label>
-          <input class="ins-input ins-num" id="f-zip" inputmode="numeric" autocomplete="postal-code">
-        </div>
+      <div class="ins-field ins-grow">
+        <label class="ins-label" for="f-city">المدينة</label>
+        <input class="ins-input" id="f-city">
       </div>
-      <div class="ins-field">
-        <label class="ins-label" for="f-street">الشارع والمبنى</label>
-        <input class="ins-input" id="f-street" autocomplete="street-address">
-      </div>
-      <div class="ins-form-commit">
-        <button class="ins-btn ins-btn--primary">حفظ العنوان</button>
-        <button class="ins-btn ins-btn--bare" type="reset">تفريغ</button>
-      </div>
+    </div>
+    <div class="ins-form-commit">
+      <button class="ins-btn ins-btn--primary">حفظ</button>
     </div>
   </form>
 </demo-example>

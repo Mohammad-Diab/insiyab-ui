@@ -1,25 +1,23 @@
 <h2 id="head">رأس الصفحة</h2>
 <p>
-  اسم الصفحة وسطر تحته، وإجراءاتها في النهاية. الإجراءات تلتفّ تحت العنوان على الشاشة الضيّقة بدل أن
-  تضغطه، لأنّ عنوان الصفحة العربي جملة ويستحقّ سطره. رأس هذه الصفحة نفسه مبنيّ به.
+  <code>.ins-page-head</code>: العنوان <code>.ins-page-title</code> وسطر تحته <code>.ins-page-sub</code> داخل
+  <code>.ins-page-head-text</code>، والإجراءات <code>.ins-page-actions</code> في النهاية، تلتفّ تحت العنوان على
+  الشاشة الضيّقة. ومسار التنقّل أوّل الرأس يأخذ سطرًا وحده.
 </p>
 <demo-example>
-  <header class="ins-page-head ins-mb-0">
+  <header class="ins-page-head">
     <nav class="ins-breadcrumb" aria-label="مسار التنقّل">
       <ol>
-        <li><a href="#head">المتجر</a></li>
-        <li><a href="#head">المنتجات</a></li>
-        <li><span aria-current="page">حقيبة ظهر جلدية</span></li>
+        <li><a href="#head">الرئيسية</a></li>
+        <li><span aria-current="page">الصفحة</span></li>
       </ol>
     </nav>
     <div class="ins-page-head-text">
-      <span class="ins-eyebrow">منتج</span>
-      <h3 class="ins-page-title">حقيبة ظهر جلدية</h3>
-      <p class="ins-page-sub">آخر تعديل قبل ساعتين · <span class="ins-num">14</span> قطعة في المخزون</p>
+      <h3 class="ins-page-title">عنوان الصفحة</h3>
+      <p class="ins-page-sub">سطر وصف قصير</p>
     </div>
     <div class="ins-page-actions">
-      <button class="ins-btn ins-btn--secondary">معاينة</button>
-      <button class="ins-btn ins-btn--primary">حفظ التغييرات</button>
+      <button class="ins-btn ins-btn--primary">حفظ</button>
     </div>
   </header>
 </demo-example>
@@ -40,14 +38,12 @@
 </demo-example>
 
 <h2 id="minimal">عنوان فقط</h2>
+<p>المسار والإجراءات اختياريان.</p>
 <demo-example>
-  <header class="ins-page-head ins-mb-0">
+  <header class="ins-page-head">
     <div class="ins-page-head-text">
-      <h3 class="ins-page-title">الطلبات</h3>
-      <p class="ins-page-sub">كلّ طلبات المتجر، الأحدث أوّلًا.</p>
-    </div>
-    <div class="ins-page-actions">
-      <button class="ins-btn ins-btn--primary"><svg class="ico"><use href="#i-plus"/></svg>طلب جديد</button>
+      <h3 class="ins-page-title">عنوان الصفحة</h3>
+      <p class="ins-page-sub">سطر وصف قصير</p>
     </div>
   </header>
 </demo-example>

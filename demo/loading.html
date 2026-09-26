@@ -258,67 +258,26 @@
         <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#skeleton">هيكل التحميل</a><a href="#spinner">الدوّارة</a><a href="#empty">الحالة الفارغة</a><a href="#search-empty">لا نتائج</a></nav>
         <h2 id="skeleton">هيكل التحميل</h2>
 <p>
-  شكل المحتوى قبل وصوله، فلا تقفز الصفحة حين يصل. أربعة أشكال: <code>--title</code> و<code>--text</code>
-  و<code>--circle</code> و<code>--block</code>. ولمعته أحد الاستثناءين الوحيدين من قاعدة «لا شيء يتكرّر»،
-  لأنّها تعني «ننتظر».
+  <code>.ins-skel</code> يرسم شكل المحتوى قبل وصوله، فلا تقفز الصفحة حين يصل. أربعة أشكال:
+  <code>--title</code> و<code>--text</code> و<code>--circle</code> و<code>--block</code>.
 </p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-cols-2">
-    <div class="ins-panel">
-      <div class="ins-panel-body ins-stack">
-        <div class="ins-row ins-gap-3 ins-flex-nowrap">
-          <span class="ins-skel ins-skel--circle"></span>
-          <span class="ins-grow">
-            <span class="ins-skel ins-skel--title ins-block"></span>
-            <span class="ins-skel ins-skel--text ins-block" style="inline-size:60%"></span>
-          </span>
-        </div>
-        <div class="ins-skel ins-skel--block"></div>
-        <div class="ins-skel ins-skel--text"></div>
-        <div class="ins-skel ins-skel--text" style="inline-size:80%"></div>
-      </div>
-    </div>
-    <div class="ins-panel">
-      <div class="ins-panel-body ins-stack">
-        <div class="ins-row ins-gap-3 ins-flex-nowrap">
-          <span class="ins-avatar ins-avatar--lg">ل ح</span>
-          <span class="ins-grow"><b class="ins-block">ليلى حسن</b><span class="ins-muted ins-text-sm">مديرة المتجر</span></span>
-        </div>
-        <div class="ins-glass-inner ins-p-4 ins-text-sm">آخر طلب: حقيبة ظهر جلدية، قبل ساعتين.</div>
-        <p class="ins-muted ins-text-sm ins-m-0">تنضمّ إلى الفريق منذ آذار ٢٠٢٤، وتدير ثلاثة متاجر.</p>
-      </div>
-    </div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-2"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-body ins-stack"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row ins-gap-3 ins-flex-nowrap"</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--circle"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-grow"</span><span class="hl-t">&gt;</span>
-          <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--title ins-block"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-          <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--text ins-block"</span> <span class="hl-a">style</span>=<span class="hl-s">"inline-size:60%"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--block"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--text"</span> <span class="hl-a">style</span>=<span class="hl-s">"inline-size:80%"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-body ins-stack"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row ins-gap-3 ins-flex-nowrap"</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-avatar ins-avatar--lg"</span><span class="hl-t">&gt;</span>ل ح<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-grow"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-block"</span><span class="hl-t">&gt;</span>ليلى حسن<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted ins-text-sm"</span><span class="hl-t">&gt;</span>مديرة المتجر<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-glass-inner ins-p-4 ins-text-sm"</span><span class="hl-t">&gt;</span>آخر طلب: حقيبة ظهر جلدية، قبل ساعتين.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-muted ins-text-sm ins-m-0"</span><span class="hl-t">&gt;</span>تنضمّ إلى الفريق منذ آذار ٢٠٢٤، وتدير ثلاثة متاجر.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p>اللوح الأيمن هيكل اللوح الأيسر: الشكل نفسه، والعناصر في الأماكن نفسها.</p>
+<figure class="dx"><div class="dx-view stack narrow">
+  <div class="ins-skel ins-skel--circle"></div>
+  <div class="ins-skel ins-skel--title"></div>
+  <div class="ins-skel ins-skel--block"></div>
+  <div class="ins-skel ins-skel--text"></div>
+  <div class="ins-skel ins-skel--text"></div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--circle"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--title"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--block"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="spinner">الدوّارة</h2>
-<p>لانتظار قصير لا شكل له — حفظ، إرسال. و<code>.ins-loading</code> حاوية تضعها في وسط منطقة فارغة بارتفاع معقول.</p>
+<p>
+  <code>.ins-spinner</code> لانتظار قصير لا شكل له، و<code>--sm</code> داخل زرّ. أعطها <code>role="status"</code>
+  وتسمية، أو <code>aria-hidden</code> حين يحمل الزرّ النصّ.
+</p>
 <figure class="dx"><div class="dx-view row">
   <span class="ins-spinner" role="status" aria-label="جارٍ التحميل"></span>
   <span class="ins-spinner ins-spinner--sm" role="status" aria-label="جارٍ التحميل"></span>
@@ -326,54 +285,42 @@
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spinner"</span> <span class="hl-a">role</span>=<span class="hl-s">"status"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"جارٍ التحميل"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spinner ins-spinner--sm"</span> <span class="hl-a">role</span>=<span class="hl-s">"status"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"جارٍ التحميل"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">disabled</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spinner ins-spinner--sm"</span> <span class="hl-a">aria-hidden</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>جارٍ الحفظ…<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<p><code>.ins-loading</code> حاوية تضع الدوّارة في وسط منطقة فارغة بارتفاع معقول.</p>
 <figure class="dx"><div class="dx-view">
-  <div class="ins-panel">
-    <div class="ins-loading"><span class="ins-spinner" role="status" aria-label="جارٍ تحميل الطلبات"></span></div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-loading"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spinner"</span> <span class="hl-a">role</span>=<span class="hl-s">"status"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"جارٍ تحميل الطلبات"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <div class="ins-loading"><span class="ins-spinner" role="status" aria-label="جارٍ التحميل"></span></div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-loading"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spinner"</span> <span class="hl-a">role</span>=<span class="hl-s">"status"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"جارٍ التحميل"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="empty">الحالة الفارغة</h2>
 <p>
-  الشاشة الوحيدة التي لا شيء فيها، فهي الوحيدة التي تستحقّ حركة: مرّر المؤشّر فيرتفع الرمز ويخرج
-  قليلًا من بهتانه. واجعلها تقول ما سيظهر هنا، وما الخطوة التالية.
+  <code>.ins-empty</code> فيه رمز <code>.ins-empty-ico</code>، وعنوان <code>.ins-empty-title</code>، وتلميح
+  <code>.ins-empty-hint</code>. اجعلها تقول ما سيظهر هنا، وما الخطوة التالية.
 </p>
 <figure class="dx"><div class="dx-view">
-  <div class="ins-panel">
-    <div class="ins-empty">
-      <span class="ins-empty-ico"><svg class="ico" style="font-size:2rem"><use href="#i-box"/></svg></span>
-      <span class="ins-empty-title">لا منتجات بعد</span>
-      <span class="ins-empty-hint">أضف أوّل منتج ليظهر في متجرك. يمكنك استيراد قائمة كاملة من ملفّ أيضًا.</span>
-      <div class="ins-row ins-justify-center ins-mt-4">
-        <button class="ins-btn ins-btn--primary"><svg class="ico"><use href="#i-plus"/></svg>منتج جديد</button>
-        <button class="ins-btn ins-btn--secondary"><svg class="ico"><use href="#i-upload"/></svg>استيراد</button>
-      </div>
-    </div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-title"</span><span class="hl-t">&gt;</span>لا منتجات بعد<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-hint"</span><span class="hl-t">&gt;</span>أضف أوّل منتج ليظهر في متجرك. يمكنك استيراد قائمة كاملة من ملفّ أيضًا.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row ins-justify-center ins-mt-4"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>منتج جديد<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>استيراد<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="search-empty">لا نتائج</h2>
-<figure class="dx"><div class="dx-view">
   <div class="ins-empty">
-    <span class="ins-empty-ico"><svg class="ico" style="font-size:2rem"><use href="#i-search"/></svg></span>
-    <span class="ins-empty-title">لا نتائج لـ «ساعة ذهبية»</span>
-    <span class="ins-empty-hint">جرّب كلمة أقصر، أو أزل التصفية حسب السعر.</span>
+    <span class="ins-empty-ico"><svg class="ico"><use href="#i-box"/></svg></span>
+    <span class="ins-empty-title">لا منتجات بعد</span>
+    <span class="ins-empty-hint">أضف أوّل منتج ليظهر هنا.</span>
+    <button class="ins-btn ins-btn--primary">منتج جديد</button>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-title"</span><span class="hl-t">&gt;</span>لا نتائج لـ «ساعة ذهبية»<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-hint"</span><span class="hl-t">&gt;</span>جرّب كلمة أقصر، أو أزل التصفية حسب السعر.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-title"</span><span class="hl-t">&gt;</span>لا منتجات بعد<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-hint"</span><span class="hl-t">&gt;</span>أضف أوّل منتج ليظهر هنا.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>منتج جديد<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="search-empty">لا نتائج</h2>
+<p>الشكل نفسه لبحث لم يجد شيئًا، بلا زرّ.</p>
+<figure class="dx"><div class="dx-view">
+  <div class="ins-empty">
+    <span class="ins-empty-ico"><svg class="ico"><use href="#i-search"/></svg></span>
+    <span class="ins-empty-title">لا نتائج</span>
+    <span class="ins-empty-hint">جرّب كلمة أخرى.</span>
+  </div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-title"</span><span class="hl-t">&gt;</span>لا نتائج<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-hint"</span><span class="hl-t">&gt;</span>جرّب كلمة أخرى.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="stats.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">البطاقات الإحصائية</span></a><a class="site-pager-link site-pager-link--next" href="progress.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">التقدّم</span></a></nav>
       </div>

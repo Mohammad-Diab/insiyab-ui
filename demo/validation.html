@@ -259,68 +259,40 @@
         <h2 id="browser">تحقّق المتصفّح</h2>
 <p>
   <code>data-ins-validate</code> على النموذج، وقيود HTML العادية على الحقول: <code>required</code>
-  و<code>type="email"</code> و<code>minlength</code> و<code>pattern</code>. المكتبة لا تتحقّق بنفسها — تأخذ
-  حكم المتصفّح وتكتب رسالته داخل الحقل بدل الفقاعة. اضغط «إنشاء الحساب» والحقول فارغة:
+  و<code>type="email"</code> و<code>minlength</code> و<code>pattern</code>. المكتبة تأخذ حكم المتصفّح وتكتب
+  رسالته داخل الحقل بدل الفقاعة. اضغط «إرسال» والحقول فارغة:
 </p>
-<figure class="dx"><div class="dx-view">
-  <form class="ins-panel" data-ins-validate id="v-form">
-    <div class="ins-panel-head"><h3 class="ins-panel-title">حساب جديد</h3></div>
-    <div class="ins-panel-body ins-stack">
-      <div class="ins-field">
-        <label class="ins-label" for="v-name">الاسم<span class="ins-req" aria-hidden="true">*</span></label>
-        <input class="ins-input" id="v-name" required autocomplete="name">
-        <p class="ins-error"></p>
-      </div>
-      <div class="ins-field">
-        <label class="ins-label" for="v-email">البريد الإلكتروني<span class="ins-req" aria-hidden="true">*</span></label>
-        <input class="ins-input" id="v-email" type="email" required dir="ltr" autocomplete="email" placeholder="name@example.com">
-        <p class="ins-error"></p>
-      </div>
-      <div class="ins-field">
-        <label class="ins-label" for="v-pass">كلمة المرور<span class="ins-req" aria-hidden="true">*</span></label>
-        <div class="ins-input-group">
-          <input class="ins-input" id="v-pass" type="password" required minlength="8" autocomplete="new-password">
-          <button class="ins-password-toggle" data-ins-password aria-label="إظهار كلمة المرور" type="button"></button>
-        </div>
-        <span class="ins-hint">ثمانية أحرف على الأقل.</span>
-        <p class="ins-error">كلمة المرور قصيرة — ثمانية أحرف على الأقل.</p>
-      </div>
-      <label class="ins-check">
-        <input type="checkbox" required><span class="ins-check-text">أوافق على شروط الاستخدام</span>
-      </label>
-      <div class="ins-form-commit">
-        <button class="ins-btn ins-btn--primary">إنشاء الحساب</button>
-      </div>
+<figure class="dx"><div class="dx-view narrow">
+  <form class="ins-stack" data-ins-validate id="v-form">
+    <div class="ins-field">
+      <label class="ins-label" for="v-email">البريد</label>
+      <input class="ins-input" id="v-email" type="email" required dir="ltr">
+      <p class="ins-error"></p>
+    </div>
+    <div class="ins-field">
+      <label class="ins-label" for="v-pass">كلمة المرور</label>
+      <input class="ins-input" id="v-pass" type="password" required minlength="8">
+      <span class="ins-hint">ثمانية أحرف على الأقل.</span>
+      <p class="ins-error">كلمة المرور قصيرة.</p>
+    </div>
+    <div class="ins-form-commit">
+      <button class="ins-btn ins-btn--primary">إرسال</button>
     </div>
   </form>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;form</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span> <span class="hl-a">data-ins-validate</span> <span class="hl-a">id</span>=<span class="hl-s">"v-form"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-head"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-title"</span><span class="hl-t">&gt;</span>حساب جديد<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-body ins-stack"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"v-name"</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-req"</span> <span class="hl-a">aria-hidden</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>*<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"v-name"</span> <span class="hl-a">required</span> <span class="hl-a">autocomplete</span>=<span class="hl-s">"name"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"v-email"</span><span class="hl-t">&gt;</span>البريد الإلكتروني<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-req"</span> <span class="hl-a">aria-hidden</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>*<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"v-email"</span> <span class="hl-a">type</span>=<span class="hl-s">"email"</span> <span class="hl-a">required</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span> <span class="hl-a">autocomplete</span>=<span class="hl-s">"email"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"name@example.com"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"v-pass"</span><span class="hl-t">&gt;</span>كلمة المرور<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-req"</span> <span class="hl-a">aria-hidden</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>*<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"v-pass"</span> <span class="hl-a">type</span>=<span class="hl-s">"password"</span> <span class="hl-a">required</span> <span class="hl-a">minlength</span>=<span class="hl-s">"8"</span> <span class="hl-a">autocomplete</span>=<span class="hl-s">"new-password"</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-password-toggle"</span> <span class="hl-a">data-ins-password</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إظهار كلمة المرور"</span> <span class="hl-a">type</span>=<span class="hl-s">"button"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span><span class="hl-t">&gt;</span>ثمانية أحرف على الأقل.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span>كلمة المرور قصيرة — ثمانية أحرف على الأقل.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">required</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check-text"</span><span class="hl-t">&gt;</span>أوافق على شروط الاستخدام<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-form-commit"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>إنشاء الحساب<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;form</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack"</span> <span class="hl-a">data-ins-validate</span> <span class="hl-a">id</span>=<span class="hl-s">"v-form"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"v-email"</span><span class="hl-t">&gt;</span>البريد<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"v-email"</span> <span class="hl-a">type</span>=<span class="hl-s">"email"</span> <span class="hl-a">required</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"v-pass"</span><span class="hl-t">&gt;</span>كلمة المرور<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"v-pass"</span> <span class="hl-a">type</span>=<span class="hl-s">"password"</span> <span class="hl-a">required</span> <span class="hl-a">minlength</span>=<span class="hl-s">"8"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span><span class="hl-t">&gt;</span>ثمانية أحرف على الأقل.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span>كلمة المرور قصيرة.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-form-commit"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>إرسال<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/form</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
@@ -330,8 +302,8 @@
   <li><b>فيه نصّ</b> — رسالتك أنت تظهر كما هي. انظر حقل كلمة المرور أعلاه.</li>
 </ul>
 <p>
-  والخطأ يظهر بعد أن يلمس المستخدم الحقل، لا لحظة فتح الصفحة: حقل مطلوب فارغ لم يُكتب فيه شيء بعد
-  ليس خطأً. يظهر حين يغادر المستخدم حقلًا غيّره (<code>:user-invalid</code>)، أو حين يحاول الإرسال.
+  والخطأ يظهر حين يغادر المستخدم حقلًا غيّره (<code>:user-invalid</code>) أو حين يحاول الإرسال، لا لحظة
+  فتح الصفحة.
 </p>
 
 <h2 id="server">أخطاء من الخادم</h2>
@@ -339,54 +311,45 @@
   خطأ لا يعرفه المتصفّح — اسم مستخدم محجوز، رمز منتهٍ — تضعه أنت: <code>aria-invalid="true"</code> على
   الحقل ونصّ في <code>.ins-error</code>. والقبول بـ <code>.ins-input--ok</code> و<code>.ins-success</code>.
 </p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-cols-2">
-    <div class="ins-field">
-      <label class="ins-label" for="v-user">اسم المستخدم</label>
-      <input class="ins-input" id="v-user" value="admin" aria-invalid="true" dir="ltr">
-      <p class="ins-error">هذا الاسم محجوز.</p>
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="v-user2">اسم المستخدم</label>
-      <input class="ins-input ins-input--ok" id="v-user2" value="huda.m" dir="ltr">
-      <p class="ins-success">الاسم متاح.</p>
-    </div>
+<figure class="dx"><div class="dx-view stack narrow">
+  <div class="ins-field">
+    <input class="ins-input" value="admin" aria-label="اسم المستخدم" aria-invalid="true" dir="ltr">
+    <p class="ins-error">هذا الاسم محجوز.</p>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-2"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"v-user"</span><span class="hl-t">&gt;</span>اسم المستخدم<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"v-user"</span> <span class="hl-a">value</span>=<span class="hl-s">"admin"</span> <span class="hl-a">aria-invalid</span>=<span class="hl-s">"true"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span>هذا الاسم محجوز.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"v-user2"</span><span class="hl-t">&gt;</span>اسم المستخدم<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-input--ok"</span> <span class="hl-a">id</span>=<span class="hl-s">"v-user2"</span> <span class="hl-a">value</span>=<span class="hl-s">"huda.m"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-success"</span><span class="hl-t">&gt;</span>الاسم متاح.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <div class="ins-field">
+    <input class="ins-input ins-input--ok" value="huda" aria-label="اسم المستخدم" dir="ltr">
+    <p class="ins-success">الاسم متاح.</p>
+  </div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">value</span>=<span class="hl-s">"admin"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"اسم المستخدم"</span> <span class="hl-a">aria-invalid</span>=<span class="hl-s">"true"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span>هذا الاسم محجوز.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-input--ok"</span> <span class="hl-a">value</span>=<span class="hl-s">"huda"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"اسم المستخدم"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-success"</span><span class="hl-t">&gt;</span>الاسم متاح.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="select">القوائم</h2>
+<p>
+  القائمة كالحقل: <code>aria-invalid="true"</code>، أو <code>.ins-select--bad</code> (و<code>.ins-input--bad</code>
+  للحقل) حين لا تملك غير صنف.
+</p>
 <figure class="dx"><div class="dx-view narrow">
   <div class="ins-field">
-    <label class="ins-label" for="v-plan">الخطّة</label>
-    <select class="ins-select ins-select--bad" id="v-plan" aria-invalid="true">
-      <option value="">اختر خطّة…</option><option>البداية</option><option>النموّ</option>
+    <select class="ins-select ins-select--bad" aria-label="الخطّة" aria-invalid="true">
+      <option value="">اختر…</option><option>الأولى</option><option>الثانية</option>
     </select>
-    <p class="ins-error">اختر خطّة للمتابعة.</p>
+    <p class="ins-error">اختر خطّة.</p>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"v-plan"</span><span class="hl-t">&gt;</span>الخطّة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;select</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-select ins-select--bad"</span> <span class="hl-a">id</span>=<span class="hl-s">"v-plan"</span> <span class="hl-a">aria-invalid</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;option</span> <span class="hl-a">value</span>=<span class="hl-s">""</span><span class="hl-t">&gt;</span>اختر خطّة…<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>البداية<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>النموّ<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;select</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-select ins-select--bad"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الخطّة"</span> <span class="hl-a">aria-invalid</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;option</span> <span class="hl-a">value</span>=<span class="hl-s">""</span><span class="hl-t">&gt;</span>اختر…<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>الأولى<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>الثانية<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/select</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span>اختر خطّة للمتابعة.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span>اختر خطّة.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <script>
-  document.getElementById('v-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    Insiyab.toast('أُنشئ الحساب', 'ok');
-  });
+  document.getElementById('v-form').addEventListener('submit', function (e) { e.preventDefault(); });
 </script>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="pickers.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">المنتقيات</span></a><a class="site-pager-link site-pager-link--next" href="buttons.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الأزرار</span></a></nav>
       </div>

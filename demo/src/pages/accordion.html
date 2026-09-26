@@ -1,64 +1,55 @@
 <h2 id="basic">أكورديون</h2>
 <p>
-  <code>.ins-accordion</code> يجمع أقسامًا من <code>&lt;details class="ins-collapse"&gt;</code>. كلّ قسم عنصر
-  details عاديّ: يُفتح بالنقر وبلوحة المفاتيح دون سطر جافاسكربت، ويجده البحث داخل الصفحة.
+  <code>.ins-accordion</code> يجمع أقسامًا من <code>&lt;details class="ins-collapse"&gt;</code>، كلّ قسم فيه
+  <code>summary</code> و<code>.ins-collapse-body</code>. يُفتح بالنقر وبلوحة المفاتيح دون جافاسكربت،
+  ولا سطح له، فضعه في لوح.
 </p>
 <demo-example>
   <div class="ins-panel">
     <div class="ins-accordion">
       <details class="ins-collapse" open>
-        <summary>كم يستغرق الشحن؟</summary>
-        <div class="ins-collapse-body">داخل المدينة يومان، وبين المدن من ثلاثة إلى خمسة أيّام عمل. يصلك رقم التتبّع برسالة فور الشحن.</div>
+        <summary>القسم الأوّل</summary>
+        <div class="ins-collapse-body">محتوى القسم الأوّل.</div>
       </details>
       <details class="ins-collapse">
-        <summary>هل يمكنني تعديل الطلب بعد الدفع؟</summary>
-        <div class="ins-collapse-body">نعم، ما دامت حالته «قيد التجهيز». بعد الشحن يمكنك طلب الاسترجاع فقط.</div>
+        <summary>القسم الثاني</summary>
+        <div class="ins-collapse-body">محتوى القسم الثاني.</div>
       </details>
       <details class="ins-collapse">
-        <summary>ما طرق الدفع المتاحة؟</summary>
-        <div class="ins-collapse-body">البطاقات البنكية، والمحافظ الرقمية، والدفع عند الاستلام في بعض المدن.</div>
+        <summary>القسم الثالث</summary>
+        <div class="ins-collapse-body">محتوى القسم الثالث.</div>
       </details>
     </div>
   </div>
 </demo-example>
 
 <h2 id="exclusive">قسم واحد مفتوح</h2>
-<p>
-  أعطِ الأقسام كلّها <code>name</code> واحدًا — المتصفّح يغلق الباقي بنفسه حين يُفتح أحدها، بلا سطر شيفرة.
-</p>
+<p>أعطِ الأقسام كلّها <code>name</code> واحدًا، فيغلق المتصفّح الباقي حين يُفتح أحدها.</p>
 <demo-example>
-  <div class="ins-panel">
-    <div class="ins-accordion">
-      <details class="ins-collapse" name="billing" open>
-        <summary>الخطّة الحالية</summary>
-        <div class="ins-collapse-body">خطّة النموّ، تتجدّد في الأوّل من تشرين الأوّل.</div>
-      </details>
-      <details class="ins-collapse" name="billing">
-        <summary>وسيلة الدفع</summary>
-        <div class="ins-collapse-body">بطاقة تنتهي بـ <span class="ins-num">4242</span>.</div>
-      </details>
-      <details class="ins-collapse" name="billing">
-        <summary>الفواتير السابقة</summary>
-        <div class="ins-collapse-body">اثنتا عشرة فاتورة، كلّها مدفوعة.</div>
-      </details>
-    </div>
+  <div class="ins-accordion">
+    <details class="ins-collapse" name="faq" open>
+      <summary>القسم الأوّل</summary>
+      <div class="ins-collapse-body">محتوى القسم الأوّل.</div>
+    </details>
+    <details class="ins-collapse" name="faq">
+      <summary>القسم الثاني</summary>
+      <div class="ins-collapse-body">محتوى القسم الثاني.</div>
+    </details>
+    <details class="ins-collapse" name="faq">
+      <summary>القسم الثالث</summary>
+      <div class="ins-collapse-body">محتوى القسم الثالث.</div>
+    </details>
   </div>
 </demo-example>
 
 <h2 id="collapse">قسم منفرد</h2>
-<p><code>.ins-collapse</code> وحده، خارج أكورديون، لتفاصيل اختيارية في نموذج.</p>
+<p><code>.ins-collapse</code> وحده، خارج أكورديون.</p>
 <demo-example>
   <details class="ins-collapse">
     <summary>خيارات متقدّمة</summary>
-    <div class="ins-collapse-body ins-stack">
-      <label class="ins-check"><input type="checkbox"><span class="ins-check-text">إخفاء المنتج من محرّكات البحث</span></label>
-      <label class="ins-check"><input type="checkbox" checked><span class="ins-check-text">السماح بالتقييمات</span></label>
-    </div>
+    <div class="ins-collapse-body">محتوى إضافي.</div>
   </details>
 </demo-example>
 
 <h2 id="motion">الحركة</h2>
-<p>
-  حيث يستطيع المتصفّح تحريك الارتفاع، يتحرّك القسم وهو يُفتح. وحيث لا يستطيع ينفتح فورًا — وهذا كلّ الفرق،
-  فلا سكربت يقيس الارتفاع ولا شيء ينكسر في متصفّح أقدم.
-</p>
+<p>حيث يستطيع المتصفّح تحريك الارتفاع يتحرّك القسم وهو يُفتح، وحيث لا يستطيع ينفتح فورًا.</p>

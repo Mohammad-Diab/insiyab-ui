@@ -267,37 +267,29 @@
 
 <h2 id="field">حقل الرمز</h2>
 <p>
-  حقل واحد عليه <code>data-ins-otp</code> وعدد الخانات. الرمز الصحيح في هذا المثال <code>123456</code>، وأيّ رمز
-  آخر يُرفض كما يرفضه خادم:
+  حقل واحد عليه <code>data-ins-otp</code> وعدد الخانات. الرمز الصحيح هنا <code>123456</code>، وأيّ رمز آخر يُرفض:
 </p>
 <figure class="dx"><div class="dx-view narrow">
-  <form class="ins-stack" id="otp-demo-form">
-    <div class="ins-field">
-      <label class="ins-label" for="otp-demo">رمز التحقق</label>
-      <input id="otp-demo" data-ins-otp="6" name="code" required>
-      <div class="ins-hint" id="otp-demo-hint">أرسلنا رمزًا من ستّة أرقام إلى <span class="ins-num" dir="ltr">050 ••• ••67</span>.</div>
-    </div>
-    <button class="ins-btn ins-btn--primary" type="submit">تحقّق</button>
-  </form>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;form</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack"</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-demo-form"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"otp-demo"</span><span class="hl-t">&gt;</span>رمز التحقق<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-demo"</span> <span class="hl-a">data-ins-otp</span>=<span class="hl-s">"6"</span> <span class="hl-a">name</span>=<span class="hl-s">"code"</span> <span class="hl-a">required</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-demo-hint"</span><span class="hl-t">&gt;</span>أرسلنا رمزًا من ستّة أرقام إلى <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>050 ••• ••67<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">type</span>=<span class="hl-s">"submit"</span><span class="hl-t">&gt;</span>تحقّق<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/form</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+  <div class="ins-field">
+    <label class="ins-label" for="otp-demo">رمز التحقق</label>
+    <input id="otp-demo" data-ins-otp="6" name="code">
+    <div class="ins-hint" id="otp-demo-hint">رمز من ستّة أرقام.</div>
+  </div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"otp-demo"</span><span class="hl-t">&gt;</span>رمز التحقق<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-demo"</span> <span class="hl-a">data-ins-otp</span>=<span class="hl-s">"6"</span> <span class="hl-a">name</span>=<span class="hl-s">"code"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-demo-hint"</span><span class="hl-t">&gt;</span>رمز من ستّة أرقام.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <p>
-  <b>يبقى حقلًا واحدًا.</b> المربّعات مرسومة فوق حقل حقيقيّ واحد، فاقتراح الهاتف للرمز من الرسائل، ولصق الرمز
-  كاملًا، ومدير كلمات المرور، وقارئ الشاشة — كلّها تلقى حقلًا نصّيًا عاديًا، وهو ما بُنيت له. ستّة حقول منفصلة
-  كانت ستكسر واحدًا منها على الأقلّ. وبلا سكربت هو ذلك الحقل نفسه.
+  <b>يبقى حقلًا واحدًا:</b> المربّعات مرسومة فوق حقل نصّيّ حقيقيّ، فاقتراح الهاتف للرمز ولصقه ومدير كلمات المرور
+  وقارئ الشاشة تعمل كما في أيّ حقل. وبلا سكربت هو ذلك الحقل نفسه.
 </p>
 
 <h2 id="typing">الكتابة</h2>
 <ul>
   <li><b>في الخانة التالية دائمًا</b> — النقر على أيّ مربّع يضع المؤشّر بعد آخر رقم، و<kbd>Backspace</kbd> يحذف الأخير.</li>
   <li><b>الأرقام العربية</b> — <code>١٢٣٤٥٦</code> تُقرأ <code>123456</code>.</li>
-  <li><b>اللصق</b> — يبقى الرمز وحده: «رمزك هو ١٢٣ ٤٥٦ صالح لخمس دقائق» تملأ <code>123456</code>.</li>
+  <li><b>اللصق</b> — يبقى الرمز وحده: «رمزك هو ١٢٣ ٤٥٦» تملأ <code>123456</code>.</li>
   <li><b>ناقص</b> — الحقل غير صالح برسالة «أدخل الرمز كاملًا» حتّى تمتلئ الخانات، والفارغ يتولّاه <code>required</code>.</li>
 </ul>
 
@@ -312,7 +304,7 @@
     <input id="otp-four" data-ins-otp="4">
   </div>
   <div class="ins-field">
-    <label class="ins-label" for="otp-alnum">رمز بحروف</label>
+    <label class="ins-label" for="otp-alnum">حروف وأرقام</label>
     <input id="otp-alnum" data-ins-otp="6" data-ins-otp-chars="alnum">
   </div>
   <form class="ins-field" id="otp-auto-form">
@@ -324,7 +316,7 @@
   <span class="hl-t">&lt;input</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-four"</span> <span class="hl-a">data-ins-otp</span>=<span class="hl-s">"4"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"otp-alnum"</span><span class="hl-t">&gt;</span>رمز بحروف<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"otp-alnum"</span><span class="hl-t">&gt;</span>حروف وأرقام<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;input</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-alnum"</span> <span class="hl-a">data-ins-otp</span>=<span class="hl-s">"6"</span> <span class="hl-a">data-ins-otp-chars</span>=<span class="hl-s">"alnum"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;form</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-auto-form"</span><span class="hl-t">&gt;</span>
@@ -360,16 +352,15 @@
     </div>
   </div>
 </div>
-<p class="site-note">
+<p>
   <b>لقارئ الشاشة</b> حقل نصّيّ واحد باسمه وتلميحه، والمربّعات مخفيّة عنه. وتسمية الحقل عليك: <code>&lt;label&gt;</code>
   أو <code>aria-label</code>.
 </p>
 
 <script>
-  document.getElementById('otp-demo-form').addEventListener('submit', function (e) { e.preventDefault(); });
   document.getElementById('otp-auto-form').addEventListener('submit', function (e) {
     e.preventDefault();
-    Insiyab.toast('أُرسل النموذج بالرمز ' + Insiyab.otp('#otp-auto'), 'ok');
+    Insiyab.toast('أُرسل ' + Insiyab.otp('#otp-auto'), 'ok');
     Insiyab.otp('#otp-auto', '');
   });
   document.addEventListener('ins:otp', function (e) {
@@ -377,10 +368,9 @@
     var hint = document.getElementById('otp-demo-hint');
     if (e.detail.value === '123456') {
       hint.textContent = 'الرمز صحيح.';
-      Insiyab.toast('تمّ التحقّق', 'ok');
     } else {
       e.detail.input.setAttribute('aria-invalid', 'true');
-      hint.textContent = 'الرمز غير صحيح. جرّب 123456.';
+      hint.textContent = 'الرمز غير صحيح.';
     }
   });
 </script>

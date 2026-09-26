@@ -1,44 +1,43 @@
 <h2 id="tones">النبرات</h2>
 <p>
-  التنبيه قطعتان تُقرآن شكلًا واحدًا: دائرة مملوءة تحمل الرمز، وكتلة رسالة فيها قضمة مقعّرة في
-  الحافة المواجهة لها، فيتشاركان خطًّا واحدًا. ومتصفّح بلا دعم للأقنعة يرسم كتلة مستقيمة الحافة
-  بجانب دائرة، وهذا تنبيه عادي تمامًا.
+  <code>.ins-alert</code> فيه دائرة <code>.ins-alert-ico</code> تحمل الرمز، ورسالة <code>.ins-alert-msg</code> فيها
+  <code>.ins-alert-text</code>. والنبرات <code>--ok</code> و<code>--info</code> و<code>--warn</code> و<code>--bad</code>.
 </p>
 <demo-example class="stack">
   <div class="ins-alert ins-alert--ok">
     <span class="ins-alert-ico"><svg class="ico"><use href="#i-check"/></svg></span>
-    <div class="ins-alert-msg"><span class="ins-alert-text">نُشر المنتج، وهو ظاهر الآن في المتجر.</span></div>
+    <div class="ins-alert-msg"><span class="ins-alert-text">تمّ الحفظ.</span></div>
   </div>
   <div class="ins-alert ins-alert--info">
     <span class="ins-alert-ico"><svg class="ico"><use href="#i-info"/></svg></span>
-    <div class="ins-alert-msg"><span class="ins-alert-text">صيانة مجدولة ليلة الجمعة من الثانية إلى الرابعة فجرًا.</span></div>
+    <div class="ins-alert-msg"><span class="ins-alert-text">معلومة للاطّلاع.</span></div>
   </div>
   <div class="ins-alert ins-alert--warn">
     <span class="ins-alert-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
-    <div class="ins-alert-msg"><span class="ins-alert-text">بقيت ثلاث قطع فقط من «حقيبة ظهر جلدية».</span></div>
+    <div class="ins-alert-msg"><span class="ins-alert-text">انتبه قبل المتابعة.</span></div>
   </div>
   <div class="ins-alert ins-alert--bad">
     <span class="ins-alert-ico"><svg class="ico"><use href="#i-x"/></svg></span>
-    <div class="ins-alert-msg"><span class="ins-alert-text">فشل الدفع: رفض المصرف البطاقة. جرّب بطاقة أخرى.</span></div>
+    <div class="ins-alert-msg"><span class="ins-alert-text">حدث خطأ.</span></div>
   </div>
 </demo-example>
 
 <h2 id="dismiss">قابل للإغلاق</h2>
 <p>
-  زرّ <code>.ins-close</code> مع <code>data-ins-dismiss</code> داخل الرسالة. الزرّ لا يعرف أنّه في تنبيه — يغلق
-  أقرب ما يمكن إغلاقه، ويُطلق <code>ins:dismiss</code>.
+  زرّ <code>.ins-close</code> مع <code>data-ins-dismiss</code> داخل الرسالة يغلق التنبيه ويُطلق
+  <code>ins:dismiss</code>.
 </p>
 <demo-example class="stack">
   <div class="ins-alert ins-alert--info" id="notice">
     <span class="ins-alert-ico"><svg class="ico"><use href="#i-info"/></svg></span>
     <div class="ins-alert-msg">
-      <span class="ins-alert-text">جديد: يمكنك الآن جدولة نشر المنتجات مسبقًا.</span>
+      <span class="ins-alert-text">تنبيه يمكن إغلاقه.</span>
       <button class="ins-close ins-close--sm ins-close--bare" data-ins-dismiss aria-label="إغلاق التنبيه"></button>
     </div>
   </div>
 </demo-example>
 <demo-example class="row" code="none">
-  <button class="ins-btn ins-btn--ghost ins-btn--sm" id="notice-back">أعد التنبيه</button>
+  <button class="ins-btn ins-btn--secondary ins-btn--sm" id="notice-back">أعد التنبيه</button>
 </demo-example>
 
 <h2 id="actions">مع إجراء</h2>
@@ -47,13 +46,10 @@
   <div class="ins-alert ins-alert--warn">
     <span class="ins-alert-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
     <div class="ins-alert-msg">
-      <span class="ins-alert-text">بطاقتك تنتهي الشهر القادم. <a href="#actions">حدّث وسيلة الدفع</a></span>
+      <span class="ins-alert-text">بطاقتك تنتهي قريبًا. <a href="#actions">حدّثها</a></span>
     </div>
   </div>
 </demo-example>
-
-<h2 id="panel">أو لوح بتنبيه</h2>
-<p>لرسالة تحتاج أكثر من سطر وأزرارًا، <a href="surfaces.html#panel-alert">اللوح بتنبيه</a> أنسب من تنبيه طويل.</p>
 
 <script>
   document.getElementById('notice-back').addEventListener('click', function () {

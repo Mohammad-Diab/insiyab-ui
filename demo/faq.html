@@ -263,38 +263,34 @@
       <summary>هل أحتاج إلى npm أو أداة بناء؟</summary>
       <div class="ins-collapse-body">
         لا. وسما <code>&lt;link&gt;</code> و<code>&lt;script&gt;</code> ومجلّد الخطوط بجانبهما، وهذا كلّ شيء.
-        المستودع فيه سكربت بناء يجمع الأجزاء في ملفّ واحد — لك أنت أن تتجاهله.
       </div>
     </details>
     <details class="ins-collapse" name="faq-use">
       <summary>هل تعمل دون جافاسكربت؟</summary>
       <div class="ins-collapse-body">
-        كلّ ما لا يتحرّك يعمل من ملفّ الأنماط وحده. وما يحتاج السكربت ليتصرّف — الألسنة، قائمة
-        الموقع على الهاتف، المعالج — مكتوب بحيث تبقى الصفحة كاملة بدونه: تظهر الألواح متتالية
-        بدل أن تختفي. وهذا الأكورديون نفسه عنصر <code>&lt;details&gt;</code> عاديّ.
+        كلّ ما لا يتحرّك يعمل من ملفّ الأنماط وحده. وما يحتاج السكربت، كالألسنة والمعالج، تبقى
+        الصفحة كاملة بدونه: تظهر الألواح متتالية بدل أن تختفي.
       </div>
     </details>
     <details class="ins-collapse" name="faq-use">
       <summary>هل تصلح لصفحة إنجليزية؟</summary>
       <div class="ins-collapse-body">
-        نعم. «العربية أوّلًا» اختيار في الجمهور لا حدّ تقني: مكتبة مبنيّة بالخصائص المنطقية تعمل
-        في الاتجاهين من الأصناف نفسها. جرّب اتجاه LTR من زرّ <b>المظهر</b> في أعلى الصفحة.
+        نعم. الخصائص المنطقية تعمل في الاتجاهين من الأصناف نفسها، فضع <code>dir="ltr"</code> على
+        <code>&lt;html&gt;</code>. جرّبه من زرّ <b>المظهر</b> في أعلى الصفحة.
       </div>
     </details>
     <details class="ins-collapse" name="faq-use">
       <summary>هل تتعارض مع Bootstrap أو Tailwind؟</summary>
       <div class="ins-collapse-body">
         لا. كلّ شيء مسبوق: الأصناف <code>ins-</code>، والمتغيّرات <code>--ins-*</code>، والسمات
-        <code>data-ins-*</code>. واسم الحوار <code>.ins-dialog</code> لا <code>.modal</code> ليس
-        تهذيبًا: قاعدة Bootstrap <code>.modal { display: none }</code> تغلب قاعدة المتصفّح لعنصر
-        <code>dialog[open]</code>، فيُفتح الحوار ولا يُرسم شيء.
+        <code>data-ins-*</code>.
       </div>
     </details>
     <details class="ins-collapse" name="faq-use">
       <summary>هل هناك نسخة لـ React أو لقوالب Jinja؟</summary>
       <div class="ins-collapse-body">
-        مخطّط لهما، ولم تصدرا بعد. والأصناف تعمل اليوم في أيّ منهما كما هي — ما سيضيفه الغلاف هو
-        مكوّنات جاهزة بدل الشيفرة، لا مظهرًا مختلفًا.
+        نعم، في المستودع: مكوّنات React في <code>packages/react</code>، وماكروهات Jinja في
+        <code>packages/jinja</code>، ولم تُنشرا بعد على npm وPyPI. كلتاهما تكتب الأصناف نفسها، فالمظهر واحد.
       </div>
     </details>
   </div>
@@ -307,23 +303,20 @@
       <summary>كيف أغيّر لون الهوية؟</summary>
       <div class="ins-collapse-body">
         سمة <code>data-ins-primary="#0F766E"</code> على <code>&lt;html&gt;</code>، أو
-        <code>Insiyab.brand('#0F766E')</code> وقت التشغيل. يُشتقّ من اللون الواحد كلّ ما عداه. التفاصيل
-        في <a href="color.html">اللون والهوية</a>.
+        <code>Insiyab.brand('#0F766E')</code> وقت التشغيل. التفاصيل في <a href="color.html">اللون والهوية</a>.
       </div>
     </details>
     <details class="ins-collapse" name="faq-design">
       <summary>لماذا لا تتحرّك الكرات الملوّنة في الخلفية؟</summary>
       <div class="ins-collapse-body">
-        لأنّها كلّفت <b>٤٧٪ من نواة معالج</b> وهي تنجرف، على صفحة لا يحدث فيها شيء. المُكلِف ليس الكرات
-        بل الأسطح المصنفرة فوقها: السطح يعيد تضبيب ما خلفه كلّما تغيّر، فأيّ حركة تحته تعيد تضبيب
-        معظم الصفحة في كلّ إطار. إيقاف الانجراف أنزلها إلى ٤٫٨٪. القصّة كاملة في <a href="motion.html">الحركة</a>.
+        لأنّ أيّ حركة تحت الأسطح المصنفرة تعيد تضبيب معظم الصفحة في كلّ إطار، وهذا يكلّف المعالج
+        كثيرًا. ولإخفائها: <code>data-ins-orbs="off"</code> على <code>&lt;html&gt;</code>.
       </div>
     </details>
     <details class="ins-collapse" name="faq-design">
       <summary>لماذا لا يوجد خطّ مائل؟</summary>
       <div class="ins-collapse-body">
-        لا خطّ من الثلاثة يحمل وجهًا مائلًا، والمائل الذي يصطنعه المتصفّح يُميل العربية في الاتجاه الخطأ.
-        لذلك التوكيد في المكتبة باللون والوزن.
+        لا خطّ من الثلاثة يحمل وجهًا مائلًا، فالتوكيد في المكتبة باللون والوزن.
       </div>
     </details>
     <details class="ins-collapse" name="faq-design">
@@ -356,15 +349,15 @@
     <details class="ins-collapse" name="faq-trouble">
       <summary>زرّ عليه <code>hidden</code> ما زال ظاهرًا</summary>
       <div class="ins-collapse-body">
-        لن يحدث مع المكتبة: كلّ مكوّن يضبط <code>display</code>، فتعيد المكتبة لسمة <code>hidden</code>
-        غلبتها صراحةً. إن رأيته فقاعدة في صفحتك تضبط <code>display</code> بأولويّة أعلى.
+        المكتبة تعيد لسمة <code>hidden</code> غلبتها على كلّ مكوّن. إن رأيته فقاعدة في صفحتك تضبط
+        <code>display</code> بأولويّة أعلى.
       </div>
     </details>
     <details class="ins-collapse" name="faq-trouble">
       <summary>القائمة المنبثقة تُقصّ داخل اللوح</summary>
       <div class="ins-collapse-body">
-        اللوح يقصّ ما يفيض منه ليحافظ على زواياه. المتصفّحات الحديثة ترفعه تلقائيًا حين تُفتح قائمة
-        داخله؛ ولمتصفّح أقدم أضف <code>.ins-panel--open</code> إلى اللوح.
+        المتصفّحات الحديثة ترفع القصّ تلقائيًا حين تُفتح قائمة داخل اللوح. ولمتصفّح أقدم أضف
+        <code>.ins-panel--open</code> إلى اللوح.
       </div>
     </details>
   </div>
@@ -373,7 +366,7 @@
 <h2 id="licence">الترخيص</h2>
 <p>
   الشيفرة بترخيص MIT. والخطوط الثلاثة بترخيص SIL Open Font License 1.1، وتراخيصها في مجلّد
-  <code>fonts/</code> لأنّ الترخيص يشترط أن يرافق الخطّ أينما ذهب.
+  <code>fonts/</code> وترافق الخطوط أينما نُسخت.
 </p>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="javascript.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الجافاسكربت</span></a><a class="site-pager-link site-pager-link--next" href="color.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">اللون والهوية</span></a></nav>
       </div>

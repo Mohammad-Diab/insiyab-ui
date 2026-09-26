@@ -1,77 +1,50 @@
 <h2 id="glass">الزجاج</h2>
 <p>
-  أربع طبقات ولا شيء غيرها: <b>الضباب</b> (<code>blur(24px) saturate(140%)</code> — والتشبّع هو ما يمنع
-  الخلفية الملوّنة من أن تبهت رماديًا)، و<b>التعبئة</b> المتدرّجة عند ١٤٥°، و<b>الحافة</b> شبه البيضاء،
-  و<b>الحدّ المائل</b> مع لمعة قطرية عند ١٣٠°. لا حبيبات ولا ضجيج ولا قزحيّة.
+  <code>.ins-glass</code> السطح الأساسي، بلا حشوة ولا سلوك. <code>.ins-card</code> بطاقة، ومع
+  <code>.ins-hoverable</code> ترتفع عند المرور. <code>.ins-glass-inner</code> المظهر المسطّح لسطح داخل سطح.
 </p>
-<demo-example>
-  <div class="ins-cols-3">
-    <div class="ins-glass ins-p-5">
-      <b>.ins-glass</b>
-      <p class="ins-muted ins-text-sm ins-mb-0">السطح الأساسي، بلا حشوة ولا سلوك.</p>
-    </div>
-    <div class="ins-card ins-p-5 ins-hoverable">
-      <b>.ins-card</b>
-      <p class="ins-muted ins-text-sm ins-mb-0">بطاقة. مع <code>.ins-hoverable</code> ترتفع عند المرور.</p>
-    </div>
-    <div class="ins-glass-inner ins-p-5">
-      <b>.ins-glass-inner</b>
-      <p class="ins-muted ins-text-sm ins-mb-0">المظهر المسطّح، لسطح داخل سطح.</p>
-    </div>
-  </div>
+<demo-example class="stack">
+  <div class="ins-glass ins-p-5">.ins-glass</div>
+  <div class="ins-card ins-p-5 ins-hoverable">.ins-card</div>
+  <div class="ins-glass-inner ins-p-5">.ins-glass-inner</div>
 </demo-example>
 
 <h2 id="nesting">زجاج داخل زجاج</h2>
-<p>
-  السطح الداخلي يسقط حدّه وظلّه ولمعته وضبابه تلقائيًا. ضباب ثانٍ فوق خلفية مصنفرة أصلًا هو ما يحوّل
-  هذا الأسلوب إلى غبش، فالقاعدة بأولويّة صفرية لا صنف يُتذكَّر.
-</p>
+<p>السطح الداخلي يسقط حدّه وظلّه ولمعته وضبابه تلقائيًا، بالصنف نفسه ودون صنف إضافي.</p>
 <demo-example>
   <div class="ins-glass ins-p-5">
-    <b>سطح خارجي</b>
-    <p class="ins-muted ins-text-sm">السطح التالي يحمل الصنف نفسه تمامًا:</p>
-    <div class="ins-glass ins-p-4">
-      <span class="ins-text-sm">بلا حدّ ولا ظلّ ولا لمعة ولا ضباب ثانٍ — لمجرّد أنّه متداخل.</span>
-    </div>
+    <p>خارجي</p>
+    <div class="ins-glass ins-p-4">داخلي</div>
   </div>
 </demo-example>
 
 <h2 id="panel">اللوح</h2>
 <p>
-  حاوية بأجزاء: رأس بأيقونة وعنوان وإجراءات، وجسم، وتذييل. واللوح لا يرتفع عند المرور — فهو حاوية
-  لا زرّ، ورفعه بينما المؤشّر يعبره في طريقه إلى صفّ بداخله ضجيج. ما يفعله هو إضاءة حافّته.
+  حاوية بأجزاء: رأس (<code>-ico</code> و<code>-title</code> و<code>-actions</code>)، وجسم، وتذييل. ولا يرتفع
+  عند المرور، بل تضيء حافّته.
 </p>
 <demo-example>
   <div class="ins-panel">
     <div class="ins-panel-head">
       <span class="ins-panel-ico"><svg class="ico"><use href="#i-users"/></svg></span>
-      <h3 class="ins-panel-title">أعضاء الفريق</h3>
+      <h3 class="ins-panel-title">العنوان</h3>
       <div class="ins-panel-actions"><button class="ins-btn ins-btn--bare ins-btn--sm">إدارة</button></div>
     </div>
-    <div class="ins-panel-body">
-      <p class="ins-m-0 ins-muted">تسعة أعضاء في ثلاثة أقسام. الدعوات المعلّقة تنتهي بعد سبعة أيّام.</p>
-    </div>
+    <div class="ins-panel-body">المحتوى.</div>
     <div class="ins-panel-foot">
-      <button class="ins-btn ins-btn--primary ins-btn--sm">دعوة عضو</button>
-      <button class="ins-btn ins-btn--bare ins-btn--sm">نسخ رابط الدعوة</button>
+      <button class="ins-btn ins-btn--primary ins-btn--sm">حفظ</button>
     </div>
   </div>
 </demo-example>
 
 <h3 id="panel-alert">لوح يحتاج انتباهًا</h3>
-<p>
-  <code>.ins-panel--alert</code> يلوّن الرأس وحده. تلوين اللوح كلّه يضع خلفية حمراء تحت كلّ شارة حالة
-  بداخله ويُسطّحها جميعًا.
-</p>
+<p><code>.ins-panel--alert</code> يلوّن الرأس وحده.</p>
 <demo-example>
   <div class="ins-panel ins-panel--alert">
     <div class="ins-panel-head">
-      <span class="ins-panel-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
-      <h3 class="ins-panel-title">ثلاث دفعات فشلت</h3>
+      <h3 class="ins-panel-title">فشلت الدفعة</h3>
     </div>
-    <div class="ins-panel-body">
-      <p class="ins-m-0 ins-muted">البطاقات المرفوضة تحتاج تحديث بياناتها قبل محاولة الخصم التالية.</p>
-    </div>
+    <div class="ins-panel-body">المحتوى.</div>
   </div>
 </demo-example>
 
@@ -79,12 +52,11 @@
 <p><code>.ins-panel-body--flush</code> لجدول أو قائمة تصل إلى حواف اللوح، و<code>.ins-panel-note</code> لسطر شرح فوقهما.</p>
 <demo-example>
   <div class="ins-panel">
-    <div class="ins-panel-head"><h3 class="ins-panel-title">الفواتير</h3></div>
     <div class="ins-panel-body ins-panel-body--flush">
-      <p class="ins-panel-note">تُصدر الفاتورة في أوّل كلّ شهر.</p>
+      <p class="ins-panel-note">سطر شرح.</p>
       <ul class="ins-list">
-        <li class="ins-list-item"><span class="ins-list-text"><span class="ins-list-title">أيلول ٢٠٢٦</span></span><span class="ins-list-end"><span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>مدفوعة</span></span></li>
-        <li class="ins-list-item"><span class="ins-list-text"><span class="ins-list-title">آب ٢٠٢٦</span></span><span class="ins-list-end"><span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>مدفوعة</span></span></li>
+        <li class="ins-list-item">البند الأوّل</li>
+        <li class="ins-list-item">البند الثاني</li>
       </ul>
     </div>
   </div>
@@ -92,8 +64,7 @@
 
 <h2 id="radii">أنصاف الأقطار</h2>
 <p>
-  <span class="ins-num">7 / 10 / 14 / 22 / 32 / 999</span> — التدرّج قرابة ×١٫٤٥ لا ×٢. و١٤ بكسل نصفًا
-  افتراضيًا هو أكبر مصدر منفرد للنعومة التي تراها.
+  <code>--ins-r-xs</code> إلى <code>--ins-r-pill</code>: 7 و10 و14 و22 و32 و999 بكسل، و14 هو الافتراضي.
 </p>
 <demo-example code="none">
   <div class="radii">
@@ -111,5 +82,5 @@
   <li><b>العتمة</b> — كلّما علا السطح زادت عتمته: اللوح <span class="ins-num">.58</span>، والمرور
     <span class="ins-num">.78</span>، والحقل المركَّز <span class="ins-num">.90</span>، والقائمة المنبثقة <span class="ins-num">.94</span>.</li>
   <li><b>الضباب</b> — الألواح ٢٤ بكسل، والأشرطة والحبوب ١٦، وخلفية الحوار ٢ فقط.</li>
-  <li><b>الظلّ</b> — ناعم وكبير ومائل إلى البرودة، لا أسود محايدًا أبدًا.</li>
+  <li><b>الظلّ</b> — ناعم وكبير ومائل إلى البرودة.</li>
 </ul>

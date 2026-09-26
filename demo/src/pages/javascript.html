@@ -1,8 +1,5 @@
 <h2 id="attributes">السمات</h2>
-<p>
-  كلّ ما يلي يعمل بالسمة وحدها في الشيفرة، دون سطر جافاسكربت في صفحتك. هذا هو الباب الأمامي؛
-  الواجهة البرمجية تحته مخرج طوارئ لما لا تصل إليه سمة.
-</p>
+<p>كلّ ما يلي يعمل بالسمة وحدها، دون سطر جافاسكربت في صفحتك.</p>
 <div class="ins-panel site-ref">
   <div class="ins-panel-body ins-panel-body--flush">
     <div class="ins-table-wrap">
@@ -43,14 +40,13 @@
 <html data-ins-scrollbar="lead">    <!-- شريط التمرير في جهة البداية -->
 </demo-code>
 <p>
-  والسكربت يختم <code>data-ins-js</code> على <code>&lt;html&gt;</code> بنفسه قبل أوّل رسم. كلّ حالة
-  تحتاج السكربت معلّقة بهذه السمة — لوح لسان مخفيّ، قائمة موقع مطويّة — فإن فشل السكربت ظهر
-  كلّ شيء بدل أن يختفي.
+  والسكربت يختم <code>data-ins-js</code> على <code>&lt;html&gt;</code> بنفسه قبل أوّل رسم، وكلّ حالة
+  تحتاج السكربت معلّقة بها، فإن فشل السكربت ظهر كلّ شيء بدل أن يختفي.
 </p>
 
 <h2 id="api">الواجهة البرمجية</h2>
 <demo-code lang="js">
-Insiyab.version                        // '0.3.0'
+Insiyab.version                        // '0.6.0'
 
 Insiyab.theme()                        // 'light' | 'dark' — ما يراه المستخدم فعلًا
 Insiyab.theme('dark' | 'light' | 'system')
@@ -79,26 +75,15 @@ Insiyab.color.shift('#0F766E', -0.3)
 </demo-code>
 
 <h2 id="events">الأحداث</h2>
-<p>
-  كلّ حدث يُطلَق على <code>document</code> ومعه <code>detail</code>. جرّب الأزرار: السجلّ تحتها
-  يستمع إلى الأحداث الحقيقية ويكتب ما يصله.
-</p>
+<p>كلّ حدث يُطلَق على <code>document</code> ومعه <code>detail</code>. جرّب الأزرار، والسجلّ تحتها يكتب ما يصله.</p>
 <demo-example code="none" class="stack">
   <div class="ins-row">
-    <button class="ins-btn ins-btn--secondary ins-btn--sm" data-ins-theme-toggle>تبديل الوضع</button>
+    <button class="ins-btn ins-btn--secondary" data-ins-theme-toggle>تبديل الوضع</button>
     <div class="ins-seg">
       <button class="is-active" data-ins-value="day">يوم</button>
       <button data-ins-value="week">أسبوع</button>
-      <button data-ins-value="month">شهر</button>
     </div>
-    <button class="ins-btn ins-btn--secondary ins-btn--sm" data-ins-toggle>تبديل</button>
-    <details class="ins-pop ins-pop--start">
-      <summary class="ins-btn ins-btn--secondary ins-btn--sm">قائمة</summary>
-      <div class="ins-pop-body">
-        <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="true">عرض المؤرشف</button>
-        <button class="ins-pop-item">تصدير</button>
-      </div>
-    </details>
+    <button class="ins-btn ins-btn--secondary" data-ins-toggle>تبديل</button>
   </div>
   <pre class="site-log" id="event-log" dir="ltr"><code>// الأحداث تظهر هنا</code></pre>
 </demo-example>
@@ -118,8 +103,8 @@ document.addEventListener('ins:dismiss', (e) => e.detail.target)
 
 <h2 id="define">منشئ خاصّ بك</h2>
 <p>
-  <code>Insiyab.define</code> يسجّل دالّة تُستدعى في مسح التهيئة نفسه — عند التحميل، ومع كلّ
-  <code>Insiyab.init(scope)</code>. فمكوّنك يُبنى حيث تُبنى مكوّنات المكتبة، ولا تحتاج نظامًا ثانيًا.
+  <code>Insiyab.define</code> يسجّل دالّة تُستدعى في مسح التهيئة نفسه: عند التحميل، ومع كلّ
+  <code>Insiyab.init(scope)</code>.
 </p>
 <demo-code lang="js">
 Insiyab.define('sparkline', (scope) => {
@@ -134,7 +119,7 @@ Insiyab.define('sparkline', (scope) => {
 <script>
   (function () {
     var log = document.querySelector('#event-log code'), lines = [];
-    ['ins:theme', 'ins:seg', 'ins:toggle', 'ins:menu'].forEach(function (name) {
+    ['ins:theme', 'ins:seg', 'ins:toggle'].forEach(function (name) {
       document.addEventListener(name, function (e) {
         var d = e.detail, v = {};
         for (var k in d) if (d[k] == null || typeof d[k] !== 'object') v[k] = d[k];
