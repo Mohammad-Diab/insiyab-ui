@@ -3,7 +3,7 @@
   <code>.ins-progress</code> على عنصر <code>&lt;progress&gt;</code> الأصلي، فالقيمة تُعلَن لقارئ الشاشة دون ARIA.
   يمتلئ من جهة البداية، والنبرات <code>--ok</code> و<code>--warn</code> و<code>--bad</code>.
 </p>
-<demo-example class="stack narrow">
+<demo-example class="stack">
   <progress class="ins-progress" value="64" max="100" aria-label="عادي">64%</progress>
   <progress class="ins-progress ins-progress--ok" value="100" max="100" aria-label="نجاح">100%</progress>
   <progress class="ins-progress ins-progress--warn" value="88" max="100" aria-label="تحذير">88%</progress>
@@ -11,7 +11,7 @@
 </demo-example>
 
 <h2 id="sizes">المقاسات</h2>
-<demo-example class="stack narrow">
+<demo-example class="stack">
   <progress class="ins-progress ins-progress--sm" value="40" max="100" aria-label="صغير">40%</progress>
   <progress class="ins-progress" value="55" max="100" aria-label="عادي">55%</progress>
   <progress class="ins-progress ins-progress--lg" value="70" max="100" aria-label="كبير">70%</progress>
@@ -19,13 +19,13 @@
 
 <h2 id="indeterminate">مدّة غير معروفة</h2>
 <p>بلا <code>value</code> يصير الشريط «جارٍ» دون نسبة.</p>
-<demo-example class="narrow">
+<demo-example>
   <progress class="ins-progress" aria-label="جارٍ التحميل"></progress>
 </demo-example>
 
 <h2 id="live">تقدّم حيّ</h2>
 <p>القيمة تُضبط من الشيفرة كأيّ خاصّية، والشريط ينتقل إليها بسلاسة.</p>
-<demo-example class="narrow">
+<demo-example>
   <progress class="ins-progress" id="up-bar" value="0" max="100" aria-label="الرفع">0%</progress>
 </demo-example>
 <demo-example class="row" code="none">

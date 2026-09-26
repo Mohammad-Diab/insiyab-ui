@@ -3,7 +3,7 @@
   <code>.ins-input-group</code> يلحم الحقل وملحقاته في قطعة واحدة بحدّ واحد وحلقة تركيز واحدة.
   <code>.ins-addon</code> نصّ ثابت قبل الحقل أو بعده — والترتيب في الشيفرة هو الترتيب في اتجاه القراءة.
 </p>
-<demo-example class="narrow">
+<demo-example>
   <div class="ins-input-group">
     <input class="ins-input" inputmode="decimal" value="249" aria-label="السعر">
     <span class="ins-addon">ر.س</span>
@@ -12,7 +12,7 @@
 
 <h3 id="ltr-group">مجموعة من اليسار</h3>
 <p>لعنوان موقع أو اسم مستخدم، ضع <code>dir="ltr"</code> على المجموعة كلّها فتبقى البادئة قبل النصّ.</p>
-<demo-example class="narrow">
+<demo-example>
   <div class="ins-input-group" dir="ltr">
     <span class="ins-addon">https://</span>
     <input class="ins-input" placeholder="my-site" aria-label="الرابط">
@@ -21,7 +21,7 @@
 </demo-example>
 
 <h2 id="button">زرّ ملحق</h2>
-<demo-example class="narrow">
+<demo-example>
   <div class="ins-input-group">
     <input class="ins-input" aria-label="الرمز">
     <button class="ins-btn ins-btn--secondary">تطبيق</button>
@@ -33,7 +33,7 @@
   <code>.ins-password-toggle</code> مع <code>data-ins-password</code> يبدّل نوع الحقل ويحدّث تسمية الزرّ
   لقارئ الشاشة. وبلا جافاسكربت لا يظهر الزرّ أصلًا.
 </p>
-<demo-example class="narrow">
+<demo-example>
   <div class="ins-input-group">
     <input class="ins-input" type="password" value="secret" aria-label="كلمة المرور">
     <button class="ins-password-toggle" data-ins-password aria-label="إظهار كلمة المرور"></button>
@@ -42,7 +42,7 @@
 
 <h2 id="stepper">العدّاد</h2>
 <p>زرّان <code>data-ins-spin</code> حول حقل رقمي، يحترمان <code>min</code> و<code>max</code> و<code>step</code>.</p>
-<demo-example class="narrow">
+<demo-example>
   <div class="ins-input-group" style="max-inline-size:11rem">
     <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>
     <input class="ins-input" type="number" min="1" max="10" value="2" aria-label="الكمّية">
@@ -52,7 +52,7 @@
 
 <h2 id="invalid">مع خطأ</h2>
 <p>الحالة على الحقل، والمجموعة كلّها تتلوّن.</p>
-<demo-example class="narrow">
+<demo-example>
   <div class="ins-field">
     <div class="ins-input-group">
       <input class="ins-input" value="SUMMER24" aria-label="الرمز" aria-invalid="true" dir="ltr">
