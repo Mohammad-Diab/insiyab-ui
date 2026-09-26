@@ -1,0 +1,70 @@
+<h2 id="chip">الرقاقة</h2>
+<p>
+  <code>.ins-chip</code> قيمة صغيرة يتصرّف فيها المستخدم، حيث الشارة تُقرأ فقط: مرشّح يُزال، أو اختيار، أو وسم.
+  <code>.ins-chip-x</code> فيها يزيلها، و<code>.ins-chips</code> يصفّ عدّة رقاقات في سطر يلتفّ.
+</p>
+<demo-example>
+  <div class="ins-chips">
+    <span class="ins-chip">الرياض<button type="button" class="ins-chip-x" aria-label="إزالة الرياض"></button></span>
+    <span class="ins-chip">عمّان<button type="button" class="ins-chip-x" aria-label="إزالة عمّان"></button></span>
+    <span class="ins-chip">القاهرة<button type="button" class="ins-chip-x" aria-label="إزالة القاهرة"></button></span>
+  </div>
+</demo-example>
+<p>قبل أن تُزال يُطلق <code>ins:chip-remove</code>، وإلغاؤه يبقيها.</p>
+
+<h2 id="filter">رقاقات التصفية</h2>
+<p>
+  <code>button.ins-chip</code> مع <code>data-ins-toggle</code> مرشّح يُضغط ويُرفع، وحين يُضغط يأخذ لون الهوية وعلامة صحّ.
+</p>
+<demo-example>
+  <div class="ins-chips">
+    <button class="ins-chip" data-ins-toggle aria-pressed="true">نشط</button>
+    <button class="ins-chip" data-ins-toggle>موقوف</button>
+    <button class="ins-chip" data-ins-toggle>مؤرشف</button>
+  </div>
+</demo-example>
+
+<h2 id="multi">اختيار متعدّد</h2>
+<p>
+  <code>.ins-tags</code> حقل واحد بعدّة قيم. مع قائمة <code>.ins-combo-list</code> فيه يصير اختيارًا متعدّدًا بمطابقة الإكمال
+  التلقائي ومفاتيحه، والخيار المختار يصير رقاقة ويخرج من القائمة. كلّ رقاقة تحمل حقلًا مخفيًا باسم <code>data-ins-name</code>،
+  فيُرسل النموذج كلّ القيم، و<kbd class="ins-kbd">Backspace</kbd> في الحقل الفارغ يعيد آخر رقاقة.
+</p>
+<demo-example>
+  <div class="ins-field">
+    <label class="ins-label" for="m-cities">المدن</label>
+    <div class="ins-tags" data-ins-name="cities">
+      <span class="ins-chip">الرياض<button type="button" class="ins-chip-x" aria-label="إزالة الرياض"></button><input type="hidden" name="cities" value="ruh"></span>
+      <input class="ins-tags-input" id="m-cities" placeholder="اختر مدينة">
+      <ul class="ins-combo-list">
+        <li class="ins-combo-option" data-value="ruh">الرياض</li>
+        <li class="ins-combo-option" data-value="amm">عمّان</li>
+        <li class="ins-combo-option" data-value="cai">القاهرة</li>
+        <li class="ins-combo-option" data-value="dxb">دبي</li>
+        <li class="ins-combo-option" data-value="doh">الدوحة</li>
+        <li class="ins-combo-option" data-value="bey">بيروت</li>
+        <li class="ins-combo-empty">لا نتائج</li>
+      </ul>
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="tags">وسوم حرّة</h2>
+<p>
+  بلا قائمة يأخذ الحقل ما يُكتب: <kbd class="ins-kbd">Enter</kbd> أو فاصلة تجعله رقاقة. و<code>data-ins-free</code> يسمح بالكتابة
+  الحرّة مع قائمة أيضًا، و<code>data-ins-max</code> يحدّ العدد.
+</p>
+<demo-example>
+  <div class="ins-field">
+    <label class="ins-label" for="m-tags">الوسوم</label>
+    <div class="ins-tags" data-ins-name="tags" data-ins-max="5">
+      <input class="ins-tags-input" id="m-tags" placeholder="اكتب واضغط Enter">
+    </div>
+  </div>
+</demo-example>
+<p>كلّ إضافة وإزالة تُطلق <code>ins:tags</code> بالقيم كلّها.</p>
+<demo-code lang="js">
+document.addEventListener('ins:tags', (e) => {
+  console.log(e.detail.values, e.detail.added, e.detail.removed);
+});
+</demo-code>

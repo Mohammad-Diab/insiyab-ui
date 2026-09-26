@@ -165,8 +165,8 @@ there, in Arabic, in both themes, with the markup of each example under it.
 |---|---|
 | **Surfaces** | `.ins-glass` · `.ins-glass-inner` · `.ins-card` · `.ins-panel` (`-head`, `-title`, `-ico`, `-body`, `-foot`, `-note`, `--alert`, `--open`) |
 | **Data** | `.ins-table` (+ `-wrap`, `-wrap--sticky`, `-wrap--pin`; a selected row via `aria-selected="true"`, `aria-current` or `.is-selected`; sortable columns via `th[data-ins-sort]`; a checkbox column `.ins-table-check` with `data-ins-select` and a `.ins-bulkbar`; editable cells via `data-ins-edit`) · `.ins-stat` (6 tones, 3 sizes) · `.ins-pill` · `.ins-badge` · `.ins-money` · `.ins-num` · `.ins-avatar` · `.ins-list` (`-item`, `-text`, `-title`, `-desc`, `-end`; items can be links) |
-| **Input** | `.ins-field` · `.ins-label` · `.ins-hint` · `.ins-input` / `.ins-select` (`--sm`, `--lg`; the open list styled like the menus where the browser allows `appearance: base-select`) · `.ins-textarea` · `.ins-check` (indeterminate via `data-ins-indeterminate`) · `.ins-switch` (+ `--card`, `-grid`) · `.ins-seg` · `.ins-search` · `.ins-input-group` + `.ins-addon` · `.ins-password-toggle` |
-| **Pickers** | `.ins-combo` (`-list`, `-option`, `-empty`) · date and date range via `data-ins-date` (+ `.ins-date-btn`, `.ins-cal`) · `.ins-range` · number stepper `.ins-spin` in an `.ins-input-group` · `.ins-tile` (`-grid`, `-title`, `-desc`) for radio and checkbox cards |
+| **Input** | `.ins-field` · `.ins-label` · `.ins-hint` · `.ins-input` / `.ins-select` (`--sm`, `--lg`; the open list styled like the menus where the browser allows `appearance: base-select`) · `.ins-textarea` · `.ins-check` (indeterminate via `data-ins-indeterminate`) · `.ins-switch` (+ `--card`, `-grid`) · `.ins-seg` · `.ins-search` · `.ins-input-group` + `.ins-addon` · `.ins-password-toggle` · a character or word counter via `data-ins-count` (`.ins-count`) |
+| **Pickers** | `.ins-combo` (`-list`, `-option`, `-empty`) · date and date range via `data-ins-date` (+ `.ins-date-btn`, `.ins-cal`) · time via `data-ins-time`, and a date with a time in one group (`data-ins-datetime`) · multi-select and tags `.ins-tags` (`-input`) · `.ins-chip` (`-x`; a filter chip with `data-ins-toggle`) in `.ins-chips` · `.ins-range` · number stepper `.ins-spin` in an `.ins-input-group` · `.ins-tile` (`-grid`, `-title`, `-desc`) for radio and checkbox cards |
 | **Validation** | `aria-invalid="true"` · `:user-invalid` · `.ins-error` · `.ins-input--bad` / `.ins-select--bad` · `.ins-success` · `.ins-input--ok` · `.ins-req` · `form[data-ins-validate]` |
 | **Buttons** | `.ins-btn` × `--primary` `--secondary` `--ghost[-danger/-success/-warning/-info]` `--success` `--danger` `--warning` `--info` `--bare`, × `--sm` `--lg` `--icon` `--full` `--lift` · toggle buttons via `data-ins-toggle` (`aria-pressed`) · `.ins-btn-group` (`--sm`; takes a split-button `.ins-pop`) · `.ins-close` (`--sm`, `--bare`) |
 | **Feedback** | `.ins-alert` (notched) · `.ins-toast` · `.ins-empty` · `.ins-progress` (native `<progress>`; `--sm`, `--lg`, `--ok`, `--warn`, `--bad`; indeterminate without `value`) · `.ins-ring` (`--lg`) · `.ins-skel` (`--text`, `--title`, `--circle`, `--block`) · `.ins-spinner` (`--sm`) · `.ins-loading` |
@@ -434,6 +434,9 @@ Everything below works as markup, with no JavaScript in your page:
 <th data-ins-sort>…</th>                          <!-- a sortable column; data-sort-value on a cell when its text is not its value -->
 <input type="checkbox" data-ins-select>          <!-- a row's box; ="all" in the header; the bar: data-ins-bulk="#table" -->
 <td data-ins-edit>…</td>                          <!-- edit in place; ="number", or ="select" with data-ins-options="a|b" -->
+<input type="time" data-ins-time step="900">      <!-- a time field in the page's language, with a list of times (on a <time>, the timeline plugin's relative time) -->
+<div class="ins-tags" data-ins-name="tags">…</div> <!-- several values as chips; with a .ins-combo-list, a multi-select -->
+<textarea data-ins-count="words" data-ins-max="300"></textarea> <!-- a counter under it; or data-ins-count with maxlength -->
 <a href="/ops/7/delete" data-ins-confirm="حذف العملية؟">…</a>  <!-- ask first -->
 <button data-ins-confirm="أرشفة؟" data-ins-confirm-ok="أرشفة" data-ins-confirm-tone="danger">…</button>
 ```
@@ -501,6 +504,9 @@ document.addEventListener('ins:wizard', (e) => console.log(e.detail.step, e.deta
 document.addEventListener('ins:wizard-leave', (e) => e.preventDefault()); // before Next moves: cancel to wait on a server
 document.addEventListener('ins:sort', (e) => e.preventDefault());  // before rows move: cancel to sort on the server
 document.addEventListener('ins:select', (e) => console.log(e.detail.rows, e.detail.count));
+document.addEventListener('ins:tags', (e) => console.log(e.detail.values, e.detail.added, e.detail.removed));
+document.addEventListener('ins:time', (e) => console.log(e.detail.value));   // '14:30'
+document.addEventListener('ins:chip-remove', (e) => e.preventDefault()); // keep the chip
 document.addEventListener('ins:edit', (e) => save(e.detail.row, e.detail.value).catch(e.detail.revert)); // cancel to refuse
 document.addEventListener('ins:calendar', (e) => console.log(e.detail.input, e.detail.calendar)); // after the footer switch
 ```

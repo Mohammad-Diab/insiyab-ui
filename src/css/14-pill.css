@@ -132,3 +132,87 @@
 .ins-avatar { transition: transform var(--ins-t-pop) var(--ins-ease-spring),
                           box-shadow var(--ins-t-pop) var(--ins-ease); }
 :where(a, button).ins-avatar:hover { transform: scale(1.08); box-shadow: var(--ins-sh-brand-sm); }
+
+/* --------------------------------------------------------------- chip */
+/* A small rounded token a person acts on, where a pill is a label they read: an
+   active filter to take away, a choice in a multi-select, a tag.
+
+     <span class="ins-chip">الرياض<button class="ins-chip-x" aria-label="إزالة الرياض"></button></span>
+     <button class="ins-chip" data-ins-toggle>نشط</button>
+
+   The first is removable: its × takes it away and says so with `ins:chip-remove`,
+   which a page cancels to keep it. The second is a filter chip, pressed or not, on
+   the toggle button's own `aria-pressed`; pressed, it takes the brand and a tick.
+   `.ins-chips` lays several out in a wrapping row. */
+.ins-chips { display: flex; flex-wrap: wrap; align-items: center; gap: .375rem; }
+.ins-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  min-block-size: 1.875rem;
+  padding-block: .1875rem;
+  padding-inline: .75rem;
+  border: 1px solid var(--ins-ctl-bd);
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-surface);
+  color: var(--ins-text-1);
+  font-family: inherit;
+  font-size: var(--ins-fs-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-decoration: none;
+  box-shadow: var(--ins-bevel-dim);
+  transition: background var(--ins-t-pop) var(--ins-ease),
+              border-color var(--ins-t-pop) var(--ins-ease),
+              color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-chip:has(> .ins-chip-x) { padding-inline-end: .25rem; }
+:where(button, a).ins-chip { cursor: pointer; }
+:where(button, a).ins-chip:hover { border-color: rgba(var(--ins-primary-rgb), .35); background: var(--ins-ctl-bg-hover); }
+:where(button, a).ins-chip:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
+.ins-chip:is([aria-pressed="true"], .is-active) {
+  border-color: var(--ins-tone-brand-bd);
+  background: var(--ins-tone-brand-bg);
+  color: var(--ins-tone-brand);
+}
+:root[data-ins-theme="dark"] .ins-chip:is([aria-pressed="true"], .is-active) { color: var(--ins-text-1); }
+/* The tick of a pressed filter chip, grown in rather than popped, so the chip's
+   width changes smoothly. */
+.ins-chip[aria-pressed]::before {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: 0;
+  block-size: .75rem;
+  margin-inline-end: -.375rem;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / .75rem no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / .75rem no-repeat;
+  transition: inline-size var(--ins-t-pop) var(--ins-ease), margin var(--ins-t-pop) var(--ins-ease);
+}
+.ins-chip[aria-pressed="true"]::before { inline-size: .75rem; margin-inline-end: 0; }
+
+.ins-chip-x {
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 1.375rem;
+  block-size: 1.375rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ins-text-3);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-chip-x::before {
+  content: "";
+  inline-size: .625rem;
+  block-size: .625rem;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6 6 18'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6 6 18'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.ins-chip-x:hover { background: var(--ins-tone-bad-bg); color: var(--ins-tone-bad); }
+.ins-chip-x:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }

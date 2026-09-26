@@ -59,6 +59,22 @@
 </demo-example>
 <p>والتحقّق التلقائي من هذه الحالات، برسائل المتصفّح داخل الحقل، في صفحة <a href="validation.html">التحقّق</a>.</p>
 
+<h2 id="count">عدّاد الأحرف والكلمات</h2>
+<p>
+  <code>data-ins-count</code> على حقل يعرض تحته ما كُتب من <code>maxlength</code>. و<code>data-ins-count="words"</code> مع
+  <code>data-ins-max</code> يعدّ الكلمات. يصفرّ قرب الحدّ ويحمرّ بعده، وبعد حدّ الكلمات يصير الحقل غير صالح فلا يُرسل النموذج.
+</p>
+<demo-example class="stack">
+  <div class="ins-field">
+    <label class="ins-label" for="i-title">العنوان</label>
+    <input class="ins-input" id="i-title" maxlength="60" data-ins-count value="تقرير الربع الثالث">
+  </div>
+  <div class="ins-field">
+    <label class="ins-label" for="i-summary">الملخّص</label>
+    <textarea class="ins-textarea" id="i-summary" data-ins-count="words" data-ins-max="50"></textarea>
+  </div>
+</demo-example>
+
 <h2 id="search">حقل البحث</h2>
 <demo-example>
   <div class="ins-search">
