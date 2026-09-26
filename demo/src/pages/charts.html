@@ -1,0 +1,147 @@
+<link rel="stylesheet" href="../dist/plugins/insiyab-chart.css">
+<script src="../dist/plugins/insiyab-chart.js"></script>
+
+<h2 id="setup">التحميل</h2>
+<demo-code>
+<link rel="stylesheet" href="plugins/insiyab-chart.css">
+<script src="insiyab.js"></script>
+<script src="plugins/insiyab-chart.js"></script>
+</demo-code>
+
+<h2 id="bar">أعمدة</h2>
+<p>
+  <code>.ins-chart</code> مع <code>data-ins-chart="bar"</code> على <code>&lt;figure&gt;</code> فيه جدول: العمود الأوّل الفئات، وصفّ
+  الرأس السلاسل. الجدول يبقى في الصفحة مخفيًا فيقرأ قارئ الشاشة الأرقام، والرسم مخفيّ عنه. والفئات تسير باتّجاه القراءة،
+  والأرقام بلغة الصفحة وأرقام لاتينية، والإشارة إلى عمود تُظهر قيمته.
+</p>
+<demo-example>
+  <figure class="ins-chart" data-ins-chart="bar">
+    <table>
+      <thead><tr><th></th><th>الطلبات</th><th>المرتجع</th></tr></thead>
+      <tbody>
+        <tr><th>يناير</th><td>120</td><td>14</td></tr>
+        <tr><th>فبراير</th><td>150</td><td>9</td></tr>
+        <tr><th>مارس</th><td>98</td><td>12</td></tr>
+        <tr><th>أبريل</th><td>174</td><td>18</td></tr>
+        <tr><th>مايو</th><td>160</td><td>11</td></tr>
+        <tr><th>يونيو</th><td>210</td><td>15</td></tr>
+      </tbody>
+    </table>
+  </figure>
+</demo-example>
+<p><code>data-ins-stack</code> يكدّس السلاسل في عمود واحد.</p>
+<demo-example>
+  <figure class="ins-chart" data-ins-chart="bar" data-ins-stack>
+    <table>
+      <thead><tr><th></th><th>مكتملة</th><th>معلّقة</th><th>ملغاة</th></tr></thead>
+      <tbody>
+        <tr><th>الأحد</th><td>32</td><td>8</td><td>2</td></tr>
+        <tr><th>الإثنين</th><td>41</td><td>6</td><td>3</td></tr>
+        <tr><th>الثلاثاء</th><td>28</td><td>11</td><td>1</td></tr>
+        <tr><th>الأربعاء</th><td>45</td><td>4</td><td>4</td></tr>
+        <tr><th>الخميس</th><td>38</td><td>9</td><td>2</td></tr>
+      </tbody>
+    </table>
+  </figure>
+</demo-example>
+
+<h2 id="hbar">أعمدة أفقية</h2>
+<p><code>hbar</code> لأسماء طويلة: الاسم في أوّل السطر وعموده بعده.</p>
+<demo-example>
+  <figure class="ins-chart" data-ins-chart="hbar" style="--ins-chart-h: 12rem">
+    <table>
+      <thead><tr><th></th><th>التذاكر</th></tr></thead>
+      <tbody>
+        <tr><th>الدفع والفواتير</th><td>48</td></tr>
+        <tr><th>الشحن والتوصيل</th><td>35</td></tr>
+        <tr><th>الحساب</th><td>21</td></tr>
+        <tr><th>أخرى</th><td>9</td></tr>
+      </tbody>
+    </table>
+  </figure>
+</demo-example>
+
+<h2 id="histogram">توزيع</h2>
+<p>
+  <code>histogram</code> أعمدة متلاصقة لتوزيع قيم على فئات، وعدّة سلاسل تتراكب شفّافة للمقارنة بين توزيعين.
+</p>
+<demo-example>
+  <figure class="ins-chart" data-ins-chart="histogram">
+    <table>
+      <thead><tr><th></th><th>التقييم الأوّل</th><th>التقييم الثاني</th></tr></thead>
+      <tbody>
+        <tr><th>0–2</th><td>3</td><td>2</td></tr>
+        <tr><th>2–4</th><td>8</td><td>6</td></tr>
+        <tr><th>4–6</th><td>19</td><td>15</td></tr>
+        <tr><th>6–8</th><td>27</td><td>31</td></tr>
+        <tr><th>8–10</th><td>12</td><td>16</td></tr>
+      </tbody>
+    </table>
+  </figure>
+</demo-example>
+
+<h2 id="line">خطّ ومساحة</h2>
+<p><code>line</code> لتغيّر عبر الزمن، و<code>area</code> يملأ تحته.</p>
+<demo-example>
+  <figure class="ins-chart" data-ins-chart="area">
+    <table>
+      <thead><tr><th></th><th>الزيارات</th><th>الطلبات</th></tr></thead>
+      <tbody>
+        <tr><th>1</th><td>820</td><td>120</td></tr>
+        <tr><th>2</th><td>932</td><td>150</td></tr>
+        <tr><th>3</th><td>901</td><td>98</td></tr>
+        <tr><th>4</th><td>934</td><td>174</td></tr>
+        <tr><th>5</th><td>1290</td><td>160</td></tr>
+        <tr><th>6</th><td>1330</td><td>210</td></tr>
+        <tr><th>7</th><td>1320</td><td>230</td></tr>
+      </tbody>
+    </table>
+    <figcaption>الأسبوع الأخير</figcaption>
+  </figure>
+</demo-example>
+
+<h2 id="donut">حلقة</h2>
+<p>
+  <code>donut</code> لأجزاء من كلّ، ومفتاحه تحته بقيمه. في الوسط المجموع، أو <code>data-ins-center</code>، وتحته
+  <code>data-ins-center-label</code>.
+</p>
+<demo-example>
+  <figure class="ins-chart" data-ins-chart="donut" data-ins-center-label="طلب" style="--ins-chart-h: 13rem">
+    <table>
+      <thead><tr><th></th><th>الطلبات</th></tr></thead>
+      <tbody>
+        <tr><th>مكتملة</th><td>184</td></tr>
+        <tr><th>قيد التجهيز</th><td>42</td></tr>
+        <tr><th>مرتجعة</th><td>13</td></tr>
+        <tr><th>ملغاة</th><td>7</td></tr>
+      </tbody>
+    </table>
+  </figure>
+</demo-example>
+
+<h2 id="spark">خطّ صغير</h2>
+<p>
+  <code>spark</code> خطّ بلا محاور بحجم كلمة، في بطاقة إحصائية مثلًا. بلا جدول: <code>data-ins-values</code> سلسلة واحدة.
+</p>
+<demo-example>
+  <div class="ins-stat ins-glass" style="max-inline-size: 22rem">
+    <span class="ins-stat-body">
+      <span class="ins-stat-label">الطلبات</span>
+      <span class="ins-stat-value">312</span>
+    </span>
+    <span class="ins-chart" data-ins-chart="spark" data-ins-values="12,18,14,22,19,27,31"></span>
+  </div>
+</demo-example>
+
+<h2 id="script">من الشيفرة</h2>
+<p>
+  <code>Insiyab.chart(el, data)</code> يرسم من بيانات ويكتب الجدول معها لقارئ الشاشة، وبلا بيانات يعيد الرسم من الجدول بعد
+  أن غيّرته الصفحة.
+</p>
+<demo-code lang="js">
+Insiyab.chart('#sales', {
+  type: 'line',
+  labels: ['يناير', 'فبراير', 'مارس'],
+  series: [{ name: 'المبيعات', values: [120, 150, 98] }]
+});
+</demo-code>
