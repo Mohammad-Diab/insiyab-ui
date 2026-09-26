@@ -90,7 +90,6 @@
 }
 .site-doc .site-body > .site-lead {
   margin: 0;
-  max-inline-size: 62ch;
   font-size: var(--ins-fs-lg);
   color: var(--ins-text-2);
 }
@@ -114,7 +113,6 @@
 .site-doc .site-body > ul,
 .site-doc .site-body > ol {
   margin: 0 0 1rem;
-  max-inline-size: 72ch;
   color: var(--ins-text-2);
   line-height: 1.9;
 }
@@ -144,7 +142,6 @@
 .site-note {
   margin: 0 0 1.25rem;
   padding: .875rem 1.125rem;
-  max-inline-size: 72ch;
   border-radius: var(--ins-r-md);
   border: 1px solid var(--ins-tone-brand-bd);
   border-inline-start-width: 3px;
@@ -180,6 +177,8 @@
 .dx-view.center { display: grid; place-items: center; min-block-size: 9rem; }
 .dx-view.flush { padding: 0; overflow: hidden; }
 .dx-view.tall { min-block-size: 20rem; }
+/* Only for an example that needs a width to show itself, like text cut off at the
+   end of a line. */
 .dx-view.narrow > * { max-inline-size: 30rem; }
 
 .dx-code {
