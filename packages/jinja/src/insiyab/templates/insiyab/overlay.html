@@ -36,17 +36,17 @@
     label: what the button says; button_label: its name for a screen reader, for an
     icon-only button; variant, size, icon_only: the button's look; summary_class
     replaces it. start: open towards the start edge. -#}
-{% macro menu(label, variant='secondary', size=none, icon_only=false, button_label=none, summary_class=none, start=false, body_class=none, class=none) -%}
-{{ _pop(false, label, variant, size, icon_only, button_label, summary_class, start, body_class, class, kwargs, caller) }}
+{% macro menu(label, variant='secondary', size=none, icon_only=false, button_label=none, summary_class=none, start=false, end=false, body_class=none, class=none) -%}
+{{ _pop(false, label, variant, size, icon_only, button_label, summary_class, start, end, body_class, class, kwargs, caller) }}
 {%- endmacro %}
 
 {#- The same trigger, opening a card. -#}
-{% macro popover(label, variant='secondary', size=none, icon_only=false, button_label=none, summary_class=none, start=false, body_class=none, class=none) -%}
-{{ _pop(true, label, variant, size, icon_only, button_label, summary_class, start, body_class, class, kwargs, caller) }}
+{% macro popover(label, variant='secondary', size=none, icon_only=false, button_label=none, summary_class=none, start=false, end=false, body_class=none, class=none) -%}
+{{ _pop(true, label, variant, size, icon_only, button_label, summary_class, start, end, body_class, class, kwargs, caller) }}
 {%- endmacro %}
 
-{% macro _pop(card, label, variant, size, icon_only, button_label, summary_class, start, body_class, class, extra, body) -%}
-<details class="{{ cls(['ins-pop', 'ins-pop--start' if start, class]) }}"{{ attrs(extra) }}><summary class="{{ summary_class or cls(['ins-btn', 'ins-btn--' ~ variant if variant, 'ins-btn--' ~ size if size, 'ins-btn--icon' if icon_only]) }}"{% if button_label %} aria-label="{{ button_label|e }}"{% endif %}>{{ label }}</summary><div class="{{ cls(['ins-pop-body', 'ins-pop-body--card' if card, body_class]) }}">{{ body() if body }}</div></details>
+{% macro _pop(card, label, variant, size, icon_only, button_label, summary_class, start, end, body_class, class, extra, body) -%}
+<details class="{{ cls(['ins-pop', 'ins-pop--start' if start, 'ins-pop--end' if end, class]) }}"{{ attrs(extra) }}><summary class="{{ summary_class or cls(['ins-btn', 'ins-btn--' ~ variant if variant, 'ins-btn--' ~ size if size, 'ins-btn--icon' if icon_only]) }}"{% if button_label %} aria-label="{{ button_label|e }}"{% endif %}>{{ label }}</summary><div class="{{ cls(['ins-pop-body', 'ins-pop-body--card' if card, body_class]) }}">{{ body() if body }}</div></details>
 {%- endmacro %}
 
 {#- tone: bad for the destructive look. href makes it a link. The label, or the block. -#}

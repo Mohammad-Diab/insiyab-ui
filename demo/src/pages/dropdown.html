@@ -6,10 +6,11 @@
 </p>
 <p>
   <code>-label</code> عنوان مجموعة، و<code>-sep</code> فاصل، و<code>-item--bad</code> لإجراء خطِر، و<code>&lt;kbd&gt;</code>
-  داخل العنصر اختصاره في نهايته. <code>--start</code> يحاذي القائمة ببداية زرّها، والافتراضي محاذاتها بنهايته.
+  داخل العنصر اختصاره في نهايته. تتدلّى القائمة من بداية زرّها وتمتدّ نحو نهاية السطر، و<code>--end</code> يحاذيها بنهايته لزرّ في آخر الشريط.
+  وتنقلب وحدها إن كانت ستخرج من الشاشة.
 </p>
 <demo-example class="row">
-  <details class="ins-pop ins-pop--start">
+  <details class="ins-pop">
     <summary class="ins-btn ins-btn--secondary">إجراءات</summary>
     <div class="ins-pop-body">
       <div class="ins-pop-label">العنوان</div>
@@ -28,7 +29,7 @@
   مفتوحة وأنت تبدّلها، والحدث <code>ins:menu</code> يحمل الحالة.
 </p>
 <demo-example class="row">
-  <details class="ins-pop ins-pop--start">
+  <details class="ins-pop">
     <summary class="ins-btn ins-btn--secondary">عرض</summary>
     <div class="ins-pop-body">
       <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="true">الأوّل</button>
@@ -48,7 +49,7 @@
   و<code>.ins-pop-text</code> لعنوانه ونصّه.
 </p>
 <demo-example class="row">
-  <details class="ins-pop ins-pop--start">
+  <details class="ins-pop">
     <summary class="ins-btn ins-btn--secondary">التفاصيل</summary>
     <div class="ins-pop-body ins-pop-body--card">
       <p class="ins-pop-title">العنوان</p>
@@ -60,7 +61,7 @@
 <h2 id="menu-link">عناصر روابط</h2>
 <p><code>.ins-pop-item</code> يصلح على <code>&lt;a&gt;</code> كما على <code>&lt;button&gt;</code>.</p>
 <demo-example class="row">
-  <details class="ins-pop ins-pop--start">
+  <details class="ins-pop">
     <summary class="ins-btn ins-btn--secondary">المساعدة</summary>
     <div class="ins-pop-body">
       <a class="ins-pop-item" href="start.html">البدء السريع</a>

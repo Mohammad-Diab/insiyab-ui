@@ -118,18 +118,21 @@ export interface MenuProps extends Omit<DetailsHTMLAttributes<HTMLDetailsElement
   buttonLabel?: string;
   /** Replaces the button look, for a trigger styled as something else (an island, say). */
   summaryClassName?: string;
-  /** Open towards the start edge (`ins-pop--start`). */
+  /** Hang from the trigger's trailing edge instead of its leading one (`ins-pop--end`),
+      for a trigger at the far end of a bar. */
+  end?: boolean;
+  /** The default alignment, kept so older code still compiles (`ins-pop--start`). */
   start?: boolean;
   onOpenChange?: (open: boolean) => void;
   bodyClassName?: string;
 }
 
 function Pop({ card, props, ref }: { card: boolean; props: MenuProps; ref: Ref<HTMLDetailsElement> }) {
-  const { label, buttonLabel, summaryClassName, start, onOpenChange, bodyClassName, variant = 'secondary', size, iconOnly, full, lift, className, children, onToggle, ...rest } = props;
+  const { label, buttonLabel, summaryClassName, start, end, onOpenChange, bodyClassName, variant = 'secondary', size, iconOnly, full, lift, className, children, onToggle, ...rest } = props;
   return (
     <details
       ref={ref}
-      className={cx('ins-pop', start && 'ins-pop--start', className)}
+      className={cx('ins-pop', start && 'ins-pop--start', end && 'ins-pop--end', className)}
       onToggle={(e) => {
         onToggle?.(e);
         onOpenChange?.(e.currentTarget.open);
