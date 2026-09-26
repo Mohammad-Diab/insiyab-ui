@@ -173,9 +173,9 @@ there, in Arabic, in both themes, with the markup of each example under it.
 | **Overlay** | `.ins-dialog` (native `<dialog>`, `--sm`, `--lg`) · `.ins-drawer` (`--end`, `--bottom`) · `.ins-pop` (native `<details>`; hangs from the trigger's leading edge, `--end` for the trailing one; `-label`, `-item`, checkable items via `role="menuitemcheckbox|menuitemradio"`) · `.ins-pop-body--card` (+ `.ins-pop-title`, `.ins-pop-text`) · `.ins-tooltip` via `data-ins-tip` · confirmation via `data-ins-confirm` or `Insiyab.confirm()` |
 | **Navigation** | `.ins-page-head` (`-text`) · `.ins-page-title` · `.ins-page-sub` · `.ins-page-actions` · `.ins-breadcrumb` · `.ins-tablist` · `.ins-tab` · `.ins-tabpanel` · `.ins-pagination` · `.ins-page` (`--prev`, `--next`) · `.ins-page-gap` · `.ins-navbar` (`--static`; `-brand`, `-toggle`, `-menu`, `-link`, `-end`) · `.ins-accordion` · `.ins-collapse` (`-body`) · `.ins-steps` (`-item`, `-label`; `--dots`) · `.ins-wizard` (`-body`, `-panel`, `-foot`, `-finish`) |
 | **Shell** | `.ins-shell` · `.ins-shell-side` (brand, `-group`, `-link`, `-link-badge`, `-bottom`) · `.ins-topbar` · `.ins-zone` · `.ins-island` (`--icon`, `--title`, `--brand`) |
-| **Layout** | `.ins-container` (`--narrow`, `--wide`) · `.ins-stack` · `.ins-row` · `.ins-cols-{2,3,4,6,12}` (+ `--fixed`) · `.ins-span-{2…12,full}` · `.ins-grid` · `.ins-toolbar` · `.ins-searchbar` |
+| **Layout** | `.ins-container` (`--narrow`, `--wide`) · `.ins-screen` (one card in the middle of the page) · `.ins-brand` (`-name`, `-sub`) · `.ins-stack` · `.ins-row` · `.ins-cols-{2,3,4,6,12}` (+ `--fixed`) · `.ins-span-{2…12,full}` · `.ins-grid` · `.ins-toolbar` · `.ins-searchbar` |
 | **Type** | `.ins-display` · `.ins-h1`–`.ins-h4` · `.ins-lead` · `.ins-eyebrow` · `.ins-prose` · `.ins-kbd` · `.ins-divider` (`--start`, `--v`) |
-| **Utilities** | spacing `ins-{gap,m,mt,mb,ms,me,mx,my,p,pt,pb,ps,pe,px,py}-{0,1,2,3,4,5,6,8,12}` · flex `ins-flex`, `-wrap`, `ins-grow`, `ins-items-*`, `ins-justify-*` · text `ins-text-{start,center,end,xs…xl,ok,warn,bad,info,brand}`, `ins-fw-*`, `ins-muted`, `ins-truncate`, `ins-clamp-{2,3}` · scroll `ins-scroll-smooth` · visibility `ins-hide-{below,above}-{sm,md,lg}`, `ins-hide-print`, `ins-print-only` |
+| **Utilities** | spacing `ins-{gap,m,mt,mb,ms,me,mx,my,p,pt,pb,ps,pe,px,py}-{0,1,2,3,4,5,6,8,12}` · flex `ins-flex`, `-wrap`, `ins-grow`, `ins-items-*`, `ins-self-*`, `ins-justify-*` · text `ins-text-{start,center,end,xs…xl,ok,warn,bad,info,brand}`, `ins-fw-*`, `ins-muted`, `ins-truncate`, `ins-clamp-{2,3}` · scroll `ins-scroll-smooth` · visibility `ins-hide-{below,above}-{sm,md,lg}`, `ins-hide-print`, `ins-print-only` |
 | **Motion** | `[data-ins-reveal]` · `.ins-hoverable` · `.ins-anim-rise` · `.ins-anim-pop` · `.ins-anim-slide` |
 | **Ground** | `.ins-orbs` / `.ins-orb-1..3` — injected for you; opt out with `data-ins-orbs="off"` |
 
@@ -334,7 +334,8 @@ before a taller step and shrinking after a shorter one. `.ins-steps--dots` draws
 steps as dots. A step that must reach a server first cancels `ins:wizard-leave`: the
 wizard waits, busy, until `Insiyab.wizard(w, 'next')` or `'stay'`. A panel with
 `hidden` is skipped, `data-ins-wizard="restart"` goes back to the start, and
-`data-ins-echo="#phone"` repeats an earlier answer on a later step.
+`data-ins-echo="#phone"` repeats an earlier answer on a later step. The login
+template in the docs is built from these parts alone.
 
 **A confirmation is one attribute.** `data-ins-confirm="حذف العملية؟"` on a link,
 a submit button or any `data-ins-*` control asks first. On a yes, the original

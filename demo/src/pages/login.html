@@ -1,0 +1,126 @@
+<link rel="stylesheet" href="../dist/plugins/insiyab-otp.css">
+<script src="../dist/plugins/insiyab-otp.js"></script>
+
+<h2 id="preview">القالب</h2>
+<p>
+  بطاقة في وسط الصفحة، ومعالج بثلاث خطوات: الهاتف، ثمّ كلمة المرور، ثمّ رمز التحقق. كلّها من أجزاء المكتبة، بلا
+  أنماط خاصّة. جرّب: أيّ رقم يبدأ بـ <code>09</code> ثمّ عشرة أرقام، و<code>0900000000</code> مرفوض، والرمز
+  <code>123456</code>. أو <a href="templates/login.html">افتحه صفحةً كاملة</a>.
+</p>
+<demo-example class="screen">
+  <main class="ins-screen">
+    <form class="ins-glass ins-p-8 ins-wizard" id="login" data-ins-wizard-motion="slide" data-ins-validate>
+      <div class="ins-brand">
+        <span class="ins-shell-mark">م</span>
+        <h1 class="ins-brand-name">متجري</h1>
+        <p class="ins-brand-sub">تسجيل الدخول</p>
+      </div>
+      <ol class="ins-steps ins-steps--dots">
+        <li class="ins-steps-item"><span class="ins-steps-label">رقم الهاتف</span></li>
+        <li class="ins-steps-item"><span class="ins-steps-label">كلمة المرور</span></li>
+        <li class="ins-steps-item"><span class="ins-steps-label">رمز التحقق</span></li>
+      </ol>
+      <div class="ins-wizard-body">
+        <section class="ins-wizard-panel ins-stack" aria-label="رقم الهاتف">
+          <div class="ins-field">
+            <label class="ins-label" for="login-phone">رقم الهاتف</label>
+            <input class="ins-input ins-input--lg" id="login-phone" name="phone" type="tel" dir="ltr" inputmode="tel"
+                   autocomplete="tel" placeholder="09XXXXXXXX" pattern="09[0-9]{8}" required>
+            <p class="ins-error"></p>
+          </div>
+          <button type="button" class="ins-btn ins-btn--primary ins-btn--lg ins-btn--full" data-ins-wizard="next">متابعة</button>
+        </section>
+        <section class="ins-wizard-panel ins-stack" aria-label="كلمة المرور">
+          <p class="ins-text-center ins-muted ins-m-0" dir="ltr" data-ins-echo="#login-phone"></p>
+          <div class="ins-field">
+            <label class="ins-label" for="login-pass">كلمة المرور</label>
+            <div class="ins-input-group">
+              <input class="ins-input ins-input--lg" id="login-pass" name="password" type="password"
+                     autocomplete="current-password" required autofocus>
+              <button type="button" class="ins-password-toggle" data-ins-password aria-label="إظهار كلمة المرور"></button>
+            </div>
+            <p class="ins-error"></p>
+          </div>
+          <button type="button" class="ins-btn ins-btn--primary ins-btn--lg ins-btn--full" data-ins-wizard="next">متابعة</button>
+          <button type="button" class="ins-btn ins-btn--bare ins-btn--sm ins-self-center" data-ins-wizard="restart">البدء من جديد</button>
+        </section>
+        <section class="ins-wizard-panel ins-stack" aria-label="رمز التحقق">
+          <p class="ins-text-center ins-muted ins-m-0">أُرسل الرمز إلى <span class="ins-num" data-ins-echo="#login-phone"></span></p>
+          <div class="ins-field">
+            <label class="ins-label" for="login-code">رمز التحقق</label>
+            <input id="login-code" name="code" data-ins-otp="6" autocomplete="one-time-code" required autofocus>
+            <p class="ins-error"></p>
+          </div>
+          <button class="ins-btn ins-btn--primary ins-btn--lg ins-btn--full ins-wizard-finish">دخول</button>
+          <button type="button" class="ins-btn ins-btn--bare ins-btn--sm ins-self-center" data-ins-wizard="restart">البدء من جديد</button>
+        </section>
+      </div>
+    </form>
+  </main>
+</demo-example>
+
+<h2 id="parts">الأجزاء</h2>
+<ul>
+  <li><b><code>.ins-screen</code></b> صفحة تحمل بطاقة واحدة في وسطها، و<b><code>.ins-brand</code></b> العلامة والاسم وسطر تحته.</li>
+  <li><b>المعالج</b> بـ <code>data-ins-wizard-motion="slide"</code>: الخطوة تنزلق بعرض البطاقة، والبطاقة تكبر قبل خطوة أطول
+    وتصغر بعد خطوة أقصر. وكلّ خطوة تحمل زرّها فينزلق معها، والنقاط فوقها تتبعها.</li>
+  <li><b><code>data-ins-echo</code></b> يعرض الرقم في الخطوتين التاليتين، و<b><code>autofocus</code></b> يضع المؤشّر في حقل كلّ خطوة.</li>
+  <li><b>الخادم</b> يُسأل عند كلّ خطوة عبر <code>ins:wizard-leave</code>، والخطأ يظهر تحت الحقل نفسه. انظر
+    <a href="steps.html#server">خطوة تنتظر الخادم</a>.</li>
+  <li><b>بلا جافاسكربت</b> نموذج واحد طويل بالحقول الثلاثة وزرّ الدخول.</li>
+  <li><b>لمسار بخطوتين</b> — حساب بلا كلمة مرور — ضع <code>hidden</code> على لوح كلمة المرور، ونقطته تختفي معه.</li>
+</ul>
+
+<h2 id="page">الصفحة</h2>
+<demo-code lang="html">
+<body>
+  <main class="ins-screen">
+    <form class="ins-glass ins-p-8 ins-wizard" data-ins-wizard-motion="slide" data-ins-validate>
+      <div class="ins-brand">…</div>
+      <ol class="ins-steps ins-steps--dots">…</ol>
+      <div class="ins-wizard-body">
+        <section class="ins-wizard-panel">…</section>
+      </div>
+    </form>
+  </main>
+</body>
+</demo-code>
+
+<script>
+  (function () {
+    var login = document.getElementById('login');
+    var phone = document.getElementById('login-phone');
+    var code = document.getElementById('login-code');
+    phone.addEventListener('input', function () { phone.setCustomValidity(''); });
+    code.addEventListener('input', function () { code.setCustomValidity(''); });
+    /* A stand-in for the server: each step waits a moment, and one number is refused. */
+    document.addEventListener('ins:wizard-leave', function (e) {
+      if (e.detail.el !== login) return;
+      e.preventDefault();
+      setTimeout(function () {
+        if (e.detail.step === 0 && phone.value === '0900000000') {
+          phone.setCustomValidity('هذا الرقم غير مسجّل.');
+          phone.reportValidity();
+          Insiyab.wizard(login, 'stay');
+          return;
+        }
+        Insiyab.wizard(login, 'next');
+      }, 700);
+    });
+    login.addEventListener('submit', function (e) {
+      e.preventDefault();
+      login.setAttribute('aria-busy', 'true');
+      setTimeout(function () {
+        login.removeAttribute('aria-busy');
+        if (code.value !== '123456') {
+          code.setCustomValidity('الرمز غير صحيح.');
+          code.reportValidity();
+          return;
+        }
+        Insiyab.toast('تمّ الدخول', 'ok');
+        login.reset();
+        Insiyab.wizard(login, 'restart');
+      }, 700);
+    });
+  })();
+</script>

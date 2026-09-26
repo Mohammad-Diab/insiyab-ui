@@ -178,6 +178,9 @@
       <a class="ins-shell-link" href="tree.html" data-keywords="Tree قوائم متداخلة شجرةً: ملفّات أو تصنيفات أو صلاحيات، بالأسهم كشجرة ملفّات، وبمربّعات متسلسلة."><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>الشجرة</a>
       <a class="ins-shell-link" href="colorpicker.html" data-keywords="Color picker حقل لون بمنتقٍ كامل، يقول قبل الحفظ هل يصلح اللون لنصّ: تباينه على الأبيض وعلى الأسود."><svg class="ico" aria-hidden="true"><use href="#i-droplet"/></svg>منتقي الألوان</a>
       <a class="ins-shell-link" href="carousel.html" data-keywords="Carousel شرائح في صفّ يُسحب بالإصبع، وأزرار ونقاط وأسهم باتّجاه القراءة — ولا يتحرّك من تلقاء نفسه."><svg class="ico" aria-hidden="true"><use href="#i-slides"/></svg>عرض الشرائح</a>
+
+      <div class="ins-shell-group">القوالب</div>
+      <a class="ins-shell-link" href="login.html" data-keywords="Login template صفحة دخول بخطوات: الهاتف ثمّ كلمة المرور ثمّ الرمز، في بطاقة تنزلق خطواتها، من أجزاء المكتبة وحدها."><svg class="ico" aria-hidden="true"><use href="#i-user"/></svg>تسجيل الدخول</a>
   </aside>
   <div class="ins-shell-scrim"></div>
 
@@ -457,7 +460,7 @@
 <p>
   قبل أن ينتقل «التالي» يُطلق <code>ins:wizard-leave</code>. إن ألغاه مستمعك، ينتظر المعالج مشغولًا: الزرّ بدوّارة ولا يقبل
   ضغطة ثانية. ثم <code>Insiyab.wizard(w, 'next')</code> حين يقبل الخادم، أو <code>'stay'</code> بعد أن تعرض الخطأ على الحقل
-  نفسه.
+  نفسه. مثال حيّ في <a href="login.html">قالب الدخول</a>.
 </p>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:wizard-leave'</span>, <span class="hl-k">async</span> (e) =&gt; {
   <span class="hl-k">if</span> (e.detail.el.id !== <span class="hl-s">'login'</span>) <span class="hl-k">return</span>;
