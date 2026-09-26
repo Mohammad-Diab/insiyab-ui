@@ -274,7 +274,6 @@
   gap: .625rem;
   padding: .75rem 1rem;
   background: transparent;
-  transition: background var(--ins-t-base) ease, box-shadow var(--ins-t-base) ease;
 }
 /* An anchor lands below the bar, not under it. The bar is sticky, so without this a
    jump to `#section` puts the section's heading behind the islands — and with
@@ -288,10 +287,26 @@ html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
 
 /* Stamped by insiyab.js past 8px of scroll. Without the script the bar simply stays
    transparent, which is the correct fallback rather than a broken one: the islands
-   carry their own ground. */
-:root[data-ins-scrolled] .ins-topbar {
+   carry their own ground.
+
+   The frost is on a layer behind the islands, not on the bar. An element with a
+   backdrop-filter is where every blur inside it stops looking: with the filter on
+   the bar itself, a menu opened from an island could only frost the bar, not the
+   page, and the content under the menu showed through it, merely tinted. The
+   islands lost their own frost the same way. */
+.ins-topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background: var(--ins-glass);
   box-shadow: 0 1px 0 var(--ins-rim), var(--ins-sh-sm);
+  opacity: 0;
+  transition: opacity var(--ins-t-base) ease;
+}
+:root[data-ins-scrolled] .ins-topbar::before {
+  opacity: 1;
   -webkit-backdrop-filter: var(--ins-blur-bar);
           backdrop-filter: var(--ins-blur-bar);
 }
@@ -377,6 +392,9 @@ html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
   justify-content: center;
   line-height: 1.15;
 }
+/* The line heights leave room below the line: the title clips for its ellipsis, and
+   at 1.2 that clipped the tails of ع, ج and ي. Title and subtitle together still fit
+   the 48px island. */
 .ins-shell-title {
   font-size: .9375rem;
   font-weight: 800;
@@ -392,9 +410,6 @@ html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
 /* `:empty`, not a conditional in a template: the subtitle is optional on every page
    and an `if` around a wrapper is one more thing each page can get wrong. */
 .ins-shell-sub {
-/* The line heights leave room below the line: the title clips for its ellipsis, and
-   at 1.2 that clipped the tails of ع, ج and ي. Title and subtitle together still fit
-   the 48px island. */
   font-size: .6875rem;
   font-weight: 600;
   color: var(--ins-text-3);

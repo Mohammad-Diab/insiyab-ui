@@ -62,7 +62,7 @@
    bar kept its blur with effects off. */
 [data-ins-fx="off"] :is(.ins-glass, .ins-card, .ins-panel, .ins-toast, .ins-pop-body,
                          .ins-island, .ins-shell-side, .ins-navbar),
-:root[data-ins-fx="off"][data-ins-scrolled] .ins-topbar,
+:root[data-ins-fx="off"][data-ins-scrolled] .ins-topbar::before,
 [data-ins-fx="off"] .ins-dialog::backdrop,
 [data-ins-fx="off"] .ins-drawer::backdrop {
   backdrop-filter: none;
