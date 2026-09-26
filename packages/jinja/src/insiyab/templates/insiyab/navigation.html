@@ -85,8 +85,8 @@
 {%- endmacro %}
 
 {#- current: the step in progress, from 0; the ones before it are done. -#}
-{% macro steps(items, current=none, class=none) -%}
-<ol class="{{ cls(['ins-steps', class]) }}"{{ attrs(kwargs) }}>
+{% macro steps(items, current=none, dots=false, class=none) -%}
+<ol class="{{ cls(['ins-steps', 'ins-steps--dots' if dots, class]) }}"{{ attrs(kwargs) }}>
 {%- for label in items -%}
 <li class="{{ cls(['ins-steps-item', 'is-done' if current is not none and loop.index0 < current]) }}"{% if current is not none and loop.index0 == current %} aria-current="step"{% endif %}><span class="ins-steps-label">{{ label }}</span></li>
 {%- endfor -%}
@@ -95,13 +95,15 @@
 
 {#- A form in steps: wizard_panel() calls in the block. Next checks the step's own
     fields before it moves on; without script it is one long form. -#}
-{% macro wizard(steps, validate=true, prev_label='السابق', next_label='التالي', finish_label='إنهاء', body_class=none, class=none) -%}
-<form class="{{ cls(['ins-panel', 'ins-wizard', class]) }}"{% if validate %} data-ins-validate{% endif %}{{ attrs(kwargs) }}><div class="{{ cls(['ins-panel-body', body_class]) }}">
-{{- _steps(steps) -}}
-{{ caller() if caller }}<div class="ins-wizard-foot"><button type="button" class="ins-btn ins-btn--secondary" data-ins-wizard="prev">{{ prev_label }}</button><button type="button" class="ins-btn ins-btn--primary" data-ins-wizard="next">{{ next_label }}</button><button class="ins-btn ins-btn--primary ins-wizard-finish">{{ finish_label }}</button></div></div></form>
+{#- motion: 'pane' or 'slide' puts the panels in .ins-wizard-body, for a smooth height
+    ('slide' slides the steps side by side). dots: dots instead of numbered steps. -#}
+{% macro wizard(steps, validate=true, prev_label='السابق', next_label='التالي', finish_label='إنهاء', body_class=none, motion=none, dots=false, class=none) -%}
+<form class="{{ cls(['ins-panel', 'ins-wizard', class]) }}"{% if validate %} data-ins-validate{% endif %}{% if motion == 'slide' %} data-ins-wizard-motion="slide"{% endif %}{{ attrs(kwargs) }}><div class="{{ cls(['ins-panel-body', body_class]) }}">
+{{- _steps(steps, dots) -}}
+{% if motion %}<div class="ins-wizard-body">{% endif %}{{ caller() if caller }}{% if motion %}</div>{% endif %}<div class="ins-wizard-foot"><button type="button" class="ins-btn ins-btn--secondary" data-ins-wizard="prev">{{ prev_label }}</button><button type="button" class="ins-btn ins-btn--primary" data-ins-wizard="next">{{ next_label }}</button><button class="ins-btn ins-btn--primary ins-wizard-finish">{{ finish_label }}</button></div></div></form>
 {%- endmacro %}
 
-{% macro _steps(items) -%}{{ steps(items) }}{%- endmacro %}
+{% macro _steps(items, dots=false) -%}{{ steps(items, dots=dots) }}{%- endmacro %}
 
 {% macro wizard_panel(label=none, class=none) -%}
 <section class="{{ cls(['ins-wizard-panel', class]) }}"{% if label %} aria-label="{{ label|e }}"{% endif %}{{ attrs(kwargs) }}>{{ caller() if caller }}</section>

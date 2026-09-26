@@ -171,7 +171,7 @@ there, in Arabic, in both themes, with the markup of each example under it.
 | **Buttons** | `.ins-btn` × `--primary` `--secondary` `--ghost[-danger/-success/-warning/-info]` `--success` `--danger` `--warning` `--info` `--bare`, × `--sm` `--lg` `--icon` `--full` `--lift` · toggle buttons via `data-ins-toggle` (`aria-pressed`) · `.ins-btn-group` (`--sm`; takes a split-button `.ins-pop`) · `.ins-close` (`--sm`, `--bare`) |
 | **Feedback** | `.ins-alert` (notched) · `.ins-toast` · `.ins-empty` · `.ins-progress` (native `<progress>`; `--sm`, `--lg`, `--ok`, `--warn`, `--bad`; indeterminate without `value`) · `.ins-ring` (`--lg`) · `.ins-skel` (`--text`, `--title`, `--circle`, `--block`) · `.ins-spinner` (`--sm`) · `.ins-loading` |
 | **Overlay** | `.ins-dialog` (native `<dialog>`, `--sm`, `--lg`) · `.ins-drawer` (`--end`, `--bottom`) · `.ins-pop` (native `<details>`; hangs from the trigger's leading edge, `--end` for the trailing one; `-label`, `-item`, checkable items via `role="menuitemcheckbox|menuitemradio"`) · `.ins-pop-body--card` (+ `.ins-pop-title`, `.ins-pop-text`) · `.ins-tooltip` via `data-ins-tip` · confirmation via `data-ins-confirm` or `Insiyab.confirm()` |
-| **Navigation** | `.ins-page-head` (`-text`) · `.ins-page-title` · `.ins-page-sub` · `.ins-page-actions` · `.ins-breadcrumb` · `.ins-tablist` · `.ins-tab` · `.ins-tabpanel` · `.ins-pagination` · `.ins-page` (`--prev`, `--next`) · `.ins-page-gap` · `.ins-navbar` (`--static`; `-brand`, `-toggle`, `-menu`, `-link`, `-end`) · `.ins-accordion` · `.ins-collapse` (`-body`) · `.ins-steps` (`-item`, `-label`) · `.ins-wizard` (`-panel`, `-foot`, `-finish`) |
+| **Navigation** | `.ins-page-head` (`-text`) · `.ins-page-title` · `.ins-page-sub` · `.ins-page-actions` · `.ins-breadcrumb` · `.ins-tablist` · `.ins-tab` · `.ins-tabpanel` · `.ins-pagination` · `.ins-page` (`--prev`, `--next`) · `.ins-page-gap` · `.ins-navbar` (`--static`; `-brand`, `-toggle`, `-menu`, `-link`, `-end`) · `.ins-accordion` · `.ins-collapse` (`-body`) · `.ins-steps` (`-item`, `-label`; `--dots`) · `.ins-wizard` (`-body`, `-panel`, `-foot`, `-finish`) |
 | **Shell** | `.ins-shell` · `.ins-shell-side` (brand, `-group`, `-link`, `-link-badge`, `-bottom`) · `.ins-topbar` · `.ins-zone` · `.ins-island` (`--icon`, `--title`, `--brand`) |
 | **Layout** | `.ins-container` (`--narrow`, `--wide`) · `.ins-stack` · `.ins-row` · `.ins-cols-{2,3,4,6,12}` (+ `--fixed`) · `.ins-span-{2…12,full}` · `.ins-grid` · `.ins-toolbar` · `.ins-searchbar` |
 | **Type** | `.ins-display` · `.ins-h1`–`.ins-h4` · `.ins-lead` · `.ins-eyebrow` · `.ins-prose` · `.ins-kbd` · `.ins-divider` (`--start`, `--v`) |
@@ -325,8 +325,16 @@ option's `data-value`:
 **A wizard is a form in steps.** Next checks only the current step's fields,
 with the browser's own validation, before it moves on. So a required field stops
 the person on its own step, not at the end. Enter in a field means Next, and
-focus moves to the step that arrives. Without the script it is one long form with
-the submit button at the bottom, which still works.
+focus moves to the step that arrives (its `autofocus` field if it has one). Without
+the script it is one long form with the submit button at the bottom, which still
+works. Around the panels, `.ins-wizard-body` makes the height change smoothly, and
+the next step arrives from the end of the line: faded in over 16px by default, or
+with `data-ins-wizard-motion="slide"` slid a whole step's width, the card growing
+before a taller step and shrinking after a shorter one. `.ins-steps--dots` draws the
+steps as dots. A step that must reach a server first cancels `ins:wizard-leave`: the
+wizard waits, busy, until `Insiyab.wizard(w, 'next')` or `'stay'`. A panel with
+`hidden` is skipped, `data-ins-wizard="restart"` goes back to the start, and
+`data-ins-echo="#phone"` repeats an earlier answer on a later step.
 
 **A confirmation is one attribute.** `data-ins-confirm="حذف العملية؟"` on a link,
 a submit button or any `data-ins-*` control asks first. On a yes, the original
@@ -420,7 +428,8 @@ Everything below works as markup, with no JavaScript in your page:
 <input type="date" data-ins-date data-ins-date-start="#from">  <!-- …and its end -->
 <input type="date" data-ins-date data-ins-locale="en">         <!-- a language other than the page's -->
 <input type="date" data-ins-date data-ins-calendar="hijri">    <!-- Hijri, with the plugin: see Plugins -->
-<button data-ins-wizard="next">…</button>         <!-- validate this step, then move; or "prev" -->
+<button data-ins-wizard="next">…</button>         <!-- validate this step, then move; or "prev", "restart" -->
+<p data-ins-echo="#phone"></p>                    <!-- a wizard step repeating an earlier field's value -->
 <a href="/ops/7/delete" data-ins-confirm="حذف العملية؟">…</a>  <!-- ask first -->
 <button data-ins-confirm="أرشفة؟" data-ins-confirm-ok="أرشفة" data-ins-confirm-tone="danger">…</button>
 ```
@@ -455,7 +464,7 @@ Insiyab.navbar(target, open?)         // open, close or toggle a navbar's menu
 Insiyab.sidebar(state?)               // 'open' | 'collapsed' | 'toggle'
 Insiyab.sidebarSelect(link)           // move the selected sidebar item, marker and all
 Insiyab.confirm(message, options?)    // Promise<boolean>; options: title, confirm, cancel, tone: 'danger'
-Insiyab.wizard(target, step?)         // the current step (0-based), or go to one, with no validation
+Insiyab.wizard(target, step?)         // the current step (0-based), or go to one with no validation: a number, 'next', 'prev', 'restart'; 'stay' ends a wait
 Insiyab.date(input, iso?)             // read a date field's ISO value, or set it ('' clears)
 Insiyab.calendar(name, calendar?)     // register a calendar system for date fields, or look one up
 Insiyab.norm(text)                    // text as the autocomplete compares it: no hamza seats or harakat, Latin digits
@@ -483,6 +492,7 @@ document.addEventListener('ins:toggle', (e) => console.log(e.detail.el, e.detail
 document.addEventListener('ins:combo', (e) => console.log(e.detail.value, e.detail.label));
 document.addEventListener('ins:date', (e) => console.log(e.detail.value, e.detail.date));   // '2026-09-23', a local Date
 document.addEventListener('ins:wizard', (e) => console.log(e.detail.step, e.detail.panel));
+document.addEventListener('ins:wizard-leave', (e) => e.preventDefault()); // before Next moves: cancel to wait on a server
 document.addEventListener('ins:calendar', (e) => console.log(e.detail.input, e.detail.calendar)); // after the footer switch
 ```
 

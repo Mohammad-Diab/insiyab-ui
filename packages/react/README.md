@@ -113,7 +113,7 @@ The same conventions hold throughout:
 | Pickers | `Combo` `DateField` (a range: `rangeEnd`/`rangeStart` name the other field's id) |
 | Feedback | `Alert` `Empty` `Progress` `Ring` `Skeleton` `Spinner` `Loading` |
 | Overlay | `Dialog` `Drawer` `Menu` `Popover` `MenuItem` `MenuCheckbox` `MenuRadio` `MenuLabel` `MenuSeparator` `MenuGroup` |
-| Navigation | `PageHead` `Breadcrumb` `Tabs` `TabList` `Tab` `TabPanel` `Pagination` `Navbar` `NavbarLink` `Accordion` `Collapse` `Steps` `Wizard` `WizardPanel` |
+| Navigation | `PageHead` `Breadcrumb` `Tabs` `TabList` `Tab` `TabPanel` `Pagination` `Navbar` `NavbarLink` `Accordion` `Collapse` `Steps` (`dots`) `Wizard` (`motion="pane"` or `"slide"`, `dots`) `WizardPanel` |
 | Shell | `Shell` `Sidebar` `SidebarBrand` `SidebarGroup` `SidebarLink` `SidebarToggle` `Topbar` `TopbarTitle` `Island` `ThemeToggle` |
 | Plugins | `Otp` `PhoneField` `FileField` `ColorField` `Tree` `Timeline` `TimelineItem` `TimelineDay` `RelativeTime` `Carousel` `Toc` `useScrollspy` `CommandPalette` |
 

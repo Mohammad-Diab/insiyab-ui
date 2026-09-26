@@ -10,12 +10,24 @@
     <li class="ins-steps-item"><span class="ins-steps-label">الثالثة</span></li>
   </ol>
 </demo-example>
+<p><code>--dots</code> نقاط صغيرة بدل الأرقام، لبطاقة دخول. الأسماء تبقى لقارئ الشاشة.</p>
+<demo-example>
+  <ol class="ins-steps ins-steps--dots">
+    <li class="ins-steps-item is-done"><span class="ins-steps-label">الأولى</span></li>
+    <li class="ins-steps-item" aria-current="step"><span class="ins-steps-label">الثانية</span></li>
+    <li class="ins-steps-item"><span class="ins-steps-label">الثالثة</span></li>
+  </ol>
+</demo-example>
 
 <h2 id="wizard">المعالج</h2>
 <p>
   <code>.ins-wizard</code> على نموذج بألواح <code>.ins-wizard-panel</code>: السكربت يُظهر لوحًا واحدًا ويقود
   الخطوات فوقه. «التالي» يتحقّق من حقول الخطوة الحالية قبل أن ينتقل، و<kbd class="ins-kbd">Enter</kbd> داخل
-  حقل يعني «التالي». وبلا جافاسكربت يصير نموذجًا واحدًا بزرّ إرسال في آخره.
+  حقل يعني «التالي»، والتركيز ينتقل إلى الخطوة التي وصلت. وبلا جافاسكربت يصير نموذجًا واحدًا بزرّ إرسال في آخره.
+</p>
+<p>
+  الألواح داخل <code>.ins-wizard-body</code> اختياريًا: معه يتغيّر ارتفاع المعالج بسلاسة بين الخطوات. والخطوة
+  التالية تدخل من نهاية السطر، ومن الجهة الأخرى في الرجوع.
 </p>
 <demo-example>
   <form class="ins-wizard" id="store-wizard" data-ins-validate>
@@ -24,23 +36,29 @@
       <li class="ins-steps-item"><span class="ins-steps-label">البريد</span></li>
       <li class="ins-steps-item"><span class="ins-steps-label">التأكيد</span></li>
     </ol>
-    <section class="ins-wizard-panel" aria-label="الاسم">
-      <div class="ins-field">
-        <label class="ins-label" for="w-name">الاسم</label>
-        <input class="ins-input" id="w-name" required>
-        <p class="ins-error"></p>
-      </div>
-    </section>
-    <section class="ins-wizard-panel" aria-label="البريد">
-      <div class="ins-field">
-        <label class="ins-label" for="w-email">البريد</label>
-        <input class="ins-input" id="w-email" type="email" required dir="ltr">
-        <p class="ins-error"></p>
-      </div>
-    </section>
-    <section class="ins-wizard-panel" aria-label="التأكيد">
-      <label class="ins-check"><input type="checkbox" required><span class="ins-check-text">أوافق</span></label>
-    </section>
+    <div class="ins-wizard-body">
+      <section class="ins-wizard-panel" aria-label="الاسم">
+        <div class="ins-field">
+          <label class="ins-label" for="w-name">الاسم</label>
+          <input class="ins-input" id="w-name" required>
+          <p class="ins-error"></p>
+        </div>
+      </section>
+      <section class="ins-wizard-panel ins-stack" aria-label="البريد">
+        <div class="ins-field">
+          <label class="ins-label" for="w-email">البريد</label>
+          <input class="ins-input" id="w-email" type="email" required dir="ltr">
+          <p class="ins-error"></p>
+        </div>
+        <div class="ins-field">
+          <label class="ins-label" for="w-phone">الهاتف</label>
+          <input class="ins-input" id="w-phone" type="tel" dir="ltr">
+        </div>
+      </section>
+      <section class="ins-wizard-panel" aria-label="التأكيد">
+        <label class="ins-check"><input type="checkbox" required><span class="ins-check-text">أوافق</span></label>
+      </section>
+    </div>
     <div class="ins-wizard-foot">
       <button type="button" class="ins-btn ins-btn--secondary" data-ins-wizard="prev">السابق</button>
       <button type="button" class="ins-btn ins-btn--primary" data-ins-wizard="next">التالي</button>
@@ -49,10 +67,90 @@
   </form>
 </demo-example>
 
+<h2 id="dialog">داخل حوار</h2>
+<p>
+  المعالج نفسه في <code>.ins-dialog</code>. زرّ <code>data-ins-dialog-close</code> في أوّل الشريط السفلي يلغي، والرجوع
+  والتالي في آخره.
+</p>
+<demo-example>
+  <button class="ins-btn ins-btn--primary" data-ins-dialog="#wiz-dialog">إضافة</button>
+  <dialog class="ins-dialog" id="wiz-dialog">
+    <form class="ins-wizard" id="dialog-wizard" data-ins-validate>
+      <div class="ins-dialog-head">
+        <h3 class="ins-dialog-title">إضافة</h3>
+        <button type="button" class="ins-close" data-ins-dialog-close aria-label="إغلاق"></button>
+      </div>
+      <div class="ins-dialog-body">
+        <ol class="ins-steps">
+          <li class="ins-steps-item"><span class="ins-steps-label">البيانات</span></li>
+          <li class="ins-steps-item"><span class="ins-steps-label">التفاصيل</span></li>
+          <li class="ins-steps-item"><span class="ins-steps-label">المراجعة</span></li>
+        </ol>
+        <div class="ins-wizard-body">
+          <section class="ins-wizard-panel" aria-label="البيانات">
+            <div class="ins-field">
+              <label class="ins-label" for="d-name">الاسم</label>
+              <input class="ins-input" id="d-name" required>
+              <p class="ins-error"></p>
+            </div>
+          </section>
+          <section class="ins-wizard-panel ins-stack" aria-label="التفاصيل">
+            <div class="ins-field">
+              <label class="ins-label" for="d-city">المدينة</label>
+              <select class="ins-select" id="d-city"><option>الرياض</option><option>عمّان</option><option>القاهرة</option></select>
+            </div>
+            <div class="ins-field">
+              <label class="ins-label" for="d-note">ملاحظة</label>
+              <textarea class="ins-textarea" id="d-note"></textarea>
+            </div>
+          </section>
+          <section class="ins-wizard-panel" aria-label="المراجعة">
+            <p class="ins-m-0">الاسم: <b data-ins-echo="#d-name"></b></p>
+          </section>
+        </div>
+      </div>
+      <div class="ins-dialog-foot ins-wizard-foot">
+        <button type="button" class="ins-btn ins-btn--bare" data-ins-dialog-close>إلغاء</button>
+        <button type="button" class="ins-btn ins-btn--secondary" data-ins-wizard="prev">السابق</button>
+        <button type="button" class="ins-btn ins-btn--primary" data-ins-wizard="next">التالي</button>
+        <button class="ins-btn ins-btn--primary ins-wizard-finish">حفظ</button>
+      </div>
+    </form>
+  </dialog>
+</demo-example>
+
+<h2 id="server">خطوة تنتظر الخادم</h2>
+<p>
+  قبل أن ينتقل «التالي» يُطلق <code>ins:wizard-leave</code>. إن ألغاه مستمعك، ينتظر المعالج مشغولًا: الزرّ بدوّارة ولا يقبل
+  ضغطة ثانية. ثم <code>Insiyab.wizard(w, 'next')</code> حين يقبل الخادم، أو <code>'stay'</code> بعد أن تعرض الخطأ على الحقل
+  نفسه.
+</p>
+<demo-code lang="js">
+document.addEventListener('ins:wizard-leave', async (e) => {
+  if (e.detail.el.id !== 'login') return;
+  e.preventDefault();                          // المعالج ينتظر
+  const ok = await checkPhone(phone.value);
+  if (ok) return Insiyab.wizard(e.detail.el, 'next');
+  phone.setCustomValidity('هذا الرقم غير مسجّل');
+  phone.reportValidity();
+  Insiyab.wizard(e.detail.el, 'stay');
+});
+</demo-code>
+
+<h2 id="more">خطوات تُتخطّى، والبدء من جديد، والتكرار</h2>
+<ul>
+  <li><b>لوح عليه <code>hidden</code></b> يُتخطّى، ومعه نقطته أو رقمه في الخطوات، لمسار يقرّر الخادم طوله.</li>
+  <li><b><code>data-ins-wizard="restart"</code></b> على زرّ يعود إلى الخطوة الأولى.</li>
+  <li><b><code>data-ins-echo="#phone"</code></b> على عنصر يعرض قيمة حقل من خطوة سابقة، كرقم الهاتف في خطوة الرمز.</li>
+  <li><b><code>autofocus</code></b> على حقل في لوح يأخذ التركيز حين تصل خطوته، بدل اللوح نفسه.</li>
+  <li><b><code>data-ins-wizard-motion="slide"</code></b> على المعالج يزلق الخطوات جنبًا إلى جنب بعرضها كاملًا، كبطاقة الدخول.</li>
+</ul>
+
 <h2 id="api">من الشيفرة</h2>
 <demo-code lang="js">
-Insiyab.wizard('#store-wizard');      // رقم الخطوة الحالية
-Insiyab.wizard('#store-wizard', 2);   // انتقل إلى الثالثة
+Insiyab.wizard('#store-wizard');              // رقم الخطوة الحالية
+Insiyab.wizard('#store-wizard', 2);           // إلى الثالثة، بلا تحقّق
+Insiyab.wizard('#store-wizard', 'next');      // أو 'prev' أو 'restart' أو 'stay'
 
 document.addEventListener('ins:wizard', (e) => {
   console.log(e.detail.step, e.detail.panel);
@@ -63,5 +161,11 @@ document.addEventListener('ins:wizard', (e) => {
   document.getElementById('store-wizard').addEventListener('submit', function (e) {
     e.preventDefault();
     Insiyab.toast('تمّ الإرسال', 'ok');
+  });
+  document.getElementById('dialog-wizard').addEventListener('submit', function (e) {
+    e.preventDefault();
+    Insiyab.dialog('#wiz-dialog', 'close');
+    Insiyab.toast('تمّ الحفظ', 'ok');
+    Insiyab.wizard(this, 0);
   });
 </script>
