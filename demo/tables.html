@@ -135,7 +135,7 @@
       <div class="ins-shell-group">المحتوى</div>
       <a class="ins-shell-link" href="typography.html" data-keywords="Typography ثلاثة خطوط مستضافة محليًا ومقسّمة حسب النطاق، وسلّم عناوين، ونصّ طويل محصور في صنفه."><svg class="ico" aria-hidden="true"><use href="#i-type"/></svg>الطباعة</a>
       <a class="ins-shell-link" href="surfaces.html" data-keywords="Surfaces &amp; panels الزجاج المصنفر بطبقاته الأربع، وما يُبنى عليه: البطاقة واللوح."><svg class="ico" aria-hidden="true"><use href="#i-layers"/></svg>الأسطح والألواح</a>
-      <a class="ins-shell-link is-active" href="tables.html" aria-current="page" data-keywords="Tables جدول بيانات يقرأ الأرقام بخطّها، ويتمرّر أفقيًا داخل حاويته لا في الصفحة."><svg class="ico" aria-hidden="true"><use href="#i-table"/></svg>الجداول</a>
+      <a class="ins-shell-link is-active" href="tables.html" aria-current="page" data-keywords="Tables جدول بيانات يقرأ الأرقام بخطّها، ويتمرّر أفقيًا داخل حاويته لا في الصفحة."><svg class="ico" aria-hidden="true"><use href="#i-table"/></svg>الجداول<span class="ins-shell-link-badge">جديد</span></a>
 
       <div class="ins-shell-group">النماذج</div>
       <a class="ins-shell-link" href="inputs.html" data-keywords="Form controls حقل النصّ والقائمة والمنطقة النصّية، بالمقاسات الثلاثة وبالتسمية والتلميح."><svg class="ico" aria-hidden="true"><use href="#i-edit"/></svg>الحقول</a>
@@ -388,6 +388,170 @@
   <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
+<h2 id="sort">الترتيب</h2>
+<p>
+  <code>data-ins-sort</code> على رأس عمود يجعله زرًّا يرتّب الصفوف تصاعديًا ثم تنازليًا، والسهم يقول الاتجاه. الأرقام تُرتَّب
+  أرقامًا والنصوص بترتيب لغة الصفحة، والخليّة الفارغة في الآخر دائمًا. وإن لم يكن النصّ هو القيمة — تاريخ مكتوب بالكلمات مثلًا —
+  ضع القيمة في <code>data-sort-value</code>.
+</p>
+<figure class="dx"><div class="dx-view">
+  <div class="ins-table-wrap">
+    <table class="ins-table">
+      <thead>
+        <tr><th data-ins-sort>الاسم</th><th data-ins-sort>التاريخ</th><th data-ins-sort class="ins-num">المبلغ</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ليلى</td><td data-sort-value="2026-03-02">2 مارس</td><td class="ins-num">249.00</td></tr>
+        <tr><td>عمر</td><td data-sort-value="2026-01-15">15 يناير</td><td class="ins-num">1,180.00</td></tr>
+        <tr><td>سارة</td><td data-sort-value="2026-02-20">20 فبراير</td><td class="ins-num">89.50</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">data-ins-sort</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">data-ins-sort</span><span class="hl-t">&gt;</span>التاريخ<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">data-ins-sort</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>المبلغ<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-sort-value</span>=<span class="hl-s">"2026-03-02"</span><span class="hl-t">&gt;</span>2 مارس<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>249.00<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمر<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-sort-value</span>=<span class="hl-s">"2026-01-15"</span><span class="hl-t">&gt;</span>15 يناير<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>1,180.00<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>سارة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-sort-value</span>=<span class="hl-s">"2026-02-20"</span><span class="hl-t">&gt;</span>20 فبراير<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>89.50<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<p>
+  قبل الترتيب يُطلق <code>ins:sort</code>. إن كان الترتيب على الخادم فألغِه، فيتحرّك السهم وحده وتجلب أنت الصفوف مرتّبة.
+</p>
+<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:sort'</span>, (e) =&gt; {
+  e.preventDefault();                    <span class="hl-c">// الخادم يرتّب</span>
+  load({ column: e.detail.column, dir: e.detail.dir });
+});</code></pre></div>
+
+<h2 id="select">تحديد الصفوف</h2>
+<p>
+  عمود مربّعات <code>.ins-table-check</code>: <code>data-ins-select</code> على مربّع كلّ صفّ، و<code>data-ins-select="all"</code>
+  على مربّع الرأس. الصفّ المحدّد يتلوّن، ومربّع الرأس يصير محدّدًا أو جزئيًا، و<kbd class="ins-kbd">Shift</kbd> مع النقر يحدّد ما بين
+  صفّين. و<code>.ins-bulkbar</code> مع <code>data-ins-bulk="#الجدول"</code> شريط يظهر ما دام شيء محدّدًا، بعدده وإجراءاته،
+  وزرّ <code>data-ins-select="none"</code> فيه يلغي التحديد.
+</p>
+<figure class="dx"><div class="dx-view">
+  <div class="ins-table-wrap">
+    <table class="ins-table" id="people">
+      <thead>
+        <tr>
+          <th class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select="all" aria-label="تحديد الكلّ"></label></th>
+          <th>الاسم</th><th>المدينة</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="ليلى"></label></td><td>ليلى</td><td>الرياض</td></tr>
+        <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="عمر"></label></td><td>عمر</td><td>عمّان</td></tr>
+        <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="سارة"></label></td><td>سارة</td><td>القاهرة</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ins-bulkbar" data-ins-bulk="#people" hidden>
+    <span class="ins-bulkbar-count"></span>
+    <button class="ins-btn ins-btn--secondary ins-btn--sm">تصدير</button>
+    <button class="ins-btn ins-btn--danger ins-btn--sm">حذف</button>
+    <button class="ins-btn ins-btn--bare ins-btn--sm" data-ins-select="none">إلغاء</button>
+  </div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span> <span class="hl-a">id</span>=<span class="hl-s">"people"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span>
+        <span class="hl-t">&lt;th</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">data-ins-select</span>=<span class="hl-s">"all"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"تحديد الكلّ"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span>
+        <span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>المدينة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">data-ins-select</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"ليلى"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الرياض<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">data-ins-select</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"عمر"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمر<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمّان<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">data-ins-select</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"سارة"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>سارة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>القاهرة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-bulkbar"</span> <span class="hl-a">data-ins-bulk</span>=<span class="hl-s">"#people"</span> <span class="hl-a">hidden</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-bulkbar-count"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--sm"</span><span class="hl-t">&gt;</span>تصدير<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--danger ins-btn--sm"</span><span class="hl-t">&gt;</span>حذف<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--bare ins-btn--sm"</span> <span class="hl-a">data-ins-select</span>=<span class="hl-s">"none"</span><span class="hl-t">&gt;</span>إلغاء<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<p>
+  نصّ العدد من <code>data-ins-text="{n} صفوف"</code> على <code>.ins-bulkbar-count</code> إن أردت غير الافتراضي. وكلّ تغيير يُطلق
+  <code>ins:select</code> بالصفوف المحدّدة، و<code>Insiyab.selection('#people')</code> يعيدها.
+</p>
+
+<h2 id="edit">التعديل في مكانه</h2>
+<p>
+  <code>data-ins-edit</code> على خليّة يجعلها قابلة للتعديل: نقرة أو <kbd class="ins-kbd">Enter</kbd> تحوّلها حقلًا،
+  و<kbd class="ins-kbd">Enter</kbd> أو الخروج منه يحفظ، و<kbd class="ins-kbd">Esc</kbd> يعيد القيمة. <code>="number"</code> لرقم،
+  و<code>="select"</code> مع <code>data-ins-options="أ|ب"</code> لقائمة.
+</p>
+<figure class="dx"><div class="dx-view">
+  <div class="ins-table-wrap">
+    <table class="ins-table">
+      <thead><tr><th>الاسم</th><th class="ins-num">الكمّية</th><th>الحالة</th></tr></thead>
+      <tbody>
+        <tr><td data-ins-edit>ليلى</td><td class="ins-num" data-ins-edit="number">12</td><td data-ins-edit="select" data-ins-options="نشط|موقوف">نشط</td></tr>
+        <tr><td data-ins-edit>عمر</td><td class="ins-num" data-ins-edit="number">7</td><td data-ins-edit="select" data-ins-options="نشط|موقوف">موقوف</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>الكمّية<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الحالة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-ins-edit</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span> <span class="hl-a">data-ins-edit</span>=<span class="hl-s">"number"</span><span class="hl-t">&gt;</span>12<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-ins-edit</span>=<span class="hl-s">"select"</span> <span class="hl-a">data-ins-options</span>=<span class="hl-s">"نشط|موقوف"</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-ins-edit</span><span class="hl-t">&gt;</span>عمر<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span> <span class="hl-a">data-ins-edit</span>=<span class="hl-s">"number"</span><span class="hl-t">&gt;</span>7<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-ins-edit</span>=<span class="hl-s">"select"</span> <span class="hl-a">data-ins-options</span>=<span class="hl-s">"نشط|موقوف"</span><span class="hl-t">&gt;</span>موقوف<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<p>
+  قبل أن يُحفظ التغيير يُطلق <code>ins:edit</code>. ألغِه لرفض القيمة، أو احفظها على الخادم واستدعِ <code>revert()</code> إن فشل الحفظ.
+</p>
+<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:edit'</span>, <span class="hl-k">async</span> (e) =&gt; {
+  <span class="hl-k">const</span> ok = <span class="hl-k">await</span> save(e.detail.row, e.detail.value);
+  <span class="hl-k">if</span> (!ok) e.detail.revert();            <span class="hl-c">// تعود القيمة القديمة</span>
+});</code></pre></div>
+
+<h2 id="sticky">رأس ثابت وعمود أوّل ثابت</h2>
+<p>
+  <code>.ins-table-wrap--sticky</code> يضع الجدول الطويل في صندوق يتمرّر داخل ارتفاع (<code>--ins-table-max</code>، 32rem)
+  ويبقي شريط الرأس ظاهرًا. و<code>.ins-table-wrap--pin</code> يبقي العمود الأوّل ظاهرًا حين يتمرّر جدول عريض أفقيًا. ويجتمعان.
+</p>
+<figure class="dx"><div class="dx-view">
+  <div class="ins-table-wrap ins-table-wrap--sticky ins-table-wrap--pin" style="--ins-table-max: 16rem">
+    <table class="ins-table" style="min-inline-size: 56rem">
+      <thead><tr><th>الاسم</th><th>المدينة</th><th>البريد</th><th>الهاتف</th><th>القسم</th><th>الحالة</th></tr></thead>
+      <tbody>
+        <tr><td>ليلى</td><td>الرياض</td><td dir="ltr">layla@example.com</td><td dir="ltr">+966 50 000 0001</td><td>المبيعات</td><td>نشط</td></tr>
+        <tr><td>عمر</td><td>عمّان</td><td dir="ltr">omar@example.com</td><td dir="ltr">+962 79 000 0002</td><td>الدعم</td><td>نشط</td></tr>
+        <tr><td>سارة</td><td>القاهرة</td><td dir="ltr">sara@example.com</td><td dir="ltr">+20 10 0000 0003</td><td>المالية</td><td>موقوف</td></tr>
+        <tr><td>كريم</td><td>دبي</td><td dir="ltr">karim@example.com</td><td dir="ltr">+971 50 000 0004</td><td>المبيعات</td><td>نشط</td></tr>
+        <tr><td>نور</td><td>الدوحة</td><td dir="ltr">nour@example.com</td><td dir="ltr">+974 5000 0005</td><td>الدعم</td><td>نشط</td></tr>
+        <tr><td>هادي</td><td>بيروت</td><td dir="ltr">hadi@example.com</td><td dir="ltr">+961 70 000 006</td><td>المالية</td><td>نشط</td></tr>
+        <tr><td>ريم</td><td>الكويت</td><td dir="ltr">reem@example.com</td><td dir="ltr">+965 5000 0007</td><td>المبيعات</td><td>موقوف</td></tr>
+        <tr><td>يوسف</td><td>مسقط</td><td dir="ltr">yousef@example.com</td><td dir="ltr">+968 9000 0008</td><td>الدعم</td><td>نشط</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap ins-table-wrap--sticky ins-table-wrap--pin"</span> <span class="hl-a">style</span>=<span class="hl-s">"--ins-table-max: 16rem"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span> <span class="hl-a">style</span>=<span class="hl-s">"min-inline-size: 56rem"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>المدينة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>البريد<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الهاتف<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>القسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الحالة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الرياض<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>layla@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+966 50 000 0001<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>المبيعات<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمر<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمّان<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>omar@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+962 79 000 0002<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الدعم<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>سارة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>القاهرة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>sara@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+20 10 0000 0003<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>المالية<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>موقوف<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>كريم<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>دبي<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>karim@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+971 50 000 0004<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>المبيعات<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نور<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الدوحة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>nour@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+974 5000 0005<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الدعم<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>هادي<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>بيروت<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>hadi@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+961 70 000 006<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>المالية<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ريم<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الكويت<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>reem@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+965 5000 0007<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>المبيعات<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>موقوف<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>يوسف<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>مسقط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>yousef@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+968 9000 0008<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الدعم<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
 <h2 id="empty">جدول فارغ</h2>
 <p>
   حين لا بيانات، ضع <code>.ins-empty</code> في خليّة بعرض الجدول، فيختفي شريط الرأس ويبقى
@@ -426,7 +590,7 @@
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="surfaces.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الأسطح والألواح</span></a><a class="site-pager-link site-pager-link--next" href="inputs.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الحقول</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">جدول بيانات</a><a href="#panel">داخل لوح</a><a href="#numbers">الأرقام</a><a href="#actions">إجراءات الصفّ</a><a href="#empty">جدول فارغ</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">جدول بيانات</a><a href="#panel">داخل لوح</a><a href="#numbers">الأرقام</a><a href="#actions">إجراءات الصفّ</a><a href="#sort">الترتيب</a><a href="#select">تحديد الصفوف</a><a href="#edit">التعديل في مكانه</a><a href="#sticky">رأس ثابت وعمود أوّل ثابت</a><a href="#empty">جدول فارغ</a></nav>
       </div>
     </main>
   </div>

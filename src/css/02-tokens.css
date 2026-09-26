@@ -249,6 +249,8 @@
      comfortable at. `.ins-container--narrow` and `--wide` swap the first. */
   --ins-container: 75rem;
   --ins-measure: 70ch;
+  /* The height a `.ins-table-wrap--sticky` scrolls inside. */
+  --ins-table-max: 32rem;
 
   /* Arabic first: Tajawal is the identity, and it carries its own Latin subset, so
      a Latin acronym inside an Arabic line stays in Tajawal rather than jumping to

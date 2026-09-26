@@ -85,6 +85,121 @@
   </div>
 </demo-example>
 
+<h2 id="sort">الترتيب</h2>
+<p>
+  <code>data-ins-sort</code> على رأس عمود يجعله زرًّا يرتّب الصفوف تصاعديًا ثم تنازليًا، والسهم يقول الاتجاه. الأرقام تُرتَّب
+  أرقامًا والنصوص بترتيب لغة الصفحة، والخليّة الفارغة في الآخر دائمًا. وإن لم يكن النصّ هو القيمة — تاريخ مكتوب بالكلمات مثلًا —
+  ضع القيمة في <code>data-sort-value</code>.
+</p>
+<demo-example>
+  <div class="ins-table-wrap">
+    <table class="ins-table">
+      <thead>
+        <tr><th data-ins-sort>الاسم</th><th data-ins-sort>التاريخ</th><th data-ins-sort class="ins-num">المبلغ</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ليلى</td><td data-sort-value="2026-03-02">2 مارس</td><td class="ins-num">249.00</td></tr>
+        <tr><td>عمر</td><td data-sort-value="2026-01-15">15 يناير</td><td class="ins-num">1,180.00</td></tr>
+        <tr><td>سارة</td><td data-sort-value="2026-02-20">20 فبراير</td><td class="ins-num">89.50</td></tr>
+      </tbody>
+    </table>
+  </div>
+</demo-example>
+<p>
+  قبل الترتيب يُطلق <code>ins:sort</code>. إن كان الترتيب على الخادم فألغِه، فيتحرّك السهم وحده وتجلب أنت الصفوف مرتّبة.
+</p>
+<demo-code lang="js">
+document.addEventListener('ins:sort', (e) => {
+  e.preventDefault();                    // الخادم يرتّب
+  load({ column: e.detail.column, dir: e.detail.dir });
+});
+</demo-code>
+
+<h2 id="select">تحديد الصفوف</h2>
+<p>
+  عمود مربّعات <code>.ins-table-check</code>: <code>data-ins-select</code> على مربّع كلّ صفّ، و<code>data-ins-select="all"</code>
+  على مربّع الرأس. الصفّ المحدّد يتلوّن، ومربّع الرأس يصير محدّدًا أو جزئيًا، و<kbd class="ins-kbd">Shift</kbd> مع النقر يحدّد ما بين
+  صفّين. و<code>.ins-bulkbar</code> مع <code>data-ins-bulk="#الجدول"</code> شريط يظهر ما دام شيء محدّدًا، بعدده وإجراءاته،
+  وزرّ <code>data-ins-select="none"</code> فيه يلغي التحديد.
+</p>
+<demo-example>
+  <div class="ins-table-wrap">
+    <table class="ins-table" id="people">
+      <thead>
+        <tr>
+          <th class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select="all" aria-label="تحديد الكلّ"></label></th>
+          <th>الاسم</th><th>المدينة</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="ليلى"></label></td><td>ليلى</td><td>الرياض</td></tr>
+        <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="عمر"></label></td><td>عمر</td><td>عمّان</td></tr>
+        <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="سارة"></label></td><td>سارة</td><td>القاهرة</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ins-bulkbar" data-ins-bulk="#people" hidden>
+    <span class="ins-bulkbar-count"></span>
+    <button class="ins-btn ins-btn--secondary ins-btn--sm">تصدير</button>
+    <button class="ins-btn ins-btn--danger ins-btn--sm">حذف</button>
+    <button class="ins-btn ins-btn--bare ins-btn--sm" data-ins-select="none">إلغاء</button>
+  </div>
+</demo-example>
+<p>
+  نصّ العدد من <code>data-ins-text="{n} صفوف"</code> على <code>.ins-bulkbar-count</code> إن أردت غير الافتراضي. وكلّ تغيير يُطلق
+  <code>ins:select</code> بالصفوف المحدّدة، و<code>Insiyab.selection('#people')</code> يعيدها.
+</p>
+
+<h2 id="edit">التعديل في مكانه</h2>
+<p>
+  <code>data-ins-edit</code> على خليّة يجعلها قابلة للتعديل: نقرة أو <kbd class="ins-kbd">Enter</kbd> تحوّلها حقلًا،
+  و<kbd class="ins-kbd">Enter</kbd> أو الخروج منه يحفظ، و<kbd class="ins-kbd">Esc</kbd> يعيد القيمة. <code>="number"</code> لرقم،
+  و<code>="select"</code> مع <code>data-ins-options="أ|ب"</code> لقائمة.
+</p>
+<demo-example>
+  <div class="ins-table-wrap">
+    <table class="ins-table">
+      <thead><tr><th>الاسم</th><th class="ins-num">الكمّية</th><th>الحالة</th></tr></thead>
+      <tbody>
+        <tr><td data-ins-edit>ليلى</td><td class="ins-num" data-ins-edit="number">12</td><td data-ins-edit="select" data-ins-options="نشط|موقوف">نشط</td></tr>
+        <tr><td data-ins-edit>عمر</td><td class="ins-num" data-ins-edit="number">7</td><td data-ins-edit="select" data-ins-options="نشط|موقوف">موقوف</td></tr>
+      </tbody>
+    </table>
+  </div>
+</demo-example>
+<p>
+  قبل أن يُحفظ التغيير يُطلق <code>ins:edit</code>. ألغِه لرفض القيمة، أو احفظها على الخادم واستدعِ <code>revert()</code> إن فشل الحفظ.
+</p>
+<demo-code lang="js">
+document.addEventListener('ins:edit', async (e) => {
+  const ok = await save(e.detail.row, e.detail.value);
+  if (!ok) e.detail.revert();            // تعود القيمة القديمة
+});
+</demo-code>
+
+<h2 id="sticky">رأس ثابت وعمود أوّل ثابت</h2>
+<p>
+  <code>.ins-table-wrap--sticky</code> يضع الجدول الطويل في صندوق يتمرّر داخل ارتفاع (<code>--ins-table-max</code>، 32rem)
+  ويبقي شريط الرأس ظاهرًا. و<code>.ins-table-wrap--pin</code> يبقي العمود الأوّل ظاهرًا حين يتمرّر جدول عريض أفقيًا. ويجتمعان.
+</p>
+<demo-example>
+  <div class="ins-table-wrap ins-table-wrap--sticky ins-table-wrap--pin" style="--ins-table-max: 16rem">
+    <table class="ins-table" style="min-inline-size: 56rem">
+      <thead><tr><th>الاسم</th><th>المدينة</th><th>البريد</th><th>الهاتف</th><th>القسم</th><th>الحالة</th></tr></thead>
+      <tbody>
+        <tr><td>ليلى</td><td>الرياض</td><td dir="ltr">layla@example.com</td><td dir="ltr">+966 50 000 0001</td><td>المبيعات</td><td>نشط</td></tr>
+        <tr><td>عمر</td><td>عمّان</td><td dir="ltr">omar@example.com</td><td dir="ltr">+962 79 000 0002</td><td>الدعم</td><td>نشط</td></tr>
+        <tr><td>سارة</td><td>القاهرة</td><td dir="ltr">sara@example.com</td><td dir="ltr">+20 10 0000 0003</td><td>المالية</td><td>موقوف</td></tr>
+        <tr><td>كريم</td><td>دبي</td><td dir="ltr">karim@example.com</td><td dir="ltr">+971 50 000 0004</td><td>المبيعات</td><td>نشط</td></tr>
+        <tr><td>نور</td><td>الدوحة</td><td dir="ltr">nour@example.com</td><td dir="ltr">+974 5000 0005</td><td>الدعم</td><td>نشط</td></tr>
+        <tr><td>هادي</td><td>بيروت</td><td dir="ltr">hadi@example.com</td><td dir="ltr">+961 70 000 006</td><td>المالية</td><td>نشط</td></tr>
+        <tr><td>ريم</td><td>الكويت</td><td dir="ltr">reem@example.com</td><td dir="ltr">+965 5000 0007</td><td>المبيعات</td><td>موقوف</td></tr>
+        <tr><td>يوسف</td><td>مسقط</td><td dir="ltr">yousef@example.com</td><td dir="ltr">+968 9000 0008</td><td>الدعم</td><td>نشط</td></tr>
+      </tbody>
+    </table>
+  </div>
+</demo-example>
+
 <h2 id="empty">جدول فارغ</h2>
 <p>
   حين لا بيانات، ضع <code>.ins-empty</code> في خليّة بعرض الجدول، فيختفي شريط الرأس ويبقى
