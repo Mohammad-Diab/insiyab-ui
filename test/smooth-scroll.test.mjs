@@ -21,7 +21,9 @@ const top0 = () => E(`window.scrollTo({ top: 0, behavior: 'instant' }); document
 const landing = () => E(`(() => { const t = document.getElementById('far-target').getBoundingClientRect().top;
   const bar = document.querySelector('.ins-topbar').getBoundingClientRect().bottom; return { t: Math.round(t), bar: Math.round(bar) }; })()`);
 
-// 1. Default: instant, and below the bar.
+// 1. Default: instant, and below the bar. The docs site opts its pages in, so take
+// the class off first: this is the library's default being tested, not the site's.
+await E(`document.documentElement.classList.remove('ins-scroll-smooth'); 0`);
 await top0(); await b.sleep(200);
 await b.click('#jump'); await b.sleep(40);
 const y1 = await Y(); await b.sleep(400); const y1f = await Y();

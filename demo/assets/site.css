@@ -74,14 +74,28 @@
 }
 
 /* --------------------------------------------------------------- page column */
-.site-page {
-  max-inline-size: 60rem;
-  margin-inline: auto;
-  padding-block: .5rem 1rem;
+/* Every page uses the app layout: the content fills the width beside the sidebar.
+   A docs page puts its contents list in a column of its own once there is room for
+   one; below that the list goes, and the sidebar and the search are the way round. */
+.site-page { padding-block: .5rem 1rem; }
+.site-doc .site-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 13rem;
+  gap: 2.5rem;
+  align-items: start;
 }
-.site-lead { max-inline-size: 62ch; }
+@media (max-width: 1200px) {
+  .site-doc .site-page { grid-template-columns: minmax(0, 1fr); }
+  .site-toc { display: none; }
+}
+.site-doc .site-body > .site-lead {
+  margin: 0;
+  max-inline-size: 62ch;
+  font-size: var(--ins-fs-lg);
+  color: var(--ins-text-2);
+}
 
-.site-doc .site-page > h2 {
+.site-doc .site-body > h2 {
   margin: 3rem 0 .75rem;
   font-size: var(--ins-fs-h3);
   font-weight: 700;
@@ -89,25 +103,25 @@
   color: var(--ins-text-1);
   scroll-margin-block-start: 5.5rem;
 }
-.site-doc .site-page > h3 {
+.site-doc .site-body > h3 {
   margin: 1.75rem 0 .5rem;
   font-size: var(--ins-fs-lg);
   font-weight: 700;
   color: var(--ins-text-1);
   scroll-margin-block-start: 5.5rem;
 }
-.site-doc .site-page > p,
-.site-doc .site-page > ul,
-.site-doc .site-page > ol {
+.site-doc .site-body > p,
+.site-doc .site-body > ul,
+.site-doc .site-body > ol {
   margin: 0 0 1rem;
   max-inline-size: 72ch;
   color: var(--ins-text-2);
   line-height: 1.9;
 }
-.site-doc .site-page > ul,
-.site-doc .site-page > ol { padding-inline-start: 1.25rem; }
-.site-doc .site-page > ul li,
-.site-doc .site-page > ol li { margin-block-end: .25rem; }
+.site-doc .site-body > ul,
+.site-doc .site-body > ol { padding-inline-start: 1.25rem; }
+.site-doc .site-body > ul li,
+.site-doc .site-body > ol li { margin-block-end: .25rem; }
 .site-page strong { color: var(--ins-text-1); }
 /* No face here ships an italic, and a synthesised one leans Arabic the wrong way —
    so emphasis is colour, as it is inside .ins-prose. */
@@ -141,28 +155,6 @@
 }
 .site-note b { color: var(--ins-text-1); }
 .site-note--warn { border-color: var(--ins-tone-warn-bd); background: var(--ins-tone-warn-bg); }
-
-/* --------------------------------------------------------------- on this page */
-.site-toc {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .375rem;
-  margin: -.5rem 0 1.5rem;
-}
-.site-toc-label { font-size: var(--ins-fs-xs); font-weight: 700; color: var(--ins-text-3); margin-inline-end: .25rem; }
-.site-toc a {
-  font-size: .75rem;
-  font-weight: 700;
-  padding: .3rem .75rem;
-  border-radius: var(--ins-r-pill);
-  background: var(--ins-ctl-bg);
-  border: 1px solid var(--ins-line);
-  color: var(--ins-text-2);
-  text-decoration: none;
-  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease), transform var(--ins-t-pop) var(--ins-ease);
-}
-.site-toc a:hover { background: var(--ins-ctl-bg-hover); color: var(--ins-text-1); transform: translateY(-1px); }
 
 /* --------------------------------------------------------------- example */
 /* The view is NOT a glass surface, on purpose: the library de-nests glass inside
@@ -198,7 +190,7 @@
   background: var(--code-bg);
 }
 /* A listing on its own, not under an example. */
-.site-page > .dx-code,
+.site-body > .dx-code,
 .dx-code:first-child { border-block-start: 1px solid var(--view-bd); border-radius: var(--ins-r-lg); margin-block-end: 1.5rem; }
 .dx-code pre {
   margin: 0;
@@ -406,9 +398,8 @@
 /* The home page uses the app layout: the full width of the content area, with the
    shell's own padding and 1rem between sections, as an application screen does.
    The documentation pages keep their reading column. */
-.site-home .site-page {
-  max-inline-size: none;
-  padding-block: 0;
+.site-home .site-page { padding-block: 0; }
+.site-home .site-body {
   display: flex;
   flex-direction: column;
   gap: var(--ins-sp-4);
