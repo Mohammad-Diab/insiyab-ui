@@ -738,8 +738,12 @@ a:hover { color: var(--ins-tone-brand-soft); }
 
 ::selection { background: rgba(var(--ins-primary-rgb), .22); }
 
+/* The track stops short of the box's ends, so in a rounded box that scrolls (a code
+   listing, a dialog body, a contents list) the thumb never runs into the corner and
+   pokes out past the curve. */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-track { background: transparent; margin: 10px; }
+::-webkit-scrollbar-corner { background: transparent; }
 ::-webkit-scrollbar-thumb {
   background: rgba(var(--ins-primary-rgb), .28);
   border-radius: 4px;

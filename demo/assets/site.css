@@ -194,6 +194,7 @@
 .dx-code:first-child { border-block-start: 1px solid var(--view-bd); border-radius: var(--ins-r-lg); margin-block-end: 1.5rem; }
 .dx-code pre {
   margin: 0;
+  border-radius: inherit;
   padding: 1rem 1.25rem;
   overflow-x: auto;
   max-block-size: 26rem;
