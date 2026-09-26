@@ -2,13 +2,14 @@
 <p>
   <code>.ins-page-head</code>: العنوان <code>.ins-page-title</code> وسطر تحته <code>.ins-page-sub</code> داخل
   <code>.ins-page-head-text</code>، والإجراءات <code>.ins-page-actions</code> في النهاية، تلتفّ تحت العنوان على
-  الشاشة الضيّقة. ومسار التنقّل أوّل الرأس يأخذ سطرًا وحده.
+  الشاشة الضيّقة. ومسار التنقّل، إن كان، أوّل الرأس يأخذ سطرًا وحده.
 </p>
 <demo-example>
   <header class="ins-page-head">
     <nav class="ins-breadcrumb" aria-label="مسار التنقّل">
       <ol>
         <li><a href="#head">الرئيسية</a></li>
+        <li><a href="#head">القسم</a></li>
         <li><span aria-current="page">الصفحة</span></li>
       </ol>
     </nav>
@@ -24,8 +25,9 @@
 
 <h2 id="breadcrumb">مسار التنقّل</h2>
 <p>
-  <code>&lt;nav class="ins-breadcrumb"&gt;</code> حول قائمة مرتّبة. الفاصل مرسوم لا حرف، وينقلب مع الاتجاه،
-  والعنصر الأخير <code>aria-current="page"</code> بلا رابط.
+  <code>&lt;nav class="ins-breadcrumb"&gt;</code> حول قائمة مرتّبة، لصفحة على عمق ثلاثة مستويات فأكثر؛ الصفحة
+  التي يصل إليها الشريط الجانبي مباشرةً لا تحتاجه. الفاصل مرسوم لا حرف، وينقلب مع الاتجاه، والعنصر الأخير
+  <code>aria-current="page"</code> بلا رابط، والنصّ الطويل يُقصّ بنقاط.
 </p>
 <demo-example>
   <nav class="ins-breadcrumb" aria-label="مسار التنقّل">

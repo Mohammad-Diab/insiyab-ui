@@ -449,51 +449,71 @@ html[dir="ltr"] .ins-page-title {
        </ol>
      </nav>
 
-   The separator is drawn, not typed, so it is not read aloud as "greater than"
-   between every crumb, and it points the way the trail runs: toward the end of the
-   line, which is the left on an Arabic page. Inside a page header it takes a line
-   of its own above the title. */
+   For a page three or more levels deep. A page one step from the sidebar needs
+   none: the sidebar already says where it is.
+
+   The trail is a glass island like the top bar's, as wide as its crumbs. Each
+   crumb is a pill, and the current page is the raised one, the same way a
+   segmented control shows its selected segment. The separator is drawn, not typed,
+   so it is not read aloud as "greater than" between every crumb, and it points the
+   way the trail runs: toward the end of the line, the left on an Arabic page. The
+   trail stays on one line; a long crumb is cut with an ellipsis rather than
+   wrapping the pill onto a second row. */
 .ins-breadcrumb ol {
   list-style: none;
   margin: 0;
-  padding: 0;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: .125rem;
-  font-size: var(--ins-fs-sm);
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  padding: .25rem;
+  border-radius: var(--ins-r-pill);
+  border: 1px solid var(--ins-rim);
+  border-top-color: var(--ins-rim-top);
+  background: var(--ins-glass);
+  box-shadow: var(--ins-sh-bubble), var(--ins-bevel);
+  font-size: .8125rem;
+  font-weight: 700;
+}
+@supports (backdrop-filter: blur(1px)) {
+  .ins-breadcrumb ol { -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
 }
 .ins-breadcrumb li { display: inline-flex; align-items: center; gap: .125rem; min-inline-size: 0; }
 .ins-breadcrumb li + li::before {
   content: "";
   flex: 0 0 auto;
-  inline-size: .375rem;
-  block-size: .375rem;
-  margin-inline: .375rem;
+  inline-size: .3125rem;
+  block-size: .3125rem;
+  margin-inline: .25rem;
   border-top: 1.5px solid var(--ins-text-3);
   border-right: 1.5px solid var(--ins-text-3);
 }
 [dir="ltr"] .ins-breadcrumb li + li::before { transform: rotate(45deg); }
 [dir="rtl"] .ins-breadcrumb li + li::before { transform: rotate(-135deg); }
-.ins-breadcrumb a {
-  padding: .125rem .375rem;
-  border-radius: var(--ins-r-xs);
-  font-weight: 600;
-  color: var(--ins-label);
-  text-decoration: none;
-  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
-}
-.ins-breadcrumb a:hover { background: var(--ins-ctl-bg); color: var(--ins-text-1); }
+.ins-breadcrumb a,
 .ins-breadcrumb [aria-current="page"] {
-  padding-inline: .375rem;
-  font-weight: 700;
-  color: var(--ins-text-1);
-  max-inline-size: 24ch;
+  display: block;
+  padding: .375rem .75rem;
+  border-radius: var(--ins-r-pill);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.ins-page-head > .ins-breadcrumb { flex-basis: 100%; margin-block-end: calc(var(--ins-sp-3) * -1); }
+.ins-breadcrumb a {
+  max-inline-size: 16ch;
+  color: var(--ins-text-2);
+  text-decoration: none;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-breadcrumb a:hover { background: var(--ins-surface-hover); color: var(--ins-primary-darker); }
+.ins-breadcrumb [aria-current="page"] {
+  max-inline-size: 24ch;
+  background: var(--ins-seg-on-bg);
+  color: var(--ins-seg-on-fg);
+  box-shadow: var(--ins-seg-on-shadow);
+}
+.ins-page-head > .ins-breadcrumb { flex-basis: 100%; }
 
 /* --------------------------------------------------------------- steps */
 /* Where you are in a sequence: a checkout, a signup, an import. Numbered by a CSS
