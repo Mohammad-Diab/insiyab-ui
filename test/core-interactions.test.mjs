@@ -178,8 +178,11 @@ ok('navbar: Escape closes', await E(`!document.querySelector('.ins-navbar').clas
 await b.size(1440, 1000);
 
 // ------------------------------------------------------------------ findings
+ok('scrolled top bar is frosted, on the layer behind the islands, not on the bar', await E(`(() => { const r = document.documentElement; r.setAttribute('data-ins-scrolled','');
+  const bar = document.querySelector('.ins-topbar'); const v = getComputedStyle(bar, '::before').backdropFilter;
+  return v !== 'none' && getComputedStyle(bar).backdropFilter === 'none'; })()`));
 ok('fx-off: scrolled top bar loses its frost', await E(`(() => { const r = document.documentElement; r.setAttribute('data-ins-fx','off'); r.setAttribute('data-ins-scrolled','');
-  const v = getComputedStyle(document.querySelector('.ins-topbar')).backdropFilter; r.removeAttribute('data-ins-fx'); return v === 'none'; })()`));
+  const v = getComputedStyle(document.querySelector('.ins-topbar'), '::before').backdropFilter; r.removeAttribute('data-ins-fx'); return v === 'none'; })()`));
 
 ok('no console errors or exceptions', b.logs.length === 0, b.logs.join(' | '));
 await b.close();
