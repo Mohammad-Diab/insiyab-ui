@@ -107,6 +107,39 @@
 .ins-avatar--sm { inline-size: 30px; block-size: 30px; font-size: .75rem; }
 .ins-avatar--lg { inline-size: 46px; block-size: 46px; font-size: 1.125rem; }
 
+/* A photo in an avatar fills its disc. */
+.ins-avatar > img { inline-size: 100%; block-size: 100%; border-radius: 50%; object-fit: cover; }
+
+/* --------------------------------------------------------------- avatar group */
+/* Several people as one overlapping row, with the rest counted:
+
+     <div class="ins-avatars" aria-label="المشاركون: 7">
+       <span class="ins-avatar ins-avatar--sm">ل</span> …
+       <span class="ins-avatar ins-avatar--sm ins-avatar--more">+4</span>
+     </div>
+
+   Each disc is ringed in the surface colour, so where two overlap there is a gap
+   between them rather than one blob. The first in reading order is on top. */
+.ins-avatars { display: inline-flex; align-items: center; isolation: isolate; }
+.ins-avatars > .ins-avatar { box-shadow: 0 0 0 2px var(--ins-glass-strong); }
+.ins-avatars > .ins-avatar + .ins-avatar { margin-inline-start: -.5rem; }
+.ins-avatars > .ins-avatar:nth-child(1) { z-index: 6; }
+.ins-avatars > .ins-avatar:nth-child(2) { z-index: 5; }
+.ins-avatars > .ins-avatar:nth-child(3) { z-index: 4; }
+.ins-avatars > .ins-avatar:nth-child(4) { z-index: 3; }
+.ins-avatars > .ins-avatar:nth-child(5) { z-index: 2; }
+.ins-avatars > .ins-avatar:nth-child(6) { z-index: 1; }
+.ins-avatar--more {
+  background: var(--ins-tone-mute-bg);
+  color: var(--ins-text-2);
+  font-family: var(--ins-font-body-en);
+  font-weight: 700;
+  /* "+4", not "4+": the sign would move to the other end in an Arabic line. */
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+:root[data-ins-theme="dark"] .ins-avatar--more { background: rgba(255, 255, 255, .12); color: var(--ins-text-1); }
+
 /* --------------------------------------------------------------- motion */
 /* A pill is usually a label, not a control, so the lift is scoped to the ones that
    are actually pressable. A label that reacts to the pointer is a label promising

@@ -2035,6 +2035,174 @@ html[dir="ltr"] .ins-prose { line-height: 1.65; }
 .ins-divider--v::before,
 .ins-divider--v::after { content: none; }
 
+/* --------------------------------------------------------- description list */
+/* Facts about one thing, as label and value: a record's details page.
+
+     <dl class="ins-dl">
+       <div><dt>رقم الطلب</dt><dd>1042</dd></div> …
+     </dl>
+
+   Each pair in its own `<div>`, which a `<dl>` allows, so a row can be ruled and
+   laid out as one. The label keeps a column of its own and the values line up
+   beside it; on a phone the label goes above its value. `.ins-dl--grid` sets the
+   pairs out in columns instead, label over value, for a summary of many short
+   facts. */
+/* It measures itself, not the screen: in a narrow side panel on a wide screen the
+   label goes above its value too. */
+.ins-dl { display: grid; margin: 0; container-type: inline-size; }
+.ins-dl > div {
+  display: grid;
+  grid-template-columns: minmax(7rem, 13rem) minmax(0, 1fr);
+  gap: .25rem 1rem;
+  align-items: baseline;
+  padding-block: .75rem;
+  border-block-end: 1px solid var(--ins-line);
+}
+.ins-dl > div:first-child { padding-block-start: 0; }
+.ins-dl > div:last-child { padding-block-end: 0; border-block-end: 0; }
+.ins-dl dt { font-size: var(--ins-fs-sm); font-weight: 700; color: var(--ins-label); }
+.ins-dl dd { margin: 0; font-size: var(--ins-fs-md); color: var(--ins-text-1); overflow-wrap: anywhere; }
+/* A figure keeps its own direction and still starts where the other values do. */
+html[dir="rtl"] .ins-dl dd.ins-num { text-align: right; }
+html[dir="ltr"] .ins-dl dd.ins-num { text-align: left; }
+.ins-dl--grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(12rem, 100%), 1fr));
+  gap: 1.25rem 1.5rem;
+}
+.ins-dl--grid > div,
+.ins-dl--grid > div:first-child,
+.ins-dl--grid > div:last-child { grid-template-columns: minmax(0, 1fr); padding: 0; border: 0; }
+@container (max-width: 26rem) {
+  .ins-dl > div { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* --------------------------------------------------------------- quote */
+/* A passage quoted from somewhere, with where it came from:
+
+     <figure class="ins-quote">
+       <blockquote>…</blockquote>
+       <figcaption class="ins-quote-source"><a href="…">دليل السياسات</a> · ص 12</figcaption>
+     </figure>
+
+   A brand bar at its leading edge and a quiet fill, so it reads as someone else's
+   words set into the page. The source is smaller and carries a document mark. */
+.ins-quote {
+  margin: 0;
+  padding-block: .875rem;
+  padding-inline: 1.125rem 1rem;
+  border-radius: var(--ins-r-md);
+  border: 1px solid var(--ins-line);
+  border-inline-start: 3px solid var(--ins-tone-brand-soft);
+  background: var(--ins-glass-inner);
+}
+.ins-quote > blockquote { margin: 0; font-size: var(--ins-fs-md); line-height: 1.9; color: var(--ins-text-1); }
+.ins-quote-source {
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+  margin-block-start: .5rem;
+  font-size: var(--ins-fs-xs);
+  color: var(--ins-text-2);
+}
+.ins-quote-source::before {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: .875rem;
+  block-size: .875rem;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5M9 13h6M9 17h4'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5M9 13h6M9 17h4'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.ins-quote-source a { color: var(--ins-tone-brand); font-weight: 700; text-decoration: none; }
+.ins-quote-source a:hover { text-decoration: underline; }
+:root[data-ins-theme="dark"] .ins-quote-source a { color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-quote-source a {
+    color: var(--ins-text-1);
+  }
+}
+
+/* A reference marker in running text: a small numbered link to a source or a note,
+   `<a class="ins-ref" href="#src-1">1</a>`. Raised and boxed rather than a bare
+   superscript, so a finger can hit it. */
+.ins-ref {
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: 1.125rem;
+  block-size: 1.125rem;
+  margin-inline: .125rem;
+  padding-inline: .25rem;
+  border-radius: var(--ins-r-xs);
+  background: var(--ins-tone-brand-bg);
+  color: var(--ins-tone-brand);
+  font-family: var(--ins-font-body-en);
+  font-size: .625rem;
+  font-weight: 800;
+  line-height: 1;
+  vertical-align: super;
+  text-decoration: none;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-ref:hover, .ins-ref.is-lit { background: var(--ins-tone-brand-soft); color: var(--ins-on-primary); }
+.ins-ref:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
+:root[data-ins-theme="dark"] .ins-ref:not(:hover, .is-lit) { color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-ref:not(:hover, .is-lit) {
+    color: var(--ins-text-1);
+  }
+}
+
+/* --------------------------------------------------------------- highlight */
+/* Part of a text marked, in one of the tones, and optionally tied to a note that
+   says why: `<mark class="ins-mark ins-mark--warn" data-ins-note="#n1">…</mark>`.
+   Pointing at either one lights both, a click on the mark brings its note into view,
+   and the note is read out with the mark. Several marks may share a note. It wraps
+   across lines as one highlight rather than a box per line. */
+.ins-mark {
+  --ins-mark-bg: var(--ins-tone-warn-bg);
+  --ins-mark-bd: var(--ins-tone-warn-bd);
+  padding: .0625em .1875em;
+  border-radius: 4px;
+  background: var(--ins-mark-bg);
+  box-shadow: inset 0 -2px 0 var(--ins-mark-bd);
+  color: inherit;
+  -webkit-box-decoration-break: clone;
+          box-decoration-break: clone;
+  transition: background var(--ins-t-pop) var(--ins-ease), box-shadow var(--ins-t-pop) var(--ins-ease);
+}
+.ins-mark--ok    { --ins-mark-bg: var(--ins-tone-ok-bg);    --ins-mark-bd: var(--ins-tone-ok-bd); }
+.ins-mark--bad   { --ins-mark-bg: var(--ins-tone-bad-bg);   --ins-mark-bd: var(--ins-tone-bad-bd); }
+.ins-mark--info  { --ins-mark-bg: var(--ins-tone-info-bg);  --ins-mark-bd: var(--ins-tone-info-bd); }
+.ins-mark--brand { --ins-mark-bg: var(--ins-tone-brand-bg); --ins-mark-bd: var(--ins-tone-brand-bd); }
+.ins-mark[data-ins-note] { cursor: pointer; outline: 0; }
+.ins-mark.is-lit,
+.ins-mark[data-ins-note]:focus-visible {
+  background: var(--ins-mark-bd);
+  box-shadow: inset 0 -2px 0 currentColor;
+}
+
+/* A note: a remark about the text, in its tone, which a mark can point at. */
+.ins-note {
+  --ins-note-bar: var(--ins-tone-warn);
+  padding-block: .625rem;
+  padding-inline: .875rem;
+  border-radius: var(--ins-r-sm);
+  border: 1px solid var(--ins-line);
+  border-inline-start: 3px solid var(--ins-note-bar);
+  background: var(--ins-glass-inner);
+  font-size: var(--ins-fs-sm);
+  line-height: 1.8;
+  color: var(--ins-text-1);
+  transition: background var(--ins-t-pop) var(--ins-ease), box-shadow var(--ins-t-pop) var(--ins-ease);
+}
+.ins-note--ok    { --ins-note-bar: var(--ins-tone-ok); }
+.ins-note--bad   { --ins-note-bar: var(--ins-tone-bad); }
+.ins-note--info  { --ins-note-bar: var(--ins-tone-info); }
+.ins-note--brand { --ins-note-bar: var(--ins-tone-brand-soft); }
+.ins-note.is-lit { background: var(--ins-glass-strong); box-shadow: 0 0 0 2px var(--ins-note-bar), var(--ins-sh-md); }
+
 /* ==========================================================================
    Insiyab · panel and card
    ==========================================================================
@@ -2328,6 +2496,65 @@ html[dir="ltr"] .ins-prose { line-height: 1.65; }
    library makes. */
 [dir="ltr"] :is(a, button).ins-list-item:hover::after { transform: translateX(2px) rotate(45deg); }
 [dir="rtl"] :is(a, button).ins-list-item:hover::after { transform: translateX(-2px) rotate(-135deg); }
+
+/* --------------------------------------------------------------- comment */
+/* One person's words in a thread: a comment on a record, a message, a reply.
+
+     <article class="ins-comment">
+       <span class="ins-avatar ins-avatar--sm">ل</span>
+       <div class="ins-comment-body">
+         <div class="ins-comment-head">
+           <b class="ins-comment-name">ليلى</b>
+           <time class="ins-comment-time" datetime="…">قبل ساعتين</time>
+         </div>
+         <div class="ins-comment-text">…</div>
+         <div class="ins-comment-actions">…</div>
+       </div>
+     </article>
+
+   `.ins-thread` stacks them, and `.ins-comment-replies` inside a body indents the
+   answers under a rule. `.ins-comment--own` is the person reading's own message, on
+   the other side and in the brand tint, for a conversation. */
+.ins-thread { display: flex; flex-direction: column; gap: 1rem; }
+.ins-comment { display: flex; align-items: flex-start; gap: .75rem; }
+.ins-comment-body { flex: 1 1 auto; min-inline-size: 0; display: flex; flex-direction: column; gap: .375rem; }
+.ins-comment-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .625rem; }
+.ins-comment-name { font-size: var(--ins-fs-md); font-weight: 700; color: var(--ins-text-1); }
+.ins-comment-time { font-size: var(--ins-fs-xs); color: var(--ins-text-3); }
+.ins-comment-text {
+  align-self: flex-start;
+  max-inline-size: 100%;
+  padding-block: .625rem;
+  padding-inline: .875rem;
+  border-radius: var(--ins-r-md);
+  border-start-start-radius: var(--ins-r-xs);
+  border: 1px solid var(--ins-line);
+  background: var(--ins-glass-inner);
+  font-size: var(--ins-fs-md);
+  line-height: 1.8;
+  color: var(--ins-text-1);
+  overflow-wrap: anywhere;
+}
+.ins-comment-text > :first-child { margin-block-start: 0; }
+.ins-comment-text > :last-child { margin-block-end: 0; }
+.ins-comment-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; }
+.ins-comment-replies {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-block-start: .5rem;
+  padding-inline-start: 1rem;
+  border-inline-start: 2px solid var(--ins-line);
+}
+.ins-comment--own { flex-direction: row-reverse; }
+.ins-comment--own .ins-comment-head { flex-direction: row-reverse; }
+.ins-comment--own .ins-comment-text {
+  align-self: flex-end;
+  border-start-start-radius: var(--ins-r-md);
+  border-start-end-radius: var(--ins-r-xs);
+  border-color: var(--ins-tone-brand-bd);
+  background: var(--ins-tone-brand-bg);
+}
 
 /* ==========================================================================
    Insiyab · stat tile
@@ -4493,6 +4720,45 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 }
 .ins-avatar--sm { inline-size: 30px; block-size: 30px; font-size: .75rem; }
 .ins-avatar--lg { inline-size: 46px; block-size: 46px; font-size: 1.125rem; }
+
+/* A photo in an avatar fills its disc. */
+.ins-avatar > img { inline-size: 100%; block-size: 100%; border-radius: 50%; object-fit: cover; }
+
+/* --------------------------------------------------------------- avatar group */
+/* Several people as one overlapping row, with the rest counted:
+
+     <div class="ins-avatars" aria-label="المشاركون: 7">
+       <span class="ins-avatar ins-avatar--sm">ل</span> …
+       <span class="ins-avatar ins-avatar--sm ins-avatar--more">+4</span>
+     </div>
+
+   Each disc is ringed in the surface colour, so where two overlap there is a gap
+   between them rather than one blob. The first in reading order is on top. */
+.ins-avatars { display: inline-flex; align-items: center; isolation: isolate; }
+.ins-avatars > .ins-avatar { box-shadow: 0 0 0 2px var(--ins-glass-strong); }
+.ins-avatars > .ins-avatar + .ins-avatar { margin-inline-start: -.5rem; }
+.ins-avatars > .ins-avatar:nth-child(1) { z-index: 6; }
+.ins-avatars > .ins-avatar:nth-child(2) { z-index: 5; }
+.ins-avatars > .ins-avatar:nth-child(3) { z-index: 4; }
+.ins-avatars > .ins-avatar:nth-child(4) { z-index: 3; }
+.ins-avatars > .ins-avatar:nth-child(5) { z-index: 2; }
+.ins-avatars > .ins-avatar:nth-child(6) { z-index: 1; }
+.ins-avatar--more {
+  background: var(--ins-tone-mute-bg);
+  color: var(--ins-text-2);
+  font-family: var(--ins-font-body-en);
+  font-weight: 700;
+  /* "+4", not "4+": the sign would move to the other end in an Arabic line. */
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+:root[data-ins-theme="dark"] .ins-avatar--more { background: rgba(255, 255, 255, .12); color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-avatar--more {
+    background: rgba(255, 255, 255, .12); color: var(--ins-text-1);
+  }
+}
 
 /* --------------------------------------------------------------- motion */
 /* A pill is usually a label, not a control, so the lift is scoped to the ones that

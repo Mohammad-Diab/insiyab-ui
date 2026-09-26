@@ -1,0 +1,34 @@
+<h2 id="quote">الاقتباس ومصدره</h2>
+<p>
+  <code>.ins-quote</code> على <code>&lt;figure&gt;</code> فيه <code>&lt;blockquote&gt;</code> ومصدره في
+  <code>.ins-quote-source</code>: نصّ منقول من مكان آخر، وعلى حافته شريط الهوية، والمصدر بعلامة مستند.
+</p>
+<demo-example>
+  <figure class="ins-quote">
+    <blockquote>تُردّ المنتجات خلال أربعة عشر يومًا من الاستلام، بشرط أن تكون في عبوتها الأصلية ومعها الفاتورة.</blockquote>
+    <figcaption class="ins-quote-source"><a href="#quote">سياسة الإرجاع</a> · البند 3</figcaption>
+  </figure>
+</demo-example>
+
+<h2 id="ref">علامة المرجع</h2>
+<p><code>.ins-ref</code> رابط صغير مرقّم داخل النصّ إلى مصدر أو ملاحظة.</p>
+<demo-example>
+  <p class="ins-m-0">مدّة الإرجاع أربعة عشر يومًا<a class="ins-ref" href="#quote">1</a> والاستبدال ثلاثون<a class="ins-ref" href="#quote">2</a>.</p>
+</demo-example>
+
+<h2 id="mark">التظليل والملاحظات</h2>
+<p>
+  <code>.ins-mark</code> يظلّل جزءًا من النصّ بإحدى النغمات: <code>--ok</code> و<code>--bad</code> و<code>--info</code>
+  و<code>--brand</code>، والافتراضي تحذير. و<code>data-ins-note="#id"</code> يربطه بملاحظة <code>.ins-note</code>: الإشارة إلى
+  أحدهما تضيء الاثنين، والنقر على التظليل يُظهر ملاحظته، وقارئ الشاشة يقرأ الملاحظة مع التظليل.
+</p>
+<demo-example class="stack">
+  <p class="ins-m-0">
+    وصل الطلب <mark class="ins-mark ins-mark--ok" data-ins-note="#n-1">في موعده</mark>، لكنّ
+    <mark class="ins-mark ins-mark--bad" data-ins-note="#n-2">العبوة كانت تالفة</mark> والفاتورة
+    <mark class="ins-mark" data-ins-note="#n-3">لم تُرفق</mark>.
+  </p>
+  <div class="ins-note ins-note--ok" id="n-1">التسليم خلال المدّة المتّفق عليها.</div>
+  <div class="ins-note ins-note--bad" id="n-2">يُستبدل المنتج دون رسوم.</div>
+  <div class="ins-note" id="n-3">تُرسل الفاتورة بالبريد.</div>
+</demo-example>

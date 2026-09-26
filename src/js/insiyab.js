@@ -2303,6 +2303,36 @@
     return n;
   }
 
+  /* ------------------------------------------------------------ highlights */
+  /* A mark (or a reference marker) and the note it points at, as one group: from a
+     mark, its note and every mark sharing it; from a note, the marks pointing at it. */
+  function noteGroup(node) {
+    if (!node || !node.closest) return null;
+    var mark = node.closest('[data-ins-note]'), ref, note;
+    if (mark) {
+      ref = mark.getAttribute('data-ins-note');
+      note = resolve(ref);
+    } else {
+      note = node.closest('.ins-note[id]');
+      if (!note) return null;
+      ref = '#' + note.id;
+    }
+    var marks = document.querySelectorAll('[data-ins-note="' + ref + '"]');
+    return marks.length ? { key: ref, marks: marks, note: note } : null;
+  }
+
+  var litGroup = null;
+  function noteLight(group) {
+    if (litGroup && group && litGroup.key === group.key) return;
+    var parts = function (g, on) {
+      for (var i = 0; i < g.marks.length; i++) g.marks[i].classList.toggle('is-lit', on);
+      if (g.note) g.note.classList.toggle('is-lit', on);
+    };
+    if (litGroup) parts(litGroup, false);
+    litGroup = group;
+    if (group) parts(group, true);
+  }
+
   /* ---------------------------------------------------------------- table */
   function tableOf(node) { return node && node.closest ? node.closest('table') : null; }
 
@@ -3054,6 +3084,19 @@
     if (group) datetimeSync(group);
   }, false);
 
+  /* Marks and their notes light together under the pointer and on keyboard focus;
+     a click on a mark brings its note into view. */
+  document.addEventListener('pointerover', function (event) { noteLight(noteGroup(event.target)); }, false);
+  document.addEventListener('focusin', function (event) { noteLight(noteGroup(event.target)); }, false);
+  document.addEventListener('focusout', function (event) {
+    if (!event.relatedTarget || !noteGroup(event.relatedTarget)) noteLight(null);
+  }, false);
+  document.addEventListener('click', function (event) {
+    var mark = event.target.closest ? event.target.closest('.ins-mark[data-ins-note]') : null;
+    var note = mark && resolve(mark.getAttribute('data-ins-note'));
+    if (note && note.scrollIntoView) note.scrollIntoView({ block: 'nearest', behavior: motionless() ? 'auto' : 'smooth' });
+  }, false);
+
   /* A table's checkboxes. The header box takes every row with it; a row box with
      Shift held takes every row between it and the last one clicked. */
   document.addEventListener('click', function (event) {
@@ -3460,6 +3503,19 @@
       h.setAttribute('data-ins-datetime-value', '');
       groups[i].appendChild(h);
       datetimeSync(groups[i]);
+    }
+  });
+
+  /* A mark with a note is reachable from the keyboard, and reads its note out. */
+  define('marks', function (scope) {
+    var marks = scope.querySelectorAll('.ins-mark[data-ins-note]');
+    for (var i = 0; i < marks.length; i++) {
+      var note = resolve(marks[i].getAttribute('data-ins-note'));
+      if (!marks[i].hasAttribute('tabindex')) marks[i].setAttribute('tabindex', '0');
+      if (!note) continue;
+      if (!note.id) note.id = uid('ins-note');
+      var ids = (marks[i].getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+      if (ids.indexOf(note.id) === -1) { ids.push(note.id); marks[i].setAttribute('aria-describedby', ids.join(' ')); }
     }
   });
 
