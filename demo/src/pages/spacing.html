@@ -1,3 +1,65 @@
+<h2 id="layouts">تخطيط الصفحة</h2>
+<p>للصفحة تخطيطان: تطبيق يملأ عرض الشاشة، وهو الأساس، وعمود في الوسط للصفحات البسيطة.</p>
+
+<h3 id="layout-app">التطبيق: بعرض الصفحة</h3>
+<p>
+  <code>.ins-shell</code> شريط جانبي وشريط علوي، والمحتوى في <code>.ins-shell-content</code> يملأ ما بقي من
+  العرض بلا حدّ أقصى. هوامشه ٨ بكسل من الأعلى و٢٨ من الجانبين و٣٢ من الأسفل، و١٦ من الجانبين تحت 900px.
+  أضف إليه <code>.ins-stack</code> ليفصل بين أقسام الصفحة ١٦ بكسل، ورتّب كلّ قسم بالشبكة.
+</p>
+<demo-example code="none">
+  <div class="lay lay--app" aria-hidden="true">
+    <div class="lay-side">الشريط الجانبي</div>
+    <div class="lay-main">
+      <div class="lay-bar">الشريط العلوي</div>
+      <div class="lay-content">
+        <div class="ins-cols-4 ins-cols--fixed lay-gap">
+          <div class="demo-box">قسم</div><div class="demo-box">قسم</div><div class="demo-box">قسم</div><div class="demo-box">قسم</div>
+        </div>
+        <div class="demo-box lay-tall">قسم بعرض المحتوى</div>
+      </div>
+    </div>
+  </div>
+</demo-example>
+<demo-code lang="html">
+<div class="ins-shell">
+  <aside class="ins-shell-side">…</aside>
+  <div class="ins-shell-scrim"></div>
+
+  <div class="ins-shell-main">
+    <header class="ins-topbar">…</header>
+    <main class="ins-shell-content ins-stack">
+      <div class="ins-cols-4">…</div>
+      <section class="ins-panel">…</section>
+    </main>
+  </div>
+</div>
+</demo-code>
+<p>تفاصيل الشريطين في <a href="shell.html">هيكل التطبيق</a>.</p>
+
+<h3 id="layout-center">صفحة في الوسط</h3>
+<p>
+  للصفحات الشخصية وصفحات التعريف: <code>.ins-navbar</code> في الأعلى، والمحتوى في <code>.ins-container</code>،
+  عمود في وسط الصفحة عرضه 75rem، و<code>--narrow</code> (48rem) للنماذج والمقالات، و<code>--wide</code> (90rem).
+  والهامش الجانبي ينمو مع الشاشة من ١٦ إلى ٣٢ بكسل.
+</p>
+<demo-example code="none">
+  <div class="lay lay--center" aria-hidden="true">
+    <div class="lay-nav">شريط الموقع</div>
+    <div class="lay-col">
+      <div class="demo-box lay-tall">القسم الأوّل</div>
+      <div class="demo-box">القسم الثاني</div>
+    </div>
+  </div>
+</demo-example>
+<demo-code lang="html">
+<header class="ins-navbar">…</header>
+<main class="ins-container ins-stack">
+  <section>…</section>
+  <section>…</section>
+</main>
+</demo-code>
+
 <h2 id="scale">السلّم</h2>
 <p>الخطوة N تساوي N × ٤ بكسل، في كلّ عائلة من الأصناف، ومتاحة متغيّرًا <code>--ins-sp-N</code> لأنماطك.</p>
 <demo-example code="none">

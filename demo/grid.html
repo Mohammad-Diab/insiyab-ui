@@ -126,7 +126,7 @@
       <div class="ins-shell-group">التخطيط</div>
       <a class="ins-shell-link" href="shell.html" data-keywords="App shell شريط جانبي زجاجي وشريط علوي من جزر عائمة. هذه الصفحة نفسها مبنيّة به."><svg class="ico" aria-hidden="true"><use href="#i-layout"/></svg>هيكل التطبيق</a>
       <a class="ins-shell-link is-active" href="grid.html" aria-current="page" data-keywords="Grid أعمدة تنهار وحدها عند الشاشات الضيّقة، فلا أصناف لكلّ مقاس."><svg class="ico" aria-hidden="true"><use href="#i-grid"/></svg>الشبكة</a>
-      <a class="ins-shell-link" href="spacing.html" data-keywords="Spacing &amp; stacks سلّم واحد، الخطوة فيه ٤ بكسل، وجهات منطقية لا يمين ولا يسار."><svg class="ico" aria-hidden="true"><use href="#i-sliders"/></svg>المسافات والترتيب</a>
+      <a class="ins-shell-link" href="spacing.html" data-keywords="Spacing &amp; page layout تخطيطان للصفحة: تطبيق بعرضها، وعمود في وسطها. وسلّم واحد خطوته ٤ بكسل، بجهات منطقية."><svg class="ico" aria-hidden="true"><use href="#i-sliders"/></svg>المسافات والترتيب</a>
 
       <div class="ins-shell-group">المحتوى</div>
       <a class="ins-shell-link" href="typography.html" data-keywords="Typography ثلاثة خطوط مستضافة محليًا ومقسّمة حسب النطاق، وسلّم عناوين، ونصّ طويل محصور في صنفه."><svg class="ico" aria-hidden="true"><use href="#i-type"/></svg>الطباعة</a>
@@ -255,7 +255,7 @@
             <p class="ins-page-sub site-lead">أعمدة تنهار وحدها عند الشاشات الضيّقة، فلا أصناف لكلّ مقاس.</p>
           </div>
         </header>
-        <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#columns">الأعمدة</a><a href="#span">الامتداد</a><a href="#collapse">الانهيار التلقائي</a><a href="#auto">الشبكة المرنة</a><a href="#container">الحاوية</a><a href="#breakpoints">نقاط الانكسار</a><a href="#example">صفحة نموذجية</a></nav>
+        <nav class="site-toc" aria-label="في هذه الصفحة"><span class="site-toc-label">في هذه الصفحة</span><a href="#columns">الأعمدة</a><a href="#span">الامتداد</a><a href="#collapse">الانهيار التلقائي</a><a href="#auto">الشبكة المرنة</a><a href="#breakpoints">نقاط الانكسار</a><a href="#example">صفحة نموذجية</a></nav>
         <h2 id="columns">الأعمدة</h2>
 <p>
   <code>.ins-cols-2</code> و<code>-3</code> و<code>-4</code> و<code>-6</code> و<code>-12</code>: أعمدة متساوية بفراغ
@@ -330,19 +330,6 @@
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall"</span><span class="hl-t">&gt;</span>5<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-grid"</span> <span class="hl-a">style</span>=<span class="hl-s">"--ins-col: 14rem"</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div>
-
-<h2 id="container">الحاوية</h2>
-<p>
-  <code>.ins-container</code> عمود الصفحة: 75rem افتراضيًا، و<code>--narrow</code> (48rem) للنماذج
-  والمقالات، و<code>--wide</code> للوحات العريضة. والهامش الجانبي ينمو مع الشاشة من ١٦ إلى ٣٢ بكسل.
-</p>
-<figure class="dx"><div class="dx-view">
-  <div class="demo-frame">
-    <div class="ins-container ins-container--narrow"><div class="demo-box">container--narrow</div></div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-frame"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-container ins-container--narrow"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>container--narrow<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="breakpoints">نقاط الانكسار</h2>
 <div class="ins-panel site-ref">

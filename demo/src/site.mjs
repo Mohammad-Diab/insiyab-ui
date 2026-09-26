@@ -67,8 +67,8 @@ export const NAV = [
       lead: 'شريط جانبي زجاجي وشريط علوي من جزر عائمة. هذه الصفحة نفسها مبنيّة به.' },
     { slug: 'grid', title: 'الشبكة', en: 'Grid', icon: 'grid',
       lead: 'أعمدة تنهار وحدها عند الشاشات الضيّقة، فلا أصناف لكلّ مقاس.' },
-    { slug: 'spacing', title: 'المسافات والترتيب', en: 'Spacing & stacks', icon: 'sliders',
-      lead: 'سلّم واحد، الخطوة فيه ٤ بكسل، وجهات منطقية لا يمين ولا يسار.' }
+    { slug: 'spacing', title: 'المسافات والترتيب', en: 'Spacing & page layout', icon: 'sliders',
+      lead: 'تخطيطان للصفحة: تطبيق بعرضها، وعمود في وسطها. وسلّم واحد خطوته ٤ بكسل، بجهات منطقية.' }
   ] },
   { group: 'المحتوى', en: 'Content', pages: [
     { slug: 'typography', title: 'الطباعة', en: 'Typography', icon: 'type',
