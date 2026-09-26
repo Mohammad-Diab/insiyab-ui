@@ -53,6 +53,31 @@
   </div>
 </demo-example>
 
+<h2 id="delta">التغيّر</h2>
+<p>
+  <code>.ins-delta</code> تغيّر رقم مقارنة بغيره: السهم يقول الاتجاه واللون هل هو جيّد. <code>--up</code> أخضر و<code>--down</code>
+  أحمر، و<code>--invert</code> يبدّلهما لرقم أقلّه أفضل كالتكاليف، و<code>--flat</code> لا تغيّر. و<code>.ins-delta-ref</code> بعده
+  يقول ممّ المقارنة، وفي البطاقة يوضعان في <code>.ins-stat-trend</code> تحت القيمة.
+</p>
+<demo-example class="row">
+  <span class="ins-delta ins-delta--up">12%</span>
+  <span class="ins-delta ins-delta--down">-4%</span>
+  <span class="ins-delta ins-delta--up ins-delta--invert">8%</span>
+  <span class="ins-delta ins-delta--flat">0%</span>
+</demo-example>
+<demo-example>
+  <div class="ins-grid">
+    <div class="ins-stat ins-glass">
+      <span class="ins-stat-ico"><svg class="ico"><use href="#i-cart"/></svg></span>
+      <span class="ins-stat-body">
+        <span class="ins-stat-label">الطلبات</span>
+        <span class="ins-stat-value">312</span>
+        <span class="ins-stat-trend"><span class="ins-delta ins-delta--up">12%</span><span class="ins-delta-ref">عن الشهر الماضي</span></span>
+      </span>
+    </div>
+  </div>
+</demo-example>
+
 <h2 id="layout">في الصفحة</h2>
 <p>
   <code>.ins-grid</code> هي الحاوية المناسبة: تضع من البطاقات ما يتّسع. و<code>--wide</code> لبطاقات تحمل

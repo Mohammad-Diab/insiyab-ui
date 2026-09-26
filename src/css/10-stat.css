@@ -99,3 +99,53 @@
    because a number that changes size changes the width of the column it sits in. */
 .ins-stat-value { transition: letter-spacing var(--ins-t-base) var(--ins-ease); }
 :where(a, button, .ins-hoverable).ins-stat:hover .ins-stat-value { letter-spacing: .005em; }
+
+/* --------------------------------------------------------------- change */
+/* A figure's change against another: `<span class="ins-delta ins-delta--up">12%</span>`.
+   The arrow says which way, the colour whether that is good: up is green and down
+   red, and `--invert` swaps them for a figure where less is better (costs, waiting
+   time). `--flat` for no change. `.ins-delta-ref` after it says what it is compared
+   with. The figure keeps its own direction, so a sign stays in front of it. */
+.ins-delta {
+  --ins-delta-c: var(--ins-tone-ok);
+  --ins-delta-bg: var(--ins-tone-ok-bg);
+  display: inline-flex;
+  align-items: center;
+  gap: .1875rem;
+  padding-block: .0625rem;
+  padding-inline: .375rem .5rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-delta-bg);
+  color: var(--ins-delta-c);
+  font-family: var(--ins-font-body-en);
+  font-size: .75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.ins-delta::before {
+  content: "";
+  inline-size: .75rem;
+  block-size: .75rem;
+  background: currentColor;
+  -webkit-mask: var(--ins-delta-arrow) center / contain no-repeat;
+          mask: var(--ins-delta-arrow) center / contain no-repeat;
+}
+.ins-delta--up { --ins-delta-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 19V5M5 12l7-7 7 7'/%3E%3C/svg%3E"); }
+.ins-delta--down {
+  --ins-delta-c: var(--ins-tone-bad);
+  --ins-delta-bg: var(--ins-tone-bad-bg);
+  --ins-delta-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M19 12l-7 7-7-7'/%3E%3C/svg%3E");
+}
+.ins-delta--up.ins-delta--invert { --ins-delta-c: var(--ins-tone-bad); --ins-delta-bg: var(--ins-tone-bad-bg); }
+.ins-delta--down.ins-delta--invert { --ins-delta-c: var(--ins-tone-ok); --ins-delta-bg: var(--ins-tone-ok-bg); }
+.ins-delta--flat {
+  --ins-delta-c: var(--ins-tone-mute);
+  --ins-delta-bg: var(--ins-tone-mute-bg);
+  --ins-delta-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
+}
+.ins-delta-ref { margin-inline-start: .375rem; font-size: .6875rem; color: var(--ins-text-3); }
+/* In a stat tile, on the line under the value. */
+.ins-stat-trend { display: flex; flex-wrap: wrap; align-items: center; margin-block-start: .125rem; }

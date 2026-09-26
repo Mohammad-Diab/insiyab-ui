@@ -1,0 +1,55 @@
+<h2 id="countdown">العدّ التنازلي</h2>
+<p>
+  <code>.ins-countdown</code> مع <code>data-ins-countdown</code> يعدّ الوقت الباقي كلّ ثانية. الرقم ثوانٍ من فتح الصفحة، وغيره
+  لحظة الانتهاء: <code>2026-09-26T18:00:00+03:00</code>. يصفرّ حين يبقى <code>data-ins-warn</code> ثانية (دقيقة إن لم يُذكر)
+  ويحمرّ عند الصفر، ويُطلق <code>ins:countdown</code> في الحالتين.
+</p>
+<demo-example class="row">
+  <span class="ins-countdown" data-ins-countdown="600"></span>
+  <span class="ins-countdown" data-ins-countdown="75"></span>
+  <span class="ins-countdown" data-ins-countdown="200000"></span>
+</demo-example>
+<p><code>--lg</code> لعدّ هو موضوع الصفحة.</p>
+<demo-example class="row">
+  <span class="ins-countdown ins-countdown--lg" data-ins-countdown="900"></span>
+</demo-example>
+<demo-code lang="js">
+document.addEventListener('ins:countdown', (e) => {
+  if (e.detail.state === 'end') release(e.detail.el);   // أو 'warn'
+});
+Insiyab.countdown('#hold', 600);                          // من جديد
+</demo-code>
+
+<h2 id="save">حالة الحفظ</h2>
+<p>
+  <code>.ins-save</code> يقول هل حُفظ آخر تغيير: جارٍ الحفظ، ثم حُفظ، أو تعذّر. الحالة في <code>data-ins-state</code>، وبلا حالة
+  يحفظ مكانه ولا يُظهر شيئًا فلا يقفز السطر حين يظهر.
+</p>
+<demo-example class="row">
+  <span class="ins-save" data-ins-state="saving"></span>
+  <span class="ins-save" data-ins-state="saved"></span>
+  <span class="ins-save" data-ins-state="error"></span>
+</demo-example>
+
+<h3 id="autosave">حفظ تلقائي</h3>
+<p>
+  <code>data-ins-autosave</code> على نموذج: بعد لحظة من آخر تغيير يقول المؤشّر «جارٍ الحفظ» ويُطلق <code>ins:autosave</code>
+  ببيانات النموذج. ألغِه واحفظ على الخادم ثم استدعِ <code>done(true)</code> أو <code>done(false)</code>؛ وإن لم تلغِه فقد حُفظ
+  التغيير عندك، مسوّدة محلّية مثلًا، ويقول المؤشّر ذلك فورًا.
+</p>
+<demo-example>
+  <form class="ins-field" data-ins-autosave onsubmit="event.preventDefault()">
+    <div class="ins-flex ins-items-center ins-justify-between">
+      <label class="ins-label" for="as-note">ملاحظة</label>
+      <span class="ins-save"></span>
+    </div>
+    <textarea class="ins-textarea" id="as-note"></textarea>
+  </form>
+</demo-example>
+<demo-code lang="js">
+document.addEventListener('ins:autosave', async (e) => {
+  e.preventDefault();
+  const ok = await fetch('/draft', { method: 'POST', body: e.detail.data }).then((r) => r.ok);
+  e.detail.done(ok);
+});
+</demo-code>

@@ -19,6 +19,40 @@
   </ol>
 </demo-example>
 
+<h3 id="states">حالات أخرى</h3>
+<p><code>.is-flagged</code> خطوة مؤجّلة للرجوع إليها بنقطة صفراء، و<code>.is-error</code> خطوة فيها ما يُصلح بالأحمر.</p>
+<demo-example>
+  <ol class="ins-steps">
+    <li class="ins-steps-item is-done"><span class="ins-steps-label">الأولى</span></li>
+    <li class="ins-steps-item is-done is-flagged"><span class="ins-steps-label">الثانية</span></li>
+    <li class="ins-steps-item is-error"><span class="ins-steps-label">الثالثة</span></li>
+    <li class="ins-steps-item" aria-current="step"><span class="ins-steps-label">الرابعة</span></li>
+  </ol>
+</demo-example>
+
+<h3 id="grid">شبكة أرقام</h3>
+<p>
+  <code>--grid</code> لخطوات كثيرة بلا أسماء ظاهرة، كأسئلة نموذج طويل: أرقام تلتفّ بلا خطوط. رابط أو زرّ في كلّ عنصر هو
+  <code>.ins-steps-label</code> فتصير الدائرة كلّها ذلك الرابط، ونصّه لقارئ الشاشة. والحالات من الصفحة: منجزة لما أُجيب،
+  وحالية للمفتوح، ومؤجّلة لما يُراجع.
+</p>
+<demo-example>
+  <ol class="ins-steps ins-steps--grid">
+    <li class="ins-steps-item is-done"><a class="ins-steps-label" href="#grid">البند 1</a></li>
+    <li class="ins-steps-item is-done"><a class="ins-steps-label" href="#grid">البند 2</a></li>
+    <li class="ins-steps-item is-done is-flagged"><a class="ins-steps-label" href="#grid">البند 3</a></li>
+    <li class="ins-steps-item" aria-current="step"><a class="ins-steps-label" href="#grid">البند 4</a></li>
+    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 5</a></li>
+    <li class="ins-steps-item is-flagged"><a class="ins-steps-label" href="#grid">البند 6</a></li>
+    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 7</a></li>
+    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 8</a></li>
+    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 9</a></li>
+    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 10</a></li>
+    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 11</a></li>
+    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 12</a></li>
+  </ol>
+</demo-example>
+
 <h2 id="wizard">المعالج</h2>
 <p>
   <code>.ins-wizard</code> على نموذج بألواح <code>.ins-wizard-panel</code>: السكربت يُظهر لوحًا واحدًا ويقود
