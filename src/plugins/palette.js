@@ -86,14 +86,15 @@
   /* ------------------------------------------------------------- the items */
 
   /* What an item is called: its `data-label`, or its text without the icon, the
-     shortcut and the group name the palette adds to it. */
+     shortcut, a count badge (a sidebar link's "8") and the group name the palette
+     adds to it. */
   function labelOf(el) {
     if (el.hasAttribute('data-label')) return el.getAttribute('data-label');
     var out = '';
     (function walk(node) {
       for (var c = node.firstChild; c; c = c.nextSibling) {
         if (c.nodeType === 3) out += c.nodeValue;
-        else if (c.nodeType === 1 && !c.matches('svg, kbd, .ins-kbd, .ins-palette-where')) walk(c);
+        else if (c.nodeType === 1 && !c.matches('svg, kbd, .ins-kbd, .ins-badge, .ins-shell-link-badge, .ins-palette-where')) walk(c);
       }
     })(el);
     return out.replace(/\s+/g, ' ').trim();
