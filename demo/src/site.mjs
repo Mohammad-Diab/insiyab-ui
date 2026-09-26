@@ -76,7 +76,11 @@ export const NAV = [
     { slug: 'surfaces', title: 'الأسطح والألواح', en: 'Surfaces & panels', icon: 'layers',
       lead: 'الزجاج المصنفر بطبقاته الأربع، وما يُبنى عليه: البطاقة واللوح.' },
     { slug: 'tables', title: 'الجداول', en: 'Tables', icon: 'table', fresh: true,
-      lead: 'جدول بيانات يقرأ الأرقام بخطّها، ويتمرّر أفقيًا داخل حاويته لا في الصفحة.' }
+      lead: 'جدول بيانات يقرأ الأرقام بخطّها، ويتمرّر أفقيًا داخل حاويته لا في الصفحة.' },
+    { slug: 'description', title: 'قائمة الوصف', en: 'Description list', icon: 'list', fresh: true,
+      lead: 'تفاصيل سجلّ واحد تسميةً وقيمة: صفّ لكلّ زوج، أو أعمدة لملخّص قصير.' },
+    { slug: 'quote', title: 'الاقتباس والتظليل', en: 'Quote, reference and highlight', icon: 'message', fresh: true,
+      lead: 'نصّ منقول ومصدره، وعلامة مرجع، وتظليل أجزاء من نصّ مربوط بملاحظات تقول لماذا.' }
   ] },
   { group: 'النماذج', en: 'Forms', pages: [
     { slug: 'inputs', title: 'الحقول', en: 'Form controls', icon: 'edit', fresh: true,
@@ -115,10 +119,12 @@ export const NAV = [
       lead: 'الحوار نفسه ملتصقًا بحافة: البداية أو النهاية أو الأسفل.' },
     { slug: 'toasts', title: 'الرسائل الطائرة', en: 'Toasts', icon: 'bell',
       lead: 'إشعار عابر يظهر ويختفي وحده، بسمة على زرّ أو بسطر جافاسكربت.' },
-    { slug: 'badges', title: 'الشارات والأرقام', en: 'Badges & numbers', icon: 'tag',
+    { slug: 'badges', title: 'الشارات والأرقام', en: 'Badges & numbers', icon: 'tag', fresh: true,
       lead: 'شارات الحالة وشارات العدّ والصور الرمزية، والمبالغ والأرقام في سطر عربي.' },
     { slug: 'list', title: 'القوائم', en: 'List group', icon: 'list',
       lead: 'صفوف متتالية بصورة ونصّين ونهاية، ثابتة أو قابلة للنقر.' },
+    { slug: 'comments', title: 'التعليقات والرسائل', en: 'Comments and messages', icon: 'inbox', fresh: true,
+      lead: 'كلام شخص في سلسلة: تعليق على سجلّ وردود عليه، أو رسائل محادثة.' },
     { slug: 'dropdown', title: 'القوائم المنبثقة', en: 'Dropdowns', icon: 'menu-down',
       lead: 'قائمة على عنصر details، بالأسهم والإغلاق بـ Esc وعناصر قابلة للتأشير.' },
     { slug: 'steps', title: 'المعالج', en: 'Steps & wizard', icon: 'steps',
