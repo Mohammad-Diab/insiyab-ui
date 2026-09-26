@@ -123,8 +123,14 @@
   function mark(spy, i) {
     var link = i === -1 ? null : spy.links[i];
     if (link === spy.active) return;
-    if (spy.active) { spy.active.classList.remove('is-active'); spy.active.removeAttribute('aria-current'); }
+    var old = spy.active;
+    if (old) { old.classList.remove('is-active'); old.removeAttribute('aria-current'); }
     spy.active = link;
+    /* The ready-made list moves its marker the way the sidebar does: it flies from
+       the old entry to the new one. Any other nav has no marker to move. */
+    if (link && old && Insiyab.flyMarker && spy.nav.classList.contains('ins-toc')) {
+      Insiyab.flyMarker(spy.nav, old, link, { bar: 'ins-toc-indicator', moving: 'ins-toc-moving' });
+    }
     if (link) {
       link.classList.add('is-active');
       link.setAttribute('aria-current', 'location');
