@@ -1,0 +1,180 @@
+<!doctype html>
+<!-- The settings template as a whole page: copy it, point the tags at your copy of the library, and put your own data in. It is built only from library parts; the docs page tpl-settings.html walks through them. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>الإعدادات · متجري</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <script src="../../dist/insiyab.js"></script>
+</head>
+<body>
+<svg hidden aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 21v-7h6v7"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h5l2 3h4l2-3h5"/><path d="M4.5 6h15l1.5 6v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6Z"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></symbol>
+  <symbol id="i-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H1a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 2.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 7 2.6h.1A2 2 0 1 1 11 2.6V3a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 19.4 9H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+</svg>
+
+<div class="ins-shell">
+  <aside class="ins-shell-side" id="nav" aria-label="القائمة الرئيسية">
+    <a class="ins-shell-brand" href="dashboard.html">
+      <span class="ins-shell-mark">م</span>
+      <span class="ins-shell-brand-text">
+        <span class="ins-shell-brand-name">متجري</span>
+        <span class="ins-shell-brand-role">لوحة الإدارة</span>
+      </span>
+    </a>
+
+    <div class="ins-shell-group">العمل</div>
+    <a class="ins-shell-link" href="dashboard.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-home"/></svg>لوحة التحكم</a>
+    <a class="ins-shell-link" href="order.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-cart"/></svg>الطلبات</a>
+    <a class="ins-shell-link" href="tickets.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-inbox"/></svg>التذاكر<span class="ins-shell-link-badge">12</span></a>
+    <a class="ins-shell-link" href="review.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-file"/></svg>العروض</a>
+
+    <div class="ins-shell-group">الحساب</div>
+    <a class="ins-shell-link is-active" aria-current="page" href="settings.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-cog"/></svg>الإعدادات</a>
+
+    <div class="ins-shell-bottom">
+      <a class="ins-shell-link" href="login.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-arrow"/></svg>خروج</a>
+    </div>
+  </aside>
+  <div class="ins-shell-scrim"></div>
+
+  <div class="ins-shell-main">
+    <header class="ins-topbar">
+      <div class="ins-zone ins-zone--start">
+        <button class="ins-island ins-island--icon" data-ins-sidebar aria-label="القائمة"><svg class="ins-ico" aria-hidden="true"><use href="#i-menu"/></svg></button>
+        <a class="ins-island ins-island--brand" href="dashboard.html"><span class="ins-shell-mark" style="--ins-mark:28px;font-size:.8125rem">م</span><b>متجري</b></a>
+      </div>
+      <div class="ins-zone ins-zone--center">
+        <div class="ins-island ins-island--title">
+          <div class="ins-shell-head"><h1 class="ins-shell-title">الإعدادات</h1></div>
+        </div>
+      </div>
+      <div class="ins-zone ins-zone--end">
+        <button class="ins-island ins-island--icon" data-ins-theme-toggle aria-label="تبديل الوضع"><svg class="ins-ico" aria-hidden="true"><use href="#i-moon"/></svg></button>
+        <details class="ins-pop ins-pop--end">
+          <summary class="ins-island" aria-label="حسابي"><span class="ins-avatar ins-avatar--sm">ل</span><span class="ins-hide-below-sm">ليلى</span></summary>
+          <div class="ins-pop-body">
+            <a class="ins-pop-item" href="settings.html">الإعدادات</a>
+            <hr class="ins-pop-sep">
+            <a class="ins-pop-item" href="login.html">خروج</a>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <main class="ins-shell-content">
+      <div class="ins-tablist" aria-label="أقسام الإعدادات">
+        <button class="ins-tab" data-ins-tab="#s-profile">الملف الشخصي</button>
+        <button class="ins-tab" data-ins-tab="#s-notify">الإشعارات</button>
+        <button class="ins-tab" data-ins-tab="#s-security">الأمان</button>
+      </div>
+
+      <div class="ins-tabpanel" id="s-profile">
+        <form class="ins-panel" data-ins-autosave onsubmit="event.preventDefault()">
+          <div class="ins-panel-head">
+            <h2 class="ins-panel-title">الملف الشخصي</h2>
+            <div class="ins-panel-actions"><span class="ins-save"></span></div>
+          </div>
+          <div class="ins-panel-body ins-stack">
+            <div class="ins-field-row">
+              <div class="ins-field ins-grow">
+                <label class="ins-label" for="p-name">الاسم</label>
+                <input class="ins-input" id="p-name" name="name" value="ليلى حدّاد">
+              </div>
+              <div class="ins-field ins-grow">
+                <label class="ins-label" for="p-email">البريد</label>
+                <input class="ins-input" id="p-email" name="email" type="email" dir="ltr" value="layla@example.com">
+              </div>
+            </div>
+            <div class="ins-field">
+              <label class="ins-label" for="p-bio">نبذة</label>
+              <textarea class="ins-textarea" id="p-bio" name="bio" maxlength="160" data-ins-count>أدير الطلبات والتذاكر في فرع الرياض.</textarea>
+            </div>
+            <div class="ins-field">
+              <label class="ins-label" for="p-langs">اللغات</label>
+              <div class="ins-tags" data-ins-name="langs">
+                <span class="ins-chip">العربية<button type="button" class="ins-chip-x" aria-label="إزالة العربية"></button><input type="hidden" name="langs" value="ar"></span>
+                <input class="ins-tags-input" id="p-langs" placeholder="أضف لغة">
+                <ul class="ins-combo-list">
+                  <li class="ins-combo-option" data-value="ar">العربية</li>
+                  <li class="ins-combo-option" data-value="en">الإنجليزية</li>
+                  <li class="ins-combo-option" data-value="fr">الفرنسية</li>
+                  <li class="ins-combo-option" data-value="tr">التركية</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ins-field">
+              <label class="ins-label" for="p-start">بداية الدوام</label>
+              <input class="ins-input" id="p-start" name="start" type="time" data-ins-time value="09:00" style="max-inline-size: 12rem">
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="ins-tabpanel" id="s-notify">
+        <section class="ins-panel">
+          <div class="ins-panel-head"><h2 class="ins-panel-title">الإشعارات</h2></div>
+          <div class="ins-panel-body">
+            <div class="ins-switch-grid">
+              <label class="ins-switch ins-switch--card"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">طلب جديد</span><span class="ins-switch-desc">حين يصل طلب إلى فرعك.</span></span></label>
+              <label class="ins-switch ins-switch--card"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">تذكرة مسندة إليك</span><span class="ins-switch-desc">بالبريد وفي التطبيق.</span></span></label>
+              <label class="ins-switch ins-switch--card"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">ملخّص أسبوعي</span><span class="ins-switch-desc">كلّ أحد صباحًا.</span></span></label>
+              <label class="ins-switch ins-switch--card"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">عروض جديدة</span><span class="ins-switch-desc">حين يُقدَّم عرض على مناقصة.</span></span></label>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="ins-tabpanel" id="s-security">
+        <div class="ins-stack">
+          <form class="ins-panel" data-ins-validate onsubmit="event.preventDefault()">
+            <div class="ins-panel-head"><h2 class="ins-panel-title">كلمة المرور</h2></div>
+            <div class="ins-panel-body ins-stack">
+              <div class="ins-field">
+                <label class="ins-label" for="pw-old">الحالية</label>
+                <div class="ins-input-group">
+                  <input class="ins-input" id="pw-old" type="password" autocomplete="current-password" required>
+                  <button type="button" class="ins-password-toggle" data-ins-password aria-label="إظهار كلمة المرور"></button>
+                </div>
+                <p class="ins-error"></p>
+              </div>
+              <div class="ins-field">
+                <label class="ins-label" for="pw-new">الجديدة</label>
+                <div class="ins-input-group">
+                  <input class="ins-input" id="pw-new" type="password" autocomplete="new-password" minlength="10" required>
+                  <button type="button" class="ins-password-toggle" data-ins-password aria-label="إظهار كلمة المرور"></button>
+                </div>
+                <p class="ins-hint">عشرة أحرف على الأقلّ.</p>
+                <p class="ins-error"></p>
+              </div>
+              <div class="ins-form-commit"><button class="ins-btn ins-btn--primary">تغيير كلمة المرور</button></div>
+            </div>
+          </form>
+          <section class="ins-panel">
+            <div class="ins-panel-head"><h2 class="ins-panel-title">الجلسات</h2></div>
+            <div class="ins-panel-body ins-panel-body--flush">
+              <div class="ins-table-wrap">
+                <table class="ins-table">
+                  <thead><tr><th>الجهاز</th><th>المكان</th><th>آخر نشاط</th><th></th></tr></thead>
+                  <tbody>
+                    <tr aria-current="true"><td>هذا الجهاز · كروم</td><td>الرياض</td><td>الآن</td><td></td></tr>
+                    <tr><td>آيفون</td><td>جدّة</td><td>أمس</td><td><button class="ins-btn ins-btn--ghost-danger ins-btn--sm" data-ins-confirm="إنهاء هذه الجلسة؟">إنهاء</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!doctype html>
+<!-- The ticket list template as a whole page: copy it, point the tags at your copy of the library, and put your own data in. It is built only from library parts; the docs page tpl-tickets.html walks through them. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>التذاكر · متجري</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <script src="../../dist/insiyab.js"></script>
+</head>
+<body>
+<svg hidden aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 21v-7h6v7"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h5l2 3h4l2-3h5"/><path d="M4.5 6h15l1.5 6v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6Z"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></symbol>
+  <symbol id="i-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H1a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 2.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 7 2.6h.1A2 2 0 1 1 11 2.6V3a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 19.4 9H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></symbol>
+</svg>
+
+<div class="ins-shell">
+  <aside class="ins-shell-side" id="nav" aria-label="القائمة الرئيسية">
+    <a class="ins-shell-brand" href="dashboard.html">
+      <span class="ins-shell-mark">م</span>
+      <span class="ins-shell-brand-text">
+        <span class="ins-shell-brand-name">متجري</span>
+        <span class="ins-shell-brand-role">لوحة الإدارة</span>
+      </span>
+    </a>
+
+    <div class="ins-shell-group">العمل</div>
+    <a class="ins-shell-link" href="dashboard.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-home"/></svg>لوحة التحكم</a>
+    <a class="ins-shell-link" href="order.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-cart"/></svg>الطلبات</a>
+    <a class="ins-shell-link is-active" aria-current="page" href="tickets.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-inbox"/></svg>التذاكر<span class="ins-shell-link-badge">12</span></a>
+    <a class="ins-shell-link" href="review.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-file"/></svg>العروض</a>
+
+    <div class="ins-shell-group">الحساب</div>
+    <a class="ins-shell-link" href="settings.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-cog"/></svg>الإعدادات</a>
+
+    <div class="ins-shell-bottom">
+      <a class="ins-shell-link" href="login.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-arrow"/></svg>خروج</a>
+    </div>
+  </aside>
+  <div class="ins-shell-scrim"></div>
+
+  <div class="ins-shell-main">
+    <header class="ins-topbar">
+      <div class="ins-zone ins-zone--start">
+        <button class="ins-island ins-island--icon" data-ins-sidebar aria-label="القائمة"><svg class="ins-ico" aria-hidden="true"><use href="#i-menu"/></svg></button>
+        <a class="ins-island ins-island--brand" href="dashboard.html"><span class="ins-shell-mark" style="--ins-mark:28px;font-size:.8125rem">م</span><b>متجري</b></a>
+      </div>
+      <div class="ins-zone ins-zone--center">
+        <div class="ins-island ins-island--title">
+          <div class="ins-shell-head"><h1 class="ins-shell-title">التذاكر</h1><span class="ins-shell-sub">12 مفتوحة</span></div>
+        </div>
+      </div>
+      <div class="ins-zone ins-zone--end">
+        <button class="ins-island ins-island--icon" data-ins-theme-toggle aria-label="تبديل الوضع"><svg class="ins-ico" aria-hidden="true"><use href="#i-moon"/></svg></button>
+        <details class="ins-pop ins-pop--end">
+          <summary class="ins-island" aria-label="حسابي"><span class="ins-avatar ins-avatar--sm">ل</span><span class="ins-hide-below-sm">ليلى</span></summary>
+          <div class="ins-pop-body">
+            <a class="ins-pop-item" href="settings.html">الإعدادات</a>
+            <hr class="ins-pop-sep">
+            <a class="ins-pop-item" href="login.html">خروج</a>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <main class="ins-shell-content">
+      <div class="ins-toolbar">
+        <div class="ins-search ins-toolbar-grow">
+          <svg class="ins-ico ins-search-ico" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="ins-input" type="search" placeholder="ابحث في التذاكر" aria-label="بحث في التذاكر">
+        </div>
+        <select class="ins-select" aria-label="المسؤول">
+          <option>كلّ المسؤولين</option>
+          <option>ليلى</option>
+          <option>عمر</option>
+          <option>سارة</option>
+        </select>
+        <div class="ins-toolbar-end">
+          <button class="ins-btn ins-btn--primary ins-btn--sm"><svg class="ins-ico" aria-hidden="true"><use href="#i-plus"/></svg> تذكرة جديدة</button>
+        </div>
+      </div>
+
+      <div class="ins-chips ins-mb-4" role="group" aria-label="المرشّحات">
+        <button class="ins-chip" data-ins-toggle aria-pressed="true">مفتوحة</button>
+        <button class="ins-chip" data-ins-toggle>قيد المتابعة</button>
+        <button class="ins-chip" data-ins-toggle>مغلقة</button>
+        <span class="ins-chip">الأولوية: عالية<button type="button" class="ins-chip-x" aria-label="إزالة مرشّح الأولوية"></button></span>
+      </div>
+
+      <section class="ins-panel">
+        <div class="ins-panel-body ins-panel-body--flush">
+          <div class="ins-table-wrap">
+            <table class="ins-table" id="tickets">
+              <thead>
+                <tr>
+                  <th class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select="all" aria-label="تحديد الكلّ"></label></th>
+                  <th data-ins-sort class="ins-num">الرقم</th>
+                  <th data-ins-sort>الموضوع</th>
+                  <th data-ins-sort>العميل</th>
+                  <th>المسؤول</th>
+                  <th data-ins-sort>الأولوية</th>
+                  <th data-ins-sort aria-sort="descending">آخر تحديث</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="التذكرة 2204"></label></td><td class="ins-num">#2204</td><td>لا يظهر الإيصال بعد الدفع</td><td>ليلى حدّاد</td><td><span class="ins-avatar ins-avatar--sm">ع</span></td><td data-sort-value="3"><span class="ins-pill ins-pill--bad">عالية</span></td><td data-sort-value="2026-09-26T09:40">قبل 20 د</td></tr>
+            <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="التذكرة 2203"></label></td><td class="ins-num">#2203</td><td>تغيير عنوان التوصيل</td><td>عمر نصّار</td><td><span class="ins-avatar ins-avatar--sm">س</span></td><td data-sort-value="1"><span class="ins-pill">منخفضة</span></td><td data-sort-value="2026-09-26T08:10">قبل ساعتين</td></tr>
+            <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="التذكرة 2202"></label></td><td class="ins-num">#2202</td><td>المنتج وصل ناقصًا</td><td>سارة يوسف</td><td><span class="ins-avatar ins-avatar--sm">ع</span></td><td data-sort-value="3"><span class="ins-pill ins-pill--bad">عالية</span></td><td data-sort-value="2026-09-25T17:30">أمس</td></tr>
+            <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="التذكرة 2201"></label></td><td class="ins-num">#2201</td><td>استفسار عن الضمان</td><td>كريم منصور</td><td><span class="ins-avatar ins-avatar--sm">ل</span></td><td data-sort-value="2"><span class="ins-pill ins-pill--warn">متوسّطة</span></td><td data-sort-value="2026-09-25T12:05">أمس</td></tr>
+            <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="التذكرة 2200"></label></td><td class="ins-num">#2200</td><td>طلب فاتورة ضريبية</td><td>نور خليل</td><td><span class="ins-avatar ins-avatar--sm">س</span></td><td data-sort-value="1"><span class="ins-pill">منخفضة</span></td><td data-sort-value="2026-09-24T15:00">24 سبتمبر</td></tr>
+            <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="التذكرة 2199"></label></td><td class="ins-num">#2199</td><td>تأخّر الشحنة</td><td>هادي سليم</td><td><span class="ins-avatar ins-avatar--sm">ع</span></td><td data-sort-value="2"><span class="ins-pill ins-pill--warn">متوسّطة</span></td><td data-sort-value="2026-09-24T10:20">24 سبتمبر</td></tr>
+            <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="التذكرة 2197"></label></td><td class="ins-num">#2197</td><td>لم يصل رمز التحقق</td><td>ريم عبدالله</td><td><span class="ins-avatar ins-avatar--sm">ل</span></td><td data-sort-value="3"><span class="ins-pill ins-pill--bad">عالية</span></td><td data-sort-value="2026-09-23T19:45">23 سبتمبر</td></tr>
+            <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="التذكرة 2196"></label></td><td class="ins-num">#2196</td><td>إلغاء الاشتراك</td><td>يوسف عمر</td><td><span class="ins-avatar ins-avatar--sm">س</span></td><td data-sort-value="1"><span class="ins-pill">منخفضة</span></td><td data-sort-value="2026-09-23T09:00">23 سبتمبر</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="ins-panel-foot">
+          <nav class="ins-pagination" aria-label="الصفحات">
+            <a class="ins-page ins-page--prev" aria-disabled="true">السابق</a>
+            <a class="ins-page" aria-current="page">1</a>
+            <a class="ins-page" href="?page=2">2</a>
+            <a class="ins-page" href="?page=3">3</a>
+            <a class="ins-page ins-page--next" href="?page=2">التالي</a>
+          </nav>
+        </div>
+      </section>
+
+      <div class="ins-bulkbar" data-ins-bulk="#tickets" hidden>
+        <span class="ins-bulkbar-count" data-ins-text="{n} تذاكر محدّدة"></span>
+        <button class="ins-btn ins-btn--secondary ins-btn--sm">إسناد</button>
+        <button class="ins-btn ins-btn--secondary ins-btn--sm">إغلاق</button>
+        <button class="ins-btn ins-btn--bare ins-btn--sm" data-ins-select="none">إلغاء التحديد</button>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

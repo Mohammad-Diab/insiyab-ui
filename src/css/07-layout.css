@@ -70,6 +70,9 @@
   padding-block: .25rem;
   font-size: .8125rem;
 }
+/* A field in the strip is as wide as it needs, not the whole line as in a form;
+   `.ins-toolbar-grow` is the one that takes what is left. */
+.ins-toolbar > :is(.ins-input, .ins-select) { inline-size: auto; }
 .ins-toolbar-grow { flex: 1 1 12rem; min-width: 0; }
 /* `margin-inline-start: auto` and not `justify-content: space-between`: the toolbar
    wraps, and space-between spreads a wrapped last row across the whole width. */

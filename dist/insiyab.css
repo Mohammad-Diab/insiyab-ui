@@ -1539,6 +1539,9 @@ html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
   padding-block: .25rem;
   font-size: .8125rem;
 }
+/* A field in the strip is as wide as it needs, not the whole line as in a form;
+   `.ins-toolbar-grow` is the one that takes what is left. */
+.ins-toolbar > :is(.ins-input, .ins-select) { inline-size: auto; }
 .ins-toolbar-grow { flex: 1 1 12rem; min-width: 0; }
 /* `margin-inline-start: auto` and not `justify-content: space-between`: the toolbar
    wraps, and space-between spreads a wrapped last row across the whole width. */
@@ -2253,6 +2256,14 @@ html[dir="ltr"] .ins-dl dd.ins-num { text-align: left; }
 .ins-note--info  { --ins-note-bar: var(--ins-tone-info); }
 .ins-note--brand { --ins-note-bar: var(--ins-tone-brand-soft); }
 .ins-note.is-lit { background: var(--ins-glass-strong); box-shadow: 0 0 0 2px var(--ins-note-bar), var(--ins-sh-md); }
+
+/* --------------------------------------------------------------- icon */
+/* An icon from whatever set a page uses, the size of the text around it:
+   `<svg class="ins-ico"><use href="#i-cart"/></svg>`, or an icon font's `<i>`. The
+   parts that hold icons (a stat's chip, a panel's, a button, an island) set the size
+   of the text, and an `.ins-ico` inside takes its size from that. The drawing's own
+   fill and stroke are left alone, so a line set and a filled set both work. */
+.ins-ico { display: inline-block; flex: 0 0 auto; inline-size: 1em; block-size: 1em; vertical-align: -.125em; }
 
 /* ==========================================================================
    Insiyab · panel and card

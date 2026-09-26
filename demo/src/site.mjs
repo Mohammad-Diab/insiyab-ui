@@ -168,7 +168,21 @@ export const NAV = [
   ] },
   { group: 'القوالب', en: 'Templates', pages: [
     { slug: 'login', title: 'تسجيل الدخول', en: 'Login template', icon: 'user',
-      lead: 'صفحة دخول بخطوات: الهاتف ثمّ كلمة المرور ثمّ الرمز، في بطاقة تنزلق خطواتها، من أجزاء المكتبة وحدها.' }
+      lead: 'صفحة دخول بخطوات: الهاتف ثمّ كلمة المرور ثمّ الرمز، في بطاقة تنزلق خطواتها، من أجزاء المكتبة وحدها.' },
+    { slug: 'tpl-dashboard', title: 'لوحة التحكم', en: 'Dashboard template', icon: 'home', fresh: true,
+      lead: 'صفحة أولى لتطبيق: أرقام اليوم بتغيّرها، ورسمان، وأحدث السجلّات، والنشاط.' },
+    { slug: 'tpl-tickets', title: 'صفحة قائمة', en: 'List page template', icon: 'inbox', fresh: true,
+      lead: 'قائمة سجلّات بحث ومرشّحات وترتيب وتحديد جماعي وترقيم.' },
+    { slug: 'tpl-order', title: 'صفحة تفاصيل', en: 'Detail page template', icon: 'cart', fresh: true,
+      lead: 'سجلّ واحد بتفاصيله: مساره وتعليقاته ومن يتولّاه.' },
+    { slug: 'tpl-settings', title: 'الإعدادات', en: 'Settings template', icon: 'cog', fresh: true,
+      lead: 'إعدادات حساب في ألسنة: ملف يحفظ نفسه، وإشعارات، وأمان.' },
+    { slug: 'tpl-review', title: 'مراجعة بمعايير', en: 'Review against criteria template', icon: 'file', fresh: true,
+      lead: 'مستند بجانب تقييمه: معايير بمستويات ودرجات، وتقييم مقترح بمصادره، ومراجع يعدّل.' },
+    { slug: 'tpl-booking', title: 'نموذج بوقت محدود', en: 'Timed multi-step form template', icon: 'clock', fresh: true,
+      lead: 'نموذج بخطوات يُحتفظ به وقتًا محدودًا، بخطوات تؤجَّل وحفظ تلقائي.' },
+    { slug: 'tpl-error', title: 'صفحة الخطأ', en: 'Error page template', icon: 'alert', fresh: true,
+      lead: 'صفحة «غير موجودة» في وسط الشاشة، ببحث وطريق للعودة.' }
   ] },
   { group: 'الملحقات', en: 'Extras', pages: [
     { slug: 'navbar', title: 'شريط الموقع', en: 'Navbar', icon: 'compass',

@@ -1,0 +1,112 @@
+<!doctype html>
+<!-- The timed multi-step form template as a whole page: copy it, point the tags at your copy of the library, and put your own data in. It is built only from library parts; the docs page tpl-booking.html walks through them. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>حجز موعد</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <script src="../../dist/insiyab.js"></script>
+</head>
+<body>
+<main class="ins-screen">
+  <form class="ins-glass ins-p-8 ins-wizard" id="booking" data-ins-validate data-ins-autosave style="max-inline-size: 40rem">
+    <div class="ins-flex ins-items-center ins-justify-between ins-gap-3 ins-mb-2">
+      <h1 class="ins-h3 ins-m-0">حجز موعد</h1>
+      <span class="ins-countdown" id="hold" data-ins-countdown="600" data-ins-warn="120"></span>
+    </div>
+    <p class="ins-muted ins-mt-0 ins-mb-6">نحتفظ بالموعد لك حتّى ينتهي الوقت. <span class="ins-save"></span></p>
+
+    <ol class="ins-steps">
+      <li class="ins-steps-item"><span class="ins-steps-label">الموعد</span></li>
+      <li class="ins-steps-item"><span class="ins-steps-label">البيانات</span></li>
+      <li class="ins-steps-item"><span class="ins-steps-label">التفضيلات</span></li>
+      <li class="ins-steps-item"><span class="ins-steps-label">المراجعة</span></li>
+    </ol>
+
+    <div class="ins-alert ins-alert--bad ins-mb-4" id="expired" hidden>انتهى وقت الاحتفاظ بالموعد. اختر موعدًا من جديد.</div>
+
+    <div class="ins-wizard-body">
+      <section class="ins-wizard-panel ins-stack" aria-label="الموعد">
+        <div class="ins-field">
+          <label class="ins-label" for="b-service">الخدمة</label>
+          <select class="ins-select" id="b-service" name="service" required>
+            <option value="">اختر خدمة</option>
+            <option>صيانة جهاز</option>
+            <option>استشارة</option>
+            <option>تركيب</option>
+          </select>
+          <p class="ins-error"></p>
+        </div>
+        <div class="ins-field">
+          <label class="ins-label" for="b-day">الموعد</label>
+          <div class="ins-input-group" data-ins-datetime="at">
+            <input class="ins-input" id="b-day" type="date" data-ins-date name="day" required>
+            <input class="ins-input" type="time" data-ins-time name="time" min="09:00" max="17:00" step="1800" required aria-label="الوقت">
+          </div>
+          <p class="ins-error"></p>
+        </div>
+      </section>
+      <section class="ins-wizard-panel ins-stack" aria-label="البيانات">
+        <div class="ins-field">
+          <label class="ins-label" for="b-name">الاسم</label>
+          <input class="ins-input" id="b-name" name="name" autocomplete="name" required autofocus>
+          <p class="ins-error"></p>
+        </div>
+        <div class="ins-field">
+          <label class="ins-label" for="b-phone">الجوّال</label>
+          <input class="ins-input" id="b-phone" name="phone" type="tel" dir="ltr" autocomplete="tel" required>
+          <p class="ins-error"></p>
+        </div>
+      </section>
+      <section class="ins-wizard-panel ins-stack" aria-label="التفضيلات">
+        <div class="ins-field">
+          <span class="ins-label">طريقة التواصل</span>
+          <div class="ins-chips">
+            <button type="button" class="ins-chip" data-ins-toggle aria-pressed="true">رسالة</button>
+            <button type="button" class="ins-chip" data-ins-toggle>اتّصال</button>
+            <button type="button" class="ins-chip" data-ins-toggle>بريد</button>
+          </div>
+        </div>
+        <div class="ins-field">
+          <label class="ins-label" for="b-notes">ملاحظات</label>
+          <textarea class="ins-textarea" id="b-notes" name="notes" maxlength="300" data-ins-count></textarea>
+        </div>
+      </section>
+      <section class="ins-wizard-panel ins-stack" aria-label="المراجعة">
+        <dl class="ins-dl">
+          <div><dt>الخدمة</dt><dd data-ins-echo="#b-service"></dd></div>
+          <div><dt>الاسم</dt><dd data-ins-echo="#b-name"></dd></div>
+          <div><dt>الجوّال</dt><dd class="ins-num" data-ins-echo="#b-phone"></dd></div>
+        </dl>
+      </section>
+    </div>
+
+    <div class="ins-wizard-foot">
+      <button type="button" class="ins-chip" id="flag" data-ins-toggle>للمراجعة لاحقًا</button>
+      <button type="button" class="ins-btn ins-btn--secondary" data-ins-wizard="prev">السابق</button>
+      <button type="button" class="ins-btn ins-btn--primary" data-ins-wizard="next">التالي</button>
+      <button class="ins-btn ins-btn--primary ins-wizard-finish">تأكيد الحجز</button>
+    </div>
+  </form>
+</main>
+<script>
+  /* The hold runs out: say so and stop the booking going through. */
+  document.addEventListener('ins:countdown', function (e) {
+    if (e.detail.el.id !== 'hold' || e.detail.state !== 'end') return;
+    document.getElementById('expired').hidden = false;
+    document.querySelector('#booking .ins-wizard-finish').disabled = true;
+  });
+  /* "For later" marks the step on screen in the step list, and follows the step. */
+  var flag = document.getElementById('flag');
+  function stepItem() { return document.querySelectorAll('#booking .ins-steps-item')[Insiyab.wizard('#booking')]; }
+  document.addEventListener('ins:toggle', function (e) {
+    if (e.detail.el === flag) stepItem().classList.toggle('is-flagged', e.detail.pressed);
+  });
+  document.addEventListener('ins:wizard', function (e) {
+    if (e.detail.el.id !== 'booking') return;
+    flag.setAttribute('aria-pressed', String(stepItem().classList.contains('is-flagged')));
+  });
+</script>
+</body>
+</html>

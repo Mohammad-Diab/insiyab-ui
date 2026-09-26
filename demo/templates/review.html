@@ -1,0 +1,173 @@
+<!doctype html>
+<!-- The review against criteria template as a whole page: copy it, point the tags at your copy of the library, and put your own data in. It is built only from library parts; the docs page tpl-review.html walks through them. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>مراجعة العروض · متجري</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <script src="../../dist/insiyab.js"></script>
+</head>
+<body>
+<svg hidden aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 21v-7h6v7"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h5l2 3h4l2-3h5"/><path d="M4.5 6h15l1.5 6v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6Z"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></symbol>
+  <symbol id="i-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H1a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 2.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 7 2.6h.1A2 2 0 1 1 11 2.6V3a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 19.4 9H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+</svg>
+
+<div class="ins-shell">
+  <aside class="ins-shell-side" id="nav" aria-label="القائمة الرئيسية">
+    <a class="ins-shell-brand" href="dashboard.html">
+      <span class="ins-shell-mark">م</span>
+      <span class="ins-shell-brand-text">
+        <span class="ins-shell-brand-name">متجري</span>
+        <span class="ins-shell-brand-role">لوحة الإدارة</span>
+      </span>
+    </a>
+
+    <div class="ins-shell-group">العمل</div>
+    <a class="ins-shell-link" href="dashboard.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-home"/></svg>لوحة التحكم</a>
+    <a class="ins-shell-link" href="order.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-cart"/></svg>الطلبات</a>
+    <a class="ins-shell-link" href="tickets.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-inbox"/></svg>التذاكر<span class="ins-shell-link-badge">12</span></a>
+    <a class="ins-shell-link is-active" aria-current="page" href="review.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-file"/></svg>العروض</a>
+
+    <div class="ins-shell-group">الحساب</div>
+    <a class="ins-shell-link" href="settings.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-cog"/></svg>الإعدادات</a>
+
+    <div class="ins-shell-bottom">
+      <a class="ins-shell-link" href="login.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-arrow"/></svg>خروج</a>
+    </div>
+  </aside>
+  <div class="ins-shell-scrim"></div>
+
+  <div class="ins-shell-main">
+    <header class="ins-topbar">
+      <div class="ins-zone ins-zone--start">
+        <button class="ins-island ins-island--icon" data-ins-sidebar aria-label="القائمة"><svg class="ins-ico" aria-hidden="true"><use href="#i-menu"/></svg></button>
+        <a class="ins-island ins-island--brand" href="dashboard.html"><span class="ins-shell-mark" style="--ins-mark:28px;font-size:.8125rem">م</span><b>متجري</b></a>
+      </div>
+      <div class="ins-zone ins-zone--center">
+        <div class="ins-island ins-island--title">
+          <div class="ins-shell-head"><h1 class="ins-shell-title">مراجعة العروض</h1><span class="ins-shell-sub">المناقصة 14/2026 · توريد أجهزة</span></div>
+        </div>
+      </div>
+      <div class="ins-zone ins-zone--end">
+        <button class="ins-island ins-island--icon" data-ins-theme-toggle aria-label="تبديل الوضع"><svg class="ins-ico" aria-hidden="true"><use href="#i-moon"/></svg></button>
+        <details class="ins-pop ins-pop--end">
+          <summary class="ins-island" aria-label="حسابي"><span class="ins-avatar ins-avatar--sm">ل</span><span class="ins-hide-below-sm">ليلى</span></summary>
+          <div class="ins-pop-body">
+            <a class="ins-pop-item" href="settings.html">الإعدادات</a>
+            <hr class="ins-pop-sep">
+            <a class="ins-pop-item" href="login.html">خروج</a>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <main class="ins-shell-content">
+      <div class="ins-toolbar">
+        <nav class="ins-toolbar-grow" aria-label="العروض">
+          <ol class="ins-steps ins-steps--grid ins-m-0">
+            <li class="ins-steps-item is-done"><a class="ins-steps-label" href="#">العرض 1</a></li>
+            <li class="ins-steps-item is-done"><a class="ins-steps-label" href="#">العرض 2</a></li>
+            <li class="ins-steps-item is-done is-flagged"><a class="ins-steps-label" href="#">العرض 3</a></li>
+            <li class="ins-steps-item" aria-current="step"><a class="ins-steps-label" href="#">العرض 4</a></li>
+            <li class="ins-steps-item"><a class="ins-steps-label" href="#">العرض 5</a></li>
+            <li class="ins-steps-item is-flagged"><a class="ins-steps-label" href="#">العرض 6</a></li>
+            <li class="ins-steps-item"><a class="ins-steps-label" href="#">العرض 7</a></li>
+            <li class="ins-steps-item"><a class="ins-steps-label" href="#">العرض 8</a></li>
+          </ol>
+        </nav>
+        <div class="ins-toolbar-end">
+          <span class="ins-save" data-ins-save-for="#score-form"></span>
+          <a class="ins-btn ins-btn--secondary ins-btn--sm" href="#">السابق</a>
+          <a class="ins-btn ins-btn--primary ins-btn--sm" href="#">التالي</a>
+        </div>
+      </div>
+
+      <div class="ins-split ins-glass" data-ins-split="review" style="block-size: max(34rem, calc(100vh - 13rem))">
+        <section class="ins-split-pane ins-p-6" aria-label="نصّ العرض">
+          <div class="ins-flex ins-items-center ins-justify-between ins-gap-2 ins-mb-4">
+            <h2 class="ins-h3 ins-m-0">العرض 4 · شركة الأفق للتوريدات</h2>
+            <span class="ins-pill ins-pill--info">مُقدَّم 20 سبتمبر</span>
+          </div>
+          <div class="ins-prose">
+            <h3 id="sec-1">1. نطاق العمل</h3>
+            <p>نتولّى توريد مئة وعشرين جهازًا وتركيبها في ثلاثة مواقع، مع تدريب فريق التشغيل.</p>
+            <h3 id="sec-2">2. التكلفة</h3>
+            <p>
+              تبلغ التكلفة الإجمالية <mark class="ins-mark ins-mark--ok" data-ins-note="#n-price">412,000 ريال شاملة الضريبة</mark>،
+              وتُدفع على ثلاث دفعات مرتبطة بالتسليم.
+            </p>
+            <h3 id="sec-3">3. الجدول الزمني</h3>
+            <p>
+              يكتمل التوريد <mark class="ins-mark ins-mark--bad" data-ins-note="#n-time">خلال ستّة عشر أسبوعًا</mark> من توقيع
+              العقد، ويبدأ التركيب بعد الأسبوع العاشر.
+            </p>
+            <h3 id="sec-4">4. الخبرات السابقة</h3>
+            <p>
+              نفّذنا <mark class="ins-mark ins-mark--ok" data-ins-note="#n-exp">أربعة مشاريع مشابهة</mark> خلال السنوات الثلاث
+              الماضية، مرفقة شهاداتها.
+            </p>
+          </div>
+        </section>
+
+        <section class="ins-split-pane ins-p-6" aria-label="التقييم">
+          <form id="score-form" class="ins-stack" data-ins-autosave onsubmit="event.preventDefault()">
+            <h2 class="ins-h4 ins-m-0">المعايير</h2>
+            <div class="ins-table-wrap">
+              <table class="ins-matrix ins-matrix--cards" id="scores">
+                <thead><tr><th></th><th>ضعيف</th><th>مقبول</th><th>ممتاز</th></tr></thead>
+                <tbody>
+                <tr><th scope="row">السعر</th><td><label class="ins-matrix-cell"><input type="radio" name="c-price" value="1"><span class="ins-matrix-points">1</span>أعلى من الميزانية.</label></td><td><label class="ins-matrix-cell"><input type="radio" name="c-price" value="3" checked><span class="ins-matrix-points">3</span>ضمن الميزانية.</label></td><td><label class="ins-matrix-cell"><input type="radio" name="c-price" value="5"><span class="ins-matrix-points">5</span>أقلّ منها بفارق واضح.</label></td></tr>
+                <tr><th scope="row">مدّة التنفيذ</th><td><label class="ins-matrix-cell"><input type="radio" name="c-time" value="1" checked><span class="ins-matrix-points">1</span>أطول من المطلوب.</label></td><td><label class="ins-matrix-cell"><input type="radio" name="c-time" value="3"><span class="ins-matrix-points">3</span>مطابقة للمطلوب.</label></td><td><label class="ins-matrix-cell"><input type="radio" name="c-time" value="5"><span class="ins-matrix-points">5</span>أقصر مع ضمانات.</label></td></tr>
+                <tr><th scope="row">الخبرة</th><td><label class="ins-matrix-cell"><input type="radio" name="c-exp" value="1"><span class="ins-matrix-points">1</span>لا مشاريع مشابهة.</label></td><td><label class="ins-matrix-cell"><input type="radio" name="c-exp" value="3"><span class="ins-matrix-points">3</span>مشروع أو مشروعان.</label></td><td><label class="ins-matrix-cell"><input type="radio" name="c-exp" value="5" checked><span class="ins-matrix-points">5</span>ثلاثة مشاريع فأكثر.</label></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="ins-m-0">المجموع: <b data-ins-sum="#scores"></b> من 15 · <span class="ins-delta ins-delta--down">-2</span> <span class="ins-delta-ref">عن التقييم المقترح (11)</span></p>
+
+            <h2 class="ins-h4 ins-m-0">التقييم المقترح</h2>
+            <div class="ins-note ins-note--ok" id="n-price">
+              <b>السعر · مقترح 3 من 5.</b> التكلفة ضمن الميزانية المعتمدة، دون خصم على الكمّية.
+              <figure class="ins-quote ins-mt-2">
+                <blockquote>تبلغ التكلفة الإجمالية 412,000 ريال شاملة الضريبة.</blockquote>
+                <figcaption class="ins-quote-source"><a href="#sec-2">نصّ العرض</a> · البند 2</figcaption>
+              </figure>
+            </div>
+            <div class="ins-note ins-note--bad" id="n-time">
+              <b>مدّة التنفيذ · مقترح 3 من 5، وعُدّل إلى 1.</b> ستّة عشر أسبوعًا أطول من الاثني عشر المطلوبة في كرّاسة الشروط.
+              <figure class="ins-quote ins-mt-2">
+                <blockquote>يكتمل التوريد خلال ستّة عشر أسبوعًا من توقيع العقد.</blockquote>
+                <figcaption class="ins-quote-source"><a href="#sec-3">نصّ العرض</a> · البند 3</figcaption>
+              </figure>
+              <div class="ins-field ins-mt-3">
+                <label class="ins-label" for="why-time">سبب التعديل</label>
+                <textarea class="ins-textarea" id="why-time" maxlength="300" data-ins-count>المدّة المطلوبة اثنا عشر أسبوعًا، والتأخير لا ضمان عليه.</textarea>
+              </div>
+            </div>
+            <div class="ins-note ins-note--ok" id="n-exp">
+              <b>الخبرة · مقترح 5 من 5.</b> أربعة مشاريع مشابهة موثّقة بشهادات.
+              <figure class="ins-quote ins-mt-2">
+                <blockquote>نفّذنا أربعة مشاريع مشابهة خلال السنوات الثلاث الماضية.</blockquote>
+                <figcaption class="ins-quote-source"><a href="#sec-4">نصّ العرض</a> · البند 4</figcaption>
+              </figure>
+            </div>
+
+            <div class="ins-flex ins-gap-2">
+              <button class="ins-btn ins-btn--primary">اعتماد التقييم</button>
+              <button type="button" class="ins-btn ins-btn--secondary" data-ins-toggle>للمراجعة لاحقًا</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>
