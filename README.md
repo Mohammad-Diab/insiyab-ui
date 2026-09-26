@@ -33,9 +33,10 @@
 > type and utility layer, the components an application form or dashboard needs
 > (pickers, steps and confirmation included), and a motion layer across all of
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
-> the shell, with every example's markup printed under it. Ten plugins: the
+> the shell, with every example's markup printed under it. Eleven plugins: the
 > Hijri calendar, the command palette, the one-time code, the phone number, file
-> upload, scrollspy, the timeline, the tree, the colour picker and the carousel.
+> upload, scrollspy, the timeline, the tree, the colour picker, the carousel and
+> charts.
 > Two wrappers cover the same classes: React components in
 > [packages/react](packages/react/README.md), and Jinja macros in
 > [packages/jinja](packages/jinja/README.md). See
@@ -929,6 +930,36 @@ and `data-ins-carousel-dots="off"` drops the dots.
 while someone is reading it is the reason. Under `prefers-reduced-motion` it moves
 without sliding. `ins:carousel` reports the slide in view, and
 `Insiyab.carousel(el, n?)` reads the current stop or moves to one.
+
+### Charts
+
+```html
+<link rel="stylesheet" href="plugins/insiyab-chart.css">
+<script src="plugins/insiyab-chart.js"></script>
+
+<figure class="ins-chart" data-ins-chart="bar">
+  <table>
+    <thead><tr><th></th><th>الطلبات</th><th>المرتجع</th></tr></thead>
+    <tbody><tr><th>يناير</th><td>120</td><td>14</td></tr>…</tbody>
+  </table>
+</figure>
+```
+
+Small SVG charts drawn from a table: the first column names the categories, the
+header row the series. The table stays in the page, out of sight, so a screen
+reader reads the numbers; the drawing is hidden from it. Types: `bar` (grouped, or
+stacked with `data-ins-stack`), `hbar`, `histogram` (bars that touch; several
+series overlap, to compare two distributions), `line`, `area`, `donut` (with
+`data-ins-center` and `data-ins-center-label`) and `spark`, a line the size of a
+word. With no table, `data-ins-values="3,5,4"` is one series.
+
+The categories run in the page's reading direction (`dir="ltr"` on the figure for
+the other way), figures are in the page's language with Latin digits, and pointing
+at a bar, a point or a slice shows its value. Six series colours, the brand first
+and then the tones, as `--ins-chart-1` … `--ins-chart-6`; the plot is
+`--ins-chart-h` tall. It redraws when its box changes size. `Insiyab.chart(el,
+{ type, labels, series: [{ name, values }] })` draws from data and writes the table
+for it, or with no data draws again from the table.
 
 ## React
 

@@ -166,7 +166,9 @@ export const NAV = [
     { slug: 'colorpicker', title: 'منتقي الألوان', en: 'Color picker', icon: 'droplet',
       lead: 'حقل لون بمنتقٍ كامل، يقول قبل الحفظ هل يصلح اللون لنصّ: تباينه على الأبيض وعلى الأسود.' },
     { slug: 'carousel', title: 'عرض الشرائح', en: 'Carousel', icon: 'slides',
-      lead: 'شرائح في صفّ يُسحب بالإصبع، وأزرار ونقاط وأسهم باتّجاه القراءة — ولا يتحرّك من تلقاء نفسه.' }
+      lead: 'شرائح في صفّ يُسحب بالإصبع، وأزرار ونقاط وأسهم باتّجاه القراءة — ولا يتحرّك من تلقاء نفسه.' },
+    { slug: 'charts', title: 'الرسوم البيانية', en: 'Charts', icon: 'chart', fresh: true,
+      lead: 'أعمدة وخطوط وحلقات وتوزيعات من جدول، بألوان المكتبة واتّجاه القراءة، والأرقام تبقى لقارئ الشاشة.' }
   ] },
   { group: 'القوالب', en: 'Templates', pages: [
     { slug: 'login', title: 'تسجيل الدخول', en: 'Login template', icon: 'user',

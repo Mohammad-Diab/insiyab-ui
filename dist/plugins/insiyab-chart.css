@@ -1,0 +1,152 @@
+/*! Insiyab UI v0.6.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
+/* ==========================================================================
+   Insiyab · Chart plugin
+   ==========================================================================
+   The look of insiyab-chart.js. Six series colours, the brand first and then the
+   tones, so a chart speaks the same colour language as the pills and alerts beside
+   it; override `--ins-chart-1` … `--ins-chart-6` on the figure for others. The plot
+   is `--ins-chart-h` tall (16rem; a spark takes 2rem). */
+
+.ins-chart {
+  --ins-chart-1: var(--ins-primary);
+  --ins-chart-2: #3B82F6;
+  --ins-chart-3: #22C55E;
+  --ins-chart-4: #F59E0B;
+  --ins-chart-5: #EF4444;
+  --ins-chart-6: #64748B;
+  --ins-chart-h: 16rem;
+  position: relative;
+  margin: 0;
+}
+.ins-chart-plot { block-size: var(--ins-chart-h); }
+/* Positions in the drawing are physical, worked out by the script for either
+   direction; a right-to-left SVG would flip which end of a label its anchor means. */
+.ins-chart svg { display: block; direction: ltr; overflow: visible; }
+
+/* The numbers, kept for a screen reader, out of sight. */
+.ins-chart > .ins-chart-data {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.ins-chart figcaption { margin-block-start: .5rem; font-size: var(--ins-fs-xs); color: var(--ins-text-3); }
+
+/* ----------------------------------------------------------------- axes */
+.ins-chart-grid line { stroke: var(--ins-line); stroke-width: 1; shape-rendering: crispEdges; }
+.ins-chart-grid line.is-zero { stroke: var(--ins-ctl-bd); }
+.ins-chart-grid text,
+.ins-chart-labels text {
+  fill: var(--ins-text-3);
+  font-family: var(--ins-font-body);
+  font-size: 11px;
+}
+.ins-chart-grid text { font-family: var(--ins-font-body-en); font-variant-numeric: tabular-nums; }
+.ins-chart-labels text { fill: var(--ins-text-2); }
+
+/* ---------------------------------------------------------------- marks */
+.ins-chart-s1 { --ins-chart-c: var(--ins-chart-1); }
+.ins-chart-s2 { --ins-chart-c: var(--ins-chart-2); }
+.ins-chart-s3 { --ins-chart-c: var(--ins-chart-3); }
+.ins-chart-s4 { --ins-chart-c: var(--ins-chart-4); }
+.ins-chart-s5 { --ins-chart-c: var(--ins-chart-5); }
+.ins-chart-s6 { --ins-chart-c: var(--ins-chart-6); }
+
+.ins-chart-bar {
+  fill: var(--ins-chart-c);
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: ins-chart-grow var(--ins-t-enter) var(--ins-ease) backwards;
+  transition: opacity var(--ins-t-pop) var(--ins-ease);
+}
+[data-ins-chart="hbar"] .ins-chart-bar { transform-origin: right; animation-name: ins-chart-grow-x; }
+[dir="ltr"] [data-ins-chart="hbar"] .ins-chart-bar,
+[data-ins-chart="hbar"][dir="ltr"] .ins-chart-bar { transform-origin: left; }
+.ins-chart-bar.is-overlap { opacity: .55; }
+.ins-chart-marks:has(.is-lit) .ins-chart-bar:not(.is-lit) { opacity: .45; }
+.ins-chart-bar.is-lit { opacity: 1; }
+
+.ins-chart-line {
+  fill: none;
+  stroke: var(--ins-chart-c);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  animation: ins-chart-draw .8s var(--ins-ease) backwards;
+}
+.ins-chart-area { fill: var(--ins-chart-c); opacity: .12; stroke: none; }
+.ins-chart-dot {
+  fill: var(--ins-glass-strong);
+  stroke: var(--ins-chart-c);
+  stroke-width: 2;
+  transition: r var(--ins-t-pop) var(--ins-ease);
+}
+.ins-chart-dot.is-lit { r: 5.5; fill: var(--ins-chart-c); }
+
+.ins-chart-track { fill: none; stroke: var(--ins-tone-mute-bg); }
+.ins-chart-slice {
+  fill: none;
+  stroke: var(--ins-chart-c);
+  animation: ins-chart-fade var(--ins-t-enter) var(--ins-ease) backwards;
+  transition: opacity var(--ins-t-pop) var(--ins-ease);
+}
+.ins-chart-marks:has(.is-lit) .ins-chart-slice:not(.is-lit) { opacity: .45; }
+.ins-chart-total { fill: var(--ins-text-1); font-family: var(--ins-font-body-en); font-size: 1.5rem; font-weight: 800; }
+.ins-chart-total-label { fill: var(--ins-text-3); font-family: var(--ins-font-body); font-size: 11px; }
+
+/* A spark: a line and its fill, the size of a word. */
+.ins-chart[data-ins-chart="spark"] { display: inline-block; inline-size: 6rem; vertical-align: middle; --ins-chart-h: 2rem; }
+.ins-chart[data-ins-chart="spark"] .ins-chart-line { stroke-width: 2; }
+.ins-chart[data-ins-chart="spark"] .ins-chart-area { opacity: .16; }
+
+/* --------------------------------------------------------------- legend */
+.ins-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .375rem 1rem;
+  margin: .75rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--ins-fs-xs);
+  color: var(--ins-text-2);
+}
+.ins-chart-legend li { display: inline-flex; align-items: center; gap: .375rem; }
+.ins-chart-key { inline-size: .625rem; block-size: .625rem; border-radius: 3px; background: var(--ins-chart-c); }
+.ins-chart-key-value { font-family: var(--ins-font-body-en); font-weight: 700; color: var(--ins-text-1); }
+.ins-chart[data-ins-chart="donut"] .ins-chart-legend { justify-content: center; }
+
+/* ---------------------------------------------------------------- tooltip */
+.ins-chart-tip {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: .125rem;
+  padding: .375rem .625rem;
+  border-radius: var(--ins-r-sm);
+  border: 1px solid var(--ins-rim);
+  background: var(--ins-glass-strong);
+  box-shadow: var(--ins-sh-md);
+  -webkit-backdrop-filter: var(--ins-blur);
+          backdrop-filter: var(--ins-blur);
+  font-size: var(--ins-fs-xs);
+  color: var(--ins-text-2);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.ins-chart-tip b { font-family: var(--ins-font-body-en); font-size: var(--ins-fs-md); color: var(--ins-text-1); }
+
+@keyframes ins-chart-grow { from { transform: scaleY(0); } }
+@keyframes ins-chart-grow-x { from { transform: scaleX(0); } }
+@keyframes ins-chart-draw { from { stroke-dashoffset: 1; } }
+@keyframes ins-chart-fade { from { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ins-chart-bar, .ins-chart-line, .ins-chart-slice { animation: none; }
+}
+[data-ins-fx="off"] :is(.ins-chart-bar, .ins-chart-line, .ins-chart-slice) { animation: none; }
+[data-ins-fx="off"] .ins-chart-tip { backdrop-filter: none; -webkit-backdrop-filter: none; }
