@@ -1084,7 +1084,7 @@
       early: 'اختر {date} أو ما بعده.', late: 'اختر {date} أو ما قبله.',
       selected: 'المحدّد: {n}', remove: 'إزالة', badTime: 'اكتب وقتًا صحيحًا.',
       words: '{n}/{max} كلمة', wordsFree: '{n} كلمة', tooManyWords: 'لا تتجاوز {max} كلمة.',
-      days: '{d} يوم', saving: 'جارٍ الحفظ…', saved: 'حُفظ', saveError: 'تعذّر الحفظ'
+      days: '{d} يوم', saving: 'جارٍ الحفظ…', saved: 'حُفظ', saveError: 'تعذّر الحفظ', resize: 'تغيير حجم اللوحين'
     },
     en: {
       ok: 'OK', cancel: 'Cancel', choose: 'Choose a date', calendar: 'Calendar',
@@ -1093,7 +1093,7 @@
       early: 'Choose {date} or later.', late: 'Choose {date} or earlier.',
       selected: '{n} selected', remove: 'Remove', badTime: 'Enter a valid time.',
       words: '{n}/{max} words', wordsFree: '{n} words', tooManyWords: 'Use {max} words or fewer.',
-      days: '{d}d', saving: 'Saving…', saved: 'Saved', saveError: 'Could not save'
+      days: '{d}d', saving: 'Saving…', saved: 'Saved', saveError: 'Could not save', resize: 'Resize the panes'
     }
   };
 
@@ -2430,6 +2430,60 @@
     }, wait);
   }
 
+  /* ----------------------------------------------------------------- sums */
+  /* The total of the chosen values in a region: `data-ins-sum="#matrix"`. */
+  function sumSync(out) {
+    var region = resolve(out.getAttribute('data-ins-sum'));
+    if (!region) return;
+    var boxes = region.querySelectorAll('input:checked'), total = 0;
+    for (var i = 0; i < boxes.length; i++) { var n = parseFloat(boxes[i].value); if (!isNaN(n)) total += n; }
+    out.textContent = String(Math.round(total * 100) / 100);
+  }
+
+  function sumsFor(node) {
+    var outs = document.querySelectorAll('[data-ins-sum]');
+    for (var i = 0; i < outs.length; i++) {
+      var region = resolve(outs[i].getAttribute('data-ins-sum'));
+      if (region && region.contains(node)) sumSync(outs[i]);
+    }
+  }
+
+  /* ----------------------------------------------------------------- split */
+  function splitHandle(split) {
+    for (var i = 0; i < split.children.length; i++) if (split.children[i].classList.contains('ins-split-handle')) return split.children[i];
+    return null;
+  }
+
+  function splitLimits(split) {
+    return { min: parseFloat(split.getAttribute('data-ins-min')) || 20, max: parseFloat(split.getAttribute('data-ins-max')) || 80 };
+  }
+
+  /* The first pane's share, in percent, kept within the limits. */
+  function splitSet(split, pct, keep) {
+    var lim = splitLimits(split);
+    pct = Math.max(lim.min, Math.min(lim.max, pct));
+    split.style.setProperty('--ins-split', pct + '%');
+    var handle = splitHandle(split);
+    if (handle) handle.setAttribute('aria-valuenow', String(Math.round(pct)));
+    var key = split.getAttribute('data-ins-split');
+    if (keep) {
+      if (key) write('ins-split:' + key, String(pct));
+      emit('ins:split', { el: split, size: pct });
+    }
+    return pct;
+  }
+
+  function splitNow(split) { return parseFloat(split.style.getPropertyValue('--ins-split')) || 50; }
+
+  /* Where the pointer is, as the first pane's share: from the start edge, which is
+     the right one on an Arabic page, or from the top for a stacked split. */
+  function splitAt(split, event) {
+    var r = split.getBoundingClientRect();
+    if (split.classList.contains('ins-split--v')) return (event.clientY - r.top) / r.height * 100;
+    var rtl = window.getComputedStyle(split).direction === 'rtl';
+    return (rtl ? r.right - event.clientX : event.clientX - r.left) / r.width * 100;
+  }
+
   /* ---------------------------------------------------------------- table */
   function tableOf(node) { return node && node.closest ? node.closest('table') : null; }
 
@@ -3189,6 +3243,61 @@
     }, false);
   });
 
+  /* A choice changes the totals of any region it is in. */
+  document.addEventListener('change', function (event) {
+    if (event.target.type === 'radio' || event.target.type === 'checkbox') sumsFor(event.target);
+  }, false);
+
+  /* The split's handle, dragged. The pointer is captured, so the drag keeps going
+     when it runs ahead of the handle, over an iframe or off the window's edge. */
+  document.addEventListener('pointerdown', function (event) {
+    var handle = event.target.closest ? event.target.closest('.ins-split-handle') : null;
+    if (!handle || event.button > 0) return;
+    var split = handle.parentNode;
+    event.preventDefault();
+    handle.focus();
+    try { handle.setPointerCapture(event.pointerId); } catch (e) { /* old engine */ }
+    handle.classList.add('is-dragging');
+    split.classList.add('is-dragging');
+    var move = function (e) { splitSet(split, splitAt(split, e)); };
+    var up = function () {
+      handle.removeEventListener('pointermove', move);
+      handle.removeEventListener('pointerup', up);
+      handle.removeEventListener('pointercancel', up);
+      handle.classList.remove('is-dragging');
+      split.classList.remove('is-dragging');
+      splitSet(split, splitNow(split), true);
+    };
+    handle.addEventListener('pointermove', move);
+    handle.addEventListener('pointerup', up);
+    handle.addEventListener('pointercancel', up);
+  }, false);
+
+  document.addEventListener('dblclick', function (event) {
+    var handle = event.target.closest ? event.target.closest('.ins-split-handle') : null;
+    if (handle) splitSet(handle.parentNode, parseFloat(handle.parentNode.getAttribute('data-ins-split-default')) || 50, true);
+  }, false);
+
+  /* The handle from the keyboard: the arrows move the line the way they point, so on
+     an Arabic page the left arrow widens the first pane, which is on the right. */
+  document.addEventListener('keydown', function (event) {
+    var handle = event.target;
+    if (!handle.classList || !handle.classList.contains('ins-split-handle')) return;
+    var split = handle.parentNode, now = splitNow(split), lim = splitLimits(split), v = split.classList.contains('ins-split--v');
+    var rtl = window.getComputedStyle(split).direction === 'rtl';
+    var grow = v ? 'ArrowDown' : (rtl ? 'ArrowLeft' : 'ArrowRight');
+    var shrink = v ? 'ArrowUp' : (rtl ? 'ArrowRight' : 'ArrowLeft');
+    var to = null, step = event.shiftKey ? 10 : 2;
+    if (event.key === grow) to = now + step;
+    else if (event.key === shrink) to = now - step;
+    else if (event.key === 'Home') to = lim.min;
+    else if (event.key === 'End') to = lim.max;
+    else if (event.key === 'Enter') to = parseFloat(split.getAttribute('data-ins-split-default')) || 50;
+    if (to === null) return;
+    event.preventDefault();
+    splitSet(split, to, true);
+  }, false);
+
   /* Marks and their notes light together under the pointer and on keyboard focus;
      a click on a mark brings its note into view. */
   document.addEventListener('pointerover', function (event) { noteLight(noteGroup(event.target)); }, false);
@@ -3611,6 +3720,53 @@
     }
   });
 
+  /* A matrix's radios named for their row and column; totals drawn once. */
+  define('matrix', function (scope) {
+    var tables = scope.querySelectorAll('.ins-matrix');
+    for (var i = 0; i < tables.length; i++) {
+      var head = tables[i].tHead && tables[i].tHead.rows[0];
+      var body = tables[i].tBodies[0];
+      if (!head || !body) continue;
+      for (var r = 0; r < body.rows.length; r++) {
+        var row = body.rows[r], name = row.cells[0] ? row.cells[0].textContent.trim() : '';
+        for (var c = 1; c < row.cells.length; c++) {
+          var input = row.cells[c].querySelector('input');
+          var col = head.cells[c] ? head.cells[c].textContent.trim() : '';
+          if (input && !input.hasAttribute('aria-label') && !input.closest('label.ins-matrix-cell')) input.setAttribute('aria-label', name + ': ' + col);
+        }
+      }
+    }
+    var sums = scope.querySelectorAll('[data-ins-sum]');
+    for (var k = 0; k < sums.length; k++) sumSync(sums[k]);
+  });
+
+  /* A split gets its handle, and the share it was left at. */
+  define('split', function (scope) {
+    var splits = scope.querySelectorAll('.ins-split');
+    for (var i = 0; i < splits.length; i++) {
+      var split = splits[i];
+      var handle = splitHandle(split);
+      var panes = [];
+      for (var j = 0; j < split.children.length; j++) if (split.children[j].classList.contains('ins-split-pane')) panes.push(split.children[j]);
+      if (!handle && panes.length > 1) {
+        handle = el('div', 'ins-split-handle');
+        split.insertBefore(handle, panes[1]);
+      }
+      if (!handle) continue;
+      var lim = splitLimits(split);
+      handle.setAttribute('role', 'separator');
+      handle.setAttribute('tabindex', '0');
+      handle.setAttribute('aria-orientation', split.classList.contains('ins-split--v') ? 'horizontal' : 'vertical');
+      handle.setAttribute('aria-valuemin', String(lim.min));
+      handle.setAttribute('aria-valuemax', String(lim.max));
+      if (!handle.hasAttribute('aria-label')) handle.setAttribute('aria-label', strings(split).resize);
+      if (panes[0]) { if (!panes[0].id) panes[0].id = uid('ins-pane'); handle.setAttribute('aria-controls', panes[0].id); }
+      var key = split.getAttribute('data-ins-split');
+      var kept = key ? parseFloat(read('ins-split:' + key)) : NaN;
+      splitSet(split, !isNaN(kept) ? kept : (parseFloat(split.getAttribute('data-ins-split-default')) || 50));
+    }
+  });
+
   define('countdowns', function (scope) {
     var nodes = scope.querySelectorAll('[data-ins-countdown]');
     for (var i = 0; i < nodes.length; i++) {
@@ -3770,6 +3926,12 @@
       var node = resolve(target);
       if (!node) return null;
       return value === undefined ? (node.__insEnd ? countdownLeft(node) : null) : countdownSet(node, value);
+    },
+    /* A split's first pane share in percent, or set it. */
+    split: function (target, size) {
+      var split = resolve(target);
+      if (!split) return null;
+      return size === undefined ? splitNow(split) : splitSet(split, size, true);
     },
     /* 'saving', 'saved', 'error' or 'idle', with words of your own if you like. */
     saveState: saveState,

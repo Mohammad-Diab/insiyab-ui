@@ -1733,6 +1733,57 @@ html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
   }
 }
 
+/* --------------------------------------------------------------- split view */
+/* Two panes side by side, the line between them dragged to share the width: a
+   document beside the form about it, a list beside the item it opens.
+
+     <div class="ins-split" data-ins-split="review" style="block-size: 70vh">
+       <section class="ins-split-pane">…</section>
+       <section class="ins-split-pane">…</section>
+     </div>
+
+   insiyab.js puts a handle between them, which the arrow keys move as well as the
+   pointer; Home and End take it to its limits (`data-ins-min`, `data-ins-max`, 20%
+   and 80%) and a double click or Enter back to the middle. A name in
+   `data-ins-split` keeps the share for next time. Each pane scrolls on its own.
+   `.ins-split--v` stacks them, one over the other. Below 56rem the side-by-side
+   kind stacks too, with no handle: two narrow columns help nobody. */
+.ins-split {
+  --ins-split: 50%;
+  display: grid;
+  grid-template-columns: minmax(0, var(--ins-split)) auto minmax(0, 1fr);
+  min-block-size: 0;
+}
+.ins-split--v { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, var(--ins-split)) auto minmax(0, 1fr); }
+.ins-split-pane { min-inline-size: 0; min-block-size: 0; overflow: auto; overscroll-behavior: contain; }
+.ins-split-handle {
+  display: grid;
+  place-items: center;
+  inline-size: .875rem;
+  cursor: col-resize;
+  touch-action: none;
+  outline: 0;
+}
+.ins-split--v > .ins-split-handle { inline-size: auto; block-size: .875rem; cursor: row-resize; }
+.ins-split-handle::before {
+  content: "";
+  inline-size: 4px;
+  block-size: 2.5rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-ctl-bd);
+  transition: background var(--ins-t-pop) var(--ins-ease), block-size var(--ins-t-pop) var(--ins-ease), inline-size var(--ins-t-pop) var(--ins-ease);
+}
+.ins-split--v > .ins-split-handle::before { inline-size: 2.5rem; block-size: 4px; }
+.ins-split-handle:is(:hover, :focus-visible, .is-dragging)::before { background: var(--ins-tone-brand-soft); block-size: 4rem; }
+.ins-split--v > .ins-split-handle:is(:hover, :focus-visible, .is-dragging)::before { inline-size: 4rem; block-size: 4px; }
+.ins-split-handle:focus-visible::before { box-shadow: var(--ins-focus-ring); }
+/* While dragging, the text under the pointer is not being selected. */
+.ins-split.is-dragging { user-select: none; }
+@media (max-width: 56rem) {
+  .ins-split:not(.ins-split--v) { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; }
+  .ins-split:not(.ins-split--v) > .ins-split-handle { display: none; }
+}
+
 /* ==========================================================================
    Insiyab · type and content
    ==========================================================================
@@ -4649,6 +4700,108 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 }
 .ins-count.is-near { color: var(--ins-tone-warn); }
 .ins-count.is-over { color: var(--ins-tone-bad); font-weight: 700; }
+
+/* --------------------------------------------------------------- choice matrix */
+/* Rows of questions sharing one set of answers: a survey grid, or criteria scored
+   against levels. A real table, one radio group per row, so the arrow keys move
+   along a row and `required` on a row's radios asks for an answer to each.
+
+     <table class="ins-matrix">
+       <thead><tr><th></th><th>ضعيف</th><th>جيّد</th>…</tr></thead>
+       <tbody>
+         <tr><th scope="row">السعر</th>
+             <td><label class="ins-check"><input type="radio" name="price" value="1"></label></td> …
+     </table>
+
+   insiyab.js names every radio after its row and column ("السعر: جيّد"), since the
+   box on its own says nothing. The chosen cell takes the brand tint.
+
+   `.ins-matrix--cards` is the version with words in the cells: each cell a
+   `<label class="ins-matrix-cell">` around its radio, a description and, if the
+   levels carry points, `.ins-matrix-points`. The whole card is the choice. An
+   element with `data-ins-sum="#matrix"` shows the total of the chosen values. */
+.ins-matrix {
+  inline-size: 100%;
+  border-collapse: separate;
+  border-spacing: 0 .25rem;
+  font-size: var(--ins-fs-sm);
+}
+.ins-matrix thead th {
+  padding: .25rem .5rem .5rem;
+  font-size: var(--ins-fs-xs);
+  font-weight: 800;
+  color: var(--ins-label);
+  text-align: center;
+  vertical-align: bottom;
+}
+.ins-matrix tbody th {
+  padding-block: .625rem;
+  padding-inline: .75rem 1rem;
+  font-weight: 700;
+  color: var(--ins-text-1);
+  text-align: start;
+}
+.ins-matrix tbody :is(th, td) {
+  background: var(--ins-glass-inner);
+  transition: background var(--ins-t-pop) var(--ins-ease);
+}
+.ins-matrix tbody td { padding: .375rem; text-align: center; vertical-align: middle; }
+.ins-matrix tbody tr:hover > :is(th, td) { background: var(--ins-surface-hover); }
+.ins-matrix tbody td:has(input:checked) { background: var(--ins-tone-brand-bg); }
+.ins-matrix td > .ins-check { justify-content: center; }
+/* The row's ends rounded, on the page's direction as the table's are. */
+html[dir="rtl"] .ins-matrix tbody tr > :first-child { border-radius: 0 var(--ins-r-sm) var(--ins-r-sm) 0; }
+html[dir="rtl"] .ins-matrix tbody tr > :last-child { border-radius: var(--ins-r-sm) 0 0 var(--ins-r-sm); }
+html[dir="ltr"] .ins-matrix tbody tr > :first-child { border-radius: var(--ins-r-sm) 0 0 var(--ins-r-sm); }
+html[dir="ltr"] .ins-matrix tbody tr > :last-child { border-radius: 0 var(--ins-r-sm) var(--ins-r-sm) 0; }
+
+/* `height: 1px` lets a card fill its cell: a percentage height resolves against a cell given any height. */
+.ins-matrix--cards tbody td { block-size: 1px; padding: .25rem; vertical-align: top; }
+.ins-matrix--cards tbody td:has(input:checked) { background: var(--ins-glass-inner); }
+.ins-matrix-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .375rem;
+  block-size: 100%;
+  min-inline-size: 8rem;
+  padding: .625rem .75rem;
+  border: 1px solid var(--ins-ctl-bd);
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-surface);
+  font-size: var(--ins-fs-xs);
+  line-height: 1.7;
+  color: var(--ins-text-2);
+  text-align: start;
+  cursor: pointer;
+  transition: border-color var(--ins-t-pop) var(--ins-ease), background var(--ins-t-pop) var(--ins-ease), box-shadow var(--ins-t-pop) var(--ins-ease);
+}
+.ins-matrix-cell > input {
+  position: absolute;
+  opacity: 0;
+  inline-size: 1px;
+  block-size: 1px;
+  pointer-events: none;
+}
+.ins-matrix-cell:hover { border-color: rgba(var(--ins-primary-rgb), .35); }
+.ins-matrix-cell:has(> input:checked) {
+  border-color: var(--ins-tone-brand-soft);
+  background: var(--ins-tone-brand-bg);
+  box-shadow: inset 0 0 0 1px var(--ins-tone-brand-soft);
+  color: var(--ins-text-1);
+}
+.ins-matrix-cell:has(> input:focus-visible) { outline: 2px solid var(--ins-tone-brand-soft); outline-offset: 2px; }
+.ins-matrix-points {
+  align-self: flex-start;
+  padding: .0625rem .5rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-mute-bg);
+  color: var(--ins-text-1);
+  font-family: var(--ins-font-body-en);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ins-matrix-cell:has(> input:checked) .ins-matrix-points { background: var(--ins-tone-brand-soft); color: var(--ins-on-primary); }
 
 /* ==========================================================================
    Insiyab · pill, badge, money, avatar

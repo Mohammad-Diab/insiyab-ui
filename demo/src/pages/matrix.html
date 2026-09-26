@@ -1,0 +1,59 @@
+<h2 id="matrix">مصفوفة الاختيار</h2>
+<p>
+  <code>.ins-matrix</code> صفوف أسئلة تتشارك إجابات واحدة، كاستبيان. جدول حقيقي، ومجموعة دوائر لكلّ صفّ، فتتنقّل الأسهم على
+  الصفّ و<code>required</code> على دوائر صفّ يطلب إجابته. يسمّي السكربت كلّ دائرة باسم صفّها وعمودها، والخليّة المختارة تتلوّن.
+</p>
+<demo-example>
+  <div class="ins-table-wrap">
+    <table class="ins-matrix">
+      <thead><tr><th></th><th>ضعيف</th><th>مقبول</th><th>جيّد</th><th>ممتاز</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">السعر</th>
+          <td><label class="ins-check"><input type="radio" name="m-price" value="1"></label></td>
+          <td><label class="ins-check"><input type="radio" name="m-price" value="2"></label></td>
+          <td><label class="ins-check"><input type="radio" name="m-price" value="3" checked></label></td>
+          <td><label class="ins-check"><input type="radio" name="m-price" value="4"></label></td>
+        </tr>
+        <tr><th scope="row">الجودة</th>
+          <td><label class="ins-check"><input type="radio" name="m-quality" value="1"></label></td>
+          <td><label class="ins-check"><input type="radio" name="m-quality" value="2"></label></td>
+          <td><label class="ins-check"><input type="radio" name="m-quality" value="3"></label></td>
+          <td><label class="ins-check"><input type="radio" name="m-quality" value="4"></label></td>
+        </tr>
+        <tr><th scope="row">التوصيل</th>
+          <td><label class="ins-check"><input type="radio" name="m-delivery" value="1"></label></td>
+          <td><label class="ins-check"><input type="radio" name="m-delivery" value="2"></label></td>
+          <td><label class="ins-check"><input type="radio" name="m-delivery" value="3"></label></td>
+          <td><label class="ins-check"><input type="radio" name="m-delivery" value="4"></label></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</demo-example>
+
+<h2 id="cards">بطاقات بوصف ودرجات</h2>
+<p>
+  <code>--cards</code> حين تحمل الخلايا كلامًا: كلّ خليّة <code>&lt;label class="ins-matrix-cell"&gt;</code> حول دائرتها ووصفها،
+  و<code>.ins-matrix-points</code> لدرجة المستوى. البطاقة كلّها هي الاختيار. وعنصر عليه <code>data-ins-sum="#id"</code> يعرض مجموع
+  القيم المختارة.
+</p>
+<demo-example>
+  <div class="ins-table-wrap">
+    <table class="ins-matrix ins-matrix--cards" id="score">
+      <thead><tr><th></th><th>ضعيف</th><th>جيّد</th><th>ممتاز</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">وضوح العرض</th>
+          <td><label class="ins-matrix-cell"><input type="radio" name="s-clarity" value="1"><span class="ins-matrix-points">1</span>الفكرة غير مفهومة.</label></td>
+          <td><label class="ins-matrix-cell"><input type="radio" name="s-clarity" value="3" checked><span class="ins-matrix-points">3</span>مفهوم مع بعض الغموض.</label></td>
+          <td><label class="ins-matrix-cell"><input type="radio" name="s-clarity" value="5"><span class="ins-matrix-points">5</span>واضح ومرتّب.</label></td>
+        </tr>
+        <tr><th scope="row">التكلفة</th>
+          <td><label class="ins-matrix-cell"><input type="radio" name="s-cost" value="1"><span class="ins-matrix-points">1</span>أعلى من الميزانية.</label></td>
+          <td><label class="ins-matrix-cell"><input type="radio" name="s-cost" value="3"><span class="ins-matrix-points">3</span>ضمن الميزانية.</label></td>
+          <td><label class="ins-matrix-cell"><input type="radio" name="s-cost" value="5"><span class="ins-matrix-points">5</span>أقلّ منها بفارق واضح.</label></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="ins-mt-3 ins-mb-0">المجموع: <b data-ins-sum="#score"></b> من 10</p>
+</demo-example>
