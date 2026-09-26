@@ -1,0 +1,31 @@
+<!doctype html>
+<!-- The error page template as a whole page: copy it, point the tags at your copy of the library, and put your own data in. It is built only from library parts; the docs page tpl-error.html walks through them. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>الصفحة غير موجودة</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <script src="../../dist/insiyab.js"></script>
+</head>
+<body>
+<svg hidden aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+</svg>
+<main class="ins-screen">
+  <div class="ins-glass ins-p-8 ins-text-center ins-stack">
+    <p class="ins-display ins-m-0 ins-num" aria-hidden="true">404</p>
+    <h1 class="ins-h2 ins-m-0">الصفحة غير موجودة</h1>
+    <p class="ins-muted ins-m-0">ربّما نُقلت أو حُذفت، أو في الرابط خطأ.</p>
+    <form class="ins-search" role="search" action="dashboard.html">
+      <svg class="ins-ico ins-search-ico" aria-hidden="true"><use href="#i-search"/></svg>
+      <input class="ins-input" type="search" name="q" placeholder="ابحث عمّا كنت تريد" aria-label="بحث">
+    </form>
+    <div class="ins-flex ins-justify-center ins-gap-2">
+      <a class="ins-btn ins-btn--primary" href="dashboard.html">الرئيسية</a>
+      <button type="button" class="ins-btn ins-btn--secondary" onclick="history.back()">رجوع</button>
+    </div>
+  </div>
+</main>
+</body>
+</html>

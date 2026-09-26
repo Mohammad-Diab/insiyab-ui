@@ -33,10 +33,12 @@
 > type and utility layer, the components an application form or dashboard needs
 > (pickers, steps and confirmation included), and a motion layer across all of
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
-> the shell, with every example's markup printed under it. Twelve plugins: the
-> Hijri calendar, the command palette, the one-time code, the phone number, file
-> upload, scrollspy, the timeline, the tree, the colour picker, the carousel,
-> charts and the month calendar.
+> the shell, with every example's markup printed under it, and a set of page
+> templates (a dashboard, a list page, a detail page, settings, a review against
+> criteria, a timed multi-step form, an error page, a login) built from the
+> library's parts alone. Twelve plugins: the Hijri calendar, the command palette,
+> the one-time code, the phone number, file upload, scrollspy, the timeline, the
+> tree, the colour picker, the carousel, charts and the month calendar.
 > Two wrappers cover the same classes: React components in
 > [packages/react](packages/react/README.md), and Jinja macros in
 > [packages/jinja](packages/jinja/README.md). See
@@ -174,8 +176,8 @@ there, in Arabic, in both themes, with the markup of each example under it.
 | **Overlay** | `.ins-dialog` (native `<dialog>`, `--sm`, `--lg`) · `.ins-drawer` (`--end`, `--bottom`) · `.ins-pop` (native `<details>`; hangs from the trigger's leading edge, `--end` for the trailing one; `-label`, `-item`, checkable items via `role="menuitemcheckbox|menuitemradio"`) · `.ins-pop-body--card` (+ `.ins-pop-title`, `.ins-pop-text`) · `.ins-tooltip` via `data-ins-tip` · confirmation via `data-ins-confirm` or `Insiyab.confirm()` |
 | **Navigation** | `.ins-page-head` (`-text`) · `.ins-page-title` · `.ins-page-sub` · `.ins-page-actions` · `.ins-breadcrumb` · `.ins-tablist` · `.ins-tab` · `.ins-tabpanel` · `.ins-pagination` · `.ins-page` (`--prev`, `--next`) · `.ins-page-gap` · `.ins-navbar` (`--static`; `-brand`, `-toggle`, `-menu`, `-link`, `-end`) · `.ins-accordion` · `.ins-collapse` (`-body`) · `.ins-steps` (`-item`, `-label`; `--dots`, `--grid`; `.is-flagged`, `.is-error`) · `.ins-wizard` (`-body`, `-panel`, `-foot`, `-finish`) |
 | **Shell** | `.ins-shell` · `.ins-shell-side` (brand, `-group`, `-link`, `-link-badge`, `-bottom`) · `.ins-topbar` · `.ins-zone` · `.ins-island` (`--icon`, `--title`, `--brand`) |
-| **Layout** | `.ins-container` (`--narrow`, `--wide`) · `.ins-screen` (one card in the middle of the page) · `.ins-split` (`-pane`, `--v`; a dragged handle, kept by `data-ins-split`) · `.ins-brand` (`-name`, `-sub`) · `.ins-stack` · `.ins-row` · `.ins-cols-{2,3,4,6,12}` (+ `--fixed`) · `.ins-span-{2…12,full}` · `.ins-grid` · `.ins-toolbar` · `.ins-searchbar` |
-| **Type** | `.ins-display` · `.ins-h1`–`.ins-h4` · `.ins-lead` · `.ins-eyebrow` · `.ins-prose` · `.ins-kbd` · `.ins-divider` (`--start`, `--v`) · `.ins-quote` (+ `-source`) · `.ins-ref` · `.ins-mark` (5 tones; `data-ins-note` ties it to a `.ins-note`) |
+| **Layout** | `.ins-container` (`--narrow`, `--wide`) · `.ins-screen` (one card in the middle of the page) · `.ins-split` (`-pane`, `--v`; a dragged handle, kept by `data-ins-split`) · `.ins-brand` (`-name`, `-sub`) · `.ins-stack` · `.ins-row` · `.ins-cols-{2,3,4,6,12}` (+ `--fixed`) · `.ins-span-{2…12,full}` · `.ins-grid` · `.ins-toolbar` (its fields size to their content; `-grow` takes the rest) · `.ins-searchbar` |
+| **Type** | `.ins-display` · `.ins-h1`–`.ins-h4` · `.ins-lead` · `.ins-eyebrow` · `.ins-prose` · `.ins-kbd` · `.ins-divider` (`--start`, `--v`) · `.ins-quote` (+ `-source`) · `.ins-ref` · `.ins-mark` (5 tones; `data-ins-note` ties it to a `.ins-note`) · `.ins-ico`, an icon from any set at the size of the text around it |
 | **Utilities** | spacing `ins-{gap,m,mt,mb,ms,me,mx,my,p,pt,pb,ps,pe,px,py}-{0,1,2,3,4,5,6,8,12}` · flex `ins-flex`, `-wrap`, `ins-grow`, `ins-items-*`, `ins-self-*`, `ins-justify-*` · text `ins-text-{start,center,end,xs…xl,ok,warn,bad,info,brand}`, `ins-fw-*`, `ins-muted`, `ins-truncate`, `ins-clamp-{2,3}` · scroll `ins-scroll-smooth` · visibility `ins-hide-{below,above}-{sm,md,lg}`, `ins-hide-print`, `ins-print-only` |
 | **Motion** | `[data-ins-reveal]` · `.ins-hoverable` · `.ins-anim-rise` · `.ins-anim-pop` · `.ins-anim-slide` |
 | **Ground** | `.ins-orbs` / `.ins-orb-1..3` — injected for you; opt out with `data-ins-orbs="off"` |

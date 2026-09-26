@@ -537,3 +537,6 @@
 /* The login template: a screen-sized frame, so the card sits in the middle of it. */
 .dx-view.screen { padding: 0; }
 .dx-view.screen .ins-screen { min-block-size: 44rem; }
+
+/* A template shown whole, in a frame the size of a small screen. */
+.site-frame { display: block; inline-size: 100%; block-size: 46rem; border: 0; border-radius: inherit; background: transparent; }

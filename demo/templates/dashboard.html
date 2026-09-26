@@ -1,0 +1,199 @@
+<!doctype html>
+<!-- The dashboard template as a whole page: copy it, point the tags at your copy of the library, and put your own data in. It is built only from library parts; the docs page tpl-dashboard.html walks through them. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>لوحة التحكم · متجري</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <link rel="stylesheet" href="../../dist/plugins/insiyab-chart.css">
+  <script src="../../dist/insiyab.js"></script>
+  <script src="../../dist/plugins/insiyab-chart.js"></script>
+</head>
+<body>
+<svg hidden aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 21v-7h6v7"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h5l2 3h4l2-3h5"/><path d="M4.5 6h15l1.5 6v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6Z"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></symbol>
+  <symbol id="i-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H1a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 2.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 7 2.6h.1A2 2 0 1 1 11 2.6V3a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 19.4 9H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M16 12h2"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8v8l9 5 9-5Z"/><path d="m3 8 9 5 9-5M12 13v8"/></symbol>
+</svg>
+
+<div class="ins-shell">
+  <aside class="ins-shell-side" id="nav" aria-label="القائمة الرئيسية">
+    <a class="ins-shell-brand" href="dashboard.html">
+      <span class="ins-shell-mark">م</span>
+      <span class="ins-shell-brand-text">
+        <span class="ins-shell-brand-name">متجري</span>
+        <span class="ins-shell-brand-role">لوحة الإدارة</span>
+      </span>
+    </a>
+
+    <div class="ins-shell-group">العمل</div>
+    <a class="ins-shell-link is-active" aria-current="page" href="dashboard.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-home"/></svg>لوحة التحكم</a>
+    <a class="ins-shell-link" href="order.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-cart"/></svg>الطلبات</a>
+    <a class="ins-shell-link" href="tickets.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-inbox"/></svg>التذاكر<span class="ins-shell-link-badge">12</span></a>
+    <a class="ins-shell-link" href="review.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-file"/></svg>العروض</a>
+
+    <div class="ins-shell-group">الحساب</div>
+    <a class="ins-shell-link" href="settings.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-cog"/></svg>الإعدادات</a>
+
+    <div class="ins-shell-bottom">
+      <a class="ins-shell-link" href="login.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-arrow"/></svg>خروج</a>
+    </div>
+  </aside>
+  <div class="ins-shell-scrim"></div>
+
+  <div class="ins-shell-main">
+    <header class="ins-topbar">
+      <div class="ins-zone ins-zone--start">
+        <button class="ins-island ins-island--icon" data-ins-sidebar aria-label="القائمة"><svg class="ins-ico" aria-hidden="true"><use href="#i-menu"/></svg></button>
+        <a class="ins-island ins-island--brand" href="dashboard.html"><span class="ins-shell-mark" style="--ins-mark:28px;font-size:.8125rem">م</span><b>متجري</b></a>
+      </div>
+      <div class="ins-zone ins-zone--center">
+        <div class="ins-island ins-island--title">
+          <div class="ins-shell-head"><h1 class="ins-shell-title">لوحة التحكم</h1><span class="ins-shell-sub">سبتمبر 2026</span></div>
+        </div>
+      </div>
+      <div class="ins-zone ins-zone--end">
+        <button class="ins-island ins-island--icon" data-ins-theme-toggle aria-label="تبديل الوضع"><svg class="ins-ico" aria-hidden="true"><use href="#i-moon"/></svg></button>
+        <details class="ins-pop ins-pop--end">
+          <summary class="ins-island" aria-label="حسابي"><span class="ins-avatar ins-avatar--sm">ل</span><span class="ins-hide-below-sm">ليلى</span></summary>
+          <div class="ins-pop-body">
+            <a class="ins-pop-item" href="settings.html">الإعدادات</a>
+            <hr class="ins-pop-sep">
+            <a class="ins-pop-item" href="login.html">خروج</a>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <main class="ins-shell-content">
+      <div class="ins-toolbar">
+        <div class="ins-seg" role="group" aria-label="الفترة">
+          <button data-ins-value="day">اليوم</button>
+          <button data-ins-value="week">الأسبوع</button>
+          <button class="is-active" data-ins-value="month">الشهر</button>
+        </div>
+        <div class="ins-toolbar-end">
+          <button class="ins-btn ins-btn--secondary ins-btn--sm"><svg class="ins-ico" aria-hidden="true"><use href="#i-download"/></svg>تصدير</button>
+          <a class="ins-btn ins-btn--primary ins-btn--sm" href="order.html"><svg class="ins-ico" aria-hidden="true"><use href="#i-plus"/></svg>طلب جديد</a>
+        </div>
+      </div>
+
+      <div class="ins-grid">
+        <div class="ins-stat ins-glass">
+          <span class="ins-stat-ico"><svg class="ins-ico" aria-hidden="true"><use href="#i-wallet"/></svg></span>
+          <span class="ins-stat-body">
+            <span class="ins-stat-label">الإيرادات</span>
+            <span class="ins-stat-value ins-money"><span class="ins-money-val">128,960</span><span class="ins-money-cur">ر.س</span></span>
+            <span class="ins-stat-trend"><span class="ins-delta ins-delta--up">12%</span><span class="ins-delta-ref">عن الشهر الماضي</span></span>
+          </span>
+          <span class="ins-chart" data-ins-chart="spark" data-ins-values="80,95,90,110,105,120,129"></span>
+        </div>
+        <div class="ins-stat ins-glass ins-stat--info">
+          <span class="ins-stat-ico"><svg class="ins-ico" aria-hidden="true"><use href="#i-cart"/></svg></span>
+          <span class="ins-stat-body">
+            <span class="ins-stat-label">الطلبات</span>
+            <span class="ins-stat-value">312</span>
+            <span class="ins-stat-trend"><span class="ins-delta ins-delta--up">8%</span><span class="ins-delta-ref">عن الشهر الماضي</span></span>
+          </span>
+          <span class="ins-chart" data-ins-chart="spark" data-ins-values="240,260,251,280,275,300,312"></span>
+        </div>
+        <div class="ins-stat ins-glass ins-stat--warn">
+          <span class="ins-stat-ico"><svg class="ins-ico" aria-hidden="true"><use href="#i-box"/></svg></span>
+          <span class="ins-stat-body">
+            <span class="ins-stat-label">متوسّط السلّة</span>
+            <span class="ins-stat-value ins-money"><span class="ins-money-val">413</span><span class="ins-money-cur">ر.س</span></span>
+            <span class="ins-stat-trend"><span class="ins-delta ins-delta--down">-3%</span><span class="ins-delta-ref">عن الشهر الماضي</span></span>
+          </span>
+        </div>
+        <div class="ins-stat ins-glass ins-stat--ok">
+          <span class="ins-stat-ico"><svg class="ins-ico" aria-hidden="true"><use href="#i-inbox"/></svg></span>
+          <span class="ins-stat-body">
+            <span class="ins-stat-label">تذاكر مفتوحة</span>
+            <span class="ins-stat-value">12</span>
+            <span class="ins-stat-trend"><span class="ins-delta ins-delta--down ins-delta--invert">-20%</span><span class="ins-delta-ref">عن الشهر الماضي</span></span>
+          </span>
+        </div>
+      </div>
+
+      <div class="ins-cols-12 ins-mt-4">
+        <section class="ins-panel ins-span-8">
+          <div class="ins-panel-head"><h2 class="ins-panel-title">الزيارات والطلبات</h2></div>
+          <div class="ins-panel-body">
+            <figure class="ins-chart" data-ins-chart="area">
+              <table>
+                <thead><tr><th></th><th>الزيارات</th><th>الطلبات</th></tr></thead>
+                <tbody>
+                  <tr><th>السبت</th><td>820</td><td>120</td></tr>
+                  <tr><th>الأحد</th><td>932</td><td>150</td></tr>
+                  <tr><th>الإثنين</th><td>901</td><td>98</td></tr>
+                  <tr><th>الثلاثاء</th><td>934</td><td>174</td></tr>
+                  <tr><th>الأربعاء</th><td>1290</td><td>160</td></tr>
+                  <tr><th>الخميس</th><td>1330</td><td>210</td></tr>
+                  <tr><th>الجمعة</th><td>1320</td><td>230</td></tr>
+                </tbody>
+              </table>
+            </figure>
+          </div>
+        </section>
+        <section class="ins-panel ins-span-4">
+          <div class="ins-panel-head"><h2 class="ins-panel-title">حالة الطلبات</h2></div>
+          <div class="ins-panel-body">
+            <figure class="ins-chart" data-ins-chart="donut" data-ins-center-label="طلب" style="--ins-chart-h: 12rem">
+              <table>
+                <thead><tr><th></th><th>الطلبات</th></tr></thead>
+                <tbody>
+                  <tr><th>مكتملة</th><td>250</td></tr>
+                  <tr><th>قيد التجهيز</th><td>42</td></tr>
+                  <tr><th>مرتجعة</th><td>13</td></tr>
+                  <tr><th>ملغاة</th><td>7</td></tr>
+                </tbody>
+              </table>
+            </figure>
+          </div>
+        </section>
+
+        <section class="ins-panel ins-span-8">
+          <div class="ins-panel-head">
+            <h2 class="ins-panel-title">أحدث الطلبات</h2>
+            <div class="ins-panel-actions"><a class="ins-btn ins-btn--bare ins-btn--sm" href="order.html">كلّ الطلبات</a></div>
+          </div>
+          <div class="ins-panel-body ins-panel-body--flush">
+            <div class="ins-table-wrap">
+              <table class="ins-table">
+                <thead><tr><th>الطلب</th><th>العميل</th><th>الحالة</th><th class="ins-num">المبلغ</th></tr></thead>
+                <tbody>
+                  <tr><td><a class="ins-num" href="order.html">#1042</a></td><td>ليلى حدّاد</td><td><span class="ins-pill ins-pill--warn">قيد التجهيز</span></td><td class="ins-num">249.00</td></tr>
+                  <tr><td><a class="ins-num" href="order.html">#1041</a></td><td>عمر نصّار</td><td><span class="ins-pill ins-pill--ok">مكتمل</span></td><td class="ins-num">1,180.00</td></tr>
+                  <tr><td><a class="ins-num" href="order.html">#1040</a></td><td>سارة يوسف</td><td><span class="ins-pill ins-pill--ok">مكتمل</span></td><td class="ins-num">89.50</td></tr>
+                  <tr><td><a class="ins-num" href="order.html">#1039</a></td><td>كريم منصور</td><td><span class="ins-pill ins-pill--bad">مرتجع</span></td><td class="ins-num">412.00</td></tr>
+                  <tr><td><a class="ins-num" href="order.html">#1038</a></td><td>نور خليل</td><td><span class="ins-pill ins-pill--info">شُحن</span></td><td class="ins-num">615.25</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+        <section class="ins-panel ins-span-4">
+          <div class="ins-panel-head"><h2 class="ins-panel-title">النشاط</h2></div>
+          <ul class="ins-list">
+            <li class="ins-list-item"><span class="ins-avatar ins-avatar--sm">ع</span><span class="ins-list-text"><span class="ins-list-title">عمر أغلق التذكرة #2198</span><span class="ins-list-desc">الدفع والفواتير</span></span><span class="ins-list-end">قبل 5 د</span></li>
+            <li class="ins-list-item"><span class="ins-avatar ins-avatar--sm">س</span><span class="ins-list-text"><span class="ins-list-title">سارة شحنت الطلب #1038</span><span class="ins-list-desc">شركة النقل السريع</span></span><span class="ins-list-end">قبل ساعة</span></li>
+            <li class="ins-list-item"><span class="ins-avatar ins-avatar--sm">ل</span><span class="ins-list-text"><span class="ins-list-title">ليلى اعتمدت عرضًا</span><span class="ins-list-desc">المناقصة 14/2026</span></span><span class="ins-list-end">أمس</span></li>
+            <li class="ins-list-item"><span class="ins-avatar ins-avatar--sm">ك</span><span class="ins-list-text"><span class="ins-list-title">كريم أضاف منتجًا</span><span class="ins-list-desc">المخزون</span></span><span class="ins-list-end">أمس</span></li>
+          </ul>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>
