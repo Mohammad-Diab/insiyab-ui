@@ -534,15 +534,17 @@
 
   /* --------------------------------------------------------------- events */
 
-  function emit(name, detail) {
+  /* Returns the event, so a cancelable one can be asked whether anyone said no. */
+  function emit(name, detail, cancelable) {
     var event;
     try {
-      event = new CustomEvent(name, { detail: detail, bubbles: true });
+      event = new CustomEvent(name, { detail: detail, bubbles: true, cancelable: !!cancelable });
     } catch (e) {                                  /* very old WebView */
       event = document.createEvent('CustomEvent');
-      event.initCustomEvent(name, true, false, detail);
+      event.initCustomEvent(name, true, !!cancelable, detail);
     }
     document.dispatchEvent(event);
+    return event;
   }
 
   /* --------------------------------------------------------- the scroller */
@@ -1859,10 +1861,18 @@
   }
 
   /* --------------------------------------------------------------- wizard */
-  function wizardPanels(w) {
+  /* Every panel of this wizard, in order, and the ones that are steps right now: a
+     panel with `hidden` is skipped, so a flow whose length the server decides (two
+     steps for one account, three for another) only has to hide what it does not
+     need. */
+  function wizardAll(w) {
     var all = w.querySelectorAll('.ins-wizard-panel'), out = [];
     for (var i = 0; i < all.length; i++) if (all[i].closest('.ins-wizard') === w) out.push(all[i]);
     return out;
+  }
+
+  function wizardPanels(w) {
+    return wizardAll(w).filter(function (p) { return !p.hidden; });
   }
 
   function wizardIndex(w) {
@@ -1889,28 +1899,176 @@
     return !bad;
   }
 
+  /* The optional viewport around the panels, `.ins-wizard-body`. With it the wizard
+     changes height smoothly and can slide; without it the panels still animate. */
+  function wizardBody(w) {
+    var b = w.querySelector('.ins-wizard-body');
+    return b && b.closest('.ins-wizard') === w ? b : null;
+  }
+
+  /* Where focus goes in a step that has just arrived: its `autofocus` field, so a
+     login step can be typed into at once, or else the panel itself, so a screen
+     reader starts reading the new step instead of staying on a button that has
+     changed underneath it. */
+  function wizardFocus(panel) {
+    var field = panel.querySelector('[autofocus]');
+    (field || panel).focus();
+  }
+
+  /* A running move is settled at once before another starts, so two quick clicks
+     never leave two panels half-way. */
+  function wizardSettle(w) {
+    if (w.__insWizMove) w.__insWizMove.finish();
+  }
+
+  /* The move from one step to the next. Two ways, chosen on the wizard:
+
+     - Pane (the default, for a form): the new step fades in from 16px away while the
+       viewport, if there is one, takes its height at the same time. The old step is
+       simply gone.
+     - Slide (`data-ins-wizard-motion="slide"`, for a login card): the steps sit side
+       by side and the whole row slides a step's width, the old one fading out as the
+       new one fades in. The card is never smaller than the step it holds: when the
+       new step is taller it grows first and then slides, when it is shorter it slides
+       first and then shrinks.
+
+     Either way the next step comes from the end of the line, the left on an Arabic
+     page, as the next page of a book does, and going back reverses it. Reduced motion
+     and effects-off swap in place. `landed` runs once the move is over, at once when
+     nothing moves. */
+  function wizardMove(w, from, to, back, before, landed) {
+    var body = wizardBody(w);
+    var slide = body && w.getAttribute('data-ins-wizard-motion') === 'slide';
+    if (!from || !to || from === to || motionless() || !to.animate) { landed(); return; }
+    var rtl = window.getComputedStyle(w).direction === 'rtl';
+    var side = (rtl ? -1 : 1) * (back ? -1 : 1);
+    var anims = [];
+    var done = false;
+    var move = { finish: function () { end(); } };
+    var end = function () {
+      if (done) return;
+      done = true;
+      anims.forEach(function (a) { try { a.cancel(); } catch (e) {} });
+      from.removeAttribute('data-ins-leaving');
+      to.removeAttribute('data-ins-entering');
+      if (body) body.removeAttribute('data-ins-moving');
+      if (w.__insWizMove === move) w.__insWizMove = null;
+      landed();
+    };
+    w.__insWizMove = move;
+
+    if (!slide) {
+      var enter = to.animate([
+        { opacity: 0, transform: 'translateX(' + (16 * side) + 'px)' },
+        { opacity: 1, transform: 'none' }
+      ], { duration: 250, easing: 'cubic-bezier(.22, 1, .36, 1)' });
+      anims.push(enter);
+      if (body) {
+        var h = body.offsetHeight;
+        if (Math.abs(h - before) > 1) {
+          body.setAttribute('data-ins-moving', '');
+          anims.push(body.animate([{ blockSize: before + 'px' }, { blockSize: h + 'px' }],
+            { duration: 250, easing: 'cubic-bezier(.22, 1, .36, 1)' }));
+        }
+      }
+      enter.onfinish = end;
+      enter.oncancel = end;
+      return;
+    }
+
+    /* Slide: the old step stays in the flow, the new one is laid beside it. The states
+       are attributes, not classes, so a framework that renders the panels' classes
+       (the React wrapper) cannot wipe them half-way through a slide. */
+    from.setAttribute('data-ins-leaving', '');
+    to.setAttribute('data-ins-entering', '');
+    body.setAttribute('data-ins-moving', '');
+    var gap = 24;
+    var span = to.offsetWidth + gap;
+    var after = to.offsetHeight + (body.offsetHeight - from.offsetHeight);
+    var ease = 'cubic-bezier(.4, 0, .2, 1)';
+    var grow = after > before;
+    /* Each stage starts the next only if the move has not been settled meanwhile. */
+    var run = function (list, next) {
+      if (done) return;
+      var last = null;
+      list.forEach(function (spec) { last = spec[0].animate(spec[1], spec[2]); anims.push(last); });
+      last.onfinish = function () { if (!done) next(); };
+    };
+    var resize = function (next) {
+      if (Math.abs(after - before) <= 1) { next(); return; }
+      run([[body, [{ blockSize: before + 'px' }, { blockSize: after + 'px' }], { duration: 320, easing: ease, fill: 'forwards' }]], next);
+    };
+    var hold = function () {
+      anims.push(body.animate([{ blockSize: before + 'px' }, { blockSize: before + 'px' }], { duration: 1, fill: 'forwards' }));
+    };
+    var shift = function (next) {
+      var opts = { duration: 320, easing: ease, fill: 'forwards' };
+      run([
+        [from, [{ transform: 'none', opacity: 1 }, { opacity: 0, offset: .7 }, { transform: 'translateX(' + (-span * side) + 'px)', opacity: 0 }], opts],
+        [to, [{ transform: 'translateX(' + (span * side) + 'px)', opacity: 0 }, { opacity: 1, offset: .7 }, { transform: 'none', opacity: 1 }], opts]
+      ], next);
+    };
+    /* The entering step waits off to the side until its turn. */
+    anims.push(to.animate([{ transform: 'translateX(' + (span * side) + 'px)', opacity: 0 }], { duration: 1, fill: 'forwards' }));
+    if (grow) resize(function () { shift(end); });
+    else { hold(); shift(function () { resize(end); }); }
+  }
+
   function wizardGo(target, index, opts) {
     var w = resolve(target);
     if (w && !w.classList.contains('ins-wizard')) w = w.closest('.ins-wizard');
     if (!w) return null;
     var o = opts || {};
+    wizardSettle(w);
     var panels = wizardPanels(w), cur = wizardIndex(w);
     if (!panels.length) return null;
     var to = Math.max(0, Math.min(panels.length - 1, index));
-    if (o.validate && to > cur && !panelValid(panels[cur])) return cur;
+    if (o.validate && to > cur) {
+      if (!panelValid(panels[cur])) return cur;
+      /* Asked first, for a step that has to reach a server before it is done: a
+         listener that cancels this owns the move. The wizard waits, marked busy, until
+         the page says `Insiyab.wizard(w, 'next')` or `Insiyab.wizard(w, 'stay')`. */
+      var ask = emit('ins:wizard-leave', { el: w, step: cur, to: to, panel: panels[cur] }, true);
+      if (ask.defaultPrevented) {
+        w.setAttribute('aria-busy', 'true');
+        return cur;
+      }
+    }
+    w.removeAttribute('aria-busy');
+    var body = wizardBody(w);
+    var before = body ? body.offsetHeight : 0;
+    var from = panels[cur];
     for (var i = 0; i < panels.length; i++) panels[i].classList.toggle('is-active', i === to);
-    var steps = w.querySelectorAll('.ins-steps-item');
-    for (var j = 0; j < steps.length; j++) {
-      steps[j].classList.toggle('is-done', j < to);
-      if (j === to) steps[j].setAttribute('aria-current', 'step');
-      else steps[j].removeAttribute('aria-current');
+    /* A step list keeps one item per panel, hidden panels included: an item whose
+       panel is hidden goes with it. Each list is counted on its own. */
+    var all = wizardAll(w), at = all.indexOf(panels[to]);
+    var lists = w.querySelectorAll('.ins-steps');
+    for (var l = 0; l < lists.length; l++) {
+      if (lists[l].closest('.ins-wizard') !== w) continue;
+      var steps = lists[l].querySelectorAll('.ins-steps-item');
+      for (var j = 0; j < steps.length; j++) {
+        steps[j].hidden = !!(all[j] && all[j].hidden);
+        steps[j].classList.toggle('is-done', j < at);
+        if (j === at) steps[j].setAttribute('aria-current', 'step');
+        else steps[j].removeAttribute('aria-current');
+      }
     }
     w.toggleAttribute('data-ins-first', to === 0);
     w.toggleAttribute('data-ins-last', to === panels.length - 1);
-    /* Focus moves to the panel that just arrived, so a screen reader starts reading
-       the new step instead of staying on a button that has changed underneath it. */
-    if (o.focus) panels[to].focus();
-    if (!o.quiet) emit('ins:wizard', { el: w, step: to, panel: panels[to] });
+    /* An earlier answer said again on a later step: `data-ins-echo="#phone"` shows
+       that field's value, so the person sees which number the code went to. */
+    var echoes = w.querySelectorAll('[data-ins-echo]');
+    for (var k = 0; k < echoes.length; k++) {
+      var src = document.querySelector(echoes[k].getAttribute('data-ins-echo'));
+      if (src && 'value' in src) echoes[k].textContent = src.value;
+    }
+    var arrived = panels[to];
+    var slides = o.focus && from !== arrived && body && w.getAttribute('data-ins-wizard-motion') === 'slide' && !motionless();
+    if (o.focus && !slides) wizardFocus(arrived);
+    wizardMove(w, from, arrived, to < cur, before, function () {
+      if (slides && arrived.classList.contains('is-active')) wizardFocus(arrived);
+    });
+    if (!o.quiet) emit('ins:wizard', { el: w, step: to, panel: arrived });
     return to;
   }
 
@@ -1984,6 +2142,7 @@
     '[data-ins-spin]',
     '[data-ins-wizard="next"]',
     '[data-ins-wizard="prev"]',
+    '[data-ins-wizard="restart"]',
     '.ins-date-btn',
     TAB,
     '.ins-seg > a',
@@ -2076,7 +2235,11 @@
     if (el.hasAttribute('data-ins-wizard')) {
       event.preventDefault();
       var w = el.closest('.ins-wizard');
-      if (w) wizardGo(w, wizardIndex(w) + (el.getAttribute('data-ins-wizard') === 'next' ? 1 : -1), { validate: true, focus: true });
+      /* Not while a step is still reaching the server. */
+      if (!w || w.getAttribute('aria-busy') === 'true') return;
+      var how = el.getAttribute('data-ins-wizard');
+      var dest = how === 'restart' ? 0 : wizardIndex(w) + (how === 'next' ? 1 : -1);
+      wizardGo(w, dest, { validate: how === 'next', focus: true });
       return;
     }
 
@@ -2254,10 +2417,13 @@
     /* A field in a wizard step that is not showing cannot be focused or pointed at,
        so the browser's report would say nothing and the submit would simply not
        happen. Go to its step first — whether or not this form reports inline. */
+    /* Only ever back, to an earlier step: that is where a field can be left invalid by
+       the time the form is submitted from its last step. */
     var panel = control.closest && control.closest('.ins-wizard-panel');
     if (panel && !panel.classList.contains('is-active')) {
       var wiz = panel.closest('.ins-wizard');
-      wizardGo(wiz, wizardPanels(wiz).indexOf(panel), { quiet: false });
+      var there = wizardPanels(wiz).indexOf(panel);
+      if (there !== -1 && there < wizardIndex(wiz)) wizardGo(wiz, there, { quiet: false });
     }
     if (!control.form || !control.form.hasAttribute('data-ins-validate')) return;
     /* Marked as reported, so the stylesheet can show it as invalid from now on. The
@@ -2297,8 +2463,23 @@
     if (msg && msg.hasAttribute('data-ins-auto')) msg.textContent = control.validationMessage;
   }, true);
 
-  /* Pressing Enter in a wizard's field submits the form — that is what Enter in a
-     form does — so a submit that arrives before the last step is taken as "next". */
+  /* Enter in a wizard's field means "next". Taken on the key itself, before the
+     browser's implicit submission, which would first check the *whole* form: every
+     required field in the steps still to come would fail and the step would never
+     move. Only the step on screen is checked, and a server step is asked as usual. */
+  document.addEventListener('keydown', function (event) {
+    if (event.key !== 'Enter' || event.isComposing || event.defaultPrevented) return;
+    var t = event.target;
+    if (!t || t.tagName !== 'INPUT' || /^(checkbox|radio|submit|button|reset|image|file)$/i.test(t.type)) return;
+    var w = t.form && t.form.classList.contains('ins-wizard') ? t.form : null;
+    if (!w || w.hasAttribute('data-ins-last') || wizardPanels(w).length < 2) return;
+    event.preventDefault();
+    if (w.getAttribute('aria-busy') === 'true') return;
+    wizardGo(w, wizardIndex(w) + 1, { validate: true, focus: true });
+  }, true);
+
+  /* And a submit that arrives before the last step anyway (a submit button in a
+     step, say) is taken as "next" too. */
   document.addEventListener('submit', function (event) {
     var w = event.target.classList && event.target.classList.contains('ins-wizard') ? event.target : null;
     if (!w || w.hasAttribute('data-ins-last')) return;
@@ -2306,6 +2487,7 @@
     if (panels.length < 2) return;
     event.preventDefault();
     event.stopImmediatePropagation();
+    if (w.getAttribute('aria-busy') === 'true') return;
     wizardGo(w, wizardIndex(w) + 1, { validate: true, focus: true });
   }, true);
 
@@ -2784,11 +2966,18 @@
     /* The sidebar's marker flight, for a plugin list that marks its current item
        the same way, so the two move alike. */
     flyMarker: flyMarker,
+    /* The current step, or go to one with no checks: a number, 'next', 'prev' or
+       'restart'. 'stay' ends a wait on the server without moving, after the page
+       has shown why the step was refused. */
     wizard: function (target, step) {
       var w = resolve(target);
       if (w && !w.classList.contains('ins-wizard')) w = w.closest('.ins-wizard');
       if (!w) return null;
-      return step === undefined ? wizardIndex(w) : wizardGo(w, step, { focus: false });
+      if (step === undefined) return wizardIndex(w);
+      if (step === 'stay') { w.removeAttribute('aria-busy'); return wizardIndex(w); }
+      var cur = wizardIndex(w);
+      var dest = step === 'next' ? cur + 1 : step === 'prev' ? cur - 1 : step === 'restart' ? 0 : step;
+      return wizardGo(w, dest, { focus: typeof step === 'string' });
     },
     date: function (target, value) {
       var input = resolve(target);

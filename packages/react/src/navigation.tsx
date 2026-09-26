@@ -388,10 +388,12 @@ export interface StepsProps extends HTMLAttributes<HTMLOListElement> {
   items: ReactNode[];
   /** The step in progress, from 0: those before it are done. */
   current?: number;
+  /** Small dots instead of numbers (`ins-steps--dots`), for a login card. */
+  dots?: boolean;
 }
-export const Steps = forwardRef<HTMLOListElement, StepsProps>(function Steps({ items, current, className, ...rest }, ref) {
+export const Steps = forwardRef<HTMLOListElement, StepsProps>(function Steps({ items, current, dots, className, ...rest }, ref) {
   return (
-    <ol ref={ref} className={cx('ins-steps', className)} {...rest}>
+    <ol ref={ref} className={cx('ins-steps', dots && 'ins-steps--dots', className)} {...rest}>
       {items.map((label, i) => (
         <li key={i} className={cx('ins-steps-item', current !== undefined && i < current && 'is-done')} aria-current={i === current ? 'step' : undefined}>
           <span className="ins-steps-label">{label}</span>
@@ -417,11 +419,17 @@ export interface WizardProps extends Omit<FormProps, 'validate'> {
   nextLabel?: ReactNode;
   finishLabel?: ReactNode;
   bodyClassName?: string;
+  /** How a step arrives. Either one puts the panels in `.ins-wizard-body`, so the
+      wizard changes height smoothly: 'pane' fades the new step in, 'slide' slides the
+      steps side by side (`data-ins-wizard-motion="slide"`). */
+  motion?: 'pane' | 'slide';
+  /** Dots instead of numbered steps. */
+  dots?: boolean;
 }
 /* A form in steps. Next checks the step's own fields with the browser's validation
    before it moves on. Without script it is one long form, which still submits. */
 export const Wizard = forwardRef<HTMLFormElement, WizardProps>(function Wizard(
-  { steps, step, defaultStep = 0, onStepChange, validate = true, prevLabel = 'السابق', nextLabel = 'التالي', finishLabel = 'إنهاء', bodyClassName, className, children, ...rest },
+  { steps, step, defaultStep = 0, onStepChange, validate = true, prevLabel = 'السابق', nextLabel = 'التالي', finishLabel = 'إنهاء', bodyClassName, motion, dots, className, children, ...rest },
   ref
 ) {
   const el = useRef<HTMLFormElement>(null);
@@ -462,11 +470,16 @@ export const Wizard = forwardRef<HTMLFormElement, WizardProps>(function Wizard(
         className={cx('ins-panel', 'ins-wizard', className)}
         data-ins-first={current === 0 ? '' : undefined}
         data-ins-last={current === last ? '' : undefined}
+        data-ins-wizard-motion={motion === 'slide' ? 'slide' : undefined}
         {...rest}
       >
         <div className={cx('ins-panel-body', bodyClassName)}>
-          <Steps items={steps} current={current} />
-          {panels.map((p, i) => cloneElement(p, { key: p.key ?? i, index: i }))}
+          <Steps items={steps} current={current} dots={dots} />
+          {motion ? (
+            <div className="ins-wizard-body">{panels.map((p, i) => cloneElement(p, { key: p.key ?? i, index: i }))}</div>
+          ) : (
+            panels.map((p, i) => cloneElement(p, { key: p.key ?? i, index: i }))
+          )}
           <div className="ins-wizard-foot">
             <button type="button" className="ins-btn ins-btn--secondary" data-ins-wizard="prev">
               {prevLabel}

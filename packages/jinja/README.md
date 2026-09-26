@@ -103,7 +103,7 @@ The conventions:
 | Pickers | `combo` `date` (a range: `range_end` / `range_start`, the other field's id) |
 | Feedback | `alert` `empty` `progress` `ring` `skeleton` `spinner` `loading` |
 | Overlay | `dialog` `drawer` `menu` `popover` `menu_item` `menu_checkbox` `menu_radio` `menu_label` `menu_separator` `menu_group` |
-| Navigation | `page_head` `breadcrumb` `tablist` `tab` `tabpanel` `pagination` `navbar` `navbar_link` `accordion` `collapse` `steps` `wizard` `wizard_panel` |
+| Navigation | `page_head` `breadcrumb` `tablist` `tab` `tabpanel` `pagination` `navbar` `navbar_link` `accordion` `collapse` `steps` (`dots`) `wizard` (`motion='pane'` or `'slide'`, `dots`) `wizard_panel` |
 | Shell | `shell` `sidebar` `sidebar_brand` `sidebar_group` `sidebar_link` `sidebar_toggle` `topbar` `topbar_title` `island` `theme_toggle` |
 | Plugins | `otp` `phone` `file` `color` `tree` `timeline` `timeline_item` `timeline_day` `relative_time` `carousel` `toc` `palette` `palette_group` |
 | Page | `head` |

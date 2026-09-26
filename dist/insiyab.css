@@ -4634,6 +4634,9 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
               display var(--ins-t-exit) var(--ins-ease) allow-discrete;
 }
 .ins-dialog[open] { display: flex; flex-direction: column; }
+/* A form around the head, body and foot, for a dialog that submits (a wizard, say),
+   stays out of the layout, so the body still scrolls between a fixed head and foot. */
+.ins-dialog > form { display: contents; }
 /* Longer in than out, the ratio every other surface here uses: an entrance is worth
    watching and a dismissal is worth getting out of the way. The duration is read
    from the state being transitioned *to*, so dropping `open` picks the exit duration
@@ -5784,6 +5787,31 @@ html[dir="ltr"] .ins-page-title {
   color: var(--ins-tone-brand);
   box-shadow: var(--ins-glow-ring);
 }
+/* Dots: the compact indicator a login card uses, one small dot per step, the steps
+   done and the current one in the brand, the current one larger. The names stay
+   for screen readers. */
+.ins-steps--dots { justify-content: center; gap: .4rem; margin-block-end: 1.1rem; }
+.ins-steps--dots .ins-steps-item { flex: 0 0 auto; }
+.ins-steps--dots .ins-steps-item::before {
+  content: "";
+  inline-size: .5rem;
+  block-size: .5rem;
+  border: 0;
+  background: var(--ins-ctl-bd);
+  box-shadow: none;
+  transition: background var(--ins-t-pop) var(--ins-ease), transform var(--ins-t-pop) var(--ins-ease);
+}
+.ins-steps--dots .ins-steps-item + .ins-steps-item::after { content: none; }
+.ins-steps--dots .ins-steps-item:is(.is-done, [aria-current="step"])::before { background: var(--ins-tone-brand-soft); box-shadow: none; }
+.ins-steps--dots .ins-steps-item[aria-current="step"]::before { transform: scale(1.5); }
+.ins-steps--dots .ins-steps-label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 /* On a phone four step names do not fit under four circles. The current one keeps
    its name; the rest keep their numbers, and their names stay for screen readers. */
 @media (max-width: 34rem) {
@@ -5818,9 +5846,37 @@ html[dir="ltr"] .ins-page-title {
    **Without the script it is simply the whole form** — every panel shown, the step
    buttons gone, the finish button at the bottom — which is a long form, not a broken
    one. */
-:root[data-ins-js] .ins-wizard-panel:not(.is-active) { display: none; }
-:root[data-ins-js] .ins-wizard-panel.is-active { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease); }
-.ins-wizard-panel:focus-visible { outline-offset: 4px; border-radius: var(--ins-r-sm); }
+:root[data-ins-js] .ins-wizard-panel:not(.is-active, [data-ins-leaving]) { display: none; }
+
+/* `.ins-wizard-body` around the panels is optional. With it the wizard changes height
+   smoothly between steps and can slide them (`data-ins-wizard-motion="slide"`);
+   insiyab.js drives both. It keeps a small gutter, so while a move clips it the
+   focus ring and the buttons' glow still show. During a slide the new step is laid
+   beside the old one, which stays in the flow until it has gone. */
+.ins-wizard-body { padding: .375rem; margin: -.375rem; }
+.ins-wizard-body[data-ins-moving] { position: relative; overflow: hidden; }
+.ins-wizard-panel[data-ins-entering] {
+  position: absolute;
+  inset-block-start: .375rem;
+  inset-inline: .375rem;
+}
+
+/* A step reaching the server: the forward button waits with a spinner and takes no
+   second click, set by insiyab.js as `aria-busy` on the wizard. */
+.ins-wizard[aria-busy="true"] :is([data-ins-wizard="next"], .ins-wizard-finish) { pointer-events: none; opacity: .75; }
+.ins-wizard[aria-busy="true"] :is([data-ins-wizard="next"], .ins-wizard-finish)::after {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: 1em;
+  block-size: 1em;
+  border: 2px solid currentColor;
+  border-block-start-color: transparent;
+  border-radius: 50%;
+  animation: ins-spin .6s linear infinite;
+}
+/* The panel takes focus only so a screen reader starts reading the new step; it is
+   not a control, and a ring round a whole step reads as an error. */
+.ins-wizard-panel:focus { outline: none; }
 .ins-wizard-foot {
   display: flex;
   flex-wrap: wrap;
@@ -5829,6 +5885,10 @@ html[dir="ltr"] .ins-page-title {
   margin-block-start: var(--ins-sp-5);
 }
 .ins-wizard-foot > :is([data-ins-wizard="next"], .ins-wizard-finish) { margin-inline-start: auto; }
+/* With a cancel (a wizard in a dialog), the cancel takes the start and back and next
+   stay together at the end. */
+.ins-wizard-foot > [data-ins-dialog-close] { margin-inline-end: auto; }
+.ins-wizard-foot:has(> [data-ins-dialog-close]) > :is([data-ins-wizard="next"], .ins-wizard-finish) { margin-inline-start: 0; }
 :root:not([data-ins-js]) [data-ins-wizard="prev"],
 :root:not([data-ins-js]) [data-ins-wizard="next"] { display: none; }
 :root[data-ins-js] .ins-wizard:not([data-ins-last]) .ins-wizard-finish,
