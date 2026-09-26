@@ -4834,7 +4834,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-pop-body {
   position: absolute;
   inset-block-start: calc(100% + .375rem);
-  inset-inline-end: 0;
+  inset-inline-start: 0;
   z-index: 20;
   min-inline-size: 12rem;
   padding: .375rem;
@@ -4925,18 +4925,21 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 }
 .ins-pop-item[aria-checked="true"]::before { opacity: 1; transform: none; }
 
-/* Which way the menu opens. By default its trailing edge lines up with the
-   trigger's and it grows toward the start — the right way for the menu at the end of
-   a table row. `.ins-pop--start` lines it up the other way, for a trigger at the
-   leading edge. The script flips either one, and flips it downward-to-upward, when
-   the menu would leave the viewport; those are the `data-ins-flip` rules. */
-.ins-pop--start > .ins-pop-body { inset-inline-end: auto; inset-inline-start: 0; }
+/* Which way the menu opens. By default it hangs from the trigger's leading edge and
+   grows toward the end, the way the line reads: from the right on an Arabic page.
+   It used to hang from the trailing edge, so on an Arabic page every menu grew
+   rightward out of its trigger's far side. `.ins-pop--end` lines it up with the
+   trailing edge instead, for a trigger at the far end of a bar. (`.ins-pop--start`
+   is the default now and still accepted.) The script flips either one, and flips it
+   downward-to-upward, when the menu would leave the viewport; those are the
+   `data-ins-flip` rules. */
+.ins-pop--end > .ins-pop-body { inset-inline-start: auto; inset-inline-end: 0; }
 .ins-pop[data-ins-flip~="up"] > .ins-pop-body {
   inset-block-start: auto;
   inset-block-end: calc(100% + .375rem);
 }
-.ins-pop[data-ins-flip~="inline"] > .ins-pop-body { inset-inline-end: auto; inset-inline-start: 0; }
-.ins-pop--start[data-ins-flip~="inline"] > .ins-pop-body { inset-inline-start: auto; inset-inline-end: 0; }
+.ins-pop[data-ins-flip~="inline"] > .ins-pop-body { inset-inline-start: auto; inset-inline-end: 0; }
+.ins-pop--end[data-ins-flip~="inline"] > .ins-pop-body { inset-inline-end: auto; inset-inline-start: 0; }
 
 /* --------------------------------------------------------------- motion */
 /* A menu item indents toward the content on hover -- the same directional nudge the
