@@ -33,10 +33,10 @@
 > type and utility layer, the components an application form or dashboard needs
 > (pickers, steps and confirmation included), and a motion layer across all of
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
-> the shell, with every example's markup printed under it. Eleven plugins: the
+> the shell, with every example's markup printed under it. Twelve plugins: the
 > Hijri calendar, the command palette, the one-time code, the phone number, file
-> upload, scrollspy, the timeline, the tree, the colour picker, the carousel and
-> charts.
+> upload, scrollspy, the timeline, the tree, the colour picker, the carousel,
+> charts and the month calendar.
 > Two wrappers cover the same classes: React components in
 > [packages/react](packages/react/README.md), and Jinja macros in
 > [packages/jinja](packages/jinja/README.md). See
@@ -960,6 +960,28 @@ and then the tones, as `--ins-chart-1` … `--ins-chart-6`; the plot is
 `--ins-chart-h` tall. It redraws when its box changes size. `Insiyab.chart(el,
 { type, labels, series: [{ name, values }] })` draws from data and writes the table
 for it, or with no data draws again from the table.
+
+### Month calendar
+
+```html
+<link rel="stylesheet" href="plugins/insiyab-month.css">
+<script src="plugins/insiyab-month.js"></script>
+
+<div class="ins-month" data-ins-month="2026-09">
+  <ul class="ins-month-events">
+    <li data-date="2026-09-03" data-time="14:30" data-tone="warn"><a href="…">تسليم الطلب</a></li>
+  </ul>
+</div>
+```
+
+A month on a grid with each day's events, drawn from the list inside it. The week
+starts on the day the page's language starts it; month and day names are in that
+language with Latin digits; today is marked. A day shows three events and a count
+of the rest, and a link stays a link; below 34rem the events become dots. The
+header goes back, on, or to today, and says so with `ins:month` ({ el, month }), so
+a page can load that month's events and call `Insiyab.month(el, { events: [{ date,
+title, href, tone, time }] })`. A click on a day, not on an event, is
+`ins:month-day` ({ el, date }).
 
 ## React
 

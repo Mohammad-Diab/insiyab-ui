@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="../dist/plugins/insiyab-month.css">
+<script src="../dist/plugins/insiyab-month.js"></script>
+
+<h2 id="setup">التحميل</h2>
+<demo-code>
+<link rel="stylesheet" href="plugins/insiyab-month.css">
+<script src="insiyab.js"></script>
+<script src="plugins/insiyab-month.js"></script>
+</demo-code>
+
+<h2 id="month">شهر بمواعيده</h2>
+<p>
+  <code>.ins-month</code> مع <code>data-ins-month="2026-09"</code>، وفيه قائمة <code>.ins-month-events</code> هي محتواه: كلّ عنصر
+  موعد في يوم (<code>data-date</code>، واختياريًا <code>data-time</code> و<code>data-tone</code>). يرسم منها الشهر جدول أسابيع يبدأ
+  باليوم الذي تبدأ به لغة الصفحة الأسبوع، واليوم الحالي معلَّم، وفي اليوم ثلاثة مواعيد و«+2» للباقي، والرابط يبقى رابطًا. وعلى
+  الهاتف تصير المواعيد نقاطًا.
+</p>
+<demo-example>
+  <div class="ins-month" data-ins-month="2026-09">
+    <ul class="ins-month-events">
+      <li data-date="2026-09-03" data-tone="warn"><a href="#month">تسليم الطلب 1042</a></li>
+      <li data-date="2026-09-08" data-time="10:00">اجتماع الفريق</li>
+      <li data-date="2026-09-08" data-time="14:30" data-tone="info">مراجعة العقد</li>
+      <li data-date="2026-09-15" data-tone="ok">إطلاق الحملة</li>
+      <li data-date="2026-09-21" data-time="09:00">زيارة المورّد</li>
+      <li data-date="2026-09-21" data-time="11:00">مكالمة العميل</li>
+      <li data-date="2026-09-21" data-time="13:00">تدريب</li>
+      <li data-date="2026-09-21" data-time="16:00" data-tone="bad">موعد نهائي</li>
+      <li data-date="2026-09-26" data-tone="info">جرد المخزون</li>
+    </ul>
+  </div>
+</demo-example>
+
+<h2 id="events">الأحداث</h2>
+<p>
+  التنقّل بين الأشهر يُطلق <code>ins:month</code> بالشهر الجديد، فتضع الصفحة مواعيده في القائمة وتستدعي
+  <code>Insiyab.month(el)</code>، أو تسلّمها مباشرة. والنقر على يوم خارج مواعيده يُطلق <code>ins:month-day</code> بتاريخه.
+</p>
+<demo-code lang="js">
+document.addEventListener('ins:month', async (e) => {
+  const events = await load(e.detail.month);          // [{ date, title, href, tone, time }]
+  Insiyab.month(e.detail.el, { events });
+});
+document.addEventListener('ins:month-day', (e) => openNew(e.detail.date));
+</demo-code>
