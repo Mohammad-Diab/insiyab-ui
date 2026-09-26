@@ -381,7 +381,7 @@ html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
   font-size: .9375rem;
   font-weight: 800;
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.6;
   color: var(--ins-primary-darker);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -392,11 +392,14 @@ html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
 /* `:empty`, not a conditional in a template: the subtitle is optional on every page
    and an `if` around a wrapper is one more thing each page can get wrong. */
 .ins-shell-sub {
+/* The line heights leave room below the line: the title clips for its ellipsis, and
+   at 1.2 that clipped the tails of ع, ج and ي. Title and subtitle together still fit
+   the 48px island. */
   font-size: .6875rem;
   font-weight: 600;
   color: var(--ins-text-3);
   margin: 0;
-  line-height: 1.25;
+  line-height: 1.5;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
