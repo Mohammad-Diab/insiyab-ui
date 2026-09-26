@@ -70,6 +70,9 @@
 }
 /* The dialog, the drawer and the tooltip move on a `transition` rather than an
    `animation`, so the `animation: none` list below would never have reached them. */
+/* Its own rule, like the ::backdrop ones: an engine that does not know ::picker would
+   discard the whole list along with it. */
+[data-ins-fx="off"] .ins-select::picker(select) { backdrop-filter: none; -webkit-backdrop-filter: none; animation: none; }
 [data-ins-fx="off"] .ins-dialog,
 [data-ins-fx="off"] .ins-dialog::backdrop,
 [data-ins-fx="off"] .ins-drawer,
