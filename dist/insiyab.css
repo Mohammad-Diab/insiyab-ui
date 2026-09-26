@@ -4270,6 +4270,109 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-date-btn:hover,
 .ins-date-btn[aria-expanded="true"] { background: var(--ins-ctl-bg-hover); color: var(--ins-tone-brand-soft); }
 
+/* --------------------------------------------------------------- tags */
+/* Several values in one field, each a chip, with the text box after them:
+
+     <div class="ins-tags" data-ins-name="cities">
+       <input class="ins-tags-input" aria-label="المدن">
+       <ul class="ins-combo-list">
+         <li class="ins-combo-option" data-value="ruh">الرياض</li> …
+       </ul>
+     </div>
+
+   With a list it is a multi-select: the autocomplete's matching and keys, and a
+   chosen option becomes a chip and leaves the list. Without one (or with
+   `data-ins-free`) it takes whatever is typed, on Enter or a comma. Each chip carries
+   a hidden input named `data-ins-name`, so the form sends every value; Backspace in
+   the empty box takes the last one back. `data-ins-max` caps how many. It is drawn
+   as one field: the chips inside it, the box growing into what is left of the line. */
+.ins-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .3125rem;
+  min-block-size: var(--ins-field-h);
+  padding: .3125rem .4375rem;
+  border: 1px solid var(--ins-ctl-bd);
+  border-radius: var(--ins-r-md);
+  background: var(--ins-ctl-bg);
+  box-shadow: var(--ins-bevel-dim), var(--ins-sh-subtle);
+  cursor: text;
+  transition: border-color var(--ins-t-base) var(--ins-ease),
+              box-shadow var(--ins-t-base) var(--ins-ease),
+              background var(--ins-t-base) var(--ins-ease);
+}
+.ins-tags:hover:not(:focus-within) { border-color: rgba(var(--ins-primary-rgb), .30); background: var(--ins-ctl-bg-hover); }
+.ins-tags:focus-within {
+  background: var(--ins-glass-strong);
+  border-color: rgba(var(--ins-primary-rgb), .55);
+  box-shadow: var(--ins-glow), var(--ins-bevel-dim), 0 4px 16px rgba(var(--ins-primary-rgb), .10);
+}
+.ins-tags > .ins-chip { min-block-size: 1.75rem; }
+.ins-tags-input {
+  flex: 1 1 6rem;
+  min-inline-size: 4rem;
+  min-block-size: 1.75rem;
+  padding: 0 .375rem;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ins-text-1);
+  font-family: inherit;
+  font-size: .875rem;
+}
+.ins-tags-input::placeholder { color: var(--ins-text-3); }
+/* The prompt is for an empty field; once there are chips it would read as one more. */
+.ins-tags:has(> .ins-chip) .ins-tags-input::placeholder { color: transparent; }
+
+/* --------------------------------------------------------------- time */
+/* `<input type="time" data-ins-time>` becomes a text field showing the time the way
+   the page's language writes it ("2:30 م"), with a list of times under it every
+   `step` seconds (half an hour when it does not say) between `min` and `max`. Typing
+   works too: "14:30", "1430", "2:30 م" and "2 pm" all read. A hidden input carries
+   `HH:MM` under the original `name`, as the native field would have sent. Without
+   the script it is the browser's own time field. */
+.ins-time > .ins-input {
+  padding-inline-end: 2.375rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+}
+[dir="ltr"] .ins-time > .ins-input { background-position: right .875rem center; }
+[dir="rtl"] .ins-time > .ins-input { background-position: left .875rem center; }
+.ins-time .ins-combo-list { min-inline-size: 9rem; }
+
+/* A date and a time in one field: both inside one `.ins-input-group`, the time after
+   a hairline. `data-ins-datetime="when"` on the group also sends them together, as
+   `2026-09-26T14:30`, under that name. */
+.ins-input-group > .ins-combo { flex: 0 1 9rem; align-self: stretch; display: flex; align-items: center; border-inline-start: 1px solid var(--ins-line); }
+.ins-input-group > .ins-combo > .ins-input,
+.ins-input-group > .ins-combo > .ins-input:focus,
+.ins-input-group > .ins-combo > .ins-input:hover:not(:disabled):not(:focus) {
+  min-block-size: calc(var(--ins-field-h) - 2px);
+  padding-inline: .75rem 2.25rem;
+  border: 0;
+  background-color: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+/* --------------------------------------------------------------- counter */
+/* `data-ins-count` on a field shows how much has been written under it: characters
+   against its `maxlength`, or `data-ins-count="words"` against `data-ins-max`. It
+   turns amber near the limit and red past it; past a word limit the field is also
+   invalid, so the form will not send it. The numbers are written without spaces
+   ("120/200") so an Arabic line cannot swap them. */
+.ins-count {
+  align-self: flex-end;
+  font-size: .6875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ins-text-3);
+  transition: color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-count.is-near { color: var(--ins-tone-warn); }
+.ins-count.is-over { color: var(--ins-tone-bad); font-weight: 700; }
+
 /* ==========================================================================
    Insiyab · pill, badge, money, avatar
    ==========================================================================
@@ -4416,6 +4519,96 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-avatar { transition: transform var(--ins-t-pop) var(--ins-ease-spring),
                           box-shadow var(--ins-t-pop) var(--ins-ease); }
 :where(a, button).ins-avatar:hover { transform: scale(1.08); box-shadow: var(--ins-sh-brand-sm); }
+
+/* --------------------------------------------------------------- chip */
+/* A small rounded token a person acts on, where a pill is a label they read: an
+   active filter to take away, a choice in a multi-select, a tag.
+
+     <span class="ins-chip">الرياض<button class="ins-chip-x" aria-label="إزالة الرياض"></button></span>
+     <button class="ins-chip" data-ins-toggle>نشط</button>
+
+   The first is removable: its × takes it away and says so with `ins:chip-remove`,
+   which a page cancels to keep it. The second is a filter chip, pressed or not, on
+   the toggle button's own `aria-pressed`; pressed, it takes the brand and a tick.
+   `.ins-chips` lays several out in a wrapping row. */
+.ins-chips { display: flex; flex-wrap: wrap; align-items: center; gap: .375rem; }
+.ins-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  min-block-size: 1.875rem;
+  padding-block: .1875rem;
+  padding-inline: .75rem;
+  border: 1px solid var(--ins-ctl-bd);
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-surface);
+  color: var(--ins-text-1);
+  font-family: inherit;
+  font-size: var(--ins-fs-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-decoration: none;
+  box-shadow: var(--ins-bevel-dim);
+  transition: background var(--ins-t-pop) var(--ins-ease),
+              border-color var(--ins-t-pop) var(--ins-ease),
+              color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-chip:has(> .ins-chip-x) { padding-inline-end: .25rem; }
+:where(button, a).ins-chip { cursor: pointer; }
+:where(button, a).ins-chip:hover { border-color: rgba(var(--ins-primary-rgb), .35); background: var(--ins-ctl-bg-hover); }
+:where(button, a).ins-chip:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
+.ins-chip:is([aria-pressed="true"], .is-active) {
+  border-color: var(--ins-tone-brand-bd);
+  background: var(--ins-tone-brand-bg);
+  color: var(--ins-tone-brand);
+}
+:root[data-ins-theme="dark"] .ins-chip:is([aria-pressed="true"], .is-active) { color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-chip:is([aria-pressed="true"], .is-active) {
+    color: var(--ins-text-1);
+  }
+}
+/* The tick of a pressed filter chip, grown in rather than popped, so the chip's
+   width changes smoothly. */
+.ins-chip[aria-pressed]::before {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: 0;
+  block-size: .75rem;
+  margin-inline-end: -.375rem;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / .75rem no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / .75rem no-repeat;
+  transition: inline-size var(--ins-t-pop) var(--ins-ease), margin var(--ins-t-pop) var(--ins-ease);
+}
+.ins-chip[aria-pressed="true"]::before { inline-size: .75rem; margin-inline-end: 0; }
+
+.ins-chip-x {
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 1.375rem;
+  block-size: 1.375rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ins-text-3);
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-chip-x::before {
+  content: "";
+  inline-size: .625rem;
+  block-size: .625rem;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6 6 18'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6 6 18'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.ins-chip-x:hover { background: var(--ins-tone-bad-bg); color: var(--ins-tone-bad); }
+.ins-chip-x:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
 
 /* ==========================================================================
    Insiyab · feedback

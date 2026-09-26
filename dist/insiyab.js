@@ -1082,14 +1082,16 @@
       prevMonth: 'الشهر السابق', nextMonth: 'الشهر التالي', month: 'الشهر', year: 'السنة',
       today: 'اليوم', clear: 'مسح', badDate: 'اكتب تاريخًا صحيحًا.', calendarSystem: 'نظام التقويم',
       early: 'اختر {date} أو ما بعده.', late: 'اختر {date} أو ما قبله.',
-      selected: 'المحدّد: {n}'
+      selected: 'المحدّد: {n}', remove: 'إزالة', badTime: 'اكتب وقتًا صحيحًا.',
+      words: '{n}/{max} كلمة', wordsFree: '{n} كلمة', tooManyWords: 'لا تتجاوز {max} كلمة.'
     },
     en: {
       ok: 'OK', cancel: 'Cancel', choose: 'Choose a date', calendar: 'Calendar',
       prevMonth: 'Previous month', nextMonth: 'Next month', month: 'Month', year: 'Year',
       today: 'Today', clear: 'Clear', badDate: 'Enter a valid date.', calendarSystem: 'Calendar system',
       early: 'Choose {date} or later.', late: 'Choose {date} or earlier.',
-      selected: '{n} selected'
+      selected: '{n} selected', remove: 'Remove', badTime: 'Enter a valid time.',
+      words: '{n}/{max} words', wordsFree: '{n} words', tooManyWords: 'Use {max} words or fewer.'
     }
   };
 
@@ -1212,6 +1214,11 @@
     if (open) {
       list.setAttribute('data-ins-open', '');
       input.setAttribute('aria-expanded', 'true');
+      /* The current choice, in view: in a list of forty-eight times, the one set. A
+         time list with nothing set opens at the hour it is now. */
+      var sel = list.querySelector('.ins-combo-option[aria-selected="true"]:not([hidden])');
+      if (sel) comboActivate(combo, sel);
+      else if (combo.classList.contains('ins-time')) timeNear(combo);
       combo.removeAttribute('data-ins-flip');
       var r = list.getBoundingClientRect(), s = input.getBoundingClientRect();
       if (r.bottom > window.innerHeight - 8 && s.top - r.height - 6 > 8) combo.setAttribute('data-ins-flip', 'up');
@@ -1225,9 +1232,15 @@
   function comboFilter(combo) {
     var q = norm(comboInput(combo).value), any = false;
     var opts = comboOptions(combo, false);
+    /* The field still showing the option already chosen is not a search for it: the
+       whole list comes back, so a person reopening it can pick another. */
+    var chosen = combo.querySelector('.ins-combo-option[aria-selected="true"]');
+    if (chosen && q === norm(chosen.getAttribute('data-label') || chosen.textContent)) q = '';
     for (var i = 0; i < opts.length; i++) {
       var hit = !q || norm(opts[i].textContent).indexOf(q) !== -1 ||
                 norm(opts[i].getAttribute('data-value')).indexOf(q) !== -1;
+      /* A multi-select's chosen options are chips now, not choices. */
+      if (opts[i].hasAttribute('data-ins-chosen')) hit = false;
       opts[i].hidden = !hit;
       if (hit) any = true;
     }
@@ -1240,6 +1253,14 @@
     var input = comboInput(combo);
     var label = opt.getAttribute('data-label') || opt.textContent.trim();
     var value = opt.hasAttribute('data-value') ? opt.getAttribute('data-value') : label;
+    /* A multi-select adds a chip and stays open for the next one. */
+    if (combo.classList.contains('ins-tags')) {
+      tagsAdd(combo, value, label);
+      input.value = '';
+      comboActivate(combo, null);
+      comboOpen(combo, comboFilter(combo));
+      return;
+    }
     input.value = label;
     var opts = comboOptions(combo, false);
     for (var i = 0; i < opts.length; i++) opts[i].setAttribute('aria-selected', String(opts[i] === opt));
@@ -1261,7 +1282,8 @@
       case 'ArrowDown':
       case 'ArrowUp':
         event.preventDefault();
-        if (!open) { comboFilter(combo); comboOpen(combo, true); if (event.altKey) return; }
+        /* Opening lands on the current choice, when there is one, rather than past it. */
+        if (!open) { comboFilter(combo); comboOpen(combo, true); if (event.altKey || comboActive(combo)) return; }
         if (!opts.length) return;
         if (event.key === 'ArrowDown') comboActivate(combo, opts[(at + 1) % opts.length]);
         else comboActivate(combo, opts[at <= 0 ? opts.length - 1 : at - 1]);
@@ -2074,6 +2096,214 @@
     return to;
   }
 
+  /* ----------------------------------------------------------------- chip */
+  /* The value a chip stands for: its hidden input's, else `data-value`, else its
+     text. */
+  function chipValue(chip) {
+    var h = chip.querySelector('input[type="hidden"]');
+    if (h) return h.value;
+    return chip.hasAttribute('data-value') ? chip.getAttribute('data-value') : chip.textContent.trim();
+  }
+
+  /* A chip's × takes it away, unless `ins:chip-remove` is cancelled. Focus moves to
+     the next chip's × (or the previous one's, or the field's box), so a keyboard can
+     clear several in a row. */
+  function chipRemove(chip) {
+    if (!chip || !chip.parentNode) return false;
+    var value = chipValue(chip);
+    var ask = emit('ins:chip-remove', { el: chip, value: value }, true);
+    if (ask.defaultPrevented) return false;
+    var tags = chip.closest('.ins-tags');
+    var near = chip.nextElementSibling, far = chip.previousElementSibling;
+    var next = (near && near.querySelector('.ins-chip-x')) || (far && far.querySelector && far.querySelector('.ins-chip-x')) ||
+      (tags && tagsInput(tags));
+    var hadFocus = chip.contains(document.activeElement);
+    chip.parentNode.removeChild(chip);
+    if (tags) tagsDropped(tags, value);
+    if (hadFocus && next) next.focus();
+    return true;
+  }
+
+  /* ----------------------------------------------------------------- tags */
+  function tagsInput(tags) { return tags.querySelector('.ins-tags-input') || tags.querySelector('input:not([type="hidden"])'); }
+
+  function tagsChips(tags) {
+    var out = [];
+    for (var i = 0; i < tags.children.length; i++) if (tags.children[i].classList.contains('ins-chip')) out.push(tags.children[i]);
+    return out;
+  }
+
+  function tagsValues(tags) { return tagsChips(tags).map(chipValue); }
+
+  function tagsOption(tags, value) {
+    var opts = tags.querySelectorAll('.ins-combo-option');
+    for (var i = 0; i < opts.length; i++) {
+      var v = opts[i].hasAttribute('data-value') ? opts[i].getAttribute('data-value') : opts[i].textContent.trim();
+      if (v === value) return opts[i];
+    }
+    return null;
+  }
+
+  /* A value as a chip, before the box. Not twice, and not past `data-ins-max`. */
+  function tagsAdd(tags, value, label) {
+    value = String(value || '').trim();
+    if (!value || tagsValues(tags).indexOf(value) !== -1) return false;
+    var max = parseInt(tags.getAttribute('data-ins-max'), 10);
+    if (max && tagsChips(tags).length >= max) return false;
+    label = label || value;
+    var chip = el('span', 'ins-chip', label);
+    var x = el('button', 'ins-chip-x');
+    x.type = 'button';
+    x.setAttribute('aria-label', strings(tags).remove + ' ' + label);
+    chip.appendChild(x);
+    var name = tags.getAttribute('data-ins-name');
+    if (name) {
+      var h = el('input');
+      h.type = 'hidden';
+      h.name = name;
+      h.value = value;
+      chip.appendChild(h);
+    } else {
+      chip.setAttribute('data-value', value);
+    }
+    tags.insertBefore(chip, tagsInput(tags));
+    var opt = tagsOption(tags, value);
+    if (opt) { opt.setAttribute('data-ins-chosen', ''); opt.setAttribute('aria-selected', 'true'); }
+    emit('ins:tags', { el: tags, values: tagsValues(tags), added: value });
+    return true;
+  }
+
+  function tagsDropped(tags, value) {
+    var opt = tagsOption(tags, value);
+    if (opt) { opt.removeAttribute('data-ins-chosen'); opt.setAttribute('aria-selected', 'false'); }
+    emit('ins:tags', { el: tags, values: tagsValues(tags), removed: value });
+  }
+
+  /* Whatever is typed becomes a tag when the field has no list to choose from, or
+     says `data-ins-free`. */
+  function tagsFree(tags) { return tags.hasAttribute('data-ins-free') || !tags.querySelector('.ins-combo-option'); }
+
+  /* The keys a tags box adds to the autocomplete's: Enter or a comma make what was
+     typed a tag, where free text is allowed; Backspace in an empty box takes the last
+     chip back. Returns whether it used the key. */
+  function onTagsKey(event) {
+    var input = event.target, tags = input.closest ? input.closest('.ins-tags') : null;
+    if (!tags || input !== tagsInput(tags) || event.isComposing) return false;
+    var list = tags.querySelector('.ins-combo-list');
+    var picking = list && list.hasAttribute('data-ins-open') && tags.querySelector('.ins-combo-option.is-active');
+    if ((event.key === 'Enter' || event.key === ',' || event.key === '،') && !picking && tagsFree(tags) && input.value.trim()) {
+      event.preventDefault();
+      tagsAdd(tags, input.value);
+      input.value = '';
+      if (list) comboFilter(tags);
+      return true;
+    }
+    if (event.key === 'Backspace' && !input.value && input.selectionStart === 0) {
+      var chips = tagsChips(tags);
+      if (chips.length) { event.preventDefault(); chipRemove(chips[chips.length - 1]); return true; }
+    }
+    return false;
+  }
+
+  /* ----------------------------------------------------------------- time */
+  /* A time as `HH:MM`, from what a person typed: "14:30", "1430", "2:30 م",
+     "2 pm", in either set of digits. Anything else: null. */
+  function parseTime(text) {
+    var t = toLatin(text).toLowerCase().replace(/[‎‏ ]/g, ' ').trim();
+    if (!t) return null;
+    var pm = /(pm|p\.m|م|مساء)/.test(t), am = /(am|a\.m|ص|صباح)/.test(t);
+    var m = t.match(/(\d{1,2})\s*[:.٫]\s*(\d{2})/), h, min;
+    if (m) { h = +m[1]; min = +m[2]; }
+    else {
+      var digits = (t.match(/\d+/) || [''])[0];
+      if (!digits || digits.length > 4) return null;
+      if (digits.length > 2) { h = +digits.slice(0, -2); min = +digits.slice(-2); }
+      else { h = +digits; min = 0; }
+    }
+    if ((pm || am) && (h < 1 || h > 12)) return null;
+    if (pm && h < 12) h += 12;
+    if (am && h === 12) h = 0;
+    if (h > 23 || min > 59) return null;
+    return pad2(h) + ':' + pad2(min);
+  }
+
+  function minutesOf(hhmm) { var p = hhmm.split(':'); return +p[0] * 60 + +p[1]; }
+
+  function formatTime(input, hhmm) {
+    var p = hhmm.split(':');
+    return dateFormat(langOf(input), { hour: 'numeric', minute: '2-digit' }).format(new Date(2000, 0, 1, +p[0], +p[1]));
+  }
+
+  function timeHidden(input) { var c = input.closest('.ins-combo'); return c && c.querySelector('input[type="hidden"]'); }
+
+  /* Set a time field: its hidden value, the words in the box, the matching option
+     marked. Refuses a time outside `min`–`max`. */
+  function setTime(input, hhmm, quiet) {
+    var hidden = timeHidden(input), combo = input.closest('.ins-combo');
+    if (!hidden) return;
+    var lo = input.getAttribute('data-ins-min'), hi = input.getAttribute('data-ins-max');
+    var out = hhmm && ((lo && minutesOf(hhmm) < minutesOf(lo)) || (hi && minutesOf(hhmm) > minutesOf(hi)));
+    if (out) { input.setCustomValidity(strings(input).badTime); return; }
+    input.setCustomValidity('');
+    var changed = hidden.value !== (hhmm || '');
+    hidden.value = hhmm || '';
+    input.value = hhmm ? formatTime(input, hhmm) : '';
+    var opts = combo.querySelectorAll('.ins-combo-option');
+    for (var i = 0; i < opts.length; i++) opts[i].setAttribute('aria-selected', String(opts[i].getAttribute('data-value') === hhmm));
+    if (!quiet && changed) { fire(input, 'change'); emit('ins:time', { input: input, value: hidden.value }); }
+  }
+
+  /* What was typed, read as the person leaves the field. The words already showing
+     are the value, untouched; text that is not a time marks the field invalid. */
+  function commitTime(input) {
+    var hidden = timeHidden(input);
+    if (!hidden) return;
+    var text = input.value.trim();
+    if (hidden.value && text === formatTime(input, hidden.value)) return;
+    if (!text) { setTime(input, ''); return; }
+    var t = parseTime(text);
+    if (t) setTime(input, t);
+    else input.setCustomValidity(strings(input).badTime);
+  }
+
+  /* An empty time list opens scrolled to the hour it is now, without choosing it. */
+  function timeNear(combo) {
+    var list = combo.querySelector('.ins-combo-list'), now = new Date();
+    var at = now.getHours() * 60 + now.getMinutes(), best = null, gap = Infinity;
+    var opts = list.querySelectorAll('.ins-combo-option:not([hidden])');
+    for (var i = 0; i < opts.length; i++) {
+      var d = Math.abs(minutesOf(opts[i].getAttribute('data-value')) - at);
+      if (d < gap) { gap = d; best = opts[i]; }
+    }
+    if (best) list.scrollTop = best.offsetTop - list.clientHeight / 3;
+  }
+
+  /* A date and a time sent together, where the group asks: `data-ins-datetime`. */
+  function datetimeSync(group) {
+    var out = group.querySelector('input[data-ins-datetime-value]');
+    if (!out) return;
+    var d = group.querySelector('[data-ins-date-ready]'), t = group.querySelector('[data-ins-time-ready]');
+    var dv = d && dateValue(d) ? dateValue(d).value : '', tv = t && timeHidden(t) ? timeHidden(t).value : '';
+    out.value = dv && tv ? dv + 'T' + tv : '';
+  }
+
+  /* -------------------------------------------------------------- counter */
+  function countSync(control) {
+    var words = control.getAttribute('data-ins-count') === 'words';
+    var v = control.value || '';
+    var n = words ? (v.trim() ? v.trim().split(/\s+/).length : 0) : v.length;
+    var max = words ? parseInt(control.getAttribute('data-ins-max'), 10) : (control.maxLength > 0 ? control.maxLength : parseInt(control.getAttribute('data-ins-max'), 10));
+    var out = resolve('#' + control.getAttribute('data-ins-count-el'));
+    if (!out) return n;
+    var t = strings(control);
+    var text = out.getAttribute('data-ins-text') || (words ? (max ? t.words : t.wordsFree) : (max ? '{n}/{max}' : '{n}'));
+    out.textContent = text.replace('{n}', n).replace('{max}', max || '');
+    out.classList.toggle('is-near', !!max && n >= max * .9 && n <= max);
+    out.classList.toggle('is-over', !!max && n > max);
+    if (words && max) control.setCustomValidity(n > max ? t.tooManyWords.replace('{max}', max) : '');
+    return n;
+  }
+
   /* ---------------------------------------------------------------- table */
   function tableOf(node) { return node && node.closest ? node.closest('table') : null; }
 
@@ -2315,6 +2545,7 @@
     '[data-ins-wizard="restart"]',
     '.ins-date-btn',
     '.ins-sort',
+    '.ins-chip-x',
     '[data-ins-select="none"]',
     '.ins-table td[data-ins-edit]',
     TAB,
@@ -2413,6 +2644,12 @@
       var how = el.getAttribute('data-ins-wizard');
       var dest = how === 'restart' ? 0 : wizardIndex(w) + (how === 'next' ? 1 : -1);
       wizardGo(w, dest, { validate: how === 'next', focus: true });
+      return;
+    }
+
+    if (el.classList.contains('ins-chip-x')) {
+      event.preventDefault();
+      chipRemove(el.closest('.ins-chip'));
       return;
     }
 
@@ -2713,6 +2950,7 @@
     var t = event.target;
     if (!t.classList) return;
     if (t.classList.contains('ins-range')) rangeFill(t);
+    if (t.hasAttribute('data-ins-count')) countSync(t);
     if (t.type === 'number' && t.closest('.ins-input-group') && t.closest('.ins-input-group').querySelector('.ins-spin')) syncSpin(t);
     var combo = t.closest && t.closest(COMBO);
     if (combo && t === comboInput(combo) && event.isTrusted !== false) {
@@ -2725,8 +2963,13 @@
   /* The keyboard for the autocomplete and the date field. Registered on its own so
      neither has to know about the menus and tabs that own their arrow keys above. */
   document.addEventListener('keydown', function (event) {
+    if (onTagsKey(event)) return;
     onComboKey(event);
     var t = event.target;
+    if (event.key === 'Enter' && t.hasAttribute && t.hasAttribute('data-ins-time-ready') && !event.defaultPrevented) {
+      commitTime(t);
+      return;
+    }
     if (!t.hasAttribute || !t.hasAttribute('data-ins-date-ready')) return;
     if (event.key === 'ArrowDown') { event.preventDefault(); openCal(t, true); }
     else if (event.key === 'Escape' && calFor === t) { event.preventDefault(); closeCal(false); }
@@ -2744,6 +2987,8 @@
       if (combo && opt.getAttribute('aria-disabled') !== 'true') { comboChoose(combo, opt); comboInput(combo).focus(); }
       return;
     }
+    var tagBox = t.classList && t.classList.contains('ins-tags') ? t : null;
+    if (tagBox) { tagsInput(tagBox).focus(); t = tagsInput(tagBox); }
     var box = t.closest && t.closest(COMBO);
     if (box && t === comboInput(box)) {
       var shown = comboList(box) && comboList(box).hasAttribute('data-ins-open');
@@ -2763,6 +3008,7 @@
     var t = event.target, to = event.relatedTarget;
     var combo = t.closest && t.closest(COMBO);
     if (combo && (!to || !combo.contains(to))) comboOpen(combo, false);
+    if (t.hasAttribute && t.hasAttribute('data-ins-time-ready') && !(to && combo && combo.contains(to))) commitTime(t);
     /* A date field reads what was typed as focus leaves it — unless it is leaving
        for its own calendar, which will set the value itself. */
     if (t.hasAttribute && t.hasAttribute('data-ins-date-ready') && !(to && calEl && calEl.contains(to))) commitTyped(t);
@@ -2790,6 +3036,8 @@
       for (var i = 0; i < ranges.length; i++) rangeFill(ranges[i]);
       var dates = form.querySelectorAll('[data-ins-date-ready]');
       for (var j = 0; j < dates.length; j++) setDate(dates[j], dateOf(dates[j]), true);
+      var counted = form.querySelectorAll('[data-ins-count]');
+      for (var k = 0; k < counted.length; k++) countSync(counted[k]);
     }, 0);
   }, true);
 
@@ -2801,6 +3049,11 @@
     var toggles = event.target.querySelectorAll ? event.target.querySelectorAll('[data-ins-password]') : [];
     for (var j = 0; j < toggles.length; j++) toggles[j].setAttribute('aria-pressed', 'false');
   }, true);
+
+  document.addEventListener('change', function (event) {
+    var group = event.target.closest && event.target.closest('[data-ins-datetime]');
+    if (group) datetimeSync(group);
+  }, false);
 
   /* A table's checkboxes. The header box takes every row with it; a row box with
      Shift held takes every row between it and the last one clicked. */
@@ -3054,6 +3307,61 @@
     }
   });
 
+  /* A time field: the native input turned into a text field with a list of times,
+     built as an autocomplete so it shares that one's keys and look. Its hidden
+     input takes the `name`, and its default value, so a form reset restores it. */
+  define('times', function (scope) {
+    var nodes = scope.querySelectorAll('input[data-ins-time]:not([data-ins-time-ready])');
+    for (var i = 0; i < nodes.length; i++) {
+      var input = nodes[i];
+      var value = parseTime(input.value || input.getAttribute('value') || '') || '';
+      var step = Math.max(1, Math.round((parseFloat(input.getAttribute('step')) || 1800) / 60));
+      var lo = parseTime(input.getAttribute('min') || '') || '00:00';
+      var hi = parseTime(input.getAttribute('max') || '') || '23:59';
+      var combo = el('div', 'ins-combo ins-time');
+      input.parentNode.insertBefore(combo, input);
+      combo.appendChild(input);
+      var hidden = el('input');
+      hidden.type = 'hidden';
+      if (input.name) { hidden.name = input.name; input.removeAttribute('name'); }
+      hidden.setAttribute('value', value);
+      hidden.value = value;
+      combo.appendChild(hidden);
+      var list = el('ul', 'ins-combo-list');
+      for (var m = minutesOf(lo); m <= minutesOf(hi); m += step) {
+        var hhmm = pad2(Math.floor(m / 60)) + ':' + pad2(m % 60);
+        var opt = el('li', 'ins-combo-option', formatTime(input, hhmm));
+        opt.setAttribute('data-value', hhmm);
+        list.appendChild(opt);
+      }
+      combo.appendChild(list);
+      if (input.hasAttribute('min')) input.setAttribute('data-ins-min', lo);
+      if (input.hasAttribute('max')) input.setAttribute('data-ins-max', hi);
+      input.removeAttribute('min');
+      input.removeAttribute('max');
+      input.removeAttribute('step');
+      input.type = 'text';
+      input.setAttribute('autocomplete', 'off');
+      input.setAttribute('data-ins-time-ready', '');
+      setTime(input, value, true);
+    }
+  });
+
+  /* A tags field with a list is a multi-select, and an autocomplete underneath; the
+     chips the server sent mark their options chosen. */
+  define('tags', function (scope) {
+    var all = scope.querySelectorAll('.ins-tags');
+    for (var i = 0; i < all.length; i++) {
+      var list = all[i].querySelector('.ins-combo-list');
+      if (list) { all[i].classList.add('ins-combo'); list.setAttribute('aria-multiselectable', 'true'); }
+      var chips = tagsChips(all[i]);
+      for (var j = 0; j < chips.length; j++) {
+        var opt = tagsOption(all[i], chipValue(chips[j]));
+        if (opt) { opt.setAttribute('data-ins-chosen', ''); opt.setAttribute('aria-selected', 'true'); }
+      }
+    }
+  });
+
   /* The combobox pattern, stamped from the markup: the field is the combobox, the
      list its listbox, and every option gets an id for `aria-activedescendant` to
      point at. An option already matching the field's value is marked chosen. */
@@ -3078,6 +3386,24 @@
       }
       var empty = combos[i].querySelector('.ins-combo-empty');
       if (empty) { empty.setAttribute('role', 'presentation'); empty.hidden = true; }
+    }
+  });
+
+  /* A counter under every counted field, tied to it for a screen reader. */
+  define('counters', function (scope) {
+    var nodes = scope.querySelectorAll('[data-ins-count]');
+    for (var i = 0; i < nodes.length; i++) {
+      var c = nodes[i];
+      if (!c.getAttribute('data-ins-count-el')) {
+        var out = el('span', 'ins-count');
+        out.id = uid('ins-count');
+        c.parentNode.insertBefore(out, c.nextSibling);
+        c.setAttribute('data-ins-count-el', out.id);
+        var ids = (c.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+        ids.push(out.id);
+        c.setAttribute('aria-describedby', ids.join(' '));
+      }
+      countSync(c);
     }
   });
 
@@ -3119,8 +3445,22 @@
         btn.setAttribute('aria-label', strings(input).choose);
         btn.setAttribute('aria-haspopup', 'dialog');
         btn.setAttribute('aria-expanded', 'false');
-        group.appendChild(btn);
+        /* Beside its own date, where a time shares the group; else at the end. */
+        group.insertBefore(btn, group.querySelector('[data-ins-time]') ? hidden.nextSibling : null);
       }
+    }
+  });
+
+  define('datetime', function (scope) {
+    var groups = scope.querySelectorAll('[data-ins-datetime]');
+    for (var i = 0; i < groups.length; i++) {
+      if (groups[i].querySelector('input[data-ins-datetime-value]')) continue;
+      var h = el('input');
+      h.type = 'hidden';
+      h.name = groups[i].getAttribute('data-ins-datetime');
+      h.setAttribute('data-ins-datetime-value', '');
+      groups[i].appendChild(h);
+      datetimeSync(groups[i]);
     }
   });
 

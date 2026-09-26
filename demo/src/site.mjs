@@ -79,14 +79,16 @@ export const NAV = [
       lead: 'جدول بيانات يقرأ الأرقام بخطّها، ويتمرّر أفقيًا داخل حاويته لا في الصفحة.' }
   ] },
   { group: 'النماذج', en: 'Forms', pages: [
-    { slug: 'inputs', title: 'الحقول', en: 'Form controls', icon: 'edit',
+    { slug: 'inputs', title: 'الحقول', en: 'Form controls', icon: 'edit', fresh: true,
       lead: 'حقل النصّ والقائمة والمنطقة النصّية، بالمقاسات الثلاثة وبالتسمية والتلميح.' },
     { slug: 'checks', title: 'الاختيار والمفاتيح', en: 'Checks & switches', icon: 'check-square',
       lead: 'مربّعات ودوائر ومفاتيح وبطاقات اختيار، كلّها عناصر إدخال حقيقية تحت التصميم.' },
     { slug: 'input-group', title: 'مجموعات الحقول', en: 'Input group', icon: 'link',
       lead: 'حقل وملحقاته في قطعة واحدة: وحدة، أو بادئة، أو زرّ، أو إظهار كلمة المرور.' },
-    { slug: 'pickers', title: 'المنتقيات', en: 'Pickers', icon: 'calendar',
+    { slug: 'pickers', title: 'المنتقيات', en: 'Pickers', icon: 'calendar', fresh: true,
       lead: 'الإكمال التلقائي والتاريخ والمنزلق والعدّاد — أدوات إدخال يحتاجها كلّ نموذج جادّ.' },
+    { slug: 'chips', title: 'الرقاقات والوسوم', en: 'Chips, tags and multi-select', icon: 'tag', fresh: true,
+      lead: 'قيم صغيرة تُزال أو تُضغط، وحقل واحد بعدّة قيم: اختيار متعدّد من قائمة، أو وسوم تُكتب.' },
     { slug: 'validation', title: 'التحقّق', en: 'Validation', icon: 'shield',
       lead: 'تحقّق المتصفّح نفسه، برسائل داخل الحقل بدل الفقاعة، ودون مكتبة تحقّق.' }
   ] },
