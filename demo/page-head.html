@@ -260,13 +260,14 @@
 <p>
   <code>.ins-page-head</code>: العنوان <code>.ins-page-title</code> وسطر تحته <code>.ins-page-sub</code> داخل
   <code>.ins-page-head-text</code>، والإجراءات <code>.ins-page-actions</code> في النهاية، تلتفّ تحت العنوان على
-  الشاشة الضيّقة. ومسار التنقّل أوّل الرأس يأخذ سطرًا وحده.
+  الشاشة الضيّقة. ومسار التنقّل، إن كان، أوّل الرأس يأخذ سطرًا وحده.
 </p>
 <figure class="dx"><div class="dx-view">
   <header class="ins-page-head">
     <nav class="ins-breadcrumb" aria-label="مسار التنقّل">
       <ol>
         <li><a href="#head">الرئيسية</a></li>
+        <li><a href="#head">القسم</a></li>
         <li><span aria-current="page">الصفحة</span></li>
       </ol>
     </nav>
@@ -282,6 +283,7 @@
   <span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-breadcrumb"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"مسار التنقّل"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;ol</span><span class="hl-t">&gt;</span>
       <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#head"</span><span class="hl-t">&gt;</span>الرئيسية<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#head"</span><span class="hl-t">&gt;</span>القسم<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
       <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">aria-current</span>=<span class="hl-s">"page"</span><span class="hl-t">&gt;</span>الصفحة<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/ol</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span>
@@ -296,8 +298,9 @@
 
 <h2 id="breadcrumb">مسار التنقّل</h2>
 <p>
-  <code>&lt;nav class="ins-breadcrumb"&gt;</code> حول قائمة مرتّبة. الفاصل مرسوم لا حرف، وينقلب مع الاتجاه،
-  والعنصر الأخير <code>aria-current="page"</code> بلا رابط.
+  <code>&lt;nav class="ins-breadcrumb"&gt;</code> حول قائمة مرتّبة، لصفحة على عمق ثلاثة مستويات فأكثر؛ الصفحة
+  التي يصل إليها الشريط الجانبي مباشرةً لا تحتاجه. الفاصل مرسوم لا حرف، وينقلب مع الاتجاه، والعنصر الأخير
+  <code>aria-current="page"</code> بلا رابط، والنصّ الطويل يُقصّ بنقاط.
 </p>
 <figure class="dx"><div class="dx-view">
   <nav class="ins-breadcrumb" aria-label="مسار التنقّل">
