@@ -123,6 +123,59 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
 }
 
+/* The open list. A plain <select> opens a list the operating system draws, grey and
+   square whatever the page looks like. Where the browser lets a page style it
+   (`appearance: base-select`), the list is drawn like the library's menus: a glass
+   card under the field, options like menu items, the chosen one in the brand
+   colour with its tick. It is still the real <select>, so forms, the keyboard and
+   screen readers behave exactly as before; a browser without it keeps its own
+   list. A multiple select is a list box, not a dropdown, and is left alone. */
+@supports (appearance: base-select) {
+  .ins-select:not([multiple]),
+  .ins-select:not([multiple])::picker(select) { appearance: base-select; }
+  .ins-select:not([multiple]) { align-items: center; }
+  /* The chevron stays the design's own, drawn above. */
+  .ins-select:not([multiple])::picker-icon { display: none; }
+  /* Below the field, like every menu here, and up only when it does not fit there;
+     the browser's default opens toward whichever side has more room. Never
+     narrower than the field. */
+  .ins-select::picker(select) {
+    position-try-order: normal;
+    min-inline-size: anchor-size(inline);
+    margin-block: .375rem;
+    padding: .375rem;
+    max-block-size: min(24rem, 70vh);
+    border-radius: var(--ins-r-md);
+    border: 1px solid var(--ins-rim);
+    background: var(--ins-glass-strong);
+    box-shadow: var(--ins-sh-lg);
+    -webkit-backdrop-filter: var(--ins-blur);
+            backdrop-filter: var(--ins-blur);
+    color: var(--ins-text-1);
+    font-family: inherit;
+  }
+  .ins-select:open::picker(select) { animation: ins-pop-in var(--ins-t-pop) var(--ins-ease); }
+  .ins-select option {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem .75rem;
+    border-radius: var(--ins-r-xs);
+    font-size: .875rem;
+    cursor: pointer;
+    transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+  }
+  .ins-select option:is(:hover, :focus-visible) {
+    outline: 0;
+    background: rgba(var(--ins-primary-rgb), .10);
+    color: var(--ins-primary-darker);
+  }
+  .ins-select option:checked { font-weight: 700; color: var(--ins-primary-darker); }
+  .ins-select option::checkmark { color: var(--ins-tone-brand-soft); }
+  .ins-select option:disabled { opacity: .45; cursor: default; }
+  :root[data-ins-theme="dark"] .ins-select option:is(:hover, :focus-visible, :checked) { color: var(--ins-text-1); }
+}
+
 /* --------------------------------------------------------- checkbox / radio */
 /* Built rather than ported: the source leaned on Bootstrap's `.form-check` for
    these. Designed to the same rules as everything else — the control fill, the
