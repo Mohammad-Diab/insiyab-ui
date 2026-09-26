@@ -533,3 +533,7 @@
 /* A top bar inside an example is a picture of one: it stays in its place, and below
    the page's own bar, so the page's menus open over it. */
 .dx-view .ins-topbar { position: relative; z-index: 0; }
+
+/* The login template: a screen-sized frame, so the card sits in the middle of it. */
+.dx-view.screen { padding: 0; }
+.dx-view.screen .ins-screen { min-block-size: 44rem; }

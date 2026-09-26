@@ -62,6 +62,12 @@
 .ins-items-end { align-items: flex-end; }
 .ins-items-baseline { align-items: baseline; }
 .ins-items-stretch { align-items: stretch; }
+/* One child's own cross-axis place: a quiet link centred under a stretched stack of
+   full-width controls, say. */
+.ins-self-start { align-self: flex-start; }
+.ins-self-center { align-self: center; }
+.ins-self-end { align-self: flex-end; }
+.ins-self-stretch { align-self: stretch; }
 
 /* `flex-start` and `flex-end` follow the direction, so these mirror in RTL with no
    help — `start` is the right edge of an Arabic row. */

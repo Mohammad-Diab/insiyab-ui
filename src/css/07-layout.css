@@ -124,6 +124,50 @@
 .ins-container--narrow { --ins-container: 48rem; }
 .ins-container--wide { --ins-container: 90rem; }
 
+/* --------------------------------------------------------------- screen */
+/* A page that holds one card in its middle: a login, a confirmation, an error. The
+   centred layout at its smallest, for a page with no shell and no navbar.
+
+     <main class="ins-screen">
+       <form class="ins-glass ins-p-8">…</form>
+     </main>
+
+   `dvh`, so a phone's collapsing address bar does not push the card off centre,
+   with `vh` before it for a browser that does not know it. */
+.ins-screen {
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(var(--ins-sp-4), 4vw, var(--ins-sp-8));
+}
+.ins-screen > * { inline-size: 100%; max-inline-size: 28rem; }
+
+/* The brand at the top of such a card: the mark, the name, one line under it. */
+.ins-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .375rem;
+  margin-block-end: var(--ins-sp-6);
+  text-align: center;
+}
+.ins-brand .ins-shell-mark {
+  --ins-mark: 3.75rem;
+  margin-block-end: .5rem;
+  font-size: 1.625rem;
+  font-weight: 800;
+}
+.ins-brand-name {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: var(--ins-primary-darker);
+}
+:root[data-ins-theme="dark"] .ins-brand-name { color: var(--ins-text-1); }
+.ins-brand-sub { margin: 0; font-size: .9375rem; color: var(--ins-text-2); }
+
 /* --------------------------------------------------------------- stack / row */
 /* Vertical and horizontal flow. Flex rather than margins between siblings, so the
    gap is one declaration a `.ins-gap-*` utility can replace, and so a hidden child
