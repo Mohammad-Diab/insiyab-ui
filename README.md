@@ -746,8 +746,9 @@ short it is. A click marks its link at once, and the marker stays put during the
 scroll that click starts.
 
 The stylesheet is optional, and only carries `.ins-toc`: a contents list that
-sticks under the top bar (`--ins-toc-top`), with `.ins-toc-title`, `.ins-toc-sub`
-for a deeper heading, and the sidebar's brand bar on the current entry.
+sticks under the top bar (`--ins-toc-top`), with `.ins-toc-title` and
+`.ins-toc-sub` for a deeper heading. It is drawn like the sidebar: a glass card
+of rounded entries, the current one raised with the brand marker.
 `ins:scrollspy` reports each change, and `Insiyab.scrollspy(nav)` measures again.
 
 ### Timeline
