@@ -168,7 +168,9 @@ export const NAV = [
     { slug: 'carousel', title: 'عرض الشرائح', en: 'Carousel', icon: 'slides',
       lead: 'شرائح في صفّ يُسحب بالإصبع، وأزرار ونقاط وأسهم باتّجاه القراءة — ولا يتحرّك من تلقاء نفسه.' },
     { slug: 'charts', title: 'الرسوم البيانية', en: 'Charts', icon: 'chart', fresh: true,
-      lead: 'أعمدة وخطوط وحلقات وتوزيعات من جدول، بألوان المكتبة واتّجاه القراءة، والأرقام تبقى لقارئ الشاشة.' }
+      lead: 'أعمدة وخطوط وحلقات وتوزيعات من جدول، بألوان المكتبة واتّجاه القراءة، والأرقام تبقى لقارئ الشاشة.' },
+    { slug: 'month', title: 'تقويم الشهر', en: 'Month calendar', icon: 'calendar', fresh: true,
+      lead: 'شهر على شبكة بمواعيد كلّ يوم، من قائمة في الصفحة، يبدأ أسبوعه كما تبدؤه لغتها.' }
   ] },
   { group: 'القوالب', en: 'Templates', pages: [
     { slug: 'login', title: 'تسجيل الدخول', en: 'Login template', icon: 'user',

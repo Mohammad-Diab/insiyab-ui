@@ -1,0 +1,101 @@
+/*! Insiyab UI v0.6.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
+/* ==========================================================================
+   Insiyab · Month plugin
+   ==========================================================================
+   The look of insiyab-month.js: a month as a glass-less grid that sits in a panel
+   or a card, days as quiet cells, today ringed in the brand, events as small
+   tinted bars in their tone. */
+
+.ins-month-events { display: none; }
+.ins-month-head { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-block-end: .75rem; }
+.ins-month-title-main { margin: 0; font-size: var(--ins-fs-lg); font-weight: 800; color: var(--ins-text-1); }
+.ins-month-nav { display: flex; align-items: center; gap: .25rem; }
+.ins-month-arrow {
+  display: block;
+  inline-size: 1rem;
+  block-size: 1rem;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+/* The arrow points where the month goes: back is toward the start of the line. */
+[dir="ltr"] .ins-month-prev .ins-month-arrow,
+[dir="rtl"] .ins-month-next .ins-month-arrow { transform: scaleX(-1); }
+
+.ins-month-grid {
+  inline-size: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 3px;
+}
+.ins-month-grid th {
+  padding-block: .25rem .375rem;
+  font-size: var(--ins-fs-xs);
+  font-weight: 700;
+  color: var(--ins-label);
+  text-align: center;
+}
+.ins-month-day {
+  block-size: 6.25rem;
+  padding: .375rem;
+  vertical-align: top;
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-glass-inner);
+  cursor: default;
+  transition: background var(--ins-t-pop) var(--ins-ease);
+}
+.ins-month-day:hover { background: var(--ins-surface-hover); }
+.ins-month-day.is-other { background: transparent; }
+.ins-month-day.is-other .ins-month-num { color: var(--ins-text-3); opacity: .6; }
+.ins-month-num {
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: 1.625rem;
+  block-size: 1.625rem;
+  border-radius: 50%;
+  font-family: var(--ins-font-body-en);
+  font-size: var(--ins-fs-sm);
+  font-weight: 700;
+  color: var(--ins-text-1);
+}
+.ins-month-day.is-today .ins-month-num { background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark)); color: var(--ins-on-primary); }
+
+.ins-month-events-day { display: flex; flex-direction: column; gap: 2px; margin-block-start: .25rem; min-inline-size: 0; }
+.ins-month-event {
+  --ins-ev: var(--ins-tone-brand-soft);
+  --ins-ev-bg: var(--ins-tone-brand-bg);
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+  min-inline-size: 0;
+  padding: .0625rem .375rem;
+  border-radius: 5px;
+  border-inline-start: 3px solid var(--ins-ev);
+  background: var(--ins-ev-bg);
+  color: var(--ins-text-1);
+  font-size: .6875rem;
+  line-height: 1.6;
+  text-decoration: none;
+}
+a.ins-month-event:hover { background: var(--ins-ev); color: var(--ins-on-primary); }
+a.ins-month-event:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
+.ins-month-event--ok   { --ins-ev: var(--ins-tone-ok);   --ins-ev-bg: var(--ins-tone-ok-bg); }
+.ins-month-event--warn { --ins-ev: var(--ins-tone-warn); --ins-ev-bg: var(--ins-tone-warn-bg); }
+.ins-month-event--bad  { --ins-ev: var(--ins-tone-bad);  --ins-ev-bg: var(--ins-tone-bad-bg); }
+.ins-month-event--info { --ins-ev: var(--ins-tone-info); --ins-ev-bg: var(--ins-tone-info-bg); }
+.ins-month-time { flex: 0 0 auto; font-family: var(--ins-font-body-en); font-weight: 700; color: var(--ins-text-2); }
+.ins-month-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ins-month-more { padding-inline: .375rem; font-size: .6875rem; font-weight: 700; color: var(--ins-text-2); direction: ltr; unicode-bidi: isolate; text-align: start; }
+
+.ins-month-dots { display: none; gap: 3px; justify-content: center; margin-block-start: .25rem; }
+.ins-month-dots > i { inline-size: 5px; block-size: 5px; border-radius: 50%; background: var(--ins-tone-brand-soft); }
+.ins-month-dots > .ins-month-dot--ok { background: var(--ins-tone-ok); }
+.ins-month-dots > .ins-month-dot--warn { background: var(--ins-tone-warn); }
+.ins-month-dots > .ins-month-dot--bad { background: var(--ins-tone-bad); }
+.ins-month-dots > .ins-month-dot--info { background: var(--ins-tone-info); }
+
+@media (max-width: 34rem) {
+  .ins-month-day { block-size: 3.25rem; padding: .25rem; text-align: center; }
+  .ins-month-events-day { display: none; }
+  .ins-month-dots { display: flex; }
+}
