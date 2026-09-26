@@ -415,32 +415,69 @@
     };
   }
 
-  /* Returns whether it flew. Whenever it does not, or once it lands, the markers
-     the arrival hid before first paint are shown again. */
-  function navFly(side, from, to) {
-    if (!from || !to || from === to || !side.contains(from) || !to.animate || motionless()) return false;
-    var s = side.getBoundingClientRect();
+  /* The marker's flight from one item to another, shared by the sidebar and any list
+     that marks its current item the same way, with a `::before` bar (the scrollspy
+     plugin's contents list). A stand-in bar, `opts.bar`, is laid over the old marker,
+     stretches to reach the new one and then lets go of the old end, while `opts.moving`
+     on the box hides the real markers. The box has to be positioned: the stand-in is
+     placed in its coordinates.
+
+     One flight per box. A move that starts before the last one has landed carries on
+     from wherever the bar is, rather than jumping back to an item, which is what a
+     contents list does while the page is scrolled past several sections.
+
+     Returns whether it flew; `opts.done` runs once a flight lands or is cut short. */
+  function flyMarker(box, from, to, opts) {
+    if (!box) return false;
+    opts = opts || {};
+    var barClass = opts.bar || 'ins-marker-flight', moving = opts.moving || 'ins-marker-moving';
+    /* Not a move, or not one anybody should see: whatever is flying keeps flying. */
+    if (!from || !to || from === to || !box.contains(from) || !to.animate || motionless()) return false;
+    if (window.getComputedStyle(box).position === 'static') return false;
+    var s = box.getBoundingClientRect();
     /* A collapsed column or a closed drawer: nobody is looking. */
     if (s.width < 8 || s.right <= 0 || s.left >= window.innerWidth) return false;
-    var a = navMarker(side, s, from), b = navMarker(side, s, to);
+    var a = navMarker(box, s, from), b = navMarker(box, s, to);
     if (a.h <= 0 || b.h <= 0) return false;
+    /* A real move: it replaces the flight in progress, starting where that bar is. */
+    var prev = box.__insFlight;
+    if (prev) {
+      if (prev.bar.parentNode) {
+        var pcs = window.getComputedStyle(prev.bar);
+        var py = parseFloat(pcs.top), ph = parseFloat(pcs.height);
+        if (!isNaN(py) && ph > 0) { a.y = py; a.h = ph; }
+      }
+      prev.halt();
+    }
 
-    var bar = el('span', 'ins-shell-indicator');
+    var bar = el('span', barClass);
     bar.setAttribute('aria-hidden', 'true');
     bar.style.left = b.x + 'px';
     bar.style.width = b.w + 'px';
-    side.appendChild(bar);
-    side.classList.add('ins-shell-moving');
+    box.appendChild(bar);
+    box.classList.add(moving);
 
     var down = b.y > a.y;
     var span = down ? { top: a.y, height: b.y + b.h - a.y }
                     : { top: b.y, height: a.y + a.h - b.y };
-    var landed = function () {
-      if (bar.parentNode) bar.parentNode.removeChild(bar);
-      side.classList.remove('ins-shell-moving');
-      navArrived();
+    var run = null;
+    var flight = {
+      bar: bar,
+      /* Ends this flight: removes its bar, and hands the box back unless a newer
+         flight already owns it. Safe to call more than once. */
+      land: function () {
+        if (bar.parentNode) bar.parentNode.removeChild(bar);
+        if (box.__insFlight !== flight) return;
+        box.__insFlight = null;
+        box.classList.remove(moving);
+        if (opts.done) opts.done();
+      },
+      halt: function () {
+        if (run) { run.onfinish = run.oncancel = null; try { run.cancel(); } catch (e) {} }
+        flight.land();
+      }
     };
-    var run;
+    box.__insFlight = flight;
     try {
       run = bar.animate([
         { top: a.y + 'px', height: a.h + 'px', easing: NAV_EASE_OUT },
@@ -448,12 +485,18 @@
         { top: b.y + 'px', height: b.h + 'px' }
       ], { duration: 600, fill: 'both' });
     } catch (e) {
-      landed();
+      flight.land();
       return false;
     }
-    run.onfinish = landed;
-    run.oncancel = landed;
+    run.onfinish = flight.land;
+    run.oncancel = flight.land;
     return true;
+  }
+
+  /* The sidebar's flight. Once it lands, the markers the arrival hid before first
+     paint are shown again; when it does not fly, the caller shows them. */
+  function navFly(side, from, to) {
+    return flyMarker(side, from, to, { bar: 'ins-shell-indicator', moving: 'ins-shell-moving', done: navArrived });
   }
 
   /* Select a sidebar item on this page — for a same-page link, or a single-page app
@@ -2737,6 +2780,9 @@
     /* Text the way the autocomplete compares it, for a plugin that searches, so a
        query finds the same things in both. */
     norm: norm,
+    /* The sidebar's marker flight, for a plugin list that marks its current item
+       the same way, so the two move alike. */
+    flyMarker: flyMarker,
     wizard: function (target, step) {
       var w = resolve(target);
       if (w && !w.classList.contains('ins-wizard')) w = w.closest('.ins-wizard');

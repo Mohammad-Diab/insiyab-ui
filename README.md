@@ -459,6 +459,7 @@ Insiyab.wizard(target, step?)         // the current step (0-based), or go to on
 Insiyab.date(input, iso?)             // read a date field's ISO value, or set it ('' clears)
 Insiyab.calendar(name, calendar?)     // register a calendar system for date fields, or look one up
 Insiyab.norm(text)                    // text as the autocomplete compares it: no hamza seats or harakat, Latin digits
+Insiyab.flyMarker(box, from, to, opts) // the sidebar's marker flight, for a list whose items have the same ::before marker
 Insiyab.init(scope?)                  // re-scan DOM you built yourself
 Insiyab.define(name, fn)              // add your own builder to that scan
 Insiyab.scrollTop()                   // reads whichever element is scrolling
@@ -747,8 +748,10 @@ scroll that click starts.
 
 The stylesheet is optional, and only carries `.ins-toc`: a contents list that
 sticks under the top bar (`--ins-toc-top`), with `.ins-toc-title` and
-`.ins-toc-sub` for a deeper heading. It is drawn like the sidebar: a glass card
-of rounded entries, the current one raised with the brand marker.
+`.ins-toc-sub` for a deeper heading. It is drawn like the sidebar and behaves
+like it: a glass card of rounded entries, the current one raised with the brand
+marker, and the marker flies from entry to entry the way the sidebar's does
+(`Insiyab.flyMarker`, the same code).
 `ins:scrollspy` reports each change, and `Insiyab.scrollspy(nav)` measures again.
 
 ### Timeline

@@ -52,11 +52,16 @@
   text-decoration: none;
   transition: background var(--ins-t-pop) var(--ins-ease),
               color var(--ins-t-pop) var(--ins-ease),
+              transform var(--ins-t-pop) var(--ins-ease),
               box-shadow var(--ins-t-pop) var(--ins-ease);
 }
 /* A deeper heading, a step in. */
 .ins-toc a.ins-toc-sub { padding-inline-start: 1.375rem; font-size: var(--ins-fs-xs); }
 .ins-toc a:hover { background: var(--ins-glass-inner); color: var(--ins-primary-darker); }
+/* The sidebar's hover nudge, toward the content. */
+[dir="rtl"] .ins-toc a:hover { transform: translateX(-2px); }
+[dir="ltr"] .ins-toc a:hover { transform: translateX(2px); }
+[data-ins-fx="off"] .ins-toc a:hover { transform: none; }
 
 /* The current entry: raised like the sidebar's active link, with its marker. */
 .ins-toc a.is-active {
@@ -81,3 +86,15 @@
   transition: transform var(--ins-t-pop) var(--ins-ease);
 }
 .ins-toc a.is-active::before { transform: scaleY(1); }
+
+/* Moving from one entry to the next, the marker flies like the sidebar's: insiyab.js
+   lays this stand-in over the old marker and stretches it to the new one, and the
+   real markers are hidden until it lands. */
+.ins-toc-indicator {
+  position: absolute;
+  z-index: 1;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-tone-brand-soft);
+  pointer-events: none;
+}
+.ins-toc-moving a::before { visibility: hidden; transition: none; }
