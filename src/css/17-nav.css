@@ -624,6 +624,55 @@ html[dir="ltr"] .ins-page-title {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+/* Two more states for a step: `.is-flagged`, left to come back to, with an amber
+   dot at its circle's corner; and `.is-error`, which needs fixing, in red. Either
+   combines with done and current. The dot hangs off the label, which is the one
+   part of the item free to carry it. */
+.ins-steps-item.is-error::before {
+  border-color: var(--ins-tone-bad);
+  background: var(--ins-tone-bad-bg);
+  color: var(--ins-tone-bad);
+}
+.ins-steps-item.is-flagged .ins-steps-label::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset-block-start: -.125rem;
+  inset-inline-start: calc(50% + .5rem);
+  inline-size: .625rem;
+  block-size: .625rem;
+  border-radius: 50%;
+  background: var(--ins-tone-warn);
+  box-shadow: 0 0 0 2px var(--ins-glass-strong);
+}
+
+/* A grid of numbers, for many steps with no names on show: the questions of a long
+   form, say. No joining lines; the numbers wrap. Put a link or a button inside each
+   item as its `.ins-steps-label`, and the whole circle is that control, its text
+   left for a screen reader. The states are set by the page: done for answered,
+   current for the one open, flagged for the ones to look at again. */
+.ins-steps--grid { flex-wrap: wrap; gap: .5rem; }
+.ins-steps--grid .ins-steps-item { flex: 0 0 auto; }
+.ins-steps--grid .ins-steps-item + .ins-steps-item::after { content: none; }
+.ins-steps--grid .ins-steps-label {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 1;
+  inline-size: 2rem;
+  block-size: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: transparent;
+  font-size: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+.ins-steps--grid .ins-steps-label:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
+.ins-steps--grid .ins-steps-item:not([aria-current="step"]):hover::before { border-color: var(--ins-tone-brand-soft); }
+.ins-steps--grid .ins-steps-item.is-flagged .ins-steps-label::after { inset-inline-start: auto; inset-inline-end: -.1875rem; inset-block-start: -.1875rem; }
 /* On a phone four step names do not fit under four circles. The current one keeps
    its name; the rest keep their numbers, and their names stay for screen readers. */
 @media (max-width: 34rem) {

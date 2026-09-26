@@ -1082,7 +1082,8 @@
       today: 'اليوم', clear: 'مسح', badDate: 'اكتب تاريخًا صحيحًا.', calendarSystem: 'نظام التقويم',
       early: 'اختر {date} أو ما بعده.', late: 'اختر {date} أو ما قبله.',
       selected: 'المحدّد: {n}', remove: 'إزالة', badTime: 'اكتب وقتًا صحيحًا.',
-      words: '{n}/{max} كلمة', wordsFree: '{n} كلمة', tooManyWords: 'لا تتجاوز {max} كلمة.'
+      words: '{n}/{max} كلمة', wordsFree: '{n} كلمة', tooManyWords: 'لا تتجاوز {max} كلمة.',
+      days: '{d} يوم', saving: 'جارٍ الحفظ…', saved: 'حُفظ', saveError: 'تعذّر الحفظ'
     },
     en: {
       ok: 'OK', cancel: 'Cancel', choose: 'Choose a date', calendar: 'Calendar',
@@ -1090,7 +1091,8 @@
       today: 'Today', clear: 'Clear', badDate: 'Enter a valid date.', calendarSystem: 'Calendar system',
       early: 'Choose {date} or later.', late: 'Choose {date} or earlier.',
       selected: '{n} selected', remove: 'Remove', badTime: 'Enter a valid time.',
-      words: '{n}/{max} words', wordsFree: '{n} words', tooManyWords: 'Use {max} words or fewer.'
+      words: '{n}/{max} words', wordsFree: '{n} words', tooManyWords: 'Use {max} words or fewer.',
+      days: '{d}d', saving: 'Saving…', saved: 'Saved', saveError: 'Could not save'
     }
   };
 
@@ -2333,6 +2335,100 @@
     if (group) parts(group, true);
   }
 
+  /* ------------------------------------------------------------ countdown */
+  /* Every running countdown, on one timer. Each keeps the moment it ends rather than
+     a count of seconds, so a tab left in the background comes back to the right time
+     instead of wherever its throttled ticks had got to. */
+  var countdowns = [], countTimer = null;
+
+  function countdownSet(node, value) {
+    var v = String(value == null ? '' : value).trim();
+    var end = /^\d+(\.\d+)?$/.test(v) ? Date.now() + parseFloat(v) * 1000 : Date.parse(v);
+    if (isNaN(end)) return null;
+    node.__insEnd = end;
+    node.__insWarned = node.__insDone = false;
+    node.classList.remove('is-warn', 'is-done');
+    if (countdowns.indexOf(node) === -1) countdowns.push(node);
+    if (!countTimer) countTimer = setInterval(countdownTick, 1000);
+    countdownDraw(node);
+    return countdownLeft(node);
+  }
+
+  function countdownLeft(node) { return Math.max(0, Math.ceil((node.__insEnd - Date.now()) / 1000)); }
+
+  function countdownDraw(node) {
+    var left = countdownLeft(node);
+    var d = Math.floor(left / 86400), h = Math.floor(left % 86400 / 3600), m = Math.floor(left % 3600 / 60), sec = left % 60;
+    var clock = (d || h ? (d ? pad2(h) : h) + ':' : '') + pad2(m) + ':' + pad2(sec);
+    var days = node.querySelector('.ins-countdown-days'), time = node.querySelector('.ins-countdown-clock');
+    if (!time) {
+      node.textContent = '';
+      days = node.appendChild(el('span', 'ins-countdown-days'));
+      time = node.appendChild(el('span', 'ins-countdown-clock'));
+    }
+    days.hidden = !d;
+    days.textContent = d ? strings(node).days.replace('{d}', d) : '';
+    time.textContent = clock;
+    var warn = parseFloat(node.getAttribute('data-ins-warn'));
+    if (isNaN(warn)) warn = 60;
+    if (!node.__insWarned && left <= warn && left > 0) {
+      node.__insWarned = true;
+      node.classList.add('is-warn');
+      emit('ins:countdown', { el: node, left: left, state: 'warn' });
+    }
+    if (!node.__insDone && left === 0) {
+      node.__insDone = true;
+      node.classList.remove('is-warn');
+      node.classList.add('is-done');
+      emit('ins:countdown', { el: node, left: 0, state: 'end' });
+    }
+    return left;
+  }
+
+  function countdownTick() {
+    for (var i = countdowns.length - 1; i >= 0; i--) {
+      var node = countdowns[i];
+      if (!document.documentElement.contains(node) || countdownDraw(node) === 0) countdowns.splice(i, 1);
+    }
+    if (!countdowns.length) { clearInterval(countTimer); countTimer = null; }
+  }
+
+  /* -------------------------------------------------------- save indicator */
+  function saveState(target, state, text) {
+    var node = resolve(target);
+    if (!node) return null;
+    var t = strings(node);
+    var said = { saving: t.saving, saved: t.saved, error: t.saveError };
+    node.setAttribute('data-ins-state', state);
+    node.textContent = state === 'idle' ? '' : (text || node.getAttribute('data-ins-text-' + state) || said[state] || '');
+    return state;
+  }
+
+  /* A form that keeps itself: a moment after the last change the indicator says
+     "saving" and `ins:autosave` goes out with the form's data. A page that saves
+     somewhere cancels it and calls `detail.done(true)` or `done(false)` when it
+     knows; one that does not cancel it has kept the change itself (a local draft),
+     and the indicator says so at once. A later change supersedes an earlier save
+     still in flight. */
+  function autosave(form) {
+    clearTimeout(form.__insSaveTimer);
+    var wait = parseInt(form.getAttribute('data-ins-autosave'), 10) || 800;
+    form.__insSaveTimer = setTimeout(function () {
+      var ind = form.querySelector('.ins-save') || (form.id && document.querySelector('.ins-save[data-ins-save-for="#' + form.id + '"]'));
+      var seq = (form.__insSaveSeq || 0) + 1;
+      form.__insSaveSeq = seq;
+      if (ind) saveState(ind, 'saving');
+      var done = function (ok) {
+        if (form.__insSaveSeq !== seq) return;
+        if (ind) saveState(ind, ok === false ? 'error' : 'saved');
+      };
+      var data = null;
+      try { data = new FormData(form); } catch (e) { /* no FormData */ }
+      var ask = emit('ins:autosave', { el: form, data: data, done: done }, true);
+      if (!ask.defaultPrevented) done(true);
+    }, wait);
+  }
+
   /* ---------------------------------------------------------------- table */
   function tableOf(node) { return node && node.closest ? node.closest('table') : null; }
 
@@ -3084,6 +3180,14 @@
     if (group) datetimeSync(group);
   }, false);
 
+  /* Any change in a form that keeps itself. */
+  ['input', 'change'].forEach(function (type) {
+    document.addEventListener(type, function (event) {
+      var form = event.target.closest && event.target.closest('form[data-ins-autosave]');
+      if (form) autosave(form);
+    }, false);
+  });
+
   /* Marks and their notes light together under the pointer and on keyboard focus;
      a click on a mark brings its note into view. */
   document.addEventListener('pointerover', function (event) { noteLight(noteGroup(event.target)); }, false);
@@ -3506,6 +3610,25 @@
     }
   });
 
+  define('countdowns', function (scope) {
+    var nodes = scope.querySelectorAll('[data-ins-countdown]');
+    for (var i = 0; i < nodes.length; i++) {
+      if (nodes[i].__insEnd) continue;
+      if (!nodes[i].hasAttribute('role')) nodes[i].setAttribute('role', 'timer');
+      countdownSet(nodes[i], nodes[i].getAttribute('data-ins-countdown'));
+    }
+  });
+
+  /* A save indicator is a status, so a screen reader hears "saved" when it lands. */
+  define('save', function (scope) {
+    var nodes = scope.querySelectorAll('.ins-save');
+    for (var i = 0; i < nodes.length; i++) {
+      if (!nodes[i].hasAttribute('role')) nodes[i].setAttribute('role', 'status');
+      var st = nodes[i].getAttribute('data-ins-state');
+      if (st && !nodes[i].textContent.trim()) saveState(nodes[i], st);
+    }
+  });
+
   /* A mark with a note is reachable from the keyboard, and reads its note out. */
   define('marks', function (scope) {
     var marks = scope.querySelectorAll('.ins-mark[data-ins-note]');
@@ -3641,6 +3764,14 @@
       }
       return node ? sortTable(node, dir) : null;
     },
+    /* Seconds left on a countdown, or start it again: seconds, or the moment it ends. */
+    countdown: function (target, value) {
+      var node = resolve(target);
+      if (!node) return null;
+      return value === undefined ? (node.__insEnd ? countdownLeft(node) : null) : countdownSet(node, value);
+    },
+    /* 'saving', 'saved', 'error' or 'idle', with words of your own if you like. */
+    saveState: saveState,
     /* The selected rows of a table; `true` or `false` selects or clears them all. */
     selection: function (target, all) {
       var table = resolve(target);

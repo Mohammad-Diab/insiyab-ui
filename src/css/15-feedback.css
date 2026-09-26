@@ -340,3 +340,88 @@
    endless animation may mean here. */
 .ins-spinner { animation: ins-spin .7s linear infinite,
                           ins-fade-in var(--ins-t-enter) var(--ins-ease); }
+
+/* --------------------------------------------------------------- countdown */
+/* Time left until something ends, counting down each second:
+
+     <span class="ins-countdown" data-ins-countdown="600">10:00</span>
+     <span class="ins-countdown" data-ins-countdown="2026-09-26T18:00:00+03:00"></span>
+
+   A number is seconds from when the page opens; anything else is the moment it ends.
+   It turns amber at `data-ins-warn` seconds left (a minute by default) and red at
+   zero, and says both with `ins:countdown`. The clock is its own left-to-right run,
+   so "09:59" is never mirrored; days, when there are any, are said in words before
+   it. It is a `role="timer"`, which a screen reader does not read out every second. */
+.ins-countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  padding-block: .25rem;
+  padding-inline: .625rem .75rem;
+  border-radius: var(--ins-r-pill);
+  border: 1px solid var(--ins-tone-mute-bd);
+  background: var(--ins-tone-mute-bg);
+  color: var(--ins-text-1);
+  font-size: var(--ins-fs-md);
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background var(--ins-t-base) var(--ins-ease), color var(--ins-t-base) var(--ins-ease), border-color var(--ins-t-base) var(--ins-ease);
+}
+.ins-countdown::before {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: 1em;
+  block-size: 1em;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='13' r='8'/%3E%3Cpath d='M12 9v4l2 2M9 2h6'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='13' r='8'/%3E%3Cpath d='M12 9v4l2 2M9 2h6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.ins-countdown-clock {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-family: var(--ins-font-body-en);
+  font-variant-numeric: tabular-nums;
+}
+.ins-countdown-days { font-weight: 600; }
+.ins-countdown.is-warn { border-color: var(--ins-tone-warn-bd); background: var(--ins-tone-warn-bg); color: var(--ins-tone-warn); }
+.ins-countdown.is-done { border-color: var(--ins-tone-bad-bd); background: var(--ins-tone-bad-bg); color: var(--ins-tone-bad); }
+.ins-countdown--lg { gap: .5rem; padding-block: .5rem; padding-inline: 1rem 1.25rem; font-size: 1.5rem; }
+
+/* ------------------------------------------------------------ save indicator */
+/* Whether the last change has been kept: "saving…", then "saved", or "could not
+   save". `data-ins-state` says which, set by `Insiyab.saveState()` or by a form's
+   autosave (`form[data-ins-autosave]`). With no state it keeps its place and shows
+   nothing, so the line it sits on does not jump when it appears. */
+.ins-save {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  min-block-size: 1.25rem;
+  font-size: var(--ins-fs-xs);
+  font-weight: 600;
+  color: var(--ins-text-3);
+  transition: color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-save:not([data-ins-state]),
+.ins-save[data-ins-state="idle"] { visibility: hidden; }
+.ins-save::before {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: .875rem;
+  block-size: .875rem;
+}
+.ins-save[data-ins-state="saving"]::before {
+  border: 2px solid currentColor;
+  border-block-start-color: transparent;
+  border-radius: 50%;
+  animation: ins-spin .7s linear infinite;
+}
+.ins-save[data-ins-state="saved"] { color: var(--ins-tone-ok); }
+.ins-save[data-ins-state="error"] { color: var(--ins-tone-bad); }
+.ins-save:is([data-ins-state="saved"], [data-ins-state="error"])::before {
+  background: currentColor;
+  -webkit-mask: var(--ins-save-icon) center / contain no-repeat;
+          mask: var(--ins-save-icon) center / contain no-repeat;
+}
+.ins-save[data-ins-state="saved"] { --ins-save-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E"); }
+.ins-save[data-ins-state="error"] { --ins-save-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 8v5M12 16.5v.5'/%3E%3C/svg%3E"); }

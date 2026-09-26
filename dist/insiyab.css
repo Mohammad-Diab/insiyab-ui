@@ -2658,6 +2658,56 @@ html[dir="ltr"] .ins-dl dd.ins-num { text-align: left; }
 .ins-stat-value { transition: letter-spacing var(--ins-t-base) var(--ins-ease); }
 :where(a, button, .ins-hoverable).ins-stat:hover .ins-stat-value { letter-spacing: .005em; }
 
+/* --------------------------------------------------------------- change */
+/* A figure's change against another: `<span class="ins-delta ins-delta--up">12%</span>`.
+   The arrow says which way, the colour whether that is good: up is green and down
+   red, and `--invert` swaps them for a figure where less is better (costs, waiting
+   time). `--flat` for no change. `.ins-delta-ref` after it says what it is compared
+   with. The figure keeps its own direction, so a sign stays in front of it. */
+.ins-delta {
+  --ins-delta-c: var(--ins-tone-ok);
+  --ins-delta-bg: var(--ins-tone-ok-bg);
+  display: inline-flex;
+  align-items: center;
+  gap: .1875rem;
+  padding-block: .0625rem;
+  padding-inline: .375rem .5rem;
+  border-radius: var(--ins-r-pill);
+  background: var(--ins-delta-bg);
+  color: var(--ins-delta-c);
+  font-family: var(--ins-font-body-en);
+  font-size: .75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.ins-delta::before {
+  content: "";
+  inline-size: .75rem;
+  block-size: .75rem;
+  background: currentColor;
+  -webkit-mask: var(--ins-delta-arrow) center / contain no-repeat;
+          mask: var(--ins-delta-arrow) center / contain no-repeat;
+}
+.ins-delta--up { --ins-delta-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 19V5M5 12l7-7 7 7'/%3E%3C/svg%3E"); }
+.ins-delta--down {
+  --ins-delta-c: var(--ins-tone-bad);
+  --ins-delta-bg: var(--ins-tone-bad-bg);
+  --ins-delta-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M19 12l-7 7-7-7'/%3E%3C/svg%3E");
+}
+.ins-delta--up.ins-delta--invert { --ins-delta-c: var(--ins-tone-bad); --ins-delta-bg: var(--ins-tone-bad-bg); }
+.ins-delta--down.ins-delta--invert { --ins-delta-c: var(--ins-tone-ok); --ins-delta-bg: var(--ins-tone-ok-bg); }
+.ins-delta--flat {
+  --ins-delta-c: var(--ins-tone-mute);
+  --ins-delta-bg: var(--ins-tone-mute-bg);
+  --ins-delta-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
+}
+.ins-delta-ref { margin-inline-start: .375rem; font-size: .6875rem; color: var(--ins-text-3); }
+/* In a stat tile, on the line under the value. */
+.ins-stat-trend { display: flex; flex-wrap: wrap; align-items: center; margin-block-start: .125rem; }
+
 /* ==========================================================================
    Insiyab · data table
    ==========================================================================
@@ -5231,6 +5281,91 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-spinner { animation: ins-spin .7s linear infinite,
                           ins-fade-in var(--ins-t-enter) var(--ins-ease); }
 
+/* --------------------------------------------------------------- countdown */
+/* Time left until something ends, counting down each second:
+
+     <span class="ins-countdown" data-ins-countdown="600">10:00</span>
+     <span class="ins-countdown" data-ins-countdown="2026-09-26T18:00:00+03:00"></span>
+
+   A number is seconds from when the page opens; anything else is the moment it ends.
+   It turns amber at `data-ins-warn` seconds left (a minute by default) and red at
+   zero, and says both with `ins:countdown`. The clock is its own left-to-right run,
+   so "09:59" is never mirrored; days, when there are any, are said in words before
+   it. It is a `role="timer"`, which a screen reader does not read out every second. */
+.ins-countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  padding-block: .25rem;
+  padding-inline: .625rem .75rem;
+  border-radius: var(--ins-r-pill);
+  border: 1px solid var(--ins-tone-mute-bd);
+  background: var(--ins-tone-mute-bg);
+  color: var(--ins-text-1);
+  font-size: var(--ins-fs-md);
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background var(--ins-t-base) var(--ins-ease), color var(--ins-t-base) var(--ins-ease), border-color var(--ins-t-base) var(--ins-ease);
+}
+.ins-countdown::before {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: 1em;
+  block-size: 1em;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='13' r='8'/%3E%3Cpath d='M12 9v4l2 2M9 2h6'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='13' r='8'/%3E%3Cpath d='M12 9v4l2 2M9 2h6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.ins-countdown-clock {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-family: var(--ins-font-body-en);
+  font-variant-numeric: tabular-nums;
+}
+.ins-countdown-days { font-weight: 600; }
+.ins-countdown.is-warn { border-color: var(--ins-tone-warn-bd); background: var(--ins-tone-warn-bg); color: var(--ins-tone-warn); }
+.ins-countdown.is-done { border-color: var(--ins-tone-bad-bd); background: var(--ins-tone-bad-bg); color: var(--ins-tone-bad); }
+.ins-countdown--lg { gap: .5rem; padding-block: .5rem; padding-inline: 1rem 1.25rem; font-size: 1.5rem; }
+
+/* ------------------------------------------------------------ save indicator */
+/* Whether the last change has been kept: "saving…", then "saved", or "could not
+   save". `data-ins-state` says which, set by `Insiyab.saveState()` or by a form's
+   autosave (`form[data-ins-autosave]`). With no state it keeps its place and shows
+   nothing, so the line it sits on does not jump when it appears. */
+.ins-save {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  min-block-size: 1.25rem;
+  font-size: var(--ins-fs-xs);
+  font-weight: 600;
+  color: var(--ins-text-3);
+  transition: color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-save:not([data-ins-state]),
+.ins-save[data-ins-state="idle"] { visibility: hidden; }
+.ins-save::before {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: .875rem;
+  block-size: .875rem;
+}
+.ins-save[data-ins-state="saving"]::before {
+  border: 2px solid currentColor;
+  border-block-start-color: transparent;
+  border-radius: 50%;
+  animation: ins-spin .7s linear infinite;
+}
+.ins-save[data-ins-state="saved"] { color: var(--ins-tone-ok); }
+.ins-save[data-ins-state="error"] { color: var(--ins-tone-bad); }
+.ins-save:is([data-ins-state="saved"], [data-ins-state="error"])::before {
+  background: currentColor;
+  -webkit-mask: var(--ins-save-icon) center / contain no-repeat;
+          mask: var(--ins-save-icon) center / contain no-repeat;
+}
+.ins-save[data-ins-state="saved"] { --ins-save-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E"); }
+.ins-save[data-ins-state="error"] { --ins-save-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 8v5M12 16.5v.5'/%3E%3C/svg%3E"); }
+
 /* ==========================================================================
    Insiyab · overlays — dialog, drawer, menu, tooltip
    ==========================================================================
@@ -6467,6 +6602,55 @@ html[dir="ltr"] .ins-page-title {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+/* Two more states for a step: `.is-flagged`, left to come back to, with an amber
+   dot at its circle's corner; and `.is-error`, which needs fixing, in red. Either
+   combines with done and current. The dot hangs off the label, which is the one
+   part of the item free to carry it. */
+.ins-steps-item.is-error::before {
+  border-color: var(--ins-tone-bad);
+  background: var(--ins-tone-bad-bg);
+  color: var(--ins-tone-bad);
+}
+.ins-steps-item.is-flagged .ins-steps-label::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset-block-start: -.125rem;
+  inset-inline-start: calc(50% + .5rem);
+  inline-size: .625rem;
+  block-size: .625rem;
+  border-radius: 50%;
+  background: var(--ins-tone-warn);
+  box-shadow: 0 0 0 2px var(--ins-glass-strong);
+}
+
+/* A grid of numbers, for many steps with no names on show: the questions of a long
+   form, say. No joining lines; the numbers wrap. Put a link or a button inside each
+   item as its `.ins-steps-label`, and the whole circle is that control, its text
+   left for a screen reader. The states are set by the page: done for answered,
+   current for the one open, flagged for the ones to look at again. */
+.ins-steps--grid { flex-wrap: wrap; gap: .5rem; }
+.ins-steps--grid .ins-steps-item { flex: 0 0 auto; }
+.ins-steps--grid .ins-steps-item + .ins-steps-item::after { content: none; }
+.ins-steps--grid .ins-steps-label {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 1;
+  inline-size: 2rem;
+  block-size: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: transparent;
+  font-size: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+.ins-steps--grid .ins-steps-label:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
+.ins-steps--grid .ins-steps-item:not([aria-current="step"]):hover::before { border-color: var(--ins-tone-brand-soft); }
+.ins-steps--grid .ins-steps-item.is-flagged .ins-steps-label::after { inset-inline-start: auto; inset-inline-end: -.1875rem; inset-block-start: -.1875rem; }
 /* On a phone four step names do not fit under four circles. The current one keeps
    its name; the rest keep their numbers, and their names stay for screen readers. */
 @media (max-width: 34rem) {
