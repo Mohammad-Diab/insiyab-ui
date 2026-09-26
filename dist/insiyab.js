@@ -1081,13 +1081,15 @@
       ok: 'تأكيد', cancel: 'إلغاء', choose: 'اختر تاريخًا', calendar: 'التقويم',
       prevMonth: 'الشهر السابق', nextMonth: 'الشهر التالي', month: 'الشهر', year: 'السنة',
       today: 'اليوم', clear: 'مسح', badDate: 'اكتب تاريخًا صحيحًا.', calendarSystem: 'نظام التقويم',
-      early: 'اختر {date} أو ما بعده.', late: 'اختر {date} أو ما قبله.'
+      early: 'اختر {date} أو ما بعده.', late: 'اختر {date} أو ما قبله.',
+      selected: 'المحدّد: {n}'
     },
     en: {
       ok: 'OK', cancel: 'Cancel', choose: 'Choose a date', calendar: 'Calendar',
       prevMonth: 'Previous month', nextMonth: 'Next month', month: 'Month', year: 'Year',
       today: 'Today', clear: 'Clear', badDate: 'Enter a valid date.', calendarSystem: 'Calendar system',
-      early: 'Choose {date} or later.', late: 'Choose {date} or earlier.'
+      early: 'Choose {date} or later.', late: 'Choose {date} or earlier.',
+      selected: '{n} selected'
     }
   };
 
@@ -2072,6 +2074,174 @@
     return to;
   }
 
+  /* ---------------------------------------------------------------- table */
+  function tableOf(node) { return node && node.closest ? node.closest('table') : null; }
+
+  /* What a cell sorts and edits by: `data-sort-value` when the text is not the value
+     (a date written out in words, say, sorted by its ISO form), else `data-value`,
+     else the text. */
+  function cellValue(td) {
+    if (!td) return '';
+    var v = td.getAttribute('data-sort-value');
+    if (v === null) v = td.getAttribute('data-value');
+    return (v === null ? td.textContent : v).trim();
+  }
+
+  /* A figure as a number, in either set of digits, with its thousands separators
+     and whatever currency or percent sign stands around it. Not a figure: NaN. */
+  function numberOf(text) {
+    var t = toLatin(text).replace(/[\s,٬ ]/g, '').replace(/٫/g, '.').replace(/−/g, '-');
+    var m = t.match(/^[^\d.-]*(-?\d*\.?\d+)[^\d]*$/);
+    return m ? parseFloat(m[1]) : NaN;
+  }
+
+  /* Sort a table by one column: 'ascending', 'descending', or the other way from now
+     when no direction is given. `ins:sort` is asked first; a page that sorts on the
+     server cancels it, and then only the arrow moves. Rows with nothing to sort by go
+     last either way. Numbers compare as numbers when every filled cell of the column
+     holds one (or the column says `data-ins-sort="number"`); text compares in the
+     page's language, with the digits inside it read as numbers. */
+  function sortTable(th, dir) {
+    var table = tableOf(th), body = table && table.tBodies[0];
+    if (!body) return null;
+    if (dir !== 'ascending' && dir !== 'descending') {
+      dir = th.getAttribute('aria-sort') === 'ascending' ? 'descending' : 'ascending';
+    }
+    var column = th.cellIndex;
+    var heads = th.parentNode.querySelectorAll('th[data-ins-sort]');
+    for (var h = 0; h < heads.length; h++) heads[h].setAttribute('aria-sort', heads[h] === th ? dir : 'none');
+    var ask = emit('ins:sort', { el: table, th: th, column: column, dir: dir }, true);
+    if (ask.defaultPrevented) return dir;
+
+    var rows = Array.prototype.slice.call(body.rows);
+    var texts = rows.map(function (r) { return cellValue(r.cells[column]); });
+    var kind = th.getAttribute('data-ins-sort');
+    var numeric = kind === 'number' || (kind !== 'text' && texts.some(function (t) { return t !== ''; }) &&
+      texts.every(function (t) { return t === '' || !isNaN(numberOf(t)); }));
+    var keys = numeric ? texts.map(numberOf) : texts;
+    var coll = null;
+    try { coll = new Intl.Collator(langOf(table), { numeric: true, sensitivity: 'base' }); } catch (e) { /* plain order */ }
+    var sign = dir === 'descending' ? -1 : 1;
+    var order = rows.map(function (r, i) { return i; });
+    order.sort(function (a, b) {
+      var x = keys[a], y = keys[b];
+      var ex = numeric ? isNaN(x) : x === '', ey = numeric ? isNaN(y) : y === '';
+      if (ex || ey) return ex === ey ? a - b : (ex ? 1 : -1);
+      var c = numeric ? x - y : coll ? coll.compare(x, y) : (x < y ? -1 : x > y ? 1 : 0);
+      return c ? c * sign : a - b;
+    });
+    for (var i = 0; i < order.length; i++) body.appendChild(rows[order[i]]);
+    return dir;
+  }
+
+  /* The rows' own checkboxes, not the header's and not a nested table's. */
+  function selectBoxes(table) {
+    var all = table.querySelectorAll('tbody input[data-ins-select]'), out = [];
+    for (var i = 0; i < all.length; i++) if (tableOf(all[i]) === table && all[i].getAttribute('data-ins-select') !== 'all') out.push(all[i]);
+    return out;
+  }
+
+  /* After any change to the boxes: each row marked as its box says, the header box
+     checked, mixed or clear, and every bar tied to this table shown with its count or
+     hidden. Returns the selected rows. */
+  function selectSync(table, quiet) {
+    var boxes = selectBoxes(table), rows = [];
+    for (var i = 0; i < boxes.length; i++) {
+      var tr = boxes[i].closest('tr');
+      if (boxes[i].checked) rows.push(tr);
+      if (!tr) continue;
+      if (boxes[i].checked) tr.setAttribute('aria-selected', 'true');
+      else tr.removeAttribute('aria-selected');
+    }
+    var head = table.querySelector('thead input[data-ins-select="all"]');
+    if (head) {
+      head.checked = rows.length > 0 && rows.length === boxes.length;
+      head.indeterminate = rows.length > 0 && rows.length < boxes.length;
+    }
+    var bars = document.querySelectorAll('[data-ins-bulk]');
+    for (var j = 0; j < bars.length; j++) {
+      if (resolve(bars[j].getAttribute('data-ins-bulk')) !== table) continue;
+      bars[j].hidden = rows.length === 0;
+      var count = bars[j].querySelector('.ins-bulkbar-count');
+      if (count) {
+        var text = count.getAttribute('data-ins-text') || strings(count).selected;
+        count.textContent = text.replace('{n}', rows.length);
+      }
+    }
+    if (!quiet) emit('ins:select', { el: table, rows: rows, count: rows.length });
+    return rows;
+  }
+
+  function selectAll(table, on) {
+    var boxes = selectBoxes(table);
+    for (var i = 0; i < boxes.length; i++) if (!boxes[i].disabled) boxes[i].checked = on;
+  }
+
+  /* The heading over a cell, to name the field that replaces it. */
+  function columnName(td) {
+    var table = tableOf(td), head = table && table.tHead && table.tHead.rows[0];
+    var th = head && head.cells[td.cellIndex];
+    return th ? th.textContent.trim() : '';
+  }
+
+  /* A cell turned into a field. What it held is kept, so Escape, a refused change or
+     a failed save can put it back exactly as it was. */
+  function editStart(td) {
+    if (td.classList.contains('is-editing')) return;
+    var kind = td.getAttribute('data-ins-edit') || 'text';
+    var old = td.hasAttribute('data-value') ? td.getAttribute('data-value') : td.textContent.trim();
+    var field;
+    if (kind === 'select') {
+      field = el('select', 'ins-select ins-select--sm');
+      var opts = (td.getAttribute('data-ins-options') || '').split('|');
+      for (var i = 0; i < opts.length; i++) {
+        var o = el('option', '', opts[i].trim());
+        o.selected = opts[i].trim() === old;
+        field.appendChild(o);
+      }
+    } else {
+      field = el('input', 'ins-input ins-input--sm');
+      field.type = 'text';
+      field.value = old;
+      if (kind === 'number') { field.setAttribute('inputmode', 'decimal'); field.dir = 'ltr'; }
+    }
+    var name = columnName(td);
+    if (name) field.setAttribute('aria-label', name);
+    td.__insEdit = { old: old, html: td.innerHTML };
+    td.classList.add('is-editing');
+    td.textContent = '';
+    td.appendChild(field);
+    field.focus();
+    if (field.select) field.select();
+  }
+
+  /* Keep or drop the change. `ins:edit` is asked before a change is kept: cancel it
+     to refuse the value, or keep it and call `detail.revert()` later if the save it
+     starts fails. Returns whether the cell changed. */
+  function editEnd(td, keep) {
+    var state = td.__insEdit;
+    if (!state) return false;
+    td.__insEdit = null;
+    var field = td.querySelector('input, select');
+    var value = field ? field.value.trim() : state.old;
+    td.classList.remove('is-editing');
+    var changed = !!keep && value !== state.old;
+    if (changed) {
+      var ask = emit('ins:edit', {
+        el: td, row: td.parentNode, value: value, old: state.old,
+        revert: function () { td.innerHTML = state.html; if (td.hasAttribute('data-value')) td.setAttribute('data-value', state.old); }
+      }, true);
+      if (ask.defaultPrevented) changed = false;
+    }
+    if (changed) {
+      td.textContent = value;
+      if (td.hasAttribute('data-value')) td.setAttribute('data-value', value);
+    } else {
+      td.innerHTML = state.html;
+    }
+    return changed;
+  }
+
   /* -------------------------------------------------------------- confirm */
   /* `Insiyab.confirm('حذف العملية؟')` — a small modal with two buttons and a promise
      of which was pressed. It is a real `<dialog>` with a `method="dialog"` form, so
@@ -2144,6 +2314,9 @@
     '[data-ins-wizard="prev"]',
     '[data-ins-wizard="restart"]',
     '.ins-date-btn',
+    '.ins-sort',
+    '[data-ins-select="none"]',
+    '.ins-table td[data-ins-edit]',
     TAB,
     '.ins-seg > a',
     '.ins-seg > button'
@@ -2240,6 +2413,25 @@
       var how = el.getAttribute('data-ins-wizard');
       var dest = how === 'restart' ? 0 : wizardIndex(w) + (how === 'next' ? 1 : -1);
       wizardGo(w, dest, { validate: how === 'next', focus: true });
+      return;
+    }
+
+    if (el.classList.contains('ins-sort')) {
+      event.preventDefault();
+      sortTable(el.closest('th'));
+      return;
+    }
+
+    /* "Clear" in a selection's bar: every row of its table let go. */
+    if (el.getAttribute('data-ins-select') === 'none') {
+      var bar = el.closest('[data-ins-bulk]');
+      var owned = bar && resolve(bar.getAttribute('data-ins-bulk'));
+      if (owned) { selectAll(owned, false); selectSync(owned); }
+      return;
+    }
+
+    if (el.hasAttribute('data-ins-edit')) {
+      editStart(el);
       return;
     }
 
@@ -2610,6 +2802,52 @@
     for (var j = 0; j < toggles.length; j++) toggles[j].setAttribute('aria-pressed', 'false');
   }, true);
 
+  /* A table's checkboxes. The header box takes every row with it; a row box with
+     Shift held takes every row between it and the last one clicked. */
+  document.addEventListener('click', function (event) {
+    var box = event.target;
+    if (!box.matches || !box.matches('.ins-table tbody input[data-ins-select]')) return;
+    var table = tableOf(box), boxes = selectBoxes(table);
+    var last = table.__insLastBox, from = boxes.indexOf(last), to = boxes.indexOf(box);
+    if (event.shiftKey && from !== -1 && to !== -1) {
+      for (var i = Math.min(from, to); i <= Math.max(from, to); i++) if (!boxes[i].disabled) boxes[i].checked = box.checked;
+    }
+    table.__insLastBox = box;
+  }, false);
+
+  document.addEventListener('change', function (event) {
+    var box = event.target;
+    if (!box.matches || !box.matches('input[data-ins-select]')) return;
+    var table = tableOf(box);
+    if (!table) return;
+    if (box.getAttribute('data-ins-select') === 'all') selectAll(table, box.checked);
+    selectSync(table);
+  }, false);
+
+  /* An editable cell: Enter or F2 opens it from the keyboard; in its field, Enter
+     keeps the change and Escape drops it, and focus goes back to the cell either way,
+     so the keyboard can carry on down the column. Leaving the field keeps it. */
+  document.addEventListener('keydown', function (event) {
+    var t = event.target;
+    if (!t.closest || event.isComposing) return;
+    if (t.matches('.ins-table td[data-ins-edit]') && (event.key === 'Enter' || event.key === 'F2')) {
+      event.preventDefault();
+      editStart(t);
+      return;
+    }
+    var td = t.closest('.ins-table td.is-editing');
+    if (!td || (event.key !== 'Enter' && event.key !== 'Escape')) return;
+    event.preventDefault();
+    event.stopPropagation();
+    editEnd(td, event.key === 'Enter');
+    td.focus();
+  }, true);
+
+  document.addEventListener('focusout', function (event) {
+    var td = event.target.closest && event.target.closest('.ins-table td.is-editing');
+    if (td && !(event.relatedTarget && td.contains(event.relatedTarget))) editEnd(td, true);
+  }, false);
+
   /* The drawer's scrim. The CSS shows it as the sidebar's sibling, so it has no
      handler of its own to hang this on. */
   document.addEventListener('click', function (event) {
@@ -2886,6 +3124,37 @@
     }
   });
 
+  /* A sortable heading becomes a button, so the keyboard can reach it, and says how
+     its column is sorted — a page the server sent sorted says so with `aria-sort`. */
+  define('table-sort', function (scope) {
+    var ths = scope.querySelectorAll('.ins-table th[data-ins-sort]');
+    for (var i = 0; i < ths.length; i++) {
+      var th = ths[i];
+      if (!th.hasAttribute('aria-sort')) th.setAttribute('aria-sort', 'none');
+      if (th.querySelector('.ins-sort')) continue;
+      var btn = el('button', 'ins-sort');
+      btn.type = 'button';
+      while (th.firstChild) btn.appendChild(th.firstChild);
+      th.appendChild(btn);
+    }
+  });
+
+  /* Rows the server sent checked are marked, and their bar shown, from the start. */
+  define('table-select', function (scope) {
+    var boxes = scope.querySelectorAll('.ins-table input[data-ins-select]'), seen = [];
+    for (var i = 0; i < boxes.length; i++) {
+      var table = tableOf(boxes[i]);
+      if (!table || seen.indexOf(table) !== -1) continue;
+      seen.push(table);
+      selectSync(table, true);
+    }
+  });
+
+  define('table-edit', function (scope) {
+    var cells = scope.querySelectorAll('.ins-table td[data-ins-edit]');
+    for (var i = 0; i < cells.length; i++) if (!cells[i].hasAttribute('tabindex')) cells[i].setAttribute('tabindex', '0');
+  });
+
   define('wizards', function (scope) {
     var wizards = scope.querySelectorAll('.ins-wizard');
     for (var i = 0; i < wizards.length; i++) {
@@ -2966,6 +3235,24 @@
     /* The sidebar's marker flight, for a plugin list that marks its current item
        the same way, so the two move alike. */
     flyMarker: flyMarker,
+    /* Sort a table by a column: the <th>, or the table and a column number. */
+    sort: function (target, column, dir) {
+      var node = resolve(target);
+      if (node && node.tagName === 'TABLE') {
+        var head = node.tHead && node.tHead.rows[0];
+        node = head ? head.cells[column] : null;
+      } else {
+        dir = column;
+      }
+      return node ? sortTable(node, dir) : null;
+    },
+    /* The selected rows of a table; `true` or `false` selects or clears them all. */
+    selection: function (target, all) {
+      var table = resolve(target);
+      if (!table) return null;
+      if (all === true || all === false) { selectAll(table, all); return selectSync(table); }
+      return selectSync(table, true);
+    },
     /* The current step, or go to one with no checks: a number, 'next', 'prev' or
        'restart'. 'stay' ends a wait on the server without moving, after the page
        has shown why the step was refused. */

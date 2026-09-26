@@ -61,7 +61,8 @@
    nothing can ever be a descendant of, so the rule never matched and the scrolled
    bar kept its blur with effects off. */
 [data-ins-fx="off"] :is(.ins-glass, .ins-card, .ins-panel, .ins-toast, .ins-pop-body,
-                         .ins-island, .ins-shell-side, .ins-navbar),
+                         .ins-island, .ins-shell-side, .ins-navbar, .ins-bulkbar,
+                         .ins-table-wrap--sticky th, .ins-table-wrap--pin td),
 :root[data-ins-fx="off"][data-ins-scrolled] .ins-topbar::before,
 [data-ins-fx="off"] .ins-dialog::backdrop,
 [data-ins-fx="off"] .ins-drawer::backdrop {
@@ -93,7 +94,7 @@
                          .ins-alert, .ins-badge, .ins-island--title,
                          .ins-seg > .is-active, .ins-shell-scrim,
                          .ins-tabpanel, .ins-navbar-menu, .ins-wizard-panel,
-                         .ins-combo-list, .ins-progress,
+                         .ins-combo-list, .ins-progress, .ins-bulkbar,
                          .ins-anim-rise, .ins-anim-pop, .ins-anim-slide) { animation: none; }
 [data-ins-fx="off"] .ins-skel { animation: none; background: var(--ins-skel-base); }
 /* The script already skips the transition with effects off; this covers a page that

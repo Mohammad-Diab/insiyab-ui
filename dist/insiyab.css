@@ -405,6 +405,8 @@
      comfortable at. `.ins-container--narrow` and `--wide` swap the first. */
   --ins-container: 75rem;
   --ins-measure: 70ch;
+  /* The height a `.ins-table-wrap--sticky` scrolls inside. */
+  --ins-table-max: 32rem;
 
   /* Arabic first: Tajawal is the identity, and it carries its own Latin subset, so
      a Latin acronym inside an Arabic line stays in Tajawal rather than jumping to
@@ -2715,6 +2717,150 @@ html[dir="ltr"] .ins-table tbody td:first-child::before { left: 0; }
 .ins-table tbody tr:nth-child(4) { animation-delay: .12s; }
 .ins-table tbody tr:nth-child(5) { animation-delay: .16s; }
 .ins-table tbody tr:nth-child(6) { animation-delay: .20s; }
+
+/* --------------------------------------------------------------- sorting */
+/* A sortable column: `data-ins-sort` on its `<th>`. insiyab.js wraps the heading in
+   a button, so the keyboard reaches it, and keeps `aria-sort` on the cell; the arrow
+   is read from that. Both arrows, faint, until the column is sorted; then the one
+   that says which way. A mask, so it takes the heading's colour in both themes. */
+.ins-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  margin: -.25rem -.375rem;
+  padding: .25rem .375rem;
+  border: 0;
+  border-radius: var(--ins-r-xs);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease);
+}
+.ins-sort:hover { background: rgba(var(--ins-primary-rgb), .10); }
+.ins-sort:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
+.ins-sort::after {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: .875rem;
+  block-size: .875rem;
+  background: currentColor;
+  opacity: .4;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m8 9 4-4 4 4M8 15l4 4 4-4'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m8 9 4-4 4 4M8 15l4 4 4-4'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+th[aria-sort="ascending"] > .ins-sort::after,
+th[aria-sort="descending"] > .ins-sort::after { opacity: 1; }
+th[aria-sort="ascending"] > .ins-sort::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 19V5M6 11l6-6 6 6'/%3E%3C/svg%3E");
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 19V5M6 11l6-6 6 6'/%3E%3C/svg%3E");
+}
+th[aria-sort="descending"] > .ins-sort::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M6 13l6 6 6-6'/%3E%3C/svg%3E");
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M6 13l6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* ------------------------------------------------------------- selection */
+/* A column of checkboxes: `.ins-table-check` on its cells, `data-ins-select` on each
+   row's box and `data-ins-select="all"` on the header's. A checked row is a selected
+   row, drawn by the rules above; the header box is checked, mixed or clear to match.
+   The column is as narrow as its box. */
+.ins-table .ins-table-check { inline-size: 1%; padding-inline: 1.25rem .25rem; }
+.ins-table .ins-table-check .ins-check { display: flex; }
+
+/* The bar the selection brings up: how many are chosen and what can be done to them.
+   `data-ins-bulk="#table"` ties it to its table; insiyab.js shows it while anything
+   is selected and writes the count into `.ins-bulkbar-count`. It sticks to the
+   bottom of the screen, so the actions stay in reach down a long list. */
+.ins-bulkbar {
+  position: sticky;
+  inset-block-end: 1rem;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  margin-block-start: .75rem;
+  padding-block: .5rem;
+  padding-inline: 1.125rem .5rem;
+  border: 1px solid var(--ins-rim);
+  border-radius: var(--ins-r-lg);
+  background: var(--ins-glass-strong);
+  box-shadow: var(--ins-sh-lg), var(--ins-bevel);
+  -webkit-backdrop-filter: var(--ins-blur);
+          backdrop-filter: var(--ins-blur);
+  animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease);
+}
+.ins-bulkbar-count { margin-inline-end: auto; font-size: var(--ins-fs-md); font-weight: 700; color: var(--ins-tone-brand); }
+:root[data-ins-theme="dark"] .ins-bulkbar-count { color: var(--ins-text-1); }
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-bulkbar-count {
+    color: var(--ins-text-1);
+  }
+}
+
+/* ------------------------------------------------------------ cell editing */
+/* An editable cell: `data-ins-edit` (or `="number"`, or `="select"` with
+   `data-ins-options="a|b|c"`). It says so under the pointer and on focus, with a
+   pencil at its end; a click, Enter or F2 turns it into a field, Enter or leaving
+   keeps the change and Escape puts the old value back. */
+.ins-table td[data-ins-edit] { cursor: text; outline: 0; }
+.ins-table td[data-ins-edit]:not(.is-editing)::after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  inline-size: .875rem;
+  block-size: .875rem;
+  margin-inline-start: .5rem;
+  background: var(--ins-text-3);
+  opacity: 0;
+  transition: opacity var(--ins-t-pop) var(--ins-ease);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.ins-table td[data-ins-edit]:is(:hover, :focus-visible)::after { opacity: 1; }
+.ins-table td[data-ins-edit]:focus-visible { box-shadow: inset 0 0 0 2px rgba(var(--ins-primary-rgb), .45); }
+.ins-table td.is-editing { padding-block: .375rem; }
+.ins-table td.is-editing > :is(.ins-input, .ins-select) { inline-size: 100%; min-inline-size: 6rem; }
+
+/* ---------------------------------------------------------------- sticky */
+/* A long table in a box of its own: `.ins-table-wrap--sticky` scrolls inside a
+   height (`--ins-table-max`, 32rem) and keeps the header bar in view, frosted, so
+   the rows passing under it blur instead of colliding with its text.
+   `.ins-table-wrap--pin` keeps the first column in view while a wide table scrolls
+   sideways. The two combine. Such a box keeps its scrolling while a menu in it is
+   open, so a menu near its edge is clipped by it. */
+.ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin),
+.ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin):has([open], [data-ins-open]) { overflow: auto; }
+.ins-table-wrap--sticky { max-block-size: var(--ins-table-max); overscroll-behavior: contain; }
+.ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin) .ins-table thead th {
+  background: linear-gradient(to bottom, rgba(var(--ins-primary-rgb), .20), rgba(var(--ins-primary-rgb), .12)),
+              var(--ins-glass-strong);
+  background-clip: padding-box;
+}
+.ins-table-wrap--sticky .ins-table thead th {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 2;
+  -webkit-backdrop-filter: var(--ins-blur-bar);
+          backdrop-filter: var(--ins-blur-bar);
+}
+/* The pinned column, on physical sides switched on the page's direction, for the
+   reason the corners above are. Its fill is solid enough that the cells sliding
+   under it do not show through. */
+html[dir="rtl"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { position: sticky; right: 0; }
+html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { position: sticky; left: 0; }
+.ins-table-wrap--pin .ins-table td:first-child {
+  z-index: 1;
+  background-color: var(--ins-glass-strong);
+  -webkit-backdrop-filter: var(--ins-blur-bar);
+          backdrop-filter: var(--ins-blur-bar);
+}
+.ins-table-wrap--pin .ins-table tbody tr:hover > td:first-child {
+  background-image: linear-gradient(var(--ins-surface-hover), var(--ins-surface-hover));
+}
+.ins-table-wrap--pin .ins-table th:first-child { z-index: 3; }
 
 /* ==========================================================================
    Insiyab · button
@@ -6514,7 +6660,8 @@ html[dir="ltr"] .ins-page-title {
    nothing can ever be a descendant of, so the rule never matched and the scrolled
    bar kept its blur with effects off. */
 [data-ins-fx="off"] :is(.ins-glass, .ins-card, .ins-panel, .ins-toast, .ins-pop-body,
-                         .ins-island, .ins-shell-side, .ins-navbar),
+                         .ins-island, .ins-shell-side, .ins-navbar, .ins-bulkbar,
+                         .ins-table-wrap--sticky th, .ins-table-wrap--pin td),
 :root[data-ins-fx="off"][data-ins-scrolled] .ins-topbar::before,
 [data-ins-fx="off"] .ins-dialog::backdrop,
 [data-ins-fx="off"] .ins-drawer::backdrop {
@@ -6546,7 +6693,7 @@ html[dir="ltr"] .ins-page-title {
                          .ins-alert, .ins-badge, .ins-island--title,
                          .ins-seg > .is-active, .ins-shell-scrim,
                          .ins-tabpanel, .ins-navbar-menu, .ins-wizard-panel,
-                         .ins-combo-list, .ins-progress,
+                         .ins-combo-list, .ins-progress, .ins-bulkbar,
                          .ins-anim-rise, .ins-anim-pop, .ins-anim-slide) { animation: none; }
 [data-ins-fx="off"] .ins-skel { animation: none; background: var(--ins-skel-base); }
 /* The script already skips the transition with effects off; this covers a page that

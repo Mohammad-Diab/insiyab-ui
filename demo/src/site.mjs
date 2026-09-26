@@ -75,7 +75,7 @@ export const NAV = [
       lead: 'ثلاثة خطوط مستضافة محليًا ومقسّمة حسب النطاق، وسلّم عناوين، ونصّ طويل محصور في صنفه.' },
     { slug: 'surfaces', title: 'الأسطح والألواح', en: 'Surfaces & panels', icon: 'layers',
       lead: 'الزجاج المصنفر بطبقاته الأربع، وما يُبنى عليه: البطاقة واللوح.' },
-    { slug: 'tables', title: 'الجداول', en: 'Tables', icon: 'table',
+    { slug: 'tables', title: 'الجداول', en: 'Tables', icon: 'table', fresh: true,
       lead: 'جدول بيانات يقرأ الأرقام بخطّها، ويتمرّر أفقيًا داخل حاويته لا في الصفحة.' }
   ] },
   { group: 'النماذج', en: 'Forms', pages: [
@@ -270,7 +270,9 @@ function sidebar(current) {
   return NAV.map((g) => {
     const links = g.pages.map((p) => {
       const on = p.slug === current.slug;
-      return `      <a class="ins-shell-link${on ? ' is-active' : ''}" href="${p.slug}.html"${on ? ' aria-current="page"' : ''} data-keywords="${attr(p.lead ? `${p.en} ${p.lead}` : p.en)}">${icon(p.icon)}${p.title}</a>`;
+      /* `fresh`: new or grown since the last review, flagged until it has been seen. */
+      const badge = p.fresh ? '<span class="ins-shell-link-badge">جديد</span>' : '';
+      return `      <a class="ins-shell-link${on ? ' is-active' : ''}" href="${p.slug}.html"${on ? ' aria-current="page"' : ''} data-keywords="${attr(p.lead ? `${p.en} ${p.lead}` : p.en)}">${icon(p.icon)}${p.title}${badge}</a>`;
     }).join('\n');
     return `      <div class="ins-shell-group">${g.group}</div>\n${links}`;
   }).join('\n\n');

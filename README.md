@@ -164,7 +164,7 @@ there, in Arabic, in both themes, with the markup of each example under it.
 | Group | Classes |
 |---|---|
 | **Surfaces** | `.ins-glass` · `.ins-glass-inner` · `.ins-card` · `.ins-panel` (`-head`, `-title`, `-ico`, `-body`, `-foot`, `-note`, `--alert`, `--open`) |
-| **Data** | `.ins-table` (+ `-wrap`; a selected row via `aria-selected="true"`, `aria-current` or `.is-selected`) · `.ins-stat` (6 tones, 3 sizes) · `.ins-pill` · `.ins-badge` · `.ins-money` · `.ins-num` · `.ins-avatar` · `.ins-list` (`-item`, `-text`, `-title`, `-desc`, `-end`; items can be links) |
+| **Data** | `.ins-table` (+ `-wrap`, `-wrap--sticky`, `-wrap--pin`; a selected row via `aria-selected="true"`, `aria-current` or `.is-selected`; sortable columns via `th[data-ins-sort]`; a checkbox column `.ins-table-check` with `data-ins-select` and a `.ins-bulkbar`; editable cells via `data-ins-edit`) · `.ins-stat` (6 tones, 3 sizes) · `.ins-pill` · `.ins-badge` · `.ins-money` · `.ins-num` · `.ins-avatar` · `.ins-list` (`-item`, `-text`, `-title`, `-desc`, `-end`; items can be links) |
 | **Input** | `.ins-field` · `.ins-label` · `.ins-hint` · `.ins-input` / `.ins-select` (`--sm`, `--lg`; the open list styled like the menus where the browser allows `appearance: base-select`) · `.ins-textarea` · `.ins-check` (indeterminate via `data-ins-indeterminate`) · `.ins-switch` (+ `--card`, `-grid`) · `.ins-seg` · `.ins-search` · `.ins-input-group` + `.ins-addon` · `.ins-password-toggle` |
 | **Pickers** | `.ins-combo` (`-list`, `-option`, `-empty`) · date and date range via `data-ins-date` (+ `.ins-date-btn`, `.ins-cal`) · `.ins-range` · number stepper `.ins-spin` in an `.ins-input-group` · `.ins-tile` (`-grid`, `-title`, `-desc`) for radio and checkbox cards |
 | **Validation** | `aria-invalid="true"` · `:user-invalid` · `.ins-error` · `.ins-input--bad` / `.ins-select--bad` · `.ins-success` · `.ins-input--ok` · `.ins-req` · `form[data-ins-validate]` |
@@ -431,6 +431,9 @@ Everything below works as markup, with no JavaScript in your page:
 <input type="date" data-ins-date data-ins-calendar="hijri">    <!-- Hijri, with the plugin: see Plugins -->
 <button data-ins-wizard="next">…</button>         <!-- validate this step, then move; or "prev", "restart" -->
 <p data-ins-echo="#phone"></p>                    <!-- a wizard step repeating an earlier field's value -->
+<th data-ins-sort>…</th>                          <!-- a sortable column; data-sort-value on a cell when its text is not its value -->
+<input type="checkbox" data-ins-select>          <!-- a row's box; ="all" in the header; the bar: data-ins-bulk="#table" -->
+<td data-ins-edit>…</td>                          <!-- edit in place; ="number", or ="select" with data-ins-options="a|b" -->
 <a href="/ops/7/delete" data-ins-confirm="حذف العملية؟">…</a>  <!-- ask first -->
 <button data-ins-confirm="أرشفة؟" data-ins-confirm-ok="أرشفة" data-ins-confirm-tone="danger">…</button>
 ```
@@ -470,6 +473,8 @@ Insiyab.date(input, iso?)             // read a date field's ISO value, or set i
 Insiyab.calendar(name, calendar?)     // register a calendar system for date fields, or look one up
 Insiyab.norm(text)                    // text as the autocomplete compares it: no hamza seats or harakat, Latin digits
 Insiyab.flyMarker(box, from, to, opts) // the sidebar's marker flight, for a list whose items have the same ::before marker
+Insiyab.sort(th, dir?)                // sort a table by a column: 'ascending' | 'descending'; or (table, column, dir?)
+Insiyab.selection(table, all?)        // the selected rows; true or false selects or clears them all
 Insiyab.init(scope?)                  // re-scan DOM you built yourself
 Insiyab.define(name, fn)              // add your own builder to that scan
 Insiyab.scrollTop()                   // reads whichever element is scrolling
@@ -494,6 +499,9 @@ document.addEventListener('ins:combo', (e) => console.log(e.detail.value, e.deta
 document.addEventListener('ins:date', (e) => console.log(e.detail.value, e.detail.date));   // '2026-09-23', a local Date
 document.addEventListener('ins:wizard', (e) => console.log(e.detail.step, e.detail.panel));
 document.addEventListener('ins:wizard-leave', (e) => e.preventDefault()); // before Next moves: cancel to wait on a server
+document.addEventListener('ins:sort', (e) => e.preventDefault());  // before rows move: cancel to sort on the server
+document.addEventListener('ins:select', (e) => console.log(e.detail.rows, e.detail.count));
+document.addEventListener('ins:edit', (e) => save(e.detail.row, e.detail.value).catch(e.detail.revert)); // cancel to refuse
 document.addEventListener('ins:calendar', (e) => console.log(e.detail.input, e.detail.calendar)); // after the footer switch
 ```
 
