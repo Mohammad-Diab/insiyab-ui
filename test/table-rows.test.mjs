@@ -1,4 +1,4 @@
-// Hovering a table row fills it; only a selected row carries the leading-edge marker.
+// Hovering a table row fills it; a selected row is tinted with the brand and carries the leading-edge marker.
 import { launch, BASE } from './lib/cdp.mjs';
 import { suite } from './lib/check.mjs';
 const { ok, end } = suite();
@@ -10,20 +10,22 @@ await b.goto(`${BASE}/demo/tables.html?theme=light`);
 await b.sleep(900);   // let the row entrances finish
 const row = (i) => E(`(() => { const tr = document.querySelectorAll('#basic ~ .dx-example .ins-table tbody tr, .ins-table tbody tr')[${i}];
   const td = tr.querySelector('td'); const m = getComputedStyle(td, '::before');
-  return { marker: m.transform, bg: getComputedStyle(td).backgroundColor, sel: tr.getAttribute('aria-selected') }; })()`);
+  const cs = getComputedStyle(td);
+  return { marker: m.transform, bg: cs.backgroundColor + ' ' + cs.backgroundImage, sel: tr.getAttribute('aria-selected') }; })()`);
 
 const NONE = 'matrix(1, 0, 0, 0, 0, 0)';
 await b.mouseTo(5, 990); await b.sleep(400);
 const rest0 = await row(0), sel = await row(1);
 ok('an ordinary row at rest: no marker', rest0.marker === NONE, rest0.marker);
 ok('the selected row: marker shown without any hover', sel.sel === 'true' && sel.marker !== NONE, sel.marker);
-ok('the selected row: filled like a hovered row', sel.bg !== rest0.bg, `${sel.bg} vs ${rest0.bg}`);
+ok('the selected row: tinted', sel.bg !== rest0.bg, `${sel.bg} vs ${rest0.bg}`);
 
 await b.hover('.ins-table tbody tr:nth-child(3) td:nth-child(3)'); await b.sleep(400);
 const hov = await row(2);
 ok('a hovered row: filled', hov.bg !== rest0.bg, hov.bg);
 ok('a hovered row: no marker', hov.marker === NONE, hov.marker);
-ok('hovered fill and selected fill are the same', hov.bg === sel.bg);
+// The selected row takes the brand tint, not the hover's grey, so it does not look like any row under the pointer.
+ok('the selected fill is not the hovered fill', hov.bg !== sel.bg, `${hov.bg} vs ${sel.bg}`);
 
 // aria-current marks it too, and aria-current="false" does not.
 await E(`(() => { const r = document.querySelectorAll('.ins-table tbody tr'); r[3].setAttribute('aria-current', 'page'); r[0].setAttribute('aria-current', 'false'); r[0].classList.remove('is-selected'); return 0; })()`);
