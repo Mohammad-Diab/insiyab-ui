@@ -3647,7 +3647,7 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
 .ins-select:focus,
 .ins-textarea:focus {
   outline: 0;
-  background: var(--ins-glass-strong);
+  background-color: var(--ins-glass-strong);
   border-color: rgba(var(--ins-primary-rgb), .55);
   box-shadow: var(--ins-glow), var(--ins-bevel-dim), 0 4px 16px rgba(var(--ins-primary-rgb), .10);
   transform: translateY(-1px);
@@ -3655,11 +3655,11 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
 /* Not inside a group: there the group is the field and takes the focus, and this
    rule — four parts deep against the group's three — painted a lighter box inside
    it on every focus in the dark theme. */
-:root[data-ins-theme="dark"] :is(.ins-input, .ins-select, .ins-textarea):not(.ins-input-group > *):focus { background: rgba(255, 255, 255, .09); }
+:root[data-ins-theme="dark"] :is(.ins-input, .ins-select, .ins-textarea):not(.ins-input-group > *):focus { background-color: rgba(255, 255, 255, .09); }
 /* The rule above, for an OS set to dark — emitted by build.mjs. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-ins-theme="light"]) :is(.ins-input, .ins-select, .ins-textarea):not(.ins-input-group > *):focus {
-    background: rgba(255, 255, 255, .09);
+    background-color: rgba(255, 255, 255, .09);
   }
 }
 
@@ -4011,7 +4011,7 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
 .ins-select:hover:not(:disabled):not(:focus),
 .ins-textarea:hover:not(:disabled):not(:focus) {
   border-color: rgba(var(--ins-primary-rgb), .30);
-  background: var(--ins-ctl-bg-hover);
+  background-color: var(--ins-ctl-bg-hover);
 }
 
 /* The box brightens and blooms a little before it is clicked. */
