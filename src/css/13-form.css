@@ -426,6 +426,19 @@
   color: var(--ins-seg-on-fg);
   box-shadow: var(--ins-seg-on-shadow);
 }
+/* With the script the face flies between segments (insiyab.js segFly), so the pop is not needed. */
+.ins-seg { position: relative; isolation: isolate; }
+:root[data-ins-js] .ins-seg > .is-active { animation: none; }
+.ins-seg.ins-seg-moving > .is-active,
+.ins-seg.ins-seg-moving > .is-active:hover { background: transparent; box-shadow: none; }
+.ins-seg-flight {
+  position: absolute;
+  z-index: -1;
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-seg-on-bg);
+  box-shadow: var(--ins-seg-on-shadow);
+  pointer-events: none;
+}
 /* On a phone a strip is three or four Arabic phrases in one control. Tightening the
    segments is what makes it fit, rather than letting it scroll with nothing to say
    so. */
