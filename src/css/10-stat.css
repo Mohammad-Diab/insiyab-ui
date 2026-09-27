@@ -56,7 +56,7 @@
 .ins-stat-hint { font-size: .6875rem; color: var(--ins-text-3); }
 
 .ins-stat--sm { padding: .625rem .75rem; gap: .625rem; }
-.ins-stat--sm .ins-stat-ico { inline-size: 32px; block-size: 32px; font-size: .875rem; }
+.ins-stat--sm .ins-stat-ico { inline-size: 32px; block-size: 32px; font-size: .875rem; border-radius: var(--ins-r-sm); }
 .ins-stat--sm .ins-stat-label { font-size: .6875rem; }
 .ins-stat--sm .ins-stat-value { font-size: 1.25rem; }
 
