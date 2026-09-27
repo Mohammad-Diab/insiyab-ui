@@ -425,8 +425,9 @@
 .site-hero-actions { display: flex; flex-wrap: wrap; gap: .625rem; margin-block-end: 1.25rem; }
 .site-install {
   display: block;
-  inline-size: fit-content;
-  max-inline-size: 100%;
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 36rem;
   margin: 0;
   padding: .75rem 1rem;
   border-radius: var(--ins-r-md);
