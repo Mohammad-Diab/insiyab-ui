@@ -1205,7 +1205,10 @@ html[dir="ltr"] .ins-matrix tbody tr > :last-child { border-radius: 0 var(--ins-
 
 /* `height: 1px` lets a card fill its cell: a percentage height resolves against a cell given any height. */
 .ins-matrix--cards tbody td { block-size: 1px; padding: .25rem; vertical-align: top; }
-.ins-matrix--cards tbody td:has(input:checked) { background: var(--ins-glass-inner); }
+.ins-matrix--cards tbody td,
+.ins-matrix--cards tbody tr:hover > td,
+.ins-matrix--cards tbody td:has(input:checked) { background: transparent; }
+html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--ins-r-sm); }
 .ins-matrix-cell {
   position: relative;
   display: flex;
