@@ -34,9 +34,11 @@ button.addEventListener('click', async () => {
 </ul>
 
 <script>
-  document.getElementById('save-btn').addEventListener('click', function () {
-    var btn = this;
-    btn.disabled = true;
-    setTimeout(function () { btn.disabled = false; Insiyab.toast('تمّ الحفظ', 'ok'); }, 700);
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('save-btn').addEventListener('click', function () {
+      var btn = this;
+      btn.disabled = true;
+      setTimeout(function () { btn.disabled = false; Insiyab.toast('تمّ الحفظ', 'ok'); }, 700);
+    });
   });
 </script>

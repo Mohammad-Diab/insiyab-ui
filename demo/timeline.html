@@ -7,22 +7,23 @@
   <title>الخط الزمني · انسياب</title>
   <meta name="description" content="ما حدث بترتيبه: مسار طلب، أو نشاط حساب، أو تاريخ ملفّ. ومعه أوقات نسبية تُكتب كما تُقال.">
 
-  <!-- The library: two tags, and nothing else of it is needed. -->
+  <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
-  <script src="../dist/insiyab.js"></script>
+  <script src="../dist/insiyab-boot.js"></script>
+  <script src="../dist/insiyab.js" defer></script>
 
   <!-- One plugin, the command palette: the search below is built by it. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-palette.css">
-  <script src="../dist/plugins/insiyab-palette.js"></script>
+  <script src="../dist/plugins/insiyab-palette.js" defer></script>
 
   <!-- And the scrollspy plugin, for each page's contents list. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-scrollspy.css">
-  <script src="../dist/plugins/insiyab-scrollspy.js"></script>
+  <script src="../dist/plugins/insiyab-scrollspy.js" defer></script>
 
   <!-- The documentation site's own furniture — code listings, the pager.
        Nothing in it is part of the library. -->
   <link rel="stylesheet" href="assets/site.css">
-  <script src="assets/site.js"></script>
+  <script src="assets/site.js" defer></script>
 </head>
 <body class="site-doc" data-page="timeline">
 
@@ -266,14 +267,14 @@
         <div class="site-body">
         <p class="site-lead">ما حدث بترتيبه: مسار طلب، أو نشاط حساب، أو تاريخ ملفّ. ومعه أوقات نسبية تُكتب كما تُقال.</p>
         <link rel="stylesheet" href="../dist/plugins/insiyab-timeline.css">
-<script src="../dist/plugins/insiyab-timeline.js"></script>
+<script src="../dist/plugins/insiyab-timeline.js" defer></script>
 
 <h2 id="install">التثبيت</h2>
 <p>
   إضافة لا جزء من الملفّين. الخطّ الزمنيّ نفسه CSS خالص، والسكربت يكتب الأوقات النسبية فقط («قبل 5 دقائق»).
 </p>
 <div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/plugins/insiyab-timeline.css"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-timeline.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>   <span class="hl-c">&lt;!-- للأوقات النسبية فقط --&gt;</span></code></pre></div>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-timeline.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>   <span class="hl-c">&lt;!-- للأوقات النسبية فقط --&gt;</span></code></pre></div>
 
 <h2 id="timeline">الخط الزمني</h2>
 <p>
@@ -393,11 +394,13 @@
 <span class="hl-t">Insiyab</span>.time(<span class="hl-s">'#feed'</span>);     <span class="hl-c">// أو في جزء منها فقط</span></code></pre></div>
 
 <script>
-  /* The example's times are set from now, so they always read as they should. */
-  document.querySelectorAll('#tl-live [data-ago]').forEach(function (t) {
-    t.setAttribute('datetime', new Date(Date.now() + Number(t.getAttribute('data-ago'))).toISOString());
+  document.addEventListener('DOMContentLoaded', function () {
+    /* The example's times are set from now, so they always read as they should. */
+    document.querySelectorAll('#tl-live [data-ago]').forEach(function (t) {
+      t.setAttribute('datetime', new Date(Date.now() + Number(t.getAttribute('data-ago'))).toISOString());
+    });
+    Insiyab.time('#tl-live');
   });
-  Insiyab.time('#tl-live');
 </script>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="scrollspy.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">تتبع القراءة</span></a><a class="site-pager-link site-pager-link--next" href="tree.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الشجرة</span></a></nav>
         </div>

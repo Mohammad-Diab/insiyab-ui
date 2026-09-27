@@ -62,7 +62,7 @@ class Setup(unittest.TestCase):
     def test_static_dir_holds_the_library(self):
         folder = insiyab.static_dir()
         self.assertIsNotNone(folder)
-        for part in ["insiyab.css", "insiyab.js", "insiyab.min.css", "plugins/insiyab-phone.js", "fonts"]:
+        for part in ["insiyab.css", "insiyab.js", "insiyab-boot.js", "insiyab.min.css", "plugins/insiyab-phone.js", "fonts"]:
             self.assertTrue(os.path.exists(os.path.join(folder, part)), part)
 
 
@@ -110,7 +110,7 @@ class Readme(unittest.TestCase):
             text = f.read()
         source = text.split("```jinja\n", 1)[1].split("```", 1)[0]
         out = env().from_string(source).render()
-        for part in ['<script src="/static/insiyab/insiyab.js">', 'data-ins-phone', 'data-ins-date', 'name="delivery"', 'ins-btn--primary', 'for="mobile"']:
+        for part in ['<script src="/static/insiyab/insiyab-boot.js">', '<script src="/static/insiyab/insiyab.js" defer>', 'data-ins-phone', 'data-ins-date', 'name="delivery"', 'ins-btn--primary', 'for="mobile"']:
             self.assertIn(part, out)
 
     def test_a_group_imports_by_name(self):
@@ -127,9 +127,10 @@ class Head(unittest.TestCase):
             [
                 '<link rel="stylesheet" href="/assets/ins/insiyab.css">',
                 '<link rel="stylesheet" href="/assets/ins/plugins/insiyab-phone.css">',
-                '<script src="/assets/ins/insiyab.js"></script>',
-                '<script src="/assets/ins/plugins/insiyab-hijri.js"></script>',
-                '<script src="/assets/ins/plugins/insiyab-phone.js"></script>',
+                '<script src="/assets/ins/insiyab-boot.js"></script>',
+                '<script src="/assets/ins/insiyab.js" defer></script>',
+                '<script src="/assets/ins/plugins/insiyab-hijri.js" defer></script>',
+                '<script src="/assets/ins/plugins/insiyab-phone.js" defer></script>',
             ],
         )
 
@@ -176,7 +177,7 @@ class Flask(unittest.TestCase):
 
     def test_renders_with_escaping_and_the_right_urls(self):
         html = self.client.get("/").get_data(as_text=True)
-        self.assertIn('<script src="/static/insiyab/insiyab.js"></script>', html)
+        self.assertIn('<script src="/static/insiyab/insiyab.js" defer></script>', html)
         self.assertIn('<span class="ins-badge">&lt;i&gt;</span>', html)
 
     def test_a_template_file_named_html_autoescapes(self):

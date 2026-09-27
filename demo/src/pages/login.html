@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="../dist/plugins/insiyab-otp.css">
-<script src="../dist/plugins/insiyab-otp.js"></script>
+<script src="../dist/plugins/insiyab-otp.js" defer></script>
 
 <h2 id="preview">القالب</h2>
 <p>
@@ -87,40 +87,42 @@
 </demo-code>
 
 <script>
-  (function () {
-    var login = document.getElementById('login');
-    var phone = document.getElementById('login-phone');
-    var code = document.getElementById('login-code');
-    phone.addEventListener('input', function () { phone.setCustomValidity(''); });
-    code.addEventListener('input', function () { code.setCustomValidity(''); });
-    /* A stand-in for the server: each step waits a moment, and one number is refused. */
-    document.addEventListener('ins:wizard-leave', function (e) {
-      if (e.detail.el !== login) return;
-      e.preventDefault();
-      setTimeout(function () {
-        if (e.detail.step === 0 && phone.value === '0900000000') {
-          phone.setCustomValidity('هذا الرقم غير مسجّل.');
-          phone.reportValidity();
-          Insiyab.wizard(login, 'stay');
-          return;
-        }
-        Insiyab.wizard(login, 'next');
-      }, 700);
-    });
-    login.addEventListener('submit', function (e) {
-      e.preventDefault();
-      login.setAttribute('aria-busy', 'true');
-      setTimeout(function () {
-        login.removeAttribute('aria-busy');
-        if (code.value !== '123456') {
-          code.setCustomValidity('الرمز غير صحيح.');
-          code.reportValidity();
-          return;
-        }
-        Insiyab.toast('تمّ الدخول', 'ok');
-        login.reset();
-        Insiyab.wizard(login, 'restart');
-      }, 700);
-    });
-  })();
+  document.addEventListener('DOMContentLoaded', function () {
+    (function () {
+      var login = document.getElementById('login');
+      var phone = document.getElementById('login-phone');
+      var code = document.getElementById('login-code');
+      phone.addEventListener('input', function () { phone.setCustomValidity(''); });
+      code.addEventListener('input', function () { code.setCustomValidity(''); });
+      /* A stand-in for the server: each step waits a moment, and one number is refused. */
+      document.addEventListener('ins:wizard-leave', function (e) {
+        if (e.detail.el !== login) return;
+        e.preventDefault();
+        setTimeout(function () {
+          if (e.detail.step === 0 && phone.value === '0900000000') {
+            phone.setCustomValidity('هذا الرقم غير مسجّل.');
+            phone.reportValidity();
+            Insiyab.wizard(login, 'stay');
+            return;
+          }
+          Insiyab.wizard(login, 'next');
+        }, 700);
+      });
+      login.addEventListener('submit', function (e) {
+        e.preventDefault();
+        login.setAttribute('aria-busy', 'true');
+        setTimeout(function () {
+          login.removeAttribute('aria-busy');
+          if (code.value !== '123456') {
+            code.setCustomValidity('الرمز غير صحيح.');
+            code.reportValidity();
+            return;
+          }
+          Insiyab.toast('تمّ الدخول', 'ok');
+          login.reset();
+          Insiyab.wizard(login, 'restart');
+        }, 700);
+      });
+    })();
+  });
 </script>

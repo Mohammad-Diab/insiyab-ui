@@ -87,26 +87,28 @@ Insiyab.brand(branding.primary);
 </demo-code>
 
 <script>
-  (function () {
-    var names = ['primary', 'primary-dark', 'primary-darker', 'on-primary', 'wash-1', 'wash-2'];
-    var grid = document.getElementById('tokens'), note = document.getElementById('label-note');
-    function paint() {
-      var cs = getComputedStyle(document.documentElement);
-      grid.innerHTML = names.map(function (n) {
-        var v = cs.getPropertyValue('--ins-' + n).trim();
-        return '<div class="token"><i style="--c:' + v + '"></i><span>--ins-' + n + '<br>' + v + '</span></div>';
-      }).join('');
-      var hex = Insiyab.brand() || cs.getPropertyValue('--ins-primary').trim();
-      var label = Insiyab.color.labelFor(hex);
-      var white = Insiyab.color.contrast('#ffffff', hex).toFixed(1);
-      var dark = Insiyab.color.contrast('#111111', hex).toFixed(1);
-      note.innerHTML = 'الأبيض على هذا اللون <span class="ins-num">' + white + ':1</span>، والأسود القريب <span class="ins-num">' + dark + ':1</span> — فاختير ' + (label === '#ffffff' ? 'الأبيض' : 'الأسود القريب') + '.';
-    }
-    new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ['style', 'data-ins-theme'] });
-    document.getElementById('brand-pick').addEventListener('input', function () {
-      Insiyab.brand(this.value);
-      try { localStorage.setItem('insiyab-demo-brand', this.value); } catch (e) {}
-    });
-    paint();
-  })();
+  document.addEventListener('DOMContentLoaded', function () {
+    (function () {
+      var names = ['primary', 'primary-dark', 'primary-darker', 'on-primary', 'wash-1', 'wash-2'];
+      var grid = document.getElementById('tokens'), note = document.getElementById('label-note');
+      function paint() {
+        var cs = getComputedStyle(document.documentElement);
+        grid.innerHTML = names.map(function (n) {
+          var v = cs.getPropertyValue('--ins-' + n).trim();
+          return '<div class="token"><i style="--c:' + v + '"></i><span>--ins-' + n + '<br>' + v + '</span></div>';
+        }).join('');
+        var hex = Insiyab.brand() || cs.getPropertyValue('--ins-primary').trim();
+        var label = Insiyab.color.labelFor(hex);
+        var white = Insiyab.color.contrast('#ffffff', hex).toFixed(1);
+        var dark = Insiyab.color.contrast('#111111', hex).toFixed(1);
+        note.innerHTML = 'الأبيض على هذا اللون <span class="ins-num">' + white + ':1</span>، والأسود القريب <span class="ins-num">' + dark + ':1</span> — فاختير ' + (label === '#ffffff' ? 'الأبيض' : 'الأسود القريب') + '.';
+      }
+      new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ['style', 'data-ins-theme'] });
+      document.getElementById('brand-pick').addEventListener('input', function () {
+        Insiyab.brand(this.value);
+        try { localStorage.setItem('insiyab-demo-brand', this.value); } catch (e) {}
+      });
+      paint();
+    })();
+  });
 </script>

@@ -29,6 +29,8 @@
   "sideEffects": true,
   "exports": {
     ".": "./dist/insiyab.js",
+    "./boot": "./dist/insiyab-boot.js",
+    "./insiyab-boot.js": "./dist/insiyab-boot.js",
     "./css": "./dist/insiyab.css",
     "./insiyab.css": "./dist/insiyab.css",
     "./insiyab.min.css": "./dist/insiyab.min.css",

@@ -7,7 +7,8 @@
 your-project/
 └── insiyab/
     ├── insiyab.css        ← أو insiyab.min.css
-    ├── insiyab.js
+    ├── insiyab-boot.js    ← في الرأس، قبل أوّل رسم
+    ├── insiyab.js         ← بـ defer
     ├── fonts/             ← ١٦ ملفّ woff2 وتراخيصها
     └── plugins/           ← اختياري: ما تستعمله منها فقط
 </demo-code>
@@ -23,7 +24,8 @@ your-project/
   <title>تطبيقي</title>
 
   <link rel="stylesheet" href="insiyab/insiyab.css">
-  <script src="insiyab/insiyab.js"></script>
+  <script src="insiyab/insiyab-boot.js"></script>
+  <script src="insiyab/insiyab.js" defer></script>
 </head>
 <body>
   <main class="ins-container ins-py-8">
@@ -34,11 +36,24 @@ your-project/
 </html>
 </demo-code>
 
-<h2 id="head">السكربت في الرأس، بلا <code>defer</code></h2>
+<h2 id="head">سكربت صغير في الرأس، والباقي مؤجَّل</h2>
 <p>
-  السكربت يستعيد الوضع الداكن وحالة الشريط الجانبي من <code>localStorage</code> لحظة قراءته، قبل أوّل
-  رسم، فلا تومض الصفحة بالوضع الخطأ. ويعمل مؤجَّلًا أيضًا، وكلّ ما تخسره هو تلك الومضة الأولى.
+  <code>insiyab-boot.js</code> نحو ٦ ك.ب، ويعمل قبل أوّل رسم: يستعيد الوضع الداكن وحالة الشريط الجانبي
+  ولون الهوية، فلا تومض الصفحة بالوضع الخطأ. و<code>insiyab.js</code> والإضافات بعده بـ<code>defer</code>،
+  فلا تؤخّر ظهور الصفحة. ضع <code>defer</code> على كلّ إضافة أيضًا، فالمؤجَّل يعمل بترتيبه بعد السكربت.
 </p>
+<p>
+  وسكربت صفحتك الذي يستدعي <code>Insiyab</code> فورًا: اجعله ملفًّا بـ<code>defer</code> بعد المكتبة، أو
+  ضعه داخل <code>DOMContentLoaded</code>. والوسم القديم وحده، <code>insiyab.js</code> في الرأس بلا
+  <code>defer</code>، ما زال يعمل كما كان.
+</p>
+<demo-code lang="html">
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    Insiyab.toast('جاهز', 'ok');
+  });
+</script>
+</demo-code>
 
 <h2 id="no-init">لا استدعاء تهيئة</h2>
 <p>

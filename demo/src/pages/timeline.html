@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="../dist/plugins/insiyab-timeline.css">
-<script src="../dist/plugins/insiyab-timeline.js"></script>
+<script src="../dist/plugins/insiyab-timeline.js" defer></script>
 
 <h2 id="install">التثبيت</h2>
 <p>
@@ -7,7 +7,7 @@
 </p>
 <demo-code lang="html">
 <link rel="stylesheet" href="insiyab/plugins/insiyab-timeline.css">
-<script src="insiyab/plugins/insiyab-timeline.js"></script>   <!-- للأوقات النسبية فقط -->
+<script src="insiyab/plugins/insiyab-timeline.js" defer></script>   <!-- للأوقات النسبية فقط -->
 </demo-code>
 
 <h2 id="timeline">الخط الزمني</h2>
@@ -91,9 +91,11 @@ Insiyab.time('#feed');     // أو في جزء منها فقط
 </demo-code>
 
 <script>
-  /* The example's times are set from now, so they always read as they should. */
-  document.querySelectorAll('#tl-live [data-ago]').forEach(function (t) {
-    t.setAttribute('datetime', new Date(Date.now() + Number(t.getAttribute('data-ago'))).toISOString());
+  document.addEventListener('DOMContentLoaded', function () {
+    /* The example's times are set from now, so they always read as they should. */
+    document.querySelectorAll('#tl-live [data-ago]').forEach(function (t) {
+      t.setAttribute('datetime', new Date(Date.now() + Number(t.getAttribute('data-ago'))).toISOString());
+    });
+    Insiyab.time('#tl-live');
   });
-  Insiyab.time('#tl-live');
 </script>

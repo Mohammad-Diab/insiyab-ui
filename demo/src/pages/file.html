@@ -1,12 +1,13 @@
 <link rel="stylesheet" href="../dist/plugins/insiyab-file.css">
-<script src="../dist/plugins/insiyab-file.js"></script>
+<script src="../dist/plugins/insiyab-file.js" defer></script>
 
 <h2 id="install">التثبيت</h2>
 <p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
 <demo-code lang="html">
 <link rel="stylesheet" href="insiyab/plugins/insiyab-file.css">
-<script src="insiyab/insiyab.js"></script>
-<script src="insiyab/plugins/insiyab-file.js"></script>
+<script src="insiyab/insiyab-boot.js"></script>
+<script src="insiyab/insiyab.js" defer></script>
+<script src="insiyab/plugins/insiyab-file.js" defer></script>
 </demo-code>
 
 <h2 id="field">منطقة الإفلات</h2>
@@ -94,20 +95,22 @@ Insiyab.file('#docs', []);     // أفرغها
 </div>
 
 <script>
-  /* A pretend upload: a second and a half of progress, and a file with «خطأ» in
-     its name fails on purpose. */
-  document.addEventListener('ins:file', function (e) {
-    if (!e.detail.upload || e.detail.input.id !== 'fl-up') return;
-    var file = e.detail.file, done = 0;
-    var timer = setInterval(function () {
-      done += 0.2;
-      if (done >= 1) {
-        clearInterval(timer);
-        if (/خطأ/.test(file.name)) Insiyab.file.fail(file, 'تعذّر الرفع، أزِل الملفّ أو أعد إضافته.');
-        else Insiyab.file.done(file, 'photo-' + Math.round(Math.random() * 1e6));
-      } else if (!Insiyab.file.progress(file, done)) {
-        clearInterval(timer);                /* removed while on its way */
-      }
-    }, 300);
+  document.addEventListener('DOMContentLoaded', function () {
+    /* A pretend upload: a second and a half of progress, and a file with «خطأ» in
+       its name fails on purpose. */
+    document.addEventListener('ins:file', function (e) {
+      if (!e.detail.upload || e.detail.input.id !== 'fl-up') return;
+      var file = e.detail.file, done = 0;
+      var timer = setInterval(function () {
+        done += 0.2;
+        if (done >= 1) {
+          clearInterval(timer);
+          if (/خطأ/.test(file.name)) Insiyab.file.fail(file, 'تعذّر الرفع، أزِل الملفّ أو أعد إضافته.');
+          else Insiyab.file.done(file, 'photo-' + Math.round(Math.random() * 1e6));
+        } else if (!Insiyab.file.progress(file, done)) {
+          clearInterval(timer);                /* removed while on its way */
+        }
+      }, 300);
+    });
   });
 </script>

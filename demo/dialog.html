@@ -7,22 +7,23 @@
   <title>الحوار · انسياب</title>
   <meta name="description" content="عنصر dialog الأصلي: الطبقة العليا وحبس التركيز والإغلاق بـ Esc، كلّها من المتصفّح.">
 
-  <!-- The library: two tags, and nothing else of it is needed. -->
+  <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
-  <script src="../dist/insiyab.js"></script>
+  <script src="../dist/insiyab-boot.js"></script>
+  <script src="../dist/insiyab.js" defer></script>
 
   <!-- One plugin, the command palette: the search below is built by it. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-palette.css">
-  <script src="../dist/plugins/insiyab-palette.js"></script>
+  <script src="../dist/plugins/insiyab-palette.js" defer></script>
 
   <!-- And the scrollspy plugin, for each page's contents list. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-scrollspy.css">
-  <script src="../dist/plugins/insiyab-scrollspy.js"></script>
+  <script src="../dist/plugins/insiyab-scrollspy.js" defer></script>
 
   <!-- The documentation site's own furniture — code listings, the pager.
        Nothing in it is part of the library. -->
   <link rel="stylesheet" href="assets/site.css">
-  <script src="assets/site.js"></script>
+  <script src="assets/site.js" defer></script>
 </head>
 <body class="site-doc" data-page="dialog">
 
@@ -374,14 +375,16 @@
 <span class="hl-t">Insiyab</span>.dialog(<span class="hl-s">'#dlg'</span>);           <span class="hl-c">// تبديل</span></code></pre></div>
 
 <script>
-  /* data-ins-confirm lets the click through only once the answer is yes, so a
-     plain click handler here is the "yes" branch. */
-  document.getElementById('del-btn').addEventListener('click', function () {
-    Insiyab.toast('حُذف', 'ok');
-  });
-  document.getElementById('archive-btn').addEventListener('click', function () {
-    Insiyab.confirm('أرشفة العنصر؟', { title: 'تأكيد', confirm: 'أرشفة' }).then(function (yes) {
-      Insiyab.toast(yes ? 'أُرشف' : 'أُلغي', yes ? 'ok' : 'info');
+  document.addEventListener('DOMContentLoaded', function () {
+    /* data-ins-confirm lets the click through only once the answer is yes, so a
+       plain click handler here is the "yes" branch. */
+    document.getElementById('del-btn').addEventListener('click', function () {
+      Insiyab.toast('حُذف', 'ok');
+    });
+    document.getElementById('archive-btn').addEventListener('click', function () {
+      Insiyab.confirm('أرشفة العنصر؟', { title: 'تأكيد', confirm: 'أرشفة' }).then(function (yes) {
+        Insiyab.toast(yes ? 'أُرشف' : 'أُلغي', yes ? 'ok' : 'info');
+      });
     });
   });
 </script>

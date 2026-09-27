@@ -74,14 +74,16 @@ Insiyab.dialog('#dlg');           // تبديل
 </demo-code>
 
 <script>
-  /* data-ins-confirm lets the click through only once the answer is yes, so a
-     plain click handler here is the "yes" branch. */
-  document.getElementById('del-btn').addEventListener('click', function () {
-    Insiyab.toast('حُذف', 'ok');
-  });
-  document.getElementById('archive-btn').addEventListener('click', function () {
-    Insiyab.confirm('أرشفة العنصر؟', { title: 'تأكيد', confirm: 'أرشفة' }).then(function (yes) {
-      Insiyab.toast(yes ? 'أُرشف' : 'أُلغي', yes ? 'ok' : 'info');
+  document.addEventListener('DOMContentLoaded', function () {
+    /* data-ins-confirm lets the click through only once the answer is yes, so a
+       plain click handler here is the "yes" branch. */
+    document.getElementById('del-btn').addEventListener('click', function () {
+      Insiyab.toast('حُذف', 'ok');
+    });
+    document.getElementById('archive-btn').addEventListener('click', function () {
+      Insiyab.confirm('أرشفة العنصر؟', { title: 'تأكيد', confirm: 'أرشفة' }).then(function (yes) {
+        Insiyab.toast(yes ? 'أُرشف' : 'أُلغي', yes ? 'ok' : 'info');
+      });
     });
   });
 </script>

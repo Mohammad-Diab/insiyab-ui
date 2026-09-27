@@ -7,22 +7,23 @@
   <title>التلميحات · انسياب</title>
   <meta name="description" content="تلميح واحد للصفحة كلّها في الطبقة العليا، بسمة واحدة على العنصر.">
 
-  <!-- The library: two tags, and nothing else of it is needed. -->
+  <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
-  <script src="../dist/insiyab.js"></script>
+  <script src="../dist/insiyab-boot.js"></script>
+  <script src="../dist/insiyab.js" defer></script>
 
   <!-- One plugin, the command palette: the search below is built by it. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-palette.css">
-  <script src="../dist/plugins/insiyab-palette.js"></script>
+  <script src="../dist/plugins/insiyab-palette.js" defer></script>
 
   <!-- And the scrollspy plugin, for each page's contents list. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-scrollspy.css">
-  <script src="../dist/plugins/insiyab-scrollspy.js"></script>
+  <script src="../dist/plugins/insiyab-scrollspy.js" defer></script>
 
   <!-- The documentation site's own furniture — code listings, the pager.
        Nothing in it is part of the library. -->
   <link rel="stylesheet" href="assets/site.css">
-  <script src="assets/site.js"></script>
+  <script src="assets/site.js" defer></script>
 </head>
 <body class="site-doc" data-page="tooltips">
 

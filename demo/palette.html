@@ -7,22 +7,23 @@
   <title>لوحة الأوامر · انسياب</title>
   <meta name="description" content="بحث واحد عن كلّ صفحة وكلّ أمر، يُفتح بـ Ctrl+K. عناصره روابط الصفحة وأزرارها كما هي، ويجمع روابط القائمة الجانبية بنفسه.">
 
-  <!-- The library: two tags, and nothing else of it is needed. -->
+  <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
-  <script src="../dist/insiyab.js"></script>
+  <script src="../dist/insiyab-boot.js"></script>
+  <script src="../dist/insiyab.js" defer></script>
 
   <!-- One plugin, the command palette: the search below is built by it. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-palette.css">
-  <script src="../dist/plugins/insiyab-palette.js"></script>
+  <script src="../dist/plugins/insiyab-palette.js" defer></script>
 
   <!-- And the scrollspy plugin, for each page's contents list. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-scrollspy.css">
-  <script src="../dist/plugins/insiyab-scrollspy.js"></script>
+  <script src="../dist/plugins/insiyab-scrollspy.js" defer></script>
 
   <!-- The documentation site's own furniture — code listings, the pager.
        Nothing in it is part of the library. -->
   <link rel="stylesheet" href="assets/site.css">
-  <script src="assets/site.js"></script>
+  <script src="assets/site.js" defer></script>
 </head>
 <body class="site-doc" data-page="palette">
 
@@ -269,8 +270,9 @@
 <p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
 <div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/insiyab.css"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/plugins/insiyab-palette.css"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-palette.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab-boot.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-palette.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
 
 <h2 id="markup">لوحة من الوسوم</h2>
 <p>
@@ -400,13 +402,15 @@
 </p>
 
 <script>
-  document.getElementById('pal-demo-add').addEventListener('click', function () {
-    var n = document.querySelectorAll('#pal-demo [data-ins-palette-key^="demo-"]').length + 1;
-    Insiyab.palette.add({
-      label: 'أمر ' + n, key: 'demo-' + n, group: 'من الشيفرة', keywords: 'added',
-      run: function () { Insiyab.toast('أمر ' + n, 'ok'); }
-    }, '#pal-demo');
-    Insiyab.palette('#pal-demo', 'open');
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('pal-demo-add').addEventListener('click', function () {
+      var n = document.querySelectorAll('#pal-demo [data-ins-palette-key^="demo-"]').length + 1;
+      Insiyab.palette.add({
+        label: 'أمر ' + n, key: 'demo-' + n, group: 'من الشيفرة', keywords: 'added',
+        run: function () { Insiyab.toast('أمر ' + n, 'ok'); }
+      }, '#pal-demo');
+      Insiyab.palette('#pal-demo', 'open');
+    });
   });
 </script>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="hijri.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">التقويم الهجري</span></a><a class="site-pager-link site-pager-link--next" href="otp.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">رمز التحقق</span></a></nav>

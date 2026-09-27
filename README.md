@@ -18,7 +18,8 @@
 
 ```html
 <link rel="stylesheet" href="insiyab/insiyab.css">
-<script src="insiyab/insiyab.js"></script>
+<script src="insiyab/insiyab-boot.js"></script>
+<script src="insiyab/insiyab.js" defer></script>
 ```
 
 <div dir="rtl">
@@ -56,7 +57,8 @@ Copy what is in `dist/` into an `insiyab/` folder of its own, and reference the 
 your-project/
 └── insiyab/
     ├── insiyab.css        ← or insiyab.min.css
-    ├── insiyab.js
+    ├── insiyab-boot.js    ← in <head>, before first paint
+    ├── insiyab.js         ← with defer
     ├── fonts/             ← 16 .woff2 files + their licences
     └── plugins/           ← optional: only the ones you use
 ```
@@ -69,7 +71,8 @@ your-project/
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" href="insiyab/insiyab.css">
-  <script src="insiyab/insiyab.js"></script>
+  <script src="insiyab/insiyab-boot.js"></script>
+  <script src="insiyab/insiyab.js" defer></script>
 </head>
 <body>
   <div class="ins-glass" style="padding:20px">مرحبًا</div>
@@ -79,11 +82,13 @@ your-project/
 
 That is the whole setup. Three things are worth knowing about it:
 
-**Put the script in `<head>`, and do not add `defer`.** The theme and the sidebar
-state are restored from `localStorage`, and that has to happen *before the first
-paint* or every page load flashes the wrong theme. The script stamps `<html>` the
-moment it is parsed and waits for `DOMContentLoaded` for everything else. It still
-works deferred or at the end of `<body>` — you just get the flash back.
+**A small boot script in `<head>`, the rest deferred.** `insiyab-boot.js` (about
+6 KB) runs before the first paint: it restores the theme, the sidebar state and the
+brand colour, so no page load flashes the wrong theme. `insiyab.js` and every plugin
+load with `defer`, so they never hold up the page, and run in order after it. Page
+code that calls `Insiyab` straight away goes in a deferred file after the library,
+or inside `DOMContentLoaded`. The old single tag, `insiyab.js` in `<head>` with no
+`defer`, still works exactly as before.
 
 **There is no init call.** Events are delegated from the document, so a
 `data-ins-*` element added to the page an hour later works with no help.
@@ -549,8 +554,9 @@ nothing for it. The plugins are built into `dist/plugins/` from `src/plugins/`.
 ### Hijri calendar
 
 ```html
-<script src="insiyab/insiyab.js"></script>
-<script src="insiyab/plugins/insiyab-hijri.js"></script>
+<script src="insiyab/insiyab-boot.js"></script>
+<script src="insiyab/insiyab.js" defer></script>
+<script src="insiyab/plugins/insiyab-hijri.js" defer></script>
 
 <div class="ins-input-group">
   <input class="ins-input" type="date" data-ins-date data-ins-calendar="hijri" name="issued" value="2026-09-24">
@@ -586,8 +592,9 @@ defined in `insiyab.js`.
 
 ```html
 <link rel="stylesheet" href="insiyab/plugins/insiyab-palette.css">
-<script src="insiyab/insiyab.js"></script>
-<script src="insiyab/plugins/insiyab-palette.js"></script>
+<script src="insiyab/insiyab-boot.js"></script>
+<script src="insiyab/insiyab.js" defer></script>
+<script src="insiyab/plugins/insiyab-palette.js" defer></script>
 
 <dialog class="ins-dialog ins-palette" data-ins-palette data-ins-palette-from=".ins-shell-side">
   <div data-ins-palette-group="إجراءات">
@@ -641,7 +648,7 @@ types.
 
 ```html
 <link rel="stylesheet" href="insiyab/plugins/insiyab-otp.css">
-<script src="insiyab/plugins/insiyab-otp.js"></script>
+<script src="insiyab/plugins/insiyab-otp.js" defer></script>
 
 <input data-ins-otp="6" name="code" aria-label="رمز التحقق" required>
 ```
@@ -673,7 +680,7 @@ Insiyab.otp('#code', '');       // clear it, quietly
 
 ```html
 <link rel="stylesheet" href="insiyab/plugins/insiyab-phone.css">
-<script src="insiyab/plugins/insiyab-phone.js"></script>
+<script src="insiyab/plugins/insiyab-phone.js" defer></script>
 
 <div class="ins-input-group">
   <input class="ins-input" data-ins-phone name="mobile" value="+966501234567">
@@ -715,7 +722,7 @@ document.addEventListener('ins:phone', (e) => console.log(e.detail.value, e.deta
 
 ```html
 <link rel="stylesheet" href="insiyab/plugins/insiyab-file.css">
-<script src="insiyab/plugins/insiyab-file.js"></script>
+<script src="insiyab/plugins/insiyab-file.js" defer></script>
 
 <input type="file" name="docs" multiple accept=".pdf,image/*"
        data-ins-file data-ins-file-max="5MB" data-ins-file-count="5">
@@ -765,7 +772,7 @@ Insiyab.file('#docs', []);   // empty it
 
 ```html
 <link rel="stylesheet" href="insiyab/plugins/insiyab-scrollspy.css">   <!-- only for .ins-toc -->
-<script src="insiyab/plugins/insiyab-scrollspy.js"></script>
+<script src="insiyab/plugins/insiyab-scrollspy.js" defer></script>
 
 <nav class="ins-toc" data-ins-scrollspy aria-label="في هذه الصفحة">
   <a href="#intro">مقدّمة</a>
@@ -795,7 +802,7 @@ marker, and the marker flies from entry to entry the way the sidebar's does
 
 ```html
 <link rel="stylesheet" href="insiyab/plugins/insiyab-timeline.css">
-<script src="insiyab/plugins/insiyab-timeline.js"></script>   <!-- only for relative times -->
+<script src="insiyab/plugins/insiyab-timeline.js" defer></script>   <!-- only for relative times -->
 
 <ol class="ins-timeline">
   <li class="ins-timeline-item ins-timeline-item--ok">
@@ -832,7 +839,7 @@ on demand.
 
 ```html
 <link rel="stylesheet" href="insiyab/plugins/insiyab-tree.css">
-<script src="insiyab/plugins/insiyab-tree.js"></script>
+<script src="insiyab/plugins/insiyab-tree.js" defer></script>
 
 <ul class="ins-tree" data-ins-tree aria-label="الملفّات">
   <li data-open>
@@ -881,7 +888,7 @@ Insiyab.tree('#files');               // the selected item, or the ticked ones
 
 ```html
 <link rel="stylesheet" href="insiyab/plugins/insiyab-color.css">
-<script src="insiyab/plugins/insiyab-color.js"></script>
+<script src="insiyab/plugins/insiyab-color.js" defer></script>
 
 <input type="color" data-ins-color name="brand" value="#9b2c5e">
 ```
@@ -909,7 +916,7 @@ it; `Insiyab.color` stays the core's colour maths.
 
 ```html
 <link rel="stylesheet" href="insiyab/plugins/insiyab-carousel.css">
-<script src="insiyab/plugins/insiyab-carousel.js"></script>
+<script src="insiyab/plugins/insiyab-carousel.js" defer></script>
 
 <div class="ins-carousel" data-ins-carousel aria-label="أعمال مختارة">
   <div>…</div>
@@ -940,7 +947,7 @@ without sliding. `ins:carousel` reports the slide in view, and
 
 ```html
 <link rel="stylesheet" href="insiyab/plugins/insiyab-chart.css">
-<script src="insiyab/plugins/insiyab-chart.js"></script>
+<script src="insiyab/plugins/insiyab-chart.js" defer></script>
 
 <figure class="ins-chart" data-ins-chart="bar">
   <table>
@@ -970,7 +977,7 @@ for it, or with no data draws again from the table.
 
 ```html
 <link rel="stylesheet" href="insiyab/plugins/insiyab-month.css">
-<script src="insiyab/plugins/insiyab-month.js"></script>
+<script src="insiyab/plugins/insiyab-month.js" defer></script>
 
 <div class="ins-month" data-ins-month="2026-09">
   <ul class="ins-month-events">

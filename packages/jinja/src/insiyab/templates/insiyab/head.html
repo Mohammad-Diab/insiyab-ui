@@ -1,6 +1,6 @@
-{#- The tags a page needs, for the <head>: the stylesheet, the script (not deferred, so
-    the theme is set before the first paint) and each plugin named, in the order the
-    plugins need. base: where the files are served, the insiyab_static global that
+{#- The tags a page needs, for the <head>: the stylesheet, the small boot script (not
+    deferred, so the theme is set before the first paint), then the library and each
+    plugin named, deferred, in the order the plugins need. base: where the files are served, the insiyab_static global that
     insiyab.register() sets, or /static/insiyab. plugins: names, as in dist/plugins:
     'phone', 'palette', 'hijri'… min: the minified stylesheets. -#}
 {% macro head(plugins=[], base=none, min=false) -%}
@@ -10,8 +10,9 @@
 {%- for p in plugins if p != 'hijri' %}
 <link rel="stylesheet" href="{{ b }}/plugins/insiyab-{{ p }}{{ ext }}">
 {%- endfor %}
-<script src="{{ b }}/insiyab.js"></script>
+<script src="{{ b }}/insiyab-boot.js"></script>
+<script src="{{ b }}/insiyab.js" defer></script>
 {%- for p in plugins %}
-<script src="{{ b }}/plugins/insiyab-{{ p }}.js"></script>
+<script src="{{ b }}/plugins/insiyab-{{ p }}.js" defer></script>
 {%- endfor -%}
 {%- endmacro %}

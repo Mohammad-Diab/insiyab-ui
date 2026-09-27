@@ -7,22 +7,23 @@
   <title>تسجيل الدخول · انسياب</title>
   <meta name="description" content="صفحة دخول بخطوات: الهاتف ثمّ كلمة المرور ثمّ الرمز، في بطاقة تنزلق خطواتها، من أجزاء المكتبة وحدها.">
 
-  <!-- The library: two tags, and nothing else of it is needed. -->
+  <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
-  <script src="../dist/insiyab.js"></script>
+  <script src="../dist/insiyab-boot.js"></script>
+  <script src="../dist/insiyab.js" defer></script>
 
   <!-- One plugin, the command palette: the search below is built by it. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-palette.css">
-  <script src="../dist/plugins/insiyab-palette.js"></script>
+  <script src="../dist/plugins/insiyab-palette.js" defer></script>
 
   <!-- And the scrollspy plugin, for each page's contents list. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-scrollspy.css">
-  <script src="../dist/plugins/insiyab-scrollspy.js"></script>
+  <script src="../dist/plugins/insiyab-scrollspy.js" defer></script>
 
   <!-- The documentation site's own furniture — code listings, the pager.
        Nothing in it is part of the library. -->
   <link rel="stylesheet" href="assets/site.css">
-  <script src="assets/site.js"></script>
+  <script src="assets/site.js" defer></script>
 </head>
 <body class="site-doc" data-page="login">
 
@@ -266,7 +267,7 @@
         <div class="site-body">
         <p class="site-lead">صفحة دخول بخطوات: الهاتف ثمّ كلمة المرور ثمّ الرمز، في بطاقة تنزلق خطواتها، من أجزاء المكتبة وحدها.</p>
         <link rel="stylesheet" href="../dist/plugins/insiyab-otp.css">
-<script src="../dist/plugins/insiyab-otp.js"></script>
+<script src="../dist/plugins/insiyab-otp.js" defer></script>
 
 <h2 id="preview">القالب</h2>
 <p>
@@ -400,42 +401,44 @@
 <span class="hl-t">&lt;/body</span><span class="hl-t">&gt;</span></code></pre></div>
 
 <script>
-  (function () {
-    var login = document.getElementById('login');
-    var phone = document.getElementById('login-phone');
-    var code = document.getElementById('login-code');
-    phone.addEventListener('input', function () { phone.setCustomValidity(''); });
-    code.addEventListener('input', function () { code.setCustomValidity(''); });
-    /* A stand-in for the server: each step waits a moment, and one number is refused. */
-    document.addEventListener('ins:wizard-leave', function (e) {
-      if (e.detail.el !== login) return;
-      e.preventDefault();
-      setTimeout(function () {
-        if (e.detail.step === 0 && phone.value === '0900000000') {
-          phone.setCustomValidity('هذا الرقم غير مسجّل.');
-          phone.reportValidity();
-          Insiyab.wizard(login, 'stay');
-          return;
-        }
-        Insiyab.wizard(login, 'next');
-      }, 700);
-    });
-    login.addEventListener('submit', function (e) {
-      e.preventDefault();
-      login.setAttribute('aria-busy', 'true');
-      setTimeout(function () {
-        login.removeAttribute('aria-busy');
-        if (code.value !== '123456') {
-          code.setCustomValidity('الرمز غير صحيح.');
-          code.reportValidity();
-          return;
-        }
-        Insiyab.toast('تمّ الدخول', 'ok');
-        login.reset();
-        Insiyab.wizard(login, 'restart');
-      }, 700);
-    });
-  })();
+  document.addEventListener('DOMContentLoaded', function () {
+    (function () {
+      var login = document.getElementById('login');
+      var phone = document.getElementById('login-phone');
+      var code = document.getElementById('login-code');
+      phone.addEventListener('input', function () { phone.setCustomValidity(''); });
+      code.addEventListener('input', function () { code.setCustomValidity(''); });
+      /* A stand-in for the server: each step waits a moment, and one number is refused. */
+      document.addEventListener('ins:wizard-leave', function (e) {
+        if (e.detail.el !== login) return;
+        e.preventDefault();
+        setTimeout(function () {
+          if (e.detail.step === 0 && phone.value === '0900000000') {
+            phone.setCustomValidity('هذا الرقم غير مسجّل.');
+            phone.reportValidity();
+            Insiyab.wizard(login, 'stay');
+            return;
+          }
+          Insiyab.wizard(login, 'next');
+        }, 700);
+      });
+      login.addEventListener('submit', function (e) {
+        e.preventDefault();
+        login.setAttribute('aria-busy', 'true');
+        setTimeout(function () {
+          login.removeAttribute('aria-busy');
+          if (code.value !== '123456') {
+            code.setCustomValidity('الرمز غير صحيح.');
+            code.reportValidity();
+            return;
+          }
+          Insiyab.toast('تمّ الدخول', 'ok');
+          login.reset();
+          Insiyab.wizard(login, 'restart');
+        }, 700);
+      });
+    })();
+  });
 </script>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="month.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">تقويم الشهر</span></a><a class="site-pager-link site-pager-link--next" href="tpl-dashboard.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">لوحة التحكم</span></a></nav>
         </div>

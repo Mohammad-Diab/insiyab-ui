@@ -7,22 +7,23 @@
   <title>انسياب · مكتبة واجهات عربية أولًا</title>
   <meta name="description" content="مكتبة واجهات بتصميم الزجاج المصنفر، عربية أولًا. ملفّان، بلا أدوات بناء.">
 
-  <!-- The library: two tags, and nothing else of it is needed. -->
+  <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
-  <script src="../dist/insiyab.js"></script>
+  <script src="../dist/insiyab-boot.js"></script>
+  <script src="../dist/insiyab.js" defer></script>
 
   <!-- One plugin, the command palette: the search below is built by it. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-palette.css">
-  <script src="../dist/plugins/insiyab-palette.js"></script>
+  <script src="../dist/plugins/insiyab-palette.js" defer></script>
 
   <!-- And the scrollspy plugin, for each page's contents list. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-scrollspy.css">
-  <script src="../dist/plugins/insiyab-scrollspy.js"></script>
+  <script src="../dist/plugins/insiyab-scrollspy.js" defer></script>
 
   <!-- The documentation site's own furniture — code listings, the pager.
        Nothing in it is part of the library. -->
   <link rel="stylesheet" href="assets/site.css">
-  <script src="assets/site.js"></script>
+  <script src="assets/site.js" defer></script>
 </head>
 <body class="site-home" data-page="index">
 
@@ -278,7 +279,8 @@
       <a class="ins-btn ins-btn--secondary ins-btn--lg" href="buttons.html">تصفّح المكوّنات</a>
     </div>
     <pre class="site-install" dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/insiyab.css"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span><span class="hl-t">&gt;&lt;/script&gt;</span></code></pre>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab-boot.js"</span><span class="hl-t">&gt;&lt;/script&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;&lt;/script&gt;</span></code></pre>
   </div>
 
   <div class="site-preview" aria-label="معاينة">

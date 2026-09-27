@@ -5,14 +5,12 @@
 
    One file, one tag, no init call:
 
-     <script src="insiyab.js"></script>
+     <script src="insiyab-boot.js"></script>
+     <script src="insiyab.js" defer></script>
 
-   **Put it in <head>, without `defer`.** The theme and the sidebar state are
-   restored from localStorage, and that has to land *before first paint* or every
-   page load flashes the wrong theme. So the top half of this file runs the moment
-   the tag is parsed — before <body> exists — and stamps <html>. Everything that
-   needs actual DOM waits for DOMContentLoaded. Loading it deferred or at the end
-   of <body> still works; you just get the flash back.
+   The `boot{ … }boot` regions are what must land before first paint (theme, sidebar,
+   brand); build.mjs ships them alone as insiyab-boot.js. Loaded on its own in <head>,
+   this file still runs them itself.
 
    Events are **delegated** from the document, not bound per element. That is why
    there is no init call to forget: a `data-ins-*` button added to the page an hour
@@ -28,11 +26,13 @@
   /* Stamped by build.mjs from package.json, which is the one place the version is
      written. It used to be typed here as well, and the two could drift; this file
      read on its own, unbuilt, reports 'dev'. */
+  /* boot{ */
   var VERSION = '0.6.0';
   var root = document.documentElement;
 
   var KEY_THEME = 'ins-theme';
   var KEY_SIDEBAR = 'ins-sidebar';
+  /* }boot */
 
   /* ------------------------------------------------------------- storage */
   /* Every access is wrapped, and that is not defensive habit: reading
@@ -40,6 +40,7 @@
      a sandboxed iframe with no allow-same-origin. An uncaught throw up here,
      before <body> exists, takes the whole library down on page one. */
 
+  /* boot{ */
   function read(key) {
     try { return window.localStorage.getItem(key); } catch (e) { return null; }
   }
@@ -49,6 +50,7 @@
   function drop(key) {
     try { window.localStorage.removeItem(key); } catch (e) { /* not fatal */ }
   }
+  /* }boot */
 
   /* --------------------------------------------------------------- colour */
   /* The brand derivation, ported from the server that first did it, so one hex in
@@ -56,6 +58,7 @@
      which is the only reason a pale brand colour cannot configure an unreadable
      button. See the notes on each step. */
 
+  /* boot{ */
   function hexToRgb(hex) {
     if (typeof hex !== 'string') return null;
     var v = hex.trim().replace(/^#/, '');
@@ -163,6 +166,7 @@
     }
     return hex;
   }
+  /* }boot */
 
   /* ---------------------------------------------------------------- theme */
   /* Three states, not two. An explicit choice is stored and stamped as
@@ -171,6 +175,7 @@
      absence of the attribute is meaningful and must not be replaced with
      `data-ins-theme="light"`. */
 
+  /* boot{ */
   function systemPrefersDark() {
     return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
   }
@@ -190,6 +195,7 @@
        the wrong way and the page looks almost right. */
     if (brandCurrent) brand(brandCurrent);
   }
+  /* }boot */
 
   function theme(next) {
     if (next === undefined) return effectiveTheme();
@@ -237,6 +243,7 @@
      `data-ins-fx="off"`, and `apply()` is simply called — the instant flip. The theme
      change is inside the callback either way, so a failure here never leaves it
      half-applied. */
+  /* boot{ */
   function motionless() {
     if (root.getAttribute('data-ins-fx') === 'off') return true;
     try {
@@ -245,6 +252,7 @@
       return false;
     }
   }
+  /* }boot */
 
   function sweep(from, apply) {
     if (!document.startViewTransition || motionless()) { apply(); return; }
@@ -350,6 +358,7 @@
      selected, and the next page, finding the note, flies the bar from that item to
      its own. The note lasts one page load and five seconds — a stale one from some
      earlier visit must not replay a journey nobody just made. */
+  /* boot{ */
   var NAV_KEY = 'ins-nav-from';
   var NAV_EASE_OUT = 'cubic-bezier(.9, .1, 1, .2)';
   var NAV_EASE_IN = 'cubic-bezier(.1, .9, .2, 1)';
@@ -411,6 +420,7 @@
     if (mo) mo.observe(root, { childList: true, subtree: true });
     document.addEventListener('DOMContentLoaded', finish);
   }
+  /* }boot */
 
   /* Where a link's marker is, in the sidebar's scrolling coordinates. */
   function navMarker(side, s, link) {
@@ -595,7 +605,8 @@
      PRE-PAINT — runs now, at parse time, with no <body> to speak of
      ========================================================================== */
 
-  (function prePaint() {
+  /* boot{ */
+  function earlyPaint(booted) {
     /* "The script is running." The stylesheet keys every script-dependent state
        on this — a tab panel that is hidden until chosen, a navbar menu that is
        folded until opened, a show-password button that does nothing without us —
@@ -615,19 +626,25 @@
        marker showed at its destination for a frame, vanished, and then arrived.
        Hidden from the first paint instead, until the flight takes over — and never
        for longer than two seconds, whatever goes wrong after this line. */
-    var note = navNote();
+    var note = booted ? null : navNote();
     if (note && note.from && !motionless()) {
       root.classList.add('ins-nav-arriving');
       window.setTimeout(navArrived, 2000);
     }
     /* And the sidebar's scroll, placed before its first paint as well. */
-    if (document.readyState === 'loading') navWatch(note);
+    if (!booted && document.readyState === 'loading') navWatch(note);
 
     /* `data-ins-primary` on <html> is the declarative form of brand(): it is read
        here so a custom brand colour is live for the first paint too, rather than
        repainting the whole page a moment after it appears. */
     var declared = root.getAttribute('data-ins-primary');
     if (declared) brand(declared);
+  }
+  /* }boot */
+
+  (function prePaint() {
+    /* insiyab-boot.js has already done the parse-time half when it is loaded first. */
+    earlyPaint(!!window.InsiyabBoot);
 
     /* Follow the OS while the user has expressed no preference of their own. */
     if (window.matchMedia) {

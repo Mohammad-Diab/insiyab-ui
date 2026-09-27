@@ -18,6 +18,7 @@
 
 import { readFile, writeFile, mkdir, readdir, copyFile, rm } from 'node:fs/promises';
 import { join, basename } from 'node:path';
+import vm from 'node:vm';
 import { buildSite } from './demo/src/site.mjs';
 
 const CHECK = process.argv.includes('--check');
@@ -367,6 +368,14 @@ const source = await readFile(SRC_JS, 'utf8');
 const versionLines = source.split(VERSION_LINE).length - 1;
 if (versionLines !== 1) fail(`${SRC_JS}: expected \`${VERSION_LINE}\` exactly once for the build to stamp, found ${versionLines}.`);
 const js = banner + source.replace(VERSION_LINE, `var VERSION = '${pkg.version}';`);
+
+/* insiyab-boot.js: the `boot{ … }boot` regions of the script, for a sync tag in <head> while insiyab.js is deferred. */
+const bootParts = [...js.matchAll(/\/\* boot\{ \*\/\r?\n([\s\S]*?)\/\* \}boot \*\//g)].map((m) => m[1]);
+if (!bootParts.length) fail(`${SRC_JS}: no boot{ … }boot regions found.`);
+const bootBody = bootParts.join('\n').replace(/\/\*[\s\S]*?\*\//g, '').split(/\r?\n/).filter((l) => l.trim()).join('\n');
+const boot = banner + "(function (window, document) {\n  'use strict';\n" + bootBody +
+  "\n  earlyPaint(false);\n  window.InsiyabBoot = { version: VERSION };\n}(window, document));\n";
+try { new vm.Script(boot, { filename: 'insiyab-boot.js' }); } catch (e) { fail(`insiyab-boot.js does not parse: ${e.message}`); }
 const min = banner + minify(css);
 
 /* Plugins: one file per plugin in src/plugins/, shipped beside the core as
@@ -434,6 +443,7 @@ await mkdir(join(DIST, 'fonts'), { recursive: true });
 await writeFile(join(DIST, 'insiyab.css'), css, 'utf8');
 await writeFile(join(DIST, 'insiyab.min.css'), min, 'utf8');
 await writeFile(join(DIST, 'insiyab.js'), js, 'utf8');
+await writeFile(join(DIST, 'insiyab-boot.js'), boot, 'utf8');
 if (plugins.length) {
   await mkdir(join(DIST, 'plugins'), { recursive: true });
   for (const p of plugins) await writeFile(join(DIST, 'plugins', p.name), p.text, 'utf8');
@@ -449,6 +459,7 @@ console.log(`built dist/ · ${files.length} parts · ${stats.declared} tokens de
 console.log(`  insiyab.css      ${kb(css)}`);
 console.log(`  insiyab.min.css  ${kb(min)}`);
 console.log(`  insiyab.js       ${kb(js)}`);
+console.log(`  insiyab-boot.js  ${kb(boot)}`);
 console.log(`  fonts/           ${(await readdir(join(DIST, 'fonts'))).length} files`);
 for (const p of plugins) console.log(`  plugins/${p.name.padEnd(8)} ${kb(p.text)}`);
 console.log(`  demo/            ${site.pages} pages`);

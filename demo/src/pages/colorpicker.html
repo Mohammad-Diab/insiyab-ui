@@ -1,12 +1,13 @@
 <link rel="stylesheet" href="../dist/plugins/insiyab-color.css">
-<script src="../dist/plugins/insiyab-color.js"></script>
+<script src="../dist/plugins/insiyab-color.js" defer></script>
 
 <h2 id="install">التثبيت</h2>
 <p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
 <demo-code lang="html">
 <link rel="stylesheet" href="insiyab/plugins/insiyab-color.css">
-<script src="insiyab/insiyab.js"></script>
-<script src="insiyab/plugins/insiyab-color.js"></script>
+<script src="insiyab/insiyab-boot.js"></script>
+<script src="insiyab/insiyab.js" defer></script>
+<script src="insiyab/plugins/insiyab-color.js" defer></script>
 </demo-code>
 
 <h2 id="field">حقل اللون</h2>
@@ -62,7 +63,9 @@ Insiyab.colorField('#brand', '#0f766e');   // ضبطه بهدوء، دون حد�
 </p>
 
 <script>
-  document.addEventListener('ins:color', function (e) {
-    if (e.detail.input.id === 'cp-brand') Insiyab.brand(e.detail.value);
+  document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('ins:color', function (e) {
+      if (e.detail.input.id === 'cp-brand') Insiyab.brand(e.detail.value);
+    });
   });
 </script>

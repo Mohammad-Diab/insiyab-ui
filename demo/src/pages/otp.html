@@ -1,12 +1,13 @@
 <link rel="stylesheet" href="../dist/plugins/insiyab-otp.css">
-<script src="../dist/plugins/insiyab-otp.js"></script>
+<script src="../dist/plugins/insiyab-otp.js" defer></script>
 
 <h2 id="install">التثبيت</h2>
 <p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
 <demo-code lang="html">
 <link rel="stylesheet" href="insiyab/plugins/insiyab-otp.css">
-<script src="insiyab/insiyab.js"></script>
-<script src="insiyab/plugins/insiyab-otp.js"></script>
+<script src="insiyab/insiyab-boot.js"></script>
+<script src="insiyab/insiyab.js" defer></script>
+<script src="insiyab/plugins/insiyab-otp.js" defer></script>
 </demo-code>
 
 <h2 id="field">حقل الرمز</h2>
@@ -89,19 +90,21 @@ Insiyab.otp('#code', '123456');    // ضبطه بهدوء، دون حدث
 </p>
 
 <script>
-  document.getElementById('otp-auto-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    Insiyab.toast('أُرسل ' + Insiyab.otp('#otp-auto'), 'ok');
-    Insiyab.otp('#otp-auto', '');
-  });
-  document.addEventListener('ins:otp', function (e) {
-    if (e.detail.input.id !== 'otp-demo') return;
-    var hint = document.getElementById('otp-demo-hint');
-    if (e.detail.value === '123456') {
-      hint.textContent = 'الرمز صحيح.';
-    } else {
-      e.detail.input.setAttribute('aria-invalid', 'true');
-      hint.textContent = 'الرمز غير صحيح.';
-    }
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('otp-auto-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      Insiyab.toast('أُرسل ' + Insiyab.otp('#otp-auto'), 'ok');
+      Insiyab.otp('#otp-auto', '');
+    });
+    document.addEventListener('ins:otp', function (e) {
+      if (e.detail.input.id !== 'otp-demo') return;
+      var hint = document.getElementById('otp-demo-hint');
+      if (e.detail.value === '123456') {
+        hint.textContent = 'الرمز صحيح.';
+      } else {
+        e.detail.input.setAttribute('aria-invalid', 'true');
+        hint.textContent = 'الرمز غير صحيح.';
+      }
+    });
   });
 </script>
