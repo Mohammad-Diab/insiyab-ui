@@ -1160,14 +1160,43 @@
     }
   }
 
+  /* The number rolls like an odometer on a layer over the field, since an input's text cannot move. */
+  function spinRoll(input, from, to, up) {
+    var group = input.parentNode;
+    if (from === to || motionless() || input.offsetParent !== group) return;
+    var old = group.querySelector('.ins-spin-roll');
+    if (old) old.parentNode.removeChild(old);
+    var cs = getComputedStyle(input);
+    var roll = el('span', 'ins-spin-roll' + (up ? '' : ' ins-spin-roll--down'));
+    roll.setAttribute('aria-hidden', 'true');
+    var st = roll.style;
+    st.left = input.offsetLeft + 'px';
+    st.top = input.offsetTop + 'px';
+    st.inlineSize = input.offsetWidth + 'px';
+    st.blockSize = input.offsetHeight + 'px';
+    st.font = cs.font;
+    st.color = cs.color;
+    roll.appendChild(el('span', 'ins-spin-out', from));
+    var next = el('span', 'ins-spin-in', to);
+    roll.appendChild(next);
+    group.appendChild(roll);
+    input.classList.add('ins-spin-rolling');
+    next.addEventListener('animationend', function () {
+      if (roll.parentNode) roll.parentNode.removeChild(roll);
+      if (!group.querySelector('.ins-spin-roll')) input.classList.remove('ins-spin-rolling');
+    });
+  }
+
   function spin(btn) {
     var input = spinInput(btn);
     if (!input || input.disabled || input.readOnly) return null;
+    var from = input.value;
     try {
       if (btn.getAttribute('data-ins-spin') === 'down') input.stepDown(); else input.stepUp();
     } catch (e) {
       return null;                                 /* not a number field */
     }
+    spinRoll(input, from, input.value, btn.getAttribute('data-ins-spin') !== 'down');
     fire(input, 'input');
     fire(input, 'change');
     syncSpin(input);

@@ -4564,6 +4564,24 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-spin:disabled { opacity: .35; cursor: not-allowed; }
 :root:not([data-ins-js]) .ins-spin { display: none; }
 .ins-input-group:has(> .ins-spin) > .ins-input { text-align: center; font-variant-numeric: tabular-nums; }
+.ins-input-group:has(> .ins-spin) { position: relative; }
+.ins-input-group > .ins-spin-rolling { color: transparent; caret-color: transparent; }
+.ins-spin-roll {
+  --ins-roll: 1;
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+.ins-spin-roll--down { --ins-roll: -1; }
+.ins-spin-roll > span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.ins-spin-out { animation: ins-roll-out .26s var(--ins-ease) forwards; }
+.ins-spin-in { animation: ins-roll-in .44s var(--ins-ease-spring) both; }
 :root[data-ins-js] .ins-input-group:has(> .ins-spin) > .ins-input { -moz-appearance: textfield; appearance: textfield; }
 :root[data-ins-js] .ins-input-group:has(> .ins-spin) > .ins-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 :root[data-ins-js] .ins-input-group:has(> .ins-spin) > .ins-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
@@ -7097,6 +7115,11 @@ html[dir="ltr"] .ins-page-title {
 @keyframes ins-rise    { from { transform: translateY(12px); } }
 @keyframes ins-rise-sm { from { opacity: 0; transform: translateY(6px); } }
 @keyframes ins-pop     { from { transform: scale(.82); } }
+@keyframes ins-roll-out { to { opacity: 0; transform: translateY(calc(-90% * var(--ins-roll))) scale(.6); filter: blur(3px); } }
+@keyframes ins-roll-in {
+  from { opacity: 0; transform: translateY(calc(90% * var(--ins-roll))) scale(.6); filter: blur(3px); color: var(--ins-tone-brand-soft); }
+  55% { color: var(--ins-tone-brand-soft); }
+}
 /* A directional entrance, for a row that should arrive from the leading edge.
    Transforms have no logical form, so the sign is flipped per direction below. */
 @keyframes ins-slide-in { from { opacity: 0; transform: translateX(var(--ins-slide, -10px)); } }

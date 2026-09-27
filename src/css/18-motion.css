@@ -39,6 +39,11 @@
 @keyframes ins-rise    { from { transform: translateY(12px); } }
 @keyframes ins-rise-sm { from { opacity: 0; transform: translateY(6px); } }
 @keyframes ins-pop     { from { transform: scale(.82); } }
+@keyframes ins-roll-out { to { opacity: 0; transform: translateY(calc(-90% * var(--ins-roll))) scale(.6); filter: blur(3px); } }
+@keyframes ins-roll-in {
+  from { opacity: 0; transform: translateY(calc(90% * var(--ins-roll))) scale(.6); filter: blur(3px); color: var(--ins-tone-brand-soft); }
+  55% { color: var(--ins-tone-brand-soft); }
+}
 /* A directional entrance, for a row that should arrive from the leading edge.
    Transforms have no logical form, so the sign is flipped per direction below. */
 @keyframes ins-slide-in { from { opacity: 0; transform: translateX(var(--ins-slide, -10px)); } }

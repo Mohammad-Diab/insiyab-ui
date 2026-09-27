@@ -857,6 +857,24 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-spin:disabled { opacity: .35; cursor: not-allowed; }
 :root:not([data-ins-js]) .ins-spin { display: none; }
 .ins-input-group:has(> .ins-spin) > .ins-input { text-align: center; font-variant-numeric: tabular-nums; }
+.ins-input-group:has(> .ins-spin) { position: relative; }
+.ins-input-group > .ins-spin-rolling { color: transparent; caret-color: transparent; }
+.ins-spin-roll {
+  --ins-roll: 1;
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+.ins-spin-roll--down { --ins-roll: -1; }
+.ins-spin-roll > span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.ins-spin-out { animation: ins-roll-out .26s var(--ins-ease) forwards; }
+.ins-spin-in { animation: ins-roll-in .44s var(--ins-ease-spring) both; }
 :root[data-ins-js] .ins-input-group:has(> .ins-spin) > .ins-input { -moz-appearance: textfield; appearance: textfield; }
 :root[data-ins-js] .ins-input-group:has(> .ins-spin) > .ins-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 :root[data-ins-js] .ins-input-group:has(> .ins-spin) > .ins-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
