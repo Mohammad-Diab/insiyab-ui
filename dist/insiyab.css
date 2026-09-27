@@ -2481,7 +2481,8 @@ html[dir="ltr"] .ins-dl dd.ins-num { text-align: left; }
    again. Where `:has()` is unsupported this rule simply does not match, which is
    the behaviour of the day before — so it degrades to the old bug, not to a new
    one. Add `.ins-panel--open` by hand if you need to support those browsers. */
-.ins-panel:has([open], [data-ins-open]) { overflow: visible; z-index: 5; }
+/* An open accordion is not a popup: it stays inside the clip, or its fills spill past the corners. */
+.ins-panel:has(details[open]:not(.ins-collapse), [data-ins-open]) { overflow: visible; z-index: 5; }
 
 .ins-panel-head {
   display: flex;
@@ -2631,6 +2632,9 @@ html[dir="ltr"] .ins-dl dd.ins-num { text-align: left; }
   color: var(--ins-text-1);
   text-decoration: none;
 }
+/* Concentric with the panel: its radius less the insets between the two edges. */
+.ins-panel > .ins-list .ins-list-item { border-radius: calc(var(--ins-r-lg) - 1px - .25rem); }
+.ins-panel-body--flush > .ins-list .ins-list-item { border-radius: calc(var(--ins-r-lg) - 1px - .625rem - .25rem); }
 .ins-list > .ins-list-item + .ins-list-item,
 .ins-list > li + li > .ins-list-item { border-block-start: 1px solid var(--ins-line); }
 .ins-list-text { flex: 1 1 auto; min-inline-size: 0; display: flex; flex-direction: column; gap: .125rem; }
@@ -2808,7 +2812,7 @@ html[dir="ltr"] .ins-dl dd.ins-num { text-align: left; }
 .ins-stat-hint { font-size: .6875rem; color: var(--ins-text-3); }
 
 .ins-stat--sm { padding: .625rem .75rem; gap: .625rem; }
-.ins-stat--sm .ins-stat-ico { inline-size: 32px; block-size: 32px; font-size: .875rem; }
+.ins-stat--sm .ins-stat-ico { inline-size: 32px; block-size: 32px; font-size: .875rem; border-radius: var(--ins-r-sm); }
 .ins-stat--sm .ins-stat-label { font-size: .6875rem; }
 .ins-stat--sm .ins-stat-value { font-size: 1.25rem; }
 
@@ -2945,6 +2949,7 @@ html[dir="ltr"] .ins-dl dd.ins-num { text-align: left; }
      came out visibly flattened. 18px is the largest value that fits, and it happens
      to be exactly half the painted height, so the ends are true semicircles. */
   --ins-table-r: 1.125rem;
+  --ins-table-card-r: var(--ins-r-lg);
   --ins-table-rule: rgba(var(--ins-primary-rgb), .24);
   /* Physical x offset of the header bar's *leading* hairline — see the corner rules
      below. Positive is leftward-inset, which is the start edge in LTR. */
@@ -3072,14 +3077,19 @@ html[dir="ltr"] .ins-table tbody td:last-child { border-right: 1px solid var(--i
    it is written on, so a box carrying a text direction of its own cannot be
    positioned with one. The corner belongs to the table's geometry, not to the
    cell's sentence. */
-html[dir="rtl"] .ins-table tbody tr:first-child td:first-child { border-top-right-radius: var(--ins-r-lg); }
-html[dir="rtl"] .ins-table tbody tr:first-child td:last-child { border-top-left-radius: var(--ins-r-lg); }
-html[dir="rtl"] .ins-table tbody tr:last-child td:first-child { border-bottom-right-radius: var(--ins-r-lg); }
-html[dir="rtl"] .ins-table tbody tr:last-child td:last-child { border-bottom-left-radius: var(--ins-r-lg); }
-html[dir="ltr"] .ins-table tbody tr:first-child td:first-child { border-top-left-radius: var(--ins-r-lg); }
-html[dir="ltr"] .ins-table tbody tr:first-child td:last-child { border-top-right-radius: var(--ins-r-lg); }
-html[dir="ltr"] .ins-table tbody tr:last-child td:first-child { border-bottom-left-radius: var(--ins-r-lg); }
-html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-right-radius: var(--ins-r-lg); }
+html[dir="rtl"] .ins-table tbody tr:first-child td:first-child { border-top-right-radius: var(--ins-table-card-r); }
+html[dir="rtl"] .ins-table tbody tr:first-child td:last-child { border-top-left-radius: var(--ins-table-card-r); }
+html[dir="rtl"] .ins-table tbody tr:last-child td:first-child { border-bottom-right-radius: var(--ins-table-card-r); }
+html[dir="rtl"] .ins-table tbody tr:last-child td:last-child { border-bottom-left-radius: var(--ins-table-card-r); }
+html[dir="ltr"] .ins-table tbody tr:first-child td:first-child { border-top-left-radius: var(--ins-table-card-r); }
+html[dir="ltr"] .ins-table tbody tr:first-child td:last-child { border-top-right-radius: var(--ins-table-card-r); }
+html[dir="ltr"] .ins-table tbody tr:last-child td:first-child { border-bottom-left-radius: var(--ins-table-card-r); }
+html[dir="ltr"] .ins-table tbody tr:last-child td:last-child { border-bottom-right-radius: var(--ins-table-card-r); }
+/* In a flush panel body the table sits .625rem inside the panel, so its corners are the panel's less that inset. */
+.ins-panel-body--flush .ins-table {
+  --ins-table-r: calc(var(--ins-r-lg) - 1px - .625rem);
+  --ins-table-card-r: calc(var(--ins-r-lg) - 1px - .625rem);
+}
 
 /* Inside a panel the panel *is* the card, so the row block flattens: a quieter fill
    and no rim of its own. The de-nesting discipline from 05-glass.css, applied to the
@@ -6730,7 +6740,7 @@ html[dir="ltr"] .ins-page-title {
   margin-inline-start: auto;
   padding: 0;
   border: 0;
-  border-radius: var(--ins-r-sm);
+  border-radius: var(--ins-r-md);
   background: var(--ins-ctl-bg);
   color: var(--ins-text-1);
   cursor: pointer;
@@ -6847,6 +6857,19 @@ html[dir="ltr"] .ins-page-title {
 
 .ins-accordion > .ins-collapse + .ins-collapse { border-block-start: 1px solid var(--ins-line); }
 .ins-accordion > .ins-collapse > summary { border-radius: var(--ins-r-sm); }
+/* Flush in a panel the rows are square, and only the panel's own corners are round. */
+.ins-panel > .ins-accordion > .ins-collapse > summary,
+.ins-panel > .ins-collapse > summary { border-radius: 0; }
+.ins-panel > .ins-accordion > .ins-collapse:first-child > summary,
+.ins-panel > .ins-collapse:first-child > summary {
+  border-start-start-radius: calc(var(--ins-r-lg) - 1px);
+  border-start-end-radius: calc(var(--ins-r-lg) - 1px);
+}
+.ins-panel > .ins-accordion > .ins-collapse:last-child:not([open]) > summary,
+.ins-panel > .ins-collapse:last-child:not([open]) > summary {
+  border-end-start-radius: calc(var(--ins-r-lg) - 1px);
+  border-end-end-radius: calc(var(--ins-r-lg) - 1px);
+}
 
 /* --------------------------------------------------------------- breadcrumb */
 /*   <nav class="ins-breadcrumb" aria-label="مسار التنقّل">

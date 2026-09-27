@@ -322,7 +322,7 @@ html[dir="ltr"] .ins-page-title {
   margin-inline-start: auto;
   padding: 0;
   border: 0;
-  border-radius: var(--ins-r-sm);
+  border-radius: var(--ins-r-md);
   background: var(--ins-ctl-bg);
   color: var(--ins-text-1);
   cursor: pointer;
@@ -439,6 +439,19 @@ html[dir="ltr"] .ins-page-title {
 
 .ins-accordion > .ins-collapse + .ins-collapse { border-block-start: 1px solid var(--ins-line); }
 .ins-accordion > .ins-collapse > summary { border-radius: var(--ins-r-sm); }
+/* Flush in a panel the rows are square, and only the panel's own corners are round. */
+.ins-panel > .ins-accordion > .ins-collapse > summary,
+.ins-panel > .ins-collapse > summary { border-radius: 0; }
+.ins-panel > .ins-accordion > .ins-collapse:first-child > summary,
+.ins-panel > .ins-collapse:first-child > summary {
+  border-start-start-radius: calc(var(--ins-r-lg) - 1px);
+  border-start-end-radius: calc(var(--ins-r-lg) - 1px);
+}
+.ins-panel > .ins-accordion > .ins-collapse:last-child:not([open]) > summary,
+.ins-panel > .ins-collapse:last-child:not([open]) > summary {
+  border-end-start-radius: calc(var(--ins-r-lg) - 1px);
+  border-end-end-radius: calc(var(--ins-r-lg) - 1px);
+}
 
 /* --------------------------------------------------------------- breadcrumb */
 /*   <nav class="ins-breadcrumb" aria-label="مسار التنقّل">
