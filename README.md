@@ -17,8 +17,8 @@
 </div>
 
 ```html
-<link rel="stylesheet" href="insiyab.css">
-<script src="insiyab.js"></script>
+<link rel="stylesheet" href="insiyab/insiyab.css">
+<script src="insiyab/insiyab.js"></script>
 ```
 
 <div dir="rtl">
@@ -50,12 +50,15 @@
 
 ## Getting started
 
-Download or copy three things next to each other, and reference the first two:
+Copy what is in `dist/` into an `insiyab/` folder of its own, and reference the first two:
 
 ```
-insiyab.css
-insiyab.js
-fonts/            ← 16 .woff2 files + their licences
+your-project/
+└── insiyab/
+    ├── insiyab.css        ← or insiyab.min.css
+    ├── insiyab.js
+    ├── fonts/             ← 16 .woff2 files + their licences
+    └── plugins/           ← optional: only the ones you use
 ```
 
 ```html
@@ -65,8 +68,8 @@ fonts/            ← 16 .woff2 files + their licences
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="insiyab.css">
-  <script src="insiyab.js"></script>
+  <link rel="stylesheet" href="insiyab/insiyab.css">
+  <script src="insiyab/insiyab.js"></script>
 </head>
 <body>
   <div class="ins-glass" style="padding:20px">مرحبًا</div>
@@ -546,8 +549,8 @@ nothing for it. The plugins are built into `dist/plugins/` from `src/plugins/`.
 ### Hijri calendar
 
 ```html
-<script src="insiyab.js"></script>
-<script src="plugins/insiyab-hijri.js"></script>
+<script src="insiyab/insiyab.js"></script>
+<script src="insiyab/plugins/insiyab-hijri.js"></script>
 
 <div class="ins-input-group">
   <input class="ins-input" type="date" data-ins-date data-ins-calendar="hijri" name="issued" value="2026-09-24">
@@ -582,9 +585,9 @@ defined in `insiyab.js`.
 ### Command palette
 
 ```html
-<link rel="stylesheet" href="plugins/insiyab-palette.css">
-<script src="insiyab.js"></script>
-<script src="plugins/insiyab-palette.js"></script>
+<link rel="stylesheet" href="insiyab/plugins/insiyab-palette.css">
+<script src="insiyab/insiyab.js"></script>
+<script src="insiyab/plugins/insiyab-palette.js"></script>
 
 <dialog class="ins-dialog ins-palette" data-ins-palette data-ins-palette-from=".ins-shell-side">
   <div data-ins-palette-group="إجراءات">
@@ -637,8 +640,8 @@ types.
 ### One-time code
 
 ```html
-<link rel="stylesheet" href="plugins/insiyab-otp.css">
-<script src="plugins/insiyab-otp.js"></script>
+<link rel="stylesheet" href="insiyab/plugins/insiyab-otp.css">
+<script src="insiyab/plugins/insiyab-otp.js"></script>
 
 <input data-ins-otp="6" name="code" aria-label="رمز التحقق" required>
 ```
@@ -669,8 +672,8 @@ Insiyab.otp('#code', '');       // clear it, quietly
 ### Phone number
 
 ```html
-<link rel="stylesheet" href="plugins/insiyab-phone.css">
-<script src="plugins/insiyab-phone.js"></script>
+<link rel="stylesheet" href="insiyab/plugins/insiyab-phone.css">
+<script src="insiyab/plugins/insiyab-phone.js"></script>
 
 <div class="ins-input-group">
   <input class="ins-input" data-ins-phone name="mobile" value="+966501234567">
@@ -711,8 +714,8 @@ document.addEventListener('ins:phone', (e) => console.log(e.detail.value, e.deta
 ### File upload
 
 ```html
-<link rel="stylesheet" href="plugins/insiyab-file.css">
-<script src="plugins/insiyab-file.js"></script>
+<link rel="stylesheet" href="insiyab/plugins/insiyab-file.css">
+<script src="insiyab/plugins/insiyab-file.js"></script>
 
 <input type="file" name="docs" multiple accept=".pdf,image/*"
        data-ins-file data-ins-file-max="5MB" data-ins-file-count="5">
@@ -761,8 +764,8 @@ Insiyab.file('#docs', []);   // empty it
 ### Scrollspy
 
 ```html
-<link rel="stylesheet" href="plugins/insiyab-scrollspy.css">   <!-- only for .ins-toc -->
-<script src="plugins/insiyab-scrollspy.js"></script>
+<link rel="stylesheet" href="insiyab/plugins/insiyab-scrollspy.css">   <!-- only for .ins-toc -->
+<script src="insiyab/plugins/insiyab-scrollspy.js"></script>
 
 <nav class="ins-toc" data-ins-scrollspy aria-label="في هذه الصفحة">
   <a href="#intro">مقدّمة</a>
@@ -791,8 +794,8 @@ marker, and the marker flies from entry to entry the way the sidebar's does
 ### Timeline
 
 ```html
-<link rel="stylesheet" href="plugins/insiyab-timeline.css">
-<script src="plugins/insiyab-timeline.js"></script>   <!-- only for relative times -->
+<link rel="stylesheet" href="insiyab/plugins/insiyab-timeline.css">
+<script src="insiyab/plugins/insiyab-timeline.js"></script>   <!-- only for relative times -->
 
 <ol class="ins-timeline">
   <li class="ins-timeline-item ins-timeline-item--ok">
@@ -828,8 +831,8 @@ on demand.
 ### Tree
 
 ```html
-<link rel="stylesheet" href="plugins/insiyab-tree.css">
-<script src="plugins/insiyab-tree.js"></script>
+<link rel="stylesheet" href="insiyab/plugins/insiyab-tree.css">
+<script src="insiyab/plugins/insiyab-tree.js"></script>
 
 <ul class="ins-tree" data-ins-tree aria-label="الملفّات">
   <li data-open>
@@ -877,8 +880,8 @@ Insiyab.tree('#files');               // the selected item, or the ticked ones
 ### Colour picker
 
 ```html
-<link rel="stylesheet" href="plugins/insiyab-color.css">
-<script src="plugins/insiyab-color.js"></script>
+<link rel="stylesheet" href="insiyab/plugins/insiyab-color.css">
+<script src="insiyab/plugins/insiyab-color.js"></script>
 
 <input type="color" data-ins-color name="brand" value="#9b2c5e">
 ```
@@ -905,8 +908,8 @@ it; `Insiyab.color` stays the core's colour maths.
 ### Carousel
 
 ```html
-<link rel="stylesheet" href="plugins/insiyab-carousel.css">
-<script src="plugins/insiyab-carousel.js"></script>
+<link rel="stylesheet" href="insiyab/plugins/insiyab-carousel.css">
+<script src="insiyab/plugins/insiyab-carousel.js"></script>
 
 <div class="ins-carousel" data-ins-carousel aria-label="أعمال مختارة">
   <div>…</div>
@@ -936,8 +939,8 @@ without sliding. `ins:carousel` reports the slide in view, and
 ### Charts
 
 ```html
-<link rel="stylesheet" href="plugins/insiyab-chart.css">
-<script src="plugins/insiyab-chart.js"></script>
+<link rel="stylesheet" href="insiyab/plugins/insiyab-chart.css">
+<script src="insiyab/plugins/insiyab-chart.js"></script>
 
 <figure class="ins-chart" data-ins-chart="bar">
   <table>
@@ -966,8 +969,8 @@ for it, or with no data draws again from the table.
 ### Month calendar
 
 ```html
-<link rel="stylesheet" href="plugins/insiyab-month.css">
-<script src="plugins/insiyab-month.js"></script>
+<link rel="stylesheet" href="insiyab/plugins/insiyab-month.css">
+<script src="insiyab/plugins/insiyab-month.js"></script>
 
 <div class="ins-month" data-ins-month="2026-09">
   <ul class="ins-month-events">
