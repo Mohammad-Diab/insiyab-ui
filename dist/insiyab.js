@@ -3468,6 +3468,79 @@
     }
   });
 
+  /* The selected face travels like the sidebar marker: the far edge reaches the new segment, then the near edge follows. */
+  function segFly(seg, from, to) {
+    if (!from || !to || from === to || motionless() || !to.animate || !seg.offsetWidth) return;
+    var a = { x: from.offsetLeft, w: from.offsetWidth }, b = { x: to.offsetLeft, w: to.offsetWidth };
+    var prev = seg.__insSeg;
+    if (prev) {
+      if (prev.face.parentNode) {
+        var pcs = window.getComputedStyle(prev.face);
+        var px = parseFloat(pcs.left), pw = parseFloat(pcs.width);
+        if (!isNaN(px) && pw > 0) { a.x = px; a.w = pw; }
+      }
+      prev.halt();
+    }
+    var face = el('span', 'ins-seg-flight');
+    face.setAttribute('aria-hidden', 'true');
+    face.style.top = to.offsetTop + 'px';
+    face.style.height = to.offsetHeight + 'px';
+    seg.appendChild(face);
+    seg.classList.add('ins-seg-moving');
+    var left = Math.min(a.x, b.x), right = Math.max(a.x + a.w, b.x + b.w);
+    var run = null;
+    var flight = {
+      face: face,
+      land: function () {
+        if (face.parentNode) face.parentNode.removeChild(face);
+        if (seg.__insSeg !== flight) return;
+        seg.__insSeg = null;
+        var on = seg.querySelector(':scope > .is-active');
+        if (on) on.style.transition = 'none';
+        seg.classList.remove('ins-seg-moving');
+        if (on) { void on.offsetWidth; on.style.transition = ''; }
+      },
+      halt: function () {
+        if (run) { run.onfinish = run.oncancel = null; try { run.cancel(); } catch (e) {} }
+        flight.land();
+      }
+    };
+    seg.__insSeg = flight;
+    try {
+      run = face.animate([
+        { left: a.x + 'px', width: a.w + 'px', easing: NAV_EASE_OUT },
+        { left: left + 'px', width: (right - left) + 'px', offset: 1 / 3, easing: NAV_EASE_IN },
+        { left: b.x + 'px', width: b.w + 'px' }
+      ], { duration: 600, fill: 'both' });
+    } catch (e) {
+      flight.land();
+      return;
+    }
+    run.onfinish = flight.land;
+    run.oncancel = flight.land;
+  }
+
+  /* Watches the segments' classes, since several paths change the selection. */
+  define('seg-slide', function (scope) {
+    if (!window.MutationObserver) return;
+    var segs = scope.querySelectorAll('.ins-seg');
+    for (var i = 0; i < segs.length; i++) {
+      if (segs[i].__insSegWatch) continue;
+      segs[i].__insSegWatch = true;
+      (function (seg) {
+        new MutationObserver(function (list) {
+          var from = null, to = null;
+          for (var j = 0; j < list.length; j++) {
+            var t = list[j].target;
+            if (t.parentNode !== seg) continue;
+            var was = /(^|\s)is-active(\s|$)/.test(list[j].oldValue || ''), now = t.classList.contains('is-active');
+            if (was && !now) from = t;
+            if (!was && now) to = t;
+          }
+          if (from && to) segFly(seg, from, to);
+        }).observe(seg, { attributes: true, attributeFilter: ['class'], attributeOldValue: true, subtree: true });
+      }(segs[i]));
+    }
   });
 
   /* Tabs: every role and relationship the pattern needs, written once from the
