@@ -79,7 +79,7 @@
 [data-ins-fx="off"] .ins-drawer,
 [data-ins-fx="off"] .ins-drawer::backdrop,
 [data-ins-fx="off"] .ins-tooltip,
-[data-ins-fx="off"] .ins-cal { transition: none; }
+[data-ins-fx="off"] :is(.ins-cal, .ins-time-pop) { transition: none; }
 /* Its own rule: an engine that does not know the pseudo-element would discard the
    whole list above along with it. */
 [data-ins-fx="off"] .ins-collapse::details-content { transition: none; }
