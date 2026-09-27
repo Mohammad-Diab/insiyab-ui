@@ -1096,6 +1096,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
   font-family: inherit;
   font-size: .875rem;
 }
+.ins-tags-input:focus-visible { outline: 0; }
 .ins-tags-input::placeholder { color: var(--ins-text-3); }
 /* The prompt is for an empty field; once there are chips it would read as one more. */
 .ins-tags:has(> .ins-chip) .ins-tags-input::placeholder { color: transparent; }
