@@ -511,6 +511,9 @@
   border-color: rgba(var(--ins-primary-rgb), .55);
   box-shadow: var(--ins-glow), var(--ins-bevel-dim), 0 4px 16px rgba(var(--ins-primary-rgb), .10);
   transform: translateY(-1px);
+  /* The transform makes a stacking context; without a z-index an open list inside is painted under what follows. */
+  position: relative;
+  z-index: 30;
 }
 .ins-input-group > :is(.ins-input, .ins-select),
 .ins-input-group > :is(.ins-input, .ins-select):focus,
