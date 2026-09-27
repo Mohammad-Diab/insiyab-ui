@@ -461,7 +461,7 @@
    next day. The week starts where the locale says it does — Saturday for Arabic,
    Monday for most of Europe, Sunday for the United States — and the month and day
    names are the locale's own. */
-.ins-cal {
+:is(.ins-cal, .ins-time-pop) {
   position: fixed;
   inset: auto;
   margin: 0;
@@ -481,17 +481,18 @@
               overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
               display var(--ins-t-exit) var(--ins-ease) allow-discrete;
 }
-.ins-cal:is(:popover-open, .is-open) {
+:is(.ins-cal, .ins-time-pop):is(:popover-open, .is-open) {
   opacity: 1;
   transform: none;
   transition-duration: var(--ins-t-enter);
 }
 @starting-style {
-  .ins-cal:is(:popover-open, .is-open) { opacity: 0; transform: translateY(-4px) scale(.98); }
+  :is(.ins-cal, .ins-time-pop):is(:popover-open, .is-open) { opacity: 0; transform: translateY(-4px) scale(.98); }
 }
 /* Closing, it stays painted for its exit; it must not catch the click meant for
    whatever is under it while it fades. */
-.ins-cal:not(:popover-open, .is-open) { pointer-events: none; }
+:is(.ins-cal, .ins-time-pop):not(:popover-open, .is-open) { pointer-events: none; }
+.ins-time-pop { inline-size: auto; padding: .5rem; }
 .ins-cal-head { display: flex; align-items: center; gap: .375rem; margin-block-end: .5rem; }
 .ins-cal-title { flex: 1 1 auto; display: flex; justify-content: center; gap: .375rem; min-inline-size: 0; }
 .ins-cal-title .ins-select {
@@ -581,6 +582,96 @@
 .ins-cal-grid td.is-in-range { background: var(--ins-tone-brand-bg); }
 .ins-cal-grid td.is-range-start { border-start-start-radius: var(--ins-r-sm); border-end-start-radius: var(--ins-r-sm); }
 .ins-cal-grid td.is-range-end { border-start-end-radius: var(--ins-r-sm); border-end-end-radius: var(--ins-r-sm); }
+.ins-cal-grid td.is-preview { background: var(--ins-tone-brand-bg); }
+.ins-cal-grid td.is-preview-start { border-start-start-radius: var(--ins-r-sm); border-end-start-radius: var(--ins-r-sm); }
+.ins-cal-grid td.is-preview-end { border-start-end-radius: var(--ins-r-sm); border-end-end-radius: var(--ins-r-sm); }
+.ins-cal-hint { font-size: var(--ins-fs-xs); font-weight: 700; color: var(--ins-tone-brand); }
+
+/* Date and time in one calendar: the drum beside the month, under it on a phone. */
+.ins-cal--datetime {
+  inline-size: min(31rem, calc(100vw - 1rem));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "head time" "grid time" "foot foot";
+  column-gap: .75rem;
+}
+.ins-cal--datetime > .ins-cal-head { grid-area: head; }
+.ins-cal--datetime > .ins-cal-grid { grid-area: grid; }
+.ins-cal--datetime > .ins-cal-foot { grid-area: foot; }
+.ins-cal-time {
+  grid-area: time;
+  align-self: center;
+  padding-inline-start: .75rem;
+  border-inline-start: 1px solid var(--ins-line);
+}
+@media (max-width: 34rem) {
+  .ins-cal--datetime { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "grid" "time" "foot"; }
+  .ins-cal-time {
+    padding: .5rem 0 0;
+    margin-block-start: .5rem;
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--ins-line);
+  }
+}
+
+/* --------------------------------------------------------------- drum */
+.ins-drum {
+  --ins-drum-row: 2.25rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .375rem;
+  padding-inline: .25rem;
+}
+.ins-drum::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: calc(50% - var(--ins-drum-row) / 2);
+  block-size: var(--ins-drum-row);
+  border-radius: var(--ins-r-sm);
+  background: var(--ins-tone-brand-bg);
+  box-shadow: inset 0 0 0 1px var(--ins-tone-brand-bd), var(--ins-bevel-dim);
+  pointer-events: none;
+}
+.ins-drum-clock { display: flex; align-items: center; gap: .125rem; }
+.ins-drum-sep { position: relative; font-weight: 800; color: var(--ins-tone-brand); }
+.ins-drum-col {
+  position: relative;
+  box-sizing: border-box;
+  inline-size: 3rem;
+  block-size: calc(var(--ins-drum-row) * 5);
+  padding-block: calc(var(--ins-drum-row) * 2);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  perspective: 16rem;
+  -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
+          mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
+  border-radius: var(--ins-r-sm);
+  cursor: ns-resize;
+}
+.ins-drum-col::-webkit-scrollbar { display: none; }
+.ins-drum-col:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
+.ins-drum-col--period { inline-size: 3.25rem; }
+.ins-drum-item {
+  display: grid;
+  place-items: center;
+  block-size: var(--ins-drum-row);
+  scroll-snap-align: center;
+  font-family: var(--ins-font-body-en);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ins-text-2);
+  cursor: pointer;
+  user-select: none;
+  transition: color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-drum-col--period .ins-drum-item { font-family: var(--ins-font-body); font-size: var(--ins-fs-sm); }
+.ins-drum-item.is-on { color: var(--ins-tone-brand); font-weight: 800; }
 .ins-cal-foot {
   display: flex;
   align-items: center;

@@ -1095,6 +1095,8 @@
       today: 'اليوم', clear: 'مسح', badDate: 'اكتب تاريخًا صحيحًا.', calendarSystem: 'نظام التقويم',
       early: 'اختر {date} أو ما بعده.', late: 'اختر {date} أو ما قبله.',
       selected: 'المحدّد: {n}', remove: 'إزالة', badTime: 'اكتب وقتًا صحيحًا.',
+      pickStart: 'اختر البداية', pickEnd: 'اختر النهاية', done: 'تم', chooseTime: 'اختر وقتًا',
+      hour: 'الساعة', minute: 'الدقيقة', period: 'الفترة',
       words: '{n}/{max} كلمة', wordsFree: '{n} كلمة', tooManyWords: 'لا تتجاوز {max} كلمة.',
       days: '{d} يوم', saving: 'جارٍ الحفظ…', saved: 'حُفظ', saveError: 'تعذّر الحفظ', resize: 'تغيير حجم اللوحين'
     },
@@ -1104,6 +1106,8 @@
       today: 'Today', clear: 'Clear', badDate: 'Enter a valid date.', calendarSystem: 'Calendar system',
       early: 'Choose {date} or later.', late: 'Choose {date} or earlier.',
       selected: '{n} selected', remove: 'Remove', badTime: 'Enter a valid time.',
+      pickStart: 'Pick the start', pickEnd: 'Pick the end', done: 'Done', chooseTime: 'Choose a time',
+      hour: 'Hour', minute: 'Minute', period: 'AM/PM',
       words: '{n}/{max} words', wordsFree: '{n} words', tooManyWords: 'Use {max} words or fewer.',
       days: '{d}d', saving: 'Saving…', saved: 'Saved', saveError: 'Could not save', resize: 'Resize the panes'
     }
@@ -1261,7 +1265,6 @@
          time list with nothing set opens at the hour it is now. */
       var sel = list.querySelector('.ins-combo-option[aria-selected="true"]:not([hidden])');
       if (sel) comboActivate(combo, sel);
-      else if (combo.classList.contains('ins-time')) timeNear(combo);
       combo.removeAttribute('data-ins-flip');
       var r = list.getBoundingClientRect(), s = input.getBoundingClientRect();
       if (r.bottom > window.innerHeight - 8 && s.top - r.height - 6 > 8) combo.setAttribute('data-ins-flip', 'up');
@@ -1407,7 +1410,7 @@
     for (var i = 0; i < fields.length; i++) {
       if (homeCalendarName(fields[i]) !== name) continue;
       var d = dateOf(fields[i]);
-      if (d) fields[i].value = formatDay(fields[i], d);
+      if (d) fields[i].value = dateText(fields[i], d);
     }
     return cal;
   }
@@ -1540,10 +1543,43 @@
   }
 
   function dateValue(input) { return resolve(input.getAttribute('data-ins-date-value')); }
-  function dateOf(input) { var h = dateValue(input); return h ? parseIso(h.value) : null; }
+  function dateOf(input) { var h = dateValue(input); return h ? parseIso(h.value.slice(0, 10)) : null; }
   function dateLocale(input) { return langOf(input); }
   function formatDay(input, d) {
     return sysFormat(viewCalendar(input), dateLocale(input), { day: 'numeric', month: 'long', year: 'numeric' }).format(d);
+  }
+  function dateMode(input) { return input.getAttribute('data-ins-date-mode') || ''; }
+  function endValue(input) { return resolve(input.getAttribute('data-ins-date-end-value')); }
+  function endOf(input) { var h = endValue(input); return h ? parseIso(h.value) : null; }
+  function timeOf(input) {
+    var h = dateValue(input);
+    return input.getAttribute('data-ins-at') || (h && h.value.slice(11, 16)) || '';
+  }
+  function timeStep(input) { return Math.max(1, +input.getAttribute('data-ins-step') || 30); }
+  function timeDefault(input) {
+    var step = timeStep(input), now = new Date();
+    var m = (Math.ceil((now.getHours() * 60 + now.getMinutes()) / step) * step) % 1440;
+    return pad2(Math.floor(m / 60)) + ':' + pad2(m % 60);
+  }
+
+  /* What the field shows: a day, a span of days, or a day and a time. */
+  function dateText(input, d) {
+    if (!d) return '';
+    var mode = dateMode(input), sys = viewCalendar(input), loc = dateLocale(input);
+    if (mode === 'range') {
+      var to = endOf(input);
+      if (!to) return formatDay(input, d) + ' – ';
+      var f = sysFormat(sys, loc, { day: 'numeric', month: 'long', year: 'numeric' });
+      return f.formatRange ? f.formatRange(d, to) : f.format(d) + ' – ' + f.format(to);
+    }
+    if (mode === 'datetime') {
+      var t = timeOf(input);
+      if (!t) return formatDay(input, d);
+      var p = t.split(':');
+      return sysFormat(sys, loc, { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: '2-digit' })
+        .format(new Date(d.getFullYear(), d.getMonth(), d.getDate(), +p[0], +p[1]));
+    }
+    return formatDay(input, d);
   }
 
   /* The bounds that apply to a field right now: its own `min` and `max`, and for the
@@ -1573,25 +1609,37 @@
 
   function checkDate(input, d) {
     var t = strings(input), b = dateBounds(input), msg = '';
+    var to = dateMode(input) === 'range' ? endOf(input) : null;
     if (d === null) msg = t.badDate;
     else if (d && b.min && d < b.min) msg = t.early.replace('{date}', formatDay(input, b.min));
     else if (d && b.max && d > b.max) msg = t.late.replace('{date}', formatDay(input, b.max));
+    else if (to && b.max && to > b.max) msg = t.late.replace('{date}', formatDay(input, b.max));
     input.setCustomValidity(msg);
     return !msg;
   }
 
-  function setDate(input, d, quiet) {
+  /* `to` is a range's end: left out, the end stays unless it now falls before the start. */
+  function setDate(input, d, quiet, to) {
     var hidden = dateValue(input);
     if (!hidden) return;
+    var mode = dateMode(input), end = mode === 'range' ? endValue(input) : null;
     var value = d ? isoOf(d) : '';
-    var changed = hidden.value !== value;
+    if (mode === 'datetime' && d) {
+      var t = timeOf(input) || timeDefault(input);
+      input.setAttribute('data-ins-at', t);
+      value += 'T' + t;
+    }
+    var endIso = end ? (to === undefined ? end.value : (to ? isoOf(to) : '')) : '';
+    if (end && (!d || (endIso && endIso < value))) endIso = '';
+    var changed = hidden.value !== value || (end && end.value !== endIso);
     hidden.value = value;
-    input.value = d ? formatDay(input, d) : '';
+    if (end) end.value = endIso;
+    input.value = dateText(input, d);
     checkDate(input, d || undefined);
     if (!quiet && changed) {
       fire(input, 'input');
       fire(input, 'change');
-      emit('ins:date', { input: input, value: value, date: d });
+      emit('ins:date', { input: input, value: value, date: d, end: end ? endIso : undefined });
     }
   }
 
@@ -1600,15 +1648,32 @@
   function commitTyped(input) {
     var current = dateOf(input);
     var text = input.value.trim();
-    if (current && text === formatDay(input, current)) return;
+    if (current && text === dateText(input, current).trim()) return;
     if (!text) { setDate(input, null); return; }
+    var mode = dateMode(input);
+    if (mode === 'range') {
+      var parts = text.split(/\s+[-–—]\s+|\s*[–—]\s*/);
+      var a = parseTyped(parts[0], input), b = parts[1] ? parseTyped(parts[1], input) : undefined;
+      if (a && b !== null && (!b || b >= a)) setDate(input, a, false, b || null);
+      else checkDate(input, null);
+      return;
+    }
+    if (mode === 'datetime') {
+      var latin = toLatin(text);
+      var tm = latin.match(/\d{1,2}\s*[:.٫]\s*\d{2}(\s*(am|pm|a\.m\.|p\.m\.|صباحًا|صباحا|مساءً|مساء|ص|م))?/i);
+      var at = tm ? parseTime(tm[0]) : null;
+      var day = parseTyped(tm ? latin.replace(tm[0], '').replace(/(في|at|،|,)\s*$/i, '').trim() : latin, input);
+      if (day) { if (at) input.setAttribute('data-ins-at', at); setDate(input, day); }
+      else checkDate(input, null);
+      return;
+    }
     var d = parseTyped(text, input);
     if (d) setDate(input, d);
     else checkDate(input, null);
   }
 
   /* The calendar, one for the page. */
-  var calEl = null, calFor = null, calView = null, calFocus = null;
+  var calEl = null, calFor = null, calView = null, calFocus = null, calPick = 'start';
 
   function calLayer() {
     if (calEl) return calEl;
@@ -1620,6 +1685,7 @@
     calEl.addEventListener('keydown', onCalKey);
     calEl.addEventListener('click', onCalClick);
     calEl.addEventListener('change', onCalChange);
+    calEl.addEventListener('mouseover', onCalOver);
     document.body.appendChild(calEl);
     return calEl;
   }
@@ -1640,10 +1706,12 @@
     var cal = calLayer(), input = calFor, t = strings(input), locale = dateLocale(input);
     var sys = viewCalendar(input), vp = sys.parts(calView);
     var y = vp.y, m = vp.m;
-    var selected = dateOf(input), now = today(), bounds = dateBounds(input), range = dateRange(input);
+    var selected = dateOf(input), now = today(), bounds = dateBounds(input), mode = dateMode(input);
+    var range = mode === 'range' ? { from: selected, to: endOf(input) } : dateRange(input);
     var fd = weekStart(locale);
 
     cal.textContent = '';
+    cal.classList.toggle('ins-cal--datetime', mode === 'datetime');
     cal.setAttribute('aria-label', t.calendar);
     cal.setAttribute('lang', locale);
     cal.dir = window.getComputedStyle(input).direction;
@@ -1732,10 +1800,23 @@
     grid.appendChild(tbody);
     cal.appendChild(grid);
 
+    var drum = null;
+    if (mode === 'datetime') {
+      var side = el('div', 'ins-cal-time');
+      drum = drumBuild(input, function (v) {
+        if (!calFor) return;
+        calFor.setAttribute('data-ins-at', v);
+        if (dateOf(calFor)) setDate(calFor, dateOf(calFor));
+      });
+      side.appendChild(drum);
+      cal.appendChild(side);
+    }
+
     var foot = el('div', 'ins-cal-foot');
     var todayBtn = el('button', 'ins-btn ins-btn--bare ins-btn--sm', t.today);
     todayBtn.type = 'button'; todayBtn.setAttribute('data-ins-cal', 'today');
     foot.appendChild(todayBtn);
+    if (mode === 'range') foot.appendChild(el('span', 'ins-cal-hint', calPick === 'end' ? t.pickEnd : t.pickStart));
     /* A field in another calendar can be flipped to Gregorian and back, for the
        person who thinks in the other one. Only then: a Gregorian field has nothing
        to switch to. The field's text follows the calendar on screen. */
@@ -1761,25 +1842,35 @@
       clear.type = 'button'; clear.setAttribute('data-ins-cal', 'clear');
       foot.appendChild(clear);
     }
+    if (mode === 'datetime') {
+      var done = el('button', 'ins-btn ins-btn--primary ins-btn--sm', t.done);
+      done.type = 'button'; done.setAttribute('data-ins-cal', 'done');
+      foot.appendChild(done);
+    }
     cal.appendChild(foot);
+    if (drum) drumSet(drum, timeOf(input) || timeDefault(input));
   }
 
   /* Below the field, aligned to its leading edge — the right edge on an Arabic page
      — and above it when there is no room below. */
-  function placeCal() {
-    if (!calEl || !calFor) return;
-    var anchor = (calFor.closest('.ins-input-group') || calFor).getBoundingClientRect();
+  function placeNear(layer, target) {
+    var anchor = target.getBoundingClientRect();
     var gap = 6, pad = 8, vw = root.clientWidth, vh = window.innerHeight;
-    calEl.style.left = '0px';
-    calEl.style.top = '0px';
-    var w = calEl.offsetWidth, h = calEl.offsetHeight;
+    layer.style.left = '0px';
+    layer.style.top = '0px';
+    var w = layer.offsetWidth, h = layer.offsetHeight;
     var y = anchor.bottom + gap;
     if (y + h > vh - pad && anchor.top - gap - h >= pad) y = anchor.top - gap - h;
-    var x = calEl.dir === 'rtl' ? anchor.right - w : anchor.left;
+    var x = layer.dir === 'rtl' ? anchor.right - w : anchor.left;
     x = Math.max(pad, Math.min(x, vw - w - pad));
     y = Math.max(pad, Math.min(y, vh - h - pad));
-    calEl.style.left = Math.round(x) + 'px';
-    calEl.style.top = Math.round(y) + 'px';
+    layer.style.left = Math.round(x) + 'px';
+    layer.style.top = Math.round(y) + 'px';
+  }
+
+  function placeCal() {
+    if (!calEl || !calFor) return;
+    placeNear(calEl, calFor.closest('.ins-input-group') || calFor);
   }
 
   function focusCalDay() {
@@ -1789,7 +1880,9 @@
 
   function openCal(input, focusGrid) {
     if (calFor && calFor !== input) closeCal(false);
+    if (timeFor) closeTime(false);
     calFor = input;
+    calPick = dateMode(input) === 'range' && dateOf(input) && !endOf(input) ? 'end' : 'start';
     var start = dateOf(input) || today();
     var b = dateBounds(input);
     if (b.min && start < b.min) start = b.min;
@@ -1804,6 +1897,8 @@
       calEl.classList.add('is-open');
     }
     placeCal();
+    var drum = calEl.querySelector('.ins-drum');
+    if (drum) drumSet(drum, timeOf(input) || timeDefault(input));
     var btn = calButton(input);
     if (btn) btn.setAttribute('aria-expanded', 'true');
     if (focusGrid) focusCalDay();
@@ -1835,10 +1930,50 @@
       for (var i = 0; i < btns.length; i++) btns[i].tabIndex = btns[i].getAttribute('data-date') === isoOf(d) ? 0 : -1;
     }
     focusCalDay();
+    calPreview(d);
+  }
+
+  /* While a range waits for its end, the band follows the pointer or the focused day. */
+  function calPreview(d) {
+    if (!calFor || dateMode(calFor) !== 'range' || calPick !== 'end') return;
+    var from = dateOf(calFor);
+    if (!from) return;
+    var tds = calEl.querySelectorAll('.ins-cal-grid td');
+    for (var i = 0; i < tds.length; i++) {
+      var c = parseIso(tds[i].firstChild.getAttribute('data-date'));
+      var on = !!d && d >= from && c >= from && c <= d;
+      tds[i].classList.toggle('is-preview', on);
+      tds[i].classList.toggle('is-preview-start', on && sameDay(c, from));
+      tds[i].classList.toggle('is-preview-end', on && sameDay(c, d));
+    }
+  }
+
+  function onCalOver(event) {
+    var b = event.target.closest ? event.target.closest('.ins-cal-day') : null;
+    if (b && b.getAttribute('aria-disabled') !== 'true') calPreview(parseIso(b.getAttribute('data-date')));
   }
 
   function calChoose(d) {
-    var input = calFor;
+    var input = calFor, mode = dateMode(input);
+    if (mode === 'range') {
+      var from = dateOf(input);
+      if (calPick === 'end' && from && d && d >= from) { setDate(input, from, false, d); closeCal(true); return; }
+      setDate(input, d, false, null);
+      if (!d) { closeCal(true); return; }
+      calPick = 'end';
+      calFocus = d;
+      renderCal();
+      focusCalDay();
+      return;
+    }
+    if (mode === 'datetime') {
+      setDate(input, d);
+      if (!d) { closeCal(true); return; }
+      calFocus = d;
+      renderCal();
+      focusCalDay();
+      return;
+    }
     setDate(input, d);
     closeCal(true);
     /* The start of a range hands straight on to its end, when the end is empty or
@@ -1853,6 +1988,7 @@
   function onCalKey(event) {
     var target = event.target;
     if (event.key === 'Escape') { event.preventDefault(); closeCal(true); return; }
+    if (event.key === 'Enter' && target.closest('.ins-drum')) { event.preventDefault(); closeCal(true); return; }
     if (!target.classList.contains('ins-cal-day')) return;
     var d = parseIso(target.getAttribute('data-date'));
     var rtl = calEl.dir === 'rtl';
@@ -1900,7 +2036,7 @@
       /* The field says the same day in the calendar now on screen, and so do its
          min and max messages. */
       var chosen = dateOf(input);
-      if (chosen) { input.value = formatDay(input, chosen); checkDate(input, chosen); }
+      if (chosen) { input.value = dateText(input, chosen); checkDate(input, chosen); }
       emit('ins:calendar', { input: input, calendar: want });
       var back = calEl.querySelector('[data-ins-cal="system"][data-value="' + want + '"]');
       if (back) back.focus();
@@ -1910,6 +2046,8 @@
       else calMove(now);
     } else if (act === 'clear') {
       setDate(calFor, null);
+      closeCal(true);
+    } else if (act === 'done') {
       closeCal(true);
     }
   }
@@ -2343,12 +2481,12 @@
     return dateFormat(langOf(input), { hour: 'numeric', minute: '2-digit' }).format(new Date(2000, 0, 1, +p[0], +p[1]));
   }
 
-  function timeHidden(input) { var c = input.closest('.ins-combo'); return c && c.querySelector('input[type="hidden"]'); }
+  function timeHidden(input) { var c = input.closest('.ins-time'); return c && c.querySelector('input[type="hidden"]'); }
 
   /* Set a time field: its hidden value, the words in the box, the matching option
      marked. Refuses a time outside `min`–`max`. */
   function setTime(input, hhmm, quiet) {
-    var hidden = timeHidden(input), combo = input.closest('.ins-combo');
+    var hidden = timeHidden(input);
     if (!hidden) return;
     var lo = input.getAttribute('data-ins-min'), hi = input.getAttribute('data-ins-max');
     var out = hhmm && ((lo && minutesOf(hhmm) < minutesOf(lo)) || (hi && minutesOf(hhmm) > minutesOf(hi)));
@@ -2357,8 +2495,8 @@
     var changed = hidden.value !== (hhmm || '');
     hidden.value = hhmm || '';
     input.value = hhmm ? formatTime(input, hhmm) : '';
-    var opts = combo.querySelectorAll('.ins-combo-option');
-    for (var i = 0; i < opts.length; i++) opts[i].setAttribute('aria-selected', String(opts[i].getAttribute('data-value') === hhmm));
+    var drum = timeFor === input && timeEl && timeEl.querySelector('.ins-drum');
+    if (drum && hhmm && drum._value !== hhmm) drumSet(drum, hhmm, true);
     if (!quiet && changed) { fire(input, 'change'); emit('ins:time', { input: input, value: hidden.value }); }
   }
 
@@ -2375,16 +2513,200 @@
     else input.setCustomValidity(strings(input).badTime);
   }
 
-  /* An empty time list opens scrolled to the hour it is now, without choosing it. */
-  function timeNear(combo) {
-    var list = combo.querySelector('.ins-combo-list'), now = new Date();
-    var at = now.getHours() * 60 + now.getMinutes(), best = null, gap = Infinity;
-    var opts = list.querySelectorAll('.ins-combo-option:not([hidden])');
-    for (var i = 0; i < opts.length; i++) {
-      var d = Math.abs(minutesOf(opts[i].getAttribute('data-value')) - at);
-      if (d < gap) { gap = d; best = opts[i]; }
+  /* ----------------------------------------------------------------- drum */
+  /* Hour, minute and period wheels that snap under a lens; each wheel is a spinbutton. */
+  function hour12(input) {
+    try {
+      var o = dateFormat(langOf(input), { hour: 'numeric' }).resolvedOptions();
+      return o.hourCycle ? o.hourCycle === 'h11' || o.hourCycle === 'h12' : !!o.hour12;
+    } catch (e) { return true; }
+  }
+
+  function periodNames(input) {
+    var f = dateFormat(langOf(input), { hour: 'numeric', hour12: true }), out = [];
+    for (var i = 0; i < 2; i++) {
+      var parts = f.formatToParts ? f.formatToParts(new Date(2000, 0, 1, i ? 21 : 9)) : [], name = '';
+      for (var j = 0; j < parts.length; j++) if (parts[j].type === 'dayPeriod') name = parts[j].value;
+      out.push(name || (i ? 'PM' : 'AM'));
     }
-    if (best) list.scrollTop = best.offsetTop - list.clientHeight / 3;
+    return out;
+  }
+
+  function drumCol(kind, label, items) {
+    var col = el('div', 'ins-drum-col ins-drum-col--' + kind);
+    col.tabIndex = 0;
+    col.setAttribute('role', 'spinbutton');
+    col.setAttribute('aria-label', label);
+    col.setAttribute('aria-valuemin', '0');
+    col.setAttribute('aria-valuemax', String(items.length - 1));
+    for (var i = 0; i < items.length; i++) col.appendChild(el('div', 'ins-drum-item', items[i]));
+    return col;
+  }
+
+  function drumBuild(input, onPick) {
+    var t = strings(input), h12 = hour12(input), step = timeStep(input);
+    var hours = [], minutes = [], mins = [];
+    for (var h = 0; h < (h12 ? 12 : 24); h++) hours.push(h12 ? String(h || 12) : pad2(h));
+    for (var m = 0; m < 60; m += Math.min(step, 60)) { minutes.push(pad2(m)); mins.push(m); }
+    var drum = el('div', 'ins-drum');
+    var clock = el('div', 'ins-drum-clock');
+    clock.dir = 'ltr';
+    var hc = drumCol('hour', t.hour, hours), mc = drumCol('minute', t.minute, minutes);
+    clock.appendChild(hc);
+    clock.appendChild(el('span', 'ins-drum-sep', ':'));
+    clock.appendChild(mc);
+    drum.appendChild(clock);
+    drum._cols = [hc, mc];
+    if (h12) {
+      var pc = drumCol('period', t.period, periodNames(input));
+      drum.appendChild(pc);
+      drum._cols.push(pc);
+    }
+    drum._h12 = h12;
+    drum._mins = mins;
+    drum._pick = onPick;
+    drum._input = input;
+    drum._value = '';
+    drum._cols.forEach(function (col) {
+      col.addEventListener('scroll', function () {
+        drumPaint(col);
+        clearTimeout(col._settle);
+        col._settle = setTimeout(function () { drumSettle(drum); }, 110);
+      }, { passive: true });
+    });
+    drum.addEventListener('click', function (event) {
+      var item = event.target.closest ? event.target.closest('.ins-drum-item') : null;
+      if (!item) return;
+      var col = item.parentNode;
+      drumGo(col, Array.prototype.indexOf.call(col.children, item));
+      col.focus({ preventScroll: true });
+    });
+    drum.addEventListener('keydown', function (event) {
+      var col = event.target.closest ? event.target.closest('.ins-drum-col') : null;
+      if (!col) return;
+      var i = drumIndex(col), n = col.children.length, to;
+      switch (event.key) {
+        case 'ArrowUp': to = i - 1; break;
+        case 'ArrowDown': to = i + 1; break;
+        case 'PageUp': to = i - 5; break;
+        case 'PageDown': to = i + 5; break;
+        case 'Home': to = 0; break;
+        case 'End': to = n - 1; break;
+        default: return;
+      }
+      event.preventDefault();
+      drumGo(col, Math.max(0, Math.min(n - 1, to)));
+    });
+    return drum;
+  }
+
+  function drumRow(col) { return (col.firstChild && col.firstChild.offsetHeight) || 36; }
+  function drumIndex(col) { return Math.max(0, Math.min(col.children.length - 1, Math.round(col.scrollTop / drumRow(col)))); }
+
+  function drumGo(col, i) {
+    col.scrollTo({ top: i * drumRow(col), behavior: motionless() ? 'auto' : 'smooth' });
+  }
+
+  function drumPaint(col) {
+    var row = drumRow(col), mid = col.scrollTop / row, items = col.children;
+    for (var i = 0; i < items.length; i++) {
+      var d = i - mid, a = Math.min(Math.abs(d), 3), st = items[i].style;
+      if (Math.abs(d) > 4) { st.opacity = '0'; continue; }
+      st.transform = 'rotateX(' + (-d * 22).toFixed(1) + 'deg) scale(' + (1 - a * .1).toFixed(3) + ')';
+      st.opacity = String(1 - a * .3);
+      items[i].classList.toggle('is-on', Math.abs(d) < .5);
+    }
+  }
+
+  function drumRead(drum) {
+    var c = drum._cols, h = drumIndex(c[0]), m = drum._mins[drumIndex(c[1])];
+    if (drum._h12) h += c[2] && drumIndex(c[2]) ? 12 : 0;
+    return pad2(h) + ':' + pad2(m);
+  }
+
+  function drumAria(drum) {
+    drum._cols.forEach(function (col) {
+      var i = drumIndex(col);
+      col.setAttribute('aria-valuenow', String(i));
+      col.setAttribute('aria-valuetext', col.children[i] ? col.children[i].textContent : '');
+    });
+  }
+
+  function drumSettle(drum) {
+    var v = drumRead(drum), input = drum._input;
+    var lo = input.getAttribute('data-ins-min'), hi = input.getAttribute('data-ins-max');
+    if (lo && lo.length === 5 && minutesOf(v) < minutesOf(lo)) { drumSet(drum, lo, true); v = lo; }
+    else if (hi && hi.length === 5 && minutesOf(v) > minutesOf(hi)) { drumSet(drum, hi, true); v = hi; }
+    drumAria(drum);
+    if (v === drum._value) return;
+    drum._value = v;
+    drum._pick(v);
+  }
+
+  function drumSet(drum, hhmm, smooth) {
+    var p = hhmm.split(':'), h = +p[0], m = +p[1], mi = 0;
+    for (var k = 0; k < drum._mins.length; k++) if (drum._mins[k] <= m) mi = k;
+    var idx = drum._h12 ? [h % 12, mi, h >= 12 ? 1 : 0] : [h, mi];
+    drum._value = pad2(h) + ':' + pad2(drum._mins[mi]);
+    drum._cols.forEach(function (col, k) {
+      if (smooth) drumGo(col, idx[k]);
+      else { col.scrollTop = idx[k] * drumRow(col); drumPaint(col); }
+    });
+    drumAria(drum);
+  }
+
+  /* The time field's own popover, one for the page. */
+  var timeEl = null, timeFor = null;
+
+  function timeLayer() {
+    if (timeEl) return timeEl;
+    timeEl = el('div', 'ins-time-pop');
+    timeEl.setAttribute('role', 'dialog');
+    if (hasPopover) timeEl.setAttribute('popover', 'manual');
+    else timeEl.hidden = true;
+    timeEl.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' || event.key === 'Enter') { event.preventDefault(); closeTime(true); }
+    });
+    document.body.appendChild(timeEl);
+    return timeEl;
+  }
+
+  function openTime(input, focusDrum) {
+    if (timeFor === input) { if (focusDrum) timeEl.querySelector('.ins-drum-col').focus(); return; }
+    if (timeFor) closeTime(false);
+    if (calFor) closeCal(false);
+    timeFor = input;
+    var pop = timeLayer(), hidden = timeHidden(input);
+    pop.textContent = '';
+    pop.dir = window.getComputedStyle(input).direction;
+    pop.setAttribute('lang', langOf(input));
+    pop.setAttribute('aria-label', strings(input).chooseTime);
+    var drum = drumBuild(input, function (v) { if (timeFor) setTime(timeFor, v); });
+    pop.appendChild(drum);
+    if (hasPopover) {
+      try { if (!pop.matches(':popover-open')) pop.showPopover(); } catch (e) { /* not connected */ }
+    } else {
+      pop.hidden = false;
+      pop.classList.add('is-open');
+    }
+    placeNear(pop, input);
+    drumSet(drum, (hidden && hidden.value) || timeDefault(input));
+    input.setAttribute('aria-expanded', 'true');
+    if (focusDrum) drum._cols[0].focus();
+  }
+
+  function closeTime(refocus) {
+    if (!timeEl || !timeFor) return;
+    var input = timeFor;
+    timeFor = null;
+    if (hasPopover) {
+      try { timeEl.hidePopover(); } catch (e) { /* already hidden */ }
+    } else {
+      timeEl.classList.remove('is-open');
+      timeEl.hidden = true;
+    }
+    input.setAttribute('aria-expanded', 'false');
+    if (refocus) input.focus();
   }
 
   /* A date and a time sent together, where the group asks: `data-ins-datetime`. */
@@ -3249,8 +3571,10 @@
     if (onTagsKey(event)) return;
     onComboKey(event);
     var t = event.target;
-    if (event.key === 'Enter' && t.hasAttribute && t.hasAttribute('data-ins-time-ready') && !event.defaultPrevented) {
-      commitTime(t);
+    if (t.hasAttribute && t.hasAttribute('data-ins-time-ready') && !event.defaultPrevented) {
+      if (event.key === 'Enter') { commitTime(t); closeTime(false); }
+      else if (event.key === 'ArrowDown') { event.preventDefault(); openTime(t, true); }
+      else if (event.key === 'Escape' && timeFor === t) { event.preventDefault(); closeTime(false); }
       return;
     }
     if (!t.hasAttribute || !t.hasAttribute('data-ins-date-ready')) return;
@@ -3279,6 +3603,7 @@
       return;
     }
     if (t.hasAttribute && t.hasAttribute('data-ins-date-ready') && calFor !== t) openCal(t, false);
+    if (t.hasAttribute && t.hasAttribute('data-ins-time-ready')) openTime(t, false);
   }, false);
 
   /* A press on the list must not take focus from the field, or the field's blur
@@ -3291,7 +3616,8 @@
     var t = event.target, to = event.relatedTarget;
     var combo = t.closest && t.closest(COMBO);
     if (combo && (!to || !combo.contains(to))) comboOpen(combo, false);
-    if (t.hasAttribute && t.hasAttribute('data-ins-time-ready') && !(to && combo && combo.contains(to))) commitTime(t);
+    if (t.hasAttribute && t.hasAttribute('data-ins-time-ready') && !(to && timeEl && timeEl.contains(to))) commitTime(t);
+    if (timeFor && timeEl && (t === timeFor || timeEl.contains(t)) && !(to && (to === timeFor || timeEl.contains(to)))) closeTime(false);
     /* A date field reads what was typed as focus leaves it — unless it is leaving
        for its own calendar, which will set the value itself. */
     if (t.hasAttribute && t.hasAttribute('data-ins-date-ready') && !(to && calEl && calEl.contains(to))) commitTyped(t);
@@ -3300,15 +3626,19 @@
 
   /* A press anywhere outside the calendar, its field and its button closes it. */
   document.addEventListener('pointerdown', function (event) {
-    if (!calFor || !calEl) return;
     var t = event.target;
+    if (timeFor && !timeEl.contains(t) && t !== timeFor) closeTime(false);
+    if (!calFor || !calEl) return;
     if (calEl.contains(t) || t === calFor || calButton(calFor) === t || (calButton(calFor) && calButton(calFor).contains(t))) return;
     closeCal(false);
   }, true);
 
   /* It is fixed to the viewport, so it follows its field as the page moves. */
-  window.addEventListener('scroll', function () { if (calFor) placeCal(); }, true);
-  window.addEventListener('resize', function () { if (calFor) placeCal(); }, false);
+  window.addEventListener('scroll', function (event) {
+    if (calFor && !(calEl.contains(event.target))) placeCal();
+    if (timeFor && !(timeEl.contains(event.target))) placeNear(timeEl, timeFor);
+  }, true);
+  window.addEventListener('resize', function () { if (calFor) placeCal(); if (timeFor) placeNear(timeEl, timeFor); }, false);
 
   /* A form reset puts the native values back, and neither a slider's fill nor a date
      field's text is a native value — so they are redrawn once the reset has run. */
@@ -3318,7 +3648,10 @@
       var ranges = form.querySelectorAll('.ins-range');
       for (var i = 0; i < ranges.length; i++) rangeFill(ranges[i]);
       var dates = form.querySelectorAll('[data-ins-date-ready]');
-      for (var j = 0; j < dates.length; j++) setDate(dates[j], dateOf(dates[j]), true);
+      for (var j = 0; j < dates.length; j++) {
+        dates[j].removeAttribute('data-ins-at');
+        setDate(dates[j], dateOf(dates[j]), true);
+      }
       var counted = form.querySelectorAll('[data-ins-count]');
       for (var k = 0; k < counted.length; k++) countSync(counted[k]);
     }, 0);
@@ -3755,23 +4088,18 @@
       var step = Math.max(1, Math.round((parseFloat(input.getAttribute('step')) || 1800) / 60));
       var lo = parseTime(input.getAttribute('min') || '') || '00:00';
       var hi = parseTime(input.getAttribute('max') || '') || '23:59';
-      var combo = el('div', 'ins-combo ins-time');
-      input.parentNode.insertBefore(combo, input);
-      combo.appendChild(input);
+      var box = el('div', 'ins-time');
+      input.parentNode.insertBefore(box, input);
+      box.appendChild(input);
       var hidden = el('input');
       hidden.type = 'hidden';
       if (input.name) { hidden.name = input.name; input.removeAttribute('name'); }
       hidden.setAttribute('value', value);
       hidden.value = value;
-      combo.appendChild(hidden);
-      var list = el('ul', 'ins-combo-list');
-      for (var m = minutesOf(lo); m <= minutesOf(hi); m += step) {
-        var hhmm = pad2(Math.floor(m / 60)) + ':' + pad2(m % 60);
-        var opt = el('li', 'ins-combo-option', formatTime(input, hhmm));
-        opt.setAttribute('data-value', hhmm);
-        list.appendChild(opt);
-      }
-      combo.appendChild(list);
+      box.appendChild(hidden);
+      input.setAttribute('data-ins-step', String(step));
+      input.setAttribute('aria-haspopup', 'dialog');
+      input.setAttribute('aria-expanded', 'false');
       if (input.hasAttribute('min')) input.setAttribute('data-ins-min', lo);
       if (input.hasAttribute('max')) input.setAttribute('data-ins-max', hi);
       input.removeAttribute('min');
@@ -3854,24 +4182,46 @@
     var nodes = scope.querySelectorAll('input[data-ins-date]:not([data-ins-date-ready])');
     for (var i = 0; i < nodes.length; i++) {
       var input = nodes[i];
-      var value = input.value || input.getAttribute('value') || '';
+      var mode = input.type === 'datetime-local' ? 'datetime' : (input.hasAttribute('data-ins-date-range') ? 'range' : '');
+      var raw = input.value || input.getAttribute('value') || '';
+      var value = mode === 'datetime'
+        ? (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(raw) && parseIso(raw.slice(0, 10)) ? raw.slice(0, 16) : '')
+        : (parseIso(raw) ? raw : '');
       var hidden = document.createElement('input');
       hidden.type = 'hidden';
       hidden.id = uid('ins-date-value');
       if (input.name) { hidden.name = input.name; input.removeAttribute('name'); }
-      hidden.setAttribute('value', parseIso(value) ? value : '');
-      hidden.value = parseIso(value) ? value : '';
+      hidden.setAttribute('value', value);
+      hidden.value = value;
       input.parentNode.insertBefore(hidden, input.nextSibling);
+      if (mode === 'range') {
+        var endH = document.createElement('input');
+        var endV = input.getAttribute('data-ins-date-to') || '';
+        endV = parseIso(endV) ? endV : '';
+        endH.type = 'hidden';
+        endH.id = uid('ins-date-end');
+        endH.name = input.getAttribute('data-ins-date-range');
+        endH.setAttribute('value', endV);
+        endH.value = endV;
+        input.parentNode.insertBefore(endH, hidden.nextSibling);
+        input.setAttribute('data-ins-date-end-value', '#' + endH.id);
+      }
+      if (mode === 'datetime') {
+        var secs = parseFloat(input.getAttribute('step'));
+        input.setAttribute('data-ins-step', String(secs ? Math.max(1, Math.round(secs / 60)) : 5));
+        input.removeAttribute('step');
+      }
+      if (mode) input.setAttribute('data-ins-date-mode', mode);
 
-      if (input.min) input.setAttribute('data-ins-min', input.min);
-      if (input.max) input.setAttribute('data-ins-max', input.max);
+      if (input.min) input.setAttribute('data-ins-min', input.min.slice(0, 10));
+      if (input.max) input.setAttribute('data-ins-max', input.max.slice(0, 10));
       input.removeAttribute('min');
       input.removeAttribute('max');
       input.type = 'text';
       input.setAttribute('autocomplete', 'off');
       input.setAttribute('data-ins-date-value', '#' + hidden.id);
       input.setAttribute('data-ins-date-ready', '');
-      setDate(input, parseIso(hidden.value), true);
+      setDate(input, parseIso(hidden.value.slice(0, 10)), true);
       input.setCustomValidity('');
 
       var group = input.closest('.ins-input-group');

@@ -37,28 +37,24 @@
 </demo-example>
 
 <h3 id="date-range">مدى تاريخين</h3>
-<p><code>data-ins-date-end</code> على الأوّل و<code>data-ins-date-start</code> على الثاني يربطانهما: لا يمكن أن تنتهي الفترة قبل أن تبدأ.</p>
+<p>
+  حقل واحد: <code>data-ins-date-range="to"</code> يعطي النهاية اسمها، و<code>data-ins-date-to</code> قيمتها الأولى.
+  النقرة الأولى في التقويم البداية والثانية النهاية، والشريط بينهما يتبع المؤشّر. ويصل الخادمَ <code>from</code> و<code>to</code>.
+</p>
 <demo-example>
-  <div class="ins-field-row">
-    <div class="ins-field ins-grow">
-      <label class="ins-label" for="p-from">من</label>
-      <div class="ins-input-group">
-        <input class="ins-input" id="p-from" type="date" data-ins-date data-ins-date-end="#p-to" name="from" value="2026-09-01">
-      </div>
-    </div>
-    <div class="ins-field ins-grow">
-      <label class="ins-label" for="p-to">إلى</label>
-      <div class="ins-input-group">
-        <input class="ins-input" id="p-to" type="date" data-ins-date data-ins-date-start="#p-from" name="to" value="2026-09-23">
-      </div>
+  <div class="ins-field">
+    <label class="ins-label" for="p-span">الفترة</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="p-span" type="date" data-ins-date data-ins-date-range="to" name="from" value="2026-09-16" data-ins-date-to="2026-09-23">
     </div>
   </div>
 </demo-example>
 
 <h2 id="time">الوقت</h2>
 <p>
-  <code>data-ins-time</code> على <code>&lt;input type="time"&gt;</code> يعرض الوقت كما تكتبه لغة الصفحة، وتحته قائمة أوقات كلّ
-  <code>step</code> ثانية (نصف ساعة إن لم يُذكر) بين <code>min</code> و<code>max</code>. والكتابة تعمل أيضًا: «14:30» و«2:30 م».
+  <code>data-ins-time</code> على <code>&lt;input type="time"&gt;</code> يعرض الوقت كما تكتبه لغة الصفحة، وتحته أسطوانات للساعة
+  والدقيقة والفترة، تقفز الدقائق فيها كلّ <code>step</code> ثانية (نصف ساعة إن لم يُذكر) بين <code>min</code> و<code>max</code>.
+  والكتابة تعمل أيضًا: «14:30» و«2:30 م».
   ويصل الخادمَ <code>HH:MM</code> باسم الحقل كما كان سيصله من الحقل الأصلي.
 </p>
 <demo-example>
@@ -70,15 +66,14 @@
 
 <h3 id="datetime">تاريخ ووقت معًا</h3>
 <p>
-  التاريخ والوقت في <code>.ins-input-group</code> واحد. و<code>data-ins-datetime="when"</code> على المجموعة يرسلهما معًا أيضًا
-  باسم واحد: <code>2026-09-26T14:30</code>.
+  <code>&lt;input type="datetime-local" data-ins-date&gt;</code> حقل واحد، والتقويم يفتح والأسطوانات بجانبه.
+  ويصل الخادمَ <code>2026-09-26T14:30</code> باسم الحقل.
 </p>
 <demo-example>
   <div class="ins-field">
     <label class="ins-label" for="p-when">الموعد</label>
-    <div class="ins-input-group" data-ins-datetime="when">
-      <input class="ins-input" id="p-when" type="date" data-ins-date name="day" value="2026-09-26">
-      <input class="ins-input" type="time" data-ins-time name="time" value="14:30" aria-label="الوقت">
+    <div class="ins-input-group">
+      <input class="ins-input" id="p-when" type="datetime-local" data-ins-date name="when" value="2026-09-26T14:30" step="900">
     </div>
   </div>
 </demo-example>

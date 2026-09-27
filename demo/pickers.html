@@ -316,41 +316,29 @@
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h3 id="date-range">مدى تاريخين</h3>
-<p><code>data-ins-date-end</code> على الأوّل و<code>data-ins-date-start</code> على الثاني يربطانهما: لا يمكن أن تنتهي الفترة قبل أن تبدأ.</p>
+<p>
+  حقل واحد: <code>data-ins-date-range="to"</code> يعطي النهاية اسمها، و<code>data-ins-date-to</code> قيمتها الأولى.
+  النقرة الأولى في التقويم البداية والثانية النهاية، والشريط بينهما يتبع المؤشّر. ويصل الخادمَ <code>from</code> و<code>to</code>.
+</p>
 <figure class="dx"><div class="dx-view">
-  <div class="ins-field-row">
-    <div class="ins-field ins-grow">
-      <label class="ins-label" for="p-from">من</label>
-      <div class="ins-input-group">
-        <input class="ins-input" id="p-from" type="date" data-ins-date data-ins-date-end="#p-to" name="from" value="2026-09-01">
-      </div>
-    </div>
-    <div class="ins-field ins-grow">
-      <label class="ins-label" for="p-to">إلى</label>
-      <div class="ins-input-group">
-        <input class="ins-input" id="p-to" type="date" data-ins-date data-ins-date-start="#p-from" name="to" value="2026-09-23">
-      </div>
+  <div class="ins-field">
+    <label class="ins-label" for="p-span">الفترة</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="p-span" type="date" data-ins-date data-ins-date-range="to" name="from" value="2026-09-16" data-ins-date-to="2026-09-23">
     </div>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field-row"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-from"</span><span class="hl-t">&gt;</span>من<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-from"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">data-ins-date-end</span>=<span class="hl-s">"#p-to"</span> <span class="hl-a">name</span>=<span class="hl-s">"from"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-01"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-to"</span><span class="hl-t">&gt;</span>إلى<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-to"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">data-ins-date-start</span>=<span class="hl-s">"#p-from"</span> <span class="hl-a">name</span>=<span class="hl-s">"to"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-23"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-span"</span><span class="hl-t">&gt;</span>الفترة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-span"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">data-ins-date-range</span>=<span class="hl-s">"to"</span> <span class="hl-a">name</span>=<span class="hl-s">"from"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-16"</span> <span class="hl-a">data-ins-date-to</span>=<span class="hl-s">"2026-09-23"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="time">الوقت</h2>
 <p>
-  <code>data-ins-time</code> على <code>&lt;input type="time"&gt;</code> يعرض الوقت كما تكتبه لغة الصفحة، وتحته قائمة أوقات كلّ
-  <code>step</code> ثانية (نصف ساعة إن لم يُذكر) بين <code>min</code> و<code>max</code>. والكتابة تعمل أيضًا: «14:30» و«2:30 م».
+  <code>data-ins-time</code> على <code>&lt;input type="time"&gt;</code> يعرض الوقت كما تكتبه لغة الصفحة، وتحته أسطوانات للساعة
+  والدقيقة والفترة، تقفز الدقائق فيها كلّ <code>step</code> ثانية (نصف ساعة إن لم يُذكر) بين <code>min</code> و<code>max</code>.
+  والكتابة تعمل أيضًا: «14:30» و«2:30 م».
   ويصل الخادمَ <code>HH:MM</code> باسم الحقل كما كان سيصله من الحقل الأصلي.
 </p>
 <figure class="dx"><div class="dx-view">
@@ -365,22 +353,20 @@
 
 <h3 id="datetime">تاريخ ووقت معًا</h3>
 <p>
-  التاريخ والوقت في <code>.ins-input-group</code> واحد. و<code>data-ins-datetime="when"</code> على المجموعة يرسلهما معًا أيضًا
-  باسم واحد: <code>2026-09-26T14:30</code>.
+  <code>&lt;input type="datetime-local" data-ins-date&gt;</code> حقل واحد، والتقويم يفتح والأسطوانات بجانبه.
+  ويصل الخادمَ <code>2026-09-26T14:30</code> باسم الحقل.
 </p>
 <figure class="dx"><div class="dx-view">
   <div class="ins-field">
     <label class="ins-label" for="p-when">الموعد</label>
-    <div class="ins-input-group" data-ins-datetime="when">
-      <input class="ins-input" id="p-when" type="date" data-ins-date name="day" value="2026-09-26">
-      <input class="ins-input" type="time" data-ins-time name="time" value="14:30" aria-label="الوقت">
+    <div class="ins-input-group">
+      <input class="ins-input" id="p-when" type="datetime-local" data-ins-date name="when" value="2026-09-26T14:30" step="900">
     </div>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-when"</span><span class="hl-t">&gt;</span>الموعد<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span> <span class="hl-a">data-ins-datetime</span>=<span class="hl-s">"when"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-when"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">name</span>=<span class="hl-s">"day"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-26"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"time"</span> <span class="hl-a">data-ins-time</span> <span class="hl-a">name</span>=<span class="hl-s">"time"</span> <span class="hl-a">value</span>=<span class="hl-s">"14:30"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الوقت"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-when"</span> <span class="hl-a">type</span>=<span class="hl-s">"datetime-local"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">name</span>=<span class="hl-s">"when"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-26T14:30"</span> <span class="hl-a">step</span>=<span class="hl-s">"900"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 

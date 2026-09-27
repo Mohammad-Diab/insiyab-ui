@@ -1145,15 +1145,14 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 }
 [dir="ltr"] .ins-time > .ins-input { background-position: right .875rem center; }
 [dir="rtl"] .ins-time > .ins-input { background-position: left .875rem center; }
-.ins-time .ins-combo-list { min-inline-size: 9rem; }
 
 /* A date and a time in one field: both inside one `.ins-input-group`, the time after
    a hairline. `data-ins-datetime="when"` on the group also sends them together, as
    `2026-09-26T14:30`, under that name. */
-.ins-input-group > .ins-combo { flex: 0 1 9rem; align-self: stretch; display: flex; align-items: center; border-inline-start: 1px solid var(--ins-line); }
-.ins-input-group > .ins-combo > .ins-input,
-.ins-input-group > .ins-combo > .ins-input:focus,
-.ins-input-group > .ins-combo > .ins-input:hover:not(:disabled):not(:focus) {
+.ins-input-group > .ins-time { flex: 0 1 9rem; align-self: stretch; display: flex; align-items: center; border-inline-start: 1px solid var(--ins-line); }
+.ins-input-group > .ins-time > .ins-input,
+.ins-input-group > .ins-time > .ins-input:focus,
+.ins-input-group > .ins-time > .ins-input:hover:not(:disabled):not(:focus) {
   min-block-size: calc(var(--ins-field-h) - 2px);
   padding-inline: .75rem 2.25rem;
   border: 0;
