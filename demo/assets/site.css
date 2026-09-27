@@ -321,14 +321,6 @@
 .site-dir { inline-size: 100%; margin: 0 .25rem .5rem; inline-size: calc(100% - .5rem); }
 .site-dir > button { flex: 1; }
 
-.site-theme-sun { display: none; }
-:root[data-ins-theme="dark"] .site-theme-sun { display: block; }
-:root[data-ins-theme="dark"] .site-theme-moon { display: none; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-ins-theme="light"]) .site-theme-sun { display: block; }
-  :root:not([data-ins-theme="light"]) .site-theme-moon { display: none; }
-}
-
 /* --------------------------------------------------------------- helpers used by examples */
 .demo-box {
   padding: .75rem;

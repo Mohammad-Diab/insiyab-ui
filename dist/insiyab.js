@@ -199,9 +199,20 @@
     }
     if (next === 'system') drop(KEY_THEME); else write(KEY_THEME, next);
     stampTheme(next);
+    pressToggles(document);
     emit('ins:theme', { theme: effectiveTheme(), mode: next });
     return effectiveTheme();
   }
+
+  function pressToggles(scope) {
+    var dark = effectiveTheme() === 'dark';
+    var nodes = scope.querySelectorAll('[data-ins-theme-toggle=""], [data-ins-theme-toggle]:not([data-ins-theme-toggle="dark"]):not([data-ins-theme-toggle="light"]):not([data-ins-theme-toggle="system"])');
+    for (var i = 0; i < nodes.length; i++) nodes[i].setAttribute('aria-pressed', String(dark));
+  }
+
+  var DAYNIGHT = '<span class="ins-dn-sky" aria-hidden="true">' +
+    '<span class="ins-dn-star"></span><span class="ins-dn-star"></span><span class="ins-dn-star"></span>' +
+    '<span class="ins-dn-cloud"></span><span class="ins-dn-orb"></span></span>';
 
   function toggleTheme() {
     return theme(effectiveTheme() === 'dark' ? 'light' : 'dark');
@@ -624,6 +635,7 @@
       var onChange = function () {
         if (read(KEY_THEME)) return;              /* an explicit choice wins */
         if (brandCurrent) brand(brandCurrent);    /* re-derive for the new ground */
+        pressToggles(document);
         emit('ins:theme', { theme: effectiveTheme(), mode: 'system' });
       };
       if (mq.addEventListener) mq.addEventListener('change', onChange);
@@ -2740,14 +2752,10 @@
     if (el.hasAttribute('data-ins-theme-toggle')) {
       /* An explicit value sets that theme; a bare attribute toggles. */
       var want = el.getAttribute('data-ins-theme-toggle');
-      var pressed = el;
       /* The switch itself is where the circle starts, so the page changes from the
          point of contact rather than from an arbitrary corner. */
       sweep(el, function () {
-        var now = want ? theme(want) : toggleTheme();
-        /* Only a real toggle carries pressed state; a set-to-dark button is not a
-           two-state control and must not claim to be one. */
-        if (!want) pressed.setAttribute('aria-pressed', String(now === 'dark'));
+        if (want) theme(want); else toggleTheme();
       });
       if (el.tagName === 'A') event.preventDefault();
       return;
@@ -3452,9 +3460,14 @@
   /* Give every bare toggle its initial pressed state, so a screen reader is not
      told the page is in light mode when it is in dark. */
   define('theme-toggle-state', function (scope) {
-    var dark = effectiveTheme() === 'dark';
-    var nodes = scope.querySelectorAll('[data-ins-theme-toggle=""], [data-ins-theme-toggle]:not([data-ins-theme-toggle="dark"]):not([data-ins-theme-toggle="light"]):not([data-ins-theme-toggle="system"])');
-    for (var i = 0; i < nodes.length; i++) nodes[i].setAttribute('aria-pressed', String(dark));
+    pressToggles(scope);
+    var skies = scope.querySelectorAll('.ins-daynight');
+    for (var i = 0; i < skies.length; i++) {
+      if (skies[i].querySelector('.ins-dn-sky')) continue;
+      skies[i].insertAdjacentHTML('beforeend', DAYNIGHT);
+    }
+  });
+
   });
 
   /* Tabs: every role and relationship the pattern needs, written once from the
