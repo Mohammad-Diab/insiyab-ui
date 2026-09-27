@@ -3779,14 +3779,21 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
   box-shadow: var(--ins-bevel-dim);
   cursor: pointer;
   position: relative;
-  transition: background var(--ins-t-pop) var(--ins-ease),
-              border-color var(--ins-t-pop) var(--ins-ease);
+  transition: border-color var(--ins-t-pop) var(--ins-ease);
 }
 .ins-check > input[type="radio"] { border-radius: 50%; }
-.ins-check > input:checked {
+/* The fill fades on a layer: a gradient background cannot transition. */
+.ins-check > input::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
   background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
-  border-color: transparent;
+  opacity: 0;
+  transition: opacity var(--ins-t-pop) var(--ins-ease);
 }
+.ins-check > input:checked { border-color: transparent; }
+.ins-check > input:checked::before { opacity: 1; }
 /* The tick, drawn rather than imported, and scaled in on the overshoot easing —
    the same curve the switch thumb travels on, for the same reason. */
 .ins-check > input[type="checkbox"]::after {
@@ -3800,9 +3807,12 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
   border-width: 0 2px 2px 0;
   transform: rotate(45deg) scale(0);
   transform-origin: center;
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+.ins-check > input[type="checkbox"]:checked::after {
+  transform: rotate(45deg) scale(1);
   transition: transform .28s var(--ins-ease-spring);
 }
-.ins-check > input[type="checkbox"]:checked::after { transform: rotate(45deg) scale(1); }
 .ins-check > input[type="radio"]::after {
   content: "";
   position: absolute;
@@ -3813,9 +3823,12 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
   border-radius: 50%;
   background: var(--ins-on-primary);
   transform: scale(0);
+  transition: transform var(--ins-t-pop) var(--ins-ease);
+}
+.ins-check > input[type="radio"]:checked::after {
+  transform: scale(1);
   transition: transform .28s var(--ins-ease-spring);
 }
-.ins-check > input[type="radio"]:checked::after { transform: scale(1); }
 .ins-check > input:focus-visible { outline: 3px solid rgba(var(--ins-primary-rgb), .45); outline-offset: 2px; }
 .ins-check > input:disabled { opacity: .5; cursor: not-allowed; }
 .ins-check-text { font-size: .875rem; }
@@ -4281,10 +4294,8 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
    HTML attribute for it — it is a property only script can set — so
    `data-ins-indeterminate` on the input is the markup form, and insiyab.js turns it
    into the property. The tick becomes a bar, on the same fill. */
-.ins-check > input[type="checkbox"]:indeterminate {
-  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
-  border-color: transparent;
-}
+.ins-check > input[type="checkbox"]:indeterminate { border-color: transparent; }
+.ins-check > input[type="checkbox"]:indeterminate::before { opacity: 1; }
 .ins-check > input[type="checkbox"]:indeterminate::after {
   inset: 0;
   margin: auto;
