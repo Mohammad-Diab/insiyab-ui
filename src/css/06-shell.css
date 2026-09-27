@@ -364,6 +364,138 @@ html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
 }
 :root[data-ins-theme="dark"] .ins-island--icon { color: var(--ins-text-1); }
 
+/* ------------------------------------------------------ day / night switch */
+.ins-daynight {
+  padding-inline: .375rem;
+  -webkit-tap-highlight-color: transparent;
+}
+.ins-dn-sky {
+  --ins-dn-travel: 2.25rem;
+  --ins-dn-night: #1b2547;
+  position: relative;
+  display: block;
+  inline-size: 4.5rem;
+  block-size: 2.25rem;
+  border-radius: var(--ins-r-pill);
+  overflow: hidden;
+  background: linear-gradient(165deg, #8ecdf3 0%, #4f9fe0 100%);
+  box-shadow: inset 0 1px 3px rgba(15, 23, 42, .3), inset 0 -1px 0 rgba(255, 255, 255, .22);
+  transition: box-shadow var(--ins-t-base) var(--ins-ease);
+}
+.ins-dn-sky::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(165deg, #26325c 0%, #0f1730 100%);
+  opacity: 0;
+  transition: opacity var(--ins-t-base) var(--ins-ease);
+}
+.ins-daynight[aria-pressed="true"] .ins-dn-sky {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .5), inset 0 -1px 0 rgba(255, 255, 255, .07);
+}
+.ins-daynight[aria-pressed="true"] .ins-dn-sky::before { opacity: 1; }
+
+.ins-dn-star {
+  position: absolute;
+  inline-size: 3px;
+  block-size: 3px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  transform: scale(.2);
+  transition: opacity var(--ins-t-base) var(--ins-ease),
+              transform .4s var(--ins-ease-spring);
+}
+.ins-dn-star:nth-child(1) { inset-block-start: 8px;  inset-inline-start: 12px; }
+.ins-dn-star:nth-child(2) { inset-block-start: 17px; inset-inline-start: 21px; inline-size: 4px; block-size: 4px; }
+.ins-dn-star:nth-child(3) { inset-block-start: 26px; inset-inline-start: 10px; }
+.ins-daynight[aria-pressed="true"] .ins-dn-star { opacity: .92; transform: scale(1); }
+.ins-daynight[aria-pressed="true"] .ins-dn-star:nth-child(2) { transition-delay: .07s; }
+.ins-daynight[aria-pressed="true"] .ins-dn-star:nth-child(3) { transition-delay: .13s; }
+
+.ins-dn-cloud {
+  position: absolute;
+  inset-block-end: 6px;
+  inset-inline-end: 9px;
+  inline-size: 18px;
+  block-size: 8px;
+  border-radius: var(--ins-r-pill);
+  background: rgba(255, 255, 255, .92);
+  transition: opacity var(--ins-t-pop) var(--ins-ease),
+              transform .38s var(--ins-ease);
+}
+.ins-dn-cloud::before {
+  content: "";
+  position: absolute;
+  inset-block-end: 4px;
+  inset-inline-start: 4px;
+  inline-size: 9px;
+  block-size: 9px;
+  border-radius: 50%;
+  background: inherit;
+}
+.ins-daynight[aria-pressed="true"] .ins-dn-cloud { opacity: 0; transform: translateY(15px); }
+
+.ins-dn-orb {
+  position: absolute;
+  inset-block-start: 6px;
+  inset-inline-start: 6px;
+  inline-size: 24px;
+  block-size: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(circle at 34% 30%, #fff3c4 0%, #ffc94f 55%, #f5a623 100%);
+  box-shadow: 0 0 12px rgba(255, 178, 62, .8), 0 1px 4px rgba(15, 23, 42, .3);
+  transition: transform .42s var(--ins-ease-spring),
+              background var(--ins-t-base) var(--ins-ease),
+              box-shadow var(--ins-t-base) var(--ins-ease);
+}
+.ins-daynight[aria-pressed="true"] .ins-dn-orb {
+  background: radial-gradient(circle at 34% 30%, #ffffff 0%, #dde5f4 70%, #c3cee3 100%);
+  box-shadow: 0 0 12px rgba(198, 214, 255, .55), 0 1px 4px rgba(0, 0, 0, .45);
+}
+.ins-dn-orb::before {
+  content: "";
+  position: absolute;
+  inset-block-start: -4px;
+  inset-inline-end: -4px;
+  inline-size: 20px;
+  block-size: 20px;
+  border-radius: 50%;
+  background: var(--ins-dn-night);
+  transform: scale(0);
+  transition: transform .38s var(--ins-ease-spring);
+}
+.ins-daynight[aria-pressed="true"] .ins-dn-orb::before { transform: scale(1); }
+
+/* The rays live on the sky, not the orb, because the orb clips its crescent. */
+.ins-dn-sky::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 16px;
+  inset-inline-start: 16px;
+  inline-size: 4px;
+  block-size: 4px;
+  border-radius: 50%;
+  box-shadow:
+    15px 0 0 -.5px #ffd97a, 11px 11px 0 -.5px #ffd97a, 0 15px 0 -.5px #ffd97a,
+    -11px 11px 0 -.5px #ffd97a, -15px 0 0 -.5px #ffd97a, -11px -11px 0 -.5px #ffd97a,
+    0 -15px 0 -.5px #ffd97a, 11px -11px 0 -.5px #ffd97a;
+  transition: opacity var(--ins-t-pop) var(--ins-ease),
+              transform .42s var(--ins-ease);
+}
+.ins-daynight[aria-pressed="true"] .ins-dn-sky::after { opacity: 0; }
+
+/* A transform has no logical form, so the travel is mirrored by hand. */
+[dir="ltr"] .ins-daynight[aria-pressed="true"] .ins-dn-orb { transform: translateX(var(--ins-dn-travel)); }
+[dir="rtl"] .ins-daynight[aria-pressed="true"] .ins-dn-orb { transform: translateX(calc(var(--ins-dn-travel) * -1)); }
+[dir="ltr"] .ins-daynight[aria-pressed="true"] .ins-dn-sky::after {
+  transform: translateX(var(--ins-dn-travel)) rotate(75deg) scale(.35);
+}
+[dir="rtl"] .ins-daynight[aria-pressed="true"] .ins-dn-sky::after {
+  transform: translateX(calc(var(--ins-dn-travel) * -1)) rotate(-75deg) scale(.35);
+}
+
 /* Centre island: the page's name. Capped and ellipsised, because an Arabic page
    title is a phrase and the bar must not grow a second line to hold one. */
 .ins-island--title {
