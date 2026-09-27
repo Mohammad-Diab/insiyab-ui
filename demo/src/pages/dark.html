@@ -52,13 +52,15 @@ document.addEventListener('ins:theme', (e) => {
 </demo-code>
 
 <script>
-  (function () {
-    var out = document.getElementById('theme-state');
-    function show() {
-      var set = document.documentElement.getAttribute('data-ins-theme');
-      out.textContent = 'الآن: ' + (Insiyab.theme() === 'dark' ? 'داكن' : 'فاتح') + ' — ' + (set ? 'باختيار صريح محفوظ' : 'يتبع النظام');
-    }
-    document.addEventListener('ins:theme', show);
-    show();
-  })();
+  document.addEventListener('DOMContentLoaded', function () {
+    (function () {
+      var out = document.getElementById('theme-state');
+      function show() {
+        var set = document.documentElement.getAttribute('data-ins-theme');
+        out.textContent = 'الآن: ' + (Insiyab.theme() === 'dark' ? 'داكن' : 'فاتح') + ' — ' + (set ? 'باختيار صريح محفوظ' : 'يتبع النظام');
+      }
+      document.addEventListener('ins:theme', show);
+      show();
+    })();
+  });
 </script>

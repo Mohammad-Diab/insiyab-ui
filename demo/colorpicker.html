@@ -7,22 +7,23 @@
   <title>منتقي الألوان · انسياب</title>
   <meta name="description" content="حقل لون بمنتقٍ كامل، يقول قبل الحفظ هل يصلح اللون لنصّ: تباينه على الأبيض وعلى الأسود.">
 
-  <!-- The library: two tags, and nothing else of it is needed. -->
+  <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
-  <script src="../dist/insiyab.js"></script>
+  <script src="../dist/insiyab-boot.js"></script>
+  <script src="../dist/insiyab.js" defer></script>
 
   <!-- One plugin, the command palette: the search below is built by it. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-palette.css">
-  <script src="../dist/plugins/insiyab-palette.js"></script>
+  <script src="../dist/plugins/insiyab-palette.js" defer></script>
 
   <!-- And the scrollspy plugin, for each page's contents list. -->
   <link rel="stylesheet" href="../dist/plugins/insiyab-scrollspy.css">
-  <script src="../dist/plugins/insiyab-scrollspy.js"></script>
+  <script src="../dist/plugins/insiyab-scrollspy.js" defer></script>
 
   <!-- The documentation site's own furniture — code listings, the pager.
        Nothing in it is part of the library. -->
   <link rel="stylesheet" href="assets/site.css">
-  <script src="assets/site.js"></script>
+  <script src="assets/site.js" defer></script>
 </head>
 <body class="site-doc" data-page="colorpicker">
 
@@ -266,13 +267,14 @@
         <div class="site-body">
         <p class="site-lead">حقل لون بمنتقٍ كامل، يقول قبل الحفظ هل يصلح اللون لنصّ: تباينه على الأبيض وعلى الأسود.</p>
         <link rel="stylesheet" href="../dist/plugins/insiyab-color.css">
-<script src="../dist/plugins/insiyab-color.js"></script>
+<script src="../dist/plugins/insiyab-color.js" defer></script>
 
 <h2 id="install">التثبيت</h2>
 <p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
 <div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/plugins/insiyab-color.css"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-color.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab-boot.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-color.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
 
 <h2 id="field">حقل اللون</h2>
 <p>
@@ -333,8 +335,10 @@
 </p>
 
 <script>
-  document.addEventListener('ins:color', function (e) {
-    if (e.detail.input.id === 'cp-brand') Insiyab.brand(e.detail.value);
+  document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('ins:color', function (e) {
+      if (e.detail.input.id === 'cp-brand') Insiyab.brand(e.detail.value);
+    });
   });
 </script>
         <nav class="site-pager" aria-label="التنقّل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="carousel.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">عرض الشرائح</span></a><a class="site-pager-link site-pager-link--next" href="reveal.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">حركات الدخول</span></a></nav>

@@ -17,18 +17,20 @@ with it.
 ## Loading the core
 
 The components need the stylesheet and the script on the page, as any Insiyab page
-does. Put them in `<head>`, so the theme is set before the first paint:
+does. Put them in `<head>`: the small boot script sets the theme before the first
+paint, and the rest is deferred, which still runs before the app's own module:
 
 ```html
 <link rel="stylesheet" href="/insiyab/insiyab.css">
-<script src="/insiyab/insiyab.js"></script>
+<script src="/insiyab/insiyab-boot.js"></script>
+<script src="/insiyab/insiyab.js" defer></script>
 <!-- and each plugin you use, after it -->
 <link rel="stylesheet" href="/insiyab/plugins/insiyab-phone.css">
-<script src="/insiyab/plugins/insiyab-phone.js"></script>
+<script src="/insiyab/plugins/insiyab-phone.js" defer></script>
 ```
 
-With a bundler you can import them instead, before the app renders. The page then
-flashes the light theme once on a dark-mode visit, which the `<head>` tag avoids:
+With a bundler you can import them instead, before the app renders. Keep the
+`insiyab-boot.js` tag in `<head>` then, or a dark-mode visit flashes the light theme once:
 
 ```js
 import 'insiyab/css';

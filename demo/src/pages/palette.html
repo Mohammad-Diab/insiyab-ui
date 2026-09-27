@@ -3,8 +3,9 @@
 <demo-code lang="html">
 <link rel="stylesheet" href="insiyab/insiyab.css">
 <link rel="stylesheet" href="insiyab/plugins/insiyab-palette.css">
-<script src="insiyab/insiyab.js"></script>
-<script src="insiyab/plugins/insiyab-palette.js"></script>
+<script src="insiyab/insiyab-boot.js"></script>
+<script src="insiyab/insiyab.js" defer></script>
+<script src="insiyab/plugins/insiyab-palette.js" defer></script>
 </demo-code>
 
 <h2 id="markup">لوحة من الوسوم</h2>
@@ -130,12 +131,14 @@ document.addEventListener('ins:palette', (e) => {
 </p>
 
 <script>
-  document.getElementById('pal-demo-add').addEventListener('click', function () {
-    var n = document.querySelectorAll('#pal-demo [data-ins-palette-key^="demo-"]').length + 1;
-    Insiyab.palette.add({
-      label: 'أمر ' + n, key: 'demo-' + n, group: 'من الشيفرة', keywords: 'added',
-      run: function () { Insiyab.toast('أمر ' + n, 'ok'); }
-    }, '#pal-demo');
-    Insiyab.palette('#pal-demo', 'open');
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('pal-demo-add').addEventListener('click', function () {
+      var n = document.querySelectorAll('#pal-demo [data-ins-palette-key^="demo-"]').length + 1;
+      Insiyab.palette.add({
+        label: 'أمر ' + n, key: 'demo-' + n, group: 'من الشيفرة', keywords: 'added',
+        run: function () { Insiyab.toast('أمر ' + n, 'ok'); }
+      }, '#pal-demo');
+      Insiyab.palette('#pal-demo', 'open');
+    });
   });
 </script>

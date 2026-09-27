@@ -192,14 +192,16 @@ document.addEventListener('ins:wizard', (e) => {
 </demo-code>
 
 <script>
-  document.getElementById('store-wizard').addEventListener('submit', function (e) {
-    e.preventDefault();
-    Insiyab.toast('تمّ الإرسال', 'ok');
-  });
-  document.getElementById('dialog-wizard').addEventListener('submit', function (e) {
-    e.preventDefault();
-    Insiyab.dialog('#wiz-dialog', 'close');
-    Insiyab.toast('تمّ الحفظ', 'ok');
-    Insiyab.wizard(this, 0);
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('store-wizard').addEventListener('submit', function (e) {
+      e.preventDefault();
+      Insiyab.toast('تمّ الإرسال', 'ok');
+    });
+    document.getElementById('dialog-wizard').addEventListener('submit', function (e) {
+      e.preventDefault();
+      Insiyab.dialog('#wiz-dialog', 'close');
+      Insiyab.toast('تمّ الحفظ', 'ok');
+      Insiyab.wizard(this, 0);
+    });
   });
 </script>

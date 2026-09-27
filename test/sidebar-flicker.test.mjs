@@ -9,7 +9,7 @@ const E = (js) => b.evaluate(js);
    with a long page: every demo page gets a parser-blocking script at the end of
    <body> that the server "takes" 700ms to send. Everything above it, the sidebar
    included, is parsed and paintable while the parser waits. And in "old" mode the
-   pre-paint hide is stripped out of insiyab.js as it is served, recreating the
+   pre-paint hide is stripped out of insiyab.js and insiyab-boot.js as they are served, recreating the
    flicker the user saw. */
 let OLD = false;
 b.on('Fetch.requestPaused', async (p) => {
@@ -25,7 +25,7 @@ b.on('Fetch.requestPaused', async (p) => {
       const r = await b.send('Fetch.getResponseBody', { requestId: p.requestId });
       let text = r.result.base64Encoded ? Buffer.from(r.result.body, 'base64').toString('utf8') : r.result.body;
       if (url.includes('/demo/') && url.split('?')[0].endsWith('.html')) text = text.replace('</body>', '<script src="/__slow.js"></script></body>');
-      if (url.includes('insiyab.js') && OLD) text = text.replace("root.classList.add('ins-nav-arriving');", '/* stripped */');
+      if (/insiyab(-boot)?\.js/.test(url) && OLD) text = text.replace("root.classList.add('ins-nav-arriving');", '/* stripped */');
       const headers = (p.responseHeaders || []).filter((h) => !/^content-length$/i.test(h.name));
       await b.send('Fetch.fulfillRequest', { requestId: p.requestId, responseCode: p.responseStatusCode, responseHeaders: headers, body: Buffer.from(text, 'utf8').toString('base64') });
       return;
@@ -37,7 +37,7 @@ await b.send('Network.setCacheDisabled', { cacheDisabled: true });
 await b.send('Network.enable');
 await b.send('Fetch.enable', { patterns: [
   { urlPattern: '*/demo/*.html*', requestStage: 'Response' },
-  { urlPattern: '*insiyab.js*', requestStage: 'Response' },
+  { urlPattern: '*insiyab*.js*', requestStage: 'Response' },
   { urlPattern: '*__slow.js*', requestStage: 'Request' },
 ] });
 
