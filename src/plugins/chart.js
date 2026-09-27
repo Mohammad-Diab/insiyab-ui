@@ -426,10 +426,12 @@
     draw(fig);
   }
 
-  Insiyab.define('charts', function (scope) {
+  function scan(scope) {
     var figs = scope.querySelectorAll('.ins-chart[data-ins-chart]');
     for (var i = 0; i < figs.length; i++) setup(figs[i]);
-  });
+  }
+  Insiyab.define('charts', scan);
+  if (document.readyState !== 'loading') scan(document);
 
   /* Draw from data: `{ type, labels, series: [{ name, values }] }`, or with no data
      draw again from the table (after the page has changed it). A data table is

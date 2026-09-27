@@ -223,10 +223,12 @@
     if (day) fire('ins:month-day', { el: box, date: day.getAttribute('data-date') });
   }, false);
 
-  Insiyab.define('month', function (scope) {
+  function scan(scope) {
     var boxes = scope.querySelectorAll('.ins-month');
     for (var i = 0; i < boxes.length; i++) draw(boxes[i]);
-  });
+  }
+  Insiyab.define('month', scan);
+  if (document.readyState !== 'loading') scan(document);
 
   /* Draw again, move to a month ('2026-10'), or hand over the events:
      `{ month, events: [{ date, title, href, tone, time }] }`. */
