@@ -1,13 +1,15 @@
 <h2 id="files">الملفّات</h2>
 <p>
-  المكتبة كلّها في مجلّد <code>dist/</code>. انسخ ثلاثة أشياء إلى مشروعك وضعها متجاورة، فملفّ الأنماط
-  يطلب الخطوط بمسار نسبي.
+  المكتبة كلّها في مجلّد <code>dist/</code>. انسخ ما فيه إلى مجلّد <code>insiyab/</code> خاصّ بها في مشروعك،
+  فتبقى ملفّاتها معًا ولا تختلط بملفّاتك. وأبقِ الخطوط بجانب ملفّ الأنماط، فهو يطلبها بمسار نسبي.
 </p>
 <demo-code lang="sh">
 your-project/
-├── insiyab.css        ← أو insiyab.min.css
-├── insiyab.js
-└── fonts/             ← ١٦ ملفّ woff2 وتراخيصها
+└── insiyab/
+    ├── insiyab.css        ← أو insiyab.min.css
+    ├── insiyab.js
+    ├── fonts/             ← ١٦ ملفّ woff2 وتراخيصها
+    └── plugins/           ← اختياري: ما تستعمله منها فقط
 </demo-code>
 
 <h2 id="template">قالب البداية</h2>
@@ -20,8 +22,8 @@ your-project/
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>تطبيقي</title>
 
-  <link rel="stylesheet" href="insiyab.css">
-  <script src="insiyab.js"></script>
+  <link rel="stylesheet" href="insiyab/insiyab.css">
+  <script src="insiyab/insiyab.js"></script>
 </head>
 <body>
   <main class="ins-container ins-py-8">
