@@ -368,12 +368,6 @@
   transition: background var(--ins-t-base) var(--ins-ease);
 }
 .ins-switch-grid > .ins-switch:hover { background: var(--ins-surface-hover); }
-/* Name at the start of the card, control at its end. `order` and not a markup
-   change, because the DOM order is the one that is right: the input has to precede
-   the track for `+ .ins-switch-track` to work at all. Visual order is a presentation
-   question and belongs here. Scoped to a card — a bare switch is a checkbox in a
-   sentence, and its label belongs next to the thing it labels. */
-.ins-switch-grid > .ins-switch .ins-switch-text { order: -1; margin-inline-end: auto; }
 
 /* --------------------------------------------------------------- segmented */
 /* One control, not a row of browser tabs. The track is a recessed tint and the
@@ -866,7 +860,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
        <span class="ins-tile-desc">حتى عشرة مستخدمين</span>
      </label>
 
-   The mark sits at the trailing top corner. It is drawn in two pieces — the ring on
+   The mark sits at the leading top corner. It is drawn in two pieces — the ring on
    `::before`, the tick or dot on `::after` — because the tick is a mask filled with
    `--ins-on-primary`, the measured label colour, and a mask on the ring would cut the
    ring away along with it. */
@@ -882,7 +876,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
   flex-direction: column;
   gap: .1875rem;
   padding: .875rem 1rem;
-  padding-inline-end: 2.75rem;
+  padding-inline-start: 2.75rem;
   border-radius: var(--ins-r-md);
   border: 1px solid var(--ins-ctl-bd);
   background: var(--ins-ctl-bg);
@@ -906,7 +900,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
   content: "";
   position: absolute;
   inset-block-start: .875rem;
-  inset-inline-end: .875rem;
+  inset-inline-start: .875rem;
   inline-size: 1.125rem;
   block-size: 1.125rem;
 }
