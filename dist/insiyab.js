@@ -2129,13 +2129,76 @@
     if (ask.defaultPrevented) return false;
     var tags = chip.closest('.ins-tags');
     var near = chip.nextElementSibling, far = chip.previousElementSibling;
+    while (near && near.hasAttribute('data-ins-leaving')) near = near.nextElementSibling;
+    while (far && far.hasAttribute('data-ins-leaving')) far = far.previousElementSibling;
     var next = (near && near.querySelector('.ins-chip-x')) || (far && far.querySelector && far.querySelector('.ins-chip-x')) ||
       (tags && tagsInput(tags));
     var hadFocus = chip.contains(document.activeElement);
-    chip.parentNode.removeChild(chip);
+    chipLeave(chip);
     if (tags) tagsDropped(tags, value);
     if (hadFocus && next) next.focus();
     return true;
+  }
+
+  /* Chips arrive and leave in motion; the neighbours glide to their new places (FLIP). */
+  var CHIP_EASE = 'cubic-bezier(.22, 1, .36, 1)';
+
+  function chipNeighbours(parent, except) {
+    var out = [];
+    for (var i = 0; i < parent.children.length; i++) {
+      var c = parent.children[i];
+      if (c === except || c.hasAttribute('data-ins-leaving') || c.classList.contains('ins-combo-list') || !c.offsetParent) continue;
+      out.push({ el: c, at: c.getBoundingClientRect() });
+    }
+    return out;
+  }
+
+  function chipGlide(list) {
+    for (var i = 0; i < list.length; i++) {
+      var now = list[i].el.getBoundingClientRect();
+      var dx = list[i].at.left - now.left, dy = list[i].at.top - now.top;
+      if (!dx && !dy) continue;
+      list[i].el.animate([{ transform: 'translate(' + dx + 'px, ' + dy + 'px)' }, { transform: 'none' }],
+        { duration: 360, easing: CHIP_EASE });
+    }
+  }
+
+  function chipMoves() { return !motionless() && !!Element.prototype.animate; }
+
+  function chipEnter(parent, chip, before) {
+    var list = chipMoves() ? chipNeighbours(parent, null) : null;
+    parent.insertBefore(chip, before);
+    if (!list) return;
+    chipGlide(list);
+    chip.animate([
+      { opacity: 0, transform: 'translateY(-10px) scale(.4) rotate(-8deg)', filter: 'blur(6px)' },
+      { opacity: 1, transform: 'none', filter: 'blur(0)' }
+    ], { duration: 460, easing: 'cubic-bezier(.34, 1.56, .64, 1)' });
+  }
+
+  function chipLeave(chip) {
+    var parent = chip.parentNode;
+    var values = chip.querySelectorAll('input');
+    for (var i = values.length - 1; i >= 0; i--) values[i].parentNode.removeChild(values[i]);
+    if (!chipMoves() || chip.offsetParent !== parent) { parent.removeChild(chip); return; }
+    var list = chipNeighbours(parent, chip);
+    var x = chip.offsetLeft, y = chip.offsetTop, w = chip.offsetWidth;
+    chip.setAttribute('data-ins-leaving', '');
+    chip.setAttribute('aria-hidden', 'true');
+    var st = chip.style;
+    st.position = 'absolute';
+    st.left = x + 'px';
+    st.top = y + 'px';
+    st.inlineSize = w + 'px';
+    st.margin = '0';
+    st.pointerEvents = 'none';
+    chipGlide(list);
+    chip.animate([
+      { opacity: 1, transform: 'none', filter: 'blur(0)' },
+      { opacity: 0, transform: 'translateY(12px) scale(.55) rotate(10deg)', filter: 'blur(6px)' }
+    ], { duration: 300, easing: 'cubic-bezier(.4, 0, 1, 1)', fill: 'forwards' }).onfinish = function () {
+      if (chip.parentNode) chip.parentNode.removeChild(chip);
+    };
   }
 
   /* ----------------------------------------------------------------- tags */
@@ -2143,7 +2206,10 @@
 
   function tagsChips(tags) {
     var out = [];
-    for (var i = 0; i < tags.children.length; i++) if (tags.children[i].classList.contains('ins-chip')) out.push(tags.children[i]);
+    for (var i = 0; i < tags.children.length; i++) {
+      var c = tags.children[i];
+      if (c.classList.contains('ins-chip') && !c.hasAttribute('data-ins-leaving')) out.push(c);
+    }
     return out;
   }
 
@@ -2180,7 +2246,7 @@
     } else {
       chip.setAttribute('data-value', value);
     }
-    tags.insertBefore(chip, tagsInput(tags));
+    chipEnter(tags, chip, tagsInput(tags));
     var opt = tagsOption(tags, value);
     if (opt) { opt.setAttribute('data-ins-chosen', ''); opt.setAttribute('aria-selected', 'true'); }
     emit('ins:tags', { el: tags, values: tagsValues(tags), added: value });

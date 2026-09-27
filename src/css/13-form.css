@@ -1072,6 +1072,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
    the empty box takes the last one back. `data-ins-max` caps how many. It is drawn
    as one field: the chips inside it, the box growing into what is left of the line. */
 .ins-tags {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;

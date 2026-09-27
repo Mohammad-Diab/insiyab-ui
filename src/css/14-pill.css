@@ -177,7 +177,7 @@
    which a page cancels to keep it. The second is a filter chip, pressed or not, on
    the toggle button's own `aria-pressed`; pressed, it takes the brand and a tick.
    `.ins-chips` lays several out in a wrapping row. */
-.ins-chips { display: flex; flex-wrap: wrap; align-items: center; gap: .375rem; }
+.ins-chips { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: .375rem; }
 .ins-chip {
   display: inline-flex;
   align-items: center;
