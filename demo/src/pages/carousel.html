@@ -2,7 +2,7 @@
 <script src="../dist/plugins/insiyab-carousel.js" defer></script>
 
 <h2 id="install">التثبيت</h2>
-<p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
+<p>إضافة مستقلة عن المكتبة: ملف أنماط وملف سكربت يُحملان بعدها.</p>
 <demo-code lang="html">
 <link rel="stylesheet" href="insiyab/plugins/insiyab-carousel.css">
 <script src="insiyab/insiyab-boot.js"></script>
@@ -12,9 +12,9 @@
 
 <h2 id="carousel">عرض الشرائح</h2>
 <p>
-  عنصر عليه <code>data-ins-carousel</code> وشرائحه أبناؤه. الصفّ تمرير المتصفّح بالتقاط الشرائح، فيُسحب بالإصبع
-  وبلا سكربت. والسكربت يضيف زرّي السابق والتالي، ونقطة لكلّ موقف، والأسهم باتّجاه القراءة، و«2 من 4» على كلّ
-  شريحة لقارئ الشاشة.
+  ضع <code>data-ins-carousel</code> على عنصر، فكل ابن له شريحة. ويقوم الصف على تمرير المتصفح نفسه مع
+  <code>scroll-snap</code>، فتسحبه بإصبعك ولو لم يعمل السكربت. ثم يضيف السكربت زري السابق والتالي، ونقطة لكل موضع، وأسهم لوحة
+  المفاتيح تسير مع اتجاه القراءة، ويخبر قارئ الشاشة عند كل شريحة أنها «2 من 4».
 </p>
 <demo-example>
   <div class="ins-carousel" data-ins-carousel aria-label="شرائح">
@@ -27,8 +27,8 @@
 
 <h2 id="many">أكثر من شريحة</h2>
 <p>
-  <code>.ins-carousel--3</code> ثلاث شرائح معًا حين تتّسع حاويته، ثمّ اثنتان ثمّ واحدة كلّما ضاقت، و<code>--2</code>
-  مثلها باثنتين. و<code>.ins-carousel--peek</code> يُظهر طرف الشريحة التالية.
+  يعرض <code>.ins-carousel--3</code> ثلاث شرائح معًا ما اتسعت حاويته، فإذا ضاقت صارت اثنتين ثم واحدة،
+  و<code>--2</code> مثله يبدأ باثنتين. أما <code>.ins-carousel--peek</code> فيكشف طرف الشريحة التالية.
 </p>
 <demo-example>
   <div class="ins-carousel ins-carousel--3" data-ins-carousel aria-label="شرائح">
@@ -39,33 +39,33 @@
   </div>
 </demo-example>
 
-<h2 id="motion">لا يتحرّك وحده</h2>
+<h2 id="motion">بلا تشغيل تلقائي</h2>
 <p>
-  لا تشغيل تلقائيّ: الشرائح لا تنتقل إلّا بيد المستخدم. وتحت <code>prefers-reduced-motion</code> ينتقل الصفّ فورًا
-  بلا انزلاق.
+  لا يدور العرض من تلقاء نفسه، فلا تنتقل الشرائح إلا بيد المستخدم. ومن اختار تقليل الحركة في نظامه
+  (<code>prefers-reduced-motion</code>) انتقل عنده الصف فورًا بلا انزلاق.
 </p>
 
 <h2 id="api">من الشيفرة</h2>
 <demo-code lang="js">
 document.addEventListener('ins:carousel', (e) => {
-  console.log(e.detail.index);        // الشريحة في أوّل العرض
+  console.log(e.detail.index);        // الشريحة في أول العرض
 });
 
-Insiyab.carousel('#projects');        // الموقف الحاليّ، من الصفر
-Insiyab.carousel('#projects', 2);     // انتقل إلى الموقف الثالث
+Insiyab.carousel('#projects');        // الموضع الحالي، من الصفر
+Insiyab.carousel('#projects', 2);     // انتقل إلى الموضع الثالث
 </demo-code>
 
-<h2 id="attributes">السمات والأصناف</h2>
+<h2 id="attributes">السمات والكلاسات</h2>
 <div class="ins-panel site-ref">
   <div class="ins-panel-body ins-panel-body--flush">
     <div class="ins-table-wrap">
       <table class="ins-table">
-        <thead><tr><th>السمة أو الصنف</th><th>ما تفعله</th></tr></thead>
+        <thead><tr><th>السمة أو الكلاس</th><th>ما تفعله</th></tr></thead>
         <tbody>
-          <tr><td><code>data-ins-carousel</code></td><td>عرض شرائح، وأبناؤه شرائحه.</td></tr>
-          <tr><td><code>.ins-carousel--2</code> <code>.ins-carousel--3</code></td><td>اثنتان أو ثلاث معًا حيث يتّسع.</td></tr>
-          <tr><td><code>.ins-carousel--peek</code></td><td>طرف الشريحة التالية ظاهر.</td></tr>
-          <tr><td><code>data-ins-carousel-dots="off"</code></td><td>بلا نقاط.</td></tr>
+          <tr><td><code>data-ins-carousel</code></td><td>يجعل العنصر عرض شرائح، وكل ابن له شريحة.</td></tr>
+          <tr><td><code>.ins-carousel--2</code> <code>.ins-carousel--3</code></td><td>شريحتان أو ثلاث معًا ما اتسع المكان.</td></tr>
+          <tr><td><code>.ins-carousel--peek</code></td><td>يكشف طرف الشريحة التالية.</td></tr>
+          <tr><td><code>data-ins-carousel-dots="off"</code></td><td>يخفي النقاط.</td></tr>
           <tr><td><code>--ins-carousel-gap</code></td><td>المسافة بين الشرائح.</td></tr>
         </tbody>
       </table>

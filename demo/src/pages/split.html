@@ -1,26 +1,26 @@
 <h2 id="split">العرض المقسوم</h2>
 <p>
-  <code>.ins-split</code> لوحان جنبًا إلى جنب، والخطّ بينهما يُسحب ليتقاسما العرض: مستند بجانب النموذج الذي يخصّه، أو قائمة
-  بجانب العنصر الذي تفتحه. يضع السكربت مقبضًا بينهما تحرّكه الأسهم أيضًا، و<kbd class="ins-kbd">Home</kbd> و<kbd class="ins-kbd">End</kbd>
-  إلى الحدّين، والنقر المزدوج أو <kbd class="ins-kbd">Enter</kbd> إلى المنتصف. واسم في <code>data-ins-split</code> يحفظ القسمة
-  للمرّة القادمة. وكلّ لوح يتمرّر وحده، وتحت 56rem يتكدّسان.
+  يضع <code>.ins-split</code> لوحين جنبًا إلى جنب يتقاسمان العرض، ويفصل بينهما خط تسحبه فتتبدل القسمة: مستند بجوار النموذج الخاص به، أو قائمة
+  بجوار العنصر الذي تفتحه منها. ويضع السكربت بينهما مقبضًا تحركه الأسهم أيضًا، ويذهب به <kbd class="ins-kbd">Home</kbd> و<kbd class="ins-kbd">End</kbd>
+  إلى الطرفين، ويعيده النقر المزدوج أو <kbd class="ins-kbd">Enter</kbd> إلى المنتصف. وإذا أعطيت <code>data-ins-split</code> اسمًا تذكرت المكتبة القسمة
+  في المرة القادمة. ويتمرر كل لوح وحده، فإذا ضاقت الشاشة عن 56rem صار اللوحان أحدهما فوق الآخر.
 </p>
 <demo-example class="flush">
   <div class="ins-split" data-ins-split="demo" style="block-size: 18rem">
     <section class="ins-split-pane ins-p-5">
       <h3 class="ins-h4">المستند</h3>
-      <p>تُردّ المنتجات خلال أربعة عشر يومًا من الاستلام، بشرط أن تكون في عبوتها الأصلية ومعها الفاتورة.</p>
-      <p>ويُستبدل المنتج التالف دون رسوم خلال ثلاثين يومًا.</p>
+      <p>تُرد المنتجات خلال أربعة عشر يومًا من الاستلام، بشرط أن تكون في عبوتها الأصلية ومعها الفاتورة.</p>
+      <p>ويستبدل المنتج التالف دون رسوم خلال ثلاثين يومًا.</p>
     </section>
     <section class="ins-split-pane ins-p-5">
       <h3 class="ins-h4">الملاحظات</h3>
-      <p>المدّة واضحة، لكنّ شرط العبوة يحتاج تفصيلًا.</p>
+      <p>المدة واضحة، لكن شرط العبوة يحتاج تفصيلًا.</p>
     </section>
   </div>
 </demo-example>
 
-<h2 id="vertical">فوق بعض</h2>
-<p><code>--v</code> يضع اللوحين واحدًا فوق الآخر، والمقبض أفقي.</p>
+<h2 id="vertical">لوح فوق لوح</h2>
+<p>ويضع <code>--v</code> اللوحين أحدهما فوق الآخر، فيصير المقبض أفقيًا.</p>
 <demo-example class="flush">
   <div class="ins-split ins-split--v" style="block-size: 18rem">
     <section class="ins-split-pane ins-p-5">القائمة</section>
@@ -28,6 +28,6 @@
   </div>
 </demo-example>
 <demo-code lang="js">
-Insiyab.split('#review', 60);                          // اللوح الأوّل 60%
+Insiyab.split('#review', 60);                          // اللوح الأول 60%
 document.addEventListener('ins:split', (e) => console.log(e.detail.size));
 </demo-code>

@@ -2,7 +2,7 @@
 <script src="../dist/plugins/insiyab-color.js" defer></script>
 
 <h2 id="install">التثبيت</h2>
-<p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
+<p>إضافة مستقلة عن المكتبة: ملف أنماط وملف سكربت يُحملان بعدها.</p>
 <demo-code lang="html">
 <link rel="stylesheet" href="insiyab/plugins/insiyab-color.css">
 <script src="insiyab/insiyab-boot.js"></script>
@@ -12,8 +12,8 @@
 
 <h2 id="field">حقل اللون</h2>
 <p>
-  حقل اللون الأصليّ عليه <code>data-ins-color</code>، في مجموعة حقل. يصير حقل رمز سداسيّ وأمامه عيّنة تفتح المنتقي،
-  ويرسل <code>#rrggbb</code> باسمه كما يرسله حقل المتصفّح:
+  ضع <code>data-ins-color</code> على <code>&lt;input type="color"&gt;</code> داخل مجموعة حقل، فيصير حقلًا نصيًا لرمز hex،
+  أمامه عينة تفتح المنتقي. ويرسل النموذج <code>#rrggbb</code> باسم الحقل، كما يرسله الحقل الأصلي:
 </p>
 <demo-example>
   <div class="ins-field">
@@ -26,24 +26,24 @@
 
 <h2 id="contrast">التباين</h2>
 <p>
-  في أسفل المنتقي اللون نصًّا على الأبيض وعلى الأسود، ونسبة التباين (<code>Insiyab.color.contrast</code>)، وهل تبلغ
-  4.5:1 الذي يحتاجه نصّ الفقرات.
+  في أسفل المنتقي ترى نصًا بهذا اللون على الأبيض وعلى الأسود، ومعه نسبة التباين
+  (<code>Insiyab.color.contrast</code>)، وهل تبلغ 4.5:1 التي يحتاجها نص الفقرات.
 </p>
 
 <h2 id="picker">المنتقي</h2>
 <ul>
-  <li><b>المربّع</b> للتشبّع والسطوع، بالسحب أو بلوحة المفاتيح: <kbd>←</kbd> <kbd>→</kbd> للتشبّع و<kbd>↑</kbd> <kbd>↓</kbd>
-    للسطوع، ومع <kbd>Shift</kbd> بخطوات من عشرة.</li>
-  <li><b>شريط الدرجة</b> — حقل مدى أصليّ، بلوحة المفاتيح كما هو.</li>
-  <li><b>ألوان جاهزة</b> — لون الهوية ولوحة حوله، أو ما يقوله <code>data-ins-color-swatches</code>،
-    و<code>none</code> يخفيها.</li>
-  <li><b>القطّارة</b> تلتقط لونًا من الشاشة، حيث يوفّرها المتصفّح.</li>
-  <li><b>الكتابة</b> — <code>#abc</code> أو <code>abc</code> أو <code>aabbcc</code>، ويُكتب كاملًا عند مغادرة الحقل. وما
-    ليس لونًا يُرفض برسالة.</li>
+  <li><b>المربع</b> للتشبع والسطوع، تسحب فيه أو تستعمل لوحة المفاتيح: <kbd>←</kbd> <kbd>→</kbd> للتشبع و<kbd>↑</kbd> <kbd>↓</kbd>
+    للسطوع، ومع <kbd>Shift</kbd> تمضي عشرًا عشرًا.</li>
+  <li><b>شريط درجة اللون (hue)</b> هو <code>&lt;input type="range"&gt;</code> أصلي، فيعمل بلوحة المفاتيح كما يعمل أي شريط مثله.</li>
+  <li><b>ألوان جاهزة</b> هي لون الهوية ولوحة من الألوان حوله، أو ما تحدده في <code>data-ins-color-swatches</code>،
+    والقيمة <code>none</code> تخفيها.</li>
+  <li><b>القطارة</b> تلتقط لونًا من الشاشة، إن كان المتصفح يدعم <code>EyeDropper</code>.</li>
+  <li><b>الكتابة</b> تقبل <code>#abc</code> و<code>abc</code> و<code>aabbcc</code>، ثم يكتب الحقل الرمز كاملًا حين تغادره،
+    ويرفض ما ليس لونًا برسالة.</li>
 </ul>
 <demo-example>
   <div class="ins-field">
-    <label class="ins-label" for="cp-set">ألوان محدّدة</label>
+    <label class="ins-label" for="cp-set">ألوان محددة</label>
     <input type="color" id="cp-set" name="status" value="#0f766e" data-ins-color data-ins-color-swatches="#15803d,#a16207,#b91c1c,#0369a1,#475569">
   </div>
 </demo-example>
@@ -51,15 +51,15 @@
 <h2 id="api">من الشيفرة</h2>
 <demo-code lang="js">
 document.addEventListener('ins:color', (e) => {
-  Insiyab.brand(e.detail.value);        // لوّن الصفحة كلّها باللون المختار
+  Insiyab.brand(e.detail.value);        // لون الصفحة كلها باللون المختار
 });
 
 Insiyab.colorField('#brand');              // اللون
 Insiyab.colorField('#brand', '#0f766e');   // ضبطه بهدوء، دون حدث
 </demo-code>
 <p>
-  <code>input</code> في أثناء حركة اللون، و<code>change</code> و<code>ins:color</code> حين يُضبط. الحقل الأوّل أعلاه
-  موصول بـ <code>Insiyab.brand()</code> هكذا.
+  يُطلق الحقل الحدث <code>input</code> ما دام اللون يتغير، ثم <code>change</code> و<code>ins:color</code> حين يستقر. والحقل
+  الأول أعلاه موصول بـ <code>Insiyab.brand()</code> على هذا النحو.
 </p>
 
 <script>

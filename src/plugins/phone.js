@@ -133,11 +133,11 @@
     ar: {
       country: 'الدولة', search: 'ابحث عن دولة أو رمز', none: 'لا دولة بهذا الاسم',
       bad: 'اكتب رقم هاتف صحيحًا في {country}.', incomplete: 'اكتب رمز الدولة كاملًا بعد +.',
-      elsewhere: 'الأرقام من {country} غير مقبولة هنا.'
+      elsewhere: 'لا تُقبل هنا أرقام {country}.'
     },
     en: {
-      country: 'Country', search: 'Search a country or code', none: 'No country by that name',
-      bad: 'Enter a valid phone number for {country}.', incomplete: 'Finish the country code after +.',
+      country: 'Country', search: 'Search for a country or code', none: 'No country by that name',
+      bad: 'Enter a valid phone number for {country}.', incomplete: 'Enter the full country code after +.',
       elsewhere: 'Numbers from {country} are not accepted here.'
     }
   };

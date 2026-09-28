@@ -3,7 +3,7 @@
 
 <h2 id="install">التثبيت</h2>
 <p>
-  إضافة لا جزء من الملفّين. الخطّ الزمنيّ نفسه CSS خالص، والسكربت يكتب الأوقات النسبية فقط («قبل 5 دقائق»).
+  إضافة مستقلة عن المكتبة، يقوم الخط الزمني فيها على CSS وحدها، ولا شأن للسكربت إلا بالأوقات النسبية («قبل 5 دقائق»).
 </p>
 <demo-code lang="html">
 <link rel="stylesheet" href="insiyab/plugins/insiyab-timeline.css">
@@ -12,9 +12,9 @@
 
 <h2 id="timeline">الخط الزمني</h2>
 <p>
-  قائمة <code>.ins-timeline</code>، ونقطة لكلّ حدث، و<code>.ins-timeline-day</code> عنوان يفصل بين الأيّام. النبرات
-  <code>--ok</code> و<code>--bad</code> و<code>--warn</code> و<code>--info</code>، و<code>is-current</code> للخطوة الجارية،
-  و<code>is-pending</code> لما لم يأتِ بعد.
+  الخط الزمني قائمة <code>.ins-timeline</code> لكل حدث فيها نقطة، ويفصل <code>.ins-timeline-day</code> بين الأيام
+  بعنوان. ونبراته <code>--ok</code> و<code>--bad</code> و<code>--warn</code> و<code>--info</code>، ويأخذ الحدث الجاري
+  <code>is-current</code>، والذي لم يأت بعد <code>is-pending</code>.
 </p>
 <demo-example>
   <ol class="ins-timeline">
@@ -24,9 +24,9 @@
       <time class="ins-timeline-time" datetime="2026-09-24T08:02">8:02 ص</time>
     </li>
     <li class="ins-timeline-item ins-timeline-item--ok">
-      <span class="ins-timeline-title">تمّ الدفع</span>
+      <span class="ins-timeline-title">تم الدفع</span>
       <time class="ins-timeline-time" datetime="2026-09-24T08:05">8:05 ص</time>
-      <p class="ins-timeline-body">نصّ الحدث.</p>
+      <p class="ins-timeline-body">نص الحدث.</p>
     </li>
     <li class="ins-timeline-item is-current">
       <span class="ins-timeline-title">قيد التجهيز</span>
@@ -37,8 +37,8 @@
   </ol>
 </demo-example>
 
-<h2 id="icons">بأيقونات</h2>
-<p><code>.ins-timeline-ico</code> أوّلَ ابنٍ للعنصر يضع رقاقة أيقونة مكان النقطة، بلون النبرة.</p>
+<h2 id="icons">بالأيقونات</h2>
+<p>ضع <code>.ins-timeline-ico</code> أول عنصر في الحدث فتحل مكان النقطة رقاقة فيها أيقونة، بلون نبرته.</p>
 <demo-example>
   <ol class="ins-timeline">
     <li class="ins-timeline-item ins-timeline-item--info">
@@ -58,9 +58,9 @@
 
 <h2 id="relative">الأوقات النسبية</h2>
 <p>
-  <code>&lt;time datetime="…" data-ins-time&gt;</code> في أيّ مكان من الصفحة يُكتب كما يُقال، بلغة الصفحة: «قبل 5
-  دقائق»، «أمس»، «خلال ساعتين». بعد أسبوع يُكتب التاريخ نفسه، و<code>data-ins-time="date"</code> يكتبه دائمًا.
-  التاريخ والوقت كاملين في <code>title</code>، والنصّ يتجدّد كلّ دقيقة.
+  أينما وضعت <code>&lt;time datetime="…" data-ins-time&gt;</code> في الصفحة كُتب الوقت كما يقوله الناس بلغة الصفحة:
+  «قبل 5 دقائق» و«أمس» و«خلال ساعتين». فإذا مضى أسبوع كُتب التاريخ نفسه، ومع <code>data-ins-time="date"</code>
+  يُكتب التاريخ دائمًا. ويحمل <code>title</code> التاريخ والوقت كاملين، ويتجدد النص كل دقيقة.
 </p>
 <demo-example>
   <ol class="ins-timeline ins-timeline--compact" id="tl-live">
@@ -72,15 +72,15 @@
 
 <h2 id="split">على جانبين</h2>
 <p>
-  <code>.ins-timeline--split</code> يوزّع الأحداث على جانبي خطّ في الوسط حين تتّسع حاويته، ويعود إلى جانب واحد في
-  الضيق. و<code>.ins-timeline--compact</code> لعمود ضيّق، كالمثال السابق.
+  يوزع <code>.ins-timeline--split</code> الأحداث على جانبي خط في الوسط إذا اتسعت حاويته، ويجمعها في جانب واحد إذا
+  ضاقت. أما <code>.ins-timeline--compact</code> فللعمود الضيق، كالمثال السابق.
 </p>
 <demo-example>
   <ol class="ins-timeline ins-timeline--split">
-    <li class="ins-timeline-item"><span class="ins-timeline-title">2019</span><p class="ins-timeline-body">الحدث الأوّل.</p></li>
+    <li class="ins-timeline-item"><span class="ins-timeline-title">2019</span><p class="ins-timeline-body">الحدث الأول.</p></li>
     <li class="ins-timeline-item"><span class="ins-timeline-title">2022</span><p class="ins-timeline-body">الحدث الثاني.</p></li>
     <li class="ins-timeline-item"><span class="ins-timeline-title">2025</span><p class="ins-timeline-body">الحدث الثالث.</p></li>
-    <li class="ins-timeline-item is-pending"><span class="ins-timeline-title">2027</span><p class="ins-timeline-body">لم يأتِ بعد.</p></li>
+    <li class="ins-timeline-item is-pending"><span class="ins-timeline-title">2027</span><p class="ins-timeline-body">لم يأت بعد.</p></li>
   </ol>
 </demo-example>
 

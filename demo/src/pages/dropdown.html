@@ -1,13 +1,13 @@
-<h2 id="basic">قائمة إجراءات</h2>
+<h2 id="basic">قائمة الإجراءات</h2>
 <p>
-  <code>&lt;details class="ins-pop"&gt;</code>: الملخّص زرّ، والجسم <code>.ins-pop-body</code> القائمة. تُفتح بلا
-  جافاسكربت؛ والسكربت يضيف <kbd class="ins-kbd">Esc</kbd> يغلقها ويعيد التركيز إلى زرّها، والأسهم تتنقّل
-  وتتخطّى المعطّل، والنقر خارجها يغلقها، وتنقلب عند حافة الشاشة.
+  تقوم القائمة المنسدلة على <code>&lt;details class="ins-pop"&gt;</code>: عنصر <code>&lt;summary&gt;</code> فيها هو الزر،
+  و<code>.ins-pop-body</code> هو القائمة، فتنفتح دون جافاسكربت. ثم يزيدها السكربت، فيغلقها مفتاح <kbd class="ins-kbd">Esc</kbd> ويعيد التركيز إلى زرها،
+  وتتنقل الأسهم بين عناصرها متخطية المعطل منها، ويغلقها النقر خارجها.
 </p>
 <p>
-  <code>-label</code> عنوان مجموعة، و<code>-sep</code> فاصل، و<code>-item--bad</code> لإجراء خطِر، و<code>&lt;kbd&gt;</code>
-  داخل العنصر اختصاره في نهايته. تتدلّى القائمة من بداية زرّها وتمتدّ نحو نهاية السطر، و<code>--end</code> يحاذيها بنهايته لزرّ في آخر الشريط.
-  وتنقلب وحدها إن كانت ستخرج من الشاشة.
+  ويكون <code>-label</code> عنوانًا لمجموعة، و<code>-sep</code> فاصلًا، و<code>-item--bad</code> لإجراء خطير، وإذا وضعت
+  <code>&lt;kbd&gt;</code> داخل العنصر ظهر اختصاره في آخره. تتدلى القائمة من بداية زرها وتمتد نحو نهاية السطر، فإذا كان
+  الزر في آخر الشريط فأضف <code>--end</code> لتحاذيه من نهايته. وتنقلب وحدها عند حافة الشاشة إذا كادت تخرج منها.
 </p>
 <demo-example class="row">
   <details class="ins-pop">
@@ -23,16 +23,16 @@
   </details>
 </demo-example>
 
-<h2 id="checkable">عناصر قابلة للتأشير</h2>
+<h2 id="checkable">عناصر قابلة للتحديد</h2>
 <p>
-  <code>role="menuitemcheckbox"</code> أو <code>menuitemradio</code> مع <code>aria-checked</code>. تبقى القائمة
-  مفتوحة وأنت تبدّلها، والحدث <code>ins:menu</code> يحمل الحالة.
+  أعط العنصر <code>role="menuitemcheckbox"</code> أو <code>menuitemradio</code> ومعه <code>aria-checked</code>. وتبقى
+  القائمة مفتوحة ما دمت تحدد فيها، ويحمل الحدث <code>ins:menu</code> الحالة الجديدة.
 </p>
 <demo-example class="row">
   <details class="ins-pop">
     <summary class="ins-btn ins-btn--secondary">عرض</summary>
     <div class="ins-pop-body">
-      <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="true">الأوّل</button>
+      <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="true">الأول</button>
       <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="false">الثاني</button>
       <hr class="ins-pop-sep">
       <div role="group">
@@ -43,23 +43,23 @@
   </details>
 </demo-example>
 
-<h2 id="card">بطاقة منبثقة</h2>
+<h2 id="card">بطاقة منسدلة</h2>
 <p>
-  <code>.ins-pop-body--card</code> لمحتوى حرّ بدل العناصر، بكلّ سلوك القائمة، و<code>.ins-pop-title</code>
-  و<code>.ins-pop-text</code> لعنوانه ونصّه.
+  ضع في <code>.ins-pop-body--card</code> ما شئت من محتوى بدل العناصر، ويبقى لها سلوك القائمة كله. ولعنوان هذا
+  المحتوى <code>.ins-pop-title</code>، ولنصه <code>.ins-pop-text</code>.
 </p>
 <demo-example class="row">
   <details class="ins-pop">
     <summary class="ins-btn ins-btn--secondary">التفاصيل</summary>
     <div class="ins-pop-body ins-pop-body--card">
       <p class="ins-pop-title">العنوان</p>
-      <p class="ins-pop-text">نصّ حرّ قصير.</p>
+      <p class="ins-pop-text">نص حر قصير.</p>
     </div>
   </details>
 </demo-example>
 
-<h2 id="menu-link">عناصر روابط</h2>
-<p><code>.ins-pop-item</code> يصلح على <code>&lt;a&gt;</code> كما على <code>&lt;button&gt;</code>.</p>
+<h2 id="menu-link">الروابط في القائمة</h2>
+<p>يصلح <code>.ins-pop-item</code> على <code>&lt;a&gt;</code> كما يصلح على <code>&lt;button&gt;</code>.</p>
 <demo-example class="row">
   <details class="ins-pop">
     <summary class="ins-btn ins-btn--secondary">المساعدة</summary>
@@ -70,8 +70,8 @@
   </details>
 </demo-example>
 
-<h2 id="split">زرّ مقسوم</h2>
-<p>قائمة داخل <code>.ins-btn-group</code> بجانب زرّ: الإجراء الأساسي بضغطة، وبدائله في القائمة.</p>
+<h2 id="split">الزر المقسوم</h2>
+<p>ضع القائمة داخل <code>.ins-btn-group</code> بجانب زر، فيكون الإجراء الأساسي بضغطة واحدة، وتبقى بدائله في القائمة.</p>
 <demo-example class="row">
   <div class="ins-btn-group">
     <button class="ins-btn ins-btn--primary">نشر</button>
@@ -79,7 +79,7 @@
       <summary class="ins-btn ins-btn--primary ins-btn--icon" aria-label="خيارات النشر"><svg class="ico"><use href="#i-chev-down"/></svg></summary>
       <div class="ins-pop-body">
         <button class="ins-pop-item">جدولة</button>
-        <button class="ins-pop-item">حفظ كمسودّة</button>
+        <button class="ins-pop-item">حفظ مسودة</button>
       </div>
     </details>
   </div>

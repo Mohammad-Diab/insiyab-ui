@@ -2,7 +2,7 @@
 
 React components for [Insiyab](https://github.com/Mohammad-Diab/insiyab-ui#readme). They are thin covers over the
 library's classes and attributes, not a second implementation. The CSS stays the
-source of truth, and the core script (`insiyab.js`) does the behaviour: the date
+source of truth, and the core script (`insiyab.js`) does the behavior: the date
 picker, the tabs' arrow keys, the menus, the dialogs, the plugins. A component
 renders the markup the docs show and keeps React's state in step with what the core
 does to it.
@@ -43,7 +43,7 @@ it, so a component rendered on a server or before the script arrives just render
 its markup.
 
 **Next.js and other server rendering.** The core stamps `<html>` before the first
-paint (`data-ins-js`, the theme, the brand colour), so give the root element
+paint (`data-ins-js`, the theme, the brand color), so give the root element
 `suppressHydrationWarning`, as any theme script needs:
 
 ```jsx
@@ -96,7 +96,7 @@ The same conventions hold throughout:
   A controlled value the page refuses to change is put back.
 - **The docs' attributes are props.** On `Button` and `CloseButton`: `tip`,
   `confirm` (with `confirmOk`, `confirmTone`), `toast` (with `toastTone`) and
-  `dismiss`. They render exactly the attribute, so the behaviour is the core's.
+  `dismiss`. They render exactly the attribute, so the behavior is the core's.
 - **Text defaults are Arabic**, like the library: `CloseButton`'s «إغلاق»,
   `Pagination`'s «السابق»/«التالي». Every one is a prop.
 - **No icons ship.** Pass your own element to `icon`. `<Icon name="i-check" />` is
@@ -142,13 +142,13 @@ The wrapper keeps the two apart in three ways, and the tests check each one.
    HTML and the built page are then the same, and hydration finds nothing to
    disagree with.
 2. **What gets rebuilt is triggered only after mount.** The date field, the phone,
-   colour, OTP and file fields, the tree, the carousel, the palette and relative
+   color, OTP and file fields, the tree, the carousel, the palette and relative
    times: their trigger attribute (`data-ins-date`, `data-ins-phone`…) is never
    rendered. Each component sets it once mounted, then calls `Insiyab.init`. The
    core's own scan, which can run before React hydrates, finds nothing to rebuild,
    and without script the server's HTML is the plain field.
 3. **What the core moves is rendered where the core keeps it.** The OTP box, the
-   file box, the carousel's track, the tree's rows and the colour field's group are
+   file box, the carousel's track, the tree's rows and the color field's group are
    already in the markup, so the plugins adopt them and never move a node React owns.
    Attributes the core takes over after building are read back rather than
    re-asserted: the date field's `type` and `name`, a shown password's `type`. React
@@ -180,7 +180,7 @@ node test/run.mjs react
 - Hydration: an app of the stateful components, rendered with `react-dom/server`,
   then hydrated after the core's scan has already run over it, in Strict Mode, with
   React's development build. A mismatch or a warning fails the test.
-- Behaviour: real clicks and keys on that app, read back from React state.
+- Behavior: real clicks and keys on that app, read back from React state.
 - Import: the same app bundled with the core and its plugins `import`ed, as a
   bundled app would load them, and mounted from nothing.
 

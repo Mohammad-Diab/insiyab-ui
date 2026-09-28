@@ -1,15 +1,15 @@
-<h2 id="basic">أكورديون</h2>
+<h2 id="basic">الأكورديون</h2>
 <p>
-  <code>.ins-accordion</code> يجمع أقسامًا من <code>&lt;details class="ins-collapse"&gt;</code>، كلّ قسم فيه
-  <code>summary</code> و<code>.ins-collapse-body</code>. يُفتح بالنقر وبلوحة المفاتيح دون جافاسكربت،
-  ولا سطح له، فضعه في لوح.
+  يجمع <code>.ins-accordion</code> أقسامًا من <code>&lt;details class="ins-collapse"&gt;</code>، في كل قسم منها
+  <code>summary</code> و<code>.ins-collapse-body</code>. وهو ينفتح بالنقر وبلوحة المفاتيح دون جافاسكربت،
+  ولا سطح له، فضعه في لوح <code>.ins-panel</code>.
 </p>
 <demo-example>
   <div class="ins-panel">
     <div class="ins-accordion">
       <details class="ins-collapse" open>
-        <summary>القسم الأوّل</summary>
-        <div class="ins-collapse-body">محتوى القسم الأوّل.</div>
+        <summary>القسم الأول</summary>
+        <div class="ins-collapse-body">محتوى القسم الأول.</div>
       </details>
       <details class="ins-collapse">
         <summary>القسم الثاني</summary>
@@ -24,12 +24,12 @@
 </demo-example>
 
 <h2 id="exclusive">قسم واحد مفتوح</h2>
-<p>أعطِ الأقسام كلّها <code>name</code> واحدًا، فيغلق المتصفّح الباقي حين يُفتح أحدها.</p>
+<p>أعط الأقسام كلها <code>name</code> واحدًا، فإذا فتحت أحدها أغلق المتصفح الباقي.</p>
 <demo-example>
   <div class="ins-accordion">
     <details class="ins-collapse" name="faq" open>
-      <summary>القسم الأوّل</summary>
-      <div class="ins-collapse-body">محتوى القسم الأوّل.</div>
+      <summary>القسم الأول</summary>
+      <div class="ins-collapse-body">محتوى القسم الأول.</div>
     </details>
     <details class="ins-collapse" name="faq">
       <summary>القسم الثاني</summary>
@@ -43,13 +43,13 @@
 </demo-example>
 
 <h2 id="collapse">قسم منفرد</h2>
-<p><code>.ins-collapse</code> وحده، خارج أكورديون.</p>
+<p>ويصلح <code>.ins-collapse</code> وحده أيضًا، خارج الأكورديون.</p>
 <demo-example>
   <details class="ins-collapse">
-    <summary>خيارات متقدّمة</summary>
+    <summary>خيارات متقدمة</summary>
     <div class="ins-collapse-body">محتوى إضافي.</div>
   </details>
 </demo-example>
 
 <h2 id="motion">الحركة</h2>
-<p>حيث يستطيع المتصفّح تحريك الارتفاع يتحرّك القسم وهو يُفتح، وحيث لا يستطيع ينفتح فورًا.</p>
+<p>إذا دعم المتصفح <code>interpolate-size</code> انساب القسم وهو ينفتح، وإلا انفتح في الحال.</p>

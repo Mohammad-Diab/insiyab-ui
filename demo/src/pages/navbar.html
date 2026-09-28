@@ -1,8 +1,8 @@
 <h2 id="basic">شريط الموقع</h2>
 <p>
-  لموقع لا لتطبيق: صفحة هبوط، مدوّنة، توثيق. <code>-brand</code> الاسم، و<code>-menu</code> الروابط،
-  و<code>-end</code> أزرارها في النهاية. يلتصق بأعلى الصفحة افتراضيًا؛ <code>--static</code> يتركه في مكانه، كما
-  في هذا المثال.
+  شريط يليق بالمواقع دون التطبيقات، كصفحة الهبوط والمدونة والتوثيق. فيه <code>-brand</code> للاسم، و<code>-menu</code>
+  للروابط، و<code>-end</code> لأزرارها في آخره. ويلتصق بأعلى الصفحة إلا أن تضع عليه <code>--static</code> فيبقى في
+  مكانه، كما في هذا المثال.
 </p>
 <demo-example>
   <header class="ins-navbar ins-navbar--static">
@@ -10,8 +10,8 @@
     <button class="ins-navbar-toggle" data-ins-navbar aria-label="القائمة"></button>
     <nav class="ins-navbar-menu" aria-label="الموقع">
       <a class="ins-navbar-link" href="#basic" aria-current="page">الرئيسية</a>
-      <a class="ins-navbar-link" href="#basic">المدوّنة</a>
-      <a class="ins-navbar-link" href="#basic">تواصل</a>
+      <a class="ins-navbar-link" href="#basic">المدونة</a>
+      <a class="ins-navbar-link" href="#basic">تواصل معنا</a>
       <div class="ins-navbar-end">
         <button class="ins-btn ins-btn--secondary ins-btn--sm">دخول</button>
       </div>
@@ -21,8 +21,9 @@
 
 <h2 id="phone">على الهاتف</h2>
 <p>
-  تحت 900px تنطوي الروابط خلف زرّ القائمة وتنفتح عمودًا داخل الشريط، والضغط على رابط أو <kbd class="ins-kbd">Esc</kbd> يغلقها. وبلا
-  جافاسكربت لا يظهر الزرّ، وتلتفّ الروابط في سطر ثانٍ. ضيّق النافذة لترى.
+  إذا ضاقت الشاشة عن 900px انطوت الروابط خلف زر القائمة، فإذا ضغطته انفتحت عمودًا داخل الشريط، ثم تنغلق إذا ضغطت
+  رابطًا أو <kbd class="ins-kbd">Esc</kbd>. أما بلا جافاسكربت فلا يظهر الزر، وتلتف الروابط إلى سطر ثان. اجعل النافذة
+  أضيق لترى ذلك.
 </p>
 <demo-code lang="js">
 Insiyab.navbar(document.querySelector('.ins-navbar'), true);   // افتح
@@ -31,5 +32,6 @@ document.addEventListener('ins:navbar', (e) => e.detail.open);
 
 <h2 id="current">الرابط الحالي</h2>
 <p>
-  <code>aria-current="page"</code> على الرابط، لا صنف: قارئ الشاشة يقرأ «الصفحة الحالية»، والتصميم يعلّمه.
+  ضع <code>aria-current="page"</code> على الرابط الحالي، وتغنيك عن أي كلاس، فيعلن قارئ الشاشة أنه «الصفحة الحالية»،
+  ويميزه التصميم للعين.
 </p>

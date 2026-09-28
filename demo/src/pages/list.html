@@ -1,8 +1,8 @@
-<h2 id="basic">قائمة</h2>
+<h2 id="basic">القائمة</h2>
 <p>
-  <code>.ins-list</code> صفوف <code>.ins-list-item</code>، كلّ صفّ فيه ما يبدأ به (صورة، أيقونة)، ونصّ بسطرين
-  (<code>-title</code> و<code>-desc</code>)، وما ينتهي به (<code>-end</code>). كلّها اختيارية، وداخل لوح تصل
-  القائمة إلى حوافه.
+  تتألف <code>.ins-list</code> من صفوف <code>.ins-list-item</code>، وفي كل صف ما يبدأ به كصورة أو أيقونة، ثم نص
+  من سطرين (<code>-title</code> و<code>-desc</code>)، ثم ما ينتهي به (<code>-end</code>). وكلها اختيارية، وإذا
+  وُضعت القائمة داخل لوح امتدت إلى حوافه.
 </p>
 <demo-example>
   <div class="ins-panel">
@@ -22,8 +22,8 @@
   </div>
 </demo-example>
 
-<h2 id="links">قائمة روابط</h2>
-<p>صفوف من <code>&lt;a&gt;</code> تصير قابلة للنقر كاملةً، و<code>aria-current="page"</code> يعلّم الحالي.</p>
+<h2 id="links">قائمة الروابط</h2>
+<p>إذا كانت الصفوف <code>&lt;a&gt;</code> صار الصف كله قابلًا للنقر، وتميز <code>aria-current="page"</code> الرابط الحالي.</p>
 <demo-example>
   <nav class="ins-list" aria-label="الإعدادات">
     <a class="ins-list-item" href="#links" aria-current="page"><span class="ins-list-text"><span class="ins-list-title">عام</span></span></a>
@@ -33,10 +33,10 @@
 </demo-example>
 
 <h2 id="plain">بلا لوح</h2>
-<p>القائمة بلا سطح خاصّ بها، فتصلح خارج اللوح بفواصلها وحدها.</p>
+<p>ليس للقائمة سطح خاص بها، فتصلح خارج اللوح وتكفيها فواصلها.</p>
 <demo-example>
   <ul class="ins-list">
-    <li class="ins-list-item"><span class="ins-list-text"><span class="ins-list-title">الأوّل</span></span></li>
+    <li class="ins-list-item"><span class="ins-list-text"><span class="ins-list-title">الأول</span></span></li>
     <li class="ins-list-item"><span class="ins-list-text"><span class="ins-list-title">الثاني</span></span></li>
   </ul>
 </demo-example>

@@ -9,7 +9,7 @@
      <script src="insiyab.js"></script>
      <script src="plugins/insiyab-otp.js"></script>
 
-     <input data-ins-otp="6" name="code" aria-label="رمز التحقق" required>
+     <input data-ins-otp="6" name="code" aria-label="رمز التحقّق" required>
 
    **It stays one input.** The boxes are drawn over a single real field, so the
    phone's "code from Messages" suggestion, a paste of the whole code, a password
@@ -41,7 +41,7 @@
   var READY = 'input[data-ins-otp-ready]';
 
   var TEXT = {
-    ar: { short: function (n, alnum) { return 'أدخل الرمز كاملًا: ' + n + (alnum ? ' خانات.' : ' أرقام.'); } },
+    ar: { short: function (n, alnum) { return 'اكتب الرمز كاملًا: ' + n + (alnum ? ' خانات.' : ' أرقام.'); } },
     en: { short: function (n, alnum) { return 'Enter all ' + n + (alnum ? ' characters.' : ' digits.'); } }
   };
 

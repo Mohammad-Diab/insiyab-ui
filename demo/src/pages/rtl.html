@@ -1,7 +1,7 @@
 <h2 id="flip">اقلب الصفحة</h2>
 <p>
-  الاتجاه هو سمة <code>dir</code> على <code>&lt;html&gt;</code> فقط، والأصناف نفسها تعمل في الاتجاهين.
-  الزرّان أدناه يقلبان هذه الصفحة كلّها.
+  الاتجاه كله في سمة <code>dir</code> على <code>&lt;html&gt;</code>، والكلاسات نفسها تعمل في الاتجاهين.
+  وبالزرين أدناه تقلب هذه الصفحة كلها.
 </p>
 <demo-example code="none" class="row">
   <div class="ins-seg site-dir">
@@ -10,14 +10,15 @@
   </div>
 </demo-example>
 
-<h2 id="logical">خصائص منطقية</h2>
+<h2 id="logical">الخصائص المنطقية</h2>
 <p>
-  <code>s</code> تعني البداية و<code>e</code> النهاية، لا اليمين واليسار. فـ <code>ins-ms-auto</code>
-  يدفع العنصر إلى النهاية، و<code>ins-ps-4</code> حشوة في جهة البداية. اقلب الاتجاه أعلاه وراقب:
+  يرمز <code>s</code> إلى البداية و<code>e</code> إلى النهاية، وهما تدوران مع الاتجاه فلا تثبتان على يمين أو يسار.
+  فالكلاس <code>ins-ms-auto</code> يدفع العنصر إلى النهاية، و<code>ins-ps-4</code> يضع <code>padding</code> في جهة البداية.
+  اقلب الاتجاه أعلاه وراقب:
 </p>
 <demo-example class="stack">
   <div class="ins-row">
-    <div class="demo-box">١</div>
+    <div class="demo-box">1</div>
     <div class="demo-box ins-ms-auto">ins-ms-auto</div>
   </div>
   <div class="demo-frame ins-ps-4"><div class="demo-box">ins-ps-4</div></div>
@@ -25,8 +26,8 @@
 
 <h2 id="numbers">الأرقام في سطر عربي</h2>
 <p>
-  داخل نصّ عربي تنتقل إشارة الناقص إلى الطرف الآخر من الرقم، فيُقرأ <span dir="ltr">1,500-</span>.
-  <code>.ins-num</code> و<code>.ins-money</code> تعزلان الرقم وتكتبانه بأرقام متساوية العرض.
+  في النص العربي تنتقل إشارة الناقص إلى الطرف الآخر من الرقم، فيُقرأ <span dir="ltr">1,500-</span>.
+  لذا يعزل الكلاسان <code>.ins-num</code> و<code>.ins-money</code> الرقم عن اتجاه السطر، ويكتبانه بأرقام متساوية العرض.
 </p>
 <demo-example class="stack">
   <p class="ins-m-0">الرصيد: <span class="ins-money ins-money--neg"><span class="ins-money-val">-1,500</span><span class="ins-money-cur">ر.س</span></span></p>
@@ -35,12 +36,12 @@
 
 <h2 id="fonts">الخطوط والنطاقات</h2>
 <p>
-  كلّ خطّ مقسّم بـ <code>unicode-range</code>، فالمتصفّح لا يحمّل إلّا النطاق الذي تحتاجه الصفحة.
+  قُسم كل خط بـ <code>unicode-range</code>، فلا يجلب المتصفح منه إلا النطاق الذي تحتاجه الصفحة.
 </p>
 
-<h2 id="icons">الأيقونات الاتجاهية</h2>
+<h2 id="icons">الأيقونات ذات الاتجاه</h2>
 <p>
-  أسهم المكتبة تنقلب مع الاتجاه وحدها. أمّا أيقوناتك الاتجاهية، فاقلبها بقاعدة:
+  تنقلب أسهم المكتبة مع الاتجاه من تلقاء نفسها. أما أيقوناتك التي تشير إلى جهة، فاقلبها بقاعدة كهذه:
 </p>
 <demo-code lang="css">
 [dir="rtl"] .icon-forward { transform: scaleX(-1); }
@@ -48,21 +49,21 @@
 
 <h2 id="scrollbar">شريط التمرير</h2>
 <p>
-  كروم يضع شريط تمرير النافذة يمينًا أيًّا كان الاتجاه. لنقله إلى جهة البداية، تمرّر المكتبة عنصرًا
-  بدل النافذة، وهذا اختياري:
+  يضع كروم شريط تمرير النافذة على اليمين أيًا كان الاتجاه. فإن أردته في جهة البداية جعلت المكتبة
+  التمرير في عنصر بدل النافذة، وهذا اختياري:
 </p>
 <demo-code lang="html">
 <html dir="rtl" data-ins-scrollbar="lead">
 </demo-code>
 <p class="site-note">
-  إن فعّلته فاقرأ موضع التمرير بـ <code>Insiyab.scrollTop()</code>، لأنّ حدث <code>scroll</code> لا يصل
-  إلى <code>window</code>.
+  إن اخترته فاقرأ موضع التمرير بـ <code>Insiyab.scrollTop()</code>، لأن حدث <code>scroll</code> لا يبلغ
+  <code>window</code> حينها.
 </p>
 
 <h2 id="locale">اللغة والتقويم</h2>
 <p>
-  منتقي التاريخ يكتب الشهور بلغة الصفحة ويبدأ الأسبوع بالسبت في صفحة عربية. ولأسماء شهور بلد
-  آخر حدّد <code>lang</code> على الصفحة، أو <code>data-ins-locale</code> على حقل واحد:
+  يكتب منتقي التاريخ الشهور بلغة الصفحة، ويبدأ الأسبوع بالسبت في الصفحة العربية. وإن أردت أسماء الشهور
+  كما تُكتب في بلد آخر فحدد <code>lang</code> على الصفحة، أو <code>data-ins-locale</code> على حقل واحد:
 </p>
 <demo-code lang="html">
 <html lang="ar-SA">                      <!-- يناير، فبراير… -->

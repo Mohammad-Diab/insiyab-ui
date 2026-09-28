@@ -1,9 +1,9 @@
 <h2 id="combo">الإكمال التلقائي</h2>
 <p>
-  حقل وقائمة خيارات داخل <code>.ins-combo</code>. السكربت يضيف نمط combobox كاملًا — الأدوار، والأسهم،
-  و<kbd class="ins-kbd">Enter</kbd> للاختيار و<kbd class="ins-kbd">Esc</kbd> للإغلاق — ومطابقة
-  <b>تفهم العربية</b>: التشكيل مُهمَل، وصور الهمزة على الألف حرف واحد، والتاء المربوطة تطابق الهاء،
-  والألف المقصورة تطابق الياء. جرّب «الاسكندرية» أو «جده».
+  يضم <code>.ins-combo</code> حقلًا وقائمة خيارات، ويبني عليهما السكربت نمط combobox كاملًا: أدوار ARIA، والتنقل بالأسهم،
+  و<kbd class="ins-kbd">Enter</kbd> للاختيار و<kbd class="ins-kbd">Esc</kbd> للإغلاق. ومطابقته
+  <b>تفهم العربية</b>، فلا تلتفت إلى التشكيل، وتعد صور الهمزة على الألف حرفًا واحدًا، وتساوي بين التاء المربوطة والهاء،
+  وبين الألف المقصورة والياء. جرب «الاسكندرية» أو «جده».
 </p>
 <demo-example>
   <div class="ins-combo">
@@ -19,16 +19,16 @@
   </div>
 </demo-example>
 <p>
-  <code>.ins-combo-empty</code> يظهر حين لا يطابق شيء. القيمة تذهب إلى الحقل المخفيّ إن وُجد، ويُطلق
-  <code>ins:combo</code> ومعه <code>value</code> و<code>label</code>.
+  ويظهر <code>.ins-combo-empty</code> إذا لم يطابق شيء. وتذهب القيمة المختارة إلى الحقل المخفي إن أضفته، ويُطلق
+  حدث <code>ins:combo</code> ومعه <code>value</code> و<code>label</code>.
 </p>
 
 <h2 id="date">التاريخ</h2>
 <p>
-  <code>data-ins-date</code> على حقل تاريخ أصلي داخل <code>.ins-input-group</code>. بلا سكربت هو حقل المتصفّح
-  نفسه؛ ومعه يكتب التاريخ بلغة الصفحة، بتقويم يبدأ أسبوعه يوم السبت في صفحة عربية، والأسهم تتنقّل بين الأيّام
-  في اتجاه الصفحة. والحقل المخفيّ يأخذ الاسم الأصلي، فيصل الخادم <code>2026-09-23</code> كما هو.
-  و<code>min</code> و<code>max</code> يعملان.
+  ضع <code>data-ins-date</code> على <code>&lt;input type="date"&gt;</code> داخل <code>.ins-input-group</code>. فإن غاب السكربت بقي حقل المتصفح
+  نفسه، وإن حضر كتب التاريخ بلغة الصفحة، وفتح تقويمًا يبدأ أسبوعه يوم السبت إذا كانت الصفحة عربية، وتنقلت فيه الأسهم بين
+  الأيام مع اتجاه الصفحة. وينتقل <code>name</code> الحقل إلى حقل مخفي، فيتلقى الخادم <code>2026-09-23</code> كما هو.
+  ويلتزم التقويم بـ <code>min</code> و<code>max</code> كذلك.
 </p>
 <demo-example>
   <div class="ins-input-group">
@@ -36,10 +36,10 @@
   </div>
 </demo-example>
 
-<h3 id="date-range">مدى تاريخين</h3>
+<h3 id="date-range">فترة بين تاريخين</h3>
 <p>
-  حقل واحد: <code>data-ins-date-range="to"</code> يعطي النهاية اسمها، و<code>data-ins-date-to</code> قيمتها الأولى.
-  النقرة الأولى في التقويم البداية والثانية النهاية، والشريط بينهما يتبع المؤشّر. ويصل الخادمَ <code>from</code> و<code>to</code>.
+  تجتمع الفترة في حقل واحد، تعطي فيه <code>data-ins-date-range="to"</code> تاريخ النهاية اسمه (<code>name</code>)، وتعطيه <code>data-ins-date-to</code> قيمته
+  الابتدائية. فالنقرة الأولى في التقويم تحدد البداية والثانية تحدد النهاية، والشريط بينهما يلحق بالمؤشر. ثم يتلقى الخادم <code>from</code> و<code>to</code>.
 </p>
 <demo-example>
   <div class="ins-field">
@@ -52,10 +52,10 @@
 
 <h2 id="time">الوقت</h2>
 <p>
-  <code>data-ins-time</code> على <code>&lt;input type="time"&gt;</code> يعرض الوقت كما تكتبه لغة الصفحة، وتحته أسطوانات للساعة
-  والدقيقة والفترة، تقفز الدقائق فيها كلّ <code>step</code> ثانية (نصف ساعة إن لم يُذكر) بين <code>min</code> و<code>max</code>.
-  والكتابة تعمل أيضًا: «14:30» و«2:30 م».
-  ويصل الخادمَ <code>HH:MM</code> باسم الحقل كما كان سيصله من الحقل الأصلي.
+  ضع <code>data-ins-time</code> على <code>&lt;input type="time"&gt;</code> فيعرض الوقت كما تكتبه لغة الصفحة، وتظهر تحته أعمدة تمرير
+  للساعة والدقيقة والفترة (ص/م)، تقفز فيها الدقائق كل <code>step</code> ثانية (ونصف ساعة إن لم تذكرها)، ولا تخرج عن <code>min</code> و<code>max</code>.
+  ويقبل الحقل الكتابة أيضًا، مثل «14:30» و«2:30 م».
+  ثم يتلقى الخادم <code>HH:MM</code> باسم الحقل، كما كان سيتلقاه من الحقل الأصلي.
 </p>
 <demo-example>
   <div class="ins-field">
@@ -66,8 +66,8 @@
 
 <h3 id="datetime">تاريخ ووقت معًا</h3>
 <p>
-  <code>&lt;input type="datetime-local" data-ins-date&gt;</code> حقل واحد، والتقويم يفتح والأسطوانات بجانبه.
-  ويصل الخادمَ <code>2026-09-26T14:30</code> باسم الحقل.
+  يجمع <code>&lt;input type="datetime-local" data-ins-date&gt;</code> الأمرين في حقل واحد، فيفتح التقويم وإلى جانبه أعمدة التمرير.
+  ويتلقى الخادم <code>2026-09-26T14:30</code> باسم الحقل.
 </p>
 <demo-example>
   <div class="ins-field">
@@ -80,14 +80,14 @@
 
 <h2 id="range">المنزلق</h2>
 <p>
-  <code>&lt;input type="range" class="ins-range"&gt;</code> أصلي: لوحة المفاتيح والقيمة والإعلان للمنصّة،
-  واتجاهه أيضًا — في صفحة عربية الحدّ الأدنى على اليمين.
+  المنزلق عنصر <code>&lt;input type="range" class="ins-range"&gt;</code> أصلي، فلوحة المفاتيح والقيمة وما يسمعه قارئ الشاشة
+  من شأن المتصفح، وكذلك اتجاهه، ففي الصفحة العربية يقع الحد الأدنى على اليمين.
 </p>
 <demo-example>
   <input class="ins-range" type="range" min="0" max="50" step="5" value="20" aria-label="النسبة">
 </demo-example>
 
-<h2 id="stepper">العدّاد</h2>
+<h2 id="stepper">العداد</h2>
 <demo-example>
   <div class="ins-input-group" style="max-inline-size:11rem">
     <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>

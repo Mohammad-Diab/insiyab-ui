@@ -3,7 +3,7 @@
 Jinja macros for [Insiyab](https://github.com/Mohammad-Diab/insiyab-ui), the
 RTL-first UI library, with the library's own stylesheet, script, fonts and plugins
 in the package. Each macro writes the markup the library's docs show, and
-`insiyab.js` does the behaviour, so a server-rendered page is an Insiyab page like
+`insiyab.js` does the behavior, so a server-rendered page is an Insiyab page like
 any other.
 
 ```sh
@@ -54,7 +54,7 @@ if it is off. The macro files end in `.html` so that Flask autoescapes them too.
     {% call ins.field('التاريخ', id='delivery') %}
       {{ ins.date(id='delivery', name='delivery', value='2026-09-30') }}
     {% endcall %}
-    {% call ins.field('الجوال', id='mobile') %}
+    {% call ins.field('الهاتف', id='mobile') %}
       {{ ins.phone(id='mobile', name='mobile', value='+966501234567') }}
     {% endcall %}
     {{ ins.button('حفظ', variant='primary') }}

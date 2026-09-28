@@ -1,34 +1,34 @@
-<h2 id="checkbox">مربّعات الاختيار</h2>
-<p>عنصر <code>&lt;input type="checkbox"&gt;</code> حقيقي داخل <code>&lt;label class="ins-check"&gt;</code>، فالنقر على النصّ يبدّله، ولوحة المفاتيح وقيمة النموذج للمنصّة.</p>
+<h2 id="checkbox">مربعات الاختيار</h2>
+<p>المربع عنصر <code>&lt;input type="checkbox"&gt;</code> حقيقي داخل <code>&lt;label class="ins-check"&gt;</code>، فإذا نقرت النص تبدلت حالته، وتبقى لوحة المفاتيح وقيمة النموذج من شأن المتصفح.</p>
 <demo-example class="row">
-  <label class="ins-check"><input type="checkbox" checked><span class="ins-check-text">محدّد</span></label>
-  <label class="ins-check"><input type="checkbox"><span class="ins-check-text">غير محدّد</span></label>
-  <label class="ins-check"><input type="checkbox" disabled><span class="ins-check-text">معطّل</span></label>
+  <label class="ins-check"><input type="checkbox" checked><span class="ins-check-text">محدد</span></label>
+  <label class="ins-check"><input type="checkbox"><span class="ins-check-text">غير محدد</span></label>
+  <label class="ins-check"><input type="checkbox" disabled><span class="ins-check-text">معطل</span></label>
 </demo-example>
 
-<h3 id="indeterminate">«بعضها محدّد»</h3>
+<h3 id="indeterminate">«بعضها محدد»</h3>
 <p>
-  لا سمة HTML لهذه الحالة — هي خاصّية لا يضبطها إلّا سكربت — فالمكتبة تجعل <code>data-ins-indeterminate</code>
-  شكلها في الشيفرة.
+  ليس في HTML سمة لهذه الحالة، فهي الخاصية <code>indeterminate</code> ولا يضبطها إلا جافاسكربت، لذا تتيح لك المكتبة أن تكتبها في HTML بالسمة
+  <code>data-ins-indeterminate</code>.
 </p>
 <demo-example class="stack">
-  <label class="ins-check"><input type="checkbox" id="c-all" data-ins-indeterminate><span class="ins-check-text">الكلّ</span></label>
+  <label class="ins-check"><input type="checkbox" id="c-all" data-ins-indeterminate><span class="ins-check-text">الكل</span></label>
   <div class="ins-stack ins-ps-6" id="c-items">
-    <label class="ins-check"><input type="checkbox" checked><span class="ins-check-text">الأوّل</span></label>
+    <label class="ins-check"><input type="checkbox" checked><span class="ins-check-text">الأول</span></label>
     <label class="ins-check"><input type="checkbox"><span class="ins-check-text">الثاني</span></label>
   </div>
 </demo-example>
 
-<h2 id="radio">الدوائر</h2>
+<h2 id="radio">أزرار الاختيار</h2>
 <demo-example class="row">
-  <label class="ins-check"><input type="radio" name="r-demo" checked><span class="ins-check-text">الأوّل</span></label>
+  <label class="ins-check"><input type="radio" name="r-demo" checked><span class="ins-check-text">الأول</span></label>
   <label class="ins-check"><input type="radio" name="r-demo"><span class="ins-check-text">الثاني</span></label>
   <label class="ins-check"><input type="radio" name="r-demo"><span class="ins-check-text">الثالث</span></label>
 </demo-example>
 
 <h2 id="switch">المفتاح</h2>
 <p>
-  <code>.ins-switch</code> للإعداد ذي الحالتين، بتسمية <code>-label</code> ووصف اختياري <code>-desc</code>.
+  يصلح <code>.ins-switch</code> لكل إعداد له حالتان، وفيه تسمية <code>-label</code>، ووصف <code>-desc</code> إن شئت.
 </p>
 <demo-example class="stack">
   <label class="ins-switch">
@@ -45,7 +45,7 @@
 </demo-example>
 
 <h3 id="switch-card">مفاتيح في بطاقات</h3>
-<p><code>.ins-switch--card</code> مفتاح واحد في إطار، و<code>.ins-switch-grid</code> شبكة منها لصفحة إعدادات.</p>
+<p>يضع <code>.ins-switch--card</code> المفتاح الواحد في إطار، ويرتب <code>.ins-switch-grid</code> المفاتيح في شبكة تليق بصفحة الإعدادات.</p>
 <demo-example>
   <label class="ins-switch ins-switch--card">
     <input type="checkbox" checked><span class="ins-switch-track"></span>
@@ -70,21 +70,21 @@
 
 <h2 id="tiles">بطاقات الاختيار</h2>
 <p>
-  لاختيار يستحقّ أكثر من سطر: دائرة أو مربّع حقيقي داخل <code>.ins-tile</code>، والبطاقة ترسم ما يعرفه
-  <code>:checked</code> أصلًا. و<code>.ins-tile-grid</code> يصفّها.
+  إذا احتاج الخيار إلى أكثر من سطر فضع زر اختيار أو مربع اختيار حقيقيًا داخل <code>.ins-tile</code>، وما البطاقة إلا مظهر
+  لحالة <code>:checked</code> التي يعرفها المتصفح أصلًا. ثم يرتب <code>.ins-tile-grid</code> البطاقات في شبكة.
 </p>
 <demo-example>
-  <div class="ins-tile-grid" role="radiogroup" aria-label="الخطّة">
+  <div class="ins-tile-grid" role="radiogroup" aria-label="الخطة">
     <label class="ins-tile"><input type="radio" name="plan" value="a"><span class="ins-tile-title">الأولى</span><span class="ins-tile-desc">وصف قصير</span></label>
     <label class="ins-tile"><input type="radio" name="plan" value="b" checked><span class="ins-tile-title">الثانية</span><span class="ins-tile-desc">وصف قصير</span></label>
     <label class="ins-tile"><input type="radio" name="plan" value="c"><span class="ins-tile-title">الثالثة</span><span class="ins-tile-desc">وصف قصير</span></label>
   </div>
 </demo-example>
 
-<h2 id="segmented">الشريط المقسّم</h2>
+<h2 id="segmented">الشريط المقسم</h2>
 <p>
-  اختيار واحد من بضعة بدائل قصيرة، والمختار عليه <code>.is-active</code>. والحدث <code>ins:seg</code> يحمل
-  القيمة من <code>data-ins-value</code>.
+  الشريط المقسم (segmented control) يختار منه المستخدم بديلًا واحدًا من بدائل قليلة قصيرة، ويحمل المختار منها <code>.is-active</code>. ويُطلق الشريط
+  حدث <code>ins:seg</code> وفيه القيمة المأخوذة من <code>data-ins-value</code>.
 </p>
 <demo-example class="row">
   <div class="ins-seg" role="group" aria-label="الفترة">

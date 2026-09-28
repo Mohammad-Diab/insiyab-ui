@@ -40,8 +40,10 @@
 
   var SHOWN = 3;
   var WORDS = {
-    ar: { prev: 'الشهر السابق', next: 'الشهر التالي', today: 'اليوم', more: '+{n}', events: '{n} مواعيد' },
-    en: { prev: 'Previous month', next: 'Next month', today: 'Today', more: '+{n}', events: '{n} events' }
+    ar: { prev: 'الشهر السابق', next: 'الشهر التالي', today: 'اليوم', more: '+{n}',
+      events: function (n) { var r = n % 100; return n === 1 ? 'موعد واحد' : n === 2 ? 'موعدان' : n + (r >= 3 && r <= 10 ? ' مواعيد' : r >= 11 ? ' موعدًا' : ' موعد'); } },
+    en: { prev: 'Previous month', next: 'Next month', today: 'Today', more: '+{n}',
+      events: function (n) { return n === 1 ? '1 event' : n + ' events'; } }
   };
 
   function el(tag, cls, text) {
@@ -172,7 +174,7 @@
         if (cur.getMonth() !== month.getMonth()) td.classList.add('is-other');
         if (key === today) { td.classList.add('is-today'); td.setAttribute('aria-current', 'date'); }
         var num = el('span', 'ins-month-num', String(cur.getDate()));
-        num.setAttribute('aria-label', full.format(cur) + (list.length ? '، ' + w.events.replace('{n}', list.length) : ''));
+        num.setAttribute('aria-label', full.format(cur) + (list.length ? '، ' + w.events(list.length) : ''));
         td.appendChild(num);
         if (list.length) {
           var wrap = el('div', 'ins-month-events-day');

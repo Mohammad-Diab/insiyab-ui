@@ -277,7 +277,7 @@ await b.goto(`${BASE}/demo/tables.html`);
 await b.key('k', CTRL);
 await b.sleep(200);
 v = await view('site-search');
-ok("the docs search is the plugin, collecting the sidebar but not the logo", v.open && v.rows.includes('مقدّمة') && !v.rows.some((r) => r.includes('انسياب')), JSON.stringify(v.rows.slice(0, 4)));
+ok("the docs search is the plugin, collecting the sidebar but not the logo", v.open && v.rows.includes('مقدمة') && !v.rows.some((r) => r.includes('انسياب')), JSON.stringify(v.rows.slice(0, 4)));
 await query('جدول', 'site-search');
 ok('a singular finds the page named in the plural, through its lead', (await view('site-search')).rows[0] === 'الجداول', JSON.stringify((await view('site-search')).rows));
 await query('butt', 'site-search');

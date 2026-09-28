@@ -76,7 +76,7 @@
       e.preventDefault();
       setTimeout(function () {
         if (e.detail.step === 0 && phone.value === '0900000000') {
-          phone.setCustomValidity('هذا الرقم غير مسجّل.');
+          phone.setCustomValidity('هذا الرقم غير مسجل.');
           phone.reportValidity();
           Insiyab.wizard(login, 'stay');
           return;
@@ -94,7 +94,7 @@
           code.reportValidity();
           return;
         }
-        Insiyab.toast('تمّ الدخول', 'ok');
+        Insiyab.toast('تم الدخول', 'ok');
         login.reset();
         Insiyab.wizard(login, 'restart');
       }, 700);

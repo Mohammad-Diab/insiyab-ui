@@ -1,7 +1,7 @@
 <h2 id="columns">الأعمدة</h2>
 <p>
-  <code>.ins-cols-2</code> و<code>-3</code> و<code>-4</code> و<code>-6</code> و<code>-12</code>: أعمدة متساوية بفراغ
-  ثابت بينها. ضيّق النافذة لترى الانهيار.
+  تصنع <code>.ins-cols-2</code> و<code>-3</code> و<code>-4</code> و<code>-6</code> و<code>-12</code> أعمدة متساوية
+  بينها فراغ ثابت، وإذا ضاقت النافذة رأيتها تتراص بعضها فوق بعض.
 </p>
 <demo-example class="stack">
   <div class="ins-cols-2"><div class="demo-box">cols-2</div><div class="demo-box">cols-2</div></div>
@@ -10,7 +10,7 @@
 </demo-example>
 
 <h2 id="span">الامتداد</h2>
-<p>داخل <code>.ins-cols-12</code>، تأخذ الخليّة <code>.ins-span-N</code> عدد N من الأعمدة، و<code>.ins-span-full</code> السطر كلّه.</p>
+<p>في شبكة <code>.ins-cols-12</code> تمتد الخلية ذات <code>.ins-span-N</code> على N من الأعمدة، وتمتد ذات <code>.ins-span-full</code> على السطر كله.</p>
 <demo-example class="stack">
   <div class="ins-cols-12">
     <div class="demo-box ins-span-8">span-8</div>
@@ -26,23 +26,23 @@
   </div>
 </demo-example>
 
-<h2 id="collapse">الانهيار التلقائي</h2>
+<h2 id="collapse">التكيف مع الشاشة</h2>
 <p>
-  لا أصناف لكلّ مقاس. شبكة <code>.ins-cols-*</code> تنزل إلى عمودين عند 900px، وتأخذ الخليّة الممتدّة
-  السطر كلّه، ثمّ تصير عمودًا واحدًا على الهاتف.
+  تغنيك الشبكة عن كلاسات لكل مقاس، فشبكة <code>.ins-cols-*</code> تنزل إلى عمودين عند 900px وتأخذ فيها الخلية الممتدة
+  السطر كله، ثم تصير عمودًا واحدًا على الهاتف.
 </p>
-<p>وحين يكون عدد الأعمدة ثابتًا بطبيعته، كأيّام الأسبوع، أضف <code>.ins-cols--fixed</code> فلا تنهار أبدًا:</p>
+<p>وإذا كان عدد الأعمدة ثابتًا بطبيعته كأيام الأسبوع، فأضف <code>.ins-cols--fixed</code> لتبقى على عددها في كل مقاس:</p>
 <demo-example>
   <div class="ins-cols-3 ins-cols--fixed">
-    <div class="demo-box">١</div><div class="demo-box">٢</div><div class="demo-box">٣</div>
-    <div class="demo-box">٤</div><div class="demo-box">٥</div><div class="demo-box">٦</div>
+    <div class="demo-box">1</div><div class="demo-box">2</div><div class="demo-box">3</div>
+    <div class="demo-box">4</div><div class="demo-box">5</div><div class="demo-box">6</div>
   </div>
 </demo-example>
 
 <h2 id="auto">الشبكة المرنة</h2>
 <p>
-  <code>.ins-grid</code> تضع من الخلايا ما يتّسع، كلّ خليّة بعرض أدنى 11rem. <code>--wide</code> يرفعه
-  إلى 20rem و<code>--half</code> إلى 26rem، أو اضبط <code>--ins-col</code> بنفسك. وتدخل خلاياها متدرّجة.
+  تضع <code>.ins-grid</code> في السطر ما يتسع له من الخلايا، على ألا يقل عرض الخلية عن 11rem. ويرفع <code>--wide</code> هذا الحد
+  إلى 20rem و<code>--half</code> إلى 26rem، ولك أن تضبط <code>--ins-col</code> بنفسك. وتدخل خلاياها بحركة متتابعة، واحدة تلو الأخرى.
 </p>
 <demo-example>
   <div class="ins-grid">
@@ -55,16 +55,16 @@
 <div class="ins-grid" style="--ins-col: 14rem">…</div>
 </demo-code>
 
-<h2 id="breakpoints">نقاط الانكسار</h2>
+<h2 id="breakpoints">نقاط الانكسار (breakpoints)</h2>
 <div class="ins-panel site-ref">
   <div class="ins-panel-body ins-panel-body--flush">
     <div class="ins-table-wrap">
       <table class="ins-table">
-        <thead><tr><th>الاسم</th><th class="ins-num">العرض</th><th>ما يتغيّر عنده</th></tr></thead>
+        <thead><tr><th>الاسم</th><th class="ins-num">العرض</th><th>ما يتغير عنده</th></tr></thead>
         <tbody>
-          <tr><td><code>sm</code></td><td class="ins-num">34rem</td><td>الشبكات عمود واحد، والسطر الفرعي في الشريط العلوي يختفي.</td></tr>
-          <tr><td><code>md</code></td><td class="ins-num">900px</td><td>الشريط الجانبي درج، والشبكات عمودان، وقائمة الموقع تنطوي.</td></tr>
-          <tr><td><code>lg</code></td><td class="ins-num">1200px</td><td>للإظهار والإخفاء فقط: <code>ins-hide-below-lg</code> و<code>ins-hide-above-lg</code>.</td></tr>
+          <tr><td><code>sm</code></td><td class="ins-num">34rem</td><td>تصير الشبكات عمودًا واحدًا، ويختفي السطر الفرعي من الشريط العلوي.</td></tr>
+          <tr><td><code>md</code></td><td class="ins-num">900px</td><td>يصير الشريط الجانبي درجًا والشبكات عمودين، وتنطوي قائمة الموقع.</td></tr>
+          <tr><td><code>lg</code></td><td class="ins-num">1200px</td><td>يقتصر على كلاسين للإظهار والإخفاء: <code>ins-hide-below-lg</code> و<code>ins-hide-above-lg</code>.</td></tr>
         </tbody>
       </table>
     </div>
@@ -72,7 +72,7 @@
 </div>
 
 <h2 id="example">صفحة نموذجية</h2>
-<p>عمود رئيسي وعمود جانبي، يصيران عمودًا واحدًا على الهاتف دون صنف إضافي.</p>
+<p>عمود رئيسي يجاوره عمود جانبي، ويصيران على الهاتف عمودًا واحدًا دون كلاس إضافي.</p>
 <demo-example>
   <div class="ins-cols-12">
     <div class="demo-box demo-box--tall ins-span-8">المحتوى</div>

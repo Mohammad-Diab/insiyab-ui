@@ -1,7 +1,7 @@
 <h2 id="chip">الرقاقة</h2>
 <p>
-  <code>.ins-chip</code> قيمة صغيرة يتصرّف فيها المستخدم، حيث الشارة تُقرأ فقط: مرشّح يُزال، أو اختيار، أو وسم.
-  <code>.ins-chip-x</code> فيها يزيلها، و<code>.ins-chips</code> يصفّ عدّة رقاقات في سطر يلتفّ.
+  الرقاقة <code>.ins-chip</code> قيمة صغيرة يتصرف فيها المستخدم، أما الشارة فللقراءة وحدها. وقد تكون الرقاقة فلترًا تزيله،
+  أو خيارًا، أو وسمًا. ويزيلها زر <code>.ins-chip-x</code> الذي فيها، ويجمع <code>.ins-chips</code> الرقاقات في سطر يلتف إذا ضاق.
 </p>
 <demo-example>
   <div class="ins-chips">
@@ -10,11 +10,12 @@
     <span class="ins-chip">القاهرة<button type="button" class="ins-chip-x" aria-label="إزالة القاهرة"></button></span>
   </div>
 </demo-example>
-<p>قبل أن تُزال يُطلق <code>ins:chip-remove</code>، وإلغاؤه يبقيها.</p>
+<p>وقبل أن تزول الرقاقة يُطلق حدث <code>ins:chip-remove</code>، فإن ألغيته بقيت.</p>
 
 <h2 id="filter">رقاقات التصفية</h2>
 <p>
-  <code>button.ins-chip</code> مع <code>data-ins-toggle</code> مرشّح يُضغط ويُرفع، وحين يُضغط يأخذ لون الهوية وعلامة صحّ.
+  إذا جعلت الرقاقة <code>button.ins-chip</code> ومعها <code>data-ins-toggle</code> صارت فلترًا تشغله وتطفئه، فإذا شغلته أخذ
+  لون الهوية وظهرت عليه علامة صح.
 </p>
 <demo-example>
   <div class="ins-chips">
@@ -24,11 +25,11 @@
   </div>
 </demo-example>
 
-<h2 id="multi">اختيار متعدّد</h2>
+<h2 id="multi">اختيار متعدد</h2>
 <p>
-  <code>.ins-tags</code> حقل واحد بعدّة قيم. مع قائمة <code>.ins-combo-list</code> فيه يصير اختيارًا متعدّدًا بمطابقة الإكمال
-  التلقائي ومفاتيحه، والخيار المختار يصير رقاقة ويخرج من القائمة. كلّ رقاقة تحمل حقلًا مخفيًا باسم <code>data-ins-name</code>،
-  فيُرسل النموذج كلّ القيم، و<kbd class="ins-kbd">Backspace</kbd> في الحقل الفارغ يعيد آخر رقاقة.
+  يجمع <code>.ins-tags</code> قيمًا عدة في حقل واحد. فإذا وضعت فيه قائمة <code>.ins-combo-list</code> صار اختيارًا متعددًا
+  يطابق كما يطابق الإكمال التلقائي وينقاد لمفاتيحه، وكلما اخترت خيارًا صار رقاقة وخرج من القائمة. وتحمل كل رقاقة حقلًا مخفيًا
+  باسم <code>data-ins-name</code>، فيرسل النموذج القيم كلها. وإذا ضغطت <kbd class="ins-kbd">Backspace</kbd> والحقل فارغ محوت آخر رقاقة.
 </p>
 <demo-example>
   <div class="ins-field">
@@ -49,10 +50,10 @@
   </div>
 </demo-example>
 
-<h2 id="tags">وسوم حرّة</h2>
+<h2 id="tags">وسوم حرة</h2>
 <p>
-  بلا قائمة يأخذ الحقل ما يُكتب: <kbd class="ins-kbd">Enter</kbd> أو فاصلة تجعله رقاقة. و<code>data-ins-free</code> يسمح بالكتابة
-  الحرّة مع قائمة أيضًا، و<code>data-ins-max</code> يحدّ العدد.
+  وإذا خلا الحقل من القائمة قبل كل ما تكتبه فيه، ويصير ما كتبته رقاقة إذا ضغطت <kbd class="ins-kbd">Enter</kbd> أو كتبت فاصلة.
+  وتتيح <code>data-ins-free</code> الكتابة الحرة مع القائمة أيضًا، وتضع <code>data-ins-max</code> حدًا لعدد الوسوم.
 </p>
 <demo-example>
   <div class="ins-field">
@@ -62,7 +63,7 @@
     </div>
   </div>
 </demo-example>
-<p>كلّ إضافة وإزالة تُطلق <code>ins:tags</code> بالقيم كلّها.</p>
+<p>ومع كل إضافة أو إزالة يُطلق حدث <code>ins:tags</code> وفيه القيم كلها.</p>
 <demo-code lang="js">
 document.addEventListener('ins:tags', (e) => {
   console.log(e.detail.values, e.detail.added, e.detail.removed);

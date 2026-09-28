@@ -60,13 +60,13 @@ ok('the presets are the brand colour and a palette', p.presets[0] === '#9b2c5e' 
 ok('the contrast of the colour on white and on black', /على الأبيض/.test(p.text) && /على الأسود/.test(p.text) && /:1/.test(p.text), p.text);
 ok('the brand colour passes on white and fails on black', JSON.stringify(p.pass) === JSON.stringify([true, false]), JSON.stringify(p.pass));
 ok('the hue slider sits at the colour\'s hue', Math.abs(+p.hue - 333) <= 2, p.hue);
-ok('the square says where it is', /تشبّع \d+٪، سطوع \d+٪/.test(p.valuetext), p.valuetext);
+ok('the square says where it is', /تشبع \d+٪، سطوع \d+٪/.test(p.valuetext), p.valuetext);
 
 const before = await val('c-brand');
 await raw('ArrowUp', 'ArrowUp', 38, 8);
 ok('Shift+↑ brightens by ten', (await val('c-brand')) !== before && (await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`)).includes('سطوع 71٪'), await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`));
 await raw('ArrowLeft', 'ArrowLeft', 37, 8);
-ok('Shift+← takes saturation off', (await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`)).startsWith('تشبّع 62٪'), await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`));
+ok('Shift+← takes saturation off', (await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`)).startsWith('تشبع 62٪'), await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`));
 ok('each key sets the colour: input, change and ins:color', (await E(`__in`)) >= 2 && (await E(`__ch`)) === 2 && (await E(`__c.filter((x) => x.startsWith('c-brand')).length`)) === 2, `${await E('__in')} ${await E('__ch')} ${await E('__c.length')}`);
 
 const area = await E(`(() => { const r = document.querySelector('.ins-color-area').getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; })()`);
