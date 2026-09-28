@@ -63,7 +63,7 @@
     'CO57,CR506,CU53,CV238,CW599,CX61:89164,CY357,CZ420,DE49,DJ253,DK45,DM1:767,DO1:809.829.849,DZ213,EC593,' +
     'EE372,EG20,EH212:5288.5289,ER291,ES34,ET251,FI358,FJ679,FK500,FM691,FO298,FR33,GA241,GB44,GD1:473,GE995,' +
     'GF594,GG44:1481,GH233,GI350,GL299,GM220,GN224,GP590,GQ240,GR30,GT502,GU1:671,GW245,GY592,HK852,HN504,' +
-    'HR385,HT509,HU36,ID62,IE353,IL972,IM44:1624,IN91,IO246,IQ964,IR98,IS354,IT39,JE44:1534,JM1:876.658,JO962,' +
+    'HR385,HT509,HU36,ID62,IE353,IM44:1624,IN91,IO246,IQ964,IR98,IS354,IT39,JE44:1534,JM1:876.658,JO962,' +
     'JP81,KE254,KG996,KH855,KI686,KM269,KN1:869,KP850,KR82,KW965,KY1:345,KZ7:6.7,LA856,LB961,LC1:758,LI423,' +
     'LK94,LR231,LS266,LT370,LU352,LV371,LY218,MA212,MC377,MD373,ME382,MF590,MG261,MH692,MK389,ML223,MM95,MN976,' +
     'MO853,MP1:670,MQ596,MR222,MS1:664,MT356,MU230,MV960,MW265,MX52,MY60,MZ258,NA264,NC687,NE227,NF672,NG234,' +
@@ -161,6 +161,14 @@
     try { n = namers[key] && namers[key].of(iso); } catch (e) { n = null; }
     return n || iso;
   }
+
+  // Short and everyday names people type that the official names do not contain.
+  var ALIAS = {
+    AE: 'uae emirates dubai abu dhabi امارات دبي ابوظبي', SA: 'ksa saudi سعوديه', US: 'usa america امريكا', GB: 'uk britain england scotland wales بريطانيا انجلترا انكلترا',
+    KW: 'kuwait كويت', QA: 'qatar قطر', BH: 'bahrain بحرين', OM: 'oman عمان', EG: 'egypt مصر', JO: 'jordan اردن', PS: 'palestine فلسطين',
+    SY: 'syria سوريه', LB: 'lebanon لبنان', IQ: 'iraq عراق', YE: 'yemen يمن', SD: 'sudan سودان', MA: 'morocco مغرب', DZ: 'algeria جزائر', TN: 'tunisia تونس', LY: 'libya ليبيا',
+    NL: 'holland', KR: 'korea south korea كوريا', CZ: 'czech republic تشيك', CI: 'ivory coast', TR: 'turkey', RU: 'russia', MM: 'burma', CD: 'drc', VA: 'vatican'
+  };
 
   function latin(s) {
     return String(s || '')
@@ -502,7 +510,7 @@
     li.setAttribute('aria-selected', String(selected));
     li.setAttribute('data-iso', c.iso);
     var name = nameOf(c.iso, locale);
-    li.setAttribute('data-find', norm(name + ' ' + nameOf(c.iso, 'en') + ' ' + c.iso));
+    li.setAttribute('data-find', norm([name, nameOf(c.iso, 'en'), nameOf(c.iso, 'ar'), c.iso, ALIAS[c.iso] || ''].join(' ')));
     li.setAttribute('data-dial', c.dial);
     var iso = document.createElement('span');
     iso.className = 'ins-phone-iso';
