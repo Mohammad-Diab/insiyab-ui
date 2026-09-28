@@ -1,0 +1,105 @@
+/* Insiyab · Birth date plugin: three fields drawn as blocks, a status line and three columns. */
+.ins-birth { --ins-birth-d: 4.75rem; --ins-birth-m: 6rem; --ins-birth-y: 9.75rem; --ins-birth-gap: .75rem; display: grid; justify-items: center; gap: .375rem; }
+.ins-birth-segs { display: flex; justify-content: center; gap: var(--ins-birth-gap); }
+.ins-birth-seg { position: relative; display: grid; justify-items: center; gap: .25rem; cursor: text; }
+.ins-birth-in {
+  position: absolute; inset-inline: 0; inset-block-start: 0; z-index: 1; inline-size: 100%; block-size: 3.25rem; margin: 0; padding: 0;
+  border: 0; outline: 0; background: transparent; color: transparent; caret-color: transparent; font-size: 16px; text-align: center; cursor: text;
+}
+.ins-birth-in::selection { background: transparent; }
+.ins-birth-box {
+  position: relative; display: grid; place-items: center; block-size: 3.25rem; border-radius: var(--ins-r-md);
+  background: var(--ins-ctl-bg); box-shadow: inset 0 0 0 1px var(--ins-ctl-bd);
+  transition: box-shadow var(--ins-t-pop) var(--ins-ease), background var(--ins-t-pop) var(--ins-ease);
+}
+.ins-birth-seg[data-part="d"] .ins-birth-box { inline-size: var(--ins-birth-d); }
+.ins-birth-seg[data-part="m"] .ins-birth-box { inline-size: var(--ins-birth-m); }
+.ins-birth-seg[data-part="y"] .ins-birth-box { inline-size: var(--ins-birth-y); }
+.ins-birth-seg:focus-within .ins-birth-box { background: var(--ins-ctl-bg-hover); box-shadow: inset 0 0 0 2px var(--ins-primary), 0 0 0 4px var(--ins-tone-brand-bg); }
+.ins-birth-seg.is-no .ins-birth-box { box-shadow: inset 0 0 0 2px var(--ins-tone-bad), 0 0 0 4px var(--ins-tone-bad-bg); }
+.ins-birth-val { direction: ltr; font: 800 1.75rem/1 var(--ins-font-body-en); font-variant-numeric: tabular-nums; letter-spacing: .06em; color: var(--ins-text-1); }
+.ins-birth-val .is-auto { color: var(--ins-tone-brand); opacity: .8; }
+.ins-birth-ph { font: 600 var(--ins-fs-md)/1 var(--ins-font-body); letter-spacing: 0; color: var(--ins-text-3); }
+.ins-birth-dots { position: absolute; inset-block-end: .3rem; inset-inline: 0; display: flex; justify-content: center; gap: .25rem; }
+.ins-birth-dots i { inline-size: .3rem; block-size: .3rem; border-radius: 50%; background: var(--ins-ctl-bd); transition: background var(--ins-t-pop) var(--ins-ease), transform var(--ins-t-pop) var(--ins-ease-spring); }
+.ins-birth-dots i.is-on { background: var(--ins-primary); transform: scale(1.15); }
+.ins-birth-cap { font-size: var(--ins-fs-xs); font-weight: 700; color: var(--ins-label); transition: opacity var(--ins-t-pop) var(--ins-ease); }
+.ins-birth-seg:not(.is-filled) .ins-birth-cap { opacity: 0; }
+.ins-birth-seg[data-part="m"].is-filled .ins-birth-cap { color: var(--ins-tone-brand); }
+.ins-birth-line { margin: 0; min-block-size: 1.5em; text-align: center; font-size: var(--ins-fs-sm); color: var(--ins-label); }
+.ins-birth-line b { color: var(--ins-text-1); }
+
+.ins-birth-drum { --ins-drum-row: 2.25rem; gap: var(--ins-birth-gap); inline-size: 100%; }
+.ins-birth-col { block-size: calc(var(--ins-drum-row) * 3); padding-block: var(--ins-drum-row); cursor: grab; user-select: none; touch-action: pan-y; }
+.ins-birth-col.is-drag { cursor: grabbing; scroll-snap-type: none; }
+.ins-birth-col .ins-drum-item { cursor: inherit; }
+.ins-birth-col--d { inline-size: var(--ins-birth-d); }
+.ins-birth-col--m { inline-size: var(--ins-birth-m); }
+.ins-birth-col--y { inline-size: var(--ins-birth-y); }
+.ins-birth-col .ins-drum-item { font-size: 1.125rem; }
+.ins-birth-col--m .ins-drum-item { font-family: var(--ins-font-body); font-size: var(--ins-fs-sm); }
+.ins-birth-col.is-unset .ins-drum-item.is-on { color: var(--ins-text-3); font-weight: 600; }
+.ins-birth-col .ins-drum-item.is-out { opacity: .3; }
+.ins-birth:has(input:disabled) { opacity: .55; pointer-events: none; }
+
+@media (max-width: 26rem) {
+  .ins-birth { --ins-birth-d: 4rem; --ins-birth-m: 5.25rem; --ins-birth-y: 8rem; --ins-birth-gap: .5rem; }
+}
+
+/* The form field: one input-sized control with the three parts typed in place, and a button that opens the columns. */
+.ins-birth--field { justify-items: stretch; gap: .25rem; }
+.ins-birth-control {
+  display: flex; align-items: center; gap: .25rem; min-block-size: var(--ins-field-h); padding-inline: .5rem .25rem;
+  border: 1px solid var(--ins-ctl-bd); border-radius: var(--ins-r-md); background: var(--ins-ctl-bg); box-shadow: var(--ins-bevel-dim), var(--ins-sh-subtle); cursor: text;
+  transition: border-color var(--ins-t-base) var(--ins-ease), box-shadow var(--ins-t-base) var(--ins-ease), background var(--ins-t-base) var(--ins-ease);
+}
+.ins-birth-control:hover:not(:focus-within) { border-color: rgba(var(--ins-primary-rgb), .30); background-color: var(--ins-ctl-bg-hover); }
+.ins-birth-control:focus-within { border-color: rgba(var(--ins-primary-rgb), .55); background-color: var(--ins-ctl-bg-hover); box-shadow: var(--ins-glow), var(--ins-bevel-dim), 0 4px 16px rgba(var(--ins-primary-rgb), .10); }
+.ins-birth--field .ins-birth-segs { flex: 1 1 auto; justify-content: flex-start; gap: .125rem; align-items: center; }
+.ins-birth--field .ins-birth-seg { display: block; }
+.ins-birth--field .ins-birth-box { inline-size: auto !important; min-inline-size: 2.5rem; block-size: 2rem; padding-inline: .375rem; background: none; box-shadow: none; border-radius: var(--ins-r-sm); }
+.ins-birth--field .ins-birth-seg[data-part="y"] .ins-birth-box { min-inline-size: 3.5rem; }
+.ins-birth--field .ins-birth-seg[data-part="m"] .ins-birth-box { min-inline-size: 3.25rem; }
+.ins-birth--field:lang(ar) .ins-birth-seg[data-part="m"] .ins-birth-box { min-inline-size: 2.75rem; }
+.ins-birth--field .ins-birth-seg:focus-within .ins-birth-box { background: var(--ins-tone-brand-bg); box-shadow: none; }
+.ins-birth--field .ins-birth-seg.is-no .ins-birth-box { background: var(--ins-tone-bad-bg); box-shadow: none; }
+.ins-birth--field .ins-birth-in { block-size: 2rem; }
+.ins-birth--field .ins-birth-val { font-size: 1rem; font-weight: 700; letter-spacing: .04em; }
+.ins-birth--field .ins-birth-ph { font-size: .875rem; font-weight: 500; }
+.ins-birth--field .ins-birth-dots, .ins-birth--field .ins-birth-cap { display: none; }
+.ins-birth-sep { color: var(--ins-text-3); font-size: .875rem; user-select: none; }
+.ins-birth-btn {
+  flex: 0 0 auto; display: grid; place-items: center; inline-size: 2.25rem; block-size: 2.25rem; margin-inline-start: auto; padding: 0;
+  border: 0; border-radius: var(--ins-r-sm); background: transparent; color: var(--ins-label); cursor: pointer;
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+}
+.ins-birth-btn:hover:not(:disabled), .ins-birth-btn[aria-expanded="true"] { background: var(--ins-ctl-bg-hover); color: var(--ins-tone-brand); }
+.ins-birth-btn:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
+.ins-birth-btn svg { inline-size: 1.125rem; block-size: 1.125rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ins-birth--field > .ins-birth-line {
+  contain: inline-size; min-block-size: 1.6em; line-height: 1.6; text-align: start; font-size: var(--ins-fs-xs);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ins-birth--field > .ins-birth-line b { line-height: 1; }
+
+.ins-birth-pop {
+  --ins-birth-d: 3.5rem; --ins-birth-m: 7rem; --ins-birth-y: 4.5rem; --ins-birth-gap: .375rem;
+  position: fixed; inset: auto; margin: 0; padding: .75rem; display: none; gap: .5rem; overflow: visible;
+  inline-size: min(19rem, calc(100vw - 1rem));
+  border: 1px solid var(--ins-rim); border-radius: var(--ins-r-lg);
+  background: linear-gradient(145deg, var(--ins-glass-strong), var(--ins-glass-hover)), var(--ins-wash-1);
+  box-shadow: var(--ins-sh-lg); color: var(--ins-text-1); font-family: var(--ins-font-body);
+  opacity: 0; transform: translateY(-4px) scale(.98);
+  transition: opacity var(--ins-t-exit) var(--ins-ease), transform var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete, display var(--ins-t-exit) var(--ins-ease) allow-discrete;
+}
+.ins-birth-pop:popover-open { display: grid; opacity: 1; transform: none; transition-duration: var(--ins-t-enter); }
+.ins-birth-pop:not(:popover-open) { pointer-events: none; }
+@starting-style { .ins-birth-pop:popover-open { opacity: 0; transform: translateY(-4px) scale(.98); } }
+.ins-birth-pop .ins-birth-line { margin: 0; font-size: var(--ins-fs-xs); }
+.ins-birth-pop .ins-birth-col { block-size: calc(var(--ins-drum-row) * 5); padding-block: calc(var(--ins-drum-row) * 2); }
+.ins-birth-pop .ins-birth-col .ins-drum-item { font-size: 1.0625rem; }
+.ins-birth-pop .ins-birth-col--m .ins-drum-item { font-size: var(--ins-fs-sm); }
+.ins-birth-foot { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; padding-block-start: .5rem; border-block-start: 1px solid var(--ins-line); }
+.ins-birth-foot .ins-btn { min-inline-size: 5.5rem; }
+.ins-birth--field .ins-birth-col:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }

@@ -1,0 +1,151 @@
+<link rel="stylesheet" href="../dist/plugins/insiyab-birthdate.css">
+<script src="../dist/plugins/insiyab-birthdate.js" defer></script>
+
+<h2 id="install">التثبيت</h2>
+<p>إضافة مستقلة عن المكتبة: ملف أنماط وملف سكربت تضعهما بعد ملفاتها.</p>
+<demo-code lang="html">
+<link rel="stylesheet" href="insiyab/plugins/insiyab-birthdate.css">
+<script src="insiyab/insiyab-boot.js"></script>
+<script src="insiyab/insiyab.js" defer></script>
+<script src="insiyab/plugins/insiyab-birthdate.js" defer></script>
+</demo-code>
+
+<h2 id="field">حقل الميلاد</h2>
+<p>
+  ضع <code>data-ins-birth</code> على <code>&lt;input type="date"&gt;</code>، فيصير حقلًا بارتفاع أي حقل في النموذج، فيه اليوم والشهر والسنة
+  بترتيب القراءة، تكتب فيها مباشرة. وفي طرفه زر يفتح أعمدة التمرير في نافذة منبثقة تحته، وتحته سطر يقرأ لك التاريخ بيومه
+  وعمرك وما يوافقه بالهجري حين يكتمل. فإن غاب السكربت بقي حقل التاريخ الأصلي على حاله.
+</p>
+<demo-example>
+  <div class="ins-field">
+    <label class="ins-label" for="birth-demo">تاريخ الميلاد</label>
+    <input type="date" id="birth-demo" name="birth" data-ins-birth>
+  </div>
+</demo-example>
+<p>
+  <b>ولحقل التاريخ العادي مكانه:</b> هذا الحقل لتاريخ يعرفه صاحبه عن ظهر قلب، أما موعد أو فترة بين تاريخين فمكانهما
+  <a href="pickers.html#date">حقل التاريخ</a> بتقويمه.
+</p>
+
+<h2 id="typing">الكتابة</h2>
+<p>تكتب في الحقل مباشرة، وينتقل التركيز وحده من اليوم إلى الشهر إلى السنة، بهذه القواعد:</p>
+<ul>
+  <li><b>الصفر وحده</b> — يوم يبدأ بـ 4 لا يكون إلا <code>04</code>، فيكتمل الحقل وينتقل التركيز إلى الشهر.</li>
+  <li><b>الفاصل</b> — بعد يوم أو شهر من رقم واحد اضغط <kbd class="ins-kbd">/</kbd> أو النقطة أو <kbd class="ins-kbd">Enter</kbd> أو <kbd class="ins-kbd">Tab</kbd>، فتكتب <code>2/3/93</code> كما اعتدت.</li>
+  <li><b>ترحيل الرقم</b> — الرقم الذي لا يكمل الحقل ينتقل إلى الحقل التالي، فتكتب <code>22193</code> دون فاصل فيصير 22/01/1993.</li>
+  <li><b>السنة من رقمين</b> — <code>93</code> تعني 1993، و<code>12</code> تعني 2012. ومن كتب السنة كاملة كُتبت كما هي.</li>
+  <li><b>لا تاريخ مستحيلًا</b> — الرقم الذي يصنع 31 فبراير أو شهرًا رقمه 13 لا يُقبل، فتومض الكتلة بالأحمر.</li>
+  <li><b>الرجوع</b> — <kbd class="ins-kbd">Backspace</kbd> في حقل فارغ يعود إلى الحقل السابق ويمحو آخر رقم فيه، و<kbd class="ins-kbd">Esc</kbd> يمسح التاريخ كله.</li>
+  <li><b>اللصق</b> — يفهم التاريخ الملصوق بأي صيغة شائعة: <code>1993-01-22</code>، و«22 يناير 1993»، و«22 كانون الثاني 93»، و«22 جانفي 93»، وحتى «29 رجب 1413».</li>
+  <li><b>الأرقام العربية</b> — تُقرأ <code>٢٢</code> كما تُقرأ <code>22</code>.</li>
+</ul>
+<p>
+  وكل حقل من الثلاثة حقل حقيقي بـ <code>inputmode="decimal"</code>، فيفتح الهاتف لوحة أرقامه وفيها النقطة فاصلًا،
+  ويملأ المتصفح تاريخ الميلاد المحفوظ عنده بـ <code>autocomplete="bday-day"</code> وأخواتها.
+</p>
+
+<h2 id="columns">أعمدة التمرير</h2>
+<p>
+  يفتحها زر التقويم، أو <kbd class="ins-kbd">Alt</kbd> + <kbd class="ins-kbd">↓</kbd> من الحقل، وتغلقها بزر «تم» أو
+  <kbd class="ins-kbd">Esc</kbd> أو بالنقر خارجها. ولكل جزء عموده، فتمرر العمود بإصبعك، أو تسحبه بالفأرة فيستمر بالقصور الذاتي إن أفلته مسرعًا، أو تحركه بالعجلة، أو تنقر قيمة فيه، أو تنتقل إليه بـ <kbd class="ins-kbd">Tab</kbd> وتحركه بالأسهم.
+  والعمود الذي لم تلمسه يبقى باهتًا ولا يُحسب، فلا يكتمل التاريخ إلا حين تختار الثلاثة، ولا حاجة إلى زر تأكيد.
+  والكتابة والأعمدة متزامنة في الاتجاهين: ما تكتبه تدور إليه الأعمدة، وما تختاره بها يظهر رقمه في حقله.
+</p>
+<p>
+  <b>وتبدأ الأعمدة من المنتصف</b> حتى تكون المسافة إلى أي تاريخ أقصر ما يمكن: اليوم 16، والشهر يونيو، والسنة من عمر 31،
+  وهو الوسيط العالمي للعمر بتقديرات الأمم المتحدة.
+</p>
+
+<h2 id="inline">الشكل الكبير</h2>
+<p>
+  حين يكون تاريخ الميلاد هو السؤال الوحيد في الشاشة، كخطوة في معالج تسجيل، اكتب <code>data-ins-birth="inline"</code>،
+  فتظهر الحقول الثلاثة كتلًا كبيرة ينمو فيها الرقم، وتحت كل كتلة عمودها مباشرة، دون نافذة منبثقة:
+</p>
+<demo-example>
+  <input type="date" id="birth-inline" data-ins-birth="inline" aria-label="تاريخ الميلاد">
+</demo-example>
+
+<h2 id="ages">العمر المسموح وعمر البداية</h2>
+<p>
+  <code>data-ins-age-min</code> أقل عمر مقبول، فينتهي عمود السنة عنده، ويُرفض كل تاريخ يجعل العمر أقل منه برسالة تقول السبب.
+  و<code>data-ins-age-max</code> أكبر عمر، وافتراضه 120. و<code>data-ins-age-start</code> عمر البداية، لموقع تعرف أعمار جمهوره:
+</p>
+<demo-example>
+  <div class="ins-field-row">
+    <div class="ins-field">
+      <label class="ins-label" for="birth-adult">18 سنة فأكثر</label>
+      <input type="date" id="birth-adult" data-ins-birth data-ins-age-min="18">
+    </div>
+    <div class="ins-field">
+      <label class="ins-label" for="birth-young">جمهور شاب، يبدأ من 22</label>
+      <input type="date" id="birth-young" data-ins-birth data-ins-age-start="22" data-ins-age-max="70">
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="form">ما يصل إلى الخادم</h2>
+<p>
+  يبقى <code>&lt;input&gt;</code> الأصلي في النموذج باسمه، مخفيًا يحمل التاريخ بصيغة ISO، مثل <code>1993-01-22</code>، فلا يحتاج الخادم
+  شيئًا جديدًا. وتضع فيه <code>value</code> فيبدأ الحقل منه، ويعود إليه إذا أُعيد ضبط النموذج. ومع <code>required</code> يمنع الحقل الفارغ
+  إرسال النموذج، والتاريخ الناقص غير صالح برسالة «أكمل تاريخ الميلاد»، وتظهر الرسالتان في <code>.ins-error</code> مع
+  <code>data-ins-validate</code>.
+</p>
+<demo-example>
+  <form class="ins-stack" data-ins-validate id="birth-form">
+    <div class="ins-field">
+      <label class="ins-label" for="birth-required">تاريخ الميلاد</label>
+      <input type="date" id="birth-required" name="birth" value="1993-01-22" data-ins-birth required>
+      <div class="ins-error"></div>
+    </div>
+    <div class="ins-form-commit">
+      <button class="ins-btn ins-btn--secondary" type="reset">إعادة الضبط</button>
+      <button class="ins-btn ins-btn--primary" type="submit">إرسال</button>
+    </div>
+  </form>
+</demo-example>
+
+<h2 id="api">من الشيفرة</h2>
+<demo-code lang="js">
+document.addEventListener('ins:birth', (e) => {
+  e.detail.value;   // '1993-01-22'، أو '' ما دام التاريخ ناقصًا
+  e.detail.date;    // كائن Date بتوقيت UTC، أو null
+});
+
+Insiyab.birth('#birth');                 // التاريخ بصيغة ISO
+Insiyab.birth('#birth', '1993-01-22');   // ضبطه بهدوء، دون حدث
+Insiyab.birth('#birth', '');             // مسحه
+Insiyab.birth.reconfigure('#birth');     // بعد تغيير سمات العمر
+</demo-code>
+<p>ويُطلق <code>&lt;input&gt;</code> الأصلي <code>input</code> و<code>change</code> كلما تغيرت قيمته، فتعمل عليه مستمعاتك كما تعمل على أي حقل.</p>
+
+<h2 id="attributes">السمات</h2>
+<div class="ins-panel site-ref">
+  <div class="ins-panel-body ins-panel-body--flush">
+    <div class="ins-table-wrap">
+      <table class="ins-table">
+        <thead><tr><th>السمة</th><th>ما تفعله</th></tr></thead>
+        <tbody>
+          <tr><td><code>data-ins-birth</code></td><td>على <code>&lt;input type="date"&gt;</code>: تجعله حقل تاريخ ميلاد، وأعمدته في نافذة منبثقة.</td></tr>
+          <tr><td><code>data-ins-birth="inline"</code></td><td>الشكل الكبير: كتل كبيرة وأعمدتها تحتها، دون نافذة منبثقة.</td></tr>
+          <tr><td><code>data-ins-age-min="18"</code></td><td>أقل عمر مقبول. الافتراض 0.</td></tr>
+          <tr><td><code>data-ins-age-max="100"</code></td><td>أكبر عمر، فيقصر عمود السنة. الافتراض 120.</td></tr>
+          <tr><td><code>data-ins-age-start="25"</code></td><td>العمر الذي يبدأ منه عمود السنة. الافتراض 31.</td></tr>
+          <tr><td><code>value</code>، <code>required</code>، <code>disabled</code></td><td>تعمل كما تعمل على حقل التاريخ.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<p>
+  <b>ولقارئ الشاشة</b> ثلاثة حقول مسماة: اليوم والشهر والسنة، في مجموعة تحمل اسم تسمية الحقل، وزر يُعلن أنه يفتح نافذة، ويُعلن
+  السطر تحتها التاريخ حين يكتمل. والنصوص بالعربية أو الإنجليزية بحسب لغة الصفحة، وأسماء الشهور بلغتها، فتظهر «كانون الثاني» في صفحة <code>ar-SY</code>.
+</p>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('birth-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      Insiyab.toast('أُرسل ' + Insiyab.birth('#birth-required'), 'ok');
+    });
+  });
+</script>
