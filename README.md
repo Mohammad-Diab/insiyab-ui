@@ -36,8 +36,8 @@
 > the shell, with every example's markup printed under it, and a set of page
 > templates (a dashboard, a list page, a detail page, settings, a review against
 > criteria, a timed multi-step form, an error page, a login) built from the
-> library's parts alone. Twelve plugins: the Hijri calendar, the command palette,
-> the one-time code, the phone number, file upload, scrollspy, the timeline, the
+> library's parts alone. Thirteen plugins: the Hijri calendar, the command palette,
+> the one-time code, the phone number, the birth date, file upload, scrollspy, the timeline, the
 > tree, the color picker, the carousel, charts and the month calendar.
 > Two wrappers cover the same classes: React components in
 > [packages/react](packages/react/README.md), and Jinja macros in
@@ -714,6 +714,60 @@ is invalid, with a message naming the country.
 Insiyab.phone('#mobile');                  // { value: '+966501234567', country: 'SA', valid: true }
 Insiyab.phone('#mobile', '+97142345678');  // set it, country and all, quietly
 document.addEventListener('ins:phone', (e) => console.log(e.detail.value, e.detail.country, e.detail.valid));
+```
+
+### Birth date
+
+```html
+<link rel="stylesheet" href="insiyab/plugins/insiyab-birthdate.css">
+<script src="insiyab/plugins/insiyab-birthdate.js" defer></script>
+
+<input type="date" name="birth" data-ins-birth required>
+```
+
+A date of birth is a date the person knows by heart, so they type it rather than
+hunt for it in a calendar. The date input becomes a control as tall as any input,
+with day, month and year typed in place, in reading order (right to left on an
+Arabic page), and a button that opens three columns in a popover under it (also
+Alt+Down; Done, Esc or a click outside close it). Once the date is complete, a line
+under the field reads it back with its weekday, the age and, on an Arabic page, the
+Hijri date. `data-ins-birth="inline"` is the large layout for a screen that asks
+only this: each part a big block whose number grows in the middle, with its column
+right under it and no popover.
+
+**What the form sends does not change.** The original input stays in the form as
+a hidden input with its `name`, holding the ISO date, and fires `input` and
+`change` when it changes. `value` starts the field, a form reset brings it back,
+and `required` blocks an empty field; a half-typed date is invalid, with a message.
+
+Typing:
+
+- A day that can only be one number gets its zero and moves on: `4` is `04`.
+- After a one-digit day or month, `/`, `.`, Enter or Tab close it: `2/3/93`.
+- A digit that does not fit carries into the next field, so `22193` is 22/01/1993.
+- A two-digit year fills its century: `93` is 1993 and `12` is 2012.
+- A digit that would make an impossible date (31 February, month 13) is refused.
+- Backspace in an empty field steps back into the one before; Esc clears it all.
+- A paste is read in any common form: ISO, digits, Egyptian, Levantine, Maghrebi
+  or English month names, or a Hijri date such as «29 رجب 1413».
+- Each field is a real input with `inputmode="decimal"` and `autocomplete="bday-*"`,
+  so a phone opens its number pad and the browser can fill a saved birthday.
+
+The columns scroll with a finger, the wheel, a click or the arrow keys, and a mouse drag moves
+them row for row, with a fling when let go at speed. A column not yet touched is
+faded and does not count, so the date is complete once all three are chosen, with
+no confirm button. They start in the middle, so any date is as close as possible:
+day 16, June, and the year of age 31, the world median age.
+
+- `data-ins-age-min="18"`: the youngest age accepted; the year column ends there.
+- `data-ins-age-max="100"`: the oldest age, 120 by default.
+- `data-ins-age-start="25"`: the age the year column starts at, 31 by default.
+
+```js
+document.addEventListener('ins:birth', (e) => console.log(e.detail.value, e.detail.date));
+Insiyab.birth('#birth');                 // the ISO date, or ''
+Insiyab.birth('#birth', '1993-01-22');   // set it, quietly; '' clears it
+Insiyab.birth.reconfigure('#birth');     // after changing the age attributes
 ```
 
 ### File upload

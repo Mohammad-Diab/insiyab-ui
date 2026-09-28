@@ -1,0 +1,43 @@
+<!doctype html>
+<!-- Fixtures for birthdate.test.mjs. Every form counts its submissions and never leaves the page. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab birth date fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <link rel="stylesheet" href="../../dist/plugins/insiyab-birthdate.css">
+  <script src="../../dist/insiyab.js"></script>
+  <script src="../../dist/plugins/insiyab-birthdate.js"></script>
+</head>
+<body>
+<main class="ins-container ins-stack" style="padding-block: 2rem">
+  <form id="f1" data-ins-validate onsubmit="event.preventDefault(); window.__sent1 = (window.__sent1 || 0) + 1">
+    <div class="ins-field">
+      <label class="ins-label" for="b1">تاريخ الميلاد</label>
+      <input type="date" id="b1" name="birth" data-ins-birth required>
+      <div class="ins-error"></div>
+    </div>
+    <button class="ins-btn" id="f1-send" type="submit">إرسال</button>
+  </form>
+
+  <form id="f2">
+    <div class="ins-field">
+      <label class="ins-label" for="b2">تاريخ الميلاد</label>
+      <input type="date" id="b2" name="birth2" value="1993-01-22" data-ins-birth data-ins-age-min="18">
+    </div>
+    <button class="ins-btn" id="f2-reset" type="reset">مسح</button>
+  </form>
+
+  <input type="date" id="b5" data-ins-birth data-ins-age-start="25" aria-label="بداية مخصصة">
+
+  <div lang="en" dir="ltr">
+    <input type="date" id="b3" data-ins-birth aria-label="Date of birth">
+  </div>
+
+  <input type="date" id="b4" data-ins-birth disabled aria-label="معطل">
+
+  <input type="date" id="b6" data-ins-birth="inline" aria-label="الشكل الكبير">
+</main>
+</body>
+</html>
