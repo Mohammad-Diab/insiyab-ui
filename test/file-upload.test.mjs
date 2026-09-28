@@ -105,7 +105,7 @@ const rowState = () => E(`[...document.querySelectorAll('#f-up ~ .ins-file-list 
   + (r.querySelector('progress') ? ':' + (r.querySelector('progress').hasAttribute('value') ? r.querySelector('progress').value : 'wait') : '') + (r.querySelector('.ins-file-status') ? ':' + r.querySelector('.ins-file-status').textContent : '')).join(' | ')`);
 ok('each file is handed to the page, marked as on its way', (await E(`__up.length`)) === 2 && (await rowState()) === 'sending:wait | sending:wait', await rowState());
 v = await view('f-up');
-ok('and the form waits for them', !v.valid && v.msg === 'انتظر حتّى يكتمل رفع الملفات.', v.msg);
+ok('and the form waits for them', !v.valid && v.msg === 'انتظر حتى يكتمل رفع الملفات.', v.msg);
 await E(`Insiyab.file.progress(__up[0], 0.5); 0`);
 ok('progress() moves its bar', (await rowState()).startsWith('sending:0.5'), await rowState());
 await E(`Insiyab.file.done(__up[0], 'id-1'); Insiyab.file.fail(__up[1], 'الخادم مشغول'); 0`);

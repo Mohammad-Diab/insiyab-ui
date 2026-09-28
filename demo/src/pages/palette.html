@@ -1,5 +1,5 @@
 <h2 id="install">التثبيت</h2>
-<p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
+<p>إضافة مستقلة عن المكتبة: ملف أنماط وملف سكربت تضعهما بعد ملفاتها.</p>
 <demo-code lang="html">
 <link rel="stylesheet" href="insiyab/insiyab.css">
 <link rel="stylesheet" href="insiyab/plugins/insiyab-palette.css">
@@ -8,11 +8,11 @@
 <script src="insiyab/plugins/insiyab-palette.js" defer></script>
 </demo-code>
 
-<h2 id="markup">لوحة من الوسوم</h2>
+<h2 id="markup">لوحة تبنيها بـ HTML</h2>
 <p>
-  حوار عليه <code>data-ins-palette</code>، وفيه روابط وأزرار عاديّة، مجمّعة إن شئت بـ
-  <code>data-ins-palette-group</code>. الإضافة تبني الحقل والقائمة والعناوين ولوحة المفاتيح. هذه اللوحة بلا اختصار
-  حتّى لا تنازع بحث التوثيق:
+  ضع <code>data-ins-palette</code> على مربع حوار واملأه بروابط وأزرار عادية، واجمعها في مجموعات إن شئت بـ
+  <code>data-ins-palette-group</code>، ثم تتولى الإضافة بناء حقل البحث والقائمة والعناوين والتنقل بلوحة المفاتيح.
+  ولا اختصار لهذه اللوحة، حتى لا تزاحم بحث التوثيق:
 </p>
 <demo-example>
   <button class="ins-btn ins-btn--secondary" data-ins-dialog="#pal-demo">فتح</button>
@@ -29,25 +29,26 @@
   </dialog>
 </demo-example>
 <p>
-  <b>اختيار عنصر هو النقر عليه:</b> الرابط يذهب إلى حيث يشير، والزرّ يفعل ما كان يفعله. واللوحة تُغلَق قبل أن
-  يعمل. و<code>&lt;kbd class="ins-kbd"&gt;</code> داخل العنصر اختصار يظهر في آخر سطره.
+  <b>اختيار العنصر كالنقر عليه:</b> فالرابط يمضي إلى وجهته والزر يؤدي عمله، وتُغلق اللوحة قبل ذلك. وإن وضعت
+  <code>&lt;kbd class="ins-kbd"&gt;</code> داخل العنصر ظهر اختصارًا في آخر سطره.
 </p>
 
 <h2 id="matching">البحث والترتيب</h2>
 <ul>
-  <li><b>بالعربية كما تُكتب</b> — بلا همزات ولا تشكيل، والتاء المربوطة هاءً، والأرقام الهندية لاتينية. «اضافه» تجد «إضافة».</li>
-  <li><b>كلمات مفتاحية</b> — <code>data-keywords</code> يُبحث فيها ولا تظهر.</li>
-  <li><b>الترتيب بموضع التطابق</b> — ما يبدأ اسمه بما كُتب، ثمّ ما تبدأ به كلمة من اسمه (وبعد «ال» أيضًا)، ثمّ
-    ما في وسط الاسم، ثمّ ما في الكلمات المفتاحية.</li>
-  <li><b>كلّ كلمة يجب أن تطابق</b> — «فاتورة شهر» لا تجد إلّا ما فيه الاثنتان.</li>
-  <li><b>أثناء البحث</b> تصير النتائج قائمة واحدة، وفي آخر كلّ سطر اسم مجموعته.</li>
+  <li><b>بالعربية كما تُكتب</b> — لا يلتفت البحث إلى الهمزات ولا إلى التشكيل، ويساوي بين التاء المربوطة والهاء،
+    وبين الأرقام العربية واللاتينية، فإذا كتبت «اضافه» وجدت «إضافة».</li>
+  <li><b>كلمات مفتاحية</b> — ما تضعه في <code>data-keywords</code> يدخل في البحث ولا يظهر.</li>
+  <li><b>الترتيب بموضع التطابق</b> — يتقدم ما يبدأ اسمه بما كتبت، ثم ما تبدأ به كلمة من اسمه (ولو بعد «ال»)، ثم
+    ما وقع في وسط الاسم، وأخيرًا ما في الكلمات المفتاحية.</li>
+  <li><b>تطابق كل الكلمات</b> — فلا تجد «فاتورة شهر» إلا ما جمع الكلمتين.</li>
+  <li><b>في أثناء البحث</b> تجتمع النتائج في قائمة واحدة، ويحمل كل سطر في آخره اسم مجموعته.</li>
 </ul>
 
 <h2 id="from">روابط القائمة الجانبية</h2>
 <p>
-  <code>data-ins-palette-from</code> يضيف كلّ رابط في المنطقة التي تسمّيها، بأيقونته وتحت عنوان قسمه
-  (<code>.ins-shell-group</code>). تُقرأ عند كلّ فتح، ورابط موجود في اللوحة لا يتكرّر. هكذا بُني بحث هذا التوثيق
-  (<kbd>Ctrl</kbd> <kbd>K</kbd>):
+  تجلب <code>data-ins-palette-from</code> إلى اللوحة كل رابط في المنطقة التي تحددها، بأيقونته وتحت عنوان قسمه
+  (<code>.ins-shell-group</code>). وتُقرأ المنطقة من جديد كلما فُتحت اللوحة، ولا يتكرر فيها رابط موجود. وعلى هذا
+  بُني بحث هذا التوثيق (<kbd>Ctrl</kbd> <kbd>K</kbd>):
 </p>
 <demo-code lang="html">
 <a class="ins-shell-link" href="tables.html" data-keywords="Tables جدول">…الجداول</a>
@@ -62,15 +63,16 @@
 
 <h2 id="recent">الأخيرة</h2>
 <p>
-  قبل أن يُكتب شيء تظهر آخر العناصر المختارة، الأحدث أوّلًا: خمسة، أو ما يقوله <code>data-ins-palette-recent</code>،
-  و<code>0</code> يلغيها. تُحفظ في المتصفّح وحده.
+  قبل أن تكتب شيئًا تعرض اللوحة آخر ما اخترت، الأحدث فالأقدم. وهي خمسة ما لم تحدد غير ذلك في
+  <code>data-ins-palette-recent</code>، والقيمة <code>0</code> تخفيها. وتُحفظ في المتصفح وحده.
 </p>
 
 <h2 id="keys">الاختصارات</h2>
 <p>
-  <kbd>Ctrl</kbd> <kbd>K</kbd> (أو <kbd>⌘</kbd> <kbd>K</kbd>) يفتحها ويغلقها، و<kbd>/</kbd> يفتحها إلّا أثناء الكتابة في
-  حقل، ولوحة المفاتيح العربية مفعّلة أيضًا. غيّرها بـ <code>data-ins-palette-keys</code>، و<code>none</code> يلغيها.
-  والأزرار التي تفتح اللوحة تُعلن الاختصار بـ <code>aria-keyshortcuts</code>.
+  يفتح <kbd>Ctrl</kbd> <kbd>K</kbd> (أو <kbd>⌘</kbd> <kbd>K</kbd>) اللوحة ويغلقها، ويفتحها <kbd>/</kbd> ما لم تكن
+  تكتب في حقل، وتعمل الاختصارات حتى إن كانت لوحة المفاتيح على العربية. ولك أن تغيرها بـ
+  <code>data-ins-palette-keys</code> أو تلغيها بـ <code>none</code>. وتعلن الأزرار التي تفتح اللوحة اختصارها بـ
+  <code>aria-keyshortcuts</code>.
 </p>
 <demo-code lang="html">
 <dialog data-ins-palette data-ins-palette-keys="mod+p shift+mod+k">…</dialog>
@@ -83,16 +85,16 @@
       <table class="ins-table">
         <thead><tr><th>السمة</th><th>على</th><th>ما تفعله</th></tr></thead>
         <tbody>
-          <tr><td><code>data-ins-palette</code></td><td><code>&lt;dialog&gt;</code></td><td>يجعل الحوار لوحة أوامر.</td></tr>
-          <tr><td><code>data-ins-palette-group="اسم"</code></td><td>عنصر، أو ما يحيط بعناصر</td><td>المجموعة وعنوانها.</td></tr>
-          <tr><td><code>data-keywords="…"</code></td><td>عنصر</td><td>كلمات يُبحث فيها ولا تظهر.</td></tr>
-          <tr><td><code>data-label="…"</code></td><td>عنصر</td><td>الاسم الذي يُبحث فيه، بدل نصّ العنصر.</td></tr>
-          <tr><td><code>data-ins-palette-key="…"</code></td><td>عنصر</td><td>ما يُتذكَّر به العنصر في «الأخيرة». الافتراض عنوانه، أو اسمه.</td></tr>
-          <tr><td><code>data-ins-palette-from="selector"</code></td><td>اللوحة</td><td>يضيف روابط تلك المنطقة، عدا الشعار.</td></tr>
-          <tr><td><code>data-ins-palette-skip</code></td><td>رابط في تلك المنطقة</td><td>لا يُضاف إلى اللوحة.</td></tr>
-          <tr><td><code>data-ins-palette-keys="mod+k /"</code></td><td>اللوحة</td><td>الاختصارات، أو <code>none</code>.</td></tr>
-          <tr><td><code>data-ins-palette-recent="5"</code></td><td>اللوحة</td><td>عدد «الأخيرة»، أو <code>0</code>.</td></tr>
-          <tr><td><code>data-ins-palette-placeholder="…"</code></td><td>اللوحة</td><td>النصّ الباهت في الحقل.</td></tr>
+          <tr><td><code>data-ins-palette</code></td><td><code>&lt;dialog&gt;</code></td><td>تجعل مربع الحوار لوحة أوامر.</td></tr>
+          <tr><td><code>data-ins-palette-group="اسم"</code></td><td>عنصر، أو حاوية لعدة عناصر</td><td>اسم المجموعة، ويظهر عنوانًا لها.</td></tr>
+          <tr><td><code>data-keywords="…"</code></td><td>عنصر</td><td>كلمات يشملها البحث ولا تظهر.</td></tr>
+          <tr><td><code>data-label="…"</code></td><td>عنصر</td><td>اسم يُبحث فيه بدل نص العنصر.</td></tr>
+          <tr><td><code>data-ins-palette-key="…"</code></td><td>عنصر</td><td>ما يُحفظ به العنصر في «الأخيرة»، وإن غابت فعنوان الرابط أو اسم العنصر.</td></tr>
+          <tr><td><code>data-ins-palette-from="selector"</code></td><td>اللوحة</td><td>تضيف روابط تلك المنطقة سوى الشعار.</td></tr>
+          <tr><td><code>data-ins-palette-skip</code></td><td>رابط في تلك المنطقة</td><td>تبقي الرابط خارج اللوحة.</td></tr>
+          <tr><td><code>data-ins-palette-keys="mod+k /"</code></td><td>اللوحة</td><td>الاختصارات، أو <code>none</code> لإلغائها.</td></tr>
+          <tr><td><code>data-ins-palette-recent="5"</code></td><td>اللوحة</td><td>عدد «الأخيرة»، أو <code>0</code> لإخفائها.</td></tr>
+          <tr><td><code>data-ins-palette-placeholder="…"</code></td><td>اللوحة</td><td>نص <code>placeholder</code> في حقل البحث.</td></tr>
         </tbody>
       </table>
     </div>
@@ -101,8 +103,8 @@
 
 <h2 id="api">من الشيفرة</h2>
 <p>
-  <code>Insiyab.palette.add()</code> لعناصر لا تعيش في الصفحة: بـ <code>run</code> زرّ يستدعي الدالة، وبـ
-  <code>href</code> رابط. وإن لم تكن في الصفحة لوحة، صنعها.
+  أما العناصر التي لا وجود لها في الصفحة فتضيفها <code>Insiyab.palette.add()</code>: فمع <code>run</code> يكون
+  العنصر زرًا يستدعي الدالة، ومع <code>href</code> يكون رابطًا. وإن خلت الصفحة من لوحة أنشأتها.
 </p>
 <demo-code lang="js">
 Insiyab.palette.add([
@@ -111,23 +113,23 @@ Insiyab.palette.add([
   { label: 'التقارير', href: '/reports', group: 'الصفحات' }
 ]);                                    // يعيد العناصر، وحذف أحدها .remove()
 
-Insiyab.palette('open');               // أو 'close' أو 'toggle'، وأوّلًا لوحة بعينها: ('#pal', 'open')
+Insiyab.palette('open');               // أو 'close' أو 'toggle'، وأولًا لوحة بعينها: ('#pal', 'open')
 
 document.addEventListener('ins:palette', (e) => {
   console.log(e.detail.label, e.detail.key, e.detail.item);
-  // e.preventDefault() يوقف العنصر: موجّه صفحة واحدة يأخذ الرابط بنفسه
+  // e.preventDefault() يوقف العنصر: موجه صفحة واحدة يأخذ الرابط بنفسه
 });
 </demo-code>
-<p>هذا الزرّ يضيف أمرًا إلى اللوحة أعلاه ثمّ يفتحها:</p>
+<p>يضيف هذا الزر أمرًا إلى اللوحة التي في الأعلى ثم يفتحها:</p>
 <demo-example>
   <button class="ins-btn ins-btn--secondary" id="pal-demo-add">إضافة أمر</button>
 </demo-example>
 
 <h2 id="a11y">إمكانية الوصول</h2>
 <p>
-  الحقل <code>combobox</code> والنتائج <code>listbox</code> بمجموعات معنونة. التركيز يبقى في الحقل والسهمان يحرّكان
-  <code>aria-activedescendant</code>، وعدد النتائج يُعلَن مع كلّ حرف، والرابط إلى الصفحة الحاليّة مُعلَّم بـ
-  <code>aria-current</code>.
+  دور الحقل <code>combobox</code> ودور النتائج <code>listbox</code>، وهي في مجموعات لها عناوين. ويبقى التركيز في الحقل بينما
+  ينقل السهمان <code>aria-activedescendant</code> بين النتائج، ويعلن قارئ الشاشة عددها مع كل حرف تكتبه، ويحمل
+  رابط الصفحة الحالية <code>aria-current</code>.
 </p>
 
 <script>

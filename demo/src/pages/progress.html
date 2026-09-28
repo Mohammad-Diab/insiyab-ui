@@ -1,7 +1,7 @@
 <h2 id="bar">الشريط</h2>
 <p>
-  <code>.ins-progress</code> على عنصر <code>&lt;progress&gt;</code> الأصلي، فالقيمة تُعلَن لقارئ الشاشة دون ARIA.
-  يمتلئ من جهة البداية، والنبرات <code>--ok</code> و<code>--warn</code> و<code>--bad</code>.
+  يقوم <code>.ins-progress</code> على عنصر <code>&lt;progress&gt;</code> الأصلي، فيعلن قارئ الشاشة قيمته من غير ARIA.
+  ويمتلئ من جهة البداية، وله ثلاث نبرات: <code>--ok</code> و<code>--warn</code> و<code>--bad</code>.
 </p>
 <demo-example class="stack">
   <progress class="ins-progress" value="64" max="100" aria-label="عادي">64%</progress>
@@ -17,14 +17,14 @@
   <progress class="ins-progress ins-progress--lg" value="70" max="100" aria-label="كبير">70%</progress>
 </demo-example>
 
-<h2 id="indeterminate">مدّة غير معروفة</h2>
-<p>بلا <code>value</code> يصير الشريط «جارٍ» دون نسبة.</p>
+<h2 id="indeterminate">مدة غير معروفة</h2>
+<p>إذا خلا الشريط من <code>value</code> دل على عمل جارٍ لا تعرف نسبته.</p>
 <demo-example>
   <progress class="ins-progress" aria-label="جارٍ التحميل"></progress>
 </demo-example>
 
-<h2 id="live">تقدّم حيّ</h2>
-<p>القيمة تُضبط من الشيفرة كأيّ خاصّية، والشريط ينتقل إليها بسلاسة.</p>
+<h2 id="live">تحديث القيمة</h2>
+<p>غيّر <code>value</code> من جافاسكربت كما تغير أي خاصية، فينساب الشريط إلى قيمته الجديدة.</p>
 <demo-example>
   <progress class="ins-progress" id="up-bar" value="0" max="100" aria-label="الرفع">0%</progress>
 </demo-example>
@@ -34,8 +34,8 @@
 
 <h2 id="ring">الحلقة</h2>
 <p>
-  <code>.ins-ring</code> لنسبة في مساحة صغيرة، و<code>--lg</code> أكبر. القيمة في <code>--ins-value</code>،
-  والدور والقيم لقارئ الشاشة على العنصر.
+  تعرض <code>.ins-ring</code> النسبة حين تضيق المساحة، ويكبرها <code>--lg</code>. تضع القيمة في المتغير <code>--ins-value</code>، وتضع على العنصر نفسه
+  <code>role="progressbar"</code> والسمات <code>aria-valuenow</code> و<code>aria-valuemin</code> و<code>aria-valuemax</code> ليفهمها قارئ الشاشة.
 </p>
 <demo-example class="row">
   <div class="ins-ring" role="progressbar" aria-label="عادية" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="--ins-value:72">72%</div>

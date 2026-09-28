@@ -1,7 +1,7 @@
 <h2 id="steps">الخطوات</h2>
 <p>
-  <code>.ins-steps</code> قائمة مرقّمة تكفي عناصرها. <code>.is-done</code> للخطوة المنجزة
-  و<code>aria-current="step"</code> للحالية. وحدها تصلح لمسار من عدّة صفحات على الخادم.
+  <code>.ins-steps</code> قائمة <code>&lt;ol&gt;</code> مرقمة لا تحتاج إلى سكربت، تميز فيها الخطوة المنجزة بـ <code>.is-done</code> والحالية
+  بـ <code>aria-current="step"</code>. وتصلح وحدها لمسار موزع على عدة صفحات من الخادم.
 </p>
 <demo-example>
   <ol class="ins-steps">
@@ -10,7 +10,7 @@
     <li class="ins-steps-item"><span class="ins-steps-label">الثالثة</span></li>
   </ol>
 </demo-example>
-<p><code>--dots</code> نقاط صغيرة بدل الأرقام، لبطاقة دخول. الأسماء تبقى لقارئ الشاشة.</p>
+<p>ويضع <code>--dots</code> نقاطًا صغيرة مكان الأرقام، فيليق ببطاقة الدخول، ولا تغيب الأسماء عن قارئ الشاشة.</p>
 <demo-example>
   <ol class="ins-steps ins-steps--dots">
     <li class="ins-steps-item is-done"><span class="ins-steps-label">الأولى</span></li>
@@ -20,7 +20,7 @@
 </demo-example>
 
 <h3 id="states">حالات أخرى</h3>
-<p><code>.is-flagged</code> خطوة مؤجّلة للرجوع إليها بنقطة صفراء، و<code>.is-error</code> خطوة فيها ما يُصلح بالأحمر.</p>
+<p>تضع <code>.is-flagged</code> نقطة صفراء على خطوة مؤجلة يعود إليها المستخدم، وتضع <code>.is-error</code> نقطة حمراء على خطوة فيها ما يحتاج إلى إصلاح.</p>
 <demo-example>
   <ol class="ins-steps">
     <li class="ins-steps-item is-done"><span class="ins-steps-label">الأولى</span></li>
@@ -30,11 +30,11 @@
   </ol>
 </demo-example>
 
-<h3 id="grid">شبكة أرقام</h3>
+<h3 id="grid">شبكة الأرقام</h3>
 <p>
-  <code>--grid</code> لخطوات كثيرة بلا أسماء ظاهرة، كأسئلة نموذج طويل: أرقام تلتفّ بلا خطوط. رابط أو زرّ في كلّ عنصر هو
-  <code>.ins-steps-label</code> فتصير الدائرة كلّها ذلك الرابط، ونصّه لقارئ الشاشة. والحالات من الصفحة: منجزة لما أُجيب،
-  وحالية للمفتوح، ومؤجّلة لما يُراجع.
+  وإذا كثرت الخطوات وخفيت أسماؤها، كأسئلة نموذج طويل، فاستعمل <code>--grid</code>: أرقام تلتف على الأسطر بلا خطوط
+  تصلها. واجعل في كل عنصر رابطًا أو زرًا بالكلاس <code>.ins-steps-label</code>، فتصير الدائرة كلها ذلك الرابط، ويذهب نصه
+  إلى قارئ الشاشة. وتضع الصفحة الحالات بنفسها: منجزة لما أُجيب عنه، وحالية للمفتوح، ومؤجلة لما ينتظر المراجعة.
 </p>
 <demo-example>
   <ol class="ins-steps ins-steps--grid">
@@ -55,13 +55,14 @@
 
 <h2 id="wizard">المعالج</h2>
 <p>
-  <code>.ins-wizard</code> على نموذج بألواح <code>.ins-wizard-panel</code>: السكربت يُظهر لوحًا واحدًا ويقود
-  الخطوات فوقه. «التالي» يتحقّق من حقول الخطوة الحالية قبل أن ينتقل، و<kbd class="ins-kbd">Enter</kbd> داخل
-  حقل يعني «التالي»، والتركيز ينتقل إلى الخطوة التي وصلت. وبلا جافاسكربت يصير نموذجًا واحدًا بزرّ إرسال في آخره.
+  ضع <code>.ins-wizard</code> على نموذج مقسوم إلى ألواح <code>.ins-wizard-panel</code>، فيُظهر السكربت لوحًا واحدًا
+  في كل مرة ويقود الخطوات فوقه. ولا ينتقل «التالي» حتى يتحقق من حقول الخطوة الحالية، ومفتاح
+  <kbd class="ins-kbd">Enter</kbd> داخل الحقل يعمل عمل «التالي»، ثم ينتقل التركيز إلى الخطوة الجديدة. فإذا غابت جافاسكربت
+  عاد المعالج نموذجًا واحدًا في آخره زر إرسال.
 </p>
 <p>
-  الألواح داخل <code>.ins-wizard-body</code> اختياريًا: معه يتغيّر ارتفاع المعالج بسلاسة بين الخطوات. والخطوة
-  التالية تدخل من نهاية السطر، ومن الجهة الأخرى في الرجوع.
+  ولك أن تضع الألواح داخل <code>.ins-wizard-body</code>، فيتدرج ارتفاع المعالج بسلاسة بين خطوة وأخرى. وتدخل الخطوة
+  التالية من نهاية السطر، وتدخل السابقة من الجهة الأخرى عند الرجوع.
 </p>
 <demo-example>
   <form class="ins-wizard" id="store-wizard" data-ins-validate>
@@ -101,10 +102,10 @@
   </form>
 </demo-example>
 
-<h2 id="dialog">داخل حوار</h2>
+<h2 id="dialog">داخل مربع الحوار</h2>
 <p>
-  المعالج نفسه في <code>.ins-dialog</code>. زرّ <code>data-ins-dialog-close</code> في أوّل الشريط السفلي يلغي، والرجوع
-  والتالي في آخره.
+  يعمل المعالج نفسه داخل <code>.ins-dialog</code>، فيوضع زر الإلغاء <code>data-ins-dialog-close</code> في أول الشريط
+  السفلي، وزرا السابق والتالي في آخره.
 </p>
 <demo-example>
   <button class="ins-btn ins-btn--primary" data-ins-dialog="#wiz-dialog">إضافة</button>
@@ -155,9 +156,9 @@
 
 <h2 id="server">خطوة تنتظر الخادم</h2>
 <p>
-  قبل أن ينتقل «التالي» يُطلق <code>ins:wizard-leave</code>. إن ألغاه مستمعك، ينتظر المعالج مشغولًا: الزرّ بدوّارة ولا يقبل
-  ضغطة ثانية. ثم <code>Insiyab.wizard(w, 'next')</code> حين يقبل الخادم، أو <code>'stay'</code> بعد أن تعرض الخطأ على الحقل
-  نفسه. مثال حيّ في <a href="login.html">قالب الدخول</a>.
+  يُطلق «التالي» الحدث <code>ins:wizard-leave</code> قبل أن ينتقل، فإذا استدعى مستمعك <code>preventDefault()</code> انتظر المعالج مشغولًا، يدور في زره
+  مؤشر التحميل ولا يقبل ضغطة ثانية. فإذا قبل الخادم استدعيت <code>Insiyab.wizard(w, 'next')</code>، وإلا عرضت الخطأ على
+  الحقل نفسه ثم استدعيت <code>'stay'</code>. وتجد مثالًا حيًا في <a href="login.html">صفحة تسجيل الدخول</a>.
 </p>
 <demo-code lang="js">
 document.addEventListener('ins:wizard-leave', async (e) => {
@@ -165,25 +166,25 @@ document.addEventListener('ins:wizard-leave', async (e) => {
   e.preventDefault();                          // المعالج ينتظر
   const ok = await checkPhone(phone.value);
   if (ok) return Insiyab.wizard(e.detail.el, 'next');
-  phone.setCustomValidity('هذا الرقم غير مسجّل');
+  phone.setCustomValidity('هذا الرقم غير مسجل');
   phone.reportValidity();
   Insiyab.wizard(e.detail.el, 'stay');
 });
 </demo-code>
 
-<h2 id="more">خطوات تُتخطّى، والبدء من جديد، والتكرار</h2>
+<h2 id="more">تخطي الخطوات، والعودة إلى البداية، وعرض القيم</h2>
 <ul>
-  <li><b>لوح عليه <code>hidden</code></b> يُتخطّى، ومعه نقطته أو رقمه في الخطوات، لمسار يقرّر الخادم طوله.</li>
-  <li><b><code>data-ins-wizard="restart"</code></b> على زرّ يعود إلى الخطوة الأولى.</li>
-  <li><b><code>data-ins-echo="#phone"</code></b> على عنصر يعرض قيمة حقل من خطوة سابقة، كرقم الهاتف في خطوة الرمز.</li>
-  <li><b><code>autofocus</code></b> على حقل في لوح يأخذ التركيز حين تصل خطوته، بدل اللوح نفسه.</li>
-  <li><b><code>data-ins-wizard-motion="slide"</code></b> على المعالج يزلق الخطوات جنبًا إلى جنب بعرضها كاملًا، كبطاقة الدخول.</li>
+  <li><b>اللوح الذي عليه <code>hidden</code></b> يتخطاه المعالج ويسقط معه نقطته أو رقمه من الخطوات، فيصلح لمسار يحدد الخادم طوله.</li>
+  <li><b><code>data-ins-wizard="restart"</code></b> على زر يعيد المعالج إلى الخطوة الأولى.</li>
+  <li><b><code>data-ins-echo="#phone"</code></b> على عنصر يعرض فيه قيمة حقل من خطوة سابقة، كرقم الهاتف في خطوة الرمز.</li>
+  <li><b><code>autofocus</code></b> على حقل في اللوح يمنحه التركيز حين تبلغ خطوته، بدل أن يذهب إلى اللوح نفسه.</li>
+  <li><b><code>data-ins-wizard-motion="slide"</code></b> على المعالج يجعل الخطوات تنزلق جنبًا إلى جنب بعرضها كاملًا، كما في بطاقة الدخول.</li>
 </ul>
 
 <h2 id="api">من الشيفرة</h2>
 <demo-code lang="js">
 Insiyab.wizard('#store-wizard');              // رقم الخطوة الحالية
-Insiyab.wizard('#store-wizard', 2);           // إلى الثالثة، بلا تحقّق
+Insiyab.wizard('#store-wizard', 2);           // إلى الثالثة، بلا تحقق
 Insiyab.wizard('#store-wizard', 'next');      // أو 'prev' أو 'restart' أو 'stay'
 
 document.addEventListener('ins:wizard', (e) => {
@@ -195,12 +196,12 @@ document.addEventListener('ins:wizard', (e) => {
   document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('store-wizard').addEventListener('submit', function (e) {
       e.preventDefault();
-      Insiyab.toast('تمّ الإرسال', 'ok');
+      Insiyab.toast('تم الإرسال', 'ok');
     });
     document.getElementById('dialog-wizard').addEventListener('submit', function (e) {
       e.preventDefault();
       Insiyab.dialog('#wiz-dialog', 'close');
-      Insiyab.toast('تمّ الحفظ', 'ok');
+      Insiyab.toast('تم الحفظ', 'ok');
       Insiyab.wizard(this, 0);
     });
   });

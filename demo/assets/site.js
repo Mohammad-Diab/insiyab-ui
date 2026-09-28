@@ -114,7 +114,7 @@
           btn.classList.add('is-done');
           setTimeout(function () { btn.textContent = 'نسخ'; btn.classList.remove('is-done'); }, 1400);
         }, function () {
-          Insiyab.toast('تعذّر النسخ — حدّد الشيفرة وانسخها يدويًا', 'warn');
+          Insiyab.toast('تعذر النسخ، فحدد الشيفرة وانسخها بنفسك', 'warn');
         });
       }
     });
@@ -122,7 +122,7 @@
     /* Search is the command palette plugin, shortcuts and all: see layout.html. */
 
     if (q.get('open')) Insiyab.dialog('#' + q.get('open'), 'open');
-    if (q.get('toast')) Insiyab.toast('تمّ الحفظ بنجاح', 'ok');
+    if (q.get('toast')) Insiyab.toast('تم الحفظ بنجاح', 'ok');
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready);

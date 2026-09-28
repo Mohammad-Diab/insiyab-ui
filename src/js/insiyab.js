@@ -1110,11 +1110,14 @@
       prevMonth: 'الشهر السابق', nextMonth: 'الشهر التالي', month: 'الشهر', year: 'السنة',
       today: 'اليوم', clear: 'مسح', badDate: 'اكتب تاريخًا صحيحًا.', calendarSystem: 'نظام التقويم',
       early: 'اختر {date} أو ما بعده.', late: 'اختر {date} أو ما قبله.',
-      selected: 'المحدّد: {n}', remove: 'إزالة', badTime: 'اكتب وقتًا صحيحًا.',
+      selected: 'المحدد: {n}', remove: 'إزالة', badTime: 'اكتب وقتًا صحيحًا.',
       pickStart: 'اختر البداية', pickEnd: 'اختر النهاية', done: 'تم', chooseTime: 'اختر وقتًا',
       hour: 'الساعة', minute: 'الدقيقة', period: 'الفترة',
-      words: '{n}/{max} كلمة', wordsFree: '{n} كلمة', tooManyWords: 'لا تتجاوز {max} كلمة.',
-      days: '{d} يوم', saving: 'جارٍ الحفظ…', saved: 'حُفظ', saveError: 'تعذّر الحفظ', resize: 'تغيير حجم اللوحين'
+      words: function (n, max) { return n + '/' + max + ' ' + (max % 100 >= 3 && max % 100 <= 10 ? 'كلمات' : 'كلمة'); },
+      wordsFree: function (n) { return arCount(n, ['كلمة واحدة', 'كلمتان', 'كلمات', 'كلمة', 'كلمة']); },
+      tooManyWords: function (max) { return 'لا تتجاوز ' + arCount(max, ['كلمة واحدة', 'كلمتين', 'كلمات', 'كلمة', 'كلمة']) + '.'; },
+      days: function (d) { return arCount(d, ['يوم واحد', 'يومان', 'أيام', 'يومًا', 'يوم']); },
+      saving: 'جارٍ الحفظ…', saved: 'حُفظ', saveError: 'تعذر الحفظ', resize: 'تغيير حجم اللوحين'
     },
     en: {
       ok: 'OK', cancel: 'Cancel', choose: 'Choose a date', calendar: 'Calendar',
@@ -1122,12 +1125,21 @@
       today: 'Today', clear: 'Clear', badDate: 'Enter a valid date.', calendarSystem: 'Calendar system',
       early: 'Choose {date} or later.', late: 'Choose {date} or earlier.',
       selected: '{n} selected', remove: 'Remove', badTime: 'Enter a valid time.',
-      pickStart: 'Pick the start', pickEnd: 'Pick the end', done: 'Done', chooseTime: 'Choose a time',
+      pickStart: 'Choose the start', pickEnd: 'Choose the end', done: 'Done', chooseTime: 'Choose a time',
       hour: 'Hour', minute: 'Minute', period: 'AM/PM',
-      words: '{n}/{max} words', wordsFree: '{n} words', tooManyWords: 'Use {max} words or fewer.',
-      days: '{d}d', saving: 'Saving…', saved: 'Saved', saveError: 'Could not save', resize: 'Resize the panes'
+      words: function (n, max) { return n + '/' + max + (max === 1 ? ' word' : ' words'); },
+      wordsFree: function (n) { return n + (n === 1 ? ' word' : ' words'); },
+      tooManyWords: function (max) { return 'Use ' + max + (max === 1 ? ' word' : ' words') + ' or fewer.'; },
+      days: function (d) { return d + 'd'; },
+      saving: 'Saving…', saved: 'Saved', saveError: 'Could not save', resize: 'Resize the panes'
     }
   };
+
+  // Arabic noun after a number; w = [one, two, 3–10, 11–99, otherwise].
+  function arCount(n, w) {
+    var r = n % 100;
+    return n === 1 ? w[0] : n === 2 ? w[1] : n + ' ' + (r >= 3 && r <= 10 ? w[2] : r >= 11 ? w[3] : w[4]);
+  }
 
   function langOf(el) {
     var own = el && el.getAttribute && el.getAttribute('data-ins-locale');
@@ -2743,11 +2755,12 @@
     var out = resolve('#' + control.getAttribute('data-ins-count-el'));
     if (!out) return n;
     var t = strings(control);
-    var text = out.getAttribute('data-ins-text') || (words ? (max ? t.words : t.wordsFree) : (max ? '{n}/{max}' : '{n}'));
-    out.textContent = text.replace('{n}', n).replace('{max}', max || '');
+    var own = out.getAttribute('data-ins-text');
+    out.textContent = own ? own.replace('{n}', n).replace('{max}', max || '')
+      : words ? (max ? t.words(n, max) : t.wordsFree(n)) : (max ? n + '/' + max : String(n));
     out.classList.toggle('is-near', !!max && n >= max * .9 && n <= max);
     out.classList.toggle('is-over', !!max && n > max);
-    if (words && max) control.setCustomValidity(n > max ? t.tooManyWords.replace('{max}', max) : '');
+    if (words && max) control.setCustomValidity(n > max ? t.tooManyWords(max) : '');
     return n;
   }
 
@@ -2813,7 +2826,7 @@
       time = node.appendChild(el('span', 'ins-countdown-clock'));
     }
     days.hidden = !d;
-    days.textContent = d ? strings(node).days.replace('{d}', d) : '';
+    days.textContent = d ? strings(node).days(d) : '';
     time.textContent = clock;
     var warn = parseFloat(node.getAttribute('data-ins-warn'));
     if (isNaN(warn)) warn = 60;

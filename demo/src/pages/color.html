@@ -1,5 +1,5 @@
-<h2 id="try">جرّب لونًا</h2>
-<p>كلّ زرّ يستدعي <code>Insiyab.brand(hex)</code>، فتتلوّن الصفحة كلّها منه. وتحتها القيم المشتقّة.</p>
+<h2 id="try">جرب لونًا</h2>
+<p>كل زر هنا يستدعي <code>Insiyab.brand(hex)</code>، فتصطبغ الصفحة كلها بلونه، وتظهر تحتها القيم المشتقة منه.</p>
 <demo-example code="none" class="stack">
   <div class="brand-swatches">
     <button class="brand-swatch" data-brand="#0F766E" style="--c:#0F766E"><i></i><bdi>#0F766E</bdi></button>
@@ -8,11 +8,11 @@
     <button class="brand-swatch" data-brand="#4C1D95" style="--c:#4C1D95"><i></i><bdi>#4C1D95</bdi></button>
     <button class="brand-swatch" data-brand="#B45309" style="--c:#B45309"><i></i><bdi>#B45309</bdi></button>
     <button class="brand-swatch" data-brand="#C9A063" style="--c:#C9A063"><i></i><bdi>#C9A063</bdi></button>
-    <label class="brand-swatch"><input type="color" id="brand-pick" value="#0F766E" aria-label="لون مخصّص" style="inline-size:1.5rem;block-size:1.5rem;border:0;padding:0;background:none;cursor:pointer">لون آخر</label>
+    <label class="brand-swatch"><input type="color" id="brand-pick" value="#0F766E" aria-label="لون مخصص" style="inline-size:1.5rem;block-size:1.5rem;border:0;padding:0;background:none;cursor:pointer">لون آخر</label>
   </div>
   <div class="ins-row">
     <button class="ins-btn ins-btn--primary">حفظ</button>
-    <label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مفعّل</span></span></label>
+    <label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مفعل</span></span></label>
   </div>
   <progress class="ins-progress" value="62" max="100">62%</progress>
   <input class="ins-input" placeholder="حلقة التركيز" aria-label="حقل">
@@ -20,24 +20,24 @@
   <p class="ins-muted ins-text-xs ins-m-0" id="label-note"></p>
 </demo-example>
 
-<h2 id="set">التعيين</h2>
-<p>بسمة على <code>&lt;html&gt;</code>، أو بالدالّة وقت التشغيل. كلاهما يشتقّ المجموعة ويطبّقها.</p>
+<h2 id="set">ضبط اللون</h2>
+<p>ضع السمة على <code>&lt;html&gt;</code>، أو استدع الدالة أثناء التشغيل، وكلاهما يشتق من اللون بقية ألوانه ويطبقها.</p>
 <demo-code lang="html">
 <html lang="ar" dir="rtl" data-ins-primary="#0F766E">
 </demo-code>
 <demo-code lang="js">
-Insiyab.brand('#0F766E');   // يطبّق
+Insiyab.brand('#0F766E');   // يطبق
 Insiyab.brand();            // يعيد اللون الحالي
 </demo-code>
 
-<h2 id="measured">لون النصّ مقيس، لا مفترَض</h2>
+<h2 id="measured">لون النص فوق لون الهوية</h2>
 <p>
-  تقيس <code>brand()</code> تباين اللون مع الأبيض ومع الأسود القريب، وتكتب النصّ بالأفضل في
-  <code>--ins-on-primary</code>. جرّب الذهبي <code>#C9A063</code> أعلاه وانظر إلى زرّ «حفظ».
+  تحسب <code>brand()</code> تباين اللون مع الأبيض ومع الأسود القريب، ثم تكتب أوضحهما في
+  <code>--ins-on-primary</code> ليكون لون النص فوقه. جرب الذهبي <code>#C9A063</code> أعلاه وانظر إلى زر «حفظ».
 </p>
 
 <h2 id="server">من الخادم</h2>
-<p>لتطبيق يلبس هويّة كلّ عميل: الخادم يعيد اللون مع الجلسة، والصفحة تطبّقه.</p>
+<p>إذا كان لكل عميل في تطبيقك لون هويته، فالطريق يسير: يعيد الخادم اللون مع بيانات الجلسة، وتطبقه الصفحة.</p>
 <demo-code lang="js">
 const res = await fetch('/api/session');
 const { branding } = await res.json();     // { primary: '#1D4ED8', … }
@@ -46,27 +46,27 @@ Insiyab.brand(branding.primary);
 
 <h2 id="css-only">بلا جافاسكربت</h2>
 <p>
-  مع ملفّ الأنماط وحده، اضبط اللون ومشتقّاته بنفسك. هذه قيم <code>#0F766E</code> في الوضع الفاتح،
-  وقيم الداكن من <code>Insiyab.color.derive(hex, 'dark')</code>.
+  إذا اكتفيت بملف الأنماط فاضبط اللون ومشتقاته بنفسك. وهذه قيم <code>#0F766E</code> في الوضع الفاتح،
+  أما قيم الداكن فتأخذها من <code>Insiyab.color.derive(hex, 'dark')</code>.
 </p>
 <demo-code lang="css">
 :root {
   --ins-primary: #0F766E;
   --ins-primary-rgb: 15, 118, 110;
-  --ins-primary-dark: #0a504b;     /* نهاية التدرّج */
-  --ins-grad-rgb: 10, 80, 75;      /* الثلاثيّة نفسها لنهاية التدرّج */
+  --ins-primary-dark: #0a504b;     /* نهاية التدرج */
+  --ins-grad-rgb: 10, 80, 75;      /* نهاية التدرج بصيغة RGB */
   --ins-accent-rgb: 10, 80, 75;
-  --ins-primary-darker: #073532;   /* النصّ الملوّن المقروء */
-  --ins-on-primary: #ffffff;       /* النصّ على السطح المملوء */
-  --ins-wash-1: #eef5f5;           /* غَسلتا خلفية الصفحة */
+  --ins-primary-darker: #073532;   /* النص الملون المقروء */
+  --ins-on-primary: #ffffff;       /* النص على السطح المملوء */
+  --ins-wash-1: #eef5f5;           /* لونا خلفية الصفحة */
   --ins-wash-2: #f0f5f4;
 }
 </demo-code>
 
-<h2 id="tones">الثلاثيّة الدلالية</h2>
+<h2 id="tones">النبرات</h2>
 <p>
-  لكلّ حالة ثلاثة متغيّرات من صبغة واحدة: النصّ <code>--ins-tone-*</code>، والخلفية
-  <code>-bg</code>، والحدّ <code>-bd</code>.
+  لكل نبرة ثلاثة متغيرات من صبغة واحدة: <code>--ins-tone-*</code> للنص، و<code>-bg</code> للخلفية،
+  و<code>-bd</code> للحد.
 </p>
 <demo-example code="none">
   <div class="tones">

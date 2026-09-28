@@ -1,8 +1,8 @@
-<h2 id="browser">تحقّق المتصفّح</h2>
+<h2 id="browser">تحقق المتصفح</h2>
 <p>
-  <code>data-ins-validate</code> على النموذج، وقيود HTML العادية على الحقول: <code>required</code>
-  و<code>type="email"</code> و<code>minlength</code> و<code>pattern</code>. المكتبة تأخذ حكم المتصفّح وتكتب
-  رسالته داخل الحقل بدل الفقاعة. اضغط «إرسال» والحقول فارغة:
+  ضع <code>data-ins-validate</code> على النموذج، وقيود HTML المعتادة على الحقول: <code>required</code>
+  و<code>type="email"</code> و<code>minlength</code> و<code>pattern</code>. فتأخذ المكتبة حكم المتصفح، وتكتب
+  رسالته تحت الحقل بدل الفقاعة التي يعرضها. اضغط «إرسال» والحقول فارغة:
 </p>
 <demo-example>
   <form class="ins-stack" data-ins-validate id="v-form">
@@ -23,20 +23,20 @@
   </form>
 </demo-example>
 
-<h2 id="messages">رسالتان: المتصفّح أو أنت</h2>
+<h2 id="messages">رسالة المتصفح أو رسالتك</h2>
 <ul>
-  <li><b><code>&lt;p class="ins-error"&gt;</code> فارغ</b> — يُملأ برسالة المتصفّح، بلغة المتصفّح، وتتحدّث وأنت تكتب.</li>
-  <li><b>فيه نصّ</b> — رسالتك أنت تظهر كما هي. انظر حقل كلمة المرور أعلاه.</li>
+  <li><b><code>&lt;p class="ins-error"&gt;</code> فارغ</b>: يملؤه المتصفح برسالته وبلغته، ويجددها وأنت تكتب.</li>
+  <li><b>فيه نص</b>: تظهر رسالتك أنت كما كتبتها، كما في حقل كلمة المرور أعلاه.</li>
 </ul>
 <p>
-  والخطأ يظهر حين يغادر المستخدم حقلًا غيّره (<code>:user-invalid</code>) أو حين يحاول الإرسال، لا لحظة
-  فتح الصفحة.
+  ولا يظهر الخطأ لحظة فتح الصفحة، بل إذا غادر المستخدم حقلًا غيّره (<code>:user-invalid</code>) أو حاول
+  الإرسال.
 </p>
 
 <h2 id="server">أخطاء من الخادم</h2>
 <p>
-  خطأ لا يعرفه المتصفّح — اسم مستخدم محجوز، رمز منتهٍ — تضعه أنت: <code>aria-invalid="true"</code> على
-  الحقل ونصّ في <code>.ins-error</code>. والقبول بـ <code>.ins-input--ok</code> و<code>.ins-success</code>.
+  أما الخطأ الذي لا يعرفه المتصفح، كاسم مستخدم محجوز أو رمز انتهت صلاحيته، فتضعه أنت: <code>aria-invalid="true"</code>
+  على الحقل، ونص في <code>.ins-error</code>. وتدل على القبول بـ <code>.ins-input--ok</code> و<code>.ins-success</code>.
 </p>
 <demo-example class="stack">
   <div class="ins-field">
@@ -51,15 +51,15 @@
 
 <h2 id="select">القوائم</h2>
 <p>
-  القائمة كالحقل: <code>aria-invalid="true"</code>، أو <code>.ins-select--bad</code> (و<code>.ins-input--bad</code>
-  للحقل) حين لا تملك غير صنف.
+  والقائمة كالحقل، يكفيها <code>aria-invalid="true"</code>. فإن لم يكن بيدك إلا أن تضيف كلاسًا فاستعمل <code>.ins-select--bad</code>
+  (و<code>.ins-input--bad</code> للحقل).
 </p>
 <demo-example>
   <div class="ins-field">
-    <select class="ins-select ins-select--bad" aria-label="الخطّة" aria-invalid="true">
+    <select class="ins-select ins-select--bad" aria-label="الخطة" aria-invalid="true">
       <option value="">اختر…</option><option>الأولى</option><option>الثانية</option>
     </select>
-    <p class="ins-error">اختر خطّة.</p>
+    <p class="ins-error">اختر خطة.</p>
   </div>
 </demo-example>
 

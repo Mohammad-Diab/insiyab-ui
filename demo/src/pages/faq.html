@@ -4,35 +4,35 @@
     <details class="ins-collapse" name="faq-use" open>
       <summary>هل أحتاج إلى npm أو أداة بناء؟</summary>
       <div class="ins-collapse-body">
-        لا. وسما <code>&lt;link&gt;</code> و<code>&lt;script&gt;</code> ومجلّد الخطوط بجانبهما، وهذا كلّ شيء.
+        لا. يكفيك وسم <code>&lt;link&gt;</code> ووسوم <code>&lt;script&gt;</code> تستدعي ملفات المكتبة، ومجلد الخطوط بجوارها، ولا شيء بعد ذلك.
       </div>
     </details>
     <details class="ins-collapse" name="faq-use">
       <summary>هل تعمل دون جافاسكربت؟</summary>
       <div class="ins-collapse-body">
-        كلّ ما لا يتحرّك يعمل من ملفّ الأنماط وحده. وما يحتاج السكربت، كالألسنة والمعالج، تبقى
-        الصفحة كاملة بدونه: تظهر الألواح متتالية بدل أن تختفي.
+        كل ما لا يتحرك يعمل من ملف الأنماط وحده. أما ما يحتاج السكربت، كعلامات التبويب والمعالج، فتبقى
+        الصفحة تامة دونه، وتظهر ألواحه متتالية بدل أن تختفي.
       </div>
     </details>
     <details class="ins-collapse" name="faq-use">
       <summary>هل تصلح لصفحة إنجليزية؟</summary>
       <div class="ins-collapse-body">
-        نعم. الخصائص المنطقية تعمل في الاتجاهين من الأصناف نفسها، فضع <code>dir="ltr"</code> على
-        <code>&lt;html&gt;</code>. جرّبه من زرّ <b>المظهر</b> في أعلى الصفحة.
+        نعم، فالخصائص المنطقية (logical properties) تعمل في الاتجاهين بالكلاسات نفسها، وكل ما عليك أن تضع <code>dir="ltr"</code> على
+        <code>&lt;html&gt;</code>. وتستطيع تجربة ذلك من زر <b>المظهر</b> أعلى الصفحة.
       </div>
     </details>
     <details class="ins-collapse" name="faq-use">
       <summary>هل تتعارض مع Bootstrap أو Tailwind؟</summary>
       <div class="ins-collapse-body">
-        لا. كلّ شيء مسبوق: الأصناف <code>ins-</code>، والمتغيّرات <code>--ins-*</code>، والسمات
+        لا، لأن كل ما فيها يحمل بادئته: الكلاسات <code>ins-</code>، والمتغيرات <code>--ins-*</code>، والسمات
         <code>data-ins-*</code>.
       </div>
     </details>
     <details class="ins-collapse" name="faq-use">
-      <summary>هل هناك نسخة لـ React أو لقوالب Jinja؟</summary>
+      <summary>هل لها نسخة لـ React أو لقوالب Jinja؟</summary>
       <div class="ins-collapse-body">
-        نعم، في المستودع: مكوّنات React في <code>packages/react</code>، وماكروهات Jinja في
-        <code>packages/jinja</code>، ولم تُنشرا بعد على npm وPyPI. كلتاهما تكتب الأصناف نفسها، فالمظهر واحد.
+        نعم، في المستودع: مكونات React في <code>packages/react</code>، وماكروهات Jinja في
+        <code>packages/jinja</code>، ولم تُنشرا بعد على npm وPyPI. وكلتاهما تكتب الكلاسات نفسها، فيبقى المظهر واحدًا.
       </div>
     </details>
   </div>
@@ -42,30 +42,30 @@
 <div class="ins-panel">
   <div class="ins-accordion">
     <details class="ins-collapse" name="faq-design">
-      <summary>كيف أغيّر لون الهوية؟</summary>
+      <summary>كيف أغير لون الهوية؟</summary>
       <div class="ins-collapse-body">
-        سمة <code>data-ins-primary="#0F766E"</code> على <code>&lt;html&gt;</code>، أو
-        <code>Insiyab.brand('#0F766E')</code> وقت التشغيل. التفاصيل في <a href="color.html">اللون والهوية</a>.
+        ضع السمة <code>data-ins-primary="#0F766E"</code> على <code>&lt;html&gt;</code>، أو استدع
+        <code>Insiyab.brand('#0F766E')</code> وقت التشغيل. وتجد التفصيل في <a href="color.html">اللون والهوية</a>.
       </div>
     </details>
     <details class="ins-collapse" name="faq-design">
-      <summary>لماذا لا تتحرّك الكرات الملوّنة في الخلفية؟</summary>
+      <summary>لماذا لا تتحرك الكرات الملونة في الخلفية؟</summary>
       <div class="ins-collapse-body">
-        لأنّ أيّ حركة تحت الأسطح المصنفرة تعيد تضبيب معظم الصفحة في كلّ إطار، وهذا يكلّف المعالج
-        كثيرًا. ولإخفائها: <code>data-ins-orbs="off"</code> على <code>&lt;html&gt;</code>.
+        لأن أي حركة تحت الأسطح الزجاجية تجبر المتصفح على إعادة حساب التمويه (blur) لمعظم الصفحة في كل إطار، وهذا عبء
+        ثقيل على الجهاز. وإن شئت إخفاءها فضع <code>data-ins-orbs="off"</code> على <code>&lt;html&gt;</code>.
       </div>
     </details>
     <details class="ins-collapse" name="faq-design">
-      <summary>لماذا لا يوجد خطّ مائل؟</summary>
+      <summary>أين الخط المائل؟</summary>
       <div class="ins-collapse-body">
-        لا خطّ من الثلاثة يحمل وجهًا مائلًا، فالتوكيد في المكتبة باللون والوزن.
+        لا يحمل أي من الخطوط الثلاثة وجهًا مائلًا، لذا تؤكد المكتبة الكلام باللون والوزن.
       </div>
     </details>
     <details class="ins-collapse" name="faq-design">
-      <summary>هل يمكن إيقاف الحركة كلّها؟</summary>
+      <summary>هل أستطيع إيقاف الحركة كلها؟</summary>
       <div class="ins-collapse-body">
-        <code>data-ins-fx="off"</code> على <code>&lt;html&gt;</code>، أو زرّ فيه <code>data-ins-fx</code>.
-        وإعداد النظام «تقليل الحركة» محترم تلقائيًا ومنفصلًا عن ذلك.
+        نعم، بوضع <code>data-ins-fx="off"</code> على <code>&lt;html&gt;</code>، أو بزر يحمل <code>data-ins-fx</code>.
+        وتحترم المكتبة إعداد «تقليل الحركة» في النظام تلقائيًا، ولو لم تفعل شيئًا من ذلك.
       </div>
     </details>
   </div>
@@ -75,30 +75,30 @@
 <div class="ins-panel">
   <div class="ins-accordion">
     <details class="ins-collapse" name="faq-trouble">
-      <summary>الخطّ يظهر بخطّ النظام لا بتجوال</summary>
+      <summary>يظهر النص بخط النظام بدل تجوال</summary>
       <div class="ins-collapse-body">
-        إمّا أنّ مجلّد <code>fonts/</code> ليس بجانب ملفّ الأنماط، وإمّا أنّ الصفحة مفتوحة عبر
-        <code>file://</code>، حيث يحجب المتصفّح الخطوط المحلّية لأنّها من أصل آخر. افتحها عبر أيّ خادم محلّي.
+        إما أن مجلد <code>fonts/</code> ليس بجوار ملف الأنماط، وإما أن الصفحة مفتوحة عبر
+        <code>file://</code>، والمتصفح يحجب الخطوط المحلية حينها لأنه يعدها من origin آخر. فافتحها من أي خادم محلي.
       </div>
     </details>
     <details class="ins-collapse" name="faq-trouble">
-      <summary>الصفحة تومض بالوضع الفاتح قبل الداكن</summary>
+      <summary>تومض الصفحة بالوضع الفاتح قبل الداكن</summary>
       <div class="ins-collapse-body">
-        السكربت محمَّل بـ <code>defer</code> أو في آخر الصفحة. ضعه في <code>&lt;head&gt;</code> دون
-        <code>defer</code> ليختم الوضع قبل أوّل رسم.
+        لعل <code>insiyab-boot.js</code> محمل بـ <code>defer</code> أو في آخر الصفحة، فيصل بعد أن تظهر. ضعه في
+        <code>&lt;head&gt;</code> دون <code>defer</code> حتى يثبت الوضع قبل أن تظهر الصفحة.
       </div>
     </details>
     <details class="ins-collapse" name="faq-trouble">
-      <summary>زرّ عليه <code>hidden</code> ما زال ظاهرًا</summary>
+      <summary>زر يحمل <code>hidden</code> ولا يزال ظاهرًا</summary>
       <div class="ins-collapse-body">
-        المكتبة تعيد لسمة <code>hidden</code> غلبتها على كلّ مكوّن. إن رأيته فقاعدة في صفحتك تضبط
-        <code>display</code> بأولويّة أعلى.
+        تجعل المكتبة السمة <code>hidden</code> تغلب <code>display</code> في كل مكون، فإن رأيت ذلك فثمة قاعدة في صفحتك تضبط
+        <code>display</code> بأولوية أعلى.
       </div>
     </details>
     <details class="ins-collapse" name="faq-trouble">
-      <summary>القائمة المنبثقة تُقصّ داخل اللوح</summary>
+      <summary>اللوح يقص القائمة المنسدلة</summary>
       <div class="ins-collapse-body">
-        المتصفّحات الحديثة ترفع القصّ تلقائيًا حين تُفتح قائمة داخل اللوح. ولمتصفّح أقدم أضف
+        تلغي المتصفحات الحديثة هذا القص تلقائيًا حين تُفتح قائمة داخل اللوح. وفي المتصفحات الأقدم أضف
         <code>.ins-panel--open</code> إلى اللوح.
       </div>
     </details>
@@ -107,6 +107,6 @@
 
 <h2 id="licence">الترخيص</h2>
 <p>
-  الشيفرة بترخيص MIT. والخطوط الثلاثة بترخيص SIL Open Font License 1.1، وتراخيصها في مجلّد
-  <code>fonts/</code> وترافق الخطوط أينما نُسخت.
+  الشيفرة مرخصة بـ MIT، والخطوط الثلاثة بـ SIL Open Font License 1.1، وتراخيصها في مجلد
+  <code>fonts/</code> ترافقها أينما نُسخت.
 </p>

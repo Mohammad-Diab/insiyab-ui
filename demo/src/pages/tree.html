@@ -2,7 +2,7 @@
 <script src="../dist/plugins/insiyab-tree.js" defer></script>
 
 <h2 id="install">التثبيت</h2>
-<p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
+<p>إضافة مستقلة عن المكتبة: ملف أنماط وملف سكربت تضعهما بعد ملفاتها.</p>
 <demo-code lang="html">
 <link rel="stylesheet" href="insiyab/plugins/insiyab-tree.css">
 <script src="insiyab/insiyab-boot.js"></script>
@@ -10,14 +10,14 @@
 <script src="insiyab/plugins/insiyab-tree.js" defer></script>
 </demo-code>
 
-<h2 id="tree">شجرة ملفّات</h2>
+<h2 id="tree">شجرة ملفات</h2>
 <p>
-  قوائم متداخلة عليها <code>data-ins-tree</code>. أوّل عنصر في كلّ بند تسميته — <code>span</code> أو رابط، وفيها
-  أيقونة إن شئت — والقائمة داخله فرعه، مغلق إلّا مع <code>data-open</code>. وعدد أو شارة بعد التسمية يذهب إلى آخر
-  الصفّ. وبلا سكربت هي القائمة المتداخلة نفسها.
+  ضع <code>data-ins-tree</code> على قوائم متداخلة تصر شجرة. فأول عنصر في كل بند هو تسميته، <code>span</code> أو
+  رابط، ولك أن تضع فيها أيقونة، والقائمة التي داخله هي فرعه، ويبقى مغلقًا ما لم تضع عليه <code>data-open</code>.
+  وإذا جاء بعد التسمية عدد أو شارة انتقل إلى آخر الصف. وإن غاب السكربت بقيت القائمة المتداخلة على حالها.
 </p>
 <demo-example>
-  <ul class="ins-tree" data-ins-tree aria-label="الملفّات">
+  <ul class="ins-tree" data-ins-tree aria-label="الملفات">
     <li data-open><span><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>العقود</span>
       <ul>
         <li><a href="#tree"><svg class="ico" aria-hidden="true"><use href="#i-pages"/></svg>عقد.pdf</a></li>
@@ -39,19 +39,19 @@
 </demo-example>
 
 <h2 id="keyboard">لوحة المفاتيح</h2>
-<p>الشجرة محطّة واحدة في ترتيب التنقّل، والأسهم تمشي فيها كما في شجرة ملفّات:</p>
+<p>تصل إلى الشجرة بضغطة Tab واحدة، ثم تتنقل فيها بالأسهم كما تتنقل في شجرة الملفات:</p>
 <ul>
-  <li><kbd>↑</kbd> <kbd>↓</kbd> بين الصفوف الظاهرة، و<kbd>Home</kbd> <kbd>End</kbd> إلى أوّلها وآخرها.</li>
-  <li><b>السهم نحو الداخل</b> — <kbd>←</kbd> في العربية و<kbd>→</kbd> في الإنجليزية — يفتح الفرع، ثمّ يدخله.</li>
-  <li><b>السهم نحو الخارج</b> يغلق الفرع، أو يخرج إلى الأب.</li>
-  <li><kbd>*</kbd> يفتح كلّ الفروع بجانب البند، وحرف ينتقل إلى أوّل صفّ يبدأ به.</li>
-  <li><kbd>Enter</kbd> يتبع الرابط أو يختار، و<kbd>Space</kbd> يختار — أو يضع العلامة في شجرة مربّعات.</li>
+  <li><kbd>↑</kbd> <kbd>↓</kbd> تنقلك بين الصفوف الظاهرة، و<kbd>Home</kbd> <kbd>End</kbd> إلى أولها وآخرها.</li>
+  <li><b>السهم نحو الداخل</b> — <kbd>←</kbd> في العربية و<kbd>→</kbd> في الإنجليزية — يفتح الفرع أولًا ثم يدخله.</li>
+  <li><b>السهم نحو الخارج</b> يغلق الفرع المفتوح، وإلا خرج إلى البند الأب.</li>
+  <li><kbd>*</kbd> يفتح كل الفروع التي في مستوى البند، وكتابة حرف تنقلك إلى أول صف يبدأ به.</li>
+  <li><kbd>Enter</kbd> ينتقل إلى الرابط أو يختار البند، و<kbd>Space</kbd> يختاره، أو يحدده إن كانت الشجرة بمربعات اختيار.</li>
 </ul>
 
 <h2 id="checks">شجرة صلاحيات</h2>
 <p>
-  <code>data-ins-tree-checks</code> وتسمية كلّ بند مربّع <code>.ins-check</code>: الفرع يعلّم كلّ ما فيه، وفرع علامته
-  جزئية يظهر مختلطًا ولا يُرسَل مع النموذج.
+  أضف <code>data-ins-tree-checks</code> واجعل تسمية كل بند مربع اختيار <code>.ins-check</code>، فإذا حددت فرعًا
+  تحدد كل ما فيه، والفرع الذي حُدد بعض ما فيه يظهر في حالة <code>indeterminate</code> ولا يُرسل مع النموذج.
 </p>
 <demo-example>
   <ul class="ins-tree" data-ins-tree data-ins-tree-checks aria-label="الصلاحيات">
@@ -64,7 +64,7 @@
     </li>
     <li><label class="ins-check"><input type="checkbox" name="perm" value="hr" checked><span class="ins-check-text">الموارد البشرية</span></label>
       <ul>
-        <li><label class="ins-check"><input type="checkbox" name="perm" value="hr.view"><span class="ins-check-text">عرض الموظّفين</span></label></li>
+        <li><label class="ins-check"><input type="checkbox" name="perm" value="hr.view"><span class="ins-check-text">عرض الموظفين</span></label></li>
         <li><label class="ins-check"><input type="checkbox" name="perm" value="hr.pay"><span class="ins-check-text">الرواتب</span></label></li>
       </ul>
     </li>
@@ -78,8 +78,8 @@ document.addEventListener('ins:tree', (e) => {
 });
 
 Insiyab.tree('#node-42', 'select');   // يختاره ويفتح الطريق إليه
-Insiyab.tree('#files', 'open');       // يفتح كلّ الفروع، أو 'close'
-Insiyab.tree('#files');               // البند المختار — أو المعلَّمة في شجرة مربّعات
+Insiyab.tree('#files', 'open');       // يفتح كل الفروع، أو 'close'
+Insiyab.tree('#files');               // البند المختار — أو المحددة في شجرة مربعات
 </demo-code>
 
 <h2 id="attributes">السمات</h2>
@@ -89,11 +89,11 @@ Insiyab.tree('#files');               // البند المختار — أو ال
       <table class="ins-table">
         <thead><tr><th>السمة</th><th>على</th><th>ما تفعله</th></tr></thead>
         <tbody>
-          <tr><td><code>data-ins-tree</code></td><td><code>&lt;ul&gt;</code></td><td>يجعل القوائم المتداخلة شجرة.</td></tr>
+          <tr><td><code>data-ins-tree</code></td><td><code>&lt;ul&gt;</code></td><td>تجعل القوائم المتداخلة شجرة.</td></tr>
           <tr><td><code>data-open</code></td><td><code>&lt;li&gt;</code></td><td>فرع مفتوح من البداية.</td></tr>
           <tr><td><code>data-selected</code></td><td><code>&lt;li&gt;</code></td><td>بند مختار من البداية.</td></tr>
-          <tr><td><code>data-ins-tree-checks</code></td><td>الشجرة</td><td>مربّعات متسلسلة، والفرع الجزئيّ مختلط.</td></tr>
-          <tr><td><code>data-ins-tree-select="none"</code></td><td>الشجرة</td><td>بلا اختيار، لشجرة تنقّل فقط.</td></tr>
+          <tr><td><code>data-ins-tree-checks</code></td><td>الشجرة</td><td>مربعات اختيار يسري تحديد الفرع فيها إلى ما تحته، ويظهر الفرع المحدد جزئيًا في حالة <code>indeterminate</code>.</td></tr>
+          <tr><td><code>data-ins-tree-select="none"</code></td><td>الشجرة</td><td>تلغي الاختيار، حين تكون الشجرة للتنقل وحده.</td></tr>
         </tbody>
       </table>
     </div>

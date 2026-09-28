@@ -1,5 +1,5 @@
 <h2 id="install">التثبيت</h2>
-<p>إضافة لا جزء من الملفّين. ملفّ الأنماط اختياريّ، وفيه قائمة المحتويات الجاهزة <code>.ins-toc</code>.</p>
+<p>إضافة مستقلة عن المكتبة، سكربتها لازم وملف أنماطها اختياري، وفيه قائمة المحتويات الجاهزة <code>.ins-toc</code>.</p>
 <demo-code lang="html">
 <link rel="stylesheet" href="insiyab/plugins/insiyab-scrollspy.css">
 <script src="insiyab/insiyab-boot.js"></script>
@@ -9,51 +9,51 @@
 
 <h2 id="toc">قائمة تتبع القراءة</h2>
 <p>
-  <code>data-ins-scrollspy</code> على أيّ تنقّل روابطه إلى أقسام في الصفحة. الرابط الذي يُقرأ قسمه يأخذ
-  <code>is-active</code> و<code>aria-current="location"</code>. مرّر الصندوق:
+  ضع <code>data-ins-scrollspy</code> على أي قائمة تنقل تشير روابطها إلى أقسام في الصفحة، فيأخذ الرابط الذي يُقرأ
+  قسمه <code>is-active</code> و<code>aria-current="location"</code>. جرب تمرير الصندوق:
 </p>
 <demo-example>
   <div class="spy-demo">
     <div class="spy-demo-box" id="spy-box">
-      <section id="spy-a"><h3>القسم الأوّل</h3></section>
+      <section id="spy-a"><h3>القسم الأول</h3></section>
       <section id="spy-b"><h3>القسم الثاني</h3></section>
-      <section id="spy-c"><h3>قسم فرعيّ</h3></section>
+      <section id="spy-c"><h3>قسم فرعي</h3></section>
       <section id="spy-d"><h3>القسم الثالث</h3></section>
     </div>
     <nav class="ins-toc" data-ins-scrollspy aria-label="المحتويات">
       <div class="ins-toc-title">المحتويات</div>
-      <a href="#spy-a">القسم الأوّل</a>
+      <a href="#spy-a">القسم الأول</a>
       <a href="#spy-b">القسم الثاني</a>
-      <a class="ins-toc-sub" href="#spy-c">قسم فرعيّ</a>
+      <a class="ins-toc-sub" href="#spy-c">قسم فرعي</a>
       <a href="#spy-d">القسم الثالث</a>
     </nav>
   </div>
 </demo-example>
 
-<h2 id="rule">أيّ قسم يُقرأ</h2>
+<h2 id="rule">كيف يُعرف القسم الحالي</h2>
 <ul>
-  <li><b>القسم الحاليّ</b> آخر قسم تجاوز أعلاه خطًّا على ثلث ما يُمرَّر من الأعلى، أو على
-    <code>data-ins-scrollspy-offset</code> بكسلًا لصفحة رأسها الثابت طويل.</li>
-  <li><b>في آخر التمرير</b> القسم الأخير، مهما قصر، وإن لم يبلغ الخطّ قطّ.</li>
-  <li><b>ما يُمرَّر</b> يُعرف وحده: الصفحة، أو <code>&lt;body&gt;</code> مع <code>data-ins-scrollbar="lead"</code>، أو
-    صندوق بشريط تمرير خاصّ كالذي أعلاه.</li>
-  <li><b>النقر على رابط</b> يعلّمه فورًا، ولا ينتقل العلَم في أثناء التمرير الذي بدأه.</li>
+  <li><b>القسم الحالي</b> هو آخر قسم عبر أعلاه خطًا يقع على ثلث منطقة التمرير من أعلاها، أو على بعد
+    <code>data-ins-scrollspy-offset</code> بكسلًا منه إذا كان الشريط العلوي الثابت طويلًا.</li>
+  <li><b>في آخر التمرير</b> يصير القسم الأخير هو الحالي مهما قصر، ولو لم يبلغ الخط قط.</li>
+  <li><b>منطقة التمرير</b> تعرفها الإضافة بنفسها: الصفحة، أو <code>&lt;body&gt;</code> مع <code>data-ins-scrollbar="lead"</code>، أو
+    صندوق له شريط تمرير خاص كالذي في الأعلى.</li>
+  <li><b>النقر على رابط</b> يجعله الحالي في الحال، ولا تنتقل العلامة عنه في أثناء التمرير الذي أحدثه النقر.</li>
 </ul>
 
 <h2 id="styles">قائمة المحتويات</h2>
 <p>
-  <code>.ins-toc</code> بطاقة زجاجية تثبت تحت الشريط العلويّ بجانب محتوى طويل، ورابطها الحاليّ مرفوع بعلامة الهوية
-  كالرابط الحاليّ في الشريط الجانبي، وتنتقل العلامة من رابط إلى آخر كما تنتقل فيه، وهي نفسها قائمة «في هذه الصفحة» في هذا
-  الموقع. العنوان
-  <code>.ins-toc-title</code>، ورابط لعنوان أعمق <code>.ins-toc-sub</code>، والمسافة من الأعلى <code>--ins-toc-top</code>.
+  <code>.ins-toc</code> بطاقة زجاجية تثبت تحت الشريط العلوي إلى جانب المحتوى الطويل، ويتميز رابطها الحالي بعلامة من
+  لون الهوية كما في الشريط الجانبي، وتنتقل العلامة من رابط إلى آخر كما تنتقل هناك. وهي نفسها قائمة «في هذه الصفحة»
+  في هذا الموقع. وللعنوان
+  <code>.ins-toc-title</code>، وللرابط إلى عنوان أعمق <code>.ins-toc-sub</code>، وتضبط المسافة من الأعلى بـ <code>--ins-toc-top</code>.
 </p>
 
 <h2 id="api">من الشيفرة</h2>
 <demo-code lang="js">
 document.addEventListener('ins:scrollspy', (e) => {
-  console.log(e.detail.link, e.detail.section);   // الرابط الحاليّ وقسمه
+  console.log(e.detail.link, e.detail.section);   // الرابط الحالي وقسمه
 });
 
-Insiyab.scrollspy('#toc');   // أعد القياس — بعد أن كبر محتوى فوق الأقسام — ويعيد الرابط الحاليّ
+Insiyab.scrollspy('#toc');   // أعد القياس — بعد أن كبر محتوى فوق الأقسام — ويعيد الرابط الحالي
 </demo-code>
 

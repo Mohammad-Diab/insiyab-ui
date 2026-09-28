@@ -1,9 +1,9 @@
-<h2 id="basic">الحوار</h2>
+<h2 id="basic">مربع الحوار</h2>
 <p>
-  <code>&lt;dialog class="ins-dialog"&gt;</code> فيه <code>.ins-dialog-head</code> و<code>.ins-dialog-body</code>
-  و<code>.ins-dialog-foot</code>. زرّ فيه <code>data-ins-dialog</code> يفتحه، و<code>data-ins-dialog-close</code>
-  داخله يغلقه. التركيز محبوس فيه، و<kbd class="ins-kbd">Esc</kbd> يغلقه ويعيد التركيز إلى الزرّ الذي فتحه.
-  والنقر خارجه لا يغلقه، كي لا تضيع نقرة شاردة ما كُتب فيه.
+  يتألف مربع الحوار <code>&lt;dialog class="ins-dialog"&gt;</code> من رأس <code>.ins-dialog-head</code> ومتن <code>.ins-dialog-body</code>
+  وذيل <code>.ins-dialog-foot</code>. يفتحه زر يحمل <code>data-ins-dialog</code>، ويغلقه من داخله زر يحمل <code>data-ins-dialog-close</code>.
+  وما دام مفتوحًا بقي التركيز محبوسًا فيه، ويغلقه مفتاح <kbd class="ins-kbd">Esc</kbd> ويعيد التركيز إلى الزر الذي فتحه.
+  أما النقر خارجه فلا يغلقه، حتى لا تذهب نقرة شاردة بما كتبته فيه.
 </p>
 <demo-example class="row">
   <button class="ins-btn ins-btn--primary" data-ins-dialog="#dlg">فتح الحوار</button>
@@ -13,7 +13,7 @@
       <h3 class="ins-dialog-title">عنوان الحوار</h3>
       <button class="ins-close" data-ins-dialog-close aria-label="إغلاق"></button>
     </div>
-    <div class="ins-dialog-body">نصّ الحوار.</div>
+    <div class="ins-dialog-body">نص الحوار.</div>
     <div class="ins-dialog-foot">
       <button class="ins-btn ins-btn--bare" data-ins-dialog-close>إلغاء</button>
       <button class="ins-btn ins-btn--primary" data-ins-dialog-close>موافق</button>
@@ -22,7 +22,7 @@
 </demo-example>
 
 <h2 id="sizes">المقاسات</h2>
-<p><code>--sm</code> لسؤال قصير، و<code>--lg</code> لمحتوى عريض كجدول.</p>
+<p>يناسب <code>--sm</code> سؤالًا قصيرًا، ويتسع <code>--lg</code> لمحتوى عريض مثل جدول.</p>
 <demo-example class="row">
   <button class="ins-btn ins-btn--secondary" data-ins-dialog="#dlg-sm">صغير</button>
   <button class="ins-btn ins-btn--secondary" data-ins-dialog="#dlg-lg">كبير</button>
@@ -32,7 +32,7 @@
       <h3 class="ins-dialog-title">حوار صغير</h3>
       <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
     </div>
-    <div class="ins-dialog-body">نصّ قصير.</div>
+    <div class="ins-dialog-body">نص قصير.</div>
     <div class="ins-dialog-foot">
       <button class="ins-btn ins-btn--bare" data-ins-dismiss>إلغاء</button>
       <button class="ins-btn ins-btn--primary" data-ins-dismiss>موافق</button>
@@ -46,16 +46,16 @@
     </div>
     <div class="ins-dialog-body">محتوى عريض.</div>
     <div class="ins-dialog-foot">
-      <button class="ins-btn ins-btn--primary" data-ins-dismiss>تمّ</button>
+      <button class="ins-btn ins-btn--primary" data-ins-dismiss>تم</button>
     </div>
   </dialog>
 </demo-example>
 
 <h2 id="confirm">التأكيد</h2>
 <p>
-  <code>data-ins-confirm</code> على زرّ أو رابط أو نموذج يسأل قبل أن يمضي الإجراء، و<code>data-ins-confirm-ok</code>
-  نصّ زرّ التأكيد. والزرّ المصمَّم خطرًا يحصل على زرّ تأكيد أحمر تلقائيًا. ومن الجافاسكربت،
-  <code>Insiyab.confirm()</code> يعيد وعدًا بـ <code>true</code> أو <code>false</code>.
+  ضع <code>data-ins-confirm</code> على زر أو رابط أو نموذج، فيسأل المستخدم قبل أن يمضي الإجراء، واكتب في <code>data-ins-confirm-ok</code>
+  نص زر التأكيد. وإذا كان الزر من أزرار الخطر جاء زر التأكيد أحمر تلقائيًا. ومن جافاسكربت تعيد
+  <code>Insiyab.confirm()</code> كائن <code>Promise</code> ينتهي إلى <code>true</code> أو <code>false</code>.
 </p>
 <demo-example class="row">
   <button class="ins-btn ins-btn--ghost-danger" id="del-btn" data-ins-confirm="حذف العنصر نهائيًا؟" data-ins-confirm-ok="حذف">حذف</button>

@@ -1,7 +1,7 @@
 <h2 id="basic">جدول بيانات</h2>
 <p>
-  <code>.ins-table</code> داخل <code>.ins-table-wrap</code>، والغلاف يتمرّر أفقيًا حين يضيق عن الجدول
-  بدل أن يمدّ الصفحة كلّها.
+  ضع <code>.ins-table</code> داخل <code>.ins-table-wrap</code>، فإذا ضاق الغلاف عن الجدول تمرر أفقيًا
+  وبقيت الصفحة على عرضها.
 </p>
 <demo-example>
   <div class="ins-table-wrap">
@@ -19,12 +19,12 @@
   </div>
 </demo-example>
 <p>
-  مرّر على صفّ فيتلوّن خلفه. والصفّ المحدَّد — <code>aria-selected="true"</code> أو <code>aria-current</code>
-  أو <code>.is-selected</code>، كالصفّ الثاني هنا — يبقى ملوّنًا وعلى حافته الأمامية شريط صغير.
+  إذا مررت المؤشر على صف تلونت خلفيته. أما الصف المحدد، وهو ما يحمل <code>aria-selected="true"</code> أو <code>aria-current</code>
+  أو <code>.is-selected</code> كالصف الثاني هنا، فيبقى ملونًا ويظهر على حافته في جهة البداية شريط صغير.
 </p>
 
-<h2 id="panel">داخل لوح</h2>
-<p>في لوح، ضع الغلاف في <code>.ins-panel-body--flush</code> ليصل الجدول إلى حوافه.</p>
+<h2 id="panel">جدول في لوح</h2>
+<p>إذا وضعت الجدول في لوح، فضع غلافه في <code>.ins-panel-body--flush</code> ليمتد الجدول إلى حواف اللوح.</p>
 <demo-example>
   <div class="ins-panel">
     <div class="ins-panel-body ins-panel-body--flush">
@@ -43,15 +43,15 @@
 
 <h2 id="numbers">الأرقام</h2>
 <p>
-  <code>.ins-num</code> على الخليّة يكتب الرقم بخطّ Inter بأرقام متساوية العرض ويعزله عن اتجاه السطر،
-  فتصطفّ الأعمدة الرقمية ولا تنتقل إشارة الناقص. ضعه على رأس العمود أيضًا ليصطفّ معه.
+  إذا وضعت <code>.ins-num</code> على خلية كتب رقمها بخط Inter بأرقام متساوية العرض، وعزله عن اتجاه السطر،
+  فتصطف الأعمدة الرقمية وتبقى إشارة السالب في مكانها. وضعه على رأس العمود أيضًا ليصطف معه.
 </p>
 <demo-example>
   <div class="ins-table-wrap">
     <table class="ins-table">
       <thead><tr><th>الطلب</th><th class="ins-num">المبلغ</th></tr></thead>
       <tbody>
-        <tr><td>الأوّل</td><td class="ins-num">249.00</td></tr>
+        <tr><td>الأول</td><td class="ins-num">249.00</td></tr>
         <tr><td>الثاني</td><td class="ins-num">1,180.00</td></tr>
         <tr><td>الثالث</td><td class="ins-num">-89.50</td></tr>
       </tbody>
@@ -59,9 +59,9 @@
   </div>
 </demo-example>
 
-<h2 id="actions">إجراءات الصفّ</h2>
+<h2 id="actions">إجراءات الصف</h2>
 <p>
-  قائمة <code>.ins-pop</code> في آخر خليّة. الغلاف يقصّ ما يتجاوزه، إلّا ما دامت قائمة فيه مفتوحة.
+  ضع قائمة منسدلة <code>.ins-pop</code> في آخر خلية من الصف. ويقص الغلاف ما يخرج عن حدوده، إلا حين تنفتح فيه القائمة فيتركها تظهر كاملة.
 </p>
 <demo-example>
   <div class="ins-table-wrap">
@@ -87,9 +87,9 @@
 
 <h2 id="sort">الترتيب</h2>
 <p>
-  <code>data-ins-sort</code> على رأس عمود يجعله زرًّا يرتّب الصفوف تصاعديًا ثم تنازليًا، والسهم يقول الاتجاه. الأرقام تُرتَّب
-  أرقامًا والنصوص بترتيب لغة الصفحة، والخليّة الفارغة في الآخر دائمًا. وإن لم يكن النصّ هو القيمة — تاريخ مكتوب بالكلمات مثلًا —
-  ضع القيمة في <code>data-sort-value</code>.
+  إذا وضعت <code>data-ins-sort</code> على رأس عمود صار زرًا يرتب الصفوف تصاعديًا ثم تنازليًا، ويدل السهم على الاتجاه. وترتب الأرقام
+  بقيمها والنصوص بحسب لغة الصفحة، وتأتي الخلية الفارغة في الآخر دائمًا. وإذا لم يكن النص هو القيمة، كتاريخ مكتوب بالكلمات،
+  فضع القيمة في <code>data-sort-value</code>.
 </p>
 <demo-example>
   <div class="ins-table-wrap">
@@ -106,28 +106,28 @@
   </div>
 </demo-example>
 <p>
-  قبل الترتيب يُطلق <code>ins:sort</code>. إن كان الترتيب على الخادم فألغِه، فيتحرّك السهم وحده وتجلب أنت الصفوف مرتّبة.
+  ويُطلق حدث <code>ins:sort</code> قبل الترتيب، فإذا كان الترتيب على الخادم فألغه، ليتحرك السهم وحده وتجلب أنت الصفوف مرتبة.
 </p>
 <demo-code lang="js">
 document.addEventListener('ins:sort', (e) => {
-  e.preventDefault();                    // الخادم يرتّب
+  e.preventDefault();                    // الخادم يرتب
   load({ column: e.detail.column, dir: e.detail.dir });
 });
 </demo-code>
 
 <h2 id="select">تحديد الصفوف</h2>
 <p>
-  عمود مربّعات <code>.ins-table-check</code>: <code>data-ins-select</code> على مربّع كلّ صفّ، و<code>data-ins-select="all"</code>
-  على مربّع الرأس. الصفّ المحدّد يتلوّن، ومربّع الرأس يصير محدّدًا أو جزئيًا، و<kbd class="ins-kbd">Shift</kbd> مع النقر يحدّد ما بين
-  صفّين. و<code>.ins-bulkbar</code> مع <code>data-ins-bulk="#الجدول"</code> شريط يظهر ما دام شيء محدّدًا، بعدده وإجراءاته،
-  وزرّ <code>data-ins-select="none"</code> فيه يلغي التحديد.
+  أضف عمود مربعات <code>.ins-table-check</code>، وضع <code>data-ins-select</code> على مربع كل صف، و<code>data-ins-select="all"</code>
+  على مربع رأس الجدول. فيتلون الصف المحدد، ويصير مربع الرأس محددًا كله أو جزئيًا، وإذا نقرت مع <kbd class="ins-kbd">Shift</kbd> حددت ما بين
+  صفين. أما <code>.ins-bulkbar</code> مع <code>data-ins-bulk="#الجدول"</code> فشريط يظهر ما دام في الجدول شيء محدد، يعرض عدده والإجراءات المتاحة له،
+  وفيه زر <code>data-ins-select="none"</code> يلغي التحديد.
 </p>
 <demo-example>
   <div class="ins-table-wrap">
     <table class="ins-table" id="people">
       <thead>
         <tr>
-          <th class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select="all" aria-label="تحديد الكلّ"></label></th>
+          <th class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select="all" aria-label="تحديد الكل"></label></th>
           <th>الاسم</th><th>المدينة</th>
         </tr>
       </thead>
@@ -146,20 +146,20 @@ document.addEventListener('ins:sort', (e) => {
   </div>
 </demo-example>
 <p>
-  نصّ العدد من <code>data-ins-text="{n} صفوف"</code> على <code>.ins-bulkbar-count</code> إن أردت غير الافتراضي. وكلّ تغيير يُطلق
-  <code>ins:select</code> بالصفوف المحدّدة، و<code>Insiyab.selection('#people')</code> يعيدها.
+  وإذا أردت لنص العدد صيغة غير الافتراضية فضع <code>data-ins-text="الصفوف المحددة: {n}"</code> على <code>.ins-bulkbar-count</code>. ومع كل تغيير يُطلق حدث
+  <code>ins:select</code> حاملًا الصفوف المحددة، وتعيدها لك <code>Insiyab.selection('#people')</code>.
 </p>
 
 <h2 id="edit">التعديل في مكانه</h2>
 <p>
-  <code>data-ins-edit</code> على خليّة يجعلها قابلة للتعديل: نقرة أو <kbd class="ins-kbd">Enter</kbd> تحوّلها حقلًا،
-  و<kbd class="ins-kbd">Enter</kbd> أو الخروج منه يحفظ، و<kbd class="ins-kbd">Esc</kbd> يعيد القيمة. <code>="number"</code> لرقم،
-  و<code>="select"</code> مع <code>data-ins-options="أ|ب"</code> لقائمة.
+  إذا وضعت <code>data-ins-edit</code> على خلية صارت قابلة للتعديل، فالنقر عليها أو <kbd class="ins-kbd">Enter</kbd> يحولها حقلًا،
+  ثم يحفظ <kbd class="ins-kbd">Enter</kbd> أو مغادرة الحقل ما كتبت، ويعيد <kbd class="ins-kbd">Esc</kbd> القيمة السابقة. واجعل قيمتها <code>="number"</code> للأرقام،
+  أو <code>="select"</code> مع <code>data-ins-options="أ|ب"</code> للاختيار من قائمة.
 </p>
 <demo-example>
   <div class="ins-table-wrap">
     <table class="ins-table">
-      <thead><tr><th>الاسم</th><th class="ins-num">الكمّية</th><th>الحالة</th></tr></thead>
+      <thead><tr><th>الاسم</th><th class="ins-num">الكمية</th><th>الحالة</th></tr></thead>
       <tbody>
         <tr><td data-ins-edit>ليلى</td><td class="ins-num" data-ins-edit="number">12</td><td data-ins-edit="select" data-ins-options="نشط|موقوف">نشط</td></tr>
         <tr><td data-ins-edit>عمر</td><td class="ins-num" data-ins-edit="number">7</td><td data-ins-edit="select" data-ins-options="نشط|موقوف">موقوف</td></tr>
@@ -168,7 +168,7 @@ document.addEventListener('ins:sort', (e) => {
   </div>
 </demo-example>
 <p>
-  قبل أن يُحفظ التغيير يُطلق <code>ins:edit</code>. ألغِه لرفض القيمة، أو احفظها على الخادم واستدعِ <code>revert()</code> إن فشل الحفظ.
+  ويُطلق حدث <code>ins:edit</code> قبل حفظ التغيير، فألغه إن أردت رفض القيمة، أو احفظها على الخادم واستدع <code>revert()</code> إذا فشل الحفظ.
 </p>
 <demo-code lang="js">
 document.addEventListener('ins:edit', async (e) => {
@@ -177,10 +177,10 @@ document.addEventListener('ins:edit', async (e) => {
 });
 </demo-code>
 
-<h2 id="sticky">رأس ثابت وعمود أوّل ثابت</h2>
+<h2 id="sticky">تثبيت رأس الجدول وعموده الأول</h2>
 <p>
-  <code>.ins-table-wrap--sticky</code> يضع الجدول الطويل في صندوق يتمرّر داخل ارتفاع (<code>--ins-table-max</code>، 32rem)
-  ويبقي شريط الرأس ظاهرًا. و<code>.ins-table-wrap--pin</code> يبقي العمود الأوّل ظاهرًا حين يتمرّر جدول عريض أفقيًا. ويجتمعان.
+  يضع <code>.ins-table-wrap--sticky</code> الجدول الطويل في صندوق يتمرر ضمن ارتفاع يحدده <code>--ins-table-max</code>، وقيمته 32rem،
+  ويبقي رأس الجدول ظاهرًا. ويبقي <code>.ins-table-wrap--pin</code> العمود الأول ظاهرًا حين يتمرر الجدول العريض أفقيًا. ولك أن تجمع بينهما.
 </p>
 <demo-example>
   <div class="ins-table-wrap ins-table-wrap--sticky ins-table-wrap--pin" style="--ins-table-max: 16rem">
@@ -202,7 +202,7 @@ document.addEventListener('ins:edit', async (e) => {
 
 <h2 id="empty">جدول فارغ</h2>
 <p>
-  حين لا بيانات، ضع <code>.ins-empty</code> في خليّة بعرض الجدول، فيختفي شريط الرأس ويبقى
+  إذا خلا الجدول من البيانات، فضع <code>.ins-empty</code> في خلية تمتد بعرضه، فيختفي رأس الجدول عن العين ويبقى
   <code>&lt;thead&gt;</code> لقارئ الشاشة.
 </p>
 <demo-example>

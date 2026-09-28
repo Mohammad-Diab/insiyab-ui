@@ -1,7 +1,7 @@
 <h2 id="glass">الزجاج</h2>
 <p>
-  <code>.ins-glass</code> السطح الأساسي، بلا حشوة ولا سلوك. <code>.ins-card</code> بطاقة، ومع
-  <code>.ins-hoverable</code> ترتفع عند المرور. <code>.ins-glass-inner</code> المظهر المسطّح لسطح داخل سطح.
+  <code>.ins-glass</code> هو السطح الأساسي، لا فراغ داخليًا (padding) فيه ولا سلوك. و<code>.ins-card</code> بطاقة، إذا أضفت إليها
+  <code>.ins-hoverable</code> ارتفعت حين يمر عليها المؤشر. أما <code>.ins-glass-inner</code> فمظهر مسطح لسطح يوضع داخل سطح آخر.
 </p>
 <demo-example class="stack">
   <div class="ins-glass ins-p-5">.ins-glass</div>
@@ -10,7 +10,7 @@
 </demo-example>
 
 <h2 id="nesting">زجاج داخل زجاج</h2>
-<p>السطح الداخلي يسقط حدّه وظلّه ولمعته وضبابه تلقائيًا، بالصنف نفسه ودون صنف إضافي.</p>
+<p>إذا وضعت سطحًا داخل سطح تخلى الداخلي تلقائيًا عن حده وظله ولمعته وضبابيته، وهو يحمل الكلاس نفسه بلا كلاس إضافي.</p>
 <demo-example>
   <div class="ins-glass ins-p-5">
     <p>خارجي</p>
@@ -20,8 +20,8 @@
 
 <h2 id="panel">اللوح</h2>
 <p>
-  حاوية بأجزاء: رأس (<code>-ico</code> و<code>-title</code> و<code>-actions</code>)، وجسم، وتذييل. ولا يرتفع
-  عند المرور، بل تضيء حافّته.
+  حاوية من ثلاثة أجزاء: رأس فيه <code>-ico</code> و<code>-title</code> و<code>-actions</code>، ثم جسم، ثم تذييل. ولا يرتفع اللوح
+  حين يمر عليه المؤشر، وإنما تضيء حافته.
 </p>
 <demo-example>
   <div class="ins-panel">
@@ -38,7 +38,7 @@
 </demo-example>
 
 <h3 id="panel-alert">لوح يحتاج انتباهًا</h3>
-<p><code>.ins-panel--alert</code> يلوّن الرأس وحده.</p>
+<p>يلون <code>.ins-panel--alert</code> رأس اللوح وحده.</p>
 <demo-example>
   <div class="ins-panel ins-panel--alert">
     <div class="ins-panel-head">
@@ -48,23 +48,23 @@
   </div>
 </demo-example>
 
-<h3 id="panel-flush">جسم بلا حشوة</h3>
-<p><code>.ins-panel-body--flush</code> لجدول أو قائمة تصل إلى حواف اللوح، و<code>.ins-panel-note</code> لسطر شرح فوقهما.</p>
+<h3 id="panel-flush">جسم بلا فراغ داخلي</h3>
+<p>استعمل <code>.ins-panel-body--flush</code> لجدول أو قائمة تمتد إلى حواف اللوح، و<code>.ins-panel-note</code> لسطر شرح يعلوهما.</p>
 <demo-example>
   <div class="ins-panel">
     <div class="ins-panel-body ins-panel-body--flush">
       <p class="ins-panel-note">سطر شرح.</p>
       <ul class="ins-list">
-        <li class="ins-list-item">البند الأوّل</li>
+        <li class="ins-list-item">البند الأول</li>
         <li class="ins-list-item">البند الثاني</li>
       </ul>
     </div>
   </div>
 </demo-example>
 
-<h2 id="radii">أنصاف الأقطار</h2>
+<h2 id="radii">انحناء الزوايا</h2>
 <p>
-  <code>--ins-r-xs</code> إلى <code>--ins-r-pill</code>: 7 و10 و14 و22 و32 و999 بكسل، و14 هو الافتراضي.
+  تمتد قيم انحناء الزوايا (border-radius) من <code>--ins-r-xs</code> إلى <code>--ins-r-pill</code>، وقيمها 7 و10 و14 و22 و32 و999 بكسل، والافتراضي منها 14.
 </p>
 <demo-example code="none">
   <div class="radii">
@@ -77,10 +77,10 @@
   </div>
 </demo-example>
 
-<h2 id="ladders">السلالم</h2>
+<h2 id="ladders">سلالم الزجاج</h2>
 <ul>
-  <li><b>العتمة</b> — كلّما علا السطح زادت عتمته: اللوح <span class="ins-num">.58</span>، والمرور
-    <span class="ins-num">.78</span>، والحقل المركَّز <span class="ins-num">.90</span>، والقائمة المنبثقة <span class="ins-num">.94</span>.</li>
-  <li><b>الضباب</b> — الألواح ٢٤ بكسل، والأشرطة والحبوب ١٦، وخلفية الحوار ٢ فقط.</li>
-  <li><b>الظلّ</b> — ناعم وكبير ومائل إلى البرودة.</li>
+  <li><b>الشفافية (opacity)</b> — كلما علا السطح قلت شفافيته، فقيمتها <span class="ins-num">.58</span> في اللوح،
+    و<span class="ins-num">.78</span> عند مرور المؤشر، و<span class="ins-num">.90</span> في الحقل الذي عليه التركيز، و<span class="ins-num">.94</span> في القائمة المنسدلة.</li>
+  <li><b>الضبابية (blur)</b> — 24 بكسل في الألواح، و16 في الأشرطة وجزر الشريط العلوي، و2 فقط في خلفية مربع الحوار (backdrop).</li>
+  <li><b>الظل</b> — واسع ناعم، يميل لونه إلى البرودة.</li>
 </ul>

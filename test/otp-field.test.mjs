@@ -53,7 +53,7 @@ ok('Arabic-Indic digits are read as Latin', (await view('otp')).value === '1234'
 await b.type('a-');
 ok('anything but a digit is ignored', (await view('otp')).value === '1234');
 v = await view('otp');
-ok('an incomplete code is invalid, with a message', !v.valid && v.msg === 'أدخل الرمز كاملًا: 6 أرقام.', v.msg);
+ok('an incomplete code is invalid, with a message', !v.valid && v.msg === 'اكتب الرمز كاملًا: 6 أرقام.', v.msg);
 await raw('ArrowLeft', 'ArrowLeft', 37);
 await raw('Home', 'Home', 36);
 ok('arrow keys do not move the caret off the end', (await view('otp')).caret === 4, (await view('otp')).caret);

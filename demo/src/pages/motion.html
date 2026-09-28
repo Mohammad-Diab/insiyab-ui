@@ -1,8 +1,8 @@
-<h2 id="curves">منحنيان</h2>
+<h2 id="curves">منحنيان للحركة</h2>
 <p>
-  <code>--ins-ease</code> (<code>cubic-bezier(.22, 1, .36, 1)</code>) لكلّ شيء تقريبًا، والدخول ٢٨٠ جزءًا
-  من الثانية والخروج ١٨٠. و<code>--ins-ease-spring</code> (<code>cubic-bezier(.34, 1.56, .64, 1)</code>)
-  لما ينتقل من مكان إلى آخر، كإبهام المفتاح.
+  يجري <code>--ins-ease</code> (<code>cubic-bezier(.22, 1, .36, 1)</code>) على كل شيء تقريبًا، فيستغرق الدخول
+  280 ميلي ثانية والخروج 180. أما <code>--ins-ease-spring</code> (<code>cubic-bezier(.34, 1.56, .64, 1)</code>)
+  فلما ينتقل من مكان إلى آخر، كالدائرة التي تنزلق في المفتاح.
 </p>
 <demo-code lang="css">
 .my-thing {
@@ -13,14 +13,14 @@
 }
 </demo-code>
 
-<p>حركات الدخول عند التمرير (<code>data-ins-reveal</code> وأصناف <code>ins-anim-*</code>) في صفحة <a href="reveal.html">حركات الدخول</a> بين الملحقات.</p>
+<p>وتجد حركات الدخول عند التمرير (<code>data-ins-reveal</code> وكلاسات <code>ins-anim-*</code>) في صفحة <a href="reveal.html">حركات الدخول</a> بين الملحقات.</p>
 
-<h2 id="gestures">إشارات المرور</h2>
-<p>مرّر على كلّ عنصر:</p>
+<h2 id="gestures">عند مرور المؤشر</h2>
+<p>مرر المؤشر على كل عنصر:</p>
 <ul>
-  <li>السطح بـ <code>.ins-hoverable</code> يرتفع: ظلّ أطول وحافة أسطع. ولا ترتفع البطاقة إلّا بهذا الصنف.</li>
-  <li>أيقونة الزرّ تنزلق نحو الحافة التي يأخذك إليها.</li>
-  <li>الحقل يضيء ولا يرتفع.</li>
+  <li>يرتفع السطح الذي يحمل <code>.ins-hoverable</code>، فيطول ظله وتسطع حافته. ولا ترتفع البطاقة إلا بهذا الكلاس.</li>
+  <li>تنزلق أيقونة الزر نحو الجهة التي يمضي بك إليها.</li>
+  <li>يضيء الحقل ولا يرتفع.</li>
 </ul>
 <demo-example class="row">
   <div class="ins-card ins-p-5 ins-hoverable">سطح</div>
@@ -28,16 +28,16 @@
   <input class="ins-input" placeholder="حقل" aria-label="حقل" style="inline-size:auto">
 </demo-example>
 
-<h2 id="nothing-loops">لا شيء يتكرّر</h2>
+<h2 id="nothing-loops">لا حركة تتكرر بلا توقف</h2>
 <p>
-  كلّ حركة عابرة وتتوقّف، إلّا هيكل التحميل والدوّارة، وكلاهما يعني «ننتظر». فأيّ حركة دائمة تحت الأسطح
-  المصنفرة تعيد تضبيب معظم الصفحة في كلّ إطار وتستهلك المعالج بلا توقّف.
+  كل حركة تمر ثم تسكن، إلا هيكل التحميل (skeleton) ومؤشر التحميل، فكلاهما يقول «ننتظر». ذلك أن أي حركة دائمة
+  تحت الأسطح الزجاجية تجبر المتصفح على إعادة حساب التمويه (blur) لمعظم الصفحة في كل إطار، فتستنزف المعالج بلا توقف.
 </p>
 
-<h2 id="off">الإيقاف</h2>
+<h2 id="off">إيقاف الحركة</h2>
 <p>
-  <code>data-ins-fx="off"</code> على <code>&lt;html&gt;</code> يوقف المؤثرات كلّها، وزرّ فيه
-  <code>data-ins-fx</code> يبدّلها ويحفظ الاختيار. وإعداد النظام «تقليل الحركة» محترم تلقائيًا.
+  يوقف <code>data-ins-fx="off"</code> على <code>&lt;html&gt;</code> المؤثرات كلها، ويبدلها زر يحمل
+  <code>data-ins-fx</code> ويحفظ الاختيار. أما إعداد «تقليل الحركة» في النظام فتحترمه المكتبة تلقائيًا.
 </p>
 <demo-example class="row">
   <button class="ins-btn ins-btn--secondary" data-ins-fx>تخفيف المؤثرات</button>

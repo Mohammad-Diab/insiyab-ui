@@ -1,24 +1,24 @@
 <h2 id="pills">شارات الحالة</h2>
 <p>
-  <code>.ins-pill</code> بنقطة <code>.ins-pill-dot</code> ونصّ، بستّ نبرات. لا ترتفع عند المرور إلّا إن كانت
-  <code>&lt;button&gt;</code> أو <code>&lt;a&gt;</code>.
+  تجمع <code>.ins-pill</code> نقطة <code>.ins-pill-dot</code> ونصًا، وتأتي بست نبرات. ولا يتغير شكلها عند مرور المؤشر
+  (hover) إلا إذا كانت <code>&lt;button&gt;</code> أو <code>&lt;a&gt;</code>، فترتفع قليلًا.
 </p>
 <demo-example class="row">
   <span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>مكتمل</span>
-  <span class="ins-pill ins-pill--warn"><span class="ins-pill-dot"></span>معلّق</span>
+  <span class="ins-pill ins-pill--warn"><span class="ins-pill-dot"></span>معلق</span>
   <span class="ins-pill ins-pill--bad"><span class="ins-pill-dot"></span>ملغى</span>
   <span class="ins-pill ins-pill--info"><span class="ins-pill-dot"></span>جارٍ</span>
-  <span class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>مميّز</span>
-  <span class="ins-pill"><span class="ins-pill-dot"></span>مسودّة</span>
+  <span class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>مميز</span>
+  <span class="ins-pill"><span class="ins-pill-dot"></span>مسودة</span>
 </demo-example>
 <demo-example class="row">
-  <button class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>الكلّ</button>
-  <button class="ins-pill"><span class="ins-pill-dot"></span>الأوّل</button>
+  <button class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>الكل</button>
+  <button class="ins-pill"><span class="ins-pill-dot"></span>الأول</button>
   <button class="ins-pill"><span class="ins-pill-dot"></span>الثاني</button>
 </demo-example>
 
-<h2 id="count">شارات العدّ</h2>
-<p><code>.ins-badge</code> عدد صغير، بنبرات <code>--ok</code> و<code>--warn</code> و<code>--bad</code> و<code>--mute</code>.</p>
+<h2 id="count">شارات العدد</h2>
+<p>تحمل <code>.ins-badge</code> عددًا صغيرًا، ولها النبرات <code>--ok</code> و<code>--warn</code> و<code>--bad</code> و<code>--mute</code>.</p>
 <demo-example class="row">
   <span class="ins-badge">12</span>
   <span class="ins-badge ins-badge--ok">3</span>
@@ -28,7 +28,7 @@
 </demo-example>
 
 <h2 id="avatar">الصورة الرمزية</h2>
-<p>حرفان أو صورة، بثلاثة مقاسات.</p>
+<p>تحمل حرفين أو صورة، وتأتي بثلاثة مقاسات.</p>
 <demo-example class="row">
   <span class="ins-avatar ins-avatar--sm">ع</span>
   <span class="ins-avatar">ل ح</span>
@@ -37,8 +37,8 @@
 
 <h3 id="avatars">مجموعة صور</h3>
 <p>
-  <code>.ins-avatars</code> يصفّ عدّة صور متداخلة، والبقيّة في <code>.ins-avatar--more</code>. كلّ صورة محاطة بلون السطح فيبقى
-  بين المتداخلتين فاصل.
+  يرص <code>.ins-avatars</code> عدة صور يتداخل بعضها في بعض، ويجمع ما بقي في <code>.ins-avatar--more</code>. وتحيط
+  بكل صورة حلقة بلون السطح، فيبقى بين كل صورتين متداخلتين فاصل.
 </p>
 <demo-example>
   <div class="ins-avatars" aria-label="المشاركون: 7">
@@ -51,8 +51,8 @@
 
 <h2 id="money">المبالغ</h2>
 <p>
-  <code>.ins-money</code> قيمة <code>-val</code> وعملة <code>-cur</code> بعدها، معزولة عن اتجاه السطر فتبقى إشارة
-  الناقص في مكانها. <code>--pos</code> و<code>--neg</code> للتغيّر. تعمل مع أيّ عملة.
+  يضم <code>.ins-money</code> القيمة في <code>-val</code> وتليها العملة في <code>-cur</code>، ولأن اتجاهه معزول عما
+  حوله بـ <code>unicode-bidi: isolate</code> تبقى إشارة السالب في مكانها. ويبين <code>--pos</code> و<code>--neg</code> الزيادة والنقص، وهو يصلح لكل عملة.
 </p>
 <demo-example class="row">
   <span class="ins-money"><span class="ins-money-val">1,249.00</span><span class="ins-money-cur">ر.س</span></span>
@@ -62,7 +62,7 @@
 </demo-example>
 
 <h2 id="num">الأرقام</h2>
-<p><code>.ins-num</code> لأيّ رقم ليس مبلغًا — رقم طلب، هاتف، تاريخ — ليُكتب بالخطّ والعزل نفسيهما.</p>
+<p>أما ما ليس مبلغًا من الأرقام، كرقم الطلب والهاتف والتاريخ، فضعه في <code>.ins-num</code> ليأخذ الخط نفسه والعزل نفسه.</p>
 <demo-example>
   <p>الطلب <span class="ins-num">#40218</span></p>
 </demo-example>

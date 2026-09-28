@@ -2,7 +2,7 @@
 <script src="../dist/plugins/insiyab-file.js" defer></script>
 
 <h2 id="install">التثبيت</h2>
-<p>إضافة لا جزء من الملفّين: ملفّ أنماط وملفّ سكربت يُحمَّلان بعد المكتبة.</p>
+<p>إضافة مستقلة عن المكتبة: ملف أنماط وملف سكربت تضعهما بعد ملفاتها.</p>
 <demo-code lang="html">
 <link rel="stylesheet" href="insiyab/plugins/insiyab-file.css">
 <script src="insiyab/insiyab-boot.js"></script>
@@ -10,48 +10,50 @@
 <script src="insiyab/plugins/insiyab-file.js" defer></script>
 </demo-code>
 
-<h2 id="field">منطقة الإفلات</h2>
+<h2 id="field">منطقة السحب والإفلات</h2>
 <p>
-  حقل ملفّات عاديّ عليه <code>data-ins-file</code>. تُسحب الملفّات إليه أو تُختار أو تُلصق، وتظهر تحته: صورة مصغّرة
-  للصور، ونوع الملفّ لغيرها، والاسم والحجم وزرّ الإزالة.
+  ضع <code>data-ins-file</code> على حقل ملفات عادي، فتسحب الملفات إليه أو تختارها أو تلصقها، وتظهر تحته في قائمة:
+  للصورة نسخة مصغرة ولغيرها نوعه، ومع كل ملف اسمه وحجمه وزر لإزالته.
 </p>
 <demo-example>
   <div class="ins-field">
     <label class="ins-label" for="fl-docs">المرفقات</label>
     <input type="file" id="fl-docs" name="docs" multiple accept=".pdf,image/*" data-ins-file data-ins-file-max="5MB" data-ins-file-count="5">
-    <div class="ins-hint">ملفّات PDF أو صور.</div>
+    <div class="ins-hint">ملفات PDF أو صور.</div>
   </div>
 </demo-example>
 <p>
-  <b>الملفّات تبقى في الحقل الحقيقيّ:</b> كلّ تغيير يُكتب في <code>files</code> الحقل نفسه، فيرسلها النموذج كما هي.
-  والحقل باقٍ في ترتيب التنقّل تحت تسميته، للوحة المفاتيح وقارئ الشاشة.
+  <b>تبقى الملفات في الحقل الحقيقي:</b> فكل تغيير يُكتب في <code>files</code> الحقل نفسه، ويرسلها النموذج كما هي.
+  ويبقى الحقل بتسميته في ترتيب التنقل بمفتاح Tab، فتصل إليه لوحة المفاتيح ويفهمه قارئ الشاشة.
 </p>
 
 <h2 id="limits">الحدود</h2>
 <ul>
-  <li><b><code>accept</code></b> — كما يقرؤه المنتقي، ويُطبَّق على الإفلات واللصق أيضًا، وهما لا يمرّان به.</li>
-  <li><b><code>data-ins-file-max</code></b> — أكبر حجم للملفّ: <code>500KB</code>، <code>5MB</code>.</li>
-  <li><b><code>data-ins-file-count</code></b> — أكبر عدد للملفّات، مع <code>multiple</code>.</li>
+  <li><b><code>accept</code></b> — يفهمه الحقل كما يفهمه منتقي الملفات، ويطبقه على الإفلات واللصق أيضًا مع أنهما لا يمران بالمنتقي.</li>
+  <li><b><code>data-ins-file-max</code></b> — أكبر حجم للملف، مثل <code>500KB</code> أو <code>5MB</code>.</li>
+  <li><b><code>data-ins-file-count</code></b> — أكبر عدد للملفات، ويعمل مع <code>multiple</code>.</li>
 </ul>
 <p>
-  ملفّ خارج الحدود لا يُضاف، ويقول الحقل أيّ ملفّ ولماذا. ومع <code>multiple</code> يُضاف الاختيار الجديد إلى القائمة،
-  وبدونه يستبدلها. والسطر الصغير في المنطقة يُكتب من الحدود، أو من <code>data-ins-file-note</code>.
+  والملف الذي يتجاوز الحدود لا يُضاف، ويذكر الحقل اسمه وسبب رفضه. ومع <code>multiple</code> ينضم ما تختاره إلى
+  القائمة، ومن دونها يحل محلها. أما السطر الصغير في المنطقة فيكتبه الحقل من الحدود، إلا أن تكتبه أنت في
+  <code>data-ins-file-note</code>.
 </p>
 
-<h2 id="compact">المضغوط</h2>
-<p>لنموذج ضيّق: <code>class="ins-file--compact"</code> على الحقل، زرّ وقائمة بلا منطقة. والإفلات على الزرّ يعمل.</p>
+<h2 id="compact">الشكل المضغوط</h2>
+<p>وإذا ضاق النموذج فضع <code>class="ins-file--compact"</code> على الحقل، فيصير زرًا وقائمة بلا منطقة إفلات، ويبقى الإفلات على الزر ممكنًا.</p>
 <demo-example>
   <div class="ins-field">
-    <label class="ins-label" for="fl-cv">ملفّ PDF</label>
+    <label class="ins-label" for="fl-cv">ملف PDF</label>
     <input type="file" id="fl-cv" class="ins-file--compact" name="cv" accept=".pdf" data-ins-file>
   </div>
 </demo-example>
 
-<h2 id="upload">الرفع الفوريّ</h2>
+<h2 id="upload">الرفع الفوري</h2>
 <p>
-  مع <code>data-ins-file-upload</code> يطلق كلّ ملفّ يُضاف <code>ins:file</code>، فترفعه الصفحة وتبلّغ الإضافة بما جرى.
-  عندها يرسل الحقل بدل الملفّات حقلًا مخفيًا باسمه لكلّ رفع تمّ، يحمل المعرّف الذي أعطته الصفحة، ويبقى غير صالح
-  ما دام ملفّ في الطريق أو تعذّر رفعه. الرفع هنا مصطنع، وملفّ في اسمه «خطأ» يتعذّر عمدًا:
+  مع <code>data-ins-file-upload</code> يُطلق كل ملف تضيفه حدث <code>ins:file</code>، فترفعه الصفحة ثم تخبر الإضافة
+  بما جرى. وحينئذ يرسل الحقل مكان الملفات حقلًا مخفيًا باسمه عن كل ملف رُفع، يحمل المعرف الذي أعطته الصفحة. ويبقى
+  الحقل غير صالح ما دام ملف قيد الرفع أو تعذر رفعه. والرفع في هذا المثال مصطنع، وكل ملف في اسمه «خطأ» يتعذر
+  رفعه عمدًا:
 </p>
 <demo-example>
   <div class="ins-field">
@@ -65,13 +67,13 @@ document.addEventListener('ins:file', async (e) => {
   const file = e.detail.file;
   try {
     const id = await send(file, (fraction) => Insiyab.file.progress(file, fraction));
-    Insiyab.file.done(file, id);          // حقل مخفيّ باسم الحقل يحمل المعرّف
+    Insiyab.file.done(file, id);          // حقل مخفي باسم الحقل يحمل المعرف
   } catch (err) {
-    Insiyab.file.fail(file, 'تعذّر الرفع، أزِل الملفّ أو أعد إضافته.');
+    Insiyab.file.fail(file, 'تعذر الرفع، أزِل الملف أو أعد إضافته.');
   }
 });
 
-Insiyab.file('#docs');         // الملفّات في القائمة
+Insiyab.file('#docs');         // الملفات في القائمة
 Insiyab.file('#docs', []);     // أفرغها
 </demo-code>
 
@@ -82,12 +84,12 @@ Insiyab.file('#docs', []);     // أفرغها
       <table class="ins-table">
         <thead><tr><th>السمة</th><th>ما تفعله</th></tr></thead>
         <tbody>
-          <tr><td><code>data-ins-file</code></td><td>على <code>&lt;input type="file"&gt;</code>: منطقة إفلات وقائمة.</td></tr>
-          <tr><td><code>data-ins-file-max="5MB"</code></td><td>أكبر حجم للملفّ.</td></tr>
-          <tr><td><code>data-ins-file-count="5"</code></td><td>أكبر عدد، مع <code>multiple</code>.</td></tr>
-          <tr><td><code>data-ins-file-note="…"</code></td><td>السطر الصغير في المنطقة، بدل المكتوب من الحدود.</td></tr>
-          <tr><td><code>data-ins-file-upload</code></td><td>الرفع عند الإضافة، بيد الصفحة.</td></tr>
-          <tr><td><code>class="ins-file--compact"</code></td><td>زرّ وقائمة بلا منطقة.</td></tr>
+          <tr><td><code>data-ins-file</code></td><td>تجعل <code>&lt;input type="file"&gt;</code> منطقة إفلات وقائمة.</td></tr>
+          <tr><td><code>data-ins-file-max="5MB"</code></td><td>أكبر حجم للملف.</td></tr>
+          <tr><td><code>data-ins-file-count="5"</code></td><td>أكبر عدد للملفات، مع <code>multiple</code>.</td></tr>
+          <tr><td><code>data-ins-file-note="…"</code></td><td>السطر الصغير في المنطقة، مكان ما يُكتب من الحدود.</td></tr>
+          <tr><td><code>data-ins-file-upload</code></td><td>رفع كل ملف حين يُضاف، وتتولاه الصفحة.</td></tr>
+          <tr><td><code>class="ins-file--compact"</code></td><td>زر وقائمة بلا منطقة إفلات.</td></tr>
         </tbody>
       </table>
     </div>
@@ -105,7 +107,7 @@ Insiyab.file('#docs', []);     // أفرغها
         done += 0.2;
         if (done >= 1) {
           clearInterval(timer);
-          if (/خطأ/.test(file.name)) Insiyab.file.fail(file, 'تعذّر الرفع، أزِل الملفّ أو أعد إضافته.');
+          if (/خطأ/.test(file.name)) Insiyab.file.fail(file, 'تعذر الرفع، أزِل الملف أو أعد إضافته.');
           else Insiyab.file.done(file, 'photo-' + Math.round(Math.random() * 1e6));
         } else if (!Insiyab.file.progress(file, done)) {
           clearInterval(timer);                /* removed while on its way */

@@ -1,7 +1,7 @@
-<h2 id="addon">ملحق نصّي</h2>
+<h2 id="addon">ملحق نصي</h2>
 <p>
-  <code>.ins-input-group</code> يلحم الحقل وملحقاته في قطعة واحدة بحدّ واحد وحلقة تركيز واحدة.
-  <code>.ins-addon</code> نصّ ثابت قبل الحقل أو بعده — والترتيب في الشيفرة هو الترتيب في اتجاه القراءة.
+  يضم <code>.ins-input-group</code> الحقل وملحقاته في قطعة واحدة، لها إطار واحد وحلقة تركيز (focus ring) واحدة.
+  و<code>.ins-addon</code> نص ثابت يسبق الحقل أو يليه، وترتيبه في الشيفرة هو ترتيبه في اتجاه القراءة.
 </p>
 <demo-example>
   <div class="ins-input-group">
@@ -10,8 +10,8 @@
   </div>
 </demo-example>
 
-<h3 id="ltr-group">مجموعة من اليسار</h3>
-<p>لعنوان موقع أو اسم مستخدم، ضع <code>dir="ltr"</code> على المجموعة كلّها فتبقى البادئة قبل النصّ.</p>
+<h3 id="ltr-group">مجموعة باتجاه LTR</h3>
+<p>إذا كان الحقل لعنوان موقع أو اسم مستخدم فضع <code>dir="ltr"</code> على المجموعة كلها، فتبقى البادئة قبل النص.</p>
 <demo-example>
   <div class="ins-input-group" dir="ltr">
     <span class="ins-addon">https://</span>
@@ -20,7 +20,7 @@
   </div>
 </demo-example>
 
-<h2 id="button">زرّ ملحق</h2>
+<h2 id="button">زر ملحق</h2>
 <demo-example>
   <div class="ins-input-group">
     <input class="ins-input" aria-label="الرمز">
@@ -30,8 +30,8 @@
 
 <h2 id="password">إظهار كلمة المرور</h2>
 <p>
-  <code>.ins-password-toggle</code> مع <code>data-ins-password</code> يبدّل نوع الحقل ويحدّث تسمية الزرّ
-  لقارئ الشاشة. وبلا جافاسكربت لا يظهر الزرّ أصلًا.
+  يبدل <code>.ins-password-toggle</code> مع <code>data-ins-password</code> نوع الحقل (<code>type</code>) فتظهر كلمة المرور أو تختفي، ويجدد
+  <code>aria-label</code> الزر لقارئ الشاشة. فإن غابت جافاسكربت لم يظهر الزر أصلًا.
 </p>
 <demo-example>
   <div class="ins-input-group">
@@ -40,18 +40,18 @@
   </div>
 </demo-example>
 
-<h2 id="stepper">العدّاد</h2>
-<p>زرّان <code>data-ins-spin</code> حول حقل رقمي، يحترمان <code>min</code> و<code>max</code> و<code>step</code>.</p>
+<h2 id="stepper">العداد</h2>
+<p>يحيط زران <code>data-ins-spin</code> بحقل رقمي، فيزيدانه وينقصانه بخطوة <code>step</code> ولا يتجاوزان <code>min</code> و<code>max</code>.</p>
 <demo-example>
   <div class="ins-input-group" style="max-inline-size:11rem">
     <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>
-    <input class="ins-input" type="number" min="1" max="10" value="2" aria-label="الكمّية">
+    <input class="ins-input" type="number" min="1" max="10" value="2" aria-label="الكمية">
     <button class="ins-spin" data-ins-spin="up" aria-label="زيادة"></button>
   </div>
 </demo-example>
 
-<h2 id="invalid">مع خطأ</h2>
-<p>الحالة على الحقل، والمجموعة كلّها تتلوّن.</p>
+<h2 id="invalid">حالة الخطأ</h2>
+<p>ضع الحالة على الحقل، فتتلون المجموعة كلها.</p>
 <demo-example>
   <div class="ins-field">
     <div class="ins-input-group">

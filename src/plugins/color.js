@@ -44,14 +44,14 @@
 
   var TEXT = {
     ar: {
-      pick: 'اختر لونًا', area: 'التشبّع والسطوع', hue: 'درجة اللون', swatches: 'ألوان جاهزة', drop: 'التقاط لون من الشاشة',
-      value: 'تشبّع {s}٪، سطوع {v}٪', contrast: 'التباين', onWhite: 'على الأبيض', onBlack: 'على الأسود',
-      pass: 'يصلح للنصّ', fail: 'لا يكفي للنصّ', bad: 'اكتب لونًا مثل #9B2C5E.'
+      pick: 'اختر لونًا', area: 'التشبع والسطوع', hue: 'درجة اللون', swatches: 'ألوان جاهزة', drop: 'التقاط لون من الشاشة',
+      value: 'تشبع {s}٪، سطوع {v}٪', contrast: 'التباين', onWhite: 'على الأبيض', onBlack: 'على الأسود',
+      pass: 'يصلح للنص', fail: 'لا يكفي للنص', bad: 'اكتب لونًا مثل #9B2C5E.'
     },
     en: {
-      pick: 'Choose a colour', area: 'Saturation and brightness', hue: 'Hue', swatches: 'Presets', drop: 'Pick a colour from the screen',
+      pick: 'Choose a color', area: 'Saturation and brightness', hue: 'Hue', swatches: 'Presets', drop: 'Pick a color from the screen',
       value: 'saturation {s}%, brightness {v}%', contrast: 'Contrast', onWhite: 'on white', onBlack: 'on black',
-      pass: 'fine for text', fail: 'too low for text', bad: 'Enter a colour like #9B2C5E.'
+      pass: 'fine for text', fail: 'too low for text', bad: 'Enter a color like #9B2C5E.'
     }
   };
 

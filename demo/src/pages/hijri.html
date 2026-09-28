@@ -2,8 +2,8 @@
 
 <h2 id="install">التثبيت</h2>
 <p>
-  إضافة لا جزء من الملفّين: ملفّ ثالث يُحمَّل بعد <code>insiyab.js</code>. لا جداول تواريخ داخله، فالمتصفّح يعرف
-  التقويم الهجريّ عبر <code>Intl</code>.
+  إضافة مستقلة عن المكتبة، وهي سكربت واحد تضعه بعد <code>insiyab.js</code>. وليس فيها جداول للتواريخ، إذ يعرف
+  المتصفح التقويم الهجري من <code>Intl</code>.
 </p>
 <demo-code lang="html">
 <script src="insiyab/insiyab-boot.js"></script>
@@ -13,8 +13,8 @@
 
 <h2 id="field">حقل هجري</h2>
 <p>
-  حقل التاريخ من صفحة <a href="pickers.html">المنتقيات</a> مع <code>data-ins-calendar="hijri"</code>. وفي أسفل
-  التقويم مفتاح يقلبه إلى الميلاديّ ويعيده.
+  أضف <code>data-ins-calendar="hijri"</code> إلى حقل التاريخ الذي في صفحة <a href="pickers.html">أدوات الاختيار</a>
+  فيصير هجريًا، وفي أسفل التقويم مفتاح ينقلك إلى الميلادي ثم يعيدك.
 </p>
 <demo-example>
   <div class="ins-field">
@@ -25,8 +25,9 @@
   </div>
 </demo-example>
 <p>
-  <b>ما يُرسَل لا يتغيّر:</b> الحقل المخفيّ يحمل التاريخ الميلاديّ بصيغة ISO، <code>2026-09-24</code>، كحقل تاريخ
-  عاديّ. و<code>min</code> و<code>max</code> والمدى بين حقلين تعمل كما هي، ورسائلها بالتقويم الظاهر:
+  <b>ما يصل إلى الخادم لا يتغير:</b> يحمل الحقل المخفي التاريخ ميلاديًا بصيغة ISO مثل <code>2026-09-24</code>،
+  كأي حقل تاريخ. وتبقى <code>min</code> و<code>max</code> والمدى بين حقلين على حالها، غير أن رسائلها تأتي بالتقويم
+  الظاهر:
 </p>
 <demo-example>
   <div class="ins-field-row">
@@ -47,15 +48,15 @@
 
 <h2 id="typing">الكتابة</h2>
 <ul>
-  <li><b>يوم/شهر/سنة هجرية</b> — <code>13/4/1448</code>، أو <code>١٣/٤/١٤٤٨</code>، أو السنة أوّلًا <code>1448-04-13</code>.</li>
-  <li><b>سنة من رقمين</b> — في القرن الهجريّ الحاليّ: <code>13/4/48</code>.</li>
-  <li><b>سنة بعد ١٧٠٠</b> — تُقرأ ميلادية: <code>24/9/2026</code> و<code>2026-09-24</code>.</li>
-  <li><b>يوم لا يوجد</b> — يُرفض برسالة داخل الحقل.</li>
+  <li><b>يوم/شهر/سنة هجرية</b> — <code>13/4/1448</code> أو <code>١٣/٤/١٤٤٨</code>، ولك أن تبدأ بالسنة: <code>1448-04-13</code>.</li>
+  <li><b>سنة من رقمين</b> — تُحسب من القرن الهجري الحالي: <code>13/4/48</code>.</li>
+  <li><b>سنة بعد 1700</b> — يقرؤها الحقل ميلادية: <code>24/9/2026</code> و<code>2026-09-24</code>.</li>
+  <li><b>يوم لا وجود له</b> — يرفضه الحقل برسالة تظهر فيه.</li>
 </ul>
 
-<h2 id="page">الصفحة كلّها</h2>
+<h2 id="page">الصفحة كلها</h2>
 <p>
-  السمة على <code>&lt;html&gt;</code> تجعل كلّ حقل تاريخ في الصفحة هجريًا، وحقل واحد يعود إلى الميلاديّ بـ
+  ضع السمة على <code>&lt;html&gt;</code> يصر كل حقل تاريخ في الصفحة هجريًا، وإن أردت حقلًا بعينه ميلاديًا فأعطه
   <code>data-ins-calendar="gregory"</code>.
 </p>
 <demo-code lang="html">
@@ -67,12 +68,12 @@
 
 <h2 id="civil">التقويم الحسابي</h2>
 <p>
-  <code>hijri</code> تقويم أمّ القرى، و<code>hijri-civil</code> التقويم الهجريّ الحسابيّ (الجدوليّ). قد يختلفان بيوم
-  أو يومين:
+  <code>hijri</code> هو تقويم أم القرى، و<code>hijri-civil</code> هو التقويم الهجري الحسابي (الجدولي)، وقد يفترقان
+  بيوم أو يومين:
 </p>
 <demo-example>
   <div class="ins-field">
-    <label class="ins-label" for="hj-civil">التاريخ بالحسابيّ</label>
+    <label class="ins-label" for="hj-civil">التاريخ بالحسابي</label>
     <div class="ins-input-group">
       <input class="ins-input" id="hj-civil" type="date" data-ins-date data-ins-calendar="hijri-civil" name="civil" value="2026-09-24">
     </div>
@@ -89,6 +90,7 @@ document.addEventListener('ins:calendar', (e) => {
 });
 </demo-code>
 <p>
-  تقويم آخر يُسجَّل بـ <code>Insiyab.calendar(name, calendar)</code>، والشرح في تعليق هذه الواجهة داخل
-  <code>insiyab.js</code>. ومتصفّح بلا تقويم هجريّ، أو صفحة لم تحمّل الإضافة، تبقى حقولها ميلادية مع سطر في الطرفية.
+  ولتسجيل تقويم آخر استدع <code>Insiyab.calendar(name, calendar)</code>، وشرحها في التعليق الذي يرافقها داخل
+  <code>insiyab.js</code>. وإذا خلا المتصفح من التقويم الهجري أو غابت الإضافة عن الصفحة، بقيت الحقول ميلادية
+  وظهر سطر تنبيه في <code>console</code>.
 </p>

@@ -2,17 +2,16 @@
 
 # انسياب · Insiyab UI
 
-**مكتبة واجهات بتصميم الزجاج المصنفر، عربية أولًا.**
+**مكتبة واجهات تليق بالعربية، يصفو زجاجها وينساب خطها.**
 
-*انسياب* هو الانتقال السلس بلا مقاومة — وهو ما تحاول المكتبة أن تكون، في شكل
-الأسطح وفي تجربة البناء بها معًا.
+*الانسياب* جريان الشيء في يسر بلا عائق، وهو ما تطمح إليه المكتبة في مظهرها
+وفي العمل بها معًا.
 
-المكتبة تفترض الاتجاه من اليمين إلى اليسار افتراضًا أصيلًا، لا إضافةً تُفعَّل: لا
-ملف تجاوزات لـ `[dir=rtl]`، ولا مرحلة انعكاس. الخطوط العربية واللاتينية
-مستضافة محليًا ومقسّمة بـ `unicode-range`، فلا تُحمّل صفحة عربية النصف اللاتيني
-من خط عربي.
+تقوم المكتبة على الكتابة من اليمين إلى اليسار أصلًا لا إضافة، فلا ملف يعكس الصفحة
+ولا قواعد تتجاوز `[dir=rtl]`. وخطوطها العربية واللاتينية مستضافة معها ومقسمة بـ
+`unicode-range`، فلا تحمل الصفحة العربية من الخط إلا حروفها.
 
-ملفان فقط، بلا أدوات بناء ولا إطار عمل:
+أضف هذه الوسوم إلى صفحتك، دون أدوات بناء ولا إطار عمل:
 
 </div>
 
@@ -24,7 +23,7 @@
 
 <div dir="rtl">
 
-لا حاجة إلى أي استدعاء بعد ذلك.
+ولا حاجة بعدها إلى أي استدعاء.
 
 </div>
 
@@ -39,7 +38,7 @@
 > criteria, a timed multi-step form, an error page, a login) built from the
 > library's parts alone. Twelve plugins: the Hijri calendar, the command palette,
 > the one-time code, the phone number, file upload, scrollspy, the timeline, the
-> tree, the colour picker, the carousel, charts and the month calendar.
+> tree, the color picker, the carousel, charts and the month calendar.
 > Two wrappers cover the same classes: React components in
 > [packages/react](packages/react/README.md), and Jinja macros in
 > [packages/jinja](packages/jinja/README.md). See
@@ -59,7 +58,7 @@ your-project/
     ├── insiyab.css        ← or insiyab.min.css
     ├── insiyab-boot.js    ← in <head>, before first paint
     ├── insiyab.js         ← with defer
-    ├── fonts/             ← 16 .woff2 files + their licences
+    ├── fonts/             ← 16 .woff2 files + their licenses
     └── plugins/           ← optional: only the ones you use
 ```
 
@@ -84,7 +83,7 @@ That is the whole setup. Three things are worth knowing about it:
 
 **A small boot script in `<head>`, the rest deferred.** `insiyab-boot.js` (about
 6 KB) runs before the first paint: it restores the theme, the sidebar state and the
-brand colour, so no page load flashes the wrong theme. `insiyab.js` and every plugin
+brand color, so no page load flashes the wrong theme. `insiyab.js` and every plugin
 load with `defer`, so they never hold up the page, and run in order after it. Page
 code that calls `Insiyab` straight away goes in a deferred file after the library,
 or inside `DOMContentLoaded`. The old single tag, `insiyab.js` in `<head>` with no
@@ -108,12 +107,12 @@ They are self-hosted rather than loaded from a CDN on purpose: a blocked or slow
 font CDN means a page rendered in a fallback serif, and that happens on the
 connections this library is published for. All three faces are
 [SIL Open Font License 1.1](fonts/) — Tajawal, Inter and Cause — and their
-licences ship in `fonts/` because the OFL requires the licence to travel with the
+licenses ship in `fonts/` because the OFL requires the license to travel with the
 font.
 
 ## Theming
 
-### One colour
+### One color
 
 ```html
 <html data-ins-primary="#0F766E">
@@ -127,7 +126,7 @@ Either one derives and applies the rest: the rgb triplet, the gradient end-stop,
 the readable text shade and both page washes. The whole system tints from there —
 shadows, glows, tints, focus rings, the page ground.
 
-The label colour on a filled surface is **measured, not assumed**. Hardcoding
+The label color on a filled surface is **measured, not assumed**. Hardcoding
 white is a real failure for a mid-tone brand: white on a mid gold is about 2.4:1.
 So `brand()` takes whichever of white and near-black actually measures better,
 and then shifts the gradient's second stop *away* from that label — which means
@@ -154,7 +153,7 @@ Insiyab.toggleTheme();
 ```
 
 Dark is a second palette that was designed as one, not an inversion of the first.
-Naive inversion of white-alpha glass gives milky grey panels with glaring white
+Naive inversion of white-alpha glass gives milky gray panels with glaring white
 rims; here the rim drops from 85% to 10%, the frost desaturates from 140% to
 120%, the shadows go darker *and* stronger, the tints roughly double, and the
 brand's readable shade flips direction entirely.
@@ -163,7 +162,7 @@ Pressing a `data-ins-theme-toggle` switch shows the change: the new palette grow
 as a circle out of the switch until it covers the page. It is a View Transition,
 so the browser animates two snapshots of the page rather than a transition on
 every element. It costs the same whatever is on screen, and it covers gradients,
-shadows and masks that a colour transition cannot. Browsers without View
+shadows and masks that a color transition cannot. Browsers without View
 Transitions, reduced motion and `data-ins-fx="off"` all get the instant flip, and
 so does `Insiyab.theme()`, which has no switch for the circle to start from.
 
@@ -202,8 +201,7 @@ real `<dialog>` — Escape closes it, focus is trapped, and the top layer puts i
 above every stacking context without a single `z-index`. The drawer is the same
 element with an edge. The popover is a real `<details>`, so it opens and is
 keyboard reachable with no script at all. **It does not close on Escape by
-itself.** This README used to say it did, and testing showed a bare `<details>`
-ignores Escape. Escape, the arrow keys, closing on choice and flipping at the
+itself**: a bare `<details>` ignores Escape. Escape, the arrow keys, closing on choice and flipping at the
 viewport edge all come from the script.
 
 **The shell is two ideas.** The top bar is *islands, not a bar*: it is
@@ -229,12 +227,12 @@ shell, `.ins-shell-content` fills the width the sidebar leaves, with no maximum:
 8px at the top, 28px at the sides (16px below 900px) and 32px at the bottom. Add
 `.ins-stack` to it to put 16px between the page's sections. For a simple page
 without the shell, such as a personal page or a landing page, `.ins-container`
-is a centred column of 75rem (`--narrow` 48rem, `--wide` 90rem), under an
+is a centered column of 75rem (`--narrow` 48rem, `--wide` 90rem), under an
 `.ins-navbar`.
 
 ```html
 <main class="ins-shell-content ins-stack">…</main>   <!-- application: full width -->
-<main class="ins-container ins-stack">…</main>       <!-- simple page: centred -->
+<main class="ins-container ins-stack">…</main>       <!-- simple page: centered -->
 ```
 
 **The grids collapse on their own.** A `.ins-cols-*` grid holds its columns on a
@@ -267,7 +265,7 @@ beat the attribute, so `<button class="ins-btn" hidden>` would still show.
 code, tables and figures inside it and touches nothing outside it, because rules
 on bare `ul` or `p` would restyle the host page's navs and menus. Inside it, Arabic
 is never tracked and nothing is set in italic. None of the faces ships an italic,
-and a synthesised one leans Arabic the wrong way, so emphasis is colour. Code is an
+and a synthesized one leans Arabic the wrong way, so emphasis is color. Code is an
 isolated LTR island in either direction.
 
 **Smooth scrolling is opt-in.** Put `ins-scroll-smooth` on `<html>` and anchor
@@ -389,7 +387,7 @@ A few of the gestures, so the vocabulary is legible:
 - **A table row** fills on hover, and that is all. The 3px brand marker on its
   leading edge belongs to a selected row: `aria-selected="true"`, `aria-current`
   or `.is-selected`. It's the same marker the sidebar's selected item carries, with
-  the same meaning: *this one is chosen*. It scales from the centre rather than
+  the same meaning: *this one is chosen*. It scales from the center rather than
   sliding, because a bar sliding the length of a wide row draws the eye *along* it.
 - **The sidebar's marker** belongs to the selected item only. Hovering an item
   gives it a background, not a marker. When the selection moves, the marker
@@ -410,7 +408,7 @@ A few of the gestures, so the vocabulary is legible:
   the switch thumb, the checkbox tick, and the icon chips.
 
 Turn it all off with `data-ins-fx="off"` on `<html>`, or a `[data-ins-fx]`
-button. `prefers-reduced-motion` is honoured separately and automatically.
+button. `prefers-reduced-motion` is honored separately and automatically.
 
 ## Attributes
 
@@ -474,7 +472,7 @@ The escape hatch, not the front door — prefer the attributes above.
 Insiyab.version                       // '0.6.0', stamped from package.json by the build
 Insiyab.theme(mode?)                  // 'dark' | 'light' | 'system'
 Insiyab.toggleTheme()
-Insiyab.brand(hex?)                   // derive and apply a brand colour
+Insiyab.brand(hex?)                   // derive and apply a brand color
 Insiyab.toast(message, tone?)         // 'ok' | 'bad' | 'warn' | 'info'
 Insiyab.dialog(target, action?)       // 'open' | 'close' | omit to toggle — drawers too
 Insiyab.dismiss(target)               // close what `target` sits in, as data-ins-dismiss does
@@ -640,7 +638,7 @@ document.addEventListener('ins:palette', (e) => {
 ```
 
 For assistive technology, the field is a `combobox` and the results a `listbox` of
-labelled groups. Focus stays in the field while the arrow keys move
+labeled groups. Focus stays in the field while the arrow keys move
 `aria-activedescendant`, and the number of results is announced as the person
 types.
 
@@ -761,7 +759,7 @@ document.addEventListener('ins:file', async (e) => {
   try {
     Insiyab.file.done(file, await send(file, (f) => Insiyab.file.progress(file, f)));
   } catch {
-    Insiyab.file.fail(file, 'تعذّر الرفع');
+    Insiyab.file.fail(file, 'تعذر الرفع');
   }
 });
 Insiyab.file('#docs');       // the files in the list
@@ -775,7 +773,7 @@ Insiyab.file('#docs', []);   // empty it
 <script src="insiyab/plugins/insiyab-scrollspy.js" defer></script>
 
 <nav class="ins-toc" data-ins-scrollspy aria-label="في هذه الصفحة">
-  <a href="#intro">مقدّمة</a>
+  <a href="#intro">مقدمة</a>
   <a href="#setup">الإعداد</a>
 </nav>
 ```
@@ -806,7 +804,7 @@ marker, and the marker flies from entry to entry the way the sidebar's does
 
 <ol class="ins-timeline">
   <li class="ins-timeline-item ins-timeline-item--ok">
-    <span class="ins-timeline-title">تمّ الدفع</span>
+    <span class="ins-timeline-title">تم الدفع</span>
     <time class="ins-timeline-time" datetime="2026-09-24T09:15" data-ins-time></time>
     <p class="ins-timeline-body">…</p>
   </li>
@@ -825,7 +823,7 @@ Other pieces:
   in the tone.
 - A `.ins-timeline-day` item is a date heading.
 - `.ins-timeline--compact` is for a narrow column.
-- `.ins-timeline--split` puts events on both sides of a centre rule once the
+- `.ins-timeline--split` puts events on both sides of a center rule once the
   timeline itself (not the screen) is wide enough.
 
 The timeline is pure CSS. The script only writes relative times into any
@@ -841,7 +839,7 @@ on demand.
 <link rel="stylesheet" href="insiyab/plugins/insiyab-tree.css">
 <script src="insiyab/plugins/insiyab-tree.js" defer></script>
 
-<ul class="ins-tree" data-ins-tree aria-label="الملفّات">
+<ul class="ins-tree" data-ins-tree aria-label="الملفات">
   <li data-open>
     <span>المستندات</span>
     <ul>
@@ -884,7 +882,7 @@ Insiyab.tree('#files', 'open');       // every branch; or 'close'
 Insiyab.tree('#files');               // the selected item, or the ticked ones
 ```
 
-### Colour picker
+### Color picker
 
 ```html
 <link rel="stylesheet" href="insiyab/plugins/insiyab-color.css">
@@ -893,24 +891,24 @@ Insiyab.tree('#files');               // the selected item, or the ticked ones
 <input type="color" data-ins-color name="brand" value="#9b2c5e">
 ```
 
-A colour field that tells you whether the colour can carry text. The field becomes
+A color field that tells you whether the color can carry text. The field becomes
 a hex field with a swatch in front of it, in an input group. It keeps its name and
-sends `#rrggbb`, exactly what the browser's own colour input sends. The swatch
+sends `#rrggbb`, exactly what the browser's own color input sends. The swatch
 opens the picker:
 
 - a square for saturation and brightness, which you can drag, or use with the
   arrow keys (Shift for steps of ten)
 - a hue slider
-- preset swatches: the page's brand colour and a palette around it, or your own
+- preset swatches: the page's brand color and a palette around it, or your own
   list in `data-ins-color-swatches`, or none with `none`
 - the eyedropper, where the browser has one
-- the colour's **contrast** against white and against black, from the core's
+- the color's **contrast** against white and against black, from the core's
   `Insiyab.color.contrast`, marked against the 4.5:1 that body text needs
 
 A hex can also be typed as `#abc`, `abc` or `aabbcc`, and is written out in full
-when the field is left. `input` fires while the colour moves, and `change` and
+when the field is left. `input` fires while the color moves, and `change` and
 `ins:color` fire when it's set. `Insiyab.colorField(field, value?)` reads or sets
-it; `Insiyab.color` stays the core's colour maths.
+it; `Insiyab.color` stays the core's color maths.
 
 ### Carousel
 
@@ -951,7 +949,7 @@ without sliding. `ins:carousel` reports the slide in view, and
 
 <figure class="ins-chart" data-ins-chart="bar">
   <table>
-    <thead><tr><th></th><th>الطلبات</th><th>المرتجع</th></tr></thead>
+    <thead><tr><th></th><th>الطلبات</th><th>المرتجعات</th></tr></thead>
     <tbody><tr><th>يناير</th><td>120</td><td>14</td></tr>…</tbody>
   </table>
 </figure>
@@ -967,7 +965,7 @@ word. With no table, `data-ins-values="3,5,4"` is one series.
 
 The categories run in the page's reading direction (`dir="ltr"` on the figure for
 the other way), figures are in the page's language with Latin digits, and pointing
-at a bar, a point or a slice shows its value. Six series colours, the brand first
+at a bar, a point or a slice shows its value. Six series colors, the brand first
 and then the tones, as `--ins-chart-1` … `--ins-chart-6`; the plot is
 `--ins-chart-h` tall. It redraws when its box changes size. `Insiyab.chart(el,
 { type, labels, series: [{ name, values }] })` draws from data and writes the table
@@ -999,7 +997,7 @@ title, href, tone, time }] })`. A click on a day, not on an event, is
 
 `@insiyab/react`, in [packages/react](packages/react/README.md), is a set of React
 components over the same classes and attributes: the CSS stays the source of truth,
-and the core script still does the behaviour, loaded in `<head>` as on any page.
+and the core script still does the behavior, loaded in `<head>` as on any page.
 
 ```jsx
 <Field label="التاريخ">
@@ -1023,7 +1021,7 @@ package and one call to set it up: `insiyab.init_app(app)` for Flask, or
 ```jinja
 {% import "insiyab/ui.html" as ins %}
 {{ ins.head(plugins=['phone']) }}
-{% call ins.field('الجوال', id='mobile') %}{{ ins.phone(id='mobile', name='mobile') }}{% endcall %}
+{% call ins.field('الهاتف', id='mobile') %}{{ ins.phone(id='mobile', name='mobile') }}{% endcall %}
 ```
 
 Its test renders the same docs examples as the React wrapper's and compares them the
@@ -1089,13 +1087,13 @@ for `packages/jinja`. Each is reported as skipped without them.
 A file that hangs is stopped after three minutes, with its browser, and reported
 as failed; `INS_TEST_TIMEOUT` (seconds) changes the limit.
 
-Component behaviour is tested on `test/fixtures/`, which exists only for the
+Component behavior is tested on `test/fixtures/`, which exists only for the
 tests, so the docs can change their examples without breaking them. The
-shell-level behaviour is tested on the docs site, because it needs a real
+shell-level behavior is tested on the docs site, because it needs a real
 multi-page shell: the theme sweep, the sidebar marker and its scroll, and OS dark
 mode compared element by element with an explicit dark choice.
 
-## Licence
+## License
 
 MIT for the code — see [LICENSE](LICENSE). The bundled fonts are SIL Open Font
-License 1.1, with their own licences in [`fonts/`](fonts/).
+License 1.1, with their own licenses in [`fonts/`](fonts/).

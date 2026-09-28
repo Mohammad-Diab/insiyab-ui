@@ -54,24 +54,29 @@
   var TEXT = {
     ar: {
       drag: 'اسحب الملفات إلى هنا أو', drag1: 'اسحب الملف إلى هنا أو', pick: 'اختر ملفات', pick1: 'اختر ملفًا',
-      upTo: 'حتّى {max} للملف', most: '{n} ملفات على الأكثر', remove: 'إزالة {name}',
-      type: 'نوع «{name}» غير مقبول.', big: '«{name}» أكبر من {max}.', count: 'لا يُقبل أكثر من {n} ملفات، فلم يُضف «{name}».',
-      sending: 'يُرفع…', failed: 'تعذّر الرفع.', wait: 'انتظر حتّى يكتمل رفع الملفات.', fix: 'أزِل الملفات التي تعذّر رفعها أو أعد رفعها.'
+      upTo: 'حتى {max} للملف الواحد', most: function (m) { return arFiles(m.n) + ' على الأكثر'; }, remove: 'إزالة {name}',
+      type: 'نوع «{name}» غير مقبول.', big: '«{name}» أكبر من {max}.',
+      count: function (m) { return 'لم يُضف «' + m.name + '»: ' + arFiles(m.n) + ' على الأكثر.'; },
+      sending: 'يُرفع…', failed: 'تعذر الرفع.', wait: 'انتظر حتى يكتمل رفع الملفات.', fix: 'أزِل الملفات التي تعذر رفعها أو أعد رفعها.'
     },
     en: {
       drag: 'Drag files here or', drag1: 'Drag a file here or', pick: 'choose files', pick1: 'choose a file',
-      upTo: 'up to {max} each', most: '{n} files at most', remove: 'Remove {name}',
-      type: '“{name}” is not a type this field accepts.', big: '“{name}” is larger than {max}.', count: 'No more than {n} files, so “{name}” was not added.',
-      sending: 'Uploading…', failed: 'Upload failed.', wait: 'Wait for the files to finish uploading.', fix: 'Remove or re-add the files that failed to upload.'
+      upTo: 'up to {max} each', most: function (m) { return enFiles(m.n) + ' at most'; }, remove: 'Remove {name}',
+      type: '“{name}” is not a type this field accepts.', big: '“{name}” is larger than {max}.',
+      count: function (m) { return '“' + m.name + '” was not added: ' + enFiles(m.n) + ' at most.'; },
+      sending: 'Uploading…', failed: 'Upload failed.', wait: 'Wait for the files to finish uploading.', fix: 'Remove the files that failed to upload, or upload them again.'
     }
   };
+
+  function arFiles(n) { var r = n % 100; return n === 1 ? 'ملف واحد' : n === 2 ? 'ملفان' : n + (r >= 3 && r <= 10 ? ' ملفات' : r >= 11 ? ' ملفًا' : ' ملف'); }
+  function enFiles(n) { return n === 1 ? '1 file' : n + ' files'; }
 
   function lang(el) {
     var host = el.closest('[lang]') || document.documentElement;
     return host.getAttribute('lang') || 'en';
   }
   function text(el) { return lang(el).slice(0, 2).toLowerCase() === 'ar' ? TEXT.ar : TEXT.en; }
-  function fill(s, map) { return s.replace(/\{(\w+)\}/g, function (all, k) { return map[k] != null ? map[k] : all; }); }
+  function fill(s, map) { return typeof s === 'function' ? s(map) : s.replace(/\{(\w+)\}/g, function (all, k) { return map[k] != null ? map[k] : all; }); }
 
   function make(tag, cls, content) {
     var el = document.createElement(tag);

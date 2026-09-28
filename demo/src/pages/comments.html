@@ -1,7 +1,7 @@
 <h2 id="comment">التعليق</h2>
 <p>
-  <code>.ins-comment</code> كلام شخص واحد: صورته، واسمه ووقته في <code>.ins-comment-head</code>، والنصّ في
-  <code>.ins-comment-text</code>، وإجراءات اختيارية في <code>.ins-comment-actions</code>.
+  يحمل <code>.ins-comment</code> كلام شخص واحد: صورته، ثم اسمه ووقته في <code>.ins-comment-head</code>، والنص في
+  <code>.ins-comment-text</code>، وإن شئت أضفت إجراءات في <code>.ins-comment-actions</code>.
 </p>
 <demo-example>
   <article class="ins-comment">
@@ -13,15 +13,16 @@
       </div>
       <div class="ins-comment-text">راجعت الطلب، والعنوان يحتاج رقم المبنى.</div>
       <div class="ins-comment-actions">
-        <button class="ins-btn ins-btn--bare ins-btn--sm">ردّ</button>
+        <button class="ins-btn ins-btn--bare ins-btn--sm">رد</button>
       </div>
     </div>
   </article>
 </demo-example>
 
-<h2 id="thread">سلسلة وردود</h2>
+<h2 id="thread">السلسلة والردود</h2>
 <p>
-  <code>.ins-thread</code> يرصّ التعليقات، و<code>.ins-comment-replies</code> داخل جسم التعليق يزيح الردود تحته بخطّ.
+  يرص <code>.ins-thread</code> التعليقات بعضها فوق بعض، وإذا وضعت <code>.ins-comment-replies</code> داخل جسم التعليق
+  أزاح الردود تحته إلى الداخل وجعل بجانبها خطًا.
 </p>
 <demo-example>
   <div class="ins-thread">
@@ -45,14 +46,14 @@
       <span class="ins-avatar ins-avatar--sm">س</span>
       <div class="ins-comment-body">
         <div class="ins-comment-head"><b class="ins-comment-name">سارة</b><time class="ins-comment-time">قبل دقائق</time></div>
-        <div class="ins-comment-text">تمّ الشحن.</div>
+        <div class="ins-comment-text">تم الشحن.</div>
       </div>
     </article>
   </div>
 </demo-example>
 
-<h2 id="own">رسائل محادثة</h2>
-<p><code>.ins-comment--own</code> رسالة القارئ نفسه، على الجهة الأخرى وبلون الهوية.</p>
+<h2 id="own">رسائل المحادثة</h2>
+<p>تخص <code>.ins-comment--own</code> رسائلك أنت، فتنتقل إلى الجهة المقابلة وتأخذ لون الهوية.</p>
 <demo-example>
   <div class="ins-thread">
     <article class="ins-comment">

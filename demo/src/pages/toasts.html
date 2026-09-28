@@ -1,17 +1,17 @@
 <h2 id="attribute">بالسمة</h2>
 <p>
-  <code>data-ins-toast</code> على زرّ يُظهر الرسالة حين يُضغط، و<code>data-ins-tone</code> نبرتها. تظهر في
-  ركن الصفحة وتختفي وحدها، ويُعلَن نصّها لقارئ الشاشة دون أن تأخذ التركيز.
+  ضع <code>data-ins-toast</code> على زر فتظهر الرسالة العابرة (Toast) حين يُضغط، واختر نبرتها بـ <code>data-ins-tone</code>. تطل
+  الرسالة من ركن الصفحة ثم تغيب وحدها، ويقرؤها قارئ الشاشة دون أن تنتزع التركيز.
 </p>
 <demo-example class="row">
-  <button class="ins-btn ins-btn--secondary" data-ins-toast="تمّ الحفظ" data-ins-tone="ok">نجاح</button>
+  <button class="ins-btn ins-btn--secondary" data-ins-toast="تم الحفظ" data-ins-tone="ok">نجاح</button>
   <button class="ins-btn ins-btn--secondary" data-ins-toast="حدث خطأ" data-ins-tone="bad">خطأ</button>
   <button class="ins-btn ins-btn--secondary" data-ins-toast="انتبه" data-ins-tone="warn">تحذير</button>
   <button class="ins-btn ins-btn--secondary" data-ins-toast="للعلم" data-ins-tone="info">معلومة</button>
 </demo-example>
 
-<h2 id="api">من الجافاسكربت</h2>
-<p><code>Insiyab.toast(text, tone)</code>، وأكثر ما يُستعمل بعد عمليّة غير متزامنة.</p>
+<h2 id="api">من الشيفرة</h2>
+<p>استدعها بـ <code>Insiyab.toast(text, tone)</code>، وأكثر ما تحتاجها بعد عملية غير متزامنة.</p>
 <demo-example class="row" code="none">
   <button class="ins-btn ins-btn--secondary" id="save-btn">حفظ</button>
 </demo-example>
@@ -19,18 +19,18 @@
 button.addEventListener('click', async () => {
   try {
     await save();
-    Insiyab.toast('تمّ الحفظ', 'ok');
+    Insiyab.toast('تم الحفظ', 'ok');
   } catch {
-    Insiyab.toast('تعذّر الحفظ', 'bad');
+    Insiyab.toast('تعذر الحفظ', 'bad');
   }
 });
 </demo-code>
 
-<h2 id="when">متى تستعمل الرسالة الطائرة</h2>
+<h2 id="when">متى تستعمل الرسالة العابرة</h2>
 <ul>
-  <li>لتأكيد ما حدث للتوّ نتيجة ما فعله المستخدم: حُفظ، أُرسل، نُسخ.</li>
-  <li>لا لخطأ في حقل — ذلك في الحقل نفسه. انظر <a href="validation.html">التحقّق</a>.</li>
-  <li>لا لرسالة يجب أن تبقى — ذلك <a href="alerts.html">تنبيه</a> في الصفحة.</li>
+  <li>لتأكيد ما جرى للتو بفعل المستخدم: حُفظ، أُرسل، نُسخ.</li>
+  <li>أما خطأ الحقل فموضعه الحقل نفسه، كما في صفحة <a href="validation.html">التحقق</a>.</li>
+  <li>وأما الرسالة التي يجب أن تبقى فحقها أن تكون <a href="alerts.html">تنبيهًا</a> في الصفحة.</li>
 </ul>
 
 <script>
@@ -38,7 +38,7 @@ button.addEventListener('click', async () => {
     document.getElementById('save-btn').addEventListener('click', function () {
       var btn = this;
       btn.disabled = true;
-      setTimeout(function () { btn.disabled = false; Insiyab.toast('تمّ الحفظ', 'ok'); }, 700);
+      setTimeout(function () { btn.disabled = false; Insiyab.toast('تم الحفظ', 'ok'); }, 700);
     });
   });
 </script>

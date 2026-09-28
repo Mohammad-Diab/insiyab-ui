@@ -18,7 +18,7 @@ API, four hundred variables, and a default look nobody would choose on purpose.
 You spend the first day configuring it into having an opinion.
 
 Insiyab ships with the opinion already in it. One look, one easing curve, one
-radius scale, one brand variable. You pick a colour and start building.
+radius scale, one brand variable. You pick a color and start building.
 
 The design language isn't new — it already exists across my own projects, in
 React, in server-rendered templates, and in a zero-build single HTML file. It has
@@ -52,10 +52,10 @@ Arabic.
 Four stacked layers, and nothing else:
 
 1. **Frost** — `backdrop-filter: blur(24px) saturate(140%)`. The saturate is not
-   decoration; it is what stops the tinted background going grey.
+   decoration; it is what stops the tinted background going gray.
 2. **Fill** — a *diagonal* translucent white gradient at 145°, never a flat rgba.
 3. **Rim** — `1px solid rgba(255,255,255,.85)`, top edge brightened to `.95`. A
-   near-white hairline, never a grey border.
+   near-white hairline, never a gray border.
 4. **Bevel + sheen** — `inset 0 1px 0 rgba(255,255,255,.9)` plus a 130° specular
    streak on a pseudo-element.
 
@@ -102,11 +102,11 @@ this your problem. This one doesn't. The name is part of that promise.
 ### One brand variable
 
 Everything tints from `--ins-primary` and its rgb triplet. That is the entire
-theming story — no theme object, no provider, no build step. Set one colour and
+theming story — no theme object, no provider, no build step. Set one color and
 the whole system retunes: shadows, glows, tints, table headers, focus rings.
 
 Already proven across three very different identities from a single unforked
-sheet. **New project = pick a colour, done.**
+sheet. **New project = pick a color, done.**
 
 It also works as a *runtime* feature, not just a stylesheet convention: one of the
 existing apps serves its brand tokens in the login response and writes them onto
@@ -114,7 +114,7 @@ the document on sign-in. Worth shipping as a documented pattern.
 
 ### Light and dark, designed rather than inverted
 
-Naive inversion of white-alpha glass gives milky grey blobs with glaring outlines.
+Naive inversion of white-alpha glass gives milky gray blobs with glaring outlines.
 Dark is a second palette that was designed as one, not a filter over the first.
 
 ### Accessibility already paid for
@@ -190,7 +190,7 @@ stylesheet and defeat the `unicode-range` splitting that exists to avoid exactly
 that. Drop in only the CSS and you still get a working page, just not the
 typography.
 
-### Framework wrappers: planned, not built
+### Framework wrappers
 
 | Package | Status |
 |---|---|
@@ -204,7 +204,7 @@ repository, under `packages/`, so a renamed class breaks a wrapper's tests in th
 same commit, and they share one parity test: every docs example, built with the
 wrapper, has to come out the same as the example.
 
-**The CSS stays the source of truth.** When the wrappers do arrive they are thin
+**The CSS stays the source of truth.** The wrappers are thin
 covers over the same classes, never re-implementations — that rule is what stops
 three entry points becoming three libraries.
 
@@ -212,12 +212,12 @@ three entry points becoming three libraries.
 
 ## Principles
 
-1. **Opinionated by design.** One look. No theme API beyond the brand colour.
+1. **Opinionated by design.** One look. No theme API beyond the brand color.
 2. **Small enough to hold in your head.** A library you have to look up is one
    you'll re-invent instead.
 3. **Zero-build must always work.** If a feature can't survive as plain CSS, it
    doesn't go in the core.
-4. **Vendored, never forked.** An app that needs different behaviour gets a token
+4. **Vendored, never forked.** An app that needs different behavior gets a token
    or a modifier upstream — it does not edit the library in place.
 5. **Breaking changes are allowed.** Bump the major, migrate when convenient.
 
@@ -302,7 +302,7 @@ and not the React original, is the right starting point.
    dropped — principle 3 says zero-build must always work.
 3. **Cut the app-specific tail.** Roughly the last 1,600 lines are USSD's own:
    customer app, bulk row composer, equation, control plane, ticket thread,
-   dialer liveness, `--net-*` carrier colours, impersonation banner. The test for
+   dialer liveness, `--net-*` carrier colors, impersonation banner. The test for
    keeping a block: *would I want this in the next thing I build?* This makes the
    extraction a curated rewrite, not a copy-and-rename.
 4. **Keep the commentary.** The source explains *why* at nearly every section,

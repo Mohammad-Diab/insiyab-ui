@@ -1,16 +1,16 @@
 <h2 id="tones">النبرات</h2>
 <p>
-  <code>.ins-alert</code> فيه دائرة <code>.ins-alert-ico</code> تحمل الرمز، ورسالة <code>.ins-alert-msg</code> فيها
-  <code>.ins-alert-text</code>. والنبرات <code>--ok</code> و<code>--info</code> و<code>--warn</code> و<code>--bad</code>.
+  في التنبيه <code>.ins-alert</code> دائرة <code>.ins-alert-ico</code> تحمل رمزه، ورسالة <code>.ins-alert-msg</code> يسكنها النص
+  <code>.ins-alert-text</code>. وله أربع نبرات: <code>--ok</code> و<code>--info</code> و<code>--warn</code> و<code>--bad</code>.
 </p>
 <demo-example class="stack">
   <div class="ins-alert ins-alert--ok">
     <span class="ins-alert-ico"><svg class="ico"><use href="#i-check"/></svg></span>
-    <div class="ins-alert-msg"><span class="ins-alert-text">تمّ الحفظ.</span></div>
+    <div class="ins-alert-msg"><span class="ins-alert-text">تم الحفظ.</span></div>
   </div>
   <div class="ins-alert ins-alert--info">
     <span class="ins-alert-ico"><svg class="ico"><use href="#i-info"/></svg></span>
-    <div class="ins-alert-msg"><span class="ins-alert-text">معلومة للاطّلاع.</span></div>
+    <div class="ins-alert-msg"><span class="ins-alert-text">معلومة للاطلاع.</span></div>
   </div>
   <div class="ins-alert ins-alert--warn">
     <span class="ins-alert-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
@@ -22,9 +22,9 @@
   </div>
 </demo-example>
 
-<h2 id="dismiss">قابل للإغلاق</h2>
+<h2 id="dismiss">إغلاق التنبيه</h2>
 <p>
-  زرّ <code>.ins-close</code> مع <code>data-ins-dismiss</code> داخل الرسالة يغلق التنبيه ويُطلق
+  ضع في الرسالة زر <code>.ins-close</code> يحمل <code>data-ins-dismiss</code>، فيغلق التنبيه بضغطة ويُطلق حدث
   <code>ins:dismiss</code>.
 </p>
 <demo-example class="stack">
@@ -41,7 +41,7 @@
 </demo-example>
 
 <h2 id="actions">مع إجراء</h2>
-<p>رابط أو زرّ صغير داخل النصّ لما يحلّ المشكلة.</p>
+<p>وإن كان للمشكلة حل فدل عليه برابط أو زر صغير داخل النص.</p>
 <demo-example>
   <div class="ins-alert ins-alert--warn">
     <span class="ins-alert-ico"><svg class="ico"><use href="#i-warn"/></svg></span>

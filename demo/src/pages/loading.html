@@ -1,6 +1,6 @@
 <h2 id="skeleton">هيكل التحميل</h2>
 <p>
-  <code>.ins-skel</code> يرسم شكل المحتوى قبل وصوله، فلا تقفز الصفحة حين يصل. أربعة أشكال:
+  يرسم هيكل التحميل (skeleton) <code>.ins-skel</code> هيئة المحتوى قبل أن يصل، فإذا وصل أخذ مكانها ولم تقفز الصفحة. وله أربعة أشكال:
   <code>--title</code> و<code>--text</code> و<code>--circle</code> و<code>--block</code>.
 </p>
 <demo-example class="stack">
@@ -11,41 +11,41 @@
   <div class="ins-skel ins-skel--text"></div>
 </demo-example>
 
-<h2 id="spinner">الدوّارة</h2>
+<h2 id="spinner">مؤشر التحميل</h2>
 <p>
-  <code>.ins-spinner</code> لانتظار قصير لا شكل له، و<code>--sm</code> داخل زرّ. أعطها <code>role="status"</code>
-  وتسمية، أو <code>aria-hidden</code> حين يحمل الزرّ النصّ.
+  يصلح مؤشر التحميل <code>.ins-spinner</code> لانتظار قصير لا تُعرف هيئة ما يأتي بعده، ويصغره <code>--sm</code> ليسكن داخل زر. أعطه <code>role="status"</code>
+  وتسمية يقرؤها قارئ الشاشة، أو أخفه عنه بـ <code>aria-hidden</code> إذا كان نص الزر يغني عنه.
 </p>
 <demo-example class="row">
   <span class="ins-spinner" role="status" aria-label="جارٍ التحميل"></span>
   <span class="ins-spinner ins-spinner--sm" role="status" aria-label="جارٍ التحميل"></span>
   <button class="ins-btn ins-btn--primary" disabled><span class="ins-spinner ins-spinner--sm" aria-hidden="true"></span>جارٍ الحفظ…</button>
 </demo-example>
-<p><code>.ins-loading</code> حاوية تضع الدوّارة في وسط منطقة فارغة بارتفاع معقول.</p>
+<p>أما <code>.ins-loading</code> فحاوية يتوسطها مؤشر التحميل، وتحفظ للمنطقة الفارغة ارتفاعًا معقولًا.</p>
 <demo-example>
   <div class="ins-loading"><span class="ins-spinner" role="status" aria-label="جارٍ التحميل"></span></div>
 </demo-example>
 
 <h2 id="empty">الحالة الفارغة</h2>
 <p>
-  <code>.ins-empty</code> فيه رمز <code>.ins-empty-ico</code>، وعنوان <code>.ins-empty-title</code>، وتلميح
-  <code>.ins-empty-hint</code>. اجعلها تقول ما سيظهر هنا، وما الخطوة التالية.
+  تجمع <code>.ins-empty</code> أيقونة <code>.ins-empty-ico</code>، وعنوانًا <code>.ins-empty-title</code>، وتلميحًا
+  <code>.ins-empty-hint</code>. ودعها تخبر القارئ بما سيظهر هنا، وبما يفعله بعد ذلك.
 </p>
 <demo-example>
   <div class="ins-empty">
     <span class="ins-empty-ico"><svg class="ico"><use href="#i-box"/></svg></span>
     <span class="ins-empty-title">لا منتجات بعد</span>
-    <span class="ins-empty-hint">أضف أوّل منتج ليظهر هنا.</span>
+    <span class="ins-empty-hint">أضف أول منتج ليظهر هنا.</span>
     <button class="ins-btn ins-btn--primary">منتج جديد</button>
   </div>
 </demo-example>
 
 <h2 id="search-empty">لا نتائج</h2>
-<p>الشكل نفسه لبحث لم يجد شيئًا، بلا زرّ.</p>
+<p>وبالشكل نفسه تخبر أن البحث لم يجد شيئًا، ولا حاجة هنا إلى زر.</p>
 <demo-example>
   <div class="ins-empty">
     <span class="ins-empty-ico"><svg class="ico"><use href="#i-search"/></svg></span>
     <span class="ins-empty-title">لا نتائج</span>
-    <span class="ins-empty-hint">جرّب كلمة أخرى.</span>
+    <span class="ins-empty-hint">جرب كلمة أخرى.</span>
   </div>
 </demo-example>

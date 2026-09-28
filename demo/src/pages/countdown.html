@@ -1,15 +1,15 @@
-<h2 id="countdown">العدّ التنازلي</h2>
+<h2 id="countdown">العد التنازلي</h2>
 <p>
-  <code>.ins-countdown</code> مع <code>data-ins-countdown</code> يعدّ الوقت الباقي كلّ ثانية. الرقم ثوانٍ من فتح الصفحة، وغيره
-  لحظة الانتهاء: <code>2026-09-26T18:00:00+03:00</code>. يصفرّ حين يبقى <code>data-ins-warn</code> ثانية (دقيقة إن لم يُذكر)
-  ويحمرّ عند الصفر، ويُطلق <code>ins:countdown</code> في الحالتين.
+  ضع <code>data-ins-countdown</code> على <code>.ins-countdown</code> فيعد الوقت الباقي ثانية بعد ثانية. فإن كانت قيمتها رقمًا فهي ثوانٍ تبدأ من فتح الصفحة، وإلا فهي
+  لحظة الانتهاء، مثل <code>2026-09-26T18:00:00+03:00</code>. ويتلون العداد بالأصفر حين يبقى من الوقت <code>data-ins-warn</code> ثانية، أو دقيقة إن لم تذكرها،
+  ثم بالأحمر عند الصفر، ويُطلق حدث <code>ins:countdown</code> في المرتين.
 </p>
 <demo-example class="row">
   <span class="ins-countdown" data-ins-countdown="600"></span>
   <span class="ins-countdown" data-ins-countdown="75"></span>
   <span class="ins-countdown" data-ins-countdown="200000"></span>
 </demo-example>
-<p><code>--lg</code> لعدّ هو موضوع الصفحة.</p>
+<p>وإذا كان العد محور الصفحة فأعطه <code>--lg</code>.</p>
 <demo-example class="row">
   <span class="ins-countdown ins-countdown--lg" data-ins-countdown="900"></span>
 </demo-example>
@@ -22,8 +22,8 @@ Insiyab.countdown('#hold', 600);                          // من جديد
 
 <h2 id="save">حالة الحفظ</h2>
 <p>
-  <code>.ins-save</code> يقول هل حُفظ آخر تغيير: جارٍ الحفظ، ثم حُفظ، أو تعذّر. الحالة في <code>data-ins-state</code>، وبلا حالة
-  يحفظ مكانه ولا يُظهر شيئًا فلا يقفز السطر حين يظهر.
+  يخبر <code>.ins-save</code> بمصير آخر تغيير: جارٍ حفظه، ثم حُفظ، أو تعذر حفظه. تضع الحالة في <code>data-ins-state</code>، فإن خلا منها
+  حجز مكانه فارغًا، حتى إذا ظهر لم يقفز السطر.
 </p>
 <demo-example class="row">
   <span class="ins-save" data-ins-state="saving"></span>
@@ -31,11 +31,11 @@ Insiyab.countdown('#hold', 600);                          // من جديد
   <span class="ins-save" data-ins-state="error"></span>
 </demo-example>
 
-<h3 id="autosave">حفظ تلقائي</h3>
+<h3 id="autosave">الحفظ التلقائي</h3>
 <p>
-  <code>data-ins-autosave</code> على نموذج: بعد لحظة من آخر تغيير يقول المؤشّر «جارٍ الحفظ» ويُطلق <code>ins:autosave</code>
-  ببيانات النموذج. ألغِه واحفظ على الخادم ثم استدعِ <code>done(true)</code> أو <code>done(false)</code>؛ وإن لم تلغِه فقد حُفظ
-  التغيير عندك، مسوّدة محلّية مثلًا، ويقول المؤشّر ذلك فورًا.
+  ضع <code>data-ins-autosave</code> على النموذج، فإذا مضت لحظة على آخر تغيير أظهر المؤشر «جارٍ الحفظ» وأطلق حدث <code>ins:autosave</code>
+  يحمل بيانات النموذج. فإن أردت الحفظ على الخادم فاستدع <code>preventDefault()</code> على الحدث، ثم <code>done(true)</code> أو <code>done(false)</code> حين تنتهي. وإن لم تستدعها
+  عدت المكتبة التغيير محفوظًا بما صنعه مستمعك، كأن يحفظه مسودة في المتصفح، وأعلن المؤشر ذلك في الحال.
 </p>
 <demo-example>
   <form class="ins-field" data-ins-autosave onsubmit="event.preventDefault()">

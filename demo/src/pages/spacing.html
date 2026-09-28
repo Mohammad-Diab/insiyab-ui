@@ -1,11 +1,11 @@
 <h2 id="layouts">تخطيط الصفحة</h2>
-<p>للصفحة تخطيطان: تطبيق يملأ عرض الشاشة، وهو الأساس، وعمود في الوسط للصفحات البسيطة.</p>
+<p>للصفحة تخطيطان: أولهما وهو الأصل تطبيق يملأ عرض الشاشة، والآخر عمود في الوسط يناسب الصفحات البسيطة.</p>
 
-<h3 id="layout-app">التطبيق: بعرض الصفحة</h3>
+<h3 id="layout-app">تطبيق بعرض الصفحة</h3>
 <p>
-  <code>.ins-shell</code> شريط جانبي وشريط علوي، والمحتوى في <code>.ins-shell-content</code> يملأ ما بقي من
-  العرض بلا حدّ أقصى. هوامشه ٨ بكسل من الأعلى و٢٨ من الجانبين و٣٢ من الأسفل، و١٦ من الجانبين تحت 900px.
-  أضف إليه <code>.ins-stack</code> ليفصل بين أقسام الصفحة ١٦ بكسل، ورتّب كلّ قسم بالشبكة.
+  يتألف <code>.ins-shell</code> من شريط جانبي وشريط علوي، ويملأ المحتوى في <code>.ins-shell-content</code> ما بقي من
+  العرض بلا حد أقصى. وفراغه الداخلي (padding) 8 بكسل من الأعلى و28 من الجانبين و32 من الأسفل، فإذا ضاقت الشاشة عن 900px صار 16 من الجانبين و24 من الأسفل.
+  وأضف إليه <code>.ins-stack</code> ليفصل بين أقسام الصفحة بمسافة 16 بكسل، ثم رتب كل قسم بالشبكة.
 </p>
 <demo-example code="none">
   <div class="lay lay--app" aria-hidden="true">
@@ -35,19 +35,19 @@
   </div>
 </div>
 </demo-code>
-<p>تفاصيل الشريطين في <a href="shell.html">هيكل التطبيق</a>.</p>
+<p>وتجد تفاصيل الشريطين في صفحة <a href="shell.html">هيكل التطبيق</a>.</p>
 
-<h3 id="layout-center">صفحة في الوسط</h3>
+<h3 id="layout-center">عمود في وسط الصفحة</h3>
 <p>
-  للصفحات الشخصية وصفحات التعريف: <code>.ins-navbar</code> في الأعلى، والمحتوى في <code>.ins-container</code>،
-  عمود في وسط الصفحة عرضه 75rem، و<code>--narrow</code> (48rem) للنماذج والمقالات، و<code>--wide</code> (90rem).
-  والهامش الجانبي ينمو مع الشاشة من ١٦ إلى ٣٢ بكسل.
+  يناسب الصفحات الشخصية وصفحات التعريف، ففي أعلاها <code>.ins-navbar</code>، والمحتوى في <code>.ins-container</code>،
+  وهو عمود يتوسط الصفحة عرضه 75rem. ويجعله <code>--narrow</code> بعرض 48rem للنماذج والمقالات، و<code>--wide</code> بعرض 90rem.
+  ويتسع فراغه الجانبي (padding) مع الشاشة من 16 إلى 32 بكسل.
 </p>
 <demo-example code="none">
   <div class="lay lay--center" aria-hidden="true">
     <div class="lay-nav">شريط الموقع</div>
     <div class="lay-col">
-      <div class="demo-box lay-tall">القسم الأوّل</div>
+      <div class="demo-box lay-tall">القسم الأول</div>
       <div class="demo-box">القسم الثاني</div>
     </div>
   </div>
@@ -60,8 +60,8 @@
 </main>
 </demo-code>
 
-<h2 id="scale">السلّم</h2>
-<p>الخطوة N تساوي N × ٤ بكسل، في كلّ عائلة من الأصناف، ومتاحة متغيّرًا <code>--ins-sp-N</code> لأنماطك.</p>
+<h2 id="scale">سلم المسافات</h2>
+<p>كل خطوة N تساوي N × 4 بكسل في جميع عائلات الكلاسات، وتجدها متغير CSS باسم <code>--ins-sp-N</code>.</p>
 <demo-example code="none">
   <div class="ins-cols-4">
     <div class="ins-row"><code class="sp-key">1</code><span class="sp-sq" style="--s:var(--ins-sp-1)"></span><span>4px</span></div>
@@ -75,19 +75,19 @@
   </div>
 </demo-example>
 
-<h2 id="classes">الأصناف</h2>
+<h2 id="classes">الكلاسات</h2>
 <div class="ins-panel site-ref">
   <div class="ins-panel-body ins-panel-body--flush">
     <div class="ins-table-wrap">
       <table class="ins-table">
-        <thead><tr><th>الصنف</th><th>الخاصّية</th></tr></thead>
+        <thead><tr><th>الكلاس</th><th>الخاصية</th></tr></thead>
         <tbody>
           <tr><td><code>ins-m-N</code> · <code>ins-p-N</code></td><td>الجهات الأربع</td></tr>
           <tr><td><code>ins-mt-N</code> · <code>ins-mb-N</code> · <code>ins-pt-N</code> · <code>ins-pb-N</code></td><td>الأعلى والأسفل</td></tr>
-          <tr><td><code>ins-ms-N</code> · <code>ins-ps-N</code></td><td>جهة البداية — اليمين في العربية</td></tr>
-          <tr><td><code>ins-me-N</code> · <code>ins-pe-N</code></td><td>جهة النهاية — اليسار في العربية</td></tr>
-          <tr><td><code>ins-mx-N</code> · <code>ins-my-N</code> · <code>ins-px-N</code> · <code>ins-py-N</code></td><td>المحوران</td></tr>
-          <tr><td><code>ins-gap-N</code></td><td>الفراغ بين أبناء شبكة أو صفّ أو كومة</td></tr>
+          <tr><td><code>ins-ms-N</code> · <code>ins-ps-N</code></td><td>جهة البداية، وهي اليمين في العربية</td></tr>
+          <tr><td><code>ins-me-N</code> · <code>ins-pe-N</code></td><td>جهة النهاية، وهي اليسار في العربية</td></tr>
+          <tr><td><code>ins-mx-N</code> · <code>ins-my-N</code> · <code>ins-px-N</code> · <code>ins-py-N</code></td><td>المحور الأفقي أو العمودي</td></tr>
+          <tr><td><code>ins-gap-N</code></td><td>الفراغ (gap) بين أبناء الشبكة و<code>ins-row</code> و<code>ins-stack</code></td></tr>
           <tr><td><code>ins-m-auto</code> · <code>ins-ms-auto</code> · <code>ins-me-auto</code> · <code>ins-mt-auto</code></td><td>يدفع العنصر إلى الطرف الآخر</td></tr>
         </tbody>
       </table>
@@ -95,14 +95,14 @@
   </div>
 </div>
 <p>
-  N واحد من 0 1 2 3 4 5 6 8 12. ولا <code>ml</code> ولا <code>mr</code> في المكتبة: الصنف نفسه يعمل في
-  الاتجاهين. والأدوات تغلب المكوّنات دون <code>!important</code>.
+  وقيمة N واحدة من 0 1 2 3 4 5 6 8 12. وليس في المكتبة <code>ml</code> ولا <code>mr</code>، لأن الكلاس الواحد يصلح
+  للاتجاهين. وتغلب هذه الأدوات أنماط المكونات دون <code>!important</code>.
 </p>
 
-<h2 id="stack">الكومة والصفّ</h2>
+<h2 id="stack">الرص العمودي والأفقي</h2>
 <p>
-  <code>.ins-stack</code> عمودي و<code>.ins-row</code> أفقي يلتفّ. كلاهما يفصل أبناءه بـ <code>gap</code>
-  ويلغي هوامشهم الخارجية. في الكومة <code>ins-mt-auto</code> يدفع العنصر إلى الأسفل، وفي الصفّ
+  يرص <code>.ins-stack</code> أبناءه عموديًا، ويرصهم <code>.ins-row</code> أفقيًا وينقلهم إلى سطر جديد إذا ضاق المكان. وكلاهما يفصل بينهم بـ <code>gap</code>
+  ويلغي هوامشهم الخارجية (margin). وفي <code>.ins-stack</code> يدفع <code>ins-mt-auto</code> العنصر إلى الأسفل، وفي <code>.ins-row</code> يدفعه
   <code>ins-ms-auto</code> إلى النهاية.
 </p>
 <demo-example class="stack">
@@ -120,14 +120,14 @@
 
 <h2 id="toolbar">شريط الأدوات</h2>
 <p>
-  <code>.ins-toolbar</code> صفّ فوق جدول أو قائمة: حقول بارتفاع الأزرار، و<code>.ins-toolbar-grow</code>
-  للعنصر الذي يأخذ ما تبقّى، و<code>.ins-toolbar-end</code> لما يُدفع إلى النهاية.
+  <code>.ins-toolbar</code> صف يعلو جدولًا أو قائمة، تأتي حقوله بارتفاع أزراره. ضع <code>.ins-toolbar-grow</code>
+  على العنصر الذي يملأ ما بقي من العرض، و<code>.ins-toolbar-end</code> على ما تريد دفعه إلى النهاية.
 </p>
 <demo-example>
   <div class="ins-toolbar">
     <input class="ins-input ins-toolbar-grow" placeholder="بحث" aria-label="بحث">
     <select class="ins-select" aria-label="الحالة" style="inline-size:auto">
-      <option>الكلّ</option><option>مفتوح</option><option>مغلق</option>
+      <option>الكل</option><option>مفتوح</option><option>مغلق</option>
     </select>
     <div class="ins-toolbar-end">
       <button class="ins-btn ins-btn--primary">إضافة</button>
@@ -135,8 +135,8 @@
   </div>
 </demo-example>
 
-<h2 id="field-row">صفّ الحقول</h2>
-<p><code>.ins-field-row</code> يضع الحقول جنبًا إلى جنب ويكدّسها على الشاشة الضيّقة. والحقل الذي يأخذ ما تبقّى يحمل <code>.ins-grow</code>.</p>
+<h2 id="field-row">صف الحقول</h2>
+<p>يضع <code>.ins-field-row</code> الحقول جنبًا إلى جنب، فإذا ضاقت الشاشة جعلها بعضها فوق بعض. والحقل الذي يملأ ما بقي من العرض يحمل <code>.ins-grow</code>.</p>
 <demo-example>
   <div class="ins-field-row">
     <div class="ins-field ins-grow"><label class="ins-label" for="s-first">الاسم</label><input class="ins-input" id="s-first"></div>
