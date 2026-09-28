@@ -113,7 +113,8 @@
 .site-doc .site-body > ul,
 .site-doc .site-body > ol {
   margin: 0 0 1rem;
-  color: var(--ins-text-2);
+  color: color-mix(in srgb, var(--ins-text-2), var(--ins-text-1) 35%);
+  font-size: 15px;
   line-height: 1.9;
 }
 .site-doc .site-body > ul,
