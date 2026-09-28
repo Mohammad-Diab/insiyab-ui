@@ -688,7 +688,8 @@
     closePop(false);
   }, true);
   document.addEventListener('focusout', function (e) {
-    if (popFor && pop && pop.contains(e.target) && e.relatedTarget && !pop.contains(e.relatedTarget)) closePop(false);
+    var to = e.relatedTarget;
+    if (popFor && pop && pop.contains(e.target) && to && !pop.contains(to) && !state(popFor).button.contains(to)) closePop(false);
   }, false);
   window.addEventListener('scroll', function () { if (popFor) place(); }, true);
   window.addEventListener('resize', function () { if (popFor) place(); }, false);
