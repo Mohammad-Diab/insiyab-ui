@@ -4382,7 +4382,16 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
    fill it in is congratulating you for typing. */
 :is(.ins-input--ok,
     .ins-field:has(> .ins-success:not(:empty)) :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *),
-.ins-input-group:is(.ins-field:has(> .ins-success:not(:empty)) *) { border-color: rgba(34, 197, 94, .45); }
+.ins-input-group:is(.ins-field:has(> .ins-success:not(:empty)) *) {
+  border-color: color-mix(in srgb, var(--ins-tone-ok) 55%, transparent);
+  background: var(--ins-tone-ok-bg);
+}
+:is(.ins-input--ok,
+    .ins-field:has(> .ins-success:not(:empty)) :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *):focus,
+.ins-input-group:is(.ins-field:has(> .ins-success:not(:empty)) *):focus-within {
+  border-color: var(--ins-tone-ok);
+  box-shadow: 0 0 0 4px var(--ins-tone-ok-bg), var(--ins-bevel-dim);
+}
 
 /* The message under a field. The mark is a mask like the eye above, so it is the
    message's own colour in both themes, and it sits against the first line rather
