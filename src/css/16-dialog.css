@@ -134,6 +134,7 @@
 .ins-dialog-body {
   padding: var(--ins-dlg-pad);
   overflow-y: auto;
+  scrollbar-gutter: stable both-edges;
   overscroll-behavior: contain;
   flex: 1 1 auto;
   min-block-size: 0;

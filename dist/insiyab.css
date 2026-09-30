@@ -779,9 +779,10 @@ a:hover { color: var(--ins-tone-brand-soft); }
    to gain and keeps the native viewport scroll. Note that anything reading the
    scroll offset has to read it from whichever element is actually scrolling — an
    element scroller's `scroll` event does not reach `window`. insiyab.js does. */
+/* The scrolling body keeps room for its bar, so the layout does not shift sideways when the page grows tall enough to scroll; not on <html>, where the room would also narrow every drawer and backdrop. */
 @media (pointer: fine) {
   html[data-ins-scrollbar="lead"] { height: 100%; overflow: hidden; }
-  html[data-ins-scrollbar="lead"] > body { height: 100%; overflow-y: auto; overflow-x: hidden; }
+  html[data-ins-scrollbar="lead"] > body { height: 100%; overflow-y: auto; overflow-x: hidden; scrollbar-gutter: stable; }
 }
 
 /* --------------------------------------------------------------- the orbs */
@@ -1018,6 +1019,7 @@ a:hover { color: var(--ins-tone-brand-soft); }
   padding: 1.125rem .75rem;
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-gutter: stable both-edges;
   background: var(--ins-glass);
   border-inline-end: 1px solid var(--ins-rim);
 }
@@ -1890,7 +1892,7 @@ html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
   min-block-size: 0;
 }
 .ins-split--v { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, var(--ins-split)) auto minmax(0, 1fr); }
-.ins-split-pane { min-inline-size: 0; min-block-size: 0; overflow: auto; overscroll-behavior: contain; }
+.ins-split-pane { min-inline-size: 0; min-block-size: 0; overflow: auto; scrollbar-gutter: stable both-edges; overscroll-behavior: contain; }
 .ins-split-handle {
   display: grid;
   place-items: center;
@@ -4724,6 +4726,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
   list-style: none;
   max-block-size: min(18rem, 50vh);
   overflow-y: auto;
+  scrollbar-gutter: stable both-edges;
   overscroll-behavior: contain;
   border-radius: var(--ins-r-md);
   border: 1px solid var(--ins-rim);
@@ -5864,6 +5867,7 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
 .ins-dialog-body {
   padding: var(--ins-dlg-pad);
   overflow-y: auto;
+  scrollbar-gutter: stable both-edges;
   overscroll-behavior: contain;
   flex: 1 1 auto;
   min-block-size: 0;
