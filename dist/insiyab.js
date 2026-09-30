@@ -4416,6 +4416,18 @@
     }
   });
 
+  // In a sticky table the rows are cut off at the header's lower edge, so none show round its corners or in the gap.
+  function stickyCut(wrap) {
+    var table = wrap.querySelector('.ins-table'), head = table && table.tHead, body = table && table.tBodies[0];
+    if (!head || !body) return;
+    var cut = wrap.scrollTop + head.offsetHeight - (table.offsetTop + body.offsetTop);
+    body.style.clipPath = cut > 0 ? 'inset(' + cut + 'px 0 0 0 round var(--ins-table-card-r))' : '';
+  }
+  document.addEventListener('scroll', function (event) {
+    var t = event.target;
+    if (t.classList && t.classList.contains('ins-table-wrap--sticky')) stickyCut(t);
+  }, true);
+
   /* Rows the server sent checked are marked, and their bar shown, from the start. */
   define('table-select', function (scope) {
     var boxes = scope.querySelectorAll('.ins-table input[data-ins-select]'), seen = [];

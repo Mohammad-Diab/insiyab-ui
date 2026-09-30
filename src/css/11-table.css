@@ -401,6 +401,7 @@ th[aria-sort="descending"] > .ins-sort::after {
 .ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin),
 .ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin):has([open], [data-ins-open]) { overflow: auto; }
 .ins-table-wrap--sticky { max-block-size: var(--ins-table-max); overscroll-behavior: contain; }
+.ins-table-wrap--sticky::-webkit-scrollbar-track { margin-block: 3rem var(--ins-r-lg); }
 .ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin) .ins-table thead th {
   background: linear-gradient(to bottom, rgba(var(--ins-primary-rgb), .20), rgba(var(--ins-primary-rgb), .12)),
               var(--ins-glass-strong);
