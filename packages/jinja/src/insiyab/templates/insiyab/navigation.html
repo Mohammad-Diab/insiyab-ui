@@ -22,9 +22,9 @@
 </ol></nav>
 {%- endmacro %}
 
-{#- The strip: tab() calls in the block. seg: the segmented look. -#}
-{% macro tablist(label=none, seg=false, class=none) -%}
-<div class="{{ cls(['ins-seg' if seg else 'ins-tablist', class]) }}"{% if label %} aria-label="{{ label|e }}"{% endif %}{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
+{#- The strip: tab() calls in the block. seg: the segmented look; line: a travelling underline. -#}
+{% macro tablist(label=none, seg=false, line=false, class=none) -%}
+<div class="{{ cls(['ins-seg' if seg else ('ins-tablist ins-tablist--line' if line else 'ins-tablist'), class]) }}"{% if label %} aria-label="{{ label|e }}"{% endif %}{{ attrs(kwargs) }}>{{ caller() if caller }}</div>
 {%- endmacro %}
 
 {#- panel: the id of its tabpanel(); seg: in a segmented strip. active: shown first
