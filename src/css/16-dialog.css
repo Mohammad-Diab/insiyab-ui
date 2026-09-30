@@ -266,8 +266,16 @@
   border: 1px solid var(--ins-rim);
   background: var(--ins-glass-strong);
   box-shadow: var(--ins-sh-lg);
-  animation: ins-pop-in var(--ins-t-pop) var(--ins-ease);
+  --ins-pop-dy: -6px;
+  opacity: 0;
+  transform: translateY(var(--ins-pop-dy)) scale(.97);
+  transition: opacity var(--ins-t-exit) var(--ins-ease), transform var(--ins-t-exit) var(--ins-ease);
 }
+.ins-pop[open] > .ins-pop-body { opacity: 1; transform: none; transition-duration: var(--ins-t-enter); }
+@starting-style { .ins-pop[open] > .ins-pop-body { opacity: 0; transform: translateY(var(--ins-pop-dy)) scale(.97); } }
+.ins-pop:not([open]) > .ins-pop-body { pointer-events: none; }
+.ins-pop::details-content { transition: content-visibility var(--ins-t-exit) var(--ins-ease) allow-discrete; }
+.ins-pop[open]::details-content { transition: none; }
 @supports (backdrop-filter: blur(1px)) {
   .ins-pop-body { backdrop-filter: var(--ins-blur); -webkit-backdrop-filter: var(--ins-blur); }
 }
@@ -353,6 +361,7 @@
    `data-ins-flip` rules. */
 .ins-pop--end > .ins-pop-body { inset-inline-start: auto; inset-inline-end: 0; }
 .ins-pop[data-ins-flip~="up"] > .ins-pop-body {
+  --ins-pop-dy: 6px;
   inset-block-start: auto;
   inset-block-end: calc(100% + .375rem);
 }
@@ -372,11 +381,11 @@
 /* The items arrive just after the body does, so the menu opens and then fills rather
    than appearing whole -- which is most of what makes a 120ms popover feel
    considered instead of abrupt. */
-.ins-pop-body > * { animation: ins-rise-sm var(--ins-t-pop) var(--ins-ease) backwards; }
-.ins-pop-body > :nth-child(2) { animation-delay: .03s; }
-.ins-pop-body > :nth-child(3) { animation-delay: .06s; }
-.ins-pop-body > :nth-child(4) { animation-delay: .09s; }
-.ins-pop-body > :nth-child(5) { animation-delay: .12s; }
+.ins-pop[open] > .ins-pop-body > * { animation: ins-rise-sm var(--ins-t-pop) var(--ins-ease) backwards; }
+.ins-pop[open] > .ins-pop-body > :nth-child(2) { animation-delay: .03s; }
+.ins-pop[open] > .ins-pop-body > :nth-child(3) { animation-delay: .06s; }
+.ins-pop[open] > .ins-pop-body > :nth-child(4) { animation-delay: .09s; }
+.ins-pop[open] > .ins-pop-body > :nth-child(5) { animation-delay: .12s; }
 
 /* --------------------------------------------------------------- tooltip */
 /* One element for the whole page, built by insiyab.js the first time a
