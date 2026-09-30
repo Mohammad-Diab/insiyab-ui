@@ -2927,7 +2927,8 @@
       node.classList.remove('is-warn', 'is-done');
     }
     if (countdowns.indexOf(node) === -1) countdowns.push(node);
-    if (!countTimer) countTimer = setInterval(countdownTick, 1000);
+    // A quarter-second tick, so a timer started between two ticks still changes on its own second.
+    if (!countTimer) countTimer = setInterval(countdownTick, 250);
     countdownDraw(node);
     return countdownLeft(node);
   }
@@ -2984,8 +2985,9 @@
       time = node.appendChild(el('span', 'ins-countdown-clock'));
     }
     days.hidden = !d;
-    days.textContent = d ? strings(node).days(d) : '';
-    time.textContent = clock;
+    var said = d ? strings(node).days(d) : '';
+    if (days.textContent !== said) days.textContent = said;
+    if (time.textContent !== clock) time.textContent = clock;
   }
 
   function countdownFinish(node, left) {
