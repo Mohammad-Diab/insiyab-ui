@@ -2712,47 +2712,36 @@ html[dir="ltr"] .ins-dl dd.ins-num { text-align: left; }
 
    `.ins-thread` stacks them, and `.ins-comment-replies` inside a body indents the
    answers under a rule. `.ins-comment--own` is the person reading's own message, on
-   the other side and in the brand tint, for a conversation. */
-.ins-thread { display: flex; flex-direction: column; gap: 1rem; }
-.ins-comment { display: flex; align-items: flex-start; gap: .75rem; }
-.ins-comment-body { flex: 1 1 auto; min-inline-size: 0; display: flex; flex-direction: column; gap: .375rem; }
-.ins-comment-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .625rem; }
+   the other side with its name in the brand colour, for a conversation. */
+.ins-thread { display: flex; flex-direction: column; gap: 1.25rem; }
+.ins-comment { --ins-comment-av: 30px; --ins-comment-gap: .75rem; display: flex; align-items: flex-start; gap: var(--ins-comment-gap); }
+.ins-comment-body { flex: 1 1 auto; min-inline-size: 0; display: flex; flex-direction: column; gap: .125rem; padding-block-start: .125rem; }
+.ins-comment-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .5rem; }
 .ins-comment-name { font-size: var(--ins-fs-md); font-weight: 700; color: var(--ins-text-1); }
 .ins-comment-time { font-size: var(--ins-fs-xs); color: var(--ins-text-3); }
-.ins-comment-text {
-  align-self: flex-start;
-  max-inline-size: 100%;
-  padding-block: .625rem;
-  padding-inline: .875rem;
-  border-radius: var(--ins-r-md);
-  border-start-start-radius: var(--ins-r-xs);
-  border: 1px solid var(--ins-line);
-  background: var(--ins-glass-inner);
-  font-size: var(--ins-fs-md);
-  line-height: 1.8;
-  color: var(--ins-text-1);
-  overflow-wrap: anywhere;
-}
+.ins-comment-name + .ins-comment-time::before { content: "·"; margin-inline-end: .5rem; }
+.ins-comment-text { font-size: var(--ins-fs-md); line-height: 1.85; color: var(--ins-text-1); overflow-wrap: anywhere; }
 .ins-comment-text > :first-child { margin-block-start: 0; }
 .ins-comment-text > :last-child { margin-block-end: 0; }
-.ins-comment-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; }
+.ins-comment-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .125rem; margin-inline-start: -.5rem; }
+.ins-comment-actions > .ins-btn--bare { color: var(--ins-label); }
+.ins-comment-actions > .ins-btn--bare:hover { color: var(--ins-tone-brand); }
+/* The replies hang under the parent's avatar, on a guide line down its column. */
 .ins-comment-replies {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-block-start: .5rem;
-  padding-inline-start: 1rem;
+  margin-block-start: .75rem;
+  margin-inline-start: calc(-1 * (var(--ins-comment-gap) + var(--ins-comment-av) / 2) - 1px);
+  padding-inline-start: calc(var(--ins-comment-gap) + var(--ins-comment-av) / 2 - 1px);
   border-inline-start: 2px solid var(--ins-line);
 }
 .ins-comment--own { flex-direction: row-reverse; }
 .ins-comment--own .ins-comment-head { flex-direction: row-reverse; }
-.ins-comment--own .ins-comment-text {
-  align-self: flex-end;
-  border-start-start-radius: var(--ins-r-md);
-  border-start-end-radius: var(--ins-r-xs);
-  border-color: var(--ins-tone-brand-bd);
-  background: var(--ins-tone-brand-bg);
-}
+.ins-comment--own .ins-comment-name { color: var(--ins-tone-brand); }
+.ins-comment--own .ins-comment-name + .ins-comment-time::before { content: none; }
+.ins-comment--own .ins-comment-time::after { content: "·"; margin-inline-start: .5rem; }
+.ins-comment--own .ins-comment-text { text-align: end; }
 
 /* ==========================================================================
    Insiyab · stat tile
