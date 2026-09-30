@@ -279,8 +279,8 @@
 
 <h2 id="field">حقل الرمز</h2>
 <p>
-  يكفيك حقل واحد تضع عليه <code>data-ins-otp</code> بعدد الخانات. والرمز الصحيح في هذا المثال <code>123456</code>،
-  وما سواه مرفوض:
+  يكفيك حقل واحد تضع عليه <code>data-ins-otp</code> بعدد الخانات، فتظهر تحت الأرقام نقطة لكل خانة تمتلئ بلون الهوية
+  كلما كتبت رقمًا، فيعرف صاحب الرمز كم بقي عليه. والرمز الصحيح في هذا المثال <code>123456</code>، وما سواه مرفوض:
 </p>
 <figure class="dx"><div class="dx-view">
   <div class="ins-field">
@@ -294,13 +294,13 @@
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-demo-hint"</span><span class="hl-t">&gt;</span>رمز من ستة أرقام.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <p>
-  <b>يبقى حقلًا واحدًا:</b> فالمربعات مرسومة فوق حقل نصي حقيقي، ولذا يعمل معه اقتراح الهاتف للرمز ولصقه ومدير
+  <b>يبقى حقلًا واحدًا:</b> فالأرقام ونقاطها مرسومة فوق حقل نصي حقيقي، ولذا يعمل معه اقتراح الهاتف للرمز ولصقه ومدير
   كلمات المرور وقارئ الشاشة كما تعمل مع أي حقل. وإن غاب السكربت بقي ذلك الحقل على حاله.
 </p>
 
 <h2 id="typing">الكتابة</h2>
 <ul>
-  <li><b>في الخانة التالية دائمًا</b> — أينما نقرت من المربعات وقع المؤشر بعد آخر رقم، ويحذف <kbd>Backspace</kbd> آخر رقم.</li>
+  <li><b>في الخانة التالية دائمًا</b> — أينما نقرت في الحقل وقع المؤشر بعد آخر رقم، ويحذف <kbd>Backspace</kbd> آخر رقم.</li>
   <li><b>الأرقام العربية</b> — تصير <code>١٢٣٤٥٦</code> في الحقل <code>123456</code>.</li>
   <li><b>اللصق</b> — لا يأخذ الحقل إلا الرمز، فإذا لصقت «رمزك هو ١٢٣ ٤٥٦» امتلأ بـ <code>123456</code>.</li>
   <li><b>الرمز الناقص</b> — يبقى الحقل غير صالح برسالة «اكتب الرمز كاملًا» حتى تمتلئ خاناته، أما الحقل الفارغ فأمره إلى <code>required</code>.</li>
@@ -337,11 +337,11 @@
   <span class="hl-t">&lt;input</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-auto"</span> <span class="hl-a">data-ins-otp</span>=<span class="hl-s">"4"</span> <span class="hl-a">data-ins-otp-submit</span> <span class="hl-a">name</span>=<span class="hl-s">"code"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/form</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="api">من الشيفرة</h2>
+<h2 id="api">التحكم بـ JavaScript</h2>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:otp'</span>, <span class="hl-k">async</span> (e) =&gt; {    <span class="hl-c">// اكتمل الرمز</span>
   <span class="hl-k">const</span> ok = <span class="hl-k">await</span> verify(e.detail.value);
   <span class="hl-k">if</span> (!ok) {
-    e.detail.input.setAttribute(<span class="hl-s">'aria-invalid'</span>, <span class="hl-s">'true'</span>);  <span class="hl-c">// المربعات حمراء، وتعود مع الكتابة</span>
+    e.detail.input.setAttribute(<span class="hl-s">'aria-invalid'</span>, <span class="hl-s">'true'</span>);  <span class="hl-c">// يحمر الحقل، ويعود مع الكتابة</span>
     <span class="hl-t">Insiyab</span>.otp(e.detail.input, <span class="hl-s">''</span>);                      <span class="hl-c">// وافرغ الحقل لمحاولة جديدة</span>
   }
 });
@@ -359,14 +359,14 @@
           <tr><td><code>data-ins-otp="6"</code></td><td>تجعل الحقل حقل رمز بهذا العدد من الخانات (4–10)، فإن خلت من القيمة أُخذ العدد من <code>maxlength</code>، وإلا فستة.</td></tr>
           <tr><td><code>data-ins-otp-chars="alnum"</code></td><td>حروف وأرقام بدل الأرقام وحدها.</td></tr>
           <tr><td><code>data-ins-otp-submit</code></td><td>ترسل النموذج حين يكتمل الرمز.</td></tr>
-          <tr><td><code>aria-invalid="true"</code></td><td>رمز رفضه الخادم، فتحمر المربعات حتى تعود إلى الكتابة.</td></tr>
+          <tr><td><code>aria-invalid="true"</code></td><td>رمز رفضه الخادم، فيحمر الحقل حتى تعود إلى الكتابة.</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
 <p>
-  <b>لا يرى قارئ الشاشة</b> إلا حقلًا نصيًا واحدًا باسمه وتلميحه، فالمربعات مخفية عنه. وتسمية الحقل عليك، بـ
+  <b>لا يرى قارئ الشاشة</b> إلا حقلًا نصيًا واحدًا باسمه وتلميحه، فالأرقام والنقاط المرسومة مخفية عنه. وتسمية الحقل عليك، بـ
   <code>&lt;label&gt;</code> أو <code>aria-label</code>.
 </p>
 
@@ -391,7 +391,7 @@
 </script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="palette.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">لوحة الأوامر</span></a><a class="site-pager-link site-pager-link--next" href="phone.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">رقم الهاتف</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">حقل الرمز</a><a href="#typing">الكتابة</a><a href="#options">العدد والحروف والإرسال</a><a href="#api">من الشيفرة</a><a href="#attributes">السمات</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">حقل الرمز</a><a href="#typing">الكتابة</a><a href="#options">العدد والحروف والإرسال</a><a href="#api">التحكم بـ JavaScript</a><a href="#attributes">السمات</a></nav>
       </div>
     </main>
   </div>

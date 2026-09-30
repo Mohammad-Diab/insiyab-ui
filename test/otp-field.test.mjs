@@ -91,11 +91,11 @@ ok('with data-ins-otp-chars="alnum", letters too, upper-cased', v.value === 'AB1
 ok('and a text keyboard', (await E(`document.getElementById('otp-alnum').inputMode`)) === 'text');
 
 // ------------------------------------------------------------------ turned down
-const red = () => E(`getComputedStyle(document.querySelector('#otp ~ .ins-otp-cells .ins-otp-cell')).borderTopColor`);
+const red = () => E(`getComputedStyle(document.querySelector('#otp ~ .ins-otp-cells')).borderTopColor`);
 const before = await red();
 await E(`document.getElementById('otp').setAttribute('aria-invalid', 'true'); 0`);
 await b.sleep(400);                                 /* the border eases over */
-ok('aria-invalid turns the boxes red', (await red()) !== before, `${before} → ${await red()}`);
+ok('aria-invalid turns the field red', (await red()) !== before, `${before} → ${await red()}`);
 await b.click('#otp');
 await raw('Backspace', 'Backspace', 8);
 ok('and comes off as the code is typed again', !(await E(`document.getElementById('otp').hasAttribute('aria-invalid')`)));
