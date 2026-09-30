@@ -284,6 +284,7 @@ html[dir="ltr"] .ins-table tbody td:first-child::before { left: 0; }
 .ins-table tbody tr:nth-child(4) { animation-delay: .12s; }
 .ins-table tbody tr:nth-child(5) { animation-delay: .16s; }
 .ins-table tbody tr:nth-child(6) { animation-delay: .20s; }
+table.is-sorted > tbody > tr { animation: none; }
 
 /* --------------------------------------------------------------- sorting */
 /* A sortable column: `data-ins-sort` on its `<th>`. insiyab.js wraps the heading in
