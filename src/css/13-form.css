@@ -268,6 +268,8 @@
    switch is the one thing on the page whose whole job is to move, and a linear
    glide reads as a checkbox that happens to be pill-shaped. */
 .ins-switch {
+  /* The hidden input is placed against the switch, or focusing it scrolls <html> when <body> is the scroller. */
+  position: relative;
   display: flex;
   align-items: center;
   gap: .625rem;
