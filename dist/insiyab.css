@@ -5783,7 +5783,8 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
               overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
               display var(--ins-t-exit) var(--ins-ease) allow-discrete;
 }
-.ins-dialog[open] { display: flex; flex-direction: column; }
+.ins-dialog { flex-direction: column; }
+.ins-dialog[open] { display: flex; }
 /* A form around the head, body and foot, for a dialog that submits (a wizard, say),
    stays out of the layout, so the body still scrolls between a fixed head and foot. */
 .ins-dialog > form { display: contents; }
@@ -5878,10 +5879,8 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
   padding: 1rem var(--ins-dlg-pad);
   border-block-start: 1px solid var(--ins-line);
   flex: none;
+  justify-content: flex-end;
 }
-/* A dialog's commit sits at the *end*, away from the cancel — the opposite of a
-   panel's form, which has no cancel to be kept away from. */
-.ins-dialog-foot > .ins-btn--primary { margin-inline-start: auto; }
 /* The generic close button takes the dialog cross's place at the end of a head. */
 .ins-dialog-head > .ins-close { margin-inline-start: auto; }
 
@@ -6112,13 +6111,6 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
 .ins-pop-body > :nth-child(3) { animation-delay: .06s; }
 .ins-pop-body > :nth-child(4) { animation-delay: .09s; }
 .ins-pop-body > :nth-child(5) { animation-delay: .12s; }
-
-/* The close button turns. It is the one control in a dialog whose meaning is a
-   rotation already. */
-.ins-dialog-x { transition: background var(--ins-t-pop) var(--ins-ease),
-                            color var(--ins-t-pop) var(--ins-ease),
-                            transform var(--ins-t-pop) var(--ins-ease-spring); }
-.ins-dialog-x:hover { transform: rotate(90deg); }
 
 /* --------------------------------------------------------------- tooltip */
 /* One element for the whole page, built by insiyab.js the first time a
