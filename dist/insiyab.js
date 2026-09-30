@@ -2610,14 +2610,19 @@
     return out;
   }
 
-  function drumCol(kind, label, items) {
+  // A looping wheel holds five copies of its items and is moved back to the middle one whenever it comes to rest.
+  function drumCol(kind, label, items, loop) {
     var col = el('div', 'ins-drum-col ins-drum-col--' + kind);
     col.tabIndex = 0;
     col.setAttribute('role', 'spinbutton');
     col.setAttribute('aria-label', label);
     col.setAttribute('aria-valuemin', '0');
     col.setAttribute('aria-valuemax', String(items.length - 1));
-    for (var i = 0; i < items.length; i++) col.appendChild(el('div', 'ins-drum-item', items[i]));
+    col._n = items.length;
+    col._copies = loop && items.length > 2 ? 5 : 1;
+    for (var c = 0; c < col._copies; c++) {
+      for (var i = 0; i < items.length; i++) col.appendChild(el('div', 'ins-drum-item', items[i]));
+    }
     return col;
   }
 
@@ -2629,7 +2634,7 @@
     var drum = el('div', 'ins-drum');
     var clock = el('div', 'ins-drum-clock');
     clock.dir = 'ltr';
-    var hc = drumCol('hour', t.hour, hours), mc = drumCol('minute', t.minute, minutes);
+    var hc = drumCol('hour', t.hour, hours, true), mc = drumCol('minute', t.minute, minutes, true);
     clock.appendChild(hc);
     clock.appendChild(el('span', 'ins-drum-sep', ':'));
     clock.appendChild(mc);
@@ -2649,8 +2654,9 @@
       col.addEventListener('scroll', function () {
         drumPaint(col);
         clearTimeout(col._settle);
-        col._settle = setTimeout(function () { drumSettle(drum); }, 110);
+        if (!col._drag) col._settle = setTimeout(function () { drumSettle(drum); }, 110);
       }, { passive: true });
+      drumDrag(col);
     });
     drum.addEventListener('click', function (event) {
       var item = event.target.closest ? event.target.closest('.ins-drum-item') : null;
@@ -2662,14 +2668,14 @@
     drum.addEventListener('keydown', function (event) {
       var col = event.target.closest ? event.target.closest('.ins-drum-col') : null;
       if (!col) return;
-      var i = drumIndex(col), n = col.children.length, to;
+      var i = drumIndex(col), n = col.children.length, base = i - i % col._n, to;
       switch (event.key) {
         case 'ArrowUp': to = i - 1; break;
         case 'ArrowDown': to = i + 1; break;
         case 'PageUp': to = i - 5; break;
         case 'PageDown': to = i + 5; break;
-        case 'Home': to = 0; break;
-        case 'End': to = n - 1; break;
+        case 'Home': to = base; break;
+        case 'End': to = base + col._n - 1; break;
         default: return;
       }
       event.preventDefault();
@@ -2681,7 +2687,47 @@
   function drumRow(col) { return (col.firstChild && col.firstChild.offsetHeight) || 36; }
   function drumIndex(col) { return Math.max(0, Math.min(col.children.length - 1, Math.round(col.scrollTop / drumRow(col)))); }
 
+  // A mouse drags a wheel as a finger does, and a quick release flings it on.
+  function drumDrag(col) {
+    col.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      e.preventDefault();
+      col.focus({ preventScroll: true });
+      col._drag = { y: e.clientY, top: col.scrollTop, moved: false, lastY: e.clientY, lastT: Date.now(), v: 0 };
+      col.setPointerCapture(e.pointerId);
+    });
+    col.addEventListener('pointermove', function (e) {
+      var d = col._drag;
+      if (!d) return;
+      var dy = e.clientY - d.y, now = Date.now();
+      if (!d.moved && Math.abs(dy) > 3) { d.moved = true; col.classList.add('is-drag'); }
+      if (!d.moved) return;
+      col.scrollTop = d.top - dy;
+      d.v = d.v * 0.6 + ((e.clientY - d.lastY) / Math.max(1, now - d.lastT)) * 0.4;
+      d.lastY = e.clientY; d.lastT = now;
+    });
+    var drop = function (e) {
+      var d = col._drag;
+      if (!d) return;
+      col._drag = null;
+      col.classList.remove('is-drag');
+      if (!d.moved) {
+        var hit = document.elementFromPoint(e.clientX, e.clientY), item = hit && hit.closest ? hit.closest('.ins-drum-item') : null;
+        if (item && item.parentNode === col) drumGo(col, Array.prototype.indexOf.call(col.children, item));
+        return;
+      }
+      var fling = Date.now() - d.lastT > 80 || Math.abs(d.v) < 0.6 ? 0 : d.v;
+      drumGo(col, Math.max(0, Math.min(col.children.length - 1, Math.round((col.scrollTop - fling * 180) / drumRow(col)))));
+    };
+    col.addEventListener('pointerup', drop);
+    col.addEventListener('pointercancel', drop);
+  }
+
+  function drumValue(col) { return drumIndex(col) % col._n; }
+  function drumMid(col, v) { return Math.floor(col._copies / 2) * col._n + v; }
+
   function drumGo(col, i) {
+    if (Math.abs(col.scrollTop - i * drumRow(col)) < 1) { drumSettle(col.closest('.ins-drum')); return; }
     col.scrollTo({ top: i * drumRow(col), behavior: motionless() ? 'auto' : 'smooth' });
   }
 
@@ -2697,26 +2743,44 @@
   }
 
   function drumRead(drum) {
-    var c = drum._cols, h = drumIndex(c[0]), m = drum._mins[drumIndex(c[1])];
-    if (drum._h12) h += c[2] && drumIndex(c[2]) ? 12 : 0;
+    var c = drum._cols, h = drumValue(c[0]), m = drum._mins[drumValue(c[1])];
+    if (drum._h12) h += c[2] && drumValue(c[2]) ? 12 : 0;
     return pad2(h) + ':' + pad2(m);
   }
 
   function drumAria(drum) {
     drum._cols.forEach(function (col) {
       var i = drumIndex(col);
-      col.setAttribute('aria-valuenow', String(i));
+      col.setAttribute('aria-valuenow', String(i % col._n));
       col.setAttribute('aria-valuetext', col.children[i] ? col.children[i].textContent : '');
     });
   }
 
+  // Hours, minutes and periods outside min–max are dimmed, so the snap back to the limit is expected.
+  function drumMarks(drum) {
+    var input = drum._input, lo = input.getAttribute('data-ins-min'), hi = input.getAttribute('data-ins-max');
+    lo = lo && lo.length === 5 ? minutesOf(lo) : null;
+    hi = hi && hi.length === 5 ? minutesOf(hi) : null;
+    var out = function (a, b) { return (lo !== null && b < lo) || (hi !== null && a > hi); };
+    var c = drum._cols, pm = drum._h12 && c[2] && drumValue(c[2]) ? 12 : 0, now = minutesOf(drumRead(drum));
+    var hour = Math.floor(now / 60) * 60;
+    [].forEach.call(c[0].children, function (it, j) { var h = (j % c[0]._n + pm) * 60; it.classList.toggle('is-out', out(h, h + 59)); });
+    [].forEach.call(c[1].children, function (it, j) { var m = hour + drum._mins[j % c[1]._n]; it.classList.toggle('is-out', out(m, m)); });
+    if (c[2]) [].forEach.call(c[2].children, function (it, j) { it.classList.toggle('is-out', out(j * 720, j * 720 + 719)); });
+  }
+
   function drumSettle(drum) {
-    var v = drumRead(drum), input = drum._input;
+    drum._cols.forEach(function (col) {
+      var mid = drumMid(col, drumValue(col));
+      if (col._copies > 1 && drumIndex(col) !== mid) { col.scrollTop = mid * drumRow(col); drumPaint(col); }
+    });
+    var v = drumRead(drum), input = drum._input, was = drum._value;
     var lo = input.getAttribute('data-ins-min'), hi = input.getAttribute('data-ins-max');
     if (lo && lo.length === 5 && minutesOf(v) < minutesOf(lo)) { drumSet(drum, lo, true); v = lo; }
     else if (hi && hi.length === 5 && minutesOf(v) > minutesOf(hi)) { drumSet(drum, hi, true); v = hi; }
     drumAria(drum);
-    if (v === drum._value) return;
+    drumMarks(drum);
+    if (v === was) return;
     drum._value = v;
     drum._pick(v);
   }
@@ -2727,10 +2791,12 @@
     var idx = drum._h12 ? [h % 12, mi, h >= 12 ? 1 : 0] : [h, mi];
     drum._value = pad2(h) + ':' + pad2(drum._mins[mi]);
     drum._cols.forEach(function (col, k) {
-      if (smooth) drumGo(col, idx[k]);
-      else { col.scrollTop = idx[k] * drumRow(col); drumPaint(col); }
+      var to = drumMid(col, idx[k]);
+      if (smooth) col.scrollTo({ top: to * drumRow(col), behavior: motionless() ? 'auto' : 'smooth' });
+      else { col.scrollTop = to * drumRow(col); drumPaint(col); }
     });
     drumAria(drum);
+    drumMarks(drum);
   }
 
   /* The time field's own popover, one for the page. */
