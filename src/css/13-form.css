@@ -1011,6 +1011,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
   list-style: none;
   max-block-size: min(18rem, 50vh);
   overflow-y: auto;
+  scrollbar-gutter: stable both-edges;
   overscroll-behavior: contain;
   border-radius: var(--ins-r-md);
   border: 1px solid var(--ins-rim);

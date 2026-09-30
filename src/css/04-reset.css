@@ -118,9 +118,10 @@ a:hover { color: var(--ins-tone-brand-soft); }
    to gain and keeps the native viewport scroll. Note that anything reading the
    scroll offset has to read it from whichever element is actually scrolling — an
    element scroller's `scroll` event does not reach `window`. insiyab.js does. */
+/* The scrolling body keeps room for its bar, so the layout does not shift sideways when the page grows tall enough to scroll; not on <html>, where the room would also narrow every drawer and backdrop. */
 @media (pointer: fine) {
   html[data-ins-scrollbar="lead"] { height: 100%; overflow: hidden; }
-  html[data-ins-scrollbar="lead"] > body { height: 100%; overflow-y: auto; overflow-x: hidden; }
+  html[data-ins-scrollbar="lead"] > body { height: 100%; overflow-y: auto; overflow-x: hidden; scrollbar-gutter: stable; }
 }
 
 /* --------------------------------------------------------------- the orbs */

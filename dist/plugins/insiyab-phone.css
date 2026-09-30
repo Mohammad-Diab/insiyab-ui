@@ -107,6 +107,7 @@
   padding: 0;
   list-style: none;
   overflow-y: auto;
+  scrollbar-gutter: stable both-edges;
   overscroll-behavior: contain;
 }
 .ins-phone-opt {

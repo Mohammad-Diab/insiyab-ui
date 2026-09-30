@@ -283,7 +283,7 @@
   min-block-size: 0;
 }
 .ins-split--v { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, var(--ins-split)) auto minmax(0, 1fr); }
-.ins-split-pane { min-inline-size: 0; min-block-size: 0; overflow: auto; overscroll-behavior: contain; }
+.ins-split-pane { min-inline-size: 0; min-block-size: 0; overflow: auto; scrollbar-gutter: stable both-edges; overscroll-behavior: contain; }
 .ins-split-handle {
   display: grid;
   place-items: center;
