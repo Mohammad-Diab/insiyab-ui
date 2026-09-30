@@ -2,7 +2,7 @@
    Insiyab · documentation site behaviour
    ==========================================================================
 
-   Loaded in <head> straight after insiyab.js, for the same reason the library
+   Loaded in <head> before insiyab-boot.js, for the same reason the library
    is: the viewer's chosen brand colour and direction are restored before first
    paint, so moving between pages never flashes the default teal or the wrong
    side for the sidebar.
@@ -19,6 +19,7 @@
 
   var KEY_BRAND = 'insiyab-demo-brand';
   var KEY_DIR = 'insiyab-demo-dir';
+
   var root = document.documentElement;
   var q = new URLSearchParams(location.search);
 
@@ -36,10 +37,8 @@
   var dir = q.get('dir') || read(KEY_DIR);
   if (dir === 'ltr' || dir === 'rtl') applyDir(dir);
   var brand = q.get('brand') || read(KEY_BRAND);
-  if (brand) Insiyab.brand(brand);
-  if (q.get('theme')) Insiyab.theme(q.get('theme'));
+  if (brand) root.setAttribute('data-ins-primary', brand);
   if (q.get('fx') === 'off') root.setAttribute('data-ins-fx', 'off');
-  if (q.get('collapsed')) Insiyab.sidebar('collapsed');
 
   /* ----------------------------------------------------------- once parsed */
   function syncCustomiser() {
@@ -78,6 +77,8 @@
      was after the first paint — the sidebar flashed at the top and then jumped. */
 
   function ready() {
+    if (q.get('theme')) Insiyab.theme(q.get('theme'));
+    if (q.get('collapsed')) Insiyab.sidebar('collapsed');
     syncCustomiser();
 
     document.addEventListener('click', function (e) {
