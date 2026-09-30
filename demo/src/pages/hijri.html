@@ -26,22 +26,14 @@
 </demo-example>
 <p>
   <b>ما يصل إلى الخادم لا يتغير:</b> يحمل الحقل المخفي التاريخ ميلاديًا بصيغة ISO مثل <code>2026-09-24</code>،
-  كأي حقل تاريخ. وتبقى <code>min</code> و<code>max</code> والمدى بين حقلين على حالها، غير أن رسائلها تأتي بالتقويم
+  كأي حقل تاريخ. وتبقى <code>min</code> و<code>max</code> والفترة بين تاريخين على حالها، غير أن رسائلها تأتي بالتقويم
   الظاهر:
 </p>
 <demo-example>
-  <div class="ins-field-row">
-    <div class="ins-field ins-grow">
-      <label class="ins-label" for="hj-from">من</label>
-      <div class="ins-input-group">
-        <input class="ins-input" id="hj-from" type="date" data-ins-date data-ins-calendar="hijri" data-ins-date-end="#hj-to" name="from" value="2026-09-12">
-      </div>
-    </div>
-    <div class="ins-field ins-grow">
-      <label class="ins-label" for="hj-to">إلى</label>
-      <div class="ins-input-group">
-        <input class="ins-input" id="hj-to" type="date" data-ins-date data-ins-calendar="hijri" data-ins-date-start="#hj-from" name="to" value="2026-10-11">
-      </div>
+  <div class="ins-field">
+    <label class="ins-label" for="hj-span">الفترة</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="hj-span" type="date" data-ins-date data-ins-calendar="hijri" data-ins-date-range="to" name="from" value="2026-09-12" data-ins-date-to="2026-10-11">
     </div>
   </div>
 </demo-example>
@@ -80,7 +72,7 @@
   </div>
 </demo-example>
 
-<h2 id="api">من الشيفرة</h2>
+<h2 id="api">التحكم بـ JavaScript</h2>
 <demo-code lang="js">
 Insiyab.date('#hj-date');                 // '2026-09-24' — ميلادي دائمًا
 Insiyab.date('#hj-date', '2026-10-01');   // يُعطى ميلاديًا ويظهر هجريًا

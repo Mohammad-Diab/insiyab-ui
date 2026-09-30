@@ -6313,13 +6313,18 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
 /* A range is tinted across the cells between its two ends, and the tint runs
    under the gaps between days so it reads as one band; its ends are rounded on
    their outer side, logically, so the band starts at the right in Arabic. */
-.ins-cal-grid td.is-in-range { background: var(--ins-tone-brand-bg); }
-.ins-cal-grid td.is-range-start { border-start-start-radius: var(--ins-r-sm); border-end-start-radius: var(--ins-r-sm); }
-.ins-cal-grid td.is-range-end { border-start-end-radius: var(--ins-r-sm); border-end-end-radius: var(--ins-r-sm); }
-.ins-cal-grid td.is-preview { background: var(--ins-tone-brand-bg); }
-.ins-cal-grid td.is-preview-start { border-start-start-radius: var(--ins-r-sm); border-end-start-radius: var(--ins-r-sm); }
-.ins-cal-grid td.is-preview-end { border-start-end-radius: var(--ins-r-sm); border-end-end-radius: var(--ins-r-sm); }
+.ins-cal-grid td:is(.is-in-range, .is-preview) { background: var(--ins-tone-brand-bg); }
+.ins-cal-grid td:is(.is-rc-ss, .is-pc-ss) { border-start-start-radius: var(--ins-r-sm); }
+.ins-cal-grid td:is(.is-rc-se, .is-pc-se) { border-start-end-radius: var(--ins-r-sm); }
+.ins-cal-grid td:is(.is-rc-es, .is-pc-es) { border-end-start-radius: var(--ins-r-sm); }
+.ins-cal-grid td:is(.is-rc-ee, .is-pc-ee) { border-end-end-radius: var(--ins-r-sm); }
 .ins-cal-hint { font-size: var(--ins-fs-xs); font-weight: 700; color: var(--ins-tone-brand); }
+
+/* A range on a wide screen: this month and the next side by side, each named above its grid. */
+.ins-cal--dual { inline-size: min(38rem, calc(100vw - 1rem)); }
+.ins-cal--dual .ins-cal-head { display: grid; grid-template-columns: auto 1fr 1fr auto; column-gap: 1.5rem; }
+.ins-cal-title--next { align-items: center; font-size: var(--ins-fs-sm); font-weight: 700; color: var(--ins-text-1); }
+.ins-cal-months { display: grid; grid-template-columns: 1fr 1fr; column-gap: 1.5rem; }
 
 /* Date and time in one calendar: the drum beside the month, under it on a phone. */
 .ins-cal--datetime {
@@ -6413,8 +6418,10 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
   gap: .5rem;
   margin-block-start: .5rem;
   padding-block-start: .5rem;
+  padding-inline: .25rem;
   border-block-start: 1px solid var(--ins-line);
 }
+.ins-cal-foot > .ins-btn--bare { min-block-size: 2.125rem; padding-inline: .625rem; }
 /* The calendar switch, for a field in another calendar: the segmented control, a
    size down to sit in the footer between Today and Clear. It does not pop when its
    face moves, because the whole calendar is redrawn under it on every month turned,

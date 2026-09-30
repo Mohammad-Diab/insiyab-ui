@@ -298,36 +298,20 @@
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <p>
   <b>ما يصل إلى الخادم لا يتغير:</b> يحمل الحقل المخفي التاريخ ميلاديًا بصيغة ISO مثل <code>2026-09-24</code>،
-  كأي حقل تاريخ. وتبقى <code>min</code> و<code>max</code> والمدى بين حقلين على حالها، غير أن رسائلها تأتي بالتقويم
+  كأي حقل تاريخ. وتبقى <code>min</code> و<code>max</code> والفترة بين تاريخين على حالها، غير أن رسائلها تأتي بالتقويم
   الظاهر:
 </p>
 <figure class="dx"><div class="dx-view">
-  <div class="ins-field-row">
-    <div class="ins-field ins-grow">
-      <label class="ins-label" for="hj-from">من</label>
-      <div class="ins-input-group">
-        <input class="ins-input" id="hj-from" type="date" data-ins-date data-ins-calendar="hijri" data-ins-date-end="#hj-to" name="from" value="2026-09-12">
-      </div>
-    </div>
-    <div class="ins-field ins-grow">
-      <label class="ins-label" for="hj-to">إلى</label>
-      <div class="ins-input-group">
-        <input class="ins-input" id="hj-to" type="date" data-ins-date data-ins-calendar="hijri" data-ins-date-start="#hj-from" name="to" value="2026-10-11">
-      </div>
+  <div class="ins-field">
+    <label class="ins-label" for="hj-span">الفترة</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="hj-span" type="date" data-ins-date data-ins-calendar="hijri" data-ins-date-range="to" name="from" value="2026-09-12" data-ins-date-to="2026-10-11">
     </div>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field-row"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"hj-from"</span><span class="hl-t">&gt;</span>من<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"hj-from"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">data-ins-calendar</span>=<span class="hl-s">"hijri"</span> <span class="hl-a">data-ins-date-end</span>=<span class="hl-s">"#hj-to"</span> <span class="hl-a">name</span>=<span class="hl-s">"from"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-12"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"hj-to"</span><span class="hl-t">&gt;</span>إلى<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"hj-to"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">data-ins-calendar</span>=<span class="hl-s">"hijri"</span> <span class="hl-a">data-ins-date-start</span>=<span class="hl-s">"#hj-from"</span> <span class="hl-a">name</span>=<span class="hl-s">"to"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-10-11"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"hj-span"</span><span class="hl-t">&gt;</span>الفترة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"hj-span"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">data-ins-calendar</span>=<span class="hl-s">"hijri"</span> <span class="hl-a">data-ins-date-range</span>=<span class="hl-s">"to"</span> <span class="hl-a">name</span>=<span class="hl-s">"from"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-12"</span> <span class="hl-a">data-ins-date-to</span>=<span class="hl-s">"2026-10-11"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
@@ -368,7 +352,7 @@
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="api">من الشيفرة</h2>
+<h2 id="api">التحكم بـ JavaScript</h2>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.date(<span class="hl-s">'#hj-date'</span>);                 <span class="hl-c">// '2026-09-24' — ميلادي دائمًا</span>
 <span class="hl-t">Insiyab</span>.date(<span class="hl-s">'#hj-date'</span>, <span class="hl-s">'2026-10-01'</span>);   <span class="hl-c">// يُعطى ميلاديًا ويظهر هجريًا</span>
 
@@ -382,7 +366,7 @@
 </p>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="utilities.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الأدوات المساعدة</span></a><a class="site-pager-link site-pager-link--next" href="palette.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">لوحة الأوامر</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">حقل هجري</a><a href="#typing">الكتابة</a><a href="#page">الصفحة كلها</a><a href="#civil">التقويم الحسابي</a><a href="#api">من الشيفرة</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">حقل هجري</a><a href="#typing">الكتابة</a><a href="#page">الصفحة كلها</a><a href="#civil">التقويم الحسابي</a><a href="#api">التحكم بـ JavaScript</a></nav>
       </div>
     </main>
   </div>

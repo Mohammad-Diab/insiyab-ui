@@ -1754,8 +1754,11 @@
     var range = mode === 'range' ? { from: selected, to: endOf(input) } : dateRange(input);
     var fd = weekStart(locale);
 
+    var dual = !!range && !!(window.matchMedia && window.matchMedia('(min-width: 45rem)').matches);
+    var after = dual ? addMonthsIn(sys, sys.fromParts(y, m, 1), 1) : null;
     cal.textContent = '';
     cal.classList.toggle('ins-cal--datetime', mode === 'datetime');
+    cal.classList.toggle('ins-cal--dual', dual);
     cal.setAttribute('aria-label', t.calendar);
     cal.setAttribute('lang', locale);
     cal.dir = window.getComputedStyle(input).direction;
@@ -1792,9 +1795,13 @@
     title.appendChild(years);
     head.appendChild(prev);
     head.appendChild(title);
+    if (dual) head.appendChild(el('div', 'ins-cal-title ins-cal-title--next', sysFormat(sys, locale, { month: 'long', year: 'numeric' }).format(after)));
     head.appendChild(next);
     cal.appendChild(head);
 
+    var pane = dual ? cal.appendChild(el('div', 'ins-cal-months')) : cal;
+    var shown = dual ? [sys.fromParts(y, m, 1), after] : [sys.fromParts(y, m, 1)];
+    for (var g = 0; g < shown.length; g++) {
     var grid = el('table', 'ins-cal-grid');
     grid.setAttribute('role', 'grid');
     var thead = el('thead'), hr = el('tr');
@@ -1810,7 +1817,7 @@
     grid.appendChild(thead);
 
     var tbody = el('tbody');
-    var first = sys.fromParts(y, m, 1);
+    var first = shown[g];
     var cell = addDays(first, -((first.getDay() - fd + 7) % 7));
     var dayNum = sysFormat(sys, locale, { day: 'numeric' });
     var full = sysFormat(sys, locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -1818,6 +1825,7 @@
       var tr = el('tr');
       for (var k = 0; k < 7; k++) {
         var td = el('td');
+        if (dual && !sameMonthIn(sys, cell, first)) { tr.appendChild(td); cell = addDays(cell, 1); continue; }
         var btn = el('button', 'ins-cal-day', dayNum.format(cell));
         btn.type = 'button';
         btn.setAttribute('data-date', isoOf(cell));
@@ -1842,7 +1850,9 @@
       tbody.appendChild(tr);
     }
     grid.appendChild(tbody);
-    cal.appendChild(grid);
+    pane.appendChild(grid);
+    calCorners(grid, 'is-in-range', 'is-rc-');
+    }
 
     var drum = null;
     if (mode === 'datetime') {
@@ -1966,7 +1976,8 @@
   function calMove(d) {
     calFocus = d;
     var sys = viewCalendar(calFor);
-    if (!sameMonthIn(sys, d, calView)) {
+    var dual = calEl.classList.contains('ins-cal--dual');
+    if (!sameMonthIn(sys, d, calView) && !(dual && sameMonthIn(sys, d, addMonthsIn(sys, calView, 1)))) {
       calView = monthStartIn(sys, d);
       renderCal();
     } else {
@@ -1977,6 +1988,25 @@
     calPreview(d);
   }
 
+  // Rounds only the band's outer corners: a corner of a day is round when the band does not go on past either of its sides.
+  function calCorners(grid, on, pre) {
+    var rows = grid.tBodies[0].rows, m = [], r, c;
+    for (r = 0; r < rows.length; r++) {
+      m.push([]);
+      for (c = 0; c < rows[r].cells.length; c++) m[r].push(rows[r].cells[c].classList.contains(on));
+    }
+    var at = function (y, x) { return y >= 0 && y < m.length && x >= 0 && x < m[y].length && m[y][x]; };
+    for (r = 0; r < rows.length; r++) {
+      for (c = 0; c < rows[r].cells.length; c++) {
+        var td = rows[r].cells[c], x = m[r][c];
+        td.classList.toggle(pre + 'ss', x && !at(r, c - 1) && !at(r - 1, c));
+        td.classList.toggle(pre + 'se', x && !at(r, c + 1) && !at(r - 1, c));
+        td.classList.toggle(pre + 'es', x && !at(r, c - 1) && !at(r + 1, c));
+        td.classList.toggle(pre + 'ee', x && !at(r, c + 1) && !at(r + 1, c));
+      }
+    }
+  }
+
   /* While a range waits for its end, the band follows the pointer or the focused day. */
   function calPreview(d) {
     if (!calFor || dateMode(calFor) !== 'range' || calPick !== 'end') return;
@@ -1984,12 +2014,15 @@
     if (!from) return;
     var tds = calEl.querySelectorAll('.ins-cal-grid td');
     for (var i = 0; i < tds.length; i++) {
+      if (!tds[i].firstChild) continue;
       var c = parseIso(tds[i].firstChild.getAttribute('data-date'));
       var on = !!d && d >= from && c >= from && c <= d;
       tds[i].classList.toggle('is-preview', on);
       tds[i].classList.toggle('is-preview-start', on && sameDay(c, from));
       tds[i].classList.toggle('is-preview-end', on && sameDay(c, d));
     }
+    var grids = calEl.querySelectorAll('.ins-cal-grid');
+    for (var g = 0; g < grids.length; g++) calCorners(grids[g], 'is-preview', 'is-pc-');
   }
 
   function onCalOver(event) {
