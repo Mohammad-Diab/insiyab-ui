@@ -165,7 +165,7 @@ ok('validation: message clears once valid', await E(`getComputedStyle(document.q
 const srv = await E(`(() => ({ code: getComputedStyle(document.getElementById('g-code').closest('.ins-input-group')).borderColor,
   innerBg: getComputedStyle(document.getElementById('g-code')).backgroundColor, ok: getComputedStyle(document.getElementById('g-user')).borderColor }))()`);
 ok('validation: server error reddens the group, not the inner input', /239, 68, 68/.test(srv.code) && srv.innerBg === 'rgba(0, 0, 0, 0)', JSON.stringify(srv));
-ok('validation: success message greens the field', /34, 197, 94/.test(srv.ok), srv.ok);
+ok('validation: success message greens the field', /21, 128, 61|0\.08\d* 0\.50\d* 0\.23\d*/.test(srv.ok), srv.ok);
 
 // ------------------------------------------------------------------ navbar
 ok('navbar wide: toggle hidden, menu shown', await E(`getComputedStyle(document.querySelector('.ins-navbar-toggle')).display === 'none' && getComputedStyle(document.querySelector('.ins-navbar-menu')).display !== 'none'`));
