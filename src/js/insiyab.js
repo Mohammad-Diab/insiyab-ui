@@ -3014,8 +3014,30 @@
       var c = numeric ? x - y : coll ? coll.compare(x, y) : (x < y ? -1 : x > y ? 1 : 0);
       return c ? c * sign : a - b;
     });
+    var before = motionless() ? null : rows.map(function (r) { return r.getBoundingClientRect().top; });
+    table.classList.add('is-sorted');
     for (var i = 0; i < order.length; i++) body.appendChild(rows[order[i]]);
+    if (before) slideRows(rows, before);
     return dir;
+  }
+
+  // Each row starts where it was and glides to its new place.
+  function slideRows(rows, before) {
+    var moved = rows.filter(function (r, i) {
+      var dy = before[i] - r.getBoundingClientRect().top;
+      if (Math.abs(dy) < 1) return false;
+      r.style.transition = 'none';
+      r.style.transform = 'translateY(' + dy + 'px)';
+      return true;
+    });
+    if (!moved.length) return;
+    void rows[0].offsetHeight;
+    moved.forEach(function (r) {
+      r.style.transition = 'transform var(--ins-t-enter) var(--ins-ease)';
+      r.style.transform = '';
+      var done = function () { r.style.transition = ''; r.removeEventListener('transitionend', done); };
+      r.addEventListener('transitionend', done);
+    });
   }
 
   /* The rows' own checkboxes, not the header's and not a nested table's. */
