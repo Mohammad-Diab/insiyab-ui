@@ -286,6 +286,15 @@
     </div>
   </form>
 
+<div class="ins-row">
+  <span class="ins-countdown" id="cd-wait" data-ins-countdown="90" data-ins-countdown-paused></span>
+  <button class="ins-btn" id="cd-go" data-ins-countdown-start="#cd-wait">start</button>
+  <button class="ins-btn" id="cd-stop" data-ins-countdown-stop="#cd-wait">stop</button>
+  <button class="ins-btn" id="cd-again" data-ins-countdown-restart="#cd-wait">restart</button>
+  <span class="ins-countdown" id="cd-api" data-ins-countdown="30" data-ins-countdown-paused></span>
+  <span class="ins-countdown" id="cd-away" data-ins-countdown="45" data-ins-countdown-pause-away></span>
+  <span class="ins-countdown" id="cd-stay" data-ins-countdown="45"></span>
+</div>
 </main>
 
 <script>

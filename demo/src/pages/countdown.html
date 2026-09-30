@@ -20,6 +20,34 @@ document.addEventListener('ins:countdown', (e) => {
 Insiyab.countdown('#hold', 600);                          // من جديد
 </demo-code>
 
+<h3 id="start">البدء والإيقاف عند الطلب</h3>
+<p>
+  أضف <code>data-ins-countdown-paused</code> فيعرض العداد وقته كاملًا وينتظر، ثم تتحكم فيه بأزرار تشير إليه:
+  <code>data-ins-countdown-start</code> يبدؤه، أو يكمله من حيث توقف، و<code>data-ins-countdown-stop</code> يوقفه ويبقي
+  الوقت الباقي ظاهرًا، و<code>data-ins-countdown-restart</code> يعيده من أوله، وهو ما يحتاجه زر «أعد إرسال الرمز»:
+</p>
+<demo-example class="row">
+  <span class="ins-countdown" id="cd-timer" data-ins-countdown="120" data-ins-countdown-paused></span>
+  <button class="ins-btn ins-btn--primary ins-btn--sm" data-ins-countdown-start="#cd-timer">ابدأ</button>
+  <button class="ins-btn ins-btn--secondary ins-btn--sm" data-ins-countdown-stop="#cd-timer">أوقف</button>
+  <button class="ins-btn ins-btn--bare ins-btn--sm" data-ins-countdown-restart="#cd-timer">من جديد</button>
+</demo-example>
+<p>
+  ولا يتوقف العداد إذا انتقل صاحبه إلى نافذة أخرى، فإن أردت أن يتوقف ما دامت الصفحة في الخلفية ثم يكمل حين يعود إليها فأضف
+  <code>data-ins-countdown-pause-away</code>، كمؤقت اختبار لا يُحسب فيه إلا الوقت الذي يقضيه أمامه.
+</p>
+<demo-code lang="html">
+<span class="ins-countdown" data-ins-countdown="1800" data-ins-countdown-pause-away></span>
+</demo-code>
+<p>والأوامر نفسها من JavaScript:</p>
+<demo-code lang="js">
+Insiyab.countdown('#cd-timer', 'start');     // يبدأ، أو يكمل من حيث توقف
+Insiyab.countdown('#cd-timer', 'stop');      // يوقف، ويعيد الثواني الباقية
+Insiyab.countdown('#cd-timer', 'restart');   // من أوله
+Insiyab.countdown('#cd-timer', 60);          // من 60 ثانية
+Insiyab.countdown('#cd-timer');              // الثواني الباقية، أو null ما دام لم يبدأ
+</demo-code>
+
 <h2 id="save">حالة الحفظ</h2>
 <p>
   يخبر <code>.ins-save</code> بمصير آخر تغيير: جارٍ حفظه، ثم حُفظ، أو تعذر حفظه. تضع الحالة في <code>data-ins-state</code>، فإن خلا منها
