@@ -76,6 +76,23 @@
      first paint. This file used to centre the active link on DOMContentLoaded, which
      was after the first paint — the sidebar flashed at the top and then jumped. */
 
+  // The page frosts over while the sides swap, and the new one opens from its start edge like a book.
+  function flipDir(dir) {
+    if (dir === root.getAttribute('dir')) return;
+    var still = root.getAttribute('data-ins-fx') === 'off' || !window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!document.startViewTransition || still) { applyDir(dir); return; }
+    root.style.setProperty('--site-flip-edge', dir === 'ltr' ? 'left' : 'right');
+    root.style.setProperty('--site-flip-turn', dir === 'ltr' ? '28deg' : '-28deg');
+    root.classList.add('site-dir-flip');
+    var clean = function () {
+      root.classList.remove('site-dir-flip');
+      root.style.removeProperty('--site-flip-edge');
+      root.style.removeProperty('--site-flip-turn');
+    };
+    try { document.startViewTransition(function () { applyDir(dir); syncCustomiser(); }).finished.then(clean, clean); }
+    catch (e) { clean(); applyDir(dir); }
+  }
+
   function ready() {
     if (q.get('theme')) Insiyab.theme(q.get('theme'));
     if (q.get('collapsed')) Insiyab.sidebar('collapsed');
@@ -93,7 +110,7 @@
 
       var d = e.target.closest('.site-dir [data-dir]');
       if (d) {
-        applyDir(d.getAttribute('data-dir'));
+        flipDir(d.getAttribute('data-dir'));
         write(KEY_DIR, d.getAttribute('data-dir') === 'rtl' ? null : d.getAttribute('data-dir'));
         syncCustomiser();
         return;
