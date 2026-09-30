@@ -2915,13 +2915,17 @@
      instead of wherever its throttled ticks had got to. */
   var countdowns = [], countTimer = null;
 
-  function countdownSet(node, value) {
+  function countdownSet(node, value, resume) {
     var v = String(value == null ? '' : value).trim();
     var end = /^\d+(\.\d+)?$/.test(v) ? Date.now() + parseFloat(v) * 1000 : Date.parse(v);
     if (isNaN(end)) return null;
+    node.removeAttribute('data-ins-countdown-paused');
     node.__insEnd = end;
-    node.__insWarned = node.__insDone = false;
-    node.classList.remove('is-warn', 'is-done');
+    node.__insLeft = null;
+    if (!resume) {
+      node.__insWarned = node.__insDone = false;
+      node.classList.remove('is-warn', 'is-done');
+    }
     if (countdowns.indexOf(node) === -1) countdowns.push(node);
     if (!countTimer) countTimer = setInterval(countdownTick, 1000);
     countdownDraw(node);
@@ -2930,8 +2934,47 @@
 
   function countdownLeft(node) { return Math.max(0, Math.ceil((node.__insEnd - Date.now()) / 1000)); }
 
+  // Stop keeps the time left on screen; start resumes from it, or begins a waiting timer; restart always begins from the full time.
+  function countdownStop(node) {
+    if (!node.__insEnd) return node.__insLeft != null ? node.__insLeft : null;
+    var left = countdownLeft(node);
+    node.__insEnd = 0;
+    node.__insLeft = left;
+    var at = countdowns.indexOf(node);
+    if (at !== -1) countdowns.splice(at, 1);
+    node.setAttribute('data-ins-countdown-paused', '');
+    countdownPaint(node, left);
+    return left;
+  }
+
+  function countdownStart(node) {
+    if (node.__insEnd) return countdownLeft(node);
+    var left = node.__insLeft;
+    return left ? countdownSet(node, left, true) : countdownSet(node, node.getAttribute('data-ins-countdown'));
+  }
+
+  function countdownAct(node, act) {
+    node.__insAway = false;
+    if (act === 'stop') return countdownStop(node);
+    if (act === 'start') return countdownStart(node);
+    if (act === 'restart') return countdownSet(node, node.getAttribute('data-ins-countdown'));
+    return countdownSet(node, act);
+  }
+
+  // A paused countdown shows the whole of its time and waits for data-ins-countdown-start or Insiyab.countdown().
+  function countdownIdle(node) {
+    var v = String(node.getAttribute('data-ins-countdown') || '').trim();
+    var secs = /^\d+(\.\d+)?$/.test(v) ? Math.ceil(parseFloat(v)) : Math.max(0, Math.ceil((Date.parse(v) - Date.now()) / 1000));
+    if (!isNaN(secs)) countdownPaint(node, secs);
+  }
+
   function countdownDraw(node) {
     var left = countdownLeft(node);
+    countdownPaint(node, left);
+    return countdownFinish(node, left);
+  }
+
+  function countdownPaint(node, left) {
     var d = Math.floor(left / 86400), h = Math.floor(left % 86400 / 3600), m = Math.floor(left % 3600 / 60), sec = left % 60;
     var clock = (d || h ? (d ? pad2(h) : h) + ':' : '') + pad2(m) + ':' + pad2(sec);
     var days = node.querySelector('.ins-countdown-days'), time = node.querySelector('.ins-countdown-clock');
@@ -2943,6 +2986,9 @@
     days.hidden = !d;
     days.textContent = d ? strings(node).days(d) : '';
     time.textContent = clock;
+  }
+
+  function countdownFinish(node, left) {
     var warn = parseFloat(node.getAttribute('data-ins-warn'));
     if (isNaN(warn)) warn = 60;
     if (!node.__insWarned && left <= warn && left > 0) {
@@ -2966,6 +3012,28 @@
     }
     if (!countdowns.length) { clearInterval(countTimer); countTimer = null; }
   }
+
+  // With data-ins-countdown-pause-away a running timer stops while the window is blurred or hidden, and carries on when it comes back.
+  function countdownAway(away) {
+    var nodes = document.querySelectorAll('[data-ins-countdown-pause-away]');
+    for (var i = 0; i < nodes.length; i++) {
+      var node = nodes[i];
+      if (away && node.__insEnd && countdownLeft(node) > 0) { countdownStop(node); node.__insAway = true; }
+      else if (!away && node.__insAway) { node.__insAway = false; countdownStart(node); }
+    }
+  }
+  window.addEventListener('blur', function () { countdownAway(true); });
+  window.addEventListener('focus', function () { countdownAway(false); });
+  document.addEventListener('visibilitychange', function () { countdownAway(document.hidden); });
+
+  // Buttons with data-ins-countdown-start, -stop or -restart="#timer" drive that timer.
+  document.addEventListener('click', function (event) {
+    var btn = event.target.closest ? event.target.closest('[data-ins-countdown-start], [data-ins-countdown-stop], [data-ins-countdown-restart]') : null;
+    if (!btn) return;
+    var act = btn.hasAttribute('data-ins-countdown-stop') ? 'stop' : btn.hasAttribute('data-ins-countdown-restart') ? 'restart' : 'start';
+    var node = resolve(btn.getAttribute('data-ins-countdown-' + act));
+    if (node) countdownAct(node, act);
+  }, false);
 
   /* -------------------------------------------------------- save indicator */
   function saveState(target, state, text) {
@@ -4470,9 +4538,10 @@
   define('countdowns', function (scope) {
     var nodes = scope.querySelectorAll('[data-ins-countdown]');
     for (var i = 0; i < nodes.length; i++) {
-      if (nodes[i].__insEnd) continue;
+      if (nodes[i].__insEnd || nodes[i].__insLeft != null) continue;
       if (!nodes[i].hasAttribute('role')) nodes[i].setAttribute('role', 'timer');
-      countdownSet(nodes[i], nodes[i].getAttribute('data-ins-countdown'));
+      if (nodes[i].hasAttribute('data-ins-countdown-paused')) countdownIdle(nodes[i]);
+      else countdownSet(nodes[i], nodes[i].getAttribute('data-ins-countdown'));
     }
   });
 
@@ -4633,11 +4702,12 @@
       }
       return node ? sortTable(node, dir) : null;
     },
-    /* Seconds left on a countdown, or start it again: seconds, or the moment it ends. */
+    /* Seconds left on a countdown; or 'start', 'stop', 'restart', seconds, or the moment it ends. */
     countdown: function (target, value) {
       var node = resolve(target);
       if (!node) return null;
-      return value === undefined ? (node.__insEnd ? countdownLeft(node) : null) : countdownSet(node, value);
+      if (value === undefined) return node.__insEnd ? countdownLeft(node) : node.__insLeft != null ? node.__insLeft : null;
+      return countdownAct(node, value);
     },
     /* A split's first pane share in percent, or set it. */
     split: function (target, size) {

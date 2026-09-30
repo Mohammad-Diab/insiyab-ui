@@ -185,6 +185,29 @@ ok('scrolled top bar is frosted, on the layer behind the islands, not on the bar
 ok('fx-off: scrolled top bar loses its frost', await E(`(() => { const r = document.documentElement; r.setAttribute('data-ins-fx','off'); r.setAttribute('data-ins-scrolled','');
   const v = getComputedStyle(document.querySelector('.ins-topbar'), '::before').backdropFilter; r.removeAttribute('data-ins-fx'); return v === 'none'; })()`));
 
+// ------------------------------------------------------------------ countdown on demand
+const cd = (id) => E(`document.getElementById('${id}').textContent + '|' + Insiyab.countdown('#${id}')`);
+ok('countdown: a paused one shows its whole time and waits', (await cd('cd-wait')) === '01:30|null', await cd('cd-wait'));
+await E(`document.getElementById('cd-go').scrollIntoView({ block: 'center', behavior: 'instant' }); 0`);
+await b.click('#cd-go'); await b.sleep(1300);
+ok('countdown: its start button sets it running', /^01:2[89]\|(88|89)$/.test(await cd('cd-wait')), await cd('cd-wait'));
+await b.click('#cd-stop'); const held = await cd('cd-wait'); await b.sleep(1300);
+ok('countdown: stop holds the time left, on screen and in the API', (await cd('cd-wait')) === held && /\|(88|89)$/.test(held), `${held} → ${await cd('cd-wait')}`);
+await b.click('#cd-go'); await b.sleep(100);
+ok('countdown: start carries on from where it stopped', (await cd('cd-wait')) === held, `${held} → ${await cd('cd-wait')}`);
+await b.click('#cd-again'); await b.sleep(100);
+ok('countdown: restart begins again from the full time', (await cd('cd-wait')) === '01:30|90', await cd('cd-wait'));
+await E(`Insiyab.countdown('#cd-api', 'start'); 0`);
+ok("countdown: Insiyab.countdown(el, 'start') starts a paused one", (await cd('cd-api')) === '00:30|30' && !(await E(`document.getElementById('cd-api').hasAttribute('data-ins-countdown-paused')`)), await cd('cd-api'));
+ok("countdown: and 'stop' returns the seconds left", (await E(`Insiyab.countdown('#cd-api', 'stop')`)) === 30);
+await E(`window.dispatchEvent(new Event('blur')); 0`);
+const away = await cd('cd-away'), stay = await cd('cd-stay');
+await b.sleep(1300);
+ok('countdown: with pause-away it holds while the window is away', (await cd('cd-away')) === away, `${away} → ${await cd('cd-away')}`);
+ok('countdown: without it, it keeps counting', (await cd('cd-stay')) !== stay, `${stay} → ${await cd('cd-stay')}`);
+await E(`window.dispatchEvent(new Event('focus')); 0`); await b.sleep(1300);
+ok('countdown: and carries on when the window comes back', (await cd('cd-away')) !== away && !(await E(`document.getElementById('cd-away').hasAttribute('data-ins-countdown-paused')`)), `${away} → ${await cd('cd-away')}`);
+
 ok('no console errors or exceptions', b.logs.length === 0, b.logs.join(' | '));
 await b.close();
 end();
