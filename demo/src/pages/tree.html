@@ -38,7 +38,7 @@
   </ul>
 </demo-example>
 
-<h2 id="keyboard">لوحة المفاتيح</h2>
+<h2 id="keyboard" data-level="advanced">لوحة المفاتيح</h2>
 <p>تصل إلى الشجرة بضغطة Tab واحدة، ثم تتنقل فيها بالأسهم كما تتنقل في شجرة الملفات:</p>
 <ul>
   <li><kbd>↑</kbd> <kbd>↓</kbd> تنقلك بين الصفوف الظاهرة، و<kbd>Home</kbd> <kbd>End</kbd> إلى أولها وآخرها.</li>
@@ -71,7 +71,7 @@
   </ul>
 </demo-example>
 
-<h2 id="api">من الشيفرة</h2>
+<h2 id="api" data-level="advanced">التحكم بـ JavaScript</h2>
 <demo-code lang="js">
 document.addEventListener('ins:tree', (e) => {
   console.log(e.detail.action, e.detail.label, e.detail.item);   // select · open · close · check
@@ -82,7 +82,7 @@ Insiyab.tree('#files', 'open');       // يفتح كل الفروع، أو 'clos
 Insiyab.tree('#files');               // البند المختار — أو المحددة في شجرة مربعات
 </demo-code>
 
-<h2 id="attributes">السمات</h2>
+<h2 id="attributes" data-level="advanced">السمات</h2>
 <div class="ins-panel site-ref">
   <div class="ins-panel-body ins-panel-body--flush">
     <div class="ins-table-wrap">

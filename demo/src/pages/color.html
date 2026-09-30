@@ -30,13 +30,13 @@ Insiyab.brand('#0F766E');   // يطبق
 Insiyab.brand();            // يعيد اللون الحالي
 </demo-code>
 
-<h2 id="measured">لون النص فوق لون الهوية</h2>
+<h2 id="measured" data-level="advanced">لون النص فوق لون الهوية</h2>
 <p>
   تحسب <code>brand()</code> تباين اللون مع الأبيض ومع الأسود القريب، ثم تكتب أوضحهما في
   <code>--ins-on-primary</code> ليكون لون النص فوقه. جرب الذهبي <code>#C9A063</code> أعلاه وانظر إلى زر «حفظ».
 </p>
 
-<h2 id="server">من الخادم</h2>
+<h2 id="server" data-level="advanced">من الخادم</h2>
 <p>إذا كان لكل عميل في تطبيقك لون هويته، فالطريق يسير: يعيد الخادم اللون مع بيانات الجلسة، وتطبقه الصفحة.</p>
 <demo-code lang="js">
 const res = await fetch('/api/session');
@@ -44,7 +44,7 @@ const { branding } = await res.json();     // { primary: '#1D4ED8', … }
 Insiyab.brand(branding.primary);
 </demo-code>
 
-<h2 id="css-only">بلا جافاسكربت</h2>
+<h2 id="css-only" data-level="advanced">بلا جافاسكربت</h2>
 <p>
   إذا اكتفيت بملف الأنماط فاضبط اللون ومشتقاته بنفسك. وهذه قيم <code>#0F766E</code> في الوضع الفاتح،
   أما قيم الداكن فتأخذها من <code>Insiyab.color.derive(hex, 'dark')</code>.
@@ -63,7 +63,7 @@ Insiyab.brand(branding.primary);
 }
 </demo-code>
 
-<h2 id="tones">النبرات</h2>
+<h2 id="tones" data-level="advanced">النبرات</h2>
 <p>
   لكل نبرة ثلاثة متغيرات من صبغة واحدة: <code>--ins-tone-*</code> للنص، و<code>-bg</code> للخلفية،
   و<code>-bd</code> للحد.

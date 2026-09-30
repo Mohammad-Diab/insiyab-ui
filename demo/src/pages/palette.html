@@ -101,7 +101,7 @@
   </div>
 </div>
 
-<h2 id="api">من الشيفرة</h2>
+<h2 id="api">التحكم بـ JavaScript</h2>
 <p>
   أما العناصر التي لا وجود لها في الصفحة فتضيفها <code>Insiyab.palette.add()</code>: فمع <code>run</code> يكون
   العنصر زرًا يستدعي الدالة، ومع <code>href</code> يكون رابطًا. وإن خلت الصفحة من لوحة أنشأتها.
@@ -137,7 +137,7 @@ document.addEventListener('ins:palette', (e) => {
     document.getElementById('pal-demo-add').addEventListener('click', function () {
       var n = document.querySelectorAll('#pal-demo [data-ins-palette-key^="demo-"]').length + 1;
       Insiyab.palette.add({
-        label: 'أمر ' + n, key: 'demo-' + n, group: 'من الشيفرة', keywords: 'added',
+        label: 'أمر ' + n, key: 'demo-' + n, group: 'مضافة بـ JavaScript', keywords: 'added',
         run: function () { Insiyab.toast('أمر ' + n, 'ok'); }
       }, '#pal-demo');
       Insiyab.palette('#pal-demo', 'open');

@@ -115,17 +115,23 @@
       </span>
     </a>
 
+    <!-- The docs' two levels: simple lists what most projects need, advanced lists everything. -->
+    <div class="ins-seg site-mode" role="group" aria-label="مستوى التوثيق">
+      <button type="button" data-mode="simple" data-ins-tip="ما يحتاجه أغلب المشاريع">بسيط</button>
+      <button type="button" data-mode="advanced" data-ins-tip="كل الصفحات والأقسام، ومعها الاستعمال المتقدم">متقدم</button>
+    </div>
+
       <div class="ins-shell-group">البداية</div>
       <a class="ins-shell-link" href="index.html" data-keywords="Introduction"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg>مقدمة</a>
       <a class="ins-shell-link" href="start.html" data-keywords="Quick start انسخ مجلد المكتبة إلى مشروعك، وأضف وسومها إلى الصفحة، فتكون جاهزة في دقيقة."><svg class="ico" aria-hidden="true"><use href="#i-rocket"/></svg>البدء السريع</a>
-      <a class="ins-shell-link" href="javascript.html" data-keywords="JavaScript السمات هي الباب، والواجهة البرمجية مخرج للطوارئ: كل ما يتحرك في المكتبة يعمل بسمة تكتبها، دون سطر جافاسكربت واحد."><svg class="ico" aria-hidden="true"><use href="#i-code"/></svg>جافاسكربت</a>
+      <a class="ins-shell-link site-adv" href="javascript.html" data-keywords="JavaScript السمات هي الباب، والواجهة البرمجية مخرج للطوارئ: كل ما يتحرك في المكتبة يعمل بسمة تكتبها، دون سطر جافاسكربت واحد."><svg class="ico" aria-hidden="true"><use href="#i-code"/></svg>جافاسكربت</a>
       <a class="ins-shell-link" href="faq.html" data-keywords="FAQ ما يسأل عنه الناس قبل أن يعتمدوا المكتبة، بأجوبة قصيرة."><svg class="ico" aria-hidden="true"><use href="#i-help"/></svg>أسئلة شائعة</a>
 
       <div class="ins-shell-group">التخصيص</div>
       <a class="ins-shell-link" href="color.html" data-keywords="Color &amp; branding اختر لونًا واحدًا، وتُشتق منه البقية: التدرج والظلال وحلقات التركيز وخلفية الصفحة."><svg class="ico" aria-hidden="true"><use href="#i-palette"/></svg>اللون والهوية</a>
       <a class="ins-shell-link" href="dark.html" data-keywords="Dark mode ألوان صيغت لليل خاصة لا قُلبت عن النهار. يتبع النظام من تلقاء نفسه، ويحفظ لكل مستخدم اختياره."><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg>الوضع الداكن</a>
       <a class="ins-shell-link" href="rtl.html" data-keywords="Arabic &amp; RTL الكتابة من اليمين إلى اليسار أصل فيها لا إضافة: خصائص CSS المنطقية (logical properties) في كل قاعدة، فلا ملف يعكس الصفحة."><svg class="ico" aria-hidden="true"><use href="#i-languages"/></svg>العربية والاتجاه</a>
-      <a class="ins-shell-link" href="motion.html" data-keywords="Motion منحنى واحد، ودخول أهدأ من الخروج، ولا حركة تدور بلا غاية."><svg class="ico" aria-hidden="true"><use href="#i-sparkle"/></svg>الحركة</a>
+      <a class="ins-shell-link site-adv" href="motion.html" data-keywords="Motion منحنى واحد، ودخول أهدأ من الخروج، ولا حركة تدور بلا غاية."><svg class="ico" aria-hidden="true"><use href="#i-sparkle"/></svg>الحركة</a>
 
       <div class="ins-shell-group">التخطيط</div>
       <a class="ins-shell-link" href="shell.html" data-keywords="App shell شريط جانبي من زجاج، وشريط علوي من جزر عائمة، وهذه الصفحة نفسها مبنية بهما."><svg class="ico" aria-hidden="true"><use href="#i-layout"/></svg>هيكل التطبيق</a>
@@ -175,12 +181,12 @@
 
       <div class="ins-shell-group">الإضافات</div>
       <a class="ins-shell-link" href="hijri.html" data-keywords="Hijri calendar حقل التاريخ بالتقويم الهجري، أم القرى أو الحسابي، ومفتاح يقلبه إلى الميلادي. أما الخادم فيستلم التاريخ الميلادي كما اعتاد."><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg>التقويم الهجري</a>
-      <a class="ins-shell-link" href="palette.html" data-keywords="Command palette لوحة الأوامر (Command palette) بحث واحد يصل إلى كل صفحة وكل أمر، تفتحه بـ Ctrl+K. عناصره روابط الصفحة وأزرارها نفسها، ويجمع روابط القائمة الجانبية وحده."><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg>لوحة الأوامر</a>
+      <a class="ins-shell-link site-adv" href="palette.html" data-keywords="Command palette لوحة الأوامر (Command palette) بحث واحد يصل إلى كل صفحة وكل أمر، تفتحه بـ Ctrl+K. عناصره روابط الصفحة وأزرارها نفسها، ويجمع روابط القائمة الجانبية وحده."><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg>لوحة الأوامر</a>
       <a class="ins-shell-link" href="otp.html" data-keywords="One-time code حقل رمز التحقق (OTP) المرسل في رسالة، لكل رقم مربع، وهو في الحقيقة حقل واحد: يُلصق فيه، ويقترحه الهاتف، ويقرؤه قارئ الشاشة."><svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg>رمز التحقق</a>
       <a class="ins-shell-link" href="phone.html" data-keywords="Phone number حقل الهاتف بدولته: يُكتب الرقم كما يكتبه أهل بلده، ويصل إلى الخادم بصيغة E.164 الدولية."><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>رقم الهاتف</a>
-      <a class="ins-shell-link" href="birthdate.html" data-keywords="Birth date يكتبه صاحبه كما يقوله، أو يختاره بإصبعه: حقل لتاريخ الميلاد لا يقبل تاريخًا مستحيلًا، ويصل إلى الخادم بصيغة ISO."><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg>تاريخ الميلاد<span class="ins-shell-link-badge">جديد</span></a>
+      <a class="ins-shell-link site-adv" href="birthdate.html" data-keywords="Birth date يكتبه صاحبه كما يقوله، أو يختاره بإصبعه: حقل لتاريخ الميلاد لا يقبل تاريخًا مستحيلًا، ويصل إلى الخادم بصيغة ISO."><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg>تاريخ الميلاد<span class="ins-shell-link-badge">جديد</span></a>
       <a class="ins-shell-link" href="file.html" data-keywords="File upload اسحب الملفات إلى منطقة الإفلات فتظهر في قائمة، وتبقى في حقلها الحقيقي فتُرسل مع النموذج كما هي."><svg class="ico" aria-hidden="true"><use href="#i-upload"/></svg>رفع الملفات</a>
-      <a class="ins-shell-link" href="scrollspy.html" data-keywords="Scrollspy قائمة محتويات (Scrollspy) تتبع القارئ، فتبرز رابط القسم الذي يقرؤه، في الصفحة أو في صندوق له تمريره الخاص."><svg class="ico" aria-hidden="true"><use href="#i-list"/></svg>تتبع القراءة</a>
+      <a class="ins-shell-link site-adv" href="scrollspy.html" data-keywords="Scrollspy قائمة محتويات (Scrollspy) تتبع القارئ، فتبرز رابط القسم الذي يقرؤه، في الصفحة أو في صندوق له تمريره الخاص."><svg class="ico" aria-hidden="true"><use href="#i-list"/></svg>تتبع القراءة</a>
       <a class="ins-shell-link" href="timeline.html" data-keywords="Timeline ما جرى بترتيبه: مسار طلب، أو نشاط حساب، أو تاريخ ملف، وأوقات نسبية تُكتب كما تُقال."><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg>الخط الزمني</a>
       <a class="ins-shell-link" href="tree.html" data-keywords="Tree قوائم متداخلة تصير شجرة: ملفات أو تصنيفات أو صلاحيات، تتنقل فيها بالأسهم، ومعها مربعات اختيار متسلسلة."><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>الشجرة</a>
       <a class="ins-shell-link" href="charts.html" data-keywords="Charts أعمدة وخطوط وحلقات وتوزيعات ترسم من جدول، بألوان المكتبة واتجاه القراءة، وتبقى أرقامها مقروءة لقارئ الشاشة."><svg class="ico" aria-hidden="true"><use href="#i-chart"/></svg>الرسوم البيانية<span class="ins-shell-link-badge">جديد</span></a>
@@ -197,9 +203,9 @@
       <a class="ins-shell-link" href="tpl-error.html" data-keywords="Error page template صفحة «غير موجودة» في وسط الشاشة، فيها بحث وطريق للعودة."><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg>صفحة الخطأ<span class="ins-shell-link-badge">جديد</span></a>
 
       <div class="ins-shell-group">الملحقات</div>
-      <a class="ins-shell-link" href="navbar.html" data-keywords="Navbar شريط تنقل (Navbar) للمواقع لا للتطبيقات: جزيرة زجاجية تنطوي خلف زر على الهاتف."><svg class="ico" aria-hidden="true"><use href="#i-compass"/></svg>شريط الموقع</a>
-      <a class="ins-shell-link" href="carousel.html" data-keywords="Carousel عرض شرائح (Carousel) في صف تسحبه بإصبعك، وأزرار ونقاط وأسهم تتبع اتجاه القراءة، ولا يتحرك من تلقاء نفسه."><svg class="ico" aria-hidden="true"><use href="#i-slides"/></svg>عرض الشرائح</a>
-      <a class="ins-shell-link" href="colorpicker.html" data-keywords="Color picker حقل لون بمنتقٍ كامل، يخبرك قبل الحفظ هل يصلح اللون للنص، بتباينه على الأبيض وعلى الأسود."><svg class="ico" aria-hidden="true"><use href="#i-droplet"/></svg>منتقي الألوان</a>
+      <a class="ins-shell-link site-adv" href="navbar.html" data-keywords="Navbar شريط تنقل (Navbar) للمواقع لا للتطبيقات: جزيرة زجاجية تنطوي خلف زر على الهاتف."><svg class="ico" aria-hidden="true"><use href="#i-compass"/></svg>شريط الموقع</a>
+      <a class="ins-shell-link site-adv" href="carousel.html" data-keywords="Carousel عرض شرائح (Carousel) في صف تسحبه بإصبعك، وأزرار ونقاط وأسهم تتبع اتجاه القراءة، ولا يتحرك من تلقاء نفسه."><svg class="ico" aria-hidden="true"><use href="#i-slides"/></svg>عرض الشرائح</a>
+      <a class="ins-shell-link site-adv" href="colorpicker.html" data-keywords="Color picker حقل لون بمنتقٍ كامل، يخبرك قبل الحفظ هل يصلح اللون للنص، بتباينه على الأبيض وعلى الأسود."><svg class="ico" aria-hidden="true"><use href="#i-droplet"/></svg>منتقي الألوان</a>
       <a class="ins-shell-link is-active" href="reveal.html" aria-current="page" data-keywords="Entrance motion &amp; scroll reveal أبناء حاوية يدخلون تباعًا حين تظهر على الشاشة (reveal)، وثلاثة كلاسات تمنح عنصرًا واحدًا حركة دخول."><svg class="ico" aria-hidden="true"><use href="#i-sparkle"/></svg>حركات الدخول</a>
   </aside>
   <div class="ins-shell-scrim"></div>
@@ -309,7 +315,7 @@
     });
   });
 </script>
-        <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="colorpicker.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">منتقي الألوان</span></a><span></span></nav>
+        <nav class="site-pager site-adv" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="colorpicker.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">منتقي الألوان</span></a><span></span></nav><nav class="site-pager site-simple" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="tpl-error.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">صفحة الخطأ</span></a><span></span></nav>
         </div>
         
       </div>
