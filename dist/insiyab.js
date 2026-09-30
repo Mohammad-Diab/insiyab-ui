@@ -758,10 +758,26 @@
     } else if (target.tagName === 'DETAILS') target.open = false;
     else if (target.classList.contains('ins-navbar')) navbar(target, false);
     else if (target.classList.contains('ins-toast')) target.classList.add('is-going');
+    else if (target.classList.contains('ins-alert') && !target.hidden && !motionless()) alertGo(target);
     else target.hidden = true;
 
     emit('ins:dismiss', { target: target });
     return target;
+  }
+
+  // The alert fades, its space closes, and only then is it hidden.
+  function alertGo(alert) {
+    if (alert.classList.contains('is-going')) return;
+    var done = function (event) {
+      if (event && event.target !== alert) return;
+      alert.removeEventListener('animationend', done);
+      clearTimeout(late);
+      alert.classList.remove('is-going');
+      alert.hidden = true;
+    };
+    var late = setTimeout(done, 1000);
+    alert.addEventListener('animationend', done);
+    alert.classList.add('is-going');
   }
 
   /* ----------------------------------------------------------------- tabs */

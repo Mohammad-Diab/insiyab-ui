@@ -133,6 +133,7 @@ await b.click('#demo-confirm .ins-dialog-foot [data-ins-dismiss]');
 await b.sleep(300);
 ok('dismiss: closes its dialog', await E(`!document.getElementById('demo-confirm').open`));
 await b.click('#dismiss-me [data-ins-dismiss]');
+await b.sleep(500);
 ok('dismiss: hides its alert', await E(`document.getElementById('dismiss-me').hidden && getComputedStyle(document.getElementById('dismiss-me')).display === 'none'`));
 
 // ------------------------------------------------------------------ password
