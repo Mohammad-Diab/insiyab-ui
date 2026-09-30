@@ -3277,7 +3277,7 @@ th[aria-sort="descending"] > .ins-sort::after {
    pencil at its end; a click, Enter or F2 turns it into a field, Enter or leaving
    keeps the change and Escape puts the old value back. */
 .ins-table td[data-ins-edit] { cursor: text; outline: 0; }
-.ins-table td[data-ins-edit]:not(.is-editing)::after {
+.ins-table td[data-ins-edit]::after {
   content: "";
   display: inline-block;
   vertical-align: middle;
@@ -3292,8 +3292,13 @@ th[aria-sort="descending"] > .ins-sort::after {
 }
 .ins-table td[data-ins-edit]:is(:hover, :focus-visible)::after { opacity: 1; }
 .ins-table td[data-ins-edit]:focus-visible { box-shadow: inset 0 0 0 2px rgba(var(--ins-primary-rgb), .45); }
-.ins-table td.is-editing { padding-block: .375rem; }
-.ins-table td.is-editing > :is(.ins-input, .ins-select) { inline-size: 100%; min-inline-size: 6rem; }
+.ins-table td.is-editing { position: relative; }
+.ins-table td.is-editing::after { visibility: hidden; }
+.ins-table td.is-editing > .ins-edit-ghost { visibility: hidden; }
+.ins-table td.is-editing > :is(.ins-input, .ins-select) {
+  position: absolute; inset-block: 0; inset-inline: calc(1.25rem - .625rem - 1px);
+  inline-size: auto; block-size: var(--ins-ctl-h); margin-block: auto; text-align: inherit;
+}
 
 /* ---------------------------------------------------------------- sticky */
 /* A long table in a box of its own: `.ins-table-wrap--sticky` scrolls inside a
