@@ -5608,6 +5608,7 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
   animation: ins-spin .7s linear infinite;
 }
 .ins-spinner--sm { inline-size: 15px; block-size: 15px; border-width: 2px; }
+.ins-btn .ins-spinner { border-color: color-mix(in srgb, currentColor 28%, transparent); border-block-start-color: currentColor; }
 @keyframes ins-spin { to { transform: rotate(360deg); } }
 .ins-loading { display: grid; place-items: center; min-block-size: 200px; }
 
