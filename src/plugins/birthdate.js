@@ -230,8 +230,9 @@
       };
       control.addEventListener('click', function (e) {
         if (btn.contains(e.target)) return;
+        if (e.target.closest('.ins-birth-seg') && !e.target.classList.contains('ins-birth-in')) return;
         if (!e.target.closest('.ins-birth-seg')) focusPart(firstOpen());
-        st.open(true);
+        if (isOpen()) pop.hidePopover(); else st.open(true);
       });
       document.addEventListener('pointerdown', function (e) { if (isOpen() && !box.contains(e.target)) pop.hidePopover(); }, true);
       box.addEventListener('focusout', function (e) { if (isOpen() && e.relatedTarget && !box.contains(e.relatedTarget)) pop.hidePopover(); });
