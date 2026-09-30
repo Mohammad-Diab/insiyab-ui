@@ -1,11 +1,4 @@
-/* ==========================================================================
-   Insiyab · One-time code plugin
-   ==========================================================================
-
-   One real input, stretched under a row of boxes. The input keeps focus, the
-   caret, autofill and the clicks — the boxes let every press through — and the
-   boxes only draw what it holds. Each box is the library's field: its radius, its
-   hairline, its lift and halo on the one that takes the next character. */
+/* Insiyab · One-time code plugin: one real input under one field-like block, with a dot under each character still to type. */
 
 .ins-otp {
   --ins-otp-n: 6;
@@ -13,9 +6,6 @@
   display: inline-flex;
   max-inline-size: 100%;
   direction: ltr;
-  /* The digits run left to right, but the row sits where the page starts a line —
-     under an Arabic label, on the right — rather than stretched across a field
-     and pushed to the left by its own direction. */
   align-self: start;
   justify-self: start;
 }
@@ -38,8 +28,6 @@
   cursor: text;
 }
 .ins-otp-input::selection { background: transparent; }
-/* Autofill paints its own fill under the text; held off, or it would tint the
-   boxes a pale blue the moment a code was suggested. */
 .ins-otp-input:-webkit-autofill {
   -webkit-text-fill-color: transparent;
   transition: background-color 600000s 0s;
@@ -49,58 +37,69 @@
   position: relative;
   z-index: 1;
   display: flex;
-  gap: .5rem;
-  pointer-events: none;
-}
-
-.ins-otp-cell {
-  display: grid;
-  place-items: center;
-  /* Never wider than the screen: ten boxes on a phone shrink rather than spill. */
-  inline-size: min(2.75rem, calc((100vw - 3rem) / var(--ins-otp-n) - .5rem));
+  justify-content: center;
+  gap: .25rem;
   block-size: 3.25rem;
-  border-radius: var(--ins-r-md);
+  padding-inline: 1.125rem;
   border: 1px solid var(--ins-ctl-bd);
+  border-radius: var(--ins-r-md);
   background: var(--ins-ctl-bg);
   box-shadow: var(--ins-bevel-dim), var(--ins-sh-subtle);
-  color: var(--ins-text-1);
-  font-family: var(--ins-font-body-en);
-  font-size: 1.375rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
+  pointer-events: none;
   transition: border-color var(--ins-t-base) var(--ins-ease),
               box-shadow var(--ins-t-base) var(--ins-ease),
-              background var(--ins-t-base) var(--ins-ease),
-              transform var(--ins-t-base) var(--ins-ease);
+              background var(--ins-t-base) var(--ins-ease);
 }
-.ins-otp:hover .ins-otp-cell:not(.is-active) { border-color: rgba(var(--ins-primary-rgb), .30); }
-.ins-otp-cell.is-filled { animation: ins-pop-in var(--ins-t-pop) var(--ins-ease); }
-
-/* The box the next character goes into: the field's own focus, the lift and the
-   halo, and a caret drawn in it while it is empty. The caret does not blink —
-   nothing here moves on its own. */
-.ins-otp-cell.is-active {
+.ins-otp:hover:not(:focus-within) .ins-otp-cells { border-color: rgba(var(--ins-primary-rgb), .30); background: var(--ins-ctl-bg-hover); }
+.ins-otp:focus-within .ins-otp-cells {
   background: var(--ins-glass-strong);
   border-color: rgba(var(--ins-primary-rgb), .55);
   box-shadow: var(--ins-glow), var(--ins-bevel-dim), 0 4px 16px rgba(var(--ins-primary-rgb), .10);
-  transform: translateY(-1px);
 }
+
+.ins-otp-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: min(1.5rem, calc((100vw - 5rem) / var(--ins-otp-n)));
+  padding-block-end: .5rem;
+  color: var(--ins-text-1);
+  font-family: var(--ins-font-body-en);
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.ins-otp-cell::before {
+  content: "";
+  position: absolute;
+  inset-block-end: .3rem;
+  inset-inline-start: calc(50% - .15rem);
+  inline-size: .3rem;
+  block-size: .3rem;
+  border-radius: 50%;
+  background: var(--ins-ctl-bd);
+  transition: background var(--ins-t-pop) var(--ins-ease), transform var(--ins-t-pop) var(--ins-ease-spring);
+}
+.ins-otp-cell.is-filled { animation: ins-pop-in var(--ins-t-pop) var(--ins-ease); }
+.ins-otp-cell.is-filled::before { background: var(--ins-primary); transform: scale(1.15); }
 .ins-otp-cell.is-active:not(.is-filled)::after {
   content: "";
   inline-size: 2px;
-  block-size: 1.375rem;
+  block-size: 1.5rem;
   border-radius: 1px;
   background: var(--ins-tone-brand-soft);
 }
 
-.ins-otp:has(> .ins-otp-input:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)) .ins-otp-cell {
+.ins-otp:has(> .ins-otp-input:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)) .ins-otp-cells {
   border-color: var(--ins-tone-bad-bd);
   background: var(--ins-tone-bad-bg);
 }
-.ins-otp:has(> .ins-otp-input:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)) .ins-otp-cell.is-active {
+.ins-otp:has(> .ins-otp-input:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)):focus-within .ins-otp-cells {
   border-color: var(--ins-tone-bad);
   box-shadow: var(--ins-glow-bad), var(--ins-bevel-dim);
 }
+.ins-otp:has(> .ins-otp-input:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)) .ins-otp-cell.is-filled::before { background: var(--ins-tone-bad); }
 
 .ins-otp:has(> .ins-otp-input:disabled) { opacity: .55; }
 .ins-otp:has(> .ins-otp-input:disabled) .ins-otp-input { cursor: not-allowed; }

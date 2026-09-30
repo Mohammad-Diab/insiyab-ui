@@ -3,7 +3,7 @@
    Insiyab · One-time code plugin
    ==========================================================================
 
-   The verification-code field, one box per digit. Load it after insiyab.js, with
+   The verification-code field, one block with a dot per digit. Load it after insiyab.js, with
    its stylesheet:
 
      <link rel="stylesheet" href="plugins/insiyab-otp.css">
@@ -12,7 +12,7 @@
 
      <input data-ins-otp="6" name="code" aria-label="رمز التحقّق" required>
 
-   **It stays one input.** The boxes are drawn over a single real field, so the
+   **It stays one input.** The block is drawn over a single real field, so the
    phone's "code from Messages" suggestion, a paste of the whole code, a password
    manager and a screen reader all meet one ordinary text field — which is what each
    of them is built for, and what six separate inputs would have broken one way or
@@ -22,11 +22,11 @@
      data-ins-otp-chars="alnum"  letters too, upper-cased; digits only by default
      data-ins-otp-submit         submit the form when the last one is entered
 
-   Typing is always at the end — the next box — and Backspace takes the last one
+   Typing is always at the end, and Backspace takes the last one
    off. Arabic-Indic digits are read as Latin ones, and a paste keeps only the code:
    "رمزك هو ١٢٣٤٥٦" fills 123456. A complete code fires `ins:otp` with the value.
    After the server turns a code down, mark the field `aria-invalid="true"`: the
-   boxes turn red, and the mark comes off by itself as the code is typed again.
+   field turns red, and the mark comes off by itself as the code is typed again.
    ========================================================================== */
 
 (function (window, document) {
