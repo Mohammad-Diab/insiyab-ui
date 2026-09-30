@@ -25,6 +25,8 @@
      <demo-code lang="html|js|css|sh">…source…</demo-code>
          a listing on its own. Write the source as-is; it is escaped here.
 
+   `level: 'simple' | 'advanced'` in NAV, or `data-level` on an <h2>/<h3>, shows that page or section in that mode only; untagged shows in both.
+
    Run through `node build.mjs`, which calls buildSite() after the library.
    ========================================================================== */
 
@@ -47,7 +49,7 @@ export const NAV = [
     { slug: 'index', title: 'مقدمة', en: 'Introduction', icon: 'home', hero: true },
     { slug: 'start', title: 'البدء السريع', en: 'Quick start', icon: 'rocket',
       lead: 'انسخ مجلد المكتبة إلى مشروعك، وأضف وسومها إلى الصفحة، فتكون جاهزة في دقيقة.' },
-    { slug: 'javascript', title: 'جافاسكربت', en: 'JavaScript', icon: 'code',
+    { slug: 'javascript', level: 'advanced', title: 'جافاسكربت', en: 'JavaScript', icon: 'code',
       lead: 'السمات هي الباب، والواجهة البرمجية مخرج للطوارئ: كل ما يتحرك في المكتبة يعمل بسمة تكتبها، دون سطر جافاسكربت واحد.' },
     { slug: 'faq', title: 'أسئلة شائعة', en: 'FAQ', icon: 'help',
       lead: 'ما يسأل عنه الناس قبل أن يعتمدوا المكتبة، بأجوبة قصيرة.' }
@@ -59,7 +61,7 @@ export const NAV = [
       lead: 'ألوان صيغت لليل خاصة لا قُلبت عن النهار. يتبع النظام من تلقاء نفسه، ويحفظ لكل مستخدم اختياره.' },
     { slug: 'rtl', title: 'العربية والاتجاه', en: 'Arabic & RTL', icon: 'languages',
       lead: 'الكتابة من اليمين إلى اليسار أصل فيها لا إضافة: خصائص CSS المنطقية (logical properties) في كل قاعدة، فلا ملف يعكس الصفحة.' },
-    { slug: 'motion', title: 'الحركة', en: 'Motion', icon: 'sparkle',
+    { slug: 'motion', level: 'advanced', title: 'الحركة', en: 'Motion', icon: 'sparkle',
       lead: 'منحنى واحد، ودخول أهدأ من الخروج، ولا حركة تدور بلا غاية.' }
   ] },
   { group: 'التخطيط', en: 'Layout', pages: [
@@ -147,17 +149,17 @@ export const NAV = [
   { group: 'الإضافات', en: 'Plugins', pages: [
     { slug: 'hijri', title: 'التقويم الهجري', en: 'Hijri calendar', icon: 'moon',
       lead: 'حقل التاريخ بالتقويم الهجري، أم القرى أو الحسابي، ومفتاح يقلبه إلى الميلادي. أما الخادم فيستلم التاريخ الميلادي كما اعتاد.' },
-    { slug: 'palette', title: 'لوحة الأوامر', en: 'Command palette', icon: 'search',
+    { slug: 'palette', level: 'advanced', title: 'لوحة الأوامر', en: 'Command palette', icon: 'search',
       lead: 'لوحة الأوامر (Command palette) بحث واحد يصل إلى كل صفحة وكل أمر، تفتحه بـ Ctrl+K. عناصره روابط الصفحة وأزرارها نفسها، ويجمع روابط القائمة الجانبية وحده.' },
     { slug: 'otp', title: 'رمز التحقق', en: 'One-time code', icon: 'lock',
       lead: 'حقل رمز التحقق (OTP) المرسل في رسالة، لكل رقم مربع، وهو في الحقيقة حقل واحد: يُلصق فيه، ويقترحه الهاتف، ويقرؤه قارئ الشاشة.' },
     { slug: 'phone', title: 'رقم الهاتف', en: 'Phone number', icon: 'phone',
       lead: 'حقل الهاتف بدولته: يُكتب الرقم كما يكتبه أهل بلده، ويصل إلى الخادم بصيغة E.164 الدولية.' },
-    { slug: 'birthdate', title: 'تاريخ الميلاد', en: 'Birth date', icon: 'calendar', fresh: true,
+    { slug: 'birthdate', level: 'advanced', title: 'تاريخ الميلاد', en: 'Birth date', icon: 'calendar', fresh: true,
       lead: 'يكتبه صاحبه كما يقوله، أو يختاره بإصبعه: حقل لتاريخ الميلاد لا يقبل تاريخًا مستحيلًا، ويصل إلى الخادم بصيغة ISO.' },
     { slug: 'file', title: 'رفع الملفات', en: 'File upload', icon: 'upload',
       lead: 'اسحب الملفات إلى منطقة الإفلات فتظهر في قائمة، وتبقى في حقلها الحقيقي فتُرسل مع النموذج كما هي.' },
-    { slug: 'scrollspy', title: 'تتبع القراءة', en: 'Scrollspy', icon: 'list',
+    { slug: 'scrollspy', level: 'advanced', title: 'تتبع القراءة', en: 'Scrollspy', icon: 'list',
       lead: 'قائمة محتويات (Scrollspy) تتبع القارئ، فتبرز رابط القسم الذي يقرؤه، في الصفحة أو في صندوق له تمريره الخاص.' },
     { slug: 'timeline', title: 'الخط الزمني', en: 'Timeline', icon: 'clock',
       lead: 'ما جرى بترتيبه: مسار طلب، أو نشاط حساب، أو تاريخ ملف، وأوقات نسبية تُكتب كما تُقال.' },
@@ -187,13 +189,13 @@ export const NAV = [
       lead: 'صفحة «غير موجودة» في وسط الشاشة، فيها بحث وطريق للعودة.' }
   ] },
   { group: 'الملحقات', en: 'Extras', pages: [
-    { slug: 'navbar', title: 'شريط الموقع', en: 'Navbar', icon: 'compass',
+    { slug: 'navbar', level: 'advanced', title: 'شريط الموقع', en: 'Navbar', icon: 'compass',
       lead: 'شريط تنقل (Navbar) للمواقع لا للتطبيقات: جزيرة زجاجية تنطوي خلف زر على الهاتف.' },
-    { slug: 'carousel', title: 'عرض الشرائح', en: 'Carousel', icon: 'slides',
+    { slug: 'carousel', level: 'advanced', title: 'عرض الشرائح', en: 'Carousel', icon: 'slides',
       lead: 'عرض شرائح (Carousel) في صف تسحبه بإصبعك، وأزرار ونقاط وأسهم تتبع اتجاه القراءة، ولا يتحرك من تلقاء نفسه.' },
-    { slug: 'colorpicker', title: 'منتقي الألوان', en: 'Color picker', icon: 'droplet',
+    { slug: 'colorpicker', level: 'advanced', title: 'منتقي الألوان', en: 'Color picker', icon: 'droplet',
       lead: 'حقل لون بمنتقٍ كامل، يخبرك قبل الحفظ هل يصلح اللون للنص، بتباينه على الأبيض وعلى الأسود.' },
-    { slug: 'reveal', title: 'حركات الدخول', en: 'Entrance motion & scroll reveal', icon: 'sparkle',
+    { slug: 'reveal', level: 'advanced', title: 'حركات الدخول', en: 'Entrance motion & scroll reveal', icon: 'sparkle',
       lead: 'أبناء حاوية يدخلون تباعًا حين تظهر على الشاشة (reveal)، وثلاثة كلاسات تمنح عنصرًا واحدًا حركة دخول.' }
   ] }
 ];
@@ -286,6 +288,36 @@ function forListing(markup) {
   return markup.replace(/<svg class="ico"[^>]*>[\s\S]*?<\/svg>/g, '<svg>…</svg>');
 }
 
+const MODE_CLASS = { advanced: 'site-adv', simple: 'site-simple' };
+
+// Wraps a data-level heading and its section in that mode's class; examples are masked so their headings are skipped.
+function levels(html, file) {
+  const kept = [];
+  const src = html.replace(/<demo-(example|code)[\s\S]*?<\/demo-\1>/g, (m) => `\u0000${kept.push(m) - 1}\u0000`);
+  const heads = [...src.matchAll(/<h([23])\b([^>]*)>/g)].map((m) => ({
+    at: m.index, rank: +m[1], mode: (m[2].match(/\sdata-level="([^"]*)"/) || [])[1], id: (m[2].match(/\sid="([^"]+)"/) || [])[1]
+  }));
+  if (/\sdata-level\b/.test(src.replace(/<h[23]\b[^>]*>/g, ''))) problems.push(`${file}: data-level works on an <h2> or <h3> only.`);
+  const ids = { advanced: new Set(), simple: new Set() };
+  let out = '', last = 0;
+  for (let i = 0; i < heads.length; i++) {
+    const h = heads[i];
+    if (!h.mode || h.at < last) continue;
+    if (!MODE_CLASS[h.mode]) { problems.push(`${file}: data-level="${h.mode}" is not simple or advanced.`); continue; }
+    let j = i + 1;
+    while (j < heads.length && heads[j].rank > h.rank) j++;
+    for (let k = i; k < j; k++) if (heads[k].id) ids[h.mode].add(heads[k].id);
+    const end = j < heads.length ? heads[j].at : src.length;
+    out += src.slice(last, h.at) + `<div class="${MODE_CLASS[h.mode]}">${src.slice(h.at, end).trimEnd()}</div>\n\n`;
+    last = end;
+  }
+  out += src.slice(last);
+  out = out.replace(/(<h[23]\b[^>]*?)\sdata-level="[^"]*"/g, '$1').replace(/\u0000(\d+)\u0000/g, (m, n) => kept[n]);
+  return { html: out, ids };
+}
+
+const shows = (p, mode) => !p.level || p.level === mode;
+
 function expand(html, file) {
   html = html.replace(/<demo-example([^>]*)>([\s\S]*?)<\/demo-example>/g, (all, attrs, inner) => {
     const cls = (attrs.match(/class="([^"]*)"/) || [])[1] || '';
@@ -310,9 +342,12 @@ function sidebar(current) {
       const on = p.slug === current.slug;
       /* `fresh`: new or grown since the last review, flagged until it has been seen. */
       const badge = p.fresh ? '<span class="ins-shell-link-badge">جديد</span>' : '';
-      return `      <a class="ins-shell-link${on ? ' is-active' : ''}" href="${p.slug}.html"${on ? ' aria-current="page"' : ''} data-keywords="${attr(p.lead ? `${p.en} ${p.lead}` : p.en)}">${icon(p.icon)}${p.title}${badge}</a>`;
+      const only = p.level && !on ? ` ${MODE_CLASS[p.level]}` : '';
+      return `      <a class="ins-shell-link${on ? ' is-active' : ''}${only}" href="${p.slug}.html"${on ? ' aria-current="page"' : ''} data-keywords="${attr(p.lead ? `${p.en} ${p.lead}` : p.en)}">${icon(p.icon)}${p.title}${badge}</a>`;
     }).join('\n');
-    return `      <div class="ins-shell-group">${g.group}</div>\n${links}`;
+    const seen = (mode) => g.pages.some((p) => p.slug === current.slug || shows(p, mode));
+    const hide = !seen('simple') ? ' site-adv' : !seen('advanced') ? ' site-simple' : '';
+    return `      <div class="ins-shell-group${hide}">${g.group}</div>\n${links}`;
   }).join('\n\n');
 }
 
@@ -330,21 +365,31 @@ function pageHead(p) {
 
 /* "On this page": the page's own h2s and h3s, in the scrollspy plugin's contents
    list beside the content. Only worth it from three sections up. */
-function toc(html) {
+// One list per mode: the scrollspy would count a hidden heading as scrolled past.
+function toc(html, ids) {
   const own = html.replace(/<figure class="dx[\s\S]*?<\/figure>/g, '');
   const heads = [...own.matchAll(/<h([23]) id="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g)];
-  if (heads.filter(([, level]) => level === '2').length < 3) return '';
-  const links = heads.map(([, level, id, text]) =>
-    `<a${level === '3' ? ' class="ins-toc-sub"' : ''} href="#${id}">${text.replace(/<[^>]+>/g, '').trim()}</a>`).join('');
-  return `<nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div>${links}</nav>`;
+  const list = (hs, cls) => {
+    if (hs.filter(([, level]) => level === '2').length < 3) return '';
+    const links = hs.map(([, level, id, text]) =>
+      `<a${level === '3' ? ' class="ins-toc-sub"' : ''} href="#${id}">${text.replace(/<[^>]+>/g, '').trim()}</a>`).join('');
+    return `<nav class="ins-toc site-toc${cls}" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div>${links}</nav>`;
+  };
+  if (!ids.advanced.size && !ids.simple.size) return list(heads, '');
+  const minus = (set) => heads.filter(([, , id]) => !set.has(id));
+  return list(minus(ids.simple), ' site-adv') + list(minus(ids.advanced), ' site-simple');
 }
 
+// Each mode's pager skips the pages the other mode alone shows, so it is a second nav when that changes a neighbour.
 function pager(i) {
-  const prev = PAGES[i - 1], next = PAGES[i + 1];
   const card = (p, dir) => p
     ? `<a class="site-pager-link site-pager-link--${dir}" href="${p.slug}.html"><span class="site-pager-dir">${dir === 'prev' ? 'السابق' : 'التالي'}</span><span class="site-pager-title">${p.title}</span></a>`
     : '<span></span>';
-  return `<nav class="site-pager" aria-label="التنقل بين الصفحات">${card(prev, 'prev')}${card(next, 'next')}</nav>`;
+  const nav = (prev, next, cls) => `<nav class="site-pager${cls}" aria-label="التنقل بين الصفحات">${card(prev, 'prev')}${card(next, 'next')}</nav>`;
+  const near = (mode) => [PAGES.slice(0, i).reverse().find((p) => shows(p, mode)), PAGES.slice(i + 1).find((p) => shows(p, mode))];
+  const [aPrev, aNext] = near('advanced'), [sPrev, sNext] = near('simple');
+  if (aPrev === sPrev && aNext === sNext) return nav(aPrev, aNext, '');
+  return nav(aPrev, aNext, ' site-adv') + nav(sPrev, sNext, ' site-simple');
 }
 
 /* --------------------------------------------------------------------------
@@ -390,7 +435,10 @@ export async function buildSite({ check = false, version = '' } = {}) {
     try { src = await readFile(join(SRC, 'pages', `${p.slug}.html`), 'utf8'); }
     catch { problems.push(`pages/${p.slug}.html is listed in NAV and missing.`); continue; }
 
-    const content = expand(src, `pages/${p.slug}.html`);
+    if (p.level && !MODE_CLASS[p.level]) problems.push(`NAV: ${p.slug} has level '${p.level}', not simple or advanced.`);
+    const { html: leveled, ids } = levels(src, `pages/${p.slug}.html`);
+    if (p.level && (ids.advanced.size || ids.simple.size)) problems.push(`pages/${p.slug}.html: the page has a level of its own, so data-level on its sections is not allowed.`);
+    const content = expand(leveled, `pages/${p.slug}.html`);
     verifyPage(p, content, slugs, shared);
 
     const fill = {
@@ -401,7 +449,7 @@ export async function buildSite({ check = false, version = '' } = {}) {
       VERSION: version,
       SIDEBAR: sidebar(p),
       HEAD: pageHead(p),
-      TOC: toc(content),
+      TOC: toc(content, ids),
       CONTENT: content.trim(),
       PAGER: pager(i),
       BODY_CLASS: p.hero ? 'site-home' : 'site-doc'

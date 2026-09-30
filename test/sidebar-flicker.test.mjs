@@ -68,7 +68,9 @@ function flicker(frames) {
 }
 
 async function trip(from, to) {
-  await b.goto(`${BASE}/demo/${from}?theme=light`);
+  await b.goto(`${BASE}/demo/${from}?theme=light&mode=advanced`);
+  // The docs' advanced mode, saved, so the destination lists every link too and the one left behind is there to fly from.
+  await E(`localStorage.setItem('insiyab-demo-mode', 'advanced'); 0`);
   await b.sleep(900);
   await b.click(`.ins-shell-link[href="${to}"]`);
   await b.sleep(3200);

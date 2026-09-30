@@ -9,7 +9,7 @@
 </demo-example>
 <p class="ins-muted ins-text-sm" id="theme-state"></p>
 
-<h2 id="api">من الشيفرة</h2>
+<h2 id="api" data-level="advanced">التحكم بـ JavaScript</h2>
 <demo-code lang="js">
 Insiyab.theme();            // 'light' | 'dark' — ما يراه المستخدم فعلًا، أيًا كان مصدره
 Insiyab.theme('dark');      // اختيار صريح، يُحفظ
@@ -21,7 +21,7 @@ document.addEventListener('ins:theme', (e) => {
 });
 </demo-code>
 
-<h2 id="designed">ألوان خاصة بالوضع الداكن</h2>
+<h2 id="designed" data-level="advanced">ألوان خاصة بالوضع الداكن</h2>
 <p>للوضع الداكن لوحة ألوان مستقلة بقيمها، وليست ألوان الفاتح مقلوبة بـ <code>filter</code>:</p>
 <ul>
   <li>حافة الزجاج أخفت، والألوان خلفه أقل تشبعًا (<code>saturate</code>).</li>
@@ -35,7 +35,7 @@ document.addEventListener('ins:theme', (e) => {
   <code>defer</code>، وإلا ومضت الصفحة بالفاتح ثم انقلبت.
 </p>
 
-<h2 id="your-css">في أنماطك</h2>
+<h2 id="your-css" data-level="advanced">في أنماطك</h2>
 <p>
   استعمل المتغيرات في أنماطك، فتتبع الوضع من تلقاء نفسها. وإن احتجت قاعدة خاصة بالداكن فاكتبها للحالتين:
   حين يختاره المستخدم صراحة، وحين يتبع النظام ولم يختر شيئًا.
