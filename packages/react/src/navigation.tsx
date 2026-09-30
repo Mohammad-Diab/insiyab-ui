@@ -145,8 +145,10 @@ export interface TabListProps extends HTMLAttributes<HTMLDivElement> {
   label?: string;
   /** The segmented look, for a small switch in a panel's head. */
   seg?: boolean;
+  /** The lighter look: a row over a hairline with a travelling underline. */
+  line?: boolean;
 }
-export const TabList = forwardRef<HTMLDivElement, TabListProps>(function TabList({ label, seg, className, children, ...rest }, ref) {
+export const TabList = forwardRef<HTMLDivElement, TabListProps>(function TabList({ label, seg, line, className, children, ...rest }, ref) {
   const ctx = useContext(TabsContext);
   /* With no value given, the first tab is the one shown, as the core would choose. */
   const firstValue = Children.toArray(children).find((c): c is ReactElement<{ value: string }> => isValidElement(c) && typeof (c.props as { value?: unknown }).value === 'string')?.props.value;
@@ -154,7 +156,7 @@ export const TabList = forwardRef<HTMLDivElement, TabListProps>(function TabList
     if (ctx && ctx.current === undefined && firstValue !== undefined) ctx.first(firstValue);
   });
   return (
-    <div ref={ref} className={cx(seg ? 'ins-seg' : 'ins-tablist', className)} role="tablist" aria-label={label} {...rest}>
+    <div ref={ref} className={cx(seg ? 'ins-seg' : line ? 'ins-tablist ins-tablist--line' : 'ins-tablist', className)} role="tablist" aria-label={label} {...rest}>
       <TabListContext.Provider value={{ seg: !!seg }}>{children}</TabListContext.Provider>
     </div>
   );

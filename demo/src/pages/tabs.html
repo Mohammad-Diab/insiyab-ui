@@ -17,20 +17,24 @@
 </demo-example>
 <p>فإن غابت جافاسكربت ظهرت الألواح كلها متتالية، فلا يختفي منها شيء.</p>
 
-<h2 id="segmented">في هيئة الشريط المقسم</h2>
-<p>وتعمل الآلية نفسها على <code>.ins-seg</code>، فتبدل بها عرضًا صغيرًا بآخر.</p>
+<h2 id="line">بخط تحتها</h2>
+<p>
+  أضف <code>.ins-tablist--line</code> لهيئة أخف: التبويبات صف فوق خط رفيع، وتحت المختار منها خط ينتقل إلى التبويب الجديد
+  كما ينتقل مؤشر الشريط الجانبي، فيمتد طرفه البعيد إليه أولًا ثم يلحق به طرفه القريب.
+</p>
 <demo-example>
-  <div class="ins-seg">
-    <button data-ins-tab="#s-day">اليوم</button>
-    <button data-ins-tab="#s-week">الأسبوع</button>
-    <button data-ins-tab="#s-month">الشهر</button>
+  <div class="ins-tablist ins-tablist--line" aria-label="الطلب">
+    <button class="ins-tab" data-ins-tab="#l-details">التفاصيل</button>
+    <button class="ins-tab" data-ins-tab="#l-items">المنتجات</button>
+    <button class="ins-tab" data-ins-tab="#l-history">السجل</button>
   </div>
-  <p class="ins-tabpanel" id="s-day">عرض اليوم.</p>
-  <p class="ins-tabpanel" id="s-week">عرض الأسبوع.</p>
-  <p class="ins-tabpanel" id="s-month">عرض الشهر.</p>
+  <div class="ins-tabpanel" id="l-details">محتوى «التفاصيل».</div>
+  <div class="ins-tabpanel" id="l-items">محتوى «المنتجات».</div>
+  <div class="ins-tabpanel" id="l-history">محتوى «السجل».</div>
 </demo-example>
+<p>وتعمل الآلية نفسها على <code>.ins-seg</code> إن كان الشريط المقسم عندك أصلًا: ضع <code>data-ins-tab</code> على أزراره.</p>
 
-<h2 id="api">من الشيفرة</h2>
+<h2 id="api">التحكم بـ JavaScript</h2>
 <demo-code lang="js">
 Insiyab.tab('#t-shipping');     // يختار التبويب الذي يشير إلى هذا اللوح
 

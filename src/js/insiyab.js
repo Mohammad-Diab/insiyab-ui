@@ -4145,7 +4145,9 @@
   /* The selected face travels like the sidebar marker: the far edge reaches the new segment, then the near edge follows. */
   function segFly(seg, from, to) {
     if (!from || !to || from === to || motionless() || !to.animate || !seg.offsetWidth) return;
-    var a = { x: from.offsetLeft, w: from.offsetWidth }, b = { x: to.offsetLeft, w: to.offsetWidth };
+    var line = seg.classList.contains('ins-tablist--line');
+    var inset = line ? parseFloat(window.getComputedStyle(to, '::after').left) || 10 : 0;
+    var a = { x: from.offsetLeft + inset, w: from.offsetWidth - 2 * inset }, b = { x: to.offsetLeft + inset, w: to.offsetWidth - 2 * inset };
     var prev = seg.__insSeg;
     if (prev) {
       if (prev.face.parentNode) {
@@ -4155,10 +4157,10 @@
       }
       prev.halt();
     }
-    var face = el('span', 'ins-seg-flight');
+    var face = el('span', line ? 'ins-tab-flight' : 'ins-seg-flight');
     face.setAttribute('aria-hidden', 'true');
-    face.style.top = to.offsetTop + 'px';
-    face.style.height = to.offsetHeight + 'px';
+    face.style.top = (line ? to.offsetTop + to.offsetHeight - 2 : to.offsetTop) + 'px';
+    if (!line) face.style.height = to.offsetHeight + 'px';
     seg.appendChild(face);
     seg.classList.add('ins-seg-moving');
     var left = Math.min(a.x, b.x), right = Math.max(a.x + a.w, b.x + b.w);
@@ -4197,7 +4199,7 @@
   /* Watches the segments' classes, since several paths change the selection. */
   define('seg-slide', function (scope) {
     if (!window.MutationObserver) return;
-    var segs = scope.querySelectorAll('.ins-seg');
+    var segs = scope.querySelectorAll('.ins-seg, .ins-tablist');
     for (var i = 0; i < segs.length; i++) {
       if (segs[i].__insSegWatch) continue;
       segs[i].__insSegWatch = true;

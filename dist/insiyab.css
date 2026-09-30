@@ -6515,10 +6515,17 @@ html[dir="ltr"] .ins-page-title {
    That is the other look for the same behaviour: a strip of peers where this is a
    row of sections. */
 .ins-tablist {
+  position: relative;
+  isolation: isolate;
   display: flex;
-  gap: .25rem;
+  gap: .1875rem;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  padding: .25rem;
   margin-block-end: var(--ins-sp-4);
-  border-block-end: 1px solid var(--ins-line);
+  border: 1px solid var(--ins-line-glass);
+  border-radius: var(--ins-r-md);
+  background: var(--ins-ctl-bg-hover);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -6532,34 +6539,62 @@ html[dir="ltr"] .ins-page-title {
   min-block-size: var(--ins-ctl-h);
   padding: .5rem .875rem;
   border: 0;
-  border-start-start-radius: var(--ins-r-sm);
-  border-start-end-radius: var(--ins-r-sm);
+  border-radius: var(--ins-r-sm);
   background: none;
   font-family: inherit;
-  font-size: var(--ins-fs-sm);
+  font-size: .8125rem;
   font-weight: 700;
-  color: var(--ins-label);
+  color: var(--ins-text-2);
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
-  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
+  transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease), box-shadow var(--ins-t-pop) var(--ins-ease);
 }
-.ins-tab::after {
+.ins-tab:hover { color: var(--ins-primary-darker); background: var(--ins-surface-hover); }
+.ins-tab:focus-visible { outline-offset: -2px; }
+.ins-tab:is([aria-selected="true"], [aria-current="page"], .is-active) {
+  background: var(--ins-seg-on-bg);
+  color: var(--ins-seg-on-fg);
+  box-shadow: var(--ins-seg-on-shadow);
+}
+.ins-tablist.ins-seg-moving > .ins-tab { background: transparent; box-shadow: none; }
+
+/* `--line`: the lighter look, a row of sections over a hairline, its underline travelling like the sidebar's marker. */
+.ins-tablist--line {
+  inline-size: auto;
+  gap: .25rem;
+  padding: 0;
+  border: 0;
+  border-block-end: 1px solid var(--ins-line);
+  border-radius: 0;
+  background: none;
+}
+.ins-tablist--line > .ins-tab {
+  border-radius: var(--ins-r-sm) var(--ins-r-sm) 0 0;
+  font-size: var(--ins-fs-sm);
+  color: var(--ins-label);
+}
+.ins-tablist--line > .ins-tab::after,
+.ins-tab-flight {
+  block-size: 3px;
+  border-radius: var(--ins-r-pill);
+  background: linear-gradient(90deg, var(--ins-primary), var(--ins-primary-dark));
+  box-shadow: 0 0 10px rgba(var(--ins-primary-rgb), .45), 0 1px 3px rgba(var(--ins-primary-rgb), .35);
+}
+.ins-tablist--line > .ins-tab::after {
   content: "";
   position: absolute;
   inset-inline: .625rem;
   inset-block-end: -1px;
-  block-size: 3px;
-  border-radius: var(--ins-r-pill);
-  background: var(--ins-tone-brand-soft);
   transform: scaleX(0);
   transition: transform var(--ins-t-pop) var(--ins-ease);
 }
-.ins-tab:hover { background: var(--ins-ctl-bg); color: var(--ins-text-1); }
-.ins-tab:hover::after { transform: scaleX(.35); }
-.ins-tab:focus-visible { outline-offset: -2px; }
-.ins-tab:is([aria-selected="true"], [aria-current="page"], .is-active) { color: var(--ins-tone-brand); }
-.ins-tab:is([aria-selected="true"], [aria-current="page"], .is-active)::after { transform: scaleX(1); }
+.ins-tablist--line > .ins-tab:hover { background: var(--ins-ctl-bg); color: var(--ins-text-1); }
+.ins-tablist--line > .ins-tab:hover::after { transform: scaleX(.35); }
+.ins-tablist--line > .ins-tab:is([aria-selected="true"], [aria-current="page"], .is-active) { background: none; box-shadow: none; color: var(--ins-tone-brand); }
+.ins-tablist--line > .ins-tab:is([aria-selected="true"], [aria-current="page"], .is-active)::after { transform: scaleX(1); }
+.ins-tablist--line.ins-seg-moving > .ins-tab::after { visibility: hidden; }
+.ins-tab-flight { position: absolute; z-index: 1; pointer-events: none; }
 
 /* Without the script every panel is shown, one after another, so the content is
    all still there. With it, only the selected one — and it arrives with the page's
