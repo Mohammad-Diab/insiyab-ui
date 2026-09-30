@@ -3836,15 +3836,22 @@
     }
     var tagBox = t.classList && t.classList.contains('ins-tags') ? t : null;
     if (tagBox) { tagsInput(tagBox).focus(); t = tagsInput(tagBox); }
+    var direct = pressedOn === t;
     var box = t.closest && t.closest(COMBO);
     if (box && t === comboInput(box)) {
       var shown = comboList(box) && comboList(box).hasAttribute('data-ins-open');
-      if (!shown) comboOpen(box, comboFilter(box));
+      if (shown) comboOpen(box, false);
+      else if (direct) comboOpen(box, comboFilter(box));
       return;
     }
-    if (t.hasAttribute && t.hasAttribute('data-ins-date-ready') && calFor !== t) openCal(t, false);
-    if (t.hasAttribute && t.hasAttribute('data-ins-time-ready')) openTime(t, false);
+    if (!direct || !t.hasAttribute) return;
+    if (t.hasAttribute('data-ins-date-ready')) { if (calFor === t) closeCal(false); else openCal(t, false); }
+    if (t.hasAttribute('data-ins-time-ready')) { if (timeFor === t) closeTime(false); else openTime(t, false); }
   }, false);
+
+  // A label passes its click on to its field; only a press on the field itself opens that field's popover.
+  var pressedOn = null;
+  document.addEventListener('pointerdown', function (event) { pressedOn = event.target; }, true);
 
   /* A press on the list must not take focus from the field, or the field's blur
      would close the list before the click that was choosing from it arrived. */
