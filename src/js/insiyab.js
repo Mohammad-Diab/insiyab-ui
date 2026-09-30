@@ -3114,7 +3114,10 @@
     if (name) field.setAttribute('aria-label', name);
     td.__insEdit = { old: old, html: td.innerHTML };
     td.classList.add('is-editing');
-    td.textContent = '';
+    var ghost = el('span', 'ins-edit-ghost');
+    ghost.setAttribute('aria-hidden', 'true');
+    while (td.firstChild) ghost.appendChild(td.firstChild);
+    td.appendChild(ghost);
     td.appendChild(field);
     field.focus();
     if (field.select) field.select();
@@ -3127,7 +3130,7 @@
     var state = td.__insEdit;
     if (!state) return false;
     td.__insEdit = null;
-    var field = td.querySelector('input, select');
+    var field = td.querySelector(':scope > input, :scope > select');
     var value = field ? field.value.trim() : state.old;
     td.classList.remove('is-editing');
     var changed = !!keep && value !== state.old;
