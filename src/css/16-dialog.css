@@ -656,8 +656,11 @@
   -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
           mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
   border-radius: var(--ins-r-sm);
-  cursor: ns-resize;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
 }
+.ins-drum-col.is-drag { cursor: grabbing; scroll-snap-type: none; }
 .ins-drum-col::-webkit-scrollbar { display: none; }
 .ins-drum-col:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
 .ins-drum-col--period { inline-size: 3.25rem; }
@@ -671,12 +674,13 @@
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   color: var(--ins-text-2);
-  cursor: pointer;
+  cursor: inherit;
   user-select: none;
   transition: color var(--ins-t-pop) var(--ins-ease);
 }
 .ins-drum-col--period .ins-drum-item { font-family: var(--ins-font-body); font-size: var(--ins-fs-sm); }
 .ins-drum-item.is-on { color: var(--ins-tone-brand); font-weight: 800; }
+.ins-drum-item.is-out { color: var(--ins-text-3); }
 .ins-cal-foot {
   display: flex;
   align-items: center;
