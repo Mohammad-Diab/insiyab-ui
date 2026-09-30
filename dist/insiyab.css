@@ -5616,6 +5616,11 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
    that slides in from the side reads as one. */
 .ins-alert { animation: ins-slide-in var(--ins-t-enter) var(--ins-ease); }
 [dir="rtl"] .ins-alert { --ins-slide: 10px; }
+.ins-alert.is-going { interpolate-size: allow-keywords; overflow: clip; animation: ins-alert-out calc(var(--ins-t-exit) * 2) var(--ins-ease) forwards; }
+@keyframes ins-alert-out {
+  45%  { opacity: 0; transform: scale(.98); block-size: auto; }
+  100% { opacity: 0; transform: scale(.98); block-size: 0; margin-block: 0; padding-block: 0; }
+}
 
 /* The alert's circle and the empty state's glyph stay still under the pointer. Both
    used to move on hover, as the one allowance for a purely decorative element; the
