@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,26 +274,72 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">الإكمال التلقائي والتاريخ والوقت والمنزلق والعداد، أدوات لا يستغني عنها نموذج جاد.</p>
-        <h2 id="combo">الإكمال التلقائي</h2>
+        <figure class="dx"><div class="dx-view">
+  <div class="ins-field-grid">
+    <div class="ins-field">
+      <label class="ins-label" for="p-main-city">المدينة</label>
+      <div class="ins-combo">
+        <input class="ins-input" id="p-main-city" autocomplete="off">
+        <ul class="ins-combo-list">
+          <li class="ins-combo-option">الرياض</li>
+          <li class="ins-combo-option">جدّة</li>
+          <li class="ins-combo-option">القاهرة</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ins-field">
+      <label class="ins-label" for="p-main-date">التاريخ</label>
+      <div class="ins-input-group">
+        <input class="ins-input" id="p-main-date" type="date" data-ins-date name="date" value="2026-09-30">
+      </div>
+    </div>
+    <div class="ins-field">
+      <label class="ins-label" for="p-main-time">الوقت</label>
+      <input class="ins-input" id="p-main-time" type="time" data-ins-time name="time" value="09:30">
+    </div>
+  </div>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field-grid"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-main-city"</span><span class="hl-t">&gt;</span>المدينة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo"</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-main-city"</span> <span class="hl-a">autocomplete</span>=<span class="hl-s">"off"</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;ul</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-list"</span><span class="hl-t">&gt;</span>
+        <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span><span class="hl-t">&gt;</span>الرياض<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+        <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span><span class="hl-t">&gt;</span>جدّة<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+        <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-option"</span><span class="hl-t">&gt;</span>القاهرة<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-main-date"</span><span class="hl-t">&gt;</span>التاريخ<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-main-date"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">name</span>=<span class="hl-s">"date"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-30"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-main-time"</span><span class="hl-t">&gt;</span>الوقت<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-main-time"</span> <span class="hl-a">type</span>=<span class="hl-s">"time"</span> <span class="hl-a">data-ins-time</span> <span class="hl-a">name</span>=<span class="hl-s">"time"</span> <span class="hl-a">value</span>=<span class="hl-s">"09:30"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="combo">الإكمال التلقائي</h2>
 <p>
   يضم <code>.ins-combo</code> حقلًا وقائمة خيارات، ويبني عليهما السكربت نمط combobox كاملًا: أدوار ARIA، والتنقل بالأسهم،
   و<kbd class="ins-kbd">Enter</kbd> للاختيار و<kbd class="ins-kbd">Esc</kbd> للإغلاق. ومطابقته
   <b>تفهم العربية</b>، فلا تلتفت إلى التشكيل، وتعد صور الهمزة على الألف حرفًا واحدًا، وتساوي بين التاء المربوطة والهاء،
   وبين الألف المقصورة والياء. جرب «الاسكندرية» أو «جده».
 </p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-combo">
-    <input class="ins-input" aria-label="المدينة" autocomplete="off">
-    <input type="hidden" name="city">
-    <ul class="ins-combo-list">
-      <li class="ins-combo-option" data-value="ruh">الرياض</li>
-      <li class="ins-combo-option" data-value="jed">جدّة</li>
-      <li class="ins-combo-option" data-value="cai">القاهرة</li>
-      <li class="ins-combo-option" data-value="alx">الإسكندريّة</li>
-      <li class="ins-combo-empty">لا نتائج</li>
-    </ul>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo"</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="combo"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-combo">
+  <input class="ins-input" aria-label="المدينة" autocomplete="off">
+  <input type="hidden" name="city">
+  <ul class="ins-combo-list">
+    <li class="ins-combo-option" data-value="ruh">الرياض</li>
+    <li class="ins-combo-option" data-value="jed">جدّة</li>
+    <li class="ins-combo-option" data-value="cai">القاهرة</li>
+    <li class="ins-combo-option" data-value="alx">الإسكندريّة</li>
+    <li class="ins-combo-empty">لا نتائج</li>
+  </ul>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">اكتب في الحقل لترى القائمة بخياراتك، واكتب «دبي» لترى «لا نتائج». وإذا اخترت مدينة ظهر هنا الحدث الذي يطلقه.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات الإكمال التلقائي"><div class="site-play-ctl" data-key="empty" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">رسالة «لا نتائج»</span></span></label></div><div class="site-play-ctl" data-key="hidden" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">يرسل رمز الخيار</span></span></label></div><div class="site-play-ctl" data-key="off" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">خيار معطل</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"المدينة"</span> <span class="hl-a">autocomplete</span>=<span class="hl-s">"off"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"hidden"</span> <span class="hl-a">name</span>=<span class="hl-s">"city"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;ul</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-list"</span><span class="hl-t">&gt;</span>
@@ -303,80 +350,37 @@
     <span class="hl-t">&lt;li</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-combo-empty"</span><span class="hl-t">&gt;</span>لا نتائج<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p>
-  ويظهر <code>.ins-combo-empty</code> إذا لم يطابق شيء. وتذهب القيمة المختارة إلى الحقل المخفي إن أضفته، ويُطلق
-  حدث <code>ins:combo</code> ومعه <code>value</code> و<code>label</code>.
-</p>
 
 <h2 id="date">التاريخ</h2>
 <p>
   ضع <code>data-ins-date</code> على <code>&lt;input type="date"&gt;</code> داخل <code>.ins-input-group</code>. فإن غاب السكربت بقي حقل المتصفح
   نفسه، وإن حضر كتب التاريخ بلغة الصفحة، وفتح تقويمًا يبدأ أسبوعه يوم السبت إذا كانت الصفحة عربية، وتنقلت فيه الأسهم بين
   الأيام مع اتجاه الصفحة. وينتقل <code>name</code> الحقل إلى حقل مخفي، فيتلقى الخادم <code>2026-09-23</code> كما هو.
-  ويلتزم التقويم بـ <code>min</code> و<code>max</code> كذلك.
 </p>
-<figure class="dx"><div class="dx-view">
+<figure class="dx site-play" data-play="date"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-field">
+  <label class="ins-label" for="p-date">التاريخ</label>
   <div class="ins-input-group">
-    <input class="ins-input" type="date" data-ins-date name="date" value="2026-09-30" min="2026-09-23" aria-label="التاريخ">
+    <input class="ins-input" id="p-date" type="date" data-ins-date name="date" value="2026-09-30">
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">name</span>=<span class="hl-s">"date"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-30"</span> <span class="hl-a">min</span>=<span class="hl-s">"2026-09-23"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"التاريخ"</span><span class="hl-t">&gt;</span>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">افتح التقويم لترى خياراتك فيه.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات التاريخ"><label class="site-play-ctl" data-key="mode" data-type="select"><span class="site-play-label">ما يُختار</span><select class="ins-select ins-select--sm"><option value="day" selected>يوم واحد</option><option value="range">فترة بين تاريخين</option><option value="datetime">تاريخ ووقت</option><option value="pair">تاريخ ووقت في حقلين</option></select></label><div class="site-play-ctl" data-key="bounds" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">حدود للتاريخ</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-date"</span><span class="hl-t">&gt;</span>التاريخ<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-date"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">name</span>=<span class="hl-s">"date"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-30"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <p>أما تاريخ الميلاد، فلا يبحث عنه صاحبه في تقويم، ولذا له حقل خاص يُكتب ويُختار بالأعمدة، في صفحة <a href="birthdate.html">تاريخ الميلاد</a>.</p>
 
-<h3 id="date-range">فترة بين تاريخين</h3>
-<p>
-  تجتمع الفترة في حقل واحد، تعطي فيه <code>data-ins-date-range="to"</code> تاريخ النهاية اسمه (<code>name</code>)، وتعطيه <code>data-ins-date-to</code> قيمته
-  الابتدائية. فالنقرة الأولى في التقويم تحدد البداية والثانية تحدد النهاية، والشريط بينهما يلحق بالمؤشر. ثم يتلقى الخادم <code>from</code> و<code>to</code>.
-</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-field">
-    <label class="ins-label" for="p-span">الفترة</label>
-    <div class="ins-input-group">
-      <input class="ins-input" id="p-span" type="date" data-ins-date data-ins-date-range="to" name="from" value="2026-09-16" data-ins-date-to="2026-09-23">
-    </div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-span"</span><span class="hl-t">&gt;</span>الفترة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-span"</span> <span class="hl-a">type</span>=<span class="hl-s">"date"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">data-ins-date-range</span>=<span class="hl-s">"to"</span> <span class="hl-a">name</span>=<span class="hl-s">"from"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-16"</span> <span class="hl-a">data-ins-date-to</span>=<span class="hl-s">"2026-09-23"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
 <h2 id="time">الوقت</h2>
 <p>
-  ضع <code>data-ins-time</code> على <code>&lt;input type="time"&gt;</code> فيعرض الوقت كما تكتبه لغة الصفحة، وتظهر تحته أعمدة تمرير
-  للساعة والدقيقة والفترة (ص/م)، تقفز فيها الدقائق كل <code>step</code> ثانية (ونصف ساعة إن لم تذكرها)، ولا تخرج عن <code>min</code> و<code>max</code>.
-  ويقبل الحقل الكتابة أيضًا، مثل «14:30» و«2:30 م».
-  ثم يتلقى الخادم <code>HH:MM</code> باسم الحقل، كما كان سيتلقاه من الحقل الأصلي.
+  ضع <code>data-ins-time</code> على <code>&lt;input type="time"&gt;</code> فيعرض الوقت كما تكتبه لغة الصفحة، وتظهر تحته أعمدة تمرير للساعة والدقيقة والفترة (ص/م)،
+  ويقبل الكتابة أيضًا، مثل «14:30» و«2:30 م». ثم يتلقى الخادم <code>HH:MM</code> باسم الحقل، كما كان سيتلقاه من الحقل الأصلي.
 </p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-field">
-    <label class="ins-label" for="p-time">الموعد</label>
-    <input class="ins-input" id="p-time" type="time" data-ins-time name="at" min="08:00" max="18:00" step="900" value="09:30">
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="time"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-field">
+  <label class="ins-label" for="p-time">الموعد</label>
+  <input class="ins-input" id="p-time" type="time" data-ins-time name="at" value="09:00">
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">افتح الحقل لترى الأعمدة بالخطوة والحدود التي اخترتها.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات الوقت"><div class="site-play-ctl" data-key="step" data-type="seg"><span class="site-play-label">الخطوة بالدقائق</span><div class="ins-seg" role="group" aria-label="الخطوة بالدقائق"><button type="button" data-value="900" aria-pressed="false">15</button><button type="button" data-value="" class="is-active" aria-pressed="true">30</button><button type="button" data-value="3600" aria-pressed="false">60</button></div></div><div class="site-play-ctl" data-key="bounds" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">حدود للوقت</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-time"</span><span class="hl-t">&gt;</span>الموعد<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-time"</span> <span class="hl-a">type</span>=<span class="hl-s">"time"</span> <span class="hl-a">data-ins-time</span> <span class="hl-a">name</span>=<span class="hl-s">"at"</span> <span class="hl-a">min</span>=<span class="hl-s">"08:00"</span> <span class="hl-a">max</span>=<span class="hl-s">"18:00"</span> <span class="hl-a">step</span>=<span class="hl-s">"900"</span> <span class="hl-a">value</span>=<span class="hl-s">"09:30"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h3 id="datetime">تاريخ ووقت معًا</h3>
-<p>
-  يجمع <code>&lt;input type="datetime-local" data-ins-date&gt;</code> الأمرين في حقل واحد، فيفتح التقويم وإلى جانبه أعمدة التمرير.
-  ويتلقى الخادم <code>2026-09-26T14:30</code> باسم الحقل.
-</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-field">
-    <label class="ins-label" for="p-when">الموعد</label>
-    <div class="ins-input-group">
-      <input class="ins-input" id="p-when" type="datetime-local" data-ins-date name="when" value="2026-09-26T14:30" step="900">
-    </div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-when"</span><span class="hl-t">&gt;</span>الموعد<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-when"</span> <span class="hl-a">type</span>=<span class="hl-s">"datetime-local"</span> <span class="hl-a">data-ins-date</span> <span class="hl-a">name</span>=<span class="hl-s">"when"</span> <span class="hl-a">value</span>=<span class="hl-s">"2026-09-26T14:30"</span> <span class="hl-a">step</span>=<span class="hl-s">"900"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-time"</span> <span class="hl-a">type</span>=<span class="hl-s">"time"</span> <span class="hl-a">data-ins-time</span> <span class="hl-a">name</span>=<span class="hl-s">"at"</span> <span class="hl-a">value</span>=<span class="hl-s">"09:00"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <div class="site-adv"><h2 id="range">المنزلق</h2>
@@ -384,25 +388,218 @@
   المنزلق عنصر <code>&lt;input type="range" class="ins-range"&gt;</code> أصلي، فلوحة المفاتيح والقيمة وما يسمعه قارئ الشاشة
   من شأن المتصفح، وكذلك اتجاهه، ففي الصفحة العربية يقع الحد الأدنى على اليمين.
 </p>
-<figure class="dx"><div class="dx-view">
-  <input class="ins-range" type="range" min="0" max="50" step="5" value="20" aria-label="النسبة">
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-range"</span> <span class="hl-a">type</span>=<span class="hl-s">"range"</span> <span class="hl-a">min</span>=<span class="hl-s">"0"</span> <span class="hl-a">max</span>=<span class="hl-s">"50"</span> <span class="hl-a">step</span>=<span class="hl-s">"5"</span> <span class="hl-a">value</span>=<span class="hl-s">"20"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"النسبة"</span><span class="hl-t">&gt;</span></code></pre></div></figure></div>
+<figure class="dx site-play" data-play="range"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><input class="ins-range" type="range" min="0" max="50" step="5" value="20" aria-label="النسبة"></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">هكذا يبدو بعد خطوة واحدة: من 20 إلى <code>25</code>.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات المنزلق"><div class="site-play-ctl site-adv" data-key="step" data-type="seg"><span class="site-play-label">الخطوة</span><div class="ins-seg" role="group" aria-label="الخطوة"><button type="button" data-value="1" aria-pressed="false">1</button><button type="button" data-value="5" class="is-active" aria-pressed="true">5</button><button type="button" data-value="10" aria-pressed="false">10</button></div></div><div class="site-play-ctl site-adv" data-key="disabled" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">معطل</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-range"</span> <span class="hl-a">type</span>=<span class="hl-s">"range"</span> <span class="hl-a">min</span>=<span class="hl-s">"0"</span> <span class="hl-a">max</span>=<span class="hl-s">"50"</span> <span class="hl-a">step</span>=<span class="hl-s">"5"</span> <span class="hl-a">value</span>=<span class="hl-s">"20"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"النسبة"</span><span class="hl-t">&gt;</span></code></pre></div></figure></div>
 
 <h2 id="stepper">العداد</h2>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-input-group" style="max-inline-size:11rem">
-    <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>
-    <input class="ins-input" type="number" min="1" max="12" value="4" aria-label="العدد">
-    <button class="ins-spin" data-ins-spin="up" aria-label="زيادة"></button>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span> <span class="hl-a">style</span>=<span class="hl-s">"max-inline-size:11rem"</span><span class="hl-t">&gt;</span>
+<p>
+  حقل رقمي بين زرين، يستدعيان <code>stepDown()</code> و<code>stepUp()</code> الحقل نفسه، فتعني <code>step</code> و<code>min</code>
+  و<code>max</code> ما تعنيه للمتصفح، ويطلق كل ضغط <code>input</code> و<code>change</code> كما تطلقهما الكتابة.
+</p>
+<figure class="dx site-play" data-play="stepper"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><div class="ins-input-group">
+  <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>
+  <input class="ins-input" type="number" min="0" max="20" value="5" aria-label="العدد">
+  <button class="ins-spin" data-ins-spin="up" aria-label="زيادة"></button>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">هكذا يبدو بعد ضغطة واحدة على +: من 5 إلى <code>6</code>.</p><p class="site-play-note">اضغط − حتى الصفر، فيتعطل الزر عنده.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات العداد"><div class="site-play-ctl" data-key="step" data-type="seg"><span class="site-play-label">الخطوة</span><div class="ins-seg" role="group" aria-label="الخطوة"><button type="button" data-value="" class="is-active" aria-pressed="true">1</button><button type="button" data-value="5" aria-pressed="false">5</button></div></div><div class="site-play-ctl" data-key="bounds" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">حدود للعدد</span></span></label></div><div class="site-play-ctl" data-key="disabled" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">معطل</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spin"</span> <span class="hl-a">data-ins-spin</span>=<span class="hl-s">"down"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إنقاص"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"number"</span> <span class="hl-a">min</span>=<span class="hl-s">"1"</span> <span class="hl-a">max</span>=<span class="hl-s">"12"</span> <span class="hl-a">value</span>=<span class="hl-s">"4"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"العدد"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"number"</span> <span class="hl-a">min</span>=<span class="hl-s">"0"</span> <span class="hl-a">max</span>=<span class="hl-s">"20"</span> <span class="hl-a">value</span>=<span class="hl-s">"5"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"العدد"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spin"</span> <span class="hl-a">data-ins-spin</span>=<span class="hl-s">"up"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"زيادة"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في أدوات الاختيار من كلاسات وسمات وأحداث، لكل أداة صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>الإكمال التلقائي</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-combo</code></td><td>كلاس</td><td>يضم الحقل وقائمته، ويبني عليهما السكربت أدوار ARIA والتنقل بالأسهم.</td></tr><tr><td><code>.ins-combo-list</code></td><td>كلاس</td><td>قائمة الخيارات <code>&lt;ul&gt;</code>، تنفتح تحت الحقل وهو يكتب.</td></tr><tr><td><code>.ins-combo-option</code></td><td>كلاس</td><td>خيار واحد <code>&lt;li&gt;</code>، ويُرسل <code>data-value</code> إن كان عليه، وإلا فنصه.</td></tr><tr><td><code>data-label</code></td><td>سمة</td><td>على خيار: النص الذي يُكتب في الحقل حين يُختار، إن كان في الخيار أكثر من اسمه.</td></tr><tr><td><code>ins:combo</code></td><td>حدث</td><td>يُطلق عند الاختيار، وفي <code>detail</code> الصندوق <code>el</code> والرمز <code>value</code> والنص <code>label</code> والخيار <code>option</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-combo-empty</code></td><td>كلاس</td><td>سطر في آخر القائمة لا يظهر إلا إذا لم يطابق شيء ما كُتب.</td></tr><tr><td><code>input[type="hidden"]</code></td><td>عنصر</td><td>حقل مخفي في الصندوق يحمل <code>name</code> ويأخذ <code>data-value</code> الخيار المختار، فيرسل النموذج الرمز. ومن دونه ضع <code>name</code> على الحقل نفسه، فيُرسل ما كُتب فيه.</td></tr><tr><td><code>aria-disabled="true"</code></td><td>سمة</td><td>على خيار: يبقى في القائمة باهتًا، فلا يُختار بالنقر ولا تقف عليه الأسهم.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>التاريخ</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-date</code></td><td>سمة</td><td>على <code>&lt;input type="date"&gt;</code> داخل <code>.ins-input-group</code>: يكتب التاريخ بلغة الصفحة ويفتح تقويمًا، ويبقى حقل المتصفح نفسه إن غاب السكربت.</td></tr><tr><td><code>.ins-date-btn</code></td><td>كلاس</td><td>زر التقويم، يضيفه السكربت إلى المجموعة، فلا تكتبه بنفسك.</td></tr><tr><td><code>data-ins-calendar</code></td><td>سمة</td><td>تقويم آخر للحقل، مثل <code>hijri</code> مع إضافة التقويم الهجري، ويبقى ما يُرسل ميلاديًا.</td></tr><tr><td><code>ins:date</code></td><td>حدث</td><td>يُطلق حين يتغير التاريخ، وفي <code>detail</code> الحقل <code>input</code> وقيمته <code>value</code>، ونهاية الفترة <code>end</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">ما يُختار</th></tr></tbody><tbody><tr><td><code>data-ins-date-range="to"</code></td><td>سمة</td><td>فترة في حقل واحد: النقرة الأولى تحدد البداية والثانية النهاية، وقيمة السمة اسم النهاية، فيتلقى الخادم <code>from</code> و<code>to</code>.</td></tr><tr><td><code>type="datetime-local"</code></td><td>سمة</td><td>مع <code>data-ins-date</code>: تقويم وإلى جانبه أعمدة للوقت، ويتلقى الخادم <code>2026-09-26T14:30</code>.</td></tr><tr><td><code>data-ins-datetime="when"</code></td><td>سمة</td><td>على مجموعة فيها حقل تاريخ وحقل وقت <code>data-ins-time</code>: يرسلهما معًا باسم السمة، <code>2026-09-26T14:30</code>.</td></tr><tr><td><code>data-ins-date-to</code></td><td>سمة</td><td>تاريخ النهاية الذي تبدأ به الفترة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الحدود</th></tr></tbody><tbody><tr><td><code>min</code></td><td>سمة</td><td>أول يوم يُختار، فتبهت الأيام قبله في التقويم، ويُرفض ما يُكتب قبله برسالة.</td></tr><tr><td><code>max</code></td><td>سمة</td><td>آخر يوم يُختار.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>الوقت</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-time</code></td><td>سمة</td><td>على <code>&lt;input type="time"&gt;</code>: يعرض الوقت بلغة الصفحة، ويقبل كتابته مثل «14:30» و«2:30 م»، ويرسل <code>HH:MM</code> باسم الحقل.</td></tr><tr><td><code>.ins-time</code></td><td>كلاس</td><td>يلف السكربت الحقل به ومعه الحقل المخفي، فلا تكتبه بنفسك.</td></tr><tr><td><code>ins:time</code></td><td>حدث</td><td>يُطلق حين يتغير الوقت، وفي <code>detail</code> الحقل <code>input</code> وقيمته <code>value</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الخطوة بالدقائق</th></tr></tbody><tbody><tr><td><code>step="900"</code></td><td>سمة</td><td>كم ثانية تقفز الدقائق في عمودها، ونصف ساعة إن غابت.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الحدود</th></tr></tbody><tbody><tr><td><code>min</code></td><td>سمة</td><td>أول وقت يُختار، ويُرفض ما يُكتب قبله برسالة.</td></tr><tr><td><code>max</code></td><td>سمة</td><td>آخر وقت يُختار.</td></tr></tbody></table></div></div></details><details class="ins-collapse site-adv"><summary>المنزلق</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group site-adv"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr class="site-adv"><td><code>.ins-range</code></td><td>كلاس</td><td>على <code>&lt;input type="range"&gt;</code>: يملأ المسار بلون الهوية حتى المقبض، ولا بد له من تسمية.</td></tr><tr class="site-adv"><td><code>min</code></td><td>سمة</td><td>ومعها <code>max</code> و<code>value</code>، كما في أي منزلق، وفي الصفحة العربية يقع الحد الأدنى على اليمين.</td></tr></tbody><tbody class="site-opt-group site-adv"><tr><th colspan="3" scope="rowgroup">الخطوة</th></tr></tbody><tbody><tr class="site-adv"><td><code>step</code></td><td>سمة</td><td>مقدار كل خطوة، بالسحب وبالأسهم.</td></tr></tbody><tbody class="site-opt-group site-adv"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr class="site-adv"><td><code>disabled</code></td><td>سمة</td><td>يبهت المنزلق ولا يتحرك.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>العداد</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-spin</code></td><td>كلاس</td><td>زر بجانب حقل رقمي داخل <code>.ins-input-group</code>، يرسم علامته بنفسه ولا بد له من <code>aria-label</code>.</td></tr><tr><td><code>data-ins-spin="down"</code></td><td>سمة</td><td>زر الإنقاص، في أول المجموعة.</td></tr><tr><td><code>data-ins-spin="up"</code></td><td>سمة</td><td>زر الزيادة، في آخرها.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الخطوة</th></tr></tbody><tbody><tr><td><code>step</code></td><td>سمة</td><td>مقدار كل ضغطة، كما يفهمه المتصفح نفسه.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الحدود</th></tr></tbody><tbody><tr><td><code>min</code></td><td>سمة</td><td>أقل عدد، فيتعطل زر الإنقاص عنده.</td></tr><tr><td><code>max</code></td><td>سمة</td><td>أكبر عدد، فيتعطل زر الزيادة عنده.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>disabled</code></td><td>سمة</td><td>على الحقل: يتعطل معه الزران.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'combo',
+  wide: true,
+  title: 'الإكمال التلقائي',
+  owns: 'ins-combo',
+  controls: [
+    { key: 'empty', label: 'رسالة «لا نتائج»', type: 'switch', value: true, name: 'ins-combo-empty', desc: 'سطر في آخر القائمة لا يظهر إلا إذا لم يطابق شيء ما كُتب.' },
+    { key: 'hidden', label: 'يرسل رمز الخيار', type: 'switch', value: true, name: 'input[type="hidden"]', kind: 'element', desc: 'حقل مخفي في الصندوق يحمل `name` ويأخذ `data-value` الخيار المختار، فيرسل النموذج الرمز. ومن دونه ضع `name` على الحقل نفسه، فيُرسل ما كُتب فيه.' },
+    { key: 'off', label: 'خيار معطل', type: 'switch', name: 'aria-disabled="true"', desc: 'على خيار: يبقى في القائمة باهتًا، فلا يُختار بالنقر ولا تقف عليه الأسهم.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-combo', desc: 'يضم الحقل وقائمته، ويبني عليهما السكربت أدوار ARIA والتنقل بالأسهم.' },
+    { group: 'الأساس', name: 'ins-combo-list', desc: 'قائمة الخيارات `<ul>`، تنفتح تحت الحقل وهو يكتب.' },
+    { group: 'الأساس', name: 'ins-combo-option', desc: 'خيار واحد `<li>`، ويُرسل `data-value` إن كان عليه، وإلا فنصه.' },
+    { group: 'الأساس', name: 'data-label', desc: 'على خيار: النص الذي يُكتب في الحقل حين يُختار، إن كان في الخيار أكثر من اسمه.' },
+    { group: 'الأساس', name: 'ins:combo', kind: 'event', desc: 'يُطلق عند الاختيار، وفي `detail` الصندوق `el` والرمز `value` والنص `label` والخيار `option`.' }
+  ],
+  events: ['ins:combo'],
+  html: function (s) {
+    return '<div class="ins-combo">\n' +
+      '  <input class="ins-input"' + (s.hidden ? '' : ' name="city"') + ' aria-label="المدينة" autocomplete="off">\n' +
+      (s.hidden ? '  <input type="hidden" name="city">\n' : '') +
+      '  <ul class="ins-combo-list">\n' +
+      '    <li class="ins-combo-option" data-value="ruh">الرياض</li>\n' +
+      '    <li class="ins-combo-option" data-value="jed">جدّة</li>\n' +
+      '    <li class="ins-combo-option" data-value="cai"' + (s.off ? ' aria-disabled="true"' : '') + '>القاهرة</li>\n' +
+      '    <li class="ins-combo-option" data-value="alx">الإسكندريّة</li>\n' +
+      (s.empty ? '    <li class="ins-combo-empty">لا نتائج</li>\n' : '') +
+      '  </ul>\n' +
+      '</div>';
+  },
+  notes: function () {
+    return ['اكتب في الحقل لترى القائمة بخياراتك، واكتب «دبي» لترى «لا نتائج». وإذا اخترت مدينة ظهر هنا الحدث الذي يطلقه.'];
+  }
+});
+
+SitePlay.define({
+  id: 'date',
+  wide: true,
+  title: 'التاريخ',
+  owns: 'ins-date-btn',
+  controls: [
+    { key: 'mode', label: 'ما يُختار', type: 'select', value: 'day', choices: [
+      { value: 'day', label: 'يوم واحد' },
+      { value: 'range', label: 'فترة بين تاريخين', name: 'data-ins-date-range="to"', desc: 'فترة في حقل واحد: النقرة الأولى تحدد البداية والثانية النهاية، وقيمة السمة اسم النهاية، فيتلقى الخادم `from` و`to`.' },
+      { value: 'datetime', label: 'تاريخ ووقت', name: 'type="datetime-local"', desc: 'مع `data-ins-date`: تقويم وإلى جانبه أعمدة للوقت، ويتلقى الخادم `2026-09-26T14:30`.' },
+      { value: 'pair', label: 'تاريخ ووقت في حقلين', name: 'data-ins-datetime="when"', desc: 'على مجموعة فيها حقل تاريخ وحقل وقت `data-ins-time`: يرسلهما معًا باسم السمة، `2026-09-26T14:30`.' }
+    ] },
+    { key: 'bounds', label: 'حدود للتاريخ', group: 'الحدود', type: 'switch', name: 'min', desc: 'أول يوم يُختار، فتبهت الأيام قبله في التقويم، ويُرفض ما يُكتب قبله برسالة.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-date', desc: 'على `<input type="date">` داخل `.ins-input-group`: يكتب التاريخ بلغة الصفحة ويفتح تقويمًا، ويبقى حقل المتصفح نفسه إن غاب السكربت.' },
+    { group: 'الأساس', name: 'ins-date-btn', desc: 'زر التقويم، يضيفه السكربت إلى المجموعة، فلا تكتبه بنفسك.' },
+    { group: 'الأساس', name: 'data-ins-calendar', desc: 'تقويم آخر للحقل، مثل `hijri` مع إضافة التقويم الهجري، ويبقى ما يُرسل ميلاديًا.' },
+    { group: 'الأساس', name: 'ins:date', kind: 'event', desc: 'يُطلق حين يتغير التاريخ، وفي `detail` الحقل `input` وقيمته `value`، ونهاية الفترة `end`.' },
+    { group: 'ما يُختار', name: 'data-ins-date-to', desc: 'تاريخ النهاية الذي تبدأ به الفترة.' },
+    { group: 'الحدود', name: 'max', desc: 'آخر يوم يُختار.' }
+  ],
+  events: ['ins:date'],
+  html: function (s) {
+    var b = s.bounds, input;
+    if (s.mode === 'range') {
+      input = '<input class="ins-input" id="p-date" type="date" data-ins-date data-ins-date-range="to" name="from" value="2026-09-16" data-ins-date-to="2026-09-23"' +
+        (b ? ' min="2026-09-01" max="2026-10-31"' : '') + '>';
+    } else if (s.mode === 'datetime') {
+      input = '<input class="ins-input" id="p-date" type="datetime-local" data-ins-date name="when" value="2026-09-26T14:30" step="900"' +
+        (b ? ' min="2026-09-01T00:00" max="2026-10-31T23:59"' : '') + '>';
+    } else if (s.mode === 'pair') {
+      input = '<input class="ins-input" id="p-date" type="date" data-ins-date value="2026-09-26"' + (b ? ' min="2026-09-01" max="2026-10-31"' : '') + '>\n' +
+        '    <input class="ins-input" type="time" data-ins-time value="14:30" aria-label="الوقت">';
+    } else {
+      input = '<input class="ins-input" id="p-date" type="date" data-ins-date name="date" value="2026-09-30"' + (b ? ' min="2026-09-01" max="2026-10-31"' : '') + '>';
+    }
+    var label = s.mode === 'range' ? 'الفترة' : s.mode === 'day' ? 'التاريخ' : 'الموعد';
+    return '<div class="ins-field">\n' +
+      '  <label class="ins-label" for="p-date">' + label + '</label>\n' +
+      '  <div class="ins-input-group"' + (s.mode === 'pair' ? ' data-ins-datetime="when"' : '') + '>\n' +
+      '    ' + input + '\n' +
+      '  </div>\n' +
+      '</div>';
+  },
+  notes: function () {
+    return ['افتح التقويم لترى خياراتك فيه.'];
+  }
+});
+
+SitePlay.define({
+  id: 'time',
+  wide: true,
+  title: 'الوقت',
+  owns: 'ins-time',
+  controls: [
+    { key: 'step', label: 'الخطوة بالدقائق', type: 'seg', value: '', choices: [
+      { value: '900', label: '15', name: 'step="900"', desc: 'كم ثانية تقفز الدقائق في عمودها، ونصف ساعة إن غابت.' },
+      { value: '', label: '30' },
+      { value: '3600', label: '60' }
+    ] },
+    { key: 'bounds', label: 'حدود للوقت', group: 'الحدود', type: 'switch', name: 'min', desc: 'أول وقت يُختار، ويُرفض ما يُكتب قبله برسالة.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-time', desc: 'على `<input type="time">`: يعرض الوقت بلغة الصفحة، ويقبل كتابته مثل «14:30» و«2:30 م»، ويرسل `HH:MM` باسم الحقل.' },
+    { group: 'الأساس', name: 'ins-time', desc: 'يلف السكربت الحقل به ومعه الحقل المخفي، فلا تكتبه بنفسك.' },
+    { group: 'الأساس', name: 'ins:time', kind: 'event', desc: 'يُطلق حين يتغير الوقت، وفي `detail` الحقل `input` وقيمته `value`.' },
+    { group: 'الحدود', name: 'max', desc: 'آخر وقت يُختار.' }
+  ],
+  events: ['ins:time'],
+  html: function (s) {
+    return '<div class="ins-field">\n' +
+      '  <label class="ins-label" for="p-time">الموعد</label>\n' +
+      '  <input class="ins-input" id="p-time" type="time" data-ins-time name="at" value="09:00"' +
+      (s.step ? ' step="' + s.step + '"' : '') + (s.bounds ? ' min="08:00" max="18:00"' : '') + '>\n' +
+      '</div>';
+  },
+  notes: function () {
+    return ['افتح الحقل لترى الأعمدة بالخطوة والحدود التي اخترتها.'];
+  }
+});
+
+SitePlay.define({
+  id: 'range',
+  title: 'المنزلق',
+  owns: 'ins-range',
+  controls: [
+    { key: 'step', label: 'الخطوة', type: 'seg', value: '5', level: 'advanced', choices: [
+      { value: '1', label: '1' },
+      { value: '5', label: '5' },
+      { value: '10', label: '10', name: 'step', desc: 'مقدار كل خطوة، بالسحب وبالأسهم.' }
+    ] },
+    { key: 'disabled', label: 'معطل', type: 'switch', level: 'advanced', name: 'disabled', desc: 'يبهت المنزلق ولا يتحرك.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, level: 'advanced', name: 'ins-range', desc: 'على `<input type="range">`: يملأ المسار بلون الهوية حتى المقبض، ولا بد له من تسمية.' },
+    { group: 'الأساس', level: 'advanced', name: 'min', desc: 'ومعها `max` و`value`، كما في أي منزلق، وفي الصفحة العربية يقع الحد الأدنى على اليمين.' }
+  ],
+  html: function (s) {
+    return '<input class="ins-range" type="range" min="0" max="50" step="' + s.step + '" value="20" aria-label="النسبة"' + (s.disabled ? ' disabled' : '') + '>';
+  },
+  stage: function (view) {
+    var input = view.querySelector('.ins-range');
+    input.stepUp();
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  },
+  notes: function (s) {
+    return ['هكذا يبدو بعد خطوة واحدة: من 20 إلى `' + (20 + +s.step) + '`.'];
+  }
+});
+
+SitePlay.define({
+  id: 'stepper',
+  title: 'العداد',
+  owns: 'ins-spin',
+  controls: [
+    { key: 'step', label: 'الخطوة', type: 'seg', value: '', choices: [
+      { value: '', label: '1' },
+      { value: '5', label: '5', name: 'step', desc: 'مقدار كل ضغطة، كما يفهمه المتصفح نفسه.' }
+    ] },
+    { key: 'bounds', label: 'حدود للعدد', group: 'الحدود', type: 'switch', value: true, name: 'min', desc: 'أقل عدد، فيتعطل زر الإنقاص عنده.' },
+    { key: 'disabled', label: 'معطل', type: 'switch', name: 'disabled', desc: 'على الحقل: يتعطل معه الزران.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-spin', desc: 'زر بجانب حقل رقمي داخل `.ins-input-group`، يرسم علامته بنفسه ولا بد له من `aria-label`.' },
+    { group: 'الأساس', name: 'data-ins-spin="down"', desc: 'زر الإنقاص، في أول المجموعة.' },
+    { group: 'الأساس', name: 'data-ins-spin="up"', desc: 'زر الزيادة، في آخرها.' },
+    { group: 'الحدود', name: 'max', desc: 'أكبر عدد، فيتعطل زر الزيادة عنده.' }
+  ],
+  html: function (s) {
+    return '<div class="ins-input-group">\n' +
+      '  <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>\n' +
+      '  <input class="ins-input" type="number"' + (s.bounds ? ' min="0" max="20"' : '') + (s.step ? ' step="' + s.step + '"' : '') +
+      ' value="5" aria-label="العدد"' + (s.disabled ? ' disabled' : '') + '>\n' +
+      '  <button class="ins-spin" data-ins-spin="up" aria-label="زيادة"></button>\n' +
+      '</div>';
+  },
+  stage: function (view, s) {
+    if (s.disabled) return;
+    var input = view.querySelector('input[type="number"]');
+    input.stepUp();
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  },
+  notes: function (s) {
+    if (s.disabled) return [];
+    var out = ['هكذا يبدو بعد ضغطة واحدة على +: من 5 إلى `' + (5 + (+s.step || 1)) + '`.'];
+    if (s.bounds) out.push('اضغط − حتى الصفر، فيتعطل الزر عنده.');
+    return out;
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="input-group.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">مجموعات الحقول</span></a><a class="site-pager-link site-pager-link--next" href="chips.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الرقاقات والوسوم</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#combo">الإكمال التلقائي</a><a href="#date">التاريخ</a><a class="ins-toc-sub" href="#date-range">فترة بين تاريخين</a><a href="#time">الوقت</a><a class="ins-toc-sub" href="#datetime">تاريخ ووقت معًا</a><a href="#range">المنزلق</a><a href="#stepper">العداد</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#combo">الإكمال التلقائي</a><a href="#date">التاريخ</a><a class="ins-toc-sub" href="#date-range">فترة بين تاريخين</a><a href="#time">الوقت</a><a class="ins-toc-sub" href="#datetime">تاريخ ووقت معًا</a><a href="#stepper">العداد</a></nav>
+        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#combo">الإكمال التلقائي</a><a href="#date">التاريخ</a><a href="#time">الوقت</a><a href="#range">المنزلق</a><a href="#stepper">العداد</a><a href="#options">الخيارات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#combo">الإكمال التلقائي</a><a href="#date">التاريخ</a><a href="#time">الوقت</a><a href="#stepper">العداد</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
