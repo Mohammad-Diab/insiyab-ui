@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,12 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">شارات للحالة وللعدد، وصور رمزية، ومبالغ وأرقام لا تضطرب في السطر العربي.</p>
-        <h2 id="pills">شارات الحالة</h2>
-<p>
-  تجمع <code>.ins-pill</code> نقطة <code>.ins-pill-dot</code> ونصًا، وتأتي بست نبرات. ولا يتغير شكلها عند مرور المؤشر
-  (hover) إلا إذا كانت <code>&lt;button&gt;</code> أو <code>&lt;a&gt;</code>، فترتفع قليلًا.
-</p>
-<figure class="dx"><div class="dx-view row">
+        <figure class="dx"><div class="dx-view row">
   <span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>مكتمل</span>
   <span class="ins-pill ins-pill--warn"><span class="ins-pill-dot"></span>معلق</span>
   <span class="ins-pill ins-pill--bad"><span class="ins-pill-dot"></span>ملغى</span>
@@ -291,80 +287,168 @@
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--info"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>جارٍ<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--brand"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>مميز<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>مسودة<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<figure class="dx"><div class="dx-view row">
-  <button class="ins-pill ins-pill--brand"><span class="ins-pill-dot"></span>الكل</button>
-  <button class="ins-pill"><span class="ins-pill-dot"></span>الأول</button>
-  <button class="ins-pill"><span class="ins-pill-dot"></span>الثاني</button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--brand"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>الكل<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>الأول<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>الثاني<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="pills">شارات الحالة</h2>
+<p>
+  تجمع <code>.ins-pill</code> نقطة <code>.ins-pill-dot</code> ونصًا، وتأتي بست نبرات. اختر من الخيارات فتتغير الشارة وشيفرتها
+  معًا، وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="pill"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><span class="ins-pill ins-pill--ok"><span class="ins-pill-dot"></span>مكتمل</span></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات شارة الحالة"><label class="site-play-ctl" data-key="tone" data-type="select"><span class="site-play-label">النبرة</span><select class="ins-select ins-select--sm"><option value="">محايدة</option><option value="ok" selected>نجاح</option><option value="warn">تحذير</option><option value="bad">خطر</option><option value="info">معلومة</option><option value="brand">العلامة</option></select></label><label class="site-play-ctl" data-key="text" data-type="text"><span class="site-play-label">النص</span><input class="ins-input ins-input--sm" type="text" value="مكتمل"></label><div class="site-play-ctl" data-key="dot" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">بنقطة</span></span></label></div><div class="site-play-ctl" data-key="press" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">قابلة للنقر</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill ins-pill--ok"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pill-dot"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>مكتمل<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="count">شارات العدد</h2>
-<p>تحمل <code>.ins-badge</code> عددًا صغيرًا، ولها النبرات <code>--ok</code> و<code>--warn</code> و<code>--bad</code> و<code>--mute</code>.</p>
-<figure class="dx"><div class="dx-view row">
-  <span class="ins-badge">12</span>
-  <span class="ins-badge ins-badge--ok">3</span>
-  <span class="ins-badge ins-badge--warn">7</span>
-  <span class="ins-badge ins-badge--bad">99+</span>
-  <span class="ins-badge ins-badge--mute">0</span>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge"</span><span class="hl-t">&gt;</span>12<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge ins-badge--ok"</span><span class="hl-t">&gt;</span>3<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge ins-badge--warn"</span><span class="hl-t">&gt;</span>7<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge ins-badge--bad"</span><span class="hl-t">&gt;</span>99+<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge ins-badge--mute"</span><span class="hl-t">&gt;</span>0<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<p>تحمل <code>.ins-badge</code> عددًا صغيرًا، فهي للعدد لا للحالة: بلا حد ولا نقطة، وتسكن على شيء آخر.</p>
+<figure class="dx site-play" data-play="count"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><span class="ins-badge">12</span></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات شارة العدد"><label class="site-play-ctl" data-key="tone" data-type="select"><span class="site-play-label">النبرة</span><select class="ins-select ins-select--sm"><option value="" selected>العلامة</option><option value="ok">نجاح</option><option value="warn">تحذير</option><option value="bad">خطر</option><option value="mute">هادئة</option></select></label><label class="site-play-ctl" data-key="text" data-type="text"><span class="site-play-label">العدد</span><input class="ins-input ins-input--sm" type="text" value="12"></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-badge"</span><span class="hl-t">&gt;</span>12<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="avatar">الصورة الرمزية</h2>
-<p>تحمل حرفين أو صورة، وتأتي بثلاثة مقاسات.</p>
-<figure class="dx"><div class="dx-view row">
-  <span class="ins-avatar ins-avatar--sm">ع</span>
-  <span class="ins-avatar">ل ح</span>
-  <span class="ins-avatar ins-avatar--lg">س ي</span>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-avatar ins-avatar--sm"</span><span class="hl-t">&gt;</span>ع<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-avatar"</span><span class="hl-t">&gt;</span>ل ح<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-avatar ins-avatar--lg"</span><span class="hl-t">&gt;</span>س ي<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h3 id="avatars">مجموعة صور</h3>
-<p>
-  يرص <code>.ins-avatars</code> عدة صور يتداخل بعضها في بعض، ويجمع ما بقي في <code>.ins-avatar--more</code>. وتحيط
-  بكل صورة حلقة بلون السطح، فيبقى بين كل صورتين متداخلتين فاصل.
-</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-avatars" aria-label="المشاركون: 7">
-    <span class="ins-avatar ins-avatar--sm">ل</span>
-    <span class="ins-avatar ins-avatar--sm">ع</span>
-    <span class="ins-avatar ins-avatar--sm">س</span>
-    <span class="ins-avatar ins-avatar--sm ins-avatar--more">+4</span>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-avatars"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"المشاركون: 7"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-avatar ins-avatar--sm"</span><span class="hl-t">&gt;</span>ل<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-avatar ins-avatar--sm"</span><span class="hl-t">&gt;</span>ع<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-avatar ins-avatar--sm"</span><span class="hl-t">&gt;</span>س<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-avatar ins-avatar--sm ins-avatar--more"</span><span class="hl-t">&gt;</span>+4<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<p>تحمل <code>.ins-avatar</code> حرفين أو صورة، ويرص <code>.ins-avatars</code> عدة صور يتداخل بعضها في بعض.</p>
+<figure class="dx site-play" data-play="avatar"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><span class="ins-avatar">ل ح</span></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات الصورة الرمزية"><div class="site-play-ctl" data-key="size" data-type="seg"><span class="site-play-label">المقاس</span><div class="ins-seg" role="group" aria-label="المقاس"><button type="button" data-value="sm" aria-pressed="false">صغير</button><button type="button" data-value="" class="is-active" aria-pressed="true">عادي</button><button type="button" data-value="lg" aria-pressed="false">كبير</button></div></div><div class="site-play-ctl" data-key="group" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مجموعة صور</span></span></label></div><label class="site-play-ctl" data-key="text" data-type="text"><span class="site-play-label">الحروف</span><input class="ins-input ins-input--sm" type="text" value="ل ح"></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-avatar"</span><span class="hl-t">&gt;</span>ل ح<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <div class="site-adv"><h2 id="money">المبالغ</h2>
 <p>
-  يضم <code>.ins-money</code> القيمة في <code>-val</code> وتليها العملة في <code>-cur</code>، ولأن اتجاهه معزول عما
-  حوله بـ <code>unicode-bidi: isolate</code> تبقى إشارة السالب في مكانها. ويبين <code>--pos</code> و<code>--neg</code> الزيادة والنقص، وهو يصلح لكل عملة.
+  يضم <code>.ins-money</code> القيمة في <code>-val</code> وتليها العملة في <code>-cur</code>، ولأن اتجاه القيمة معزول عما حولها بـ
+  <code>unicode-bidi: isolate</code> تبقى إشارة السالب في مكانها.
 </p>
-<figure class="dx"><div class="dx-view row">
-  <span class="ins-money"><span class="ins-money-val">1,249.00</span><span class="ins-money-cur">ر.س</span></span>
-  <span class="ins-money"><span class="ins-money-val">120.50</span><span class="ins-money-cur">USD</span></span>
-  <span class="ins-money ins-money--pos"><span class="ins-money-val">+450.00</span><span class="ins-money-cur">ر.س</span></span>
-  <span class="ins-money ins-money--neg"><span class="ins-money-val">-1,500.00</span><span class="ins-money-cur">ر.س</span></span>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>1,249.00<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>ر.س<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>120.50<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>USD<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money ins-money--pos"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>+450.00<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>ر.س<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money ins-money--neg"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>-1,500.00<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>ر.س<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure></div>
+<figure class="dx site-play" data-play="money"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><span class="ins-money"><span class="ins-money-val">1,249.00</span><span class="ins-money-cur">ر.س</span></span></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات المبلغ"><div class="site-play-ctl site-adv" data-key="sign" data-type="seg"><span class="site-play-label">الاتجاه</span><div class="ins-seg" role="group" aria-label="الاتجاه"><button type="button" data-value="" class="is-active" aria-pressed="true">بلا</button><button type="button" data-value="pos" aria-pressed="false">زيادة</button><button type="button" data-value="neg" aria-pressed="false">نقص</button></div></div><label class="site-play-ctl site-adv" data-key="val" data-type="text"><span class="site-play-label">القيمة</span><input class="ins-input ins-input--sm" type="text" value="1,249.00"></label><label class="site-play-ctl site-adv" data-key="cur" data-type="text"><span class="site-play-label">العملة</span><input class="ins-input ins-input--sm" type="text" value="ر.س"></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-val"</span><span class="hl-t">&gt;</span>1,249.00<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-money-cur"</span><span class="hl-t">&gt;</span>ر.س<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure></div>
 
 <h2 id="num">الأرقام</h2>
-<p>أما ما ليس مبلغًا من الأرقام، كرقم الطلب والهاتف والتاريخ، فضعه في <code>.ins-num</code> ليأخذ الخط نفسه والعزل نفسه.</p>
-<figure class="dx"><div class="dx-view">
-  <p>الطلب <span class="ins-num">#40218</span></p>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>الطلب <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>#40218<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<p>أما ما ليس مبلغًا من الأرقام، كرقم المرجع والهاتف والتاريخ، فضعه في <code>.ins-num</code> ليُعزل اتجاهه كذلك.</p>
+<figure class="dx site-play" data-play="num"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><p>رقم المرجع <span class="ins-num">#40218</span></p></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات الرقم"><label class="site-play-ctl" data-key="text" data-type="text"><span class="site-play-label">الرقم</span><input class="ins-input ins-input--sm" type="text" value="#40218"></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>رقم المرجع <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>#40218<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الشارات والصور الرمزية والأرقام من كلاسات، لكل مكون صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>شارة الحالة</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-pill</code></td><td>كلاس</td><td>شارة للحالة، ومعها كلاس للنبرة. وهي محايدة إن لم تذكر نبرة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">النبرة</th></tr></tbody><tbody><tr><td><code>.ins-pill--ok</code></td><td>كلاس</td><td>لحالة تمت أو تسير كما ينبغي.</td></tr><tr><td><code>.ins-pill--warn</code></td><td>كلاس</td><td>لحالة معلقة أو تنتظر شيئًا.</td></tr><tr><td><code>.ins-pill--bad</code></td><td>كلاس</td><td>لحالة ملغاة أو متعثرة.</td></tr><tr><td><code>.ins-pill--info</code></td><td>كلاس</td><td>لحالة جارية.</td></tr><tr><td><code>.ins-pill--brand</code></td><td>كلاس</td><td>بلون العلامة، لما يستحق أن يتميز.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-pill-dot</code></td><td>كلاس</td><td>نقطة بلون الشارة قبل النص، لحالة تكفيها علامة بلا أيقونة.</td></tr><tr><td><code>button.ins-pill</code></td><td>عنصر</td><td>ضع الكلاس على <code>&lt;button&gt;</code> أو <code>&lt;a&gt;</code> فترتفع الشارة قليلًا تحت المؤشر. أما الشارة التي تُقرأ فحسب فلا تتحرك.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>شارة العدد</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-badge</code></td><td>كلاس</td><td>تحمل عددًا صغيرًا، بلون العلامة إن لم تذكر نبرة. وإذا تغير العدد فاستبدلت الشارة ظهرت بقفزة خفيفة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">النبرة</th></tr></tbody><tbody><tr><td><code>.ins-badge--ok</code></td><td>كلاس</td><td>لعدد ما تم.</td></tr><tr><td><code>.ins-badge--warn</code></td><td>كلاس</td><td>لعدد ما ينتظر.</td></tr><tr><td><code>.ins-badge--bad</code></td><td>كلاس</td><td>لعدد ما تعثر، أو ما يستدعي الانتباه.</td></tr><tr><td><code>.ins-badge--mute</code></td><td>كلاس</td><td>لعدد لا يطلب شيئًا، كالصفر.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>الصورة الرمزية</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-avatar</code></td><td>كلاس</td><td>قرص بلون العلامة يحمل حرفًا أو حرفين، أو صورة <code>&lt;img&gt;</code> تملؤه.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المقاس</th></tr></tbody><tbody><tr><td><code>.ins-avatar--sm</code></td><td>كلاس</td><td>صورة أصغر، لقائمة أو سطر.</td></tr><tr><td><code>.ins-avatar--lg</code></td><td>كلاس</td><td>صورة أكبر، لرأس صفحة أو بطاقة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">مجموعة صور</th></tr></tbody><tbody><tr><td><code>.ins-avatars</code></td><td>كلاس</td><td>يرص عدة صور يتداخل بعضها في بعض، وتحيط بكل صورة حلقة بلون السطح فيبقى بين كل صورتين فاصل. ومعه <code>aria-label</code> يقول كم هم.</td></tr><tr><td><code>.ins-avatar--more</code></td><td>كلاس</td><td>آخر المجموعة، يعد من بقي، مثل <code>+4</code>.</td></tr></tbody></table></div></div></details><details class="ins-collapse site-adv"><summary>المبلغ</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group site-adv"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr class="site-adv"><td><code>.ins-money</code></td><td>كلاس</td><td>مبلغ بأرقام متساوية العرض، يصلح لكل عملة.</td></tr><tr class="site-adv"><td><code>.ins-money-val</code></td><td>كلاس</td><td>القيمة، معزولة الاتجاه، فتبقى إشارة السالب في مكانها في السطر العربي.</td></tr><tr class="site-adv"><td><code>.ins-money-cur</code></td><td>كلاس</td><td>العملة بعد القيمة، أصغر منها وأهدأ لونًا.</td></tr></tbody><tbody class="site-opt-group site-adv"><tr><th colspan="3" scope="rowgroup">الاتجاه</th></tr></tbody><tbody><tr class="site-adv"><td><code>.ins-money--pos</code></td><td>كلاس</td><td>بلون النجاح، لمبلغ زاد.</td></tr><tr class="site-adv"><td><code>.ins-money--neg</code></td><td>كلاس</td><td>بلون الخطر، لمبلغ نقص.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>الرقم</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-num</code></td><td>كلاس</td><td>لرقم ليس مبلغًا، كرقم المرجع والهاتف والتاريخ: يعزل اتجاهه كما تُعزل قيمة المبلغ، فلا يضطرب في السطر العربي.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'pill',
+  title: 'شارة الحالة',
+  owns: 'ins-pill',
+  controls: [
+    { key: 'tone', label: 'النبرة', type: 'select', value: 'ok', choices: [
+      { value: '', label: 'محايدة' },
+      { value: 'ok', label: 'نجاح', name: 'ins-pill--ok', desc: 'لحالة تمت أو تسير كما ينبغي.' },
+      { value: 'warn', label: 'تحذير', name: 'ins-pill--warn', desc: 'لحالة معلقة أو تنتظر شيئًا.' },
+      { value: 'bad', label: 'خطر', name: 'ins-pill--bad', desc: 'لحالة ملغاة أو متعثرة.' },
+      { value: 'info', label: 'معلومة', name: 'ins-pill--info', desc: 'لحالة جارية.' },
+      { value: 'brand', label: 'العلامة', name: 'ins-pill--brand', desc: 'بلون العلامة، لما يستحق أن يتميز.' }
+    ] },
+    { key: 'text', label: 'النص', type: 'text', value: 'مكتمل' },
+    { key: 'dot', label: 'بنقطة', type: 'switch', value: true, name: 'ins-pill-dot', desc: 'نقطة بلون الشارة قبل النص، لحالة تكفيها علامة بلا أيقونة.' },
+    { key: 'press', label: 'قابلة للنقر', type: 'switch', name: 'button.ins-pill', kind: 'element', desc: 'ضع الكلاس على `<button>` أو `<a>` فترتفع الشارة قليلًا تحت المؤشر. أما الشارة التي تُقرأ فحسب فلا تتحرك.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-pill', desc: 'شارة للحالة، ومعها كلاس للنبرة. وهي محايدة إن لم تذكر نبرة.' }
+  ],
+  html: function (s) {
+    var dot = s.dot ? '<span class="ins-pill-dot"></span>' : '';
+    var cls = 'ins-pill' + (s.tone ? ' ins-pill--' + s.tone : '');
+    if (!s.press) return '<span class="' + cls + '">' + dot + s.text + '</span>';
+    return '<div class="ins-flex ins-items-center ins-gap-2">\n' +
+      '  <button class="' + cls + '">' + dot + s.text + '</button>\n' +
+      '  <button class="ins-pill">' + dot + 'الأول</button>\n' +
+      '  <button class="ins-pill">' + dot + 'الثاني</button>\n' +
+      '</div>';
+  },
+  notes: function (s) {
+    return s.press ? ['شارات تُنقر، كأزرار تصفية. مر عليها بالمؤشر فترتفع قليلًا.'] : [];
+  }
+});
+
+SitePlay.define({
+  id: 'count',
+  title: 'شارة العدد',
+  owns: 'ins-badge',
+  controls: [
+    { key: 'tone', label: 'النبرة', type: 'select', value: '', choices: [
+      { value: '', label: 'العلامة' },
+      { value: 'ok', label: 'نجاح', name: 'ins-badge--ok', desc: 'لعدد ما تم.' },
+      { value: 'warn', label: 'تحذير', name: 'ins-badge--warn', desc: 'لعدد ما ينتظر.' },
+      { value: 'bad', label: 'خطر', name: 'ins-badge--bad', desc: 'لعدد ما تعثر، أو ما يستدعي الانتباه.' },
+      { value: 'mute', label: 'هادئة', name: 'ins-badge--mute', desc: 'لعدد لا يطلب شيئًا، كالصفر.' }
+    ] },
+    { key: 'text', label: 'العدد', type: 'text', value: '12' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-badge', desc: 'تحمل عددًا صغيرًا، بلون العلامة إن لم تذكر نبرة. وإذا تغير العدد فاستبدلت الشارة ظهرت بقفزة خفيفة.' }
+  ],
+  html: function (s) {
+    return '<span class="ins-badge' + (s.tone ? ' ins-badge--' + s.tone : '') + '">' + s.text + '</span>';
+  }
+});
+
+SitePlay.define({
+  id: 'avatar',
+  title: 'الصورة الرمزية',
+  owns: 'ins-avatar',
+  controls: [
+    { key: 'size', label: 'المقاس', type: 'seg', value: '', choices: [
+      { value: 'sm', label: 'صغير', name: 'ins-avatar--sm', desc: 'صورة أصغر، لقائمة أو سطر.' },
+      { value: '', label: 'عادي' },
+      { value: 'lg', label: 'كبير', name: 'ins-avatar--lg', desc: 'صورة أكبر، لرأس صفحة أو بطاقة.' }
+    ] },
+    { key: 'group', label: 'مجموعة صور', group: 'مجموعة صور', type: 'switch', name: 'ins-avatars', desc: 'يرص عدة صور يتداخل بعضها في بعض، وتحيط بكل صورة حلقة بلون السطح فيبقى بين كل صورتين فاصل. ومعه `aria-label` يقول كم هم.' },
+    { key: 'text', label: 'الحروف', type: 'text', value: 'ل ح' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-avatar', desc: 'قرص بلون العلامة يحمل حرفًا أو حرفين، أو صورة `<img>` تملؤه.' },
+    { group: 'مجموعة صور', name: 'ins-avatar--more', desc: 'آخر المجموعة، يعد من بقي، مثل `+4`.' }
+  ],
+  disable: function (s) { return s.group ? ['text'] : []; },
+  html: function (s) {
+    var cls = 'ins-avatar' + (s.size ? ' ins-avatar--' + s.size : '');
+    if (!s.group) return '<span class="' + cls + '">' + s.text + '</span>';
+    return '<div class="ins-avatars" aria-label="المشاركون: 7">\n' +
+      ['ل', 'ع', 'س'].map(function (t) { return '  <span class="' + cls + '">' + t + '</span>\n'; }).join('') +
+      '  <span class="' + cls + ' ins-avatar--more">+4</span>\n' +
+      '</div>';
+  }
+});
+
+SitePlay.define({
+  id: 'money',
+  title: 'المبلغ',
+  owns: 'ins-money',
+  controls: [
+    { key: 'sign', label: 'الاتجاه', type: 'seg', value: '', level: 'advanced', choices: [
+      { value: '', label: 'بلا' },
+      { value: 'pos', label: 'زيادة', name: 'ins-money--pos', desc: 'بلون النجاح، لمبلغ زاد.' },
+      { value: 'neg', label: 'نقص', name: 'ins-money--neg', desc: 'بلون الخطر، لمبلغ نقص.' }
+    ] },
+    { key: 'val', label: 'القيمة', type: 'text', value: '1,249.00', level: 'advanced' },
+    { key: 'cur', label: 'العملة', type: 'text', value: 'ر.س', level: 'advanced' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, level: 'advanced', name: 'ins-money', desc: 'مبلغ بأرقام متساوية العرض، يصلح لكل عملة.' },
+    { group: 'الأساس', level: 'advanced', name: 'ins-money-val', desc: 'القيمة، معزولة الاتجاه، فتبقى إشارة السالب في مكانها في السطر العربي.' },
+    { group: 'الأساس', level: 'advanced', name: 'ins-money-cur', desc: 'العملة بعد القيمة، أصغر منها وأهدأ لونًا.' }
+  ],
+  html: function (s) {
+    return '<span class="ins-money' + (s.sign ? ' ins-money--' + s.sign : '') + '"><span class="ins-money-val">' + s.val +
+      '</span><span class="ins-money-cur">' + s.cur + '</span></span>';
+  },
+  notes: function (s) {
+    return s.sign === 'neg' && s.val.charAt(0) !== '-' ? ['اكتب الإشارة في القيمة، مثل `-1,500.00`، فالكلاس يلوّن ولا يضيفها.'] : [];
+  }
+});
+
+SitePlay.define({
+  id: 'num',
+  title: 'الرقم',
+  owns: 'ins-num',
+  controls: [
+    { key: 'text', label: 'الرقم', type: 'text', value: '#40218' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-num', desc: 'لرقم ليس مبلغًا، كرقم المرجع والهاتف والتاريخ: يعزل اتجاهه كما تُعزل قيمة المبلغ، فلا يضطرب في السطر العربي.' }
+  ],
+  html: function (s) {
+    return '<p>رقم المرجع <span class="ins-num">' + s.text + '</span></p>';
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="toasts.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الرسائل العابرة</span></a><a class="site-pager-link site-pager-link--next" href="list.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">القوائم</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#pills">شارات الحالة</a><a href="#count">شارات العدد</a><a href="#avatar">الصورة الرمزية</a><a class="ins-toc-sub" href="#avatars">مجموعة صور</a><a href="#money">المبالغ</a><a href="#num">الأرقام</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#pills">شارات الحالة</a><a href="#count">شارات العدد</a><a href="#avatar">الصورة الرمزية</a><a class="ins-toc-sub" href="#avatars">مجموعة صور</a><a href="#num">الأرقام</a></nav>
+        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#pills">شارات الحالة</a><a href="#count">شارات العدد</a><a href="#avatar">الصورة الرمزية</a><a href="#money">المبالغ</a><a href="#num">الأرقام</a><a href="#options">الخيارات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#pills">شارات الحالة</a><a href="#count">شارات العدد</a><a href="#avatar">الصورة الرمزية</a><a href="#num">الأرقام</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
