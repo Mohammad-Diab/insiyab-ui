@@ -19,8 +19,8 @@
           mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 /* The arrow points where the month goes: back is toward the start of the line. */
-[dir="ltr"] .ins-month-prev .ins-month-arrow,
-[dir="rtl"] .ins-month-next .ins-month-arrow { transform: scaleX(-1); }
+.ins-month-prev .ins-month-arrow:dir(ltr),
+.ins-month-next .ins-month-arrow:dir(rtl) { transform: scaleX(-1); }
 
 .ins-month-grid {
   inline-size: 100%;
