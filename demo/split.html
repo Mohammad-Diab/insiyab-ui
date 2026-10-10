@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,14 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">لوحان يتقاسمان العرض بخط تسحبه: مستند بجانب نموذجه، أو قائمة بجانب ما تفتحه منها.</p>
-        <h2 id="split">العرض المقسوم</h2>
-<p>
-  يضع <code>.ins-split</code> لوحين جنبًا إلى جنب يتقاسمان العرض، ويفصل بينهما خط تسحبه فتتبدل القسمة: مستند بجوار النموذج الخاص به، أو قائمة
-  بجوار العنصر الذي تفتحه منها. ويضع السكربت بينهما مقبضًا تحركه الأسهم أيضًا، ويذهب به <kbd class="ins-kbd">Home</kbd> و<kbd class="ins-kbd">End</kbd>
-  إلى الطرفين، ويعيده النقر المزدوج أو <kbd class="ins-kbd">Enter</kbd> إلى المنتصف. وإذا أعطيت <code>data-ins-split</code> اسمًا تذكرت المكتبة القسمة
-  في المرة القادمة. ويتمرر كل لوح وحده، فإذا ضاقت الشاشة عن 56rem صار اللوحان أحدهما فوق الآخر.
-</p>
-<figure class="dx"><div class="dx-view flush">
+        <figure class="dx"><div class="dx-view flush">
   <div class="ins-split" data-ins-split="demo" style="block-size: 18rem">
     <section class="ins-split-pane ins-p-5">
       <h3 class="ins-h4">المستند</h3>
@@ -304,19 +298,70 @@
   <span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<div class="site-adv"><h2 id="vertical">لوح فوق لوح</h2>
-<p>ويضع <code>--v</code> اللوحين أحدهما فوق الآخر، فيصير المقبض أفقيًا.</p>
-<figure class="dx"><div class="dx-view flush">
-  <div class="ins-split ins-split--v" style="block-size: 18rem">
-    <section class="ins-split-pane ins-p-5">القائمة</section>
-    <section class="ins-split-pane ins-p-5">التفاصيل</section>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-split ins-split--v"</span> <span class="hl-a">style</span>=<span class="hl-s">"block-size: 18rem"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;section</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-split-pane ins-p-5"</span><span class="hl-t">&gt;</span>القائمة<span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;section</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-split-pane ins-p-5"</span><span class="hl-t">&gt;</span>التفاصيل<span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
+<h2 id="split">العرض المقسوم</h2>
+<p>
+  يضع <code>.ins-split</code> لوحين جنبًا إلى جنب يتقاسمان العرض، ويفصل بينهما خط تسحبه فتتبدل القسمة: مستند بجوار النموذج الخاص به، أو قائمة
+  بجوار العنصر الذي تفتحه منها. ويتمرر كل لوح وحده، فإذا ضاقت الشاشة عن 56rem صار اللوحان أحدهما فوق الآخر.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="split"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-split" style="block-size: 12rem">
+  <section class="ins-split-pane"><div class="demo-box demo-box--tall">اللوح الأول</div></section>
+  <section class="ins-split-pane"><div class="demo-box demo-box--tall">اللوح الثاني</div></section>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">اسحب الخط بين اللوحين، فيظهر هنا الحدث الذي يطلقه.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات العرض المقسوم"><div class="site-play-ctl" data-key="start" data-type="seg"><span class="site-play-label">حصة اللوح الأول</span><div class="ins-seg" role="group" aria-label="حصة اللوح الأول"><button type="button" data-value="30" aria-pressed="false">30%</button><button type="button" data-value="" class="is-active" aria-pressed="true">50%</button><button type="button" data-value="70" aria-pressed="false">70%</button></div></div><div class="site-play-ctl" data-key="limits" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">حدود أضيق للسحب</span></span></label></div><div class="site-play-ctl" data-key="keep" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">يتذكر القسمة</span></span></label></div><div class="site-play-ctl site-adv" data-key="v" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">لوح فوق لوح</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-split"</span> <span class="hl-a">style</span>=<span class="hl-s">"block-size: 12rem"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;section</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-split-pane"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall"</span><span class="hl-t">&gt;</span>اللوح الأول<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;section</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-split-pane"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall"</span><span class="hl-t">&gt;</span>اللوح الثاني<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<div class="site-adv"><h3 id="script">من السكربت</h3>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.split(<span class="hl-s">'#review'</span>, <span class="hl-n">60</span>);                          <span class="hl-c">// اللوح الأول 60%</span>
 <span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:split'</span>, (e) =&gt; console.log(e.detail.size));</code></pre></div></div>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في العرض المقسوم من كلاسات وسمات وأحداث.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>العرض المقسوم</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-split</code></td><td>كلاس</td><td>يضع لوحين جنبًا إلى جنب يتقاسمان العرض، ولا بد له من ارتفاع تعطيه إياه، فيتمرر كل لوح وحده.</td></tr><tr><td><code>.ins-split-pane</code></td><td>كلاس</td><td>كل لوح من اللوحين.</td></tr><tr><td><code>.ins-split-handle</code></td><td>كلاس</td><td>المقبض بين اللوحين، يضعه السكربت بنفسه، وتحركه الأسهم أيضًا، ويذهب به <code>Home</code> و<code>End</code> إلى الطرفين.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">حصة اللوح الأول</th></tr></tbody><tbody><tr><td><code>data-ins-split-default="30"</code></td><td>سمة</td><td>حصة اللوح الأول حين يُفتح أول مرة، وإليها يعيده النقر المزدوج و<code>Enter</code>. والأصل 50.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>data-ins-split</code></td><td>سمة</td><td>أعطها اسمًا، فتحفظ المكتبة القسمة باسمه وتعيدها في الزيارة القادمة.</td></tr><tr class="site-adv"><td><code>.ins-split--v</code></td><td>كلاس</td><td>يضع اللوحين أحدهما فوق الآخر، فيصير المقبض أفقيًا.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">حدود أضيق للسحب</th></tr></tbody><tbody><tr><td><code>data-ins-min="60"</code></td><td>سمة</td><td>أصغر حصة للوح الأول بالنسبة المئوية، ولا تنزل عنها ولا الحصة التي يبدأ بها. والأصل 20.</td></tr><tr><td><code>data-ins-max="75"</code></td><td>سمة</td><td>أكبر حصة للوح الأول، والأصل 80.</td></tr></tbody><tbody class="site-opt-group site-adv"><tr><th colspan="3" scope="rowgroup">السكربت</th></tr></tbody><tbody><tr class="site-adv"><td><code>.is-dragging</code></td><td>كلاس</td><td>يضعه السكربت على العرض المقسوم ومقبضه ما دام السحب جاريًا.</td></tr><tr class="site-adv"><td><code>ins:split</code></td><td>حدث</td><td>يُطلق كلما تغيرت القسمة بالسحب أو بلوحة المفاتيح، وفي <code>detail</code> العرض المقسوم <code>el</code> وحصة اللوح الأول <code>size</code>.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'split',
+  title: 'العرض المقسوم',
+  owns: 'ins-split',
+  wide: true,
+  controls: [
+    { key: 'start', label: 'حصة اللوح الأول', type: 'seg', value: '', choices: [
+      { value: '30', label: '30%', name: 'data-ins-split-default="30"', desc: 'حصة اللوح الأول حين يُفتح أول مرة، وإليها يعيده النقر المزدوج و`Enter`. والأصل 50.' },
+      { value: '', label: '50%' },
+      { value: '70', label: '70%' }
+    ] },
+    { key: 'limits', label: 'حدود أضيق للسحب', type: 'switch' },
+    { key: 'keep', label: 'يتذكر القسمة', type: 'switch', name: 'data-ins-split', desc: 'أعطها اسمًا، فتحفظ المكتبة القسمة باسمه وتعيدها في الزيارة القادمة.' },
+    { key: 'v', label: 'لوح فوق لوح', type: 'switch', level: 'advanced', name: 'ins-split--v', desc: 'يضع اللوحين أحدهما فوق الآخر، فيصير المقبض أفقيًا.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-split', desc: 'يضع لوحين جنبًا إلى جنب يتقاسمان العرض، ولا بد له من ارتفاع تعطيه إياه، فيتمرر كل لوح وحده.' },
+    { group: 'الأساس', name: 'ins-split-pane', desc: 'كل لوح من اللوحين.' },
+    { group: 'الأساس', name: 'ins-split-handle', desc: 'المقبض بين اللوحين، يضعه السكربت بنفسه، وتحركه الأسهم أيضًا، ويذهب به `Home` و`End` إلى الطرفين.' },
+    { group: 'حدود أضيق للسحب', name: 'data-ins-min="60"', desc: 'أصغر حصة للوح الأول بالنسبة المئوية، ولا تنزل عنها ولا الحصة التي يبدأ بها. والأصل 20.' },
+    { group: 'حدود أضيق للسحب', name: 'data-ins-max="75"', desc: 'أكبر حصة للوح الأول، والأصل 80.' },
+    { group: 'السكربت', name: 'is-dragging', kind: 'class', level: 'advanced', desc: 'يضعه السكربت على العرض المقسوم ومقبضه ما دام السحب جاريًا.' },
+    { group: 'السكربت', name: 'ins:split', kind: 'event', level: 'advanced', desc: 'يُطلق كلما تغيرت القسمة بالسحب أو بلوحة المفاتيح، وفي `detail` العرض المقسوم `el` وحصة اللوح الأول `size`.' }
+  ],
+  events: ['ins:split'],
+  html: function (s) {
+    var attrs = (s.keep ? ' data-ins-split="panes"' : '') + (s.start ? ' data-ins-split-default="' + s.start + '"' : '') +
+      (s.limits ? ' data-ins-min="60" data-ins-max="75"' : '');
+    return '<div class="ins-split' + (s.v ? ' ins-split--v' : '') + '"' + attrs + ' style="block-size: 12rem">\n' +
+      '  <section class="ins-split-pane"><div class="demo-box demo-box--tall">اللوح الأول</div></section>\n' +
+      '  <section class="ins-split-pane"><div class="demo-box demo-box--tall">اللوح الثاني</div></section>\n' +
+      '</div>';
+  },
+  notes: function (s) {
+    var out = ['اسحب الخط بين اللوحين، فيظهر هنا الحدث الذي يطلقه.'];
+    if (s.limits) out.push('لا تخرج القسمة عن 60% و75%، حتى الحصة التي يبدأ بها اللوح الأول.');
+    if (s.keep) out.push('غيّر القسمة ثم أعد تحميل الصفحة، فتجدها كما تركتها.');
+    return out;
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="spacing.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">المسافات والترتيب</span></a><a class="site-pager-link site-pager-link--next" href="typography.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الخطوط والنصوص</span></a></nav>
         </div>
         
