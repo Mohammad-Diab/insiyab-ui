@@ -1,0 +1,69 @@
+<link rel="stylesheet" href="../dist/plugins/insiyab-notify.css">
+<script src="../dist/plugins/insiyab-notify.js" defer></script>
+
+<demo-example class="row">
+  <details class="ins-pop ins-notify" data-ins-notify>
+    <summary class="ins-island ins-island--icon" aria-label="الإشعارات"><svg class="ico"><use href="#i-bell"/></svg></summary>
+    <div class="ins-pop-body ins-notify-body">
+      <div class="ins-notify-head">
+        <b class="ins-notify-title">الإشعارات</b>
+        <button class="ins-btn ins-btn--bare ins-btn--sm" type="button" data-ins-notify-read>تعليم الكل مقروءًا</button>
+      </div>
+      <ul class="ins-list ins-notify-list">
+        <li class="ins-list-item" data-ins-unread>
+          <span class="ins-panel-ico"><svg class="ico"><use href="#i-download"/></svg></span>
+          <span class="ins-list-text"><span class="ins-list-title">اكتمل التصدير</span><span class="ins-list-desc">الملف جاهز للتنزيل.</span></span>
+          <span class="ins-list-end">الآن</span>
+        </li>
+        <li class="ins-list-item" data-ins-unread>
+          <span class="ins-panel-ico"><svg class="ico"><use href="#i-message"/></svg></span>
+          <span class="ins-list-text"><span class="ins-list-title">تعليق جديد على المستند</span><span class="ins-list-desc">على الفقرة الثانية.</span></span>
+          <span class="ins-list-end">قبل ساعة</span>
+        </li>
+        <li class="ins-list-item">
+          <span class="ins-panel-ico"><svg class="ico"><use href="#i-check"/></svg></span>
+          <span class="ins-list-text"><span class="ins-list-title">تم حفظ التغييرات</span><span class="ins-list-desc">حُفظت نسخة جديدة من الملف.</span></span>
+          <span class="ins-list-end">أمس</span>
+        </li>
+      </ul>
+    </div>
+  </details>
+</demo-example>
+
+<h2 id="install">التثبيت</h2>
+<p>إضافة مستقلة عن المكتبة: ملف أنماط وملف سكربت تضعهما بعد ملفاتها.</p>
+<demo-code lang="html">
+<link rel="stylesheet" href="insiyab/plugins/insiyab-notify.css">
+<script src="insiyab/insiyab-boot.js"></script>
+<script src="insiyab/insiyab.js" defer></script>
+<script src="insiyab/plugins/insiyab-notify.js" defer></script>
+</demo-code>
+
+<h2 id="notify">مركز الإشعارات</h2>
+<p>
+  ضع <code>data-ins-notify</code> على قائمة منسدلة زرها جرس، فيعد السكربت الصفوف التي عليها <code>data-ins-unread</code>
+  ويكتب عددها على زاوية الجرس، ويصير الصف مقروءًا حين يُنقر. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<demo-play of="notify"></demo-play>
+
+<h2 id="when">متى تستعمل مركز الإشعارات</h2>
+<ul>
+  <li>لما يحدث والمستخدم بعيد عنه، ويبقى حتى يراه: اكتمل عمل طويل، أو وصل تعليق.</li>
+  <li>أما تأكيد ما فعله المستخدم للتو فمكانه <a href="toasts.html">الرسالة العابرة</a>، تظهر ثم تغيب.</li>
+</ul>
+
+<h2 id="api" data-level="advanced">التحكم بـ JavaScript</h2>
+<p>إذا وصل إشعار من الخادم فأضف صفه إلى القائمة، فيعده الجرس ويهتز مرة واحدة.</p>
+<demo-code lang="js">
+Insiyab.notify('#inbox');                  // عدد غير المقروءة
+Insiyab.notify('#inbox', item);            // تعليم صف مقروءًا، بهدوء
+Insiyab.notify('#inbox', 'all');           // تعليمها كلها مقروءة
+
+document.addEventListener('ins:notify', (e) => {
+  console.log(e.detail.item, e.detail.all);  // حين يعلمها المستخدم مقروءة
+});
+</demo-code>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في مركز الإشعارات من كلاسات وسمات وأحداث، في صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
