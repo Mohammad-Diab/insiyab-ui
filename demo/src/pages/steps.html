@@ -1,57 +1,18 @@
+<demo-example>
+  <ol class="ins-steps">
+    <li class="ins-steps-item is-done"><span class="ins-steps-label">الأولى</span></li>
+    <li class="ins-steps-item" aria-current="step"><span class="ins-steps-label">الثانية</span></li>
+    <li class="ins-steps-item"><span class="ins-steps-label">الثالثة</span></li>
+  </ol>
+</demo-example>
+
 <h2 id="steps">الخطوات</h2>
 <p>
   <code>.ins-steps</code> قائمة <code>&lt;ol&gt;</code> مرقمة لا تحتاج إلى سكربت، تميز فيها الخطوة المنجزة بـ <code>.is-done</code> والحالية
-  بـ <code>aria-current="step"</code>. وتصلح وحدها لمسار موزع على عدة صفحات من الخادم.
+  بـ <code>aria-current="step"</code>. وتصلح وحدها لمسار موزع على عدة صفحات من الخادم، وتجد الخيارات كلها بشرحها في
+  <a href="#options">آخر الصفحة</a>.
 </p>
-<demo-example>
-  <ol class="ins-steps">
-    <li class="ins-steps-item is-done"><span class="ins-steps-label">الأولى</span></li>
-    <li class="ins-steps-item" aria-current="step"><span class="ins-steps-label">الثانية</span></li>
-    <li class="ins-steps-item"><span class="ins-steps-label">الثالثة</span></li>
-  </ol>
-</demo-example>
-<p>ويضع <code>--dots</code> نقاطًا صغيرة مكان الأرقام، فيليق ببطاقة الدخول، ولا تغيب الأسماء عن قارئ الشاشة.</p>
-<demo-example>
-  <ol class="ins-steps ins-steps--dots">
-    <li class="ins-steps-item is-done"><span class="ins-steps-label">الأولى</span></li>
-    <li class="ins-steps-item" aria-current="step"><span class="ins-steps-label">الثانية</span></li>
-    <li class="ins-steps-item"><span class="ins-steps-label">الثالثة</span></li>
-  </ol>
-</demo-example>
-
-<h3 id="states">حالات أخرى</h3>
-<p>تضع <code>.is-flagged</code> نقطة صفراء على خطوة مؤجلة يعود إليها المستخدم، وتضع <code>.is-error</code> نقطة حمراء على خطوة فيها ما يحتاج إلى إصلاح.</p>
-<demo-example>
-  <ol class="ins-steps">
-    <li class="ins-steps-item is-done"><span class="ins-steps-label">الأولى</span></li>
-    <li class="ins-steps-item is-done is-flagged"><span class="ins-steps-label">الثانية</span></li>
-    <li class="ins-steps-item is-error"><span class="ins-steps-label">الثالثة</span></li>
-    <li class="ins-steps-item" aria-current="step"><span class="ins-steps-label">الرابعة</span></li>
-  </ol>
-</demo-example>
-
-<h3 id="grid">شبكة الأرقام</h3>
-<p>
-  وإذا كثرت الخطوات وخفيت أسماؤها، كأسئلة نموذج طويل، فاستعمل <code>--grid</code>: أرقام تلتف على الأسطر بلا خطوط
-  تصلها. واجعل في كل عنصر رابطًا أو زرًا بالكلاس <code>.ins-steps-label</code>، فتصير الدائرة كلها ذلك الرابط، ويذهب نصه
-  إلى قارئ الشاشة. وتضع الصفحة الحالات بنفسها: منجزة لما أُجيب عنه، وحالية للمفتوح، ومؤجلة لما ينتظر المراجعة.
-</p>
-<demo-example>
-  <ol class="ins-steps ins-steps--grid">
-    <li class="ins-steps-item is-done"><a class="ins-steps-label" href="#grid">البند 1</a></li>
-    <li class="ins-steps-item is-done"><a class="ins-steps-label" href="#grid">البند 2</a></li>
-    <li class="ins-steps-item is-done is-flagged"><a class="ins-steps-label" href="#grid">البند 3</a></li>
-    <li class="ins-steps-item" aria-current="step"><a class="ins-steps-label" href="#grid">البند 4</a></li>
-    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 5</a></li>
-    <li class="ins-steps-item is-flagged"><a class="ins-steps-label" href="#grid">البند 6</a></li>
-    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 7</a></li>
-    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 8</a></li>
-    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 9</a></li>
-    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 10</a></li>
-    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 11</a></li>
-    <li class="ins-steps-item"><a class="ins-steps-label" href="#grid">البند 12</a></li>
-  </ol>
-</demo-example>
+<demo-play of="steps"></demo-play>
 
 <h2 id="wizard">المعالج</h2>
 <p>
@@ -60,99 +21,7 @@
   <kbd class="ins-kbd">Enter</kbd> داخل الحقل يعمل عمل «التالي»، ثم ينتقل التركيز إلى الخطوة الجديدة. فإذا غابت جافاسكربت
   عاد المعالج نموذجًا واحدًا في آخره زر إرسال.
 </p>
-<p>
-  ولك أن تضع الألواح داخل <code>.ins-wizard-body</code>، فيتدرج ارتفاع المعالج بسلاسة بين خطوة وأخرى. وتدخل الخطوة
-  التالية من نهاية السطر، وتدخل السابقة من الجهة الأخرى عند الرجوع.
-</p>
-<demo-example>
-  <form class="ins-wizard" id="store-wizard" data-ins-validate>
-    <ol class="ins-steps">
-      <li class="ins-steps-item"><span class="ins-steps-label">الاسم</span></li>
-      <li class="ins-steps-item"><span class="ins-steps-label">البريد</span></li>
-      <li class="ins-steps-item"><span class="ins-steps-label">التأكيد</span></li>
-    </ol>
-    <div class="ins-wizard-body">
-      <section class="ins-wizard-panel" aria-label="الاسم">
-        <div class="ins-field">
-          <label class="ins-label" for="w-name">الاسم</label>
-          <input class="ins-input" id="w-name" required>
-          <p class="ins-error"></p>
-        </div>
-      </section>
-      <section class="ins-wizard-panel ins-stack" aria-label="البريد">
-        <div class="ins-field">
-          <label class="ins-label" for="w-email">البريد</label>
-          <input class="ins-input" id="w-email" type="email" required dir="ltr">
-          <p class="ins-error"></p>
-        </div>
-        <div class="ins-field">
-          <label class="ins-label" for="w-phone">الهاتف</label>
-          <input class="ins-input" id="w-phone" type="tel" dir="ltr">
-        </div>
-      </section>
-      <section class="ins-wizard-panel" aria-label="التأكيد">
-        <label class="ins-check"><input type="checkbox" required><span class="ins-check-text">أوافق</span></label>
-      </section>
-    </div>
-    <div class="ins-wizard-foot">
-      <button type="button" class="ins-btn ins-btn--secondary" data-ins-wizard="prev">السابق</button>
-      <button type="button" class="ins-btn ins-btn--primary" data-ins-wizard="next">التالي</button>
-      <button class="ins-btn ins-btn--primary ins-wizard-finish">إرسال</button>
-    </div>
-  </form>
-</demo-example>
-
-<h2 id="dialog">داخل مربع الحوار</h2>
-<p>
-  يعمل المعالج نفسه داخل <code>.ins-dialog</code>، فيوضع زر الإلغاء <code>data-ins-dialog-close</code> في أول الشريط
-  السفلي، وزرا السابق والتالي في آخره.
-</p>
-<demo-example>
-  <button class="ins-btn ins-btn--primary" data-ins-dialog="#wiz-dialog">إضافة</button>
-  <dialog class="ins-dialog" id="wiz-dialog">
-    <form class="ins-wizard" id="dialog-wizard" data-ins-validate>
-      <div class="ins-dialog-head">
-        <h3 class="ins-dialog-title">إضافة</h3>
-        <button type="button" class="ins-close" data-ins-dialog-close aria-label="إغلاق"></button>
-      </div>
-      <div class="ins-dialog-body">
-        <ol class="ins-steps">
-          <li class="ins-steps-item"><span class="ins-steps-label">البيانات</span></li>
-          <li class="ins-steps-item"><span class="ins-steps-label">التفاصيل</span></li>
-          <li class="ins-steps-item"><span class="ins-steps-label">المراجعة</span></li>
-        </ol>
-        <div class="ins-wizard-body">
-          <section class="ins-wizard-panel" aria-label="البيانات">
-            <div class="ins-field">
-              <label class="ins-label" for="d-name">الاسم</label>
-              <input class="ins-input" id="d-name" required>
-              <p class="ins-error"></p>
-            </div>
-          </section>
-          <section class="ins-wizard-panel ins-stack" aria-label="التفاصيل">
-            <div class="ins-field">
-              <label class="ins-label" for="d-city">المدينة</label>
-              <select class="ins-select" id="d-city"><option>الرياض</option><option>عمّان</option><option>القاهرة</option></select>
-            </div>
-            <div class="ins-field">
-              <label class="ins-label" for="d-note">ملاحظة</label>
-              <textarea class="ins-textarea" id="d-note"></textarea>
-            </div>
-          </section>
-          <section class="ins-wizard-panel" aria-label="المراجعة">
-            <p class="ins-m-0">الاسم: <b data-ins-echo="#d-name"></b></p>
-          </section>
-        </div>
-      </div>
-      <div class="ins-dialog-foot ins-wizard-foot">
-        <button type="button" class="ins-btn ins-btn--bare" data-ins-dialog-close>إلغاء</button>
-        <button type="button" class="ins-btn ins-btn--secondary" data-ins-wizard="prev">السابق</button>
-        <button type="button" class="ins-btn ins-btn--primary" data-ins-wizard="next">التالي</button>
-        <button class="ins-btn ins-btn--primary ins-wizard-finish">حفظ</button>
-      </div>
-    </form>
-  </dialog>
-</demo-example>
+<demo-play of="wizard"></demo-play>
 
 <h2 id="server">خطوة تنتظر الخادم</h2>
 <p>
@@ -172,15 +41,6 @@ document.addEventListener('ins:wizard-leave', async (e) => {
 });
 </demo-code>
 
-<h2 id="more">تخطي الخطوات، والعودة إلى البداية، وعرض القيم</h2>
-<ul>
-  <li><b>اللوح الذي عليه <code>hidden</code></b> يتخطاه المعالج ويسقط معه نقطته أو رقمه من الخطوات، فيصلح لمسار يحدد الخادم طوله.</li>
-  <li><b><code>data-ins-wizard="restart"</code></b> على زر يعيد المعالج إلى الخطوة الأولى.</li>
-  <li><b><code>data-ins-echo="#phone"</code></b> على عنصر يعرض فيه قيمة حقل من خطوة سابقة، كرقم الهاتف في خطوة الرمز.</li>
-  <li><b><code>autofocus</code></b> على حقل في اللوح يمنحه التركيز حين تبلغ خطوته، بدل أن يذهب إلى اللوح نفسه.</li>
-  <li><b><code>data-ins-wizard-motion="slide"</code></b> على المعالج يجعل الخطوات تنزلق جنبًا إلى جنب بعرضها كاملًا، كما في بطاقة الدخول.</li>
-</ul>
-
 <h2 id="api" data-level="advanced">التحكم بـ JavaScript</h2>
 <demo-code lang="js">
 Insiyab.wizard('#store-wizard');              // رقم الخطوة الحالية
@@ -192,17 +52,18 @@ document.addEventListener('ins:wizard', (e) => {
 });
 </demo-code>
 
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الخطوات والمعالج من كلاسات وسمات وأحداث، لكل مكون صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
+
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('store-wizard').addEventListener('submit', function (e) {
-      e.preventDefault();
-      Insiyab.toast('تم الإرسال', 'ok');
-    });
-    document.getElementById('dialog-wizard').addEventListener('submit', function (e) {
-      e.preventDefault();
-      Insiyab.dialog('#wiz-dialog', 'close');
-      Insiyab.toast('تم الحفظ', 'ok');
-      Insiyab.wizard(this, 0);
-    });
+  document.addEventListener('submit', function (e) {
+    var w = e.target.closest('.site-play-view .ins-wizard');
+    if (!w) return;
+    e.preventDefault();
+    var dlg = w.closest('dialog');
+    if (dlg) Insiyab.dialog(dlg, 'close');
+    Insiyab.toast('تم الإرسال', 'ok');
+    Insiyab.wizard(w, 0);
   });
 </script>
