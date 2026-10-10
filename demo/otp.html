@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -303,6 +304,20 @@
   <b>يبقى حقلًا واحدًا:</b> فالأرقام ونقاطها مرسومة فوق حقل نصي حقيقي، ولذا يعمل معه اقتراح الهاتف للرمز ولصقه ومدير
   كلمات المرور وقارئ الشاشة كما تعمل مع أي حقل. وإن غاب السكربت بقي ذلك الحقل على حاله.
 </p>
+<p>
+  <b>لا يرى قارئ الشاشة</b> إلا حقلًا نصيًا واحدًا باسمه وتلميحه، فالأرقام والنقاط المرسومة مخفية عنه. وتسمية الحقل عليك، بـ
+  <code>&lt;label&gt;</code> أو <code>aria-label</code>.
+</p>
+
+<h2 id="try">جرّب الحقل</h2>
+<p>اختر من الخيارات، فيتغير الحقل وشيفرته معًا. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.</p>
+<figure class="dx site-play" data-play="otp"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><div class="ins-field">
+  <label class="ins-label" for="otp-play">رمز التحقق</label>
+  <input id="otp-play" data-ins-otp="6" name="code">
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات حقل الرمز"><div class="site-play-ctl" data-key="size" data-type="seg"><span class="site-play-label">عدد الخانات</span><div class="ins-seg" role="group" aria-label="عدد الخانات"><button type="button" data-value="4" aria-pressed="false">4</button><button type="button" data-value="6" class="is-active" aria-pressed="true">6</button><button type="button" data-value="8" aria-pressed="false">8</button></div></div><div class="site-play-ctl" data-key="alnum" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">حروف وأرقام</span></span></label></div><div class="site-play-ctl" data-key="disabled" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">معطل</span></span></label></div><div class="site-play-ctl" data-key="submit" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">يُرسل وحده</span></span></label></div><div class="site-play-ctl" data-key="invalid" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">رمز مرفوض</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"otp-play"</span><span class="hl-t">&gt;</span>رمز التحقق<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-play"</span> <span class="hl-a">data-ins-otp</span>=<span class="hl-s">"6"</span> <span class="hl-a">name</span>=<span class="hl-s">"code"</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="typing">الكتابة</h2>
 <ul>
@@ -311,37 +326,6 @@
   <li><b>اللصق</b> — لا يأخذ الحقل إلا الرمز، فإذا لصقت «رمزك هو ١٢٣ ٤٥٦» امتلأ بـ <code>123456</code>.</li>
   <li><b>الرمز الناقص</b> — يبقى الحقل غير صالح برسالة «اكتب الرمز كاملًا» حتى تمتلئ خاناته، أما الحقل الفارغ فأمره إلى <code>required</code>.</li>
 </ul>
-
-<h2 id="options">العدد والحروف والإرسال</h2>
-<p>
-  يأخذ الحقل من 4 خانات إلى 10، وإذا كان الرمز حروفًا لاتينية وأرقامًا فأضف <code>data-ins-otp-chars="alnum"</code>
-  فتظهر حروفه كبيرة. أما <code>data-ins-otp-submit</code> فترسل النموذج حين تمتلئ آخر خانة:
-</p>
-<figure class="dx"><div class="dx-view row">
-  <div class="ins-field">
-    <label class="ins-label" for="otp-four">أربعة أرقام</label>
-    <input id="otp-four" data-ins-otp="4">
-  </div>
-  <div class="ins-field">
-    <label class="ins-label" for="otp-alnum">حروف وأرقام</label>
-    <input id="otp-alnum" data-ins-otp="6" data-ins-otp-chars="alnum">
-  </div>
-  <form class="ins-field" id="otp-auto-form">
-    <label class="ins-label" for="otp-auto">يُرسل وحده</label>
-    <input id="otp-auto" data-ins-otp="4" data-ins-otp-submit name="code">
-  </form>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"otp-four"</span><span class="hl-t">&gt;</span>أربعة أرقام<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-four"</span> <span class="hl-a">data-ins-otp</span>=<span class="hl-s">"4"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"otp-alnum"</span><span class="hl-t">&gt;</span>حروف وأرقام<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-alnum"</span> <span class="hl-a">data-ins-otp</span>=<span class="hl-s">"6"</span> <span class="hl-a">data-ins-otp-chars</span>=<span class="hl-s">"alnum"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;form</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-auto-form"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"otp-auto"</span><span class="hl-t">&gt;</span>يُرسل وحده<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">id</span>=<span class="hl-s">"otp-auto"</span> <span class="hl-a">data-ins-otp</span>=<span class="hl-s">"4"</span> <span class="hl-a">data-ins-otp-submit</span> <span class="hl-a">name</span>=<span class="hl-s">"code"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/form</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <div class="site-adv"><h2 id="api">التحكم بـ JavaScript</h2>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:otp'</span>, <span class="hl-k">async</span> (e) =&gt; {    <span class="hl-c">// اكتمل الرمز</span>
@@ -355,33 +339,18 @@
 <span class="hl-t">Insiyab</span>.otp(<span class="hl-s">'#code'</span>);              <span class="hl-c">// الرمز المكتوب</span>
 <span class="hl-t">Insiyab</span>.otp(<span class="hl-s">'#code'</span>, <span class="hl-s">'123456'</span>);    <span class="hl-c">// ضبطه بهدوء، دون حدث</span></code></pre></div></div>
 
-<div class="site-adv"><h2 id="attributes">السمات</h2>
-<div class="ins-panel site-ref">
-  <div class="ins-panel-body ins-panel-body--flush">
-    <div class="ins-table-wrap">
-      <table class="ins-table">
-        <thead><tr><th>السمة</th><th>ما تفعله</th></tr></thead>
-        <tbody>
-          <tr><td><code>data-ins-otp="6"</code></td><td>تجعل الحقل حقل رمز بهذا العدد من الخانات (4–10)، فإن خلت من القيمة أُخذ العدد من <code>maxlength</code>، وإلا فستة.</td></tr>
-          <tr><td><code>data-ins-otp-chars="alnum"</code></td><td>حروف وأرقام بدل الأرقام وحدها.</td></tr>
-          <tr><td><code>data-ins-otp-submit</code></td><td>ترسل النموذج حين يكتمل الرمز.</td></tr>
-          <tr><td><code>aria-invalid="true"</code></td><td>رمز رفضه الخادم، فيحمر الحقل حتى تعود إلى الكتابة.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-<p>
-  <b>لا يرى قارئ الشاشة</b> إلا حقلًا نصيًا واحدًا باسمه وتلميحه، فالأرقام والنقاط المرسومة مخفية عنه. وتسمية الحقل عليك، بـ
-  <code>&lt;label&gt;</code> أو <code>aria-label</code>.
-</p>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في حقل الرمز من كلاسات وسمات وأحداث.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>حقل الرمز</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-otp="6"</code></td><td>سمة</td><td>تجعل الحقل حقل رمز بهذا العدد من الخانات، من 4 إلى 10، فإن خلت من العدد أُخذ من <code>maxlength</code>، وإلا فستة.</td></tr><tr><td><code>.ins-otp</code></td><td>كلاس</td><td>الكتلة التي يلف بها السكربت الحقل ويرسم فيها الخانات، فلا تكتبها بنفسك.</td></tr><tr><td><code>ins:otp</code></td><td>حدث</td><td>يُطلق حين يكتمل الرمز، وفي <code>detail</code> الحقل <code>input</code> والرمز <code>value</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>data-ins-otp-chars="alnum"</code></td><td>سمة</td><td>لرمز فيه حروف لاتينية وأرقام، فتظهر حروفه كبيرة. والأرقام وحدها هي الأصل.</td></tr><tr><td><code>disabled</code></td><td>سمة</td><td>يبهت الحقل ولا يُكتب فيه.</td></tr><tr><td><code>data-ins-otp-submit</code></td><td>سمة</td><td>يرسل النموذج حين تمتلئ آخر خانة.</td></tr><tr><td><code>aria-invalid="true"</code></td><td>سمة</td><td>رمز رفضه الخادم، فيحمر الحقل حتى يعود صاحبه إلى الكتابة.</td></tr></tbody></table></div></div></details></div></div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('otp-auto-form').addEventListener('submit', function (e) {
+    document.addEventListener('submit', function (e) {
+      if (!e.target.closest('[data-play="otp"]')) return;
       e.preventDefault();
-      Insiyab.toast('أُرسل ' + Insiyab.otp('#otp-auto'), 'ok');
-      Insiyab.otp('#otp-auto', '');
+      var input = e.target.querySelector('input[data-ins-otp]');
+      Insiyab.toast('أُرسل ' + Insiyab.otp(input), 'ok');
+      Insiyab.otp(input, '');
     });
     document.addEventListener('ins:otp', function (e) {
       if (e.detail.input.id !== 'otp-demo') return;
@@ -394,10 +363,54 @@
       }
     });
   });
-</script></div>
+</script>
+
+<script>
+SitePlay.define({
+  id: 'otp',
+  title: 'حقل الرمز',
+  owns: 'ins-otp',
+  controls: [
+    { key: 'size', label: 'عدد الخانات', type: 'seg', value: '6', choices: [
+      { value: '4', label: '4' },
+      { value: '6', label: '6' },
+      { value: '8', label: '8' }
+    ] },
+    { key: 'alnum', label: 'حروف وأرقام', type: 'switch', name: 'data-ins-otp-chars="alnum"', desc: 'لرمز فيه حروف لاتينية وأرقام، فتظهر حروفه كبيرة. والأرقام وحدها هي الأصل.' },
+    { key: 'disabled', label: 'معطل', type: 'switch', name: 'disabled', desc: 'يبهت الحقل ولا يُكتب فيه.' },
+    { key: 'submit', label: 'يُرسل وحده', type: 'switch', name: 'data-ins-otp-submit', desc: 'يرسل النموذج حين تمتلئ آخر خانة.' },
+    { key: 'invalid', label: 'رمز مرفوض', type: 'switch', name: 'aria-invalid="true"', desc: 'رمز رفضه الخادم، فيحمر الحقل حتى يعود صاحبه إلى الكتابة.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-otp="6"', desc: 'تجعل الحقل حقل رمز بهذا العدد من الخانات، من 4 إلى 10، فإن خلت من العدد أُخذ من `maxlength`، وإلا فستة.' },
+    { group: 'الأساس', name: 'ins-otp', desc: 'الكتلة التي يلف بها السكربت الحقل ويرسم فيها الخانات، فلا تكتبها بنفسك.' },
+    { group: 'الأساس', name: 'ins:otp', kind: 'event', desc: 'يُطلق حين يكتمل الرمز، وفي `detail` الحقل `input` والرمز `value`.' }
+  ],
+  disable: function (s) { return s.disabled ? ['invalid', 'submit'] : []; },
+  events: ['ins:otp'],
+  html: function (s) {
+    var input = '<input id="otp-play" data-ins-otp="' + s.size + '"' + (s.alnum ? ' data-ins-otp-chars="alnum"' : '') +
+      (s.submit ? ' data-ins-otp-submit' : '') + (s.invalid && !s.disabled ? ' aria-invalid="true"' : '') + (s.disabled ? ' disabled' : '') + ' name="code">';
+    var tag = s.submit && !s.disabled ? 'form' : 'div';
+    return '<' + tag + ' class="ins-field">\n' +
+      '  <label class="ins-label" for="otp-play">رمز التحقق</label>\n' +
+      '  ' + input + '\n' +
+      '</' + tag + '>';
+  },
+  stage: function (view, s) {
+    if (window.Insiyab && Insiyab.otp) Insiyab.otp(view.querySelector('input[data-ins-otp]'), s.alnum ? 'A7K' : '482');
+  },
+  notes: function (s) {
+    var out = [];
+    if (s.submit && !s.disabled) out.push('املأ الخانات، فيُرسل النموذج وحده. والإرسال هنا رسالة عابرة لا أكثر.');
+    if (s.invalid && !s.disabled) out.push('اكتب رقمًا، فيعود الحقل إلى لونه.');
+    return out;
+  }
+});
+</script>
         <nav class="site-pager site-adv" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="palette.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">لوحة الأوامر</span></a><a class="site-pager-link site-pager-link--next" href="phone.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">رقم الهاتف</span></a></nav><nav class="site-pager site-simple" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="hijri.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">التقويم الهجري</span></a><a class="site-pager-link site-pager-link--next" href="phone.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">رقم الهاتف</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">حقل الرمز</a><a href="#typing">الكتابة</a><a href="#options">العدد والحروف والإرسال</a><a href="#api">التحكم بـ JavaScript</a><a href="#attributes">السمات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">حقل الرمز</a><a href="#typing">الكتابة</a><a href="#options">العدد والحروف والإرسال</a></nav>
+        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">حقل الرمز</a><a href="#try">جرّب الحقل</a><a href="#typing">الكتابة</a><a href="#api">التحكم بـ JavaScript</a><a href="#options">الخيارات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">حقل الرمز</a><a href="#try">جرّب الحقل</a><a href="#typing">الكتابة</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
