@@ -4141,6 +4141,37 @@
     }
   });
 
+  /* Values from attributes: data-ins-size, data-ins-col and data-ins-height each set the variable of the same name, and a ring's aria-valuenow sets how full it is. A bare number is pixels. */
+  var VALUE_ATTRS = ['data-ins-size', 'data-ins-col', 'data-ins-height', 'aria-valuenow', 'aria-valuemin', 'aria-valuemax'];
+  var valuesWatched = false;
+
+  function setValues(el) {
+    for (var i = 0; i < 3; i++) {
+      var name = VALUE_ATTRS[i], v = el.getAttribute(name), prop = '--ins-' + name.slice(9);
+      if (v == null || v === '') { if (el.__insValues && el.__insValues[prop]) el.style.removeProperty(prop); continue; }
+      el.style.setProperty(prop, /^-?[\d.]+$/.test(v) ? v + 'px' : v);
+      (el.__insValues = el.__insValues || {})[prop] = true;
+    }
+    if (el.classList && el.classList.contains('ins-ring') && el.hasAttribute('aria-valuenow')) {
+      var now = parseFloat(el.getAttribute('aria-valuenow')), min = parseFloat(el.getAttribute('aria-valuemin')) || 0;
+      var max = parseFloat(el.getAttribute('aria-valuemax'));
+      if (isNaN(max)) max = 100;
+      if (!isNaN(now) && max !== min) el.style.setProperty('--ins-value', String(Math.max(0, Math.min(100, (now - min) * 100 / (max - min)))));
+    }
+  }
+
+  define('values', function (scope) {
+    var sel = '[data-ins-size], [data-ins-col], [data-ins-height], .ins-ring[aria-valuenow]';
+    if (scope !== document && scope.matches && scope.matches(sel)) setValues(scope);
+    var nodes = scope.querySelectorAll(sel);
+    for (var i = 0; i < nodes.length; i++) setValues(nodes[i]);
+    if (valuesWatched || !window.MutationObserver) return;
+    valuesWatched = true;
+    new MutationObserver(function (list) {
+      for (var j = 0; j < list.length; j++) setValues(list[j].target);
+    }).observe(root, { attributes: true, subtree: true, attributeFilter: VALUE_ATTRS });
+  });
+
   /* The selected face travels like the sidebar marker: the far edge reaches the new segment, then the near edge follows. */
   function segFly(seg, from, to) {
     if (!from || !to || from === to || motionless() || !to.animate || !seg.offsetWidth) return;

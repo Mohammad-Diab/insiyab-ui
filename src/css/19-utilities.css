@@ -345,3 +345,16 @@
   .ins-hide-print { display: none; }
   .ins-print-only { display: revert; }
 }
+
+/* --------------------------------------------------------------- values from attributes */
+/* One way to give an element a number: data-ins-size, data-ins-col, data-ins-height, and aria-valuenow on a ring. The script copies each into its variable; where CSS can read the attribute itself, it does so before the script runs. */
+@property --ins-size { syntax: '*'; inherits: false; }
+@property --ins-height { syntax: '*'; inherits: false; }
+@supports (x: attr(x type(*))) {
+  [data-ins-size] { --ins-size: attr(data-ins-size type(<length>)); }
+  [data-ins-height] { --ins-height: attr(data-ins-height type(<length>)); }
+  [data-ins-col] { --ins-col: attr(data-ins-col type(<length>)); }
+  .ins-ring[aria-valuenow] {
+    --ins-value: calc((attr(aria-valuenow type(<number>), 0) - attr(aria-valuemin type(<number>), 0)) * 100 / (attr(aria-valuemax type(<number>), 100) - attr(aria-valuemin type(<number>), 0)));
+  }
+}
