@@ -3356,7 +3356,6 @@
       no.value = 'cancel';
       var yes = el('button', 'ins-btn ' + (o.tone === 'danger' ? 'ins-btn--danger' : 'ins-btn--primary'), o.confirm || t.ok);
       yes.value = 'ok';
-      yes.style.marginInlineStart = 'auto';
       foot.appendChild(no);
       foot.appendChild(yes);
       form.appendChild(foot);

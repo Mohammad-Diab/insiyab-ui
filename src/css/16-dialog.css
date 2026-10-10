@@ -145,14 +145,20 @@
 /* For a dialog that is not scrolling anyway and holds one open select. */
 .ins-dialog-body--spill { overflow: visible; }
 
+/* Every footer follows one rule: the actions at the end, the main one outermost and the cancel just before it, anything that does not finish alone at the start. */
 .ins-dialog-foot {
   display: flex;
   align-items: center;
-  gap: .5rem;
+  gap: var(--ins-foot-gap);
   padding: 1rem var(--ins-dlg-pad);
   border-block-start: 1px solid var(--ins-line);
   flex: none;
   justify-content: flex-end;
+}
+.ins-dialog-foot > .ins-btn:not(.ins-btn--icon) { min-inline-size: var(--ins-foot-min); }
+/* On a phone the actions share the width and take a finger's height, as native dialogs and sheets do. */
+@media (max-width: 34rem) {
+  .ins-dialog-foot > .ins-btn:not(.ins-btn--icon) { flex: 1 1 0; min-block-size: var(--ins-field-h); }
 }
 /* The generic close button takes the dialog cross's place at the end of a head. */
 .ins-dialog-head > .ins-close { margin-inline-start: auto; }
@@ -686,14 +692,16 @@
 .ins-cal-foot {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: .5rem;
+  gap: var(--ins-foot-gap);
   margin-block-start: .5rem;
   padding-block-start: .5rem;
   padding-inline: .25rem;
   border-block-start: 1px solid var(--ins-line);
 }
-.ins-cal-foot > .ins-btn--bare { min-block-size: 2.125rem; padding-inline: .625rem; }
+.ins-cal-foot > .ins-btn { min-inline-size: var(--ins-foot-min-sm); }
+/* Today stays at the start; Clear and Done go to the end together, and the calendar switch sits between. */
+.ins-cal-foot > :is([data-ins-cal="clear"], .ins-cal-switch),
+.ins-cal-foot > :not([data-ins-cal="clear"]) + [data-ins-cal="done"] { margin-inline-start: auto; }
 /* The calendar switch, for a field in another calendar: the segmented control, a
    size down to sit in the footer between Today and Clear. It does not pop when its
    face moves, because the whole calendar is redrawn under it on every month turned,

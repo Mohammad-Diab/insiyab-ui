@@ -218,6 +218,9 @@
 .ins-btn--bare:focus-visible { background: transparent; color: var(--ins-text-1); }
 .ins-btn--bare::before { content: none; }
 .ins-btn--bare:active:not(:disabled) { transform: none; }
+/* In a footer it is the quiet choice beside the main one, so it keeps its size's padding and height: a hit area, and room from its neighbour. */
+:is(.ins-dialog-foot, .ins-cal-foot, .ins-wizard-foot) > .ins-btn--bare { padding: .375rem 1rem; min-block-size: var(--ins-ctl-h); }
+:is(.ins-dialog-foot, .ins-cal-foot, .ins-wizard-foot) > .ins-btn--bare.ins-btn--sm { padding: .25rem .625rem; min-block-size: var(--ins-ctl-sm-h); }
 
 /* --------------------------------------------------------------- motion */
 /* An icon inside a button nudges toward the trailing edge on hover -- the direction

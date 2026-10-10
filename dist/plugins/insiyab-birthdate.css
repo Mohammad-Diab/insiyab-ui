@@ -102,6 +102,10 @@
 .ins-birth-pop .ins-birth-col { block-size: calc(var(--ins-drum-row) * 5); padding-block: calc(var(--ins-drum-row) * 2); }
 .ins-birth-pop .ins-birth-col .ins-drum-item { font-size: 1.0625rem; }
 .ins-birth-pop .ins-birth-col--m .ins-drum-item { font-size: var(--ins-fs-sm); }
-.ins-birth-foot { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; padding-block-start: .5rem; border-block-start: 1px solid var(--ins-line); }
-.ins-birth-foot .ins-btn { min-inline-size: 5.5rem; }
+.ins-birth-foot { display: flex; align-items: center; justify-content: flex-end; gap: var(--ins-foot-gap); padding-block-start: .5rem; border-block-start: 1px solid var(--ins-line); }
+.ins-birth-foot > .ins-btn { min-inline-size: var(--ins-foot-min-sm); }
+.ins-birth-foot > .ins-btn--bare { padding: .25rem .625rem; min-block-size: var(--ins-ctl-sm-h); }
+@media (max-width: 34rem) {
+  .ins-birth-foot > .ins-btn { flex: 1 1 0; min-block-size: var(--ins-field-h); }
+}
 .ins-birth--field .ins-birth-col:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
