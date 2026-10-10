@@ -563,9 +563,10 @@
     }
     find.value = '';
     filter();
-    if (hasPopover) { try { layer.showPopover(); } catch (e) { /* not connected */ } }
-    else { layer.hidden = false; layer.classList.add('is-open'); }
-    place();
+    Insiyab._layer.open(layer, {
+      trigger: st.button, anchor: st.button.parentNode, align: 'left', move: true, toggle: 'class',
+      close: function (why) { closePop(why === 'escape'); }
+    });
     st.button.setAttribute('aria-expanded', 'true');
     activate(list.querySelector('.ins-phone-opt[aria-selected="true"]') || list.querySelector('.ins-phone-opt'), true);
     find.focus();
@@ -575,24 +576,9 @@
     if (!pop || !popFor) return;
     var input = popFor;
     popFor = null;
-    if (hasPopover) { try { pop.hidePopover(); } catch (e) { /* already hidden */ } }
-    else { pop.classList.remove('is-open'); pop.hidden = true; }
+    Insiyab._layer.shut(pop);
     state(input).button.setAttribute('aria-expanded', 'false');
     if (refocus) state(input).button.focus();
-  }
-
-  function place() {
-    if (!pop || !popFor) return;
-    var anchor = state(popFor).button.parentNode.getBoundingClientRect();
-    var gap = 6, pad = 8, vw = document.documentElement.clientWidth, vh = window.innerHeight;
-    pop.style.left = '0px';
-    pop.style.top = '0px';
-    var w = pop.offsetWidth, h = pop.offsetHeight;
-    var y = anchor.bottom + gap;
-    if (y + h > vh - pad && anchor.top - gap - h >= pad) y = anchor.top - gap - h;
-    var x = Math.max(pad, Math.min(anchor.left, vw - w - pad));
-    pop.style.left = Math.round(x) + 'px';
-    pop.style.top = Math.round(Math.max(pad, Math.min(y, vh - h - pad))) + 'px';
   }
 
   function options(visibleOnly) {
@@ -680,19 +666,10 @@
     if (popFor === input) closePop(false);
     else openPop(input);
   }, false);
-  /* A press anywhere else closes the list. */
-  document.addEventListener('pointerdown', function (e) {
-    if (!popFor || !pop) return;
-    var t = e.target;
-    if (pop.contains(t) || state(popFor).button.contains(t)) return;
-    closePop(false);
-  }, true);
   document.addEventListener('focusout', function (e) {
     var to = e.relatedTarget;
-    if (popFor && pop && pop.contains(e.target) && to && !pop.contains(to) && !state(popFor).button.contains(to)) closePop(false);
+    if (popFor && pop && pop.contains(e.target) && to && !pop.contains(to) && !to.contains(pop) && !state(popFor).button.contains(to)) closePop(false);
   }, false);
-  window.addEventListener('scroll', function () { if (popFor) place(); }, true);
-  window.addEventListener('resize', function () { if (popFor) place(); }, false);
 
   document.addEventListener('reset', function (e) {
     var form = e.target;

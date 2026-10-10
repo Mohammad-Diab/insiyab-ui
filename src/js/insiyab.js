@@ -682,7 +682,17 @@
       layer.setAttribute('aria-live', 'polite');
       document.body.appendChild(layer);
     }
+    layerPrune();
+    toastHost(layer);
     return layer;
+  }
+
+  // The toasts live in the top layer, inside the top modal when there is one, so a toast raised from a dialog is above its backdrop and can be dismissed.
+  function toastHost(layer) {
+    var host = topModal() || document.body;
+    if (layer.parentNode !== host) host.appendChild(layer);
+    if (hasPopover && !layer.hasAttribute('popover')) layer.setAttribute('popover', 'manual');
+    popShow(layer);
   }
 
   function toast(message, tone) {
@@ -718,7 +728,7 @@
 
   /* --------------------------------------------------------------- dialog */
 
-  function dialog(target, action) {
+  function dialog(target, action, from) {
     var el = typeof target === 'string' ? document.querySelector(target) : target;
     if (!el) return null;
     if (typeof el.showModal !== 'function') {
@@ -726,7 +736,11 @@
       return el;
     }
     var wantOpen = action === 'close' ? false : (action === 'open' ? true : !el.open);
-    if (wantOpen && !el.open) el.showModal();
+    if (wantOpen && !el.open) {
+      el._insFrom = from || document.activeElement;
+      gutterCheck();
+      el.showModal();
+    }
     else if (!wantOpen && el.open) el.close();
     return el;
   }
@@ -754,8 +768,12 @@
       target = el.closest('dialog, [popover], details, .ins-navbar.is-open, .ins-alert, .ins-toast');
     }
     if (!target) return null;
+    // A menu's body is a popover now, but it is the menu that closes; any other open layer closes as its owner closes it.
+    if (target.classList.contains('ins-pop-body') && target.parentNode.matches && target.parentNode.matches(POP)) target = target.parentNode;
+    var at = layerAt(target);
 
-    if (target.tagName === 'DIALOG') dialog(target, 'close');
+    if (at !== -1 && layers[at].kind === 'popup') layers[at].o.close('dismiss');
+    else if (target.tagName === 'DIALOG') dialog(target, 'close');
     else if (target.hasAttribute('popover') && target.hidePopover) {
       try { target.hidePopover(); } catch (e) { /* already hidden */ }
     } else if (target.tagName === 'DETAILS') target.open = false;
@@ -887,6 +905,321 @@
     return show;
   }
 
+  /* --------------------------------------------------------------- layers */
+  // Every pop-up opens in the top layer, placed beside its trigger by `place`, and every open pop-up and modal is one stack.
+  var hasPopover = typeof HTMLElement !== 'undefined' &&
+                   Object.prototype.hasOwnProperty.call(HTMLElement.prototype, 'popover');
+  var nativeClosedBy = typeof HTMLDialogElement !== 'undefined' && 'closedBy' in HTMLDialogElement.prototype;
+  var layers = [], layerFrame = 0, pressSpent = false, pressFrom = null, focusNow = null, focusBefore = null;
+  // Set by this script, not the boot one, so a page whose script failed still shows its menus in the flow.
+  if (hasPopover) root.setAttribute('data-ins-layers', '');
+  var layerRO = typeof window.ResizeObserver === 'function' ? new window.ResizeObserver(function () { layerSchedule(); }) : null;
+
+  function layerAt(el) {
+    for (var i = 0; i < layers.length; i++) if (layers[i].el === el) return i;
+    return -1;
+  }
+
+  // A modal taken off the page while open leaves the stack too.
+  function layerPrune() {
+    for (var i = layers.length - 1; i >= 0; i--) {
+      var l = layers[i];
+      if (l && l.kind === 'modal' && (!l.el.open || !root.contains(l.el))) modalClosed(l.el);
+    }
+  }
+
+  function layerTop() {
+    layerPrune();
+    return layers.length ? layers[layers.length - 1] : null;
+  }
+
+  function topModal() {
+    for (var i = layers.length - 1; i >= 0; i--) if (layers[i].kind === 'modal') return layers[i].el;
+    return null;
+  }
+
+  // Everything outside the top modal is inert, so a layer lives in the open dialog its trigger is in.
+  function layerHost(trigger) {
+    return (trigger && trigger.closest && trigger.closest('dialog[open]')) || document.body;
+  }
+
+  function popShow(el, o) {
+    if (hasPopover && el.hasAttribute('popover')) {
+      try { if (!el.matches(':popover-open')) el.showPopover(); } catch (e) { /* not connected */ }
+    } else if (o && o.toggle === 'class') {
+      el.hidden = false;
+      el.classList.add('is-open');
+    }
+  }
+
+  function popHide(el, o) {
+    if (hasPopover && el.hasAttribute('popover')) {
+      try { if (el.matches(':popover-open')) el.hidePopover(); } catch (e) { /* already hidden */ }
+    } else if (o && o.toggle === 'class') {
+      el.classList.remove('is-open');
+      el.hidden = true;
+    }
+  }
+
+  // Every ancestor that clips the anchor: once it is wholly outside them, the layer has nothing left to point at.
+  function clipsOf(el) {
+    var out = [];
+    for (var p = el.parentElement; p && p !== document.body && p !== root; p = p.parentElement) {
+      var cs = window.getComputedStyle(p);
+      if (/auto|scroll|hidden|clip/.test(cs.overflowX + cs.overflowY)) out.push(p);
+    }
+    return out;
+  }
+
+  function layerGone(l) {
+    if (!root.contains(l.anchor)) return true;
+    var a = l.anchor.getBoundingClientRect();
+    var top = 0, left = 0, bottom = window.innerHeight, right = root.clientWidth;
+    for (var i = 0; i < l.clips.length; i++) {
+      var c = l.clips[i].getBoundingClientRect();
+      top = Math.max(top, c.top);
+      left = Math.max(left, c.left);
+      bottom = Math.min(bottom, c.bottom);
+      right = Math.min(right, c.right);
+    }
+    return a.bottom <= top || a.top >= bottom || a.right <= left || a.left >= right;
+  }
+
+  // A fixed layer beside its anchor: o.side (bottom), o.align (start, end, left, center), o.gap, o.match (the anchor's width), o.dir and o.flip (gets data-ins-flip); flipped where the other side has room, then kept in the viewport.
+  function place(layer, anchor, o) {
+    o = o || {};
+    var a = anchor.getBoundingClientRect(), s = layer.style;
+    var gap = o.gap == null ? 6 : o.gap, pad = 8, vw = root.clientWidth, vh = window.innerHeight;
+    s.left = '0px';
+    s.top = '0px';
+    s.right = 'auto';
+    s.bottom = 'auto';
+    if (o.match) s.width = Math.round(a.width) + 'px';
+    var w = layer.offsetWidth, h = layer.offsetHeight;
+    var rtl = (o.dir || window.getComputedStyle(anchor).direction) === 'rtl';
+    var want = o.side || 'bottom', side = want;
+    if (side === 'start') side = rtl ? 'right' : 'left';
+    if (side === 'end') side = rtl ? 'left' : 'right';
+    var room = { top: a.top - gap - pad, bottom: vh - a.bottom - gap - pad, left: a.left - gap - pad, right: vw - a.right - gap - pad };
+    var other = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' }[side];
+    var need = side === 'top' || side === 'bottom' ? h : w;
+    if (room[side] < need && room[other] >= need) side = other;
+    var x, y, turned = false, align = o.align || 'start';
+    var at = function (al) {
+      if (al === 'center') return a.left + a.width / 2 - w / 2;
+      if (al === 'left') return a.left;
+      return (al === 'start') !== rtl ? a.left : a.right - w;
+    };
+    if (side === 'top' || side === 'bottom') {
+      y = side === 'top' ? a.top - gap - h : a.bottom + gap;
+      x = at(align);
+      if ((align === 'start' || align === 'end') && (x < pad || x + w > vw - pad)) {
+        var x2 = at(align === 'start' ? 'end' : 'start');
+        if (x2 >= pad && x2 + w <= vw - pad) { x = x2; turned = true; }
+      }
+    } else {
+      x = side === 'left' ? a.left - gap - w : a.right + gap;
+      y = a.top + a.height / 2 - h / 2;
+    }
+    s.left = Math.round(Math.max(pad, Math.min(x, vw - w - pad))) + 'px';
+    s.top = Math.round(Math.max(pad, Math.min(y, vh - h - pad))) + 'px';
+    if (o.flip) {
+      var flips = (side === 'top' && want === 'bottom' ? 'up' : '') + (turned ? ' inline' : '');
+      flips = flips.replace(/^ /, '');
+      if (flips && o.flip.getAttribute('data-ins-flip') !== flips) o.flip.setAttribute('data-ins-flip', flips);
+      else if (!flips && o.flip.hasAttribute('data-ins-flip')) o.flip.removeAttribute('data-ins-flip');
+    }
+    return side;
+  }
+
+  // Opens `el` on the stack: o.trigger, o.anchor, o.owns (presses that leave it open), o.close(why), o.move (into the trigger's dialog), o.toggle ('class' without the Popover API) and the `place` options.
+  function layerOpen(el, o) {
+    var at = layerAt(el);
+    if (at !== -1) { layerPlace(layers[at]); return layers[at]; }
+    var trigger = o.trigger || o.anchor;
+    layerPrune();
+    for (var i = layers.length - 1; i >= 0; i--) {
+      if (!layers[i] || layers[i].kind === 'modal' || layers[i].el.contains(trigger)) break;
+      layers[i].o.close('other');
+    }
+    if (o.move) {
+      var host = layerHost(trigger);
+      if (el.parentNode !== host) host.appendChild(el);
+    }
+    var entry = { el: el, kind: 'popup', o: o, trigger: trigger, anchor: o.anchor || trigger };
+    entry.clips = clipsOf(entry.anchor);
+    layers.push(entry);
+    popShow(el, o);
+    layerPlace(entry);
+    if (layerRO) { layerRO.observe(el); layerRO.observe(entry.anchor); }
+    return entry;
+  }
+
+  function layerShut(el) {
+    var at = layerAt(el), entry = at === -1 ? null : layers.splice(at, 1)[0];
+    popHide(el, entry && entry.o);
+    if (entry && layerRO) { layerRO.unobserve(el); layerRO.unobserve(entry.anchor); }
+  }
+
+  function layerPlace(l) {
+    if ((hasPopover && l.el.hasAttribute('popover')) || l.o.toggle === 'class') place(l.el, l.anchor, l.o);
+  }
+
+  function layerOwns(l, t) {
+    if (l.el.contains(t) || l.trigger.contains(t)) return true;
+    var owns = l.o.owns || [];
+    for (var i = 0; i < owns.length; i++) if (owns[i] && owns[i].contains(t)) return true;
+    return false;
+  }
+
+  function layerSchedule() {
+    if (layerFrame) return;
+    for (var i = 0; i < layers.length; i++) {
+      if (layers[i].kind === 'popup') { layerFrame = window.requestAnimationFrame(layerTick); return; }
+    }
+  }
+
+  function layerTick() {
+    layerFrame = 0;
+    var open = layers.slice();
+    for (var i = open.length - 1; i >= 0; i--) {
+      var l = open[i];
+      if (l.kind !== 'popup' || layerAt(l.el) === -1) continue;
+      if (layerGone(l)) l.o.close('scroll');
+      else layerPlace(l);
+    }
+  }
+
+  // Where focus goes back to: the control itself, or the summary of the closed menu it sits in.
+  function returnTarget(x) {
+    for (var n = 0; x && n < 8; n++) {
+      if (!root.contains(x)) return null;
+      if (x.getClientRects().length && !x.closest('[inert]')) return x;
+      var pop = x.closest(POP);
+      if (pop && pop.querySelector('summary') === x) pop = pop.parentElement ? pop.parentElement.closest(POP) : null;
+      x = pop ? pop.querySelector('summary') : null;
+    }
+    return null;
+  }
+
+  // `closedby` as HTML defines it; without the attribute a drawer closes on an outside press and a dialog does not.
+  function closedBy(d) {
+    var v = (d.getAttribute('closedby') || '').toLowerCase();
+    if (v === 'any' || v === 'closerequest' || v === 'none') return v;
+    return d.classList.contains('ins-drawer') ? 'any' : 'closerequest';
+  }
+
+  function modalOpened(d) {
+    if (layerAt(d) !== -1) return;
+    var from = d._insFrom;
+    d._insFrom = null;
+    if (!from || d.contains(from)) from = focusBefore && !d.contains(focusBefore) ? focusBefore : null;
+    for (var i = layers.length - 1; i >= 0; i--) {
+      var l = layers[i];
+      if (!l) continue;
+      if (l.kind === 'modal') l.el.setAttribute('data-ins-under', '');
+      else if (!d.contains(l.trigger)) l.o.close('cover');
+    }
+    layers.push({ el: d, kind: 'modal', from: from });
+    if (tipOwner && !d.contains(tipOwner)) hideTip();
+  }
+
+  function modalClosed(d) {
+    var at = layerAt(d);
+    if (at === -1) return;
+    var entry = layers.splice(at, 1)[0];
+    d.removeAttribute('data-ins-under');
+    for (var i = layers.length - 1; i >= 0; i--) {
+      var l = layers[i];
+      if (l && l.kind === 'popup' && (d.contains(l.trigger) || d.contains(l.el))) l.o.close('modal');
+    }
+    var below = topModal();
+    if (below) below.removeAttribute('data-ins-under');
+    if (tipOwner && (d.contains(tipOwner) || (tipEl && d.contains(tipEl)))) hideTip();
+    var toasts = document.querySelector('.ins-toasts');
+    if (toasts && d.contains(toasts)) toastHost(toasts);
+    var ae = document.activeElement;
+    if (!ae || ae === document.body || ae === root || d.contains(ae)) {
+      var to = returnTarget(entry.from);
+      if (to) to.focus();
+    }
+  }
+
+  function onOpenChange(records) {
+    for (var i = 0; i < records.length; i++) {
+      var d = records[i].target;
+      if (d.tagName !== 'DIALOG') continue;
+      var modal = d.open;
+      try { modal = d.open && d.matches(':modal'); } catch (e) { /* no :modal: an open dialog counts */ }
+      if (modal) modalOpened(d);
+      else if (!d.open) modalClosed(d);
+    }
+  }
+  if (window.MutationObserver) {
+    new window.MutationObserver(onOpenChange).observe(root, { attributes: true, attributeFilter: ['open'], subtree: true });
+  }
+
+  // A page that scrolls keeps its scrollbar's room while a modal locks it, so nothing shifts sideways.
+  function gutterCheck() {
+    if (topModal()) return;
+    var on = window.innerWidth - root.clientWidth > 0;
+    if (on !== root.hasAttribute('data-ins-gutter')) root.toggleAttribute('data-ins-gutter', on);
+  }
+
+  function outsideBox(el, event) {
+    var r = el.getBoundingClientRect();
+    return event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom;
+  }
+
+  document.addEventListener('focusin', function (event) {
+    if (event.target !== focusNow) { focusBefore = focusNow; focusNow = event.target; }
+  }, true);
+
+  // A press outside the top pop-ups closes them, down to the one it landed in or the first modal; the press is then spent.
+  document.addEventListener('pointerdown', function (event) {
+    pressSpent = false;
+    gutterCheck();
+    var t = event.target, top = layerTop();
+    pressFrom = top && top.kind === 'modal' && t === top.el && outsideBox(top.el, event) ? top.el : null;
+    for (var i = layers.length - 1; i >= 0; i--) {
+      var l = layers[i];
+      if (!l || l.kind === 'modal' || layerOwns(l, t)) break;
+      l.o.close('outside');
+      pressSpent = true;
+    }
+  }, true);
+
+  document.addEventListener('keydown', function (event) {
+    pressSpent = false;
+    if (event.key === 'Enter' || event.key === ' ' || event.ctrlKey || event.metaKey) gutterCheck();
+  }, true);
+
+  // A spent press does not also light-dismiss the dialog under it, and closedby="none" ignores Escape where the browser does not know the attribute.
+  document.addEventListener('cancel', function (event) {
+    var d = event.target;
+    if (!d || d.tagName !== 'DIALOG') return;
+    if (pressSpent) event.preventDefault();
+    else if (!nativeClosedBy && closedBy(d) === 'none') event.preventDefault();
+  }, true);
+
+  // Light dismiss where the browser does not do it: the top modal, pressed and released on its backdrop.
+  document.addEventListener('click', function (event) {
+    var d = event.target, from = pressFrom, spent = pressSpent;
+    pressFrom = null;
+    pressSpent = false;
+    if (spent || !from || d !== from || !d.open || d !== topModal() || !outsideBox(d, event)) return;
+    if (closedBy(d) !== 'any' || (nativeClosedBy && d.hasAttribute('closedby'))) return;
+    if (d.requestClose) d.requestClose();
+    else d.close();
+  }, false);
+
+  // Open layers follow their anchors, in one frame for all of them, and close once the anchor has scrolled out of sight.
+  window.addEventListener('scroll', function (event) {
+    for (var i = 0; i < layers.length; i++) if (layers[i].kind === 'popup' && layers[i].el.contains(event.target)) return;
+    layerSchedule();
+  }, true);
+  window.addEventListener('resize', layerSchedule, false);
+
   /* -------------------------------------------------------------- tooltip */
   /* One tooltip element for the page, in the top layer, moved to whichever control
      asked. The text is `data-ins-tip`, or the control's own `aria-label` when the
@@ -901,8 +1234,6 @@
      the pointer leaves both the control and the tip — the last so it can be read. */
   var TIP = '[data-ins-tip]';
   var tipEl = null, tipOwner = null, tipTimer = 0, tipWarmUntil = 0;
-  var hasPopover = typeof HTMLElement !== 'undefined' &&
-                   Object.prototype.hasOwnProperty.call(HTMLElement.prototype, 'popover');
 
   function tipLayer() {
     if (tipEl) return tipEl;
@@ -928,37 +1259,7 @@
   }
 
   function placeTip(el, tip) {
-    var r = el.getBoundingClientRect();
-    var gap = 8, pad = 8;
-    var vw = root.clientWidth, vh = window.innerHeight;
-    tip.style.left = '0px';
-    tip.style.top = '0px';
-    var w = tip.offsetWidth, h = tip.offsetHeight;
-
-    var side = el.getAttribute('data-ins-tip-side') || 'top';
-    var rtl = window.getComputedStyle(el).direction === 'rtl';
-    if (side === 'start') side = rtl ? 'right' : 'left';
-    if (side === 'end') side = rtl ? 'left' : 'right';
-    /* Flip to the opposite side when there is no room, then clamp into the viewport:
-       a tip on an icon at the very edge of the page slides along rather than being
-       cut off. */
-    if (side === 'top' && r.top - gap - h < pad) side = 'bottom';
-    else if (side === 'bottom' && r.bottom + gap + h > vh - pad) side = 'top';
-    else if (side === 'left' && r.left - gap - w < pad) side = 'right';
-    else if (side === 'right' && r.right + gap + w > vw - pad) side = 'left';
-
-    var x, y;
-    if (side === 'top' || side === 'bottom') {
-      x = r.left + r.width / 2 - w / 2;
-      y = side === 'top' ? r.top - gap - h : r.bottom + gap;
-    } else {
-      x = side === 'left' ? r.left - gap - w : r.right + gap;
-      y = r.top + r.height / 2 - h / 2;
-    }
-    x = Math.max(pad, Math.min(x, vw - w - pad));
-    y = Math.max(pad, Math.min(y, vh - h - pad));
-    tip.style.left = Math.round(x) + 'px';
-    tip.style.top = Math.round(y) + 'px';
+    var side = place(tip, el, { side: el.getAttribute('data-ins-tip-side') || 'top', align: 'center', gap: 8 });
     tip.style.setProperty('--ins-tip-dy', side === 'top' ? '4px' : (side === 'bottom' ? '-4px' : '0px'));
     tip.setAttribute('data-side', side);
   }
@@ -975,6 +1276,8 @@
     /* textContent, as everywhere else a string reaches the page. */
     tip.textContent = text;
     describedBy(el, !!own && own !== name && own !== (el.textContent || '').trim());
+    var host = layerHost(el);
+    if (tip.parentNode !== host) host.appendChild(tip);
     if (hasPopover) {
       try { if (!tip.matches(':popover-open')) tip.showPopover(); } catch (e) { /* not connected yet */ }
     } else {
@@ -1029,23 +1332,38 @@
   function closePop(pop, refocus) {
     if (!pop.open) return;
     pop.open = false;
+    menuHide(pop);
     var summary = refocus && pop.querySelector('summary');
     if (summary) summary.focus();
   }
 
-  /* Measured once, on open. The body is placed by the stylesheet, and this only
-     decides between the four placements it already has: below or above, and
-     toward the start or toward the end. */
-  function flipPop(pop) {
+  function popBody(pop) {
+    for (var c = pop.firstElementChild; c; c = c.nextElementSibling) if (c.classList.contains('ins-pop-body')) return c;
+    return null;
+  }
+
+  // Opening in the same task, not on the toggle event that follows, so the first item can take focus at once.
+  function popOpen(pop) {
+    pop.open = true;
+    menuShow(pop);
+  }
+
+  // The body joins the top layer, beside its summary: no scrolling box clips it and none grows to hold it.
+  function menuShow(pop) {
+    var body = popBody(pop), summary = pop.querySelector('summary');
+    if (!body || !summary) return;
+    if (hasPopover && !body.hasAttribute('popover')) body.setAttribute('popover', 'manual');
+    layerOpen(body, {
+      trigger: summary, anchor: summary, flip: pop,
+      align: pop.classList.contains('ins-pop--end') ? 'end' : 'start',
+      close: function (why) { closePop(pop, why === 'escape'); }
+    });
+  }
+
+  function menuHide(pop) {
+    var body = popBody(pop);
+    if (body) layerShut(body);
     pop.removeAttribute('data-ins-flip');
-    var body = pop.querySelector('.ins-pop-body');
-    if (!body) return;
-    var b = body.getBoundingClientRect();
-    var s = pop.getBoundingClientRect();
-    var vw = root.clientWidth, vh = window.innerHeight, flips = [];
-    if (b.bottom > vh - 8 && s.top - b.height - 6 > 8) flips.push('up');
-    if (b.left < 8 || b.right > vw - 8) flips.push('inline');
-    if (flips.length) pop.setAttribute('data-ins-flip', flips.join(' '));
   }
 
   function onPopKey(event) {
@@ -1067,7 +1385,7 @@
       case 'ArrowUp':
         if (!items.length) return;
         event.preventDefault();
-        if (!pop.open) pop.open = true;
+        if (!pop.open) popOpen(pop);
         if (event.key === 'ArrowDown') focusItem(items, onSummary ? 0 : at + 1);
         else focusItem(items, onSummary ? items.length - 1 : at - 1);
         return;
@@ -1083,7 +1401,7 @@
            Closing is left to the platform. */
         if (!onSummary || pop.open || !items.length) return;
         event.preventDefault();
-        pop.open = true;
+        popOpen(pop);
         focusItem(items, 0);
         return;
     }
@@ -1308,17 +1626,21 @@
     if (open) {
       list.setAttribute('data-ins-open', '');
       input.setAttribute('aria-expanded', 'true');
+      if (hasPopover && !list.hasAttribute('popover')) list.setAttribute('popover', 'manual');
+      layerOpen(list, {
+        trigger: input, anchor: combo, owns: [combo], match: true, flip: combo,
+        close: function () { comboOpen(combo, false); }
+      });
       /* The current choice, in view: in a list of forty-eight times, the one set. A
          time list with nothing set opens at the hour it is now. */
       var sel = list.querySelector('.ins-combo-option[aria-selected="true"]:not([hidden])');
       if (sel) comboActivate(combo, sel);
-      combo.removeAttribute('data-ins-flip');
-      var r = list.getBoundingClientRect(), s = input.getBoundingClientRect();
-      if (r.bottom > window.innerHeight - 8 && s.top - r.height - 6 > 8) combo.setAttribute('data-ins-flip', 'up');
     } else {
       list.removeAttribute('data-ins-open');
       input.setAttribute('aria-expanded', 'false');
       comboActivate(combo, null);
+      layerShut(list);
+      combo.removeAttribute('data-ins-flip');
     }
   }
 
@@ -1981,26 +2303,6 @@
 
   /* Below the field, aligned to its leading edge — the right edge on an Arabic page
      — and above it when there is no room below. */
-  function placeNear(layer, target) {
-    var anchor = target.getBoundingClientRect();
-    var gap = 6, pad = 8, vw = root.clientWidth, vh = window.innerHeight;
-    layer.style.left = '0px';
-    layer.style.top = '0px';
-    var w = layer.offsetWidth, h = layer.offsetHeight;
-    var y = anchor.bottom + gap;
-    if (y + h > vh - pad && anchor.top - gap - h >= pad) y = anchor.top - gap - h;
-    var x = layer.dir === 'rtl' ? anchor.right - w : anchor.left;
-    x = Math.max(pad, Math.min(x, vw - w - pad));
-    y = Math.max(pad, Math.min(y, vh - h - pad));
-    layer.style.left = Math.round(x) + 'px';
-    layer.style.top = Math.round(y) + 'px';
-  }
-
-  function placeCal() {
-    if (!calEl || !calFor) return;
-    placeNear(calEl, calFor.closest('.ins-input-group') || calFor);
-  }
-
   function focusCalDay() {
     var btn = calEl && calEl.querySelector('.ins-cal-day[tabindex="0"]');
     if (btn) btn.focus();
@@ -2018,13 +2320,11 @@
     calFocus = start;
     calView = monthStartIn(viewCalendar(input), start);
     renderCal();
-    if (hasPopover) {
-      try { if (!calEl.matches(':popover-open')) calEl.showPopover(); } catch (e) { /* not connected */ }
-    } else {
-      calEl.hidden = false;
-      calEl.classList.add('is-open');
-    }
-    placeCal();
+    layerOpen(calEl, {
+      trigger: input, anchor: input.closest('.ins-input-group') || input, owns: [calButton(input)],
+      move: true, toggle: 'class', dir: calEl.dir,
+      close: function (why) { closeCal(why === 'escape'); }
+    });
     var drum = calEl.querySelector('.ins-drum');
     if (drum) drumSet(drum, timeOf(input) || timeDefault(input));
     var btn = calButton(input);
@@ -2036,12 +2336,7 @@
     if (!calEl || !calFor) return;
     var input = calFor;
     calFor = null;
-    if (hasPopover) {
-      try { calEl.hidePopover(); } catch (e) { /* already hidden */ }
-    } else {
-      calEl.classList.remove('is-open');
-      calEl.hidden = true;
-    }
+    layerShut(calEl);
     var btn = calButton(input);
     if (btn) btn.setAttribute('aria-expanded', 'false');
     if (refocus) input.focus();
@@ -2902,13 +3197,10 @@
     pop.setAttribute('aria-label', strings(input).chooseTime);
     var drum = drumBuild(input, function (v) { if (timeFor) setTime(timeFor, v); });
     pop.appendChild(drum);
-    if (hasPopover) {
-      try { if (!pop.matches(':popover-open')) pop.showPopover(); } catch (e) { /* not connected */ }
-    } else {
-      pop.hidden = false;
-      pop.classList.add('is-open');
-    }
-    placeNear(pop, input);
+    layerOpen(pop, {
+      trigger: input, anchor: input, move: true, toggle: 'class', dir: pop.dir,
+      close: function (why) { closeTime(why === 'escape'); }
+    });
     drumSet(drum, (hidden && hidden.value) || timeDefault(input));
     input.setAttribute('aria-expanded', 'true');
     if (focusDrum) drum._cols[0].focus();
@@ -2918,12 +3210,7 @@
     if (!timeEl || !timeFor) return;
     var input = timeFor;
     timeFor = null;
-    if (hasPopover) {
-      try { timeEl.hidePopover(); } catch (e) { /* already hidden */ }
-    } else {
-      timeEl.classList.remove('is-open');
-      timeEl.hidden = true;
-    }
+    layerShut(timeEl);
     input.setAttribute('aria-expanded', 'false');
     if (refocus) input.focus();
   }
@@ -3402,7 +3689,7 @@
      Escape, the focus trap and the return value are all the platform's. Focus lands
      on Cancel, the button that does nothing: the confirmation that defaults to the
      destructive answer is the one somebody presses Enter through. */
-  function confirmDialog(message, options) {
+  function confirmDialog(message, options, from) {
     var o = options || {};
     var t = strings(document.body);
     if (typeof window.Promise !== 'function' || !document.body) return null;
@@ -3442,6 +3729,8 @@
         setTimeout(function () { if (dlg.parentNode) dlg.parentNode.removeChild(dlg); }, 400);
       });
       document.body.appendChild(dlg);
+      dlg._insFrom = from || document.activeElement;
+      gutterCheck();
       dlg.showModal();
       no.focus();
     });
@@ -3505,7 +3794,7 @@
     }
 
     if (el.hasAttribute('data-ins-dialog')) {
-      dialog(el.getAttribute('data-ins-dialog'), 'open');
+      dialog(el.getAttribute('data-ins-dialog'), 'open', el);
       if (el.tagName === 'A') event.preventDefault();
       return;
     }
@@ -3626,16 +3915,6 @@
     }
   }, false);
 
-  /* A popover is a <details>, so it opens and is keyboard reachable with no script.
-     Clicking elsewhere closes it here; Escape and the arrow keys are `onPopKey`
-     above — this comment used to say the platform supplied Escape, and it does not. */
-  document.addEventListener('click', function (event) {
-    var open = document.querySelectorAll('details.ins-pop[open]');
-    for (var i = 0; i < open.length; i++) {
-      if (!open[i].contains(event.target)) open[i].removeAttribute('open');
-    }
-  }, true);
-
   /* Choosing an item closes its menu and hands focus back to the trigger — except a
      checkbox item, which is a setting being flipped, and whose menu stays open for
      the next one. A radio item moves the check within its group, or within the
@@ -3660,27 +3939,21 @@
     closePop(pop, true);
   }, false);
 
-  /* `toggle` does not bubble, so it is caught on the way down. One menu open at a
-     time, however it was opened, and each one measured against the viewport as it
-     opens. */
+  // A toggle event does not bubble, so it is caught on the way down; however a menu opened or closed, its body follows.
   document.addEventListener('toggle', function (event) {
     var pop = event.target;
     if (!pop.matches || !pop.matches(POP)) return;
-    if (!pop.open) { pop.removeAttribute('data-ins-flip'); return; }
-    var open = document.querySelectorAll(POP + '[open]');
-    for (var i = 0; i < open.length; i++) {
-      if (open[i] !== pop && !open[i].contains(pop)) open[i].open = false;
-    }
-    flipPop(pop);
+    if (pop.open) menuShow(pop);
+    else menuHide(pop);
   }, true);
 
-  /* Tabbing out of an open menu closes it. Only when focus has actually gone
-     somewhere: a click on the menu's own padding moves focus to nothing, and
-     closing on that would shut the menu under the pointer. */
+  // Tabbing out of an open menu closes it, unless focus went to a pop-up opened from inside it; focus going nowhere, or to a box around the menu (a dialog), is a click on its padding.
   document.addEventListener('focusout', function (event) {
     var pop = event.target.closest ? event.target.closest(POP + '[open]') : null;
     var to = event.relatedTarget;
-    if (pop && to && !pop.contains(to)) pop.open = false;
+    if (!pop || !to || pop.contains(to) || to.contains(pop)) return;
+    for (var i = 0; i < layers.length; i++) if (layers[i].kind === 'popup' && layers[i].el.contains(to) && pop.contains(layers[i].trigger)) return;
+    closePop(pop, false);
   }, false);
 
   /* A sidebar link: a same-page one moves the selection here and now; one that loads
@@ -3695,18 +3968,6 @@
     try {
       window.sessionStorage.setItem(NAV_KEY, JSON.stringify(note));
     } catch (e) { /* no storage: the page simply arrives with its marker in place */ }
-  }, false);
-
-  /* A drawer closes on a click outside it. The click lands on the <dialog> itself
-     — that is where a backdrop's clicks go — so the test is whether it fell outside
-     the drawer's own box. A modal dialog does not do this, deliberately: it is
-     usually a form, and a stray click should not throw one away. */
-  document.addEventListener('click', function (event) {
-    var d = event.target;
-    if (!d || d.tagName !== 'DIALOG' || !d.open || !d.classList.contains('ins-drawer')) return;
-    var r = d.getBoundingClientRect();
-    if (event.clientX < r.left || event.clientX > r.right ||
-        event.clientY < r.top || event.clientY > r.bottom) dialog(d, 'close');
   }, false);
 
   /* Following a link in an open navbar menu closes it — on a page that does not
@@ -3855,7 +4116,7 @@
     var asked = confirmDialog(el.getAttribute('data-ins-confirm'), {
       tone: danger ? 'danger' : el.getAttribute('data-ins-confirm-tone'),
       confirm: el.getAttribute('data-ins-confirm-ok') || undefined
-    });
+    }, el);
     if (!asked) return;
     asked.then(function (yes) {
       if (!yes) return;
@@ -3938,28 +4199,12 @@
     var combo = t.closest && t.closest(COMBO);
     if (combo && (!to || !combo.contains(to))) comboOpen(combo, false);
     if (t.hasAttribute && t.hasAttribute('data-ins-time-ready') && !(to && timeEl && timeEl.contains(to))) commitTime(t);
-    if (timeFor && timeEl && (t === timeFor || timeEl.contains(t)) && !(to && (to === timeFor || timeEl.contains(to)))) closeTime(false);
+    if (timeFor && timeEl && (t === timeFor || timeEl.contains(t)) && !(to && (to === timeFor || timeEl.contains(to) || to.contains(timeEl)))) closeTime(false);
     /* A date field reads what was typed as focus leaves it — unless it is leaving
        for its own calendar, which will set the value itself. */
     if (t.hasAttribute && t.hasAttribute('data-ins-date-ready') && !(to && calEl && calEl.contains(to))) commitTyped(t);
-    if (calFor && calEl && calEl.contains(t) && to && !calEl.contains(to) && to !== calFor && to !== calButton(calFor)) closeCal(false);
+    if (calFor && calEl && calEl.contains(t) && to && !calEl.contains(to) && !to.contains(calEl) && to !== calFor && to !== calButton(calFor)) closeCal(false);
   }, false);
-
-  /* A press anywhere outside the calendar, its field and its button closes it. */
-  document.addEventListener('pointerdown', function (event) {
-    var t = event.target;
-    if (timeFor && !timeEl.contains(t) && t !== timeFor) closeTime(false);
-    if (!calFor || !calEl) return;
-    if (calEl.contains(t) || t === calFor || calButton(calFor) === t || (calButton(calFor) && calButton(calFor).contains(t))) return;
-    closeCal(false);
-  }, true);
-
-  /* It is fixed to the viewport, so it follows its field as the page moves. */
-  window.addEventListener('scroll', function (event) {
-    if (calFor && !(calEl.contains(event.target))) placeCal();
-    if (timeFor && !(timeEl.contains(event.target))) placeNear(timeEl, timeFor);
-  }, true);
-  window.addEventListener('resize', function () { if (calFor) placeCal(); if (timeFor) placeNear(timeEl, timeFor); }, false);
 
   /* A form reset puts the native values back, and neither a slider's fill nor a date
      field's text is a native value — so they are redrawn once the reset has run. */
@@ -4157,7 +4402,9 @@
     if (event.defaultPrevented) return;
 
     if (event.key !== 'Escape' && event.keyCode !== 27) return;
-    if (tipOwner) hideTip();
+    if (tipOwner) { hideTip(); event.preventDefault(); return; }
+    var top = layerTop();
+    if (top && top.kind === 'popup') { event.preventDefault(); top.o.close('escape'); return; }
     var panel = drawer();
     if (panel && panel.classList.contains('is-open')) sidebar('closed');
     var bars = document.querySelectorAll('.ins-navbar.is-open');
@@ -4415,6 +4662,8 @@
     for (var i = 0; i < pops.length; i++) {
       var summary = pops[i].querySelector('summary');
       var body = pops[i].querySelector('.ins-pop-body');
+      // The body becomes a popover when it first opens, not here, so server-rendered markup still hydrates unchanged.
+      if (pops[i].open) menuShow(pops[i]);
       if (!summary || !body || !body.querySelector('.ins-pop-item')) continue;
       summary.setAttribute('aria-haspopup', 'menu');
       body.setAttribute('role', 'menu');
@@ -4824,6 +5073,7 @@
   function ready() {
     init(document);
     watchScroll();
+    gutterCheck();
   }
 
   /* Loaded in <head> as recommended: wait. Loaded late, or injected: run now. */
@@ -4853,6 +5103,13 @@
     navbar: navbar,
     confirm: confirmDialog,
     calendar: registerCalendar,
+    // The overlay stack, for the plugins: open(el, options), shut(el), place(el) and host(trigger).
+    _layer: {
+      open: layerOpen,
+      shut: layerShut,
+      place: function (el) { var at = layerAt(el); if (at !== -1) layerPlace(layers[at]); },
+      host: layerHost
+    },
     /* Text the way the autocomplete compares it, for a plugin that searches, so a
        query finds the same things in both. */
     norm: norm,

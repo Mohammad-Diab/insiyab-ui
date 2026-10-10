@@ -204,20 +204,18 @@
       pop.appendChild(popLine); pop.appendChild(drum); pop.appendChild(foot);
       box.appendChild(pop);
       btn.popoverTargetElement = pop; btn.popoverTargetAction = 'toggle';
-      var place = function () {
-        if (!pop.matches(':popover-open')) return;
-        var r = control.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight, rtl = getComputedStyle(box).direction === 'rtl';
-        var left = rtl ? r.right - w : r.left;
-        pop.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, left)) + 'px';
-        pop.style.top = (r.bottom + 6 + h > window.innerHeight && r.top - 6 - h > 0 ? r.top - 6 - h : r.bottom + 6) + 'px';
-      };
+      var place = function () { Insiyab._layer.place(pop); };
       var isOpen = function () { return pop.matches(':popover-open'); }, stay = false;
       st.open = function (keep) { if (isOpen() || input.disabled) return; stay = keep; pop.showPopover(); };
       pop.addEventListener('toggle', function (e) {
         var open = e.newState === 'open', keep = stay;
         stay = false;
         btn.setAttribute('aria-expanded', String(open));
-        if (!open) return;
+        if (!open) { Insiyab._layer.shut(pop); return; }
+        Insiyab._layer.open(pop, {
+          trigger: btn, anchor: control, owns: [box],
+          close: function (why) { if (why === 'escape') { st.cancel(); focusPart(firstOpen()); } else pop.hidePopover(); }
+        });
         st.saved = JSON.stringify({ parts: st.parts, set: st.set, val: st.val });
         place();
         requestAnimationFrame(function () { ORDER.forEach(goValue); place(); if (!keep) st.cols[firstOpen()].focus({ preventScroll: true }); });
@@ -234,7 +232,6 @@
         if (!e.target.closest('.ins-birth-seg')) focusPart(firstOpen());
         if (isOpen()) pop.hidePopover(); else st.open(true);
       });
-      document.addEventListener('pointerdown', function (e) { if (isOpen() && !box.contains(e.target)) pop.hidePopover(); }, true);
       box.addEventListener('focusout', function (e) { if (isOpen() && e.relatedTarget && !box.contains(e.relatedTarget)) pop.hidePopover(); });
       box.addEventListener('keydown', function (e) {
         if (e.key !== 'Escape' || !isOpen()) return;
@@ -243,8 +240,6 @@
         st.cancel();
         if (inside) focusPart(firstOpen());
       }, true);
-      window.addEventListener('scroll', place, true);
-      window.addEventListener('resize', place);
     }
     box.appendChild(line);
     st.pop = pop;

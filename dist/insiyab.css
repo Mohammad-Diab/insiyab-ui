@@ -787,6 +787,13 @@ a:hover { color: var(--ins-tone-brand-soft); }
   html[data-ins-scrollbar="lead"] > body { height: 100%; overflow-y: auto; overflow-x: hidden; scrollbar-gutter: stable; }
 }
 
+/* While any modal is open the page under it does not scroll; insiyab.js marks a page whose scrollbar takes room, so that room is kept and nothing shifts. */
+html:has(dialog:modal) { overflow: hidden; }
+html[data-ins-gutter]:has(dialog:modal) { scrollbar-gutter: stable; }
+@media (pointer: fine) {
+  html[data-ins-scrollbar="lead"]:has(dialog:modal) > body { overflow: hidden; }
+}
+
 /* --------------------------------------------------------------- the orbs */
 /* Three soft brand-tinted blobs behind everything. insiyab.js injects the markup
    so a two-tag page gets them for free; write it yourself if you are CSS-only,
@@ -2487,7 +2494,8 @@ html[dir="ltr"] .ins-dl dd.ins-num { text-align: left; }
    the behaviour of the day before — so it degrades to the old bug, not to a new
    one. Add `.ins-panel--open` by hand if you need to support those browsers. */
 /* An open accordion is not a popup: it stays inside the clip, or its fills spill past the corners. */
-.ins-panel:has(details[open]:not(.ins-collapse), [data-ins-open]) { overflow: visible; z-index: 5; }
+/* A menu or list in the top layer is not clipped, so only one still in the flow (no script, no Popover API) needs the escape. */
+.ins-panel:has(details[open]:not(.ins-collapse, .ins-pop), .ins-pop[open] > .ins-pop-body:not([popover]), [data-ins-open]:not([popover])) { overflow: visible; z-index: 5; }
 
 .ins-panel-head {
   display: flex;
@@ -2921,7 +2929,8 @@ html[dir="ltr"] .ins-dl dd.ins-num { text-align: left; }
 /* `overflow-x: auto` computes `auto` on *both* axes, so the wrapper cuts popovers
    off — measured at 4 of 15 rows on one page, by up to 182px. Only while one is
    open, so a phone keeps its sideways scroll the rest of the time. */
-.ins-table-wrap:has([open], [data-ins-open]) { overflow: visible; }
+/* Only for a menu still in the flow: one in the top layer is not clipped, and dropping the clip would lose the sideways scroll under it. */
+.ins-table-wrap:has([open]:not(.ins-pop), .ins-pop[open] > .ins-pop-body:not([popover]), [data-ins-open]:not([popover])) { overflow: visible; }
 
 .ins-table {
   inline-size: 100%;
@@ -3313,7 +3322,7 @@ th[aria-sort="descending"] > .ins-sort::after {
    sideways. The two combine. Such a box keeps its scrolling while a menu in it is
    open, so a menu near its edge is clipped by it. */
 .ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin),
-.ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin):has([open], [data-ins-open]) { overflow: auto; }
+.ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin):has([open]:not(.ins-pop), .ins-pop[open] > .ins-pop-body:not([popover]), [data-ins-open]:not([popover])) { overflow: auto; }
 .ins-table-wrap--sticky { max-block-size: var(--ins-height, var(--ins-table-max)); overscroll-behavior: contain; }
 .ins-table-wrap--sticky::-webkit-scrollbar-track { margin-block: 3rem var(--ins-r-lg); }
 .ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin) .ins-table thead th {
@@ -4744,6 +4753,8 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
   .ins-combo-list { backdrop-filter: var(--ins-blur); -webkit-backdrop-filter: var(--ins-blur); }
 }
 .ins-combo-list:not([data-ins-open]) { display: none; }
+/* With the script the list is a popover in the top layer, as wide as its field and placed by insiyab.js. */
+.ins-combo-list[popover] { position: fixed; inset: auto; color: inherit; }
 .ins-combo[data-ins-flip~="up"] > .ins-combo-list {
   inset-block-start: auto;
   inset-block-end: calc(100% + .375rem);
@@ -5430,6 +5441,8 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
      clicks across the whole width — only the toasts themselves are targets. */
   pointer-events: none;
 }
+/* With the script the strip is a popover, raised above any open modal; the browser's own popover box is undone. */
+.ins-toasts[popover] { inset-block-end: auto; margin-block: 0; block-size: auto; padding: 0; border: 0; background: none; color: inherit; overflow: visible; }
 .ins-toast {
   pointer-events: auto;
   cursor: pointer;
@@ -5830,6 +5843,8 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
 }
 .ins-dialog[open]::backdrop,
 .ins-drawer[open]::backdrop { opacity: 1; transition-duration: var(--ins-t-enter); }
+/* Stacked modals dim the page once: a modal under another gives up its backdrop and sits under the top one's. */
+dialog[open][data-ins-under]::backdrop { opacity: 0; transition-duration: var(--ins-t-exit); }
 @starting-style {
   .ins-dialog[open]::backdrop,
   .ins-drawer[open]::backdrop { opacity: 0; }
@@ -6015,8 +6030,14 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
   --ins-pop-dy: -6px;
   opacity: 0;
   transform: translateY(var(--ins-pop-dy)) scale(.97);
-  transition: opacity var(--ins-t-exit) var(--ins-ease), transform var(--ins-t-exit) var(--ins-ease);
+  transition: opacity var(--ins-t-exit) var(--ins-ease), transform var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
 }
+/* With the script the body is a popover in the top layer, placed beside its summary by insiyab.js, so no scrolling box clips it. */
+.ins-pop-body[popover] { position: fixed; inset: auto; margin: 0; color: inherit; }
+/* Until its first opening makes it one, a body is not shown in the flow for the frame before the script gets to it. */
+:root[data-ins-layers] .ins-pop > .ins-pop-body:not([popover]) { display: none; }
 .ins-pop[open] > .ins-pop-body { opacity: 1; transform: none; transition-duration: var(--ins-t-enter); }
 @starting-style { .ins-pop[open] > .ins-pop-body { opacity: 0; transform: translateY(var(--ins-pop-dy)) scale(.97); } }
 .ins-pop:not([open]) > .ins-pop-body { pointer-events: none; }

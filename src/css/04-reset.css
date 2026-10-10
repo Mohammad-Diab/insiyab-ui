@@ -124,6 +124,13 @@ a:hover { color: var(--ins-tone-brand-soft); }
   html[data-ins-scrollbar="lead"] > body { height: 100%; overflow-y: auto; overflow-x: hidden; scrollbar-gutter: stable; }
 }
 
+/* While any modal is open the page under it does not scroll; insiyab.js marks a page whose scrollbar takes room, so that room is kept and nothing shifts. */
+html:has(dialog:modal) { overflow: hidden; }
+html[data-ins-gutter]:has(dialog:modal) { scrollbar-gutter: stable; }
+@media (pointer: fine) {
+  html[data-ins-scrollbar="lead"]:has(dialog:modal) > body { overflow: hidden; }
+}
+
 /* --------------------------------------------------------------- the orbs */
 /* Three soft brand-tinted blobs behind everything. insiyab.js injects the markup
    so a two-tag page gets them for free; write it yourself if you are CSS-only,

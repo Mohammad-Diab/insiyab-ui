@@ -125,6 +125,8 @@
      clicks across the whole width — only the toasts themselves are targets. */
   pointer-events: none;
 }
+/* With the script the strip is a popover, raised above any open modal; the browser's own popover box is undone. */
+.ins-toasts[popover] { inset-block-end: auto; margin-block: 0; block-size: auto; padding: 0; border: 0; background: none; color: inherit; overflow: visible; }
 .ins-toast {
   pointer-events: auto;
   cursor: pointer;

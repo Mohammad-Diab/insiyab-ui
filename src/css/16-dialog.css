@@ -91,6 +91,8 @@
 }
 .ins-dialog[open]::backdrop,
 .ins-drawer[open]::backdrop { opacity: 1; transition-duration: var(--ins-t-enter); }
+/* Stacked modals dim the page once: a modal under another gives up its backdrop and sits under the top one's. */
+dialog[open][data-ins-under]::backdrop { opacity: 0; transition-duration: var(--ins-t-exit); }
 @starting-style {
   .ins-dialog[open]::backdrop,
   .ins-drawer[open]::backdrop { opacity: 0; }
@@ -276,8 +278,14 @@
   --ins-pop-dy: -6px;
   opacity: 0;
   transform: translateY(var(--ins-pop-dy)) scale(.97);
-  transition: opacity var(--ins-t-exit) var(--ins-ease), transform var(--ins-t-exit) var(--ins-ease);
+  transition: opacity var(--ins-t-exit) var(--ins-ease), transform var(--ins-t-exit) var(--ins-ease),
+              overlay var(--ins-t-exit) var(--ins-ease) allow-discrete,
+              display var(--ins-t-exit) var(--ins-ease) allow-discrete;
 }
+/* With the script the body is a popover in the top layer, placed beside its summary by insiyab.js, so no scrolling box clips it. */
+.ins-pop-body[popover] { position: fixed; inset: auto; margin: 0; color: inherit; }
+/* Until its first opening makes it one, a body is not shown in the flow for the frame before the script gets to it. */
+:root[data-ins-layers] .ins-pop > .ins-pop-body:not([popover]) { display: none; }
 .ins-pop[open] > .ins-pop-body { opacity: 1; transform: none; transition-duration: var(--ins-t-enter); }
 @starting-style { .ins-pop[open] > .ins-pop-body { opacity: 0; transform: translateY(var(--ins-pop-dy)) scale(.97); } }
 .ins-pop:not([open]) > .ins-pop-body { pointer-events: none; }

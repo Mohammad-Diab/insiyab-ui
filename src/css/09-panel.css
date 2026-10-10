@@ -71,7 +71,8 @@
    the behaviour of the day before — so it degrades to the old bug, not to a new
    one. Add `.ins-panel--open` by hand if you need to support those browsers. */
 /* An open accordion is not a popup: it stays inside the clip, or its fills spill past the corners. */
-.ins-panel:has(details[open]:not(.ins-collapse), [data-ins-open]) { overflow: visible; z-index: 5; }
+/* A menu or list in the top layer is not clipped, so only one still in the flow (no script, no Popover API) needs the escape. */
+.ins-panel:has(details[open]:not(.ins-collapse, .ins-pop), .ins-pop[open] > .ins-pop-body:not([popover]), [data-ins-open]:not([popover])) { overflow: visible; z-index: 5; }
 
 .ins-panel-head {
   display: flex;
