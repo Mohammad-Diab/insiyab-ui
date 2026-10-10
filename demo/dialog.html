@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,14 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">على عنصر dialog الأصلي، فالطبقة العليا (top layer) وحبس التركيز (focus trap) والإغلاق بـ Esc كلها من المتصفح.</p>
-        <h2 id="basic">مربع الحوار</h2>
-<p>
-  يتألف مربع الحوار <code>&lt;dialog class="ins-dialog"&gt;</code> من رأس <code>.ins-dialog-head</code> ومتن <code>.ins-dialog-body</code>
-  وذيل <code>.ins-dialog-foot</code>. يفتحه زر يحمل <code>data-ins-dialog</code>، ويغلقه من داخله زر يحمل <code>data-ins-dialog-close</code>.
-  وما دام مفتوحًا بقي التركيز محبوسًا فيه، ويغلقه مفتاح <kbd class="ins-kbd">Esc</kbd> ويعيد التركيز إلى الزر الذي فتحه.
-  أما النقر خارجه فلا يغلقه، حتى لا تذهب نقرة شاردة بما كتبته فيه.
-</p>
-<figure class="dx"><div class="dx-view row">
+        <figure class="dx"><div class="dx-view row">
   <button class="ins-btn ins-btn--primary" data-ins-dialog="#dlg">فتح الحوار</button>
 
   <dialog class="ins-dialog" id="dlg">
@@ -308,96 +302,172 @@
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/dialog</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="sizes">المقاسات</h2>
-<p>يناسب <code>--sm</code> سؤالًا قصيرًا، ويتسع <code>--lg</code> لمحتوى عريض مثل جدول.</p>
-<figure class="dx"><div class="dx-view row">
-  <button class="ins-btn ins-btn--secondary" data-ins-dialog="#dlg-sm">صغير</button>
-  <button class="ins-btn ins-btn--secondary" data-ins-dialog="#dlg-lg">كبير</button>
+<h2 id="dialog">مربع الحوار</h2>
+<p>
+  يفتح <code>&lt;dialog class="ins-dialog"&gt;</code> زرٌ يحمل <code>data-ins-dialog</code>، ويبقى التركيز محبوسًا فيه حتى يُغلق.
+  أما النقر خارجه فلا يغلقه، حتى لا تذهب نقرة شاردة بما كتبته فيه. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="dialog"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><button class="ins-btn ins-btn--primary" data-ins-dialog="#dlg-demo">فتح الحوار</button>
 
-  <dialog class="ins-dialog ins-dialog--sm" id="dlg-sm">
-    <div class="ins-dialog-head">
-      <h3 class="ins-dialog-title">حوار صغير</h3>
-      <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
-    </div>
-    <div class="ins-dialog-body">نص قصير.</div>
-    <div class="ins-dialog-foot">
-      <button class="ins-btn ins-btn--bare" data-ins-dismiss>إلغاء</button>
-      <button class="ins-btn ins-btn--primary" data-ins-dismiss>موافق</button>
-    </div>
-  </dialog>
+<dialog class="ins-dialog" id="dlg-demo">
+  <div class="ins-dialog-head">
+    <h3 class="ins-dialog-title">عنوان الحوار</h3>
+    <button class="ins-close" data-ins-dialog-close aria-label="إغلاق"></button>
+  </div>
+  <div class="ins-dialog-body">نص الحوار.</div>
+  <div class="ins-dialog-foot">
+    <button class="ins-btn ins-btn--bare" data-ins-dialog-close>إلغاء</button>
+    <button class="ins-btn ins-btn--primary" data-ins-dialog-close>موافق</button>
+  </div>
+</dialog></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">اضغط الزر لترى الحوار بخياراتك.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات مربع الحوار"><div class="site-play-ctl" data-key="size" data-type="seg"><span class="site-play-label">المقاس</span><div class="ins-seg" role="group" aria-label="المقاس"><button type="button" data-value="sm" aria-pressed="false">صغير</button><button type="button" data-value="" class="is-active" aria-pressed="true">عادي</button><button type="button" data-value="lg" aria-pressed="false">كبير</button></div></div><label class="site-play-ctl" data-key="title" data-type="text"><span class="site-play-label">العنوان</span><input class="ins-input ins-input--sm" type="text" value="عنوان الحوار"></label><div class="site-play-ctl" data-key="foot" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">الذيل</span></span></label></div><div class="site-play-ctl site-adv" data-key="form" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">فيه نموذج</span></span></label></div><label class="site-play-ctl" data-key="closedby" data-type="select"><span class="site-play-label">ما يغلقه</span><select class="ins-select ins-select--sm"><option value="" selected>Esc وأزراره</option><option value="any">والنقر خارجه أيضًا</option><option value="none">أزراره وحدها</option></select></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">data-ins-dialog</span>=<span class="hl-s">"#dlg-demo"</span><span class="hl-t">&gt;</span>فتح الحوار<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 
-  <dialog class="ins-dialog ins-dialog--lg" id="dlg-lg">
-    <div class="ins-dialog-head">
-      <h3 class="ins-dialog-title">حوار كبير</h3>
-      <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
-    </div>
-    <div class="ins-dialog-body">محتوى عريض.</div>
-    <div class="ins-dialog-foot">
-      <button class="ins-btn ins-btn--primary" data-ins-dismiss>تم</button>
-    </div>
-  </dialog>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">data-ins-dialog</span>=<span class="hl-s">"#dlg-sm"</span><span class="hl-t">&gt;</span>صغير<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">data-ins-dialog</span>=<span class="hl-s">"#dlg-lg"</span><span class="hl-t">&gt;</span>كبير<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-
-<span class="hl-t">&lt;dialog</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog ins-dialog--sm"</span> <span class="hl-a">id</span>=<span class="hl-s">"dlg-sm"</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;dialog</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog"</span> <span class="hl-a">id</span>=<span class="hl-s">"dlg-demo"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-head"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-title"</span><span class="hl-t">&gt;</span>حوار صغير<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-close"</span> <span class="hl-a">data-ins-dismiss</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إغلاق"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-title"</span><span class="hl-t">&gt;</span>عنوان الحوار<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-close"</span> <span class="hl-a">data-ins-dialog-close</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إغلاق"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-body"</span><span class="hl-t">&gt;</span>نص قصير.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-body"</span><span class="hl-t">&gt;</span>نص الحوار.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-foot"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--bare"</span> <span class="hl-a">data-ins-dismiss</span><span class="hl-t">&gt;</span>إلغاء<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">data-ins-dismiss</span><span class="hl-t">&gt;</span>موافق<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/dialog</span><span class="hl-t">&gt;</span>
-
-<span class="hl-t">&lt;dialog</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog ins-dialog--lg"</span> <span class="hl-a">id</span>=<span class="hl-s">"dlg-lg"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-head"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-title"</span><span class="hl-t">&gt;</span>حوار كبير<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-close"</span> <span class="hl-a">data-ins-dismiss</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إغلاق"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-body"</span><span class="hl-t">&gt;</span>محتوى عريض.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dialog-foot"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">data-ins-dismiss</span><span class="hl-t">&gt;</span>تم<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--bare"</span> <span class="hl-a">data-ins-dialog-close</span><span class="hl-t">&gt;</span>إلغاء<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">data-ins-dialog-close</span><span class="hl-t">&gt;</span>موافق<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/dialog</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<p>
+  وأزرار الذيل على قاعدة واحدة في المكتبة كلها، في الحوار والدرج والتأكيد والنوافذ المنبثقة: تصطف في نهاية السطر، والزر الرئيسي
+  آخرها وقبله زر الإلغاء، وما لا يُنهي الحوار، كالحذف أو «اليوم»، يقف وحده في أوله. وعلى الهاتف تتقاسم الأزرار العرض بارتفاع يناسب الإصبع.
+</p>
+<p>
+  وإذا فتحت حوارًا من حوار، أو قائمة داخله، أظلمت الصفحة مرة واحدة وبقي الأول خلف الثاني. ويغلق <kbd class="ins-kbd">Esc</kbd>
+  والنقر خارجه أعلاهما وحده، ثم يعود التركيز إلى الزر الذي فتحه، ولا تتمرر الصفحة خلفهما ما داما مفتوحين.
+</p>
 
 <h2 id="confirm">التأكيد</h2>
 <p>
-  ضع <code>data-ins-confirm</code> على زر أو رابط أو نموذج، فيسأل المستخدم قبل أن يمضي الإجراء، واكتب في <code>data-ins-confirm-ok</code>
-  نص زر التأكيد. وإذا كان الزر من أزرار الخطر جاء زر التأكيد أحمر تلقائيًا. ومن جافاسكربت تعيد
-  <code>Insiyab.confirm()</code> كائن <code>Promise</code> ينتهي إلى <code>true</code> أو <code>false</code>.
+  ضع <code>data-ins-confirm</code> على زر أو رابط أو نموذج، فيسأل المستخدم قبل أن يمضي الإجراء. وإذا كان الزر من أزرار الخطر جاء
+  زر التأكيد أحمر تلقائيًا.
 </p>
-<figure class="dx"><div class="dx-view row">
-  <button class="ins-btn ins-btn--ghost-danger" id="del-btn" data-ins-confirm="حذف العنصر نهائيًا؟" data-ins-confirm-ok="حذف">حذف</button>
-  <button class="ins-btn ins-btn--secondary" id="archive-btn">أرشفة</button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--ghost-danger"</span> <span class="hl-a">id</span>=<span class="hl-s">"del-btn"</span> <span class="hl-a">data-ins-confirm</span>=<span class="hl-s">"حذف العنصر نهائيًا؟"</span> <span class="hl-a">data-ins-confirm-ok</span>=<span class="hl-s">"حذف"</span><span class="hl-t">&gt;</span>حذف<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">id</span>=<span class="hl-s">"archive-btn"</span><span class="hl-t">&gt;</span>أرشفة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<figure class="dx site-play" data-play="confirm"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><button class="ins-btn ins-btn--secondary" data-ins-confirm="أرشفة الملف؟" data-ins-confirm-ok="أرشفة">أرشفة</button></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">اضغط الزر لترى السؤال بخياراتك.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات التأكيد"><div class="site-play-ctl" data-key="look" data-type="seg"><span class="site-play-label">نمط الزر</span><div class="ins-seg" role="group" aria-label="نمط الزر"><button type="button" data-value="secondary" class="is-active" aria-pressed="true">ثانوي</button><button type="button" data-value="ghost-danger" aria-pressed="false">خطر</button></div></div><label class="site-play-ctl" data-key="text" data-type="text"><span class="site-play-label">السؤال</span><input class="ins-input ins-input--sm" type="text" value="أرشفة الملف؟"></label><label class="site-play-ctl" data-key="ok" data-type="text"><span class="site-play-label">زر التأكيد</span><input class="ins-input ins-input--sm" type="text" value="أرشفة"></label><div class="site-play-ctl" data-key="tone" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">تأكيد بلون الخطر</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">data-ins-confirm</span>=<span class="hl-s">"أرشفة الملف؟"</span> <span class="hl-a">data-ins-confirm-ok</span>=<span class="hl-s">"أرشفة"</span><span class="hl-t">&gt;</span>أرشفة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<p>
+  ومن جافاسكربت تعيد <code>Insiyab.confirm()</code> كائن <code>Promise</code> ينتهي إلى <code>true</code> أو <code>false</code>.
+</p>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-k">const</span> yes = <span class="hl-k">await</span> <span class="hl-t">Insiyab</span>.confirm(<span class="hl-s">'أرشفة العنصر؟'</span>, { title: <span class="hl-s">'تأكيد'</span>, confirm: <span class="hl-s">'أرشفة'</span> });
 <span class="hl-k">if</span> (yes) archive();</code></pre></div>
 
 <div class="site-adv"><h2 id="api">التحكم بـ JavaScript</h2>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.dialog(<span class="hl-s">'#dlg'</span>, <span class="hl-s">'open'</span>);
 <span class="hl-t">Insiyab</span>.dialog(<span class="hl-s">'#dlg'</span>, <span class="hl-s">'close'</span>);
-<span class="hl-t">Insiyab</span>.dialog(<span class="hl-s">'#dlg'</span>);           <span class="hl-c">// تبديل</span></code></pre></div>
+<span class="hl-t">Insiyab</span>.dialog(<span class="hl-s">'#dlg'</span>);           <span class="hl-c">// تبديل</span></code></pre></div></div>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في مربع الحوار والتأكيد من كلاسات وسمات، لكل منهما صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>مربع الحوار</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-dialog</code></td><td>كلاس</td><td>على <code>&lt;dialog&gt;</code>، فيحبس التركيز ما دام مفتوحًا، ويغلقه <code>Esc</code> ويعيد التركيز إلى الزر الذي فتحه.</td></tr><tr><td><code>data-ins-dialog="#id"</code></td><td>سمة</td><td>على الزر الذي يفتح الحوار، وقيمتها معرّف الحوار.</td></tr><tr><td><code>data-ins-dialog-close</code></td><td>سمة</td><td>على زر داخل الحوار يغلقه، ويصلح له <code>data-ins-dismiss</code> أيضًا.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المقاس</th></tr></tbody><tbody><tr><td><code>.ins-dialog--sm</code></td><td>كلاس</td><td>لسؤال قصير، فيقع زراه تحته مباشرة.</td></tr><tr><td><code>.ins-dialog--lg</code></td><td>كلاس</td><td>لمحتوى عريض، كجدول أو نموذج من عمودين.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأجزاء</th></tr></tbody><tbody><tr><td><code>.ins-dialog-foot</code></td><td>كلاس</td><td>ذيل الحوار، وفيه أزراره مصفوفة إلى نهاية السطر.</td></tr><tr><td><code>.ins-dialog-head</code></td><td>كلاس</td><td>رأس الحوار، وفيه العنوان وزر الإغلاق <code>.ins-close</code>.</td></tr><tr><td><code>.ins-dialog-title</code></td><td>كلاس</td><td>عنوان الحوار.</td></tr><tr><td><code>.ins-dialog-body</code></td><td>كلاس</td><td>متن الحوار، يتمرر وحده إذا طال.</td></tr><tr class="site-adv"><td><code>.ins-dialog-x</code></td><td>كلاس</td><td>زر إغلاق أقدم من <code>.ins-close</code> وباقٍ لمن استعمله، وتضع فيه الأيقونة بنفسك.</td></tr><tr class="site-adv"><td><code>.ins-dialog-body--spill</code></td><td>كلاس</td><td>كانت تلغي تمرير المتن لتخرج منه القائمة المفتوحة. ولم تعد تلزم، فالقوائم تطفو الآن فوق الحوار، وبقيت لمن استعملها.</td></tr></tbody><tbody class="site-opt-group site-adv"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr class="site-adv"><td><code>form</code></td><td>عنصر</td><td>لحوار يجمع بيانات: ضع رأسه ومتنه وذيله في <code>&lt;form method="dialog"&gt;</code>، فيغلقه أي زر في النموذج ويبقى المتن وحده يتمرر بين رأس وذيل ثابتين. وتجد قيمة الزر الذي أغلقه في <code>returnValue</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الإغلاق</th></tr></tbody><tbody><tr><td><code>closedby="any"</code></td><td>سمة</td><td>يغلقه النقر خارجه مع <code>Esc</code>. ولا يُغلق الحوار بالنقر خارجه إن لم تكتبها، حتى لا تذهب نقرة شاردة بما كُتب فيه.</td></tr><tr><td><code>closedby="none"</code></td><td>سمة</td><td>لا يغلقه <code>Esc</code> ولا النقر خارجه، بل أزراره وحدها، لحوار لا بد فيه من جواب.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>التأكيد</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-confirm</code></td><td>سمة</td><td>على زر أو رابط أو نموذج، وقيمتها السؤال، فلا يمضي الإجراء إلا إذا أكده المستخدم.</td></tr><tr><td><code>data-ins-confirm-ok</code></td><td>سمة</td><td>نص زر التأكيد، وهو «تأكيد» إن لم تكتبه.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>data-ins-confirm-tone="danger"</code></td><td>سمة</td><td>يجعل زر التأكيد أحمر وإن لم يكن الزر نفسه من أزرار الخطر.</td></tr></tbody></table></div></div></details></div></div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    /* data-ins-confirm lets the click through only once the answer is yes, so a
-       plain click handler here is the "yes" branch. */
-    document.getElementById('del-btn').addEventListener('click', function () {
-      Insiyab.toast('حُذف', 'ok');
-    });
-    document.getElementById('archive-btn').addEventListener('click', function () {
-      Insiyab.confirm('أرشفة العنصر؟', { title: 'تأكيد', confirm: 'أرشفة' }).then(function (yes) {
-        Insiyab.toast(yes ? 'أُرشف' : 'أُلغي', yes ? 'ok' : 'info');
-      });
-    });
-  });
-</script></div>
+SitePlay.define({
+  id: 'dialog',
+  title: 'مربع الحوار',
+  owns: 'ins-dialog',
+  controls: [
+    { key: 'size', label: 'المقاس', type: 'seg', value: '', choices: [
+      { value: 'sm', label: 'صغير', name: 'ins-dialog--sm', desc: 'لسؤال قصير، فيقع زراه تحته مباشرة.' },
+      { value: '', label: 'عادي' },
+      { value: 'lg', label: 'كبير', name: 'ins-dialog--lg', desc: 'لمحتوى عريض، كجدول أو نموذج من عمودين.' }
+    ] },
+    { key: 'title', label: 'العنوان', type: 'text', value: 'عنوان الحوار' },
+    { key: 'foot', label: 'الذيل', group: 'الأجزاء', type: 'switch', value: true, name: 'ins-dialog-foot', desc: 'ذيل الحوار، وفيه أزراره مصفوفة إلى نهاية السطر.' },
+    { key: 'form', label: 'فيه نموذج', type: 'switch', level: 'advanced', name: 'form', kind: 'element', desc: 'لحوار يجمع بيانات: ضع رأسه ومتنه وذيله في `<form method="dialog">`، فيغلقه أي زر في النموذج ويبقى المتن وحده يتمرر بين رأس وذيل ثابتين. وتجد قيمة الزر الذي أغلقه في `returnValue`.' },
+    { key: 'closedby', label: 'ما يغلقه', type: 'select', value: '', group: 'الإغلاق', choices: [
+      { value: '', label: 'Esc وأزراره' },
+      { value: 'any', label: 'والنقر خارجه أيضًا', name: 'closedby="any"', desc: 'يغلقه النقر خارجه مع `Esc`. ولا يُغلق الحوار بالنقر خارجه إن لم تكتبها، حتى لا تذهب نقرة شاردة بما كُتب فيه.' },
+      { value: 'none', label: 'أزراره وحدها', name: 'closedby="none"', desc: 'لا يغلقه `Esc` ولا النقر خارجه، بل أزراره وحدها، لحوار لا بد فيه من جواب.' }
+    ] }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-dialog', desc: 'على `<dialog>`، فيحبس التركيز ما دام مفتوحًا، ويغلقه `Esc` ويعيد التركيز إلى الزر الذي فتحه.' },
+    { group: 'الأساس', name: 'data-ins-dialog="#id"', desc: 'على الزر الذي يفتح الحوار، وقيمتها معرّف الحوار.' },
+    { group: 'الأساس', name: 'data-ins-dialog-close', desc: 'على زر داخل الحوار يغلقه، ويصلح له `data-ins-dismiss` أيضًا.' },
+    { group: 'الأجزاء', name: 'ins-dialog-head', desc: 'رأس الحوار، وفيه العنوان وزر الإغلاق `.ins-close`.' },
+    { group: 'الأجزاء', name: 'ins-dialog-title', desc: 'عنوان الحوار.' },
+    { group: 'الأجزاء', name: 'ins-dialog-body', desc: 'متن الحوار، يتمرر وحده إذا طال.' },
+    { group: 'الأجزاء', name: 'ins-dialog-x', level: 'advanced', desc: 'زر إغلاق أقدم من `.ins-close` وباقٍ لمن استعمله، وتضع فيه الأيقونة بنفسك.' },
+    { group: 'الأجزاء', name: 'ins-dialog-body--spill', level: 'advanced', desc: 'كانت تلغي تمرير المتن لتخرج منه القائمة المفتوحة. ولم تعد تلزم، فالقوائم تطفو الآن فوق الحوار، وبقيت لمن استعملها.' }
+  ],
+  html: function (s) {
+    var pad = s.form ? '    ' : '  ';
+    var close = s.form ? '' : ' data-ins-dialog-close';
+    var inner = [
+      '<div class="ins-dialog-head">',
+      '  <h3 class="ins-dialog-title">' + s.title + '</h3>',
+      '  <button class="ins-close" data-ins-dialog-close aria-label="إغلاق"></button>',
+      '</div>'
+    ];
+    if (!s.form) inner.push('<div class="ins-dialog-body">نص الحوار.</div>');
+    else {
+      inner.push('<div class="ins-dialog-body">',
+        '  <div class="ins-field">',
+        '    <label class="ins-label" for="dlg-name">الاسم</label>',
+        '    <input class="ins-input" id="dlg-name" name="name" type="text">',
+        '  </div>',
+        '  <div class="ins-field">',
+        '    <label class="ins-label" for="dlg-kind">النوع</label>',
+        '    <select class="ins-select" id="dlg-kind" name="kind">',
+        '      <option>عام</option>',
+        '      <option>خاص</option>',
+        '    </select>',
+        '  </div>',
+        '  <div class="ins-field">',
+        '    <label class="ins-label" for="dlg-note">ملاحظة</label>',
+        '    <textarea class="ins-textarea" id="dlg-note" name="note" rows="3"></textarea>',
+        '  </div>',
+        '  <label class="ins-check"><input type="checkbox" name="copy"><span class="ins-check-text">أرسل لي نسخة</span></label>',
+        '</div>');
+    }
+    if (s.foot) {
+      inner.push('<div class="ins-dialog-foot">',
+        '  <button class="ins-btn ins-btn--bare"' + close + (s.form ? ' value="cancel"' : '') + '>إلغاء</button>',
+        '  <button class="ins-btn ins-btn--primary"' + close + (s.form ? ' value="ok"' : '') + '>موافق</button>',
+        '</div>');
+    }
+    var body = inner.map(function (l) { return l.split('\n').map(function (x) { return pad + x; }).join('\n'); }).join('\n');
+    if (s.form) body = '  <form method="dialog">\n' + body + '\n  </form>';
+    return '<button class="ins-btn ins-btn--primary" data-ins-dialog="#dlg-demo">فتح الحوار</button>\n\n' +
+      '<dialog class="ins-dialog' + (s.size ? ' ins-dialog--' + s.size : '') + '" id="dlg-demo"' + (s.closedby ? ' closedby="' + s.closedby + '"' : '') + '>\n' + body + '\n</dialog>';
+  },
+  notes: function (s) {
+    if (s.closedby === 'any') return ['اضغط الزر لترى الحوار بخياراتك، ثم انقر خارجه فيُغلق.'];
+    if (s.closedby === 'none') return ['اضغط الزر لترى الحوار بخياراتك، فلا يغلقه `Esc` ولا النقر خارجه.'];
+    return ['اضغط الزر لترى الحوار بخياراتك.'];
+  }
+});
+
+SitePlay.define({
+  id: 'confirm',
+  title: 'التأكيد',
+  controls: [
+    { key: 'look', label: 'نمط الزر', type: 'seg', value: 'secondary', choices: [
+      { value: 'secondary', label: 'ثانوي' },
+      { value: 'ghost-danger', label: 'خطر' }
+    ] },
+    { key: 'text', label: 'السؤال', type: 'text', value: 'أرشفة الملف؟' },
+    { key: 'ok', label: 'زر التأكيد', type: 'text', value: 'أرشفة' },
+    { key: 'tone', label: 'تأكيد بلون الخطر', type: 'switch', name: 'data-ins-confirm-tone="danger"', desc: 'يجعل زر التأكيد أحمر وإن لم يكن الزر نفسه من أزرار الخطر.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-confirm', desc: 'على زر أو رابط أو نموذج، وقيمتها السؤال، فلا يمضي الإجراء إلا إذا أكده المستخدم.' },
+    { group: 'الأساس', name: 'data-ins-confirm-ok', desc: 'نص زر التأكيد، وهو «تأكيد» إن لم تكتبه.' }
+  ],
+  disable: function (s) { return s.look === 'ghost-danger' ? ['tone'] : []; },
+  html: function (s) {
+    var tone = s.tone && s.look !== 'ghost-danger' ? ' data-ins-confirm-tone="danger"' : '';
+    return '<button class="ins-btn ins-btn--' + s.look + '" data-ins-confirm="' + s.text + '"' +
+      (s.ok ? ' data-ins-confirm-ok="' + s.ok + '"' : '') + tone + '>' + (s.ok || 'متابعة') + '</button>';
+  },
+  notes: function () { return ['اضغط الزر لترى السؤال بخياراتك.']; }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="alerts.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">التنبيهات</span></a><a class="site-pager-link site-pager-link--next" href="drawer.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الدرج</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">مربع الحوار</a><a href="#sizes">المقاسات</a><a href="#confirm">التأكيد</a><a href="#api">التحكم بـ JavaScript</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">مربع الحوار</a><a href="#sizes">المقاسات</a><a href="#confirm">التأكيد</a></nav>
+        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#dialog">مربع الحوار</a><a href="#confirm">التأكيد</a><a href="#api">التحكم بـ JavaScript</a><a href="#options">الخيارات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#dialog">مربع الحوار</a><a href="#confirm">التأكيد</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
