@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,12 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">تفاصيل سجل واحد، تسمية وقيمة: صف لكل زوج، أو أعمدة لملخص قصير.</p>
-        <h2 id="list">قائمة الوصف</h2>
-<p>
-  ضع <code>.ins-dl</code> على <code>&lt;dl&gt;</code> لتعرض تفاصيل سجل واحد، في كل سطر تسمية وقيمتها، ولكل زوج <code>&lt;div&gt;</code>
-  خاص به. فتصطف التسميات في عمود وتقف القيم بجوارها، وعلى الهاتف تنزل كل تسمية فوق قيمتها.
-</p>
-<figure class="dx"><div class="dx-view">
+        <figure class="dx"><div class="dx-view">
   <dl class="ins-dl">
     <div><dt>رقم الطلب</dt><dd class="ins-num">1042</dd></div>
     <div><dt>العميل</dt><dd>ليلى حداد</dd></div>
@@ -294,25 +290,61 @@
   <span class="hl-t">&lt;div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>ملاحظات<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span><span class="hl-t">&gt;</span>التسليم بعد الساعة الرابعة، والاتصال قبل الوصول.<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/dl</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="grid">قائمة في أعمدة</h2>
-<p>ويوزع <code>.ins-dl--grid</code> الأزواج على أعمدة تعلو فيها التسمية قيمتها، وهو أنسب لملخص يجمع حقائق قصيرة كثيرة.</p>
-<figure class="dx"><div class="dx-view">
-  <dl class="ins-dl ins-dl--grid">
-    <div><dt>رقم الطلب</dt><dd class="ins-num">1042</dd></div>
-    <div><dt>التاريخ</dt><dd>26 سبتمبر 2026</dd></div>
-    <div><dt>المبلغ</dt><dd class="ins-num">249.00</dd></div>
-    <div><dt>الدفع</dt><dd>بطاقة</dd></div>
-    <div><dt>الشحن</dt><dd>سريع</dd></div>
-    <div><dt>الحالة</dt><dd>قيد التجهيز</dd></div>
-  </dl>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;dl</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dl ins-dl--grid"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>رقم الطلب<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>1042<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>التاريخ<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span><span class="hl-t">&gt;</span>26 سبتمبر 2026<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>المبلغ<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>249.00<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>الدفع<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span><span class="hl-t">&gt;</span>بطاقة<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>الشحن<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span><span class="hl-t">&gt;</span>سريع<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>الحالة<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span><span class="hl-t">&gt;</span>قيد التجهيز<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<h2 id="list">قائمة الوصف</h2>
+<p>
+  ضع <code>.ins-dl</code> على <code>&lt;dl&gt;</code> لتعرض تفاصيل سجل واحد، في كل سطر تسمية وقيمتها، ولكل زوج <code>&lt;div&gt;</code>
+  خاص به. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="dl"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><dl class="ins-dl">
+  <div><dt>الاسم</dt><dd>سلمى</dd></div>
+  <div><dt>الفرق</dt><dd class="ins-num">-12</dd></div>
+  <div><dt>الحالة</dt><dd>مفتوح</dd></div>
+</dl></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">تقيس القائمة عرضها هي لا عرض الشاشة، فإذا ضاق مكانها عن 26rem نزلت كل تسمية فوق قيمتها.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات قائمة الوصف"><div class="site-play-ctl" data-key="grid" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">في أعمدة</span></span></label></div><div class="site-play-ctl" data-key="count" data-type="seg"><span class="site-play-label">عدد الأزواج</span><div class="ins-seg" role="group" aria-label="عدد الأزواج"><button type="button" data-value="3" class="is-active" aria-pressed="true">3</button><button type="button" data-value="6" aria-pressed="false">6</button></div></div><div class="site-play-ctl" data-key="num" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">محاذاة الرقم</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;dl</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-dl"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span><span class="hl-t">&gt;</span>سلمى<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>الفرق<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>-12<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>الحالة<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span><span class="hl-t">&gt;</span>مفتوح<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/dl</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في قائمة الوصف من كلاسات.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>قائمة الوصف</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-dl</code></td><td>كلاس</td><td>على <code>&lt;dl&gt;</code>، ولكل زوج من <code>&lt;dt&gt;</code> و<code>&lt;dd&gt;</code> عنصر <code>&lt;div&gt;</code> خاص به، فتصطف التسميات في عمود وتقف القيم بجوارها.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-dl--grid</code></td><td>كلاس</td><td>يوزع الأزواج على أعمدة تعلو فيها التسمية قيمتها، لملخص يجمع حقائق قصيرة كثيرة.</td></tr><tr><td><code>.ins-num</code></td><td>كلاس</td><td>على <code>&lt;dd&gt;</code> يحمل رقمًا، فيبقى على اتجاهه فلا تنتقل إشارة السالب إلى آخره، ويبدأ من حيث تبدأ القيم الأخرى.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'dl',
+  title: 'قائمة الوصف',
+  owns: 'ins-dl',
+  wide: true,
+  controls: [
+    { key: 'grid', label: 'في أعمدة', type: 'switch', name: 'ins-dl--grid', desc: 'يوزع الأزواج على أعمدة تعلو فيها التسمية قيمتها، لملخص يجمع حقائق قصيرة كثيرة.' },
+    { key: 'count', label: 'عدد الأزواج', type: 'seg', value: '3', choices: [
+      { value: '3', label: '3' },
+      { value: '6', label: '6' }
+    ] },
+    { key: 'num', label: 'محاذاة الرقم', type: 'switch', value: true, name: 'ins-num', desc: 'على `<dd>` يحمل رقمًا، فيبقى على اتجاهه فلا تنتقل إشارة السالب إلى آخره، ويبدأ من حيث تبدأ القيم الأخرى.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-dl', desc: 'على `<dl>`، ولكل زوج من `<dt>` و`<dd>` عنصر `<div>` خاص به، فتصطف التسميات في عمود وتقف القيم بجوارها.' }
+  ],
+  html: function (s) {
+    var pairs = [
+      ['الاسم', 'سلمى'],
+      ['الفرق', '-12', true],
+      ['الحالة', 'مفتوح'],
+      ['التاريخ', '26 سبتمبر 2026'],
+      ['المدة', '14 يومًا'],
+      ['ملاحظات', 'رسالة قصيرة']
+    ].slice(0, +s.count);
+    var rows = pairs.map(function (p) {
+      return '  <div><dt>' + p[0] + '</dt><dd' + (p[2] && s.num ? ' class="ins-num"' : '') + '>' + p[1] + '</dd></div>';
+    });
+    return '<dl class="ins-dl' + (s.grid ? ' ins-dl--grid' : '') + '">\n' + rows.join('\n') + '\n</dl>';
+  },
+  notes: function (s) {
+    return s.grid ? [] : ['تقيس القائمة عرضها هي لا عرض الشاشة، فإذا ضاق مكانها عن 26rem نزلت كل تسمية فوق قيمتها.'];
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="tables.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الجداول</span></a><a class="site-pager-link site-pager-link--next" href="quote.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الاقتباس والتظليل</span></a></nav>
         </div>
         
