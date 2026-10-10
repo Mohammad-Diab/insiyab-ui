@@ -1,9 +1,3 @@
-<h2 id="basic">القائمة</h2>
-<p>
-  تتألف <code>.ins-list</code> من صفوف <code>.ins-list-item</code>، وفي كل صف ما يبدأ به كصورة أو أيقونة، ثم نص
-  من سطرين (<code>-title</code> و<code>-desc</code>)، ثم ما ينتهي به (<code>-end</code>). وكلها اختيارية، وإذا
-  وُضعت القائمة داخل لوح امتدت إلى حوافه.
-</p>
 <demo-example>
   <div class="ins-panel">
     <ul class="ins-list">
@@ -22,21 +16,14 @@
   </div>
 </demo-example>
 
-<h2 id="links">قائمة الروابط</h2>
-<p>إذا كانت الصفوف <code>&lt;a&gt;</code> صار الصف كله قابلًا للنقر، وتميز <code>aria-current="page"</code> الرابط الحالي.</p>
-<demo-example>
-  <nav class="ins-list" aria-label="الإعدادات">
-    <a class="ins-list-item" href="#links" aria-current="page"><span class="ins-list-text"><span class="ins-list-title">عام</span></span></a>
-    <a class="ins-list-item" href="#links"><span class="ins-list-text"><span class="ins-list-title">الدفع</span></span></a>
-    <a class="ins-list-item" href="#links"><span class="ins-list-text"><span class="ins-list-title">الأمان</span></span></a>
-  </nav>
-</demo-example>
+<h2 id="basic">القائمة</h2>
+<p>
+  تتألف <code>.ins-list</code> من صفوف <code>.ins-list-item</code>، وفي كل صف ما يبدأ به كصورة أو أيقونة، ثم نص
+  من سطرين (<code>-title</code> و<code>-desc</code>)، ثم ما ينتهي به (<code>-end</code>). وكلها اختيارية، وتجدها بشرحها في
+  <a href="#options">آخر الصفحة</a>.
+</p>
+<demo-play of="list"></demo-play>
 
-<h2 id="plain">بلا لوح</h2>
-<p>ليس للقائمة سطح خاص بها، فتصلح خارج اللوح وتكفيها فواصلها.</p>
-<demo-example>
-  <ul class="ins-list">
-    <li class="ins-list-item"><span class="ins-list-text"><span class="ins-list-title">الأول</span></span></li>
-    <li class="ins-list-item"><span class="ins-list-text"><span class="ins-list-title">الثاني</span></span></li>
-  </ul>
-</demo-example>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في القوائم من كلاسات وسمات، لكل مكون صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
