@@ -27,40 +27,19 @@
   ويبقى الحقل بتسميته في ترتيب التنقل بمفتاح Tab، فتصل إليه لوحة المفاتيح ويفهمه قارئ الشاشة.
 </p>
 
-<h2 id="limits">الحدود</h2>
-<ul>
-  <li><b><code>accept</code></b> — يفهمه الحقل كما يفهمه منتقي الملفات، ويطبقه على الإفلات واللصق أيضًا مع أنهما لا يمران بالمنتقي.</li>
-  <li><b><code>data-ins-file-max</code></b> — أكبر حجم للملف، مثل <code>500KB</code> أو <code>5MB</code>.</li>
-  <li><b><code>data-ins-file-count</code></b> — أكبر عدد للملفات، ويعمل مع <code>multiple</code>.</li>
-</ul>
+<h2 id="try">جرّب الحقل</h2>
 <p>
-  والملف الذي يتجاوز الحدود لا يُضاف، ويذكر الحقل اسمه وسبب رفضه. ومع <code>multiple</code> ينضم ما تختاره إلى
-  القائمة، ومن دونها يحل محلها. أما السطر الصغير في المنطقة فيكتبه الحقل من الحدود، إلا أن تكتبه أنت في
-  <code>data-ins-file-note</code>.
+  اختر من الخيارات، فيتغير الحقل وشيفرته معًا. والملف الذي يتجاوز الحدود لا يُضاف، ويذكر الحقل اسمه وسبب رفضه.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-
-<h2 id="compact">الشكل المضغوط</h2>
-<p>وإذا ضاق النموذج فضع <code>class="ins-file--compact"</code> على الحقل، فيصير زرًا وقائمة بلا منطقة إفلات، ويبقى الإفلات على الزر ممكنًا.</p>
-<demo-example>
-  <div class="ins-field">
-    <label class="ins-label" for="fl-cv">ملف PDF</label>
-    <input type="file" id="fl-cv" class="ins-file--compact" name="cv" accept=".pdf" data-ins-file>
-  </div>
-</demo-example>
+<demo-play of="file"></demo-play>
 
 <h2 id="upload">الرفع الفوري</h2>
 <p>
   مع <code>data-ins-file-upload</code> يُطلق كل ملف تضيفه حدث <code>ins:file</code>، فترفعه الصفحة ثم تخبر الإضافة
   بما جرى. وحينئذ يرسل الحقل مكان الملفات حقلًا مخفيًا باسمه عن كل ملف رُفع، يحمل المعرف الذي أعطته الصفحة. ويبقى
-  الحقل غير صالح ما دام ملف قيد الرفع أو تعذر رفعه. والرفع في هذا المثال مصطنع، وكل ملف في اسمه «خطأ» يتعذر
-  رفعه عمدًا:
+  الحقل غير صالح ما دام ملف قيد الرفع أو تعذر رفعه. وتجربه في الحقل أعلاه بخيار «يُرفع فورًا»، والصفحة ترفع الملفات هكذا:
 </p>
-<demo-example>
-  <div class="ins-field">
-    <label class="ins-label" for="fl-up">الصور</label>
-    <input type="file" id="fl-up" name="photos" multiple accept="image/*" data-ins-file data-ins-file-upload>
-  </div>
-</demo-example>
 <demo-code lang="js">
 document.addEventListener('ins:file', async (e) => {
   if (!e.detail.upload) return;
@@ -77,31 +56,15 @@ Insiyab.file('#docs');         // الملفات في القائمة
 Insiyab.file('#docs', []);     // أفرغها
 </demo-code>
 
-<h2 id="attributes" data-level="advanced">السمات</h2>
-<div class="ins-panel site-ref">
-  <div class="ins-panel-body ins-panel-body--flush">
-    <div class="ins-table-wrap">
-      <table class="ins-table">
-        <thead><tr><th>السمة</th><th>ما تفعله</th></tr></thead>
-        <tbody>
-          <tr><td><code>data-ins-file</code></td><td>تجعل <code>&lt;input type="file"&gt;</code> منطقة إفلات وقائمة.</td></tr>
-          <tr><td><code>data-ins-file-max="5MB"</code></td><td>أكبر حجم للملف.</td></tr>
-          <tr><td><code>data-ins-file-count="5"</code></td><td>أكبر عدد للملفات، مع <code>multiple</code>.</td></tr>
-          <tr><td><code>data-ins-file-note="…"</code></td><td>السطر الصغير في المنطقة، مكان ما يُكتب من الحدود.</td></tr>
-          <tr><td><code>data-ins-file-upload</code></td><td>رفع كل ملف حين يُضاف، وتتولاه الصفحة.</td></tr>
-          <tr><td><code>class="ins-file--compact"</code></td><td>زر وقائمة بلا منطقة إفلات.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في رفع الملفات من كلاسات وسمات وأحداث.</p>
+<demo-options></demo-options>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    /* A pretend upload: a second and a half of progress, and a file with «خطأ» in
-       its name fails on purpose. */
+    // A pretend upload: a second and a half of progress, and a file with «خطأ» in its name fails on purpose.
     document.addEventListener('ins:file', function (e) {
-      if (!e.detail.upload || e.detail.input.id !== 'fl-up') return;
+      if (!e.detail.upload || !e.detail.input.closest('[data-play="file"]')) return;
       var file = e.detail.file, done = 0;
       var timer = setInterval(function () {
         done += 0.2;
