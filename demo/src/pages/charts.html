@@ -1,20 +1,6 @@
 <link rel="stylesheet" href="../dist/plugins/insiyab-chart.css">
 <script src="../dist/plugins/insiyab-chart.js" defer></script>
 
-<h2 id="setup">التثبيت</h2>
-<demo-code>
-<link rel="stylesheet" href="insiyab/plugins/insiyab-chart.css">
-<script src="insiyab/insiyab-boot.js"></script>
-<script src="insiyab/insiyab.js" defer></script>
-<script src="insiyab/plugins/insiyab-chart.js" defer></script>
-</demo-code>
-
-<h2 id="bar">الأعمدة</h2>
-<p>
-  ضع <code>.ins-chart</code> مع <code>data-ins-chart="bar"</code> على <code>&lt;figure&gt;</code> فيه جدول، عموده الأول
-  للفئات وصفه في <code>&lt;thead&gt;</code> للسلاسل. ويبقى الجدول في الصفحة مخفيًا ليقرأ منه قارئ الشاشة الأرقام، أما الرسم فمخفي عنه. وتسير
-  الفئات مع اتجاه القراءة، وتُنسق الأرقام على لغة الصفحة بأرقام لاتينية، وإذا مررت المؤشر على عمود ظهرت قيمته.
-</p>
 <demo-example>
   <figure class="ins-chart" data-ins-chart="bar">
     <table>
@@ -30,111 +16,22 @@
     </table>
   </figure>
 </demo-example>
-<p>وتجمع <code>data-ins-stack</code> السلاسل بعضها فوق بعض في عمود واحد.</p>
-<demo-example>
-  <figure class="ins-chart" data-ins-chart="bar" data-ins-stack>
-    <table>
-      <thead><tr><th></th><th>مكتملة</th><th>معلقة</th><th>ملغاة</th></tr></thead>
-      <tbody>
-        <tr><th>الأحد</th><td>32</td><td>8</td><td>2</td></tr>
-        <tr><th>الاثنين</th><td>41</td><td>6</td><td>3</td></tr>
-        <tr><th>الثلاثاء</th><td>28</td><td>11</td><td>1</td></tr>
-        <tr><th>الأربعاء</th><td>45</td><td>4</td><td>4</td></tr>
-        <tr><th>الخميس</th><td>38</td><td>9</td><td>2</td></tr>
-      </tbody>
-    </table>
-  </figure>
-</demo-example>
 
-<h2 id="hbar">أعمدة أفقية</h2>
-<p>وإذا طالت الأسماء فاختر <code>hbar</code>، فيأتي الاسم في أول السطر وعموده بعده.</p>
-<demo-example>
-  <figure class="ins-chart" data-ins-chart="hbar" style="--ins-chart-h: 12rem">
-    <table>
-      <thead><tr><th></th><th>التذاكر</th></tr></thead>
-      <tbody>
-        <tr><th>الدفع والفواتير</th><td>48</td></tr>
-        <tr><th>الشحن والتوصيل</th><td>35</td></tr>
-        <tr><th>الحساب</th><td>21</td></tr>
-        <tr><th>أخرى</th><td>9</td></tr>
-      </tbody>
-    </table>
-  </figure>
-</demo-example>
+<h2 id="setup">التثبيت</h2>
+<demo-code>
+<link rel="stylesheet" href="insiyab/plugins/insiyab-chart.css">
+<script src="insiyab/insiyab-boot.js"></script>
+<script src="insiyab/insiyab.js" defer></script>
+<script src="insiyab/plugins/insiyab-chart.js" defer></script>
+</demo-code>
 
-<h2 id="histogram">التوزيع</h2>
+<h2 id="chart">الرسم البياني</h2>
 <p>
-  يرسم <code>histogram</code> أعمدة متلاصقة تبين كيف تتوزع القيم على الفئات، وإذا تعددت السلاسل تراكبت شفافة لتقارن
-  بين توزيعين.
+  ضع <code>.ins-chart</code> مع <code>data-ins-chart</code> على <code>&lt;figure&gt;</code> فيه جدول، عموده الأول للفئات
+  وصف <code>&lt;thead&gt;</code> للسلاسل. وتسير الفئات مع اتجاه القراءة، وتُنسق الأرقام على لغة الصفحة بأرقام لاتينية.
+  وارتفاع الرسم في <code>data-ins-height</code>، وألوان سلاسله في <code>--ins-chart-1</code> إلى <code>--ins-chart-6</code>.
 </p>
-<demo-example>
-  <figure class="ins-chart" data-ins-chart="histogram">
-    <table>
-      <thead><tr><th></th><th>الجولة الأولى</th><th>الجولة الثانية</th></tr></thead>
-      <tbody>
-        <tr><th>0–2</th><td>3</td><td>2</td></tr>
-        <tr><th>2–4</th><td>8</td><td>6</td></tr>
-        <tr><th>4–6</th><td>19</td><td>15</td></tr>
-        <tr><th>6–8</th><td>27</td><td>31</td></tr>
-        <tr><th>8–10</th><td>12</td><td>16</td></tr>
-      </tbody>
-    </table>
-  </figure>
-</demo-example>
-
-<h2 id="line">الخط والمساحة</h2>
-<p><code>line</code> لما يتغير مع الزمن، و<code>area</code> مثله ويملأ ما تحت الخط.</p>
-<demo-example>
-  <figure class="ins-chart" data-ins-chart="area">
-    <table>
-      <thead><tr><th></th><th>الزيارات</th><th>الطلبات</th></tr></thead>
-      <tbody>
-        <tr><th>1</th><td>820</td><td>120</td></tr>
-        <tr><th>2</th><td>932</td><td>150</td></tr>
-        <tr><th>3</th><td>901</td><td>98</td></tr>
-        <tr><th>4</th><td>934</td><td>174</td></tr>
-        <tr><th>5</th><td>1290</td><td>160</td></tr>
-        <tr><th>6</th><td>1330</td><td>210</td></tr>
-        <tr><th>7</th><td>1320</td><td>230</td></tr>
-      </tbody>
-    </table>
-    <figcaption>الأسبوع الأخير</figcaption>
-  </figure>
-</demo-example>
-
-<h2 id="donut">الحلقة</h2>
-<p>
-  <code>donut</code> لأجزاء من كل، ومفتاحه (legend) تحته بقيمه. وفي وسطه المجموع ما لم تضع غيره في <code>data-ins-center</code>،
-  وتحته ما في <code>data-ins-center-label</code>.
-</p>
-<demo-example>
-  <figure class="ins-chart" data-ins-chart="donut" data-ins-center-label="طلب" style="--ins-chart-h: 13rem">
-    <table>
-      <thead><tr><th></th><th>الطلبات</th></tr></thead>
-      <tbody>
-        <tr><th>مكتملة</th><td>184</td></tr>
-        <tr><th>قيد التجهيز</th><td>42</td></tr>
-        <tr><th>مرتجعة</th><td>13</td></tr>
-        <tr><th>ملغاة</th><td>7</td></tr>
-      </tbody>
-    </table>
-  </figure>
-</demo-example>
-
-<h2 id="spark">الخط المصغر (sparkline)</h2>
-<p>
-  <code>spark</code> خط بلا محاور في حجم كلمة، تضعه في بطاقة إحصائية مثلًا. ويستغني عن الجدول، فسلسلته الوحيدة في
-  <code>data-ins-values</code>.
-</p>
-<demo-example>
-  <div class="ins-stat ins-glass" style="max-inline-size: 22rem">
-    <span class="ins-stat-body">
-      <span class="ins-stat-label">الطلبات</span>
-      <span class="ins-stat-value">312</span>
-    </span>
-    <span class="ins-chart" data-ins-chart="spark" data-ins-values="12,18,14,22,19,27,31"></span>
-  </div>
-</demo-example>
+<demo-play of="chart"></demo-play>
 
 <h2 id="script" data-level="advanced">التحكم بـ JavaScript</h2>
 <p>
@@ -148,3 +45,7 @@ Insiyab.chart('#sales', {
   series: [{ name: 'المبيعات', values: [120, 150, 98] }]
 });
 </demo-code>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الرسوم البيانية من كلاسات وسمات، في صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>

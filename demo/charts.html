@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -276,18 +277,6 @@
         <link rel="stylesheet" href="../dist/plugins/insiyab-chart.css">
 <script src="../dist/plugins/insiyab-chart.js" defer></script>
 
-<h2 id="setup">التثبيت</h2>
-<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/plugins/insiyab-chart.css"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab-boot.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-chart.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
-
-<h2 id="bar">الأعمدة</h2>
-<p>
-  ضع <code>.ins-chart</code> مع <code>data-ins-chart="bar"</code> على <code>&lt;figure&gt;</code> فيه جدول، عموده الأول
-  للفئات وصفه في <code>&lt;thead&gt;</code> للسلاسل. ويبقى الجدول في الصفحة مخفيًا ليقرأ منه قارئ الشاشة الأرقام، أما الرسم فمخفي عنه. وتسير
-  الفئات مع اتجاه القراءة، وتُنسق الأرقام على لغة الصفحة بأرقام لاتينية، وإذا مررت المؤشر على عمود ظهرت قيمته.
-</p>
 <figure class="dx"><div class="dx-view">
   <figure class="ins-chart" data-ins-chart="bar">
     <table>
@@ -315,173 +304,46 @@
     <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/figure</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p>وتجمع <code>data-ins-stack</code> السلاسل بعضها فوق بعض في عمود واحد.</p>
-<figure class="dx"><div class="dx-view">
-  <figure class="ins-chart" data-ins-chart="bar" data-ins-stack>
-    <table>
-      <thead><tr><th></th><th>مكتملة</th><th>معلقة</th><th>ملغاة</th></tr></thead>
-      <tbody>
-        <tr><th>الأحد</th><td>32</td><td>8</td><td>2</td></tr>
-        <tr><th>الاثنين</th><td>41</td><td>6</td><td>3</td></tr>
-        <tr><th>الثلاثاء</th><td>28</td><td>11</td><td>1</td></tr>
-        <tr><th>الأربعاء</th><td>45</td><td>4</td><td>4</td></tr>
-        <tr><th>الخميس</th><td>38</td><td>9</td><td>2</td></tr>
-      </tbody>
-    </table>
-  </figure>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;figure</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-chart"</span> <span class="hl-a">data-ins-chart</span>=<span class="hl-s">"bar"</span> <span class="hl-a">data-ins-stack</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;table</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>مكتملة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>معلقة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>ملغاة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الأحد<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>32<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>8<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>2<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الاثنين<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>41<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>6<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>3<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الثلاثاء<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>28<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>11<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>1<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الأربعاء<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>45<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>4<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>4<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الخميس<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>38<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>9<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>2<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/figure</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="hbar">أعمدة أفقية</h2>
-<p>وإذا طالت الأسماء فاختر <code>hbar</code>، فيأتي الاسم في أول السطر وعموده بعده.</p>
-<figure class="dx"><div class="dx-view">
-  <figure class="ins-chart" data-ins-chart="hbar" style="--ins-chart-h: 12rem">
-    <table>
-      <thead><tr><th></th><th>التذاكر</th></tr></thead>
-      <tbody>
-        <tr><th>الدفع والفواتير</th><td>48</td></tr>
-        <tr><th>الشحن والتوصيل</th><td>35</td></tr>
-        <tr><th>الحساب</th><td>21</td></tr>
-        <tr><th>أخرى</th><td>9</td></tr>
-      </tbody>
-    </table>
-  </figure>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;figure</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-chart"</span> <span class="hl-a">data-ins-chart</span>=<span class="hl-s">"hbar"</span> <span class="hl-a">style</span>=<span class="hl-s">"--ins-chart-h: 12rem"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;table</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>التذاكر<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الدفع والفواتير<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>48<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الشحن والتوصيل<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>35<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الحساب<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>21<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>أخرى<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>9<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/figure</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<h2 id="setup">التثبيت</h2>
+<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/plugins/insiyab-chart.css"</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab-boot.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-chart.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
 
-<h2 id="histogram">التوزيع</h2>
+<h2 id="chart">الرسم البياني</h2>
 <p>
-  يرسم <code>histogram</code> أعمدة متلاصقة تبين كيف تتوزع القيم على الفئات، وإذا تعددت السلاسل تراكبت شفافة لتقارن
-  بين توزيعين.
+  ضع <code>.ins-chart</code> مع <code>data-ins-chart</code> على <code>&lt;figure&gt;</code> فيه جدول، عموده الأول للفئات
+  وصف <code>&lt;thead&gt;</code> للسلاسل. وتسير الفئات مع اتجاه القراءة، وتُنسق الأرقام على لغة الصفحة بأرقام لاتينية.
+  وارتفاع الرسم في <code>data-ins-height</code>، وألوان سلاسله في <code>--ins-chart-1</code> إلى <code>--ins-chart-6</code>.
 </p>
-<figure class="dx"><div class="dx-view">
-  <figure class="ins-chart" data-ins-chart="histogram">
-    <table>
-      <thead><tr><th></th><th>الجولة الأولى</th><th>الجولة الثانية</th></tr></thead>
-      <tbody>
-        <tr><th>0–2</th><td>3</td><td>2</td></tr>
-        <tr><th>2–4</th><td>8</td><td>6</td></tr>
-        <tr><th>4–6</th><td>19</td><td>15</td></tr>
-        <tr><th>6–8</th><td>27</td><td>31</td></tr>
-        <tr><th>8–10</th><td>12</td><td>16</td></tr>
-      </tbody>
-    </table>
-  </figure>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;figure</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-chart"</span> <span class="hl-a">data-ins-chart</span>=<span class="hl-s">"histogram"</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="chart"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><figure class="ins-chart" data-ins-chart="bar">
+  <table>
+    <thead>
+      <tr><th></th><th>هذا العام</th><th>العام الماضي</th></tr>
+    </thead>
+    <tbody>
+      <tr><th>يناير</th><td>120</td><td>90</td></tr>
+      <tr><th>فبراير</th><td>150</td><td>130</td></tr>
+      <tr><th>مارس</th><td>98</td><td>110</td></tr>
+      <tr><th>أبريل</th><td>174</td><td>140</td></tr>
+      <tr><th>مايو</th><td>160</td><td>150</td></tr>
+    </tbody>
+  </table>
+</figure></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">مرر المؤشر على الرسم فتظهر القيمة التي تحته.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات الرسم البياني"><label class="site-play-ctl" data-key="type" data-type="select"><span class="site-play-label">النوع</span><select class="ins-select ins-select--sm"><option value="bar" selected>أعمدة</option><option value="hbar">أعمدة أفقية</option><option value="histogram">توزيع</option><option value="line">خط</option><option value="area">مساحة</option><option value="donut">حلقة</option><option value="spark">خط مصغر</option></select></label><div class="site-play-ctl" data-key="source" data-type="seg"><span class="site-play-label">البيانات</span><div class="ins-seg" role="group" aria-label="البيانات"><button type="button" data-value="table" class="is-active" aria-pressed="true">جدول</button><button type="button" data-value="attr" aria-pressed="false">سمة</button></div></div><div class="site-play-ctl" data-key="series" data-type="seg"><span class="site-play-label">السلاسل</span><div class="ins-seg" role="group" aria-label="السلاسل"><button type="button" data-value="1" aria-pressed="false">1</button><button type="button" data-value="2" class="is-active" aria-pressed="true">2</button><button type="button" data-value="3" aria-pressed="false">3</button></div></div><div class="site-play-ctl" data-key="stack" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مكدسة</span></span></label></div><label class="site-play-ctl" data-key="center" data-type="text"><span class="site-play-label">تحت المجموع</span><input class="ins-input ins-input--sm" type="text" value=""></label><div class="site-play-ctl" data-key="caption" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">بعنوان</span></span></label></div><div class="site-play-ctl" data-key="ltr" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">من اليسار</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;figure</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-chart"</span> <span class="hl-a">data-ins-chart</span>=<span class="hl-s">"bar"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;table</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الجولة الأولى<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الجولة الثانية<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>هذا العام<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>العام الماضي<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>0–2<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>3<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>2<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>2–4<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>8<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>6<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>4–6<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>19<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>15<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>6–8<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>27<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>31<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>8–10<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>12<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>16<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>يناير<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>120<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>90<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>فبراير<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>150<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>130<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>مارس<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>98<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>110<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>أبريل<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>174<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>140<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>مايو<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>160<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>150<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/figure</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="line">الخط والمساحة</h2>
-<p><code>line</code> لما يتغير مع الزمن، و<code>area</code> مثله ويملأ ما تحت الخط.</p>
-<figure class="dx"><div class="dx-view">
-  <figure class="ins-chart" data-ins-chart="area">
-    <table>
-      <thead><tr><th></th><th>الزيارات</th><th>الطلبات</th></tr></thead>
-      <tbody>
-        <tr><th>1</th><td>820</td><td>120</td></tr>
-        <tr><th>2</th><td>932</td><td>150</td></tr>
-        <tr><th>3</th><td>901</td><td>98</td></tr>
-        <tr><th>4</th><td>934</td><td>174</td></tr>
-        <tr><th>5</th><td>1290</td><td>160</td></tr>
-        <tr><th>6</th><td>1330</td><td>210</td></tr>
-        <tr><th>7</th><td>1320</td><td>230</td></tr>
-      </tbody>
-    </table>
-    <figcaption>الأسبوع الأخير</figcaption>
-  </figure>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;figure</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-chart"</span> <span class="hl-a">data-ins-chart</span>=<span class="hl-s">"area"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;table</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الزيارات<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الطلبات<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>1<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>820<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>120<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>2<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>932<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>150<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>3<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>901<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>98<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>4<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>934<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>174<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>5<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>1290<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>160<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>6<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>1330<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>210<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>7<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>1320<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>230<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;figcaption</span><span class="hl-t">&gt;</span>الأسبوع الأخير<span class="hl-t">&lt;/figcaption</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/figure</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="donut">الحلقة</h2>
-<p>
-  <code>donut</code> لأجزاء من كل، ومفتاحه (legend) تحته بقيمه. وفي وسطه المجموع ما لم تضع غيره في <code>data-ins-center</code>،
-  وتحته ما في <code>data-ins-center-label</code>.
-</p>
-<figure class="dx"><div class="dx-view">
-  <figure class="ins-chart" data-ins-chart="donut" data-ins-center-label="طلب" style="--ins-chart-h: 13rem">
-    <table>
-      <thead><tr><th></th><th>الطلبات</th></tr></thead>
-      <tbody>
-        <tr><th>مكتملة</th><td>184</td></tr>
-        <tr><th>قيد التجهيز</th><td>42</td></tr>
-        <tr><th>مرتجعة</th><td>13</td></tr>
-        <tr><th>ملغاة</th><td>7</td></tr>
-      </tbody>
-    </table>
-  </figure>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;figure</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-chart"</span> <span class="hl-a">data-ins-chart</span>=<span class="hl-s">"donut"</span> <span class="hl-a">data-ins-center-label</span>=<span class="hl-s">"طلب"</span> <span class="hl-a">style</span>=<span class="hl-s">"--ins-chart-h: 13rem"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;table</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الطلبات<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>مكتملة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>184<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>قيد التجهيز<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>42<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>مرتجعة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>13<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>ملغاة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>7<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/figure</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="spark">الخط المصغر (sparkline)</h2>
-<p>
-  <code>spark</code> خط بلا محاور في حجم كلمة، تضعه في بطاقة إحصائية مثلًا. ويستغني عن الجدول، فسلسلته الوحيدة في
-  <code>data-ins-values</code>.
-</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-stat ins-glass" style="max-inline-size: 22rem">
-    <span class="ins-stat-body">
-      <span class="ins-stat-label">الطلبات</span>
-      <span class="ins-stat-value">312</span>
-    </span>
-    <span class="ins-chart" data-ins-chart="spark" data-ins-values="12,18,14,22,19,27,31"></span>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat ins-glass"</span> <span class="hl-a">style</span>=<span class="hl-s">"max-inline-size: 22rem"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-body"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-label"</span><span class="hl-t">&gt;</span>الطلبات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-value"</span><span class="hl-t">&gt;</span>312<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-chart"</span> <span class="hl-a">data-ins-chart</span>=<span class="hl-s">"spark"</span> <span class="hl-a">data-ins-values</span>=<span class="hl-s">"12,18,14,22,19,27,31"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <div class="site-adv"><h2 id="script">التحكم بـ JavaScript</h2>
 <p>
@@ -493,9 +355,94 @@
   labels: [<span class="hl-s">'يناير'</span>, <span class="hl-s">'فبراير'</span>, <span class="hl-s">'مارس'</span>],
   series: [{ name: <span class="hl-s">'المبيعات'</span>, values: [<span class="hl-n">120</span>, <span class="hl-n">150</span>, <span class="hl-n">98</span>] }]
 });</code></pre></div></div>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الرسوم البيانية من كلاسات وسمات، في صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>الرسم البياني</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-chart</code></td><td>كلاس</td><td>على <code>&lt;figure&gt;</code> فيه جدول، عموده الأول للفئات وصف <code>&lt;thead&gt;</code> للسلاسل، ومعه <code>data-ins-chart</code> لنوع الرسم.</td></tr><tr><td><code>table</code></td><td>عنصر</td><td>يبقى الجدول في الصفحة مخفيًا، فيقرأ منه قارئ الشاشة الأرقام، أما الرسم فمخفي عنه.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">النوع</th></tr></tbody><tbody><tr><td><code>data-ins-chart="bar"</code></td><td>سمة</td><td>أعمدة لكل فئة، تتجاور فيها السلاسل. وهو النوع إذا غابت القيمة.</td></tr><tr><td><code>data-ins-chart="hbar"</code></td><td>سمة</td><td>يأتي الاسم في أول السطر وعموده بعده، فاختره إذا طالت الأسماء.</td></tr><tr><td><code>data-ins-chart="histogram"</code></td><td>سمة</td><td>أعمدة متلاصقة تبين كيف تتوزع القيم على الفئات، وإذا تعددت السلاسل تراكبت شفافة لتقارن بينها.</td></tr><tr><td><code>data-ins-chart="line"</code></td><td>سمة</td><td>لما يتغير مع الزمن.</td></tr><tr><td><code>data-ins-chart="area"</code></td><td>سمة</td><td>خط يملأ ما تحته.</td></tr><tr><td><code>data-ins-chart="donut"</code></td><td>سمة</td><td>لأجزاء من كل، يرسم السلسلة الأولى وحدها، وتحته مفتاحه (legend) بقيمه، وفي وسطه المجموع.</td></tr><tr><td><code>data-ins-chart="spark"</code></td><td>سمة</td><td>خط بلا محاور في حجم كلمة (sparkline)، تضعه في بطاقة إحصائية مثلًا.</td></tr><tr><td><code>data-ins-stack</code></td><td>سمة</td><td>مع <code>bar</code> أو <code>hbar</code>: تجمع السلاسل بعضها فوق بعض في عمود واحد.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">البيانات</th></tr></tbody><tbody><tr><td><code>data-ins-values</code></td><td>سمة</td><td>سلسلة واحدة بلا جدول، أرقامها مفصولة بفواصل: <code>3,5,4</code>.</td></tr><tr><td><code>data-ins-labels</code></td><td>سمة</td><td>مع <code>data-ins-values</code>: أسماء الفئات مفصولة بفواصل.</td></tr><tr><td><code>data-ins-name</code></td><td>سمة</td><td>مع <code>data-ins-values</code>: اسم السلسلة، ويظهر مع القيمة تحت المؤشر.</td></tr><tr><td><code>data-value</code></td><td>سمة</td><td>على خلية في الجدول: القيمة التي تُرسم، إذا كُتب في الخلية نص غير الرقم.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>figcaption</code></td><td>عنصر</td><td>عنوان قصير يُكتب تحت الرسم.</td></tr><tr><td><code>dir="ltr"</code></td><td>سمة</td><td>على الشكل: تجري الفئات من اليسار وإن كانت الصفحة عربية.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الحلقة</th></tr></tbody><tbody><tr><td><code>data-ins-center</code></td><td>سمة</td><td>نص يُكتب في وسط الحلقة مكان المجموع.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'chart',
+  title: 'الرسم البياني',
+  owns: 'ins-chart',
+  wide: true,
+  controls: [
+    { key: 'type', label: 'النوع', type: 'select', value: 'bar', choices: [
+      { value: 'bar', label: 'أعمدة', name: 'data-ins-chart="bar"', desc: 'أعمدة لكل فئة، تتجاور فيها السلاسل. وهو النوع إذا غابت القيمة.' },
+      { value: 'hbar', label: 'أعمدة أفقية', name: 'data-ins-chart="hbar"', desc: 'يأتي الاسم في أول السطر وعموده بعده، فاختره إذا طالت الأسماء.' },
+      { value: 'histogram', label: 'توزيع', name: 'data-ins-chart="histogram"', desc: 'أعمدة متلاصقة تبين كيف تتوزع القيم على الفئات، وإذا تعددت السلاسل تراكبت شفافة لتقارن بينها.' },
+      { value: 'line', label: 'خط', name: 'data-ins-chart="line"', desc: 'لما يتغير مع الزمن.' },
+      { value: 'area', label: 'مساحة', name: 'data-ins-chart="area"', desc: 'خط يملأ ما تحته.' },
+      { value: 'donut', label: 'حلقة', name: 'data-ins-chart="donut"', desc: 'لأجزاء من كل، يرسم السلسلة الأولى وحدها، وتحته مفتاحه (legend) بقيمه، وفي وسطه المجموع.' },
+      { value: 'spark', label: 'خط مصغر', name: 'data-ins-chart="spark"', desc: 'خط بلا محاور في حجم كلمة (sparkline)، تضعه في بطاقة إحصائية مثلًا.' }
+    ] },
+    { key: 'source', label: 'البيانات', type: 'seg', value: 'table', choices: [
+      { value: 'table', label: 'جدول' },
+      { value: 'attr', label: 'سمة', name: 'data-ins-values', desc: 'سلسلة واحدة بلا جدول، أرقامها مفصولة بفواصل: `3,5,4`.' }
+    ] },
+    { key: 'series', label: 'السلاسل', type: 'seg', value: '2', choices: [
+      { value: '1', label: '1' },
+      { value: '2', label: '2' },
+      { value: '3', label: '3' }
+    ] },
+    { key: 'stack', label: 'مكدسة', group: 'النوع', type: 'switch', name: 'data-ins-stack', desc: 'مع `bar` أو `hbar`: تجمع السلاسل بعضها فوق بعض في عمود واحد.' },
+    { key: 'center', label: 'تحت المجموع', group: 'الحلقة', type: 'text', value: '', name: 'data-ins-center-label', desc: 'نص صغير يُكتب تحت المجموع في وسط الحلقة.' },
+    { key: 'caption', label: 'بعنوان', type: 'switch', name: 'figcaption', kind: 'element', desc: 'عنوان قصير يُكتب تحت الرسم.' },
+    { key: 'ltr', label: 'من اليسار', type: 'switch', name: 'dir="ltr"', desc: 'على الشكل: تجري الفئات من اليسار وإن كانت الصفحة عربية.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-chart', desc: 'على `<figure>` فيه جدول، عموده الأول للفئات وصف `<thead>` للسلاسل، ومعه `data-ins-chart` لنوع الرسم.' },
+    { group: 'الأساس', name: 'table', kind: 'element', desc: 'يبقى الجدول في الصفحة مخفيًا، فيقرأ منه قارئ الشاشة الأرقام، أما الرسم فمخفي عنه.' },
+    { group: 'البيانات', name: 'data-ins-labels', desc: 'مع `data-ins-values`: أسماء الفئات مفصولة بفواصل.' },
+    { group: 'البيانات', name: 'data-ins-name', desc: 'مع `data-ins-values`: اسم السلسلة، ويظهر مع القيمة تحت المؤشر.' },
+    { group: 'البيانات', name: 'data-value', desc: 'على خلية في الجدول: القيمة التي تُرسم، إذا كُتب في الخلية نص غير الرقم.' },
+    { group: 'الحلقة', name: 'data-ins-center', desc: 'نص يُكتب في وسط الحلقة مكان المجموع.' }
+  ],
+  disable: function (s) {
+    var off = [], spark = s.type === 'spark', single = spark || s.source === 'attr' || s.type === 'donut';
+    if (spark) off.push('source', 'caption');
+    if (single) off.push('series');
+    if ((s.type !== 'bar' && s.type !== 'hbar') || single || s.series === '1') off.push('stack');
+    if (s.type !== 'donut') off.push('center');
+    return off;
+  },
+  html: function (s) {
+    var hist = s.type === 'histogram', spark = s.type === 'spark', attr = spark || s.source === 'attr';
+    var labels = hist ? ['0–2', '2–4', '4–6', '6–8', '8–10'] : ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو'];
+    var names = hist ? ['المجموعة الأولى', 'المجموعة الثانية', 'المجموعة الثالثة'] : ['هذا العام', 'العام الماضي', 'قبل عامين'];
+    var data = hist ? [[3, 8, 19, 27, 12], [2, 6, 15, 31, 16], [1, 4, 10, 22, 20]] : [[120, 150, 98, 174, 160], [90, 130, 110, 140, 150], [60, 80, 95, 100, 120]];
+    var n = attr || s.type === 'donut' ? 1 : +s.series;
+    var stack = s.stack && n > 1 && (s.type === 'bar' || s.type === 'hbar');
+    var at = ' data-ins-chart="' + s.type + '"' + (stack ? ' data-ins-stack' : '') +
+      (s.type === 'donut' && s.center ? ' data-ins-center-label="' + s.center + '"' : '') + (s.ltr ? ' dir="ltr"' : '');
+    var cap = s.caption ? '  <figcaption>' + (hist ? 'توزيع القيم' : 'الأشهر الخمسة الأولى') + '</figcaption>\n' : '';
+    if (attr) {
+      var vals = spark ? [12, 18, 14, 22, 19, 27, 31] : data[0];
+      var more = spark ? '' : ' data-ins-labels="' + labels.join(',') + '" data-ins-name="' + names[0] + '"';
+      if (!spark) return '<figure class="ins-chart"' + at + ' data-ins-values="' + vals.join(',') + '"' + more + '>' + (cap ? '\n' + cap : '') + '</figure>';
+      return '<div class="ins-stat ins-glass">\n  <span class="ins-stat-body">\n    <span class="ins-stat-label">الزيارات</span>\n' +
+        '    <span class="ins-stat-value">31</span>\n  </span>\n  <span class="ins-chart"' + at + ' data-ins-values="' + vals.join(',') + '"></span>\n</div>';
+    }
+    var head = '      <tr><th></th>' + names.slice(0, n).map(function (x) { return '<th>' + x + '</th>'; }).join('') + '</tr>\n';
+    var rows = labels.map(function (l, i) {
+      return '      <tr><th>' + l + '</th>' + data.slice(0, n).map(function (d) { return '<td>' + d[i] + '</td>'; }).join('') + '</tr>';
+    }).join('\n');
+    return '<figure class="ins-chart"' + at + '>\n' +
+      '  <table>\n    <thead>\n' + head + '    </thead>\n    <tbody>\n' + rows + '\n    </tbody>\n  </table>\n' + cap + '</figure>';
+  },
+  notes: function (s) {
+    var out = [];
+    if (s.type === 'spark') out.push('الخط المصغر سلسلة واحدة في `data-ins-values`، فلا جدول له، ومكانه بطاقة إحصائية `.ins-stat` كهذه.');
+    else if (s.source === 'attr') out.push('بلا جدول يكتب الرسم أرقامه في `aria-label` على الشكل، ليقرأها قارئ الشاشة.');
+    if (s.type === 'donut') out.push('ترسم الحلقة السلسلة الأولى وحدها.');
+    if (s.type !== 'spark') out.push('مرر المؤشر على الرسم فتظهر القيمة التي تحته.');
+    return out;
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="tree.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الشجرة</span></a><a class="site-pager-link site-pager-link--next" href="month.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">تقويم الشهر</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#setup">التثبيت</a><a href="#bar">الأعمدة</a><a href="#hbar">أعمدة أفقية</a><a href="#histogram">التوزيع</a><a href="#line">الخط والمساحة</a><a href="#donut">الحلقة</a><a href="#spark">الخط المصغر (sparkline)</a><a href="#script">التحكم بـ JavaScript</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#setup">التثبيت</a><a href="#bar">الأعمدة</a><a href="#hbar">أعمدة أفقية</a><a href="#histogram">التوزيع</a><a href="#line">الخط والمساحة</a><a href="#donut">الحلقة</a><a href="#spark">الخط المصغر (sparkline)</a></nav>
+        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#setup">التثبيت</a><a href="#chart">الرسم البياني</a><a href="#script">التحكم بـ JavaScript</a><a href="#options">الخيارات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#setup">التثبيت</a><a href="#chart">الرسم البياني</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
