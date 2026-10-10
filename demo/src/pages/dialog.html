@@ -1,10 +1,3 @@
-<h2 id="basic">مربع الحوار</h2>
-<p>
-  يتألف مربع الحوار <code>&lt;dialog class="ins-dialog"&gt;</code> من رأس <code>.ins-dialog-head</code> ومتن <code>.ins-dialog-body</code>
-  وذيل <code>.ins-dialog-foot</code>. يفتحه زر يحمل <code>data-ins-dialog</code>، ويغلقه من داخله زر يحمل <code>data-ins-dialog-close</code>.
-  وما دام مفتوحًا بقي التركيز محبوسًا فيه، ويغلقه مفتاح <kbd class="ins-kbd">Esc</kbd> ويعيد التركيز إلى الزر الذي فتحه.
-  أما النقر خارجه فلا يغلقه، حتى لا تذهب نقرة شاردة بما كتبته فيه.
-</p>
 <demo-example class="row">
   <button class="ins-btn ins-btn--primary" data-ins-dialog="#dlg">فتح الحوار</button>
 
@@ -21,46 +14,30 @@
   </dialog>
 </demo-example>
 
-<h2 id="sizes">المقاسات</h2>
-<p>يناسب <code>--sm</code> سؤالًا قصيرًا، ويتسع <code>--lg</code> لمحتوى عريض مثل جدول.</p>
-<demo-example class="row">
-  <button class="ins-btn ins-btn--secondary" data-ins-dialog="#dlg-sm">صغير</button>
-  <button class="ins-btn ins-btn--secondary" data-ins-dialog="#dlg-lg">كبير</button>
-
-  <dialog class="ins-dialog ins-dialog--sm" id="dlg-sm">
-    <div class="ins-dialog-head">
-      <h3 class="ins-dialog-title">حوار صغير</h3>
-      <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
-    </div>
-    <div class="ins-dialog-body">نص قصير.</div>
-    <div class="ins-dialog-foot">
-      <button class="ins-btn ins-btn--bare" data-ins-dismiss>إلغاء</button>
-      <button class="ins-btn ins-btn--primary" data-ins-dismiss>موافق</button>
-    </div>
-  </dialog>
-
-  <dialog class="ins-dialog ins-dialog--lg" id="dlg-lg">
-    <div class="ins-dialog-head">
-      <h3 class="ins-dialog-title">حوار كبير</h3>
-      <button class="ins-close" data-ins-dismiss aria-label="إغلاق"></button>
-    </div>
-    <div class="ins-dialog-body">محتوى عريض.</div>
-    <div class="ins-dialog-foot">
-      <button class="ins-btn ins-btn--primary" data-ins-dismiss>تم</button>
-    </div>
-  </dialog>
-</demo-example>
+<h2 id="dialog">مربع الحوار</h2>
+<p>
+  يفتح <code>&lt;dialog class="ins-dialog"&gt;</code> زرٌ يحمل <code>data-ins-dialog</code>، ويبقى التركيز محبوسًا فيه حتى يُغلق.
+  أما النقر خارجه فلا يغلقه، حتى لا تذهب نقرة شاردة بما كتبته فيه. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<demo-play of="dialog"></demo-play>
+<p>
+  وأزرار الذيل على قاعدة واحدة في المكتبة كلها، في الحوار والدرج والتأكيد والنوافذ المنبثقة: تصطف في نهاية السطر، والزر الرئيسي
+  آخرها وقبله زر الإلغاء، وما لا يُنهي الحوار، كالحذف أو «اليوم»، يقف وحده في أوله. وعلى الهاتف تتقاسم الأزرار العرض بارتفاع يناسب الإصبع.
+</p>
+<p>
+  وإذا فتحت حوارًا من حوار، أو قائمة داخله، أظلمت الصفحة مرة واحدة وبقي الأول خلف الثاني. ويغلق <kbd class="ins-kbd">Esc</kbd>
+  والنقر خارجه أعلاهما وحده، ثم يعود التركيز إلى الزر الذي فتحه، ولا تتمرر الصفحة خلفهما ما داما مفتوحين.
+</p>
 
 <h2 id="confirm">التأكيد</h2>
 <p>
-  ضع <code>data-ins-confirm</code> على زر أو رابط أو نموذج، فيسأل المستخدم قبل أن يمضي الإجراء، واكتب في <code>data-ins-confirm-ok</code>
-  نص زر التأكيد. وإذا كان الزر من أزرار الخطر جاء زر التأكيد أحمر تلقائيًا. ومن جافاسكربت تعيد
-  <code>Insiyab.confirm()</code> كائن <code>Promise</code> ينتهي إلى <code>true</code> أو <code>false</code>.
+  ضع <code>data-ins-confirm</code> على زر أو رابط أو نموذج، فيسأل المستخدم قبل أن يمضي الإجراء. وإذا كان الزر من أزرار الخطر جاء
+  زر التأكيد أحمر تلقائيًا.
 </p>
-<demo-example class="row">
-  <button class="ins-btn ins-btn--ghost-danger" id="del-btn" data-ins-confirm="حذف العنصر نهائيًا؟" data-ins-confirm-ok="حذف">حذف</button>
-  <button class="ins-btn ins-btn--secondary" id="archive-btn">أرشفة</button>
-</demo-example>
+<demo-play of="confirm"></demo-play>
+<p>
+  ومن جافاسكربت تعيد <code>Insiyab.confirm()</code> كائن <code>Promise</code> ينتهي إلى <code>true</code> أو <code>false</code>.
+</p>
 <demo-code lang="js">
 const yes = await Insiyab.confirm('أرشفة العنصر؟', { title: 'تأكيد', confirm: 'أرشفة' });
 if (yes) archive();
@@ -73,17 +50,6 @@ Insiyab.dialog('#dlg', 'close');
 Insiyab.dialog('#dlg');           // تبديل
 </demo-code>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    /* data-ins-confirm lets the click through only once the answer is yes, so a
-       plain click handler here is the "yes" branch. */
-    document.getElementById('del-btn').addEventListener('click', function () {
-      Insiyab.toast('حُذف', 'ok');
-    });
-    document.getElementById('archive-btn').addEventListener('click', function () {
-      Insiyab.confirm('أرشفة العنصر؟', { title: 'تأكيد', confirm: 'أرشفة' }).then(function (yes) {
-        Insiyab.toast(yes ? 'أُرشف' : 'أُلغي', yes ? 'ok' : 'info');
-      });
-    });
-  });
-</script>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في مربع الحوار والتأكيد من كلاسات وسمات، لكل منهما صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
