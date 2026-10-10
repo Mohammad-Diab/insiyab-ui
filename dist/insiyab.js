@@ -260,6 +260,10 @@
     var box = from && from.getBoundingClientRect ? from.getBoundingClientRect() : null;
     var x = box ? box.left + box.width / 2 : window.innerWidth / 2;
     var y = box ? box.top + box.height / 2 : 0;
+    // From where the toggle rests, not where its hover lift or press dip has moved it this instant.
+    if (box && window.DOMMatrix) {
+      try { var m = new window.DOMMatrix(window.getComputedStyle(from).transform); x -= m.m41; y -= m.m42; } catch (e) {}
+    }
     var w = window.innerWidth, h = window.innerHeight;
     /* To the furthest corner, or the old palette survives in one corner of the screen
        for the length of the animation. `sqrt` rather than `Math.hypot`, to stay ES5. */
@@ -4172,6 +4176,37 @@
       for (var j = 0; j < list.length; j++) setValues(list[j].target);
     }).observe(root, { attributes: true, subtree: true, attributeFilter: VALUE_ATTRS });
   });
+
+  /* A press shows on a single click as fully as on a hold: :active draws the hold, and a press too short to see it gets one dip on release. */
+  var PRESS = '.ins-btn:not(.ins-btn--bare), .ins-island:is(a, button, [role="button"]), .ins-spin, :is(a, button).ins-pill';
+  var PRESS_DEPTH = { 'ins-spin': .92, 'ins-pill': .96 };
+  var pressing = null;
+
+  function pressOf(t) {
+    var el = t && t.closest ? t.closest(PRESS) : null;
+    return el && !el.disabled && el.getAttribute('aria-disabled') !== 'true' ? el : null;
+  }
+
+  function pressDip(el) {
+    if (motionless() || !el.animate) return;
+    var s = .97;
+    for (var k in PRESS_DEPTH) if (el.classList.contains(k)) s = PRESS_DEPTH[k];
+    try {
+      el.animate([{ transform: 'scale(1)' }, { transform: 'scale(' + s + ')', offset: .35 }, { transform: 'scale(1)' }],
+        { duration: 240, easing: 'ease-out', composite: 'add' });
+    } catch (e) {}
+  }
+
+  function pressStart(e) { var el = pressOf(e.target); pressing = el ? { el: el, at: Date.now() } : null; }
+  function pressEnd(e) {
+    var p = pressing;
+    pressing = null;
+    if (p && Date.now() - p.at < 150 && p.el.contains(e.target)) pressDip(p.el);
+  }
+  document.addEventListener('pointerdown', function (e) { if (e.button === 0) pressStart(e); }, true);
+  document.addEventListener('pointerup', pressEnd, true);
+  document.addEventListener('keydown', function (e) { if (!e.repeat && (e.key === 'Enter' || e.key === ' ')) pressStart(e); }, true);
+  document.addEventListener('keyup', function (e) { if (e.key === 'Enter' || e.key === ' ') pressEnd(e); }, true);
 
   /* The selected face travels like the sidebar marker: the far edge reaches the new segment, then the near edge follows. */
   function segFly(seg, from, to) {
