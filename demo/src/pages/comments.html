@@ -1,42 +1,16 @@
-<h2 id="comment">التعليق</h2>
-<p>
-  يحمل <code>.ins-comment</code> كلام شخص واحد: صورته، ثم اسمه ووقته في <code>.ins-comment-head</code>، والنص في
-  <code>.ins-comment-text</code>، وإن شئت أضفت إجراءات في <code>.ins-comment-actions</code>.
-</p>
-<demo-example>
-  <article class="ins-comment">
-    <span class="ins-avatar ins-avatar--sm">ل</span>
-    <div class="ins-comment-body">
-      <div class="ins-comment-head">
-        <b class="ins-comment-name">ليلى</b>
-        <time class="ins-comment-time" datetime="2026-09-26T10:00">قبل ساعتين</time>
-      </div>
-      <div class="ins-comment-text">راجعت الطلب، والعنوان يحتاج رقم المبنى.</div>
-      <div class="ins-comment-actions">
-        <button class="ins-btn ins-btn--bare ins-btn--sm">رد</button>
-      </div>
-    </div>
-  </article>
-</demo-example>
-
-<h2 id="thread">السلسلة والردود</h2>
-<p>
-  يرص <code>.ins-thread</code> التعليقات بعضها فوق بعض، وإذا وضعت <code>.ins-comment-replies</code> داخل جسم التعليق
-  أزاح الردود تحته إلى الداخل وجعل بجانبها خطًا.
-</p>
 <demo-example>
   <div class="ins-thread">
     <article class="ins-comment">
       <span class="ins-avatar ins-avatar--sm">ل</span>
       <div class="ins-comment-body">
         <div class="ins-comment-head"><b class="ins-comment-name">ليلى</b><time class="ins-comment-time">قبل ساعتين</time></div>
-        <div class="ins-comment-text">العنوان يحتاج رقم المبنى.</div>
+        <div class="ins-comment-text">العنوان يحتاج تعديلًا بسيطًا.</div>
         <div class="ins-comment-replies">
           <article class="ins-comment">
             <span class="ins-avatar ins-avatar--sm">ع</span>
             <div class="ins-comment-body">
               <div class="ins-comment-head"><b class="ins-comment-name">عمر</b><time class="ins-comment-time">قبل ساعة</time></div>
-              <div class="ins-comment-text">أضفته، المبنى 12.</div>
+              <div class="ins-comment-text">عدلته، وهو جاهز الآن.</div>
             </div>
           </article>
         </div>
@@ -46,29 +20,27 @@
       <span class="ins-avatar ins-avatar--sm">س</span>
       <div class="ins-comment-body">
         <div class="ins-comment-head"><b class="ins-comment-name">سارة</b><time class="ins-comment-time">قبل دقائق</time></div>
-        <div class="ins-comment-text">تم الشحن.</div>
+        <div class="ins-comment-text">شكرًا لكما.</div>
       </div>
     </article>
   </div>
 </demo-example>
 
-<h2 id="own">رسائل المحادثة</h2>
-<p>تخص <code>.ins-comment--own</code> رسائلك أنت، فتنتقل إلى الجهة المقابلة وتأخذ لون الهوية.</p>
-<demo-example>
-  <div class="ins-thread">
-    <article class="ins-comment">
-      <span class="ins-avatar ins-avatar--sm">ل</span>
-      <div class="ins-comment-body">
-        <div class="ins-comment-head"><b class="ins-comment-name">ليلى</b><time class="ins-comment-time">10:02</time></div>
-        <div class="ins-comment-text">هل وصل الطلب؟</div>
-      </div>
-    </article>
-    <article class="ins-comment ins-comment--own">
-      <span class="ins-avatar ins-avatar--sm">أ</span>
-      <div class="ins-comment-body">
-        <div class="ins-comment-head"><b class="ins-comment-name">أنت</b><time class="ins-comment-time">10:05</time></div>
-        <div class="ins-comment-text">نعم، استلمته صباحًا.</div>
-      </div>
-    </article>
-  </div>
-</demo-example>
+<h2 id="comment">التعليق</h2>
+<p>
+  يحمل <code>.ins-comment</code> كلام شخص واحد: صورته، ثم اسمه ووقته في <code>.ins-comment-head</code>، والنص في
+  <code>.ins-comment-text</code>، وإن شئت أضفت إجراءات في <code>.ins-comment-actions</code>. وتجد الخيارات كلها بشرحها في
+  <a href="#options">آخر الصفحة</a>.
+</p>
+<demo-play of="comment"></demo-play>
+
+<h2 id="thread">السلسلة والردود</h2>
+<p>
+  يرص <code>.ins-thread</code> التعليقات بعضها فوق بعض، وإذا وضعت <code>.ins-comment-replies</code> داخل جسم التعليق
+  أزاح الردود تحته إلى الداخل. وفي المحادثة تنتقل رسائلك بـ<code>.ins-comment--own</code> إلى الجهة المقابلة.
+</p>
+<demo-play of="thread"></demo-play>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في التعليقات والرسائل من كلاسات، لكل مكون صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
