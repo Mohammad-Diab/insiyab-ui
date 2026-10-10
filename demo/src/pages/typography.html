@@ -1,3 +1,11 @@
+<demo-example>
+  <p class="ins-display">انسياب</p>
+  <p class="ins-h1">عنوان أول</p>
+  <p class="ins-h2">عنوان ثان</p>
+  <p class="ins-h3">عنوان ثالث</p>
+  <p class="ins-h4">عنوان رابع</p>
+</demo-example>
+
 <h2 id="faces" data-level="advanced">الخطوط الثلاثة</h2>
 <p>
   تُكتب العربية بخط تجوال ومعه حروفه اللاتينية، والأرقام والنص اللاتيني بخط Inter، أما العناوين في الصفحات
@@ -12,70 +20,24 @@
 <h2 id="headings">العناوين</h2>
 <p>
   مظهر العنوان مستقل عن مستواه، فالمستوى يخدم بنية الصفحة وقارئ الشاشة، والمظهر يخدم التصميم.
-  لذا لا غرابة في أن تكتب <code>&lt;h2 class="ins-h4"&gt;</code>.
+  لذا لا غرابة في أن تكتب <code>&lt;h2 class="ins-h4"&gt;</code>. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<demo-example>
-  <p class="ins-display">انسياب</p>
-  <p class="ins-h1">عنوان أول</p>
-  <p class="ins-h2">عنوان ثان</p>
-  <p class="ins-h3">عنوان ثالث</p>
-  <p class="ins-h4">عنوان رابع</p>
-</demo-example>
-
-<h2 id="lead">التمهيد والعنوان الصغير</h2>
-<p><code>.ins-eyebrow</code> عنوان صغير يعلو العنوان، و<code>.ins-lead</code> لفقرة التمهيد التي تليه.</p>
-<demo-example>
-  <span class="ins-eyebrow">الإعدادات</span>
-  <p class="ins-h2">الحساب</p>
-  <p class="ins-lead">الاسم والعنوان وطرق الدفع.</p>
-</demo-example>
+<demo-play of="heading"></demo-play>
 
 <h2 id="prose">النص الطويل</h2>
 <p>
   ينسق <code>.ins-prose</code> ما في داخله من فقرات وقوائم واقتباسات وشيفرة وجداول، ولا يمس شيئًا
   خارجه. ولا يباعد بين الحروف العربية ولا يميلها، وإنما يكون التوكيد باللون.
 </p>
-<demo-example>
-  <article class="ins-prose">
-    <h2>عنوان</h2>
-    <p>فقرة فيها <strong>نص عريض</strong> و<em>توكيد</em> و<mark>تظليل</mark> و<a href="#prose">رابط</a>.</p>
-    <h3>عنوان فرعي</h3>
-    <ol>
-      <li>الخطوة الأولى</li>
-      <li>الخطوة الثانية
-        <ul>
-          <li>بند متداخل</li>
-        </ul>
-      </li>
-    </ol>
-    <blockquote>اقتباس قصير.</blockquote>
-    <pre><code>GET /api/orders</code></pre>
-    <dl>
-      <dt>المدة</dt><dd>14 يومًا</dd>
-    </dl>
-  </article>
-</demo-example>
+<demo-play of="prose"></demo-play>
 
 <h2 id="divider">الفاصل</h2>
-<p>
-  ضع <code>.ins-divider</code> على <code>&lt;hr&gt;</code> أو على عنصر فيه نص، ويضع <code>--start</code> النص في
-  البداية. أما <code>--v</code> ففاصل عمودي بين عناصر الصف، فأضف إليه <code>aria-orientation="vertical"</code>.
-</p>
-<demo-example class="stack">
-  <hr class="ins-divider">
-  <div class="ins-divider">أو</div>
-  <div class="ins-divider ins-divider--start">عنوان</div>
-  <div class="ins-row">
-    <span>ملف</span>
-    <hr class="ins-divider ins-divider--v" aria-orientation="vertical">
-    <span>تعديل</span>
-  </div>
-</demo-example>
+<p>يفصل <code>.ins-divider</code> بين قسمين بخط، أو بخطين بينهما كلمة، أو بين عناصر صف بخط عمودي.</p>
+<demo-play of="divider"></demo-play>
 
 <h2 id="kbd" data-level="advanced">المفاتيح</h2>
-<demo-example>
-  <p>اضغط <kbd class="ins-kbd">Ctrl</kbd> + <kbd class="ins-kbd">K</kbd> للبحث.</p>
-</demo-example>
+<p>يرسم <code>.ins-kbd</code> اسم المفتاح في هيئة زر من لوحة المفاتيح، لاختصار في قائمة أو تلميح.</p>
+<demo-play of="kbd"></demo-play>
 
 <h2 id="tokens" data-level="advanced">المقاسات</h2>
 <p>تجدها متغيرات CSS، وكلاسات في صفحة <a href="utilities.html#text">الأدوات المساعدة</a>.</p>
@@ -84,3 +46,7 @@
 --ins-fs-h4  --ins-fs-h3  --ins-fs-h2  --ins-fs-h1  --ins-fs-display
 --ins-font-body  --ins-font-arabic  --ins-font-body-en  --ins-font-heading-en  --ins-font-mono
 </demo-code>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الخطوط والنصوص من كلاسات وعناصر، لكل مكون صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
