@@ -288,6 +288,66 @@
 }
 @media (max-width: 34rem) { .site-pager { grid-template-columns: 1fr; } .site-pager-link--next { grid-column: auto; } }
 
+/* --------------------------------------------------------------- playground */
+.site-play-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 16.5rem;
+  border: 1px solid var(--view-bd);
+  border-radius: var(--ins-r-lg) var(--ins-r-lg) 0 0;
+}
+/* The notes share the preview's cell and sit at its foot, so one appearing never moves the component; clipped sideways only, so an open menu can drop past it. */
+.site-play-stage { display: grid; min-inline-size: 0; overflow-x: clip; border-start-start-radius: calc(var(--ins-r-lg) - 1px); background: rgba(var(--ins-primary-rgb), .025); }
+.site-play-view { position: relative; grid-area: 1 / 1; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; min-block-size: 13rem; padding: 4rem 1.5rem; }
+.site-play-notes { grid-area: 1 / 1; align-self: end; }
+.site-play-view > * { max-inline-size: 100%; }
+.site-play-view > .ins-btn--full, .site-play-view > .ins-alert { inline-size: min(100%, 26rem); }
+.site-play-view--wide { justify-items: stretch; }
+.site-play-view--wide > .ins-btn { justify-self: center; }
+.site-play-notes:empty { display: none; }
+.site-play-notes { padding: 0 1.25rem 1rem; }
+.site-play-note { margin: .375rem 0 0; font-size: var(--ins-fs-xs); line-height: 1.8; color: var(--ins-text-2); }
+.site-play-event { color: var(--ins-tone-brand, var(--ins-text-1)); font-weight: 600; }
+.site-play-controls {
+  display: flex;
+  flex-direction: column;
+  gap: .875rem;
+  padding: 1rem;
+  border-inline-start: 1px solid var(--view-bd);
+  border-start-end-radius: calc(var(--ins-r-lg) - 1px);
+  background: var(--ins-ctl-bg);
+}
+.site-play-ctl { display: flex; flex-direction: column; gap: .375rem; }
+.site-play-ctl[data-type="switch"] { flex-direction: row; }
+.site-play-label { font-size: var(--ins-fs-xs); font-weight: 700; color: var(--ins-text-2); }
+.site-play-ctl .ins-seg { display: flex; }
+.site-play-ctl .ins-seg > button { flex: 1; justify-content: center; }
+.site-play-ctl.is-off { opacity: .45; }
+.site-play-reset { align-self: flex-start; margin-block-start: auto; }
+/* The listing grows as options are added, so it keeps its transparent bar's room and the page below never jumps when a line gets too long. */
+@supports selector(::-webkit-scrollbar) { .site-play .dx-code pre { overflow-x: scroll; } }
+@media (max-width: 44rem) {
+  .site-play-top { grid-template-columns: minmax(0, 1fr); }
+  .site-play-view, .site-play-notes { grid-area: auto; }
+  .site-play-view { padding-block: 2.5rem; }
+  .site-play-stage { border-start-end-radius: calc(var(--ins-r-lg) - 1px); }
+  .site-play-controls { border-inline-start: 0; border-block-start: 1px solid var(--view-bd); border-start-end-radius: 0; }
+}
+
+/* --------------------------------------------------------------- options list */
+.site-options { margin-block-end: 1.5rem; }
+.site-opt-body { padding: .5rem .625rem 1.125rem; }
+.site-opt tbody td { block-size: auto; padding-block: .625rem; line-height: 1.7; }
+.site-opt td:first-child code { white-space: nowrap; }
+.site-opt td:nth-child(2) { white-space: nowrap; color: var(--ins-text-2); font-size: var(--ins-fs-xs); }
+.site-opt :is(th, td):last-child { inline-size: 100%; }
+.site-opt-group th {
+  padding: 1.125rem 1.25rem .375rem;
+  font-size: var(--ins-fs-xs);
+  font-weight: 800;
+  color: var(--ins-text-2);
+  text-align: start;
+}
+
 /* --------------------------------------------------------------- simple and advanced */
 /* A section's own block, so it can fold without its margins jumping; the heading's top margin moves onto it. */
 .site-doc .site-body > :is(.site-adv, .site-simple) { display: flow-root; margin-block: 3rem 0; }
@@ -548,7 +608,7 @@
 
 /* A top bar inside an example is a picture of one: it stays in its place, and below
    the page's own bar, so the page's menus open over it. */
-.dx-view .ins-topbar { position: relative; z-index: 0; }
+:is(.dx-view, .site-play-view) .ins-topbar { position: relative; z-index: 0; }
 
 /* The login template: a screen-sized frame, so the card sits in the middle of it. */
 .dx-view.screen { padding: 0; }
