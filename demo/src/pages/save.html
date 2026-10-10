@@ -1,0 +1,29 @@
+<demo-example class="row">
+  <span class="ins-save" data-ins-state="saving"></span>
+  <span class="ins-save" data-ins-state="saved"></span>
+  <span class="ins-save" data-ins-state="error"></span>
+</demo-example>
+
+<h2 id="save">حالة الحفظ</h2>
+<p>
+  يخبر <code>.ins-save</code> بمصير آخر تغيير: جارٍ حفظه، ثم حُفظ، أو تعذر حفظه. تضع الحالة في <code>data-ins-state</code>، أو
+  تتركها للنموذج الذي يحفظ نفسه.
+</p>
+<demo-play of="save"></demo-play>
+
+<h2 id="api" data-level="advanced">التحكم بـ JavaScript</h2>
+<p>تضع الحالة من جافاسكربت، أو تحفظ النموذج على الخادم بنفسك حين يطلق حدثه.</p>
+<demo-code lang="js">
+Insiyab.saveState('#status', 'saving');             // أو 'saved' أو 'error' أو 'idle'
+Insiyab.saveState('#status', 'saved', 'حُفظت المسودة');
+
+document.addEventListener('ins:autosave', async (e) => {
+  e.preventDefault();
+  const ok = await fetch('/draft', { method: 'POST', body: e.detail.data }).then((r) => r.ok);
+  e.detail.done(ok);
+});
+</demo-code>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في حالة الحفظ من كلاسات وسمات وأحداث، في صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
