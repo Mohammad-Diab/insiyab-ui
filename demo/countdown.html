@@ -4,12 +4,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>العد التنازلي والحفظ · انسياب</title>
-  <meta name="description" content="كم بقي من الوقت، وهل حُفظ آخر تغيير: جارٍ الحفظ، أو حُفظ، أو تعذر.">
+  <title>العد التنازلي · انسياب</title>
+  <meta name="description" content="كم بقي من الوقت، ثانية بعد ثانية، بلون ينبه حين يقترب الصفر.">
 
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -162,7 +163,8 @@
       <a class="ins-shell-link" href="stats.html" data-keywords="Stat tiles رقم ومعناه وأيقونة، بست نبرات وثلاثة مقاسات."><svg class="ico" aria-hidden="true"><use href="#i-chart"/></svg>البطاقات الإحصائية<span class="ins-shell-link-badge">جديد</span></a>
       <a class="ins-shell-link" href="loading.html" data-keywords="Loading &amp; empty states هيكل التحميل (skeleton) ومؤشر التحميل والحالة الفارغة: ما يراه المستخدم قبل وصول البيانات، أو حين لا تصل."><svg class="ico" aria-hidden="true"><use href="#i-loader"/></svg>التحميل والحالة الفارغة</a>
       <a class="ins-shell-link" href="progress.html" data-keywords="Progress شريط تقدم على عنصر progress الأصلي، وحلقة للنسب المئوية."><svg class="ico" aria-hidden="true"><use href="#i-gauge"/></svg>التقدم</a>
-      <a class="ins-shell-link is-active" href="countdown.html" aria-current="page" data-keywords="Countdown &amp; save status كم بقي من الوقت، وهل حُفظ آخر تغيير: جارٍ الحفظ، أو حُفظ، أو تعذر."><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg>العد التنازلي والحفظ<span class="ins-shell-link-badge">جديد</span></a>
+      <a class="ins-shell-link is-active" href="countdown.html" aria-current="page" data-keywords="Countdown timer كم بقي من الوقت، ثانية بعد ثانية، بلون ينبه حين يقترب الصفر."><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg>العد التنازلي<span class="ins-shell-link-badge">جديد</span></a>
+      <a class="ins-shell-link" href="save.html" data-keywords="Save status autosave هل حُفظ آخر تغيير: جارٍ الحفظ، أو حُفظ، أو تعذر. ومعها نموذج يحفظ نفسه."><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>حالة الحفظ<span class="ins-shell-link-badge">جديد</span></a>
       <a class="ins-shell-link" href="tooltips.html" data-keywords="Tooltips تلميح واحد يخدم الصفحة كلها من الطبقة العليا (top layer)، بسمة تضعها على العنصر."><svg class="ico" aria-hidden="true"><use href="#i-message"/></svg>التلميحات</a>
       <a class="ins-shell-link" href="alerts.html" data-keywords="Alerts رسالة تستقر في الصفحة بأربع نبرات، ويمكن إغلاقها."><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg>التنبيهات</a>
       <a class="ins-shell-link" href="dialog.html" data-keywords="Dialog على عنصر dialog الأصلي، فالطبقة العليا (top layer) وحبس التركيز (focus trap) والإغلاق بـ Esc كلها من المتصفح."><svg class="ico" aria-hidden="true"><use href="#i-window"/></svg>مربع الحوار</a>
@@ -230,7 +232,7 @@
 
       <div class="ins-zone ins-zone--center">
         <div class="ins-island ins-island--title">
-          <div class="ins-shell-head"><h1 class="ins-shell-title">العد التنازلي والحفظ</h1></div>
+          <div class="ins-shell-head"><h1 class="ins-shell-title">العد التنازلي</h1></div>
         </div>
         <button class="ins-island ins-island--icon" data-ins-dialog="#site-search" aria-label="بحث في التوثيق" aria-keyshortcuts="Control+K /" data-ins-tip data-ins-tip-side="bottom">
           <svg class="ico" aria-hidden="true"><use href="#i-search"/></svg>
@@ -272,98 +274,96 @@
     <main class="ins-shell-content">
       <div class="site-page">
         <div class="site-body">
-        <p class="site-lead">كم بقي من الوقت، وهل حُفظ آخر تغيير: جارٍ الحفظ، أو حُفظ، أو تعذر.</p>
-        <h2 id="countdown">العد التنازلي</h2>
-<p>
-  ضع <code>data-ins-countdown</code> على <code>.ins-countdown</code> فيعد الوقت الباقي ثانية بعد ثانية. فإن كانت قيمتها رقمًا فهي ثوانٍ تبدأ من فتح الصفحة، وإلا فهي
-  لحظة الانتهاء، مثل <code>2026-09-26T18:00:00+03:00</code>. ويتلون العداد بالأصفر حين يبقى من الوقت <code>data-ins-warn</code> ثانية، أو دقيقة إن لم تذكرها،
-  ثم بالأحمر عند الصفر، ويُطلق حدث <code>ins:countdown</code> في المرتين.
-</p>
-<figure class="dx"><div class="dx-view row">
+        <p class="site-lead">كم بقي من الوقت، ثانية بعد ثانية، بلون ينبه حين يقترب الصفر.</p>
+        <figure class="dx"><div class="dx-view row">
   <span class="ins-countdown" data-ins-countdown="600"></span>
   <span class="ins-countdown" data-ins-countdown="75"></span>
   <span class="ins-countdown" data-ins-countdown="200000"></span>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-countdown"</span> <span class="hl-a">data-ins-countdown</span>=<span class="hl-s">"600"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-countdown"</span> <span class="hl-a">data-ins-countdown</span>=<span class="hl-s">"75"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-countdown"</span> <span class="hl-a">data-ins-countdown</span>=<span class="hl-s">"200000"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p>وإذا كان العد محور الصفحة فأعطه <code>--lg</code>.</p>
-<figure class="dx"><div class="dx-view row">
-  <span class="ins-countdown ins-countdown--lg" data-ins-countdown="900"></span>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-countdown ins-countdown--lg"</span> <span class="hl-a">data-ins-countdown</span>=<span class="hl-s">"900"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:countdown'</span>, (e) =&gt; {
+
+<h2 id="countdown">العد التنازلي</h2>
+<p>
+  ضع <code>data-ins-countdown</code> على <code>.ins-countdown</code> فيعد الوقت الباقي ثانية بعد ثانية، ويتلون بالأصفر حين يقترب
+  الصفر ثم بالأحمر عنده. اختر من الخيارات فيتغير العداد وشيفرته معًا، وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="countdown"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><span class="ins-countdown" data-ins-countdown="600"></span></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات العد التنازلي"><label class="site-play-ctl" data-key="from" data-type="select"><span class="site-play-label">الوقت</span><select class="ins-select ins-select--sm"><option value="600" selected>عشر دقائق</option><option value="75">دقيقة وربع</option><option value="10">عشر ثوانٍ</option><option value="200000">أيام</option><option value="date">حتى لحظة</option></select></label><div class="site-play-ctl" data-key="warn" data-type="seg"><span class="site-play-label">التحذير قبل الصفر بـ</span><div class="ins-seg" role="group" aria-label="التحذير قبل الصفر بـ"><button type="button" data-value="" class="is-active" aria-pressed="true">دقيقة</button><button type="button" data-value="900" aria-pressed="false">ربع ساعة</button></div></div><div class="site-play-ctl" data-key="size" data-type="seg"><span class="site-play-label">المقاس</span><div class="ins-seg" role="group" aria-label="المقاس"><button type="button" data-value="" class="is-active" aria-pressed="true">عادي</button><button type="button" data-value="lg" aria-pressed="false">كبير</button></div></div><div class="site-play-ctl" data-key="paused" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">يبدأ عند الطلب</span></span></label></div><div class="site-play-ctl" data-key="away" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">يتوقف في الخلفية</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-countdown"</span> <span class="hl-a">data-ins-countdown</span>=<span class="hl-s">"600"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<div class="site-adv"><h2 id="api">التحكم بـ JavaScript</h2>
+<p>الأوامر نفسها من جافاسكربت، والحدث الذي تستمع إليه.</p>
+<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.countdown(<span class="hl-s">'#timer'</span>, <span class="hl-s">'start'</span>);     <span class="hl-c">// يبدأ، أو يكمل من حيث توقف</span>
+<span class="hl-t">Insiyab</span>.countdown(<span class="hl-s">'#timer'</span>, <span class="hl-s">'stop'</span>);      <span class="hl-c">// يوقف، ويعيد الثواني الباقية</span>
+<span class="hl-t">Insiyab</span>.countdown(<span class="hl-s">'#timer'</span>, <span class="hl-s">'restart'</span>);   <span class="hl-c">// من أوله</span>
+<span class="hl-t">Insiyab</span>.countdown(<span class="hl-s">'#timer'</span>, <span class="hl-n">60</span>);          <span class="hl-c">// من 60 ثانية</span>
+<span class="hl-t">Insiyab</span>.countdown(<span class="hl-s">'#timer'</span>);              <span class="hl-c">// الثواني الباقية، أو null ما دام لم يبدأ</span>
+
+<span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:countdown'</span>, (e) =&gt; {
   <span class="hl-k">if</span> (e.detail.state === <span class="hl-s">'end'</span>) release(e.detail.el);   <span class="hl-c">// أو 'warn'</span>
+});</code></pre></div></div>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في العد التنازلي من كلاسات وسمات وأحداث، في صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>العد التنازلي</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-countdown</code></td><td>كلاس</td><td>يعد الوقت الباقي ثانية بعد ثانية، فيتلون بالأصفر حين يقترب الصفر، ثم بالأحمر عنده. ويعرفه قارئ الشاشة مؤقتًا فلا يقرؤه كل ثانية.</td></tr><tr><td><code>data-ins-countdown</code></td><td>سمة</td><td>الوقت: رقم هو ثوانٍ تبدأ من فتح الصفحة، أو لحظة الانتهاء مثل <code>2026-09-26T18:00:00+03:00</code>. ومن جافاسكربت يبدؤه <code>Insiyab.countdown(el, 600)</code> من جديد، ويعيد <code>Insiyab.countdown(el)</code> الثواني الباقية.</td></tr><tr><td><code>ins:countdown</code></td><td>حدث</td><td>يُطلق مرتين: حين يبلغ العداد حد التحذير، وعند الصفر. وفي <code>detail</code> العداد <code>el</code> والثواني الباقية <code>left</code> والحالة <code>state</code>، وهي <code>warn</code> أو <code>end</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">التحذير قبل الصفر بـ</th></tr></tbody><tbody><tr><td><code>data-ins-warn</code></td><td>سمة</td><td>كم ثانية قبل الصفر يتلون العداد بالأصفر، وهي دقيقة إن لم تذكرها.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المقاس</th></tr></tbody><tbody><tr><td><code>.ins-countdown--lg</code></td><td>كلاس</td><td>عداد أكبر، إذا كان العد محور الصفحة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">البدء والإيقاف</th></tr></tbody><tbody><tr><td><code>data-ins-countdown-paused</code></td><td>سمة</td><td>يعرض العداد وقته كاملًا وينتظر، ثم تتحكم فيه بأزرار تشير إليه.</td></tr><tr><td><code>data-ins-countdown-start</code></td><td>سمة</td><td>على زر يشير إلى العداد، مثل <code>data-ins-countdown-start="#timer"</code>: يبدؤه، أو يكمله من حيث توقف. ومن جافاسكربت: <code>Insiyab.countdown(el, 'start')</code>.</td></tr><tr><td><code>data-ins-countdown-stop</code></td><td>سمة</td><td>يوقفه ويبقي الوقت الباقي ظاهرًا. ومن جافاسكربت: <code>Insiyab.countdown(el, 'stop')</code>، ويعيد الثواني الباقية.</td></tr><tr><td><code>data-ins-countdown-restart</code></td><td>سمة</td><td>يعيده من أوله، وهو ما يحتاجه زر «أعد إرسال الرمز». ومن جافاسكربت: <code>Insiyab.countdown(el, 'restart')</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>data-ins-countdown-pause-away</code></td><td>سمة</td><td>يتوقف العداد ما دامت الصفحة في الخلفية، ثم يكمل حين تعود، فلا يُحسب إلا الوقت الذي يقضيه صاحبه أمامه.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'countdown',
+  title: 'العد التنازلي',
+  owns: 'ins-countdown',
+  controls: [
+    { key: 'from', label: 'الوقت', type: 'select', value: '600', choices: [
+      { value: '600', label: 'عشر دقائق' },
+      { value: '75', label: 'دقيقة وربع' },
+      { value: '10', label: 'عشر ثوانٍ' },
+      { value: '200000', label: 'أيام' },
+      { value: 'date', label: 'حتى لحظة' }
+    ] },
+    { key: 'warn', label: 'التحذير قبل الصفر بـ', type: 'seg', value: '', choices: [
+      { value: '', label: 'دقيقة' },
+      { value: '900', label: 'ربع ساعة', name: 'data-ins-warn', desc: 'كم ثانية قبل الصفر يتلون العداد بالأصفر، وهي دقيقة إن لم تذكرها.' }
+    ] },
+    { key: 'size', label: 'المقاس', type: 'seg', value: '', choices: [
+      { value: '', label: 'عادي' },
+      { value: 'lg', label: 'كبير', name: 'ins-countdown--lg', desc: 'عداد أكبر، إذا كان العد محور الصفحة.' }
+    ] },
+    { key: 'paused', label: 'يبدأ عند الطلب', group: 'البدء والإيقاف', type: 'switch', name: 'data-ins-countdown-paused', desc: 'يعرض العداد وقته كاملًا وينتظر، ثم تتحكم فيه بأزرار تشير إليه.' },
+    { key: 'away', label: 'يتوقف في الخلفية', type: 'switch', name: 'data-ins-countdown-pause-away', desc: 'يتوقف العداد ما دامت الصفحة في الخلفية، ثم يكمل حين تعود، فلا يُحسب إلا الوقت الذي يقضيه صاحبه أمامه.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-countdown', desc: 'يعد الوقت الباقي ثانية بعد ثانية، فيتلون بالأصفر حين يقترب الصفر، ثم بالأحمر عنده. ويعرفه قارئ الشاشة مؤقتًا فلا يقرؤه كل ثانية.' },
+    { group: 'الأساس', name: 'data-ins-countdown', desc: 'الوقت: رقم هو ثوانٍ تبدأ من فتح الصفحة، أو لحظة الانتهاء مثل `2026-09-26T18:00:00+03:00`. ومن جافاسكربت يبدؤه `Insiyab.countdown(el, 600)` من جديد، ويعيد `Insiyab.countdown(el)` الثواني الباقية.' },
+    { group: 'الأساس', name: 'ins:countdown', kind: 'event', desc: 'يُطلق مرتين: حين يبلغ العداد حد التحذير، وعند الصفر. وفي `detail` العداد `el` والثواني الباقية `left` والحالة `state`، وهي `warn` أو `end`.' },
+    { group: 'البدء والإيقاف', name: 'data-ins-countdown-start', desc: 'على زر يشير إلى العداد، مثل `data-ins-countdown-start="#timer"`: يبدؤه، أو يكمله من حيث توقف. ومن جافاسكربت: `Insiyab.countdown(el, \'start\')`.' },
+    { group: 'البدء والإيقاف', name: 'data-ins-countdown-stop', desc: 'يوقفه ويبقي الوقت الباقي ظاهرًا. ومن جافاسكربت: `Insiyab.countdown(el, \'stop\')`، ويعيد الثواني الباقية.' },
+    { group: 'البدء والإيقاف', name: 'data-ins-countdown-restart', desc: 'يعيده من أوله، وهو ما يحتاجه زر «أعد إرسال الرمز». ومن جافاسكربت: `Insiyab.countdown(el, \'restart\')`.' }
+  ],
+  events: ['ins:countdown'],
+  html: function (s) {
+    var attrs = ' data-ins-countdown="' + (s.from === 'date' ? '2028-01-01T00:00:00+03:00' : s.from) + '"' +
+      (s.warn ? ' data-ins-warn="' + s.warn + '"' : '') + (s.away ? ' data-ins-countdown-pause-away' : '');
+    var cls = 'ins-countdown' + (s.size ? ' ins-countdown--lg' : '');
+    if (!s.paused) return '<span class="' + cls + '"' + attrs + '></span>';
+    return '<div class="ins-flex ins-flex-wrap ins-items-center ins-gap-2">\n' +
+      '  <span class="' + cls + '" id="cd-timer"' + attrs + ' data-ins-countdown-paused></span>\n' +
+      '  <button class="ins-btn ins-btn--primary ins-btn--sm" data-ins-countdown-start="#cd-timer">ابدأ</button>\n' +
+      '  <button class="ins-btn ins-btn--secondary ins-btn--sm" data-ins-countdown-stop="#cd-timer">أوقف</button>\n' +
+      '  <button class="ins-btn ins-btn--bare ins-btn--sm" data-ins-countdown-restart="#cd-timer">من جديد</button>\n' +
+      '</div>';
+  },
+  notes: function (s) {
+    var out = [];
+    if (s.from === 'date') out.push('القيمة لحظة بعينها، فيعد العداد إليها أيامًا وساعات.');
+    if (s.away) out.push('انتقل إلى نافذة أخرى ثم عد بعد لحظات، فتجد العداد وقف حيث تركته ثم أكمل.');
+    if (s.paused) out.push('اضغط «ابدأ» فيبدأ العد، و«أوقف» فيقف، و«من جديد» فيعيده من أوله.');
+    else if (s.from === '10' || s.from === '75') out.push('انتظر قليلًا، فيتلون العداد حين يقترب الصفر ويظهر هنا الحدث.');
+    return out;
+  }
 });
-<span class="hl-t">Insiyab</span>.countdown(<span class="hl-s">'#hold'</span>, <span class="hl-n">600</span>);                          <span class="hl-c">// من جديد</span></code></pre></div>
-
-<h3 id="start">البدء والإيقاف عند الطلب</h3>
-<p>
-  أضف <code>data-ins-countdown-paused</code> فيعرض العداد وقته كاملًا وينتظر، ثم تتحكم فيه بأزرار تشير إليه:
-  <code>data-ins-countdown-start</code> يبدؤه، أو يكمله من حيث توقف، و<code>data-ins-countdown-stop</code> يوقفه ويبقي
-  الوقت الباقي ظاهرًا، و<code>data-ins-countdown-restart</code> يعيده من أوله، وهو ما يحتاجه زر «أعد إرسال الرمز»:
-</p>
-<figure class="dx"><div class="dx-view row">
-  <span class="ins-countdown" id="cd-timer" data-ins-countdown="120" data-ins-countdown-paused></span>
-  <button class="ins-btn ins-btn--primary ins-btn--sm" data-ins-countdown-start="#cd-timer">ابدأ</button>
-  <button class="ins-btn ins-btn--secondary ins-btn--sm" data-ins-countdown-stop="#cd-timer">أوقف</button>
-  <button class="ins-btn ins-btn--bare ins-btn--sm" data-ins-countdown-restart="#cd-timer">من جديد</button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-countdown"</span> <span class="hl-a">id</span>=<span class="hl-s">"cd-timer"</span> <span class="hl-a">data-ins-countdown</span>=<span class="hl-s">"120"</span> <span class="hl-a">data-ins-countdown-paused</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary ins-btn--sm"</span> <span class="hl-a">data-ins-countdown-start</span>=<span class="hl-s">"#cd-timer"</span><span class="hl-t">&gt;</span>ابدأ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--sm"</span> <span class="hl-a">data-ins-countdown-stop</span>=<span class="hl-s">"#cd-timer"</span><span class="hl-t">&gt;</span>أوقف<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--bare ins-btn--sm"</span> <span class="hl-a">data-ins-countdown-restart</span>=<span class="hl-s">"#cd-timer"</span><span class="hl-t">&gt;</span>من جديد<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p>
-  ولا يتوقف العداد إذا انتقل صاحبه إلى نافذة أخرى، فإن أردت أن يتوقف ما دامت الصفحة في الخلفية ثم يكمل حين يعود إليها فأضف
-  <code>data-ins-countdown-pause-away</code>، كمؤقت عمل لا يُحسب فيه إلا الوقت الذي يقضيه أمامه.
-</p>
-<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-countdown"</span> <span class="hl-a">data-ins-countdown</span>=<span class="hl-s">"1800"</span> <span class="hl-a">data-ins-countdown-pause-away</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div>
-<p>والأوامر نفسها من JavaScript:</p>
-<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.countdown(<span class="hl-s">'#cd-timer'</span>, <span class="hl-s">'start'</span>);     <span class="hl-c">// يبدأ، أو يكمل من حيث توقف</span>
-<span class="hl-t">Insiyab</span>.countdown(<span class="hl-s">'#cd-timer'</span>, <span class="hl-s">'stop'</span>);      <span class="hl-c">// يوقف، ويعيد الثواني الباقية</span>
-<span class="hl-t">Insiyab</span>.countdown(<span class="hl-s">'#cd-timer'</span>, <span class="hl-s">'restart'</span>);   <span class="hl-c">// من أوله</span>
-<span class="hl-t">Insiyab</span>.countdown(<span class="hl-s">'#cd-timer'</span>, <span class="hl-n">60</span>);          <span class="hl-c">// من 60 ثانية</span>
-<span class="hl-t">Insiyab</span>.countdown(<span class="hl-s">'#cd-timer'</span>);              <span class="hl-c">// الثواني الباقية، أو null ما دام لم يبدأ</span></code></pre></div>
-
-<h2 id="save">حالة الحفظ</h2>
-<p>
-  يخبر <code>.ins-save</code> بمصير آخر تغيير: جارٍ حفظه، ثم حُفظ، أو تعذر حفظه. تضع الحالة في <code>data-ins-state</code>، فإن خلا منها
-  حجز مكانه فارغًا، حتى إذا ظهر لم يقفز السطر.
-</p>
-<figure class="dx"><div class="dx-view row">
-  <span class="ins-save" data-ins-state="saving"></span>
-  <span class="ins-save" data-ins-state="saved"></span>
-  <span class="ins-save" data-ins-state="error"></span>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-save"</span> <span class="hl-a">data-ins-state</span>=<span class="hl-s">"saving"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-save"</span> <span class="hl-a">data-ins-state</span>=<span class="hl-s">"saved"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-save"</span> <span class="hl-a">data-ins-state</span>=<span class="hl-s">"error"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h3 id="autosave">الحفظ التلقائي</h3>
-<p>
-  ضع <code>data-ins-autosave</code> على النموذج، فإذا مضت لحظة على آخر تغيير أظهر المؤشر «جارٍ الحفظ» وأطلق حدث <code>ins:autosave</code>
-  يحمل بيانات النموذج. فإن أردت الحفظ على الخادم فاستدع <code>preventDefault()</code> على الحدث، ثم <code>done(true)</code> أو <code>done(false)</code> حين تنتهي. وإن لم تستدعها
-  عدت المكتبة التغيير محفوظًا بما صنعه مستمعك، كأن يحفظه مسودة في المتصفح، وأعلن المؤشر ذلك في الحال.
-</p>
-<figure class="dx"><div class="dx-view">
-  <form class="ins-field" data-ins-autosave onsubmit="event.preventDefault()">
-    <div class="ins-flex ins-items-center ins-justify-between">
-      <label class="ins-label" for="as-note">ملاحظة</label>
-      <span class="ins-save"></span>
-    </div>
-    <textarea class="ins-textarea" id="as-note"></textarea>
-  </form>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;form</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span> <span class="hl-a">data-ins-autosave</span> <span class="hl-a">onsubmit</span>=<span class="hl-s">"event.preventDefault()"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-flex ins-items-center ins-justify-between"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"as-note"</span><span class="hl-t">&gt;</span>ملاحظة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-save"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;textarea</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-textarea"</span> <span class="hl-a">id</span>=<span class="hl-s">"as-note"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/textarea</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/form</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:autosave'</span>, <span class="hl-k">async</span> (e) =&gt; {
-  e.preventDefault();
-  <span class="hl-k">const</span> ok = <span class="hl-k">await</span> fetch(<span class="hl-s">'/draft'</span>, { method: <span class="hl-s">'POST'</span>, body: e.detail.data }).then((r) =&gt; r.ok);
-  e.detail.done(ok);
-});</code></pre></div>
-        <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="progress.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">التقدم</span></a><a class="site-pager-link site-pager-link--next" href="tooltips.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">التلميحات</span></a></nav>
+</script>
+        <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="progress.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">التقدم</span></a><a class="site-pager-link site-pager-link--next" href="save.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">حالة الحفظ</span></a></nav>
         </div>
-        
+        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#countdown">العد التنازلي</a><a href="#api">التحكم بـ JavaScript</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
