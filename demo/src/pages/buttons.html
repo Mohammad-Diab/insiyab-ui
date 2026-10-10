@@ -1,87 +1,29 @@
-<h2 id="filled">المملوءة</h2>
-<p>تصلح للإجراء الرئيسي في الشاشة، وللإجراءات التي تحمل نبرة، مثل <code>--success</code> و<code>--danger</code>. وإن شئت وضعت أيقونة <code>&lt;svg&gt;</code> قبل النص.</p>
 <demo-example class="row">
   <button class="ins-btn ins-btn--primary"><svg class="ico"><use href="#i-check"/></svg>حفظ</button>
-  <button class="ins-btn ins-btn--success">تأكيد</button>
-  <button class="ins-btn ins-btn--danger">حذف</button>
-  <button class="ins-btn ins-btn--warning">إيقاف</button>
-  <button class="ins-btn ins-btn--info">تفاصيل</button>
-</demo-example>
-
-<h2 id="secondary">الثانوية والهادئة</h2>
-<p>
-  اجعل <code>--secondary</code> لما يجاور الزر الرئيسي، و<code>--ghost</code> وأخواته لما هو أهدأ منه، و<code>--bare</code>
-  لإجراء يكاد يكون رابطًا.
-</p>
-<demo-example class="row">
   <button class="ins-btn ins-btn--secondary">معاينة</button>
   <button class="ins-btn ins-btn--ghost">تصدير</button>
-  <button class="ins-btn ins-btn--ghost-success">قبول</button>
-  <button class="ins-btn ins-btn--ghost-danger">رفض</button>
-  <button class="ins-btn ins-btn--ghost-warning">تأجيل</button>
-  <button class="ins-btn ins-btn--ghost-info">مساعدة</button>
+  <button class="ins-btn ins-btn--danger">حذف</button>
   <button class="ins-btn ins-btn--bare">إلغاء</button>
 </demo-example>
 
-<h2 id="sizes">المقاسات</h2>
-<demo-example class="row">
-  <button class="ins-btn ins-btn--primary ins-btn--lg">كبير</button>
-  <button class="ins-btn ins-btn--primary">عادي</button>
-  <button class="ins-btn ins-btn--primary ins-btn--sm">صغير</button>
-</demo-example>
-<demo-example class="stack">
-  <button class="ins-btn ins-btn--primary ins-btn--full">بعرض الحاوية</button>
-</demo-example>
-
-<h2 id="icon">زر الأيقونة</h2>
-<p>يجعل <code>--icon</code> الزر مربعًا يسع أيقونة واحدة، ولا بد له عندئذ من تسمية <code>aria-label</code>.</p>
-<demo-example class="row">
-  <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="تعديل"><svg class="ico"><use href="#i-edit"/></svg></button>
-  <button class="ins-btn ins-btn--ghost-danger ins-btn--icon" aria-label="حذف"><svg class="ico"><use href="#i-trash"/></svg></button>
-  <button class="ins-btn ins-btn--secondary ins-btn--sm ins-btn--icon" aria-label="المزيد"><svg class="ico"><use href="#i-dots"/></svg></button>
-</demo-example>
-
-<h2 id="states">الحالات</h2>
+<h2 id="button">الزر</h2>
 <p>
-  تعطل <code>disabled</code> الزر، ويرفعه <code>--lift</code> قليلًا إذا مر عليه المؤشر، وإذا وضعت <code>.ins-btn</code> على
-  <code>&lt;a&gt;</code> صار الرابط في هيئة زر. وتظهر حلقة التركيز (focus ring) عند التنقل بلوحة المفاتيح، فجرب <kbd class="ins-kbd">Tab</kbd>.
+  اختر من الخيارات، فيتغير الزر وشيفرته معًا. واجعل <code>--primary</code> للإجراء الرئيسي في الشاشة، و<code>--secondary</code>
+  لما يجاوره، والهادئ لما هو أقل منهما. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<demo-example class="row">
-  <button class="ins-btn ins-btn--primary" disabled>معطل</button>
-  <button class="ins-btn ins-btn--primary ins-btn--lift">مرتفع</button>
-  <a class="ins-btn ins-btn--secondary" href="#states">رابط</a>
-</demo-example>
+<demo-play of="button"></demo-play>
 
-<h2 id="toggle" data-level="advanced">أزرار التبديل</h2>
-<p>تحفظ <code>data-ins-toggle</code> حالة الزر في <code>aria-pressed</code>، وتُطلق حدث <code>ins:toggle</code>.</p>
-<demo-example class="row">
-  <div class="ins-btn-group" role="group" aria-label="تنسيق النص">
-    <button class="ins-btn ins-btn--secondary ins-btn--icon" data-ins-toggle aria-pressed="true" aria-label="عريض"><b>B</b></button>
-    <button class="ins-btn ins-btn--secondary ins-btn--icon" data-ins-toggle aria-label="تسطير"><u>U</u></button>
-    <button class="ins-btn ins-btn--secondary ins-btn--icon" data-ins-toggle aria-label="يتوسطه خط"><s>S</s></button>
-  </div>
-</demo-example>
-
-<h2 id="group">المجموعات</h2>
+<h2 id="group">مجموعة الأزرار</h2>
 <p>
-  يضم <code>.ins-btn-group</code> الأزرار المتجاورة في قطعة واحدة، ويصغرها <code>--sm</code>. وإذا وضعت فيها قائمة منسدلة
-  <code>details.ins-pop</code> صنعت زرًا مقسومًا (split button)، وتفصيله في صفحة <a href="dropdown.html#split">القوائم المنسدلة</a>.
+  تضم <code>.ins-btn-group</code> الأزرار المتجاورة في قطعة واحدة. وإذا وضعت فيها قائمة منسدلة <code>details.ins-pop</code>
+  صنعت زرًا مقسومًا (split button)، وتفصيله في صفحة <a href="dropdown.html#split">القوائم المنسدلة</a>.
 </p>
-<demo-example class="row">
-  <div class="ins-btn-group">
-    <button class="ins-btn ins-btn--secondary">السابق</button>
-    <button class="ins-btn ins-btn--secondary">اليوم</button>
-    <button class="ins-btn ins-btn--secondary">التالي</button>
-  </div>
-</demo-example>
+<demo-play of="group"></demo-play>
 
 <h2 id="close">زر الإغلاق</h2>
-<p>
-  يرسم <code>.ins-close</code> علامة الإغلاق بنفسه في CSS، فيغنيك عن الأيقونة، ولا بد له من <code>aria-label</code>. ويصغره <code>--sm</code>،
-  ويجعله <code>--bare</code> بلا خلفية. وإذا أضفت <code>data-ins-dismiss</code> أغلق أقرب تنبيه أو مربع حوار أو درج يحتويه.
-</p>
-<demo-example class="row">
-  <button class="ins-close" aria-label="إغلاق"></button>
-  <button class="ins-close ins-close--sm" aria-label="إغلاق"></button>
-  <button class="ins-close ins-close--bare" aria-label="إغلاق"></button>
-</demo-example>
+<p>يرسم <code>.ins-close</code> علامة الإغلاق بنفسه، فيغنيك عن الأيقونة.</p>
+<demo-play of="close"></demo-play>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الأزرار من كلاسات وسمات وأحداث، لكل مكون صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
