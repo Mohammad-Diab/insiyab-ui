@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,13 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">أقسام تنطوي وتنفتح، مبنية على عنصر details نفسه فتعمل بلا جافاسكربت.</p>
-        <h2 id="basic">الأكورديون</h2>
-<p>
-  يجمع <code>.ins-accordion</code> أقسامًا من <code>&lt;details class="ins-collapse"&gt;</code>، في كل قسم منها
-  <code>summary</code> و<code>.ins-collapse-body</code>. وهو ينفتح بالنقر وبلوحة المفاتيح دون جافاسكربت،
-  ولا سطح له، فضعه في لوح <code>.ins-panel</code>.
-</p>
-<figure class="dx"><div class="dx-view">
+        <figure class="dx"><div class="dx-view">
   <div class="ins-panel">
     <div class="ins-accordion">
       <details class="ins-collapse" open>
@@ -313,55 +308,122 @@
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="exclusive">قسم واحد مفتوح</h2>
-<p>أعط الأقسام كلها <code>name</code> واحدًا، فإذا فتحت أحدها أغلق المتصفح الباقي.</p>
-<figure class="dx"><div class="dx-view">
+<h2 id="accordion">الأكورديون</h2>
+<p>
+  يجمع <code>.ins-accordion</code> أقسامًا من <code>&lt;details class="ins-collapse"&gt;</code>، فينفتح بالنقر وبلوحة المفاتيح
+  دون جافاسكربت. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="accordion"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-panel">
   <div class="ins-accordion">
-    <details class="ins-collapse" name="faq" open>
+    <details class="ins-collapse" open>
       <summary>القسم الأول</summary>
       <div class="ins-collapse-body">محتوى القسم الأول.</div>
     </details>
-    <details class="ins-collapse" name="faq">
+    <details class="ins-collapse">
       <summary>القسم الثاني</summary>
       <div class="ins-collapse-body">محتوى القسم الثاني.</div>
     </details>
-    <details class="ins-collapse" name="faq">
+    <details class="ins-collapse">
       <summary>القسم الثالث</summary>
       <div class="ins-collapse-body">محتوى القسم الثالث.</div>
     </details>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-accordion"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span> <span class="hl-a">name</span>=<span class="hl-s">"faq"</span> <span class="hl-a">open</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>القسم الأول<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى القسم الأول.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span> <span class="hl-a">name</span>=<span class="hl-s">"faq"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>القسم الثاني<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى القسم الثاني.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span> <span class="hl-a">name</span>=<span class="hl-s">"faq"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>القسم الثالث<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى القسم الثالث.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">في المعاينة فُتح القسم الثالث كأنك نقرته، وبقي ما كان مفتوحًا قبله. فعّل «قسم واحد مفتوح» ليُغلق.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات الأكورديون"><div class="site-play-ctl" data-key="one" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">قسم واحد مفتوح</span></span></label></div><div class="site-play-ctl" data-key="open" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">الأول مفتوح</span></span></label></div><div class="site-play-ctl" data-key="panel" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">في لوح</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-accordion"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span> <span class="hl-a">open</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>القسم الأول<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى القسم الأول.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>القسم الثاني<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى القسم الثاني.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>القسم الثالث<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى القسم الثالث.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="collapse">قسم منفرد</h2>
 <p>ويصلح <code>.ins-collapse</code> وحده أيضًا، خارج الأكورديون.</p>
-<figure class="dx"><div class="dx-view">
-  <details class="ins-collapse">
-    <summary>خيارات متقدمة</summary>
-    <div class="ins-collapse-body">محتوى إضافي.</div>
-  </details>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="collapse"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><details class="ins-collapse">
+  <summary>خيارات متقدمة</summary>
+  <div class="ins-collapse-body">محتوى إضافي.</div>
+</details></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات القسم المنفرد"><label class="site-play-ctl" data-key="title" data-type="text"><span class="site-play-label">العنوان</span><input class="ins-input ins-input--sm" type="text" value="خيارات متقدمة"></label><div class="site-play-ctl" data-key="open" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مفتوح</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;summary</span><span class="hl-t">&gt;</span>خيارات متقدمة<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-collapse-body"</span><span class="hl-t">&gt;</span>محتوى إضافي.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <div class="site-adv"><h2 id="motion">الحركة</h2>
 <p>إذا دعم المتصفح <code>interpolate-size</code> انساب القسم وهو ينفتح، وإلا انفتح في الحال.</p></div>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الأكورديون من كلاسات وسمات، لكل مكون صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>الأكورديون</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-accordion</code></td><td>كلاس</td><td>يجمع أقسامًا من <code>.ins-collapse</code> ويفصل بينها بخط رفيع. ولا سطح له، فضعه في لوح <code>.ins-panel</code> فتستقيم زوايا أقسامه على زواياه.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>name="…"</code></td><td>سمة</td><td>أعط الأقسام كلها <code>name</code> واحدًا، فإذا فتحت أحدها أغلق المتصفح الباقي.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>القسم المنفرد</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-collapse</code></td><td>كلاس</td><td>على <code>&lt;details&gt;</code>، فينفتح بالنقر وبلوحة المفاتيح دون جافاسكربت، ويصلح وحده أو داخل <code>.ins-accordion</code>.</td></tr><tr><td><code>summary</code></td><td>عنصر</td><td>عنوان القسم، وبالنقر عليه ينفتح وينغلق.</td></tr><tr><td><code>.ins-collapse-body</code></td><td>كلاس</td><td>محتوى القسم.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>open</code></td><td>سمة</td><td>يبدأ القسم مفتوحًا.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'accordion',
+  title: 'الأكورديون',
+  owns: 'ins-accordion',
+  wide: true,
+  controls: [
+    { key: 'one', label: 'قسم واحد مفتوح', type: 'switch', name: 'name="…"', desc: 'أعط الأقسام كلها `name` واحدًا، فإذا فتحت أحدها أغلق المتصفح الباقي.' },
+    { key: 'open', label: 'الأول مفتوح', type: 'switch', value: true },
+    { key: 'panel', label: 'في لوح', type: 'switch', value: true }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-accordion', desc: 'يجمع أقسامًا من `.ins-collapse` ويفصل بينها بخط رفيع. ولا سطح له، فضعه في لوح `.ins-panel` فتستقيم زوايا أقسامه على زواياه.' }
+  ],
+  html: function (s) {
+    var name = s.one ? ' name="group"' : '';
+    var pad = s.panel ? '    ' : '  ';
+    var words = ['الأول', 'الثاني', 'الثالث'];
+    var items = words.map(function (w, i) {
+      return pad + '<details class="ins-collapse"' + name + (i === 0 && s.open ? ' open' : '') + '>\n' +
+        pad + '  <summary>القسم ' + w + '</summary>\n' +
+        pad + '  <div class="ins-collapse-body">محتوى القسم ' + w + '.</div>\n' +
+        pad + '</details>';
+    }).join('\n');
+    var acc = (s.panel ? '  ' : '') + '<div class="ins-accordion">\n' + items + '\n' + (s.panel ? '  ' : '') + '</div>';
+    return s.panel ? '<div class="ins-panel">\n' + acc + '\n</div>' : acc;
+  },
+  // The third section opened, as if the reader had clicked it, so what `name` closes can be seen.
+  stage: function (view) {
+    var all = view.querySelectorAll('details.ins-collapse');
+    all[all.length - 1].open = true;
+  },
+  notes: function (s) {
+    return ['في المعاينة فُتح القسم الثالث كأنك نقرته' + (s.one ? '، فأغلق المتصفح ما كان مفتوحًا قبله.' : '، وبقي ما كان مفتوحًا قبله. فعّل «قسم واحد مفتوح» ليُغلق.')];
+  }
+});
+
+SitePlay.define({
+  id: 'collapse',
+  title: 'القسم المنفرد',
+  owns: 'ins-collapse',
+  wide: true,
+  controls: [
+    { key: 'title', label: 'العنوان', type: 'text', value: 'خيارات متقدمة' },
+    { key: 'open', label: 'مفتوح', type: 'switch', name: 'open', desc: 'يبدأ القسم مفتوحًا.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-collapse', desc: 'على `<details>`، فينفتح بالنقر وبلوحة المفاتيح دون جافاسكربت، ويصلح وحده أو داخل `.ins-accordion`.' },
+    { group: 'الأساس', name: 'summary', kind: 'element', desc: 'عنوان القسم، وبالنقر عليه ينفتح وينغلق.' },
+    { group: 'الأساس', name: 'ins-collapse-body', desc: 'محتوى القسم.' }
+  ],
+  html: function (s) {
+    return '<details class="ins-collapse"' + (s.open ? ' open' : '') + '>\n' +
+      '  <summary>' + s.title + '</summary>\n' +
+      '  <div class="ins-collapse-body">محتوى إضافي.</div>\n' +
+      '</details>';
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="buttons.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الأزرار</span></a><a class="site-pager-link site-pager-link--next" href="tabs.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">علامات التبويب</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">الأكورديون</a><a href="#exclusive">قسم واحد مفتوح</a><a href="#collapse">قسم منفرد</a><a href="#motion">الحركة</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">الأكورديون</a><a href="#exclusive">قسم واحد مفتوح</a><a href="#collapse">قسم منفرد</a></nav>
+        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#accordion">الأكورديون</a><a href="#collapse">قسم منفرد</a><a href="#motion">الحركة</a><a href="#options">الخيارات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#accordion">الأكورديون</a><a href="#collapse">قسم منفرد</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
