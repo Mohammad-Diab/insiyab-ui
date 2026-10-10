@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,7 +274,19 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">ثلاثة خطوط مستضافة مع المكتبة لا يُحمل منها إلا ما تحتاجه الصفحة، وسلم للعناوين، ونص طويل لا يتجاوز تنسيقه الكلاس الذي يحمله.</p>
-        <div class="site-adv"><h2 id="faces">الخطوط الثلاثة</h2>
+        <figure class="dx"><div class="dx-view">
+  <p class="ins-display">انسياب</p>
+  <p class="ins-h1">عنوان أول</p>
+  <p class="ins-h2">عنوان ثان</p>
+  <p class="ins-h3">عنوان ثالث</p>
+  <p class="ins-h4">عنوان رابع</p>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-display"</span><span class="hl-t">&gt;</span>انسياب<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h1"</span><span class="hl-t">&gt;</span>عنوان أول<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h2"</span><span class="hl-t">&gt;</span>عنوان ثان<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h3"</span><span class="hl-t">&gt;</span>عنوان ثالث<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h4"</span><span class="hl-t">&gt;</span>عنوان رابع<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<div class="site-adv"><h2 id="faces">الخطوط الثلاثة</h2>
 <p>
   تُكتب العربية بخط تجوال ومعه حروفه اللاتينية، والأرقام والنص اللاتيني بخط Inter، أما العناوين في الصفحات
   التي تجري من اليسار إلى اليمين فبخط Cause.
@@ -287,109 +300,159 @@
 <h2 id="headings">العناوين</h2>
 <p>
   مظهر العنوان مستقل عن مستواه، فالمستوى يخدم بنية الصفحة وقارئ الشاشة، والمظهر يخدم التصميم.
-  لذا لا غرابة في أن تكتب <code>&lt;h2 class="ins-h4"&gt;</code>.
+  لذا لا غرابة في أن تكتب <code>&lt;h2 class="ins-h4"&gt;</code>. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<figure class="dx"><div class="dx-view">
-  <p class="ins-display">انسياب</p>
-  <p class="ins-h1">عنوان أول</p>
-  <p class="ins-h2">عنوان ثان</p>
-  <p class="ins-h3">عنوان ثالث</p>
-  <p class="ins-h4">عنوان رابع</p>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-display"</span><span class="hl-t">&gt;</span>انسياب<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h1"</span><span class="hl-t">&gt;</span>عنوان أول<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h2"</span><span class="hl-t">&gt;</span>عنوان ثان<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h3"</span><span class="hl-t">&gt;</span>عنوان ثالث<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h4"</span><span class="hl-t">&gt;</span>عنوان رابع<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="lead">التمهيد والعنوان الصغير</h2>
-<p><code>.ins-eyebrow</code> عنوان صغير يعلو العنوان، و<code>.ins-lead</code> لفقرة التمهيد التي تليه.</p>
-<figure class="dx"><div class="dx-view">
-  <span class="ins-eyebrow">الإعدادات</span>
-  <p class="ins-h2">الحساب</p>
-  <p class="ins-lead">الاسم والعنوان وطرق الدفع.</p>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-eyebrow"</span><span class="hl-t">&gt;</span>الإعدادات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h2"</span><span class="hl-t">&gt;</span>الحساب<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-lead"</span><span class="hl-t">&gt;</span>الاسم والعنوان وطرق الدفع.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<figure class="dx site-play" data-play="heading"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><h2 class="ins-h2">الإعدادات</h2></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات العنوان"><label class="site-play-ctl" data-key="size" data-type="select"><span class="site-play-label">المقاس</span><select class="ins-select ins-select--sm"><option value="display">عنوان الواجهة</option><option value="h1">أول</option><option value="h2" selected>ثان</option><option value="h3">ثالث</option><option value="h4">رابع</option></select></label><div class="site-play-ctl" data-key="tag" data-type="seg"><span class="site-play-label">العنصر</span><div class="ins-seg" role="group" aria-label="العنصر"><button type="button" data-value="h1" aria-pressed="false">h1</button><button type="button" data-value="h2" class="is-active" aria-pressed="true">h2</button><button type="button" data-value="h3" aria-pressed="false">h3</button><button type="button" data-value="p" aria-pressed="false">p</button></div></div><label class="site-play-ctl" data-key="text" data-type="text"><span class="site-play-label">النص</span><input class="ins-input ins-input--sm" type="text" value="الإعدادات"></label><div class="site-play-ctl" data-key="eyebrow" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">عنوان صغير فوقه</span></span></label></div><div class="site-play-ctl" data-key="lead" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">تمهيد تحته</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;h2</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-h2"</span><span class="hl-t">&gt;</span>الإعدادات<span class="hl-t">&lt;/h2</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="prose">النص الطويل</h2>
 <p>
   ينسق <code>.ins-prose</code> ما في داخله من فقرات وقوائم واقتباسات وشيفرة وجداول، ولا يمس شيئًا
   خارجه. ولا يباعد بين الحروف العربية ولا يميلها، وإنما يكون التوكيد باللون.
 </p>
-<figure class="dx"><div class="dx-view">
-  <article class="ins-prose">
-    <h2>عنوان</h2>
-    <p>فقرة فيها <strong>نص عريض</strong> و<em>توكيد</em> و<mark>تظليل</mark> و<a href="#prose">رابط</a>.</p>
-    <h3>عنوان فرعي</h3>
-    <ol>
-      <li>الخطوة الأولى</li>
-      <li>الخطوة الثانية
-        <ul>
-          <li>بند متداخل</li>
-        </ul>
-      </li>
-    </ol>
-    <blockquote>اقتباس قصير.</blockquote>
-    <pre><code>GET /api/orders</code></pre>
-    <dl>
-      <dt>المدة</dt><dd>14 يومًا</dd>
-    </dl>
-  </article>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;article</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-prose"</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="prose"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><article class="ins-prose">
+  <h2>عنوان</h2>
+  <p>فقرة فيها <strong>نص عريض</strong> و<em>توكيد</em> و<mark>تظليل</mark> و<code>code</code> و<a href="#prose">رابط</a>.</p>
+</article></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات النص الطويل"><div class="site-play-ctl" data-key="list" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">قائمة</span></span></label></div><div class="site-play-ctl" data-key="quote" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">اقتباس</span></span></label></div><div class="site-play-ctl" data-key="code" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">شيفرة</span></span></label></div><div class="site-play-ctl" data-key="table" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">جدول</span></span></label></div><div class="site-play-ctl" data-key="dl" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">قائمة وصف</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;article</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-prose"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;h2</span><span class="hl-t">&gt;</span>عنوان<span class="hl-t">&lt;/h2</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>فقرة فيها <span class="hl-t">&lt;strong</span><span class="hl-t">&gt;</span>نص عريض<span class="hl-t">&lt;/strong</span><span class="hl-t">&gt;</span> و<span class="hl-t">&lt;em</span><span class="hl-t">&gt;</span>توكيد<span class="hl-t">&lt;/em</span><span class="hl-t">&gt;</span> و<span class="hl-t">&lt;mark</span><span class="hl-t">&gt;</span>تظليل<span class="hl-t">&lt;/mark</span><span class="hl-t">&gt;</span> و<span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#prose"</span><span class="hl-t">&gt;</span>رابط<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>عنوان فرعي<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;ol</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span>الخطوة الأولى<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span>الخطوة الثانية
-      <span class="hl-t">&lt;ul</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span>بند متداخل<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/ol</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;blockquote</span><span class="hl-t">&gt;</span>اقتباس قصير.<span class="hl-t">&lt;/blockquote</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;pre</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;code</span><span class="hl-t">&gt;</span>GET /api/orders<span class="hl-t">&lt;/code</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/pre</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;dl</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;dt</span><span class="hl-t">&gt;</span>المدة<span class="hl-t">&lt;/dt</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;dd</span><span class="hl-t">&gt;</span>14 يومًا<span class="hl-t">&lt;/dd</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/dl</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>فقرة فيها <span class="hl-t">&lt;strong</span><span class="hl-t">&gt;</span>نص عريض<span class="hl-t">&lt;/strong</span><span class="hl-t">&gt;</span> و<span class="hl-t">&lt;em</span><span class="hl-t">&gt;</span>توكيد<span class="hl-t">&lt;/em</span><span class="hl-t">&gt;</span> و<span class="hl-t">&lt;mark</span><span class="hl-t">&gt;</span>تظليل<span class="hl-t">&lt;/mark</span><span class="hl-t">&gt;</span> و<span class="hl-t">&lt;code</span><span class="hl-t">&gt;</span>code<span class="hl-t">&lt;/code</span><span class="hl-t">&gt;</span> و<span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#prose"</span><span class="hl-t">&gt;</span>رابط<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/article</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="divider">الفاصل</h2>
-<p>
-  ضع <code>.ins-divider</code> على <code>&lt;hr&gt;</code> أو على عنصر فيه نص، ويضع <code>--start</code> النص في
-  البداية. أما <code>--v</code> ففاصل عمودي بين عناصر الصف، فأضف إليه <code>aria-orientation="vertical"</code>.
-</p>
-<figure class="dx"><div class="dx-view stack">
-  <hr class="ins-divider">
-  <div class="ins-divider">أو</div>
-  <div class="ins-divider ins-divider--start">عنوان</div>
-  <div class="ins-row">
-    <span>ملف</span>
-    <hr class="ins-divider ins-divider--v" aria-orientation="vertical">
-    <span>تعديل</span>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;hr</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-divider"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-divider"</span><span class="hl-t">&gt;</span>أو<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-divider ins-divider--start"</span><span class="hl-t">&gt;</span>عنوان<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span>ملف<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;hr</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-divider ins-divider--v"</span> <span class="hl-a">aria-orientation</span>=<span class="hl-s">"vertical"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span>تعديل<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<p>يفصل <code>.ins-divider</code> بين قسمين بخط، أو بخطين بينهما كلمة، أو بين عناصر صف بخط عمودي.</p>
+<figure class="dx site-play" data-play="divider"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-divider">أو</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات الفاصل"><div class="site-play-ctl" data-key="v" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">عمودي</span></span></label></div><label class="site-play-ctl" data-key="text" data-type="text"><span class="site-play-label">النص</span><input class="ins-input ins-input--sm" type="text" value="أو"></label><div class="site-play-ctl" data-key="start" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">النص في البداية</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-divider"</span><span class="hl-t">&gt;</span>أو<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <div class="site-adv"><h2 id="kbd">المفاتيح</h2>
-<figure class="dx"><div class="dx-view">
-  <p>اضغط <kbd class="ins-kbd">Ctrl</kbd> + <kbd class="ins-kbd">K</kbd> للبحث.</p>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>اضغط <span class="hl-t">&lt;kbd</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-kbd"</span><span class="hl-t">&gt;</span>Ctrl<span class="hl-t">&lt;/kbd</span><span class="hl-t">&gt;</span> + <span class="hl-t">&lt;kbd</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-kbd"</span><span class="hl-t">&gt;</span>K<span class="hl-t">&lt;/kbd</span><span class="hl-t">&gt;</span> للبحث.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure></div>
+<p>يرسم <code>.ins-kbd</code> اسم المفتاح في هيئة زر من لوحة المفاتيح، لاختصار في قائمة أو تلميح.</p>
+<figure class="dx site-play" data-play="kbd"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><p>اضغط <kbd class="ins-kbd">Ctrl</kbd> + <kbd class="ins-kbd">K</kbd> للبحث.</p></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات المفتاح"><label class="site-play-ctl site-adv" data-key="key" data-type="text"><span class="site-play-label">المفتاح</span><input class="ins-input ins-input--sm" type="text" value="K"></label><div class="site-play-ctl site-adv" data-key="ctrl" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مع Ctrl</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;p</span><span class="hl-t">&gt;</span>اضغط <span class="hl-t">&lt;kbd</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-kbd"</span><span class="hl-t">&gt;</span>Ctrl<span class="hl-t">&lt;/kbd</span><span class="hl-t">&gt;</span> + <span class="hl-t">&lt;kbd</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-kbd"</span><span class="hl-t">&gt;</span>K<span class="hl-t">&lt;/kbd</span><span class="hl-t">&gt;</span> للبحث.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span></code></pre></div></figure></div>
 
 <div class="site-adv"><h2 id="tokens">المقاسات</h2>
 <p>تجدها متغيرات CSS، وكلاسات في صفحة <a href="utilities.html#text">الأدوات المساعدة</a>.</p>
 <div class="dx-code" data-lang="css"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-a">--ins-fs-xs</span>  <span class="hl-a">--ins-fs-sm</span>  <span class="hl-a">--ins-fs-md</span>  <span class="hl-a">--ins-fs-lg</span>  <span class="hl-a">--ins-fs-xl</span>
 <span class="hl-a">--ins-fs-h4</span>  <span class="hl-a">--ins-fs-h3</span>  <span class="hl-a">--ins-fs-h2</span>  <span class="hl-a">--ins-fs-h1</span>  <span class="hl-a">--ins-fs-display</span>
 <span class="hl-a">--ins-font-body</span>  <span class="hl-a">--ins-font-arabic</span>  <span class="hl-a">--ins-font-body-en</span>  <span class="hl-a">--ins-font-heading-en</span>  <span class="hl-a">--ins-font-mono</span></code></pre></div></div>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الخطوط والنصوص من كلاسات وعناصر، لكل مكون صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>العنوان</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المقاس</th></tr></tbody><tbody><tr><td><code>.ins-display</code></td><td>كلاس</td><td>أكبر العناوين، لعنوان واحد يتصدر صفحة أو واجهة.</td></tr><tr><td><code>.ins-h1</code></td><td>كلاس</td><td>بمقاس العنوان الأول.</td></tr><tr><td><code>.ins-h2</code></td><td>كلاس</td><td>بمقاس العنوان الثاني.</td></tr><tr><td><code>.ins-h3</code></td><td>كلاس</td><td>بمقاس العنوان الثالث.</td></tr><tr><td><code>.ins-h4</code></td><td>كلاس</td><td>بمقاس العنوان الرابع.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-eyebrow</code></td><td>كلاس</td><td>عنوان صغير بلون الهوية يعلو العنوان، يسمي القسم الذي هو فيه.</td></tr><tr><td><code>.ins-lead</code></td><td>كلاس</td><td>فقرة التمهيد التي تلي العنوان، بخط أكبر من المتن ولون أهدأ.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>النص الطويل</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-prose</code></td><td>كلاس</td><td>ينسق ما في داخله من نص طويل، كمقال أو صفحة مساعدة، ولا يمس شيئًا خارجه. ويحد عرض السطر ليسهل على العين.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>ul, ol</code></td><td>عنصر</td><td>قوائم بعلامات بلون الهوية، ويتداخل بعضها في بعض.</td></tr><tr><td><code>blockquote</code></td><td>عنصر</td><td>اقتباس بشريط على حافته في جهة البداية وخلفية هادئة، ولا يميل.</td></tr><tr><td><code>pre</code></td><td>عنصر</td><td>كتلة شيفرة تبدأ من اليسار في الاتجاهين، وتتمرر أفقيًا إذا طالت أسطرها.</td></tr><tr><td><code>table</code></td><td>عنصر</td><td>جدول بسيط بخطوط وحسب، للجدول الذي يأتي في وسط المقال. أما جدول البيانات فهو <code>.ins-table</code>.</td></tr><tr><td><code>dl</code></td><td>عنصر</td><td>تسمية عريضة وقيمتها تحتها بلون أهدأ.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">في النص</th></tr></tbody><tbody><tr><td><code>h1, h2, h3, h4</code></td><td>عنصر</td><td>بمقاسات <code>.ins-h1</code> إلى <code>.ins-h4</code>، وأقرب إلى ما بعدها منها إلى ما قبلها.</td></tr><tr><td><code>a</code></td><td>عنصر</td><td>روابط تحتها خط، بعيد عن نقاط الحروف العربية.</td></tr><tr><td><code>em</code></td><td>عنصر</td><td>توكيد باللون لا بالميل، فلا يميل الحرف العربي.</td></tr><tr><td><code>mark</code></td><td>عنصر</td><td>تظليل بلون الهوية الخفيف.</td></tr><tr><td><code>code</code></td><td>عنصر</td><td>شيفرة قصيرة في السطر، معزولة عن اتجاهه فلا تنقلب في الجملة العربية.</td></tr><tr><td><code>kbd</code></td><td>عنصر</td><td>مفتاح بهيئة <code>.ins-kbd</code>، دون كلاس.</td></tr><tr><td><code>hr</code></td><td>عنصر</td><td>خط فاصل بين قسمين.</td></tr><tr><td><code>figure</code></td><td>عنصر</td><td>صورة أو فيديو بزوايا مستديرة لا يتجاوز عرض النص، ومعه <code>&lt;figcaption&gt;</code> بخط أصغر.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>الفاصل</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-divider</code></td><td>كلاس</td><td>على <code>&lt;hr&gt;</code> فيكون خطًا، أو على عنصر فيه نص فيكون النص بين خطين. ولا تضع <code>role="separator"</code> على فاصل فيه نص، فقارئ الشاشة يتجاهل ما في داخل الفاصل.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">فاصل عمودي</th></tr></tbody><tbody><tr><td><code>.ins-divider--v</code></td><td>كلاس</td><td>فاصل عمودي بين عناصر صف، بطول الصف نفسه.</td></tr><tr><td><code>aria-orientation="vertical"</code></td><td>سمة</td><td>ضعها على <code>&lt;hr&gt;</code> العمودي، فيعرف قارئ الشاشة اتجاهه.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-divider--start</code></td><td>كلاس</td><td>يضع النص في البداية، فيصير عنوان قسم يمتد بعده الخط.</td></tr></tbody></table></div></div></details><details class="ins-collapse site-adv"><summary>المفتاح</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group site-adv"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr class="site-adv"><td><code>.ins-kbd</code></td><td>كلاس</td><td>على <code>&lt;kbd&gt;</code>: مفتاح بحافة سفلية أثقل، يُكتب اسمه من اليسار ولو كان في جملة عربية. وداخل <code>.ins-prose</code> يكفي <code>&lt;kbd&gt;</code> وحده.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'heading',
+  title: 'العنوان',
+  owns: 'ins-(?:display|h[1-4]|eyebrow|lead)',
+  controls: [
+    { key: 'size', label: 'المقاس', group: 'المقاس', type: 'select', value: 'h2', choices: [
+      { value: 'display', label: 'عنوان الواجهة', name: 'ins-display', desc: 'أكبر العناوين، لعنوان واحد يتصدر صفحة أو واجهة.' },
+      { value: 'h1', label: 'أول', name: 'ins-h1', desc: 'بمقاس العنوان الأول.' },
+      { value: 'h2', label: 'ثان', name: 'ins-h2', desc: 'بمقاس العنوان الثاني.' },
+      { value: 'h3', label: 'ثالث', name: 'ins-h3', desc: 'بمقاس العنوان الثالث.' },
+      { value: 'h4', label: 'رابع', name: 'ins-h4', desc: 'بمقاس العنوان الرابع.' }
+    ] },
+    { key: 'tag', label: 'العنصر', type: 'seg', value: 'h2', choices: [
+      { value: 'h1', label: 'h1' },
+      { value: 'h2', label: 'h2' },
+      { value: 'h3', label: 'h3' },
+      { value: 'p', label: 'p' }
+    ] },
+    { key: 'text', label: 'النص', type: 'text', value: 'الإعدادات' },
+    { key: 'eyebrow', label: 'عنوان صغير فوقه', type: 'switch', name: 'ins-eyebrow', desc: 'عنوان صغير بلون الهوية يعلو العنوان، يسمي القسم الذي هو فيه.' },
+    { key: 'lead', label: 'تمهيد تحته', type: 'switch', name: 'ins-lead', desc: 'فقرة التمهيد التي تلي العنوان، بخط أكبر من المتن ولون أهدأ.' }
+  ],
+  html: function (s) {
+    var out = [];
+    if (s.eyebrow) out.push('<span class="ins-eyebrow">الحساب</span>');
+    out.push('<' + s.tag + ' class="ins-' + s.size + '">' + s.text + '</' + s.tag + '>');
+    if (s.lead) out.push('<p class="ins-lead">الاسم والبريد وكلمة المرور.</p>');
+    if (out.length === 1) return out[0];
+    return '<div>\n  ' + out.join('\n  ') + '\n</div>';
+  },
+  notes: function (s) {
+    var level = s.tag === 'p' ? '' : s.tag;
+    if (!level) return ['فقرة بهيئة عنوان، لا يعدها قارئ الشاشة عنوانًا.'];
+    return level.slice(1) !== s.size.slice(1) ? ['المستوى `' + level + '` لبنية الصفحة، والمقاس من الكلاس، ولا يلزم أن يتفقا.'] : [];
+  }
+});
+
+SitePlay.define({
+  id: 'prose',
+  title: 'النص الطويل',
+  owns: 'ins-prose',
+  wide: true,
+  controls: [
+    { key: 'list', label: 'قائمة', type: 'switch', name: 'ul, ol', kind: 'element', desc: 'قوائم بعلامات بلون الهوية، ويتداخل بعضها في بعض.' },
+    { key: 'quote', label: 'اقتباس', type: 'switch', name: 'blockquote', kind: 'element', desc: 'اقتباس بشريط على حافته في جهة البداية وخلفية هادئة، ولا يميل.' },
+    { key: 'code', label: 'شيفرة', type: 'switch', name: 'pre', kind: 'element', desc: 'كتلة شيفرة تبدأ من اليسار في الاتجاهين، وتتمرر أفقيًا إذا طالت أسطرها.' },
+    { key: 'table', label: 'جدول', type: 'switch', name: 'table', kind: 'element', desc: 'جدول بسيط بخطوط وحسب، للجدول الذي يأتي في وسط المقال. أما جدول البيانات فهو `.ins-table`.' },
+    { key: 'dl', label: 'قائمة وصف', type: 'switch', name: 'dl', kind: 'element', desc: 'تسمية عريضة وقيمتها تحتها بلون أهدأ.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-prose', desc: 'ينسق ما في داخله من نص طويل، كمقال أو صفحة مساعدة، ولا يمس شيئًا خارجه. ويحد عرض السطر ليسهل على العين.' },
+    { group: 'في النص', name: 'h1, h2, h3, h4', kind: 'element', desc: 'بمقاسات `.ins-h1` إلى `.ins-h4`، وأقرب إلى ما بعدها منها إلى ما قبلها.' },
+    { group: 'في النص', name: 'a', kind: 'element', desc: 'روابط تحتها خط، بعيد عن نقاط الحروف العربية.' },
+    { group: 'في النص', name: 'em', kind: 'element', desc: 'توكيد باللون لا بالميل، فلا يميل الحرف العربي.' },
+    { group: 'في النص', name: 'mark', kind: 'element', desc: 'تظليل بلون الهوية الخفيف.' },
+    { group: 'في النص', name: 'code', kind: 'element', desc: 'شيفرة قصيرة في السطر، معزولة عن اتجاهه فلا تنقلب في الجملة العربية.' },
+    { group: 'في النص', name: 'kbd', kind: 'element', desc: 'مفتاح بهيئة `.ins-kbd`، دون كلاس.' },
+    { group: 'في النص', name: 'hr', kind: 'element', desc: 'خط فاصل بين قسمين.' },
+    { group: 'في النص', name: 'figure', kind: 'element', desc: 'صورة أو فيديو بزوايا مستديرة لا يتجاوز عرض النص، ومعه `<figcaption>` بخط أصغر.' }
+  ],
+  html: function (s) {
+    var out = ['<article class="ins-prose">', '  <h2>عنوان</h2>',
+      '  <p>فقرة فيها <strong>نص عريض</strong> و<em>توكيد</em> و<mark>تظليل</mark> و<code>code</code> و<a href="#prose">رابط</a>.</p>'];
+    if (s.list) out.push('  <ol>', '    <li>البند الأول</li>', '    <li>البند الثاني', '      <ul>', '        <li>بند متداخل</li>', '      </ul>', '    </li>', '  </ol>');
+    if (s.quote) out.push('  <blockquote>اقتباس قصير.</blockquote>');
+    if (s.code) out.push('  <pre><code>GET /api/items</code></pre>');
+    if (s.table) out.push('  <table>', '    <thead><tr><th>الاسم</th><th>القيمة</th></tr></thead>', '    <tbody><tr><td>الأول</td><td>12</td></tr><tr><td>الثاني</td><td>7</td></tr></tbody>', '  </table>');
+    if (s.dl) out.push('  <dl>', '    <dt>المدة</dt><dd>14 يومًا</dd>', '  </dl>');
+    out.push('</article>');
+    return out.join('\n');
+  }
+});
+
+SitePlay.define({
+  id: 'divider',
+  title: 'الفاصل',
+  owns: 'ins-divider',
+  wide: true,
+  controls: [
+    { key: 'v', label: 'عمودي', group: 'فاصل عمودي', type: 'switch', name: 'ins-divider--v', desc: 'فاصل عمودي بين عناصر صف، بطول الصف نفسه.' },
+    { key: 'text', label: 'النص', type: 'text', value: 'أو' },
+    { key: 'start', label: 'النص في البداية', type: 'switch', name: 'ins-divider--start', desc: 'يضع النص في البداية، فيصير عنوان قسم يمتد بعده الخط.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-divider', desc: 'على `<hr>` فيكون خطًا، أو على عنصر فيه نص فيكون النص بين خطين. ولا تضع `role="separator"` على فاصل فيه نص، فقارئ الشاشة يتجاهل ما في داخل الفاصل.' },
+    { group: 'فاصل عمودي', name: 'aria-orientation="vertical"', desc: 'ضعها على `<hr>` العمودي، فيعرف قارئ الشاشة اتجاهه.' }
+  ],
+  disable: function (s) { return s.v ? ['text', 'start'] : s.text ? [] : ['start']; },
+  html: function (s) {
+    if (s.v) {
+      return '<div class="ins-row">\n  <span>ملف</span>\n  <hr class="ins-divider ins-divider--v" aria-orientation="vertical">\n  <span>تعديل</span>\n</div>';
+    }
+    var cls = 'ins-divider' + (s.start ? ' ins-divider--start' : '');
+    return s.text ? '<div class="' + cls + '">' + s.text + '</div>' : '<hr class="' + cls + '">';
+  }
+});
+
+SitePlay.define({
+  id: 'kbd',
+  title: 'المفتاح',
+  owns: 'ins-kbd',
+  controls: [
+    { key: 'key', label: 'المفتاح', type: 'text', value: 'K', level: 'advanced' },
+    { key: 'ctrl', label: 'مع Ctrl', type: 'switch', value: true, level: 'advanced' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-kbd', level: 'advanced', desc: 'على `<kbd>`: مفتاح بحافة سفلية أثقل، يُكتب اسمه من اليسار ولو كان في جملة عربية. وداخل `.ins-prose` يكفي `<kbd>` وحده.' }
+  ],
+  html: function (s) {
+    var keys = (s.ctrl ? '<kbd class="ins-kbd">Ctrl</kbd> + ' : '') + '<kbd class="ins-kbd">' + s.key + '</kbd>';
+    return '<p>اضغط ' + keys + ' للبحث.</p>';
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="split.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">العرض المقسوم</span></a><a class="site-pager-link site-pager-link--next" href="surfaces.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الأسطح والألواح</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#faces">الخطوط الثلاثة</a><a href="#headings">العناوين</a><a href="#lead">التمهيد والعنوان الصغير</a><a href="#prose">النص الطويل</a><a href="#divider">الفاصل</a><a href="#kbd">المفاتيح</a><a href="#tokens">المقاسات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#headings">العناوين</a><a href="#lead">التمهيد والعنوان الصغير</a><a href="#prose">النص الطويل</a><a href="#divider">الفاصل</a></nav>
+        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#faces">الخطوط الثلاثة</a><a href="#headings">العناوين</a><a href="#prose">النص الطويل</a><a href="#divider">الفاصل</a><a href="#kbd">المفاتيح</a><a href="#tokens">المقاسات</a><a href="#options">الخيارات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#headings">العناوين</a><a href="#prose">النص الطويل</a><a href="#divider">الفاصل</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
