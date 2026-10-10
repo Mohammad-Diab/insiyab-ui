@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,12 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">هيكل التحميل (skeleton) ومؤشر التحميل والحالة الفارغة: ما يراه المستخدم قبل وصول البيانات، أو حين لا تصل.</p>
-        <h2 id="skeleton">هيكل التحميل</h2>
-<p>
-  يرسم هيكل التحميل (skeleton) <code>.ins-skel</code> هيئة المحتوى قبل أن يصل، فإذا وصل أخذ مكانها ولم تقفز الصفحة. وله أربعة أشكال:
-  <code>--title</code> و<code>--text</code> و<code>--circle</code> و<code>--block</code>.
-</p>
-<figure class="dx"><div class="dx-view stack">
+        <figure class="dx"><div class="dx-view stack">
   <div class="ins-skel ins-skel--circle"></div>
   <div class="ins-skel ins-skel--title"></div>
   <div class="ins-skel ins-skel--block"></div>
@@ -290,58 +286,143 @@
 <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
+<h2 id="skeleton">هيكل التحميل</h2>
+<p>
+  يرسم هيكل التحميل (skeleton) <code>.ins-skel</code> هيئة المحتوى قبل أن يصل، فإذا وصل أخذ مكانها ولم تقفز الصفحة. اختر الشكل
+  الأقرب إلى ما سيصل، وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="skeleton"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-skel ins-skel--text"></div>
+<div class="ins-skel ins-skel--text"></div>
+<div class="ins-skel ins-skel--text"></div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">آخر السطور أقصرها، فتُقرأ السطور فقرة لم تصل بعد، لا جدولًا من الأشرطة.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات هيكل التحميل"><label class="site-play-ctl" data-key="shape" data-type="select"><span class="site-play-label">الشكل</span><select class="ins-select ins-select--sm"><option value="text" selected>سطور</option><option value="title">عنوان</option><option value="circle">دائرة</option><option value="block">كتلة</option></select></label><div class="site-play-ctl" data-key="lines" data-type="seg"><span class="site-play-label">عدد السطور</span><div class="ins-seg" role="group" aria-label="عدد السطور"><button type="button" data-value="1" aria-pressed="false">1</button><button type="button" data-value="2" aria-pressed="false">2</button><button type="button" data-value="3" class="is-active" aria-pressed="true">3</button></div></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-skel ins-skel--text"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
 <h2 id="spinner">مؤشر التحميل</h2>
 <p>
-  يصلح مؤشر التحميل <code>.ins-spinner</code> لانتظار قصير لا تُعرف هيئة ما يأتي بعده، ويصغره <code>--sm</code> ليسكن داخل زر. أعطه <code>role="status"</code>
-  وتسمية يقرؤها قارئ الشاشة، أو أخفه عنه بـ <code>aria-hidden</code> إذا كان نص الزر يغني عنه.
+  يصلح مؤشر التحميل <code>.ins-spinner</code> لانتظار قصير لا تُعرف هيئة ما يأتي بعده. أعطه <code>role="status"</code> وتسمية
+  يقرؤها قارئ الشاشة، أو أخفه عنه بـ <code>aria-hidden</code> إذا كان نص الزر يغني عنه.
 </p>
-<figure class="dx"><div class="dx-view row">
-  <span class="ins-spinner" role="status" aria-label="جارٍ التحميل"></span>
-  <span class="ins-spinner ins-spinner--sm" role="status" aria-label="جارٍ التحميل"></span>
-  <button class="ins-btn ins-btn--primary" disabled><span class="ins-spinner ins-spinner--sm" aria-hidden="true"></span>جارٍ الحفظ…</button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spinner"</span> <span class="hl-a">role</span>=<span class="hl-s">"status"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"جارٍ التحميل"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spinner ins-spinner--sm"</span> <span class="hl-a">role</span>=<span class="hl-s">"status"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"جارٍ التحميل"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">disabled</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spinner ins-spinner--sm"</span> <span class="hl-a">aria-hidden</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>جارٍ الحفظ…<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p>أما <code>.ins-loading</code> فحاوية يتوسطها مؤشر التحميل، وتحفظ للمنطقة الفارغة ارتفاعًا معقولًا.</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-loading"><span class="ins-spinner" role="status" aria-label="جارٍ التحميل"></span></div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-loading"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spinner"</span> <span class="hl-a">role</span>=<span class="hl-s">"status"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"جارٍ التحميل"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<figure class="dx site-play" data-play="spinner"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><span class="ins-spinner" role="status" aria-label="جارٍ التحميل"></span></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات مؤشر التحميل"><div class="site-play-ctl" data-key="place" data-type="seg"><span class="site-play-label">موضعه</span><div class="ins-seg" role="group" aria-label="موضعه"><button type="button" data-value="" class="is-active" aria-pressed="true">وحده</button><button type="button" data-value="btn" aria-pressed="false">في زر</button><button type="button" data-value="box" aria-pressed="false">في حاوية</button></div></div><div class="site-play-ctl" data-key="size" data-type="seg"><span class="site-play-label">المقاس</span><div class="ins-seg" role="group" aria-label="المقاس"><button type="button" data-value="" class="is-active" aria-pressed="true">عادي</button><button type="button" data-value="sm" aria-pressed="false">صغير</button></div></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-spinner"</span> <span class="hl-a">role</span>=<span class="hl-s">"status"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"جارٍ التحميل"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="empty">الحالة الفارغة</h2>
 <p>
-  تجمع <code>.ins-empty</code> أيقونة <code>.ins-empty-ico</code>، وعنوانًا <code>.ins-empty-title</code>، وتلميحًا
-  <code>.ins-empty-hint</code>. ودعها تخبر القارئ بما سيظهر هنا، وبما يفعله بعد ذلك.
+  تجمع <code>.ins-empty</code> أيقونة وعنوانًا وتلميحًا، وزرًا إن كان للقارئ ما يفعله. ودعها تخبره بما سيظهر هنا، وبما يفعله بعد ذلك.
 </p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-empty">
-    <span class="ins-empty-ico"><svg class="ico"><use href="#i-box"/></svg></span>
-    <span class="ins-empty-title">لا منتجات بعد</span>
-    <span class="ins-empty-hint">أضف أول منتج ليظهر هنا.</span>
-    <button class="ins-btn ins-btn--primary">منتج جديد</button>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty"</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="empty"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-empty">
+  <span class="ins-empty-ico"><svg class="ico"><use href="#i-folder"/></svg></span>
+  <span class="ins-empty-title">لا ملفات بعد</span>
+  <span class="ins-empty-hint">أضف أول ملف ليظهر هنا.</span>
+  <button class="ins-btn ins-btn--primary">ملف جديد</button>
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات الحالة الفارغة"><div class="site-play-ctl" data-key="kind" data-type="seg"><span class="site-play-label">السبب</span><div class="ins-seg" role="group" aria-label="السبب"><button type="button" data-value="new" class="is-active" aria-pressed="true">لا شيء بعد</button><button type="button" data-value="search" aria-pressed="false">لا نتائج</button></div></div><div class="site-play-ctl" data-key="ico" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">أيقونة</span></span></label></div><div class="site-play-ctl" data-key="action" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مع زر</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-title"</span><span class="hl-t">&gt;</span>لا منتجات بعد<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-hint"</span><span class="hl-t">&gt;</span>أضف أول منتج ليظهر هنا.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>منتج جديد<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-title"</span><span class="hl-t">&gt;</span>لا ملفات بعد<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-hint"</span><span class="hl-t">&gt;</span>أضف أول ملف ليظهر هنا.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>ملف جديد<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="search-empty">لا نتائج</h2>
-<p>وبالشكل نفسه تخبر أن البحث لم يجد شيئًا، ولا حاجة هنا إلى زر.</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-empty">
-    <span class="ins-empty-ico"><svg class="ico"><use href="#i-search"/></svg></span>
-    <span class="ins-empty-title">لا نتائج</span>
-    <span class="ins-empty-hint">جرب كلمة أخرى.</span>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-title"</span><span class="hl-t">&gt;</span>لا نتائج<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-hint"</span><span class="hl-t">&gt;</span>جرب كلمة أخرى.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في هيكل التحميل ومؤشر التحميل والحالة الفارغة من كلاسات وسمات، لكل مكون صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>هيكل التحميل</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-skel</code></td><td>كلاس</td><td>يرسم هيئة المحتوى قبل أن يصل، ومعه كلاس للشكل. فإذا وصل المحتوى أخذ مكانه، فلا تقفز الصفحة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الشكل</th></tr></tbody><tbody><tr><td><code>.ins-skel--text</code></td><td>كلاس</td><td>سطر من النص، وآخر السطور في مجموعتها أقصرها، كما في الفقرة.</td></tr><tr><td><code>.ins-skel--title</code></td><td>كلاس</td><td>عنوان، أغلظ من السطر وأقصر منه.</td></tr><tr><td><code>.ins-skel--circle</code></td><td>كلاس</td><td>صورة رمزية أو أيقونة.</td></tr><tr><td><code>.ins-skel--block</code></td><td>كلاس</td><td>صورة أو رسم بياني أو بطاقة.</td></tr><tr><td><code>data-ins-size="3rem"</code></td><td>سمة</td><td>قطر الدائرة، فاجعله بقدر ما سيحل محلها. وهو <code>2.5rem</code> إن لم تذكره.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>مؤشر التحميل</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-spinner</code></td><td>كلاس</td><td>لانتظار قصير لا تُعرف هيئة ما يأتي بعده، فإن عرفتها فهيكل التحميل أولى.</td></tr><tr><td><code>role="status"</code></td><td>سمة</td><td>ومعها <code>aria-label</code>، فيعلم قارئ الشاشة أن شيئًا يُحمَّل.</td></tr><tr><td><code>aria-hidden="true"</code></td><td>سمة</td><td>مكان <code>role="status"</code> إذا كان نص الزر أو ما حول المؤشر يغني عنه.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">موضعه</th></tr></tbody><tbody><tr><td><code>.ins-loading</code></td><td>كلاس</td><td>حاوية يتوسطها المؤشر، وتحفظ للمنطقة التي تنتظر محتواها ارتفاعًا معقولًا.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المقاس</th></tr></tbody><tbody><tr><td><code>.ins-spinner--sm</code></td><td>كلاس</td><td>مؤشر أصغر، يسكن داخل زر أو بجوار نص.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>الحالة الفارغة</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-empty-ico</code></td><td>كلاس</td><td>أيقونة باهتة فوق العنوان، تدل على ما كان سيظهر هنا.</td></tr><tr><td><code>.ins-empty</code></td><td>كلاس</td><td>تخبر القارئ بما سيظهر هنا، وبما يفعله بعد ذلك.</td></tr><tr><td><code>.ins-empty-title</code></td><td>كلاس</td><td>العنوان: ما الذي ليس هنا.</td></tr><tr><td><code>.ins-empty-hint</code></td><td>كلاس</td><td>التلميح تحت العنوان: ما الذي يفعله القارئ الآن.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'skeleton',
+  title: 'هيكل التحميل',
+  owns: 'ins-skel',
+  wide: true,
+  controls: [
+    { key: 'shape', label: 'الشكل', type: 'select', value: 'text', choices: [
+      { value: 'text', label: 'سطور', name: 'ins-skel--text', desc: 'سطر من النص، وآخر السطور في مجموعتها أقصرها، كما في الفقرة.' },
+      { value: 'title', label: 'عنوان', name: 'ins-skel--title', desc: 'عنوان، أغلظ من السطر وأقصر منه.' },
+      { value: 'circle', label: 'دائرة', name: 'ins-skel--circle', desc: 'صورة رمزية أو أيقونة.' },
+      { value: 'block', label: 'كتلة', name: 'ins-skel--block', desc: 'صورة أو رسم بياني أو بطاقة.' }
+    ] },
+    { key: 'lines', label: 'عدد السطور', type: 'seg', value: '3', choices: [
+      { value: '1', label: '1' },
+      { value: '2', label: '2' },
+      { value: '3', label: '3' }
+    ] }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-skel', desc: 'يرسم هيئة المحتوى قبل أن يصل، ومعه كلاس للشكل. فإذا وصل المحتوى أخذ مكانه، فلا تقفز الصفحة.' },
+    { group: 'الشكل', name: 'data-ins-size="3rem"', desc: 'قطر الدائرة، فاجعله بقدر ما سيحل محلها. وهو `2.5rem` إن لم تذكره.' }
+  ],
+  disable: function (s) { return s.shape === 'text' ? [] : ['lines']; },
+  html: function (s) {
+    var n = s.shape === 'text' ? +s.lines : 1, rows = [];
+    for (var i = 0; i < n; i++) rows.push('<div class="ins-skel ins-skel--' + s.shape + '"></div>');
+    return rows.join('\n');
+  },
+  notes: function (s) {
+    return s.shape === 'text' && s.lines !== '1' ? ['آخر السطور أقصرها، فتُقرأ السطور فقرة لم تصل بعد، لا جدولًا من الأشرطة.'] : [];
+  }
+});
+
+SitePlay.define({
+  id: 'spinner',
+  title: 'مؤشر التحميل',
+  owns: 'ins-spinner',
+  controls: [
+    { key: 'place', label: 'موضعه', type: 'seg', value: '', choices: [
+      { value: '', label: 'وحده' },
+      { value: 'btn', label: 'في زر' },
+      { value: 'box', label: 'في حاوية', name: 'ins-loading', desc: 'حاوية يتوسطها المؤشر، وتحفظ للمنطقة التي تنتظر محتواها ارتفاعًا معقولًا.' }
+    ] },
+    { key: 'size', label: 'المقاس', type: 'seg', value: '', choices: [
+      { value: '', label: 'عادي' },
+      { value: 'sm', label: 'صغير', name: 'ins-spinner--sm', desc: 'مؤشر أصغر، يسكن داخل زر أو بجوار نص.' }
+    ] }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-spinner', desc: 'لانتظار قصير لا تُعرف هيئة ما يأتي بعده، فإن عرفتها فهيكل التحميل أولى.' },
+    { group: 'الأساس', name: 'role="status"', desc: 'ومعها `aria-label`، فيعلم قارئ الشاشة أن شيئًا يُحمَّل.' },
+    { group: 'الأساس', name: 'aria-hidden="true"', desc: 'مكان `role="status"` إذا كان نص الزر أو ما حول المؤشر يغني عنه.' }
+  ],
+  disable: function (s) { return s.place === 'btn' ? ['size'] : []; },
+  html: function (s) {
+    if (s.place === 'btn') return '<button class="ins-btn ins-btn--primary" disabled><span class="ins-spinner ins-spinner--sm" aria-hidden="true"></span>جارٍ الحفظ…</button>';
+    var spin = '<span class="ins-spinner' + (s.size ? ' ins-spinner--sm' : '') + '" role="status" aria-label="جارٍ التحميل"></span>';
+    return s.place === 'box' ? '<div class="ins-loading">\n  ' + spin + '\n</div>' : spin;
+  },
+  notes: function (s) {
+    return s.place === 'btn' ? ['في الزر يصغر المؤشر ويأخذ لون نص الزر، ويُخفى عن قارئ الشاشة لأن نص الزر يغني عنه.'] : [];
+  }
+});
+
+SitePlay.define({
+  id: 'empty',
+  title: 'الحالة الفارغة',
+  owns: 'ins-empty',
+  wide: true,
+  controls: [
+    { key: 'kind', label: 'السبب', type: 'seg', value: 'new', choices: [
+      { value: 'new', label: 'لا شيء بعد' },
+      { value: 'search', label: 'لا نتائج' }
+    ] },
+    { key: 'ico', label: 'أيقونة', type: 'switch', value: true, group: 'الأساس', name: 'ins-empty-ico', desc: 'أيقونة باهتة فوق العنوان، تدل على ما كان سيظهر هنا.' },
+    { key: 'action', label: 'مع زر', type: 'switch', value: true }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-empty', desc: 'تخبر القارئ بما سيظهر هنا، وبما يفعله بعد ذلك.' },
+    { group: 'الأساس', name: 'ins-empty-title', desc: 'العنوان: ما الذي ليس هنا.' },
+    { group: 'الأساس', name: 'ins-empty-hint', desc: 'التلميح تحت العنوان: ما الذي يفعله القارئ الآن.' }
+  ],
+  html: function (s) {
+    var k = s.kind === 'search'
+      ? { ico: 'search', title: 'لا نتائج', hint: 'جرب كلمة أخرى.', btn: '<button class="ins-btn ins-btn--secondary">امسح البحث</button>' }
+      : { ico: 'folder', title: 'لا ملفات بعد', hint: 'أضف أول ملف ليظهر هنا.', btn: '<button class="ins-btn ins-btn--primary">ملف جديد</button>' };
+    return '<div class="ins-empty">\n' +
+      (s.ico ? '  <span class="ins-empty-ico"><svg class="ico"><use href="#i-' + k.ico + '"/></svg></span>\n' : '') +
+      '  <span class="ins-empty-title">' + k.title + '</span>\n' +
+      '  <span class="ins-empty-hint">' + k.hint + '</span>\n' +
+      (s.action ? '  ' + k.btn + '\n' : '') +
+      '</div>';
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="stats.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">البطاقات الإحصائية</span></a><a class="site-pager-link site-pager-link--next" href="progress.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">التقدم</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#skeleton">هيكل التحميل</a><a href="#spinner">مؤشر التحميل</a><a href="#empty">الحالة الفارغة</a><a href="#search-empty">لا نتائج</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#skeleton">هيكل التحميل</a><a href="#spinner">مؤشر التحميل</a><a href="#empty">الحالة الفارغة</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
