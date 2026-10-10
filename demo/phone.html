@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -308,6 +309,20 @@
   ما كتبت. أما الحقل الظاهر فيعرض الرقم كما يكتبه أهل بلده: <code>050 123 4567</code>.
 </p>
 
+<h2 id="try">جرّب الحقل</h2>
+<p>اختر من الخيارات، فيتغير الحقل وشيفرته معًا. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.</p>
+<figure class="dx site-play" data-play="phone"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-field">
+  <label class="ins-label" for="ph-play">الهاتف</label>
+  <div class="ins-input-group">
+    <input class="ins-input" id="ph-play" data-ins-phone name="mobile">
+  </div>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">اضغط زر الدولة لترى القائمة بخياراتك.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات حقل الهاتف"><div class="site-play-ctl" data-key="value" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">فيه رقم</span></span></label></div><label class="site-play-ctl" data-key="country" data-type="select"><span class="site-play-label">الدولة الأولى</span><select class="ins-select ins-select--sm"><option value="" selected>من لغة الصفحة</option><option value="AE">الإمارات</option><option value="KW">الكويت</option><option value="QA">قطر</option></select></label><div class="site-play-ctl" data-key="only" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">دول محددة وحدها</span></span></label></div><div class="site-play-ctl" data-key="preferred" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">دول تتصدر القائمة</span></span></label></div><div class="site-play-ctl" data-key="disabled" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">معطل</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"ph-play"</span><span class="hl-t">&gt;</span>الهاتف<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"ph-play"</span> <span class="hl-a">data-ins-phone</span> <span class="hl-a">name</span>=<span class="hl-s">"mobile"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
 <h2 id="typing">الكتابة</h2>
 <ul>
   <li><b>تنتظم أرقامه وأنت تكتب</b> — ويبقى المؤشر بعد الرقم الذي كان يليه، وإذا ضغطت <kbd>Backspace</kbd> بعد مسافة حذف الرقم الذي قبلها.</li>
@@ -323,35 +338,6 @@
   الصفحة. أما الدول العربية، ومعها الولايات المتحدة وكندا وبريطانيا وفرنسا وألمانيا وتركيا والهند وباكستان،
   فيُفحص طول أرقامها وتنتظم كما تُكتب هناك، ويبقى غيرها على الحد الدولي، 15 رقمًا، بلا مجموعات.
 </p>
-<p>
-  ويبدأ الحقل بالدولة التي في <code>data-ins-phone-country</code>، فإن غابت فبدولة الرقم نفسه، ثم بمنطقة لغة الصفحة
-  (<code>lang="ar-EG"</code> ← مصر)، وإلا فبالسعودية. وتظهر الدولة في الزر برمزها دون علم.
-</p>
-<figure class="dx"><div class="dx-view row">
-  <div class="ins-field">
-    <label class="ins-label" for="ph-gulf">دول محددة</label>
-    <div class="ins-input-group">
-      <input class="ins-input" id="ph-gulf" data-ins-phone data-ins-phone-only="SA,AE,KW,QA,BH,OM" data-ins-phone-country="KW" name="gulf">
-    </div>
-  </div>
-  <div class="ins-field">
-    <label class="ins-label" for="ph-pref">المفضلة أولًا</label>
-    <div class="ins-input-group">
-      <input class="ins-input" id="ph-pref" data-ins-phone data-ins-phone-preferred="EG,JO,SY,LB" data-ins-phone-country="EG" name="pref">
-    </div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"ph-gulf"</span><span class="hl-t">&gt;</span>دول محددة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"ph-gulf"</span> <span class="hl-a">data-ins-phone</span> <span class="hl-a">data-ins-phone-only</span>=<span class="hl-s">"SA,AE,KW,QA,BH,OM"</span> <span class="hl-a">data-ins-phone-country</span>=<span class="hl-s">"KW"</span> <span class="hl-a">name</span>=<span class="hl-s">"gulf"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"ph-pref"</span><span class="hl-t">&gt;</span>المفضلة أولًا<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input-group"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"ph-pref"</span> <span class="hl-a">data-ins-phone</span> <span class="hl-a">data-ins-phone-preferred</span>=<span class="hl-s">"EG,JO,SY,LB"</span> <span class="hl-a">data-ins-phone-country</span>=<span class="hl-s">"EG"</span> <span class="hl-a">name</span>=<span class="hl-s">"pref"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <div class="site-adv"><h2 id="api">التحكم بـ JavaScript</h2>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.phone(<span class="hl-s">'#mobile'</span>);                   <span class="hl-c">// { value: '+966501234567', country: 'SA', valid: true }</span>
@@ -361,32 +347,62 @@
   console.log(e.detail.value, e.detail.country, e.detail.valid);   <span class="hl-c">// حين تتغير القيمة</span>
 });</code></pre></div></div>
 
-<div class="site-adv"><h2 id="attributes">السمات</h2>
-<div class="ins-panel site-ref">
-  <div class="ins-panel-body ins-panel-body--flush">
-    <div class="ins-table-wrap">
-      <table class="ins-table">
-        <thead><tr><th>السمة</th><th>ما تفعله</th></tr></thead>
-        <tbody>
-          <tr><td><code>data-ins-phone</code></td><td>تجعل الحقل حقل هاتف، وتقبل قيمته الأولى صيغة E.164 أو الصيغة المحلية.</td></tr>
-          <tr><td><code>data-ins-phone-country="AE"</code></td><td>الدولة التي يبدأ بها الحقل.</td></tr>
-          <tr><td><code>data-ins-phone-preferred="SA,AE"</code></td><td>دول تتصدر القائمة.</td></tr>
-          <tr><td><code>data-ins-phone-only="SA,AE"</code></td><td>لا يقبل الحقل إلا هذه الدول، ويرفض ما سواها برسالة.</td></tr>
-          <tr><td><code>placeholder</code></td><td>إن تركته وضع الحقل فيه مثالًا من الدولة المختارة.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في حقل الهاتف من كلاسات وسمات وأحداث.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>حقل الهاتف</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-phone</code></td><td>سمة</td><td>على حقل داخل <code>.ins-input-group</code>: يضع في أولها زرًا يعرض رمز الدولة ومفتاحها، ويرسل الرقم بصيغة E.164 في حقل مخفي باسم الحقل.</td></tr><tr><td><code>.ins-phone</code></td><td>كلاس</td><td>يضيفه السكربت إلى المجموعة، ويبنيها إن غابت، فلا تكتبه بنفسك.</td></tr><tr><td><code>placeholder</code></td><td>سمة</td><td>إن تركته وضع الحقل فيه مثالًا من الدولة المختارة.</td></tr><tr><td><code>ins:phone</code></td><td>حدث</td><td>يُطلق حين تتغير القيمة، وفي <code>detail</code> الحقل <code>input</code> والرقم <code>value</code> والدولة <code>country</code> وصلاحه <code>valid</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>value="+966501234567"</code></td><td>سمة</td><td>الرقم الذي يبدأ به الحقل، بصيغة E.164 أو بالصيغة المحلية، ودولته تغلب <code>data-ins-phone-country</code>.</td></tr><tr><td><code>data-ins-phone-only="SA,AE,KW,QA,BH,OM"</code></td><td>سمة</td><td>لا يعرض الحقل إلا الدول التي تكتب رموزها، أيًّا كانت، ويرفض رقمًا من غيرها برسالة. والمثال هنا دول الخليج.</td></tr><tr><td><code>data-ins-phone-preferred="EG,JO,SY,LB"</code></td><td>سمة</td><td>دول في أول القائمة، فوق الباقي.</td></tr><tr><td><code>disabled</code></td><td>سمة</td><td>يتعطل معه زر الدولة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الدولة الأولى</th></tr></tbody><tbody><tr><td><code>data-ins-phone-country="AE"</code></td><td>سمة</td><td>الدولة التي يبدأ بها الحقل، فإن غابت فدولة الرقم نفسه، ثم منطقة لغة الصفحة (<code>lang="ar-EG"</code> مصر)، وإلا فالسعودية.</td></tr></tbody></table></div></div></details></div></div>
 
 <script>
   document.addEventListener('ins:phone', function (e) {
     if (e.detail.input.id === 'ph-demo') document.getElementById('ph-demo-out').textContent = e.detail.value || '—';
   });
-</script></div>
+</script>
+
+<script>
+SitePlay.define({
+  id: 'phone',
+  wide: true,
+  title: 'حقل الهاتف',
+  owns: 'ins-phone',
+  controls: [
+    { key: 'value', label: 'فيه رقم', type: 'switch', name: 'value="+966501234567"', desc: 'الرقم الذي يبدأ به الحقل، بصيغة E.164 أو بالصيغة المحلية، ودولته تغلب `data-ins-phone-country`.' },
+    { key: 'country', label: 'الدولة الأولى', type: 'select', value: '', choices: [
+      { value: '', label: 'من لغة الصفحة' },
+      { value: 'AE', label: 'الإمارات', name: 'data-ins-phone-country="AE"', desc: 'الدولة التي يبدأ بها الحقل، فإن غابت فدولة الرقم نفسه، ثم منطقة لغة الصفحة (`lang="ar-EG"` مصر)، وإلا فالسعودية.' },
+      { value: 'KW', label: 'الكويت' },
+      { value: 'QA', label: 'قطر' }
+    ] },
+    { key: 'only', label: 'دول محددة وحدها', type: 'switch', name: 'data-ins-phone-only="SA,AE,KW,QA,BH,OM"', desc: 'لا يعرض الحقل إلا الدول التي تكتب رموزها، أيًّا كانت، ويرفض رقمًا من غيرها برسالة. والمثال هنا دول الخليج.' },
+    { key: 'preferred', label: 'دول تتصدر القائمة', type: 'switch', name: 'data-ins-phone-preferred="EG,JO,SY,LB"', desc: 'دول في أول القائمة، فوق الباقي.' },
+    { key: 'disabled', label: 'معطل', type: 'switch', name: 'disabled', desc: 'يتعطل معه زر الدولة.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-phone', desc: 'على حقل داخل `.ins-input-group`: يضع في أولها زرًا يعرض رمز الدولة ومفتاحها، ويرسل الرقم بصيغة E.164 في حقل مخفي باسم الحقل.' },
+    { group: 'الأساس', name: 'ins-phone', desc: 'يضيفه السكربت إلى المجموعة، ويبنيها إن غابت، فلا تكتبه بنفسك.' },
+    { group: 'الأساس', name: 'placeholder', desc: 'إن تركته وضع الحقل فيه مثالًا من الدولة المختارة.' },
+    { group: 'الأساس', name: 'ins:phone', kind: 'event', desc: 'يُطلق حين تتغير القيمة، وفي `detail` الحقل `input` والرقم `value` والدولة `country` وصلاحه `valid`.' }
+  ],
+  disable: function (s) { return (s.value ? ['country'] : []).concat(s.only ? ['preferred'] : []); },
+  events: ['ins:phone'],
+  html: function (s) {
+    var attrs = (s.value ? '' : s.country ? ' data-ins-phone-country="' + s.country + '"' : '') +
+      (s.only ? ' data-ins-phone-only="SA,AE,KW,QA,BH,OM"' : '') + (s.preferred && !s.only ? ' data-ins-phone-preferred="EG,JO,SY,LB"' : '');
+    return '<div class="ins-field">\n' +
+      '  <label class="ins-label" for="ph-play">الهاتف</label>\n' +
+      '  <div class="ins-input-group">\n' +
+      '    <input class="ins-input" id="ph-play" data-ins-phone' + attrs + ' name="mobile"' + (s.value ? ' value="+966501234567"' : '') + (s.disabled ? ' disabled' : '') + '>\n' +
+      '  </div>\n' +
+      '</div>';
+  },
+  notes: function (s) {
+    if (s.disabled) return [];
+    return [s.value ? 'الرقم يختار دولته بنفسه، فلا حاجة إلى الدولة الأولى. واضغط زر الدولة لترى القائمة بخياراتك.' : 'اضغط زر الدولة لترى القائمة بخياراتك.'];
+  }
+
+});
+</script>
         <nav class="site-pager site-adv" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="otp.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">رمز التحقق</span></a><a class="site-pager-link site-pager-link--next" href="birthdate.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">تاريخ الميلاد</span></a></nav><nav class="site-pager site-simple" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="otp.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">رمز التحقق</span></a><a class="site-pager-link site-pager-link--next" href="file.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">رفع الملفات</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">حقل الهاتف</a><a href="#typing">الكتابة</a><a href="#countries">الدول</a><a href="#api">التحكم بـ JavaScript</a><a href="#attributes">السمات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">حقل الهاتف</a><a href="#typing">الكتابة</a><a href="#countries">الدول</a></nav>
+        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">حقل الهاتف</a><a href="#try">جرّب الحقل</a><a href="#typing">الكتابة</a><a href="#countries">الدول</a><a href="#api">التحكم بـ JavaScript</a><a href="#options">الخيارات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">حقل الهاتف</a><a href="#try">جرّب الحقل</a><a href="#typing">الكتابة</a><a href="#countries">الدول</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
