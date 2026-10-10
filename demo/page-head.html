@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,13 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">عنوان الصفحة وسطر تحته وإجراءاتها، ومسار التنقل (breadcrumb) فوقها.</p>
-        <h2 id="head">رأس الصفحة</h2>
-<p>
-  يضم <code>.ins-page-head</code> العنوان <code>.ins-page-title</code> وتحته سطر <code>.ins-page-sub</code>، وكلاهما
-  داخل <code>.ins-page-head-text</code>، ثم الإجراءات <code>.ins-page-actions</code> في آخره، وتنزل تحت العنوان إذا
-  ضاقت الشاشة. وإذا كان للصفحة مسار تنقل (breadcrumb) جاء في أول الرأس على سطر وحده.
-</p>
-<figure class="dx"><div class="dx-view">
+        <figure class="dx"><div class="dx-view">
   <header class="ins-page-head">
     <nav class="ins-breadcrumb" aria-label="مسار التنقل">
       <ol>
@@ -313,46 +308,139 @@
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/header</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="breadcrumb">مسار التنقل</h2>
+<h2 id="head">رأس الصفحة</h2>
 <p>
-  يحيط <code>&lt;nav class="ins-breadcrumb"&gt;</code> بقائمة مرتبة، وموضعه الصفحات التي تقع على عمق ثلاثة مستويات
-  فأكثر، أما الصفحة التي يبلغها الشريط الجانبي مباشرة فتستغني عنه. والفاصل بين عناصره مرسوم بـ CSS لا حرف مكتوب،
-  لذا ينقلب مع اتجاه الصفحة. ويأخذ العنصر الأخير <code>aria-current="page"</code> بلا رابط، ويُختصر النص الطويل بثلاث نقاط.
+  يضم <code>.ins-page-head</code> العنوان وسطرًا تحته، ثم الإجراءات في آخره، وتنزل تحت العنوان إذا ضاقت الشاشة. والمسار
+  والإجراءات وسطر الوصف كلها اختيارية، وتجد الخيارات بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<figure class="dx"><div class="dx-view">
+<figure class="dx site-play" data-play="head"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><header class="ins-page-head">
   <nav class="ins-breadcrumb" aria-label="مسار التنقل">
     <ol>
-      <li><a href="#breadcrumb">الرئيسية</a></li>
-      <li><a href="#breadcrumb">الإعدادات</a></li>
-      <li><span aria-current="page">الفواتير</span></li>
+      <li><a href="/">الرئيسية</a></li>
+      <li><a href="/section">القسم</a></li>
+      <li><span aria-current="page">الصفحة</span></li>
     </ol>
   </nav>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-breadcrumb"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"مسار التنقل"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;ol</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#breadcrumb"</span><span class="hl-t">&gt;</span>الرئيسية<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#breadcrumb"</span><span class="hl-t">&gt;</span>الإعدادات<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">aria-current</span>=<span class="hl-s">"page"</span><span class="hl-t">&gt;</span>الفواتير<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/ol</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="minimal">العنوان وحده</h2>
-<p>المسار والإجراءات اختياريان، فقد يكتفي الرأس بالعنوان وسطر الوصف.</p>
-<figure class="dx"><div class="dx-view">
-  <header class="ins-page-head">
-    <div class="ins-page-head-text">
-      <h3 class="ins-page-title">عنوان الصفحة</h3>
-      <p class="ins-page-sub">سطر وصف قصير</p>
-    </div>
-  </header>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;header</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page-head"</span><span class="hl-t">&gt;</span>
+  <div class="ins-page-head-text">
+    <h3 class="ins-page-title">عنوان الصفحة</h3>
+    <p class="ins-page-sub">سطر وصف قصير</p>
+  </div>
+  <div class="ins-page-actions">
+    <button class="ins-btn ins-btn--primary">حفظ</button>
+  </div>
+</header></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات رأس الصفحة"><label class="site-play-ctl" data-key="title" data-type="text"><span class="site-play-label">العنوان</span><input class="ins-input ins-input--sm" type="text" value="عنوان الصفحة"></label><div class="site-play-ctl" data-key="sub" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">سطر الوصف</span></span></label></div><div class="site-play-ctl" data-key="actions" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">الإجراءات</span></span></label></div><div class="site-play-ctl" data-key="crumbs" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مسار التنقل</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;header</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page-head"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-breadcrumb"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"مسار التنقل"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;ol</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"/"</span><span class="hl-t">&gt;</span>الرئيسية<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"/section"</span><span class="hl-t">&gt;</span>القسم<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">aria-current</span>=<span class="hl-s">"page"</span><span class="hl-t">&gt;</span>الصفحة<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/ol</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page-head-text"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;h3</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page-title"</span><span class="hl-t">&gt;</span>عنوان الصفحة<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page-sub"</span><span class="hl-t">&gt;</span>سطر وصف قصير<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-page-actions"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>حفظ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/header</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="breadcrumb">مسار التنقل</h2>
+<p>
+  موضع <code>.ins-breadcrumb</code> الصفحات التي تقع على عمق ثلاثة مستويات فأكثر، أما الصفحة التي يبلغها الشريط الجانبي
+  مباشرة فتستغني عنه، فالشريط يدل على مكانها. وإذا كان للصفحة مسار جاء في أول رأسها على سطر وحده.
+</p>
+<figure class="dx site-play" data-play="breadcrumb"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><nav class="ins-breadcrumb" aria-label="مسار التنقل">
+  <ol>
+    <li><a href="/">الرئيسية</a></li>
+    <li><a href="/settings">الإعدادات</a></li>
+    <li><span aria-current="page">الفواتير</span></li>
+  </ol>
+</nav></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات مسار التنقل"><div class="site-play-ctl" data-key="depth" data-type="seg"><span class="site-play-label">عدد المستويات</span><div class="ins-seg" role="group" aria-label="عدد المستويات"><button type="button" data-value="2" aria-pressed="false">2</button><button type="button" data-value="3" class="is-active" aria-pressed="true">3</button><button type="button" data-value="4" aria-pressed="false">4</button></div></div><label class="site-play-ctl" data-key="here" data-type="text"><span class="site-play-label">الصفحة الحالية</span><input class="ins-input ins-input--sm" type="text" value="الفواتير"></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-breadcrumb"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"مسار التنقل"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;ol</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"/"</span><span class="hl-t">&gt;</span>الرئيسية<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"/settings"</span><span class="hl-t">&gt;</span>الإعدادات<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">aria-current</span>=<span class="hl-s">"page"</span><span class="hl-t">&gt;</span>الفواتير<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/ol</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في رأس الصفحة ومسار التنقل من كلاسات وسمات، لكل مكون صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>رأس الصفحة</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-page-head</code></td><td>كلاس</td><td>رأس الصفحة، على <code>&lt;header&gt;</code>: العنوان وما تحته، والإجراءات في آخره.</td></tr><tr><td><code>.ins-page-head-text</code></td><td>كلاس</td><td>يضم العنوان وسطر الوصف، ويأخذ ما بقي من السطر.</td></tr><tr><td><code>.ins-page-title</code></td><td>كلاس</td><td>عنوان الصفحة، ويكون <code>&lt;h1&gt;</code> في صفحتك. وهو هنا <code>&lt;h3&gt;</code> لأن لهذه الصفحة عنوانها.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-page-sub</code></td><td>كلاس</td><td>سطر قصير تحت العنوان، داخل <code>.ins-page-head-text</code>.</td></tr><tr><td><code>.ins-page-actions</code></td><td>كلاس</td><td>أزرار الصفحة في آخر الرأس، وتنزل تحت العنوان إذا ضاقت الشاشة.</td></tr><tr><td><code>.ins-breadcrumb</code></td><td>كلاس</td><td>مسار التنقل في أول الرأس، على سطر وحده.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>مسار التنقل</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-breadcrumb</code></td><td>كلاس</td><td>على <code>&lt;nav&gt;</code> ومعها <code>aria-label</code>، وفيها قائمة <code>&lt;ol&gt;</code>. والفاصل بين عناصرها مرسوم بـ CSS لا حرف مكتوب، فلا يقرؤه قارئ الشاشة، وينقلب مع اتجاه الصفحة.</td></tr><tr><td><code>aria-current="page"</code></td><td>سمة</td><td>على العنصر الأخير، بلا رابط: الصفحة الحالية. ويُختصر النص الطويل بثلاث نقاط.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'head',
+  title: 'رأس الصفحة',
+  owns: 'ins-page-head',
+  wide: true,
+  controls: [
+    { key: 'title', label: 'العنوان', type: 'text', value: 'عنوان الصفحة' },
+    { key: 'sub', label: 'سطر الوصف', type: 'switch', value: true, name: 'ins-page-sub', desc: 'سطر قصير تحت العنوان، داخل `.ins-page-head-text`.' },
+    { key: 'actions', label: 'الإجراءات', type: 'switch', value: true, name: 'ins-page-actions', desc: 'أزرار الصفحة في آخر الرأس، وتنزل تحت العنوان إذا ضاقت الشاشة.' },
+    { key: 'crumbs', label: 'مسار التنقل', type: 'switch', value: true, name: 'ins-breadcrumb', desc: 'مسار التنقل في أول الرأس، على سطر وحده.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-page-head', desc: 'رأس الصفحة، على `<header>`: العنوان وما تحته، والإجراءات في آخره.' },
+    { group: 'الأساس', name: 'ins-page-head-text', desc: 'يضم العنوان وسطر الوصف، ويأخذ ما بقي من السطر.' },
+    { group: 'الأساس', name: 'ins-page-title', desc: 'عنوان الصفحة، ويكون `<h1>` في صفحتك. وهو هنا `<h3>` لأن لهذه الصفحة عنوانها.' }
+  ],
+  html: function (s) {
+    var out = '<header class="ins-page-head">\n';
+    if (s.crumbs) {
+      out += '  <nav class="ins-breadcrumb" aria-label="مسار التنقل">\n' +
+        '    <ol>\n' +
+        '      <li><a href="/">الرئيسية</a></li>\n' +
+        '      <li><a href="/section">القسم</a></li>\n' +
+        '      <li><span aria-current="page">الصفحة</span></li>\n' +
+        '    </ol>\n' +
+        '  </nav>\n';
+    }
+    out += '  <div class="ins-page-head-text">\n' +
+      '    <h3 class="ins-page-title">' + s.title + '</h3>\n' +
+      (s.sub ? '    <p class="ins-page-sub">سطر وصف قصير</p>\n' : '') +
+      '  </div>\n';
+    if (s.actions) {
+      out += '  <div class="ins-page-actions">\n' +
+        '    <button class="ins-btn ins-btn--primary">حفظ</button>\n' +
+        '  </div>\n';
+    }
+    return out + '</header>';
+  }
+});
+
+SitePlay.define({
+  id: 'breadcrumb',
+  title: 'مسار التنقل',
+  owns: 'ins-breadcrumb',
+  wide: true,
+  controls: [
+    { key: 'depth', label: 'عدد المستويات', type: 'seg', value: '3', choices: [
+      { value: '2', label: '2' },
+      { value: '3', label: '3' },
+      { value: '4', label: '4' }
+    ] },
+    { key: 'here', label: 'الصفحة الحالية', type: 'text', value: 'الفواتير' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-breadcrumb', desc: 'على `<nav>` ومعها `aria-label`، وفيها قائمة `<ol>`. والفاصل بين عناصرها مرسوم بـ CSS لا حرف مكتوب، فلا يقرؤه قارئ الشاشة، وينقلب مع اتجاه الصفحة.' },
+    { group: 'الأساس', name: 'aria-current="page"', desc: 'على العنصر الأخير، بلا رابط: الصفحة الحالية. ويُختصر النص الطويل بثلاث نقاط.' }
+  ],
+  html: function (s) {
+    var trail = ['الرئيسية', 'الإعدادات', 'الحساب'].slice(0, +s.depth - 1);
+    var paths = ['/', '/settings', '/settings/account'];
+    var out = '<nav class="ins-breadcrumb" aria-label="مسار التنقل">\n  <ol>\n';
+    trail.forEach(function (name, i) { out += '    <li><a href="' + paths[i] + '">' + name + '</a></li>\n'; });
+    return out + '    <li><span aria-current="page">' + s.here + '</span></li>\n  </ol>\n</nav>';
+  },
+  notes: function (s) {
+    return s.here.length > 24 ? ['النص أطول مما يسعه العنصر، فاختُصر بثلاث نقاط.'] : [];
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="pagination.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">ترقيم الصفحات</span></a><a class="site-pager-link site-pager-link--next" href="utilities.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الأدوات المساعدة</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#head">رأس الصفحة</a><a href="#breadcrumb">مسار التنقل</a><a href="#minimal">العنوان وحده</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#head">رأس الصفحة</a><a href="#breadcrumb">مسار التنقل</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>

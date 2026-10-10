@@ -1,9 +1,3 @@
-<h2 id="head">رأس الصفحة</h2>
-<p>
-  يضم <code>.ins-page-head</code> العنوان <code>.ins-page-title</code> وتحته سطر <code>.ins-page-sub</code>، وكلاهما
-  داخل <code>.ins-page-head-text</code>، ثم الإجراءات <code>.ins-page-actions</code> في آخره، وتنزل تحت العنوان إذا
-  ضاقت الشاشة. وإذا كان للصفحة مسار تنقل (breadcrumb) جاء في أول الرأس على سطر وحده.
-</p>
 <demo-example>
   <header class="ins-page-head">
     <nav class="ins-breadcrumb" aria-label="مسار التنقل">
@@ -23,29 +17,20 @@
   </header>
 </demo-example>
 
+<h2 id="head">رأس الصفحة</h2>
+<p>
+  يضم <code>.ins-page-head</code> العنوان وسطرًا تحته، ثم الإجراءات في آخره، وتنزل تحت العنوان إذا ضاقت الشاشة. والمسار
+  والإجراءات وسطر الوصف كلها اختيارية، وتجد الخيارات بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<demo-play of="head"></demo-play>
+
 <h2 id="breadcrumb">مسار التنقل</h2>
 <p>
-  يحيط <code>&lt;nav class="ins-breadcrumb"&gt;</code> بقائمة مرتبة، وموضعه الصفحات التي تقع على عمق ثلاثة مستويات
-  فأكثر، أما الصفحة التي يبلغها الشريط الجانبي مباشرة فتستغني عنه. والفاصل بين عناصره مرسوم بـ CSS لا حرف مكتوب،
-  لذا ينقلب مع اتجاه الصفحة. ويأخذ العنصر الأخير <code>aria-current="page"</code> بلا رابط، ويُختصر النص الطويل بثلاث نقاط.
+  موضع <code>.ins-breadcrumb</code> الصفحات التي تقع على عمق ثلاثة مستويات فأكثر، أما الصفحة التي يبلغها الشريط الجانبي
+  مباشرة فتستغني عنه، فالشريط يدل على مكانها. وإذا كان للصفحة مسار جاء في أول رأسها على سطر وحده.
 </p>
-<demo-example>
-  <nav class="ins-breadcrumb" aria-label="مسار التنقل">
-    <ol>
-      <li><a href="#breadcrumb">الرئيسية</a></li>
-      <li><a href="#breadcrumb">الإعدادات</a></li>
-      <li><span aria-current="page">الفواتير</span></li>
-    </ol>
-  </nav>
-</demo-example>
+<demo-play of="breadcrumb"></demo-play>
 
-<h2 id="minimal">العنوان وحده</h2>
-<p>المسار والإجراءات اختياريان، فقد يكتفي الرأس بالعنوان وسطر الوصف.</p>
-<demo-example>
-  <header class="ins-page-head">
-    <div class="ins-page-head-text">
-      <h3 class="ins-page-title">عنوان الصفحة</h3>
-      <p class="ins-page-sub">سطر وصف قصير</p>
-    </div>
-  </header>
-</demo-example>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في رأس الصفحة ومسار التنقل من كلاسات وسمات، لكل مكون صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
