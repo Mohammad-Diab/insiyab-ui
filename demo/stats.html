@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,13 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">رقم ومعناه وأيقونة، بست نبرات وثلاثة مقاسات.</p>
-        <h2 id="basic">البطاقة</h2>
-<p>
-  تتألف البطاقة <code>.ins-stat</code> من أيقونة في رقاقة <code>.ins-stat-ico</code>، وتسمية <code>.ins-stat-label</code>، وقيمة
-  <code>.ins-stat-value</code>. أضف إليها الكلاس <code>.ins-glass</code> فتصير سطحًا قائمًا بذاته، أو دعها بدونه وضعها داخل لوح. ولها غير نبرتها العادية خمس نبرات:
-  <code>--ok</code> و<code>--warn</code> و<code>--bad</code> و<code>--info</code> و<code>--zero</code>.
-</p>
-<figure class="dx"><div class="dx-view">
+        <figure class="dx"><div class="dx-view">
   <div class="ins-grid">
     <div class="ins-stat ins-glass">
       <span class="ins-stat-ico"><svg class="ico"><use href="#i-cart"/></svg></span>
@@ -332,85 +327,124 @@
     <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-body"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-label"</span><span class="hl-t">&gt;</span>شكاوى<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-value"</span><span class="hl-t">&gt;</span>0<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p>واجعل <code>--zero</code> للقيمة الصفرية فتطمئن القارئ بدل أن تنبهه، و<code>--mute</code> للقيمة الثانوية فتخفت بين أخواتها.</p>
 
-<h2 id="sizes">المقاسات والتلميح</h2>
-<p>يبرز <code>--lg</code> أهم رقم في الصفحة، ويناسب <code>--sm</code> شريطًا تتزاحم فيه البطاقات. أما <code>.ins-stat-hint</code> فسطر تحت القيمة يبين سياقها.</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-grid ins-grid--wide">
-    <div class="ins-stat ins-glass ins-stat--lg">
-      <span class="ins-stat-ico"><svg class="ico"><use href="#i-wallet"/></svg></span>
-      <span class="ins-stat-body">
-        <span class="ins-stat-label">الإيرادات</span>
-        <span class="ins-stat-value">128,960</span>
-        <span class="ins-stat-hint">هذا الشهر</span>
-      </span>
-    </div>
-    <div class="ins-stat ins-glass ins-stat--sm ins-stat--mute">
-      <span class="ins-stat-ico"><svg class="ico"><use href="#i-box"/></svg></span>
-      <span class="ins-stat-body"><span class="ins-stat-label">المخزون</span><span class="ins-stat-value">412</span></span>
-    </div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-grid ins-grid--wide"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat ins-glass ins-stat--lg"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-body"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-label"</span><span class="hl-t">&gt;</span>الإيرادات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-value"</span><span class="hl-t">&gt;</span>128,960<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-hint"</span><span class="hl-t">&gt;</span>هذا الشهر<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat ins-glass ins-stat--sm ins-stat--mute"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-body"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-label"</span><span class="hl-t">&gt;</span>المخزون<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-value"</span><span class="hl-t">&gt;</span>412<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<h2 id="basic">البطاقة</h2>
+<p>
+  تتألف البطاقة <code>.ins-stat</code> من أيقونة في رقاقة <code>.ins-stat-ico</code>، وتسمية <code>.ins-stat-label</code>، وقيمة
+  <code>.ins-stat-value</code>. أضف إليها <code>.ins-glass</code> فتصير سطحًا قائمًا بذاته، أو دعها بدونه وضعها داخل لوح.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="stat"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><div class="ins-stat ins-glass">
+  <span class="ins-stat-ico"><svg class="ico"><use href="#i-file"/></svg></span>
+  <span class="ins-stat-body"><span class="ins-stat-label">الملفات</span><span class="ins-stat-value">128</span></span>
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات البطاقة"><label class="site-play-ctl" data-key="tone" data-type="select"><span class="site-play-label">النبرة</span><select class="ins-select ins-select--sm"><option value="" selected>عادية</option><option value="ok">نجاح</option><option value="warn">تحذير</option><option value="bad">خطر</option><option value="info">معلومة</option><option value="zero">صفر</option><option value="mute">خافتة</option></select></label><div class="site-play-ctl" data-key="size" data-type="seg"><span class="site-play-label">المقاس</span><div class="ins-seg" role="group" aria-label="المقاس"><button type="button" data-value="sm" aria-pressed="false">صغير</button><button type="button" data-value="" class="is-active" aria-pressed="true">عادي</button><button type="button" data-value="lg" aria-pressed="false">كبير</button></div></div><label class="site-play-ctl" data-key="label" data-type="text"><span class="site-play-label">التسمية</span><input class="ins-input ins-input--sm" type="text" value="الملفات"></label><label class="site-play-ctl" data-key="value" data-type="text"><span class="site-play-label">القيمة</span><input class="ins-input ins-input--sm" type="text" value="128"></label><div class="site-play-ctl" data-key="glass" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">سطح قائم بذاته</span></span></label></div><div class="site-play-ctl" data-key="hint" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">تلميح</span></span></label></div><div class="site-play-ctl" data-key="trend" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">التغير</span></span></label></div><div class="site-play-ctl" data-key="link" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">رابط</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat ins-glass"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-body"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-label"</span><span class="hl-t">&gt;</span>الملفات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-value"</span><span class="hl-t">&gt;</span>128<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="delta">التغير</h2>
 <p>
-  يعرض <code>.ins-delta</code> مقدار ما تغير الرقم عن غيره، فيدل سهمه على الاتجاه، ويدل لونه على أن التغير محمود أو مذموم. فالكلاس <code>--up</code> للصعود بالأخضر، و<code>--down</code>
-  للهبوط بالأحمر، و<code>--invert</code> يعكس اللونين حين يكون النقص خيرًا من الزيادة كالتكاليف، و<code>--flat</code> لما بقي على حاله. ويتبعه <code>.ins-delta-ref</code>
-  ليذكر ما يقارن به، ويجتمعان في البطاقة داخل <code>.ins-stat-trend</code> تحت القيمة.
+  يعرض <code>.ins-delta</code> مقدار ما تغير الرقم عن غيره، فيدل سهمه على الاتجاه، ويدل لونه على أن التغير محمود أو مذموم.
+  ويجتمع مع <code>.ins-delta-ref</code> في البطاقة داخل <code>.ins-stat-trend</code> تحت القيمة.
 </p>
-<figure class="dx"><div class="dx-view row">
-  <span class="ins-delta ins-delta--up">12%</span>
-  <span class="ins-delta ins-delta--down">-4%</span>
-  <span class="ins-delta ins-delta--up ins-delta--invert">8%</span>
-  <span class="ins-delta ins-delta--flat">0%</span>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-delta ins-delta--up"</span><span class="hl-t">&gt;</span>12%<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-delta ins-delta--down"</span><span class="hl-t">&gt;</span>-4%<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-delta ins-delta--up ins-delta--invert"</span><span class="hl-t">&gt;</span>8%<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-delta ins-delta--flat"</span><span class="hl-t">&gt;</span>0%<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-grid">
-    <div class="ins-stat ins-glass">
-      <span class="ins-stat-ico"><svg class="ico"><use href="#i-cart"/></svg></span>
-      <span class="ins-stat-body">
-        <span class="ins-stat-label">الطلبات</span>
-        <span class="ins-stat-value">312</span>
-        <span class="ins-stat-trend"><span class="ins-delta ins-delta--up">12%</span><span class="ins-delta-ref">عن الشهر الماضي</span></span>
-      </span>
-    </div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-grid"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat ins-glass"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-body"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-label"</span><span class="hl-t">&gt;</span>الطلبات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-value"</span><span class="hl-t">&gt;</span>312<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stat-trend"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-delta ins-delta--up"</span><span class="hl-t">&gt;</span>12%<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-delta-ref"</span><span class="hl-t">&gt;</span>عن الشهر الماضي<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<figure class="dx site-play" data-play="delta"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><span><span class="ins-delta ins-delta--up">12%</span><span class="ins-delta-ref">عن الشهر الماضي</span></span></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات التغير"><div class="site-play-ctl" data-key="dir" data-type="seg"><span class="site-play-label">الاتجاه</span><div class="ins-seg" role="group" aria-label="الاتجاه"><button type="button" data-value="up" class="is-active" aria-pressed="true">صعود</button><button type="button" data-value="down" aria-pressed="false">هبوط</button><button type="button" data-value="flat" aria-pressed="false">ثبات</button></div></div><div class="site-play-ctl" data-key="invert" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">النقص خير</span></span></label></div><div class="site-play-ctl" data-key="ref" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">ما يقارن به</span></span></label></div><label class="site-play-ctl" data-key="text" data-type="text"><span class="site-play-label">المقدار</span><input class="ins-input ins-input--sm" type="text" value="12%"></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-delta ins-delta--up"</span><span class="hl-t">&gt;</span>12%<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-delta-ref"</span><span class="hl-t">&gt;</span>عن الشهر الماضي<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="layout">في الصفحة</h2>
 <p>
   ضع البطاقات في <code>.ins-grid</code>، فهي تضع منها في كل صف ما يتسع له، وأضف إليها <code>--wide</code> إذا حملت
   البطاقات أرقامًا طويلة.
 </p>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في البطاقات الإحصائية من كلاسات، لكل مكون صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>البطاقة</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-stat</code></td><td>كلاس</td><td>البطاقة: أيقونة في رقاقة، ثم تسمية وقيمة.</td></tr><tr><td><code>.ins-stat-ico</code></td><td>كلاس</td><td>رقاقة الأيقونة، بلون النبرة.</td></tr><tr><td><code>.ins-stat-body</code></td><td>كلاس</td><td>يضم التسمية والقيمة وما تحتهما.</td></tr><tr><td><code>.ins-stat-label</code></td><td>كلاس</td><td>ما يعنيه الرقم.</td></tr><tr><td><code>.ins-stat-value</code></td><td>كلاس</td><td>الرقم نفسه، بخط Inter وأرقام متساوية العرض، وبلون النبرة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">النبرة</th></tr></tbody><tbody><tr><td><code>.ins-stat--ok</code></td><td>كلاس</td><td>لرقم محمود، كالمكتمل.</td></tr><tr><td><code>.ins-stat--warn</code></td><td>كلاس</td><td>لرقم ينتظر أو يحتاج انتباهًا، كالمعلق.</td></tr><tr><td><code>.ins-stat--bad</code></td><td>كلاس</td><td>لرقم يدل على خلل، كالفاشل.</td></tr><tr><td><code>.ins-stat--info</code></td><td>كلاس</td><td>لرقم يُعرض للعلم وحسب.</td></tr><tr><td><code>.ins-stat--zero</code></td><td>كلاس</td><td>للقيمة الصفرية، فتطمئن القارئ بدل أن تنبهه.</td></tr><tr><td><code>.ins-stat--mute</code></td><td>كلاس</td><td>للقيمة الثانوية، فتخفت بين أخواتها.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المقاس</th></tr></tbody><tbody><tr><td><code>.ins-stat--sm</code></td><td>كلاس</td><td>لشريط تتزاحم فيه البطاقات.</td></tr><tr><td><code>.ins-stat--lg</code></td><td>كلاس</td><td>لأهم رقم في الصفحة، ويأخذ الصف كله على الهاتف.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-glass</code></td><td>كلاس</td><td>يجعل البطاقة سطحًا زجاجيًا قائمًا بذاته. ومن دونه ضعها داخل لوح.</td></tr><tr><td><code>.ins-stat-hint</code></td><td>كلاس</td><td>سطر تحت القيمة يبين سياقها.</td></tr><tr><td><code>.ins-stat-trend</code></td><td>كلاس</td><td>سطر تحت القيمة يضم <code>.ins-delta</code> و<code>.ins-delta-ref</code>.</td></tr><tr><td><code>a.ins-stat</code></td><td>عنصر</td><td>بطاقة تنقل إلى مكان، فتتحرك أيقونتها تحت المؤشر. وكذلك على <code>&lt;button&gt;</code>، أو مع <code>.ins-hoverable</code>.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>التغير</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-delta</code></td><td>كلاس</td><td>مقدار ما تغير الرقم: يدل سهمه على الاتجاه، ولونه على أن التغير محمود أو مذموم. ويبقى الرقم من اليسار فتبقى الإشارة أمامه.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الاتجاه</th></tr></tbody><tbody><tr><td><code>.ins-delta--up</code></td><td>كلاس</td><td>سهم إلى أعلى باللون الأخضر.</td></tr><tr><td><code>.ins-delta--down</code></td><td>كلاس</td><td>سهم إلى أسفل باللون الأحمر.</td></tr><tr><td><code>.ins-delta--flat</code></td><td>كلاس</td><td>خط أفقي بلون خافت، لما بقي على حاله.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-delta--invert</code></td><td>كلاس</td><td>يعكس اللونين حين يكون النقص خيرًا من الزيادة، كالتكاليف ووقت الانتظار.</td></tr><tr><td><code>.ins-delta-ref</code></td><td>كلاس</td><td>بعد <code>.ins-delta</code>، يذكر ما يقارن به الرقم.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'stat',
+  title: 'البطاقة',
+  owns: 'ins-stat',
+  controls: [
+    { key: 'tone', label: 'النبرة', type: 'select', value: '', choices: [
+      { value: '', label: 'عادية' },
+      { value: 'ok', label: 'نجاح', name: 'ins-stat--ok', desc: 'لرقم محمود، كالمكتمل.' },
+      { value: 'warn', label: 'تحذير', name: 'ins-stat--warn', desc: 'لرقم ينتظر أو يحتاج انتباهًا، كالمعلق.' },
+      { value: 'bad', label: 'خطر', name: 'ins-stat--bad', desc: 'لرقم يدل على خلل، كالفاشل.' },
+      { value: 'info', label: 'معلومة', name: 'ins-stat--info', desc: 'لرقم يُعرض للعلم وحسب.' },
+      { value: 'zero', label: 'صفر', name: 'ins-stat--zero', desc: 'للقيمة الصفرية، فتطمئن القارئ بدل أن تنبهه.' },
+      { value: 'mute', label: 'خافتة', name: 'ins-stat--mute', desc: 'للقيمة الثانوية، فتخفت بين أخواتها.' }
+    ] },
+    { key: 'size', label: 'المقاس', type: 'seg', value: '', choices: [
+      { value: 'sm', label: 'صغير', name: 'ins-stat--sm', desc: 'لشريط تتزاحم فيه البطاقات.' },
+      { value: '', label: 'عادي' },
+      { value: 'lg', label: 'كبير', name: 'ins-stat--lg', desc: 'لأهم رقم في الصفحة، ويأخذ الصف كله على الهاتف.' }
+    ] },
+    { key: 'label', label: 'التسمية', type: 'text', value: 'الملفات' },
+    { key: 'value', label: 'القيمة', type: 'text', value: '128' },
+    { key: 'glass', label: 'سطح قائم بذاته', type: 'switch', value: true, name: 'ins-glass', desc: 'يجعل البطاقة سطحًا زجاجيًا قائمًا بذاته. ومن دونه ضعها داخل لوح.' },
+    { key: 'hint', label: 'تلميح', type: 'switch', name: 'ins-stat-hint', desc: 'سطر تحت القيمة يبين سياقها.' },
+    { key: 'trend', label: 'التغير', type: 'switch', name: 'ins-stat-trend', desc: 'سطر تحت القيمة يضم `.ins-delta` و`.ins-delta-ref`.' },
+    { key: 'link', label: 'رابط', type: 'switch', name: 'a.ins-stat', kind: 'element', desc: 'بطاقة تنقل إلى مكان، فتتحرك أيقونتها تحت المؤشر. وكذلك على `<button>`، أو مع `.ins-hoverable`.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-stat', desc: 'البطاقة: أيقونة في رقاقة، ثم تسمية وقيمة.' },
+    { group: 'الأساس', name: 'ins-stat-ico', desc: 'رقاقة الأيقونة، بلون النبرة.' },
+    { group: 'الأساس', name: 'ins-stat-body', desc: 'يضم التسمية والقيمة وما تحتهما.' },
+    { group: 'الأساس', name: 'ins-stat-label', desc: 'ما يعنيه الرقم.' },
+    { group: 'الأساس', name: 'ins-stat-value', desc: 'الرقم نفسه، بخط Inter وأرقام متساوية العرض، وبلون النبرة.' }
+  ],
+  html: function (s) {
+    var cls = 'ins-stat' + (s.glass ? ' ins-glass' : '') + (s.tone ? ' ins-stat--' + s.tone : '') + (s.size ? ' ins-stat--' + s.size : '');
+    var tag = s.link ? 'a' : 'div';
+    var body = [
+      '<span class="ins-stat-label">' + s.label + '</span>',
+      '<span class="ins-stat-value">' + s.value + '</span>'
+    ];
+    if (s.hint) body.push('<span class="ins-stat-hint">هذا الشهر</span>');
+    if (s.trend) body.push('<span class="ins-stat-trend"><span class="ins-delta ins-delta--up">12%</span><span class="ins-delta-ref">عن الشهر الماضي</span></span>');
+    var inner = body.length > 2 ? '\n    ' + body.join('\n    ') + '\n  ' : body.join('');
+    return '<' + tag + ' class="' + cls + '"' + (s.link ? ' href="/files"' : '') + '>\n' +
+      '  <span class="ins-stat-ico"><svg class="ico"><use href="#i-file"/></svg></span>\n' +
+      '  <span class="ins-stat-body">' + inner + '</span>\n</' + tag + '>';
+  },
+  notes: function (s) {
+    var out = [];
+    if (s.tone === 'zero') out.push('اجعل القيمة صفرًا مع `--zero`، فهو للقيمة الصفرية.');
+    if (s.link) out.push('مرر المؤشر على البطاقة، فتتحرك أيقونتها.');
+    return out;
+  }
+});
+
+SitePlay.define({
+  id: 'delta',
+  title: 'التغير',
+  owns: 'ins-delta',
+  controls: [
+    { key: 'dir', label: 'الاتجاه', type: 'seg', value: 'up', choices: [
+      { value: 'up', label: 'صعود', name: 'ins-delta--up', desc: 'سهم إلى أعلى باللون الأخضر.' },
+      { value: 'down', label: 'هبوط', name: 'ins-delta--down', desc: 'سهم إلى أسفل باللون الأحمر.' },
+      { value: 'flat', label: 'ثبات', name: 'ins-delta--flat', desc: 'خط أفقي بلون خافت، لما بقي على حاله.' }
+    ] },
+    { key: 'invert', label: 'النقص خير', type: 'switch', name: 'ins-delta--invert', desc: 'يعكس اللونين حين يكون النقص خيرًا من الزيادة، كالتكاليف ووقت الانتظار.' },
+    { key: 'ref', label: 'ما يقارن به', type: 'switch', value: true, name: 'ins-delta-ref', desc: 'بعد `.ins-delta`، يذكر ما يقارن به الرقم.' },
+    { key: 'text', label: 'المقدار', type: 'text', value: '12%' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-delta', desc: 'مقدار ما تغير الرقم: يدل سهمه على الاتجاه، ولونه على أن التغير محمود أو مذموم. ويبقى الرقم من اليسار فتبقى الإشارة أمامه.' }
+  ],
+  disable: function (s) { return s.dir === 'flat' ? ['invert'] : []; },
+  html: function (s) {
+    var d = '<span class="ins-delta ins-delta--' + s.dir + (s.invert && s.dir !== 'flat' ? ' ins-delta--invert' : '') + '">' + s.text + '</span>';
+    return s.ref ? '<span>' + d + '<span class="ins-delta-ref">عن الشهر الماضي</span></span>' : d;
+  },
+  notes: function (s) {
+    return s.invert && s.dir !== 'flat' ? ['الاتجاه على حاله، وانعكس اللون فقط.'] : [];
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="tabs.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">علامات التبويب</span></a><a class="site-pager-link site-pager-link--next" href="loading.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">التحميل والحالة الفارغة</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">البطاقة</a><a href="#sizes">المقاسات والتلميح</a><a href="#delta">التغير</a><a href="#layout">في الصفحة</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">البطاقة</a><a href="#delta">التغير</a><a href="#layout">في الصفحة</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
