@@ -24,6 +24,10 @@
   </div>
 </demo-example>
 
+<h2 id="try">جرّب الحقل</h2>
+<p>اختر من الخيارات، فيتغير الحقل وشيفرته معًا. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.</p>
+<demo-play of="color"></demo-play>
+
 <h2 id="contrast">التباين</h2>
 <p>
   في أسفل المنتقي ترى نصًا بهذا اللون على الأبيض وعلى الأسود، ومعه نسبة التباين
@@ -41,12 +45,6 @@
   <li><b>الكتابة</b> تقبل <code>#abc</code> و<code>abc</code> و<code>aabbcc</code>، ثم يكتب الحقل الرمز كاملًا حين تغادره،
     ويرفض ما ليس لونًا برسالة.</li>
 </ul>
-<demo-example>
-  <div class="ins-field">
-    <label class="ins-label" for="cp-set">ألوان محددة</label>
-    <input type="color" id="cp-set" name="status" value="#0f766e" data-ins-color data-ins-color-swatches="#15803d,#a16207,#b91c1c,#0369a1,#475569">
-  </div>
-</demo-example>
 
 <h2 id="api">التحكم بـ JavaScript</h2>
 <demo-code lang="js">
@@ -61,6 +59,10 @@ Insiyab.colorField('#brand', '#0f766e');   // ضبطه بهدوء، دون حد�
   يُطلق الحقل الحدث <code>input</code> ما دام اللون يتغير، ثم <code>change</code> و<code>ins:color</code> حين يستقر. والحقل
   الأول أعلاه موصول بـ <code>Insiyab.brand()</code> على هذا النحو.
 </p>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في حقل اللون من كلاسات وسمات وأحداث.</p>
+<demo-options></demo-options>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
