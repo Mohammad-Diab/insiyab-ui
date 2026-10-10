@@ -206,6 +206,9 @@
   --ins-dlg-pad: 1.5rem;    /* the modal's inset */
   --ins-dlg-gap: 1.25rem;   /* between the blocks inside one */
   --ins-dlg-gap-x: .75rem;  /* between two fields on the same line */
+  --ins-foot-gap: .75rem;   /* between the actions of any footer: dialog, drawer, pop-up */
+  --ins-foot-min: 5rem;     /* a footer action's least width, so a one-word «تم» is not a chip */
+  --ins-foot-min-sm: 4rem;  /* the same, for the small buttons of a field's pop-up */
 
   /* The tooltip is the one surface that is *not* glass: a solid inverted chip. It
      floats over whatever is under the pointer, which is exactly where a frosted
