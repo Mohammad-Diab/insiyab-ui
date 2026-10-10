@@ -14,7 +14,7 @@
   --ins-chart-4: #F59E0B;
   --ins-chart-5: #EF4444;
   --ins-chart-6: #64748B;
-  --ins-chart-h: 16rem;
+  --ins-chart-h: var(--ins-height, 16rem);
   position: relative;
   margin: 0;
 }

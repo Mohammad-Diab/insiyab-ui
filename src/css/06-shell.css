@@ -90,7 +90,7 @@
    So the size is a variable, which cannot cycle, and `object-fit: contain`
    letterboxes a portrait mark against the brand fill rather than cropping it. */
 .ins-shell-mark {
-  --ins-mark: 34px;
+  --ins-mark: var(--ins-size, 34px);
   flex: 0 0 auto;
   inline-size: var(--ins-mark);
   block-size: var(--ins-mark);
@@ -516,6 +516,7 @@ html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
 .ins-island--brand { display: none; padding-inline: 1rem; gap: .5rem; }
 :root.ins-sidebar-collapsed .ins-island--brand { display: inline-flex; }
 @media (max-width: 900px) { .ins-island--brand { display: inline-flex; } }
+.ins-island--brand .ins-shell-mark { --ins-mark: var(--ins-size, 28px); font-size: .8125rem; }
 
 .ins-shell-head {
   min-width: 0;

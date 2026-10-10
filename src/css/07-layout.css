@@ -156,7 +156,7 @@
   text-align: center;
 }
 .ins-brand .ins-shell-mark {
-  --ins-mark: 3.75rem;
+  --ins-mark: var(--ins-size, 3.75rem);
   margin-block-end: .5rem;
   font-size: 1.625rem;
   font-weight: 800;
