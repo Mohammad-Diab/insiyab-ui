@@ -1,9 +1,3 @@
-<h2 id="basic">شريط الموقع</h2>
-<p>
-  شريط يليق بالمواقع دون التطبيقات، كصفحة الهبوط والمدونة والتوثيق. فيه <code>-brand</code> للاسم، و<code>-menu</code>
-  للروابط، و<code>-end</code> لأزرارها في آخره. ويلتصق بأعلى الصفحة إلا أن تضع عليه <code>--static</code> فيبقى في
-  مكانه، كما في هذا المثال.
-</p>
 <demo-example>
   <header class="ins-navbar ins-navbar--static">
     <a class="ins-navbar-brand" href="#basic">الموقع</a>
@@ -19,6 +13,14 @@
   </header>
 </demo-example>
 
+<h2 id="basic">شريط الموقع</h2>
+<p>
+  شريط يليق بالمواقع دون التطبيقات، كصفحة الهبوط والمدونة والتوثيق، أما التطبيق فله <a href="shell.html">هيكل التطبيق</a>.
+  فيه <code>-brand</code> للاسم، و<code>-menu</code> للروابط، و<code>-end</code> لأزرارها في آخره. ويلتصق بأعلى الصفحة
+  إلا أن تضع عليه <code>--static</code>، كما في هذه الأمثلة. وتجد الخيارات بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<demo-play of="navbar"></demo-play>
+
 <h2 id="phone">على الهاتف</h2>
 <p>
   إذا ضاقت الشاشة عن 900px انطوت الروابط خلف زر القائمة، فإذا ضغطته انفتحت عمودًا داخل الشريط، ثم تنغلق إذا ضغطت
@@ -30,8 +32,6 @@ Insiyab.navbar(document.querySelector('.ins-navbar'), true);   // افتح
 document.addEventListener('ins:navbar', (e) => e.detail.open);
 </demo-code>
 
-<h2 id="current">الرابط الحالي</h2>
-<p>
-  ضع <code>aria-current="page"</code> على الرابط الحالي، وتغنيك عن أي كلاس، فيعلن قارئ الشاشة أنه «الصفحة الحالية»،
-  ويميزه التصميم للعين.
-</p>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في شريط الموقع من كلاسات وسمات وأحداث.</p>
+<demo-options></demo-options>
