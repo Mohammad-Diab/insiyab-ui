@@ -21,6 +21,8 @@
   var KEY_DIR = 'insiyab-demo-dir';
   var KEY_MODE = 'insiyab-demo-mode';
 
+  // A page's playground definitions register here as the page parses, before the playgrounds boot.
+  var SitePlay = window.SitePlay = { defs: {}, define: function (def) { this.defs[def.id] = def; } };
   var root = document.documentElement;
   var q = new URLSearchParams(location.search);
 
@@ -127,7 +129,7 @@
     running = [];
     var me = ++turn;
     if (next === root.getAttribute('data-site-mode')) { syncCustomiser(); return; }
-    var apply = function () { root.setAttribute('data-site-mode', next); syncCustomiser(); };
+    var apply = function () { root.setAttribute('data-site-mode', next); syncCustomiser(); refreshPlays(); };
     var still = root.getAttribute('data-ins-fx') === 'off' || !Element.prototype.animate || !window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (still) { apply(); return; }
     var drop = next === 'simple' ? '.site-adv' : '.site-simple', add = next === 'simple' ? '.site-simple' : '.site-adv';
@@ -171,7 +173,168 @@
     if (!t.closest(simple ? '.site-adv' : '.site-simple')) return;
     root.setAttribute('data-site-mode', simple ? 'advanced' : 'simple');
     syncCustomiser();
+    refreshPlays();
     t.scrollIntoView();
+  }
+
+  /* ------------------------------------------------------------ playgrounds */
+  var plays = [];
+
+  function playValues(box) {
+    var v = {};
+    box.querySelectorAll('.site-play-ctl').forEach(function (ctl) {
+      var key = ctl.getAttribute('data-key'), type = ctl.getAttribute('data-type');
+      if (type === 'seg') { var on = ctl.querySelector('[aria-pressed="true"]'); v[key] = on ? on.getAttribute('data-value') : ''; }
+      else if (type === 'switch') v[key] = ctl.querySelector('input').checked;
+      else v[key] = ctl.querySelector('select, input').value;
+    });
+    return v;
+  }
+
+  function setPlayValues(box, v) {
+    box.querySelectorAll('.site-play-ctl').forEach(function (ctl) {
+      var key = ctl.getAttribute('data-key'), type = ctl.getAttribute('data-type');
+      if (!Object.prototype.hasOwnProperty.call(v, key)) return;
+      if (type === 'seg') {
+        ctl.querySelectorAll('[data-value]').forEach(function (b) {
+          var on = b.getAttribute('data-value') === String(v[key]);
+          b.classList.toggle('is-active', on);
+          b.setAttribute('aria-pressed', String(on));
+        });
+      } else if (type === 'switch') ctl.querySelector('input').checked = !!v[key];
+      else ctl.querySelector('select, input').value = v[key];
+    });
+  }
+
+  function playDefaults(def) {
+    var v = {};
+    def.controls.forEach(function (c) { v[c.key] = c.type === 'switch' ? !!c.value : c.value == null ? '' : c.value; });
+    return v;
+  }
+
+  // Only what differs from the defaults goes in the link, as ?play-<id>=key:value,key:value.
+  function savePlay(p) {
+    var v = playValues(p.box), d = playDefaults(p.def), parts = [];
+    Object.keys(v).forEach(function (k) { if (v[k] !== d[k]) parts.push(k + ':' + encodeURIComponent(v[k] === true ? '1' : v[k] === false ? '0' : v[k])); });
+    var url = new URLSearchParams(location.search);
+    if (parts.length) url.set('play-' + p.def.id, parts.join(',')); else url.delete('play-' + p.def.id);
+    var s = url.toString();
+    try { history.replaceState(history.state, '', location.pathname + (s ? '?' + s : '') + location.hash); } catch (e) { /* a file:// page */ }
+  }
+
+  function linkedValues(def) {
+    var raw = q.get('play-' + def.id), v = {};
+    if (!raw) return null;
+    raw.split(',').forEach(function (pair) {
+      var i = pair.indexOf(':');
+      if (i < 1) return;
+      var key = pair.slice(0, i), val = decodeURIComponent(pair.slice(i + 1));
+      def.controls.forEach(function (c) { if (c.key === key) v[key] = c.type === 'switch' ? val === '1' : val; });
+    });
+    return v;
+  }
+
+  function renderPlay(p) {
+    var def = p.def, box = p.box;
+    var s = SiteCode.state(def, playValues(box), root.getAttribute('data-site-mode') === 'simple');
+    var off = def.disable ? def.disable(s) : [];
+    box.querySelectorAll('.site-play-ctl').forEach(function (ctl) {
+      var dis = off.indexOf(ctl.getAttribute('data-key')) !== -1;
+      ctl.classList.toggle('is-off', dis);
+      ctl.querySelectorAll('button, input, select').forEach(function (el) { el.disabled = dis; });
+    });
+    var markup = def.html(s);
+    p.view.classList.toggle('site-play-view--wide', SiteCode.wide(def, s));
+    p.view.innerHTML = markup;
+    if (window.Insiyab && Insiyab.init) Insiyab.init(p.view);
+    if (def.stage) def.stage(p.view, s);
+    box.querySelector('.dx-code code').innerHTML = SiteCode.highlight(SiteCode.forListing(markup), 'html');
+    p.notes.innerHTML = (def.notes ? def.notes(s) : []).map(function (n) { return '<p class="site-play-note">' + SiteCode.prose(n) + '</p>'; }).join('');
+    fitPlay(p);
+    fitSoon(p);
+  }
+
+  // Room at the preview's foot for whatever reaches past it (an open menu) and for the notes that share its cell on a wide screen.
+  function fitPlay(p) {
+    var v = p.view;
+    v.style.minBlockSize = v.style.paddingBlockEnd = '';
+    var box = v.getBoundingClientRect(), low = -Infinity, pad = parseFloat(getComputedStyle(v).paddingBlockEnd) || 0;
+    (function walk(el) {
+      for (var c = el.firstElementChild; c; c = c.nextElementSibling) {
+        var cs = getComputedStyle(c);
+        // A modal, a pop-up in the top layer or anything fixed to the screen floats above the page and takes no room in the preview.
+        if (cs.position === 'fixed' || c.matches(':modal, :popover-open')) continue;
+        var r = c.getBoundingClientRect();
+        if (r.height && r.bottom > low) low = r.bottom;
+        if (cs.overflowY === 'visible' && cs.overflowX !== 'hidden') walk(c);
+      }
+    })(v);
+    var overlay = p.notes.offsetHeight && getComputedStyle(p.notes).gridRowStart !== 'auto' ? p.notes.offsetHeight + 8 : 0;
+    var short = low + overlay + 16 - box.bottom;
+    // Height and foot padding grow together, so the centred component keeps its place.
+    if (short > 0) { v.style.minBlockSize = Math.ceil(box.height + short) + 'px'; v.style.paddingBlockEnd = Math.ceil(pad + short) + 'px'; }
+  }
+
+  // Again two frames later, once the library has placed what just opened (it does so in its own toggle handler).
+  function fitSoon(p) { requestAnimationFrame(function () { requestAnimationFrame(function () { fitPlay(p); }); }); }
+
+  function refreshPlays() { plays.forEach(renderPlay); }
+
+  // A Date as the day it stands for, whether made at local or UTC midnight (JSON would often print the day before), a File by its name.
+  function eventValue(v) {
+    if (v && v.nodeType) return v.tagName.toLowerCase() + (v.classList[0] ? '.' + v.classList[0] : '');
+    if (v instanceof Date) {
+      var two = function (n) { return (n < 10 ? '0' : '') + n; };
+      if (!v.getUTCHours() && !v.getUTCMinutes()) return v.toISOString().slice(0, 10);
+      var day = v.getFullYear() + '-' + two(v.getMonth() + 1) + '-' + two(v.getDate());
+      return day + (v.getHours() || v.getMinutes() ? ' ' + two(v.getHours()) + ':' + two(v.getMinutes()) : '');
+    }
+    if (typeof File !== 'undefined' && v instanceof File) return 'File ' + JSON.stringify(v.name);
+    return JSON.stringify(v);
+  }
+
+  function bootPlays() {
+    if (!window.SiteCode) return;
+    document.querySelectorAll('.site-play[data-play]').forEach(function (box) {
+      var def = SitePlay.defs[box.getAttribute('data-play')];
+      if (!def) return;
+      var p = { def: def, box: box, view: box.querySelector('.site-play-view'), notes: box.querySelector('.site-play-notes') };
+      plays.push(p);
+      var change = function () { renderPlay(p); savePlay(p); };
+      box.addEventListener('click', function (e) {
+        var seg = e.target.closest('.site-play-ctl [data-value]');
+        if (seg) {
+          seg.parentNode.querySelectorAll('[data-value]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === seg)); });
+          change();
+          return;
+        }
+        if (e.target.closest('[data-play-reset]')) { setPlayValues(box, playDefaults(def)); change(); return; }
+        if (e.target.closest('.site-play-view a[href]')) e.preventDefault();
+      });
+      box.addEventListener('change', function (e) { if (e.target.closest('.site-play-controls')) change(); });
+      p.view.addEventListener('toggle', function () { fitSoon(p); }, true);
+      box.addEventListener('input', function (e) { if (e.target.matches('.site-play-ctl input[type="text"]')) change(); });
+      // What the component announces shows under it, so its events can be seen as well as read about.
+      (def.events || []).forEach(function (name) {
+        document.addEventListener(name, function (e) {
+          var d = e.detail || {}, el = d.el || d.target || d.input || e.target;
+          if (!el || !el.nodeType || !p.view.contains(el)) return;
+          var said = Object.keys(d).filter(function (k) { return k !== 'el'; }).map(function (k) {
+            return '`' + k + ': ' + eventValue(d[k]) + '`';
+          }).join('، ');
+          var line = p.notes.querySelector('.site-play-event') || p.notes.appendChild(document.createElement('p'));
+          line.className = 'site-play-note site-play-event';
+          line.innerHTML = SiteCode.prose('حدث `' + name + '`' + (said ? '، ومعه ' + said : ''));
+          fitPlay(p);
+        });
+      });
+      var linked = linkedValues(def);
+      if (linked) setPlayValues(box, linked);
+      if (linked || def.stage) renderPlay(p); else fitPlay(p);
+    });
+    var fitAll = function () { plays.forEach(fitPlay); }, queued = 0;
+    window.addEventListener('resize', function () { if (!queued) queued = requestAnimationFrame(function () { queued = 0; fitAll(); }); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
   }
 
   function copy(text) {
@@ -217,6 +380,7 @@
     if (q.get('theme')) Insiyab.theme(q.get('theme'));
     if (q.get('collapsed')) Insiyab.sidebar('collapsed');
     syncCustomiser();
+    bootPlays();
     revealTarget();
     window.addEventListener('hashchange', revealTarget);
 

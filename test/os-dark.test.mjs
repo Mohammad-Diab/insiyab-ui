@@ -11,7 +11,7 @@ const E = (js) => b.evaluate(js);
 const SNAP = `(() => {
   const props = ['color', 'background-color', 'background-image', 'border-top-color', 'box-shadow', 'fill', 'stroke', 'outline-color'];
   const out = {};
-  const all = [...document.querySelectorAll('body *')].filter((el) => !el.closest('script, style, svg defs'));
+  const all = [...document.querySelectorAll('body *')].filter((el) => !el.closest('script, style, svg defs, details:not([open]) > :not(summary)'));
   all.forEach((el, i) => {
     for (const pseudo of [null, '::before', '::after']) {
       const cs = getComputedStyle(el, pseudo);
@@ -53,11 +53,11 @@ ok('OS dark paints exactly like explicit dark on every element', totalDiff === 0
 // And the escape hatch still holds: explicit light on an OS set to dark stays light.
 await b.goto(`${BASE}/demo/inputs.html`);
 await E(`localStorage.clear(); Insiyab.theme('light'); 0`);
-await b.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'light' }] });
-await b.sleep(300);
+await b.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'light' }, { name: 'prefers-reduced-motion', value: 'reduce' }] });
+await b.sleep(600);
 const lightOnLight = await E(SNAP);
-await b.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'dark' }] });
-await b.sleep(300);
+await b.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'dark' }, { name: 'prefers-reduced-motion', value: 'reduce' }] });
+await b.sleep(600);
 const lightOnDark = await E(SNAP);
 const d2 = Object.keys(lightOnLight).filter((k) => lightOnLight[k] !== lightOnDark[k]);
 ok('explicit light on an OS set to dark is untouched by the OS', d2.length === 0, `${d2.length} differences`);

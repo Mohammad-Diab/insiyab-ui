@@ -16,7 +16,7 @@
    Output is demo/<slug>.html, plain files that need no script to read. They are
    committed, so the demo works from a static host or a checkout with no build.
 
-   Two custom tags are expanded at build time, so a page never repeats itself:
+   Custom tags are expanded at build time, so a page never repeats itself:
 
      <demo-example class="row">…live markup…</demo-example>
          renders the markup, and prints the same markup, highlighted, under it.
@@ -25,13 +25,18 @@
      <demo-code lang="html|js|css|sh">…source…</demo-code>
          a listing on its own. Write the source as-is; it is escaped here.
 
+     <demo-play of="id"></demo-play> and <demo-options></demo-options>
+         a component's playground and its options list, from demo/src/play/<slug>.js.
+
    `level: 'simple' | 'advanced'` in NAV, or `data-level` on an <h2>/<h3>, shows that page or section in that mode only; untagged shows in both.
 
    Run through `node build.mjs`, which calls buildSite() after the library.
    ========================================================================== */
 
 import { readFile, writeFile, readdir, unlink } from 'node:fs/promises';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import vm from 'node:vm';
 
 const DIR = 'demo';
 const SRC = 'demo/src';
@@ -219,73 +224,130 @@ function dedent(src) {
   return lines.map((l) => l.slice(indent)).join('\n');
 }
 
-/* --------------------------------------------------------------------------
-   Highlighting, done once here so the pages ship no highlighter.
-   Deliberately small: tags, attributes, strings and comments for markup; strings,
-   comments, keywords and numbers for script. Good enough to read, and nothing a
-   reader would mistake for a real parser.
-   -------------------------------------------------------------------------- */
-
-function hlHtml(src) {
-  const re = /<!--[\s\S]*?-->|<\/?[a-zA-Z][\w-]*(?:\s+[^\s=>/]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+))?)*\s*\/?>/g;
-  let out = '', last = 0, m;
-  while ((m = re.exec(src))) {
-    out += esc(src.slice(last, m.index));
-    const tok = m[0];
-    if (tok.startsWith('<!--')) {
-      out += `<span class="hl-c">${esc(tok)}</span>`;
-    } else {
-      const head = tok.match(/^<\/?[a-zA-Z][\w-]*/)[0];
-      const tail = tok.match(/\s*\/?>$/)[0];
-      const body = tok.slice(head.length, tok.length - tail.length);
-      out += `<span class="hl-t">${esc(head)}</span>`;
-      out += body.replace(/([^\s=]+)(\s*=\s*)?("[^"]*"|'[^']*'|[^\s>]+)?|\s+/g, (all, name, eq, val) => {
-        if (!name) return all;
-        return `<span class="hl-a">${esc(name)}</span>${eq ? esc(eq) : ''}${val ? `<span class="hl-s">${esc(val)}</span>` : ''}`;
-      });
-      out += `<span class="hl-t">${esc(tail)}</span>`;
-    }
-    last = m.index + tok.length;
-  }
-  return out + esc(src.slice(last));
-}
-
-const JS_WORDS = /^(?:const|let|var|function|return|if|else|new|true|false|null|undefined|await|async|this|typeof|import|from|export)$/;
-
-function hlScript(src, css) {
-  const re = css
-    ? /\/\*[\s\S]*?\*\/|"[^"]*"|'[^']*'|--[\w-]+|[\w-]+(?=\s*:)|#[0-9a-fA-F]{3,8}\b|\b\d+(?:\.\d+)?(?:px|rem|em|s|%)?/g
-    : /\/\*[\s\S]*?\*\/|\/\/[^\n]*|`[^`]*`|"(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|\b[A-Za-z_$][\w$]*\b|\b\d+(?:\.\d+)?\b/g;
-  let out = '', last = 0, m;
-  while ((m = re.exec(src))) {
-    const t = m[0];
-    let cls = '';
-    if (t.startsWith('/*') || t.startsWith('//')) cls = 'hl-c';
-    else if (/^["'`]/.test(t)) cls = 'hl-s';
-    else if (/^\d|^#/.test(t)) cls = 'hl-n';
-    else if (css) cls = t.startsWith('--') ? 'hl-a' : 'hl-t';
-    else if (JS_WORDS.test(t)) cls = 'hl-k';
-    else if (t === 'Insiyab' || t === 'document' || t === 'window') cls = 'hl-t';
-    out += esc(src.slice(last, m.index)) + (cls ? `<span class="${cls}">${esc(t)}</span>` : esc(t));
-    last = m.index + t.length;
-  }
-  return out + esc(src.slice(last));
-}
+// The listing highlighter lives in demo/assets/site-code.js, shared with the page's playgrounds.
+const SiteCode = vm.runInNewContext(`${readFileSync(join(DIR, 'assets', 'site-code.js'), 'utf8')}\nSiteCode`, {});
+const forListing = SiteCode.forListing;
 
 function listing(src, lang) {
-  const code = dedent(src);
-  const body = lang === 'html' ? hlHtml(code)
-    : lang === 'js' ? hlScript(code, false)
-    : lang === 'css' ? hlScript(code, true)
-    : esc(code);
-  return `<div class="dx-code" data-lang="${lang}"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code>${body}</code></pre></div>`;
+  return `<div class="dx-code" data-lang="${lang}"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code>${SiteCode.highlight(dedent(src), lang)}</code></pre></div>`;
 }
 
-/* In a listing, an inline icon is noise: its <use> points at this site's sprite,
-   which is not something anyone is going to copy. Show that an icon goes there,
-   not which one. */
-function forListing(markup) {
-  return markup.replace(/<svg class="ico"[^>]*>[\s\S]*?<\/svg>/g, '<svg>…</svg>');
+/* --------------------------------------------------------------------------
+   Playgrounds and options lists, from demo/src/play/<slug>.js
+   -------------------------------------------------------------------------- */
+
+// A page's playground file, run here with a stand-in registry; the page runs the same file for real.
+function loadPlay(slug) {
+  const path = join(SRC, 'play', `${slug}.js`);
+  if (!existsSync(path)) return null;
+  const src = readFileSync(path, 'utf8');
+  const defs = [];
+  vm.runInNewContext(src, { SitePlay: { define: (d) => defs.push(d) } }, { filename: path });
+  return { src, defs };
+}
+
+const optionKind = (o) => o.kind || (/^ins-/.test(o.name) ? 'class' : /:/.test(o.name) && !/=/.test(o.name) ? 'event' : 'attr');
+const KIND_LABEL = { class: 'كلاس', attr: 'سمة', event: 'حدث', element: 'عنصر' };
+
+// Every documented option of a component, in groups: one per control, then the extra rows.
+function optionGroups(def) {
+  const groups = [];
+  const group = (label, first) => {
+    let g = groups.find((x) => x.label === label);
+    if (!g) { g = { label, rows: [] }; first ? groups.unshift(g) : groups.push(g); }
+    return g;
+  };
+  for (const c of def.controls) {
+    const rows = c.type === 'switch' ? (c.name ? [{ ...c }] : []) : (c.choices || []).filter((x) => x.name).map((x) => ({ ...x, level: x.level || c.level }));
+    if (rows.length) group(c.group || (c.type === 'switch' ? 'خيارات أخرى' : c.label)).rows.push(...rows);
+  }
+  for (const x of def.extra || []) group(x.group, x.first).rows.push(x);
+  return groups;
+}
+
+function controlMarkup(c) {
+  const adv = c.level ? ` ${MODE_CLASS[c.level]}` : '';
+  const head = `<span class="site-play-label">${c.label}</span>`;
+  if (c.type === 'seg') {
+    const opts = c.choices.map((x) => {
+      const on = x.value === c.value;
+      return `<button type="button" data-value="${attr(x.value)}"${on ? ' class="is-active" aria-pressed="true"' : ' aria-pressed="false"'}>${x.label}</button>`;
+    }).join('');
+    return `<div class="site-play-ctl${adv}" data-key="${c.key}" data-type="seg">${head}<div class="ins-seg" role="group" aria-label="${attr(c.label)}">${opts}</div></div>`;
+  }
+  if (c.type === 'select') {
+    const opts = c.choices.map((x) => `<option value="${attr(x.value)}"${x.value === c.value ? ' selected' : ''}>${x.label}</option>`).join('');
+    return `<label class="site-play-ctl${adv}" data-key="${c.key}" data-type="select">${head}<select class="ins-select ins-select--sm">${opts}</select></label>`;
+  }
+  if (c.type === 'text') {
+    return `<label class="site-play-ctl${adv}" data-key="${c.key}" data-type="text">${head}<input class="ins-input ins-input--sm" type="text" value="${attr(c.value || '')}"></label>`;
+  }
+  return `<div class="site-play-ctl${adv}" data-key="${c.key}" data-type="switch"><label class="ins-switch"><input type="checkbox"${c.value ? ' checked' : ''}><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">${c.label}</span></span></label></div>`;
+}
+
+const noteMarkup = (notes) => notes.map((n) => `<p class="site-play-note">${SiteCode.prose(n)}</p>`).join('');
+
+// The playground as the page first paints it: the default state, rendered here, so it reads without script.
+function playMarkup(def) {
+  const s = SiteCode.state(def, null, true);
+  const markup = def.html(s);
+  return `<figure class="dx site-play" data-play="${def.id}">` +
+    `<div class="site-play-top"><div class="site-play-stage"><div class="site-play-view${SiteCode.wide(def, s) ? ' site-play-view--wide' : ''}">${markup}</div>` +
+    `<div class="site-play-notes" aria-live="polite">${noteMarkup(def.notes ? def.notes(s) : [])}</div></div>` +
+    `<div class="site-play-controls" role="group" aria-label="خيارات ${attr(def.title)}">${def.controls.map(controlMarkup).join('')}` +
+    `<button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div>` +
+    `${listing(forListing(markup), 'html')}</figure>`;
+}
+
+function optionsMarkup(defs) {
+  const boxes = defs.map((def) => {
+    const groups = optionGroups(def);
+    const body = groups.map((g) => {
+      const allAdv = g.rows.every((r) => r.level === 'advanced');
+      const rows = g.rows.map((r) => {
+        const kind = optionKind(r);
+        return `<tr${r.level ? ` class="${MODE_CLASS[r.level]}"` : ''}><td><code>${kind === 'class' ? '.' : ''}${SiteCode.esc(r.name)}</code></td><td>${KIND_LABEL[kind]}</td><td>${SiteCode.prose(r.desc)}</td></tr>`;
+      }).join('');
+      // A group is its own <tbody>, so the library's row card, corners and zebra restart under each label.
+      return `<tbody class="site-opt-group${allAdv ? ' site-adv' : ''}"><tr><th colspan="3" scope="rowgroup">${g.label}</th></tr></tbody><tbody>${rows}</tbody>`;
+    }).join('');
+    const adv = groups.length && groups.every((g) => g.rows.every((r) => r.level === 'advanced'));
+    return `<details class="ins-collapse${adv ? ' site-adv' : ''}"><summary>${def.title}</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead>${body}</table></div></div></details>`;
+  }).join('');
+  return `<div class="ins-panel site-options"><div class="ins-accordion">${boxes}</div></div>`;
+}
+
+// Nothing the library ships under a component's class goes undocumented, and nothing documented is missing from the library.
+function verifyPlay(file, defs, lib) {
+  for (const def of defs) {
+    const names = new Set(optionGroups(def).flatMap((g) => g.rows).map((r) => r.name));
+    if (def.owns) {
+      const re = new RegExp(`\\.(${def.owns}(?:--[a-z0-9-]+)?)(?![\\w-])`, 'g');
+      for (const cls of new Set([...lib.css.matchAll(re)].map((m) => m[1]))) {
+        if (!names.has(cls)) problems.push(`${file}: .${cls} is in the library but not in the options of "${def.id}".`);
+      }
+    }
+    for (const r of optionGroups(def).flatMap((g) => g.rows)) {
+      const kind = optionKind(r), name = r.name.split('=')[0];
+      const known = kind === 'class' ? new RegExp(`\\.${name}(?![\\w-])`).test(lib.css)
+        : kind === 'event' ? lib.js.includes(`'${name}'`)
+        : kind === 'attr' && name.startsWith('data-ins-') ? lib.js.includes(name) || lib.css.includes(name)
+        : true;
+      if (!known) problems.push(`${file}: "${r.name}" in the options of "${def.id}" is not in the library.`);
+      if (!r.desc) problems.push(`${file}: "${r.name}" in "${def.id}" has no description.`);
+    }
+  }
+}
+
+function expandPlay(html, play, file) {
+  const byId = new Map((play ? play.defs : []).map((d) => [d.id, d]));
+  html = html.replace(/<demo-play of="([^"]+)"><\/demo-play>/g, (all, id) => {
+    if (!byId.has(id)) { problems.push(`${file}: <demo-play of="${id}"> has no definition in play/.`); return ''; }
+    return playMarkup(byId.get(id));
+  });
+  html = html.replace(/<demo-options><\/demo-options>/g, () => (play ? optionsMarkup(play.defs) : ''));
+  if (/<demo-(play|options)/.test(html)) problems.push(`${file}: a malformed <demo-play> or <demo-options>.`);
+  return html;
 }
 
 const MODE_CLASS = { advanced: 'site-adv', simple: 'site-simple' };
@@ -427,6 +489,14 @@ export async function buildSite({ check = false, version = '' } = {}) {
 
   const have = (await readdir(join(SRC, 'pages'))).filter((f) => f.endsWith('.html')).map((f) => f.slice(0, -5));
   for (const s of have) if (!slugs.has(s)) problems.push(`pages/${s}.html exists but is not in NAV, so nothing links to it.`);
+  const plays = existsSync(join(SRC, 'play')) ? readdirSync(join(SRC, 'play')).filter((f) => f.endsWith('.js')) : [];
+  for (const f of plays) if (!slugs.has(f.slice(0, -3))) problems.push(`play/${f} has no page of the same name.`);
+  const lib = {
+    css: readdirSync('src/css').map((f) => readFileSync(join('src/css', f), 'utf8')).join('\n') +
+      readdirSync('src/plugins').filter((f) => f.endsWith('.css')).map((f) => readFileSync(join('src/plugins', f), 'utf8')).join('\n'),
+    js: readFileSync('src/js/insiyab.js', 'utf8') +
+      readdirSync('src/plugins').filter((f) => f.endsWith('.js')).map((f) => readFileSync(join('src/plugins', f), 'utf8')).join('\n')
+  };
 
   const out = [];
   for (let i = 0; i < PAGES.length; i++) {
@@ -438,8 +508,13 @@ export async function buildSite({ check = false, version = '' } = {}) {
     if (p.level && !MODE_CLASS[p.level]) problems.push(`NAV: ${p.slug} has level '${p.level}', not simple or advanced.`);
     const { html: leveled, ids } = levels(src, `pages/${p.slug}.html`);
     if (p.level && (ids.advanced.size || ids.simple.size)) problems.push(`pages/${p.slug}.html: the page has a level of its own, so data-level on its sections is not allowed.`);
-    const content = expand(leveled, `pages/${p.slug}.html`);
+    let play = null;
+    try { play = loadPlay(p.slug); } catch (e) { problems.push(`play/${p.slug}.js: ${e.message}`); }
+    if (play) verifyPlay(`play/${p.slug}.js`, play.defs, lib);
+    const content = expandPlay(expand(leveled, `pages/${p.slug}.html`), play, `pages/${p.slug}.html`);
     verifyPage(p, content, slugs, shared);
+    // The play script goes in after the checks, so the ids and links its html() writes are not counted twice.
+    const page = play ? `${content}\n<script>\n${play.src.trim()}\n</script>` : content;
 
     const fill = {
       SLUG: p.slug,
@@ -450,9 +525,11 @@ export async function buildSite({ check = false, version = '' } = {}) {
       SIDEBAR: sidebar(p),
       HEAD: pageHead(p),
       TOC: toc(content, ids),
-      CONTENT: content.trim(),
+      CONTENT: page.trim(),
       PAGER: pager(i),
-      BODY_CLASS: p.hero ? 'site-home' : 'site-doc'
+      BODY_CLASS: p.hero ? 'site-home' : 'site-doc',
+      // Only a page with a playground needs the highlighter in the browser.
+      PLAY_SCRIPT: play ? '\n  <script src="assets/site-code.js" defer></script>' : ''
     };
     const html = layout
       .replace('<!doctype html>', `<!doctype html>\n${MARK}${p.slug}.html — edit that, not this. -->`)
