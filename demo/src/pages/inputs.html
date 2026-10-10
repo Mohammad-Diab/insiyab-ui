@@ -1,108 +1,34 @@
-<h2 id="field">الحقل</h2>
-<p>
-  يجمع <code>.ins-field</code> التسمية والحقل والتلميح في عمود واحد. والتسمية فيه عنصر <code>&lt;label for&gt;</code>
-  حقيقي دائمًا، فإذا نقرتها انتقل التركيز إلى الحقل، وإذا بلغها قارئ الشاشة قرأها.
-</p>
 <demo-example>
   <div class="ins-field">
     <label class="ins-label" for="i-name">الاسم</label>
     <input class="ins-input" id="i-name">
-    <span class="ins-hint">يظهر في الفواتير.</span>
+    <span class="ins-hint">تلميح قصير.</span>
   </div>
 </demo-example>
 
-<h2 id="types">أنواع الحقول</h2>
+<h2 id="field">الحقل</h2>
 <p>
-  يصلح <code>.ins-input</code> لأنواع <code>&lt;input&gt;</code> كلها، ومعه <code>.ins-select</code> و<code>.ins-textarea</code>.
-  أما البريد والهاتف فيأخذ كل منهما <code>dir="ltr"</code> على حقله وحده، ويبقى سائر النموذج عربيًا.
+  يجمع <code>.ins-field</code> التسمية والحقل والتلميح في عمود واحد، والتسمية فيه عنصر <code>&lt;label for&gt;</code> حقيقي.
+  ويصلح <code>.ins-input</code> لأنواع <code>&lt;input&gt;</code> كلها، ومعه <code>.ins-select</code> للقائمة و<code>.ins-textarea</code> للنص الطويل.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<p>
-  وإذا فتحت قائمة <code>&lt;select&gt;</code> ظهرت بطاقة زجاجية كقوائم المكتبة المنسدلة، والخيار المختار فيها بلون الهوية،
-  وذلك حيث يسمح المتصفح بتنسيقها بـ CSS (كروم وإيدج). وهي مع هذا القائمة الأصلية نفسها، فلا يتغير عليها النموذج ولا لوحة المفاتيح
-  ولا قارئ الشاشة، والمتصفح الذي لا يسمح بذلك يعرض قائمته المعتادة.
-</p>
-<demo-example class="stack">
-  <input class="ins-input" type="email" dir="ltr" placeholder="name@example.com" aria-label="البريد">
-  <input class="ins-input" type="tel" dir="ltr" placeholder="+966 5X XXX XXXX" aria-label="الهاتف">
-  <input class="ins-input" type="number" value="249" aria-label="السعر">
-  <select class="ins-select" aria-label="الدولة">
-    <option>السعودية</option><option>مصر</option><option>الأردن</option>
-  </select>
-  <textarea class="ins-textarea" placeholder="ملاحظات" aria-label="ملاحظات"></textarea>
-</demo-example>
-
-<h2 id="sizes">المقاسات</h2>
-<demo-example class="stack">
-  <input class="ins-input ins-input--sm" placeholder="صغير · ins-input--sm" aria-label="صغير">
-  <input class="ins-input" placeholder="عادي" aria-label="عادي">
-  <input class="ins-input ins-input--lg" placeholder="كبير · ins-input--lg" aria-label="كبير">
-  <select class="ins-select ins-select--sm" aria-label="قائمة صغيرة"><option>قائمة صغيرة</option></select>
-  <select class="ins-select ins-select--lg" aria-label="قائمة كبيرة"><option>قائمة كبيرة</option></select>
-</demo-example>
-
-<h2 id="states">الحالات</h2>
-<p>
-  يتعطل الحقل بـ <code>disabled</code>، ويصير للقراءة فقط بـ <code>readonly</code>. ويدل على الخطأ
-  <code>aria-invalid="true"</code> ومعه رسالة <code>.ins-error</code>، وعلى القبول <code>.ins-input--ok</code> ومعه رسالة <code>.ins-success</code>.
-</p>
-<demo-example class="stack">
-  <input class="ins-input" value="معطل" aria-label="معطل" disabled>
-  <input class="ins-input" value="للقراءة فقط" aria-label="للقراءة فقط" readonly>
-  <div class="ins-field">
-    <input class="ins-input" value="abc" aria-label="خطأ" aria-invalid="true">
-    <p class="ins-error">اكتب رقمًا صحيحًا.</p>
-  </div>
-  <div class="ins-field">
-    <input class="ins-input ins-input--ok" value="huda" aria-label="صحيح" dir="ltr">
-    <p class="ins-success">الاسم متاح.</p>
-  </div>
-</demo-example>
-<p>أما التحقق التلقائي من هذه الحالات، وإظهار رسائل المتصفح تحت الحقل، ففي صفحة <a href="validation.html">التحقق</a>.</p>
-
-<h2 id="count">عداد الأحرف والكلمات</h2>
-<p>
-  ضع <code>data-ins-count</code> على حقل، فيظهر تحته عدد ما كتبت من أصل <code>maxlength</code>. وإذا أردت عد الكلمات فاكتب
-  <code>data-ins-count="words"</code> ومعه <code>data-ins-max</code>. ويتلون العداد بالأصفر إذا دنا من الحد وبالأحمر إذا تجاوزه،
-  فإذا تجاوز حد الكلمات صار الحقل غير صالح، وامتنع النموذج عن الإرسال.
-</p>
-<demo-example class="stack">
-  <div class="ins-field">
-    <label class="ins-label" for="i-title">العنوان</label>
-    <input class="ins-input" id="i-title" maxlength="60" data-ins-count value="تقرير الربع الثالث">
-  </div>
-  <div class="ins-field">
-    <label class="ins-label" for="i-summary">الملخص</label>
-    <textarea class="ins-textarea" id="i-summary" data-ins-count="words" data-ins-max="50"></textarea>
-  </div>
-</demo-example>
+<demo-play of="field"></demo-play>
 
 <h2 id="search">حقل البحث</h2>
-<demo-example>
-  <div class="ins-search">
-    <svg class="ico ins-search-ico"><use href="#i-search"/></svg>
-    <input class="ins-input" type="search" placeholder="بحث" aria-label="بحث">
-  </div>
-</demo-example>
+<p>يضع <code>.ins-search</code> أيقونة البحث داخل الحقل، فتأخذ لون الهوية إذا تركّز فيه.</p>
+<demo-play of="search"></demo-play>
 
-<h2 id="form">نموذج كامل</h2>
+<h2 id="form">النموذج</h2>
 <p>
-  يجعل <code>.ins-field-row</code> الحقول متجاورة، ويجمع <code>.ins-form-commit</code> أزرار الحفظ في آخر النموذج،
-  ويضع <code>.ins-req</code> علامة الحقل المطلوب.
+  يرتب <code>.ins-field-row</code> الحقول في سطر، و<code>.ins-field-grid</code> في شبكة، ويجمع <code>.ins-form-commit</code>
+  أزرار الحفظ في آخر النموذج. أما التحقق من الحقول وإظهار رسائل المتصفح تحتها ففي صفحة <a href="validation.html">التحقق</a>.
 </p>
-<demo-example>
-  <form onsubmit="event.preventDefault()">
-    <div class="ins-field-row">
-      <div class="ins-field ins-grow">
-        <label class="ins-label" for="f-name">الاسم<span class="ins-req" aria-hidden="true">*</span></label>
-        <input class="ins-input" id="f-name" required>
-      </div>
-      <div class="ins-field ins-grow">
-        <label class="ins-label" for="f-city">المدينة</label>
-        <input class="ins-input" id="f-city">
-      </div>
-    </div>
-    <div class="ins-form-commit">
-      <button class="ins-btn ins-btn--primary">حفظ</button>
-    </div>
-  </form>
-</demo-example>
+<demo-play of="form"></demo-play>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الحقول من كلاسات وسمات، لكل مكون صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
+
+<script>
+  document.addEventListener('submit', function (e) { if (e.target.closest('.dx')) e.preventDefault(); });
+</script>

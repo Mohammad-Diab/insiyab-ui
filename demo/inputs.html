@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,164 +274,255 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">حقل النص والقائمة ومربع النص الطويل، بثلاثة مقاسات، ومعها التسمية والتلميح.</p>
-        <h2 id="field">الحقل</h2>
-<p>
-  يجمع <code>.ins-field</code> التسمية والحقل والتلميح في عمود واحد. والتسمية فيه عنصر <code>&lt;label for&gt;</code>
-  حقيقي دائمًا، فإذا نقرتها انتقل التركيز إلى الحقل، وإذا بلغها قارئ الشاشة قرأها.
-</p>
-<figure class="dx"><div class="dx-view">
+        <figure class="dx"><div class="dx-view">
   <div class="ins-field">
     <label class="ins-label" for="i-name">الاسم</label>
     <input class="ins-input" id="i-name">
-    <span class="ins-hint">يظهر في الفواتير.</span>
+    <span class="ins-hint">تلميح قصير.</span>
   </div>
 </div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-name"</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-name"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span><span class="hl-t">&gt;</span>يظهر في الفواتير.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span><span class="hl-t">&gt;</span>تلميح قصير.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="types">أنواع الحقول</h2>
+<h2 id="field">الحقل</h2>
 <p>
-  يصلح <code>.ins-input</code> لأنواع <code>&lt;input&gt;</code> كلها، ومعه <code>.ins-select</code> و<code>.ins-textarea</code>.
-  أما البريد والهاتف فيأخذ كل منهما <code>dir="ltr"</code> على حقله وحده، ويبقى سائر النموذج عربيًا.
+  يجمع <code>.ins-field</code> التسمية والحقل والتلميح في عمود واحد، والتسمية فيه عنصر <code>&lt;label for&gt;</code> حقيقي.
+  ويصلح <code>.ins-input</code> لأنواع <code>&lt;input&gt;</code> كلها، ومعه <code>.ins-select</code> للقائمة و<code>.ins-textarea</code> للنص الطويل.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<p>
-  وإذا فتحت قائمة <code>&lt;select&gt;</code> ظهرت بطاقة زجاجية كقوائم المكتبة المنسدلة، والخيار المختار فيها بلون الهوية،
-  وذلك حيث يسمح المتصفح بتنسيقها بـ CSS (كروم وإيدج). وهي مع هذا القائمة الأصلية نفسها، فلا يتغير عليها النموذج ولا لوحة المفاتيح
-  ولا قارئ الشاشة، والمتصفح الذي لا يسمح بذلك يعرض قائمته المعتادة.
-</p>
-<figure class="dx"><div class="dx-view stack">
-  <input class="ins-input" type="email" dir="ltr" placeholder="name@example.com" aria-label="البريد">
-  <input class="ins-input" type="tel" dir="ltr" placeholder="+966 5X XXX XXXX" aria-label="الهاتف">
-  <input class="ins-input" type="number" value="249" aria-label="السعر">
-  <select class="ins-select" aria-label="الدولة">
-    <option>السعودية</option><option>مصر</option><option>الأردن</option>
-  </select>
-  <textarea class="ins-textarea" placeholder="ملاحظات" aria-label="ملاحظات"></textarea>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"email"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"name@example.com"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"البريد"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"tel"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"+966 5X XXX XXXX"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الهاتف"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"number"</span> <span class="hl-a">value</span>=<span class="hl-s">"249"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"السعر"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;select</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-select"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الدولة"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>السعودية<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>مصر<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>الأردن<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/select</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;textarea</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-textarea"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"ملاحظات"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"ملاحظات"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/textarea</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="sizes">المقاسات</h2>
-<figure class="dx"><div class="dx-view stack">
-  <input class="ins-input ins-input--sm" placeholder="صغير · ins-input--sm" aria-label="صغير">
-  <input class="ins-input" placeholder="عادي" aria-label="عادي">
-  <input class="ins-input ins-input--lg" placeholder="كبير · ins-input--lg" aria-label="كبير">
-  <select class="ins-select ins-select--sm" aria-label="قائمة صغيرة"><option>قائمة صغيرة</option></select>
-  <select class="ins-select ins-select--lg" aria-label="قائمة كبيرة"><option>قائمة كبيرة</option></select>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-input--sm"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"صغير · ins-input--sm"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"صغير"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"عادي"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"عادي"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-input--lg"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"كبير · ins-input--lg"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"كبير"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;select</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-select ins-select--sm"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"قائمة صغيرة"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>قائمة صغيرة<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/select</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;select</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-select ins-select--lg"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"قائمة كبيرة"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>قائمة كبيرة<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/select</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="states">الحالات</h2>
-<p>
-  يتعطل الحقل بـ <code>disabled</code>، ويصير للقراءة فقط بـ <code>readonly</code>. ويدل على الخطأ
-  <code>aria-invalid="true"</code> ومعه رسالة <code>.ins-error</code>، وعلى القبول <code>.ins-input--ok</code> ومعه رسالة <code>.ins-success</code>.
-</p>
-<figure class="dx"><div class="dx-view stack">
-  <input class="ins-input" value="معطل" aria-label="معطل" disabled>
-  <input class="ins-input" value="للقراءة فقط" aria-label="للقراءة فقط" readonly>
-  <div class="ins-field">
-    <input class="ins-input" value="abc" aria-label="خطأ" aria-invalid="true">
-    <p class="ins-error">اكتب رقمًا صحيحًا.</p>
-  </div>
-  <div class="ins-field">
-    <input class="ins-input ins-input--ok" value="huda" aria-label="صحيح" dir="ltr">
-    <p class="ins-success">الاسم متاح.</p>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">value</span>=<span class="hl-s">"معطل"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"معطل"</span> <span class="hl-a">disabled</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">value</span>=<span class="hl-s">"للقراءة فقط"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"للقراءة فقط"</span> <span class="hl-a">readonly</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">value</span>=<span class="hl-s">"abc"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"خطأ"</span> <span class="hl-a">aria-invalid</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span>اكتب رقمًا صحيحًا.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-input--ok"</span> <span class="hl-a">value</span>=<span class="hl-s">"huda"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"صحيح"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-success"</span><span class="hl-t">&gt;</span>الاسم متاح.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p>أما التحقق التلقائي من هذه الحالات، وإظهار رسائل المتصفح تحت الحقل، ففي صفحة <a href="validation.html">التحقق</a>.</p>
-
-<h2 id="count">عداد الأحرف والكلمات</h2>
-<p>
-  ضع <code>data-ins-count</code> على حقل، فيظهر تحته عدد ما كتبت من أصل <code>maxlength</code>. وإذا أردت عد الكلمات فاكتب
-  <code>data-ins-count="words"</code> ومعه <code>data-ins-max</code>. ويتلون العداد بالأصفر إذا دنا من الحد وبالأحمر إذا تجاوزه،
-  فإذا تجاوز حد الكلمات صار الحقل غير صالح، وامتنع النموذج عن الإرسال.
-</p>
-<figure class="dx"><div class="dx-view stack">
-  <div class="ins-field">
-    <label class="ins-label" for="i-title">العنوان</label>
-    <input class="ins-input" id="i-title" maxlength="60" data-ins-count value="تقرير الربع الثالث">
-  </div>
-  <div class="ins-field">
-    <label class="ins-label" for="i-summary">الملخص</label>
-    <textarea class="ins-textarea" id="i-summary" data-ins-count="words" data-ins-max="50"></textarea>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-title"</span><span class="hl-t">&gt;</span>العنوان<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-title"</span> <span class="hl-a">maxlength</span>=<span class="hl-s">"60"</span> <span class="hl-a">data-ins-count</span> <span class="hl-a">value</span>=<span class="hl-s">"تقرير الربع الثالث"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"i-summary"</span><span class="hl-t">&gt;</span>الملخص<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;textarea</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-textarea"</span> <span class="hl-a">id</span>=<span class="hl-s">"i-summary"</span> <span class="hl-a">data-ins-count</span>=<span class="hl-s">"words"</span> <span class="hl-a">data-ins-max</span>=<span class="hl-s">"50"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/textarea</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="field"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-field">
+  <label class="ins-label" for="p-field">الاسم</label>
+  <input class="ins-input" id="p-field">
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات الحقل"><div class="site-play-ctl" data-key="el" data-type="seg"><span class="site-play-label">العنصر</span><div class="ins-seg" role="group" aria-label="العنصر"><button type="button" data-value="input" class="is-active" aria-pressed="true">حقل</button><button type="button" data-value="select" aria-pressed="false">قائمة</button><button type="button" data-value="textarea" aria-pressed="false">نص طويل</button></div></div><label class="site-play-ctl" data-key="type" data-type="select"><span class="site-play-label">النوع</span><select class="ins-select ins-select--sm"><option value="text" selected>نص</option><option value="email">بريد</option><option value="tel">هاتف</option><option value="number">رقم</option><option value="password">كلمة مرور</option></select></label><div class="site-play-ctl" data-key="size" data-type="seg"><span class="site-play-label">المقاس</span><div class="ins-seg" role="group" aria-label="المقاس"><button type="button" data-value="sm" aria-pressed="false">صغير</button><button type="button" data-value="" class="is-active" aria-pressed="true">عادي</button><button type="button" data-value="lg" aria-pressed="false">كبير</button></div></div><label class="site-play-ctl" data-key="state" data-type="select"><span class="site-play-label">الحالة</span><select class="ins-select ins-select--sm"><option value="" selected>عادي</option><option value="disabled">معطل</option><option value="readonly">للقراءة فقط</option><option value="bad">خطأ</option><option value="ok">مقبول</option></select></label><div class="site-play-ctl" data-key="count" data-type="seg"><span class="site-play-label">العداد</span><div class="ins-seg" role="group" aria-label="العداد"><button type="button" data-value="" class="is-active" aria-pressed="true">بلا</button><button type="button" data-value="chars" aria-pressed="false">أحرف</button><button type="button" data-value="words" aria-pressed="false">كلمات</button></div></div><label class="site-play-ctl" data-key="label" data-type="text"><span class="site-play-label">التسمية</span><input class="ins-input ins-input--sm" type="text" value="الاسم"></label><div class="site-play-ctl" data-key="hint" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">تلميح</span></span></label></div><div class="site-play-ctl" data-key="req" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مطلوب</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-field"</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-field"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="search">حقل البحث</h2>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-search">
-    <svg class="ico ins-search-ico"><use href="#i-search"/></svg>
-    <input class="ins-input" type="search" placeholder="بحث" aria-label="بحث">
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-search"</span><span class="hl-t">&gt;</span>
+<p>يضع <code>.ins-search</code> أيقونة البحث داخل الحقل، فتأخذ لون الهوية إذا تركّز فيه.</p>
+<figure class="dx site-play" data-play="search"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-search">
+  <svg class="ico ins-search-ico"><use href="#i-search"/></svg>
+  <input class="ins-input" type="search" placeholder="بحث" aria-label="بحث">
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات حقل البحث"><div class="site-play-ctl" data-key="size" data-type="seg"><span class="site-play-label">المقاس</span><div class="ins-seg" role="group" aria-label="المقاس"><button type="button" data-value="sm" aria-pressed="false">صغير</button><button type="button" data-value="" class="is-active" aria-pressed="true">عادي</button><button type="button" data-value="lg" aria-pressed="false">كبير</button></div></div><div class="site-play-ctl" data-key="bar" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مع زر</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-search"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;svg</span> <span class="hl-a">class</span>=<span class="hl-s">"ico ins-search-ico"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;use</span> <span class="hl-a">href</span>=<span class="hl-s">"#i-search"</span><span class="hl-t">/&gt;</span><span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">type</span>=<span class="hl-s">"search"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"بحث"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"بحث"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="form">نموذج كامل</h2>
+<h2 id="form">النموذج</h2>
 <p>
-  يجعل <code>.ins-field-row</code> الحقول متجاورة، ويجمع <code>.ins-form-commit</code> أزرار الحفظ في آخر النموذج،
-  ويضع <code>.ins-req</code> علامة الحقل المطلوب.
+  يرتب <code>.ins-field-row</code> الحقول في سطر، و<code>.ins-field-grid</code> في شبكة، ويجمع <code>.ins-form-commit</code>
+  أزرار الحفظ في آخر النموذج. أما التحقق من الحقول وإظهار رسائل المتصفح تحتها ففي صفحة <a href="validation.html">التحقق</a>.
 </p>
-<figure class="dx"><div class="dx-view">
-  <form onsubmit="event.preventDefault()">
-    <div class="ins-field-row">
-      <div class="ins-field ins-grow">
-        <label class="ins-label" for="f-name">الاسم<span class="ins-req" aria-hidden="true">*</span></label>
-        <input class="ins-input" id="f-name" required>
-      </div>
-      <div class="ins-field ins-grow">
-        <label class="ins-label" for="f-city">المدينة</label>
-        <input class="ins-input" id="f-city">
-      </div>
+<figure class="dx site-play" data-play="form"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><form>
+  <div class="ins-stack">
+    <div class="ins-field">
+      <label class="ins-label" for="p-f1">الاسم</label>
+      <input class="ins-input" id="p-f1">
     </div>
-    <div class="ins-form-commit">
-      <button class="ins-btn ins-btn--primary">حفظ</button>
+    <div class="ins-field">
+      <label class="ins-label" for="p-f2">المدينة</label>
+      <input class="ins-input" id="p-f2">
     </div>
-  </form>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;form</span> <span class="hl-a">onsubmit</span>=<span class="hl-s">"event.preventDefault()"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field-row"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"f-name"</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-req"</span> <span class="hl-a">aria-hidden</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>*<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"f-name"</span> <span class="hl-a">required</span><span class="hl-t">&gt;</span>
+    <div class="ins-field">
+      <label class="ins-label" for="p-f3">الهاتف</label>
+      <input class="ins-input" id="p-f3">
+    </div>
+  </div>
+  <div class="ins-form-commit">
+    <button class="ins-btn ins-btn--primary">حفظ</button>
+  </div>
+</form></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات النموذج"><div class="site-play-ctl" data-key="layout" data-type="seg"><span class="site-play-label">ترتيب الحقول</span><div class="ins-seg" role="group" aria-label="ترتيب الحقول"><button type="button" data-value="" class="is-active" aria-pressed="true">عمود</button><button type="button" data-value="row" aria-pressed="false">سطر</button><button type="button" data-value="grid" aria-pressed="false">شبكة</button></div></div><div class="site-play-ctl" data-key="commit" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">سطر الحفظ</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;form</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-f1"</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-f1"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"f-city"</span><span class="hl-t">&gt;</span>المدينة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"f-city"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-f2"</span><span class="hl-t">&gt;</span>المدينة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-f2"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-f3"</span><span class="hl-t">&gt;</span>الهاتف<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-f3"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-form-commit"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>حفظ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/form</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الحقول من كلاسات وسمات، لكل مكون صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>الحقل</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-input</code></td><td>كلاس</td><td>الحقل نفسه، على <code>&lt;input&gt;</code> بأي نوع.</td></tr><tr><td><code>.ins-label</code></td><td>كلاس</td><td>التسمية، على <code>&lt;label for&gt;</code> حقيقي: إذا نقرتها انتقل التركيز إلى الحقل، وإذا بلغها قارئ الشاشة قرأها.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">العنصر</th></tr></tbody><tbody><tr><td><code>.ins-select</code></td><td>كلاس</td><td>لقائمة <code>&lt;select&gt;</code>. وحيث يسمح المتصفح (كروم وإيدج) تفتح بطاقة زجاجية كقوائم المكتبة، وهي مع ذلك القائمة الأصلية نفسها.</td></tr><tr><td><code>.ins-textarea</code></td><td>كلاس</td><td>لمربع النص الطويل <code>&lt;textarea&gt;</code>، ويطول بالسحب.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المقاس</th></tr></tbody><tbody><tr><td><code>.ins-input--sm</code></td><td>كلاس</td><td>حقل أصغر، للجداول والأشرطة.</td></tr><tr><td><code>.ins-input--lg</code></td><td>كلاس</td><td>حقل أكبر، لصفحة دخول أو بحث هو كل الصفحة.</td></tr><tr><td><code>.ins-select--sm</code></td><td>كلاس</td><td>قائمة صغيرة، تجاور <code>ins-input--sm</code>. ولا مقاس لمربع النص الطويل.</td></tr><tr><td><code>.ins-select--lg</code></td><td>كلاس</td><td>قائمة كبيرة، تجاور <code>ins-input--lg</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الحالة</th></tr></tbody><tbody><tr><td><code>disabled</code></td><td>سمة</td><td>يعطل الحقل، فلا يُكتب فيه ولا يُرسل مع النموذج.</td></tr><tr><td><code>readonly</code></td><td>سمة</td><td>تُقرأ قيمة الحقل وتُنسخ ولا تُغيَّر، وتُرسل مع النموذج.</td></tr><tr><td><code>aria-invalid="true"</code></td><td>سمة</td><td>يدل على الخطأ، ومعه رسالة <code>.ins-error</code> تحت الحقل. وتجد التحقق التلقائي في صفحة التحقق.</td></tr><tr><td><code>.ins-input--ok</code></td><td>كلاس</td><td>يدل على قبول القيمة، ومعه رسالة <code>.ins-success</code>، وتكفي الرسالة وحدها للقائمة ومربع النص.</td></tr><tr><td><code>.ins-input--bad</code></td><td>كلاس</td><td>مثل <code>aria-invalid="true"</code>، لمن لا يملك أن يضيف إلا كلاسًا، ومثله <code>ins-select--bad</code> للقائمة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">العداد</th></tr></tbody><tbody><tr><td><code>data-ins-count</code></td><td>سمة</td><td>يعد تحت الحقل ما كُتب من أصل <code>maxlength</code>، ويصفرّ إذا دنا من الحد ويحمرّ إذا تجاوزه.</td></tr><tr><td><code>data-ins-count="words"</code></td><td>سمة</td><td>يعد الكلمات من أصل <code>data-ins-max</code>، فإذا تجاوزها صار الحقل غير صالح وامتنع النموذج عن الإرسال.</td></tr><tr><td><code>data-ins-max</code></td><td>سمة</td><td>حد الكلمات للعداد، ويحد الأحرف أيضًا إذا غاب <code>maxlength</code>.</td></tr><tr class="site-adv"><td><code>data-ins-count-el</code></td><td>سمة</td><td>معرّف عنصر تختاره ليكتب فيه العداد بدل الذي تضيفه المكتبة.</td></tr><tr class="site-adv"><td><code>data-ins-text</code></td><td>سمة</td><td>على ذلك العنصر: صيغة العداد، مثل <code>{n} من {max}</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-hint</code></td><td>كلاس</td><td>سطر قصير تحت الحقل يشرح ما يُكتب فيه.</td></tr><tr><td><code>.ins-req</code></td><td>كلاس</td><td>علامة الحقل المطلوب بعد التسمية، ومعها <code>aria-hidden</code>. أما <code>required</code> على الحقل فهو ما يقرؤه قارئ الشاشة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">النوع</th></tr></tbody><tbody><tr><td><code>dir="ltr"</code></td><td>سمة</td><td>على حقل البريد أو الهاتف وحده، فيُكتب من اليسار ويبقى سائر النموذج عربيًا.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>حقل البحث</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-search</code></td><td>كلاس</td><td>يضع أيقونة البحث داخل الحقل في أوله، وتأخذ لون الهوية إذا تركّز فيه.</td></tr><tr><td><code>.ins-search-ico</code></td><td>كلاس</td><td>الأيقونة نفسها، على <code>&lt;svg&gt;</code> قبل الحقل.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-searchbar</code></td><td>كلاس</td><td>يضم حقل البحث وزره في سطر واحد بعرض محدود، ويدفعهما إلى آخر شريط الأدوات.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>النموذج</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-field</code></td><td>كلاس</td><td>يجمع التسمية والحقل والتلميح في عمود واحد.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">ترتيب الحقول</th></tr></tbody><tbody><tr><td><code>.ins-field-row</code></td><td>كلاس</td><td>يجعل الحقول متجاورة في سطر يلتف إذا ضاق، وتلتقي رؤوسها على خط واحد.</td></tr><tr><td><code>.ins-field-grid</code></td><td>كلاس</td><td>لحقول قصيرة كثيرة لا يسعها سطر: شبكة تتوازى حقولها مهما اختلفت تسمياتها.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-form-commit</code></td><td>كلاس</td><td>يجمع أزرار الحفظ في آخر النموذج، ويبدأ بالزر الرئيسي.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+  document.addEventListener('submit', function (e) { if (e.target.closest('.dx')) e.preventDefault(); });
+</script>
+
+<script>
+SitePlay.define({
+  id: 'field',
+  title: 'الحقل',
+  wide: true,
+  owns: 'ins-input',
+  controls: [
+    { key: 'el', label: 'العنصر', type: 'seg', value: 'input', choices: [
+      { value: 'input', label: 'حقل' },
+      { value: 'select', label: 'قائمة', name: 'ins-select', desc: 'لقائمة `<select>`. وحيث يسمح المتصفح (كروم وإيدج) تفتح بطاقة زجاجية كقوائم المكتبة، وهي مع ذلك القائمة الأصلية نفسها.' },
+      { value: 'textarea', label: 'نص طويل', name: 'ins-textarea', desc: 'لمربع النص الطويل `<textarea>`، ويطول بالسحب.' }
+    ] },
+    { key: 'type', label: 'النوع', type: 'select', value: 'text', choices: [
+      { value: 'text', label: 'نص' },
+      { value: 'email', label: 'بريد' },
+      { value: 'tel', label: 'هاتف' },
+      { value: 'number', label: 'رقم' },
+      { value: 'password', label: 'كلمة مرور' }
+    ] },
+    { key: 'size', label: 'المقاس', type: 'seg', value: '', choices: [
+      { value: 'sm', label: 'صغير', name: 'ins-input--sm', desc: 'حقل أصغر، للجداول والأشرطة.' },
+      { value: '', label: 'عادي' },
+      { value: 'lg', label: 'كبير', name: 'ins-input--lg', desc: 'حقل أكبر، لصفحة دخول أو بحث هو كل الصفحة.' }
+    ] },
+    { key: 'state', label: 'الحالة', type: 'select', value: '', choices: [
+      { value: '', label: 'عادي' },
+      { value: 'disabled', label: 'معطل', name: 'disabled', desc: 'يعطل الحقل، فلا يُكتب فيه ولا يُرسل مع النموذج.' },
+      { value: 'readonly', label: 'للقراءة فقط', name: 'readonly', desc: 'تُقرأ قيمة الحقل وتُنسخ ولا تُغيَّر، وتُرسل مع النموذج.' },
+      { value: 'bad', label: 'خطأ', name: 'aria-invalid="true"', desc: 'يدل على الخطأ، ومعه رسالة `.ins-error` تحت الحقل. وتجد التحقق التلقائي في صفحة التحقق.' },
+      { value: 'ok', label: 'مقبول', name: 'ins-input--ok', desc: 'يدل على قبول القيمة، ومعه رسالة `.ins-success`، وتكفي الرسالة وحدها للقائمة ومربع النص.' }
+    ] },
+    { key: 'count', label: 'العداد', type: 'seg', value: '', choices: [
+      { value: '', label: 'بلا' },
+      { value: 'chars', label: 'أحرف', name: 'data-ins-count', desc: 'يعد تحت الحقل ما كُتب من أصل `maxlength`، ويصفرّ إذا دنا من الحد ويحمرّ إذا تجاوزه.' },
+      { value: 'words', label: 'كلمات', name: 'data-ins-count="words"', desc: 'يعد الكلمات من أصل `data-ins-max`، فإذا تجاوزها صار الحقل غير صالح وامتنع النموذج عن الإرسال.' }
+    ] },
+    { key: 'label', label: 'التسمية', type: 'text', value: 'الاسم' },
+    { key: 'hint', label: 'تلميح', type: 'switch', name: 'ins-hint', desc: 'سطر قصير تحت الحقل يشرح ما يُكتب فيه.' },
+    { key: 'req', label: 'مطلوب', type: 'switch', name: 'ins-req', desc: 'علامة الحقل المطلوب بعد التسمية، ومعها `aria-hidden`. أما `required` على الحقل فهو ما يقرؤه قارئ الشاشة.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-input', desc: 'الحقل نفسه، على `<input>` بأي نوع.' },
+    { group: 'الأساس', name: 'ins-label', desc: 'التسمية، على `<label for>` حقيقي: إذا نقرتها انتقل التركيز إلى الحقل، وإذا بلغها قارئ الشاشة قرأها.' },
+    { group: 'النوع', name: 'dir="ltr"', desc: 'على حقل البريد أو الهاتف وحده، فيُكتب من اليسار ويبقى سائر النموذج عربيًا.' },
+    { group: 'المقاس', name: 'ins-select--sm', desc: 'قائمة صغيرة، تجاور `ins-input--sm`. ولا مقاس لمربع النص الطويل.' },
+    { group: 'المقاس', name: 'ins-select--lg', desc: 'قائمة كبيرة، تجاور `ins-input--lg`.' },
+    { group: 'الحالة', name: 'ins-input--bad', desc: 'مثل `aria-invalid="true"`، لمن لا يملك أن يضيف إلا كلاسًا، ومثله `ins-select--bad` للقائمة.' },
+    { group: 'العداد', name: 'data-ins-max', desc: 'حد الكلمات للعداد، ويحد الأحرف أيضًا إذا غاب `maxlength`.' },
+    { group: 'العداد', name: 'data-ins-count-el', level: 'advanced', desc: 'معرّف عنصر تختاره ليكتب فيه العداد بدل الذي تضيفه المكتبة.' },
+    { group: 'العداد', name: 'data-ins-text', level: 'advanced', desc: 'على ذلك العنصر: صيغة العداد، مثل `{n} من {max}`.' }
+  ],
+  disable: function (s) {
+    var off = [];
+    if (s.el !== 'input') off.push('type');
+    if (s.el === 'textarea') off.push('size');
+    if (s.el === 'select') off.push('count');
+    return off;
+  },
+  html: function (s) {
+    var tag = s.el;
+    var cls = 'ins-' + tag + (s.size && tag !== 'textarea' ? ' ins-' + tag + '--' + s.size : '') + (s.state === 'ok' && tag === 'input' ? ' ins-input--ok' : '');
+    var attrs = ' id="p-field"';
+    var ltr = tag === 'input' && (s.type === 'email' || s.type === 'tel');
+    if (tag === 'input' && s.type !== 'text') attrs += ' type="' + s.type + '"';
+    if (ltr) attrs += ' dir="ltr"';
+    if (s.req) attrs += ' required';
+    if (s.count === 'chars' && tag !== 'select') attrs += ' maxlength="60" data-ins-count';
+    if (s.count === 'words' && tag !== 'select') attrs += ' data-ins-count="words" data-ins-max="50"';
+    if (s.state === 'disabled') attrs += ' disabled';
+    if (s.state === 'readonly' && tag !== 'select') attrs += ' readonly';
+    if (s.state === 'bad') attrs += ' aria-invalid="true"';
+    var value = s.state === 'disabled' || s.state === 'readonly' || s.state === 'bad' || s.state === 'ok' ? 'نص قصير' : '';
+    if (tag === 'input' && s.type === 'email' && value) value = 'name@example.com';
+    if (tag === 'input' && s.type === 'tel' && value) value = '+966 50 000 0000';
+    if (tag === 'input' && s.type === 'number' && value) value = '12';
+    if (tag === 'input' && s.type === 'password') value = '';
+    if (ltr && !value) attrs += ' placeholder="' + (s.type === 'email' ? 'name@example.com' : '+966 50 000 0000') + '"';
+    var ctl;
+    if (tag === 'select') ctl = '<select class="' + cls + '"' + attrs + '>\n    <option>الأول</option>\n    <option>الثاني</option>\n    <option>الثالث</option>\n  </select>';
+    else if (tag === 'textarea') ctl = '<textarea class="' + cls + '"' + attrs + '>' + value + '</textarea>';
+    else ctl = '<input class="' + cls + '"' + attrs + (value ? ' value="' + value + '"' : '') + '>';
+    var out = '<div class="ins-field">\n' +
+      '  <label class="ins-label" for="p-field">' + s.label + (s.req ? '<span class="ins-req" aria-hidden="true">*</span>' : '') + '</label>\n' +
+      '  ' + ctl + '\n';
+    if (s.hint) out += '  <span class="ins-hint">تلميح قصير.</span>\n';
+    if (s.state === 'bad') out += '  <p class="ins-error">رسالة الخطأ.</p>\n';
+    if (s.state === 'ok') out += '  <p class="ins-success">رسالة القبول.</p>\n';
+    return out + '</div>';
+  },
+  stage: function (view, s) {
+    var input = view.querySelector('input');
+    if (s.el === 'input' && !input.value && (s.type === 'number' || s.type === 'password')) input.value = s.type === 'number' ? '12' : 'secret';
+  },
+  notes: function (s) {
+    var out = [];
+    if (s.el === 'input' && (s.type === 'email' || s.type === 'tel')) out.push('يُكتب البريد والهاتف من اليسار، فأخذ الحقل وحده `dir="ltr"`.');
+    if (s.el === 'select' && s.state === 'readonly') out.push('القائمة لا تعرف `readonly`، فإما أن تبقى كما هي أو تُعطَّل.');
+    if (s.count && s.el !== 'select') out.push('اكتب في الحقل، فيتغير العداد تحته.');
+    return out;
+  }
+});
+
+SitePlay.define({
+  id: 'search',
+  title: 'حقل البحث',
+  wide: true,
+  owns: 'ins-search',
+  controls: [
+    { key: 'size', label: 'المقاس', type: 'seg', value: '', choices: [
+      { value: 'sm', label: 'صغير' },
+      { value: '', label: 'عادي' },
+      { value: 'lg', label: 'كبير' }
+    ] },
+    { key: 'bar', label: 'مع زر', type: 'switch', name: 'ins-searchbar', desc: 'يضم حقل البحث وزره في سطر واحد بعرض محدود، ويدفعهما إلى آخر شريط الأدوات.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-search', desc: 'يضع أيقونة البحث داخل الحقل في أوله، وتأخذ لون الهوية إذا تركّز فيه.' },
+    { group: 'الأساس', name: 'ins-search-ico', desc: 'الأيقونة نفسها، على `<svg>` قبل الحقل.' }
+  ],
+  html: function (s) {
+    var search = '<div class="ins-search">\n' +
+      '  <svg class="ico ins-search-ico"><use href="#i-search"/></svg>\n' +
+      '  <input class="ins-input' + (s.size ? ' ins-input--' + s.size : '') + '" type="search" placeholder="بحث" aria-label="بحث">\n' +
+      '</div>';
+    if (!s.bar) return search;
+    return '<div class="ins-searchbar">\n  ' + search.replace(/\n/g, '\n  ') + '\n  <button class="ins-btn ins-btn--primary' + (s.size === 'sm' ? ' ins-btn--sm' : s.size === 'lg' ? ' ins-btn--lg' : '') + '">بحث</button>\n</div>';
+  }
+});
+
+SitePlay.define({
+  id: 'form',
+  title: 'النموذج',
+  wide: true,
+  owns: 'ins-field',
+  controls: [
+    { key: 'layout', label: 'ترتيب الحقول', type: 'seg', value: '', choices: [
+      { value: '', label: 'عمود' },
+      { value: 'row', label: 'سطر', name: 'ins-field-row', desc: 'يجعل الحقول متجاورة في سطر يلتف إذا ضاق، وتلتقي رؤوسها على خط واحد.' },
+      { value: 'grid', label: 'شبكة', name: 'ins-field-grid', desc: 'لحقول قصيرة كثيرة لا يسعها سطر: شبكة تتوازى حقولها مهما اختلفت تسمياتها.' }
+    ] },
+    { key: 'commit', label: 'سطر الحفظ', type: 'switch', value: true, name: 'ins-form-commit', desc: 'يجمع أزرار الحفظ في آخر النموذج، ويبدأ بالزر الرئيسي.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-field', desc: 'يجمع التسمية والحقل والتلميح في عمود واحد.' }
+  ],
+  html: function (s) {
+    var grow = s.layout === 'row' ? ' ins-grow' : '';
+    var field = function (id, label) {
+      return '    <div class="ins-field' + grow + '">\n' +
+        '      <label class="ins-label" for="' + id + '">' + label + '</label>\n' +
+        '      <input class="ins-input" id="' + id + '">\n' +
+        '    </div>\n';
+    };
+    var wrap = s.layout === 'row' ? 'ins-field-row' : s.layout === 'grid' ? 'ins-field-grid' : 'ins-stack';
+    var commit = s.commit ? '  <div class="ins-form-commit">\n    <button class="ins-btn ins-btn--primary">حفظ</button>\n  </div>\n' : '';
+    return '<form>\n  <div class="' + wrap + '">\n' + field('p-f1', 'الاسم') + field('p-f2', 'المدينة') + field('p-f3', 'الهاتف') + '  </div>\n' + commit + '</form>';
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="quote.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الاقتباس والتظليل</span></a><a class="site-pager-link site-pager-link--next" href="checks.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الاختيار والمفاتيح</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#field">الحقل</a><a href="#types">أنواع الحقول</a><a href="#sizes">المقاسات</a><a href="#states">الحالات</a><a href="#count">عداد الأحرف والكلمات</a><a href="#search">حقل البحث</a><a href="#form">نموذج كامل</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#field">الحقل</a><a href="#search">حقل البحث</a><a href="#form">النموذج</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
