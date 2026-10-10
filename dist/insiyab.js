@@ -1910,6 +1910,77 @@
     if (drum) drumSet(drum, timeOf(input) || timeDefault(input));
   }
 
+  var CAL_TURN = 560, CAL_EASE = 'cubic-bezier(.22, 1, .36, 1)', calGhosts = [];
+
+  function calSnap() {
+    var out = {}, days = calEl.querySelectorAll('.ins-cal-day[data-date]');
+    for (var i = 0; i < days.length; i++) {
+      out[days[i].getAttribute('data-date')] = { el: days[i], at: days[i].getBoundingClientRect(), col: days[i].parentNode.cellIndex || 0, name: days[i].__insName || days[i].textContent };
+    }
+    return out;
+  }
+
+  // A day turns over like a card mid-glide, and its other calendar's number is on the back.
+  function calFlip(day, from, dx, dy, wait) {
+    var name = day.textContent, a = dy < 0 ? -90 : 90, tilt = ' perspective(20rem) rotateX(';
+    day.__insName = name;
+    day.textContent = from;
+    day.animate([
+      { transform: 'translate(' + dx + 'px, ' + dy + 'px)' + tilt + '0deg)', easing: 'cubic-bezier(.5, 0, .75, 0)' },
+      { transform: 'translate(' + dx / 2 + 'px, ' + dy / 2 + 'px)' + tilt + a + 'deg)', offset: .5 },
+      { transform: 'translate(' + dx / 2 + 'px, ' + dy / 2 + 'px)' + tilt + -a + 'deg)', offset: .5, easing: 'cubic-bezier(.25, 1, .5, 1)' },
+      { transform: 'translate(0px, 0px)' + tilt + '0deg)' }
+    ], { duration: CAL_TURN, delay: wait, fill: 'backwards' });
+    window.setTimeout(function () { day.textContent = name; day.__insName = null; }, wait + CAL_TURN / 2);
+  }
+
+  function calDrop(node) { return function () { if (node.parentNode) node.parentNode.removeChild(node); }; }
+
+  // Switching calendars: the same days glide to their rows in the other calendar, in a wave across the columns.
+  function calTurn(before) {
+    var seg = calEl.querySelector('.ins-cal-switch');
+    if (seg) segFly(seg, seg.querySelector(':scope > :not(.is-active)'), seg.querySelector(':scope > .is-active'));
+    if (motionless() || !Element.prototype.animate) return;
+    while (calGhosts.length) calDrop(calGhosts.pop())();
+    var days = calEl.querySelectorAll('.ins-cal-day[data-date]'), seen = {}, sx = 0, sy = 0, i, at, was;
+    for (i = 0; i < days.length; i++) {
+      was = before[days[i].getAttribute('data-date')];
+      if (was) { at = days[i].getBoundingClientRect(); sx = was.at.left - at.left; sy = was.at.top - at.top; break; }
+    }
+    for (i = 0; i < days.length; i++) {
+      var day = days[i], iso = day.getAttribute('data-date'), wait = (day.parentNode.cellIndex || 0) * 30;
+      was = before[iso];
+      seen[iso] = true;
+      if (was) {
+        at = day.getBoundingClientRect();
+        calFlip(day, was.name, was.at.left - at.left, was.at.top - at.top, wait);
+      } else {
+        day.animate([{ transform: 'translate(' + sx + 'px, ' + sy + 'px)', opacity: 0 }, { opacity: 0, offset: .4 }, { transform: 'none', opacity: 1 }],
+          { duration: CAL_TURN, delay: wait, easing: CAL_EASE, fill: 'backwards' });
+      }
+    }
+    var box = calEl.getBoundingClientRect();
+    for (var key in before) {
+      if (seen[key]) continue;
+      var r = before[key].at, ghost = before[key].el.cloneNode(true);
+      ghost.removeAttribute('data-date');
+      ghost.tabIndex = -1;
+      ghost.inert = true;
+      ghost.setAttribute('aria-hidden', 'true');
+      ghost.style.cssText = 'position:absolute;margin:0;pointer-events:none;left:' + (r.left - box.left - calEl.clientLeft) + 'px;top:' +
+        (r.top - box.top - calEl.clientTop) + 'px;width:' + r.width + 'px;height:' + r.height + 'px;max-block-size:none';
+      calEl.appendChild(ghost);
+      calGhosts.push(ghost);
+      ghost.animate([{ transform: 'none', opacity: 1 }, { opacity: 0, offset: .45 }, { transform: 'translate(' + -sx + 'px, ' + -sy + 'px)', opacity: 0 }],
+        { duration: CAL_TURN, delay: before[key].col * 30, easing: CAL_EASE, fill: 'both' }).onfinish = calDrop(ghost);
+    }
+    var titles = calEl.querySelectorAll('.ins-cal-title');
+    for (i = 0; i < titles.length; i++) {
+      titles[i].animate([{ opacity: 0, transform: 'translateY(-.375rem)', filter: 'blur(2px)' }, { opacity: 1, transform: 'none', filter: 'none' }],
+        { duration: 360, easing: CAL_EASE });
+    }
+  }
+
   /* Below the field, aligned to its leading edge — the right edge on an Arabic page
      — and above it when there is no room below. */
   function placeNear(layer, target) {
@@ -2110,11 +2181,13 @@
       /* Stopped here: the switch is drawn as a segmented control, and the page's
          own segmented-control handler has nothing to do with it. */
       event.stopPropagation();
-      var input = calFor, want = t.getAttribute('data-value');
+      if (t.classList.contains('is-active')) return;
+      var input = calFor, want = t.getAttribute('data-value'), before = calSnap();
       if (want === 'gregory') input.setAttribute('data-ins-calendar-view', 'gregory');
       else input.removeAttribute('data-ins-calendar-view');
       calView = monthStartIn(viewCalendar(input), calFocus);
       renderCal();
+      calTurn(before);
       /* The field says the same day in the calendar now on screen, and so do its
          min and max messages. */
       var chosen = dateOf(input);
