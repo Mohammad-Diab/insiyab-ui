@@ -1,8 +1,3 @@
-<h2 id="entrances">الدخول</h2>
-<p>
-  ضع <code>data-ins-reveal</code> على حاوية فيدخل أبناؤها متتابعين، أما الكلاسات الثلاثة فتمنح عنصرًا بمفرده حركة
-  دخول. واضغط «أعد» لتراها مرة أخرى.
-</p>
 <demo-example class="stack">
   <div class="ins-cols-4" data-ins-reveal id="reveal-demo">
     <div class="demo-box">1</div>
@@ -18,9 +13,23 @@
   </div>
 </demo-example>
 
+<h2 id="reveal">دخول الأبناء متتابعين</h2>
+<p>
+  ضع <code>data-ins-reveal</code> على حاوية فيدخل أبناؤها متتابعين. واضغط «أعد» في المثال أعلاه لتراه مرة أخرى.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<demo-play of="reveal"></demo-play>
+
+<h2 id="anim">حركة لعنصر بمفرده</h2>
+<p>تمنح الكلاسات الثلاثة عنصرًا بمفرده حركة دخول.</p>
+<demo-play of="anim"></demo-play>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في حركات الدخول من كلاسات وسمات، لكل منها صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
+
 <script>
-  /* A fresh copy of each element is the only way to run a CSS entrance again.
-     Delegated, because the button is inside one of the copies. */
+  // A fresh copy is the only way to run a CSS entrance again; delegated, as the button is inside a copy.
   document.addEventListener('click', function (e) {
     if (!e.target.closest('#replay')) return;
     ['reveal-demo', 'anim-demo'].forEach(function (id) {

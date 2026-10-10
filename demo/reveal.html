@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,12 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">أبناء حاوية يدخلون تباعًا حين تظهر على الشاشة (reveal)، وثلاثة كلاسات تمنح عنصرًا واحدًا حركة دخول.</p>
-        <h2 id="entrances">الدخول</h2>
-<p>
-  ضع <code>data-ins-reveal</code> على حاوية فيدخل أبناؤها متتابعين، أما الكلاسات الثلاثة فتمنح عنصرًا بمفرده حركة
-  دخول. واضغط «أعد» لتراها مرة أخرى.
-</p>
-<figure class="dx"><div class="dx-view stack">
+        <figure class="dx"><div class="dx-view stack">
   <div class="ins-cols-4" data-ins-reveal id="reveal-demo">
     <div class="demo-box">1</div>
     <div class="demo-box">2</div>
@@ -304,9 +300,33 @@
   <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-ms-auto"</span> <span class="hl-a">id</span>=<span class="hl-s">"replay"</span><span class="hl-t">&gt;</span>أعد<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
+<h2 id="reveal">دخول الأبناء متتابعين</h2>
+<p>
+  ضع <code>data-ins-reveal</code> على حاوية فيدخل أبناؤها متتابعين. واضغط «أعد» في المثال أعلاه لتراه مرة أخرى.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="reveal"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-cols-4" data-ins-reveal>
+  <div class="demo-box">1</div>
+  <div class="demo-box">2</div>
+  <div class="demo-box">3</div>
+  <div class="demo-box">4</div>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">غيّر أي خيار فتعود الحركة من أولها.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات دخول الأبناء متتابعين"><div class="site-play-ctl" data-key="count" data-type="seg"><span class="site-play-label">عدد الأبناء</span><div class="ins-seg" role="group" aria-label="عدد الأبناء"><button type="button" data-value="4" class="is-active" aria-pressed="true">4</button><button type="button" data-value="8" aria-pressed="false">8</button></div></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-4"</span> <span class="hl-a">data-ins-reveal</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>1<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>2<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>4<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="anim">حركة لعنصر بمفرده</h2>
+<p>تمنح الكلاسات الثلاثة عنصرًا بمفرده حركة دخول.</p>
+<figure class="dx site-play" data-play="anim"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><div class="demo-box ins-anim-rise">عنصر</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">تعيد المعاينة الحركة كل ثانيتين، لأن حركة الدخول تجري مرة واحدة.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات حركة لعنصر بمفرده"><div class="site-play-ctl" data-key="anim" data-type="seg"><span class="site-play-label">الحركة</span><div class="ins-seg" role="group" aria-label="الحركة"><button type="button" data-value="rise" class="is-active" aria-pressed="true">صعود</button><button type="button" data-value="pop" aria-pressed="false">نبضة</button><button type="button" data-value="slide" aria-pressed="false">انزلاق</button></div></div><label class="site-play-ctl" data-key="text" data-type="text"><span class="site-play-label">النص</span><input class="ins-input ins-input--sm" type="text" value="عنصر"></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-anim-rise"</span><span class="hl-t">&gt;</span>عنصر<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في حركات الدخول من كلاسات وسمات، لكل منها صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>دخول الأبناء متتابعين</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-reveal</code></td><td>سمة</td><td>على حاوية، فيدخل أبناؤها واحدًا بعد واحد، حتى العاشر منهم. وتتوقف الحركة إذا أطفأ المستخدم المؤثرات.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>حركة لعنصر بمفرده</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الحركة</th></tr></tbody><tbody><tr><td><code>.ins-anim-rise</code></td><td>كلاس</td><td>يصعد العنصر قليلًا وهو يظهر.</td></tr><tr><td><code>.ins-anim-pop</code></td><td>كلاس</td><td>يكبر العنصر من أصغر من حجمه بنبضة خفيفة.</td></tr><tr><td><code>.ins-anim-slide</code></td><td>كلاس</td><td>ينزلق العنصر من حافة البداية مع اتجاه القراءة.</td></tr></tbody></table></div></div></details></div></div>
+
 <script>
-  /* A fresh copy of each element is the only way to run a CSS entrance again.
-     Delegated, because the button is inside one of the copies. */
+  // A fresh copy is the only way to run a CSS entrance again; delegated, as the button is inside a copy.
   document.addEventListener('click', function (e) {
     if (!e.target.closest('#replay')) return;
     ['reveal-demo', 'anim-demo'].forEach(function (id) {
@@ -315,9 +335,63 @@
     });
   });
 </script>
+
+<script>
+var animLoop = 0;
+
+SitePlay.define({
+  id: 'reveal',
+  title: 'دخول الأبناء متتابعين',
+  wide: true,
+  controls: [
+    { key: 'count', label: 'عدد الأبناء', type: 'seg', value: '4', choices: [
+      { value: '4', label: '4' },
+      { value: '8', label: '8' }
+    ] }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-reveal', desc: 'على حاوية، فيدخل أبناؤها واحدًا بعد واحد، حتى العاشر منهم. وتتوقف الحركة إذا أطفأ المستخدم المؤثرات.' }
+  ],
+  html: function (s) {
+    var boxes = [];
+    for (var i = 1; i <= +s.count; i++) boxes.push('  <div class="demo-box">' + i + '</div>');
+    return '<div class="ins-cols-4" data-ins-reveal>\n' + boxes.join('\n') + '\n</div>';
+  },
+  notes: function () { return ['غيّر أي خيار فتعود الحركة من أولها.']; }
+});
+
+SitePlay.define({
+  id: 'anim',
+  title: 'حركة لعنصر بمفرده',
+  owns: 'ins-anim',
+  controls: [
+    { key: 'anim', label: 'الحركة', type: 'seg', value: 'rise', choices: [
+      { value: 'rise', label: 'صعود', name: 'ins-anim-rise', desc: 'يصعد العنصر قليلًا وهو يظهر.' },
+      { value: 'pop', label: 'نبضة', name: 'ins-anim-pop', desc: 'يكبر العنصر من أصغر من حجمه بنبضة خفيفة.' },
+      { value: 'slide', label: 'انزلاق', name: 'ins-anim-slide', desc: 'ينزلق العنصر من حافة البداية مع اتجاه القراءة.' }
+    ] },
+    { key: 'text', label: 'النص', type: 'text', value: 'عنصر' }
+  ],
+  html: function (s) {
+    return '<div class="demo-box ins-anim-' + s.anim + '">' + s.text + '</div>';
+  },
+  // An entrance runs once, so the preview replays it every two seconds.
+  stage: function (view) {
+    clearInterval(animLoop);
+    var el = view.firstElementChild, cls = el.className;
+    animLoop = setInterval(function () {
+      if (!el.isConnected) { clearInterval(animLoop); return; }
+      el.className = 'demo-box';
+      void el.offsetWidth;
+      el.className = cls;
+    }, 2000);
+  },
+  notes: function () { return ['تعيد المعاينة الحركة كل ثانيتين، لأن حركة الدخول تجري مرة واحدة.']; }
+});
+</script>
         <nav class="site-pager site-adv" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="colorpicker.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">منتقي الألوان</span></a><span></span></nav><nav class="site-pager site-simple" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="tpl-error.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">صفحة الخطأ</span></a><span></span></nav>
         </div>
-        
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#reveal">دخول الأبناء متتابعين</a><a href="#anim">حركة لعنصر بمفرده</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
