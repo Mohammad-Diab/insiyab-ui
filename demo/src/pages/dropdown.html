@@ -1,14 +1,3 @@
-<h2 id="basic">قائمة الإجراءات</h2>
-<p>
-  تقوم القائمة المنسدلة على <code>&lt;details class="ins-pop"&gt;</code>: عنصر <code>&lt;summary&gt;</code> فيها هو الزر،
-  و<code>.ins-pop-body</code> هو القائمة، فتنفتح دون جافاسكربت. ثم يزيدها السكربت، فيغلقها مفتاح <kbd class="ins-kbd">Esc</kbd> ويعيد التركيز إلى زرها،
-  وتتنقل الأسهم بين عناصرها متخطية المعطل منها، ويغلقها النقر خارجها.
-</p>
-<p>
-  ويكون <code>-label</code> عنوانًا لمجموعة، و<code>-sep</code> فاصلًا، و<code>-item--bad</code> لإجراء خطير، وإذا وضعت
-  <code>&lt;kbd&gt;</code> داخل العنصر ظهر اختصاره في آخره. تتدلى القائمة من بداية زرها وتمتد نحو نهاية السطر، فإذا كان
-  الزر في آخر الشريط فأضف <code>--end</code> لتحاذيه من نهايته. وتنقلب وحدها عند حافة الشاشة إذا كادت تخرج منها.
-</p>
 <demo-example class="row">
   <details class="ins-pop">
     <summary class="ins-btn ins-btn--secondary">إجراءات</summary>
@@ -23,64 +12,14 @@
   </details>
 </demo-example>
 
-<h2 id="checkable" data-level="advanced">عناصر قابلة للتحديد</h2>
+<h2 id="split">القائمة المنسدلة</h2>
 <p>
-  أعط العنصر <code>role="menuitemcheckbox"</code> أو <code>menuitemradio</code> ومعه <code>aria-checked</code>. وتبقى
-  القائمة مفتوحة ما دمت تحدد فيها، ويحمل الحدث <code>ins:menu</code> الحالة الجديدة.
+  تقوم القائمة المنسدلة على <code>&lt;details class="ins-pop"&gt;</code>: عنصر <code>&lt;summary&gt;</code> فيها هو الزر،
+  و<code>.ins-pop-body</code> هو القائمة، فتنفتح دون جافاسكربت. ثم يزيدها السكربت، فيغلقها مفتاح <kbd class="ins-kbd">Esc</kbd>
+  والنقر خارجها، وتتنقل الأسهم بين عناصرها. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<demo-example class="row">
-  <details class="ins-pop">
-    <summary class="ins-btn ins-btn--secondary">عرض</summary>
-    <div class="ins-pop-body">
-      <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="true">الأول</button>
-      <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="false">الثاني</button>
-      <hr class="ins-pop-sep">
-      <div role="group">
-        <button class="ins-pop-item" role="menuitemradio" aria-checked="true">الأحدث</button>
-        <button class="ins-pop-item" role="menuitemradio" aria-checked="false">الأقدم</button>
-      </div>
-    </div>
-  </details>
-</demo-example>
+<demo-play of="pop"></demo-play>
 
-<h2 id="card">بطاقة منسدلة</h2>
-<p>
-  ضع في <code>.ins-pop-body--card</code> ما شئت من محتوى بدل العناصر، ويبقى لها سلوك القائمة كله. ولعنوان هذا
-  المحتوى <code>.ins-pop-title</code>، ولنصه <code>.ins-pop-text</code>.
-</p>
-<demo-example class="row">
-  <details class="ins-pop">
-    <summary class="ins-btn ins-btn--secondary">التفاصيل</summary>
-    <div class="ins-pop-body ins-pop-body--card">
-      <p class="ins-pop-title">العنوان</p>
-      <p class="ins-pop-text">نص حر قصير.</p>
-    </div>
-  </details>
-</demo-example>
-
-<h2 id="menu-link">الروابط في القائمة</h2>
-<p>يصلح <code>.ins-pop-item</code> على <code>&lt;a&gt;</code> كما يصلح على <code>&lt;button&gt;</code>.</p>
-<demo-example class="row">
-  <details class="ins-pop">
-    <summary class="ins-btn ins-btn--secondary">المساعدة</summary>
-    <div class="ins-pop-body">
-      <a class="ins-pop-item" href="start.html">البدء السريع</a>
-      <a class="ins-pop-item" href="faq.html">أسئلة شائعة</a>
-    </div>
-  </details>
-</demo-example>
-
-<h2 id="split" data-level="advanced">الزر المقسوم</h2>
-<p>ضع القائمة داخل <code>.ins-btn-group</code> بجانب زر، فيكون الإجراء الأساسي بضغطة واحدة، وتبقى بدائله في القائمة.</p>
-<demo-example class="row">
-  <div class="ins-btn-group">
-    <button class="ins-btn ins-btn--primary">نشر</button>
-    <details class="ins-pop">
-      <summary class="ins-btn ins-btn--primary ins-btn--icon" aria-label="خيارات النشر"><svg class="ico"><use href="#i-chev-down"/></svg></summary>
-      <div class="ins-pop-body">
-        <button class="ins-pop-item">جدولة</button>
-        <button class="ins-pop-item">حفظ مسودة</button>
-      </div>
-    </details>
-  </div>
-</demo-example>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في القائمة المنسدلة من كلاسات وسمات وأحداث، في صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
