@@ -27,6 +27,15 @@
   <a href="pickers.html#date">حقل التاريخ</a> بتقويمه.
 </p>
 
+<p>
+  <b>ولقارئ الشاشة</b> ثلاثة حقول مسماة: اليوم والشهر والسنة، في مجموعة تحمل اسم تسمية الحقل، وزر يُعلن أنه يفتح نافذة، ويُعلن
+  السطر تحتها التاريخ حين يكتمل. والنصوص بالعربية أو الإنجليزية بحسب لغة الصفحة، وأسماء الشهور بلغتها، فتظهر «كانون الثاني» في صفحة <code>ar-SY</code>.
+</p>
+
+<h2 id="try">جرّب الحقل</h2>
+<p>اختر من الخيارات، فيتغير الحقل وشيفرته معًا. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.</p>
+<demo-play of="birth"></demo-play>
+
 <h2 id="typing">الكتابة</h2>
 <p>تكتب في الحقل مباشرة، وينتقل التركيز وحده من اليوم إلى الشهر إلى السنة، بهذه القواعد:</p>
 <ul>
@@ -55,33 +64,6 @@
   <b>وتبدأ الأعمدة من المنتصف</b> حتى تكون المسافة إلى أي تاريخ أقصر ما يمكن: اليوم 16، والشهر يونيو، والسنة من عمر 31،
   وهو الوسيط العالمي للعمر بتقديرات الأمم المتحدة.
 </p>
-
-<h2 id="inline">الشكل الكبير</h2>
-<p>
-  حين يكون تاريخ الميلاد هو السؤال الوحيد في الشاشة، كخطوة في معالج تسجيل، اكتب <code>data-ins-birth="inline"</code>،
-  فتظهر الحقول الثلاثة كتلًا كبيرة ينمو فيها الرقم، وتحت كل كتلة عمودها مباشرة، دون نافذة منبثقة:
-</p>
-<demo-example>
-  <input type="date" id="birth-inline" data-ins-birth="inline" aria-label="تاريخ الميلاد">
-</demo-example>
-
-<h2 id="ages">العمر المسموح وعمر البداية</h2>
-<p>
-  <code>data-ins-age-min</code> أقل عمر مقبول، فينتهي عمود السنة عنده، ويُرفض كل تاريخ يجعل العمر أقل منه برسالة تقول السبب.
-  و<code>data-ins-age-max</code> أكبر عمر، وافتراضه 120. و<code>data-ins-age-start</code> عمر البداية، لموقع تعرف أعمار جمهوره:
-</p>
-<demo-example>
-  <div class="ins-field-row">
-    <div class="ins-field">
-      <label class="ins-label" for="birth-adult">18 سنة فأكثر</label>
-      <input type="date" id="birth-adult" data-ins-birth data-ins-age-min="18">
-    </div>
-    <div class="ins-field">
-      <label class="ins-label" for="birth-young">جمهور شاب، يبدأ من 22</label>
-      <input type="date" id="birth-young" data-ins-birth data-ins-age-start="22" data-ins-age-max="70">
-    </div>
-  </div>
-</demo-example>
 
 <h2 id="form">ما يصل إلى الخادم</h2>
 <p>
@@ -118,28 +100,9 @@ Insiyab.birth.reconfigure('#birth');     // بعد تغيير سمات العم�
 </demo-code>
 <p>ويُطلق <code>&lt;input&gt;</code> الأصلي <code>input</code> و<code>change</code> كلما تغيرت قيمته، فتعمل عليه مستمعاتك كما تعمل على أي حقل.</p>
 
-<h2 id="attributes">السمات</h2>
-<div class="ins-panel site-ref">
-  <div class="ins-panel-body ins-panel-body--flush">
-    <div class="ins-table-wrap">
-      <table class="ins-table">
-        <thead><tr><th>السمة</th><th>ما تفعله</th></tr></thead>
-        <tbody>
-          <tr><td><code>data-ins-birth</code></td><td>على <code>&lt;input type="date"&gt;</code>: تجعله حقل تاريخ ميلاد، وأعمدته في نافذة منبثقة.</td></tr>
-          <tr><td><code>data-ins-birth="inline"</code></td><td>الشكل الكبير: كتل كبيرة وأعمدتها تحتها، دون نافذة منبثقة.</td></tr>
-          <tr><td><code>data-ins-age-min="18"</code></td><td>أقل عمر مقبول. الافتراض 0.</td></tr>
-          <tr><td><code>data-ins-age-max="100"</code></td><td>أكبر عمر، فيقصر عمود السنة. الافتراض 120.</td></tr>
-          <tr><td><code>data-ins-age-start="25"</code></td><td>العمر الذي يبدأ منه عمود السنة. الافتراض 31.</td></tr>
-          <tr><td><code>value</code>، <code>required</code>، <code>disabled</code></td><td>تعمل كما تعمل على حقل التاريخ.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-<p>
-  <b>ولقارئ الشاشة</b> ثلاثة حقول مسماة: اليوم والشهر والسنة، في مجموعة تحمل اسم تسمية الحقل، وزر يُعلن أنه يفتح نافذة، ويُعلن
-  السطر تحتها التاريخ حين يكتمل. والنصوص بالعربية أو الإنجليزية بحسب لغة الصفحة، وأسماء الشهور بلغتها، فتظهر «كانون الثاني» في صفحة <code>ar-SY</code>.
-</p>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في حقل الميلاد من كلاسات وسمات وأحداث.</p>
+<demo-options></demo-options>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
