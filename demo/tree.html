@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -276,19 +277,6 @@
         <link rel="stylesheet" href="../dist/plugins/insiyab-tree.css">
 <script src="../dist/plugins/insiyab-tree.js" defer></script>
 
-<h2 id="install">التثبيت</h2>
-<p>إضافة مستقلة عن المكتبة: ملف أنماط وملف سكربت تضعهما بعد ملفاتها.</p>
-<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/plugins/insiyab-tree.css"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab-boot.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-tree.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
-
-<h2 id="tree">شجرة ملفات</h2>
-<p>
-  ضع <code>data-ins-tree</code> على قوائم متداخلة تصر شجرة. فأول عنصر في كل بند هو تسميته، <code>span</code> أو
-  رابط، ولك أن تضع فيها أيقونة، والقائمة التي داخله هي فرعه، ويبقى مغلقًا ما لم تضع عليه <code>data-open</code>.
-  وإذا جاء بعد التسمية عدد أو شارة انتقل إلى آخر الصف. وإن غاب السكربت بقيت القائمة المتداخلة على حالها.
-</p>
 <figure class="dx"><div class="dx-view">
   <ul class="ins-tree" data-ins-tree aria-label="الملفات">
     <li data-open><span><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>العقود</span>
@@ -329,6 +317,46 @@
   <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>ملاحظات.txt<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
+<h2 id="install">التثبيت</h2>
+<p>إضافة مستقلة عن المكتبة: ملف أنماط وملف سكربت تضعهما بعد ملفاتها.</p>
+<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/plugins/insiyab-tree.css"</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab-boot.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-tree.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
+
+<h2 id="tree">شجرة ملفات</h2>
+<p>
+  ضع <code>data-ins-tree</code> على قوائم متداخلة تصر شجرة: أول عنصر في كل بند تسميته، والقائمة التي داخله فرعه، ويبقى
+  مغلقًا ما لم تضع عليه <code>data-open</code>. وإن غاب السكربت بقيت القائمة المتداخلة على حالها.
+</p>
+<figure class="dx site-play" data-play="tree"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><ul class="ins-tree" data-ins-tree aria-label="الملفات">
+  <li data-open><span><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>المستندات</span>
+    <ul>
+      <li><span><svg class="ico" aria-hidden="true"><use href="#i-file"/></svg>ملف.pdf</span></li>
+      <li><span><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>الصور</span>
+        <ul>
+          <li><span><svg class="ico" aria-hidden="true"><use href="#i-file"/></svg>صورة 1.png</span></li>
+          <li><span><svg class="ico" aria-hidden="true"><use href="#i-file"/></svg>صورة 2.png</span></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><span><svg class="ico" aria-hidden="true"><use href="#i-file"/></svg>ملاحظات.txt</span></li>
+</ul></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">انقر بندًا أو افتح فرعًا، فيظهر هنا الحدث.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات الشجرة"><div class="site-play-ctl" data-key="checks" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">بمربعات اختيار</span></span></label></div><div class="site-play-ctl" data-key="icons" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">بأيقونات</span></span></label></div><div class="site-play-ctl" data-key="open" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">فرع مفتوح</span></span></label></div><div class="site-play-ctl" data-key="link" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">رابط</span></span></label></div><div class="site-play-ctl" data-key="count" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">عدد في آخر الصف</span></span></label></div><div class="site-play-ctl site-adv" data-key="none" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">بلا اختيار</span></span></label></div><div class="site-play-ctl site-adv" data-key="selected" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">بند مختار</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;ul</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tree"</span> <span class="hl-a">data-ins-tree</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الملفات"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;li</span> <span class="hl-a">data-open</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>المستندات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;ul</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>ملف.pdf<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>الصور<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
+        <span class="hl-t">&lt;ul</span><span class="hl-t">&gt;</span>
+          <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>صورة 1.png<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+          <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>صورة 2.png<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+        <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>ملاحظات.txt<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
 <div class="site-adv"><h2 id="keyboard">لوحة المفاتيح</h2>
 <p>تصل إلى الشجرة بضغطة Tab واحدة، ثم تتنقل فيها بالأسهم كما تتنقل في شجرة الملفات:</p>
 <ul>
@@ -339,43 +367,6 @@
   <li><kbd>Enter</kbd> ينتقل إلى الرابط أو يختار البند، و<kbd>Space</kbd> يختاره، أو يحدده إن كانت الشجرة بمربعات اختيار.</li>
 </ul></div>
 
-<h2 id="checks">شجرة صلاحيات</h2>
-<p>
-  أضف <code>data-ins-tree-checks</code> واجعل تسمية كل بند مربع اختيار <code>.ins-check</code>، فإذا حددت فرعًا
-  تحدد كل ما فيه، والفرع الذي حُدد بعض ما فيه يظهر في حالة <code>indeterminate</code> ولا يُرسل مع النموذج.
-</p>
-<figure class="dx"><div class="dx-view">
-  <ul class="ins-tree" data-ins-tree data-ins-tree-checks aria-label="الصلاحيات">
-    <li data-open><label class="ins-check"><input type="checkbox" name="perm" value="sales"><span class="ins-check-text">المبيعات</span></label>
-      <ul>
-        <li><label class="ins-check"><input type="checkbox" name="perm" value="sales.view" checked><span class="ins-check-text">عرض الطلبات</span></label></li>
-        <li><label class="ins-check"><input type="checkbox" name="perm" value="sales.edit"><span class="ins-check-text">تعديل الطلبات</span></label></li>
-        <li><label class="ins-check"><input type="checkbox" name="perm" value="sales.refund"><span class="ins-check-text">الاسترداد</span></label></li>
-      </ul>
-    </li>
-    <li><label class="ins-check"><input type="checkbox" name="perm" value="hr" checked><span class="ins-check-text">الموارد البشرية</span></label>
-      <ul>
-        <li><label class="ins-check"><input type="checkbox" name="perm" value="hr.view"><span class="ins-check-text">عرض الموظفين</span></label></li>
-        <li><label class="ins-check"><input type="checkbox" name="perm" value="hr.pay"><span class="ins-check-text">الرواتب</span></label></li>
-      </ul>
-    </li>
-  </ul>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;ul</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tree"</span> <span class="hl-a">data-ins-tree</span> <span class="hl-a">data-ins-tree-checks</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الصلاحيات"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span> <span class="hl-a">data-open</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">name</span>=<span class="hl-s">"perm"</span> <span class="hl-a">value</span>=<span class="hl-s">"sales"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check-text"</span><span class="hl-t">&gt;</span>المبيعات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;ul</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">name</span>=<span class="hl-s">"perm"</span> <span class="hl-a">value</span>=<span class="hl-s">"sales.view"</span> <span class="hl-a">checked</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check-text"</span><span class="hl-t">&gt;</span>عرض الطلبات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">name</span>=<span class="hl-s">"perm"</span> <span class="hl-a">value</span>=<span class="hl-s">"sales.edit"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check-text"</span><span class="hl-t">&gt;</span>تعديل الطلبات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">name</span>=<span class="hl-s">"perm"</span> <span class="hl-a">value</span>=<span class="hl-s">"sales.refund"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check-text"</span><span class="hl-t">&gt;</span>الاسترداد<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">name</span>=<span class="hl-s">"perm"</span> <span class="hl-a">value</span>=<span class="hl-s">"hr"</span> <span class="hl-a">checked</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check-text"</span><span class="hl-t">&gt;</span>الموارد البشرية<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;ul</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">name</span>=<span class="hl-s">"perm"</span> <span class="hl-a">value</span>=<span class="hl-s">"hr.view"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check-text"</span><span class="hl-t">&gt;</span>عرض الموظفين<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;li</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">name</span>=<span class="hl-s">"perm"</span> <span class="hl-a">value</span>=<span class="hl-s">"hr.pay"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check-text"</span><span class="hl-t">&gt;</span>الرواتب<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
 <div class="site-adv"><h2 id="api">التحكم بـ JavaScript</h2>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:tree'</span>, (e) =&gt; {
   console.log(e.detail.action, e.detail.label, e.detail.item);   <span class="hl-c">// select · open · close · check</span>
@@ -385,26 +376,77 @@
 <span class="hl-t">Insiyab</span>.tree(<span class="hl-s">'#files'</span>, <span class="hl-s">'open'</span>);       <span class="hl-c">// يفتح كل الفروع، أو 'close'</span>
 <span class="hl-t">Insiyab</span>.tree(<span class="hl-s">'#files'</span>);               <span class="hl-c">// البند المختار — أو المحددة في شجرة مربعات</span></code></pre></div></div>
 
-<div class="site-adv"><h2 id="attributes">السمات</h2>
-<div class="ins-panel site-ref">
-  <div class="ins-panel-body ins-panel-body--flush">
-    <div class="ins-table-wrap">
-      <table class="ins-table">
-        <thead><tr><th>السمة</th><th>على</th><th>ما تفعله</th></tr></thead>
-        <tbody>
-          <tr><td><code>data-ins-tree</code></td><td><code>&lt;ul&gt;</code></td><td>تجعل القوائم المتداخلة شجرة.</td></tr>
-          <tr><td><code>data-open</code></td><td><code>&lt;li&gt;</code></td><td>فرع مفتوح من البداية.</td></tr>
-          <tr><td><code>data-selected</code></td><td><code>&lt;li&gt;</code></td><td>بند مختار من البداية.</td></tr>
-          <tr><td><code>data-ins-tree-checks</code></td><td>الشجرة</td><td>مربعات اختيار يسري تحديد الفرع فيها إلى ما تحته، ويظهر الفرع المحدد جزئيًا في حالة <code>indeterminate</code>.</td></tr>
-          <tr><td><code>data-ins-tree-select="none"</code></td><td>الشجرة</td><td>تلغي الاختيار، حين تكون الشجرة للتنقل وحده.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div></div>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الشجرة من كلاسات وسمات وأحداث، في صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>الشجرة</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-tree</code></td><td>سمة</td><td>على <code>&lt;ul&gt;</code> فيه قوائم متداخلة يجعلها شجرة: أول عنصر في كل بند تسميته، <code>&lt;span&gt;</code> أو رابط، والقائمة التي فيه فرعه.</td></tr><tr><td><code>.ins-tree</code></td><td>كلاس</td><td>هيئة الشجرة، تضعها الإضافة وحدها إن غابت.</td></tr><tr><td><code>aria-label</code></td><td>سمة</td><td>اسم الشجرة يقرؤه قارئ الشاشة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">مربعات الاختيار</th></tr></tbody><tbody><tr><td><code>data-ins-tree-checks</code></td><td>سمة</td><td>اجعل تسمية كل بند مربع اختيار <code>.ins-check</code>، فإذا حددت فرعًا تحدد كل ما فيه، والفرع المحدد بعضه يظهر في حالة <code>indeterminate</code> ولا يُرسل مع النموذج.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">البند</th></tr></tbody><tbody><tr><td><code>data-open</code></td><td>سمة</td><td>على <code>&lt;li&gt;</code>: فرع مفتوح من البداية، وإلا بقي مغلقًا.</td></tr><tr><td><code>li &gt; a</code></td><td>عنصر</td><td>اجعل تسمية البند رابطًا، فينتقل إليه Enter، ويبقى رابطًا إن غاب السكربت.</td></tr><tr><td><code>.ins-tree-end</code></td><td>كلاس</td><td>بعد التسمية: ينتقل إلى آخر الصف، ومثله شارة <code>.ins-pill</code> أو <code>.ins-badge</code>.</td></tr><tr class="site-adv"><td><code>data-selected</code></td><td>سمة</td><td>على <code>&lt;li&gt;</code>: بند مختار من البداية.</td></tr></tbody><tbody class="site-opt-group site-adv"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr class="site-adv"><td><code>data-ins-tree-select="none"</code></td><td>سمة</td><td>تلغي الاختيار، حين تكون الشجرة للتنقل وحده.</td></tr></tbody><tbody class="site-opt-group site-adv"><tr><th colspan="3" scope="rowgroup">الأحداث</th></tr></tbody><tbody><tr class="site-adv"><td><code>ins:tree</code></td><td>حدث</td><td>يُطلق عند كل تغيير، وفي <code>detail</code> البند <code>item</code> وتسميته <code>label</code> وما جرى <code>action</code>: <code>select</code> أو <code>open</code> أو <code>close</code> أو <code>check</code>.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'tree',
+  title: 'الشجرة',
+  owns: 'ins-tree',
+  wide: true,
+  controls: [
+    { key: 'checks', label: 'بمربعات اختيار', group: 'مربعات الاختيار', type: 'switch', name: 'data-ins-tree-checks', desc: 'اجعل تسمية كل بند مربع اختيار `.ins-check`، فإذا حددت فرعًا تحدد كل ما فيه، والفرع المحدد بعضه يظهر في حالة `indeterminate` ولا يُرسل مع النموذج.' },
+    { key: 'icons', label: 'بأيقونات', type: 'switch', value: true },
+    { key: 'open', label: 'فرع مفتوح', group: 'البند', type: 'switch', value: true, name: 'data-open', desc: 'على `<li>`: فرع مفتوح من البداية، وإلا بقي مغلقًا.' },
+    { key: 'link', label: 'رابط', group: 'البند', type: 'switch', name: 'li > a', kind: 'element', desc: 'اجعل تسمية البند رابطًا، فينتقل إليه Enter، ويبقى رابطًا إن غاب السكربت.' },
+    { key: 'count', label: 'عدد في آخر الصف', group: 'البند', type: 'switch', name: 'ins-tree-end', desc: 'بعد التسمية: ينتقل إلى آخر الصف، ومثله شارة `.ins-pill` أو `.ins-badge`.' },
+    { key: 'none', label: 'بلا اختيار', type: 'switch', level: 'advanced', name: 'data-ins-tree-select="none"', desc: 'تلغي الاختيار، حين تكون الشجرة للتنقل وحده.' },
+    { key: 'selected', label: 'بند مختار', group: 'البند', type: 'switch', level: 'advanced', name: 'data-selected', desc: 'على `<li>`: بند مختار من البداية.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-tree', desc: 'على `<ul>` فيه قوائم متداخلة يجعلها شجرة: أول عنصر في كل بند تسميته، `<span>` أو رابط، والقائمة التي فيه فرعه.' },
+    { group: 'الأساس', name: 'ins-tree', desc: 'هيئة الشجرة، تضعها الإضافة وحدها إن غابت.' },
+    { group: 'الأساس', name: 'aria-label', desc: 'اسم الشجرة يقرؤه قارئ الشاشة.' },
+    { group: 'الأحداث', name: 'ins:tree', kind: 'event', level: 'advanced', desc: 'يُطلق عند كل تغيير، وفي `detail` البند `item` وتسميته `label` وما جرى `action`: `select` أو `open` أو `close` أو `check`.' }
+  ],
+  events: ['ins:tree'],
+  disable: function (s) {
+    var off = [];
+    if (s.checks) off.push('icons', 'link', 'selected', 'none');
+    else if (s.none) off.push('selected');
+    return off;
+  },
+  html: function (s) {
+    var folder = '<svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg>';
+    var file = '<svg class="ico" aria-hidden="true"><use href="#i-file"/></svg>';
+    var n = 0;
+    var label = function (text, ico, href) {
+      if (s.checks) return '<label class="ins-check"><input type="checkbox" name="files" value="f' + (++n) + '"' + (text === 'ملف.pdf' ? ' checked' : '') + '><span class="ins-check-text">' + text + '</span></label>';
+      var inner = (s.icons ? ico : '') + text;
+      return href && s.link ? '<a href="' + href + '">' + inner + '</a>' : '<span>' + inner + '</span>';
+    };
+    var end = function (k) { return s.count ? '<span class="ins-tree-end">' + k + '</span>' : ''; };
+    var tree = s.checks ? ' data-ins-tree-checks' : s.none ? ' data-ins-tree-select="none"' : '';
+    var picked = s.selected && !s.checks && !s.none ? ' data-selected' : '';
+    return '<ul class="ins-tree" data-ins-tree' + tree + ' aria-label="الملفات">\n' +
+      '  <li' + (s.open ? ' data-open' : '') + '>' + label('المستندات', folder) + end(2) + '\n' +
+      '    <ul>\n' +
+      '      <li>' + label('ملف.pdf', file, '/files/1') + '</li>\n' +
+      '      <li>' + label('الصور', folder) + end(2) + '\n' +
+      '        <ul>\n' +
+      '          <li>' + label('صورة 1.png', file) + '</li>\n' +
+      '          <li>' + label('صورة 2.png', file) + '</li>\n' +
+      '        </ul>\n' +
+      '      </li>\n' +
+      '    </ul>\n' +
+      '  </li>\n' +
+      '  <li' + picked + '>' + label('ملاحظات.txt', file) + '</li>\n' +
+      '</ul>';
+  },
+  notes: function (s) {
+    var out = ['انقر بندًا أو افتح فرعًا، فيظهر هنا الحدث.'];
+    if (s.link && !s.checks) out.push('صار «ملف.pdf» رابطًا يشبه غيره من البنود، فإذا نقرته أو ضغطت Enter عليه انتقلت إليه.');
+    if (s.checks) out.push('حُدد `ملف.pdf` وحده، فظهر فرعه محددًا بعضه.');
+    if (!s.checks && s.none) out.push('لا يُختار البند هنا، وتبقى الأسهم تنقلك وتفتح الفروع.');
+    return out;
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="timeline.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الخط الزمني</span></a><a class="site-pager-link site-pager-link--next" href="charts.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الرسوم البيانية</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#tree">شجرة ملفات</a><a href="#keyboard">لوحة المفاتيح</a><a href="#checks">شجرة صلاحيات</a><a href="#api">التحكم بـ JavaScript</a><a href="#attributes">السمات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#tree">شجرة ملفات</a><a href="#checks">شجرة صلاحيات</a></nav>
+        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#tree">شجرة ملفات</a><a href="#keyboard">لوحة المفاتيح</a><a href="#api">التحكم بـ JavaScript</a><a href="#options">الخيارات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#tree">شجرة ملفات</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
