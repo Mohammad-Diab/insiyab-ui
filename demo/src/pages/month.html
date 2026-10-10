@@ -1,21 +1,6 @@
 <link rel="stylesheet" href="../dist/plugins/insiyab-month.css">
 <script src="../dist/plugins/insiyab-month.js" defer></script>
 
-<h2 id="setup">التثبيت</h2>
-<demo-code>
-<link rel="stylesheet" href="insiyab/plugins/insiyab-month.css">
-<script src="insiyab/insiyab-boot.js"></script>
-<script src="insiyab/insiyab.js" defer></script>
-<script src="insiyab/plugins/insiyab-month.js" defer></script>
-</demo-code>
-
-<h2 id="month">شهر بمواعيده</h2>
-<p>
-  ضع <code>.ins-month</code> مع <code>data-ins-month="2026-09"</code>، واجعل فيه قائمة <code>.ins-month-events</code> تحمل
-  مواعيده، كل عنصر فيها موعد في يوم (<code>data-date</code>، ولك أن تضيف <code>data-time</code> و<code>data-tone</code>). ومنها
-  يرسم الشهر جدول أسابيع يبدأ باليوم الذي يبدأ به الأسبوع في لغة الصفحة، ويميز اليوم الحالي، ولا يعرض في اليوم أكثر
-  من ثلاثة مواعيد ثم يكتب عدد ما بقي، مثل «+2»، ويبقى الرابط رابطًا. وعلى الهاتف تصير المواعيد نقاطًا.
-</p>
 <demo-example>
   <div class="ins-month" data-ins-month="2026-09">
     <ul class="ins-month-events">
@@ -32,6 +17,21 @@
   </div>
 </demo-example>
 
+<h2 id="setup">التثبيت</h2>
+<demo-code>
+<link rel="stylesheet" href="insiyab/plugins/insiyab-month.css">
+<script src="insiyab/insiyab-boot.js"></script>
+<script src="insiyab/insiyab.js" defer></script>
+<script src="insiyab/plugins/insiyab-month.js" defer></script>
+</demo-code>
+
+<h2 id="month">شهر بمواعيده</h2>
+<p>
+  ضع <code>.ins-month</code> مع <code>data-ins-month="2026-09"</code>، وفيه قائمة <code>.ins-month-events</code> لكل موعد
+  فيها عنصر بيومه. ومنها يرسم الشهر جدول أسابيع يميز اليوم الحالي، وعلى الهاتف تصير المواعيد نقاطًا.
+</p>
+<demo-play of="month"></demo-play>
+
 <h2 id="events">الأحداث</h2>
 <p>
   إذا انتقلت إلى شهر آخر أُطلق حدث <code>ins:month</code> ومعه الشهر الجديد، فتضع الصفحة مواعيده في القائمة ثم
@@ -45,3 +45,7 @@ document.addEventListener('ins:month', async (e) => {
 });
 document.addEventListener('ins:month-day', (e) => openNew(e.detail.date));
 </demo-code>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في تقويم الشهر من كلاسات وسمات وأحداث، في صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
