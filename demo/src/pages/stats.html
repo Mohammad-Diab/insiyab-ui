@@ -1,9 +1,3 @@
-<h2 id="basic">البطاقة</h2>
-<p>
-  تتألف البطاقة <code>.ins-stat</code> من أيقونة في رقاقة <code>.ins-stat-ico</code>، وتسمية <code>.ins-stat-label</code>، وقيمة
-  <code>.ins-stat-value</code>. أضف إليها الكلاس <code>.ins-glass</code> فتصير سطحًا قائمًا بذاته، أو دعها بدونه وضعها داخل لوح. ولها غير نبرتها العادية خمس نبرات:
-  <code>--ok</code> و<code>--warn</code> و<code>--bad</code> و<code>--info</code> و<code>--zero</code>.
-</p>
 <demo-example>
   <div class="ins-grid">
     <div class="ins-stat ins-glass">
@@ -32,54 +26,28 @@
     </div>
   </div>
 </demo-example>
-<p>واجعل <code>--zero</code> للقيمة الصفرية فتطمئن القارئ بدل أن تنبهه، و<code>--mute</code> للقيمة الثانوية فتخفت بين أخواتها.</p>
 
-<h2 id="sizes">المقاسات والتلميح</h2>
-<p>يبرز <code>--lg</code> أهم رقم في الصفحة، ويناسب <code>--sm</code> شريطًا تتزاحم فيه البطاقات. أما <code>.ins-stat-hint</code> فسطر تحت القيمة يبين سياقها.</p>
-<demo-example>
-  <div class="ins-grid ins-grid--wide">
-    <div class="ins-stat ins-glass ins-stat--lg">
-      <span class="ins-stat-ico"><svg class="ico"><use href="#i-wallet"/></svg></span>
-      <span class="ins-stat-body">
-        <span class="ins-stat-label">الإيرادات</span>
-        <span class="ins-stat-value">128,960</span>
-        <span class="ins-stat-hint">هذا الشهر</span>
-      </span>
-    </div>
-    <div class="ins-stat ins-glass ins-stat--sm ins-stat--mute">
-      <span class="ins-stat-ico"><svg class="ico"><use href="#i-box"/></svg></span>
-      <span class="ins-stat-body"><span class="ins-stat-label">المخزون</span><span class="ins-stat-value">412</span></span>
-    </div>
-  </div>
-</demo-example>
+<h2 id="basic">البطاقة</h2>
+<p>
+  تتألف البطاقة <code>.ins-stat</code> من أيقونة في رقاقة <code>.ins-stat-ico</code>، وتسمية <code>.ins-stat-label</code>، وقيمة
+  <code>.ins-stat-value</code>. أضف إليها <code>.ins-glass</code> فتصير سطحًا قائمًا بذاته، أو دعها بدونه وضعها داخل لوح.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<demo-play of="stat"></demo-play>
 
 <h2 id="delta">التغير</h2>
 <p>
-  يعرض <code>.ins-delta</code> مقدار ما تغير الرقم عن غيره، فيدل سهمه على الاتجاه، ويدل لونه على أن التغير محمود أو مذموم. فالكلاس <code>--up</code> للصعود بالأخضر، و<code>--down</code>
-  للهبوط بالأحمر، و<code>--invert</code> يعكس اللونين حين يكون النقص خيرًا من الزيادة كالتكاليف، و<code>--flat</code> لما بقي على حاله. ويتبعه <code>.ins-delta-ref</code>
-  ليذكر ما يقارن به، ويجتمعان في البطاقة داخل <code>.ins-stat-trend</code> تحت القيمة.
+  يعرض <code>.ins-delta</code> مقدار ما تغير الرقم عن غيره، فيدل سهمه على الاتجاه، ويدل لونه على أن التغير محمود أو مذموم.
+  ويجتمع مع <code>.ins-delta-ref</code> في البطاقة داخل <code>.ins-stat-trend</code> تحت القيمة.
 </p>
-<demo-example class="row">
-  <span class="ins-delta ins-delta--up">12%</span>
-  <span class="ins-delta ins-delta--down">-4%</span>
-  <span class="ins-delta ins-delta--up ins-delta--invert">8%</span>
-  <span class="ins-delta ins-delta--flat">0%</span>
-</demo-example>
-<demo-example>
-  <div class="ins-grid">
-    <div class="ins-stat ins-glass">
-      <span class="ins-stat-ico"><svg class="ico"><use href="#i-cart"/></svg></span>
-      <span class="ins-stat-body">
-        <span class="ins-stat-label">الطلبات</span>
-        <span class="ins-stat-value">312</span>
-        <span class="ins-stat-trend"><span class="ins-delta ins-delta--up">12%</span><span class="ins-delta-ref">عن الشهر الماضي</span></span>
-      </span>
-    </div>
-  </div>
-</demo-example>
+<demo-play of="delta"></demo-play>
 
 <h2 id="layout">في الصفحة</h2>
 <p>
   ضع البطاقات في <code>.ins-grid</code>، فهي تضع منها في كل صف ما يتسع له، وأضف إليها <code>--wide</code> إذا حملت
   البطاقات أرقامًا طويلة.
 </p>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في البطاقات الإحصائية من كلاسات، لكل مكون صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
