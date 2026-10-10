@@ -1,9 +1,3 @@
-<h2 id="basic">الترقيم</h2>
-<p>
-  تتألف <code>.ins-pagination</code> من روابط <code>.ins-page</code> حقيقية تغنيها عن السكربت. تميز
-  <code>aria-current="page"</code> الصفحة الحالية، ويرسم <code>--prev</code> و<code>--next</code> السهمين، و<code>.ins-page-gap</code>
-  الفجوة بين الأرقام. ويتبع السهمان اتجاه القراءة، فيشير «السابق» إلى اليمين في الصفحة العربية.
-</p>
 <demo-example>
   <nav class="ins-pagination" aria-label="الصفحات">
     <a class="ins-page ins-page--prev" href="?page=2">السابق</a>
@@ -17,24 +11,13 @@
   </nav>
 </demo-example>
 
-<h2 id="edges">عند الطرفين</h2>
-<p>في الصفحة الأولى لا يجد «السابق» وجهة، فأعطه <code>aria-disabled="true"</code> ودعه بلا <code>href</code>.</p>
-<demo-example>
-  <nav class="ins-pagination" aria-label="الصفحات">
-    <a class="ins-page ins-page--prev" aria-disabled="true">السابق</a>
-    <a class="ins-page" aria-current="page">1</a>
-    <a class="ins-page" href="?page=2">2</a>
-    <a class="ins-page" href="?page=3">3</a>
-    <a class="ins-page ins-page--next" href="?page=2">التالي</a>
-  </nav>
-</demo-example>
+<h2 id="pagination">الترقيم</h2>
+<p>
+  تتألف <code>.ins-pagination</code> من روابط <code>.ins-page</code> حقيقية تغنيها عن السكربت، ويتبع السهمان اتجاه القراءة،
+  فيشير «السابق» إلى اليمين في الصفحة العربية. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<demo-play of="pagination"></demo-play>
 
-<h2 id="compact">الترقيم المختصر</h2>
-<p>يكتفي بالسهمين وموضعك بينهما، فيناسب الهاتف والقائمة الجانبية.</p>
-<demo-example>
-  <nav class="ins-pagination" aria-label="الصفحات">
-    <a class="ins-page ins-page--prev" href="?page=2">السابق</a>
-    <span class="ins-page-gap">3 من 12</span>
-    <a class="ins-page ins-page--next" href="?page=4">التالي</a>
-  </nav>
-</demo-example>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الترقيم من كلاسات وسمات، في صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
