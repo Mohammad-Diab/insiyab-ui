@@ -1,28 +1,14 @@
-<h2 id="basic">التلميح</h2>
-<p>إذا تركت <code>data-ins-tip</code> بلا قيمة أخذ التلميح نصه من <code>aria-label</code>، فيستمد زر الأيقونة تلميحه من تسميته.</p>
 <demo-example class="row">
   <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="تعديل" data-ins-tip><svg class="ico"><use href="#i-edit"/></svg></button>
   <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="مشاركة" data-ins-tip><svg class="ico"><use href="#i-share"/></svg></button>
 </demo-example>
 
-<h2 id="text">نص غير التسمية</h2>
+<h2 id="tip">التلميح</h2>
 <p>
-  وإذا أعطيت السمة قيمة صارت هي نص التلميح بدل التسمية، وتربطه المكتبة بالعنصر عبر <code>aria-describedby</code>، فيسمعه قارئ الشاشة بعد اسمه. أما العنصر الذي لا يقبل التركيز
-  فأضف إليه <code>tabindex="0"</code> حتى يبلغ تلميحه من يستعمل لوحة المفاتيح.
+  ضع <code>data-ins-tip</code> على العنصر، فإن تركتها بلا قيمة أخذ التلميح نصه من <code>aria-label</code>، فيستمد زر الأيقونة تلميحه
+  من تسميته. وإن أعطيتها قيمة صارت هي نص التلميح. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<demo-example class="row">
-  <button class="ins-btn ins-btn--secondary" data-ins-tip="لا يمكن التراجع">حذف</button>
-  <span tabindex="0" data-ins-tip="نص التلميح">نص عادي</span>
-</demo-example>
-
-<h2 id="sides">الجهة</h2>
-<p>تحدد <code>data-ins-tip-side</code> جهة التلميح، وهي <code>top</code> إن لم تذكرها، أو <code>bottom</code> أو <code>start</code> أو <code>end</code>. والجهتان الأخيرتان تتبعان اتجاه الصفحة، فالبداية <code>start</code> في العربية يمين. وإذا ضاق المكان بالتلميح انتقل تلقائيًا إلى الجهة المقابلة.</p>
-<demo-example class="row center">
-  <button class="ins-btn ins-btn--secondary" data-ins-tip="فوق">فوق</button>
-  <button class="ins-btn ins-btn--secondary" data-ins-tip="تحت" data-ins-tip-side="bottom">تحت</button>
-  <button class="ins-btn ins-btn--secondary" data-ins-tip="البداية" data-ins-tip-side="start">البداية</button>
-  <button class="ins-btn ins-btn--secondary" data-ins-tip="النهاية" data-ins-tip-side="end">النهاية</button>
-</demo-example>
+<demo-play of="tip"></demo-play>
 
 <h2 id="behaviour" data-level="advanced">السلوك</h2>
 <ul>
@@ -31,3 +17,7 @@
   <li>يخدم الصفحة كلها عنصر واحد في الطبقة العليا (top layer)، فلا يقصه <code>overflow</code> لوح أو جدول.</li>
   <li>يختفي بمفتاح <kbd class="ins-kbd">Esc</kbd>، وبالتمرير والضغط، وحين يغادر المؤشر العنصر والتلميح كليهما.</li>
 </ul>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في التلميح من سمات، في صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
