@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -346,97 +347,275 @@
   </div>
 </div></figure>
 
-<h2 id="classes">الكلاسات</h2>
-<div class="ins-panel site-ref">
-  <div class="ins-panel-body ins-panel-body--flush">
-    <div class="ins-table-wrap">
-      <table class="ins-table">
-        <thead><tr><th>الكلاس</th><th>الخاصية</th></tr></thead>
-        <tbody>
-          <tr><td><code>ins-m-N</code> · <code>ins-p-N</code></td><td>الجهات الأربع</td></tr>
-          <tr><td><code>ins-mt-N</code> · <code>ins-mb-N</code> · <code>ins-pt-N</code> · <code>ins-pb-N</code></td><td>الأعلى والأسفل</td></tr>
-          <tr><td><code>ins-ms-N</code> · <code>ins-ps-N</code></td><td>جهة البداية، وهي اليمين في العربية</td></tr>
-          <tr><td><code>ins-me-N</code> · <code>ins-pe-N</code></td><td>جهة النهاية، وهي اليسار في العربية</td></tr>
-          <tr><td><code>ins-mx-N</code> · <code>ins-my-N</code> · <code>ins-px-N</code> · <code>ins-py-N</code></td><td>المحور الأفقي أو العمودي</td></tr>
-          <tr><td><code>ins-gap-N</code></td><td>الفراغ (gap) بين أبناء الشبكة و<code>ins-row</code> و<code>ins-stack</code></td></tr>
-          <tr><td><code>ins-m-auto</code> · <code>ins-ms-auto</code> · <code>ins-me-auto</code> · <code>ins-mt-auto</code></td><td>يدفع العنصر إلى الطرف الآخر</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+<h2 id="margin">الهامش الخارجي</h2>
 <p>
-  وقيمة N واحدة من 0 1 2 3 4 5 6 8 12. وليس في المكتبة <code>ml</code> ولا <code>mr</code>، لأن الكلاس الواحد يصلح
-  للاتجاهين. وتغلب هذه الأدوات أنماط المكونات دون <code>!important</code>.
+  في كل كلاس جهة وخطوة: <code>ins-mt-4</code> هامش خارجي (margin) من الأعلى خطوته 4. وليس في المكتبة <code>ml</code> ولا <code>mr</code>،
+  لأن البداية والنهاية تتبعان اتجاه الصفحة، فيصلح الكلاس الواحد للاتجاهين. وتغلب هذه الكلاسات أنماط المكونات دون <code>!important</code>.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
+<figure class="dx site-play" data-play="margin"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><div class="lay">
+  <div class="demo-box ins-m-4">المحتوى</div>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">الإطار المنقط هو الحاوية، والفراغ بينه وبين المحتوى هو الهامش.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات الهامش الخارجي"><label class="site-play-ctl" data-key="side" data-type="select"><span class="site-play-label">الجهة</span><select class="ins-select ins-select--sm"><option value="" selected>الجهات الأربع</option><option value="t">الأعلى</option><option value="b">الأسفل</option><option value="s">البداية</option><option value="e">النهاية</option><option value="x">البداية والنهاية</option><option value="y">الأعلى والأسفل</option></select></label><label class="site-play-ctl" data-key="step" data-type="select"><span class="site-play-label">الخطوة</span><select class="ins-select ins-select--sm"><option value="0">0 (0 بكسل)</option><option value="1">1 (4 بكسل)</option><option value="2">2 (8 بكسل)</option><option value="3">3 (12 بكسل)</option><option value="4" selected>4 (16 بكسل)</option><option value="5">5 (20 بكسل)</option><option value="6">6 (24 بكسل)</option><option value="8">8 (32 بكسل)</option><option value="12">12 (48 بكسل)</option></select></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"lay"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-m-4"</span><span class="hl-t">&gt;</span>المحتوى<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="stack">الرص العمودي والأفقي</h2>
+<h2 id="padding">الفراغ الداخلي</h2>
+<p>وللفراغ الداخلي (padding) الجهات نفسها والخطوات نفسها: <code>ins-p-N</code> و<code>ins-pt-N</code> و<code>ins-ps-N</code> وأخواتها.</p>
+<figure class="dx site-play" data-play="padding"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><div class="lay ins-p-4">
+  <div class="demo-box">المحتوى</div>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">الإطار المنقط هو العنصر، والفراغ بين حده والمحتوى هو الفراغ الداخلي.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات الفراغ الداخلي"><label class="site-play-ctl" data-key="side" data-type="select"><span class="site-play-label">الجهة</span><select class="ins-select ins-select--sm"><option value="" selected>الجهات الأربع</option><option value="t">الأعلى</option><option value="b">الأسفل</option><option value="s">البداية</option><option value="e">النهاية</option><option value="x">البداية والنهاية</option><option value="y">الأعلى والأسفل</option></select></label><label class="site-play-ctl" data-key="step" data-type="select"><span class="site-play-label">الخطوة</span><select class="ins-select ins-select--sm"><option value="0">0 (0 بكسل)</option><option value="1">1 (4 بكسل)</option><option value="2">2 (8 بكسل)</option><option value="3">3 (12 بكسل)</option><option value="4" selected>4 (16 بكسل)</option><option value="5">5 (20 بكسل)</option><option value="6">6 (24 بكسل)</option><option value="8">8 (32 بكسل)</option><option value="12">12 (48 بكسل)</option></select></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"lay ins-p-4"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>المحتوى<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="gap">الفراغ بين الأبناء</h2>
+<p>يغير <code>ins-gap-N</code> الفراغ (gap) بين أبناء الصف والعمود والشبكة، فلا تحتاج هامشًا على كل ابن.</p>
+<figure class="dx site-play" data-play="gap"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><div class="ins-row ins-gap-6">
+  <div class="demo-box">1</div>
+  <div class="demo-box">2</div>
+  <div class="demo-box">3</div>
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات الفراغ بين الأبناء"><div class="site-play-ctl" data-key="box" data-type="seg"><span class="site-play-label">الحاوية</span><div class="ins-seg" role="group" aria-label="الحاوية"><button type="button" data-value="row" class="is-active" aria-pressed="true">صف</button><button type="button" data-value="stack" aria-pressed="false">عمود</button></div></div><label class="site-play-ctl" data-key="step" data-type="select"><span class="site-play-label">الخطوة</span><select class="ins-select ins-select--sm"><option value="0">0 (0 بكسل)</option><option value="1">1 (4 بكسل)</option><option value="2">2 (8 بكسل)</option><option value="3">3 (12 بكسل)</option><option value="4">4 (16 بكسل)</option><option value="5">5 (20 بكسل)</option><option value="6" selected>6 (24 بكسل)</option><option value="8">8 (32 بكسل)</option><option value="12">12 (48 بكسل)</option></select></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row ins-gap-6"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>1<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>2<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="stack">الرص العمودي</h2>
 <p>
-  يرص <code>.ins-stack</code> أبناءه عموديًا، ويرصهم <code>.ins-row</code> أفقيًا وينقلهم إلى سطر جديد إذا ضاق المكان. وكلاهما يفصل بينهم بـ <code>gap</code>
-  ويلغي هوامشهم الخارجية (margin). وفي <code>.ins-stack</code> يدفع <code>ins-mt-auto</code> العنصر إلى الأسفل، وفي <code>.ins-row</code> يدفعه
-  <code>ins-ms-auto</code> إلى النهاية.
+  يرص <code>.ins-stack</code> أبناءه عموديًا ويفصل بينهم بـ <code>gap</code>، ويلغي هوامشهم الخارجية لئلا يتضاعف الفراغ.
+  وبه تفصل بين أقسام الصفحة.
 </p>
-<figure class="dx"><div class="dx-view stack">
-  <div class="ins-stack ins-gap-2">
-    <div class="demo-box">stack · 1</div>
-    <div class="demo-box">stack · 2</div>
-    <div class="demo-box">stack · 3</div>
-  </div>
-  <div class="ins-row">
-    <div class="demo-box">row · 1</div>
-    <div class="demo-box">row · 2</div>
-    <div class="demo-box ins-ms-auto">ins-ms-auto</div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack ins-gap-2"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>stack · 1<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>stack · 2<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>stack · 3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>row · 1<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>row · 2<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-ms-auto"</span><span class="hl-t">&gt;</span>ins-ms-auto<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="stack"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><div class="ins-stack">
+  <div class="demo-box">الأول</div>
+  <div class="demo-box">الثاني</div>
+  <div class="demo-box">عنصر أعرض من أخويه</div>
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات الرص العمودي"><div class="site-play-ctl" data-key="start" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">لا يمد أبناءه</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>الأول<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>الثاني<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>عنصر أعرض من أخويه<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="row">الرص الأفقي</h2>
+<p>يرص <code>.ins-row</code> أبناءه أفقيًا، وينقلهم إلى سطر جديد إذا ضاق المكان، وهو أنسب لسطر من الأزرار والشارات.</p>
+<figure class="dx site-play" data-play="row"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-row">
+  <div class="demo-box">الأول</div>
+  <div class="demo-box">الثاني</div>
+  <div class="demo-box">الثالث</div>
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات الرص الأفقي"><div class="site-play-ctl" data-key="push" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">آخرها في النهاية</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-row"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>الأول<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>الثاني<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>الثالث<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="toolbar">شريط الأدوات</h2>
-<p>
-  <code>.ins-toolbar</code> صف يعلو جدولًا أو قائمة، تأتي حقوله بارتفاع أزراره. ضع <code>.ins-toolbar-grow</code>
-  على العنصر الذي يملأ ما بقي من العرض، و<code>.ins-toolbar-end</code> على ما تريد دفعه إلى النهاية.
-</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-toolbar">
-    <input class="ins-input ins-toolbar-grow" placeholder="بحث" aria-label="بحث">
-    <select class="ins-select" aria-label="الحالة" style="inline-size:auto">
-      <option>الكل</option><option>مفتوح</option><option>مغلق</option>
-    </select>
-    <div class="ins-toolbar-end">
-      <button class="ins-btn ins-btn--primary">إضافة</button>
-    </div>
+<p><code>.ins-toolbar</code> صف يعلو جدولًا أو قائمة، تأتي حقوله بارتفاع أزراره.</p>
+<figure class="dx site-play" data-play="toolbar"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-toolbar">
+  <input class="ins-input ins-toolbar-grow" placeholder="بحث" aria-label="بحث">
+  <select class="ins-select" aria-label="الحالة"><option>الكل</option><option>مفتوح</option><option>مغلق</option></select>
+  <div class="ins-toolbar-end">
+    <button class="ins-btn ins-btn--primary">إضافة</button>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toolbar"</span><span class="hl-t">&gt;</span>
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات شريط الأدوات"><div class="site-play-ctl" data-key="grow" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">حقل يملأ ما بقي</span></span></label></div><div class="site-play-ctl" data-key="end" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">أزرار في النهاية</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toolbar"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-toolbar-grow"</span> <span class="hl-a">placeholder</span>=<span class="hl-s">"بحث"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"بحث"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;select</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-select"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الحالة"</span> <span class="hl-a">style</span>=<span class="hl-s">"inline-size:auto"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>الكل<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>مفتوح<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>مغلق<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/select</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;select</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-select"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الحالة"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>الكل<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>مفتوح<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>مغلق<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/select</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toolbar-end"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>إضافة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="field-row">صف الحقول</h2>
-<p>يضع <code>.ins-field-row</code> الحقول جنبًا إلى جنب، فإذا ضاقت الشاشة جعلها بعضها فوق بعض. والحقل الذي يملأ ما بقي من العرض يحمل <code>.ins-grow</code>.</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-field-row">
-    <div class="ins-field ins-grow"><label class="ins-label" for="s-first">الاسم</label><input class="ins-input" id="s-first"></div>
-    <div class="ins-field ins-grow"><label class="ins-label" for="s-last">العائلة</label><input class="ins-input" id="s-last"></div>
+<p>يضع <code>.ins-field-row</code> الحقول جنبًا إلى جنب، فإذا ضاقت الشاشة جعلها بعضها فوق بعض.</p>
+<figure class="dx site-play" data-play="field-row"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-field-row">
+  <div class="ins-field ins-grow">
+    <label class="ins-label" for="fr-first">الاسم</label>
+    <input class="ins-input" id="fr-first">
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field-row"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"s-first"</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-first"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"s-last"</span><span class="hl-t">&gt;</span>العائلة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"s-last"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <div class="ins-field ins-grow">
+    <label class="ins-label" for="fr-last">العائلة</label>
+    <input class="ins-input" id="fr-last">
+  </div>
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات صف الحقول"><div class="site-play-ctl" data-key="grow" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">الحقول تملأ الصف</span></span></label></div><div class="site-play-ctl" data-key="btn" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">زر في الصف</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field-row"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"fr-first"</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"fr-first"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field ins-grow"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"fr-last"</span><span class="hl-t">&gt;</span>العائلة<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"fr-last"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في المسافات والترتيب من كلاسات، لكل عائلة صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>الهامش الخارجي</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الجهة</th></tr></tbody><tbody><tr><td><code>.ins-m-4</code></td><td>كلاس</td><td>الجهات الأربع. والرقم في آخر الكلاس خطوة من السلم: 0 1 2 3 4 5 6 8 12.</td></tr><tr><td><code>.ins-mt-4</code></td><td>كلاس</td><td>الأعلى.</td></tr><tr><td><code>.ins-mb-4</code></td><td>كلاس</td><td>الأسفل.</td></tr><tr><td><code>.ins-ms-4</code></td><td>كلاس</td><td>جهة البداية، وهي اليمين في العربية.</td></tr><tr><td><code>.ins-me-4</code></td><td>كلاس</td><td>جهة النهاية، وهي اليسار في العربية.</td></tr><tr><td><code>.ins-mx-4</code></td><td>كلاس</td><td>البداية والنهاية معًا.</td></tr><tr><td><code>.ins-my-4</code></td><td>كلاس</td><td>الأعلى والأسفل معًا.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الهامش التلقائي</th></tr></tbody><tbody><tr><td><code>.ins-m-auto</code></td><td>كلاس</td><td>يوسّط العنصر في حاوية مرنة (flex) أو شبكة.</td></tr><tr><td><code>.ins-mx-auto</code></td><td>كلاس</td><td>يوسّط العنصر أفقيًا إذا كان له عرض.</td></tr><tr><td><code>.ins-ms-auto</code></td><td>كلاس</td><td>يدفع العنصر، ومعه ما بعده، إلى نهاية <code>ins-row</code>.</td></tr><tr><td><code>.ins-me-auto</code></td><td>كلاس</td><td>يدفع ما بعد العنصر إلى نهاية <code>ins-row</code>.</td></tr><tr><td><code>.ins-mt-auto</code></td><td>كلاس</td><td>يدفع العنصر إلى أسفل <code>ins-stack</code>.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>الفراغ الداخلي</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الجهة</th></tr></tbody><tbody><tr><td><code>.ins-p-4</code></td><td>كلاس</td><td>الجهات الأربع. والرقم في آخر الكلاس خطوة من السلم: 0 1 2 3 4 5 6 8 12.</td></tr><tr><td><code>.ins-pt-4</code></td><td>كلاس</td><td>الأعلى.</td></tr><tr><td><code>.ins-pb-4</code></td><td>كلاس</td><td>الأسفل.</td></tr><tr><td><code>.ins-ps-4</code></td><td>كلاس</td><td>جهة البداية، وهي اليمين في العربية.</td></tr><tr><td><code>.ins-pe-4</code></td><td>كلاس</td><td>جهة النهاية، وهي اليسار في العربية.</td></tr><tr><td><code>.ins-px-4</code></td><td>كلاس</td><td>البداية والنهاية معًا.</td></tr><tr><td><code>.ins-py-4</code></td><td>كلاس</td><td>الأعلى والأسفل معًا.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>الفراغ بين الأبناء</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-gap-4</code></td><td>كلاس</td><td>يغير الفراغ بين أبناء <code>ins-row</code> و<code>ins-stack</code> والشبكات. والرقم خطوة من السلم: 0 1 2 3 4 5 6 8 12.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>الرص العمودي</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-stack</code></td><td>كلاس</td><td>يرص أبناءه عموديًا بينهم 16 بكسل، ويمدهم على عرضه، ويلغي هوامشهم الخارجية.</td></tr><tr><td><code>.ins-mt-auto</code></td><td>كلاس</td><td>على أحد الأبناء، فيدفعه إلى أسفل العمود إذا كان للعمود ارتفاع.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-items-start</code></td><td>كلاس</td><td>يبقي كل ابن على عرضه، فلا يمتد زر وحيد في العمود على عرضه كله.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>الرص الأفقي</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-row</code></td><td>كلاس</td><td>يرص أبناءه أفقيًا بينهم 12 بكسل، ويوسّطهم عموديًا، وينقلهم إلى سطر جديد إذا ضاق المكان.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-ms-auto</code></td><td>كلاس</td><td>على أحد الأبناء، فيدفعه ومن بعده إلى نهاية الصف.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>شريط الأدوات</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-toolbar</code></td><td>كلاس</td><td>صف يعلو جدولًا أو قائمة، تأتي حقوله بارتفاع أزراره وبعرض ما فيها لا بعرض السطر.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-toolbar-grow</code></td><td>كلاس</td><td>على العنصر الذي يملأ ما بقي من عرض الشريط.</td></tr><tr><td><code>.ins-toolbar-end</code></td><td>كلاس</td><td>يدفع ما فيه إلى نهاية الشريط.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>صف الحقول</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-field-row</code></td><td>كلاس</td><td>يضع الحقول جنبًا إلى جنب، فإذا ضاق المكان جعلها بعضها فوق بعض.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-grow</code></td><td>كلاس</td><td>على الحقل الذي يملأ ما بقي من عرض الصف.</td></tr><tr><td><code>button.ins-btn</code></td><td>عنصر</td><td>زر في الصف يأخذ ارتفاع الحقول ويقف على خط أسفلها. فلا تضعه في صف فيه حقل له تلميح.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>العمود في وسط الصفحة</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-container</code></td><td>كلاس</td><td>عمود يتوسط الصفحة عرضه 75rem، ويتسع فراغه الجانبي مع الشاشة من 16 إلى 32 بكسل.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">العرض</th></tr></tbody><tbody><tr><td><code>.ins-container--narrow</code></td><td>كلاس</td><td>عمود بعرض 48rem، للنماذج والمقالات.</td></tr><tr><td><code>.ins-container--wide</code></td><td>كلاس</td><td>عمود بعرض 90rem.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+var STEPS = ['0', '1', '2', '3', '4', '5', '6', '8', '12'].map(function (n) { return { value: n, label: n + ' (' + n * 4 + ' بكسل)' }; });
+
+SitePlay.define({
+  id: 'margin',
+  title: 'الهامش الخارجي',
+  owns: 'ins-m',
+  controls: [
+    { key: 'side', label: 'الجهة', type: 'select', value: '', choices: [
+      { value: '', label: 'الجهات الأربع', name: 'ins-m-4', desc: 'الجهات الأربع. والرقم في آخر الكلاس خطوة من السلم: 0 1 2 3 4 5 6 8 12.' },
+      { value: 't', label: 'الأعلى', name: 'ins-mt-4', desc: 'الأعلى.' },
+      { value: 'b', label: 'الأسفل', name: 'ins-mb-4', desc: 'الأسفل.' },
+      { value: 's', label: 'البداية', name: 'ins-ms-4', desc: 'جهة البداية، وهي اليمين في العربية.' },
+      { value: 'e', label: 'النهاية', name: 'ins-me-4', desc: 'جهة النهاية، وهي اليسار في العربية.' },
+      { value: 'x', label: 'البداية والنهاية', name: 'ins-mx-4', desc: 'البداية والنهاية معًا.' },
+      { value: 'y', label: 'الأعلى والأسفل', name: 'ins-my-4', desc: 'الأعلى والأسفل معًا.' }
+    ] },
+    { key: 'step', label: 'الخطوة', type: 'select', value: '4', choices: STEPS }
+  ],
+  extra: [
+    { group: 'الهامش التلقائي', name: 'ins-m-auto', desc: 'يوسّط العنصر في حاوية مرنة (flex) أو شبكة.' },
+    { group: 'الهامش التلقائي', name: 'ins-mx-auto', desc: 'يوسّط العنصر أفقيًا إذا كان له عرض.' },
+    { group: 'الهامش التلقائي', name: 'ins-ms-auto', desc: 'يدفع العنصر، ومعه ما بعده، إلى نهاية `ins-row`.' },
+    { group: 'الهامش التلقائي', name: 'ins-me-auto', desc: 'يدفع ما بعد العنصر إلى نهاية `ins-row`.' },
+    { group: 'الهامش التلقائي', name: 'ins-mt-auto', desc: 'يدفع العنصر إلى أسفل `ins-stack`.' }
+  ],
+  html: function (s) {
+    return '<div class="lay">\n  <div class="demo-box ins-m' + s.side + '-' + s.step + '">المحتوى</div>\n</div>';
+  },
+  notes: function () { return ['الإطار المنقط هو الحاوية، والفراغ بينه وبين المحتوى هو الهامش.']; }
+});
+
+SitePlay.define({
+  id: 'padding',
+  title: 'الفراغ الداخلي',
+  owns: 'ins-p',
+  controls: [
+    { key: 'side', label: 'الجهة', type: 'select', value: '', choices: [
+      { value: '', label: 'الجهات الأربع', name: 'ins-p-4', desc: 'الجهات الأربع. والرقم في آخر الكلاس خطوة من السلم: 0 1 2 3 4 5 6 8 12.' },
+      { value: 't', label: 'الأعلى', name: 'ins-pt-4', desc: 'الأعلى.' },
+      { value: 'b', label: 'الأسفل', name: 'ins-pb-4', desc: 'الأسفل.' },
+      { value: 's', label: 'البداية', name: 'ins-ps-4', desc: 'جهة البداية، وهي اليمين في العربية.' },
+      { value: 'e', label: 'النهاية', name: 'ins-pe-4', desc: 'جهة النهاية، وهي اليسار في العربية.' },
+      { value: 'x', label: 'البداية والنهاية', name: 'ins-px-4', desc: 'البداية والنهاية معًا.' },
+      { value: 'y', label: 'الأعلى والأسفل', name: 'ins-py-4', desc: 'الأعلى والأسفل معًا.' }
+    ] },
+    { key: 'step', label: 'الخطوة', type: 'select', value: '4', choices: STEPS }
+  ],
+  html: function (s) {
+    return '<div class="lay ins-p' + s.side + '-' + s.step + '">\n  <div class="demo-box">المحتوى</div>\n</div>';
+  },
+  notes: function () { return ['الإطار المنقط هو العنصر، والفراغ بين حده والمحتوى هو الفراغ الداخلي.']; }
+});
+
+SitePlay.define({
+  id: 'gap',
+  title: 'الفراغ بين الأبناء',
+  owns: 'ins-gap',
+  controls: [
+    { key: 'box', label: 'الحاوية', type: 'seg', value: 'row', choices: [
+      { value: 'row', label: 'صف' },
+      { value: 'stack', label: 'عمود' }
+    ] },
+    { key: 'step', label: 'الخطوة', type: 'select', value: '6', choices: STEPS }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-gap-4', desc: 'يغير الفراغ بين أبناء `ins-row` و`ins-stack` والشبكات. والرقم خطوة من السلم: 0 1 2 3 4 5 6 8 12.' }
+  ],
+  html: function (s) {
+    return '<div class="ins-' + s.box + ' ins-gap-' + s.step + '">\n' +
+      '  <div class="demo-box">1</div>\n  <div class="demo-box">2</div>\n  <div class="demo-box">3</div>\n</div>';
+  }
+});
+
+SitePlay.define({
+  id: 'stack',
+  title: 'الرص العمودي',
+  owns: 'ins-stack',
+  controls: [
+    { key: 'start', label: 'لا يمد أبناءه', type: 'switch', name: 'ins-items-start', desc: 'يبقي كل ابن على عرضه، فلا يمتد زر وحيد في العمود على عرضه كله.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-stack', desc: 'يرص أبناءه عموديًا بينهم 16 بكسل، ويمدهم على عرضه، ويلغي هوامشهم الخارجية.' },
+    { group: 'الأساس', name: 'ins-mt-auto', desc: 'على أحد الأبناء، فيدفعه إلى أسفل العمود إذا كان للعمود ارتفاع.' }
+  ],
+  html: function (s) {
+    return '<div class="ins-stack' + (s.start ? ' ins-items-start' : '') + '">\n' +
+      '  <div class="demo-box">الأول</div>\n  <div class="demo-box">الثاني</div>\n  <div class="demo-box">عنصر أعرض من أخويه</div>\n</div>';
+  }
+});
+
+SitePlay.define({
+  id: 'row',
+  title: 'الرص الأفقي',
+  owns: 'ins-row',
+  wide: true,
+  controls: [
+    { key: 'push', label: 'آخرها في النهاية', type: 'switch', name: 'ins-ms-auto', desc: 'على أحد الأبناء، فيدفعه ومن بعده إلى نهاية الصف.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-row', desc: 'يرص أبناءه أفقيًا بينهم 12 بكسل، ويوسّطهم عموديًا، وينقلهم إلى سطر جديد إذا ضاق المكان.' }
+  ],
+  html: function (s) {
+    return '<div class="ins-row">\n  <div class="demo-box">الأول</div>\n  <div class="demo-box">الثاني</div>\n' +
+      '  <div class="demo-box' + (s.push ? ' ins-ms-auto' : '') + '">الثالث</div>\n</div>';
+  }
+});
+
+SitePlay.define({
+  id: 'toolbar',
+  title: 'شريط الأدوات',
+  owns: 'ins-toolbar',
+  wide: true,
+  controls: [
+    { key: 'grow', label: 'حقل يملأ ما بقي', type: 'switch', value: true, name: 'ins-toolbar-grow', desc: 'على العنصر الذي يملأ ما بقي من عرض الشريط.' },
+    { key: 'end', label: 'أزرار في النهاية', type: 'switch', value: true, name: 'ins-toolbar-end', desc: 'يدفع ما فيه إلى نهاية الشريط.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-toolbar', desc: 'صف يعلو جدولًا أو قائمة، تأتي حقوله بارتفاع أزراره وبعرض ما فيها لا بعرض السطر.' }
+  ],
+  html: function (s) {
+    var btn = '<button class="ins-btn ins-btn--primary">إضافة</button>';
+    return '<div class="ins-toolbar">\n' +
+      '  <input class="ins-input' + (s.grow ? ' ins-toolbar-grow' : '') + '" placeholder="بحث" aria-label="بحث">\n' +
+      '  <select class="ins-select" aria-label="الحالة"><option>الكل</option><option>مفتوح</option><option>مغلق</option></select>\n' +
+      (s.end ? '  <div class="ins-toolbar-end">\n    ' + btn + '\n  </div>\n' : '  ' + btn + '\n') +
+      '</div>';
+  }
+});
+
+SitePlay.define({
+  id: 'field-row',
+  title: 'صف الحقول',
+  owns: 'ins-field-row',
+  wide: true,
+  controls: [
+    { key: 'grow', label: 'الحقول تملأ الصف', type: 'switch', value: true, name: 'ins-grow', desc: 'على الحقل الذي يملأ ما بقي من عرض الصف.' },
+    { key: 'btn', label: 'زر في الصف', type: 'switch', name: 'button.ins-btn', kind: 'element', desc: 'زر في الصف يأخذ ارتفاع الحقول ويقف على خط أسفلها. فلا تضعه في صف فيه حقل له تلميح.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-field-row', desc: 'يضع الحقول جنبًا إلى جنب، فإذا ضاق المكان جعلها بعضها فوق بعض.' }
+  ],
+  html: function (s) {
+    var field = function (id, label) {
+      return '  <div class="ins-field' + (s.grow ? ' ins-grow' : '') + '">\n    <label class="ins-label" for="' + id + '">' + label + '</label>\n' +
+        '    <input class="ins-input" id="' + id + '">\n  </div>\n';
+    };
+    return '<div class="ins-field-row">\n' + field('fr-first', 'الاسم') + field('fr-last', 'العائلة') +
+      (s.btn ? '  <button class="ins-btn ins-btn--primary">حفظ</button>\n' : '') + '</div>';
+  }
+});
+
+SitePlay.define({
+  id: 'container',
+  title: 'العمود في وسط الصفحة',
+  owns: 'ins-container',
+  controls: [],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-container', desc: 'عمود يتوسط الصفحة عرضه 75rem، ويتسع فراغه الجانبي مع الشاشة من 16 إلى 32 بكسل.' },
+    { group: 'العرض', name: 'ins-container--narrow', desc: 'عمود بعرض 48rem، للنماذج والمقالات.' },
+    { group: 'العرض', name: 'ins-container--wide', desc: 'عمود بعرض 90rem.' }
+  ],
+  html: function () { return ''; }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="grid.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الشبكة</span></a><a class="site-pager-link site-pager-link--next" href="split.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">العرض المقسوم</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#layouts">تخطيط الصفحة</a><a class="ins-toc-sub" href="#layout-app">تطبيق بعرض الصفحة</a><a class="ins-toc-sub" href="#layout-center">عمود في وسط الصفحة</a><a href="#scale">سلم المسافات</a><a href="#classes">الكلاسات</a><a href="#stack">الرص العمودي والأفقي</a><a href="#toolbar">شريط الأدوات</a><a href="#field-row">صف الحقول</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#layouts">تخطيط الصفحة</a><a class="ins-toc-sub" href="#layout-app">تطبيق بعرض الصفحة</a><a class="ins-toc-sub" href="#layout-center">عمود في وسط الصفحة</a><a href="#scale">سلم المسافات</a><a href="#margin">الهامش الخارجي</a><a href="#padding">الفراغ الداخلي</a><a href="#gap">الفراغ بين الأبناء</a><a href="#stack">الرص العمودي</a><a href="#row">الرص الأفقي</a><a href="#toolbar">شريط الأدوات</a><a href="#field-row">صف الحقول</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
