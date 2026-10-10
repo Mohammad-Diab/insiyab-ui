@@ -1,59 +1,26 @@
-<h2 id="columns">الأعمدة</h2>
-<p>
-  تصنع <code>.ins-cols-2</code> و<code>-3</code> و<code>-4</code> و<code>-6</code> و<code>-12</code> أعمدة متساوية
-  بينها فراغ ثابت، وإذا ضاقت النافذة رأيتها تتراص بعضها فوق بعض.
-</p>
 <demo-example class="stack">
   <div class="ins-cols-2"><div class="demo-box">cols-2</div><div class="demo-box">cols-2</div></div>
   <div class="ins-cols-3"><div class="demo-box">cols-3</div><div class="demo-box">cols-3</div><div class="demo-box">cols-3</div></div>
   <div class="ins-cols-4"><div class="demo-box">cols-4</div><div class="demo-box">cols-4</div><div class="demo-box">cols-4</div><div class="demo-box">cols-4</div></div>
 </demo-example>
 
+<h2 id="columns">الأعمدة</h2>
+<p>
+  تصنع <code>.ins-cols-*</code> أعمدة متساوية بينها فراغ 16 بكسل، وتنطوي وحدها كلما ضاقت الشاشة، فلا تحتاج كلاسًا لكل مقاس.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<demo-play of="cols"></demo-play>
+
 <h2 id="span">الامتداد</h2>
 <p>في شبكة <code>.ins-cols-12</code> تمتد الخلية ذات <code>.ins-span-N</code> على N من الأعمدة، وتمتد ذات <code>.ins-span-full</code> على السطر كله.</p>
-<demo-example class="stack">
-  <div class="ins-cols-12">
-    <div class="demo-box ins-span-8">span-8</div>
-    <div class="demo-box ins-span-4">span-4</div>
-  </div>
-  <div class="ins-cols-12">
-    <div class="demo-box ins-span-3">span-3</div>
-    <div class="demo-box ins-span-6">span-6</div>
-    <div class="demo-box ins-span-3">span-3</div>
-  </div>
-  <div class="ins-cols-12">
-    <div class="demo-box ins-span-full">span-full</div>
-  </div>
-</demo-example>
-
-<h2 id="collapse">التكيف مع الشاشة</h2>
-<p>
-  تغنيك الشبكة عن كلاسات لكل مقاس، فشبكة <code>.ins-cols-*</code> تنزل إلى عمودين عند 900px وتأخذ فيها الخلية الممتدة
-  السطر كله، ثم تصير عمودًا واحدًا على الهاتف.
-</p>
-<p>وإذا كان عدد الأعمدة ثابتًا بطبيعته كأيام الأسبوع، فأضف <code>.ins-cols--fixed</code> لتبقى على عددها في كل مقاس:</p>
-<demo-example>
-  <div class="ins-cols-3 ins-cols--fixed">
-    <div class="demo-box">1</div><div class="demo-box">2</div><div class="demo-box">3</div>
-    <div class="demo-box">4</div><div class="demo-box">5</div><div class="demo-box">6</div>
-  </div>
-</demo-example>
+<demo-play of="span"></demo-play>
 
 <h2 id="auto">الشبكة المرنة</h2>
 <p>
-  تضع <code>.ins-grid</code> في السطر ما يتسع له من الخلايا، على ألا يقل عرض الخلية عن 11rem. ويرفع <code>--wide</code> هذا الحد
-  إلى 20rem و<code>--half</code> إلى 26rem، ولك أن تضبط <code>--ins-col</code> بنفسك. وتدخل خلاياها بحركة متتابعة، واحدة تلو الأخرى.
+  تناسب <code>.ins-grid</code> مجموعة من البطاقات، فهي لا تسأل عن عدد الأعمدة، وإنما تضع في السطر ما يتسع له من الخلايا
+  على ألا يقل عرض الخلية عن حد تختاره.
 </p>
-<demo-example>
-  <div class="ins-grid">
-    <div class="demo-box demo-box--tall">1</div><div class="demo-box demo-box--tall">2</div>
-    <div class="demo-box demo-box--tall">3</div><div class="demo-box demo-box--tall">4</div>
-    <div class="demo-box demo-box--tall">5</div>
-  </div>
-</demo-example>
-<demo-code lang="html">
-<div class="ins-grid" style="--ins-col: 14rem">…</div>
-</demo-code>
+<demo-play of="grid"></demo-play>
 
 <h2 id="breakpoints" data-level="advanced">نقاط الانكسار (breakpoints)</h2>
 <div class="ins-panel site-ref">
@@ -71,11 +38,6 @@
   </div>
 </div>
 
-<h2 id="example">صفحة نموذجية</h2>
-<p>عمود رئيسي يجاوره عمود جانبي، ويصيران على الهاتف عمودًا واحدًا دون كلاس إضافي.</p>
-<demo-example>
-  <div class="ins-cols-12">
-    <div class="demo-box demo-box--tall ins-span-8">المحتوى</div>
-    <div class="demo-box demo-box--tall ins-span-4">الجانب</div>
-  </div>
-</demo-example>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الشبكة من كلاسات، لكل عائلة صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>

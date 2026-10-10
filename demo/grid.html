@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,12 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">أعمدة تنطوي وحدها كلما ضاقت الشاشة، فلا تحتاج كلاسًا لكل مقاس.</p>
-        <h2 id="columns">الأعمدة</h2>
-<p>
-  تصنع <code>.ins-cols-2</code> و<code>-3</code> و<code>-4</code> و<code>-6</code> و<code>-12</code> أعمدة متساوية
-  بينها فراغ ثابت، وإذا ضاقت النافذة رأيتها تتراص بعضها فوق بعض.
-</p>
-<figure class="dx"><div class="dx-view stack">
+        <figure class="dx"><div class="dx-view stack">
   <div class="ins-cols-2"><div class="demo-box">cols-2</div><div class="demo-box">cols-2</div></div>
   <div class="ins-cols-3"><div class="demo-box">cols-3</div><div class="demo-box">cols-3</div><div class="demo-box">cols-3</div></div>
   <div class="ins-cols-4"><div class="demo-box">cols-4</div><div class="demo-box">cols-4</div><div class="demo-box">cols-4</div><div class="demo-box">cols-4</div></div>
@@ -286,67 +282,49 @@
 <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-3"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>cols-3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>cols-3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>cols-3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-4"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>cols-4<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>cols-4<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>cols-4<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>cols-4<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="span">الامتداد</h2>
-<p>في شبكة <code>.ins-cols-12</code> تمتد الخلية ذات <code>.ins-span-N</code> على N من الأعمدة، وتمتد ذات <code>.ins-span-full</code> على السطر كله.</p>
-<figure class="dx"><div class="dx-view stack">
-  <div class="ins-cols-12">
-    <div class="demo-box ins-span-8">span-8</div>
-    <div class="demo-box ins-span-4">span-4</div>
-  </div>
-  <div class="ins-cols-12">
-    <div class="demo-box ins-span-3">span-3</div>
-    <div class="demo-box ins-span-6">span-6</div>
-    <div class="demo-box ins-span-3">span-3</div>
-  </div>
-  <div class="ins-cols-12">
-    <div class="demo-box ins-span-full">span-full</div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-12"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-span-8"</span><span class="hl-t">&gt;</span>span-8<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-span-4"</span><span class="hl-t">&gt;</span>span-4<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-12"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-span-3"</span><span class="hl-t">&gt;</span>span-3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-span-6"</span><span class="hl-t">&gt;</span>span-6<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-span-3"</span><span class="hl-t">&gt;</span>span-3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-12"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-span-full"</span><span class="hl-t">&gt;</span>span-full<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<h2 id="columns">الأعمدة</h2>
+<p>
+  تصنع <code>.ins-cols-*</code> أعمدة متساوية بينها فراغ 16 بكسل، وتنطوي وحدها كلما ضاقت الشاشة، فلا تحتاج كلاسًا لكل مقاس.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="cols"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-cols-3">
+  <div class="demo-box">1</div>
+  <div class="demo-box">2</div>
+  <div class="demo-box">3</div>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">ضيّق النافذة، فتصير الأعمدة عمودين عند 900px، ثم عمودًا واحدًا على الهاتف.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات الأعمدة"><div class="site-play-ctl" data-key="count" data-type="seg"><span class="site-play-label">عدد الأعمدة</span><div class="ins-seg" role="group" aria-label="عدد الأعمدة"><button type="button" data-value="2" aria-pressed="false">2</button><button type="button" data-value="3" class="is-active" aria-pressed="true">3</button><button type="button" data-value="4" aria-pressed="false">4</button><button type="button" data-value="6" aria-pressed="false">6</button><button type="button" data-value="12" aria-pressed="false">12</button></div></div><div class="site-play-ctl" data-key="fixed" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">عدد ثابت في كل مقاس</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-3"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>1<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>2<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="collapse">التكيف مع الشاشة</h2>
-<p>
-  تغنيك الشبكة عن كلاسات لكل مقاس، فشبكة <code>.ins-cols-*</code> تنزل إلى عمودين عند 900px وتأخذ فيها الخلية الممتدة
-  السطر كله، ثم تصير عمودًا واحدًا على الهاتف.
-</p>
-<p>وإذا كان عدد الأعمدة ثابتًا بطبيعته كأيام الأسبوع، فأضف <code>.ins-cols--fixed</code> لتبقى على عددها في كل مقاس:</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-cols-3 ins-cols--fixed">
-    <div class="demo-box">1</div><div class="demo-box">2</div><div class="demo-box">3</div>
-    <div class="demo-box">4</div><div class="demo-box">5</div><div class="demo-box">6</div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-3 ins-cols--fixed"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>1<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>2<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>4<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>5<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box"</span><span class="hl-t">&gt;</span>6<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<h2 id="span">الامتداد</h2>
+<p>في شبكة <code>.ins-cols-12</code> تمتد الخلية ذات <code>.ins-span-N</code> على N من الأعمدة، وتمتد ذات <code>.ins-span-full</code> على السطر كله.</p>
+<figure class="dx site-play" data-play="span"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-cols-12">
+  <div class="demo-box ins-span-8">span-8</div>
+  <div class="demo-box ins-span-4">span-4</div>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">تأخذ الخلية الممتدة السطر كله عند 900px، ثم تصير الشبكة عمودًا واحدًا على الهاتف.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات الامتداد"><label class="site-play-ctl" data-key="span" data-type="select"><span class="site-play-label">تمتد الخلية الأولى على</span><select class="ins-select ins-select--sm"><option value="2">عمودين</option><option value="3">3 أعمدة</option><option value="4">4 أعمدة</option><option value="5">5 أعمدة</option><option value="6">6 أعمدة</option><option value="7">7 أعمدة</option><option value="8" selected>8 أعمدة</option><option value="9">9 أعمدة</option><option value="10">10 أعمدة</option><option value="11">11 عمودًا</option><option value="12">12 عمودًا</option><option value="full">السطر كله</option></select></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-12"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-span-8"</span><span class="hl-t">&gt;</span>span-8<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box ins-span-4"</span><span class="hl-t">&gt;</span>span-4<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="auto">الشبكة المرنة</h2>
 <p>
-  تضع <code>.ins-grid</code> في السطر ما يتسع له من الخلايا، على ألا يقل عرض الخلية عن 11rem. ويرفع <code>--wide</code> هذا الحد
-  إلى 20rem و<code>--half</code> إلى 26rem، ولك أن تضبط <code>--ins-col</code> بنفسك. وتدخل خلاياها بحركة متتابعة، واحدة تلو الأخرى.
+  تناسب <code>.ins-grid</code> مجموعة من البطاقات، فهي لا تسأل عن عدد الأعمدة، وإنما تضع في السطر ما يتسع له من الخلايا
+  على ألا يقل عرض الخلية عن حد تختاره.
 </p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-grid">
-    <div class="demo-box demo-box--tall">1</div><div class="demo-box demo-box--tall">2</div>
-    <div class="demo-box demo-box--tall">3</div><div class="demo-box demo-box--tall">4</div>
-    <div class="demo-box demo-box--tall">5</div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-grid"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall"</span><span class="hl-t">&gt;</span>1<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall"</span><span class="hl-t">&gt;</span>2<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall"</span><span class="hl-t">&gt;</span>3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall"</span><span class="hl-t">&gt;</span>4<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="grid"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-grid">
+  <div class="demo-box demo-box--tall">1</div>
+  <div class="demo-box demo-box--tall">2</div>
+  <div class="demo-box demo-box--tall">3</div>
+  <div class="demo-box demo-box--tall">4</div>
+  <div class="demo-box demo-box--tall">5</div>
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات الشبكة المرنة"><label class="site-play-ctl" data-key="min" data-type="select"><span class="site-play-label">أقل عرض للخلية</span><select class="ins-select ins-select--sm"><option value="" selected>11rem</option><option value="wide">20rem</option><option value="half">26rem</option><option value="own">بنفسك</option></select></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-grid"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall"</span><span class="hl-t">&gt;</span>1<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall"</span><span class="hl-t">&gt;</span>2<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall"</span><span class="hl-t">&gt;</span>3<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall"</span><span class="hl-t">&gt;</span>4<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall"</span><span class="hl-t">&gt;</span>5<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-grid"</span> <span class="hl-a">style</span>=<span class="hl-s">"--ins-col: 14rem"</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div>
 
 <div class="site-adv"><h2 id="breakpoints">نقاط الانكسار (breakpoints)</h2>
 <div class="ins-panel site-ref">
@@ -364,20 +342,97 @@
   </div>
 </div></div>
 
-<h2 id="example">صفحة نموذجية</h2>
-<p>عمود رئيسي يجاوره عمود جانبي، ويصيران على الهاتف عمودًا واحدًا دون كلاس إضافي.</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-cols-12">
-    <div class="demo-box demo-box--tall ins-span-8">المحتوى</div>
-    <div class="demo-box demo-box--tall ins-span-4">الجانب</div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-cols-12"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall ins-span-8"</span><span class="hl-t">&gt;</span>المحتوى<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"demo-box demo-box--tall ins-span-4"</span><span class="hl-t">&gt;</span>الجانب<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الشبكة من كلاسات، لكل عائلة صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>الأعمدة</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">عدد الأعمدة</th></tr></tbody><tbody><tr><td><code>.ins-cols-2</code></td><td>كلاس</td><td>عمودان، يصيران عمودًا واحدًا على الهاتف.</td></tr><tr><td><code>.ins-cols-3</code></td><td>كلاس</td><td>ثلاثة أعمدة، تصير عمودين عند 900px ثم عمودًا واحدًا على الهاتف.</td></tr><tr><td><code>.ins-cols-4</code></td><td>كلاس</td><td>أربعة أعمدة، تنطوي كما تنطوي الثلاثة.</td></tr><tr><td><code>.ins-cols-6</code></td><td>كلاس</td><td>ستة أعمدة، تنطوي كما تنطوي الثلاثة.</td></tr><tr><td><code>.ins-cols-12</code></td><td>كلاس</td><td>اثنا عشر عمودًا تتقاسمها خلايا <code>ins-span-N</code>، وتنطوي كما تنطوي الثلاثة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-cols--fixed</code></td><td>كلاس</td><td>يبقي الشبكة على عدد أعمدتها في كل مقاس، لما كان عدده ثابتًا بطبيعته كأيام الأسبوع.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>الامتداد</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">تمتد الخلية الأولى على</th></tr></tbody><tbody><tr><td><code>.ins-span-2</code></td><td>كلاس</td><td>تمتد الخلية على عمودين.</td></tr><tr><td><code>.ins-span-3</code></td><td>كلاس</td><td>على 3 أعمدة، أي ربع السطر.</td></tr><tr><td><code>.ins-span-4</code></td><td>كلاس</td><td>على 4 أعمدة، أي ثلث السطر.</td></tr><tr><td><code>.ins-span-5</code></td><td>كلاس</td><td>على 5 أعمدة.</td></tr><tr><td><code>.ins-span-6</code></td><td>كلاس</td><td>على 6 أعمدة، أي نصف السطر.</td></tr><tr><td><code>.ins-span-7</code></td><td>كلاس</td><td>على 7 أعمدة.</td></tr><tr><td><code>.ins-span-8</code></td><td>كلاس</td><td>على 8 أعمدة، أي ثلثي السطر، كعمود المحتوى بجوار عمود جانبي.</td></tr><tr><td><code>.ins-span-9</code></td><td>كلاس</td><td>على 9 أعمدة، أي ثلاثة أرباع السطر.</td></tr><tr><td><code>.ins-span-10</code></td><td>كلاس</td><td>على 10 أعمدة.</td></tr><tr><td><code>.ins-span-11</code></td><td>كلاس</td><td>على 11 عمودًا.</td></tr><tr><td><code>.ins-span-12</code></td><td>كلاس</td><td>على الأعمدة الاثني عشر كلها.</td></tr><tr><td><code>.ins-span-full</code></td><td>كلاس</td><td>على السطر كله، في أي شبكة وبأي عدد من الأعمدة.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>الشبكة المرنة</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-grid</code></td><td>كلاس</td><td>يضع في السطر ما يتسع له من خلايا لا يقل عرضها عن 11rem، وتدخل خلاياها واحدة تلو الأخرى.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">أقل عرض للخلية</th></tr></tbody><tbody><tr><td><code>.ins-grid--wide</code></td><td>كلاس</td><td>لا يقل عرض الخلية عن 20rem، لبطاقات فيها أكثر من رقم.</td></tr><tr><td><code>.ins-grid--half</code></td><td>كلاس</td><td>لا يقل عرضها عن 26rem، فلا يتسع السطر إلا لخليتين على الشاشة العريضة.</td></tr><tr><td><code>data-ins-col="14rem"</code></td><td>سمة</td><td>تضبط أقل عرض للخلية بنفسك.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'cols',
+  title: 'الأعمدة',
+  owns: 'ins-cols',
+  wide: true,
+  controls: [
+    { key: 'count', label: 'عدد الأعمدة', type: 'seg', value: '3', choices: [
+      { value: '2', label: '2', name: 'ins-cols-2', desc: 'عمودان، يصيران عمودًا واحدًا على الهاتف.' },
+      { value: '3', label: '3', name: 'ins-cols-3', desc: 'ثلاثة أعمدة، تصير عمودين عند 900px ثم عمودًا واحدًا على الهاتف.' },
+      { value: '4', label: '4', name: 'ins-cols-4', desc: 'أربعة أعمدة، تنطوي كما تنطوي الثلاثة.' },
+      { value: '6', label: '6', name: 'ins-cols-6', desc: 'ستة أعمدة، تنطوي كما تنطوي الثلاثة.' },
+      { value: '12', label: '12', name: 'ins-cols-12', desc: 'اثنا عشر عمودًا تتقاسمها خلايا `ins-span-N`، وتنطوي كما تنطوي الثلاثة.' }
+    ] },
+    { key: 'fixed', label: 'عدد ثابت في كل مقاس', type: 'switch', name: 'ins-cols--fixed', desc: 'يبقي الشبكة على عدد أعمدتها في كل مقاس، لما كان عدده ثابتًا بطبيعته كأيام الأسبوع.' }
+  ],
+  html: function (s) {
+    var n = +s.count, cells = [];
+    for (var i = 1; i <= n; i++) cells.push('  <div class="demo-box">' + i + '</div>');
+    return '<div class="ins-cols-' + n + (s.fixed ? ' ins-cols--fixed' : '') + '">\n' + cells.join('\n') + '\n</div>';
+  },
+  notes: function (s) {
+    if (s.fixed) return ['تبقى الأعمدة على عددها مهما ضاقت الشاشة، فاختره لما يتسع له الهاتف.'];
+    return [s.count === '2' ? 'ضيّق النافذة، فيصير العمودان عمودًا واحدًا على الهاتف.' : 'ضيّق النافذة، فتصير الأعمدة عمودين عند 900px، ثم عمودًا واحدًا على الهاتف.'];
+  }
+});
+
+SitePlay.define({
+  id: 'span',
+  title: 'الامتداد',
+  owns: 'ins-span',
+  wide: true,
+  controls: [
+    { key: 'span', label: 'تمتد الخلية الأولى على', type: 'select', value: '8', choices: [
+      { value: '2', label: 'عمودين', name: 'ins-span-2', desc: 'تمتد الخلية على عمودين.' },
+      { value: '3', label: '3 أعمدة', name: 'ins-span-3', desc: 'على 3 أعمدة، أي ربع السطر.' },
+      { value: '4', label: '4 أعمدة', name: 'ins-span-4', desc: 'على 4 أعمدة، أي ثلث السطر.' },
+      { value: '5', label: '5 أعمدة', name: 'ins-span-5', desc: 'على 5 أعمدة.' },
+      { value: '6', label: '6 أعمدة', name: 'ins-span-6', desc: 'على 6 أعمدة، أي نصف السطر.' },
+      { value: '7', label: '7 أعمدة', name: 'ins-span-7', desc: 'على 7 أعمدة.' },
+      { value: '8', label: '8 أعمدة', name: 'ins-span-8', desc: 'على 8 أعمدة، أي ثلثي السطر، كعمود المحتوى بجوار عمود جانبي.' },
+      { value: '9', label: '9 أعمدة', name: 'ins-span-9', desc: 'على 9 أعمدة، أي ثلاثة أرباع السطر.' },
+      { value: '10', label: '10 أعمدة', name: 'ins-span-10', desc: 'على 10 أعمدة.' },
+      { value: '11', label: '11 عمودًا', name: 'ins-span-11', desc: 'على 11 عمودًا.' },
+      { value: '12', label: '12 عمودًا', name: 'ins-span-12', desc: 'على الأعمدة الاثني عشر كلها.' },
+      { value: 'full', label: 'السطر كله', name: 'ins-span-full', desc: 'على السطر كله، في أي شبكة وبأي عدد من الأعمدة.' }
+    ] }
+  ],
+  html: function (s) {
+    var rows = ['<div class="ins-cols-12">', '  <div class="demo-box ins-span-' + s.span + '">span-' + s.span + '</div>'];
+    var rest = s.span === 'full' ? 0 : 12 - s.span;
+    if (rest > 1) rows.push('  <div class="demo-box ins-span-' + rest + '">span-' + rest + '</div>');
+    if (rest === 1) rows.push('  <div class="demo-box">1</div>');
+    return rows.concat('</div>').join('\n');
+  },
+  notes: function () {
+    return ['تأخذ الخلية الممتدة السطر كله عند 900px، ثم تصير الشبكة عمودًا واحدًا على الهاتف.'];
+  }
+});
+
+SitePlay.define({
+  id: 'grid',
+  title: 'الشبكة المرنة',
+  owns: 'ins-grid',
+  wide: true,
+  controls: [
+    { key: 'min', label: 'أقل عرض للخلية', type: 'select', value: '', choices: [
+      { value: '', label: '11rem' },
+      { value: 'wide', label: '20rem', name: 'ins-grid--wide', desc: 'لا يقل عرض الخلية عن 20rem، لبطاقات فيها أكثر من رقم.' },
+      { value: 'half', label: '26rem', name: 'ins-grid--half', desc: 'لا يقل عرضها عن 26rem، فلا يتسع السطر إلا لخليتين على الشاشة العريضة.' },
+      { value: 'own', label: 'بنفسك', name: 'data-ins-col="14rem"', desc: 'تضبط أقل عرض للخلية بنفسك.' }
+    ] }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-grid', desc: 'يضع في السطر ما يتسع له من خلايا لا يقل عرضها عن 11rem، وتدخل خلاياها واحدة تلو الأخرى.' }
+  ],
+  html: function (s) {
+    var cls = 'ins-grid' + (s.min === 'wide' || s.min === 'half' ? ' ins-grid--' + s.min : '') + '';
+    var cells = [];
+    for (var i = 1; i <= 5; i++) cells.push('  <div class="demo-box demo-box--tall">' + i + '</div>');
+    return '<div class="' + cls + '"' + (s.min === 'own' ? ' data-ins-col="14rem"' : '') + '>\n' + cells.join('\n') + '\n</div>';
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="shell.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">هيكل التطبيق</span></a><a class="site-pager-link site-pager-link--next" href="spacing.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">المسافات والترتيب</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#columns">الأعمدة</a><a href="#span">الامتداد</a><a href="#collapse">التكيف مع الشاشة</a><a href="#auto">الشبكة المرنة</a><a href="#breakpoints">نقاط الانكسار (breakpoints)</a><a href="#example">صفحة نموذجية</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#columns">الأعمدة</a><a href="#span">الامتداد</a><a href="#collapse">التكيف مع الشاشة</a><a href="#auto">الشبكة المرنة</a><a href="#example">صفحة نموذجية</a></nav>
+        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#columns">الأعمدة</a><a href="#span">الامتداد</a><a href="#auto">الشبكة المرنة</a><a href="#breakpoints">نقاط الانكسار (breakpoints)</a><a href="#options">الخيارات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#columns">الأعمدة</a><a href="#span">الامتداد</a><a href="#auto">الشبكة المرنة</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
