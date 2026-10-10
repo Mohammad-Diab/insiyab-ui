@@ -358,8 +358,10 @@
 :root:not([data-site-mode="simple"]) .site-simple { display: none; }
 .site-mode { display: flex; flex-shrink: 0; margin: 0 .25rem .25rem; }
 .site-mode > button { flex: 1; justify-content: center; }
+/* An inline-block, so the heading's last letter is not shaped as if it joined the badge's first. */
 .site-adv > :is(h2, h3):first-child::after {
   content: 'متقدم';
+  display: inline-block;
   margin-inline-start: .625rem;
   padding: .0625rem .5rem;
   border: 1px solid var(--ins-line);
