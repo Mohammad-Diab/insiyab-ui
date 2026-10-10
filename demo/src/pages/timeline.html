@@ -1,21 +1,6 @@
 <link rel="stylesheet" href="../dist/plugins/insiyab-timeline.css">
 <script src="../dist/plugins/insiyab-timeline.js" defer></script>
 
-<h2 id="install">التثبيت</h2>
-<p>
-  إضافة مستقلة عن المكتبة، يقوم الخط الزمني فيها على CSS وحدها، ولا شأن للسكربت إلا بالأوقات النسبية («قبل 5 دقائق»).
-</p>
-<demo-code lang="html">
-<link rel="stylesheet" href="insiyab/plugins/insiyab-timeline.css">
-<script src="insiyab/plugins/insiyab-timeline.js" defer></script>   <!-- للأوقات النسبية فقط -->
-</demo-code>
-
-<h2 id="timeline">الخط الزمني</h2>
-<p>
-  الخط الزمني قائمة <code>.ins-timeline</code> لكل حدث فيها نقطة، ويفصل <code>.ins-timeline-day</code> بين الأيام
-  بعنوان. ونبراته <code>--ok</code> و<code>--bad</code> و<code>--warn</code> و<code>--info</code>، ويأخذ الحدث الجاري
-  <code>is-current</code>، والذي لم يأت بعد <code>is-pending</code>.
-</p>
 <demo-example>
   <ol class="ins-timeline">
     <li class="ins-timeline-day">24 سبتمبر</li>
@@ -37,52 +22,21 @@
   </ol>
 </demo-example>
 
-<h2 id="icons">بالأيقونات</h2>
-<p>ضع <code>.ins-timeline-ico</code> أول عنصر في الحدث فتحل مكان النقطة رقاقة فيها أيقونة، بلون نبرته.</p>
-<demo-example>
-  <ol class="ins-timeline">
-    <li class="ins-timeline-item ins-timeline-item--info">
-      <span class="ins-timeline-ico"><svg class="ico" aria-hidden="true"><use href="#i-message"/></svg></span>
-      <span class="ins-timeline-title">تعليق</span>
-    </li>
-    <li class="ins-timeline-item ins-timeline-item--warn">
-      <span class="ins-timeline-ico"><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg></span>
-      <span class="ins-timeline-title">تأخير</span>
-    </li>
-    <li class="ins-timeline-item ins-timeline-item--ok">
-      <span class="ins-timeline-ico"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span>
-      <span class="ins-timeline-title">اعتماد</span>
-    </li>
-  </ol>
-</demo-example>
-
-<h2 id="relative">الأوقات النسبية</h2>
+<h2 id="install">التثبيت</h2>
 <p>
-  أينما وضعت <code>&lt;time datetime="…" data-ins-time&gt;</code> في الصفحة كُتب الوقت كما يقوله الناس بلغة الصفحة:
-  «قبل 5 دقائق» و«أمس» و«خلال ساعتين». فإذا مضى أسبوع كُتب التاريخ نفسه، ومع <code>data-ins-time="date"</code>
-  يُكتب التاريخ دائمًا. ويحمل <code>title</code> التاريخ والوقت كاملين، ويتجدد النص كل دقيقة.
+  إضافة مستقلة عن المكتبة، يقوم الخط الزمني فيها على CSS وحدها، ولا شأن للسكربت إلا بالأوقات النسبية («قبل 5 دقائق»).
 </p>
-<demo-example>
-  <ol class="ins-timeline ins-timeline--compact" id="tl-live">
-    <li class="ins-timeline-item"><span class="ins-timeline-title">تسجيل الدخول</span><time class="ins-timeline-time" data-ins-time data-ago="-120000"></time></li>
-    <li class="ins-timeline-item"><span class="ins-timeline-title">تعديل</span><time class="ins-timeline-time" data-ins-time data-ago="-93600000"></time></li>
-    <li class="ins-timeline-item"><span class="ins-timeline-title">إنشاء الحساب</span><time class="ins-timeline-time" data-ins-time data-ago="-3456000000"></time></li>
-  </ol>
-</demo-example>
+<demo-code lang="html">
+<link rel="stylesheet" href="insiyab/plugins/insiyab-timeline.css">
+<script src="insiyab/plugins/insiyab-timeline.js" defer></script>   <!-- للأوقات النسبية فقط -->
+</demo-code>
 
-<h2 id="split">على جانبين</h2>
+<h2 id="timeline">الخط الزمني</h2>
 <p>
-  يوزع <code>.ins-timeline--split</code> الأحداث على جانبي خط في الوسط إذا اتسعت حاويته، ويجمعها في جانب واحد إذا
-  ضاقت. أما <code>.ins-timeline--compact</code> فللعمود الضيق، كالمثال السابق.
+  الخط الزمني قائمة <code>.ins-timeline</code> لكل حدث فيها نقطة، ويفصل <code>.ins-timeline-day</code> بين الأيام بعنوان.
+  ويأخذ الحدث الجاري <code>is-current</code>، والذي لم يأت بعد <code>is-pending</code>.
 </p>
-<demo-example>
-  <ol class="ins-timeline ins-timeline--split">
-    <li class="ins-timeline-item"><span class="ins-timeline-title">2019</span><p class="ins-timeline-body">الحدث الأول.</p></li>
-    <li class="ins-timeline-item"><span class="ins-timeline-title">2022</span><p class="ins-timeline-body">الحدث الثاني.</p></li>
-    <li class="ins-timeline-item"><span class="ins-timeline-title">2025</span><p class="ins-timeline-body">الحدث الثالث.</p></li>
-    <li class="ins-timeline-item is-pending"><span class="ins-timeline-title">2027</span><p class="ins-timeline-body">لم يأت بعد.</p></li>
-  </ol>
-</demo-example>
+<demo-play of="timeline"></demo-play>
 
 <h2 id="api" data-level="advanced">التحكم بـ JavaScript</h2>
 <demo-code lang="js">
@@ -90,12 +44,6 @@ Insiyab.time();            // أعد كتابة الأوقات — بعد إضا
 Insiyab.time('#feed');     // أو في جزء منها فقط
 </demo-code>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    /* The example's times are set from now, so they always read as they should. */
-    document.querySelectorAll('#tl-live [data-ago]').forEach(function (t) {
-      t.setAttribute('datetime', new Date(Date.now() + Number(t.getAttribute('data-ago'))).toISOString());
-    });
-    Insiyab.time('#tl-live');
-  });
-</script>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الخط الزمني من كلاسات وسمات، في صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
