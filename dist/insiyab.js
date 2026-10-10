@@ -3934,6 +3934,26 @@
     if (event.target.type === 'radio' || event.target.type === 'checkbox') sumsFor(event.target);
   }, false);
 
+  // A chosen radio clicked again is cleared, where it or an ancestor carries data-ins-deselect.
+  var radioWas = null;
+
+  function deselectable(t) {
+    var r = t.type === 'radio' ? t : t.closest && t.closest('label') ? t.closest('label').control : null;
+    return r && r.type === 'radio' && r.closest('[data-ins-deselect]') ? { radio: r, on: r.checked } : null;
+  }
+
+  document.addEventListener('pointerdown', function (event) { radioWas = deselectable(event.target); }, true);
+  document.addEventListener('keydown', function (event) { radioWas = event.key === ' ' ? deselectable(event.target) : null; }, true);
+  document.addEventListener('click', function (event) {
+    var r = event.target, was = radioWas;
+    if (r.type !== 'radio') return;
+    radioWas = null;
+    if (!was || was.radio !== r || !was.on || r.disabled) return;
+    r.checked = false;
+    r.dispatchEvent(new Event('input', { bubbles: true }));
+    r.dispatchEvent(new Event('change', { bubbles: true }));
+  }, false);
+
   /* The split's handle, dragged. The pointer is captured, so the drag keeps going
      when it runs ahead of the handle, over an iframe or off the window's edge. */
   document.addEventListener('pointerdown', function (event) {
