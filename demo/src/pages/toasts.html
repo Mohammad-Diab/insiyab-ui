@@ -1,8 +1,3 @@
-<h2 id="attribute">بالسمة</h2>
-<p>
-  ضع <code>data-ins-toast</code> على زر فتظهر الرسالة العابرة (Toast) حين يُضغط، واختر نبرتها بـ <code>data-ins-tone</code>. تطل
-  الرسالة من ركن الصفحة ثم تغيب وحدها، ويقرؤها قارئ الشاشة دون أن تنتزع التركيز.
-</p>
 <demo-example class="row">
   <button class="ins-btn ins-btn--secondary" data-ins-toast="تم الحفظ" data-ins-tone="ok">نجاح</button>
   <button class="ins-btn ins-btn--secondary" data-ins-toast="حدث خطأ" data-ins-tone="bad">خطأ</button>
@@ -10,11 +5,22 @@
   <button class="ins-btn ins-btn--secondary" data-ins-toast="للعلم" data-ins-tone="info">معلومة</button>
 </demo-example>
 
-<h2 id="api">التحكم بـ JavaScript</h2>
+<h2 id="toast">الرسالة العابرة</h2>
+<p>
+  ضع <code>data-ins-toast</code> على زر، أو استدع <code>Insiyab.toast()</code>، فتطل الرسالة من أعلى الصفحة ثم تغيب وحدها، ويقرؤها
+  قارئ الشاشة دون أن تنتزع التركيز. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<demo-play of="toast"></demo-play>
+
+<h2 id="when">متى تستعمل الرسالة العابرة</h2>
+<ul>
+  <li>لتأكيد ما جرى للتو بفعل المستخدم: حُفظ، أُرسل، نُسخ.</li>
+  <li>أما خطأ الحقل فموضعه الحقل نفسه، كما في صفحة <a href="validation.html">التحقق</a>.</li>
+  <li>وأما الرسالة التي يجب أن تبقى فحقها أن تكون <a href="alerts.html">تنبيهًا</a> في الصفحة.</li>
+</ul>
+
+<h2 id="api" data-level="advanced">التحكم بـ JavaScript</h2>
 <p>استدعها بـ <code>Insiyab.toast(text, tone)</code>، وأكثر ما تحتاجها بعد عملية غير متزامنة.</p>
-<demo-example class="row" code="none">
-  <button class="ins-btn ins-btn--secondary" id="save-btn">حفظ</button>
-</demo-example>
 <demo-code lang="js">
 button.addEventListener('click', async () => {
   try {
@@ -26,19 +32,6 @@ button.addEventListener('click', async () => {
 });
 </demo-code>
 
-<h2 id="when">متى تستعمل الرسالة العابرة</h2>
-<ul>
-  <li>لتأكيد ما جرى للتو بفعل المستخدم: حُفظ، أُرسل، نُسخ.</li>
-  <li>أما خطأ الحقل فموضعه الحقل نفسه، كما في صفحة <a href="validation.html">التحقق</a>.</li>
-  <li>وأما الرسالة التي يجب أن تبقى فحقها أن تكون <a href="alerts.html">تنبيهًا</a> في الصفحة.</li>
-</ul>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('save-btn').addEventListener('click', function () {
-      var btn = this;
-      btn.disabled = true;
-      setTimeout(function () { btn.disabled = false; Insiyab.toast('تم الحفظ', 'ok'); }, 700);
-    });
-  });
-</script>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الرسالة العابرة من كلاسات وسمات، في صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>

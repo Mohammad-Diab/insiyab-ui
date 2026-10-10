@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,12 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">الرسالة العابرة (Toast) إشعار يظهر ثم يختفي وحده، بسمة على زر أو بسطر جافاسكربت.</p>
-        <h2 id="attribute">بالسمة</h2>
-<p>
-  ضع <code>data-ins-toast</code> على زر فتظهر الرسالة العابرة (Toast) حين يُضغط، واختر نبرتها بـ <code>data-ins-tone</code>. تطل
-  الرسالة من ركن الصفحة ثم تغيب وحدها، ويقرؤها قارئ الشاشة دون أن تنتزع التركيز.
-</p>
-<figure class="dx"><div class="dx-view row">
+        <figure class="dx"><div class="dx-view row">
   <button class="ins-btn ins-btn--secondary" data-ins-toast="تم الحفظ" data-ins-tone="ok">نجاح</button>
   <button class="ins-btn ins-btn--secondary" data-ins-toast="حدث خطأ" data-ins-tone="bad">خطأ</button>
   <button class="ins-btn ins-btn--secondary" data-ins-toast="انتبه" data-ins-tone="warn">تحذير</button>
@@ -288,19 +284,12 @@
 <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">data-ins-toast</span>=<span class="hl-s">"انتبه"</span> <span class="hl-a">data-ins-tone</span>=<span class="hl-s">"warn"</span><span class="hl-t">&gt;</span>تحذير<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">data-ins-toast</span>=<span class="hl-s">"للعلم"</span> <span class="hl-a">data-ins-tone</span>=<span class="hl-s">"info"</span><span class="hl-t">&gt;</span>معلومة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="api">التحكم بـ JavaScript</h2>
-<p>استدعها بـ <code>Insiyab.toast(text, tone)</code>، وأكثر ما تحتاجها بعد عملية غير متزامنة.</p>
-<figure class="dx dx--bare"><div class="dx-view row">
-  <button class="ins-btn ins-btn--secondary" id="save-btn">حفظ</button>
-</div></figure>
-<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code>button.addEventListener(<span class="hl-s">'click'</span>, <span class="hl-k">async</span> () =&gt; {
-  try {
-    <span class="hl-k">await</span> save();
-    <span class="hl-t">Insiyab</span>.toast(<span class="hl-s">'تم الحفظ'</span>, <span class="hl-s">'ok'</span>);
-  } catch {
-    <span class="hl-t">Insiyab</span>.toast(<span class="hl-s">'تعذر الحفظ'</span>, <span class="hl-s">'bad'</span>);
-  }
-});</code></pre></div>
+<h2 id="toast">الرسالة العابرة</h2>
+<p>
+  ضع <code>data-ins-toast</code> على زر، أو استدع <code>Insiyab.toast()</code>، فتطل الرسالة من أعلى الصفحة ثم تغيب وحدها، ويقرؤها
+  قارئ الشاشة دون أن تنتزع التركيز. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="toast"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><button class="ins-btn ins-btn--secondary" data-ins-toast="تم الحفظ" data-ins-tone="ok">اعرض الرسالة</button></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">اضغط الزر لترى الرسالة بخياراتك.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات الرسالة العابرة"><div class="site-play-ctl" data-key="how" data-type="seg"><span class="site-play-label">تظهر</span><div class="ins-seg" role="group" aria-label="تظهر"><button type="button" data-value="attr" class="is-active" aria-pressed="true">بسمة على الزر</button><button type="button" data-value="js" aria-pressed="false">بجافاسكربت</button></div></div><label class="site-play-ctl" data-key="tone" data-type="select"><span class="site-play-label">النبرة</span><select class="ins-select ins-select--sm"><option value="ok" selected>نجاح</option><option value="info">معلومة</option><option value="warn">تحذير</option><option value="bad">خطأ</option></select></label><label class="site-play-ctl" data-key="text" data-type="text"><span class="site-play-label">النص</span><input class="ins-input ins-input--sm" type="text" value="تم الحفظ"></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">data-ins-toast</span>=<span class="hl-s">"تم الحفظ"</span> <span class="hl-a">data-ins-tone</span>=<span class="hl-s">"ok"</span><span class="hl-t">&gt;</span>اعرض الرسالة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="when">متى تستعمل الرسالة العابرة</h2>
 <ul>
@@ -309,18 +298,57 @@
   <li>وأما الرسالة التي يجب أن تبقى فحقها أن تكون <a href="alerts.html">تنبيهًا</a> في الصفحة.</li>
 </ul>
 
+<div class="site-adv"><h2 id="api">التحكم بـ JavaScript</h2>
+<p>استدعها بـ <code>Insiyab.toast(text, tone)</code>، وأكثر ما تحتاجها بعد عملية غير متزامنة.</p>
+<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code>button.addEventListener(<span class="hl-s">'click'</span>, <span class="hl-k">async</span> () =&gt; {
+  try {
+    <span class="hl-k">await</span> save();
+    <span class="hl-t">Insiyab</span>.toast(<span class="hl-s">'تم الحفظ'</span>, <span class="hl-s">'ok'</span>);
+  } catch {
+    <span class="hl-t">Insiyab</span>.toast(<span class="hl-s">'تعذر الحفظ'</span>, <span class="hl-s">'bad'</span>);
+  }
+});</code></pre></div></div>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الرسالة العابرة من كلاسات وسمات، في صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>الرسالة العابرة</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-toast</code></td><td>كلاس</td><td>الرسالة نفسها، تبنيها المكتبة فلا تكتبها بنفسك. تطل من أعلى الصفحة وتغيب وحدها بعد خمس ثوانٍ، أو حين تُنقر.</td></tr><tr><td><code>.ins-toasts</code></td><td>كلاس</td><td>الشريط الذي تصطف فيه الرسائل، تبنيه المكتبة مرة واحدة، ويقرأ قارئ الشاشة ما فيه دون أن ينتزع التركيز.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">تظهر</th></tr></tbody><tbody><tr><td><code>data-ins-toast</code></td><td>سمة</td><td>ضعها على زر فتظهر الرسالة حين يُضغط، وقيمتها نص الرسالة. ومن جافاسكربت تستدعي <code>Insiyab.toast(text, tone)</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">النبرة</th></tr></tbody><tbody><tr><td><code>data-ins-tone="ok"</code></td><td>سمة</td><td>لما تم للتو بفعل المستخدم: حُفظ، أُرسل، نُسخ.</td></tr><tr><td><code>data-ins-tone="info"</code></td><td>سمة</td><td>لمعلومة عابرة، وهي النبرة إن لم تذكر غيرها.</td></tr><tr><td><code>data-ins-tone="warn"</code></td><td>سمة</td><td>لما يستحق الانتباه ولا يوقف العمل.</td></tr><tr><td><code>data-ins-tone="bad"</code></td><td>سمة</td><td>لعملية تعذرت.</td></tr></tbody></table></div></div></details></div></div>
+
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('save-btn').addEventListener('click', function () {
-      var btn = this;
-      btn.disabled = true;
-      setTimeout(function () { btn.disabled = false; Insiyab.toast('تم الحفظ', 'ok'); }, 700);
-    });
-  });
+SitePlay.define({
+  id: 'toast',
+  title: 'الرسالة العابرة',
+  owns: 'ins-toast',
+  controls: [
+    { key: 'how', label: 'تظهر', type: 'seg', value: 'attr', choices: [
+      { value: 'attr', label: 'بسمة على الزر', name: 'data-ins-toast', desc: 'ضعها على زر فتظهر الرسالة حين يُضغط، وقيمتها نص الرسالة. ومن جافاسكربت تستدعي `Insiyab.toast(text, tone)`.' },
+      { value: 'js', label: 'بجافاسكربت' }
+    ] },
+    { key: 'tone', label: 'النبرة', type: 'select', value: 'ok', choices: [
+      { value: 'ok', label: 'نجاح', name: 'data-ins-tone="ok"', desc: 'لما تم للتو بفعل المستخدم: حُفظ، أُرسل، نُسخ.' },
+      { value: 'info', label: 'معلومة', name: 'data-ins-tone="info"', desc: 'لمعلومة عابرة، وهي النبرة إن لم تذكر غيرها.' },
+      { value: 'warn', label: 'تحذير', name: 'data-ins-tone="warn"', desc: 'لما يستحق الانتباه ولا يوقف العمل.' },
+      { value: 'bad', label: 'خطأ', name: 'data-ins-tone="bad"', desc: 'لعملية تعذرت.' }
+    ] },
+    { key: 'text', label: 'النص', type: 'text', value: 'تم الحفظ' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-toast', desc: 'الرسالة نفسها، تبنيها المكتبة فلا تكتبها بنفسك. تطل من أعلى الصفحة وتغيب وحدها بعد خمس ثوانٍ، أو حين تُنقر.' },
+    { group: 'الأساس', name: 'ins-toasts', desc: 'الشريط الذي تصطف فيه الرسائل، تبنيه المكتبة مرة واحدة، ويقرأ قارئ الشاشة ما فيه دون أن ينتزع التركيز.' }
+  ],
+  html: function (s) {
+    var btn = '<button class="ins-btn ins-btn--secondary"';
+    if (s.how === 'js') {
+      var text = s.text.replace(/\\/g, '\\\\').replace(/'/g, '\\\'');
+      return btn + ' onclick="Insiyab.toast(\'' + text + '\', \'' + s.tone + '\')">اعرض الرسالة</button>';
+    }
+    return btn + ' data-ins-toast="' + s.text + '" data-ins-tone="' + s.tone + '">اعرض الرسالة</button>';
+  },
+  notes: function () { return ['اضغط الزر لترى الرسالة بخياراتك.']; }
+});
 </script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="drawer.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الدرج</span></a><a class="site-pager-link site-pager-link--next" href="badges.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الشارات والأرقام</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#attribute">بالسمة</a><a href="#api">التحكم بـ JavaScript</a><a href="#when">متى تستعمل الرسالة العابرة</a></nav>
+        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#toast">الرسالة العابرة</a><a href="#when">متى تستعمل الرسالة العابرة</a><a href="#api">التحكم بـ JavaScript</a><a href="#options">الخيارات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#toast">الرسالة العابرة</a><a href="#when">متى تستعمل الرسالة العابرة</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
