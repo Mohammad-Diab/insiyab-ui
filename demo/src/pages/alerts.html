@@ -1,8 +1,3 @@
-<h2 id="tones">النبرات</h2>
-<p>
-  في التنبيه <code>.ins-alert</code> دائرة <code>.ins-alert-ico</code> تحمل رمزه، ورسالة <code>.ins-alert-msg</code> يسكنها النص
-  <code>.ins-alert-text</code>. وله أربع نبرات: <code>--ok</code> و<code>--info</code> و<code>--warn</code> و<code>--bad</code>.
-</p>
 <demo-example class="stack">
   <div class="ins-alert ins-alert--ok">
     <span class="ins-alert-ico"><svg class="ico"><use href="#i-check"/></svg></span>
@@ -22,37 +17,13 @@
   </div>
 </demo-example>
 
-<h2 id="dismiss">إغلاق التنبيه</h2>
+<h2 id="alert">التنبيه</h2>
 <p>
-  ضع في الرسالة زر <code>.ins-close</code> يحمل <code>data-ins-dismiss</code>، فيغلق التنبيه بضغطة ويُطلق حدث
-  <code>ins:dismiss</code>.
+  في التنبيه <code>.ins-alert</code> دائرة <code>.ins-alert-ico</code> تحمل رمزه، ورسالة <code>.ins-alert-msg</code> يسكنها النص
+  <code>.ins-alert-text</code>. اختر من الخيارات فيتغير التنبيه وشيفرته معًا، وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<demo-example class="stack">
-  <div class="ins-alert ins-alert--info" id="notice">
-    <span class="ins-alert-ico"><svg class="ico"><use href="#i-info"/></svg></span>
-    <div class="ins-alert-msg">
-      <span class="ins-alert-text">تنبيه يمكن إغلاقه.</span>
-      <button class="ins-close ins-close--sm ins-close--bare" data-ins-dismiss aria-label="إغلاق التنبيه"></button>
-    </div>
-  </div>
-</demo-example>
-<demo-example class="row" code="none">
-  <button class="ins-btn ins-btn--secondary ins-btn--sm" id="notice-back">أعد التنبيه</button>
-</demo-example>
+<demo-play of="alert"></demo-play>
 
-<h2 id="actions">مع إجراء</h2>
-<p>وإن كان للمشكلة حل فدل عليه برابط أو زر صغير داخل النص.</p>
-<demo-example>
-  <div class="ins-alert ins-alert--warn">
-    <span class="ins-alert-ico"><svg class="ico"><use href="#i-warn"/></svg></span>
-    <div class="ins-alert-msg">
-      <span class="ins-alert-text">بطاقتك تنتهي قريبًا. <a href="#actions">حدّثها</a></span>
-    </div>
-  </div>
-</demo-example>
-
-<script>
-  document.getElementById('notice-back').addEventListener('click', function () {
-    document.getElementById('notice').hidden = false;
-  });
-</script>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في التنبيه من كلاسات وسمات وأحداث، في صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
