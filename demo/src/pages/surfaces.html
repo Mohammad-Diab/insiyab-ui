@@ -1,66 +1,25 @@
-<h2 id="glass">الزجاج</h2>
-<p>
-  <code>.ins-glass</code> هو السطح الأساسي، لا فراغ داخليًا (padding) فيه ولا سلوك. و<code>.ins-card</code> بطاقة، إذا أضفت إليها
-  <code>.ins-hoverable</code> ارتفعت حين يمر عليها المؤشر. أما <code>.ins-glass-inner</code> فمظهر مسطح لسطح يوضع داخل سطح آخر.
-</p>
 <demo-example class="stack">
   <div class="ins-glass ins-p-5">.ins-glass</div>
   <div class="ins-card ins-p-5 ins-hoverable">.ins-card</div>
   <div class="ins-glass-inner ins-p-5">.ins-glass-inner</div>
 </demo-example>
 
-<h2 id="nesting" data-level="advanced">زجاج داخل زجاج</h2>
-<p>إذا وضعت سطحًا داخل سطح تخلى الداخلي تلقائيًا عن حده وظله ولمعته وضبابيته، وهو يحمل الكلاس نفسه بلا كلاس إضافي.</p>
-<demo-example>
-  <div class="ins-glass ins-p-5">
-    <p>خارجي</p>
-    <div class="ins-glass ins-p-4">داخلي</div>
-  </div>
-</demo-example>
+<h2 id="glass">الزجاج</h2>
+<p>
+  <code>.ins-glass</code> هو السطح الأساسي، لا فراغ داخليًا (padding) فيه ولا سلوك، وعليه يبنى كل سطح في المكتبة.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<demo-play of="glass"></demo-play>
+
+<h2 id="card">البطاقة</h2>
+<p><code>.ins-card</code> زجاج بطبقاته نفسها، باسم يقول ما هو، ولا يرتفع تحت المؤشر إلا إذا كان يُنقر.</p>
+<demo-play of="card"></demo-play>
 
 <h2 id="panel">اللوح</h2>
 <p>
-  حاوية من ثلاثة أجزاء: رأس فيه <code>-ico</code> و<code>-title</code> و<code>-actions</code>، ثم جسم، ثم تذييل. ولا يرتفع اللوح
-  حين يمر عليه المؤشر، وإنما تضيء حافته.
+  <code>.ins-panel</code> حاوية من ثلاثة أجزاء: رأس ثم جسم ثم تذييل، وهو السطح الذي تبنى منه أكثر الصفحات.
 </p>
-<demo-example>
-  <div class="ins-panel">
-    <div class="ins-panel-head">
-      <span class="ins-panel-ico"><svg class="ico"><use href="#i-users"/></svg></span>
-      <h3 class="ins-panel-title">العنوان</h3>
-      <div class="ins-panel-actions"><button class="ins-btn ins-btn--bare ins-btn--sm">إدارة</button></div>
-    </div>
-    <div class="ins-panel-body">المحتوى.</div>
-    <div class="ins-panel-foot">
-      <button class="ins-btn ins-btn--primary ins-btn--sm">حفظ</button>
-    </div>
-  </div>
-</demo-example>
-
-<h3 id="panel-alert">لوح يحتاج انتباهًا</h3>
-<p>يلون <code>.ins-panel--alert</code> رأس اللوح وحده.</p>
-<demo-example>
-  <div class="ins-panel ins-panel--alert">
-    <div class="ins-panel-head">
-      <h3 class="ins-panel-title">فشلت الدفعة</h3>
-    </div>
-    <div class="ins-panel-body">المحتوى.</div>
-  </div>
-</demo-example>
-
-<h3 id="panel-flush">جسم بلا فراغ داخلي</h3>
-<p>استعمل <code>.ins-panel-body--flush</code> لجدول أو قائمة تمتد إلى حواف اللوح، و<code>.ins-panel-note</code> لسطر شرح يعلوهما.</p>
-<demo-example>
-  <div class="ins-panel">
-    <div class="ins-panel-body ins-panel-body--flush">
-      <p class="ins-panel-note">سطر شرح.</p>
-      <ul class="ins-list">
-        <li class="ins-list-item">البند الأول</li>
-        <li class="ins-list-item">البند الثاني</li>
-      </ul>
-    </div>
-  </div>
-</demo-example>
+<demo-play of="panel"></demo-play>
 
 <h2 id="radii" data-level="advanced">انحناء الزوايا</h2>
 <p>
@@ -84,3 +43,7 @@
   <li><b>الضبابية (blur)</b> — 24 بكسل في الألواح، و16 في الأشرطة وجزر الشريط العلوي، و2 فقط في خلفية مربع الحوار (backdrop).</li>
   <li><b>الظل</b> — واسع ناعم، يميل لونه إلى البرودة.</li>
 </ul>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الأسطح والألواح من كلاسات، لكل مكون صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
