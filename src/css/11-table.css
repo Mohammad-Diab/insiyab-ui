@@ -19,7 +19,8 @@
 /* `overflow-x: auto` computes `auto` on *both* axes, so the wrapper cuts popovers
    off — measured at 4 of 15 rows on one page, by up to 182px. Only while one is
    open, so a phone keeps its sideways scroll the rest of the time. */
-.ins-table-wrap:has([open], [data-ins-open]) { overflow: visible; }
+/* Only for a menu still in the flow: one in the top layer is not clipped, and dropping the clip would lose the sideways scroll under it. */
+.ins-table-wrap:has([open]:not(.ins-pop), .ins-pop[open] > .ins-pop-body:not([popover]), [data-ins-open]:not([popover])) { overflow: visible; }
 
 .ins-table {
   inline-size: 100%;
@@ -399,7 +400,7 @@ th[aria-sort="descending"] > .ins-sort::after {
    sideways. The two combine. Such a box keeps its scrolling while a menu in it is
    open, so a menu near its edge is clipped by it. */
 .ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin),
-.ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin):has([open], [data-ins-open]) { overflow: auto; }
+.ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin):has([open]:not(.ins-pop), .ins-pop[open] > .ins-pop-body:not([popover]), [data-ins-open]:not([popover])) { overflow: auto; }
 .ins-table-wrap--sticky { max-block-size: var(--ins-height, var(--ins-table-max)); overscroll-behavior: contain; }
 .ins-table-wrap--sticky::-webkit-scrollbar-track { margin-block: 3rem var(--ins-r-lg); }
 .ins-table-wrap:is(.ins-table-wrap--sticky, .ins-table-wrap--pin) .ins-table thead th {

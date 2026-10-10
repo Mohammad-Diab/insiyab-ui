@@ -349,9 +349,10 @@
     box.hidden = !box.children.length;
     if (!st.value) { hsv = { h: 0, s: 0, v: 0 }; }
     syncPicker(true);
-    if (hasPopover) { try { layer.showPopover(); } catch (e) { /* not connected */ } }
-    else { layer.hidden = false; layer.classList.add('is-open'); }
-    place();
+    Insiyab._layer.open(layer, {
+      trigger: st.swatch, anchor: st.swatch.parentNode, align: 'left', move: true, toggle: 'class',
+      close: function (why) { closePop(why === 'escape'); }
+    });
     st.swatch.setAttribute('aria-expanded', 'true');
     layer.querySelector('.ins-color-area').focus();
   }
@@ -360,23 +361,9 @@
     if (!pop || !popFor) return;
     var input = popFor;
     popFor = null;
-    if (hasPopover) { try { pop.hidePopover(); } catch (e) { /* already hidden */ } }
-    else { pop.classList.remove('is-open'); pop.hidden = true; }
+    Insiyab._layer.shut(pop);
     state(input).swatch.setAttribute('aria-expanded', 'false');
     if (refocus) state(input).swatch.focus();
-  }
-
-  function place() {
-    if (!pop || !popFor) return;
-    var anchor = state(popFor).swatch.parentNode.getBoundingClientRect();
-    var gap = 6, pad = 8, vw = document.documentElement.clientWidth, vh = window.innerHeight;
-    pop.style.left = '0px';
-    pop.style.top = '0px';
-    var w = pop.offsetWidth, h = pop.offsetHeight;
-    var y = anchor.bottom + gap;
-    if (y + h > vh - pad && anchor.top - gap - h >= pad) y = anchor.top - gap - h;
-    pop.style.left = Math.round(Math.max(pad, Math.min(anchor.left, vw - w - pad))) + 'px';
-    pop.style.top = Math.round(Math.max(pad, Math.min(y, vh - h - pad))) + 'px';
   }
 
   /* ------------------------------------------------------------- wiring */
@@ -401,19 +388,12 @@
   document.addEventListener('focusout', function (e) {
     var input = field(e.target);
     if (input) commitTyped(input);
-    if (popFor && pop && pop.contains(e.target) && e.relatedTarget && !pop.contains(e.relatedTarget) && e.relatedTarget !== state(popFor).swatch) closePop(false);
+    if (popFor && pop && pop.contains(e.target) && e.relatedTarget && !pop.contains(e.relatedTarget) && !e.relatedTarget.contains(pop) && e.relatedTarget !== state(popFor).swatch) closePop(false);
   }, false);
   document.addEventListener('keydown', function (e) {
     var input = field(e.target);
     if (input && e.key === 'Enter') commitTyped(input);
   }, false);
-  document.addEventListener('pointerdown', function (e) {
-    if (!popFor || !pop) return;
-    if (pop.contains(e.target) || state(popFor).swatch.contains(e.target)) return;
-    closePop(false);
-  }, true);
-  window.addEventListener('scroll', function () { if (popFor) place(); }, true);
-  window.addEventListener('resize', function () { if (popFor) place(); }, false);
   document.addEventListener('reset', function (e) {
     var form = e.target;
     setTimeout(function () {

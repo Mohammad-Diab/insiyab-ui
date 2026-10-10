@@ -1023,6 +1023,8 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
   .ins-combo-list { backdrop-filter: var(--ins-blur); -webkit-backdrop-filter: var(--ins-blur); }
 }
 .ins-combo-list:not([data-ins-open]) { display: none; }
+/* With the script the list is a popover in the top layer, as wide as its field and placed by insiyab.js. */
+.ins-combo-list[popover] { position: fixed; inset: auto; color: inherit; }
 .ins-combo[data-ins-flip~="up"] > .ins-combo-list {
   inset-block-start: auto;
   inset-block-end: calc(100% + .375rem);
