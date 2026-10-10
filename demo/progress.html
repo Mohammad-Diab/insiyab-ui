@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,12 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">شريط تقدم على عنصر progress الأصلي، وحلقة للنسب المئوية.</p>
-        <h2 id="bar">الشريط</h2>
-<p>
-  يقوم <code>.ins-progress</code> على عنصر <code>&lt;progress&gt;</code> الأصلي، فيعلن قارئ الشاشة قيمته من غير ARIA.
-  ويمتلئ من جهة البداية، وله ثلاث نبرات: <code>--ok</code> و<code>--warn</code> و<code>--bad</code>.
-</p>
-<figure class="dx"><div class="dx-view stack">
+        <figure class="dx"><div class="dx-view stack">
   <progress class="ins-progress" value="64" max="100" aria-label="عادي">64%</progress>
   <progress class="ins-progress ins-progress--ok" value="100" max="100" aria-label="نجاح">100%</progress>
   <progress class="ins-progress ins-progress--warn" value="88" max="100" aria-label="تحذير">88%</progress>
@@ -288,61 +284,96 @@
 <span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress ins-progress--warn"</span> <span class="hl-a">value</span>=<span class="hl-s">"88"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"تحذير"</span><span class="hl-t">&gt;</span>88%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress ins-progress--bad"</span> <span class="hl-a">value</span>=<span class="hl-s">"97"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"خطر"</span><span class="hl-t">&gt;</span>97%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="sizes">المقاسات</h2>
-<figure class="dx"><div class="dx-view stack">
-  <progress class="ins-progress ins-progress--sm" value="40" max="100" aria-label="صغير">40%</progress>
-  <progress class="ins-progress" value="55" max="100" aria-label="عادي">55%</progress>
-  <progress class="ins-progress ins-progress--lg" value="70" max="100" aria-label="كبير">70%</progress>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress ins-progress--sm"</span> <span class="hl-a">value</span>=<span class="hl-s">"40"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"صغير"</span><span class="hl-t">&gt;</span>40%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress"</span> <span class="hl-a">value</span>=<span class="hl-s">"55"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"عادي"</span><span class="hl-t">&gt;</span>55%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress ins-progress--lg"</span> <span class="hl-a">value</span>=<span class="hl-s">"70"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"كبير"</span><span class="hl-t">&gt;</span>70%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="indeterminate">مدة غير معروفة</h2>
-<p>إذا خلا الشريط من <code>value</code> دل على عمل جارٍ لا تعرف نسبته.</p>
-<figure class="dx"><div class="dx-view">
-  <progress class="ins-progress" aria-label="جارٍ التحميل"></progress>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"جارٍ التحميل"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<div class="site-adv"><h2 id="live">تحديث القيمة</h2>
-<p>غيّر <code>value</code> من جافاسكربت كما تغير أي خاصية، فينساب الشريط إلى قيمته الجديدة.</p>
-<figure class="dx"><div class="dx-view">
-  <progress class="ins-progress" id="up-bar" value="0" max="100" aria-label="الرفع">0%</progress>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress"</span> <span class="hl-a">id</span>=<span class="hl-s">"up-bar"</span> <span class="hl-a">value</span>=<span class="hl-s">"0"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الرفع"</span><span class="hl-t">&gt;</span>0%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<figure class="dx dx--bare"><div class="dx-view row">
-  <button class="ins-btn ins-btn--secondary" id="up-go">ابدأ</button>
-</div></figure></div>
+<h2 id="bar">الشريط</h2>
+<p>
+  يقوم <code>.ins-progress</code> على عنصر <code>&lt;progress&gt;</code> الأصلي، فيعلن قارئ الشاشة قيمته من غير ARIA. واجعل نبرته
+  تتبع المعنى: فالمساحة التي امتلأ أكثرها تحذير، لا لون العلامة. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="bar"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><progress class="ins-progress" aria-label="التقدم" value="64" max="100">64%</progress></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات الشريط"><label class="site-play-ctl" data-key="tone" data-type="select"><span class="site-play-label">النبرة</span><select class="ins-select ins-select--sm"><option value="" selected>عادي</option><option value="ok">نجاح</option><option value="warn">تحذير</option><option value="bad">خطر</option></select></label><div class="site-play-ctl" data-key="size" data-type="seg"><span class="site-play-label">المقاس</span><div class="ins-seg" role="group" aria-label="المقاس"><button type="button" data-value="sm" aria-pressed="false">صغير</button><button type="button" data-value="" class="is-active" aria-pressed="true">عادي</button><button type="button" data-value="lg" aria-pressed="false">كبير</button></div></div><div class="site-play-ctl" data-key="indet" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مدة غير معروفة</span></span></label></div><label class="site-play-ctl" data-key="value" data-type="text"><span class="site-play-label">القيمة</span><input class="ins-input ins-input--sm" type="text" value="64"></label><div class="site-play-ctl site-adv" data-key="live" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">تحديث القيمة</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;progress</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-progress"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"التقدم"</span> <span class="hl-a">value</span>=<span class="hl-s">"64"</span> <span class="hl-a">max</span>=<span class="hl-s">"100"</span><span class="hl-t">&gt;</span>64%<span class="hl-t">&lt;/progress</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="ring">الحلقة</h2>
 <p>
-  تعرض <code>.ins-ring</code> النسبة حين تضيق المساحة، ويكبرها <code>--lg</code>. تضع القيمة في المتغير <code>--ins-value</code>، وتضع على العنصر نفسه
-  <code>role="progressbar"</code> والسمات <code>aria-valuenow</code> و<code>aria-valuemin</code> و<code>aria-valuemax</code> ليفهمها قارئ الشاشة.
+  تعرض <code>.ins-ring</code> النسبة حين تضيق المساحة. تضع القيمة في <code>aria-valuenow</code> مع
+  <code>role="progressbar"</code>، فيقرؤها قارئ الشاشة وتمتلئ منها الحلقة.
 </p>
-<figure class="dx"><div class="dx-view row">
-  <div class="ins-ring" role="progressbar" aria-label="عادية" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="--ins-value:72">72%</div>
-  <div class="ins-ring ins-ring--lg" role="progressbar" aria-label="كبيرة" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="--ins-value:45">45%</div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-ring"</span> <span class="hl-a">role</span>=<span class="hl-s">"progressbar"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"عادية"</span> <span class="hl-a">aria-valuenow</span>=<span class="hl-s">"72"</span> <span class="hl-a">aria-valuemin</span>=<span class="hl-s">"0"</span> <span class="hl-a">aria-valuemax</span>=<span class="hl-s">"100"</span> <span class="hl-a">style</span>=<span class="hl-s">"--ins-value:72"</span><span class="hl-t">&gt;</span>72%<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-ring ins-ring--lg"</span> <span class="hl-a">role</span>=<span class="hl-s">"progressbar"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"كبيرة"</span> <span class="hl-a">aria-valuenow</span>=<span class="hl-s">"45"</span> <span class="hl-a">aria-valuemin</span>=<span class="hl-s">"0"</span> <span class="hl-a">aria-valuemax</span>=<span class="hl-s">"100"</span> <span class="hl-a">style</span>=<span class="hl-s">"--ins-value:45"</span><span class="hl-t">&gt;</span>45%<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<figure class="dx site-play" data-play="ring"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><div class="ins-ring" role="progressbar" aria-label="التقدم" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100">72%</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات الحلقة"><div class="site-play-ctl" data-key="size" data-type="seg"><span class="site-play-label">المقاس</span><div class="ins-seg" role="group" aria-label="المقاس"><button type="button" data-value="" class="is-active" aria-pressed="true">عادي</button><button type="button" data-value="lg" aria-pressed="false">كبير</button></div></div><label class="site-play-ctl" data-key="value" data-type="text"><span class="site-play-label">النسبة</span><input class="ins-input ins-input--sm" type="text" value="72"></label><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-ring"</span> <span class="hl-a">role</span>=<span class="hl-s">"progressbar"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"التقدم"</span> <span class="hl-a">aria-valuenow</span>=<span class="hl-s">"72"</span> <span class="hl-a">aria-valuemin</span>=<span class="hl-s">"0"</span> <span class="hl-a">aria-valuemax</span>=<span class="hl-s">"100"</span><span class="hl-t">&gt;</span>72%<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الشريط والحلقة من كلاسات وسمات، لكل مكون صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>الشريط</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-progress</code></td><td>كلاس</td><td>على عنصر <code>&lt;progress&gt;</code> الأصلي، فيعلن قارئ الشاشة قيمته من غير ARIA. ويمتلئ من جهة البداية.</td></tr><tr><td><code>value</code></td><td>سمة</td><td>القيمة الحالية، من صفر إلى <code>max</code>. فإن خلا منها الشريط دل على عمل جارٍ لا تُعرف نسبته. وإن غيّرتها من جافاسكربت انساب الشريط إلى قيمته الجديدة.</td></tr><tr><td><code>max</code></td><td>سمة</td><td>القيمة عند الامتلاء، وهي <code>1</code> إن لم تذكرها.</td></tr><tr><td><code>aria-label</code></td><td>سمة</td><td>اسم الشريط، يقرؤه قارئ الشاشة مع قيمته.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">النبرة</th></tr></tbody><tbody><tr><td><code>.ins-progress--ok</code></td><td>كلاس</td><td>لما اكتمل، أو يسير كما ينبغي.</td></tr><tr><td><code>.ins-progress--warn</code></td><td>كلاس</td><td>لنسبة تقترب من حدها، كمساحة تكاد تمتلئ.</td></tr><tr><td><code>.ins-progress--bad</code></td><td>كلاس</td><td>لنسبة بلغت حدها أو تجاوزته.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المقاس</th></tr></tbody><tbody><tr><td><code>.ins-progress--sm</code></td><td>كلاس</td><td>شريط أنحف، لصف في جدول أو بطاقة.</td></tr><tr><td><code>.ins-progress--lg</code></td><td>كلاس</td><td>شريط أغلظ، إذا كان التقدم محور الشاشة.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>الحلقة</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-ring</code></td><td>كلاس</td><td>تعرض النسبة حين تضيق المساحة، وتدور مع عقارب الساعة في الاتجاهين كما يدور القرص.</td></tr><tr><td><code>role="progressbar"</code></td><td>سمة</td><td>فالحلقة ليست عنصرًا أصليًا، ولا يفهمها قارئ الشاشة من غيرها.</td></tr><tr><td><code>aria-valuenow="72"</code></td><td>سمة</td><td>القيمة، ومنها تمتلئ الحلقة بنسبتها بين <code>aria-valuemin</code> و<code>aria-valuemax</code>، فلا تكتب القيمة مرتين.</td></tr><tr><td><code>data-ins-size="4rem"</code></td><td>سمة</td><td>قطر الحلقة إن أردت غير المقاسين.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المقاس</th></tr></tbody><tbody><tr><td><code>.ins-ring--lg</code></td><td>كلاس</td><td>حلقة أكبر، في بطاقة إحصائية أو بجوار عنوان.</td></tr></tbody></table></div></div></details></div></div>
 
 <script>
-  (function () {
-    var bar = document.getElementById('up-bar'), btn = document.getElementById('up-go'), t;
-    btn.addEventListener('click', function () {
-      clearInterval(t);
-      bar.value = 0;
-      btn.disabled = true;
-      t = setInterval(function () {
-        bar.value = Math.min(100, bar.value + Math.round(4 + Math.random() * 12));
-        if (bar.value >= 100) {
-          clearInterval(t);
-          btn.disabled = false;
-        }
-      }, 220);
-    });
-  })();
+SitePlay.define({
+  id: 'bar',
+  title: 'الشريط',
+  owns: 'ins-progress',
+  wide: true,
+  controls: [
+    { key: 'tone', label: 'النبرة', type: 'select', value: '', choices: [
+      { value: '', label: 'عادي' },
+      { value: 'ok', label: 'نجاح', name: 'ins-progress--ok', desc: 'لما اكتمل، أو يسير كما ينبغي.' },
+      { value: 'warn', label: 'تحذير', name: 'ins-progress--warn', desc: 'لنسبة تقترب من حدها، كمساحة تكاد تمتلئ.' },
+      { value: 'bad', label: 'خطر', name: 'ins-progress--bad', desc: 'لنسبة بلغت حدها أو تجاوزته.' }
+    ] },
+    { key: 'size', label: 'المقاس', type: 'seg', value: '', choices: [
+      { value: 'sm', label: 'صغير', name: 'ins-progress--sm', desc: 'شريط أنحف، لصف في جدول أو بطاقة.' },
+      { value: '', label: 'عادي' },
+      { value: 'lg', label: 'كبير', name: 'ins-progress--lg', desc: 'شريط أغلظ، إذا كان التقدم محور الشاشة.' }
+    ] },
+    { key: 'indet', label: 'مدة غير معروفة', type: 'switch' },
+    { key: 'value', label: 'القيمة', type: 'text', value: '64' },
+    { key: 'live', label: 'تحديث القيمة', type: 'switch', level: 'advanced' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-progress', desc: 'على عنصر `<progress>` الأصلي، فيعلن قارئ الشاشة قيمته من غير ARIA. ويمتلئ من جهة البداية.' },
+    { group: 'الأساس', name: 'value', desc: 'القيمة الحالية، من صفر إلى `max`. فإن خلا منها الشريط دل على عمل جارٍ لا تُعرف نسبته. وإن غيّرتها من جافاسكربت انساب الشريط إلى قيمته الجديدة.' },
+    { group: 'الأساس', name: 'max', desc: 'القيمة عند الامتلاء، وهي `1` إن لم تذكرها.' },
+    { group: 'الأساس', name: 'aria-label', desc: 'اسم الشريط، يقرؤه قارئ الشاشة مع قيمته.' }
+  ],
+  disable: function (s) { return s.indet ? ['value', 'live'] : []; },
+  html: function (s) {
+    var cls = 'ins-progress' + (s.tone ? ' ins-progress--' + s.tone : '') + (s.size ? ' ins-progress--' + s.size : '');
+    if (s.indet) return '<progress class="' + cls + '" aria-label="جارٍ التحميل"></progress>';
+    var id = s.live ? ' id="up-bar"' : '';
+    var bar = '<progress class="' + cls + '"' + id + ' aria-label="التقدم" value="' + s.value + '" max="100">' + s.value + '%</progress>';
+    if (!s.live) return bar;
+    return '<div class="ins-flex ins-items-center ins-gap-3">\n  ' + bar +
+      '\n  <button class="ins-btn ins-btn--secondary ins-btn--sm" onclick="document.getElementById(\'up-bar\').value += 10">تقدم</button>\n</div>';
+  },
+  notes: function (s) {
+    var out = [];
+    if (s.indet) out.push('لا قيمة للشريط، فهو يدل على عمل جارٍ لا تُعرف نسبته.');
+    if (s.live && !s.indet) out.push('اضغط الزر، فتزيد القيمة وينساب الشريط إليها.');
+    return out;
+  }
+});
+
+SitePlay.define({
+  id: 'ring',
+  title: 'الحلقة',
+  owns: 'ins-ring',
+  controls: [
+    { key: 'size', label: 'المقاس', type: 'seg', value: '', choices: [
+      { value: '', label: 'عادي' },
+      { value: 'lg', label: 'كبير', name: 'ins-ring--lg', desc: 'حلقة أكبر، في بطاقة إحصائية أو بجوار عنوان.' }
+    ] },
+    { key: 'value', label: 'النسبة', type: 'text', value: '72' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-ring', desc: 'تعرض النسبة حين تضيق المساحة، وتدور مع عقارب الساعة في الاتجاهين كما يدور القرص.' },
+    { group: 'الأساس', name: 'role="progressbar"', desc: 'فالحلقة ليست عنصرًا أصليًا، ولا يفهمها قارئ الشاشة من غيرها.' },
+    { group: 'الأساس', name: 'aria-valuenow="72"', desc: 'القيمة، ومنها تمتلئ الحلقة بنسبتها بين `aria-valuemin` و`aria-valuemax`، فلا تكتب القيمة مرتين.' },
+    { group: 'الأساس', name: 'data-ins-size="4rem"', desc: 'قطر الحلقة إن أردت غير المقاسين.' }
+  ],
+  html: function (s) {
+    return '<div class="ins-ring' + (s.size ? ' ins-ring--lg' : '') + '" role="progressbar" aria-label="التقدم" aria-valuenow="' + s.value +
+      '" aria-valuemin="0" aria-valuemax="100">' + s.value + '%</div>';
+  }
+});
 </script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="loading.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">التحميل والحالة الفارغة</span></a><a class="site-pager-link site-pager-link--next" href="countdown.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">العد التنازلي والحفظ</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#bar">الشريط</a><a href="#sizes">المقاسات</a><a href="#indeterminate">مدة غير معروفة</a><a href="#live">تحديث القيمة</a><a href="#ring">الحلقة</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#bar">الشريط</a><a href="#sizes">المقاسات</a><a href="#indeterminate">مدة غير معروفة</a><a href="#ring">الحلقة</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#bar">الشريط</a><a href="#ring">الحلقة</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
