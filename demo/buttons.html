@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,122 +274,182 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">ألوان وأنماط ومقاسات، وأزرار تبديل ومجموعات، وزر للإغلاق.</p>
-        <h2 id="filled">المملوءة</h2>
-<p>تصلح للإجراء الرئيسي في الشاشة، وللإجراءات التي تحمل نبرة، مثل <code>--success</code> و<code>--danger</code>. وإن شئت وضعت أيقونة <code>&lt;svg&gt;</code> قبل النص.</p>
-<figure class="dx"><div class="dx-view row">
+        <figure class="dx"><div class="dx-view row">
   <button class="ins-btn ins-btn--primary"><svg class="ico"><use href="#i-check"/></svg>حفظ</button>
-  <button class="ins-btn ins-btn--success">تأكيد</button>
-  <button class="ins-btn ins-btn--danger">حذف</button>
-  <button class="ins-btn ins-btn--warning">إيقاف</button>
-  <button class="ins-btn ins-btn--info">تفاصيل</button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>حفظ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--success"</span><span class="hl-t">&gt;</span>تأكيد<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--danger"</span><span class="hl-t">&gt;</span>حذف<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--warning"</span><span class="hl-t">&gt;</span>إيقاف<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--info"</span><span class="hl-t">&gt;</span>تفاصيل<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="secondary">الثانوية والهادئة</h2>
-<p>
-  اجعل <code>--secondary</code> لما يجاور الزر الرئيسي، و<code>--ghost</code> وأخواته لما هو أهدأ منه، و<code>--bare</code>
-  لإجراء يكاد يكون رابطًا.
-</p>
-<figure class="dx"><div class="dx-view row">
   <button class="ins-btn ins-btn--secondary">معاينة</button>
   <button class="ins-btn ins-btn--ghost">تصدير</button>
-  <button class="ins-btn ins-btn--ghost-success">قبول</button>
-  <button class="ins-btn ins-btn--ghost-danger">رفض</button>
-  <button class="ins-btn ins-btn--ghost-warning">تأجيل</button>
-  <button class="ins-btn ins-btn--ghost-info">مساعدة</button>
+  <button class="ins-btn ins-btn--danger">حذف</button>
   <button class="ins-btn ins-btn--bare">إلغاء</button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span><span class="hl-t">&gt;</span>معاينة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span>حفظ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span><span class="hl-t">&gt;</span>معاينة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--ghost"</span><span class="hl-t">&gt;</span>تصدير<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--ghost-success"</span><span class="hl-t">&gt;</span>قبول<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--ghost-danger"</span><span class="hl-t">&gt;</span>رفض<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--ghost-warning"</span><span class="hl-t">&gt;</span>تأجيل<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--ghost-info"</span><span class="hl-t">&gt;</span>مساعدة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--danger"</span><span class="hl-t">&gt;</span>حذف<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--bare"</span><span class="hl-t">&gt;</span>إلغاء<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="sizes">المقاسات</h2>
-<figure class="dx"><div class="dx-view row">
-  <button class="ins-btn ins-btn--primary ins-btn--lg">كبير</button>
-  <button class="ins-btn ins-btn--primary">عادي</button>
-  <button class="ins-btn ins-btn--primary ins-btn--sm">صغير</button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary ins-btn--lg"</span><span class="hl-t">&gt;</span>كبير<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>عادي<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary ins-btn--sm"</span><span class="hl-t">&gt;</span>صغير<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<figure class="dx"><div class="dx-view stack">
-  <button class="ins-btn ins-btn--primary ins-btn--full">بعرض الحاوية</button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary ins-btn--full"</span><span class="hl-t">&gt;</span>بعرض الحاوية<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="icon">زر الأيقونة</h2>
-<p>يجعل <code>--icon</code> الزر مربعًا يسع أيقونة واحدة، ولا بد له عندئذ من تسمية <code>aria-label</code>.</p>
-<figure class="dx"><div class="dx-view row">
-  <button class="ins-btn ins-btn--secondary ins-btn--icon" aria-label="تعديل"><svg class="ico"><use href="#i-edit"/></svg></button>
-  <button class="ins-btn ins-btn--ghost-danger ins-btn--icon" aria-label="حذف"><svg class="ico"><use href="#i-trash"/></svg></button>
-  <button class="ins-btn ins-btn--secondary ins-btn--sm ins-btn--icon" aria-label="المزيد"><svg class="ico"><use href="#i-dots"/></svg></button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--icon"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"تعديل"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--ghost-danger ins-btn--icon"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"حذف"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--sm ins-btn--icon"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"المزيد"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="states">الحالات</h2>
+<h2 id="button">الزر</h2>
 <p>
-  تعطل <code>disabled</code> الزر، ويرفعه <code>--lift</code> قليلًا إذا مر عليه المؤشر، وإذا وضعت <code>.ins-btn</code> على
-  <code>&lt;a&gt;</code> صار الرابط في هيئة زر. وتظهر حلقة التركيز (focus ring) عند التنقل بلوحة المفاتيح، فجرب <kbd class="ins-kbd">Tab</kbd>.
+  اختر من الخيارات، فيتغير الزر وشيفرته معًا. واجعل <code>--primary</code> للإجراء الرئيسي في الشاشة، و<code>--secondary</code>
+  لما يجاوره، والهادئ لما هو أقل منهما. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<figure class="dx"><div class="dx-view row">
-  <button class="ins-btn ins-btn--primary" disabled>معطل</button>
-  <button class="ins-btn ins-btn--primary ins-btn--lift">مرتفع</button>
-  <a class="ins-btn ins-btn--secondary" href="#states">رابط</a>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span> <span class="hl-a">disabled</span><span class="hl-t">&gt;</span>معطل<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary ins-btn--lift"</span><span class="hl-t">&gt;</span>مرتفع<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span> <span class="hl-a">href</span>=<span class="hl-s">"#states"</span><span class="hl-t">&gt;</span>رابط<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<figure class="dx site-play" data-play="button"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><button class="ins-btn ins-btn--primary">حفظ</button></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات الزر"><label class="site-play-ctl" data-key="look" data-type="select"><span class="site-play-label">النمط</span><select class="ins-select ins-select--sm"><option value="primary" selected>رئيسي</option><option value="secondary">ثانوي</option><option value="success">نجاح</option><option value="danger">خطر</option><option value="warning">تحذير</option><option value="info">معلومة</option><option value="ghost">هادئ</option><option value="ghost-success">هادئ بنبرة النجاح</option><option value="ghost-danger">هادئ بنبرة الخطر</option><option value="ghost-warning">هادئ بنبرة التحذير</option><option value="ghost-info">هادئ بنبرة المعلومة</option><option value="bare">بلا خلفية</option></select></label><div class="site-play-ctl" data-key="size" data-type="seg"><span class="site-play-label">المقاس</span><div class="ins-seg" role="group" aria-label="المقاس"><button type="button" data-value="sm" aria-pressed="false">صغير</button><button type="button" data-value="" class="is-active" aria-pressed="true">عادي</button><button type="button" data-value="lg" aria-pressed="false">كبير</button></div></div><div class="site-play-ctl" data-key="icon" data-type="seg"><span class="site-play-label">الأيقونة</span><div class="ins-seg" role="group" aria-label="الأيقونة"><button type="button" data-value="" class="is-active" aria-pressed="true">بلا</button><button type="button" data-value="start" aria-pressed="false">قبل النص</button><button type="button" data-value="only" aria-pressed="false">وحدها</button></div></div><label class="site-play-ctl" data-key="text" data-type="text"><span class="site-play-label">النص</span><input class="ins-input ins-input--sm" type="text" value="حفظ"></label><div class="site-play-ctl" data-key="full" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">بعرض الحاوية</span></span></label></div><div class="site-play-ctl" data-key="lift" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">يرتفع تحت المؤشر</span></span></label></div><div class="site-play-ctl" data-key="link" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">رابط بهيئة زر</span></span></label></div><div class="site-play-ctl" data-key="disabled" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">معطل</span></span></label></div><div class="site-play-ctl site-adv" data-key="toggle" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">زر تبديل</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>حفظ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<div class="site-adv"><h2 id="toggle">أزرار التبديل</h2>
-<p>تحفظ <code>data-ins-toggle</code> حالة الزر في <code>aria-pressed</code>، وتُطلق حدث <code>ins:toggle</code>.</p>
-<figure class="dx"><div class="dx-view row">
-  <div class="ins-btn-group" role="group" aria-label="تنسيق النص">
-    <button class="ins-btn ins-btn--secondary ins-btn--icon" data-ins-toggle aria-pressed="true" aria-label="عريض"><b>B</b></button>
-    <button class="ins-btn ins-btn--secondary ins-btn--icon" data-ins-toggle aria-label="تسطير"><u>U</u></button>
-    <button class="ins-btn ins-btn--secondary ins-btn--icon" data-ins-toggle aria-label="يتوسطه خط"><s>S</s></button>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn-group"</span> <span class="hl-a">role</span>=<span class="hl-s">"group"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"تنسيق النص"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--icon"</span> <span class="hl-a">data-ins-toggle</span> <span class="hl-a">aria-pressed</span>=<span class="hl-s">"true"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"عريض"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>B<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--icon"</span> <span class="hl-a">data-ins-toggle</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"تسطير"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;u</span><span class="hl-t">&gt;</span>U<span class="hl-t">&lt;/u</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--icon"</span> <span class="hl-a">data-ins-toggle</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"يتوسطه خط"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;s</span><span class="hl-t">&gt;</span>S<span class="hl-t">&lt;/s</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure></div>
-
-<h2 id="group">المجموعات</h2>
+<h2 id="group">مجموعة الأزرار</h2>
 <p>
-  يضم <code>.ins-btn-group</code> الأزرار المتجاورة في قطعة واحدة، ويصغرها <code>--sm</code>. وإذا وضعت فيها قائمة منسدلة
-  <code>details.ins-pop</code> صنعت زرًا مقسومًا (split button)، وتفصيله في صفحة <a href="dropdown.html#split">القوائم المنسدلة</a>.
+  تضم <code>.ins-btn-group</code> الأزرار المتجاورة في قطعة واحدة. وإذا وضعت فيها قائمة منسدلة <code>details.ins-pop</code>
+  صنعت زرًا مقسومًا (split button)، وتفصيله في صفحة <a href="dropdown.html#split">القوائم المنسدلة</a>.
 </p>
-<figure class="dx"><div class="dx-view row">
-  <div class="ins-btn-group">
-    <button class="ins-btn ins-btn--secondary">السابق</button>
-    <button class="ins-btn ins-btn--secondary">اليوم</button>
-    <button class="ins-btn ins-btn--secondary">التالي</button>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn-group"</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="group"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><div class="ins-btn-group" role="group" aria-label="التنقل بين الأيام">
+  <button class="ins-btn ins-btn--secondary">السابق</button>
+  <button class="ins-btn ins-btn--secondary">اليوم</button>
+  <button class="ins-btn ins-btn--secondary">التالي</button>
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات مجموعة الأزرار"><div class="site-play-ctl" data-key="size" data-type="seg"><span class="site-play-label">المقاس</span><div class="ins-seg" role="group" aria-label="المقاس"><button type="button" data-value="" class="is-active" aria-pressed="true">عادي</button><button type="button" data-value="sm" aria-pressed="false">صغير</button></div></div><div class="site-play-ctl" data-key="look" data-type="seg"><span class="site-play-label">نمط الأزرار</span><div class="ins-seg" role="group" aria-label="نمط الأزرار"><button type="button" data-value="secondary" class="is-active" aria-pressed="true">ثانوي</button><button type="button" data-value="ghost" aria-pressed="false">هادئ</button></div></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn-group"</span> <span class="hl-a">role</span>=<span class="hl-s">"group"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"التنقل بين الأيام"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span><span class="hl-t">&gt;</span>السابق<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span><span class="hl-t">&gt;</span>اليوم<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span><span class="hl-t">&gt;</span>التالي<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="close">زر الإغلاق</h2>
-<p>
-  يرسم <code>.ins-close</code> علامة الإغلاق بنفسه في CSS، فيغنيك عن الأيقونة، ولا بد له من <code>aria-label</code>. ويصغره <code>--sm</code>،
-  ويجعله <code>--bare</code> بلا خلفية. وإذا أضفت <code>data-ins-dismiss</code> أغلق أقرب تنبيه أو مربع حوار أو درج يحتويه.
-</p>
-<figure class="dx"><div class="dx-view row">
-  <button class="ins-close" aria-label="إغلاق"></button>
-  <button class="ins-close ins-close--sm" aria-label="إغلاق"></button>
-  <button class="ins-close ins-close--bare" aria-label="إغلاق"></button>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-close"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إغلاق"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-close ins-close--sm"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إغلاق"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-close ins-close--bare"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إغلاق"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<p>يرسم <code>.ins-close</code> علامة الإغلاق بنفسه، فيغنيك عن الأيقونة.</p>
+<figure class="dx site-play" data-play="close"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><button class="ins-close" aria-label="إغلاق"></button></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات زر الإغلاق"><div class="site-play-ctl" data-key="size" data-type="seg"><span class="site-play-label">المقاس</span><div class="ins-seg" role="group" aria-label="المقاس"><button type="button" data-value="" class="is-active" aria-pressed="true">عادي</button><button type="button" data-value="sm" aria-pressed="false">صغير</button></div></div><div class="site-play-ctl" data-key="bare" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">بلا خلفية</span></span></label></div><div class="site-play-ctl" data-key="dismiss" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">يغلق ما يحتويه</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-close"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"إغلاق"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الأزرار من كلاسات وسمات وأحداث، لكل مكون صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>الزر</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-btn</code></td><td>كلاس</td><td>أساس كل زر، على <code>&lt;button&gt;</code> أو <code>&lt;a&gt;</code>، ومعه كلاس للنمط.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">النمط</th></tr></tbody><tbody><tr><td><code>.ins-btn--primary</code></td><td>كلاس</td><td>للإجراء الرئيسي في الشاشة.</td></tr><tr><td><code>.ins-btn--secondary</code></td><td>كلاس</td><td>لما يجاور الزر الرئيسي.</td></tr><tr><td><code>.ins-btn--success</code></td><td>كلاس</td><td>لإجراء يؤكد أو يقبل.</td></tr><tr><td><code>.ins-btn--danger</code></td><td>كلاس</td><td>لإجراء يحذف، أو لا رجعة فيه.</td></tr><tr><td><code>.ins-btn--warning</code></td><td>كلاس</td><td>لإجراء يوقف أو يؤجل.</td></tr><tr><td><code>.ins-btn--info</code></td><td>كلاس</td><td>لإجراء يشرح أو يفصّل.</td></tr><tr><td><code>.ins-btn--ghost</code></td><td>كلاس</td><td>أهدأ من الثانوي، لإجراء لا يلفت النظر.</td></tr><tr><td><code>.ins-btn--ghost-success</code></td><td>كلاس</td><td>هادئ بلون النجاح.</td></tr><tr><td><code>.ins-btn--ghost-danger</code></td><td>كلاس</td><td>هادئ بلون الخطر.</td></tr><tr><td><code>.ins-btn--ghost-warning</code></td><td>كلاس</td><td>هادئ بلون التحذير.</td></tr><tr><td><code>.ins-btn--ghost-info</code></td><td>كلاس</td><td>هادئ بلون المعلومة.</td></tr><tr><td><code>.ins-btn--bare</code></td><td>كلاس</td><td>لإجراء يكاد يكون رابطًا، كالإلغاء.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المقاس</th></tr></tbody><tbody><tr><td><code>.ins-btn--sm</code></td><td>كلاس</td><td>زر أصغر، للجداول والأشرطة.</td></tr><tr><td><code>.ins-btn--lg</code></td><td>كلاس</td><td>زر أكبر، للإجراء الوحيد في الشاشة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأيقونة</th></tr></tbody><tbody><tr><td><code>.ins-btn--icon</code></td><td>كلاس</td><td>زر مربع يسع أيقونة واحدة، ولا بد له عندئذ من <code>aria-label</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-btn--full</code></td><td>كلاس</td><td>يمد الزر على عرض حاويته كله.</td></tr><tr><td><code>.ins-btn--lift</code></td><td>كلاس</td><td>يرفع الزر قليلًا إذا مر عليه المؤشر.</td></tr><tr><td><code>a.ins-btn</code></td><td>عنصر</td><td>ضع الكلاس على <code>&lt;a&gt;</code> فيصير الرابط في هيئة زر، ويبقى رابطًا.</td></tr><tr><td><code>disabled</code></td><td>سمة</td><td>يعطل الزر، فلا يُنقر ولا يصل إليه التنقل بلوحة المفاتيح.</td></tr></tbody><tbody class="site-opt-group site-adv"><tr><th colspan="3" scope="rowgroup">زر تبديل</th></tr></tbody><tbody><tr class="site-adv"><td><code>data-ins-toggle</code></td><td>سمة</td><td>يحفظ حالة الزر في <code>aria-pressed</code> عند كل ضغطة، ويطلق حدث <code>ins:toggle</code>.</td></tr><tr class="site-adv"><td><code>aria-pressed="true"</code></td><td>سمة</td><td>الزر مضغوط. ضعها بنفسك ليبدأ الزر مضغوطًا.</td></tr><tr class="site-adv"><td><code>ins:toggle</code></td><td>حدث</td><td>يُطلق عند كل ضغطة، وفي <code>detail</code> الزر نفسه <code>el</code> وحالته <code>pressed</code>.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>مجموعة الأزرار</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-btn-group</code></td><td>كلاس</td><td>يضم الأزرار المتجاورة في قطعة واحدة.</td></tr><tr><td><code>role="group"</code></td><td>سمة</td><td>ومعها <code>aria-label</code>، فيعرف قارئ الشاشة أن الأزرار مجموعة واحدة وما هي.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المقاس</th></tr></tbody><tbody><tr><td><code>.ins-btn-group--sm</code></td><td>كلاس</td><td>لمجموعة من أزرار <code>ins-btn--sm</code>: يضبط انحناء طرفيها على مقاس أزرارها.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>زر الإغلاق</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-close</code></td><td>كلاس</td><td>يرسم علامة الإغلاق بنفسه، فلا يحتاج أيقونة، ولا بد له من <code>aria-label</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المقاس</th></tr></tbody><tbody><tr><td><code>.ins-close--sm</code></td><td>كلاس</td><td>زر أصغر، لتنبيه أو رقاقة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-close--bare</code></td><td>كلاس</td><td>يزيل الخلفية، لزر يسكن داخل تنبيه أو لوح.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">يغلق ما يحتويه</th></tr></tbody><tbody><tr><td><code>data-ins-dismiss</code></td><td>سمة</td><td>يغلق أقرب تنبيه أو مربع حوار أو درج يحتويه، أو ما تسميه له: <code>data-ins-dismiss="#id"</code>.</td></tr><tr><td><code>ins:dismiss</code></td><td>حدث</td><td>يُطلق عند الإغلاق، وفي <code>detail</code> ما أُغلق <code>target</code>.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'button',
+  title: 'الزر',
+  owns: 'ins-btn',
+  controls: [
+    { key: 'look', label: 'النمط', type: 'select', value: 'primary', choices: [
+      { value: 'primary', label: 'رئيسي', name: 'ins-btn--primary', desc: 'للإجراء الرئيسي في الشاشة.' },
+      { value: 'secondary', label: 'ثانوي', name: 'ins-btn--secondary', desc: 'لما يجاور الزر الرئيسي.' },
+      { value: 'success', label: 'نجاح', name: 'ins-btn--success', desc: 'لإجراء يؤكد أو يقبل.' },
+      { value: 'danger', label: 'خطر', name: 'ins-btn--danger', desc: 'لإجراء يحذف، أو لا رجعة فيه.' },
+      { value: 'warning', label: 'تحذير', name: 'ins-btn--warning', desc: 'لإجراء يوقف أو يؤجل.' },
+      { value: 'info', label: 'معلومة', name: 'ins-btn--info', desc: 'لإجراء يشرح أو يفصّل.' },
+      { value: 'ghost', label: 'هادئ', name: 'ins-btn--ghost', desc: 'أهدأ من الثانوي، لإجراء لا يلفت النظر.' },
+      { value: 'ghost-success', label: 'هادئ بنبرة النجاح', name: 'ins-btn--ghost-success', desc: 'هادئ بلون النجاح.' },
+      { value: 'ghost-danger', label: 'هادئ بنبرة الخطر', name: 'ins-btn--ghost-danger', desc: 'هادئ بلون الخطر.' },
+      { value: 'ghost-warning', label: 'هادئ بنبرة التحذير', name: 'ins-btn--ghost-warning', desc: 'هادئ بلون التحذير.' },
+      { value: 'ghost-info', label: 'هادئ بنبرة المعلومة', name: 'ins-btn--ghost-info', desc: 'هادئ بلون المعلومة.' },
+      { value: 'bare', label: 'بلا خلفية', name: 'ins-btn--bare', desc: 'لإجراء يكاد يكون رابطًا، كالإلغاء.' }
+    ] },
+    { key: 'size', label: 'المقاس', type: 'seg', value: '', choices: [
+      { value: 'sm', label: 'صغير', name: 'ins-btn--sm', desc: 'زر أصغر، للجداول والأشرطة.' },
+      { value: '', label: 'عادي' },
+      { value: 'lg', label: 'كبير', name: 'ins-btn--lg', desc: 'زر أكبر، للإجراء الوحيد في الشاشة.' }
+    ] },
+    { key: 'icon', label: 'الأيقونة', type: 'seg', value: '', choices: [
+      { value: '', label: 'بلا' },
+      { value: 'start', label: 'قبل النص' },
+      { value: 'only', label: 'وحدها', name: 'ins-btn--icon', desc: 'زر مربع يسع أيقونة واحدة، ولا بد له عندئذ من `aria-label`.' }
+    ] },
+    { key: 'text', label: 'النص', type: 'text', value: 'حفظ' },
+    { key: 'full', label: 'بعرض الحاوية', type: 'switch', name: 'ins-btn--full', desc: 'يمد الزر على عرض حاويته كله.' },
+    { key: 'lift', label: 'يرتفع تحت المؤشر', type: 'switch', name: 'ins-btn--lift', desc: 'يرفع الزر قليلًا إذا مر عليه المؤشر.' },
+    { key: 'link', label: 'رابط بهيئة زر', type: 'switch', name: 'a.ins-btn', kind: 'element', desc: 'ضع الكلاس على `<a>` فيصير الرابط في هيئة زر، ويبقى رابطًا.' },
+    { key: 'disabled', label: 'معطل', type: 'switch', name: 'disabled', desc: 'يعطل الزر، فلا يُنقر ولا يصل إليه التنقل بلوحة المفاتيح.' },
+    { key: 'toggle', label: 'زر تبديل', group: 'زر تبديل', type: 'switch', level: 'advanced', name: 'data-ins-toggle', desc: 'يحفظ حالة الزر في `aria-pressed` عند كل ضغطة، ويطلق حدث `ins:toggle`.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-btn', desc: 'أساس كل زر، على `<button>` أو `<a>`، ومعه كلاس للنمط.' },
+    { group: 'زر تبديل', name: 'aria-pressed="true"', level: 'advanced', desc: 'الزر مضغوط. ضعها بنفسك ليبدأ الزر مضغوطًا.' },
+    { group: 'زر تبديل', name: 'ins:toggle', kind: 'event', level: 'advanced', desc: 'يُطلق عند كل ضغطة، وفي `detail` الزر نفسه `el` وحالته `pressed`.' }
+  ],
+  events: ['ins:toggle'],
+  disable: function (s) { return s.link ? ['disabled', 'toggle'] : []; },
+  stage: function (view, s) { if (s.toggle && !s.link) view.querySelector('button').setAttribute('aria-pressed', 'true'); },
+  html: function (s) {
+    var cls = 'ins-btn ins-btn--' + s.look + (s.size ? ' ins-btn--' + s.size : '') + (s.icon === 'only' ? ' ins-btn--icon' : '') +
+      (s.full ? ' ins-btn--full' : '') + (s.lift ? ' ins-btn--lift' : '');
+    var tag = s.link ? 'a' : 'button';
+    var attrs = s.link ? ' href="/orders"' : (s.disabled ? ' disabled' : '') + (s.toggle ? ' data-ins-toggle aria-pressed="false"' : '');
+    if (s.icon === 'only') attrs += ' aria-label="' + s.text + '"';
+    var ico = s.icon ? '<svg class="ico"><use href="#i-check"/></svg>' : '';
+    return '<' + tag + ' class="' + cls + '"' + attrs + '>' + ico + (s.icon === 'only' ? '' : s.text) + '</' + tag + '>';
+  },
+  notes: function (s) {
+    var out = [];
+    if (s.icon === 'only') out.push('لا نص على الزر، فصار نصه تسمية `aria-label` يقرؤها قارئ الشاشة.');
+    if (s.lift) out.push('مرر المؤشر على الزر، فيرتفع قليلًا.');
+    if (s.link) out.push('الرابط لا يُعطَّل ولا يكون زر تبديل، فهذان الخياران للأزرار وحدها.');
+    if (s.toggle && !s.link) out.push(s.look === 'primary'
+      ? 'الزر الرئيسي لا يتغير شكله حين يُضغط، فاختر نمطًا آخر لترى حالته المضغوطة. واضغطه يظهر هنا الحدث الذي يطلقه.'
+      : 'يبدو الزر هنا مضغوطًا، فاضغطه يرجع إلى حاله ويظهر هنا الحدث الذي يطلقه.');
+    return out;
+  }
+});
+
+SitePlay.define({
+  id: 'group',
+  title: 'مجموعة الأزرار',
+  owns: 'ins-btn-group',
+  controls: [
+    { key: 'size', label: 'المقاس', type: 'seg', value: '', choices: [
+      { value: '', label: 'عادي' },
+      { value: 'sm', label: 'صغير', name: 'ins-btn-group--sm', desc: 'لمجموعة من أزرار `ins-btn--sm`: يضبط انحناء طرفيها على مقاس أزرارها.' }
+    ] },
+    { key: 'look', label: 'نمط الأزرار', type: 'seg', value: 'secondary', choices: [
+      { value: 'secondary', label: 'ثانوي' },
+      { value: 'ghost', label: 'هادئ' }
+    ] }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-btn-group', desc: 'يضم الأزرار المتجاورة في قطعة واحدة.' },
+    { group: 'الأساس', name: 'role="group"', desc: 'ومعها `aria-label`، فيعرف قارئ الشاشة أن الأزرار مجموعة واحدة وما هي.' }
+  ],
+  html: function (s) {
+    var btn = 'ins-btn ins-btn--' + s.look + (s.size ? ' ins-btn--sm' : '');
+    return '<div class="ins-btn-group' + (s.size ? ' ins-btn-group--sm' : '') + '" role="group" aria-label="التنقل بين الأيام">\n' +
+      '  <button class="' + btn + '">السابق</button>\n' +
+      '  <button class="' + btn + '">اليوم</button>\n' +
+      '  <button class="' + btn + '">التالي</button>\n' +
+      '</div>';
+  },
+  notes: function (s) {
+    return s.size ? ['يصغّر `ins-btn-group--sm` انحناء طرفي المجموعة فقط، فضع `ins-btn--sm` على أزرارها أيضًا.'] : [];
+  }
+});
+
+SitePlay.define({
+  id: 'close',
+  title: 'زر الإغلاق',
+  owns: 'ins-close',
+  controls: [
+    { key: 'size', label: 'المقاس', type: 'seg', value: '', choices: [
+      { value: '', label: 'عادي' },
+      { value: 'sm', label: 'صغير', name: 'ins-close--sm', desc: 'زر أصغر، لتنبيه أو رقاقة.' }
+    ] },
+    { key: 'bare', label: 'بلا خلفية', type: 'switch', name: 'ins-close--bare', desc: 'يزيل الخلفية، لزر يسكن داخل تنبيه أو لوح.' },
+    { key: 'dismiss', label: 'يغلق ما يحتويه', group: 'يغلق ما يحتويه', type: 'switch', name: 'data-ins-dismiss', desc: 'يغلق أقرب تنبيه أو مربع حوار أو درج يحتويه، أو ما تسميه له: `data-ins-dismiss="#id"`.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-close', desc: 'يرسم علامة الإغلاق بنفسه، فلا يحتاج أيقونة، ولا بد له من `aria-label`.' },
+    { group: 'يغلق ما يحتويه', name: 'ins:dismiss', kind: 'event', desc: 'يُطلق عند الإغلاق، وفي `detail` ما أُغلق `target`.' }
+  ],
+  events: ['ins:dismiss'],
+  html: function (s) {
+    var btn = '<button class="ins-close' + (s.size ? ' ins-close--sm' : '') + (s.bare ? ' ins-close--bare' : '') + '"' +
+      (s.dismiss ? ' data-ins-dismiss aria-label="إغلاق التنبيه"' : ' aria-label="إغلاق"') + '></button>';
+    if (!s.dismiss) return btn;
+    return '<div class="ins-alert ins-alert--info">\n' +
+      '  <span class="ins-alert-ico"><svg class="ico"><use href="#i-info"/></svg></span>\n' +
+      '  <div class="ins-alert-msg">\n' +
+      '    <span class="ins-alert-text">تنبيه يغلقه الزر.</span>\n' +
+      '    ' + btn + '\n' +
+      '  </div>\n' +
+      '</div>';
+  },
+  notes: function (s) {
+    return s.dismiss ? ['اضغط الزر فيُغلق التنبيه ويظهر هنا الحدث، وغيّر أي خيار لتعيده.'] : [];
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="validation.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">التحقق</span></a><a class="site-pager-link site-pager-link--next" href="accordion.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الأكورديون</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#filled">المملوءة</a><a href="#secondary">الثانوية والهادئة</a><a href="#sizes">المقاسات</a><a href="#icon">زر الأيقونة</a><a href="#states">الحالات</a><a href="#toggle">أزرار التبديل</a><a href="#group">المجموعات</a><a href="#close">زر الإغلاق</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#filled">المملوءة</a><a href="#secondary">الثانوية والهادئة</a><a href="#sizes">المقاسات</a><a href="#icon">زر الأيقونة</a><a href="#states">الحالات</a><a href="#group">المجموعات</a><a href="#close">زر الإغلاق</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#button">الزر</a><a href="#group">مجموعة الأزرار</a><a href="#close">زر الإغلاق</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
