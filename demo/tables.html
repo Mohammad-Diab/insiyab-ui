@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,12 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">جدول بيانات تصطف أرقامه، ويتمرر عرضًا داخل حاويته فلا تتسع الصفحة معه.</p>
-        <h2 id="basic">جدول بيانات</h2>
-<p>
-  ضع <code>.ins-table</code> داخل <code>.ins-table-wrap</code>، فإذا ضاق الغلاف عن الجدول تمرر أفقيًا
-  وبقيت الصفحة على عرضها.
-</p>
-<figure class="dx"><div class="dx-view">
+        <figure class="dx"><div class="dx-view">
   <div class="ins-table-wrap">
     <table class="ins-table">
       <thead>
@@ -305,140 +301,87 @@
     <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p>
-  إذا مررت المؤشر على صف تلونت خلفيته. أما الصف المحدد، وهو ما يحمل <code>aria-selected="true"</code> أو <code>aria-current</code>
-  أو <code>.is-selected</code> كالصف الثاني هنا، فيبقى ملونًا ويظهر على حافته في جهة البداية شريط صغير.
-</p>
 
-<h2 id="panel">جدول في لوح</h2>
-<p>إذا وضعت الجدول في لوح، فضع غلافه في <code>.ins-panel-body--flush</code> ليمتد الجدول إلى حواف اللوح.</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-panel">
-    <div class="ins-panel-body ins-panel-body--flush">
-      <div class="ins-table-wrap">
-        <table class="ins-table">
-          <thead><tr><th>الاسم</th><th>المدينة</th></tr></thead>
-          <tbody>
-            <tr><td>ليلى</td><td>الرياض</td></tr>
-            <tr><td>عمر</td><td>عمّان</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-panel-body ins-panel-body--flush"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>المدينة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-          <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الرياض<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-          <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمر<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمّان<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="numbers">الأرقام</h2>
+<h2 id="table">الجدول</h2>
 <p>
-  إذا وضعت <code>.ins-num</code> على خلية كتب رقمها بخط Inter بأرقام متساوية العرض، وعزله عن اتجاه السطر،
-  فتصطف الأعمدة الرقمية وتبقى إشارة السالب في مكانها. وضعه على رأس العمود أيضًا ليصطف معه.
+  ضع <code>.ins-table</code> داخل <code>.ins-table-wrap</code>، فإذا ضاق الغلاف عن الجدول تمرر أفقيًا وبقيت الصفحة على عرضها.
+  واختر من الخيارات، فيتغير الجدول وشيفرته معًا، وتجدها كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-table-wrap">
-    <table class="ins-table">
-      <thead><tr><th>الطلب</th><th class="ins-num">المبلغ</th></tr></thead>
-      <tbody>
-        <tr><td>الأول</td><td class="ins-num">249.00</td></tr>
-        <tr><td>الثاني</td><td class="ins-num">1,180.00</td></tr>
-        <tr><td>الثالث</td><td class="ins-num">-89.50</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="table"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-table-wrap">
+  <table class="ins-table">
+    <thead>
+      <tr><th>الاسم</th><th>المدينة</th><th>القيمة</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>ليلى</td><td>الرياض</td><td>249.00</td></tr>
+      <tr><td>عمر</td><td>عمّان</td><td>1,180.00</td></tr>
+      <tr><td>سارة</td><td>القاهرة</td><td>-89.50</td></tr>
+    </tbody>
+  </table>
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات الجدول"><div class="site-play-ctl" data-key="empty" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">فارغ</span></span></label></div><div class="site-play-ctl" data-key="num" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">عمود أرقام</span></span></label></div><label class="site-play-ctl" data-key="current" data-type="select"><span class="site-play-label">الصف المحدد</span><select class="ins-select ins-select--sm"><option value="" selected>بلا</option><option value="selected">aria-selected</option><option value="current">aria-current</option><option value="cls">is-selected</option></select></label><div class="site-play-ctl" data-key="panel" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">في لوح</span></span></label></div><div class="site-play-ctl" data-key="actions" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">إجراءات الصف</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الطلب<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>المبلغ<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>المدينة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>القيمة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الأول<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>249.00<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الثاني<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>1,180.00<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الثالث<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>-89.50<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الرياض<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>249.00<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمر<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمّان<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>1,180.00<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>سارة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>القاهرة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>-89.50<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="actions">إجراءات الصف</h2>
-<p>
-  ضع قائمة منسدلة <code>.ins-pop</code> في آخر خلية من الصف. ويقص الغلاف ما يخرج عن حدوده، إلا حين تنفتح فيه القائمة فيتركها تظهر كاملة.
-</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-table-wrap">
-    <table class="ins-table">
-      <thead><tr><th>الاسم</th><th></th></tr></thead>
-      <tbody>
-        <tr>
-          <td>ليلى</td>
-          <td>
-            <details class="ins-pop">
-              <summary class="ins-btn ins-btn--secondary ins-btn--sm">إجراءات</summary>
-              <div class="ins-pop-body">
-                <button class="ins-pop-item">تعديل</button>
-                <button class="ins-pop-item ins-pop-item--bad">حذف</button>
-              </div>
-            </details>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
+<h2 id="sticky">تثبيت رأس الجدول وعموده الأول</h2>
+<p>للجدول الطويل أو العريض: يبقى رأسه أو عموده الأول ظاهرًا وهو يتمرر داخل غلافه.</p>
+<figure class="dx site-play" data-play="wrap"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-table-wrap">
+  <table class="ins-table" style="min-inline-size: 48rem">
+    <thead><tr><th>الاسم</th><th>المدينة</th><th>البريد</th><th>الهاتف</th><th>الحالة</th></tr></thead>
+    <tbody>
+      <tr><td>ليلى</td><td>الرياض</td><td dir="ltr">layla@example.com</td><td dir="ltr">+966 50 000 0001</td><td>نشط</td></tr>
+      <tr><td>عمر</td><td>عمّان</td><td dir="ltr">omar@example.com</td><td dir="ltr">+962 79 000 0002</td><td>نشط</td></tr>
+      <tr><td>سارة</td><td>القاهرة</td><td dir="ltr">sara@example.com</td><td dir="ltr">+20 10 0000 0003</td><td>موقوف</td></tr>
+      <tr><td>كريم</td><td>دبي</td><td dir="ltr">karim@example.com</td><td dir="ltr">+971 50 000 0004</td><td>نشط</td></tr>
+      <tr><td>نور</td><td>الدوحة</td><td dir="ltr">nour@example.com</td><td dir="ltr">+974 5000 0005</td><td>نشط</td></tr>
+    </tbody>
+  </table>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">الجدول هنا أعرض من غلافه بـ<code>min-inline-size</code>، فمرره أفقيًا.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات غلاف الجدول"><div class="site-play-ctl" data-key="sticky" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">تثبيت الرأس</span></span></label></div><div class="site-play-ctl" data-key="pin" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">تثبيت العمود الأول</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span> <span class="hl-a">style</span>=<span class="hl-s">"min-inline-size: 48rem"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>المدينة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>البريد<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الهاتف<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الحالة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>
-          <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop"</span><span class="hl-t">&gt;</span>
-            <span class="hl-t">&lt;summary</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--sm"</span><span class="hl-t">&gt;</span>إجراءات<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-            <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-body"</span><span class="hl-t">&gt;</span>
-              <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-item"</span><span class="hl-t">&gt;</span>تعديل<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-              <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-item ins-pop-item--bad"</span><span class="hl-t">&gt;</span>حذف<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-            <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-          <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الرياض<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>layla@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+966 50 000 0001<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمر<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمّان<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>omar@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+962 79 000 0002<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>سارة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>القاهرة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>sara@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+20 10 0000 0003<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>موقوف<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>كريم<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>دبي<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>karim@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+971 50 000 0004<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نور<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الدوحة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>nour@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+974 5000 0005<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="sort">الترتيب</h2>
 <p>
-  إذا وضعت <code>data-ins-sort</code> على رأس عمود صار زرًا يرتب الصفوف تصاعديًا ثم تنازليًا، ويدل السهم على الاتجاه. وترتب الأرقام
-  بقيمها والنصوص بحسب لغة الصفحة، وتأتي الخلية الفارغة في الآخر دائمًا. وإذا لم يكن النص هو القيمة، كتاريخ مكتوب بالكلمات،
-  فضع القيمة في <code>data-sort-value</code>.
+  إذا وضعت <code>data-ins-sort</code> على رأس عمود صار زرًا يرتب الصفوف تصاعديًا ثم تنازليًا. وترتب الأرقام بقيمها والنصوص
+  بحسب لغة الصفحة، ويرتب <code>Insiyab.sort(th)</code> من الشيفرة.
 </p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-table-wrap">
-    <table class="ins-table">
-      <thead>
-        <tr><th data-ins-sort>الاسم</th><th data-ins-sort>التاريخ</th><th data-ins-sort class="ins-num">المبلغ</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>ليلى</td><td data-sort-value="2026-03-02">2 مارس</td><td class="ins-num">249.00</td></tr>
-        <tr><td>عمر</td><td data-sort-value="2026-01-15">15 يناير</td><td class="ins-num">1,180.00</td></tr>
-        <tr><td>سارة</td><td data-sort-value="2026-02-20">20 فبراير</td><td class="ins-num">89.50</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="sort"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-table-wrap">
+  <table class="ins-table">
+    <thead>
+      <tr><th data-ins-sort>الاسم</th><th data-ins-sort>التاريخ</th><th data-ins-sort class="ins-num">القيمة</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>عمر</td><td>15 يناير</td><td class="ins-num">1,180.00</td></tr>
+      <tr><td>ليلى</td><td>2 مارس</td><td class="ins-num">249.00</td></tr>
+      <tr><td>سارة</td><td>20 فبراير</td><td class="ins-num">89.50</td></tr>
+    </tbody>
+  </table>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">رتب عمود التاريخ، فيرتبه بنصه فيأتي 2 مارس قبل 15 يناير، ثم شغّل «قيمة للترتيب» وقارن.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات الترتيب"><div class="site-play-ctl" data-key="value" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">قيمة للترتيب</span></span></label></div><div class="site-play-ctl" data-key="start" data-type="seg"><span class="site-play-label">مرتب من البداية</span><div class="ins-seg" role="group" aria-label="مرتب من البداية"><button type="button" data-value="" class="is-active" aria-pressed="true">لا</button><button type="button" data-value="ascending" aria-pressed="false">تصاعديًا</button><button type="button" data-value="descending" aria-pressed="false">تنازليًا</button></div></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">data-ins-sort</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">data-ins-sort</span><span class="hl-t">&gt;</span>التاريخ<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">data-ins-sort</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>المبلغ<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">data-ins-sort</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">data-ins-sort</span><span class="hl-t">&gt;</span>التاريخ<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">data-ins-sort</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>القيمة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-sort-value</span>=<span class="hl-s">"2026-03-02"</span><span class="hl-t">&gt;</span>2 مارس<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>249.00<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمر<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-sort-value</span>=<span class="hl-s">"2026-01-15"</span><span class="hl-t">&gt;</span>15 يناير<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>1,180.00<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>سارة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-sort-value</span>=<span class="hl-s">"2026-02-20"</span><span class="hl-t">&gt;</span>20 فبراير<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>89.50<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمر<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>15 يناير<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>1,180.00<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>2 مارس<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>249.00<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>سارة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>20 فبراير<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>89.50<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
@@ -452,34 +395,30 @@
 
 <h2 id="select">تحديد الصفوف</h2>
 <p>
-  أضف عمود مربعات <code>.ins-table-check</code>، وضع <code>data-ins-select</code> على مربع كل صف، و<code>data-ins-select="all"</code>
-  على مربع رأس الجدول. فيتلون الصف المحدد، ويصير مربع الرأس محددًا كله أو جزئيًا، وإذا نقرت مع <kbd class="ins-kbd">Shift</kbd> حددت ما بين
-  صفين. أما <code>.ins-bulkbar</code> مع <code>data-ins-bulk="#الجدول"</code> فشريط يظهر ما دام في الجدول شيء محدد، يعرض عدده والإجراءات المتاحة له،
-  وفيه زر <code>data-ins-select="none"</code> يلغي التحديد.
+  عمود من المربعات يحدد الصفوف، وشريط يعرض عدد المحدد منها وما يمكن فعله بها. وتعيد لك
+  <code>Insiyab.selection('#people')</code> الصفوف المحددة.
 </p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-table-wrap">
-    <table class="ins-table" id="people">
-      <thead>
-        <tr>
-          <th class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select="all" aria-label="تحديد الكل"></label></th>
-          <th>الاسم</th><th>المدينة</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="ليلى"></label></td><td>ليلى</td><td>الرياض</td></tr>
-        <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="عمر"></label></td><td>عمر</td><td>عمّان</td></tr>
-        <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="سارة"></label></td><td>سارة</td><td>القاهرة</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="ins-bulkbar" data-ins-bulk="#people" hidden>
-    <span class="ins-bulkbar-count"></span>
-    <button class="ins-btn ins-btn--secondary ins-btn--sm">تصدير</button>
-    <button class="ins-btn ins-btn--danger ins-btn--sm">حذف</button>
-    <button class="ins-btn ins-btn--bare ins-btn--sm" data-ins-select="none">إلغاء</button>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="select"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-table-wrap">
+  <table class="ins-table" id="people">
+    <thead>
+      <tr>
+        <th class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select="all" aria-label="تحديد الكل"></label></th>
+        <th>الاسم</th><th>المدينة</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="ليلى" checked></label></td><td>ليلى</td><td>الرياض</td></tr>
+      <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="عمر"></label></td><td>عمر</td><td>عمّان</td></tr>
+      <tr><td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="سارة"></label></td><td>سارة</td><td>القاهرة</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="ins-bulkbar" data-ins-bulk="#people" hidden>
+  <span class="ins-bulkbar-count"></span>
+  <button class="ins-btn ins-btn--secondary ins-btn--sm">تصدير</button>
+  <button class="ins-btn ins-btn--danger ins-btn--sm">حذف</button>
+  <button class="ins-btn ins-btn--bare ins-btn--sm" data-ins-select="none">إلغاء</button>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">حدد الصفوف أو ألغ تحديدها، فيظهر الشريط ويختفي معها. وتكتب المكتبة العدد بنفسها.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات تحديد الصفوف"><div class="site-play-ctl" data-key="all" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مربع للكل</span></span></label></div><div class="site-play-ctl" data-key="checked" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">صف محدد من البداية</span></span></label></div><div class="site-play-ctl" data-key="bulk" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">شريط الإجراءات</span></span></label></div><div class="site-play-ctl" data-key="text" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">صيغة العدد</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span> <span class="hl-a">id</span>=<span class="hl-s">"people"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span>
       <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span>
@@ -488,7 +427,7 @@
       <span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">data-ins-select</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"ليلى"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الرياض<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">data-ins-select</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"ليلى"</span> <span class="hl-a">checked</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الرياض<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
       <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">data-ins-select</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"عمر"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمر<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمّان<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
       <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-check"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"checkbox"</span> <span class="hl-a">data-ins-select</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"سارة"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>سارة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>القاهرة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
@@ -500,33 +439,23 @@
   <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--danger ins-btn--sm"</span><span class="hl-t">&gt;</span>حذف<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--bare ins-btn--sm"</span> <span class="hl-a">data-ins-select</span>=<span class="hl-s">"none"</span><span class="hl-t">&gt;</span>إلغاء<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p>
-  وإذا أردت لنص العدد صيغة غير الافتراضية فضع <code>data-ins-text="الصفوف المحددة: {n}"</code> على <code>.ins-bulkbar-count</code>. ومع كل تغيير يُطلق حدث
-  <code>ins:select</code> حاملًا الصفوف المحددة، وتعيدها لك <code>Insiyab.selection('#people')</code>.
-</p>
 
 <h2 id="edit">التعديل في مكانه</h2>
-<p>
-  إذا وضعت <code>data-ins-edit</code> على خلية صارت قابلة للتعديل، فالنقر عليها أو <kbd class="ins-kbd">Enter</kbd> يحولها حقلًا،
-  ثم يحفظ <kbd class="ins-kbd">Enter</kbd> أو مغادرة الحقل ما كتبت، ويعيد <kbd class="ins-kbd">Esc</kbd> القيمة السابقة. واجعل قيمتها <code>="number"</code> للأرقام،
-  أو <code>="select"</code> مع <code>data-ins-options="أ|ب"</code> للاختيار من قائمة.
-</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-table-wrap">
-    <table class="ins-table">
-      <thead><tr><th>الاسم</th><th class="ins-num">الكمية</th><th>الحالة</th></tr></thead>
-      <tbody>
-        <tr><td data-ins-edit>ليلى</td><td class="ins-num" data-ins-edit="number">12</td><td data-ins-edit="select" data-ins-options="نشط|موقوف">نشط</td></tr>
-        <tr><td data-ins-edit>عمر</td><td class="ins-num" data-ins-edit="number">7</td><td data-ins-edit="select" data-ins-options="نشط|موقوف">موقوف</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
+<p>خلية تصير حقلًا إذا نقرتها، فيعدل المستخدم القيمة دون أن يغادر الجدول.</p>
+<figure class="dx site-play" data-play="edit"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-table-wrap">
+  <table class="ins-table">
+    <thead><tr><th>الاسم</th><th class="ins-num">الكمية</th><th>الحالة</th></tr></thead>
+    <tbody>
+      <tr><td data-ins-edit>ليلى</td><td class="ins-num">12</td><td>نشط</td></tr>
+      <tr><td data-ins-edit>عمر</td><td class="ins-num">7</td><td>موقوف</td></tr>
+    </tbody>
+  </table>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">انقر خلية تقبل التعديل، أو اضغط عليها <code>Enter</code>، ثم احفظ بـ<code>Enter</code> أو تراجع بـ<code>Esc</code>.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات التعديل في مكانه"><div class="site-play-ctl" data-key="number" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">عمود أرقام</span></span></label></div><div class="site-play-ctl" data-key="select" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">اختيار من قائمة</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>الكمية<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الحالة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-ins-edit</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span> <span class="hl-a">data-ins-edit</span>=<span class="hl-s">"number"</span><span class="hl-t">&gt;</span>12<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-ins-edit</span>=<span class="hl-s">"select"</span> <span class="hl-a">data-ins-options</span>=<span class="hl-s">"نشط|موقوف"</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-ins-edit</span><span class="hl-t">&gt;</span>عمر<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span> <span class="hl-a">data-ins-edit</span>=<span class="hl-s">"number"</span><span class="hl-t">&gt;</span>7<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-ins-edit</span>=<span class="hl-s">"select"</span> <span class="hl-a">data-ins-options</span>=<span class="hl-s">"نشط|موقوف"</span><span class="hl-t">&gt;</span>موقوف<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-ins-edit</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>12<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">data-ins-edit</span><span class="hl-t">&gt;</span>عمر<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-num"</span><span class="hl-t">&gt;</span>7<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>موقوف<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
     <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
@@ -538,82 +467,207 @@
   <span class="hl-k">if</span> (!ok) e.detail.revert();            <span class="hl-c">// تعود القيمة القديمة</span>
 });</code></pre></div>
 
-<h2 id="sticky">تثبيت رأس الجدول وعموده الأول</h2>
-<p>
-  يضع <code>.ins-table-wrap--sticky</code> الجدول الطويل في صندوق يتمرر ضمن ارتفاع يحدده <code>--ins-table-max</code>، وقيمته 32rem،
-  ويبقي رأس الجدول ظاهرًا. ويبقي <code>.ins-table-wrap--pin</code> العمود الأول ظاهرًا حين يتمرر الجدول العريض أفقيًا. ولك أن تجمع بينهما.
-</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-table-wrap ins-table-wrap--sticky ins-table-wrap--pin" style="--ins-table-max: 16rem">
-    <table class="ins-table" style="min-inline-size: 56rem">
-      <thead><tr><th>الاسم</th><th>المدينة</th><th>البريد</th><th>الهاتف</th><th>القسم</th><th>الحالة</th></tr></thead>
-      <tbody>
-        <tr><td>ليلى</td><td>الرياض</td><td dir="ltr">layla@example.com</td><td dir="ltr">+966 50 000 0001</td><td>المبيعات</td><td>نشط</td></tr>
-        <tr><td>عمر</td><td>عمّان</td><td dir="ltr">omar@example.com</td><td dir="ltr">+962 79 000 0002</td><td>الدعم</td><td>نشط</td></tr>
-        <tr><td>سارة</td><td>القاهرة</td><td dir="ltr">sara@example.com</td><td dir="ltr">+20 10 0000 0003</td><td>المالية</td><td>موقوف</td></tr>
-        <tr><td>كريم</td><td>دبي</td><td dir="ltr">karim@example.com</td><td dir="ltr">+971 50 000 0004</td><td>المبيعات</td><td>نشط</td></tr>
-        <tr><td>نور</td><td>الدوحة</td><td dir="ltr">nour@example.com</td><td dir="ltr">+974 5000 0005</td><td>الدعم</td><td>نشط</td></tr>
-        <tr><td>هادي</td><td>بيروت</td><td dir="ltr">hadi@example.com</td><td dir="ltr">+961 70 000 006</td><td>المالية</td><td>نشط</td></tr>
-        <tr><td>ريم</td><td>الكويت</td><td dir="ltr">reem@example.com</td><td dir="ltr">+965 5000 0007</td><td>المبيعات</td><td>موقوف</td></tr>
-        <tr><td>يوسف</td><td>مسقط</td><td dir="ltr">yousef@example.com</td><td dir="ltr">+968 9000 0008</td><td>الدعم</td><td>نشط</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap ins-table-wrap--sticky ins-table-wrap--pin"</span> <span class="hl-a">style</span>=<span class="hl-s">"--ins-table-max: 16rem"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span> <span class="hl-a">style</span>=<span class="hl-s">"min-inline-size: 56rem"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>المدينة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>البريد<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الهاتف<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>القسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الحالة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ليلى<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الرياض<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>layla@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+966 50 000 0001<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>المبيعات<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمر<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>عمّان<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>omar@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+962 79 000 0002<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الدعم<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>سارة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>القاهرة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>sara@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+20 10 0000 0003<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>المالية<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>موقوف<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>كريم<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>دبي<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>karim@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+971 50 000 0004<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>المبيعات<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نور<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الدوحة<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>nour@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+974 5000 0005<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الدعم<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>هادي<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>بيروت<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>hadi@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+961 70 000 006<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>المالية<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>ريم<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الكويت<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>reem@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+965 5000 0007<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>المبيعات<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>موقوف<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>يوسف<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>مسقط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>yousef@example.com<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>+968 9000 0008<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>الدعم<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;td</span><span class="hl-t">&gt;</span>نشط<span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الجداول من كلاسات وسمات وأحداث، لكل مكون صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>الجدول</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-table</code></td><td>كلاس</td><td>على <code>&lt;table&gt;</code>: رأس عائم فوق بطاقة من الصفوف، ويتلون الصف الذي تحت المؤشر.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-empty</code></td><td>كلاس</td><td>حالة فارغة في خلية تمتد بعرض الجدول، فيختفي رأسه عن العين ويبقى <code>&lt;thead&gt;</code> لقارئ الشاشة.</td></tr><tr><td><code>.ins-num</code></td><td>كلاس</td><td>على خلايا العمود ورأسه: خط Inter بأرقام متساوية العرض، فتصطف القيم وتبقى إشارة السالب في مكانها.</td></tr><tr><td><code>.ins-panel-body--flush</code></td><td>كلاس</td><td>ضع الغلاف في <code>.ins-panel-body--flush</code> داخل لوح، فيمتد الجدول إلى حواف اللوح وتهدأ خلفية صفوفه.</td></tr><tr><td><code>details.ins-pop</code></td><td>عنصر</td><td>قائمة منسدلة في آخر خلية من الصف. والغلاف يقص ما يخرج عنه، إلا القائمة المفتوحة فيتركها تظهر كاملة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الصف المحدد</th></tr></tbody><tbody><tr><td><code>aria-selected="true"</code></td><td>سمة</td><td>صف اخترته من القائمة: يتلون، ويظهر على حافته في جهة البداية شريط صغير.</td></tr><tr><td><code>aria-current</code></td><td>سمة</td><td>السجل الذي تعرضه الصفحة، بالهيئة نفسها. أما <code>aria-current="false"</code> فلا يحدده.</td></tr><tr><td><code>.is-selected</code></td><td>كلاس</td><td>مثلهما، إذا أردت أن تحدد الصف بكلاس.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>غلاف الجدول</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-table-wrap</code></td><td>كلاس</td><td>يغلف الجدول، فإذا ضاق عنه تمرر أفقيًا وبقيت الصفحة على عرضها.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-table-wrap--sticky</code></td><td>كلاس</td><td>يضع الجدول الطويل في صندوق يتمرر ضمن ارتفاع تحدده <code>data-ins-height</code>، وهو 32rem إن لم تذكره، ويبقي رأسه ظاهرًا.</td></tr><tr><td><code>.ins-table-wrap--pin</code></td><td>كلاس</td><td>يبقي العمود الأول ظاهرًا حين يتمرر الجدول العريض أفقيًا. ولك أن تجمعه مع <code>--sticky</code>.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>الترتيب</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-sort</code></td><td>سمة</td><td>على رأس العمود: يصير زرًا يرتب الصفوف تصاعديًا ثم تنازليًا، ويدل السهم على الاتجاه. والخلية الفارغة تأتي في الآخر دائمًا.</td></tr><tr><td><code>.ins-sort</code></td><td>كلاس</td><td>الزر الذي تضعه المكتبة في رأس العمود، فلا تكتبه بنفسك.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">قيمة الخلية</th></tr></tbody><tbody><tr><td><code>data-sort-value</code></td><td>سمة</td><td>على الخلية إذا لم يكن نصها هو قيمتها، كتاريخ مكتوب بالكلمات، فيرتبها بهذه القيمة.</td></tr><tr><td><code>data-value</code></td><td>سمة</td><td>يرتب بها إذا لم تجد <code>data-sort-value</code>، ويبدأ بها التعديل في مكانه أيضًا.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">مرتب من البداية</th></tr></tbody><tbody><tr><td><code>aria-sort="ascending"</code></td><td>سمة</td><td>على رأس العمود إذا جاءت الصفوف من الخادم مرتبة به تصاعديًا، فيظهر السهم في مكانه.</td></tr><tr><td><code>aria-sort="descending"</code></td><td>سمة</td><td>مثلها، للصفوف المرتبة تنازليًا.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">نوع القيم</th></tr></tbody><tbody><tr><td><code>data-ins-sort="number"</code></td><td>سمة</td><td>يرتب العمود بالأرقام في كل حال. ومن دونها يرتبه بالأرقام إذا كانت خلاياه كلها أرقامًا، وبالنص على لغة الصفحة فيما سوى ذلك.</td></tr><tr><td><code>data-ins-sort="text"</code></td><td>سمة</td><td>يرتب العمود نصًا ولو كانت خلاياه أرقامًا.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الحدث</th></tr></tbody><tbody><tr><td><code>ins:sort</code></td><td>حدث</td><td>يُطلق قبل الترتيب، وفي <code>detail</code> الجدول <code>el</code> ورأس العمود <code>th</code> ورقمه <code>column</code> والاتجاه <code>dir</code>. ألغه إذا كان الترتيب على الخادم، فيتحرك السهم وحده.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>تحديد الصفوف</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-table-check</code></td><td>كلاس</td><td>على خلايا عمود المربعات، فيضيق العمود على قدر المربع.</td></tr><tr><td><code>data-ins-select</code></td><td>سمة</td><td>على مربع كل صف: يتلون الصف إذا حددته، وإذا نقرت مع <code>Shift</code> حددت ما بين صفين.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>data-ins-select="all"</code></td><td>سمة</td><td>على مربع رأس الجدول: يحدد الصفوف كلها أو يلغي تحديدها، ويصير محددًا كله أو جزئيًا بحسبها.</td></tr><tr><td><code>checked</code></td><td>سمة</td><td>على مربع صف أرسله الخادم محددًا، فيتلون صفه ويظهر الشريط من البداية.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">شريط الإجراءات</th></tr></tbody><tbody><tr><td><code>.ins-bulkbar</code></td><td>كلاس</td><td>شريط يظهر ما دام في الجدول صف محدد، فيه عدد المحدد والإجراءات المتاحة له، ويلتصق بأسفل الشاشة في القائمة الطويلة.</td></tr><tr><td><code>data-ins-text</code></td><td>سمة</td><td>على <code>.ins-bulkbar-count</code>: صيغة للعدد غير الافتراضية، و<code>{n}</code> مكان العدد.</td></tr><tr><td><code>data-ins-bulk</code></td><td>سمة</td><td>على الشريط، يربطه بجدوله: <code>data-ins-bulk="#people"</code>.</td></tr><tr><td><code>.ins-bulkbar-count</code></td><td>كلاس</td><td>تكتب فيه المكتبة عدد الصفوف المحددة.</td></tr><tr><td><code>data-ins-select="none"</code></td><td>سمة</td><td>على زر في الشريط يلغي التحديد كله.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الحدث</th></tr></tbody><tbody><tr><td><code>ins:select</code></td><td>حدث</td><td>يُطلق مع كل تغيير في التحديد، وفي <code>detail</code> الجدول <code>el</code> والصفوف المحددة <code>rows</code> وعددها <code>count</code>.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>التعديل في مكانه</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-edit</code></td><td>سمة</td><td>على الخلية: ينقرها المستخدم أو يضغط عليها <code>Enter</code> فتصير حقلًا، ثم يحفظ <code>Enter</code> أو مغادرة الحقل ما كتب، ويعيد <code>Esc</code> القيمة السابقة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>data-ins-edit="number"</code></td><td>سمة</td><td>حقل للأرقام، يُكتب من اليسار وتظهر له على الهاتف لوحة الأرقام.</td></tr><tr><td><code>data-ins-edit="select"</code></td><td>سمة</td><td>قائمة تختار منها بدل الحقل، ومعها خياراتها في <code>data-ins-options</code>.</td></tr><tr><td><code>data-ins-options</code></td><td>سمة</td><td>خيارات القائمة، بينها <code>|</code>: <code>data-ins-options="نشط|موقوف"</code>.</td></tr><tr><td><code>data-value</code></td><td>سمة</td><td>قيمة الخلية إذا اختلفت عن نصها، فيبدأ بها الحقل وتتحدث بعد الحفظ.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الحدث</th></tr></tbody><tbody><tr><td><code>ins:edit</code></td><td>حدث</td><td>يُطلق قبل حفظ التغيير، وفي <code>detail</code> الخلية <code>el</code> والصف <code>row</code> والقيمة الجديدة <code>value</code> والسابقة <code>old</code>، و<code>revert()</code> تعيد السابقة. ألغه لترفض القيمة.</td></tr></tbody></table></div></div></details></div></div>
 
-<h2 id="empty">جدول فارغ</h2>
-<p>
-  إذا خلا الجدول من البيانات، فضع <code>.ins-empty</code> في خلية تمتد بعرضه، فيختفي رأس الجدول عن العين ويبقى
-  <code>&lt;thead&gt;</code> لقارئ الشاشة.
-</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-table-wrap">
-    <table class="ins-table">
-      <thead><tr><th>الاسم</th><th>المدينة</th></tr></thead>
-      <tbody>
-        <tr>
-          <td colspan="2">
-            <div class="ins-empty">
-              <span class="ins-empty-title">لا بيانات</span>
-              <span class="ins-empty-hint">ستظهر الصفوف هنا.</span>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table-wrap"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;table</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-table"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;thead</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;th</span><span class="hl-t">&gt;</span>المدينة<span class="hl-t">&lt;/th</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/thead</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;tbody</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;tr</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;td</span> <span class="hl-a">colspan</span>=<span class="hl-s">"2"</span><span class="hl-t">&gt;</span>
-          <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty"</span><span class="hl-t">&gt;</span>
-            <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-title"</span><span class="hl-t">&gt;</span>لا بيانات<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-            <span class="hl-t">&lt;span</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-empty-hint"</span><span class="hl-t">&gt;</span>ستظهر الصفوف هنا.<span class="hl-t">&lt;/span</span><span class="hl-t">&gt;</span>
-          <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-        <span class="hl-t">&lt;/td</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;/tr</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/tbody</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/table</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<script>
+SitePlay.define({
+  id: 'table',
+  title: 'الجدول',
+  owns: 'ins-table',
+  wide: true,
+  controls: [
+    { key: 'empty', label: 'فارغ', type: 'switch', name: 'ins-empty', desc: 'حالة فارغة في خلية تمتد بعرض الجدول، فيختفي رأسه عن العين ويبقى `<thead>` لقارئ الشاشة.' },
+    { key: 'num', label: 'عمود أرقام', type: 'switch', name: 'ins-num', desc: 'على خلايا العمود ورأسه: خط Inter بأرقام متساوية العرض، فتصطف القيم وتبقى إشارة السالب في مكانها.' },
+    { key: 'current', label: 'الصف المحدد', group: 'الصف المحدد', type: 'select', value: '', choices: [
+      { value: '', label: 'بلا' },
+      { value: 'selected', label: 'aria-selected', name: 'aria-selected="true"', desc: 'صف اخترته من القائمة: يتلون، ويظهر على حافته في جهة البداية شريط صغير.' },
+      { value: 'current', label: 'aria-current', name: 'aria-current', desc: 'السجل الذي تعرضه الصفحة، بالهيئة نفسها. أما `aria-current="false"` فلا يحدده.' },
+      { value: 'cls', label: 'is-selected', name: 'is-selected', kind: 'class', desc: 'مثلهما، إذا أردت أن تحدد الصف بكلاس.' }
+    ] },
+    { key: 'panel', label: 'في لوح', type: 'switch', name: 'ins-panel-body--flush', desc: 'ضع الغلاف في `.ins-panel-body--flush` داخل لوح، فيمتد الجدول إلى حواف اللوح وتهدأ خلفية صفوفه.' },
+    { key: 'actions', label: 'إجراءات الصف', type: 'switch', name: 'details.ins-pop', kind: 'element', desc: 'قائمة منسدلة في آخر خلية من الصف. والغلاف يقص ما يخرج عنه، إلا القائمة المفتوحة فيتركها تظهر كاملة.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-table', desc: 'على `<table>`: رأس عائم فوق بطاقة من الصفوف، ويتلون الصف الذي تحت المؤشر.' }
+  ],
+  disable: function (s) { return s.empty ? ['num', 'current', 'actions'] : []; },
+  html: function (s) {
+    var rows = [['ليلى', 'الرياض', '249.00'], ['عمر', 'عمّان', '1,180.00'], ['سارة', 'القاهرة', '-89.50']];
+    var full = !s.empty, num = full && s.num ? ' class="ins-num"' : '', act = full && s.actions;
+    var mark = full ? { selected: ' aria-selected="true"', current: ' aria-current="true"', cls: ' class="is-selected"' }[s.current] || '' : '';
+    var menu = '\n      <td>\n        <details class="ins-pop">\n          <summary class="ins-btn ins-btn--secondary ins-btn--sm">إجراءات</summary>\n' +
+      '          <div class="ins-pop-body">\n            <button class="ins-pop-item">تعديل</button>\n            <button class="ins-pop-item ins-pop-item--bad">حذف</button>\n          </div>\n        </details>\n      </td>\n    ';
+    var body = s.empty
+      ? '    <tr>\n      <td colspan="3">\n        <div class="ins-empty">\n          <span class="ins-empty-title">لا بيانات</span>\n' +
+        '          <span class="ins-empty-hint">ستظهر الصفوف هنا.</span>\n        </div>\n      </td>\n    </tr>'
+      : rows.map(function (r, i) {
+        var cells = '<td>' + r[0] + '</td><td>' + r[1] + '</td><td' + num + '>' + r[2] + '</td>';
+        return '    <tr' + (i === 1 ? mark : '') + '>' + (act ? '\n      ' + cells + menu : cells) + '</tr>';
+      }).join('\n');
+    var out = '<div class="ins-table-wrap">\n  <table class="ins-table">\n    <thead>\n      <tr><th>الاسم</th><th>المدينة</th><th' + num + '>القيمة</th>' + (act ? '<th></th>' : '') + '</tr>\n    </thead>\n' +
+      '    <tbody>\n' + body.replace(/^/gm, '  ') + '\n    </tbody>\n  </table>\n</div>';
+    if (!s.panel) return out;
+    return '<div class="ins-panel">\n  <div class="ins-panel-body ins-panel-body--flush">\n' + out.replace(/^/gm, '    ') + '\n  </div>\n</div>';
+  },
+  notes: function (s) {
+    var out = [];
+    if (s.empty) out.push('رأس الجدول مخفي عن العين، وباقٍ في الشيفرة لقارئ الشاشة.');
+    else if (s.actions) out.push('افتح قائمة صف، فيتركها الغلاف تظهر كاملة ما دامت مفتوحة.');
+    return out;
+  }
+});
+
+SitePlay.define({
+  id: 'wrap',
+  title: 'غلاف الجدول',
+  owns: 'ins-table-wrap',
+  wide: true,
+  controls: [
+    { key: 'sticky', label: 'تثبيت الرأس', type: 'switch', name: 'ins-table-wrap--sticky', desc: 'يضع الجدول الطويل في صندوق يتمرر ضمن ارتفاع تحدده `data-ins-height`، وهو 32rem إن لم تذكره، ويبقي رأسه ظاهرًا.' },
+    { key: 'pin', label: 'تثبيت العمود الأول', type: 'switch', name: 'ins-table-wrap--pin', desc: 'يبقي العمود الأول ظاهرًا حين يتمرر الجدول العريض أفقيًا. ولك أن تجمعه مع `--sticky`.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-table-wrap', desc: 'يغلف الجدول، فإذا ضاق عنه تمرر أفقيًا وبقيت الصفحة على عرضها.' }
+  ],
+  html: function (s) {
+    var rows = [
+      ['ليلى', 'الرياض', 'layla@example.com', '+966 50 000 0001', 'نشط'],
+      ['عمر', 'عمّان', 'omar@example.com', '+962 79 000 0002', 'نشط'],
+      ['سارة', 'القاهرة', 'sara@example.com', '+20 10 0000 0003', 'موقوف'],
+      ['كريم', 'دبي', 'karim@example.com', '+971 50 000 0004', 'نشط'],
+      ['نور', 'الدوحة', 'nour@example.com', '+974 5000 0005', 'نشط']
+    ];
+    var cls = 'ins-table-wrap' + (s.sticky ? ' ins-table-wrap--sticky' : '') + (s.pin ? ' ins-table-wrap--pin' : '');
+    return '<div class="' + cls + '"' + (s.sticky ? ' data-ins-height="16rem"' : '') + '>\n  <table class="ins-table" style="min-inline-size: 48rem">\n' +
+      '    <thead><tr><th>الاسم</th><th>المدينة</th><th>البريد</th><th>الهاتف</th><th>الحالة</th></tr></thead>\n    <tbody>\n' +
+      rows.map(function (r) {
+        return '      <tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td dir="ltr">' + r[2] + '</td><td dir="ltr">' + r[3] + '</td><td>' + r[4] + '</td></tr>';
+      }).join('\n') + '\n    </tbody>\n  </table>\n</div>';
+  },
+  notes: function (s) {
+    if (s.sticky && s.pin) return ['مرر الجدول عموديًا وأفقيًا، فيبقى رأسه وعموده الأول ظاهرين.'];
+    if (s.sticky) return ['مرر الجدول داخل صندوقه، وقد قصّرناه بـ`data-ins-height`، فيبقى رأسه ظاهرًا.'];
+    if (s.pin) return ['مرر الجدول أفقيًا، فيبقى العمود الأول في مكانه.'];
+    return ['الجدول هنا أعرض من غلافه بـ`min-inline-size`، فمرره أفقيًا.'];
+  }
+});
+
+SitePlay.define({
+  id: 'sort',
+  title: 'الترتيب',
+  owns: 'ins-sort',
+  wide: true,
+  controls: [
+    { key: 'value', label: 'قيمة للترتيب', group: 'قيمة الخلية', type: 'switch', name: 'data-sort-value', desc: 'على الخلية إذا لم يكن نصها هو قيمتها، كتاريخ مكتوب بالكلمات، فيرتبها بهذه القيمة.' },
+    { key: 'start', label: 'مرتب من البداية', type: 'seg', value: '', choices: [
+      { value: '', label: 'لا' },
+      { value: 'ascending', label: 'تصاعديًا', name: 'aria-sort="ascending"', desc: 'على رأس العمود إذا جاءت الصفوف من الخادم مرتبة به تصاعديًا، فيظهر السهم في مكانه.' },
+      { value: 'descending', label: 'تنازليًا', name: 'aria-sort="descending"', desc: 'مثلها، للصفوف المرتبة تنازليًا.' }
+    ] }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-sort', desc: 'على رأس العمود: يصير زرًا يرتب الصفوف تصاعديًا ثم تنازليًا، ويدل السهم على الاتجاه. والخلية الفارغة تأتي في الآخر دائمًا.' },
+    { group: 'الأساس', name: 'ins-sort', desc: 'الزر الذي تضعه المكتبة في رأس العمود، فلا تكتبه بنفسك.' },
+    { group: 'نوع القيم', name: 'data-ins-sort="number"', desc: 'يرتب العمود بالأرقام في كل حال. ومن دونها يرتبه بالأرقام إذا كانت خلاياه كلها أرقامًا، وبالنص على لغة الصفحة فيما سوى ذلك.' },
+    { group: 'نوع القيم', name: 'data-ins-sort="text"', desc: 'يرتب العمود نصًا ولو كانت خلاياه أرقامًا.' },
+    { group: 'قيمة الخلية', name: 'data-value', desc: 'يرتب بها إذا لم تجد `data-sort-value`، ويبدأ بها التعديل في مكانه أيضًا.' },
+    { group: 'الحدث', name: 'ins:sort', kind: 'event', desc: 'يُطلق قبل الترتيب، وفي `detail` الجدول `el` ورأس العمود `th` ورقمه `column` والاتجاه `dir`. ألغه إذا كان الترتيب على الخادم، فيتحرك السهم وحده.' }
+  ],
+  events: ['ins:sort'],
+  html: function (s) {
+    var rows = [['عمر', '2026-01-15', '15 يناير', '1,180.00'], ['ليلى', '2026-03-02', '2 مارس', '249.00'], ['سارة', '2026-02-20', '20 فبراير', '89.50']];
+    if (s.start) {
+      var order = ['سارة', 'عمر', 'ليلى'];
+      rows.sort(function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); });
+      if (s.start === 'descending') rows.reverse();
+    }
+    return '<div class="ins-table-wrap">\n  <table class="ins-table">\n    <thead>\n' +
+      '      <tr><th data-ins-sort' + (s.start ? ' aria-sort="' + s.start + '"' : '') + '>الاسم</th><th data-ins-sort>التاريخ</th><th data-ins-sort class="ins-num">القيمة</th></tr>\n' +
+      '    </thead>\n    <tbody>\n' +
+      rows.map(function (r) {
+        return '      <tr><td>' + r[0] + '</td><td' + (s.value ? ' data-sort-value="' + r[1] + '"' : '') + '>' + r[2] + '</td><td class="ins-num">' + r[3] + '</td></tr>';
+      }).join('\n') + '\n    </tbody>\n  </table>\n</div>';
+  },
+  notes: function (s) {
+    return [s.value
+      ? 'رتب عمود التاريخ، فيرتبه بالقيمة التي في `data-sort-value`، ويظهر هنا الحدث.'
+      : 'رتب عمود التاريخ، فيرتبه بنصه فيأتي 2 مارس قبل 15 يناير، ثم شغّل «قيمة للترتيب» وقارن.'];
+  }
+});
+
+SitePlay.define({
+  id: 'select',
+  title: 'تحديد الصفوف',
+  owns: 'ins-bulkbar',
+  wide: true,
+  controls: [
+    { key: 'all', label: 'مربع للكل', type: 'switch', value: true, name: 'data-ins-select="all"', desc: 'على مربع رأس الجدول: يحدد الصفوف كلها أو يلغي تحديدها، ويصير محددًا كله أو جزئيًا بحسبها.' },
+    { key: 'checked', label: 'صف محدد من البداية', type: 'switch', value: true, name: 'checked', desc: 'على مربع صف أرسله الخادم محددًا، فيتلون صفه ويظهر الشريط من البداية.' },
+    { key: 'bulk', label: 'شريط الإجراءات', group: 'شريط الإجراءات', type: 'switch', value: true, name: 'ins-bulkbar', desc: 'شريط يظهر ما دام في الجدول صف محدد، فيه عدد المحدد والإجراءات المتاحة له، ويلتصق بأسفل الشاشة في القائمة الطويلة.' },
+    { key: 'text', label: 'صيغة العدد', group: 'شريط الإجراءات', type: 'switch', name: 'data-ins-text', desc: 'على `.ins-bulkbar-count`: صيغة للعدد غير الافتراضية، و`{n}` مكان العدد.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-table-check', desc: 'على خلايا عمود المربعات، فيضيق العمود على قدر المربع.' },
+    { group: 'الأساس', name: 'data-ins-select', desc: 'على مربع كل صف: يتلون الصف إذا حددته، وإذا نقرت مع `Shift` حددت ما بين صفين.' },
+    { group: 'شريط الإجراءات', name: 'data-ins-bulk', desc: 'على الشريط، يربطه بجدوله: `data-ins-bulk="#people"`.' },
+    { group: 'شريط الإجراءات', name: 'ins-bulkbar-count', desc: 'تكتب فيه المكتبة عدد الصفوف المحددة.' },
+    { group: 'شريط الإجراءات', name: 'data-ins-select="none"', desc: 'على زر في الشريط يلغي التحديد كله.' },
+    { group: 'الحدث', name: 'ins:select', kind: 'event', desc: 'يُطلق مع كل تغيير في التحديد، وفي `detail` الجدول `el` والصفوف المحددة `rows` وعددها `count`.' }
+  ],
+  disable: function (s) { return s.bulk ? [] : ['text']; },
+  html: function (s) {
+    var box = function (name, on) {
+      return '<td class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select aria-label="' + name + '"' + (on ? ' checked' : '') + '></label></td>';
+    };
+    var head = s.all ? '<th class="ins-table-check"><label class="ins-check"><input type="checkbox" data-ins-select="all" aria-label="تحديد الكل"></label></th>' : '<th class="ins-table-check"></th>';
+    var out = '<div class="ins-table-wrap">\n  <table class="ins-table" id="people">\n    <thead>\n      <tr>\n        ' + head + '\n        <th>الاسم</th><th>المدينة</th>\n      </tr>\n    </thead>\n    <tbody>\n' +
+      [['ليلى', 'الرياض'], ['عمر', 'عمّان'], ['سارة', 'القاهرة']].map(function (r, i) {
+        return '      <tr>' + box(r[0], s.checked && i === 0) + '<td>' + r[0] + '</td><td>' + r[1] + '</td></tr>';
+      }).join('\n') + '\n    </tbody>\n  </table>\n</div>';
+    if (!s.bulk) return out;
+    return out + '\n<div class="ins-bulkbar" data-ins-bulk="#people" hidden>\n' +
+      '  <span class="ins-bulkbar-count"' + (s.text ? ' data-ins-text="الصفوف المحددة: {n}"' : '') + '></span>\n' +
+      '  <button class="ins-btn ins-btn--secondary ins-btn--sm">تصدير</button>\n' +
+      '  <button class="ins-btn ins-btn--danger ins-btn--sm">حذف</button>\n' +
+      '  <button class="ins-btn ins-btn--bare ins-btn--sm" data-ins-select="none">إلغاء</button>\n</div>';
+  },
+  notes: function (s) {
+    return s.bulk ? ['حدد الصفوف أو ألغ تحديدها، فيظهر الشريط ويختفي معها. وتكتب المكتبة العدد بنفسها.'] : [];
+  }
+});
+
+SitePlay.define({
+  id: 'edit',
+  title: 'التعديل في مكانه',
+  wide: true,
+  controls: [
+    { key: 'number', label: 'عمود أرقام', type: 'switch', name: 'data-ins-edit="number"', desc: 'حقل للأرقام، يُكتب من اليسار وتظهر له على الهاتف لوحة الأرقام.' },
+    { key: 'select', label: 'اختيار من قائمة', type: 'switch', name: 'data-ins-edit="select"', desc: 'قائمة تختار منها بدل الحقل، ومعها خياراتها في `data-ins-options`.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-edit', desc: 'على الخلية: ينقرها المستخدم أو يضغط عليها `Enter` فتصير حقلًا، ثم يحفظ `Enter` أو مغادرة الحقل ما كتب، ويعيد `Esc` القيمة السابقة.' },
+    { group: 'خيارات أخرى', name: 'data-ins-options', desc: 'خيارات القائمة، بينها `|`: `data-ins-options="نشط|موقوف"`.' },
+    { group: 'خيارات أخرى', name: 'data-value', desc: 'قيمة الخلية إذا اختلفت عن نصها، فيبدأ بها الحقل وتتحدث بعد الحفظ.' },
+    { group: 'الحدث', name: 'ins:edit', kind: 'event', desc: 'يُطلق قبل حفظ التغيير، وفي `detail` الخلية `el` والصف `row` والقيمة الجديدة `value` والسابقة `old`، و`revert()` تعيد السابقة. ألغه لترفض القيمة.' }
+  ],
+  html: function (s) {
+    var rows = [['ليلى', '12', 'نشط'], ['عمر', '7', 'موقوف']];
+    return '<div class="ins-table-wrap">\n  <table class="ins-table">\n    <thead><tr><th>الاسم</th><th class="ins-num">الكمية</th><th>الحالة</th></tr></thead>\n    <tbody>\n' +
+      rows.map(function (r) {
+        return '      <tr><td data-ins-edit>' + r[0] + '</td><td class="ins-num"' + (s.number ? ' data-ins-edit="number"' : '') + '>' + r[1] + '</td>' +
+          '<td' + (s.select ? ' data-ins-edit="select" data-ins-options="نشط|موقوف"' : '') + '>' + r[2] + '</td></tr>';
+      }).join('\n') + '\n    </tbody>\n  </table>\n</div>';
+  },
+  notes: function () {
+    return ['انقر خلية تقبل التعديل، أو اضغط عليها `Enter`، ثم احفظ بـ`Enter` أو تراجع بـ`Esc`.'];
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="surfaces.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الأسطح والألواح</span></a><a class="site-pager-link site-pager-link--next" href="description.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">قائمة الوصف</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">جدول بيانات</a><a href="#panel">جدول في لوح</a><a href="#numbers">الأرقام</a><a href="#actions">إجراءات الصف</a><a href="#sort">الترتيب</a><a href="#select">تحديد الصفوف</a><a href="#edit">التعديل في مكانه</a><a href="#sticky">تثبيت رأس الجدول وعموده الأول</a><a href="#empty">جدول فارغ</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#table">الجدول</a><a href="#sticky">تثبيت رأس الجدول وعموده الأول</a><a href="#sort">الترتيب</a><a href="#select">تحديد الصفوف</a><a href="#edit">التعديل في مكانه</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
