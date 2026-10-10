@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,18 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">قائمة منسدلة (dropdown) على عنصر details، تتنقل فيها بالأسهم وتغلقها بـ Esc، وفيها عناصر يمكن تحديدها.</p>
-        <h2 id="basic">قائمة الإجراءات</h2>
-<p>
-  تقوم القائمة المنسدلة على <code>&lt;details class="ins-pop"&gt;</code>: عنصر <code>&lt;summary&gt;</code> فيها هو الزر،
-  و<code>.ins-pop-body</code> هو القائمة، فتنفتح دون جافاسكربت. ثم يزيدها السكربت، فيغلقها مفتاح <kbd class="ins-kbd">Esc</kbd> ويعيد التركيز إلى زرها،
-  وتتنقل الأسهم بين عناصرها متخطية المعطل منها، ويغلقها النقر خارجها.
-</p>
-<p>
-  ويكون <code>-label</code> عنوانًا لمجموعة، و<code>-sep</code> فاصلًا، و<code>-item--bad</code> لإجراء خطير، وإذا وضعت
-  <code>&lt;kbd&gt;</code> داخل العنصر ظهر اختصاره في آخره. تتدلى القائمة من بداية زرها وتمتد نحو نهاية السطر، فإذا كان
-  الزر في آخر الشريط فأضف <code>--end</code> لتحاذيه من نهايته. وتنقلب وحدها عند حافة الشاشة إذا كادت تخرج منها.
-</p>
-<figure class="dx"><div class="dx-view row">
+        <figure class="dx"><div class="dx-view row">
   <details class="ins-pop">
     <summary class="ins-btn ins-btn--secondary">إجراءات</summary>
     <div class="ins-pop-body">
@@ -308,102 +298,124 @@
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<div class="site-adv"><h2 id="checkable">عناصر قابلة للتحديد</h2>
+<h2 id="split">القائمة المنسدلة</h2>
 <p>
-  أعط العنصر <code>role="menuitemcheckbox"</code> أو <code>menuitemradio</code> ومعه <code>aria-checked</code>. وتبقى
-  القائمة مفتوحة ما دمت تحدد فيها، ويحمل الحدث <code>ins:menu</code> الحالة الجديدة.
+  تقوم القائمة المنسدلة على <code>&lt;details class="ins-pop"&gt;</code>: عنصر <code>&lt;summary&gt;</code> فيها هو الزر،
+  و<code>.ins-pop-body</code> هو القائمة، فتنفتح دون جافاسكربت. ثم يزيدها السكربت، فيغلقها مفتاح <kbd class="ins-kbd">Esc</kbd>
+  والنقر خارجها، وتتنقل الأسهم بين عناصرها. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<figure class="dx"><div class="dx-view row">
-  <details class="ins-pop">
-    <summary class="ins-btn ins-btn--secondary">عرض</summary>
-    <div class="ins-pop-body">
-      <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="true">الأول</button>
-      <button class="ins-pop-item" role="menuitemcheckbox" aria-checked="false">الثاني</button>
-      <hr class="ins-pop-sep">
-      <div role="group">
-        <button class="ins-pop-item" role="menuitemradio" aria-checked="true">الأحدث</button>
-        <button class="ins-pop-item" role="menuitemradio" aria-checked="false">الأقدم</button>
-      </div>
-    </div>
-  </details>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;summary</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span><span class="hl-t">&gt;</span>عرض<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-body"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-item"</span> <span class="hl-a">role</span>=<span class="hl-s">"menuitemcheckbox"</span> <span class="hl-a">aria-checked</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>الأول<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-item"</span> <span class="hl-a">role</span>=<span class="hl-s">"menuitemcheckbox"</span> <span class="hl-a">aria-checked</span>=<span class="hl-s">"false"</span><span class="hl-t">&gt;</span>الثاني<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;hr</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-sep"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">role</span>=<span class="hl-s">"group"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-item"</span> <span class="hl-a">role</span>=<span class="hl-s">"menuitemradio"</span> <span class="hl-a">aria-checked</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>الأحدث<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-item"</span> <span class="hl-a">role</span>=<span class="hl-s">"menuitemradio"</span> <span class="hl-a">aria-checked</span>=<span class="hl-s">"false"</span><span class="hl-t">&gt;</span>الأقدم<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span></code></pre></div></figure></div>
-
-<h2 id="card">بطاقة منسدلة</h2>
-<p>
-  ضع في <code>.ins-pop-body--card</code> ما شئت من محتوى بدل العناصر، ويبقى لها سلوك القائمة كله. ولعنوان هذا
-  المحتوى <code>.ins-pop-title</code>، ولنصه <code>.ins-pop-text</code>.
-</p>
-<figure class="dx"><div class="dx-view row">
-  <details class="ins-pop">
-    <summary class="ins-btn ins-btn--secondary">التفاصيل</summary>
-    <div class="ins-pop-body ins-pop-body--card">
-      <p class="ins-pop-title">العنوان</p>
-      <p class="ins-pop-text">نص حر قصير.</p>
-    </div>
-  </details>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;summary</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span><span class="hl-t">&gt;</span>التفاصيل<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-body ins-pop-body--card"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-title"</span><span class="hl-t">&gt;</span>العنوان<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-text"</span><span class="hl-t">&gt;</span>نص حر قصير.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<h2 id="menu-link">الروابط في القائمة</h2>
-<p>يصلح <code>.ins-pop-item</code> على <code>&lt;a&gt;</code> كما يصلح على <code>&lt;button&gt;</code>.</p>
-<figure class="dx"><div class="dx-view row">
-  <details class="ins-pop">
-    <summary class="ins-btn ins-btn--secondary">المساعدة</summary>
-    <div class="ins-pop-body">
-      <a class="ins-pop-item" href="start.html">البدء السريع</a>
-      <a class="ins-pop-item" href="faq.html">أسئلة شائعة</a>
-    </div>
-  </details>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;summary</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span><span class="hl-t">&gt;</span>المساعدة<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-body"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-item"</span> <span class="hl-a">href</span>=<span class="hl-s">"start.html"</span><span class="hl-t">&gt;</span>البدء السريع<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-item"</span> <span class="hl-a">href</span>=<span class="hl-s">"faq.html"</span><span class="hl-t">&gt;</span>أسئلة شائعة<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-
-<div class="site-adv"><h2 id="split">الزر المقسوم</h2>
-<p>ضع القائمة داخل <code>.ins-btn-group</code> بجانب زر، فيكون الإجراء الأساسي بضغطة واحدة، وتبقى بدائله في القائمة.</p>
-<figure class="dx"><div class="dx-view row">
-  <div class="ins-btn-group">
-    <button class="ins-btn ins-btn--primary">نشر</button>
-    <details class="ins-pop">
-      <summary class="ins-btn ins-btn--primary ins-btn--icon" aria-label="خيارات النشر"><svg class="ico"><use href="#i-chev-down"/></svg></summary>
-      <div class="ins-pop-body">
-        <button class="ins-pop-item">جدولة</button>
-        <button class="ins-pop-item">حفظ مسودة</button>
-      </div>
-    </details>
+<figure class="dx site-play" data-play="pop"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view"><details class="ins-pop">
+  <summary class="ins-btn ins-btn--secondary">إجراءات</summary>
+  <div class="ins-pop-body">
+    <button class="ins-pop-item">تعديل</button>
+    <button class="ins-pop-item">نسخ</button>
+    <button class="ins-pop-item">نقل</button>
   </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn-group"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>نشر<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;summary</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary ins-btn--icon"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"خيارات النشر"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;svg</span><span class="hl-t">&gt;</span>…<span class="hl-t">&lt;/svg</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-body"</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-item"</span><span class="hl-t">&gt;</span>جدولة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-item"</span><span class="hl-t">&gt;</span>حفظ مسودة<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure></div>
+</details></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات القائمة المنسدلة"><div class="site-play-ctl" data-key="align" data-type="seg"><span class="site-play-label">المحاذاة</span><div class="ins-seg" role="group" aria-label="المحاذاة"><button type="button" data-value="" class="is-active" aria-pressed="true">من البداية</button><button type="button" data-value="end" aria-pressed="false">من النهاية</button></div></div><div class="site-play-ctl" data-key="body" data-type="seg"><span class="site-play-label">المحتوى</span><div class="ins-seg" role="group" aria-label="المحتوى"><button type="button" data-value="" class="is-active" aria-pressed="true">عناصر</button><button type="button" data-value="card" aria-pressed="false">بطاقة</button></div></div><div class="site-play-ctl" data-key="label" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">عنوان مجموعة</span></span></label></div><div class="site-play-ctl site-adv" data-key="check" data-type="seg"><span class="site-play-label">قابلة للتحديد</span><div class="ins-seg" role="group" aria-label="قابلة للتحديد"><button type="button" data-value="" class="is-active" aria-pressed="true">لا</button><button type="button" data-value="checkbox" aria-pressed="false">تحديد متعدد</button><button type="button" data-value="radio" aria-pressed="false">اختيار واحد</button></div></div><div class="site-play-ctl" data-key="kbd" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">اختصار</span></span></label></div><div class="site-play-ctl" data-key="disabled" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">عنصر معطل</span></span></label></div><div class="site-play-ctl" data-key="sep" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">فاصل</span></span></label></div><div class="site-play-ctl" data-key="bad" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">إجراء خطير</span></span></label></div><div class="site-play-ctl" data-key="links" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">روابط</span></span></label></div><div class="site-play-ctl site-adv" data-key="split" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">زر مقسوم</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;details</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;summary</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary"</span><span class="hl-t">&gt;</span>إجراءات<span class="hl-t">&lt;/summary</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-body"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-item"</span><span class="hl-t">&gt;</span>تعديل<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-item"</span><span class="hl-t">&gt;</span>نسخ<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-pop-item"</span><span class="hl-t">&gt;</span>نقل<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/details</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في القائمة المنسدلة من كلاسات وسمات وأحداث، في صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>القائمة المنسدلة</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-pop</code></td><td>كلاس</td><td>على <code>&lt;details&gt;</code>، وعنصر <code>&lt;summary&gt;</code> فيها هو الزر، فتنفتح دون جافاسكربت. ويزيدها السكربت الإغلاق بـ <code>Esc</code> وبالنقر خارجها، والتنقل بالأسهم.</td></tr><tr><td><code>.ins-pop-body</code></td><td>كلاس</td><td>القائمة نفسها، تحت الزر.</td></tr><tr><td><code>.ins-pop-item</code></td><td>كلاس</td><td>عنصر القائمة، يغلقها إذا اخترته ويعيد التركيز إلى زرها.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المحاذاة</th></tr></tbody><tbody><tr><td><code>.ins-pop--end</code></td><td>كلاس</td><td>تحاذي القائمة زرها من نهايته، لزر في آخر الشريط. وتنقلب وحدها إذا كادت تخرج من الشاشة.</td></tr><tr><td><code>.ins-pop--start</code></td><td>كلاس</td><td>المحاذاة من البداية، وهي الأصل فلا حاجة إليه، ويبقى مقبولًا لمن كتبه.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">المحتوى</th></tr></tbody><tbody><tr><td><code>.ins-pop-body--card</code></td><td>كلاس</td><td>تضع فيها ما شئت من محتوى بدل العناصر، ويبقى لها سلوك القائمة كله.</td></tr><tr><td><code>.ins-pop-title</code></td><td>كلاس</td><td>عنوان محتوى البطاقة.</td></tr><tr><td><code>.ins-pop-text</code></td><td>كلاس</td><td>نص البطاقة.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">العناصر</th></tr></tbody><tbody><tr><td><code>.ins-pop-label</code></td><td>كلاس</td><td>عنوان صغير فوق مجموعة من العناصر.</td></tr><tr><td><code>kbd.ins-kbd</code></td><td>عنصر</td><td>ضع <code>&lt;kbd&gt;</code> داخل العنصر فيظهر اختصاره في آخره.</td></tr><tr><td><code>disabled</code></td><td>سمة</td><td>يعطل العنصر فتتخطاه الأسهم، وعلى الرابط <code>aria-disabled="true"</code>.</td></tr><tr><td><code>.ins-pop-sep</code></td><td>كلاس</td><td>خط يفصل بين مجموعتين، على <code>&lt;hr&gt;</code>.</td></tr><tr><td><code>.ins-pop-item--bad</code></td><td>كلاس</td><td>لعنصر يحذف أو لا رجعة فيه.</td></tr><tr><td><code>a.ins-pop-item</code></td><td>عنصر</td><td>يصلح <code>.ins-pop-item</code> على <code>&lt;a&gt;</code> كما يصلح على <code>&lt;button&gt;</code>.</td></tr></tbody><tbody class="site-opt-group site-adv"><tr><th colspan="3" scope="rowgroup">عناصر قابلة للتحديد</th></tr></tbody><tbody><tr class="site-adv"><td><code>role="menuitemcheckbox"</code></td><td>سمة</td><td>عنصر يُحدد ويُلغى تحديده، وتبقى القائمة مفتوحة ما دمت تحدد فيها.</td></tr><tr class="site-adv"><td><code>role="menuitemradio"</code></td><td>سمة</td><td>لا يُحدد إلا عنصر واحد في مجموعته <code>role="group"</code>، أو في القائمة كلها إن لم تكن له مجموعة.</td></tr><tr class="site-adv"><td><code>aria-checked="true"</code></td><td>سمة</td><td>العنصر محدد. ضعها على كل عنصر قابل للتحديد، <code>true</code> أو <code>false</code>.</td></tr><tr class="site-adv"><td><code>ins:menu</code></td><td>حدث</td><td>يُطلق عند كل تحديد، وفي <code>detail</code> العنصر <code>item</code> وحالته الجديدة <code>checked</code>.</td></tr></tbody><tbody class="site-opt-group site-adv"><tr><th colspan="3" scope="rowgroup">الزر المقسوم</th></tr></tbody><tbody><tr class="site-adv"><td><code>.ins-btn-group &gt; .ins-pop</code></td><td>عنصر</td><td>ضع القائمة داخل <code>.ins-btn-group</code> بجانب زر، فيكون الإجراء الأساسي بضغطة واحدة، وتبقى بدائله في القائمة.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'pop',
+  title: 'القائمة المنسدلة',
+  owns: 'ins-pop',
+  controls: [
+    { key: 'align', label: 'المحاذاة', type: 'seg', value: '', choices: [
+      { value: '', label: 'من البداية' },
+      { value: 'end', label: 'من النهاية', name: 'ins-pop--end', desc: 'تحاذي القائمة زرها من نهايته، لزر في آخر الشريط. وتنقلب وحدها إذا كادت تخرج من الشاشة.' }
+    ] },
+    { key: 'body', label: 'المحتوى', type: 'seg', value: '', choices: [
+      { value: '', label: 'عناصر' },
+      { value: 'card', label: 'بطاقة', name: 'ins-pop-body--card', desc: 'تضع فيها ما شئت من محتوى بدل العناصر، ويبقى لها سلوك القائمة كله.' }
+    ] },
+    { key: 'label', label: 'عنوان مجموعة', group: 'العناصر', type: 'switch', name: 'ins-pop-label', desc: 'عنوان صغير فوق مجموعة من العناصر.' },
+    { key: 'check', label: 'قابلة للتحديد', group: 'عناصر قابلة للتحديد', type: 'seg', level: 'advanced', value: '', choices: [
+      { value: '', label: 'لا' },
+      { value: 'checkbox', label: 'تحديد متعدد', name: 'role="menuitemcheckbox"', desc: 'عنصر يُحدد ويُلغى تحديده، وتبقى القائمة مفتوحة ما دمت تحدد فيها.' },
+      { value: 'radio', label: 'اختيار واحد', name: 'role="menuitemradio"', desc: 'لا يُحدد إلا عنصر واحد في مجموعته `role="group"`، أو في القائمة كلها إن لم تكن له مجموعة.' }
+    ] },
+    { key: 'kbd', label: 'اختصار', group: 'العناصر', type: 'switch', name: 'kbd.ins-kbd', kind: 'element', desc: 'ضع `<kbd>` داخل العنصر فيظهر اختصاره في آخره.' },
+    { key: 'disabled', label: 'عنصر معطل', group: 'العناصر', type: 'switch', name: 'disabled', desc: 'يعطل العنصر فتتخطاه الأسهم، وعلى الرابط `aria-disabled="true"`.' },
+    { key: 'sep', label: 'فاصل', group: 'العناصر', type: 'switch', name: 'ins-pop-sep', desc: 'خط يفصل بين مجموعتين، على `<hr>`.' },
+    { key: 'bad', label: 'إجراء خطير', group: 'العناصر', type: 'switch', name: 'ins-pop-item--bad', desc: 'لعنصر يحذف أو لا رجعة فيه.' },
+    { key: 'links', label: 'روابط', group: 'العناصر', type: 'switch', name: 'a.ins-pop-item', kind: 'element', desc: 'يصلح `.ins-pop-item` على `<a>` كما يصلح على `<button>`.' },
+    { key: 'split', label: 'زر مقسوم', group: 'الزر المقسوم', type: 'switch', level: 'advanced', name: '.ins-btn-group > .ins-pop', kind: 'element', desc: 'ضع القائمة داخل `.ins-btn-group` بجانب زر، فيكون الإجراء الأساسي بضغطة واحدة، وتبقى بدائله في القائمة.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-pop', desc: 'على `<details>`، وعنصر `<summary>` فيها هو الزر، فتنفتح دون جافاسكربت. ويزيدها السكربت الإغلاق بـ `Esc` وبالنقر خارجها، والتنقل بالأسهم.' },
+    { group: 'الأساس', name: 'ins-pop-body', desc: 'القائمة نفسها، تحت الزر.' },
+    { group: 'الأساس', name: 'ins-pop-item', desc: 'عنصر القائمة، يغلقها إذا اخترته ويعيد التركيز إلى زرها.' },
+    { group: 'المحاذاة', name: 'ins-pop--start', desc: 'المحاذاة من البداية، وهي الأصل فلا حاجة إليه، ويبقى مقبولًا لمن كتبه.' },
+    { group: 'المحتوى', name: 'ins-pop-title', desc: 'عنوان محتوى البطاقة.' },
+    { group: 'المحتوى', name: 'ins-pop-text', desc: 'نص البطاقة.' },
+    { group: 'عناصر قابلة للتحديد', name: 'aria-checked="true"', level: 'advanced', desc: 'العنصر محدد. ضعها على كل عنصر قابل للتحديد، `true` أو `false`.' },
+    { group: 'عناصر قابلة للتحديد', name: 'ins:menu', kind: 'event', level: 'advanced', desc: 'يُطلق عند كل تحديد، وفي `detail` العنصر `item` وحالته الجديدة `checked`.' }
+  ],
+  disable: function (s) {
+    if (s.body === 'card') return ['label', 'kbd', 'disabled', 'sep', 'bad', 'links', 'check'];
+    return s.check ? ['kbd', 'links'] : [];
+  },
+  html: function (s) {
+    var P = s.split ? '      ' : '    ';
+    var body;
+    if (s.body === 'card') {
+      body = [P + '<p class="ins-pop-title">العنوان</p>', P + '<p class="ins-pop-text">نص حر قصير.</p>'];
+    } else {
+      body = [];
+      if (s.label) body.push(P + '<div class="ins-pop-label">العنوان</div>');
+      var words = s.check ? ['الاسم', 'التاريخ', 'الحجم'] : s.links ? ['البدء', 'الأسئلة الشائعة', 'المساعدة'] : ['تعديل', 'نسخ', 'نقل'];
+      var items = words.map(function (w, i) {
+        var off = s.disabled && i === 2;
+        if (s.check) {
+          var role = s.check === 'checkbox' ? 'menuitemcheckbox' : 'menuitemradio';
+          return '<button class="ins-pop-item" role="' + role + '" aria-checked="' + (i === 0) + '"' + (off ? ' disabled' : '') + '>' + w + '</button>';
+        }
+        var inner = w + (s.kbd && i === 0 ? ' <kbd class="ins-kbd">E</kbd>' : '');
+        if (s.links) return '<a class="ins-pop-item"' + (off ? ' aria-disabled="true"' : ' href="' + ['/start', '/faq', '/help'][i] + '"') + '>' + inner + '</a>';
+        return '<button class="ins-pop-item"' + (off ? ' disabled' : '') + '>' + inner + '</button>';
+      });
+      if (s.check === 'radio') body.push(P + '<div role="group">', items.map(function (x) { return P + '  ' + x; }).join('\n'), P + '</div>');
+      else body.push(items.map(function (x) { return P + x; }).join('\n'));
+      if (s.sep) body.push(P + '<hr class="ins-pop-sep">');
+      if (s.bad) body.push(P + (s.links && !s.check ? '<a class="ins-pop-item ins-pop-item--bad" href="/item/delete">حذف</a>' : '<button class="ins-pop-item ins-pop-item--bad">حذف</button>'));
+    }
+    var Q = s.split ? '  ' : '';
+    var summary = s.split
+      ? '<summary class="ins-btn ins-btn--primary ins-btn--icon" aria-label="خيارات الحفظ"><svg class="ico"><use href="#i-chev-down"/></svg></summary>'
+      : '<summary class="ins-btn ins-btn--secondary">' + (s.body === 'card' ? 'التفاصيل' : 'إجراءات') + '</summary>';
+    var pop = Q + '<details class="ins-pop' + (s.align ? ' ins-pop--end' : '') + '">\n' +
+      Q + '  ' + summary + '\n' +
+      Q + '  <div class="ins-pop-body' + (s.body === 'card' ? ' ins-pop-body--card' : '') + '">\n' + body.join('\n') + '\n' +
+      Q + '  </div>\n' +
+      Q + '</details>';
+    if (!s.split) return pop;
+    return '<div class="ins-btn-group" role="group" aria-label="الحفظ">\n  <button class="ins-btn ins-btn--primary">حفظ</button>\n' + pop + '\n</div>';
+  },
+  // Drawn open, so what each option changes in the menu shows at once.
+  stage: function (view) { view.querySelector('details.ins-pop').open = true; },
+  notes: function (s) {
+    var out = [];
+    if (s.body === 'card') out.push('البطاقة لا عناصر فيها، فخيارات العناصر للقائمة وحدها.');
+    else if (s.check === 'checkbox') out.push('حدد عنصرًا فتبقى القائمة مفتوحة للتالي.');
+    else if (s.check === 'radio') out.push('اختر عنصرًا فينتقل التحديد إليه وتُغلق القائمة.');
+    if (s.split) out.push('زر القائمة أيقونة وحدها، فلا بد له من `aria-label`.');
+    return out;
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="comments.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">التعليقات والرسائل</span></a><a class="site-pager-link site-pager-link--next" href="steps.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الخطوات والمعالج</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">قائمة الإجراءات</a><a href="#checkable">عناصر قابلة للتحديد</a><a href="#card">بطاقة منسدلة</a><a href="#menu-link">الروابط في القائمة</a><a href="#split">الزر المقسوم</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">قائمة الإجراءات</a><a href="#card">بطاقة منسدلة</a><a href="#menu-link">الروابط في القائمة</a></nav>
+        
       </div>
     </main>
   </div>
