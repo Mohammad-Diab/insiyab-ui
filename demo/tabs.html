@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,13 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">تبويبات تبدل الألواح بالنقر وبالأسهم، في شكلين: شريط، وأزرار متلاصقة.</p>
-        <h2 id="basic">علامات التبويب</h2>
-<p>
-  يضم <code>.ins-tablist</code> أزرار <code>.ins-tab</code>، ويشير كل زر إلى لوحه <code>.ins-tabpanel</code> بالسمة
-  <code>data-ins-tab</code>. ثم يضيف السكربت أدوار ARIA والتنقل بأسهم لوحة المفاتيح، والسهم الأيسر في العربية هو «التالي».
-  أما التبويب الذي يكون رابطًا <code>&lt;a&gt;</code> فتتركه المكتبة وشأنه.
-</p>
-<figure class="dx"><div class="dx-view">
+        <figure class="dx"><div class="dx-view">
   <div class="ins-tablist" aria-label="الإعدادات">
     <button class="ins-tab" data-ins-tab="#t-general">عام</button>
     <button class="ins-tab" data-ins-tab="#t-payments">الدفع</button>
@@ -298,31 +293,28 @@
 <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"t-general"</span><span class="hl-t">&gt;</span>محتوى «عام».<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"t-payments"</span><span class="hl-t">&gt;</span>محتوى «الدفع».<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"t-shipping"</span><span class="hl-t">&gt;</span>محتوى «الشحن».<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p>فإن غابت جافاسكربت ظهرت الألواح كلها متتالية، فلا يختفي منها شيء.</p>
 
-<h2 id="line">بخط تحتها</h2>
+<h2 id="tabs">علامات التبويب</h2>
 <p>
-  أضف <code>.ins-tablist--line</code> لهيئة أخف: التبويبات صف فوق خط رفيع، وتحت المختار منها خط ينتقل إلى التبويب الجديد
-  كما ينتقل مؤشر الشريط الجانبي، فيمتد طرفه البعيد إليه أولًا ثم يلحق به طرفه القريب.
+  يضم <code>.ins-tablist</code> أزرار <code>.ins-tab</code>، ويشير كل زر إلى لوحه <code>.ins-tabpanel</code> بالسمة
+  <code>data-ins-tab</code>، ثم يضيف السكربت أدوار ARIA والتنقل بأسهم لوحة المفاتيح. وتجد الخيارات كلها بشرحها في
+  <a href="#options">آخر الصفحة</a>.
 </p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-tablist ins-tablist--line" aria-label="الطلب">
-    <button class="ins-tab" data-ins-tab="#l-details">التفاصيل</button>
-    <button class="ins-tab" data-ins-tab="#l-items">المنتجات</button>
-    <button class="ins-tab" data-ins-tab="#l-history">السجل</button>
-  </div>
-  <div class="ins-tabpanel" id="l-details">محتوى «التفاصيل».</div>
-  <div class="ins-tabpanel" id="l-items">محتوى «المنتجات».</div>
-  <div class="ins-tabpanel" id="l-history">محتوى «السجل».</div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tablist ins-tablist--line"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الطلب"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tab"</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#l-details"</span><span class="hl-t">&gt;</span>التفاصيل<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tab"</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#l-items"</span><span class="hl-t">&gt;</span>المنتجات<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tab"</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#l-history"</span><span class="hl-t">&gt;</span>السجل<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="tabs"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-tablist" aria-label="الإعدادات">
+  <button class="ins-tab" data-ins-tab="#tab-1">عام</button>
+  <button class="ins-tab" data-ins-tab="#tab-2">الحساب</button>
+  <button class="ins-tab" data-ins-tab="#tab-3">الإشعارات</button>
+</div>
+<div class="ins-tabpanel" id="tab-1">محتوى «عام».</div>
+<div class="ins-tabpanel" id="tab-2">محتوى «الحساب».</div>
+<div class="ins-tabpanel" id="tab-3">محتوى «الإشعارات».</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات علامات التبويب"><div class="site-play-ctl" data-key="look" data-type="seg"><span class="site-play-label">الهيئة</span><div class="ins-seg" role="group" aria-label="الهيئة"><button type="button" data-value="" class="is-active" aria-pressed="true">عادية</button><button type="button" data-value="line" aria-pressed="false">بخط</button><button type="button" data-value="seg" aria-pressed="false">مقسمة</button></div></div><div class="site-play-ctl" data-key="link" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">تبويب رابط</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tablist"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الإعدادات"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tab"</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#tab-1"</span><span class="hl-t">&gt;</span>عام<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tab"</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#tab-2"</span><span class="hl-t">&gt;</span>الحساب<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tab"</span> <span class="hl-a">data-ins-tab</span>=<span class="hl-s">"#tab-3"</span><span class="hl-t">&gt;</span>الإشعارات<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"l-details"</span><span class="hl-t">&gt;</span>محتوى «التفاصيل».<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"l-items"</span><span class="hl-t">&gt;</span>محتوى «المنتجات».<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"l-history"</span><span class="hl-t">&gt;</span>محتوى «السجل».<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
-<p>وتعمل الآلية نفسها على <code>.ins-seg</code> إن كان الشريط المقسم عندك أصلًا: ضع <code>data-ins-tab</code> على أزراره.</p>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"tab-1"</span><span class="hl-t">&gt;</span>محتوى «عام».<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"tab-2"</span><span class="hl-t">&gt;</span>محتوى «الحساب».<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-tabpanel"</span> <span class="hl-a">id</span>=<span class="hl-s">"tab-3"</span><span class="hl-t">&gt;</span>محتوى «الإشعارات».<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <div class="site-adv"><h2 id="api">التحكم بـ JavaScript</h2>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.tab(<span class="hl-s">'#t-shipping'</span>);     <span class="hl-c">// يختار التبويب الذي يشير إلى هذا اللوح</span>
@@ -330,9 +322,51 @@
 <span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:tab'</span>, (e) =&gt; {
   console.log(e.detail.tab, e.detail.panel);
 });</code></pre></div></div>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في علامات التبويب من كلاسات وسمات وأحداث، في صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>علامات التبويب</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-tablist</code></td><td>كلاس</td><td>يضم أزرار التبويب، ومعه <code>aria-label</code> يسمي المجموعة.</td></tr><tr><td><code>.ins-tab</code></td><td>كلاس</td><td>زر التبويب. ويضيف السكربت أدوار ARIA والتنقل بالأسهم، والسهم الأيسر في العربية هو «التالي».</td></tr><tr><td><code>data-ins-tab="#id"</code></td><td>سمة</td><td>على زر التبويب، وقيمتها معرّف اللوح الذي يعرضه.</td></tr><tr><td><code>.ins-tabpanel</code></td><td>كلاس</td><td>لوح التبويب. وإن غابت جافاسكربت ظهرت الألواح كلها متتالية، فلا يختفي منها شيء.</td></tr><tr class="site-adv"><td><code>ins:tab</code></td><td>حدث</td><td>يُطلق عند اختيار تبويب، وفي <code>detail</code> التبويب <code>tab</code> ولوحه <code>panel</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الهيئة</th></tr></tbody><tbody><tr><td><code>.ins-tablist--line</code></td><td>كلاس</td><td>هيئة أخف: التبويبات صف فوق خط رفيع، وتحت المختار منها خط ينتقل إلى التبويب الجديد.</td></tr><tr><td><code>.ins-seg</code></td><td>كلاس</td><td>ضع <code>data-ins-tab</code> على أزرار <code>.ins-seg</code>، فيبدل الشريط المقسم الألواح بالآلية نفسها.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>a.ins-tab</code></td><td>عنصر</td><td>تبويب <code>&lt;a href&gt;</code> يذهب إلى صفحة أخرى، فتتركه المكتبة وشأنه، وتميزه <code>aria-current="page"</code> إن كان للصفحة الحالية.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'tabs',
+  title: 'علامات التبويب',
+  owns: 'ins-tablist',
+  wide: true,
+  controls: [
+    { key: 'look', label: 'الهيئة', type: 'seg', value: '', choices: [
+      { value: '', label: 'عادية' },
+      { value: 'line', label: 'بخط', name: 'ins-tablist--line', desc: 'هيئة أخف: التبويبات صف فوق خط رفيع، وتحت المختار منها خط ينتقل إلى التبويب الجديد.' },
+      { value: 'seg', label: 'مقسمة', name: 'ins-seg', desc: 'ضع `data-ins-tab` على أزرار `.ins-seg`، فيبدل الشريط المقسم الألواح بالآلية نفسها.' }
+    ] },
+    { key: 'link', label: 'تبويب رابط', type: 'switch', name: 'a.ins-tab', kind: 'element', desc: 'تبويب `<a href>` يذهب إلى صفحة أخرى، فتتركه المكتبة وشأنه، وتميزه `aria-current="page"` إن كان للصفحة الحالية.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-tablist', desc: 'يضم أزرار التبويب، ومعه `aria-label` يسمي المجموعة.' },
+    { group: 'الأساس', name: 'ins-tab', desc: 'زر التبويب. ويضيف السكربت أدوار ARIA والتنقل بالأسهم، والسهم الأيسر في العربية هو «التالي».' },
+    { group: 'الأساس', name: 'data-ins-tab="#id"', desc: 'على زر التبويب، وقيمتها معرّف اللوح الذي يعرضه.' },
+    { group: 'الأساس', name: 'ins-tabpanel', desc: 'لوح التبويب. وإن غابت جافاسكربت ظهرت الألواح كلها متتالية، فلا يختفي منها شيء.' },
+    { group: 'الأساس', name: 'ins:tab', kind: 'event', level: 'advanced', desc: 'يُطلق عند اختيار تبويب، وفي `detail` التبويب `tab` ولوحه `panel`.' }
+  ],
+  disable: function (s) { return s.look === 'seg' ? ['link'] : []; },
+  html: function (s) {
+    var tabs = [['tab-1', 'عام'], ['tab-2', 'الحساب'], ['tab-3', 'الإشعارات']];
+    var seg = s.look === 'seg';
+    var cls = seg ? 'ins-seg' : 'ins-tablist' + (s.look === 'line' ? ' ins-tablist--line' : '');
+    var item = seg ? '' : 'ins-tab';
+    var out = '<div class="' + cls + '" aria-label="الإعدادات">\n' +
+      tabs.map(function (t) { return '  <button' + (item ? ' class="' + item + '"' : '') + ' data-ins-tab="#' + t[0] + '">' + t[1] + '</button>'; }).join('\n') +
+      (s.link && !seg ? '\n  <a class="ins-tab" href="/help">المساعدة</a>' : '') + '\n</div>\n';
+    return out + tabs.map(function (t) { return '<div class="ins-tabpanel" id="' + t[0] + '">محتوى «' + t[1] + '».</div>'; }).join('\n');
+  },
+  notes: function (s) {
+    return s.look === 'seg' ? ['الشريط المقسم لا يحمل رابطًا، فخيار التبويب الرابط للهيئتين الأخريين.'] : [];
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="accordion.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الأكورديون</span></a><a class="site-pager-link site-pager-link--next" href="stats.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">البطاقات الإحصائية</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">علامات التبويب</a><a href="#line">بخط تحتها</a><a href="#api">التحكم بـ JavaScript</a></nav>
+        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#tabs">علامات التبويب</a><a href="#api">التحكم بـ JavaScript</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>

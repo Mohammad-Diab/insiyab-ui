@@ -1,9 +1,3 @@
-<h2 id="basic">علامات التبويب</h2>
-<p>
-  يضم <code>.ins-tablist</code> أزرار <code>.ins-tab</code>، ويشير كل زر إلى لوحه <code>.ins-tabpanel</code> بالسمة
-  <code>data-ins-tab</code>. ثم يضيف السكربت أدوار ARIA والتنقل بأسهم لوحة المفاتيح، والسهم الأيسر في العربية هو «التالي».
-  أما التبويب الذي يكون رابطًا <code>&lt;a&gt;</code> فتتركه المكتبة وشأنه.
-</p>
 <demo-example>
   <div class="ins-tablist" aria-label="الإعدادات">
     <button class="ins-tab" data-ins-tab="#t-general">عام</button>
@@ -15,24 +9,14 @@
   <div class="ins-tabpanel" id="t-payments">محتوى «الدفع».</div>
   <div class="ins-tabpanel" id="t-shipping">محتوى «الشحن».</div>
 </demo-example>
-<p>فإن غابت جافاسكربت ظهرت الألواح كلها متتالية، فلا يختفي منها شيء.</p>
 
-<h2 id="line">بخط تحتها</h2>
+<h2 id="tabs">علامات التبويب</h2>
 <p>
-  أضف <code>.ins-tablist--line</code> لهيئة أخف: التبويبات صف فوق خط رفيع، وتحت المختار منها خط ينتقل إلى التبويب الجديد
-  كما ينتقل مؤشر الشريط الجانبي، فيمتد طرفه البعيد إليه أولًا ثم يلحق به طرفه القريب.
+  يضم <code>.ins-tablist</code> أزرار <code>.ins-tab</code>، ويشير كل زر إلى لوحه <code>.ins-tabpanel</code> بالسمة
+  <code>data-ins-tab</code>، ثم يضيف السكربت أدوار ARIA والتنقل بأسهم لوحة المفاتيح. وتجد الخيارات كلها بشرحها في
+  <a href="#options">آخر الصفحة</a>.
 </p>
-<demo-example>
-  <div class="ins-tablist ins-tablist--line" aria-label="الطلب">
-    <button class="ins-tab" data-ins-tab="#l-details">التفاصيل</button>
-    <button class="ins-tab" data-ins-tab="#l-items">المنتجات</button>
-    <button class="ins-tab" data-ins-tab="#l-history">السجل</button>
-  </div>
-  <div class="ins-tabpanel" id="l-details">محتوى «التفاصيل».</div>
-  <div class="ins-tabpanel" id="l-items">محتوى «المنتجات».</div>
-  <div class="ins-tabpanel" id="l-history">محتوى «السجل».</div>
-</demo-example>
-<p>وتعمل الآلية نفسها على <code>.ins-seg</code> إن كان الشريط المقسم عندك أصلًا: ضع <code>data-ins-tab</code> على أزراره.</p>
+<demo-play of="tabs"></demo-play>
 
 <h2 id="api" data-level="advanced">التحكم بـ JavaScript</h2>
 <demo-code lang="js">
@@ -42,3 +26,7 @@ document.addEventListener('ins:tab', (e) => {
   console.log(e.detail.tab, e.detail.panel);
 });
 </demo-code>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في علامات التبويب من كلاسات وسمات وأحداث، في صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
