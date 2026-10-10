@@ -3707,16 +3707,15 @@
         head.appendChild(h);
         form.appendChild(head);
         dlg.setAttribute('aria-labelledby', h.id);
-      } else {
-        dlg.setAttribute('aria-label', t.ok);
       }
       var body = el('div', 'ins-dialog-body');
-      var p = el('p', '', String(message));
+      // With no title the question is the title, so it is drawn and announced as one; with a title it is the text under it.
+      var p = el(o.title ? 'p' : 'h2', o.title ? '' : 'ins-dialog-title', String(message));
       p.id = textId;
       p.style.margin = '0';
       body.appendChild(p);
       form.appendChild(body);
-      dlg.setAttribute('aria-describedby', textId);
+      dlg.setAttribute(o.title ? 'aria-describedby' : 'aria-labelledby', textId);
       var foot = el('div', 'ins-dialog-foot');
       var no = el('button', 'ins-btn ins-btn--bare', o.cancel || t.cancel);
       no.value = 'cancel';
