@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,13 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">شريط تنقل (Navbar) للمواقع لا للتطبيقات: جزيرة زجاجية تنطوي خلف زر على الهاتف.</p>
-        <h2 id="basic">شريط الموقع</h2>
-<p>
-  شريط يليق بالمواقع دون التطبيقات، كصفحة الهبوط والمدونة والتوثيق. فيه <code>-brand</code> للاسم، و<code>-menu</code>
-  للروابط، و<code>-end</code> لأزرارها في آخره. ويلتصق بأعلى الصفحة إلا أن تضع عليه <code>--static</code> فيبقى في
-  مكانه، كما في هذا المثال.
-</p>
-<figure class="dx"><div class="dx-view">
+        <figure class="dx"><div class="dx-view">
   <header class="ins-navbar ins-navbar--static">
     <a class="ins-navbar-brand" href="#basic">الموقع</a>
     <button class="ins-navbar-toggle" data-ins-navbar aria-label="القائمة"></button>
@@ -305,6 +300,36 @@
   <span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/header</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
+<h2 id="basic">شريط الموقع</h2>
+<p>
+  شريط يليق بالمواقع دون التطبيقات، كصفحة الهبوط والمدونة والتوثيق، أما التطبيق فله <a href="shell.html">هيكل التطبيق</a>.
+  فيه <code>-brand</code> للاسم، و<code>-menu</code> للروابط، و<code>-end</code> لأزرارها في آخره. ويلتصق بأعلى الصفحة
+  إلا أن تضع عليه <code>--static</code>، كما في هذه الأمثلة. وتجد الخيارات بشرحها في <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="navbar"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><header class="ins-navbar ins-navbar--static">
+  <a class="ins-navbar-brand" href="/">الموقع</a>
+  <button class="ins-navbar-toggle" data-ins-navbar aria-label="القائمة"></button>
+  <nav class="ins-navbar-menu" aria-label="الموقع">
+    <a class="ins-navbar-link" href="/" aria-current="page">الرئيسية</a>
+    <a class="ins-navbar-link" href="/blog">المدونة</a>
+    <a class="ins-navbar-link" href="/contact">تواصل معنا</a>
+    <div class="ins-navbar-end">
+      <button class="ins-btn ins-btn--secondary ins-btn--sm">دخول</button>
+    </div>
+  </nav>
+</header></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">إذا ضاقت النافذة عن 900px انطوت الروابط خلف زر القائمة، فاضغطه يظهر هنا الحدث.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات شريط الموقع"><label class="site-play-ctl" data-key="brand" data-type="text"><span class="site-play-label">الاسم</span><input class="ins-input ins-input--sm" type="text" value="الموقع"></label><div class="site-play-ctl" data-key="current" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">رابط حالي</span></span></label></div><div class="site-play-ctl" data-key="end" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">أزرار في آخره</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;header</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar ins-navbar--static"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-brand"</span> <span class="hl-a">href</span>=<span class="hl-s">"/"</span><span class="hl-t">&gt;</span>الموقع<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-toggle"</span> <span class="hl-a">data-ins-navbar</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"القائمة"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-menu"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الموقع"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-link"</span> <span class="hl-a">href</span>=<span class="hl-s">"/"</span> <span class="hl-a">aria-current</span>=<span class="hl-s">"page"</span><span class="hl-t">&gt;</span>الرئيسية<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-link"</span> <span class="hl-a">href</span>=<span class="hl-s">"/blog"</span><span class="hl-t">&gt;</span>المدونة<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-link"</span> <span class="hl-a">href</span>=<span class="hl-s">"/contact"</span><span class="hl-t">&gt;</span>تواصل معنا<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-navbar-end"</span><span class="hl-t">&gt;</span>
+      <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--secondary ins-btn--sm"</span><span class="hl-t">&gt;</span>دخول<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/header</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
 <h2 id="phone">على الهاتف</h2>
 <p>
   إذا ضاقت الشاشة عن 900px انطوت الروابط خلف زر القائمة، فإذا ضغطته انفتحت عمودًا داخل الشريط، ثم تنغلق إذا ضغطت
@@ -314,14 +339,53 @@
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.navbar(<span class="hl-t">document</span>.querySelector(<span class="hl-s">'.ins-navbar'</span>), <span class="hl-k">true</span>);   <span class="hl-c">// افتح</span>
 <span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:navbar'</span>, (e) =&gt; e.detail.open);</code></pre></div>
 
-<h2 id="current">الرابط الحالي</h2>
-<p>
-  ضع <code>aria-current="page"</code> على الرابط الحالي، وتغنيك عن أي كلاس، فيعلن قارئ الشاشة أنه «الصفحة الحالية»،
-  ويميزه التصميم للعين.
-</p>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في شريط الموقع من كلاسات وسمات وأحداث.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>شريط الموقع</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-navbar</code></td><td>كلاس</td><td>شريط للمواقع دون التطبيقات، كصفحة الهبوط والمدونة والتوثيق: جزيرة زجاجية تلتصق بأعلى الصفحة.</td></tr><tr><td><code>.ins-navbar--static</code></td><td>كلاس</td><td>يبقى الشريط في مكانه فلا يلتصق بأعلى الصفحة. وهو في المعاينة دائمًا، حتى لا يعلو شريطها شريط التوثيق.</td></tr><tr><td><code>.ins-navbar-brand</code></td><td>كلاس</td><td>اسم الموقع أو شعاره، رابطًا إلى الرئيسية.</td></tr><tr><td><code>.ins-navbar-menu</code></td><td>كلاس</td><td>الروابط، على <code>&lt;nav&gt;</code> ومعها <code>aria-label</code>.</td></tr><tr><td><code>.ins-navbar-link</code></td><td>كلاس</td><td>رابط في الشريط.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>aria-current="page"</code></td><td>سمة</td><td>على رابط الصفحة الحالية، ويغنيك عن أي كلاس: يعلن قارئ الشاشة أنه «الصفحة الحالية»، ويميزه التصميم للعين.</td></tr><tr><td><code>.ins-navbar-end</code></td><td>كلاس</td><td>حاوية لأزرار الشريط في آخره، كالدخول ومفتاح الوضع الداكن، داخل <code>.ins-navbar-menu</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">على الهاتف</th></tr></tbody><tbody><tr><td><code>.ins-navbar-toggle</code></td><td>كلاس</td><td>زر القائمة، ومعه <code>data-ins-navbar</code> و<code>aria-label</code>. يظهر إذا ضاقت الشاشة عن 900px، وتنطوي الروابط خلفه.</td></tr><tr><td><code>data-ins-navbar</code></td><td>سمة</td><td>على زر القائمة: يفتحها ويغلقها ويضبط <code>aria-expanded</code>، وتنغلق إذا ضغطت رابطًا أو Esc. وبلا جافاسكربت لا يظهر الزر، وتلتف الروابط إلى سطر ثان.</td></tr><tr><td><code>.is-open</code></td><td>كلاس</td><td>القائمة مفتوحة. يضعها السكربت على <code>.ins-navbar</code>، أو <code>Insiyab.navbar(bar, true)</code>.</td></tr><tr><td><code>ins:navbar</code></td><td>حدث</td><td>يُطلق عند الفتح والإغلاق، وفي <code>detail</code> الشريط <code>el</code> وحالته <code>open</code>.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'navbar',
+  title: 'شريط الموقع',
+  owns: 'ins-navbar',
+  wide: true,
+  controls: [
+    { key: 'brand', label: 'الاسم', type: 'text', value: 'الموقع' },
+    { key: 'current', label: 'رابط حالي', type: 'switch', value: true, name: 'aria-current="page"', desc: 'على رابط الصفحة الحالية، ويغنيك عن أي كلاس: يعلن قارئ الشاشة أنه «الصفحة الحالية»، ويميزه التصميم للعين.' },
+    { key: 'end', label: 'أزرار في آخره', type: 'switch', value: true, name: 'ins-navbar-end', desc: 'حاوية لأزرار الشريط في آخره، كالدخول ومفتاح الوضع الداكن، داخل `.ins-navbar-menu`.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-navbar', desc: 'شريط للمواقع دون التطبيقات، كصفحة الهبوط والمدونة والتوثيق: جزيرة زجاجية تلتصق بأعلى الصفحة.' },
+    { group: 'الأساس', name: 'ins-navbar--static', desc: 'يبقى الشريط في مكانه فلا يلتصق بأعلى الصفحة. وهو في المعاينة دائمًا، حتى لا يعلو شريطها شريط التوثيق.' },
+    { group: 'الأساس', name: 'ins-navbar-brand', desc: 'اسم الموقع أو شعاره، رابطًا إلى الرئيسية.' },
+    { group: 'الأساس', name: 'ins-navbar-menu', desc: 'الروابط، على `<nav>` ومعها `aria-label`.' },
+    { group: 'الأساس', name: 'ins-navbar-link', desc: 'رابط في الشريط.' },
+    { group: 'على الهاتف', name: 'ins-navbar-toggle', desc: 'زر القائمة، ومعه `data-ins-navbar` و`aria-label`. يظهر إذا ضاقت الشاشة عن 900px، وتنطوي الروابط خلفه.' },
+    { group: 'على الهاتف', name: 'data-ins-navbar', desc: 'على زر القائمة: يفتحها ويغلقها ويضبط `aria-expanded`، وتنغلق إذا ضغطت رابطًا أو Esc. وبلا جافاسكربت لا يظهر الزر، وتلتف الروابط إلى سطر ثان.' },
+    { group: 'على الهاتف', name: 'is-open', kind: 'class', desc: 'القائمة مفتوحة. يضعها السكربت على `.ins-navbar`، أو `Insiyab.navbar(bar, true)`.' },
+    { group: 'على الهاتف', name: 'ins:navbar', kind: 'event', desc: 'يُطلق عند الفتح والإغلاق، وفي `detail` الشريط `el` وحالته `open`.' }
+  ],
+  events: ['ins:navbar'],
+  html: function (s) {
+    return '<header class="ins-navbar ins-navbar--static">\n' +
+      '  <a class="ins-navbar-brand" href="/">' + s.brand + '</a>\n' +
+      '  <button class="ins-navbar-toggle" data-ins-navbar aria-label="القائمة"></button>\n' +
+      '  <nav class="ins-navbar-menu" aria-label="الموقع">\n' +
+      '    <a class="ins-navbar-link" href="/"' + (s.current ? ' aria-current="page"' : '') + '>الرئيسية</a>\n' +
+      '    <a class="ins-navbar-link" href="/blog">المدونة</a>\n' +
+      '    <a class="ins-navbar-link" href="/contact">تواصل معنا</a>\n' +
+      (s.end ? '    <div class="ins-navbar-end">\n      <button class="ins-btn ins-btn--secondary ins-btn--sm">دخول</button>\n    </div>\n' : '') +
+      '  </nav>\n' +
+      '</header>';
+  },
+  notes: function () {
+    return ['إذا ضاقت النافذة عن 900px انطوت الروابط خلف زر القائمة، فاضغطه يظهر هنا الحدث.'];
+  }
+});
+</script>
         <nav class="site-pager site-adv" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="tpl-error.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">صفحة الخطأ</span></a><a class="site-pager-link site-pager-link--next" href="carousel.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">عرض الشرائح</span></a></nav><nav class="site-pager site-simple" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="tpl-error.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">صفحة الخطأ</span></a><span></span></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">شريط الموقع</a><a href="#phone">على الهاتف</a><a href="#current">الرابط الحالي</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#basic">شريط الموقع</a><a href="#phone">على الهاتف</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
