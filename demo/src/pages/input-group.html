@@ -1,63 +1,32 @@
-<h2 id="addon">ملحق نصي</h2>
+<demo-example>
+  <div class="ins-field">
+    <label class="ins-label" for="g-price">السعر</label>
+    <div class="ins-input-group">
+      <input class="ins-input" id="g-price" inputmode="decimal" value="249">
+      <span class="ins-addon">ر.س</span>
+    </div>
+  </div>
+</demo-example>
+
+<h2 id="addon">مجموعة الحقل</h2>
 <p>
   يضم <code>.ins-input-group</code> الحقل وملحقاته في قطعة واحدة، لها إطار واحد وحلقة تركيز (focus ring) واحدة.
   و<code>.ins-addon</code> نص ثابت يسبق الحقل أو يليه، وترتيبه في الشيفرة هو ترتيبه في اتجاه القراءة.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<demo-example>
-  <div class="ins-input-group">
-    <input class="ins-input" inputmode="decimal" value="249" aria-label="السعر">
-    <span class="ins-addon">ر.س</span>
-  </div>
-</demo-example>
-
-<h3 id="ltr-group" data-level="advanced">مجموعة باتجاه LTR</h3>
-<p>إذا كان الحقل لعنوان موقع أو اسم مستخدم فضع <code>dir="ltr"</code> على المجموعة كلها، فتبقى البادئة قبل النص.</p>
-<demo-example>
-  <div class="ins-input-group" dir="ltr">
-    <span class="ins-addon">https://</span>
-    <input class="ins-input" placeholder="my-site" aria-label="الرابط">
-    <span class="ins-addon">.example.com</span>
-  </div>
-</demo-example>
-
-<h2 id="button">زر ملحق</h2>
-<demo-example>
-  <div class="ins-input-group">
-    <input class="ins-input" aria-label="الرمز">
-    <button class="ins-btn ins-btn--secondary">تطبيق</button>
-  </div>
-</demo-example>
+<demo-play of="group"></demo-play>
 
 <h2 id="password">إظهار كلمة المرور</h2>
 <p>
-  يبدل <code>.ins-password-toggle</code> مع <code>data-ins-password</code> نوع الحقل (<code>type</code>) فتظهر كلمة المرور أو تختفي، ويجدد
-  <code>aria-label</code> الزر لقارئ الشاشة. فإن غابت جافاسكربت لم يظهر الزر أصلًا.
+  يبدل <code>.ins-password-toggle</code> مع <code>data-ins-password</code> نوع الحقل فتظهر كلمة المرور أو تختفي، ويخبر قارئ الشاشة
+  بحالته. فإن غابت جافاسكربت لم يظهر الزر أصلًا.
 </p>
-<demo-example>
-  <div class="ins-input-group">
-    <input class="ins-input" type="password" value="secret" aria-label="كلمة المرور">
-    <button class="ins-password-toggle" data-ins-password aria-label="إظهار كلمة المرور"></button>
-  </div>
-</demo-example>
+<demo-play of="password"></demo-play>
 
 <h2 id="stepper">العداد</h2>
 <p>يحيط زران <code>data-ins-spin</code> بحقل رقمي، فيزيدانه وينقصانه بخطوة <code>step</code> ولا يتجاوزان <code>min</code> و<code>max</code>.</p>
-<demo-example>
-  <div class="ins-input-group" style="max-inline-size:11rem">
-    <button class="ins-spin" data-ins-spin="down" aria-label="إنقاص"></button>
-    <input class="ins-input" type="number" min="1" max="10" value="2" aria-label="الكمية">
-    <button class="ins-spin" data-ins-spin="up" aria-label="زيادة"></button>
-  </div>
-</demo-example>
+<demo-play of="stepper"></demo-play>
 
-<h2 id="invalid">حالة الخطأ</h2>
-<p>ضع الحالة على الحقل، فتتلون المجموعة كلها.</p>
-<demo-example>
-  <div class="ins-field">
-    <div class="ins-input-group">
-      <input class="ins-input" value="SUMMER24" aria-label="الرمز" aria-invalid="true" dir="ltr">
-      <button class="ins-btn ins-btn--secondary">تطبيق</button>
-    </div>
-    <p class="ins-error">انتهت صلاحية الرمز.</p>
-  </div>
-</demo-example>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في مجموعات الحقول من كلاسات وسمات، لكل مكون صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
