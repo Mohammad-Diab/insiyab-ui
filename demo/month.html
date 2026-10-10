@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -276,19 +277,6 @@
         <link rel="stylesheet" href="../dist/plugins/insiyab-month.css">
 <script src="../dist/plugins/insiyab-month.js" defer></script>
 
-<h2 id="setup">التثبيت</h2>
-<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/plugins/insiyab-month.css"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab-boot.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-month.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
-
-<h2 id="month">شهر بمواعيده</h2>
-<p>
-  ضع <code>.ins-month</code> مع <code>data-ins-month="2026-09"</code>، واجعل فيه قائمة <code>.ins-month-events</code> تحمل
-  مواعيده، كل عنصر فيها موعد في يوم (<code>data-date</code>، ولك أن تضيف <code>data-time</code> و<code>data-tone</code>). ومنها
-  يرسم الشهر جدول أسابيع يبدأ باليوم الذي يبدأ به الأسبوع في لغة الصفحة، ويميز اليوم الحالي، ولا يعرض في اليوم أكثر
-  من ثلاثة مواعيد ثم يكتب عدد ما بقي، مثل «+2»، ويبقى الرابط رابطًا. وعلى الهاتف تصير المواعيد نقاطًا.
-</p>
 <figure class="dx"><div class="dx-view">
   <div class="ins-month" data-ins-month="2026-09">
     <ul class="ins-month-events">
@@ -317,6 +305,37 @@
   <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
+<h2 id="setup">التثبيت</h2>
+<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/plugins/insiyab-month.css"</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab-boot.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-month.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
+
+<h2 id="month">شهر بمواعيده</h2>
+<p>
+  ضع <code>.ins-month</code> مع <code>data-ins-month="2026-09"</code>، وفيه قائمة <code>.ins-month-events</code> لكل موعد
+  فيها عنصر بيومه. ومنها يرسم الشهر جدول أسابيع يميز اليوم الحالي، وعلى الهاتف تصير المواعيد نقاطًا.
+</p>
+<figure class="dx site-play" data-play="month"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-month" data-ins-month="2026-09">
+  <ul class="ins-month-events">
+    <li data-date="2026-09-03">تسليم</li>
+    <li data-date="2026-09-08" data-time="10:00">اجتماع</li>
+    <li data-date="2026-09-08" data-time="14:30">مراجعة</li>
+    <li data-date="2026-09-15">ورشة عمل</li>
+    <li data-date="2026-09-21" data-time="09:00">مكالمة</li>
+    <li data-date="2026-09-26">إجازة</li>
+  </ul>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">انتقل إلى شهر آخر، أو انقر يومًا خاليًا، فيظهر هنا الحدث.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات تقويم الشهر"><label class="site-play-ctl" data-key="tone" data-type="select"><span class="site-play-label">النبرة</span><select class="ins-select ins-select--sm"><option value="" selected>الأساسي</option><option value="ok">نجاح</option><option value="warn">تحذير</option><option value="bad">خطر</option><option value="info">معلومة</option></select></label><div class="site-play-ctl" data-key="time" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">بوقته</span></span></label></div><div class="site-play-ctl" data-key="link" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">رابط</span></span></label></div><div class="site-play-ctl" data-key="more" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">أكثر من ثلاثة في يوم</span></span></label></div><div class="site-play-ctl" data-key="en" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">بالإنجليزية</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-month"</span> <span class="hl-a">data-ins-month</span>=<span class="hl-s">"2026-09"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;ul</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-month-events"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span> <span class="hl-a">data-date</span>=<span class="hl-s">"2026-09-03"</span><span class="hl-t">&gt;</span>تسليم<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span> <span class="hl-a">data-date</span>=<span class="hl-s">"2026-09-08"</span> <span class="hl-a">data-time</span>=<span class="hl-s">"10:00"</span><span class="hl-t">&gt;</span>اجتماع<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span> <span class="hl-a">data-date</span>=<span class="hl-s">"2026-09-08"</span> <span class="hl-a">data-time</span>=<span class="hl-s">"14:30"</span><span class="hl-t">&gt;</span>مراجعة<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span> <span class="hl-a">data-date</span>=<span class="hl-s">"2026-09-15"</span><span class="hl-t">&gt;</span>ورشة عمل<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span> <span class="hl-a">data-date</span>=<span class="hl-s">"2026-09-21"</span> <span class="hl-a">data-time</span>=<span class="hl-s">"09:00"</span><span class="hl-t">&gt;</span>مكالمة<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;li</span> <span class="hl-a">data-date</span>=<span class="hl-s">"2026-09-26"</span><span class="hl-t">&gt;</span>إجازة<span class="hl-t">&lt;/li</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/ul</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
 <h2 id="events">الأحداث</h2>
 <p>
   إذا انتقلت إلى شهر آخر أُطلق حدث <code>ins:month</code> ومعه الشهر الجديد، فتضع الصفحة مواعيده في القائمة ثم
@@ -328,9 +347,66 @@
   <span class="hl-t">Insiyab</span>.month(e.detail.el, { events });
 });
 <span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:month-day'</span>, (e) =&gt; openNew(e.detail.date));</code></pre></div>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في تقويم الشهر من كلاسات وسمات وأحداث، في صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>تقويم الشهر</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-month</code></td><td>سمة</td><td>على <code>.ins-month</code>: الشهر الذي يُعرض بصيغة <code>2026-09</code>، وبدونها الشهر الحالي.</td></tr><tr><td><code>.ins-month-events</code></td><td>كلاس</td><td>قائمة المواعيد داخل الشهر، منها يُرسم ثم تُخفى، ولكل موعد فيها عنصر <code>&lt;li&gt;</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الموعد</th></tr></tbody><tbody><tr><td><code>data-tone="ok"</code></td><td>سمة</td><td>موعد بلون النجاح.</td></tr><tr><td><code>data-tone="warn"</code></td><td>سمة</td><td>موعد بلون التحذير.</td></tr><tr><td><code>data-tone="bad"</code></td><td>سمة</td><td>موعد بلون الخطر.</td></tr><tr><td><code>data-tone="info"</code></td><td>سمة</td><td>موعد بلون المعلومة.</td></tr><tr><td><code>data-time</code></td><td>سمة</td><td>وقت الموعد، مثل <code>14:30</code>، يُكتب قبل عنوانه وتُرتب به مواعيد اليوم.</td></tr><tr><td><code>li &gt; a</code></td><td>عنصر</td><td>اجعل نص الموعد رابطًا، فيبقى في الشهر رابطًا يُنقر.</td></tr><tr><td><code>data-date</code></td><td>سمة</td><td>على كل <code>&lt;li&gt;</code>: يوم الموعد بصيغة <code>2026-09-08</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>lang="en"</code></td><td>سمة</td><td>يأخذ الشهر لغته من أقرب <code>lang</code>، ومنها أسماء الأيام والشهر وأول أيام الأسبوع.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأحداث</th></tr></tbody><tbody><tr><td><code>ins:month</code></td><td>حدث</td><td>يُطلق إذا انتقلت إلى شهر آخر، وفي <code>detail</code> الشهر الجديد <code>month</code>.</td></tr><tr><td><code>ins:month-day</code></td><td>حدث</td><td>يُطلق إذا نُقر يوم في موضع خال من مواعيده، وفي <code>detail</code> تاريخه <code>date</code>.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'month',
+  title: 'تقويم الشهر',
+  owns: 'ins-month',
+  wide: true,
+  controls: [
+    { key: 'tone', label: 'النبرة', group: 'الموعد', type: 'select', value: '', choices: [
+      { value: '', label: 'الأساسي' },
+      { value: 'ok', label: 'نجاح', name: 'data-tone="ok"', desc: 'موعد بلون النجاح.' },
+      { value: 'warn', label: 'تحذير', name: 'data-tone="warn"', desc: 'موعد بلون التحذير.' },
+      { value: 'bad', label: 'خطر', name: 'data-tone="bad"', desc: 'موعد بلون الخطر.' },
+      { value: 'info', label: 'معلومة', name: 'data-tone="info"', desc: 'موعد بلون المعلومة.' }
+    ] },
+    { key: 'time', label: 'بوقته', group: 'الموعد', type: 'switch', value: true, name: 'data-time', desc: 'وقت الموعد، مثل `14:30`، يُكتب قبل عنوانه وتُرتب به مواعيد اليوم.' },
+    { key: 'link', label: 'رابط', group: 'الموعد', type: 'switch', name: 'li > a', kind: 'element', desc: 'اجعل نص الموعد رابطًا، فيبقى في الشهر رابطًا يُنقر.' },
+    { key: 'more', label: 'أكثر من ثلاثة في يوم', type: 'switch' },
+    { key: 'en', label: 'بالإنجليزية', type: 'switch', name: 'lang="en"', desc: 'يأخذ الشهر لغته من أقرب `lang`، ومنها أسماء الأيام والشهر وأول أيام الأسبوع.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-month', desc: 'على `.ins-month`: الشهر الذي يُعرض بصيغة `2026-09`، وبدونها الشهر الحالي.' },
+    { group: 'الأساس', name: 'ins-month-events', desc: 'قائمة المواعيد داخل الشهر، منها يُرسم ثم تُخفى، ولكل موعد فيها عنصر `<li>`.' },
+    { group: 'الموعد', name: 'data-date', desc: 'على كل `<li>`: يوم الموعد بصيغة `2026-09-08`.' },
+    { group: 'الأحداث', name: 'ins:month', kind: 'event', desc: 'يُطلق إذا انتقلت إلى شهر آخر، وفي `detail` الشهر الجديد `month`.' },
+    { group: 'الأحداث', name: 'ins:month-day', kind: 'event', desc: 'يُطلق إذا نُقر يوم في موضع خال من مواعيده، وفي `detail` تاريخه `date`.' }
+  ],
+  events: ['ins:month', 'ins:month-day'],
+  html: function (s) {
+    var t = s.en
+      ? ['Delivery', 'Meeting', 'Review', 'Workshop', 'Call', 'Training', 'Visit', 'Deadline', 'Holiday']
+      : ['تسليم', 'اجتماع', 'مراجعة', 'ورشة عمل', 'مكالمة', 'تدريب', 'زيارة', 'موعد نهائي', 'إجازة'];
+    var list = [['03', '', 0], ['08', '10:00', 1], ['08', '14:30', 2], ['15', '', 3], ['21', '09:00', 4]];
+    if (s.more) list.push(['21', '11:00', 5], ['21', '13:00', 6], ['21', '16:00', 7]);
+    list.push(['26', '', 8]);
+    var items = list.map(function (e, i) {
+      var text = s.link && i === 0 ? '<a href="/events/1">' + t[e[2]] + '</a>' : t[e[2]];
+      return '    <li data-date="2026-09-' + e[0] + '"' + (s.time && e[1] ? ' data-time="' + e[1] + '"' : '') +
+        (s.tone ? ' data-tone="' + s.tone + '"' : '') + '>' + text + '</li>';
+    }).join('\n');
+    return '<div class="ins-month" data-ins-month="2026-09"' + (s.en ? ' lang="en" dir="ltr"' : '') + '>\n' +
+      '  <ul class="ins-month-events">\n' + items + '\n  </ul>\n</div>';
+  },
+  notes: function (s) {
+    var out = [];
+    if (s.link) out.push('صار «تسليم» يوم 3 رابطًا يشبه غيره من المواعيد، فمرر عليه المؤشر يمتلئ بلونه.');
+    if (s.more) out.push('لا يعرض اليوم أكثر من ثلاثة مواعيد، فإن زادت كتب عدد ما بقي، مثل «+2».');
+    if (s.en) out.push('صار الأسبوع يبدأ بالأحد كما يبدؤه أهل هذه اللغة، ومعها `dir="ltr"` ليجري الشهر من اليسار.');
+    out.push('انتقل إلى شهر آخر، أو انقر يومًا خاليًا، فيظهر هنا الحدث.');
+    return out;
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="charts.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">الرسوم البيانية</span></a><a class="site-pager-link site-pager-link--next" href="login.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">تسجيل الدخول</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#setup">التثبيت</a><a href="#month">شهر بمواعيده</a><a href="#events">الأحداث</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#setup">التثبيت</a><a href="#month">شهر بمواعيده</a><a href="#events">الأحداث</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
