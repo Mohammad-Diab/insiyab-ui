@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,13 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">تحقق المتصفح نفسه، ورسائله تحت الحقل لا في فقاعة، دون مكتبة تحقق.</p>
-        <h2 id="browser">تحقق المتصفح</h2>
-<p>
-  ضع <code>data-ins-validate</code> على النموذج، وقيود HTML المعتادة على الحقول: <code>required</code>
-  و<code>type="email"</code> و<code>minlength</code> و<code>pattern</code>. فتأخذ المكتبة حكم المتصفح، وتكتب
-  رسالته تحت الحقل بدل الفقاعة التي يعرضها. اضغط «إرسال» والحقول فارغة:
-</p>
-<figure class="dx"><div class="dx-view">
+        <figure class="dx"><div class="dx-view">
   <form class="ins-stack" data-ins-validate id="v-form">
     <div class="ins-field">
       <label class="ins-label" for="v-email">البريد</label>
@@ -313,64 +308,154 @@
   <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/form</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="messages">رسالة المتصفح أو رسالتك</h2>
-<ul>
-  <li><b><code>&lt;p class="ins-error"&gt;</code> فارغ</b>: يملؤه المتصفح برسالته وبلغته، ويجددها وأنت تكتب.</li>
-  <li><b>فيه نص</b>: تظهر رسالتك أنت كما كتبتها، كما في حقل كلمة المرور أعلاه.</li>
-</ul>
+<h2 id="browser">تحقق المتصفح</h2>
 <p>
-  ولا يظهر الخطأ لحظة فتح الصفحة، بل إذا غادر المستخدم حقلًا غيّره (<code>:user-invalid</code>) أو حاول
-  الإرسال.
+  ضع <code>data-ins-validate</code> على النموذج، وقيود HTML المعتادة على الحقول: <code>required</code>
+  و<code>type="email"</code> و<code>minlength</code> و<code>pattern</code>. فتأخذ المكتبة حكم المتصفح، وتكتب
+  رسالته تحت الحقل بدل الفقاعة التي يعرضها. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
+<figure class="dx site-play" data-play="validate"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><form class="ins-stack" data-ins-validate>
+  <div class="ins-field">
+    <label class="ins-label" for="p-val">الاسم</label>
+    <input class="ins-input" id="p-val" required>
+    <p class="ins-error"></p>
+  </div>
+  <div class="ins-form-commit">
+    <button class="ins-btn ins-btn--primary">إرسال</button>
+  </div>
+</form></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">هكذا يبدو الحقل بعد محاولة إرسال فاشلة. اكتب فيه، فتتغير الرسالة أو تزول.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات تحقق المتصفح"><label class="site-play-ctl" data-key="rule" data-type="select"><span class="site-play-label">القيد</span><select class="ins-select ins-select--sm"><option value="required" selected>مطلوب</option><option value="email">بريد صحيح</option><option value="minlength">ثمانية أحرف على الأقل</option><option value="pattern">أرقام فقط</option></select></label><div class="site-play-ctl" data-key="msg" data-type="seg"><span class="site-play-label">الرسالة</span><div class="ins-seg" role="group" aria-label="الرسالة"><button type="button" data-value="" class="is-active" aria-pressed="true">رسالة المتصفح</button><button type="button" data-value="own" aria-pressed="false">رسالتك</button></div></div><div class="site-play-ctl" data-key="hint" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">تلميح</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;form</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-stack"</span> <span class="hl-a">data-ins-validate</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-val"</span><span class="hl-t">&gt;</span>الاسم<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-val"</span> <span class="hl-a">required</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-form-commit"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;button</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-btn ins-btn--primary"</span><span class="hl-t">&gt;</span>إرسال<span class="hl-t">&lt;/button</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/form</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="server">أخطاء من الخادم</h2>
 <p>
   أما الخطأ الذي لا يعرفه المتصفح، كاسم مستخدم محجوز أو رمز انتهت صلاحيته، فتضعه أنت: <code>aria-invalid="true"</code>
   على الحقل، ونص في <code>.ins-error</code>. وتدل على القبول بـ <code>.ins-input--ok</code> و<code>.ins-success</code>.
 </p>
-<figure class="dx"><div class="dx-view stack">
-  <div class="ins-field">
-    <input class="ins-input" value="admin" aria-label="اسم المستخدم" aria-invalid="true" dir="ltr">
-    <p class="ins-error">هذا الاسم محجوز.</p>
-  </div>
-  <div class="ins-field">
-    <input class="ins-input ins-input--ok" value="huda" aria-label="اسم المستخدم" dir="ltr">
-    <p class="ins-success">الاسم متاح.</p>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">value</span>=<span class="hl-s">"admin"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"اسم المستخدم"</span> <span class="hl-a">aria-invalid</span>=<span class="hl-s">"true"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="server"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-field">
+  <label class="ins-label" for="p-srv">اسم المستخدم</label>
+  <input class="ins-input" id="p-srv" value="name" dir="ltr" aria-invalid="true">
+  <p class="ins-error">هذا الاسم محجوز.</p>
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات أخطاء من الخادم"><div class="site-play-ctl" data-key="state" data-type="seg"><span class="site-play-label">الحالة</span><div class="ins-seg" role="group" aria-label="الحالة"><button type="button" data-value="bad" class="is-active" aria-pressed="true">خطأ</button><button type="button" data-value="ok" aria-pressed="false">مقبول</button></div></div><div class="site-play-ctl" data-key="el" data-type="seg"><span class="site-play-label">العنصر</span><div class="ins-seg" role="group" aria-label="العنصر"><button type="button" data-value="input" class="is-active" aria-pressed="true">حقل</button><button type="button" data-value="select" aria-pressed="false">قائمة</button></div></div><div class="site-play-ctl" data-key="cls" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">بالكلاس وحده</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"p-srv"</span><span class="hl-t">&gt;</span>اسم المستخدم<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input"</span> <span class="hl-a">id</span>=<span class="hl-s">"p-srv"</span> <span class="hl-a">value</span>=<span class="hl-s">"name"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span> <span class="hl-a">aria-invalid</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span>هذا الاسم محجوز.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-input ins-input--ok"</span> <span class="hl-a">value</span>=<span class="hl-s">"huda"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"اسم المستخدم"</span> <span class="hl-a">dir</span>=<span class="hl-s">"ltr"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-success"</span><span class="hl-t">&gt;</span>الاسم متاح.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="select">القوائم</h2>
-<p>
-  والقائمة كالحقل، يكفيها <code>aria-invalid="true"</code>. فإن لم يكن بيدك إلا أن تضيف كلاسًا فاستعمل <code>.ins-select--bad</code>
-  (و<code>.ins-input--bad</code> للحقل).
-</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-field">
-    <select class="ins-select ins-select--bad" aria-label="الخطة" aria-invalid="true">
-      <option value="">اختر…</option><option>الأولى</option><option>الثانية</option>
-    </select>
-    <p class="ins-error">اختر خطة.</p>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;select</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-select ins-select--bad"</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"الخطة"</span> <span class="hl-a">aria-invalid</span>=<span class="hl-s">"true"</span><span class="hl-t">&gt;</span>
-    <span class="hl-t">&lt;option</span> <span class="hl-a">value</span>=<span class="hl-s">""</span><span class="hl-t">&gt;</span>اختر…<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>الأولى<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;option</span><span class="hl-t">&gt;</span>الثانية<span class="hl-t">&lt;/option</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;/select</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;p</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-error"</span><span class="hl-t">&gt;</span>اختر خطة.<span class="hl-t">&lt;/p</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في التحقق من كلاسات وسمات، لكل مكون صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>تحقق المتصفح</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-validate</code></td><td>سمة</td><td>على <code>&lt;form&gt;</code>: يأخذ حكم المتصفح على قيود الحقول ويكتب رسالته تحت الحقل بدل فقاعته. ولا يظهر الخطأ إلا إذا غادر المستخدم حقلًا غيّره أو حاول الإرسال.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الرسالة</th></tr></tbody><tbody><tr><td><code>p.ins-error</code></td><td>عنصر</td><td>فارغًا: يملؤه المتصفح برسالته وبلغته، ويجددها وأنت تكتب.</td></tr><tr><td><code>.ins-error</code></td><td>كلاس</td><td>رسالة الخطأ تحت الحقل. فإن كتبت فيها نصًا ظهرت رسالتك كما كتبتها.</td></tr></tbody></table></div></div></details><details class="ins-collapse"><summary>أخطاء من الخادم</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>.ins-success</code></td><td>كلاس</td><td>رسالة القبول تحت الحقل، وتكفي وحدها ليخضرّ الحقل.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الحالة</th></tr></tbody><tbody><tr><td><code>aria-invalid="true"</code></td><td>سمة</td><td>على الحقل أو القائمة، ومعه نص في <code>.ins-error</code>: خطأ لا يعرفه المتصفح، كاسم محجوز.</td></tr><tr><td><code>.ins-input--ok</code></td><td>كلاس</td><td>على الحقل، ومعه نص في <code>.ins-success</code>: قيمة تستحق التأكيد، كاسم متاح.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-input--bad</code></td><td>كلاس</td><td>بدل <code>aria-invalid</code>، لمن لا يملك أن يضيف إلا كلاسًا.</td></tr><tr><td><code>.ins-select--bad</code></td><td>كلاس</td><td>مثله للقائمة.</td></tr></tbody></table></div></div></details></div></div>
 
 <script>
-  document.getElementById('v-form').addEventListener('submit', function (e) { e.preventDefault(); });
+  document.addEventListener('submit', function (e) { if (e.target.closest('.dx')) e.preventDefault(); });
+</script>
+
+<script>
+SitePlay.define({
+  id: 'validate',
+  title: 'تحقق المتصفح',
+  wide: true,
+  owns: 'ins-error',
+  controls: [
+    { key: 'rule', label: 'القيد', type: 'select', value: 'required', choices: [
+      { value: 'required', label: 'مطلوب' },
+      { value: 'email', label: 'بريد صحيح' },
+      { value: 'minlength', label: 'ثمانية أحرف على الأقل' },
+      { value: 'pattern', label: 'أرقام فقط' }
+    ] },
+    { key: 'msg', label: 'الرسالة', type: 'seg', value: '', choices: [
+      { value: '', label: 'رسالة المتصفح', name: 'p.ins-error', kind: 'element', desc: 'فارغًا: يملؤه المتصفح برسالته وبلغته، ويجددها وأنت تكتب.' },
+      { value: 'own', label: 'رسالتك', name: 'ins-error', desc: 'رسالة الخطأ تحت الحقل. فإن كتبت فيها نصًا ظهرت رسالتك كما كتبتها.' }
+    ] },
+    { key: 'hint', label: 'تلميح', type: 'switch' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-validate', desc: 'على `<form>`: يأخذ حكم المتصفح على قيود الحقول ويكتب رسالته تحت الحقل بدل فقاعته. ولا يظهر الخطأ إلا إذا غادر المستخدم حقلًا غيّره أو حاول الإرسال.' }
+  ],
+  html: function (s) {
+    var attrs = s.rule === 'email' ? ' type="email" dir="ltr" required' : s.rule === 'minlength' ? ' type="password" required minlength="8"'
+      : s.rule === 'pattern' ? ' inputmode="numeric" pattern="[0-9]+" required' : ' required';
+    var label = s.rule === 'email' ? 'البريد' : s.rule === 'minlength' ? 'كلمة المرور' : s.rule === 'pattern' ? 'الرمز' : 'الاسم';
+    var own = s.rule === 'email' ? 'اكتب بريدًا صحيحًا.' : s.rule === 'minlength' ? 'كلمة المرور قصيرة.' : s.rule === 'pattern' ? 'اكتب أرقامًا فقط.' : 'اكتب الاسم.';
+    var hint = s.rule === 'minlength' ? 'ثمانية أحرف على الأقل.' : 'تلميح قصير.';
+    return '<form class="ins-stack" data-ins-validate>\n' +
+      '  <div class="ins-field">\n' +
+      '    <label class="ins-label" for="p-val">' + label + '</label>\n' +
+      '    <input class="ins-input" id="p-val"' + attrs + '>\n' +
+      (s.hint ? '    <span class="ins-hint">' + hint + '</span>\n' : '') +
+      '    <p class="ins-error">' + (s.msg ? own : '') + '</p>\n' +
+      '  </div>\n' +
+      '  <div class="ins-form-commit">\n' +
+      '    <button class="ins-btn ins-btn--primary">إرسال</button>\n' +
+      '  </div>\n' +
+      '</form>';
+  },
+  stage: function (view) {
+    var input = view.querySelector('input'), msg = view.querySelector('.ins-error');
+    input.setAttribute('data-ins-reported', '');
+    if (!msg.textContent.trim()) { msg.setAttribute('data-ins-auto', ''); msg.setAttribute('dir', 'auto'); msg.textContent = input.validationMessage; }
+  },
+  notes: function (s) {
+    var out = ['هكذا يبدو الحقل بعد محاولة إرسال فاشلة. اكتب فيه، فتتغير الرسالة أو تزول.'];
+    if (s.hint) out.push('يربط السكربت التلميح والرسالة بالحقل في `aria-describedby`، فيقرؤهما قارئ الشاشة معه.');
+    return out;
+  }
+});
+
+SitePlay.define({
+  id: 'server',
+  title: 'أخطاء من الخادم',
+  wide: true,
+  owns: 'ins-success',
+  controls: [
+    { key: 'state', label: 'الحالة', type: 'seg', value: 'bad', choices: [
+      { value: 'bad', label: 'خطأ', name: 'aria-invalid="true"', desc: 'على الحقل أو القائمة، ومعه نص في `.ins-error`: خطأ لا يعرفه المتصفح، كاسم محجوز.' },
+      { value: 'ok', label: 'مقبول', name: 'ins-input--ok', desc: 'على الحقل، ومعه نص في `.ins-success`: قيمة تستحق التأكيد، كاسم متاح.' }
+    ] },
+    { key: 'el', label: 'العنصر', type: 'seg', value: 'input', choices: [
+      { value: 'input', label: 'حقل' },
+      { value: 'select', label: 'قائمة' }
+    ] },
+    { key: 'cls', label: 'بالكلاس وحده', type: 'switch', name: 'ins-input--bad', desc: 'بدل `aria-invalid`، لمن لا يملك أن يضيف إلا كلاسًا.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'ins-success', desc: 'رسالة القبول تحت الحقل، وتكفي وحدها ليخضرّ الحقل.' },
+    { group: 'خيارات أخرى', name: 'ins-select--bad', desc: 'مثله للقائمة.' }
+  ],
+  disable: function (s) { return s.state === 'ok' ? ['cls'] : []; },
+  html: function (s) {
+    var bad = s.state === 'bad';
+    var mark = bad ? (s.cls ? '' : ' aria-invalid="true"') : '';
+    var cls = s.el === 'select' ? 'ins-select' + (bad && s.cls ? ' ins-select--bad' : '') : 'ins-input' + (bad && s.cls ? ' ins-input--bad' : '') + (bad ? '' : ' ins-input--ok');
+    var ctl = s.el === 'select'
+      ? '<select class="' + cls + '" id="p-srv"' + mark + '>\n    <option value="">اختر…</option>\n    <option' + (bad ? '' : ' selected') + '>الأول</option>\n    <option>الثاني</option>\n  </select>'
+      : '<input class="' + cls + '" id="p-srv" value="name" dir="ltr"' + mark + '>';
+    var msg = bad ? '<p class="ins-error">' + (s.el === 'select' ? 'اختر واحدًا.' : 'هذا الاسم محجوز.') + '</p>'
+      : '<p class="ins-success">' + (s.el === 'select' ? 'اختيار صحيح.' : 'الاسم متاح.') + '</p>';
+    return '<div class="ins-field">\n' +
+      '  <label class="ins-label" for="p-srv">' + (s.el === 'select' ? 'الخيار' : 'اسم المستخدم') + '</label>\n' +
+      '  ' + ctl + '\n' +
+      '  ' + msg + '\n' +
+      '</div>';
+  },
+  notes: function (s) {
+    var out = [];
+    if (s.state === 'ok' && s.el === 'select') out.push('لا كلاس قبول للقائمة، فتكفيها رسالة `.ins-success`.');
+    if (s.state === 'bad' && s.cls) out.push('يبدو الحقل كما كان، والفرق أن قارئ الشاشة لا يسمع أن فيه خطأ، فضع `aria-invalid` متى استطعت.');
+    return out;
+  }
+});
 </script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="matrix.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">مصفوفة الاختيار</span></a><a class="site-pager-link site-pager-link--next" href="buttons.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الأزرار</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#browser">تحقق المتصفح</a><a href="#messages">رسالة المتصفح أو رسالتك</a><a href="#server">أخطاء من الخادم</a><a href="#select">القوائم</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#browser">تحقق المتصفح</a><a href="#server">أخطاء من الخادم</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>

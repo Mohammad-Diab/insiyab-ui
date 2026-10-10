@@ -1,9 +1,3 @@
-<h2 id="browser">تحقق المتصفح</h2>
-<p>
-  ضع <code>data-ins-validate</code> على النموذج، وقيود HTML المعتادة على الحقول: <code>required</code>
-  و<code>type="email"</code> و<code>minlength</code> و<code>pattern</code>. فتأخذ المكتبة حكم المتصفح، وتكتب
-  رسالته تحت الحقل بدل الفقاعة التي يعرضها. اضغط «إرسال» والحقول فارغة:
-</p>
 <demo-example>
   <form class="ins-stack" data-ins-validate id="v-form">
     <div class="ins-field">
@@ -23,46 +17,25 @@
   </form>
 </demo-example>
 
-<h2 id="messages">رسالة المتصفح أو رسالتك</h2>
-<ul>
-  <li><b><code>&lt;p class="ins-error"&gt;</code> فارغ</b>: يملؤه المتصفح برسالته وبلغته، ويجددها وأنت تكتب.</li>
-  <li><b>فيه نص</b>: تظهر رسالتك أنت كما كتبتها، كما في حقل كلمة المرور أعلاه.</li>
-</ul>
+<h2 id="browser">تحقق المتصفح</h2>
 <p>
-  ولا يظهر الخطأ لحظة فتح الصفحة، بل إذا غادر المستخدم حقلًا غيّره (<code>:user-invalid</code>) أو حاول
-  الإرسال.
+  ضع <code>data-ins-validate</code> على النموذج، وقيود HTML المعتادة على الحقول: <code>required</code>
+  و<code>type="email"</code> و<code>minlength</code> و<code>pattern</code>. فتأخذ المكتبة حكم المتصفح، وتكتب
+  رسالته تحت الحقل بدل الفقاعة التي يعرضها. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
+<demo-play of="validate"></demo-play>
 
 <h2 id="server">أخطاء من الخادم</h2>
 <p>
   أما الخطأ الذي لا يعرفه المتصفح، كاسم مستخدم محجوز أو رمز انتهت صلاحيته، فتضعه أنت: <code>aria-invalid="true"</code>
   على الحقل، ونص في <code>.ins-error</code>. وتدل على القبول بـ <code>.ins-input--ok</code> و<code>.ins-success</code>.
 </p>
-<demo-example class="stack">
-  <div class="ins-field">
-    <input class="ins-input" value="admin" aria-label="اسم المستخدم" aria-invalid="true" dir="ltr">
-    <p class="ins-error">هذا الاسم محجوز.</p>
-  </div>
-  <div class="ins-field">
-    <input class="ins-input ins-input--ok" value="huda" aria-label="اسم المستخدم" dir="ltr">
-    <p class="ins-success">الاسم متاح.</p>
-  </div>
-</demo-example>
+<demo-play of="server"></demo-play>
 
-<h2 id="select">القوائم</h2>
-<p>
-  والقائمة كالحقل، يكفيها <code>aria-invalid="true"</code>. فإن لم يكن بيدك إلا أن تضيف كلاسًا فاستعمل <code>.ins-select--bad</code>
-  (و<code>.ins-input--bad</code> للحقل).
-</p>
-<demo-example>
-  <div class="ins-field">
-    <select class="ins-select ins-select--bad" aria-label="الخطة" aria-invalid="true">
-      <option value="">اختر…</option><option>الأولى</option><option>الثانية</option>
-    </select>
-    <p class="ins-error">اختر خطة.</p>
-  </div>
-</demo-example>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في التحقق من كلاسات وسمات، لكل مكون صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
 
 <script>
-  document.getElementById('v-form').addEventListener('submit', function (e) { e.preventDefault(); });
+  document.addEventListener('submit', function (e) { if (e.target.closest('.dx')) e.preventDefault(); });
 </script>
