@@ -1,6 +1,15 @@
 <link rel="stylesheet" href="../dist/plugins/insiyab-carousel.css">
 <script src="../dist/plugins/insiyab-carousel.js" defer></script>
 
+<demo-example>
+  <div class="ins-carousel" data-ins-carousel aria-label="شرائح">
+    <div class="car-demo car-demo--1"><b>الأولى</b></div>
+    <div class="car-demo car-demo--2"><b>الثانية</b></div>
+    <div class="car-demo car-demo--3"><b>الثالثة</b></div>
+    <div class="car-demo car-demo--4"><b>الرابعة</b></div>
+  </div>
+</demo-example>
+
 <h2 id="install">التثبيت</h2>
 <p>إضافة مستقلة عن المكتبة: ملف أنماط وملف سكربت يُحملان بعدها.</p>
 <demo-code lang="html">
@@ -14,30 +23,9 @@
 <p>
   ضع <code>data-ins-carousel</code> على عنصر، فكل ابن له شريحة. ويقوم الصف على تمرير المتصفح نفسه مع
   <code>scroll-snap</code>، فتسحبه بإصبعك ولو لم يعمل السكربت. ثم يضيف السكربت زري السابق والتالي، ونقطة لكل موضع، وأسهم لوحة
-  المفاتيح تسير مع اتجاه القراءة، ويخبر قارئ الشاشة عند كل شريحة أنها «2 من 4».
+  المفاتيح تسير مع اتجاه القراءة، ويخبر قارئ الشاشة عند كل شريحة أنها «2 من 4». وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<demo-example>
-  <div class="ins-carousel" data-ins-carousel aria-label="شرائح">
-    <div class="car-demo car-demo--1"><b>الأولى</b></div>
-    <div class="car-demo car-demo--2"><b>الثانية</b></div>
-    <div class="car-demo car-demo--3"><b>الثالثة</b></div>
-    <div class="car-demo car-demo--4"><b>الرابعة</b></div>
-  </div>
-</demo-example>
-
-<h2 id="many">أكثر من شريحة</h2>
-<p>
-  يعرض <code>.ins-carousel--3</code> ثلاث شرائح معًا ما اتسعت حاويته، فإذا ضاقت صارت اثنتين ثم واحدة،
-  و<code>--2</code> مثله يبدأ باثنتين. أما <code>.ins-carousel--peek</code> فيكشف طرف الشريحة التالية.
-</p>
-<demo-example>
-  <div class="ins-carousel ins-carousel--3" data-ins-carousel aria-label="شرائح">
-    <div class="car-demo car-demo--1"><b>الأولى</b></div>
-    <div class="car-demo car-demo--2"><b>الثانية</b></div>
-    <div class="car-demo car-demo--3"><b>الثالثة</b></div>
-    <div class="car-demo car-demo--4"><b>الرابعة</b></div>
-  </div>
-</demo-example>
+<demo-play of="carousel"></demo-play>
 
 <h2 id="motion">بلا تشغيل تلقائي</h2>
 <p>
@@ -55,20 +43,6 @@ Insiyab.carousel('#projects');        // الموضع الحالي، من الص
 Insiyab.carousel('#projects', 2);     // انتقل إلى الموضع الثالث
 </demo-code>
 
-<h2 id="attributes">السمات والكلاسات</h2>
-<div class="ins-panel site-ref">
-  <div class="ins-panel-body ins-panel-body--flush">
-    <div class="ins-table-wrap">
-      <table class="ins-table">
-        <thead><tr><th>السمة أو الكلاس</th><th>ما تفعله</th></tr></thead>
-        <tbody>
-          <tr><td><code>data-ins-carousel</code></td><td>يجعل العنصر عرض شرائح، وكل ابن له شريحة.</td></tr>
-          <tr><td><code>.ins-carousel--2</code> <code>.ins-carousel--3</code></td><td>شريحتان أو ثلاث معًا ما اتسع المكان.</td></tr>
-          <tr><td><code>.ins-carousel--peek</code></td><td>يكشف طرف الشريحة التالية.</td></tr>
-          <tr><td><code>data-ins-carousel-dots="off"</code></td><td>يخفي النقاط.</td></tr>
-          <tr><td><code>--ins-carousel-gap</code></td><td>المسافة بين الشرائح.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في عرض الشرائح من كلاسات وسمات وأحداث، في صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>

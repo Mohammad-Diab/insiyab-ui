@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -276,19 +277,6 @@
         <link rel="stylesheet" href="../dist/plugins/insiyab-carousel.css">
 <script src="../dist/plugins/insiyab-carousel.js" defer></script>
 
-<h2 id="install">التثبيت</h2>
-<p>إضافة مستقلة عن المكتبة: ملف أنماط وملف سكربت يُحملان بعدها.</p>
-<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/plugins/insiyab-carousel.css"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab-boot.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-carousel.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
-
-<h2 id="carousel">عرض الشرائح</h2>
-<p>
-  ضع <code>data-ins-carousel</code> على عنصر، فكل ابن له شريحة. ويقوم الصف على تمرير المتصفح نفسه مع
-  <code>scroll-snap</code>، فتسحبه بإصبعك ولو لم يعمل السكربت. ثم يضيف السكربت زري السابق والتالي، ونقطة لكل موضع، وأسهم لوحة
-  المفاتيح تسير مع اتجاه القراءة، ويخبر قارئ الشاشة عند كل شريحة أنها «2 من 4».
-</p>
 <figure class="dx"><div class="dx-view">
   <div class="ins-carousel" data-ins-carousel aria-label="شرائح">
     <div class="car-demo car-demo--1"><b>الأولى</b></div>
@@ -303,19 +291,25 @@
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--4"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الرابعة<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
-<h2 id="many">أكثر من شريحة</h2>
+<h2 id="install">التثبيت</h2>
+<p>إضافة مستقلة عن المكتبة: ملف أنماط وملف سكربت يُحملان بعدها.</p>
+<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/plugins/insiyab-carousel.css"</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab-boot.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-carousel.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
+
+<h2 id="carousel">عرض الشرائح</h2>
 <p>
-  يعرض <code>.ins-carousel--3</code> ثلاث شرائح معًا ما اتسعت حاويته، فإذا ضاقت صارت اثنتين ثم واحدة،
-  و<code>--2</code> مثله يبدأ باثنتين. أما <code>.ins-carousel--peek</code> فيكشف طرف الشريحة التالية.
+  ضع <code>data-ins-carousel</code> على عنصر، فكل ابن له شريحة. ويقوم الصف على تمرير المتصفح نفسه مع
+  <code>scroll-snap</code>، فتسحبه بإصبعك ولو لم يعمل السكربت. ثم يضيف السكربت زري السابق والتالي، ونقطة لكل موضع، وأسهم لوحة
+  المفاتيح تسير مع اتجاه القراءة، ويخبر قارئ الشاشة عند كل شريحة أنها «2 من 4». وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-carousel ins-carousel--3" data-ins-carousel aria-label="شرائح">
-    <div class="car-demo car-demo--1"><b>الأولى</b></div>
-    <div class="car-demo car-demo--2"><b>الثانية</b></div>
-    <div class="car-demo car-demo--3"><b>الثالثة</b></div>
-    <div class="car-demo car-demo--4"><b>الرابعة</b></div>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-carousel ins-carousel--3"</span> <span class="hl-a">data-ins-carousel</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"شرائح"</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="carousel"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-carousel" data-ins-carousel aria-label="شرائح">
+  <div class="car-demo car-demo--1"><b>الأولى</b></div>
+  <div class="car-demo car-demo--2"><b>الثانية</b></div>
+  <div class="car-demo car-demo--3"><b>الثالثة</b></div>
+  <div class="car-demo car-demo--4"><b>الرابعة</b></div>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">انتقل إلى شريحة أخرى، فيظهر هنا الحدث الذي يطلقه العرض.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات عرض الشرائح"><div class="site-play-ctl" data-key="per" data-type="seg"><span class="site-play-label">شرائح معًا</span><div class="ins-seg" role="group" aria-label="شرائح معًا"><button type="button" data-value="" class="is-active" aria-pressed="true">واحدة</button><button type="button" data-value="2" aria-pressed="false">اثنتان</button><button type="button" data-value="3" aria-pressed="false">ثلاث</button></div></div><div class="site-play-ctl" data-key="count" data-type="seg"><span class="site-play-label">عدد الشرائح</span><div class="ins-seg" role="group" aria-label="عدد الشرائح"><button type="button" data-value="1" aria-pressed="false">1</button><button type="button" data-value="4" class="is-active" aria-pressed="true">4</button><button type="button" data-value="6" aria-pressed="false">6</button></div></div><div class="site-play-ctl" data-key="peek" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">طرف التالية</span></span></label></div><div class="site-play-ctl" data-key="dots" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">بلا نقاط</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-carousel"</span> <span class="hl-a">data-ins-carousel</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"شرائح"</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--1"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الأولى<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--2"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الثانية<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"car-demo car-demo--3"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;b</span><span class="hl-t">&gt;</span>الثالثة<span class="hl-t">&lt;/b</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
@@ -336,26 +330,56 @@
 <span class="hl-t">Insiyab</span>.carousel(<span class="hl-s">'#projects'</span>);        <span class="hl-c">// الموضع الحالي، من الصفر</span>
 <span class="hl-t">Insiyab</span>.carousel(<span class="hl-s">'#projects'</span>, <span class="hl-n">2</span>);     <span class="hl-c">// انتقل إلى الموضع الثالث</span></code></pre></div>
 
-<h2 id="attributes">السمات والكلاسات</h2>
-<div class="ins-panel site-ref">
-  <div class="ins-panel-body ins-panel-body--flush">
-    <div class="ins-table-wrap">
-      <table class="ins-table">
-        <thead><tr><th>السمة أو الكلاس</th><th>ما تفعله</th></tr></thead>
-        <tbody>
-          <tr><td><code>data-ins-carousel</code></td><td>يجعل العنصر عرض شرائح، وكل ابن له شريحة.</td></tr>
-          <tr><td><code>.ins-carousel--2</code> <code>.ins-carousel--3</code></td><td>شريحتان أو ثلاث معًا ما اتسع المكان.</td></tr>
-          <tr><td><code>.ins-carousel--peek</code></td><td>يكشف طرف الشريحة التالية.</td></tr>
-          <tr><td><code>data-ins-carousel-dots="off"</code></td><td>يخفي النقاط.</td></tr>
-          <tr><td><code>--ins-carousel-gap</code></td><td>المسافة بين الشرائح.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في عرض الشرائح من كلاسات وسمات وأحداث، في صندوق يفتح بالنقر.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>عرض الشرائح</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-carousel</code></td><td>سمة</td><td>يجعل العنصر عرض شرائح، وكل ابن له شريحة. ويضبط <code>--ins-carousel-gap</code> المسافة بين الشرائح.</td></tr><tr><td><code>.ins-carousel</code></td><td>كلاس</td><td>كلاس العرض، ويضيفه السكربت إن لم تكتبه، ومعه <code>aria-label</code> يسمي العرض.</td></tr><tr><td><code>.ins-carousel-slide</code></td><td>كلاس</td><td>يضيفه السكربت لكل ابن، وإذا كانت الشريحة صورة <code>&lt;img&gt;</code> ملأت عرضها.</td></tr><tr><td><code>ins:carousel</code></td><td>حدث</td><td>يُطلق كلما تغيرت الشريحة في أول العرض، وفي <code>detail</code> موضعها <code>index</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">شرائح معًا</th></tr></tbody><tbody><tr><td><code>.ins-carousel--2</code></td><td>كلاس</td><td>شريحتان معًا في حاوية عرضها <code>36rem</code> فأكثر، وإلا فواحدة. فالحاوية هي التي تقرر لا الشاشة.</td></tr><tr><td><code>.ins-carousel--3</code></td><td>كلاس</td><td>ثلاث شرائح معًا في حاوية عرضها <code>56rem</code> فأكثر، واثنتان تحت ذلك، وواحدة تحت <code>36rem</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-carousel--peek</code></td><td>كلاس</td><td>يكشف طرف الشريحة التالية، فيعرف المستخدم أن بعدها المزيد.</td></tr><tr><td><code>data-ins-carousel-dots="off"</code></td><td>سمة</td><td>يخفي النقاط تحت العرض، ويبقى الزران.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'carousel',
+  title: 'عرض الشرائح',
+  owns: 'ins-carousel',
+  wide: true,
+  events: ['ins:carousel'],
+  controls: [
+    { key: 'per', label: 'شرائح معًا', type: 'seg', value: '', choices: [
+      { value: '', label: 'واحدة' },
+      { value: '2', label: 'اثنتان', name: 'ins-carousel--2', desc: 'شريحتان معًا في حاوية عرضها `36rem` فأكثر، وإلا فواحدة. فالحاوية هي التي تقرر لا الشاشة.' },
+      { value: '3', label: 'ثلاث', name: 'ins-carousel--3', desc: 'ثلاث شرائح معًا في حاوية عرضها `56rem` فأكثر، واثنتان تحت ذلك، وواحدة تحت `36rem`.' }
+    ] },
+    { key: 'count', label: 'عدد الشرائح', type: 'seg', value: '4', choices: [
+      { value: '1', label: '1' },
+      { value: '4', label: '4' },
+      { value: '6', label: '6' }
+    ] },
+    { key: 'peek', label: 'طرف التالية', type: 'switch', name: 'ins-carousel--peek', desc: 'يكشف طرف الشريحة التالية، فيعرف المستخدم أن بعدها المزيد.' },
+    { key: 'dots', label: 'بلا نقاط', type: 'switch', name: 'data-ins-carousel-dots="off"', desc: 'يخفي النقاط تحت العرض، ويبقى الزران.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-carousel', desc: 'يجعل العنصر عرض شرائح، وكل ابن له شريحة. ويضبط `--ins-carousel-gap` المسافة بين الشرائح.' },
+    { group: 'الأساس', name: 'ins-carousel', desc: 'كلاس العرض، ويضيفه السكربت إن لم تكتبه، ومعه `aria-label` يسمي العرض.' },
+    { group: 'الأساس', name: 'ins-carousel-slide', desc: 'يضيفه السكربت لكل ابن، وإذا كانت الشريحة صورة `<img>` ملأت عرضها.' },
+    { group: 'الأساس', name: 'ins:carousel', kind: 'event', desc: 'يُطلق كلما تغيرت الشريحة في أول العرض، وفي `detail` موضعها `index`.' }
+  ],
+  html: function (s) {
+    var words = ['الأولى', 'الثانية', 'الثالثة', 'الرابعة', 'الخامسة', 'السادسة'];
+    var cls = 'ins-carousel' + (s.per ? ' ins-carousel--' + s.per : '') + (s.peek ? ' ins-carousel--peek' : '');
+    var slides = words.slice(0, +s.count).map(function (w, i) {
+      return '  <div class="car-demo car-demo--' + (i % 4 + 1) + '"><b>' + w + '</b></div>';
+    }).join('\n');
+    return '<div class="' + cls + '" data-ins-carousel' + (s.dots ? ' data-ins-carousel-dots="off"' : '') + ' aria-label="شرائح">\n' + slides + '\n</div>';
+  },
+  notes: function (s) {
+    if (s.count === '1') return ['شريحة واحدة لا تحتاج زرين ولا نقاطًا، فأخفاها السكربت.'];
+    if (s.per === '2') return ['لا تجتمع شريحتان في الصف إلا في حاوية عرضها `36rem` فأكثر، وهذه المعاينة أضيق من ذلك، فتبقى فيها شريحة واحدة.'];
+    if (s.per === '3') return ['لا تجتمع ثلاث شرائح في الصف إلا في حاوية عرضها `56rem` فأكثر، واثنتان من `36rem`. وهذه المعاينة أضيق من ذلك، فتبقى فيها شريحة واحدة.'];
+    return ['انتقل إلى شريحة أخرى، فيظهر هنا الحدث الذي يطلقه العرض.'];
+  }
+});
+</script>
         <nav class="site-pager site-adv" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="navbar.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">شريط الموقع</span></a><a class="site-pager-link site-pager-link--next" href="colorpicker.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">منتقي الألوان</span></a></nav><nav class="site-pager site-simple" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="tpl-error.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">صفحة الخطأ</span></a><span></span></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#carousel">عرض الشرائح</a><a href="#many">أكثر من شريحة</a><a href="#motion">بلا تشغيل تلقائي</a><a href="#api">التحكم بـ JavaScript</a><a href="#attributes">السمات والكلاسات</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#carousel">عرض الشرائح</a><a href="#motion">بلا تشغيل تلقائي</a><a href="#api">التحكم بـ JavaScript</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
