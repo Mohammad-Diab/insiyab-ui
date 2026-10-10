@@ -134,6 +134,8 @@ export const NAV = [
       lead: 'الدرج (Drawer) هو مربع الحوار نفسه ملتصقًا بحافة: البداية أو النهاية أو الأسفل.' },
     { slug: 'toasts', title: 'الرسائل العابرة', en: 'Toasts', icon: 'bell',
       lead: 'الرسالة العابرة (Toast) إشعار يظهر ثم يختفي وحده، بسمة على زر أو بسطر جافاسكربت.' },
+    { slug: 'notify', title: 'مركز الإشعارات', en: 'Notification center', icon: 'bell', fresh: true,
+      lead: 'جرس يعد ما لم يُقرأ من الإشعارات، وتحته قائمتها: يصير الإشعار مقروءًا بنقرة، ويهتز الجرس حين يصل جديد.' },
     { slug: 'badges', title: 'الشارات والأرقام', en: 'Badges & numbers', icon: 'tag', fresh: true,
       lead: 'شارات للحالة وللعدد، وصور رمزية، ومبالغ وأرقام لا تضطرب في السطر العربي.' },
     { slug: 'list', title: 'القوائم', en: 'Lists', icon: 'list',

@@ -1,0 +1,64 @@
+<!doctype html>
+<!-- Fixtures for notify.test.mjs: a bell on the page, an English one, an empty one, and one inside a dialog. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab notify fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <link rel="stylesheet" href="../../dist/plugins/insiyab-notify.css">
+  <script src="../../dist/insiyab.js"></script>
+  <script src="../../dist/plugins/insiyab-notify.js"></script>
+</head>
+<body>
+<main class="ins-container ins-stack" style="padding-block: 2rem 40rem; max-inline-size: 40rem">
+  <div class="ins-row" style="justify-content: flex-end">
+    <details class="ins-pop ins-notify" data-ins-notify id="nb">
+      <summary class="ins-island ins-island--icon" aria-label="الإشعارات" id="nb-s"><svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/></svg></summary>
+      <div class="ins-pop-body ins-notify-body">
+        <div class="ins-notify-head">
+          <b class="ins-notify-title">الإشعارات</b>
+          <button class="ins-btn ins-btn--bare ins-btn--sm" type="button" data-ins-notify-read id="nb-all">تعليم الكل مقروءًا</button>
+        </div>
+        <ul class="ins-list ins-notify-list" id="nb-list">
+          <li class="ins-list-item" data-ins-unread id="n1"><span class="ins-list-text"><span class="ins-list-title">اكتمل التصدير</span><span class="ins-list-desc">الملف جاهز للتنزيل.</span></span><span class="ins-list-end">الآن</span></li>
+          <li class="ins-list-item" data-ins-unread id="n2"><span class="ins-list-text"><span class="ins-list-title">تعليق جديد على المستند</span></span><span class="ins-list-end">قبل ساعة</span></li>
+          <li class="ins-list-item" id="n3"><span class="ins-list-text"><span class="ins-list-title">تم الحفظ</span></span><span class="ins-list-end">أمس</span></li>
+          <li><a class="ins-list-item" href="/x" data-ins-unread id="n4"><span class="ins-list-text"><span class="ins-list-title">رسالة قصيرة</span></span><span class="ins-list-end">أمس</span></a></li>
+        </ul>
+        <a class="ins-notify-foot" href="/all">عرض الكل</a>
+      </div>
+    </details>
+  </div>
+
+  <div lang="en" dir="ltr">
+    <details class="ins-pop ins-notify" data-ins-notify id="ne">
+      <summary class="ins-island ins-island--icon" aria-label="Notifications" id="ne-s"><svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0"/></svg></summary>
+      <div class="ins-pop-body ins-notify-body">
+        <ul class="ins-list ins-notify-list"><li class="ins-list-item" data-ins-unread><span class="ins-list-text"><span class="ins-list-title">Export finished</span></span></li></ul>
+      </div>
+    </details>
+  </div>
+
+  <details class="ins-pop ins-notify" data-ins-notify id="n0">
+    <summary class="ins-island ins-island--icon" aria-label="الإشعارات" id="n0-s"><svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0"/></svg></summary>
+    <div class="ins-pop-body ins-notify-body">
+      <ul class="ins-list ins-notify-list"></ul>
+    </div>
+  </details>
+
+  <button class="ins-btn" id="open-d" data-ins-dialog="#dn">dialog</button>
+  <dialog class="ins-dialog" id="dn">
+    <div class="ins-dialog-head"><h2 class="ins-dialog-title">dialog</h2></div>
+    <div class="ins-dialog-body">
+      <details class="ins-pop ins-notify" data-ins-notify id="nd">
+        <summary class="ins-island ins-island--icon" aria-label="الإشعارات" id="nd-s"><svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0"/></svg></summary>
+        <div class="ins-pop-body ins-notify-body">
+          <ul class="ins-list ins-notify-list"><li class="ins-list-item" data-ins-unread id="nd1"><span class="ins-list-text"><span class="ins-list-title">اكتمل التصدير</span></span></li></ul>
+        </div>
+      </details>
+    </div>
+  </dialog>
+</main>
+</body>
+</html>
