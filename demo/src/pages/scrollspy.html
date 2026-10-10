@@ -1,17 +1,3 @@
-<h2 id="install">التثبيت</h2>
-<p>إضافة مستقلة عن المكتبة، سكربتها لازم وملف أنماطها اختياري، وفيه قائمة المحتويات الجاهزة <code>.ins-toc</code>.</p>
-<demo-code lang="html">
-<link rel="stylesheet" href="insiyab/plugins/insiyab-scrollspy.css">
-<script src="insiyab/insiyab-boot.js"></script>
-<script src="insiyab/insiyab.js" defer></script>
-<script src="insiyab/plugins/insiyab-scrollspy.js" defer></script>
-</demo-code>
-
-<h2 id="toc">قائمة تتبع القراءة</h2>
-<p>
-  ضع <code>data-ins-scrollspy</code> على أي قائمة تنقل تشير روابطها إلى أقسام في الصفحة، فيأخذ الرابط الذي يُقرأ
-  قسمه <code>is-active</code> و<code>aria-current="location"</code>. جرب تمرير الصندوق:
-</p>
 <demo-example>
   <div class="spy-demo">
     <div class="spy-demo-box" id="spy-box">
@@ -30,6 +16,25 @@
   </div>
 </demo-example>
 
+<h2 id="install">التثبيت</h2>
+<p>إضافة مستقلة عن المكتبة، سكربتها لازم وملف أنماطها اختياري، وفيه قائمة المحتويات الجاهزة <code>.ins-toc</code>.</p>
+<demo-code lang="html">
+<link rel="stylesheet" href="insiyab/plugins/insiyab-scrollspy.css">
+<script src="insiyab/insiyab-boot.js"></script>
+<script src="insiyab/insiyab.js" defer></script>
+<script src="insiyab/plugins/insiyab-scrollspy.js" defer></script>
+</demo-code>
+
+<h2 id="toc">قائمة تتبع القراءة</h2>
+<p>
+  ضع <code>data-ins-scrollspy</code> على أي قائمة تنقل تشير روابطها إلى أقسام في الصفحة، فيأخذ الرابط الذي يُقرأ
+  قسمه <code>is-active</code> و<code>aria-current="location"</code>. و<code>.ins-toc</code> بطاقة جاهزة لها، يتميز رابطها الحالي
+  بعلامة من لون الهوية تنتقل من رابط إلى آخر كما في الشريط الجانبي، وهي نفسها قائمة «في هذه الصفحة» في هذا الموقع.
+  وفي المثال كلاسات <code>spy-demo</code> لهذا التوثيق وحده، تمنح الصندوق ارتفاعه وتمريره. وتجد الخيارات بشرحها في
+  <a href="#options">آخر الصفحة</a>.
+</p>
+<demo-play of="toc"></demo-play>
+
 <h2 id="rule">كيف يُعرف القسم الحالي</h2>
 <ul>
   <li><b>القسم الحالي</b> هو آخر قسم عبر أعلاه خطًا يقع على ثلث منطقة التمرير من أعلاها، أو على بعد
@@ -40,14 +45,6 @@
   <li><b>النقر على رابط</b> يجعله الحالي في الحال، ولا تنتقل العلامة عنه في أثناء التمرير الذي أحدثه النقر.</li>
 </ul>
 
-<h2 id="styles">قائمة المحتويات</h2>
-<p>
-  <code>.ins-toc</code> بطاقة زجاجية تثبت تحت الشريط العلوي إلى جانب المحتوى الطويل، ويتميز رابطها الحالي بعلامة من
-  لون الهوية كما في الشريط الجانبي، وتنتقل العلامة من رابط إلى آخر كما تنتقل هناك. وهي نفسها قائمة «في هذه الصفحة»
-  في هذا الموقع. وللعنوان
-  <code>.ins-toc-title</code>، وللرابط إلى عنوان أعمق <code>.ins-toc-sub</code>، وتضبط المسافة من الأعلى بـ <code>--ins-toc-top</code>.
-</p>
-
 <h2 id="api">التحكم بـ JavaScript</h2>
 <demo-code lang="js">
 document.addEventListener('ins:scrollspy', (e) => {
@@ -57,3 +54,6 @@ document.addEventListener('ins:scrollspy', (e) => {
 Insiyab.scrollspy('#toc');   // أعد القياس — بعد أن كبر محتوى فوق الأقسام — ويعيد الرابط الحالي
 </demo-code>
 
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الإضافة من كلاسات وسمات وأحداث.</p>
+<demo-options></demo-options>

@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -273,19 +274,7 @@
       <div class="site-page">
         <div class="site-body">
         <p class="site-lead">قائمة محتويات (Scrollspy) تتبع القارئ، فتبرز رابط القسم الذي يقرؤه، في الصفحة أو في صندوق له تمريره الخاص.</p>
-        <h2 id="install">التثبيت</h2>
-<p>إضافة مستقلة عن المكتبة، سكربتها لازم وملف أنماطها اختياري، وفيه قائمة المحتويات الجاهزة <code>.ins-toc</code>.</p>
-<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/plugins/insiyab-scrollspy.css"</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab-boot.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-scrollspy.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
-
-<h2 id="toc">قائمة تتبع القراءة</h2>
-<p>
-  ضع <code>data-ins-scrollspy</code> على أي قائمة تنقل تشير روابطها إلى أقسام في الصفحة، فيأخذ الرابط الذي يُقرأ
-  قسمه <code>is-active</code> و<code>aria-current="location"</code>. جرب تمرير الصندوق:
-</p>
-<figure class="dx"><div class="dx-view">
+        <figure class="dx"><div class="dx-view">
   <div class="spy-demo">
     <div class="spy-demo-box" id="spy-box">
       <section id="spy-a"><h3>القسم الأول</h3></section>
@@ -317,6 +306,51 @@
   <span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
+<h2 id="install">التثبيت</h2>
+<p>إضافة مستقلة عن المكتبة، سكربتها لازم وملف أنماطها اختياري، وفيه قائمة المحتويات الجاهزة <code>.ins-toc</code>.</p>
+<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;link</span> <span class="hl-a">rel</span>=<span class="hl-s">"stylesheet"</span> <span class="hl-a">href</span>=<span class="hl-s">"insiyab/plugins/insiyab-scrollspy.css"</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab-boot.js"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/insiyab.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;script</span> <span class="hl-a">src</span>=<span class="hl-s">"insiyab/plugins/insiyab-scrollspy.js"</span> <span class="hl-a">defer</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/script</span><span class="hl-t">&gt;</span></code></pre></div>
+
+<h2 id="toc">قائمة تتبع القراءة</h2>
+<p>
+  ضع <code>data-ins-scrollspy</code> على أي قائمة تنقل تشير روابطها إلى أقسام في الصفحة، فيأخذ الرابط الذي يُقرأ
+  قسمه <code>is-active</code> و<code>aria-current="location"</code>. و<code>.ins-toc</code> بطاقة جاهزة لها، يتميز رابطها الحالي
+  بعلامة من لون الهوية تنتقل من رابط إلى آخر كما في الشريط الجانبي، وهي نفسها قائمة «في هذه الصفحة» في هذا الموقع.
+  وفي المثال كلاسات <code>spy-demo</code> لهذا التوثيق وحده، تمنح الصندوق ارتفاعه وتمريره. وتجد الخيارات بشرحها في
+  <a href="#options">آخر الصفحة</a>.
+</p>
+<figure class="dx site-play" data-play="toc"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="spy-demo">
+  <div class="spy-demo-box">
+    <section id="spy-1"><h3>القسم الأول</h3></section>
+    <section id="spy-2"><h3>القسم الثاني</h3></section>
+    <section id="spy-3"><h3>قسم فرعي</h3></section>
+    <section id="spy-4"><h3>القسم الثالث</h3></section>
+  </div>
+  <nav class="ins-toc" data-ins-scrollspy aria-label="المحتويات">
+    <div class="ins-toc-title">المحتويات</div>
+    <a href="#spy-1">القسم الأول</a>
+    <a href="#spy-2">القسم الثاني</a>
+    <a class="ins-toc-sub" href="#spy-3">قسم فرعي</a>
+    <a href="#spy-4">القسم الثالث</a>
+  </nav>
+</div></div><div class="site-play-notes" aria-live="polite"><p class="site-play-note">الصندوق ممرر قليلًا، فغيّر الخط تنتقل العلامة.</p></div></div><div class="site-play-controls" role="group" aria-label="خيارات قائمة المحتويات"><div class="site-play-ctl" data-key="title" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">عنوان القائمة</span></span></label></div><div class="site-play-ctl" data-key="sub" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">رابط إلى عنوان أعمق</span></span></label></div><div class="site-play-ctl" data-key="offset" data-type="seg"><span class="site-play-label">خط القسم الحالي</span><div class="ins-seg" role="group" aria-label="خط القسم الحالي"><button type="button" data-value="" class="is-active" aria-pressed="true">ثلث المنطقة</button><button type="button" data-value="40" aria-pressed="false">40 بكسلًا</button></div></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"spy-demo"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"spy-demo-box"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;section</span> <span class="hl-a">id</span>=<span class="hl-s">"spy-1"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>القسم الأول<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;section</span> <span class="hl-a">id</span>=<span class="hl-s">"spy-2"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>القسم الثاني<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;section</span> <span class="hl-a">id</span>=<span class="hl-s">"spy-3"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>قسم فرعي<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;section</span> <span class="hl-a">id</span>=<span class="hl-s">"spy-4"</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;h3</span><span class="hl-t">&gt;</span>القسم الثالث<span class="hl-t">&lt;/h3</span><span class="hl-t">&gt;</span><span class="hl-t">&lt;/section</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;nav</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toc"</span> <span class="hl-a">data-ins-scrollspy</span> <span class="hl-a">aria-label</span>=<span class="hl-s">"المحتويات"</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toc-title"</span><span class="hl-t">&gt;</span>المحتويات<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#spy-1"</span><span class="hl-t">&gt;</span>القسم الأول<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#spy-2"</span><span class="hl-t">&gt;</span>القسم الثاني<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;a</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-toc-sub"</span> <span class="hl-a">href</span>=<span class="hl-s">"#spy-3"</span><span class="hl-t">&gt;</span>قسم فرعي<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+    <span class="hl-t">&lt;a</span> <span class="hl-a">href</span>=<span class="hl-s">"#spy-4"</span><span class="hl-t">&gt;</span>القسم الثالث<span class="hl-t">&lt;/a</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;/nav</span><span class="hl-t">&gt;</span>
+<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
+
 <h2 id="rule">كيف يُعرف القسم الحالي</h2>
 <ul>
   <li><b>القسم الحالي</b> هو آخر قسم عبر أعلاه خطًا يقع على ثلث منطقة التمرير من أعلاها، أو على بعد
@@ -327,23 +361,66 @@
   <li><b>النقر على رابط</b> يجعله الحالي في الحال، ولا تنتقل العلامة عنه في أثناء التمرير الذي أحدثه النقر.</li>
 </ul>
 
-<h2 id="styles">قائمة المحتويات</h2>
-<p>
-  <code>.ins-toc</code> بطاقة زجاجية تثبت تحت الشريط العلوي إلى جانب المحتوى الطويل، ويتميز رابطها الحالي بعلامة من
-  لون الهوية كما في الشريط الجانبي، وتنتقل العلامة من رابط إلى آخر كما تنتقل هناك. وهي نفسها قائمة «في هذه الصفحة»
-  في هذا الموقع. وللعنوان
-  <code>.ins-toc-title</code>، وللرابط إلى عنوان أعمق <code>.ins-toc-sub</code>، وتضبط المسافة من الأعلى بـ <code>--ins-toc-top</code>.
-</p>
-
 <h2 id="api">التحكم بـ JavaScript</h2>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:scrollspy'</span>, (e) =&gt; {
   console.log(e.detail.link, e.detail.section);   <span class="hl-c">// الرابط الحالي وقسمه</span>
 });
 
 <span class="hl-t">Insiyab</span>.scrollspy(<span class="hl-s">'#toc'</span>);   <span class="hl-c">// أعد القياس — بعد أن كبر محتوى فوق الأقسام — ويعيد الرابط الحالي</span></code></pre></div>
+
+<h2 id="options">الخيارات</h2>
+<p>كل ما في الإضافة من كلاسات وسمات وأحداث.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>قائمة المحتويات</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-scrollspy</code></td><td>سمة</td><td>على أي قائمة تنقل تشير روابطها إلى أقسام في الصفحة، فيتميز رابط القسم الذي يُقرأ.</td></tr><tr><td><code>.ins-toc</code></td><td>كلاس</td><td>قائمة المحتويات الجاهزة من ملف أنماط الإضافة: بطاقة زجاجية تثبت تحت الشريط العلوي، وتضبط مسافتها من الأعلى بـ <code>--ins-toc-top</code>.</td></tr><tr><td><code>.is-active</code></td><td>كلاس</td><td>يضعها السكربت على الرابط الحالي، ومعها <code>aria-current="location"</code>.</td></tr><tr><td><code>ins:scrollspy</code></td><td>حدث</td><td>يُطلق كلما تغير الرابط الحالي، وفي <code>detail</code> القائمة <code>nav</code> والرابط <code>link</code> وقسمه <code>section</code>.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-toc-title</code></td><td>كلاس</td><td>عنوان صغير في أول القائمة.</td></tr><tr><td><code>.ins-toc-sub</code></td><td>كلاس</td><td>على رابط إلى عنوان أعمق، فيتأخر خطوة عن غيره.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خط القسم الحالي</th></tr></tbody><tbody><tr><td><code>data-ins-scrollspy-offset</code></td><td>سمة</td><td>على القائمة: بُعد الخط الذي يُعرف به القسم الحالي عن أعلى منطقة التمرير، بالبكسل، بدل ثلثها. لصفحة شريطها العلوي الثابت طويل.</td></tr></tbody></table></div></div></details></div></div>
+
+<script>
+SitePlay.define({
+  id: 'toc',
+  title: 'قائمة المحتويات',
+  owns: 'ins-toc',
+  wide: true,
+  controls: [
+    { key: 'title', label: 'عنوان القائمة', type: 'switch', value: true, name: 'ins-toc-title', desc: 'عنوان صغير في أول القائمة.' },
+    { key: 'sub', label: 'رابط إلى عنوان أعمق', type: 'switch', value: true, name: 'ins-toc-sub', desc: 'على رابط إلى عنوان أعمق، فيتأخر خطوة عن غيره.' },
+    { key: 'offset', label: 'خط القسم الحالي', type: 'seg', value: '', choices: [
+      { value: '', label: 'ثلث المنطقة' },
+      { value: '40', label: '40 بكسلًا', name: 'data-ins-scrollspy-offset', desc: 'على القائمة: بُعد الخط الذي يُعرف به القسم الحالي عن أعلى منطقة التمرير، بالبكسل، بدل ثلثها. لصفحة شريطها العلوي الثابت طويل.' }
+    ] }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-scrollspy', desc: 'على أي قائمة تنقل تشير روابطها إلى أقسام في الصفحة، فيتميز رابط القسم الذي يُقرأ.' },
+    { group: 'الأساس', name: 'ins-toc', desc: 'قائمة المحتويات الجاهزة من ملف أنماط الإضافة: بطاقة زجاجية تثبت تحت الشريط العلوي، وتضبط مسافتها من الأعلى بـ `--ins-toc-top`.' },
+    { group: 'الأساس', name: 'is-active', kind: 'class', desc: 'يضعها السكربت على الرابط الحالي، ومعها `aria-current="location"`.' },
+    { group: 'الأساس', name: 'ins:scrollspy', kind: 'event', desc: 'يُطلق كلما تغير الرابط الحالي، وفي `detail` القائمة `nav` والرابط `link` وقسمه `section`.' }
+  ],
+  events: ['ins:scrollspy'],
+  html: function (s) {
+    return '<div class="spy-demo">\n' +
+      '  <div class="spy-demo-box">\n' +
+      '    <section id="spy-1"><h3>القسم الأول</h3></section>\n' +
+      '    <section id="spy-2"><h3>القسم الثاني</h3></section>\n' +
+      '    <section id="spy-3"><h3>قسم فرعي</h3></section>\n' +
+      '    <section id="spy-4"><h3>القسم الثالث</h3></section>\n' +
+      '  </div>\n' +
+      '  <nav class="ins-toc" data-ins-scrollspy' + (s.offset ? ' data-ins-scrollspy-offset="' + s.offset + '"' : '') + ' aria-label="المحتويات">\n' +
+      (s.title ? '    <div class="ins-toc-title">المحتويات</div>\n' : '') +
+      '    <a href="#spy-1">القسم الأول</a>\n' +
+      '    <a href="#spy-2">القسم الثاني</a>\n' +
+      '    <a' + (s.sub ? ' class="ins-toc-sub"' : '') + ' href="#spy-3">قسم فرعي</a>\n' +
+      '    <a href="#spy-4">القسم الثالث</a>\n' +
+      '  </nav>\n' +
+      '</div>';
+  },
+  stage: function (view) {
+    view.querySelector('.spy-demo-box').scrollTop = 130;
+  },
+  notes: function () {
+    return ['الصندوق ممرر قليلًا، فغيّر الخط تنتقل العلامة.'];
+  }
+});
+</script>
         <nav class="site-pager" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="file.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">رفع الملفات</span></a><a class="site-pager-link site-pager-link--next" href="timeline.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الخط الزمني</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#toc">قائمة تتبع القراءة</a><a href="#rule">كيف يُعرف القسم الحالي</a><a href="#styles">قائمة المحتويات</a><a href="#api">التحكم بـ JavaScript</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#toc">قائمة تتبع القراءة</a><a href="#rule">كيف يُعرف القسم الحالي</a><a href="#api">التحكم بـ JavaScript</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
