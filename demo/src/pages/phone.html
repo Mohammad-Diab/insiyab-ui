@@ -29,6 +29,10 @@
   ما كتبت. أما الحقل الظاهر فيعرض الرقم كما يكتبه أهل بلده: <code>050 123 4567</code>.
 </p>
 
+<h2 id="try">جرّب الحقل</h2>
+<p>اختر من الخيارات، فيتغير الحقل وشيفرته معًا. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.</p>
+<demo-play of="phone"></demo-play>
+
 <h2 id="typing">الكتابة</h2>
 <ul>
   <li><b>تنتظم أرقامه وأنت تكتب</b> — ويبقى المؤشر بعد الرقم الذي كان يليه، وإذا ضغطت <kbd>Backspace</kbd> بعد مسافة حذف الرقم الذي قبلها.</li>
@@ -44,24 +48,6 @@
   الصفحة. أما الدول العربية، ومعها الولايات المتحدة وكندا وبريطانيا وفرنسا وألمانيا وتركيا والهند وباكستان،
   فيُفحص طول أرقامها وتنتظم كما تُكتب هناك، ويبقى غيرها على الحد الدولي، 15 رقمًا، بلا مجموعات.
 </p>
-<p>
-  ويبدأ الحقل بالدولة التي في <code>data-ins-phone-country</code>، فإن غابت فبدولة الرقم نفسه، ثم بمنطقة لغة الصفحة
-  (<code>lang="ar-EG"</code> ← مصر)، وإلا فبالسعودية. وتظهر الدولة في الزر برمزها دون علم.
-</p>
-<demo-example class="row">
-  <div class="ins-field">
-    <label class="ins-label" for="ph-gulf">دول محددة</label>
-    <div class="ins-input-group">
-      <input class="ins-input" id="ph-gulf" data-ins-phone data-ins-phone-only="SA,AE,KW,QA,BH,OM" data-ins-phone-country="KW" name="gulf">
-    </div>
-  </div>
-  <div class="ins-field">
-    <label class="ins-label" for="ph-pref">المفضلة أولًا</label>
-    <div class="ins-input-group">
-      <input class="ins-input" id="ph-pref" data-ins-phone data-ins-phone-preferred="EG,JO,SY,LB" data-ins-phone-country="EG" name="pref">
-    </div>
-  </div>
-</demo-example>
 
 <h2 id="api" data-level="advanced">التحكم بـ JavaScript</h2>
 <demo-code lang="js">
@@ -73,23 +59,9 @@ document.addEventListener('ins:phone', (e) => {
 });
 </demo-code>
 
-<h2 id="attributes" data-level="advanced">السمات</h2>
-<div class="ins-panel site-ref">
-  <div class="ins-panel-body ins-panel-body--flush">
-    <div class="ins-table-wrap">
-      <table class="ins-table">
-        <thead><tr><th>السمة</th><th>ما تفعله</th></tr></thead>
-        <tbody>
-          <tr><td><code>data-ins-phone</code></td><td>تجعل الحقل حقل هاتف، وتقبل قيمته الأولى صيغة E.164 أو الصيغة المحلية.</td></tr>
-          <tr><td><code>data-ins-phone-country="AE"</code></td><td>الدولة التي يبدأ بها الحقل.</td></tr>
-          <tr><td><code>data-ins-phone-preferred="SA,AE"</code></td><td>دول تتصدر القائمة.</td></tr>
-          <tr><td><code>data-ins-phone-only="SA,AE"</code></td><td>لا يقبل الحقل إلا هذه الدول، ويرفض ما سواها برسالة.</td></tr>
-          <tr><td><code>placeholder</code></td><td>إن تركته وضع الحقل فيه مثالًا من الدولة المختارة.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في حقل الهاتف من كلاسات وسمات وأحداث.</p>
+<demo-options></demo-options>
 
 <script>
   document.addEventListener('ins:phone', function (e) {
