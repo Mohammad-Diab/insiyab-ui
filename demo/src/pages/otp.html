@@ -26,6 +26,14 @@
   <b>يبقى حقلًا واحدًا:</b> فالأرقام ونقاطها مرسومة فوق حقل نصي حقيقي، ولذا يعمل معه اقتراح الهاتف للرمز ولصقه ومدير
   كلمات المرور وقارئ الشاشة كما تعمل مع أي حقل. وإن غاب السكربت بقي ذلك الحقل على حاله.
 </p>
+<p>
+  <b>لا يرى قارئ الشاشة</b> إلا حقلًا نصيًا واحدًا باسمه وتلميحه، فالأرقام والنقاط المرسومة مخفية عنه. وتسمية الحقل عليك، بـ
+  <code>&lt;label&gt;</code> أو <code>aria-label</code>.
+</p>
+
+<h2 id="try">جرّب الحقل</h2>
+<p>اختر من الخيارات، فيتغير الحقل وشيفرته معًا. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.</p>
+<demo-play of="otp"></demo-play>
 
 <h2 id="typing">الكتابة</h2>
 <ul>
@@ -34,26 +42,6 @@
   <li><b>اللصق</b> — لا يأخذ الحقل إلا الرمز، فإذا لصقت «رمزك هو ١٢٣ ٤٥٦» امتلأ بـ <code>123456</code>.</li>
   <li><b>الرمز الناقص</b> — يبقى الحقل غير صالح برسالة «اكتب الرمز كاملًا» حتى تمتلئ خاناته، أما الحقل الفارغ فأمره إلى <code>required</code>.</li>
 </ul>
-
-<h2 id="options">العدد والحروف والإرسال</h2>
-<p>
-  يأخذ الحقل من 4 خانات إلى 10، وإذا كان الرمز حروفًا لاتينية وأرقامًا فأضف <code>data-ins-otp-chars="alnum"</code>
-  فتظهر حروفه كبيرة. أما <code>data-ins-otp-submit</code> فترسل النموذج حين تمتلئ آخر خانة:
-</p>
-<demo-example class="row">
-  <div class="ins-field">
-    <label class="ins-label" for="otp-four">أربعة أرقام</label>
-    <input id="otp-four" data-ins-otp="4">
-  </div>
-  <div class="ins-field">
-    <label class="ins-label" for="otp-alnum">حروف وأرقام</label>
-    <input id="otp-alnum" data-ins-otp="6" data-ins-otp-chars="alnum">
-  </div>
-  <form class="ins-field" id="otp-auto-form">
-    <label class="ins-label" for="otp-auto">يُرسل وحده</label>
-    <input id="otp-auto" data-ins-otp="4" data-ins-otp-submit name="code">
-  </form>
-</demo-example>
 
 <h2 id="api" data-level="advanced">التحكم بـ JavaScript</h2>
 <demo-code lang="js">
@@ -69,33 +57,18 @@ Insiyab.otp('#code');              // الرمز المكتوب
 Insiyab.otp('#code', '123456');    // ضبطه بهدوء، دون حدث
 </demo-code>
 
-<h2 id="attributes" data-level="advanced">السمات</h2>
-<div class="ins-panel site-ref">
-  <div class="ins-panel-body ins-panel-body--flush">
-    <div class="ins-table-wrap">
-      <table class="ins-table">
-        <thead><tr><th>السمة</th><th>ما تفعله</th></tr></thead>
-        <tbody>
-          <tr><td><code>data-ins-otp="6"</code></td><td>تجعل الحقل حقل رمز بهذا العدد من الخانات (4–10)، فإن خلت من القيمة أُخذ العدد من <code>maxlength</code>، وإلا فستة.</td></tr>
-          <tr><td><code>data-ins-otp-chars="alnum"</code></td><td>حروف وأرقام بدل الأرقام وحدها.</td></tr>
-          <tr><td><code>data-ins-otp-submit</code></td><td>ترسل النموذج حين يكتمل الرمز.</td></tr>
-          <tr><td><code>aria-invalid="true"</code></td><td>رمز رفضه الخادم، فيحمر الحقل حتى تعود إلى الكتابة.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-<p>
-  <b>لا يرى قارئ الشاشة</b> إلا حقلًا نصيًا واحدًا باسمه وتلميحه، فالأرقام والنقاط المرسومة مخفية عنه. وتسمية الحقل عليك، بـ
-  <code>&lt;label&gt;</code> أو <code>aria-label</code>.
-</p>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في حقل الرمز من كلاسات وسمات وأحداث.</p>
+<demo-options></demo-options>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('otp-auto-form').addEventListener('submit', function (e) {
+    document.addEventListener('submit', function (e) {
+      if (!e.target.closest('[data-play="otp"]')) return;
       e.preventDefault();
-      Insiyab.toast('أُرسل ' + Insiyab.otp('#otp-auto'), 'ok');
-      Insiyab.otp('#otp-auto', '');
+      var input = e.target.querySelector('input[data-ins-otp]');
+      Insiyab.toast('أُرسل ' + Insiyab.otp(input), 'ok');
+      Insiyab.otp(input, '');
     });
     document.addEventListener('ins:otp', function (e) {
       if (e.detail.input.id !== 'otp-demo') return;
