@@ -39,43 +39,9 @@
 <h2 id="topbar">الشريط العلوي: جزر عائمة</h2>
 <p>
   الشريط العلوي شفاف، تطفو عليه جزر زجاجية موزعة على ثلاث مناطق: <code>.ins-zone--start</code> و<code>--center</code>
-  و<code>--end</code>. فإذا مر المحتوى تحته عند التمرير صار زجاجًا مصنفرًا.
+  و<code>--end</code>. فإذا مر المحتوى تحته عند التمرير صار زجاجًا مصنفرًا. وكل ما في الشريط جزيرة، فتتشارك الجزر الارتفاع والحد والظل، وتبدو سطرًا واحدًا من الأشياء لا شريط أدوات. وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-<demo-example class="flush">
-  <header class="ins-topbar">
-    <div class="ins-zone ins-zone--start">
-      <button class="ins-island ins-island--icon" aria-label="القائمة"><svg class="ico"><use href="#i-menu"/></svg></button>
-    </div>
-    <div class="ins-zone ins-zone--center">
-      <div class="ins-island ins-island--title">
-        <span class="ins-shell-head">
-          <span class="ins-shell-title">الطلبات</span>
-          <span class="ins-shell-sub">سطر فرعي</span>
-        </span>
-      </div>
-    </div>
-    <div class="ins-zone ins-zone--end">
-      <button class="ins-island ins-island--icon" aria-label="الإشعارات"><svg class="ico"><use href="#i-bell"/></svg></button>
-      <button class="ins-island">حسابي</button>
-    </div>
-  </header>
-</demo-example>
-
-<h3 id="islands" data-level="advanced">أنواع الجزر</h3>
-<ul>
-  <li><code>.ins-island</code> — جزيرة على هيئة حبة تحمل نصًا أو أي محتوى، وإذا كانت زرًا أو رابطًا ارتفعت حين يمر عليها المؤشر.</li>
-  <li><code>.ins-island--icon</code> — جزيرة مربعة تتسع لأيقونة واحدة.</li>
-  <li><code>.ins-island--title</code> — تحمل اسم الصفحة وتحته سطر اختياري، فإذا طال النص انتهى بنقاط ولم ينكسر إلى سطرين. اجعل
-    <code>.ins-shell-title</code> عنصر <code>&lt;h1&gt;</code> ليكون عنوان الصفحة، ولا تكرره في المحتوى.</li>
-  <li><code>.ins-island--brand</code> — تحمل الهوية، ولا تظهر إلا حين يطوى الشريط الجانبي أو يصير درجًا.</li>
-  <li>وإذا وضعت <code>.ins-pill</code> أو <code>.ins-btn</code> في إحدى المناطق أخذ ارتفاع الجزيرة تلقائيًا.</li>
-</ul>
-
-<h2 id="sidebar">الشريط الجانبي</h2>
-<p>
-  يحمل الرابط النشط الكلاس <code>.is-active</code> والسمة <code>aria-current="page"</code>. أما <code>.ins-shell-link-badge</code>
-  فعداد في آخر الرابط، وأما <code>.ins-shell-bottom</code> فيعزل في أسفل الشريط ما لا يقود إلى صفحة، كالخروج، عن بقية الروابط.
-</p>
+<demo-play of="topbar"></demo-play>
 
 <h2 id="collapse">الطي والدرج</h2>
 <p>
@@ -90,10 +56,6 @@ Insiyab.sidebar('collapsed');   // أو 'open' أو 'toggle'
 document.addEventListener('ins:sidebar', (e) => e.detail.state);
 </demo-code>
 
-<h2 id="ground" data-level="advanced">الخلفية</h2>
-<p>
-  تضع المكتبة خلف الصفحة تلقائيًا ثلاث كرات من لون الهوية، ليظهر عليها أثر الزجاج المصنفر. ولإيقافها:
-</p>
-<demo-code lang="html">
-<html data-ins-orbs="off">
-</demo-code>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في هيكل التطبيق من كلاسات وسمات وأحداث، لكل جزء صندوق يفتح بالنقر.</p>
+<demo-options></demo-options>
