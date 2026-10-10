@@ -10,6 +10,7 @@
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>
+  <script src="assets/site-code.js" defer></script>
   <script src="../dist/insiyab-boot.js"></script>
   <script src="../dist/insiyab.js" defer></script>
 
@@ -304,46 +305,27 @@
   ويبقى الحقل بتسميته في ترتيب التنقل بمفتاح Tab، فتصل إليه لوحة المفاتيح ويفهمه قارئ الشاشة.
 </p>
 
-<h2 id="limits">الحدود</h2>
-<ul>
-  <li><b><code>accept</code></b> — يفهمه الحقل كما يفهمه منتقي الملفات، ويطبقه على الإفلات واللصق أيضًا مع أنهما لا يمران بالمنتقي.</li>
-  <li><b><code>data-ins-file-max</code></b> — أكبر حجم للملف، مثل <code>500KB</code> أو <code>5MB</code>.</li>
-  <li><b><code>data-ins-file-count</code></b> — أكبر عدد للملفات، ويعمل مع <code>multiple</code>.</li>
-</ul>
+<h2 id="try">جرّب الحقل</h2>
 <p>
-  والملف الذي يتجاوز الحدود لا يُضاف، ويذكر الحقل اسمه وسبب رفضه. ومع <code>multiple</code> ينضم ما تختاره إلى
-  القائمة، ومن دونها يحل محلها. أما السطر الصغير في المنطقة فيكتبه الحقل من الحدود، إلا أن تكتبه أنت في
-  <code>data-ins-file-note</code>.
+  اختر من الخيارات، فيتغير الحقل وشيفرته معًا. والملف الذي يتجاوز الحدود لا يُضاف، ويذكر الحقل اسمه وسبب رفضه.
+  وتجد الخيارات كلها بشرحها في <a href="#options">آخر الصفحة</a>.
 </p>
-
-<h2 id="compact">الشكل المضغوط</h2>
-<p>وإذا ضاق النموذج فضع <code>class="ins-file--compact"</code> على الحقل، فيصير زرًا وقائمة بلا منطقة إفلات، ويبقى الإفلات على الزر ممكنًا.</p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-field">
-    <label class="ins-label" for="fl-cv">ملف PDF</label>
-    <input type="file" id="fl-cv" class="ins-file--compact" name="cv" accept=".pdf" data-ins-file>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"fl-cv"</span><span class="hl-t">&gt;</span>ملف PDF<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"file"</span> <span class="hl-a">id</span>=<span class="hl-s">"fl-cv"</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-file--compact"</span> <span class="hl-a">name</span>=<span class="hl-s">"cv"</span> <span class="hl-a">accept</span>=<span class="hl-s">".pdf"</span> <span class="hl-a">data-ins-file</span><span class="hl-t">&gt;</span>
+<figure class="dx site-play" data-play="file"><div class="site-play-top"><div class="site-play-stage"><div class="site-play-view site-play-view--wide"><div class="ins-field">
+  <label class="ins-label" for="fl-play">المرفقات</label>
+  <input type="file" id="fl-play" name="docs" multiple accept=".pdf,image/*" data-ins-file data-ins-file-max="5MB" data-ins-file-count="5">
+  <div class="ins-hint">ملفات PDF أو صور.</div>
+</div></div><div class="site-play-notes" aria-live="polite"></div></div><div class="site-play-controls" role="group" aria-label="خيارات منطقة الإفلات"><div class="site-play-ctl" data-key="compact" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">مضغوط</span></span></label></div><div class="site-play-ctl" data-key="multiple" data-type="switch"><label class="ins-switch"><input type="checkbox" checked><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">عدة ملفات</span></span></label></div><label class="site-play-ctl" data-key="accept" data-type="select"><span class="site-play-label">الأنواع المقبولة</span><select class="ins-select ins-select--sm"><option value="">كل الأنواع</option><option value=".pdf,image/*" selected>PDF وصور</option><option value="image/*">صور فقط</option></select></label><div class="site-play-ctl" data-key="max" data-type="seg"><span class="site-play-label">أكبر حجم</span><div class="ins-seg" role="group" aria-label="أكبر حجم"><button type="button" data-value="" aria-pressed="false">بلا</button><button type="button" data-value="500KB" aria-pressed="false">500KB</button><button type="button" data-value="5MB" class="is-active" aria-pressed="true">5MB</button></div></div><div class="site-play-ctl" data-key="count" data-type="seg"><span class="site-play-label">أكبر عدد</span><div class="ins-seg" role="group" aria-label="أكبر عدد"><button type="button" data-value="" aria-pressed="false">بلا</button><button type="button" data-value="2" aria-pressed="false">2</button><button type="button" data-value="5" class="is-active" aria-pressed="true">5</button></div></div><label class="site-play-ctl" data-key="note" data-type="text"><span class="site-play-label">السطر الصغير</span><input class="ins-input ins-input--sm" type="text" value=""></label><div class="site-play-ctl" data-key="upload" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">يُرفع فورًا</span></span></label></div><div class="site-play-ctl" data-key="disabled" data-type="switch"><label class="ins-switch"><input type="checkbox"><span class="ins-switch-track"></span><span class="ins-switch-text"><span class="ins-switch-label">معطل</span></span></label></div><button class="ins-btn ins-btn--ghost ins-btn--sm site-play-reset" type="button" data-play-reset>الافتراضي</button></div></div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"fl-play"</span><span class="hl-t">&gt;</span>المرفقات<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"file"</span> <span class="hl-a">id</span>=<span class="hl-s">"fl-play"</span> <span class="hl-a">name</span>=<span class="hl-s">"docs"</span> <span class="hl-a">multiple</span> <span class="hl-a">accept</span>=<span class="hl-s">".pdf,image/*"</span> <span class="hl-a">data-ins-file</span> <span class="hl-a">data-ins-file-max</span>=<span class="hl-s">"5MB"</span> <span class="hl-a">data-ins-file-count</span>=<span class="hl-s">"5"</span><span class="hl-t">&gt;</span>
+  <span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-hint"</span><span class="hl-t">&gt;</span>ملفات PDF أو صور.<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 
 <h2 id="upload">الرفع الفوري</h2>
 <p>
   مع <code>data-ins-file-upload</code> يُطلق كل ملف تضيفه حدث <code>ins:file</code>، فترفعه الصفحة ثم تخبر الإضافة
   بما جرى. وحينئذ يرسل الحقل مكان الملفات حقلًا مخفيًا باسمه عن كل ملف رُفع، يحمل المعرف الذي أعطته الصفحة. ويبقى
-  الحقل غير صالح ما دام ملف قيد الرفع أو تعذر رفعه. والرفع في هذا المثال مصطنع، وكل ملف في اسمه «خطأ» يتعذر
-  رفعه عمدًا:
+  الحقل غير صالح ما دام ملف قيد الرفع أو تعذر رفعه. وتجربه في الحقل أعلاه بخيار «يُرفع فورًا»، والصفحة ترفع الملفات هكذا:
 </p>
-<figure class="dx"><div class="dx-view">
-  <div class="ins-field">
-    <label class="ins-label" for="fl-up">الصور</label>
-    <input type="file" id="fl-up" name="photos" multiple accept="image/*" data-ins-file data-ins-file-upload>
-  </div>
-</div><div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;div</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-field"</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;label</span> <span class="hl-a">class</span>=<span class="hl-s">"ins-label"</span> <span class="hl-a">for</span>=<span class="hl-s">"fl-up"</span><span class="hl-t">&gt;</span>الصور<span class="hl-t">&lt;/label</span><span class="hl-t">&gt;</span>
-  <span class="hl-t">&lt;input</span> <span class="hl-a">type</span>=<span class="hl-s">"file"</span> <span class="hl-a">id</span>=<span class="hl-s">"fl-up"</span> <span class="hl-a">name</span>=<span class="hl-s">"photos"</span> <span class="hl-a">multiple</span> <span class="hl-a">accept</span>=<span class="hl-s">"image/*"</span> <span class="hl-a">data-ins-file</span> <span class="hl-a">data-ins-file-upload</span><span class="hl-t">&gt;</span>
-<span class="hl-t">&lt;/div</span><span class="hl-t">&gt;</span></code></pre></div></figure>
 <div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">document</span>.addEventListener(<span class="hl-s">'ins:file'</span>, <span class="hl-k">async</span> (e) =&gt; {
   <span class="hl-k">if</span> (!e.detail.upload) <span class="hl-k">return</span>;
   <span class="hl-k">const</span> file = e.detail.file;
@@ -358,31 +340,15 @@
 <span class="hl-t">Insiyab</span>.file(<span class="hl-s">'#docs'</span>);         <span class="hl-c">// الملفات في القائمة</span>
 <span class="hl-t">Insiyab</span>.file(<span class="hl-s">'#docs'</span>, []);     <span class="hl-c">// أفرغها</span></code></pre></div>
 
-<div class="site-adv"><h2 id="attributes">السمات</h2>
-<div class="ins-panel site-ref">
-  <div class="ins-panel-body ins-panel-body--flush">
-    <div class="ins-table-wrap">
-      <table class="ins-table">
-        <thead><tr><th>السمة</th><th>ما تفعله</th></tr></thead>
-        <tbody>
-          <tr><td><code>data-ins-file</code></td><td>تجعل <code>&lt;input type="file"&gt;</code> منطقة إفلات وقائمة.</td></tr>
-          <tr><td><code>data-ins-file-max="5MB"</code></td><td>أكبر حجم للملف.</td></tr>
-          <tr><td><code>data-ins-file-count="5"</code></td><td>أكبر عدد للملفات، مع <code>multiple</code>.</td></tr>
-          <tr><td><code>data-ins-file-note="…"</code></td><td>السطر الصغير في المنطقة، مكان ما يُكتب من الحدود.</td></tr>
-          <tr><td><code>data-ins-file-upload</code></td><td>رفع كل ملف حين يُضاف، وتتولاه الصفحة.</td></tr>
-          <tr><td><code>class="ins-file--compact"</code></td><td>زر وقائمة بلا منطقة إفلات.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+<h2 id="options">الخيارات</h2>
+<p>كل ما في رفع الملفات من كلاسات وسمات وأحداث.</p>
+<div class="ins-panel site-options"><div class="ins-accordion"><details class="ins-collapse"><summary>منطقة الإفلات</summary><div class="ins-collapse-body ins-panel-body--flush site-opt-body"><div class="ins-table-wrap"><table class="ins-table site-opt"><thead><tr><th scope="col">الخيار</th><th scope="col">النوع</th><th scope="col">ما يفعله</th></tr></thead><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الأساس</th></tr></tbody><tbody><tr><td><code>data-ins-file</code></td><td>سمة</td><td>على <code>&lt;input type="file"&gt;</code>: منطقة تسحب الملفات إليها أو تختارها أو تلصقها، وقائمة بها تحتها، وتبقى الملفات في الحقل نفسه.</td></tr><tr><td><code>.ins-file</code></td><td>كلاس</td><td>الكتلة التي يلف بها السكربت الحقل، فلا تكتبها بنفسك.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">خيارات أخرى</th></tr></tbody><tbody><tr><td><code>.ins-file--compact</code></td><td>كلاس</td><td>على الحقل، إذا ضاق النموذج: زر وقائمة بلا منطقة إفلات، ويبقى الإفلات على الزر ممكنًا.</td></tr><tr><td><code>multiple</code></td><td>سمة</td><td>ينضم ما تختاره إلى القائمة، ومن دونها يحل الملف الجديد محل القديم.</td></tr><tr><td><code>disabled</code></td><td>سمة</td><td>يبهت الحقل، فلا تُختار فيه ملفات ولا تُفلت.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الحدود</th></tr></tbody><tbody><tr><td><code>accept</code></td><td>سمة</td><td>يفهمه الحقل كما يفهمه منتقي الملفات، ويطبقه على الإفلات واللصق أيضًا.</td></tr><tr><td><code>data-ins-file-max="5MB"</code></td><td>سمة</td><td>أكبر حجم للملف الواحد، بـ <code>B</code> أو <code>KB</code> أو <code>MB</code> أو <code>GB</code>.</td></tr><tr><td><code>data-ins-file-count="5"</code></td><td>سمة</td><td>أكبر عدد للملفات، مع <code>multiple</code>.</td></tr><tr><td><code>data-ins-file-note</code></td><td>سمة</td><td>السطر الصغير في المنطقة، مكان ما يكتبه الحقل من الحدود.</td></tr></tbody><tbody class="site-opt-group"><tr><th colspan="3" scope="rowgroup">الرفع الفوري</th></tr></tbody><tbody><tr><td><code>data-ins-file-upload</code></td><td>سمة</td><td>يُطلق كل ملف تضيفه <code>ins:file</code> فترفعه الصفحة، ويرسل الحقل مكان الملفات معرفاتها في حقول مخفية باسمه.</td></tr><tr><td><code>ins:file</code></td><td>حدث</td><td>يُطلق لكل ملف يُضاف، وفي <code>detail</code> الحقل <code>input</code> والملف <code>file</code> وسطره في القائمة <code>item</code>، و<code>upload</code> إن كان الرفع للصفحة.</td></tr></tbody></table></div></div></details></div></div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    /* A pretend upload: a second and a half of progress, and a file with «خطأ» in
-       its name fails on purpose. */
+    // A pretend upload: a second and a half of progress, and a file with «خطأ» in its name fails on purpose.
     document.addEventListener('ins:file', function (e) {
-      if (!e.detail.upload || e.detail.input.id !== 'fl-up') return;
+      if (!e.detail.upload || !e.detail.input.closest('[data-play="file"]')) return;
       var file = e.detail.file, done = 0;
       var timer = setInterval(function () {
         done += 0.2;
@@ -396,10 +362,75 @@
       }, 300);
     });
   });
-</script></div>
+</script>
+
+<script>
+SitePlay.define({
+  id: 'file',
+  wide: true,
+  title: 'منطقة الإفلات',
+  owns: 'ins-file',
+  controls: [
+    { key: 'compact', label: 'مضغوط', type: 'switch', name: 'ins-file--compact', desc: 'على الحقل، إذا ضاق النموذج: زر وقائمة بلا منطقة إفلات، ويبقى الإفلات على الزر ممكنًا.' },
+    { key: 'multiple', label: 'عدة ملفات', type: 'switch', value: true, name: 'multiple', desc: 'ينضم ما تختاره إلى القائمة، ومن دونها يحل الملف الجديد محل القديم.' },
+    { key: 'accept', label: 'الأنواع المقبولة', group: 'الحدود', type: 'select', value: '.pdf,image/*', choices: [
+      { value: '', label: 'كل الأنواع' },
+      { value: '.pdf,image/*', label: 'PDF وصور', name: 'accept', desc: 'يفهمه الحقل كما يفهمه منتقي الملفات، ويطبقه على الإفلات واللصق أيضًا.' },
+      { value: 'image/*', label: 'صور فقط' }
+    ] },
+    { key: 'max', label: 'أكبر حجم', group: 'الحدود', type: 'seg', value: '5MB', choices: [
+      { value: '', label: 'بلا' },
+      { value: '500KB', label: '500KB' },
+      { value: '5MB', label: '5MB', name: 'data-ins-file-max="5MB"', desc: 'أكبر حجم للملف الواحد، بـ `B` أو `KB` أو `MB` أو `GB`.' }
+    ] },
+    { key: 'count', label: 'أكبر عدد', group: 'الحدود', type: 'seg', value: '5', choices: [
+      { value: '', label: 'بلا' },
+      { value: '2', label: '2' },
+      { value: '5', label: '5', name: 'data-ins-file-count="5"', desc: 'أكبر عدد للملفات، مع `multiple`.' }
+    ] },
+    { key: 'note', label: 'السطر الصغير', type: 'text', value: '' },
+    { key: 'upload', label: 'يُرفع فورًا', group: 'الرفع الفوري', type: 'switch', name: 'data-ins-file-upload', desc: 'يُطلق كل ملف تضيفه `ins:file` فترفعه الصفحة، ويرسل الحقل مكان الملفات معرفاتها في حقول مخفية باسمه.' },
+    { key: 'disabled', label: 'معطل', type: 'switch', name: 'disabled', desc: 'يبهت الحقل، فلا تُختار فيه ملفات ولا تُفلت.' }
+  ],
+  extra: [
+    { group: 'الأساس', first: true, name: 'data-ins-file', desc: 'على `<input type="file">`: منطقة تسحب الملفات إليها أو تختارها أو تلصقها، وقائمة بها تحتها، وتبقى الملفات في الحقل نفسه.' },
+    { group: 'الأساس', name: 'ins-file', desc: 'الكتلة التي يلف بها السكربت الحقل، فلا تكتبها بنفسك.' },
+    { group: 'الحدود', name: 'data-ins-file-note', desc: 'السطر الصغير في المنطقة، مكان ما يكتبه الحقل من الحدود.' },
+    { group: 'الرفع الفوري', name: 'ins:file', kind: 'event', desc: 'يُطلق لكل ملف يُضاف، وفي `detail` الحقل `input` والملف `file` وسطره في القائمة `item`، و`upload` إن كان الرفع للصفحة.' }
+  ],
+  disable: function (s) { return s.multiple ? [] : ['count']; },
+  events: ['ins:file'],
+  html: function (s) {
+    var attrs = (s.compact ? ' class="ins-file--compact"' : '') + ' name="docs"' + (s.multiple ? ' multiple' : '') +
+      (s.accept ? ' accept="' + s.accept + '"' : '') + ' data-ins-file' + (s.max ? ' data-ins-file-max="' + s.max + '"' : '') +
+      (s.count && s.multiple ? ' data-ins-file-count="' + s.count + '"' : '') + (s.note ? ' data-ins-file-note="' + s.note + '"' : '') +
+      (s.upload ? ' data-ins-file-upload' : '') + (s.disabled ? ' disabled' : '');
+    return '<div class="ins-field">\n' +
+      '  <label class="ins-label" for="fl-play">المرفقات</label>\n' +
+      '  <input type="file" id="fl-play"' + attrs + '>\n' +
+      '  <div class="ins-hint">' + { '': 'أي نوع من الملفات.', '.pdf,image/*': 'ملفات PDF أو صور.', 'image/*': 'صور فقط.' }[s.accept] + '</div>\n' +
+      '</div>';
+  },
+  stage: function (view, s) {
+    var zone = view.querySelector('.ins-file-zone');
+    if (!s.upload || s.disabled || !zone || !window.DataTransfer) return;
+    var png = atob('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='), bytes = new Uint8Array(png.length);
+    for (var i = 0; i < png.length; i++) bytes[i] = png.charCodeAt(i);
+    var dt = new DataTransfer();
+    dt.items.add(new File([bytes], 'صورة.png', { type: 'image/png' }));
+    zone.dispatchEvent(new DragEvent('drop', { dataTransfer: dt, bubbles: true, cancelable: true }));
+  },
+  notes: function (s) {
+    var out = [];
+    if (s.upload) out.push('هذه صورة أُضيفت للتو وهي تُرفع. والرفع هنا مصطنع، وكل ملف في اسمه «خطأ» يتعذر رفعه عمدًا.');
+    if (!s.multiple) out.push('الحقل لملف واحد، فلا معنى لأكبر عدد.');
+    return out;
+  }
+});
+</script>
         <nav class="site-pager site-adv" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="birthdate.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">تاريخ الميلاد</span></a><a class="site-pager-link site-pager-link--next" href="scrollspy.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">تتبع القراءة</span></a></nav><nav class="site-pager site-simple" aria-label="التنقل بين الصفحات"><a class="site-pager-link site-pager-link--prev" href="phone.html"><span class="site-pager-dir">السابق</span><span class="site-pager-title">رقم الهاتف</span></a><a class="site-pager-link site-pager-link--next" href="timeline.html"><span class="site-pager-dir">التالي</span><span class="site-pager-title">الخط الزمني</span></a></nav>
         </div>
-        <nav class="ins-toc site-toc site-adv" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">منطقة السحب والإفلات</a><a href="#limits">الحدود</a><a href="#compact">الشكل المضغوط</a><a href="#upload">الرفع الفوري</a><a href="#attributes">السمات</a></nav><nav class="ins-toc site-toc site-simple" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">منطقة السحب والإفلات</a><a href="#limits">الحدود</a><a href="#compact">الشكل المضغوط</a><a href="#upload">الرفع الفوري</a></nav>
+        <nav class="ins-toc site-toc" data-ins-scrollspy aria-label="في هذه الصفحة"><div class="ins-toc-title">في هذه الصفحة</div><a href="#install">التثبيت</a><a href="#field">منطقة السحب والإفلات</a><a href="#try">جرّب الحقل</a><a href="#upload">الرفع الفوري</a><a href="#options">الخيارات</a></nav>
       </div>
     </main>
   </div>
