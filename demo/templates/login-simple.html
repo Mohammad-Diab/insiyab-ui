@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- The simple login template as a whole page: copy it, point the tags at your copy of the library, and replace the stand-in server in the script with your own call. The docs page login-simple.html walks through its parts. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>تسجيل الدخول</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <script src="../../dist/insiyab.js"></script>
+</head>
+<body>
+<main class="ins-screen">
+  <form class="ins-glass ins-p-8" id="signin" data-ins-validate>
+    <div class="ins-brand">
+      <span class="ins-shell-mark">م</span>
+      <h1 class="ins-brand-name">متجري</h1>
+      <p class="ins-brand-sub">تسجيل الدخول</p>
+    </div>
+    <div class="ins-stack">
+      <div class="ins-field">
+        <label class="ins-label" for="signin-account">رقم الهاتف أو اسم المستخدم</label>
+        <input class="ins-input ins-input--lg" id="signin-account" name="username" dir="ltr" autocomplete="username"
+               autocapitalize="none" spellcheck="false" pattern="09[0-9]{8}|[A-Za-z][A-Za-z0-9._]{2,}" required autofocus>
+        <p class="ins-error"></p>
+      </div>
+      <div class="ins-field">
+        <label class="ins-label" for="signin-pass">كلمة المرور</label>
+        <div class="ins-input-group">
+          <input class="ins-input ins-input--lg" id="signin-pass" name="password" type="password"
+                 autocomplete="current-password" required>
+          <button type="button" class="ins-password-toggle" data-ins-password aria-label="إظهار كلمة المرور"></button>
+        </div>
+        <p class="ins-error"></p>
+      </div>
+      <div class="ins-flex ins-justify-between ins-items-center">
+        <label class="ins-check"><input type="checkbox" name="remember"><span class="ins-check-text">تذكرني</span></label>
+        <a href="#" id="signin-forgot">نسيت كلمة المرور</a>
+      </div>
+      <button class="ins-btn ins-btn--primary ins-btn--lg ins-btn--full">دخول</button>
+    </div>
+  </form>
+</main>
+
+<script>
+  (function () {
+    var form = document.getElementById('signin');
+    var account = document.getElementById('signin-account');
+    var submit = form.querySelector('.ins-btn--primary');
+    account.addEventListener('input', function () { account.setCustomValidity(''); });
+    document.getElementById('signin-forgot').addEventListener('click', function (e) { e.preventDefault(); });
+    /* A stand-in for the server: it waits a moment, and one number is refused. */
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (form.getAttribute('aria-busy') === 'true') return;
+      var spin = document.createElement('span');
+      spin.className = 'ins-spinner ins-spinner--sm';
+      spin.setAttribute('aria-hidden', 'true');
+      submit.appendChild(spin);
+      form.setAttribute('aria-busy', 'true');
+      setTimeout(function () {
+        form.removeAttribute('aria-busy');
+        spin.remove();
+        if (account.value === '0900000000') {
+          account.setCustomValidity('هذا الرقم غير مسجل.');
+          account.reportValidity();
+          return;
+        }
+        Insiyab.toast('تم الدخول', 'ok');
+      }, 700);
+    });
+  })();
+</script>
+</body>
+</html>

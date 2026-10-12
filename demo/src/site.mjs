@@ -180,7 +180,9 @@ export const NAV = [
       lead: 'شهر على شبكة بمواعيد كل يوم، يقرؤها من قائمة في الصفحة، ويبدأ أسبوعه كما تبدؤه لغة الصفحة.' }
   ] },
   { group: 'القوالب', en: 'Templates', pages: [
-    { slug: 'login', title: 'تسجيل الدخول', en: 'Login template', icon: 'user',
+    { slug: 'login-simple', title: 'تسجيل الدخول', en: 'Login template', icon: 'lock', fresh: true,
+      lead: 'صفحة دخول تكفيها بطاقة واحدة: الهاتف أو اسم المستخدم، وكلمة المرور، و«تذكرني»، ورابط لمن نسي كلمة المرور.' },
+    { slug: 'login', title: 'معالج تسجيل الدخول', en: 'Login wizard template', icon: 'user',
       lead: 'صفحة دخول بخطوات: الهاتف، ثم كلمة المرور، ثم الرمز، في بطاقة تنزلق خطواتها، من أجزاء المكتبة وحدها.' },
     { slug: 'tpl-dashboard', title: 'لوحة التحكم', en: 'Dashboard template', icon: 'home', fresh: true,
       lead: 'واجهة التطبيق الأولى: أرقام اليوم وتغيرها، ورسمان، وأحدث السجلات، وآخر النشاط.' },
