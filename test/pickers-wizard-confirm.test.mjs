@@ -139,6 +139,8 @@ const wz = `(() => { const w = document.getElementById('demo-wizard'); const ps 
 let w = await E(wz);
 ok('wizard: starts on step one only', w.at === 0 && w.shown === 'true,false,false' && w.current === 0, JSON.stringify(w));
 ok('wizard: prev hidden on first step', await E(`getComputedStyle(document.querySelector('#demo-wizard [data-ins-wizard=prev]')).visibility === 'hidden'`));
+ok('wizard: the foot follows the footer standard, a 12px gap and buttons at least 5rem wide', await E(`(() => { const f = document.querySelector('#demo-wizard .ins-wizard-foot');
+  return getComputedStyle(f).columnGap === '12px' && [...f.querySelectorAll('.ins-btn')].every(x => getComputedStyle(x).minInlineSize === '80px'); })()`));
 await b.click('#demo-wizard [data-ins-wizard="next"]');
 await b.sleep(150);
 w = await E(wz);
