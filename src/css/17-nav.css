@@ -790,9 +790,10 @@ html[dir="ltr"] .ins-page-title {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: .5rem;
+  gap: var(--ins-foot-gap);
   margin-block-start: var(--ins-sp-5);
 }
+.ins-wizard-foot > .ins-btn:not(.ins-btn--icon) { min-inline-size: var(--ins-foot-min); }
 .ins-wizard-foot > :is([data-ins-wizard="next"], .ins-wizard-finish) { margin-inline-start: auto; }
 /* With a cancel (a wizard in a dialog), the cancel takes the start and back and next
    stay together at the end. */
