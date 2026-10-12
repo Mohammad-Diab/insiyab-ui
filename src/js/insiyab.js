@@ -4209,6 +4209,13 @@
      field's text is a native value — so they are redrawn once the reset has run. */
   document.addEventListener('reset', function (event) {
     var form = event.target;
+    // A reset form starts over: no field stays reported, and every message the library wrote is emptied.
+    if (form.querySelectorAll) {
+      var reported = form.querySelectorAll('[data-ins-reported]');
+      for (var r = 0; r < reported.length; r++) reported[r].removeAttribute('data-ins-reported');
+      var written = form.querySelectorAll('.ins-error[data-ins-auto]');
+      for (var m = 0; m < written.length; m++) written[m].textContent = '';
+    }
     setTimeout(function () {
       var ranges = form.querySelectorAll('.ins-range');
       for (var i = 0; i < ranges.length; i++) rangeFill(ranges[i]);
@@ -5058,6 +5065,7 @@
   define('field-messages', function (scope) {
     var msgs = scope.querySelectorAll('.ins-field > .ins-hint, .ins-field > .ins-error, .ins-field > .ins-success');
     for (var i = 0; i < msgs.length; i++) {
+      if (!msgs[i].classList.contains('ins-hint') && !msgs[i].hasAttribute('dir')) msgs[i].setAttribute('dir', 'auto');
       var control = msgs[i].parentNode.querySelector('input, select, textarea');
       if (!control) continue;
       if (!msgs[i].id) msgs[i].id = uid('ins-msg');

@@ -147,6 +147,7 @@ ok('password: hides again', await E(`document.getElementById('v-pass').type === 
 ok('validation: messages hidden before interaction', await E(`[...document.querySelectorAll('form[data-ins-validate] .ins-error')].every(e => getComputedStyle(e).display === 'none')`));
 ok('validation: hint + message described', await E(`(document.getElementById('v-pass').getAttribute('aria-describedby') || '').split(' ').length === 2`),
   await E(`document.getElementById('v-pass').getAttribute('aria-describedby')`));
+ok('validation: messages take their own direction', await E(`[...document.querySelectorAll('.ins-field > .ins-error, .ins-field > .ins-success')].every((m) => m.hasAttribute('dir'))`));
 await b.click('#v-form .ins-btn--primary');
 await b.sleep(200);
 const v = await E(`(() => { const f = document.getElementById('v-form'); const errs = [...f.querySelectorAll('.ins-error')];
@@ -162,6 +163,20 @@ await E(`document.getElementById('v-email').focus()`);
 await b.type('a@b.co');
 await b.sleep(100);
 ok('validation: message clears once valid', await E(`getComputedStyle(document.querySelectorAll('#v-form .ins-error')[0]).display === 'none'`));
+// A reset form starts over: a stale server message is emptied, nothing stays reported or red, and the page's own message is kept.
+await E(`(() => { const e = document.getElementById('v-email'); e.setCustomValidity('هذا البريد مسجل.'); e.reportValidity(); e.setCustomValidity(''); document.getElementById('v-form').reset(); return 0; })()`);
+await b.sleep(200);
+const rs = await E(`(() => { const f = document.getElementById('v-form'); const errs = [...f.querySelectorAll('.ins-error')];
+  return { reported: f.querySelectorAll('[data-ins-reported]').length, hidden: errs.every(e => getComputedStyle(e).display === 'none'), text0: errs[0].textContent, text1: errs[1].textContent,
+           emailBorder: getComputedStyle(document.getElementById('v-email')).borderColor }; })()`);
+ok('validation reset: no field stays reported', rs.reported === 0, String(rs.reported));
+ok('validation reset: every message hidden', rs.hidden);
+ok('validation reset: the library-written message is emptied', rs.text0 === '', rs.text0);
+ok('validation reset: the page-written message is kept', rs.text1.startsWith('كلمة المرور قصيرة'), rs.text1);
+ok('validation reset: the field is not red', !/(239, 68, 68|153, 27, 27)/.test(rs.emailBorder), rs.emailBorder);
+await b.click('#v-form .ins-btn--primary');
+await b.sleep(200);
+ok('validation reset: a new submit reports again', await E(`(() => { const e = document.querySelectorAll('#v-form .ins-error')[0]; return getComputedStyle(e).display !== 'none' && e.textContent.length > 3; })()`));
 const srv = await E(`(() => ({ code: getComputedStyle(document.getElementById('g-code').closest('.ins-input-group')).borderColor,
   innerBg: getComputedStyle(document.getElementById('g-code')).backgroundColor, ok: getComputedStyle(document.getElementById('g-user')).borderColor }))()`);
 ok('validation: server error reddens the group, not the inner input', /239, 68, 68/.test(srv.code) && srv.innerBg === 'rgba(0, 0, 0, 0)', JSON.stringify(srv));
