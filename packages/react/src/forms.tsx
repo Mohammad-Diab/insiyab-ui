@@ -91,14 +91,14 @@ export const Field = forwardRef<HTMLDivElement, FieldProps>(function Field(
           never the same element: React replaces one with the other instead of editing
           text the core has written into. */}
       {own != null ? (
-        <p className="ins-error" id={id + '-error'} key="own">
+        <p className="ins-error" dir="auto" id={id + '-error'} key="own">
           {own}
         </p>
       ) : validate ? (
-        <p className="ins-error" id={id + '-error'} key="auto" />
+        <p className="ins-error" dir="auto" id={id + '-error'} key="auto" />
       ) : null}
       {hasSuccess && (
-        <p className="ins-success" id={id + '-ok'}>
+        <p className="ins-success" dir="auto" id={id + '-ok'}>
           {success}
         </p>
       )}
