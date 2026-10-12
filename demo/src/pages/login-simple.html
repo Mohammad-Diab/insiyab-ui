@@ -1,0 +1,94 @@
+<h2 id="preview">القالب</h2>
+<p>
+  بطاقة دخول تتوسط الصفحة، فيها حقل واحد يقبل رقم الهاتف أو اسم المستخدم، ثم كلمة المرور بزر يظهرها، ثم «تذكرني»
+  ورابط لمن نسي كلمة المرور. وكل ما فيها من أجزاء المكتبة، فلا تحتاج CSS خاصًا بها. جربها برقم من عشرة أرقام يبدأ
+  بـ <code>09</code> أو باسم مستخدم لاتيني مثل <code>sara</code>، إلا <code>0900000000</code> فهو مرفوض. ولك أن
+  <a href="templates/login-simple.html">تفتحها في صفحة مستقلة</a>.
+</p>
+<demo-example class="screen">
+  <main class="ins-screen">
+    <form class="ins-glass ins-p-8" id="signin" data-ins-validate>
+      <div class="ins-brand">
+        <span class="ins-shell-mark">م</span>
+        <h1 class="ins-brand-name">متجري</h1>
+        <p class="ins-brand-sub">تسجيل الدخول</p>
+      </div>
+      <div class="ins-stack">
+        <div class="ins-field">
+          <label class="ins-label" for="signin-account">رقم الهاتف أو اسم المستخدم</label>
+          <input class="ins-input ins-input--lg" id="signin-account" name="username" dir="ltr" autocomplete="username"
+                 autocapitalize="none" spellcheck="false" pattern="09[0-9]{8}|[A-Za-z][A-Za-z0-9._]{2,}" required>
+          <p class="ins-error"></p>
+        </div>
+        <div class="ins-field">
+          <label class="ins-label" for="signin-pass">كلمة المرور</label>
+          <div class="ins-input-group">
+            <input class="ins-input ins-input--lg" id="signin-pass" name="password" type="password"
+                   autocomplete="current-password" required>
+            <button type="button" class="ins-password-toggle" data-ins-password aria-label="إظهار كلمة المرور"></button>
+          </div>
+          <p class="ins-error"></p>
+        </div>
+        <div class="ins-flex ins-justify-between ins-items-center">
+          <label class="ins-check"><input type="checkbox" name="remember"><span class="ins-check-text">تذكرني</span></label>
+          <a href="#" id="signin-forgot">نسيت كلمة المرور</a>
+        </div>
+        <button class="ins-btn ins-btn--primary ins-btn--lg ins-btn--full">دخول</button>
+      </div>
+    </form>
+  </main>
+</demo-example>
+
+<h2 id="parts">الأجزاء</h2>
+<ul>
+  <li><b><code>.ins-screen</code></b> صفحة تتوسطها بطاقة واحدة، و<b><code>.ins-brand</code></b> يجمع العلامة والاسم وسطرًا تحتهما.</li>
+  <li><b>حقل واحد للصيغتين</b> بنمط واحد في <code>pattern</code>: عشرة أرقام تبدأ بـ <code>09</code>، أو اسم يبدأ بحرف لاتيني
+    ويليه حرفان أو أكثر من الحروف والأرقام و<code>.</code> و<code>_</code>. وعليه <code>dir="ltr"</code> لأن القيمتين لاتينيتان.</li>
+  <li><b><code>data-ins-password</code></b> على الزر يظهر كلمة المرور ويخفيها، ويخفيها من جديد قبل أن يُرسل النموذج.</li>
+  <li><b><code>data-ins-validate</code></b> يكتب رسالة كل حقل تحته بعد أن يغادره الزائر أو حين يرسل النموذج، ورد الخادم
+    يظهر في المكان نفسه عبر <code>setCustomValidity</code>.</li>
+  <li><b>الانتظار</b> يظهر في زر الدخول نفسه: <code>.ins-spinner--sm</code> داخل <code>.ins-btn</code> يأخذ لون نصه.</li>
+  <li><b>نسيت كلمة المرور</b> رابط عادي، فاجعله يشير إلى صفحة الاستعادة في تطبيقك.</li>
+</ul>
+
+<h2 id="page">الصفحة</h2>
+<demo-code lang="html">
+<body>
+  <main class="ins-screen">
+    <form class="ins-glass ins-p-8" data-ins-validate>
+      <div class="ins-brand">…</div>
+      <div class="ins-stack">…</div>
+    </form>
+  </main>
+</body>
+</demo-code>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var form = document.getElementById('signin');
+    var account = document.getElementById('signin-account');
+    var submit = form.querySelector('.ins-btn--primary');
+    account.addEventListener('input', function () { account.setCustomValidity(''); });
+    document.getElementById('signin-forgot').addEventListener('click', function (e) { e.preventDefault(); });
+    /* A stand-in for the server: it waits a moment, and one number is refused. */
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (form.getAttribute('aria-busy') === 'true') return;
+      var spin = document.createElement('span');
+      spin.className = 'ins-spinner ins-spinner--sm';
+      spin.setAttribute('aria-hidden', 'true');
+      submit.appendChild(spin);
+      form.setAttribute('aria-busy', 'true');
+      setTimeout(function () {
+        form.removeAttribute('aria-busy');
+        spin.remove();
+        if (account.value === '0900000000') {
+          account.setCustomValidity('هذا الرقم غير مسجل.');
+          account.reportValidity();
+          return;
+        }
+        Insiyab.toast('تم الدخول', 'ok');
+      }, 700);
+    });
+  });
+</script>

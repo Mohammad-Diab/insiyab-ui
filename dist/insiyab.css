@@ -4465,6 +4465,11 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
   font-size: var(--ins-fs-lg);
 }
 .ins-select--lg { padding-inline-end: 2.625rem; }
+/* A large field inside a group makes the whole group large, so a password with its eye is as tall as the field above it. */
+.ins-input-group:has(> :is(.ins-input--lg, .ins-select--lg)) { min-block-size: 3.25rem; }
+.ins-input-group > :is(.ins-input--lg, .ins-select--lg),
+.ins-input-group > :is(.ins-input--lg, .ins-select--lg):focus,
+.ins-input-group > :is(.ins-input--lg, .ins-select--lg):hover:not(:disabled):not(:focus) { min-block-size: calc(3.25rem - 2px); }
 
 /* --------------------------------------------------------------- indeterminate */
 /* "Some of these": the select-all box over a partly selected table. There is no
@@ -7273,9 +7278,10 @@ html[dir="ltr"] .ins-page-title {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: .5rem;
+  gap: var(--ins-foot-gap);
   margin-block-start: var(--ins-sp-5);
 }
+.ins-wizard-foot > .ins-btn:not(.ins-btn--icon) { min-inline-size: var(--ins-foot-min); }
 .ins-wizard-foot > :is([data-ins-wizard="next"], .ins-wizard-finish) { margin-inline-start: auto; }
 /* With a cancel (a wizard in a dialog), the cancel takes the start and back and next
    stay together at the end. */
