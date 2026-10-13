@@ -67,6 +67,8 @@ public class BulkBar : ContentControl
         var count = Table?.SelectedRows.Count ?? 0;
         var format = Text ?? (FlowDirection == FlowDirection.RightToLeft ? "المحدد: {n}" : "{n} selected");
         CountText = format.Replace("{n}", count.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        // It rises in each time a selection brings it up, as the web's does.
+        if (count > 0 && !IsVisible && TopLevel.GetTopLevel(this) is not null) Entrance.Play(this, EntranceEffect.Rise);
         IsVisible = count > 0;
     }
 

@@ -21,7 +21,7 @@ public enum EntranceEffect
     Slide,
 }
 
-/// <summary>Entrance motion, the web's <c>data-ins-reveal</c> and <c>.ins-anim-*</c>. <c>Entrance.Reveal="True"</c> on a panel brings its children in one after another (the first ten 50ms apart) as the panel fades in; <c>Entrance.Effect</c> brings one element in. Both run when the element appears, and <see cref="Replay"/> runs them again. The motion is laid over the element's own transform and opacity at animation priority for its duration only, so a control's own transitions are never touched.</summary>
+/// <summary>Entrance motion, the web's <c>data-ins-reveal</c> and <c>.ins-anim-*</c>. <c>Entrance.Reveal="True"</c> on a panel brings its children in one after another (the first ten 50ms apart, or as RevealCount and RevealStep say) as the panel fades in; <c>Entrance.Effect</c> brings one element in. Both run when the element appears, and <see cref="Replay"/> runs them again. The motion is laid over the element's own transform and opacity at animation priority for its duration only, so a control's own transitions are never touched.</summary>
 public static class Entrance
 {
     public static readonly AttachedProperty<bool> RevealProperty =
@@ -30,15 +30,23 @@ public static class Entrance
     public static readonly AttachedProperty<EntranceEffect> EffectProperty =
         AvaloniaProperty.RegisterAttached<Control, EntranceEffect>("Effect", typeof(Entrance));
 
+    /// <summary>How far apart a revealing panel's children start: 50ms, or 70ms for the web's <c>.ins-grid</c>.</summary>
+    public static readonly AttachedProperty<TimeSpan> RevealStepProperty =
+        AvaloniaProperty.RegisterAttached<Control, TimeSpan>("RevealStep", typeof(Entrance), TimeSpan.FromMilliseconds(50));
+
+    /// <summary>How many of a revealing panel's children start one after another; the rest start with the first. 10, or 8 for <c>.ins-grid</c>.</summary>
+    public static readonly AttachedProperty<int> RevealCountProperty =
+        AvaloniaProperty.RegisterAttached<Control, int>("RevealCount", typeof(Entrance), 10);
+
     private static readonly Easing s_ease = new SplineEasing(0.22, 1, 0.36, 1);
     private static readonly Easing s_spring = new SplineEasing(0.34, 1.56, 0.64, 1);
-    private static readonly ConditionalWeakTable<Control, Motion> s_running = new();
-    private static readonly List<Motion> s_active = [];
+    private static readonly ConditionalWeakTable<Control, Arrival> s_running = new();
+    private static readonly List<Arrival> s_active = [];
     private static readonly Stopwatch s_clock = Stopwatch.StartNew();
     private static readonly HashSet<TopLevel> s_frames = [];
 
     // One element's entrance: from-values that ease to rest (opacity 1, no offset, scale 1) after a delay.
-    private sealed class Motion(Control target, double start, double delay, double duration, Easing easing, double opacity, double x, double y, double scale)
+    private sealed class Arrival(Control target, double start, double delay, double duration, Easing easing, double opacity, double x, double y, double scale)
     {
         public readonly Control Target = target;
         private IDisposable? _opacity;
@@ -87,6 +95,14 @@ public static class Entrance
 
     public static void SetEffect(Control c, EntranceEffect value) => c.SetValue(EffectProperty, value);
 
+    public static TimeSpan GetRevealStep(Control c) => c.GetValue(RevealStepProperty);
+
+    public static void SetRevealStep(Control c, TimeSpan value) => c.SetValue(RevealStepProperty, value);
+
+    public static int GetRevealCount(Control c) => c.GetValue(RevealCountProperty);
+
+    public static void SetRevealCount(Control c, int value) => c.SetValue(RevealCountProperty, value);
+
     /// <summary>Runs the entrance of <paramref name="root"/> and of every element inside it again.</summary>
     public static void Replay(Control root)
     {
@@ -109,18 +125,21 @@ public static class Entrance
     }
 
     /// <summary>Runs one entrance on <paramref name="c"/> now, whatever its <c>Effect</c>.</summary>
-    public static void Play(Control c, EntranceEffect effect)
+    public static void Play(Control c, EntranceEffect effect) => Play(c, effect, 0);
+
+    // The same, starting after delay ms: the table's rows arrive one after another.
+    internal static void Play(Control c, EntranceEffect effect, double delay)
     {
         switch (effect)
         {
             case EntranceEffect.Rise:
-                Play(c, 0, 280, s_ease, opacity: 0, y: 6);
+                Play(c, delay, 280, s_ease, opacity: 0, y: 6);
                 break;
             case EntranceEffect.Pop:
-                Play(c, 0, 220, s_spring, scale: 0.82);
+                Play(c, delay, 220, s_spring, scale: 0.82);
                 break;
             case EntranceEffect.Slide:
-                Play(c, 0, 280, s_ease, opacity: 0, x: -10);
+                Play(c, delay, 280, s_ease, opacity: 0, x: -10);
                 break;
         }
     }
@@ -130,9 +149,11 @@ public static class Entrance
         if (GetReveal(c))
         {
             Play(c, 0, 400, s_ease, opacity: 0);
+            var step = GetRevealStep(c).TotalMilliseconds;
+            var count = GetRevealCount(c);
             if (c is Panel panel)
                 for (var i = 0; i < panel.Children.Count; i++)
-                    Play(panel.Children[i], i < 10 ? i * 50 : 0, 400, s_ease, y: 12);
+                    Play(panel.Children[i], i < count ? i * step : 0, 400, s_ease, y: 12);
         }
         Play(c, GetEffect(c));
     }
@@ -144,8 +165,10 @@ public static class Entrance
         {
             old.Stop();
             s_active.Remove(old);
+            s_running.Remove(c);
         }
-        var motion = new Motion(c, s_clock.Elapsed.TotalMilliseconds, delay, duration, easing, opacity, x, y, scale);
+        if (Motion.IsStill(c)) return;
+        var motion = new Arrival(c, s_clock.Elapsed.TotalMilliseconds, delay, duration, easing, opacity, x, y, scale);
         s_running.AddOrUpdate(c, motion);
         s_active.Add(motion);
         motion.Step(s_clock.Elapsed.TotalMilliseconds);
