@@ -1,0 +1,137 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.QuotePage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/ContentFrames.axaml" />
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel>
+
+      <Border Classes="dx">
+        <Border Classes="quote">
+          <StackPanel>
+            <TextBlock Text="يُحفظ الملف كل خمس دقائق، ويمكنك استعادة أي نسخة سابقة منه." />
+            <ContentControl Classes="quote-source">
+              <StackPanel Orientation="Horizontal">
+                <HyperlinkButton Content="دليل الاستخدام" />
+                <TextBlock Text=" · ص 12" />
+              </StackPanel>
+            </ContentControl>
+          </StackPanel>
+        </Border>
+      </Border>
+
+      <TextBlock Classes="section" Text="الاقتباس ومصدره" />
+      <Border Classes="stage">
+        <Border Classes="quote">
+          <StackPanel>
+            <TextBlock Text="يُحفظ الملف كل خمس دقائق، ويمكنك استعادة أي نسخة سابقة منه." />
+            <ContentControl Classes="quote-source">
+              <StackPanel Orientation="Horizontal">
+                <HyperlinkButton Content="دليل الاستخدام" />
+                <TextBlock Text=" · ص 12" />
+              </StackPanel>
+            </ContentControl>
+          </StackPanel>
+        </Border>
+      </Border>
+      <TextBlock Classes="variant" Text="المصدر نص" />
+      <Border Classes="stage">
+        <Border Classes="quote">
+          <StackPanel>
+            <TextBlock Text="يُحفظ الملف كل خمس دقائق، ويمكنك استعادة أي نسخة سابقة منه." />
+            <ContentControl Classes="quote-source" Content="دليل الاستخدام · ص 12" />
+          </StackPanel>
+        </Border>
+      </Border>
+      <TextBlock Classes="variant" Text="بلا مصدر" />
+      <Border Classes="stage">
+        <Border Classes="quote">
+          <TextBlock Text="يُحفظ الملف كل خمس دقائق، ويمكنك استعادة أي نسخة سابقة منه." />
+        </Border>
+      </Border>
+
+      <TextBlock Classes="section" Text="علامة المرجع" />
+      <Border Classes="stage">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="p">
+            <Run Text="نص يحيل إلى مرجعه" /><InlineUIContainer BaselineAlignment="Superscript"><ins:Ref Content="1" /></InlineUIContainer><Run Text="." />
+          </TextBlock>
+          <ins:Note Classes="info" Content="المرجع الذي تحيل إليه العلامة." />
+        </StackPanel>
+      </Border>
+      <TextBlock Classes="variant" Text="تضيء مع ملاحظتها" />
+      <Border Classes="stage">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="p">
+            <Run Text="نص يحيل إلى مرجعه" /><InlineUIContainer BaselineAlignment="Superscript"><ins:Ref Content="1" Note="RefNote" /></InlineUIContainer><Run Text="." />
+          </TextBlock>
+          <ins:Note Name="RefNote" Classes="info" Content="المرجع الذي تحيل إليه العلامة." />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="section" Text="التظليل" />
+      <Border Classes="stage">
+        <TextBlock Classes="p">
+          <Run Text="في هذه الفقرة " /><ins:Mark Text="جملة تحتاج مراجعة" /><Run Text="، وبعدها بقية النص." />
+        </TextBlock>
+      </Border>
+      <TextBlock Classes="variant" Text="نجاح" />
+      <Border Classes="stage">
+        <TextBlock Classes="p">
+          <Run Text="في هذه الفقرة " /><ins:Mark Classes="ok" Text="جملة تحتاج مراجعة" /><Run Text="، وبعدها بقية النص." />
+        </TextBlock>
+      </Border>
+      <TextBlock Classes="variant" Text="خطأ" />
+      <Border Classes="stage">
+        <TextBlock Classes="p">
+          <Run Text="في هذه الفقرة " /><ins:Mark Classes="bad" Text="جملة تحتاج مراجعة" /><Run Text="، وبعدها بقية النص." />
+        </TextBlock>
+      </Border>
+      <TextBlock Classes="variant" Text="معلومة" />
+      <Border Classes="stage">
+        <TextBlock Classes="p">
+          <Run Text="في هذه الفقرة " /><ins:Mark Classes="info" Text="جملة تحتاج مراجعة" /><Run Text="، وبعدها بقية النص." />
+        </TextBlock>
+      </Border>
+      <TextBlock Classes="variant" Text="الهوية" />
+      <Border Classes="stage">
+        <TextBlock Classes="p">
+          <Run Text="في هذه الفقرة " /><ins:Mark Classes="brand" Text="جملة تحتاج مراجعة" /><Run Text="، وبعدها بقية النص." />
+        </TextBlock>
+      </Border>
+      <TextBlock Classes="variant" Text="مع ملاحظة" />
+      <Border Classes="stage">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="p">
+            <Run Text="في هذه الفقرة " /><ins:Mark Text="جملة تحتاج مراجعة" Note="MarkNote" /><Run Text="، وبعدها بقية النص." />
+          </TextBlock>
+          <ins:Note Name="MarkNote" Content="سبب التظليل، يشرحه لمن يقرأ." />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="section" Text="الملاحظة" />
+      <Border Classes="stage">
+        <ins:Note Content="ملاحظة قصيرة على النص." />
+      </Border>
+      <TextBlock Classes="variant" Text="نجاح" />
+      <Border Classes="stage">
+        <ins:Note Classes="ok" Content="ملاحظة قصيرة على النص." />
+      </Border>
+      <TextBlock Classes="variant" Text="خطأ" />
+      <Border Classes="stage">
+        <ins:Note Classes="bad" Content="ملاحظة قصيرة على النص." />
+      </Border>
+      <TextBlock Classes="variant" Text="معلومة" />
+      <Border Classes="stage">
+        <ins:Note Classes="info" Content="ملاحظة قصيرة على النص." />
+      </Border>
+      <TextBlock Classes="variant" Text="الهوية" />
+      <Border Classes="stage">
+        <ins:Note Classes="brand" Content="ملاحظة قصيرة على النص." />
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

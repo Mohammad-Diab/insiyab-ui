@@ -1,0 +1,257 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <StreamGeometry x:Key="InsQuoteSourceIcon">M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5M9 13h6M9 17h4</StreamGeometry>
+
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <!-- One border, two colours: absolute points put the brand on the first 3px (the start bar) and InsLine on the rest -->
+          <LinearGradientBrush x:Key="InsQuoteBorder" StartPoint="0,0" EndPoint="3,0">
+            <GradientStop Offset="0.99" Color="{DynamicResource InsToneBrandSoftColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsLineColor}" />
+          </LinearGradientBrush>
+          <SolidColorBrush x:Key="InsQuoteLink" Color="{DynamicResource InsToneBrandColor}" />
+          <SolidColorBrush x:Key="InsRefFg" Color="{DynamicResource InsToneBrandColor}" />
+          <TextDecorationCollection x:Key="InsMarkLineWarn">
+            <TextDecoration Location="Underline" Stroke="{DynamicResource InsToneWarnBd}" StrokeThickness="2" StrokeThicknessUnit="Pixel" StrokeOffset="3" StrokeOffsetUnit="Pixel" />
+          </TextDecorationCollection>
+          <TextDecorationCollection x:Key="InsMarkLineOk">
+            <TextDecoration Location="Underline" Stroke="{DynamicResource InsToneOkBd}" StrokeThickness="2" StrokeThicknessUnit="Pixel" StrokeOffset="3" StrokeOffsetUnit="Pixel" />
+          </TextDecorationCollection>
+          <TextDecorationCollection x:Key="InsMarkLineBad">
+            <TextDecoration Location="Underline" Stroke="{DynamicResource InsToneBadBd}" StrokeThickness="2" StrokeThicknessUnit="Pixel" StrokeOffset="3" StrokeOffsetUnit="Pixel" />
+          </TextDecorationCollection>
+          <TextDecorationCollection x:Key="InsMarkLineInfo">
+            <TextDecoration Location="Underline" Stroke="{DynamicResource InsToneInfoBd}" StrokeThickness="2" StrokeThicknessUnit="Pixel" StrokeOffset="3" StrokeOffsetUnit="Pixel" />
+          </TextDecorationCollection>
+          <TextDecorationCollection x:Key="InsMarkLineBrand">
+            <TextDecoration Location="Underline" Stroke="{DynamicResource InsToneBrandBd}" StrokeThickness="2" StrokeThicknessUnit="Pixel" StrokeOffset="3" StrokeOffsetUnit="Pixel" />
+          </TextDecorationCollection>
+          <TextDecorationCollection x:Key="InsMarkLineLit">
+            <TextDecoration Location="Underline" Stroke="{DynamicResource InsText1}" StrokeThickness="2" StrokeThicknessUnit="Pixel" StrokeOffset="3" StrokeOffsetUnit="Pixel" />
+          </TextDecorationCollection>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <LinearGradientBrush x:Key="InsQuoteBorder" StartPoint="0,0" EndPoint="3,0">
+            <GradientStop Offset="0.99" Color="{DynamicResource InsToneBrandSoftColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsLineColor}" />
+          </LinearGradientBrush>
+          <SolidColorBrush x:Key="InsQuoteLink" Color="{DynamicResource InsText1Color}" />
+          <SolidColorBrush x:Key="InsRefFg" Color="{DynamicResource InsText1Color}" />
+          <TextDecorationCollection x:Key="InsMarkLineWarn">
+            <TextDecoration Location="Underline" Stroke="{DynamicResource InsToneWarnBd}" StrokeThickness="2" StrokeThicknessUnit="Pixel" StrokeOffset="3" StrokeOffsetUnit="Pixel" />
+          </TextDecorationCollection>
+          <TextDecorationCollection x:Key="InsMarkLineOk">
+            <TextDecoration Location="Underline" Stroke="{DynamicResource InsToneOkBd}" StrokeThickness="2" StrokeThicknessUnit="Pixel" StrokeOffset="3" StrokeOffsetUnit="Pixel" />
+          </TextDecorationCollection>
+          <TextDecorationCollection x:Key="InsMarkLineBad">
+            <TextDecoration Location="Underline" Stroke="{DynamicResource InsToneBadBd}" StrokeThickness="2" StrokeThicknessUnit="Pixel" StrokeOffset="3" StrokeOffsetUnit="Pixel" />
+          </TextDecorationCollection>
+          <TextDecorationCollection x:Key="InsMarkLineInfo">
+            <TextDecoration Location="Underline" Stroke="{DynamicResource InsToneInfoBd}" StrokeThickness="2" StrokeThicknessUnit="Pixel" StrokeOffset="3" StrokeOffsetUnit="Pixel" />
+          </TextDecorationCollection>
+          <TextDecorationCollection x:Key="InsMarkLineBrand">
+            <TextDecoration Location="Underline" Stroke="{DynamicResource InsToneBrandBd}" StrokeThickness="2" StrokeThicknessUnit="Pixel" StrokeOffset="3" StrokeOffsetUnit="Pixel" />
+          </TextDecorationCollection>
+          <TextDecorationCollection x:Key="InsMarkLineLit">
+            <TextDecoration Location="Underline" Stroke="{DynamicResource InsText1}" StrokeThickness="2" StrokeThicknessUnit="Pixel" StrokeOffset="3" StrokeOffsetUnit="Pixel" />
+          </TextDecorationCollection>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <ControlTheme x:Key="{x:Type ctl:Ref}" TargetType="ctl:Ref">
+        <Setter Property="MinWidth" Value="18" />
+        <Setter Property="Height" Value="18" />
+        <Setter Property="Margin" Value="2,0" />
+        <Setter Property="Padding" Value="4,0" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
+        <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsRefFg}" />
+        <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="FontWeight" Value="ExtraBold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Background="{TemplateBinding Background}"
+                              CornerRadius="{TemplateBinding CornerRadius}"
+                              Padding="{TemplateBinding Padding}"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+              <ContentPresenter.Transitions>
+                <Transitions>
+                  <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                </Transitions>
+              </ContentPresenter.Transitions>
+            </ContentPresenter>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover, ^:lit">
+          <Setter Property="Background" Value="{DynamicResource InsToneBrandSoft}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ ContentPresenter#PART_ContentPresenter">
+          <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ctl:Note}" TargetType="ctl:Note">
+        <Setter Property="BorderBrush" Value="{DynamicResource InsToneWarn}" />
+        <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Name="PART_Ring" Margin="-2" BorderThickness="2" CornerRadius="12"
+                      BorderBrush="{TemplateBinding BorderBrush}" Opacity="0" IsHitTestVisible="False">
+                <Border.Transitions>
+                  <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                  </Transitions>
+                </Border.Transitions>
+              </Border>
+              <Border Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{DynamicResource InsLine}"
+                      BorderThickness="1"
+                      CornerRadius="{TemplateBinding CornerRadius}">
+                <Border.Transitions>
+                  <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                    <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                  </Transitions>
+                </Border.Transitions>
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Margin="{TemplateBinding Padding}"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  TextWrapping="Wrap"
+                                  LineHeight="23.4" />
+              </Border>
+              <!-- The tone bar: a start-edge-only border over the face, curving into its corners as the CSS one does -->
+              <Border Name="PART_Bar" BorderThickness="3,0,0,0"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      IsHitTestVisible="False" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^.ok"><Setter Property="BorderBrush" Value="{DynamicResource InsToneOk}" /></Style>
+        <Style Selector="^.bad"><Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" /></Style>
+        <Style Selector="^.info"><Setter Property="BorderBrush" Value="{DynamicResource InsToneInfo}" /></Style>
+        <Style Selector="^.brand"><Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandSoft}" /></Style>
+        <Style Selector="^:lit">
+          <Style Selector="^ /template/ Border#PART_Face">
+            <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShMd}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Ring">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- mark: a Span, so the highlight wraps with the text; the bottom rule is an underline at the foot of the line -->
+  <Style Selector="ctl|Mark">
+    <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
+    <Setter Property="TextDecorations" Value="{DynamicResource InsMarkLineWarn}" />
+  </Style>
+  <Style Selector="ctl|Mark.ok">
+    <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+    <Setter Property="TextDecorations" Value="{DynamicResource InsMarkLineOk}" />
+  </Style>
+  <Style Selector="ctl|Mark.bad">
+    <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+    <Setter Property="TextDecorations" Value="{DynamicResource InsMarkLineBad}" />
+  </Style>
+  <Style Selector="ctl|Mark.info">
+    <Setter Property="Background" Value="{DynamicResource InsToneInfoBg}" />
+    <Setter Property="TextDecorations" Value="{DynamicResource InsMarkLineInfo}" />
+  </Style>
+  <Style Selector="ctl|Mark.brand">
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+    <Setter Property="TextDecorations" Value="{DynamicResource InsMarkLineBrand}" />
+  </Style>
+  <!-- lit: the fill takes the tone's border colour and the rule the text colour -->
+  <Style Selector="ctl|Mark:lit">
+    <Setter Property="Background" Value="{DynamicResource InsToneWarnBd}" />
+    <Setter Property="TextDecorations" Value="{DynamicResource InsMarkLineLit}" />
+  </Style>
+  <Style Selector="ctl|Mark.ok:lit"><Setter Property="Background" Value="{DynamicResource InsToneOkBd}" /></Style>
+  <Style Selector="ctl|Mark.bad:lit"><Setter Property="Background" Value="{DynamicResource InsToneBadBd}" /></Style>
+  <Style Selector="ctl|Mark.info:lit"><Setter Property="Background" Value="{DynamicResource InsToneInfoBd}" /></Style>
+  <Style Selector="ctl|Mark.brand:lit"><Setter Property="Background" Value="{DynamicResource InsToneBrandBd}" /></Style>
+
+  <!-- quote: a passage from elsewhere, a brand bar at its start edge and a quiet fill -->
+  <Style Selector="Border.quote">
+    <Setter Property="Padding" Value="18,14,16,14" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+    <Setter Property="BorderThickness" Value="3,1,1,1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsQuoteBorder}" />
+    <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
+  </Style>
+  <Style Selector="Border.quote TextBlock">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+    <Setter Property="LineHeight" Value="26.6" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+
+  <!-- quote-source: where it came from, smaller, behind a document mark; a HyperlinkButton in it is the link -->
+  <Style Selector="ContentControl.quote-source">
+    <Setter Property="Margin" Value="0,8,0,0" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <ctl:Icon Data="{StaticResource InsQuoteSourceIcon}" Size="14" VerticalAlignment="Center" />
+          <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}" VerticalAlignment="Center" />
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="ContentControl.quote-source TextBlock">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="LineHeight" Value="NaN" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ContentControl.quote-source HyperlinkButton">
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsQuoteLink}" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ContentControl.quote-source HyperlinkButton TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource InsQuoteLink}" />
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector="ContentControl.quote-source HyperlinkButton:pointerover TextBlock">
+    <Setter Property="TextDecorations" Value="Underline" />
+  </Style>
+  <Style Selector="ContentControl.quote-source HyperlinkButton /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource InsQuoteLink}" />
+  </Style>
+
+</Styles>

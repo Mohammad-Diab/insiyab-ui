@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.CountdownPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/ContentFrames.axaml" />
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel>
+
+      <Border Classes="dx">
+        <WrapPanel ItemSpacing="12" LineSpacing="12">
+          <ins:Countdown Seconds="600" />
+          <ins:Countdown Seconds="75" />
+          <ins:Countdown Seconds="200000" />
+        </WrapPanel>
+      </Border>
+
+      <TextBlock Classes="section" Text="العد التنازلي" />
+      <Border Classes="stage">
+        <ins:Countdown Seconds="600" />
+      </Border>
+      <TextBlock Classes="variant" Text="دقيقة وربع" />
+      <Border Classes="stage">
+        <ins:Countdown Seconds="75" />
+      </Border>
+      <TextBlock Classes="variant" Text="عشر ثوانٍ" />
+      <Border Classes="stage">
+        <ins:Countdown Seconds="10" />
+      </Border>
+      <TextBlock Classes="variant" Text="أيام" />
+      <Border Classes="stage">
+        <ins:Countdown Seconds="200000" />
+      </Border>
+      <TextBlock Classes="variant" Text="حتى لحظة" />
+      <Border Classes="stage">
+        <ins:Countdown Until="2028-01-01T00:00:00+03:00" />
+      </Border>
+      <TextBlock Classes="variant" Text="التحذير قبل الصفر بربع ساعة" />
+      <Border Classes="stage">
+        <ins:Countdown Seconds="600" Warn="900" />
+      </Border>
+      <TextBlock Classes="variant" Text="كبير" />
+      <Border Classes="stage">
+        <ins:Countdown Classes="lg" Seconds="600" />
+      </Border>
+      <TextBlock Classes="variant" Text="يبدأ عند الطلب" />
+      <Border Classes="stage">
+        <WrapPanel ItemSpacing="8" LineSpacing="8">
+          <ins:Countdown Name="Timer" Seconds="600" StartPaused="True" />
+          <Button Classes="primary sm" Content="ابدأ" Command="{Binding #Timer.StartCommand}" VerticalAlignment="Center" />
+          <Button Classes="secondary sm" Content="أوقف" Command="{Binding #Timer.StopCommand}" VerticalAlignment="Center" />
+          <Button Classes="bare sm" Content="من جديد" Command="{Binding #Timer.RestartCommand}" VerticalAlignment="Center" />
+        </WrapPanel>
+      </Border>
+      <TextBlock Classes="variant" Text="يتوقف في الخلفية" />
+      <Border Classes="stage">
+        <ins:Countdown Seconds="600" PauseAway="True" />
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

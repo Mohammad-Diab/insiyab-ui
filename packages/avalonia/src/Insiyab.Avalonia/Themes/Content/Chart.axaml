@@ -1,0 +1,70 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <!-- The six series colours: the brand first, then the tones, as the web chart-1 to chart-6 -->
+      <SolidColorBrush x:Key="InsChart2" Color="#3B82F6" />
+      <SolidColorBrush x:Key="InsChart3" Color="#22C55E" />
+      <SolidColorBrush x:Key="InsChart4" Color="#F59E0B" />
+      <SolidColorBrush x:Key="InsChart5" Color="#EF4444" />
+      <SolidColorBrush x:Key="InsChart6" Color="#64748B" />
+
+      <ControlTheme x:Key="{x:Type ctl:Chart}" TargetType="ctl:Chart">
+        <Setter Property="Brush1" Value="{DynamicResource InsPrimary}" />
+        <Setter Property="Brush2" Value="{DynamicResource InsChart2}" />
+        <Setter Property="Brush3" Value="{DynamicResource InsChart3}" />
+        <Setter Property="Brush4" Value="{DynamicResource InsChart4}" />
+        <Setter Property="Brush5" Value="{DynamicResource InsChart5}" />
+        <Setter Property="Brush6" Value="{DynamicResource InsChart6}" />
+        <Setter Property="GridBrush" Value="{DynamicResource InsLine}" />
+        <Setter Property="ZeroBrush" Value="{DynamicResource InsCtlBd}" />
+        <Setter Property="AxisBrush" Value="{DynamicResource InsText3}" />
+        <Setter Property="LabelBrush" Value="{DynamicResource InsText2}" />
+        <Setter Property="TrackBrush" Value="{DynamicResource InsToneMuteBg}" />
+        <Setter Property="DotBrush" Value="{DynamicResource InsGlassStrong}" />
+        <Setter Property="TotalBrush" Value="{DynamicResource InsText1}" />
+        <Setter Property="NumberFontFamily" Value="{DynamicResource InsFontBodyEn}" />
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <StackPanel>
+              <Panel>
+                <ctl:ChartPlot Name="PART_Plot" FlowDirection="LeftToRight" />
+                <Canvas FlowDirection="LeftToRight" IsHitTestVisible="False">
+                  <Border Name="PART_Tip" IsVisible="False" ZIndex="5" AutomationProperties.LiveSetting="Polite"
+                          FlowDirection="{TemplateBinding FlowDirection}"
+                          Padding="10,6" CornerRadius="{DynamicResource InsRSm}" BorderThickness="1"
+                          BorderBrush="{DynamicResource InsRim}" Background="{DynamicResource InsGlassStrong}"
+                          BoxShadow="{DynamicResource InsShMd}">
+                    <StackPanel Spacing="2">
+                      <TextBlock Name="PART_TipLabel" FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsText2}" />
+                      <TextBlock Name="PART_TipValue" FontSize="{DynamicResource InsFsMd}" FontWeight="Bold"
+                                 FontFamily="{DynamicResource InsFontBodyEn}" Foreground="{DynamicResource InsText1}" />
+                      <StackPanel Name="PART_TipRows" Spacing="3" Margin="0,2,0,0" IsVisible="False" />
+                    </StackPanel>
+                  </Border>
+                </Canvas>
+              </Panel>
+              <WrapPanel Name="PART_Legend" Margin="0,12,0,0" ItemSpacing="16" LineSpacing="6"
+                         TextElement.FontSize="{DynamicResource InsFsXs}" TextElement.Foreground="{DynamicResource InsText2}" />
+              <TextBlock Name="PART_Caption" Text="{TemplateBinding Caption}" Margin="0,8,0,0" TextWrapping="Wrap"
+                         FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsText3}"
+                         IsVisible="{TemplateBinding Caption, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </StackPanel>
+          </ControlTemplate>
+        </Setter>
+        <!-- A spark: a line and its fill, the size of a word -->
+        <Style Selector="^[Type=Spark]">
+          <Setter Property="Width" Value="96" />
+          <Setter Property="HorizontalAlignment" Value="Left" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Setter Property="Focusable" Value="False" />
+          <Style Selector="^ /template/ WrapPanel#PART_Legend"><Setter Property="IsVisible" Value="False" /></Style>
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+</Styles>
