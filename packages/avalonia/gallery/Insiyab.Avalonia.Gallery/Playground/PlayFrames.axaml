@@ -1,0 +1,213 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="PlayViewBd" Color="#1A0F172A" />
+          <SolidColorBrush x:Key="PlayCodeBg" Color="#9EFFFFFF" />
+          <SolidColorBrush x:Key="PlayCodeBd" Color="#140F172A" />
+          <SolidColorBrush x:Key="PlayHlT" Color="#9D174D" />
+          <SolidColorBrush x:Key="PlayHlA" Color="#A14B06" />
+          <SolidColorBrush x:Key="PlayHlS" Color="#047857" />
+          <SolidColorBrush x:Key="PlayHlC" Color="#64748B" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="PlayViewBd" Color="#1AFFFFFF" />
+          <SolidColorBrush x:Key="PlayCodeBg" Color="#47000000" />
+          <SolidColorBrush x:Key="PlayCodeBd" Color="#14FFFFFF" />
+          <SolidColorBrush x:Key="PlayHlT" Color="#F9A8D4" />
+          <SolidColorBrush x:Key="PlayHlA" Color="#FCD34D" />
+          <SolidColorBrush x:Key="PlayHlS" Color="#6EE7B7" />
+          <SolidColorBrush x:Key="PlayHlC" Color="#94A3B8" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+      <SolidColorBrush x:Key="PlayViewBg" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.025" />
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- Page prose: the intro, a section heading and the paragraph under it -->
+  <Style Selector="TextBlock.intro">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+    <Setter Property="LineHeight" Value="25.9" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Margin" Value="0,0,0,16" />
+  </Style>
+  <Style Selector="TextBlock.section">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsH3}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="LineHeight" Value="25.2" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="Margin" Value="0,48,0,12" />
+  </Style>
+  <Style Selector="TextBlock.p">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+    <Setter Property="LineHeight" Value="25.9" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Margin" Value="0,0,0,16" />
+  </Style>
+
+  <!-- The page's main example, its listing under it -->
+  <Style Selector="Border.play-example">
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource PlayViewBd}" />
+    <Setter Property="Background" Value="{DynamicResource PlayViewBg}" />
+    <Setter Property="CornerRadius" Value="22,22,0,0" />
+    <Setter Property="Padding" Value="24" />
+  </Style>
+  <Style Selector="pg|PlayExample, pg|Playground, pg|OptionsList">
+    <Setter Property="Margin" Value="0,0,0,24" />
+  </Style>
+
+  <!-- The playground: the preview and its notes beside the controls, the listing under both -->
+  <Style Selector="Border.play-top">
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource PlayViewBd}" />
+    <Setter Property="Background" Value="{DynamicResource PlayViewBg}" />
+    <Setter Property="CornerRadius" Value="22,22,0,0" />
+  </Style>
+  <Style Selector="Border.play-view">
+    <Setter Property="MinHeight" Value="208" />
+    <Setter Property="Padding" Value="24,64" />
+  </Style>
+  <Style Selector="StackPanel.play-notes">
+    <Setter Property="VerticalAlignment" Value="Bottom" />
+    <Setter Property="Margin" Value="20,0,20,16" />
+    <Setter Property="Spacing" Value="6" />
+  </Style>
+  <Style Selector="TextBlock.play-note">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="LineHeight" Value="21.6" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="TextBlock.play-note Run.code">
+    <Setter Property="FontSize" Value="12" />
+  </Style>
+  <Style Selector="TextBlock.play-event">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <Style Selector="TextBlock.play-error">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontMono}" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+  </Style>
+  <Style Selector="Border.play-controls">
+    <Setter Property="Width" Value="264" />
+    <Setter Property="Padding" Value="16" />
+    <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource PlayViewBd}" />
+    <Setter Property="BorderThickness" Value="1,0,0,0" />
+    <Setter Property="CornerRadius" Value="0,21,0,0" />
+  </Style>
+  <Style Selector="Border.play-controls.narrow">
+    <Setter Property="Width" Value="NaN" />
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+    <Setter Property="CornerRadius" Value="0" />
+  </Style>
+  <Style Selector="StackPanel.play-ctl">
+    <Setter Property="Spacing" Value="6" />
+  </Style>
+  <Style Selector="StackPanel.play-ctl:disabled">
+    <Setter Property="Opacity" Value="0.45" />
+  </Style>
+  <Style Selector="TextBlock.play-label">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+  </Style>
+
+  <!-- A listing: the code from the left in either direction, a copy button at its start corner -->
+  <Style Selector="Border.play-listing">
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource PlayViewBd}" />
+    <Setter Property="Background" Value="{DynamicResource PlayCodeBg}" />
+    <Setter Property="CornerRadius" Value="22" />
+    <Setter Property="BorderThickness" Value="1,0,1,1" />
+    <Setter Property="CornerRadius" Value="0,0,22,22" />
+  </Style>
+  <Style Selector="TextBlock.play-code">
+    <Setter Property="FlowDirection" Value="LeftToRight" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="Margin" Value="20,16,72,16" />
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontMono}" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="LineHeight" Value="22.1" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="TextWrapping" Value="NoWrap" />
+  </Style>
+  <Style Selector="TextBlock.play-code Run.hl-t">
+    <Setter Property="Foreground" Value="{DynamicResource PlayHlT}" />
+  </Style>
+  <Style Selector="TextBlock.play-code Run.hl-a">
+    <Setter Property="Foreground" Value="{DynamicResource PlayHlA}" />
+  </Style>
+  <Style Selector="TextBlock.play-code Run.hl-s">
+    <Setter Property="Foreground" Value="{DynamicResource PlayHlS}" />
+  </Style>
+  <Style Selector="TextBlock.play-code Run.hl-c">
+    <Setter Property="Foreground" Value="{DynamicResource PlayHlC}" />
+  </Style>
+  <Style Selector="TextBlock.play-code Run.ar">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontArabic}" />
+    <Setter Property="FontSize" Value="14" />
+  </Style>
+  <Style Selector="Button.play-copy">
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+    <Setter Property="Margin" Value="8" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="Padding" Value="10,4" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+    <Setter Property="FontSize" Value="11" />
+  </Style>
+  <Style Selector="Button.play-copy.done">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneOk}" />
+  </Style>
+
+  <!-- The options list: one box per component, a row per option -->
+  <Style Selector="TextBlock.opt-head">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+    <Setter Property="Margin" Value="12,4,12,8" />
+  </Style>
+  <Style Selector="TextBlock.opt-group">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="ExtraBold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+    <Setter Property="Margin" Value="12,18,12,6" />
+  </Style>
+  <Style Selector="Border.opt-name">
+    <Setter Property="Margin" Value="12,8" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+  </Style>
+  <Style Selector="Border.opt-name > TextBlock">
+    <Setter Property="TextWrapping" Value="NoWrap" />
+  </Style>
+  <Style Selector="TextBlock.opt-kind">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+    <Setter Property="Margin" Value="12,12" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+  </Style>
+  <Style Selector="TextBlock.opt-desc">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+    <Setter Property="LineHeight" Value="23.8" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Margin" Value="12,8" />
+  </Style>
+  <Style Selector="Border.opt-line">
+    <Setter Property="Height" Value="1" />
+    <Setter Property="VerticalAlignment" Value="Bottom" />
+    <Setter Property="Background" Value="{DynamicResource InsLine}" />
+  </Style>
+
+</Styles>

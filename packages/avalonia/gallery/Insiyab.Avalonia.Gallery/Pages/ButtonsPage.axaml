@@ -1,155 +1,31 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.ButtonsPage">
-  <UserControl.Resources>
-    <SolidColorBrush x:Key="ExampleTint" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.example">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background" Value="{StaticResource ExampleTint}" />
-    </Style>
-    <Style Selector="TextBlock.cap">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-      <Setter Property="Margin" Value="0,0,0,8" />
-      <Setter Property="LineHeight" Value="20.4" />
-    </Style>
-    <Style Selector="TextBlock.h3">
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
 
-  <ScrollViewer>
-    <StackPanel Spacing="16" MaxWidth="832" HorizontalAlignment="Stretch">
+  <StackPanel>
+    <TextBlock Classes="intro" Text="ألوان وأنماط ومقاسات، وأزرار تبديل ومجموعات، وزر للإغلاق، وأزرار تفتح قوائم." />
+    <pg:PlayExample Layout="Row" Code="{x:Static pg:ButtonsPlay.Example}" />
 
-      <Border Classes="example">
-        <WrapPanel ItemSpacing="10" LineSpacing="10">
-          <Button Classes="primary">
-            <StackPanel Orientation="Horizontal" Spacing="8">
-              <ins:Icon Data="{StaticResource IconCheck}" />
-              <TextBlock Text="حفظ" />
-            </StackPanel>
-          </Button>
-          <Button Classes="secondary" Content="معاينة" />
-          <Button Classes="ghost" Content="تصدير" />
-          <Button Classes="danger" Content="حذف" />
-          <Button Classes="bare" Content="إلغاء" />
-        </WrapPanel>
-      </Border>
+    <TextBlock Classes="section" Text="الزر" />
+    <pg:PlayText Classes="p" Markup="اختر من الخيارات، فيتغير الزر وشيفرته معًا. واجعل `primary` للإجراء الرئيسي في الشاشة، و`secondary` لما يجاوره، والهادئ لما هو أقل منهما. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:ButtonsPlay.Button}" />
 
-      <TextBlock Classes="h3" Text="الزر" />
-      <Border Classes="example">
-        <StackPanel Spacing="20">
-          <StackPanel>
-            <TextBlock Classes="cap" Text="النمط" />
-            <WrapPanel ItemSpacing="10" LineSpacing="10">
-              <Button Classes="primary" Content="حفظ" />
-              <Button Classes="secondary" Content="حفظ" />
-              <Button Classes="success" Content="حفظ" />
-              <Button Classes="danger" Content="حفظ" />
-              <Button Classes="warning" Content="حفظ" />
-              <Button Classes="info" Content="حفظ" />
-              <Button Classes="ghost" Content="حفظ" />
-              <Button Classes="ghost-success" Content="حفظ" />
-              <Button Classes="ghost-danger" Content="حفظ" />
-              <Button Classes="ghost-warning" Content="حفظ" />
-              <Button Classes="ghost-info" Content="حفظ" />
-              <Button Classes="bare" Content="حفظ" />
-            </WrapPanel>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="المقاس" />
-            <WrapPanel ItemSpacing="10" LineSpacing="10">
-              <Button Classes="primary sm" Content="حفظ" />
-              <Button Classes="primary" Content="حفظ" />
-              <Button Classes="primary lg" Content="حفظ" />
-            </WrapPanel>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="الأيقونة" />
-            <WrapPanel ItemSpacing="10" LineSpacing="10">
-              <Button Classes="primary">
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                  <ins:Icon Data="{StaticResource IconCheck}" />
-                  <TextBlock Text="حفظ" />
-                </StackPanel>
-              </Button>
-              <Button Classes="primary icon" AutomationProperties.Name="حفظ">
-                <ins:Icon Data="{StaticResource IconCheck}" />
-              </Button>
-              <Button Classes="primary sm icon" AutomationProperties.Name="حفظ">
-                <ins:Icon Data="{StaticResource IconCheck}" />
-              </Button>
-            </WrapPanel>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="بعرض الحاوية" />
-            <Button Classes="primary full" Content="حفظ" />
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="يرتفع تحت المؤشر" />
-            <Button Classes="primary lift" Content="حفظ" />
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="رابط بهيئة زر" />
-            <HyperlinkButton Theme="{StaticResource InsLinkButton}" Classes="primary" Content="حفظ" NavigateUri="https://example.com/orders" />
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="معطل" />
-            <WrapPanel ItemSpacing="10" LineSpacing="10">
-              <Button Classes="primary" Content="حفظ" IsEnabled="False" />
-              <Button Classes="secondary" Content="حفظ" IsEnabled="False" />
-            </WrapPanel>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="زر تبديل" />
-            <WrapPanel ItemSpacing="10" LineSpacing="10">
-              <ToggleButton Classes="secondary" Content="حفظ" IsChecked="True" />
-              <ToggleButton Classes="secondary" Content="حفظ" />
-              <ToggleButton Classes="ghost" Content="حفظ" IsChecked="True" />
-            </WrapPanel>
-          </StackPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="مجموعة الأزرار" />
+    <pg:PlayText Classes="p" Markup="يضم الكلاس `btn-group` على `StackPanel` الأزرار المتجاورة في قطعة واحدة." />
+    <pg:Playground Def="{x:Static pg:ButtonsPlay.Group}" />
 
-      <TextBlock Classes="h3" Text="مجموعة الأزرار" />
-      <Border Classes="example">
-        <StackPanel Spacing="20">
-          <StackPanel Classes="btn-group" AutomationProperties.Name="التنقل بين الأيام">
-            <Button Classes="secondary" Content="السابق" />
-            <Button Classes="secondary" Content="اليوم" />
-            <Button Classes="secondary" Content="التالي" />
-          </StackPanel>
-          <StackPanel Classes="btn-group" AutomationProperties.Name="التنقل بين الأيام">
-            <Button Classes="ghost" Content="السابق" />
-            <Button Classes="ghost" Content="اليوم" />
-            <Button Classes="ghost" Content="التالي" />
-          </StackPanel>
-          <StackPanel Classes="btn-group sm" AutomationProperties.Name="التنقل بين الأيام">
-            <Button Classes="secondary sm" Content="السابق" />
-            <Button Classes="secondary sm" Content="اليوم" />
-            <Button Classes="secondary sm" Content="التالي" />
-          </StackPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="زر الإغلاق" />
+    <pg:PlayText Classes="p" Markup="يرسم الكلاس `close` علامة الإغلاق بنفسه، فيغنيك عن الأيقونة." />
+    <pg:Playground Def="{x:Static pg:ButtonsPlay.Close}" />
 
       <TextBlock Classes="h3" Text="زر الإغلاق" />
-      <Border Classes="example">
-        <StackPanel Spacing="20" HorizontalAlignment="Stretch">
-          <WrapPanel ItemSpacing="16" LineSpacing="10">
-            <Button Classes="close" AutomationProperties.Name="إغلاق" />
-            <Button Classes="close sm" AutomationProperties.Name="إغلاق" />
-            <Button Classes="close bare" AutomationProperties.Name="إغلاق" />
-          </WrapPanel>
-          <ins:Alert Classes="info" Content="تنبيه يغلقه الزر." IsDismissible="True" CloseLabel="إغلاق التنبيه" Width="416" HorizontalAlignment="Left" />
-        </StackPanel>
-      </Border>
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في الأزرار من كلاسات وخصائص وأحداث، لكل مكون صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:ButtonsPlay.All}" />
+  </StackPanel>
 </UserControl>
