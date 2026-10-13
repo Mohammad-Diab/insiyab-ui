@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
@@ -32,6 +33,7 @@ public class Navbar : ListBox
         RoutedEvent.Register<Navbar, RoutedEventArgs>(nameof(Toggled), RoutingStrategies.Bubble);
 
     private bool _isCollapsed;
+    private Control? _menu;
 
     public Navbar()
     {
@@ -63,6 +65,12 @@ public class Navbar : ListBox
 
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey) => new NavbarLink();
 
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        _menu = e.NameScope.Find<Control>("PART_Menu");
+    }
+
     protected override void OnSizeChanged(SizeChangedEventArgs e)
     {
         base.OnSizeChanged(e);
@@ -75,6 +83,7 @@ public class Navbar : ListBox
         if (change.Property == IsOpenProperty)
         {
             PseudoClasses.Set(":open", change.GetNewValue<bool>());
+            if (change.GetNewValue<bool>() && IsCollapsed && _menu is not null && !Motion.IsStill(this)) Entrance.Play(_menu, EntranceEffect.Rise);
             RaiseEvent(new RoutedEventArgs(ToggledEvent, this));
         }
         else if (change.Property == CollapseWidthProperty) UpdateCollapsed(Bounds.Width);

@@ -44,9 +44,12 @@ public static class Shell
     public static void AddSidebarChangedHandler(Interactive element, EventHandler<SidebarChangedEventArgs> handler) => element.AddHandler(SidebarChangedEvent, handler);
     public static void RemoveSidebarChangedHandler(Interactive element, EventHandler<SidebarChangedEventArgs> handler) => element.RemoveHandler(SidebarChangedEvent, handler);
 
-    /// <summary>On a title island: it fades and settles in when it arrives (the web's <c>ins-island-in</c>). Set by the topbar theme.</summary>
+    /// <summary>On a title island: it fades and settles in when it arrives and again each time its <c>TextBlock.shell-title</c> or its content changes (the web's <c>ins-island-in</c> on every page). Set by the topbar theme.</summary>
     public static readonly AttachedProperty<bool> EntersProperty =
         AvaloniaProperty.RegisterAttached<Control, bool>("Enters", typeof(Shell));
+
+    private static readonly AttachedProperty<CancellationTokenSource?> EntranceProperty =
+        AvaloniaProperty.RegisterAttached<Control, CancellationTokenSource?>("Entrance", typeof(Shell));
 
     private static readonly AttachedProperty<IDisposable?> WatchProperty =
         AvaloniaProperty.RegisterAttached<Control, IDisposable?>("Watch", typeof(Shell));
@@ -90,6 +93,14 @@ public static class Shell
         {
             c.AttachedToVisualTree -= OnEnterAttached;
             if (e.GetNewValue<bool>()) c.AttachedToVisualTree += OnEnterAttached;
+        });
+        TextBlock.TextProperty.Changed.AddClassHandler<TextBlock>((t, e) =>
+        {
+            if (t.Classes.Contains("shell-title") && !Equals(e.OldValue, e.NewValue) && t.GetVisualAncestors().OfType<Control>().FirstOrDefault(GetEnters) is { } island) Replay(island);
+        });
+        ContentControl.ContentProperty.Changed.AddClassHandler<ContentControl>((c, e) =>
+        {
+            if (GetEnters(c) && !Equals(e.OldValue, e.NewValue)) Replay(c);
         });
     }
 
@@ -168,7 +179,22 @@ public static class Shell
 
     private static void OnEnterAttached(object? sender, VisualTreeAttachmentEventArgs e)
     {
-        if (sender is not Control c) return;
+        if (sender is Control c) Enter(c);
+    }
+
+    // A new page title while the island is on screen plays its entrance again.
+    private static void Replay(Control island)
+    {
+        if (TopLevel.GetTopLevel(island) is not null) Enter(island);
+    }
+
+    private static void Enter(Control c)
+    {
+        c.GetValue(EntranceProperty)?.Cancel();
+        c.SetValue(EntranceProperty, null);
+        if (Motion.IsStill(c)) return;
+        var run = new CancellationTokenSource();
+        c.SetValue(EntranceProperty, run);
         TransformOperationsAnimator.Ensure();
         var animation = new Animation
         {
@@ -181,7 +207,14 @@ public static class Shell
                 new KeyFrame { Cue = new Cue(1), Setters = { new Setter(Visual.OpacityProperty, 1d), new Setter(Visual.RenderTransformProperty, TransformOperations.Identity) } },
             },
         };
-        _ = animation.RunAsync(c, CancellationToken.None);
+        _ = RunEntrance(animation, c, run);
+    }
+
+    private static async Task RunEntrance(Animation animation, Control c, CancellationTokenSource run)
+    {
+        try { await animation.RunAsync(c, run.Token); }
+        catch (OperationCanceledException) { }
+        if (c.GetValue(EntranceProperty) == run) c.SetValue(EntranceProperty, null);
     }
 
     private static void OnScrollChanged(object? sender, ScrollChangedEventArgs e)
