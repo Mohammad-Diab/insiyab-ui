@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.ToastsPage">
+  <ScrollViewer>
+    <StackPanel Spacing="24">
+
+      <Border Classes="card" Padding="24">
+        <WrapPanel ItemSpacing="12" LineSpacing="12">
+          <Button Classes="secondary" Content="نجاح" ins:Toast.Text="تم الحفظ" ins:Toast.Tone="Ok" />
+          <Button Classes="secondary" Content="خطأ" ins:Toast.Text="حدث خطأ" ins:Toast.Tone="Bad" />
+          <Button Classes="secondary" Content="تحذير" ins:Toast.Text="انتبه" ins:Toast.Tone="Warn" />
+          <Button Classes="secondary" Content="معلومة" ins:Toast.Text="للعلم" ins:Toast.Tone="Info" />
+        </WrapPanel>
+      </Border>
+
+      <TextBlock Classes="h2" Text="الرسالة العابرة" />
+      <Border Classes="card" Padding="24">
+        <StackPanel Spacing="12">
+          <Button Classes="secondary" Content="اعرض الرسالة" HorizontalAlignment="Center" Click="OnShowToast" />
+          <TextBlock Classes="muted" HorizontalAlignment="Center" TextWrapping="Wrap" Text="اضغط F8 لتنتقل إلى الرسائل بلوحة المفاتيح، وتبقى رسالة الخطأ حتى تغلقها." />
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

@@ -1,0 +1,219 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <!-- The alert tone carriers the toast reuses: the glyph's saturated hue and a border at 45% -->
+      <SolidColorBrush x:Key="InsToastOkGlyph" Color="#16A34A" />
+      <SolidColorBrush x:Key="InsToastBadGlyph" Color="#DC2626" />
+      <SolidColorBrush x:Key="InsToastWarnGlyph" Color="#D97706" />
+      <SolidColorBrush x:Key="InsToastOkBd" Color="#7322C55E" />
+      <SolidColorBrush x:Key="InsToastBadBd" Color="#73EF4444" />
+      <SolidColorBrush x:Key="InsToastWarnBd" Color="#73F59E0B" />
+      <SolidColorBrush x:Key="InsToastInfoBd" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsToastInfoText" Color="{DynamicResource InsPrimaryDarkerColor}" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsToastInfoText" Color="{DynamicResource InsText1Color}" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- The toast strip: in the bottom corner on the end side, 1rem in, as wide as min(92vw, 26rem) at most, toasts .5rem apart, the newest nearest the edge -->
+      <ControlTheme x:Key="{x:Type WindowNotificationManager}" TargetType="WindowNotificationManager">
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <ReversibleStackPanel Name="PART_Items" Spacing="8" Margin="16" MaxWidth="416">
+              <ReversibleStackPanel.DataTemplates>
+                <DataTemplate x:DataType="INotification">
+                  <StackPanel Spacing="2">
+                    <TextBlock FontWeight="Bold" Text="{Binding Title}" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+                  </StackPanel>
+                </DataTemplate>
+              </ReversibleStackPanel.DataTemplates>
+            </ReversibleStackPanel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:topleft /template/ ReversibleStackPanel#PART_Items">
+          <Setter Property="VerticalAlignment" Value="Top" />
+          <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style Selector="^:topright /template/ ReversibleStackPanel#PART_Items">
+          <Setter Property="VerticalAlignment" Value="Top" />
+          <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+        <Style Selector="^:topcenter /template/ ReversibleStackPanel#PART_Items">
+          <Setter Property="VerticalAlignment" Value="Top" />
+          <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="^:bottomleft /template/ ReversibleStackPanel#PART_Items">
+          <Setter Property="ReverseOrder" Value="False" />
+          <Setter Property="VerticalAlignment" Value="Bottom" />
+          <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style Selector="^:bottomright /template/ ReversibleStackPanel#PART_Items">
+          <Setter Property="ReverseOrder" Value="False" />
+          <Setter Property="VerticalAlignment" Value="Bottom" />
+          <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+        <Style Selector="^:bottomcenter /template/ ReversibleStackPanel#PART_Items">
+          <Setter Property="ReverseOrder" Value="False" />
+          <Setter Property="VerticalAlignment" Value="Bottom" />
+          <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+        <!-- At a phone's width the strip spans the bottom -->
+        <Style Selector="^.phone /template/ ReversibleStackPanel#PART_Items">
+          <Setter Property="HorizontalAlignment" Value="Stretch" />
+          <Setter Property="MaxWidth" Value="Infinity" />
+          <Setter Property="Margin" Value="12" />
+        </Style>
+      </ControlTheme>
+
+      <!-- One toast, .ins-toast: as wide as its sentence, a small glyph in the tone colour; a click sends it away, and one that stays has a cross -->
+      <ControlTheme x:Key="{x:Type NotificationCard}" TargetType="NotificationCard">
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Padding" Value="16,13" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+        <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsToastInfoBd}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsToastInfoText}" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Name="PART_FocusRing"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BoxShadow="{DynamicResource InsFocusRing}"
+                      Opacity="0"
+                      IsHitTestVisible="False" />
+              <Border Name="PART_Card"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      Padding="{TemplateBinding Padding}"
+                      BoxShadow="{DynamicResource InsShLg}">
+                <DockPanel>
+                  <TextBlock Name="PART_Glyph"
+                             DockPanel.Dock="Left"
+                             Margin="0,0,10,0"
+                             FontSize="16"
+                             LineHeight="24"
+                             VerticalAlignment="Center"
+                             Foreground="{DynamicResource InsPrimary}"
+                             Text="i" />
+                  <Button Name="PART_Close"
+                          DockPanel.Dock="Right"
+                          Classes="close sm bare"
+                          Margin="10,0,0,0"
+                          VerticalAlignment="Center"
+                          NotificationCard.CloseOnClick="True"
+                          IsVisible="False"
+                          AutomationProperties.Name="إغلاق"
+                          ToolTip.Tip="إغلاق" />
+                  <ContentPresenter Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    VerticalAlignment="Center"
+                                    TextWrapping="Wrap"
+                                    LineHeight="21" />
+                </DockPanel>
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+
+        <ControlTheme.Animations>
+          <Animation Duration="0:0:0.22" FillMode="Forward">
+            <Animation.Easing>
+              <SplineEasing X1="0.22" Y1="1" X2="0.36" Y2="1" />
+            </Animation.Easing>
+            <KeyFrame Cue="0%">
+              <Setter Property="Opacity" Value="0" />
+              <Setter Property="RenderTransform" Value="translateY(12px) scale(0.97)" />
+            </KeyFrame>
+            <KeyFrame Cue="100%">
+              <Setter Property="Opacity" Value="1" />
+              <Setter Property="RenderTransform" Value="none" />
+            </KeyFrame>
+          </Animation>
+        </ControlTheme.Animations>
+
+        <!-- The exit, the entrance run backwards at the exit's pace; IsClosed at its end hands the card back to the manager -->
+        <Style Selector="^[IsClosing=true]">
+          <Setter Property="IsHitTestVisible" Value="False" />
+          <Style.Animations>
+            <Animation Duration="0:0:0.18" FillMode="Forward">
+              <Animation.Easing>
+                <SplineEasing X1="0.22" Y1="1" X2="0.36" Y2="1" />
+              </Animation.Easing>
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="1" />
+                <Setter Property="RenderTransform" Value="none" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0" />
+                <Setter Property="RenderTransform" Value="translateY(12px) scale(0.97)" />
+                <Setter Property="IsClosed" Value="True" />
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^.persist /template/ Button#PART_Close">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+
+        <Style Selector="^:success">
+          <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToastOkBd}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneOk}" />
+          <Style Selector="^ /template/ TextBlock#PART_Glyph">
+            <Setter Property="Text" Value="✓" />
+            <Setter Property="Foreground" Value="{DynamicResource InsToastOkGlyph}" />
+          </Style>
+        </Style>
+        <Style Selector="^:error">
+          <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToastBadBd}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+          <Style Selector="^ /template/ TextBlock#PART_Glyph">
+            <Setter Property="Text" Value="✕" />
+            <Setter Property="Foreground" Value="{DynamicResource InsToastBadGlyph}" />
+          </Style>
+        </Style>
+        <Style Selector="^:warning">
+          <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToastWarnBd}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneWarn}" />
+          <Style Selector="^ /template/ TextBlock#PART_Glyph">
+            <Setter Property="Text" Value="!" />
+            <Setter Property="Foreground" Value="{DynamicResource InsToastWarnGlyph}" />
+          </Style>
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- At a phone's width a toast fills the strip -->
+  <Style Selector="WindowNotificationManager.phone NotificationCard">
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+  </Style>
+
+</Styles>

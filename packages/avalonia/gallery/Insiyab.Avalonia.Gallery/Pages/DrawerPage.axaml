@@ -1,0 +1,115 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.DrawerPage">
+  <UserControl.Resources>
+    <ins:Dialog x:Key="DrawerStart" Classes="drawer" Title="درج البداية">
+      <TextBlock Text="محتوى الدرج." TextWrapping="Wrap" />
+      <ins:Dialog.Foot>
+        <ins:DialogFoot>
+          <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
+          <Button Classes="primary" Content="تطبيق" ins:Dialog.Result="ok" />
+        </ins:DialogFoot>
+      </ins:Dialog.Foot>
+    </ins:Dialog>
+    <ins:Dialog x:Key="DrawerEnd" Classes="drawer end" Title="درج النهاية">
+      <TextBlock Text="محتوى الدرج." TextWrapping="Wrap" />
+    </ins:Dialog>
+    <ins:Dialog x:Key="DrawerBottom" Classes="drawer bottom" Title="لوح سفلي">
+      <TextBlock Text="محتوى اللوح." TextWrapping="Wrap" />
+    </ins:Dialog>
+
+    <ins:Dialog x:Key="Play" Classes="drawer" Title="عنوان الدرج">
+      <TextBlock Text="محتوى الدرج." TextWrapping="Wrap" />
+      <ins:Dialog.Foot>
+        <ins:DialogFoot>
+          <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
+          <Button Classes="primary" Content="تطبيق" ins:Dialog.Result="ok" />
+        </ins:DialogFoot>
+      </ins:Dialog.Foot>
+    </ins:Dialog>
+    <ins:Dialog x:Key="PlayEnd" Classes="drawer end" Title="عنوان الدرج">
+      <TextBlock Text="محتوى الدرج." TextWrapping="Wrap" />
+      <ins:Dialog.Foot>
+        <ins:DialogFoot>
+          <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
+          <Button Classes="primary" Content="تطبيق" ins:Dialog.Result="ok" />
+        </ins:DialogFoot>
+      </ins:Dialog.Foot>
+    </ins:Dialog>
+    <ins:Dialog x:Key="PlayBottom" Classes="drawer bottom" Title="عنوان الدرج">
+      <TextBlock Text="محتوى الدرج." TextWrapping="Wrap" />
+      <ins:Dialog.Foot>
+        <ins:DialogFoot>
+          <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
+          <Button Classes="primary" Content="تطبيق" ins:Dialog.Result="ok" />
+        </ins:DialogFoot>
+      </ins:Dialog.Foot>
+    </ins:Dialog>
+    <ins:Dialog x:Key="PlayBare" Classes="drawer" Title="عنوان الدرج">
+      <TextBlock Text="محتوى الدرج." TextWrapping="Wrap" />
+    </ins:Dialog>
+    <ins:Dialog x:Key="PlayRequest" Classes="drawer" Title="عنوان الدرج" ClosedBy="CloseRequest">
+      <TextBlock Text="محتوى الدرج." TextWrapping="Wrap" />
+      <ins:Dialog.Foot>
+        <ins:DialogFoot>
+          <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
+          <Button Classes="primary" Content="تطبيق" ins:Dialog.Result="ok" />
+        </ins:DialogFoot>
+      </ins:Dialog.Foot>
+    </ins:Dialog>
+    <ins:Dialog x:Key="PlayNone" Classes="drawer" Title="عنوان الدرج" ClosedBy="None">
+      <TextBlock Text="محتوى الدرج." TextWrapping="Wrap" />
+      <ins:Dialog.Foot>
+        <ins:DialogFoot>
+          <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
+          <Button Classes="primary" Content="تطبيق" ins:Dialog.Result="ok" />
+        </ins:DialogFoot>
+      </ins:Dialog.Foot>
+    </ins:Dialog>
+  </UserControl.Resources>
+
+  <ScrollViewer>
+    <StackPanel Spacing="24">
+
+      <Border Classes="card" Padding="24">
+        <WrapPanel ItemSpacing="12" LineSpacing="12">
+          <Button Classes="secondary" Content="البداية" ins:Dialog.Opens="{StaticResource DrawerStart}" />
+          <Button Classes="secondary" Content="النهاية" ins:Dialog.Opens="{StaticResource DrawerEnd}" />
+          <Button Classes="secondary" Content="الأسفل" ins:Dialog.Opens="{StaticResource DrawerBottom}" />
+        </WrapPanel>
+      </Border>
+
+      <TextBlock Classes="h2" Text="الدرج" />
+      <Border Classes="card" Padding="24">
+        <StackPanel Spacing="16" HorizontalAlignment="Center">
+          <Button Classes="secondary" Content="فتح الدرج" HorizontalAlignment="Center" ins:Dialog.Opens="{StaticResource Play}" />
+          <WrapPanel ItemSpacing="12" LineSpacing="12" HorizontalAlignment="Center">
+            <Button Classes="secondary sm" Content="النهاية" ins:Dialog.Opens="{StaticResource PlayEnd}" />
+            <Button Classes="secondary sm" Content="الأسفل" ins:Dialog.Opens="{StaticResource PlayBottom}" />
+            <Button Classes="secondary sm" Content="بلا ذيل" ins:Dialog.Opens="{StaticResource PlayBare}" />
+            <Button Classes="secondary sm" Content="Esc وأزراره" ins:Dialog.Opens="{StaticResource PlayRequest}" />
+            <Button Classes="secondary sm" Content="أزراره وحدها" ins:Dialog.Opens="{StaticResource PlayNone}" />
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="h2" Text="الدرج المثبّت" />
+      <Border Classes="card" Padding="0" Height="320" ClipToBounds="True">
+        <ins:DrawerHost x:Name="Pinned" Mode="Pinned" Side="End" IsPaneOpen="True">
+          <ins:DrawerHost.Pane>
+            <ins:Dialog Title="عنوان الدرج">
+              <TextBlock Text="محتوى الدرج." TextWrapping="Wrap" />
+            </ins:Dialog>
+          </ins:DrawerHost.Pane>
+          <StackPanel Margin="24" Spacing="12">
+            <Button Classes="secondary" Content="الدرج" HorizontalAlignment="Left" ins:DrawerHost.Toggles="{Binding #Pinned}" />
+            <TextBlock Text="محتوى الصفحة." />
+            <TextBlock Classes="muted" Text="اسحب حافته لتغيّر عرضه، وإذا ضاقت النافذة طفا فوق الصفحة كالدرج العادي." TextWrapping="Wrap" />
+          </StackPanel>
+        </ins:DrawerHost>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

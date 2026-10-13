@@ -1,0 +1,248 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <StreamGeometry x:Key="InsNotifyBellIcon">M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.9 1.9 0 0 0 3.4 0</StreamGeometry>
+      <SolidColorBrush x:Key="InsNotifyCountBg" Color="#DC2626" />
+      <SolidColorBrush x:Key="InsNotifyIcoBg" Color="{DynamicResource InsPrimaryColor}" Opacity="0.1" />
+      <SolidColorBrush x:Key="InsNotifyFootHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.06" />
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsNotifyUnreadBg" Color="{DynamicResource InsPrimaryColor}" Opacity="0.05" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsNotifyUnreadBg" Color="{DynamicResource InsPrimaryColor}" Opacity="0.12" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- The foot link, .ins-notify-foot: centred brand text under the list -->
+      <ControlTheme x:Key="InsNotifyFoot" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+        <Setter Property="BorderThickness" Value="0,1,0,0" />
+        <Setter Property="Padding" Value="16,10" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Padding="{TemplateBinding Padding}">
+              <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsNotifyFootHover}" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ctl:Notify}" TargetType="ctl:Notify">
+        <Setter Property="Icon" Value="{StaticResource InsNotifyBellIcon}" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Button Name="PART_Bell" Classes="island icon">
+                <ctl:Icon Name="PART_BellIcon" Data="{TemplateBinding Icon}" RenderTransformOrigin="50%,12%" />
+              </Button>
+              <Border Name="PART_Count"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Top"
+                      Margin="0,-7,-7,0"
+                      Padding="2"
+                      CornerRadius="{DynamicResource InsRPill}"
+                      Background="{DynamicResource InsWash1}"
+                      IsHitTestVisible="False">
+                <ctl:Badge Name="PART_Badge"
+                           Content="{TemplateBinding CountText}"
+                           Background="{DynamicResource InsNotifyCountBg}"
+                           Foreground="#FFFFFF"
+                           MinWidth="20"
+                           Height="20"
+                           Padding="5,0"
+                           FlowDirection="LeftToRight" />
+              </Border>
+              <Popup Name="PART_Popup"
+                     PlacementTarget="{Binding #PART_Bell}"
+                     OverlayInputPassThroughElement="{Binding #PART_Bell}"
+                     IsOpen="{TemplateBinding IsOpen, Mode=TwoWay}"
+                     IsLightDismissEnabled="True"
+                     ShouldUseOverlayLayer="True">
+                <FlyoutPresenter Classes="pop card notify"
+                                 FlowDirection="{TemplateBinding FlowDirection}"
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                  <DockPanel>
+                    <Border Name="PART_Head" DockPanel.Dock="Top" Padding="16,10,12,10" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource InsLine}">
+                      <DockPanel>
+                        <Button Name="PART_ReadAll"
+                                DockPanel.Dock="Right"
+                                Classes="bare sm"
+                                Content="{TemplateBinding ReadAllText}"
+                                IsVisible="{TemplateBinding ReadAllText, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                        <TextBlock Text="{TemplateBinding Title}"
+                                   FontSize="{DynamicResource InsFsMd}"
+                                   FontWeight="ExtraBold"
+                                   Foreground="{DynamicResource InsText1}"
+                                   VerticalAlignment="Center"
+                                   MinHeight="30"
+                                   LineHeight="30" />
+                      </DockPanel>
+                    </Border>
+                    <Button Name="PART_Foot"
+                            DockPanel.Dock="Bottom"
+                            Theme="{StaticResource InsNotifyFoot}"
+                            Content="{TemplateBinding FootText}"
+                            IsVisible="{TemplateBinding FootText, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                    <Panel>
+                      <TextBlock Name="PART_Empty"
+                                 Text="{TemplateBinding EmptyText}"
+                                 Margin="24,32"
+                                 HorizontalAlignment="Center"
+                                 TextAlignment="Center"
+                                 FontSize="15"
+                                 FontWeight="Bold"
+                                 Foreground="{DynamicResource InsText1}"
+                                 IsVisible="False" />
+                      <ScrollViewer Name="PART_Scroll" HorizontalScrollBarVisibility="Disabled">
+                        <ItemsPresenter Name="PART_ItemsPresenter" Margin="4" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                      </ScrollViewer>
+                    </Panel>
+                  </DockPanel>
+                </FlyoutPresenter>
+              </Popup>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:not(:unread) /template/ Border#PART_Count">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:empty /template/ TextBlock#PART_Empty">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:empty /template/ ScrollViewer#PART_Scroll">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:empty /template/ Button#PART_ReadAll">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+      </ControlTheme>
+
+      <!-- One row, .ins-notify-list .ins-list-item: a notification, not a destination, so no chevron; read rows keep an ordinary title -->
+      <ControlTheme x:Key="{x:Type ctl:NotifyItem}" TargetType="ctl:NotifyItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="Padding" Value="12,10" />
+        <Setter Property="MinHeight" Value="52" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Name="PART_Row"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      Padding="{TemplateBinding Padding}"
+                      MinHeight="{TemplateBinding MinHeight}">
+                <DockPanel>
+                  <Panel DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Center">
+                    <Border Name="PART_Ico" Width="36" Height="36" CornerRadius="{DynamicResource InsRMd}" Background="{DynamicResource InsNotifyIcoBg}">
+                      <ctl:Icon Data="{TemplateBinding Icon}" Size="15" Foreground="{DynamicResource InsToneBrandSoft}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ctl:Avatar Name="PART_Avatar" Classes="sm" Content="{TemplateBinding Avatar}" IsVisible="False" />
+                  </Panel>
+                  <TextBlock Name="PART_End"
+                             DockPanel.Dock="Right"
+                             Margin="12,0,0,0"
+                             Text="{TemplateBinding End}"
+                             FontSize="{DynamicResource InsFsXs}"
+                             Foreground="{DynamicResource InsLabel}"
+                             VerticalAlignment="Center" />
+                  <StackPanel Spacing="2" VerticalAlignment="Center">
+                    <TextBlock Name="PART_Title"
+                               Text="{TemplateBinding Title}"
+                               FontSize="{DynamicResource InsFsMd}"
+                               FontWeight="SemiBold"
+                               TextTrimming="CharacterEllipsis" />
+                    <TextBlock Name="PART_Desc"
+                               Text="{TemplateBinding Description}"
+                               FontSize="{DynamicResource InsFsXs}"
+                               Foreground="{DynamicResource InsLabel}"
+                               TextWrapping="Wrap" />
+                  </StackPanel>
+                </DockPanel>
+              </Border>
+              <Ellipse Name="PART_Dot"
+                       Width="7"
+                       Height="7"
+                       Margin="4,0,0,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Fill="{DynamicResource InsPrimary}"
+                       IsVisible="False" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Border#PART_Row">
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:nth-child(n+2)">
+          <Setter Property="BorderThickness" Value="0,1,0,0" />
+        </Style>
+        <Style Selector="^:unread">
+          <Setter Property="Background" Value="{DynamicResource InsNotifyUnreadBg}" />
+          <Style Selector="^ /template/ TextBlock#PART_Title">
+            <Setter Property="FontWeight" Value="ExtraBold" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_Dot">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+        </Style>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_Row">
+          <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
+        </Style>
+        <Style Selector="^:avatar">
+          <Style Selector="^ /template/ Border#PART_Ico">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ ctl|Avatar#PART_Avatar">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- The panel, .ins-notify-body: 22rem wide, 30rem at most, no inner padding; the head and foot stay put -->
+  <Style Selector="FlyoutPresenter.notify">
+    <Setter Property="Padding" Value="0" />
+  </Style>
+  <Style Selector="FlyoutPresenter.notify /template/ Border#LayoutRoot">
+    <Setter Property="Width" Value="352" />
+    <Setter Property="MaxHeight" Value="480" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+
+</Styles>
