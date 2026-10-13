@@ -238,6 +238,7 @@ public partial class Table : TemplatedControl
         if (ItemsSource is not null) Generate();
         var source = ItemsSource is not null ? _generated : (IList<TableRow>)Rows;
 
+        var shown = _display.Select(KeyOf).ToHashSet();
         foreach (var old in _display) old.Attach(null);
         _display.Clear();
         _rows.Children.Clear();
@@ -288,6 +289,7 @@ public partial class Table : TemplatedControl
             _rows.Children.Add(row);
         }
 
+        Arrive(shown);
         PseudoClasses.Set(":empty", _display.Count == 0 && Empty is not null);
         PseudoClasses.Set(":cell-cursor", HasEditable);
         if (_current is null || !_display.Contains(_current))
@@ -302,6 +304,37 @@ public partial class Table : TemplatedControl
         ColumnWidths.Invalidate();
         SyncSelection(true);
         Dispatcher.UIThread.Post(UpdateSticky, DispatcherPriority.Render);
+    }
+
+    private static object KeyOf(TableRow row) => row.Item ?? row;
+
+    // Rows new to the table rise in, the first six 40ms apart, as the web's do; a fresh table's later rows simply appear, and a sort only moves rows, so it never replays this.
+    private void Arrive(HashSet<object> shown)
+    {
+        if (Motion.IsStill(this)) return;
+        var fresh = _display.Count(r => !shown.Contains(KeyOf(r)));
+        for (var i = 0; i < _display.Count; i++)
+        {
+            if (shown.Contains(KeyOf(_display[i]))) continue;
+            if (i < 6) Rise(_display[i], i * 40);
+            else if (fresh < _display.Count) Rise(_display[i], 0);
+        }
+    }
+
+    // A row added while the template is still being built is not in the tree yet, and an entrance needs its frames, so it starts when the row arrives there.
+    private static void Rise(TableRow row, double delay)
+    {
+        if (row.IsAttachedToVisualTree())
+        {
+            Entrance.Play(row, EntranceEffect.Rise, delay);
+            return;
+        }
+        void Attached(object? sender, VisualTreeAttachmentEventArgs e)
+        {
+            row.AttachedToVisualTree -= Attached;
+            Entrance.Play(row, EntranceEffect.Rise, delay);
+        }
+        row.AttachedToVisualTree += Attached;
     }
 
     private string Word(string key)
