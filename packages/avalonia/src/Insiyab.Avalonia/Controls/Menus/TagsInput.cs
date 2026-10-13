@@ -226,11 +226,8 @@ public class TagsInput : TemplatedControl
         if (e.NewItems is not null)
             foreach (string v in e.NewItems)
             {
-                var chip = MakeChip(v);
                 var at = _input is not null ? _panel.Children.IndexOf(_input) : -1;
-                if (at < 0) _panel.Children.Add(chip);
-                else _panel.Children.Insert(at, chip);
-                if (this.IsAttachedToVisualTree()) chip.PlayEnter();
+                Chip.Arrive(_panel, at < 0 ? _panel.Children.Count : at, MakeChip(v));
                 Changed(v, null);
             }
         if (e.Action == NotifyCollectionChangedAction.Reset)
