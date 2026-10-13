@@ -125,13 +125,18 @@ public static class TablesPlay
         [
             Switch("sticky", "تثبيت الرأس", "sticky", "يضع الجدول الطويل في صندوق يتمرر ضمن `MaxHeight`، وهو 512 إن لم تذكره، ويبقي رأسه ظاهرًا."),
             Switch("pin", "تثبيت العمود الأول", "pin", "يبقي العمود الأول ظاهرًا حين يتمرر الجدول العريض أفقيًا. ولك أن تجمعه مع `sticky`."),
+            Seg("frozen", "أعمدة ثابتة", "",
+                Choice("", "بلا"),
+                Choice("2", "عمودان", "FrozenColumns", "عدد الأعمدة التي تبقى في مكانها من البداية حين يتمرر الجدول أفقيًا، ومعها عمود المربعات إن وُجد. وعلى حافة آخرها ظل خفيف ما دامت الخلايا تمر تحته.", OptionKind.Property)),
         ],
         Extra =
         [
             Row("الأساس", "TableMinWidth", "أضيق ما يكون عليه الجدول، فإذا ضاقت حاويته عنه تمرر أفقيًا وبقيت الصفحة على عرضها.", OptionKind.Property, true),
-            Row("الأساس", "CanResizeColumns", "يسحب المستخدم الحافة في آخر عنوان العمود فيغير عرضه.", OptionKind.Property, true),
+            Row("الأساس", "CanResizeColumns", "يسحب المستخدم الحافة في آخر عنوان العمود فيغير عرضه، وينقرها مرتين فيضيق العمود على قدر أعرض ما فيه. وهو مفعّل إن لم تذكره.", OptionKind.Property, true),
+            Row("الأساس", "MinWidth", "على `ins:TableColumn`: أضيق ما يُسحب إليه العمود، وهو 48 إن لم تذكره.", OptionKind.Property, true),
             Row("الأساس", "IsFit", "على `ins:TableColumn`: يضيق العمود على قدر محتواه، ويذهب ما بقي من العرض إلى غيره.", OptionKind.Property, true),
         ],
+        Disable = s => s.Has("frozen") ? ["pin"] : [],
         Axaml = s =>
         {
             string[][] rows =
@@ -142,8 +147,9 @@ public static class TablesPlay
                 ["كريم", "دبي", "karim@example.com", "+971 50 000 0004", "نشط"],
                 ["نور", "الدوحة", "nour@example.com", "+974 5000 0005", "نشط"],
             ];
-            var cls = Classes(s.On("sticky") ? "sticky" : null, s.On("pin") ? "pin" : null);
-            return $"<ins:Table{cls} TableMinWidth=\"768\"{(s.On("sticky") ? " MaxHeight=\"256\"" : "")}>\n" +
+            var cls = Classes(s.On("sticky") ? "sticky" : null, s.On("pin") && !s.Has("frozen") ? "pin" : null);
+            var frozen = s.Has("frozen") ? $" FrozenColumns=\"{s["frozen"]}\"" : "";
+            return $"<ins:Table{cls}{frozen} TableMinWidth=\"768\"{(s.On("sticky") ? " MaxHeight=\"256\"" : "")}>\n" +
                 "  <ins:Table.Columns>\n" +
                 "    <ins:TableColumn Header=\"الاسم\" /><ins:TableColumn Header=\"المدينة\" /><ins:TableColumn Header=\"البريد\" /><ins:TableColumn Header=\"الهاتف\" /><ins:TableColumn Header=\"الحالة\" />\n" +
                 "  </ins:Table.Columns>\n" +
@@ -153,6 +159,7 @@ public static class TablesPlay
         },
         Notes = s =>
         {
+            if (s.Has("frozen")) return ["مرر الجدول أفقيًا، فيبقى العمودان الأولان في مكانهما، ويظهر على حافة الثاني ظل خفيف فوق الخلايا التي تمر تحته."];
             if (s.On("sticky") && s.On("pin")) return ["مرر الجدول عموديًا وأفقيًا، فيبقى رأسه وعموده الأول ظاهرين."];
             if (s.On("sticky")) return ["مرر الجدول داخل صندوقه، وقد قصّرناه بـ`MaxHeight`، فيبقى رأسه ظاهرًا."];
             if (s.On("pin")) return ["مرر الجدول أفقيًا، فيبقى العمود الأول في مكانه."];
@@ -179,7 +186,7 @@ public static class TablesPlay
             Row("نوع القيم", "Sort=\"Number\"", "يرتب العمود بالأرقام في كل حال.", OptionKind.Property),
             Row("نوع القيم", "Sort=\"Text\"", "يرتب العمود نصًا ولو كانت خلاياه أرقامًا.", OptionKind.Property),
             Row("قيمة الخلية", "Value", "يرتب بها إذا لم تجد `SortValue`، ويبدأ بها التعديل في مكانه أيضًا.", OptionKind.Property),
-            Row("الحدث", "Sorting", "يُطلق قبل الترتيب، ومعه العمود `Column` ورقمه `ColumnIndex` والاتجاه `Direction`. ألغه بـ`Cancel` إذا كان الترتيب على الخادم، فيتحرك السهم وحده. ويرتب `SortBy` من الشيفرة.", OptionKind.Event),
+            Row("الحدث", "Sorting", "يُطلق قبل الترتيب، ومعه العمود `Column` ورقمه `ColumnIndex` والاتجاه `Direction`. ألغه بـ`Cancel` إذا كان الترتيب على الخادم، فيتحرك السهم وحده. وترتب `Sort(column)` من الشيفرة.", OptionKind.Event),
         ],
         Axaml = s =>
         {
@@ -260,7 +267,7 @@ public static class TablesPlay
         Stage = (view, _, say) =>
         {
             foreach (var t in view.GetLogicalDescendants().OfType<Table>())
-                t.SelectionChanged += (_, e) => say($"حدث `SelectionChanged`، و`Count` الآن `{e.Count}`");
+                t.Loaded += (_, _) => t.SelectionChanged += (_, e) => say($"حدث `SelectionChanged`، و`Count` الآن `{e.Count}`");
         },
     };
 
@@ -299,5 +306,43 @@ public static class TablesPlay
         },
     };
 
-    public static PlayDef[] All { get; } = [Table, Wrap, Sort, Select, Edit];
+    public static PlayDef Sheet { get; } = new()
+    {
+        Id = "sheet",
+        Title = "التنقل بين الخلايا",
+        Wide = _ => true,
+        Controls =
+        [
+            Switch("cells", "من خلية إلى خلية", "IsCellNavigation", "يتنقل المستخدم بين الخلايا كما في جداول البيانات: الأسهم بحسب اتجاه الواجهة، و`Home` و`End` إلى أول الصف وآخره، و`Ctrl+Home` و`Ctrl+End` إلى أول الجدول وآخره، و`PageUp` و`PageDown` صفحةً صفحة، و`Tab` و`Shift+Tab` إلى الخلية التالية والسابقة.", OptionKind.Property, on: true),
+            Switch("edit", "خلايا تقبل التعديل", "Edit=\"Text\"", "على عمود: يبدأ تعديل خليته بـ`Enter` أو `F2` أو بالكتابة مباشرة، ثم يحفظ `Enter` ما كتبت وينزل إلى الخلية التي تحتها، ويتراجع `Esc`.", OptionKind.Property, on: true),
+        ],
+        Extra =
+        [
+            Row("الأساس", "CurrentRow", "الصف الذي عليه لوحة المفاتيح، ومعه `CurrentColumn` رقم عمود الخلية.", OptionKind.Property, true),
+        ],
+        Axaml = s =>
+        {
+            var edit = s.On("edit") ? " Edit=\"Text\"" : "";
+            var num = s.On("edit") ? " Edit=\"Number\"" : "";
+            string[][] rows = [["ليلى", "الرياض", "12", "نشط"], ["عمر", "عمّان", "7", "نشط"], ["سارة", "القاهرة", "30", "موقوف"], ["كريم", "دبي", "4", "نشط"]];
+            return $"<ins:Table{(s.On("cells") ? " IsCellNavigation=\"True\"" : "")}>\n" +
+                "  <ins:Table.Columns>\n" +
+                $"    <ins:TableColumn Header=\"الاسم\"{edit} />\n" +
+                "    <ins:TableColumn Header=\"المدينة\" />\n" +
+                $"    <ins:TableColumn Header=\"الكمية\" Classes=\"num\"{num} />\n" +
+                "    <ins:TableColumn Header=\"الحالة\" />\n" +
+                "  </ins:Table.Columns>\n" +
+                string.Concat(rows.Select(r => $"  <ins:TableRow>{Cells(r)}</ins:TableRow>\n")) +
+                "</ins:Table>";
+        },
+        Notes = s =>
+        {
+            if (!s.On("cells")) return ["بلا `IsCellNavigation` تنتقل الأسهم بين الصفوف، ولا تتنقل بين الخلايا إلا إذا كان في الجدول عمود يقبل التعديل."];
+            return s.On("edit")
+                ? ["انقر الجدول ثم تنقل فيه بالأسهم و`Tab`، واكتب على خلية من الاسم أو الكمية فيبدأ التعديل بما كتبت."]
+                : ["انقر الجدول ثم تنقل بين خلاياه بالأسهم و`Home` و`End` و`Tab`."];
+        },
+    };
+
+    public static PlayDef[] All { get; } = [Table, Wrap, Sort, Select, Edit, Sheet];
 }

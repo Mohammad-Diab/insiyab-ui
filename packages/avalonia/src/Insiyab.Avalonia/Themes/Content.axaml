@@ -4,4 +4,5 @@
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Content/Comments.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Content/Countdown.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Content/Chart.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Content/Find.axaml" />
 </Styles>

@@ -804,8 +804,222 @@ public class DataTests
         Assert.Equal(w0 + 40, heads[0].Bounds.Width, 1);
         foreach (var row in table.DisplayedRows) Assert.Equal(heads[0].Bounds.Width, row.Cells[0].Bounds.Width, 1);
         DoubleClick(grip, window);
-        Assert.Equal(w0, heads[0].Bounds.Width, 1);
-        Assert.Empty(table.ColumnWidths.FixedWidths);
+        var content = Math.Ceiling(table.DisplayedRows.Select(r => r.Cells[0].DesiredSize.Width).Append(heads[0].DesiredSize.Width).Max());
+        Assert.Equal(Math.Max(ColumnLayout.MinWidth, content), heads[0].Bounds.Width, 1);
+        Assert.True(heads[0].Bounds.Width < w0);
+        Assert.Equal(heads[0].Bounds.Width, table.ColumnWidths.FixedWidths[0], 1);
+        foreach (var row in table.DisplayedRows) Assert.Equal(heads[0].Bounds.Width, row.Cells[0].Bounds.Width, 1);
+        window.Close();
+    }
+
+    [AvaloniaFact]
+    public void Table_column_drag_stops_at_its_min_width()
+    {
+        var table = People(new TableColumn { Header = "الاسم", MinWidth = 120 }, new TableColumn { Header = "المدينة" }, new TableColumn { Header = "القيمة" });
+        var window = Show(table, width: 760);
+        Settle();
+        var head = (TableHeader)Part<ColumnsPanel>(table, "PART_HeadCells").Children[0];
+        var grip = Part<Border>(head, "PART_Grip");
+        Assert.NotNull(grip.Cursor);
+        var p = Center(grip, window);
+        window.MouseMove(p);
+        window.MouseDown(p, MouseButton.Left);
+        window.MouseMove(new Point(p.X - 400, p.Y));
+        window.MouseUp(new Point(p.X - 400, p.Y), MouseButton.Left);
+        Settle(300);
+        Assert.Equal(120, head.Bounds.Width, 1);
+        window.Close();
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void Table_figures_heading_keeps_its_grip_on_the_trailing_edge(string dir)
+    {
+        var table = People(new TableColumn { Header = "الاسم" }, new TableColumn { Header = "القيمة", Classes = "num" }, new TableColumn { Header = "المدينة" });
+        var window = Show(table, Dir(dir), width: 760);
+        Settle();
+        var head = (TableHeader)Part<ColumnsPanel>(table, "PART_HeadCells").Children[1];
+        var grip = Part<Border>(head, "PART_Grip");
+        var trailing = BoundsIn(grip, window);
+        var box = BoundsIn(head, window);
+        if (dir == "rtl")
+        {
+            Assert.Contains(":grip-flip", head.Classes);
+            Assert.Equal(box.Left, trailing.Left, 1);
+        }
+        else
+        {
+            Assert.DoesNotContain(":grip-flip", head.Classes);
+            Assert.Equal(box.Right, trailing.Right, 1);
+        }
+        window.Close();
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void Table_frozen_columns_stay_and_the_last_casts_a_shade(string dir)
+    {
+        var table = People(new TableColumn { Header = "الاسم" }, new TableColumn { Header = "المدينة" }, new TableColumn { Header = "القيمة" }, new TableColumn { Header = "الحالة" });
+        foreach (var row in table.Rows) row.Cells.Add(new TableCell { Content = "نشط" });
+        table.FrozenColumns = 2;
+        table.TableMinWidth = 1000;
+        var window = Show(table, Dir(dir), width: 600, height: 400);
+        Settle();
+        var scroll = Part<ScrollViewer>(table, "PART_Scroll");
+        var cells = table.DisplayedRows[0].Cells;
+        Assert.DoesNotContain(":pin-edge", cells[1].Classes);
+        Assert.False(Part<Border>(cells[1], "PART_Shade").IsVisible);
+        scroll.Offset = new Vector(150, 0);
+        Settle(300);
+        Assert.Equal(150, Assert.IsType<TranslateTransform>(cells[0].RenderTransform).X, 0);
+        Assert.Equal(150, Assert.IsType<TranslateTransform>(cells[1].RenderTransform).X, 0);
+        Assert.Null(cells[2].RenderTransform);
+        Assert.Contains(":pinned", cells[0].Classes);
+        Assert.DoesNotContain(":pin-edge", cells[0].Classes);
+        Assert.Contains(":pin-edge", cells[1].Classes);
+        Assert.True(Part<Border>(cells[1], "PART_Shade").IsVisible);
+        var head = (TableHeader)Part<ColumnsPanel>(table, "PART_HeadCells").Children[1];
+        Assert.Contains(":pin-edge", head.Classes);
+        var shade = BoundsIn(Part<Border>(cells[1], "PART_Shade"), window);
+        var edge = BoundsIn(cells[1], window);
+        if (dir == "rtl") Assert.Equal(edge.Left, shade.Right, 1);
+        else Assert.Equal(edge.Right, shade.Left, 1);
+        scroll.Offset = new Vector(0, 0);
+        Settle(300);
+        Assert.DoesNotContain(":pin-edge", cells[1].Classes);
+        Assert.Null(cells[1].RenderTransform);
+        table.FrozenColumns = 0;
+        scroll.Offset = new Vector(150, 0);
+        Settle(300);
+        Assert.Null(cells[0].RenderTransform);
+        Assert.DoesNotContain(":pinned", cells[1].Classes);
+        window.Close();
+    }
+
+    [AvaloniaFact]
+    public void Table_frozen_columns_take_the_selection_column_with_them()
+    {
+        var table = People();
+        table.IsSelectable = true;
+        table.FrozenColumns = 1;
+        table.TableMinWidth = 1000;
+        var window = Show(table, width: 600, height: 400);
+        Settle();
+        Part<ScrollViewer>(table, "PART_Scroll").Offset = new Vector(100, 0);
+        Settle(300);
+        var cells = table.DisplayedRows[0].Cells;
+        Assert.Contains(":pinned", cells[0].Classes);
+        Assert.Contains(":pin-edge", cells[1].Classes);
+        Assert.Null(cells[2].RenderTransform);
+        window.Close();
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void Table_cell_navigation_moves_like_a_spreadsheet(string dir)
+    {
+        var table = Five();
+        table.IsCellNavigation = true;
+        var window = Show(table, Dir(dir), width: 700, height: 500);
+        var rows = table.DisplayedRows;
+        table.Focus();
+        Settle(200);
+        Assert.Contains(":cell-cursor", table.Classes);
+        Assert.Same(rows[0], table.CurrentRow);
+        Assert.Equal(0, table.CurrentColumn);
+        Press(window, dir == "rtl" ? Key.Left : Key.Right);
+        Assert.Equal(1, table.CurrentColumn);
+        Assert.Equal(1, Part<Border>(rows[0].Cells[1], "PART_Focus").Opacity);
+        Assert.Equal(0, Part<Border>(rows[0], "PART_Ring").Opacity);
+        Press(window, Key.End);
+        Assert.Same(rows[0], table.CurrentRow);
+        Assert.Equal(2, table.CurrentColumn);
+        Press(window, Key.Home);
+        Assert.Equal(0, table.CurrentColumn);
+        Press(window, Key.Tab);
+        Assert.Equal(1, table.CurrentColumn);
+        Press(window, Key.Tab, RawInputModifiers.Shift);
+        Assert.Equal(0, table.CurrentColumn);
+        Press(window, Key.Tab, RawInputModifiers.Shift);
+        Assert.Same(rows[0], table.CurrentRow);
+        Assert.Equal(0, table.CurrentColumn);
+        table.Focus();
+        Settle(200);
+        Press(window, Key.End);
+        Press(window, Key.Tab);
+        Assert.Same(rows[1], table.CurrentRow);
+        Assert.Equal(0, table.CurrentColumn);
+        Assert.Equal([1], Selected(table));
+        Press(window, Key.Down);
+        Assert.Same(rows[2], table.CurrentRow);
+        Assert.Equal(0, table.CurrentColumn);
+        Press(window, Key.End, RawInputModifiers.Control);
+        Assert.Same(rows[4], table.CurrentRow);
+        Assert.Equal(2, table.CurrentColumn);
+        Press(window, Key.Home, RawInputModifiers.Control);
+        Assert.Same(rows[0], table.CurrentRow);
+        Assert.Equal(0, table.CurrentColumn);
+        Assert.Equal([0], Selected(table));
+        window.Close();
+    }
+
+    [AvaloniaFact]
+    public void Table_enter_edits_the_current_cell_commits_and_moves_down()
+    {
+        var table = People(new TableColumn { Header = "الاسم", Edit = TableEdit.Text }, new TableColumn { Header = "المدينة" }, new TableColumn { Header = "القيمة" });
+        table.IsCellNavigation = true;
+        var activated = 0;
+        table.RowActivated += (_, _) => activated++;
+        var window = Show(table, width: 700);
+        table.Focus();
+        Settle(200);
+        Press(window, Key.Enter);
+        var cell = table.DisplayedRows[0].Cells[0];
+        Assert.True(cell.IsEditing);
+        cell.GetVisualDescendants().OfType<TextBox>().Single().Text = "ليلى حداد";
+        Press(window, Key.Enter);
+        Assert.False(cell.IsEditing);
+        Assert.Equal("ليلى حداد", cell.Text);
+        Assert.Same(table.DisplayedRows[1], table.CurrentRow);
+        Assert.Equal(0, table.CurrentColumn);
+        Press(window, Key.Tab);
+        Press(window, Key.Enter);
+        Assert.Equal(1, activated);
+        Press(window, Key.Home);
+        window.KeyTextInput("ع");
+        Settle(300);
+        var next = table.DisplayedRows[1].Cells[0];
+        Assert.True(next.IsEditing);
+        Press(window, Key.Escape);
+        Assert.False(next.IsEditing);
+        Assert.Equal("عمر", next.Text);
+        window.Close();
+    }
+
+    [AvaloniaFact]
+    public void Table_cell_navigation_scrolls_the_cell_clear_of_the_frozen_columns()
+    {
+        var table = People(new TableColumn { Header = "الاسم" }, new TableColumn { Header = "المدينة" }, new TableColumn { Header = "القيمة" }, new TableColumn { Header = "الحالة" });
+        foreach (var row in table.Rows) row.Cells.Add(new TableCell { Content = "نشط" });
+        table.IsCellNavigation = true;
+        table.FrozenColumns = 1;
+        table.TableMinWidth = 1200;
+        var window = Show(table, width: 600, height: 400);
+        table.Focus();
+        Settle(200);
+        var scroll = Part<ScrollViewer>(table, "PART_Scroll");
+        Press(window, Key.End);
+        Assert.True(scroll.Offset.X > 0);
+        var last = BoundsIn(table.DisplayedRows[0].Cells[3], scroll);
+        Assert.True(last.Right <= scroll.Viewport.Width + 1);
+        Press(window, Key.Home);
+        Press(window, Key.Right);
+        var second = BoundsIn(table.DisplayedRows[0].Cells[1], scroll);
+        var frozen = BoundsIn(table.DisplayedRows[0].Cells[0], scroll);
+        Assert.True(second.Left >= frozen.Right - 1);
         window.Close();
     }
 

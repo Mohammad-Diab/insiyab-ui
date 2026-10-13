@@ -15,6 +15,7 @@
     <pg:Playground Def="{x:Static pg:TablesPlay.Table}" />
 
     <TextBlock Classes="section" Text="تثبيت رأس الجدول وعموده الأول" />
+    <pg:PlayText Classes="p" Markup="للجدول الطويل أو العريض: يبقى رأسه أو أعمدته الأولى ظاهرة وهو يتمرر داخل صندوقه. ويغير المستخدم عرض العمود بسحب حافة عنوانه." />
     <pg:Playground Def="{x:Static pg:TablesPlay.Wrap}" />
 
     <TextBlock Classes="section" Text="الترتيب" />
@@ -31,7 +32,9 @@
     <pg:Playground Def="{x:Static pg:TablesPlay.Edit}" />
     <pg:PlayText Classes="p" Markup="ويُطلق حدث `CellEditing` قبل حفظ التغيير، فألغه إن أردت رفض القيمة، أو احفظها على الخادم واستدع `Revert()` إذا فشل الحفظ." />
 
-      <TextBlock Classes="h3" Text="تثبيت رأس الجدول وعموده الأول" />
+    <TextBlock Classes="section" Text="التنقل بين الخلايا" />
+    <pg:PlayText Classes="p" Markup="مع `IsCellNavigation` تقف لوحة المفاتيح على خلية لا على صف، وتتنقل بين الخلايا كما في جداول البيانات، ويبدأ التعديل بالكتابة على الخلية مباشرة." />
+    <pg:Playground Def="{x:Static pg:TablesPlay.Sheet}" />
 
     <TextBlock Classes="section" Text="الخيارات" />
     <pg:PlayText Classes="p" Markup="كل ما في الجداول من عناصر وخصائص وأحداث، لكل مكون صندوق يفتح بالنقر." />

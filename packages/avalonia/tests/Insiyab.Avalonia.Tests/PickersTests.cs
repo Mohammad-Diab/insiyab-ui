@@ -654,4 +654,178 @@ public class PickersTests : IDisposable
         Assert.True(month.GetVisualDescendants().OfType<StackPanel>().First(p => p.Classes.Contains("month-dots")).IsVisible);
         Assert.False(month.GetVisualDescendants().OfType<StackPanel>().First(p => p.Classes.Contains("month-events")).IsVisible);
     }
+
+    private static Rect Box(Visual v, Visual root)
+    {
+        var a = v.TranslatePoint(new Point(0, 0), root)!.Value;
+        var b = v.TranslatePoint(new Point(v.Bounds.Width, v.Bounds.Height), root)!.Value;
+        return new Rect(new Point(Math.Min(a.X, b.X), Math.Min(a.Y, b.Y)), new Point(Math.Max(a.X, b.X), Math.Max(a.Y, b.Y)));
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_events_start_as_an_empty_list_that_redraws()
+    {
+        var month = new MonthCalendar { Month = new DateTime(2026, 9, 1) };
+        Show(Spread(month), FlowDirection.RightToLeft, width: 800, height: 900);
+        Assert.NotNull(month.Events);
+        Assert.Empty(month.Events!);
+        month.Events!.Add(new MonthEvent { Date = new DateTime(2026, 9, 10), Title = "اجتماع" });
+        Settle(200);
+        Assert.Single(month.Cells[new DateTime(2026, 9, 10)].GetVisualDescendants().OfType<Border>(), b => b.Classes.Contains("month-event"));
+        Assert.NotSame(month.Events, new MonthCalendar().Events);
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_takes_its_events_as_children_in_xaml()
+    {
+        var month = global::Avalonia.Markup.Xaml.AvaloniaRuntimeXamlLoader.Parse<MonthCalendar>(
+            """
+            <ins:MonthCalendar xmlns="https://github.com/avaloniaui" xmlns:ins="using:Insiyab.Avalonia.Controls" Month="2026-09-01">
+              <ins:MonthEvent Date="2026-09-10" Title="اجتماع" Tone="Info" />
+              <ins:MonthEvent Date="2026-09-12" Title="تسليم" />
+            </ins:MonthCalendar>
+            """, typeof(MonthCalendar).Assembly);
+        Assert.Equal(2, month.Events!.Count);
+        Assert.Equal(MonthEventTone.Info, month.Events[0].Tone);
+        Show(Spread(month), FlowDirection.RightToLeft, width: 800, height: 900);
+        Assert.Single(month.Cells[new DateTime(2026, 9, 12)].GetVisualDescendants().OfType<Border>(), b => b.Classes.Contains("month-event"));
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_lanes_put_overlapping_events_side_by_side()
+    {
+        var lanes = MonthCalendar.Lanes([(0, 60), (30, 90), (60, 120), (200, 260), (210, 230), (215, 225)]);
+        Assert.Equal([(0, 2), (1, 2), (0, 2), (0, 3), (1, 3), (2, 3)], lanes);
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void MonthCalendar_week_view_places_events_by_time_and_length(string dir)
+    {
+        var visit = new MonthEvent { Date = new DateTime(2026, 9, 21), Time = new TimeSpan(9, 0, 0), Duration = TimeSpan.FromMinutes(90), Title = "زيارة المورد" };
+        var call = new MonthEvent { Date = new DateTime(2026, 9, 21), Time = new TimeSpan(10, 0, 0), Title = "مكالمة العميل" };
+        var training = new MonthEvent { Date = new DateTime(2026, 9, 21), Time = new TimeSpan(13, 0, 0), Duration = TimeSpan.FromHours(2), Title = "تدريب" };
+        var holiday = new MonthEvent { Date = new DateTime(2026, 9, 21), Title = "إجازة" };
+        var month = new MonthCalendar { View = MonthCalendarView.Week, Date = new DateTime(2026, 9, 21), Width = 760, Events = [visit, call, training, holiday] };
+        if (dir == "ltr") month.Locale = "en";
+        var w = Show(Spread(month), Dir(dir), width: 820, height: 900);
+        Settle(300);
+
+        Assert.Contains(":week", month.Classes);
+        var title = month.GetVisualDescendants().OfType<TextBlock>().First(t => t.Classes.Contains("month-title")).Text;
+        Assert.Equal(dir == "rtl" ? "19–25 سبتمبر 2026" : "September 20 – 26, 2026", title);
+        var heads = month.GetVisualDescendants().OfType<Border>().Where(b => b.Classes.Contains("week-head")).ToList();
+        Assert.Equal(7, heads.Count);
+        Assert.Equal(dir == "rtl" ? new DateTime(2026, 9, 19) : new DateTime(2026, 9, 20), heads[0].Tag);
+        Assert.DoesNotContain(heads, h => h.Classes.Contains("today"));
+
+        const double hour = 48;
+        Assert.Equal(1.5 * hour - 2, month.Chips[visit].Bounds.Height, 1);
+        Assert.Equal(hour - 2, month.Chips[call].Bounds.Height, 1);
+        Assert.Equal(2 * hour - 2, month.Chips[training].Bounds.Height, 1);
+        Assert.Equal(month.Chips[visit].Bounds.Width, month.Chips[call].Bounds.Width, 1);
+        Assert.Equal(2 * month.Chips[visit].Bounds.Width + 2, month.Chips[training].Bounds.Width, 1);
+        var a = Box(month.Chips[visit], w);
+        var b = Box(month.Chips[call], w);
+        var c = Box(month.Chips[training], w);
+        Assert.Equal(hour, b.Top - a.Top, 1);
+        Assert.Equal(4 * hour, c.Top - a.Top, 1);
+        if (dir == "rtl") Assert.True(a.Left > b.Left);
+        else Assert.True(a.Left < b.Left);
+        Assert.Contains(month.Chips[holiday], month.GetVisualDescendants().OfType<StackPanel>().Single(p => p.Classes.Contains("week-allday") && p.Children.Count > 0).Children);
+        Assert.Equal(dir == "rtl" ? "1:00 م – 3:00 م" : "1:00 PM – 3:00 PM", month.Chips[training].GetVisualDescendants().OfType<TextBlock>().Last().Text);
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_week_and_day_views_step_and_switch()
+    {
+        var month = new MonthCalendar { Date = new DateTime(2026, 9, 21), Width = 760, Events = MonthEvents() };
+        Assert.Equal(new DateTime(2026, 9, 21), month.Date);
+        Show(Spread(month), FlowDirection.RightToLeft, width: 820, height: 900);
+        var dates = new List<DateTime>();
+        var views = new List<MonthCalendarView>();
+        month.DateChanged += (_, d) => dates.Add(d);
+        month.ViewChanged += (_, v) => views.Add(v);
+
+        var seg = month.GetVisualDescendants().OfType<Segmented>().Single(s => s.Classes.Contains("month-views"));
+        Assert.True(seg.IsVisible);
+        Assert.Equal(0, seg.SelectedIndex);
+        seg.SelectedIndex = 1;
+        Settle(200);
+        Assert.Equal(MonthCalendarView.Week, month.View);
+        Assert.Equal([MonthCalendarView.Week], views);
+
+        month.Go(1);
+        Assert.Equal(new DateTime(2026, 9, 28), month.Date);
+        month.Go(1);
+        Assert.Equal(new DateTime(2026, 10, 5), month.Date);
+        Assert.Equal(new DateTime(2026, 10, 1), month.Month);
+        month.Go(0);
+        Assert.Equal(new DateTime(2026, 9, 15), month.Date);
+        Assert.Equal([new DateTime(2026, 9, 28), new DateTime(2026, 10, 5), new DateTime(2026, 9, 15)], dates);
+
+        month.View = MonthCalendarView.Day;
+        Settle(200);
+        Assert.Equal(2, seg.SelectedIndex);
+        Assert.Single(month.GetVisualDescendants().OfType<Border>(), b => b.Classes.Contains("week-day"));
+        month.Go(-1);
+        Assert.Equal(new DateTime(2026, 9, 14), month.Date);
+        Assert.Equal("الاثنين، 14 سبتمبر 2026", month.GetVisualDescendants().OfType<TextBlock>().First(t => t.Classes.Contains("month-title")).Text);
+
+        month.HasViewSwitch = false;
+        Settle(100);
+        Assert.False(seg.IsVisible);
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_month_and_date_stay_together()
+    {
+        var month = new MonthCalendar { Month = new DateTime(2026, 3, 1) };
+        Assert.Equal(new DateTime(2026, 3, 1), month.Date);
+        month.Date = new DateTime(2026, 5, 9);
+        Assert.Equal(new DateTime(2026, 5, 1), month.Month);
+        month.Month = new DateTime(2026, 5, 20);
+        Assert.Equal(new DateTime(2026, 5, 9), month.Date);
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_now_line_crosses_today_at_the_current_time()
+    {
+        var before = MonthCalendar.Now;
+        MonthCalendar.Now = () => new DateTime(2026, 9, 15, 10, 30, 0);
+        try
+        {
+            var month = new MonthCalendar { View = MonthCalendarView.Week, Date = new DateTime(2026, 9, 15), Width = 760 };
+            Show(Spread(month), FlowDirection.RightToLeft, width: 820, height: 900);
+            Settle(200);
+            var line = Assert.IsAssignableFrom<Control>(month.NowLine);
+            var column = month.GetVisualDescendants().OfType<Border>().Single(b => b.Classes.Contains("week-day") && b.Classes.Contains("today"));
+            Assert.Same(column.Child, line.GetVisualParent());
+            Assert.Equal(2.5 * 48 - 5, line.Bounds.Y, 1);
+            Assert.Equal(column.Bounds.Width - column.BorderThickness.Left, line.Bounds.Width, 1);
+
+            month.Date = new DateTime(2026, 9, 25);
+            Settle(100);
+            Assert.Null(month.NowLine);
+        }
+        finally
+        {
+            MonthCalendar.Now = before;
+        }
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_events_outside_the_hours_stay_at_the_edges()
+    {
+        var early = new MonthEvent { Date = new DateTime(2026, 9, 21), Time = new TimeSpan(6, 0, 0), Title = "باكر" };
+        var late = new MonthEvent { Date = new DateTime(2026, 9, 21), Time = new TimeSpan(19, 30, 0), Duration = TimeSpan.FromHours(3), Title = "متأخر" };
+        var month = new MonthCalendar { View = MonthCalendarView.Day, Date = new DateTime(2026, 9, 21), DayStartHour = 9, DayEndHour = 20, Width = 600, Events = [early, late] };
+        Show(Spread(month), FlowDirection.RightToLeft, width: 700, height: 900);
+        Settle(200);
+        Assert.Equal(11, month.GetVisualDescendants().OfType<Border>().Count(b => b.Classes.Contains("week-hour-cell")));
+        Assert.Equal(1, month.Chips[early].Bounds.Y, 1);
+        var lane = month.Chips[late].GetVisualParent<Control>()!;
+        Assert.Equal(lane.Bounds.Height - 1, month.Chips[late].Bounds.Bottom, 1);
+    }
 }
