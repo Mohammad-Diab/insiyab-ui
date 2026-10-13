@@ -25,6 +25,16 @@ public enum WizardMotion
     Slide,
 }
 
+/// <summary>How a <see cref="Wizard"/> draws its steps.</summary>
+public enum WizardStepsLook
+{
+    /// <summary>Numbered circles joined by lines, the web's <c>.ins-steps</c>.</summary>
+    Numbers,
+
+    /// <summary>One small dot per step, the web's <c>.ins-steps--dots</c>: for a sign-in card.</summary>
+    Dots,
+}
+
 /// <summary>What a button inside a wizard does when pressed, the web's <c>data-ins-wizard</c>.</summary>
 public enum WizardAction
 {
@@ -32,6 +42,7 @@ public enum WizardAction
     Next,
     Previous,
     Restart,
+    Finish,
 }
 
 /// <summary>One step of a <see cref="Wizard"/>: <c>.ins-wizard-panel</c>. Its <c>Header</c> is the step's name in the steps above.</summary>
@@ -65,6 +76,14 @@ public class WizardLeavingEventArgs(RoutedEvent routedEvent, int step, int to, W
     public void Wait() => IsWaiting = true;
 }
 
+/// <summary>Raised when the finish button finds every step valid. Call <see cref="Wait"/> to hold the wizard busy while the answer is sent, then <see cref="Wizard.Stay"/> or <see cref="Wizard.Restart"/>.</summary>
+public class WizardFinishedEventArgs(RoutedEvent routedEvent) : RoutedEventArgs(routedEvent)
+{
+    public bool IsWaiting { get; private set; }
+
+    public void Wait() => IsWaiting = true;
+}
+
 /// <summary>Raised after every move: the step number among the steps showing, and its panel.</summary>
 public class WizardMovedEventArgs(RoutedEvent routedEvent, int step, WizardPanel panel) : RoutedEventArgs(routedEvent)
 {
@@ -73,7 +92,7 @@ public class WizardMovedEventArgs(RoutedEvent routedEvent, int step, WizardPanel
     public WizardPanel Panel { get; } = panel;
 }
 
-/// <summary>A form in steps, the web's <c>.ins-wizard</c>: the steps on top, one <see cref="WizardPanel"/> at a time, and back, next and finish below. "Next" (and Enter in a field) checks the step's fields first: <see cref="RequiredProperty"/> ones that are empty, and any field already showing an error. Enter is next (finish on the last step), Alt and the arrow pointing back or forward and the mouse's back and forward buttons move between steps.</summary>
+/// <summary>A form in steps, the web's <c>.ins-wizard</c>: the steps on top, one <see cref="WizardPanel"/> at a time, and back, next and finish below. "Next" (and Enter in a field) checks the step's fields first: their <see cref="Validate"/> rules, <see cref="RequiredProperty"/> ones that are empty, and any field already showing an error. Enter is next (finish on the last step), Alt and the arrow pointing back or forward and the mouse's back and forward buttons move between steps.</summary>
 [TemplatePart("PART_Steps", typeof(Steps))]
 [TemplatePart("PART_Body", typeof(Border))]
 [TemplatePart("PART_ItemsPresenter", typeof(ItemsPresenter))]
@@ -96,6 +115,12 @@ public class Wizard : ItemsControl
     public static readonly StyledProperty<bool> ShowStepsProperty =
         AvaloniaProperty.Register<Wizard, bool>(nameof(ShowSteps), true);
 
+    public static readonly StyledProperty<bool> ShowFootProperty =
+        AvaloniaProperty.Register<Wizard, bool>(nameof(ShowFoot), true);
+
+    public static readonly StyledProperty<WizardStepsLook> StepsLookProperty =
+        AvaloniaProperty.Register<Wizard, WizardStepsLook>(nameof(StepsLook));
+
     public static readonly StyledProperty<string> PreviousTextProperty =
         AvaloniaProperty.Register<Wizard, string>(nameof(PreviousText), "السابق");
 
@@ -108,7 +133,7 @@ public class Wizard : ItemsControl
     public static readonly DirectProperty<Wizard, bool> IsBusyProperty =
         AvaloniaProperty.RegisterDirect<Wizard, bool>(nameof(IsBusy), o => o.IsBusy);
 
-    /// <summary>On a field in a step: "next" stops while it is empty (a TextBox) or unticked (a CheckBox), the web's <c>required</c>.</summary>
+    /// <summary>On a field in a step: "next" stops while it is empty (a TextBox), not whole (an OtpBox, with its own message) or unticked (a CheckBox), the web's <c>required</c>.</summary>
     public static readonly AttachedProperty<bool> RequiredProperty =
         AvaloniaProperty.RegisterAttached<Wizard, Control, bool>("Required");
 
@@ -129,8 +154,8 @@ public class Wizard : ItemsControl
     public static readonly RoutedEvent<WizardMovedEventArgs> MovedEvent =
         RoutedEvent.Register<Wizard, WizardMovedEventArgs>(nameof(Moved), RoutingStrategies.Bubble);
 
-    public static readonly RoutedEvent<RoutedEventArgs> FinishedEvent =
-        RoutedEvent.Register<Wizard, RoutedEventArgs>(nameof(Finished), RoutingStrategies.Bubble);
+    public static readonly RoutedEvent<WizardFinishedEventArgs> FinishedEvent =
+        RoutedEvent.Register<Wizard, WizardFinishedEventArgs>(nameof(Finished), RoutingStrategies.Bubble);
 
     public static readonly RoutedEvent<RoutedEventArgs> CancelledEvent =
         RoutedEvent.Register<Wizard, RoutedEventArgs>(nameof(Cancelled), RoutingStrategies.Bubble);
@@ -174,6 +199,12 @@ public class Wizard : ItemsControl
 
     public bool ShowSteps { get => GetValue(ShowStepsProperty); set => SetValue(ShowStepsProperty, value); }
 
+    /// <summary>The foot with back, next and finish, the web's optional <c>.ins-wizard-foot</c>; off, each step carries its own <see cref="ActionProperty"/> buttons.</summary>
+    public bool ShowFoot { get => GetValue(ShowFootProperty); set => SetValue(ShowFootProperty, value); }
+
+    /// <summary>The look of the steps on top: <see cref="WizardStepsLook.Dots"/> is the web's <c>.ins-steps--dots</c>.</summary>
+    public WizardStepsLook StepsLook { get => GetValue(StepsLookProperty); set => SetValue(StepsLookProperty, value); }
+
     public string PreviousText { get => GetValue(PreviousTextProperty); set => SetValue(PreviousTextProperty, value); }
 
     public string NextText { get => GetValue(NextTextProperty); set => SetValue(NextTextProperty, value); }
@@ -191,7 +222,7 @@ public class Wizard : ItemsControl
     public event EventHandler<WizardMovedEventArgs>? Moved { add => AddHandler(MovedEvent, value); remove => RemoveHandler(MovedEvent, value); }
 
     /// <summary>The finish button was pressed and every step is valid: the web's form submit.</summary>
-    public event EventHandler<RoutedEventArgs>? Finished { add => AddHandler(FinishedEvent, value); remove => RemoveHandler(FinishedEvent, value); }
+    public event EventHandler<WizardFinishedEventArgs>? Finished { add => AddHandler(FinishedEvent, value); remove => RemoveHandler(FinishedEvent, value); }
 
     /// <summary>The cancel button was pressed.</summary>
     public event EventHandler<RoutedEventArgs>? Cancelled { add => AddHandler(CancelledEvent, value); remove => RemoveHandler(CancelledEvent, value); }
@@ -220,7 +251,7 @@ public class Wizard : ItemsControl
     /// <summary>After <see cref="WizardLeavingEventArgs.Wait"/>: the step was accepted, go on.</summary>
     public void Proceed() => GoTo(CurrentIndex + 1, validate: false, focus: true);
 
-    /// <summary>After <see cref="WizardLeavingEventArgs.Wait"/>: the step was refused, stay on it.</summary>
+    /// <summary>After <see cref="WizardLeavingEventArgs.Wait"/> or <see cref="WizardFinishedEventArgs.Wait"/>: the step was refused, stay on it.</summary>
     public void Stay() => IsBusy = false;
 
     /// <summary>Goes to a step; with <paramref name="validate"/> a forward move checks the step being left and asks <see cref="Leaving"/> first. Returns the step showing afterwards.</summary>
@@ -269,6 +300,7 @@ public class Wizard : ItemsControl
         if (_finish is not null) _finish.Click -= OnFinish;
         if (_cancel is not null) _cancel.Click -= OnCancel;
         _steps = e.NameScope.Find<Steps>("PART_Steps");
+        ApplyStepsLook();
         _body = e.NameScope.Find<Border>("PART_Body");
         _presenter = e.NameScope.Find<ItemsPresenter>("PART_ItemsPresenter");
         _previous = e.NameScope.Find<Button>("PART_Previous");
@@ -293,6 +325,17 @@ public class Wizard : ItemsControl
             Apply(from, to);
         }
         else if (change.Property == CancelContentProperty) PseudoClasses.Set(":has-cancel", change.NewValue is not null);
+        else if (change.Property == StepsLookProperty) ApplyStepsLook();
+    }
+
+    private void ApplyStepsLook()
+    {
+        if (_steps is null) return;
+        if (StepsLook == WizardStepsLook.Dots)
+        {
+            if (!_steps.Classes.Contains("dots")) _steps.Classes.Add("dots");
+        }
+        else _steps.Classes.Remove("dots");
     }
 
     private IEnumerable<WizardPanel> All() => Items.OfType<WizardPanel>();
@@ -345,6 +388,7 @@ public class Wizard : ItemsControl
         if (_body is not null) _body.Height = double.NaN;
 
         var moves = animate && leaving != arrived && _body is not null && TopLevel.GetTopLevel(this) is not null && before > 0;
+        if (_body is not null) _body.ClipToBounds = moves;
         var focus = _focusOnArrival;
         _focusOnArrival = false;
         if (moves)
@@ -388,6 +432,7 @@ public class Wizard : ItemsControl
         await Task.WhenAll(tasks);
         if (cts.IsCancellationRequested) return;
         body.Height = double.NaN;
+        body.ClipToBounds = false;
         if (_move == cts) _move = null;
     }
 
@@ -442,6 +487,7 @@ public class Wizard : ItemsControl
         arrived.ClearValue(RenderTransformProperty);
         arrived.ClearValue(OpacityProperty);
         body.Height = double.NaN;
+        body.ClipToBounds = false;
         if (_move == cts) _move = null;
         if (focus && arrived.IsVisible) FocusArrival(arrived);
     }
@@ -466,18 +512,19 @@ public class Wizard : ItemsControl
         else panel.Focus();
     }
 
-    /// <summary>Checks one step the way the browser checks a form: every field with an error keeps it, every empty <see cref="RequiredProperty"/> field gets one, and the first of them takes the focus.</summary>
+    /// <summary>Checks one step the way the browser checks a form: every field's <see cref="Validate"/> rules are reported, every field with an error keeps it, every empty <see cref="RequiredProperty"/> field gets one, and the first of them takes the focus.</summary>
     public bool IsValid(WizardPanel panel)
     {
         Control? first = null;
         foreach (var c in panel.GetLogicalDescendants().OfType<Control>())
         {
             if (!c.IsEffectivelyEnabled) continue;
+            if (c is TextBox box) Validate.Report(box);
             var bad = DataValidationErrors.GetHasErrors(c);
             if (GetRequired(c) && Missing(c))
             {
                 bad = true;
-                DataValidationErrors.SetErrors(c, [RequiredMessage()]);
+                DataValidationErrors.SetErrors(c, [MessageFor(c)]);
                 Watch(c);
             }
             if (bad) first ??= c;
@@ -488,8 +535,11 @@ public class Wizard : ItemsControl
 
     private string RequiredMessage() => FlowDirection == FlowDirection.RightToLeft ? "هذا الحقل مطلوب." : "This field is required.";
 
+    private string MessageFor(Control c) => c is OtpBox { ValidationMessage: { } partial } ? partial : RequiredMessage();
+
     private static bool Missing(Control c) => c switch
     {
+        OtpBox o => !o.IsComplete,
         TextBox t => string.IsNullOrWhiteSpace(t.Text),
         ToggleButton b => b.IsChecked != true,
         _ => false,
@@ -501,7 +551,11 @@ public class Wizard : ItemsControl
         _flagged.Add(c);
         void Recheck()
         {
-            if (Missing(c)) return;
+            if (Missing(c))
+            {
+                if (c is OtpBox) DataValidationErrors.SetErrors(c, [MessageFor(c)]);
+                return;
+            }
             DataValidationErrors.ClearErrors(c);
             _flagged.Remove(c);
             if (c is TextBox t) t.TextChanged -= OnText;
@@ -536,7 +590,9 @@ public class Wizard : ItemsControl
             IsValid(panels[i]);
             return;
         }
-        RaiseEvent(new RoutedEventArgs(FinishedEvent));
+        var done = new WizardFinishedEventArgs(FinishedEvent);
+        RaiseEvent(done);
+        if (done.IsWaiting) IsBusy = true;
     }
 
     private void OnFieldKey(object? sender, KeyEventArgs e)
@@ -578,9 +634,10 @@ public class Wizard : ItemsControl
         if (sender is not Button b || b.FindLogicalAncestorOfType<Wizard>() is not { } w) return;
         switch (GetAction(b))
         {
-            case WizardAction.Next: w.Next(); break;
+            case WizardAction.Next: if (!w.IsBusy) w.Next(); break;
             case WizardAction.Previous: w.Previous(); break;
             case WizardAction.Restart: w.Restart(); break;
+            case WizardAction.Finish: w.Finish(); break;
         }
     }
 }

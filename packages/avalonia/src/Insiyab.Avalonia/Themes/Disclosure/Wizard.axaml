@@ -31,23 +31,24 @@
           <ControlTemplate>
             <DockPanel>
               <ins:Steps Name="PART_Steps" DockPanel.Dock="Top" IsVisible="{TemplateBinding ShowSteps}" />
-              <Grid Name="PART_Foot" DockPanel.Dock="Bottom" Margin="0,20,0,0" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="8">
-                <Button Name="PART_Cancel" Classes="bare" Content="{TemplateBinding CancelContent}" IsVisible="False" />
-                <Button Name="PART_Previous" Classes="secondary" Content="{TemplateBinding PreviousText}" />
-                <Button Name="PART_Next" Grid.Column="3" Classes="primary">
+              <Grid Name="PART_Foot" DockPanel.Dock="Bottom" Margin="0,20,0,0" IsVisible="{TemplateBinding ShowFoot}" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="{DynamicResource InsFootGap}">
+                <Button Name="PART_Cancel" Classes="bare" MinWidth="{DynamicResource InsFootMin}" Content="{TemplateBinding CancelContent}" IsVisible="False" />
+                <Button Name="PART_Previous" Classes="secondary" MinWidth="{DynamicResource InsFootMin}" Content="{TemplateBinding PreviousText}" />
+                <Button Name="PART_Next" Grid.Column="3" Classes="primary" MinWidth="{DynamicResource InsFootMin}">
                   <StackPanel Orientation="Horizontal" Spacing="8">
                     <TextBlock Text="{TemplateBinding NextText}" />
                     <ins:LoadingSpinner Name="PART_NextSpinner" Classes="sm" IsVisible="False" />
                   </StackPanel>
                 </Button>
-                <Button Name="PART_Finish" Grid.Column="3" Classes="primary" IsVisible="False">
+                <Button Name="PART_Finish" Grid.Column="3" Classes="primary" MinWidth="{DynamicResource InsFootMin}" IsVisible="False">
                   <StackPanel Orientation="Horizontal" Spacing="8">
                     <TextBlock Text="{TemplateBinding FinishText}" />
                     <ins:LoadingSpinner Name="PART_FinishSpinner" Classes="sm" IsVisible="False" />
                   </StackPanel>
                 </Button>
               </Grid>
-              <Border Name="PART_Body" Padding="6" Margin="-6" ClipToBounds="True">
+              <!-- Clipped only while a step moves, as the web's [data-ins-moving], so a step's own button keeps its glow at rest -->
+              <Border Name="PART_Body" Padding="6" Margin="-6" ClipToBounds="False">
                 <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
               </Border>
             </DockPanel>
@@ -84,6 +85,20 @@
   </Styles.Resources>
 
   <!-- Names the bare class too, so it outranks the bare button's own zero padding and height -->
+  <!-- A step's own next and finish buttons wait as the foot's do: dimmed, no second press, a spinner after the text -->
+  <Style Selector="ins|Wizard:busy Button[(ins|Wizard.Action)=Next], ins|Wizard:busy Button[(ins|Wizard.Action)=Finish]">
+    <Setter Property="Opacity" Value="0.75" />
+    <Setter Property="IsHitTestVisible" Value="False" />
+    <Setter Property="ContentTemplate">
+      <DataTemplate x:DataType="x:Object">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <ContentPresenter Content="{Binding}" />
+          <ins:LoadingSpinner Classes="sm" />
+        </StackPanel>
+      </DataTemplate>
+    </Setter>
+  </Style>
+
   <Style Selector="ins|Wizard /template/ Button#PART_Cancel.bare">
     <Setter Property="Padding" Value="16,6" />
     <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
