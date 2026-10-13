@@ -1,0 +1,195 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.DropdownPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/MenusFrames.axaml" />
+    <!-- The split button's two halves, until the buttons have a group of their own; the faces are physical, so the corners follow the direction by hand. -->
+    <Style Selector="StackPanel.split > Button:nth-child(1)">
+      <Setter Property="CornerRadius" Value="14,0,0,14" />
+    </Style>
+    <Style Selector="StackPanel.split > Button:nth-child(2)">
+      <Setter Property="CornerRadius" Value="0,14,14,0" />
+      <Setter Property="BorderThickness" Value="1,0,0,0" />
+      <Setter Property="BorderBrush" Value="#47FFFFFF" />
+    </Style>
+    <Style Selector="StackPanel.split[FlowDirection=RightToLeft] > Button:nth-child(1)">
+      <Setter Property="CornerRadius" Value="0,14,14,0" />
+    </Style>
+    <Style Selector="StackPanel.split[FlowDirection=RightToLeft] > Button:nth-child(2)">
+      <Setter Property="CornerRadius" Value="14,0,0,14" />
+      <Setter Property="BorderThickness" Value="0,0,1,0" />
+    </Style>
+  </UserControl.Styles>
+  <StackPanel>
+
+    <Border Classes="dx">
+      <Button Classes="secondary" Content="إجراءات">
+        <Button.Flyout>
+          <ins:PopMenu>
+            <MenuItem Classes="label" Header="العنوان" />
+            <MenuItem Header="تعديل" InputGesture="E">
+              <MenuItem.Icon><ins:Icon Data="{StaticResource IconEdit}" /></MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="نسخ" />
+            <MenuItem Header="نقل" IsEnabled="False" />
+            <Separator />
+            <MenuItem Classes="bad" Header="حذف" />
+          </ins:PopMenu>
+        </Button.Flyout>
+      </Button>
+    </Border>
+
+    <TextBlock Classes="section" Text="القائمة المنسدلة" />
+    <Border Classes="stage open">
+      <Button Classes="secondary" Content="إجراءات">
+        <Button.Flyout>
+          <ins:PopMenu>
+            <MenuItem Header="تعديل" />
+            <MenuItem Header="نسخ" />
+            <MenuItem Header="نقل" />
+          </ins:PopMenu>
+        </Button.Flyout>
+      </Button>
+    </Border>
+
+    <TextBlock Classes="variant" Text="من النهاية" />
+    <Border Classes="stage open">
+      <Button Classes="secondary" Content="إجراءات">
+        <Button.Flyout>
+          <ins:PopMenu IsEnd="True">
+            <MenuItem Header="تعديل" />
+            <MenuItem Header="نسخ" />
+            <MenuItem Header="نقل" />
+          </ins:PopMenu>
+        </Button.Flyout>
+      </Button>
+    </Border>
+
+    <TextBlock Classes="variant" Text="بطاقة" />
+    <Border Classes="stage open">
+      <Button Classes="secondary" Content="التفاصيل">
+        <Button.Flyout>
+          <ins:PopCard>
+            <StackPanel>
+              <TextBlock Classes="pop-title" Text="العنوان" />
+              <TextBlock Classes="pop-text" Text="نص حر قصير." />
+            </StackPanel>
+          </ins:PopCard>
+        </Button.Flyout>
+      </Button>
+    </Border>
+
+    <TextBlock Classes="variant" Text="عنوان مجموعة" />
+    <Border Classes="stage open">
+      <Button Classes="secondary" Content="إجراءات">
+        <Button.Flyout>
+          <ins:PopMenu>
+            <MenuItem Classes="label" Header="العنوان" />
+            <MenuItem Header="تعديل" />
+            <MenuItem Header="نسخ" />
+            <MenuItem Header="نقل" />
+          </ins:PopMenu>
+        </Button.Flyout>
+      </Button>
+    </Border>
+
+    <TextBlock Classes="variant" Text="تحديد متعدد" />
+    <Border Classes="stage open">
+      <Button Classes="secondary" Content="إجراءات">
+        <Button.Flyout>
+          <ins:PopMenu>
+            <MenuItem Header="الاسم" ToggleType="CheckBox" IsChecked="True" />
+            <MenuItem Header="التاريخ" ToggleType="CheckBox" />
+            <MenuItem Header="الحجم" ToggleType="CheckBox" />
+          </ins:PopMenu>
+        </Button.Flyout>
+      </Button>
+    </Border>
+
+    <TextBlock Classes="variant" Text="اختيار واحد" />
+    <Border Classes="stage open">
+      <Button Classes="secondary" Content="إجراءات">
+        <Button.Flyout>
+          <ins:PopMenu>
+            <MenuItem Header="الاسم" ToggleType="Radio" GroupName="sort" IsChecked="True" />
+            <MenuItem Header="التاريخ" ToggleType="Radio" GroupName="sort" />
+            <MenuItem Header="الحجم" ToggleType="Radio" GroupName="sort" />
+          </ins:PopMenu>
+        </Button.Flyout>
+      </Button>
+    </Border>
+
+    <TextBlock Classes="variant" Text="اختصار" />
+    <Border Classes="stage open">
+      <Button Classes="secondary" Content="إجراءات">
+        <Button.Flyout>
+          <ins:PopMenu>
+            <MenuItem Header="تعديل" InputGesture="E" />
+            <MenuItem Header="نسخ" />
+            <MenuItem Header="نقل" />
+          </ins:PopMenu>
+        </Button.Flyout>
+      </Button>
+    </Border>
+
+    <TextBlock Classes="variant" Text="عنصر معطل" />
+    <Border Classes="stage open">
+      <Button Classes="secondary" Content="إجراءات">
+        <Button.Flyout>
+          <ins:PopMenu>
+            <MenuItem Header="تعديل" />
+            <MenuItem Header="نسخ" />
+            <MenuItem Header="نقل" IsEnabled="False" />
+          </ins:PopMenu>
+        </Button.Flyout>
+      </Button>
+    </Border>
+
+    <TextBlock Classes="variant" Text="فاصل وإجراء خطير" />
+    <Border Classes="stage open">
+      <Button Classes="secondary" Content="إجراءات">
+        <Button.Flyout>
+          <ins:PopMenu>
+            <MenuItem Header="تعديل" />
+            <MenuItem Header="نسخ" />
+            <MenuItem Header="نقل" />
+            <Separator />
+            <MenuItem Classes="bad" Header="حذف" />
+          </ins:PopMenu>
+        </Button.Flyout>
+      </Button>
+    </Border>
+
+    <TextBlock Classes="variant" Text="روابط" />
+    <Border Classes="stage open">
+      <Button Classes="secondary" Content="إجراءات">
+        <Button.Flyout>
+          <ins:PopMenu>
+            <MenuItem Header="البدء" />
+            <MenuItem Header="الأسئلة الشائعة" />
+            <MenuItem Header="المساعدة" />
+          </ins:PopMenu>
+        </Button.Flyout>
+      </Button>
+    </Border>
+
+    <TextBlock Classes="variant" Text="زر مقسوم" />
+    <Border Classes="stage open">
+      <StackPanel Classes="split" Orientation="Horizontal">
+        <Button Classes="primary" Content="حفظ" />
+        <Button Classes="primary icon" AutomationProperties.Name="خيارات الحفظ">
+          <ins:Icon Data="{StaticResource IconChevDown}" />
+          <Button.Flyout>
+            <ins:PopMenu>
+              <MenuItem Header="تعديل" />
+              <MenuItem Header="نسخ" />
+              <MenuItem Header="نقل" />
+            </ins:PopMenu>
+          </Button.Flyout>
+        </Button>
+      </StackPanel>
+    </Border>
+
+  </StackPanel>
+</UserControl>

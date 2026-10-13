@@ -1,0 +1,9 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Menus/Kbd.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Menus/Pop.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Menus/Tooltip.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Menus/Chips.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Menus/Tags.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Menus/Palette.axaml" />
+</Styles>

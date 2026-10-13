@@ -1,0 +1,96 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.ChipsPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/MenusFrames.axaml" />
+  </UserControl.Styles>
+  <StackPanel>
+
+    <Border Classes="dx">
+      <WrapPanel Classes="chips">
+        <ins:Chip Content="الرياض" IsRemovable="True" />
+        <ins:Chip Content="عمّان" IsRemovable="True" />
+        <ins:Chip Content="القاهرة" IsRemovable="True" />
+      </WrapPanel>
+    </Border>
+
+    <TextBlock Classes="section" Text="الرقاقة" />
+    <Border Classes="stage">
+      <WrapPanel Classes="chips">
+        <ins:Chip Content="الأول" IsRemovable="True" />
+        <ins:Chip Content="الثاني" IsRemovable="True" />
+        <ins:Chip Content="الثالث" IsRemovable="True" />
+      </WrapPanel>
+    </Border>
+
+    <TextBlock Classes="variant" Text="فلتر" />
+    <Border Classes="stage">
+      <WrapPanel Classes="chips">
+        <ToggleButton Classes="chip" Content="الأول" IsChecked="True" />
+        <ToggleButton Classes="chip" Content="الثاني" />
+        <ToggleButton Classes="chip" Content="الثالث" />
+      </WrapPanel>
+    </Border>
+
+    <TextBlock Classes="variant" Text="رابط" />
+    <Border Classes="stage">
+      <WrapPanel Classes="chips">
+        <Button Classes="chip active" Content="الأول" />
+        <Button Classes="chip" Content="الثاني" />
+        <Button Classes="chip" Content="الثالث" />
+      </WrapPanel>
+    </Border>
+
+    <TextBlock Classes="section" Text="الاختيار المتعدد" />
+    <Border Classes="stage wide">
+      <StackPanel Spacing="6">
+        <TextBlock Classes="label" Text="العناصر" />
+        <ins:TagsInput PlaceholderText="اختر" x:Name="ListTags">
+          <ins:TagsOption Value="a" Label="الأول" />
+          <ins:TagsOption Value="b" Label="الثاني" />
+          <ins:TagsOption Value="c" Label="الثالث" />
+          <ins:TagsOption Value="d" Label="الرابع" />
+          <ins:TagsOption Value="e" Label="الخامس" />
+        </ins:TagsInput>
+      </StackPanel>
+    </Border>
+
+    <TextBlock Classes="variant" Text="بلا قائمة" />
+    <Border Classes="stage wide">
+      <StackPanel Spacing="6">
+        <TextBlock Classes="label" Text="الوسوم" />
+        <ins:TagsInput x:Name="FreeTags" PlaceholderText="اكتب واضغط Enter" />
+      </StackPanel>
+    </Border>
+
+    <TextBlock Classes="variant" Text="كتابة حرة مع القائمة" />
+    <Border Classes="stage wide">
+      <StackPanel Spacing="6">
+        <TextBlock Classes="label" Text="العناصر" />
+        <ins:TagsInput x:Name="FreeListTags" IsFree="True" PlaceholderText="اختر">
+          <ins:TagsOption Value="a" Label="الأول" />
+          <ins:TagsOption Value="b" Label="الثاني" />
+          <ins:TagsOption Value="c" Label="الثالث" />
+          <ins:TagsOption Value="d" Label="الرابع" />
+          <ins:TagsOption Value="e" Label="الخامس" />
+        </ins:TagsInput>
+      </StackPanel>
+    </Border>
+
+    <TextBlock Classes="variant" Text="حد أعلى: 3" />
+    <Border Classes="stage wide">
+      <StackPanel Spacing="6">
+        <TextBlock Classes="label" Text="العناصر" />
+        <ins:TagsInput x:Name="MaxTags" Max="3" PlaceholderText="اختر">
+          <ins:TagsOption Value="a" Label="الأول" />
+          <ins:TagsOption Value="b" Label="الثاني" />
+          <ins:TagsOption Value="c" Label="الثالث" />
+          <ins:TagsOption Value="d" Label="الرابع" />
+          <ins:TagsOption Value="e" Label="الخامس" />
+        </ins:TagsInput>
+      </StackPanel>
+    </Border>
+
+  </StackPanel>
+</UserControl>

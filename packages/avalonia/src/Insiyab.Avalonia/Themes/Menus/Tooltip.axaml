@@ -1,0 +1,60 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <!-- .ins-tooltip. The 8px clear frame in the template is the gap to the control on every side, so the tip sits off it whichever side it lands on. -->
+      <ControlTheme x:Key="{x:Type ToolTip}" TargetType="ToolTip">
+        <Setter Property="Foreground" Value="{DynamicResource InsTipFg}" />
+        <Setter Property="Background" Value="{DynamicResource InsTipBg}" />
+        <Setter Property="FontFamily" Value="{DynamicResource InsFontBody}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Padding" Value="10,6" />
+        <Setter Property="MaxWidth" Value="304" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="ins:TipKeyboard.Registered" Value="True" />
+        <Setter Property="Opacity" Value="0" />
+        <Setter Property="RenderTransform" Value="translateY(4px) scale(0.96)" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Name="PART_Room" Padding="8">
+              <Border Name="PART_LayoutRoot"
+                      Background="{TemplateBinding Background}"
+                      Padding="{TemplateBinding Padding}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BoxShadow="{DynamicResource InsShMd}">
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  TextBlock.LineHeight="18"
+                                  TextBlock.TextWrapping="Wrap" />
+              </Border>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:open">
+          <Setter Property="Opacity" Value="1" />
+          <Setter Property="RenderTransform" Value="none" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- Above the control and centred, not at the pointer; 400ms on hover, at once from one tip to the next; in the window's own layer, so its shadow is never cut. -->
+  <Style Selector=":is(Control)">
+    <Setter Property="ToolTip.Placement" Value="Top" />
+    <Setter Property="ToolTip.VerticalOffset" Value="0" />
+    <Setter Property="ToolTip.ShowDelay" Value="400" />
+    <Setter Property="ToolTip.BetweenShowDelay" Value="0" />
+    <Setter Property="ToolTip.ShouldUseOverlayLayer" Value="True" />
+  </Style>
+
+</Styles>
