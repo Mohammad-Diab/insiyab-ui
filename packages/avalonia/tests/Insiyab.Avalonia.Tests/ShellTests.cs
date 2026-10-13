@@ -209,6 +209,66 @@ public class ShellTests
         Assert.True(pane.TranslatePoint(new Point(pane.Bounds.Width / 2, 10), window)!.Value.X > 400);
     }
 
+    private static Visual? TabFrom(Window window, Control from, RawInputModifiers modifiers = RawInputModifiers.None)
+    {
+        from.Focus(NavigationMethod.Tab);
+        window.KeyPress(Key.Tab, modifiers, PhysicalKey.Tab, null);
+        Settle(100);
+        return window.FocusManager?.GetFocusedElement() as Visual;
+    }
+
+    private static bool InNav(Visual? focused, ListBox nav) => focused is not null && (focused == nav || focused.FindAncestorOfType<ListBox>() == nav);
+
+    [AvaloniaFact]
+    public void Tab_reaches_the_sidebar_before_the_content_as_on_the_web()
+    {
+        var shell = NewShell(out var nav, out var menu, out _);
+        var after = new Button { Content = "بعد" };
+        var root = new DockPanel { Children = { after, shell } };
+        DockPanel.SetDock(after, Dock.Bottom);
+        var window = Show(root, width: 1200, height: 600);
+        var link = (ListBoxItem)nav.ContainerFromIndex(1)!;
+
+        Assert.Same(menu, TabFrom(window, link));
+        Assert.True(InNav(TabFrom(window, after), nav));
+    }
+
+    [AvaloniaFact]
+    public void Hidden_sidebar_leaves_the_tab_order()
+    {
+        var shell = NewShell(out var nav, out var menu, out _);
+        var window = Show(shell, width: 1200, height: 600);
+        Assert.True(InNav(TabFrom(window, menu, RawInputModifiers.Shift), nav));
+
+        Shell.Sidebar(shell, "collapsed");
+        Settle();
+        Assert.False(InNav(TabFrom(window, menu, RawInputModifiers.Shift), nav));
+        Assert.False(InNav(TabFrom(window, menu), nav));
+
+        Shell.Sidebar(shell, "open");
+        Settle();
+        Assert.True(InNav(TabFrom(window, menu, RawInputModifiers.Shift), nav));
+
+        window.Width = 800;
+        Settle();
+        Assert.True(Shell.IsDrawer(shell));
+        Assert.False(InNav(TabFrom(window, menu, RawInputModifiers.Shift), nav));
+        Click(menu, window);
+        Assert.True(InNav(TabFrom(window, menu, RawInputModifiers.Shift), nav));
+    }
+
+    [AvaloniaFact]
+    public void Drawer_glass_lies_on_the_wash_and_the_column_stays_clear()
+    {
+        var drawer = NewShell(out _, out _, out _);
+        Show(drawer, width: 800, height: 500);
+        AssertBrush(drawer, "InsWash1", () => Part<Panel>(drawer, "PART_PaneRoot").Background);
+
+        var column = NewShell(out _, out _, out _);
+        Show(column, width: 1200, height: 500);
+        Assert.Null(Part<Panel>(column, "PART_PaneRoot").Background);
+    }
+
     [AvaloniaFact]
     public void Shell_nav_marks_the_selected_link_and_skips_group_headings()
     {

@@ -12,9 +12,5 @@
   </Application.Resources>
   <Application.Styles>
     <ins:InsiyabTheme />
-    <Style Selector="Button.bare.current">
-      <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
-      <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
-    </Style>
   </Application.Styles>
 </Application>

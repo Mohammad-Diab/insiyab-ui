@@ -11,7 +11,8 @@ public sealed class GalleryPageAttribute(string slug, string title) : Attribute
     public string Title { get; } = title;
 }
 
-public sealed record GalleryPage(string Slug, string Title, string Group, Type Type)
+/// <summary>A page in the gallery's sidebar: <see cref="Icon"/> is a key in Icons.axaml, <see cref="Fresh"/> shows the «جديد» badge.</summary>
+public sealed record GalleryPage(string Slug, string Title, string Group, Type Type, string Icon, bool Fresh)
 {
     public Control Create() => (Control)Activator.CreateInstance(Type)!;
 }
@@ -31,6 +32,31 @@ public static class GalleryPages
         ("الملحقات", ["navbar", "carousel", "colorpicker", "reveal"]),
     ];
 
+    // Each link's icon, the web NAV's `icon`; tokens, fonts and window are Avalonia's own and borrow one from the sprite.
+    private static readonly Dictionary<string, string> Icons = new()
+    {
+        ["color"] = "IconPalette", ["tokens"] = "IconSliders", ["fonts"] = "IconType", ["window"] = "IconWindow",
+        ["shell"] = "IconLayout", ["split"] = "IconSidebar",
+        ["typography"] = "IconType", ["surfaces"] = "IconLayers", ["tables"] = "IconTable", ["description"] = "IconList", ["quote"] = "IconMessage",
+        ["inputs"] = "IconEdit", ["checks"] = "IconCheckSquare", ["input-group"] = "IconLink", ["pickers"] = "IconCalendar", ["chips"] = "IconTag", ["matrix"] = "IconGrid", ["validation"] = "IconShield",
+        ["buttons"] = "IconPointer", ["accordion"] = "IconChevrons", ["tabs"] = "IconTabs", ["stats"] = "IconChart", ["loading"] = "IconLoader", ["progress"] = "IconGauge",
+        ["countdown"] = "IconClock", ["save"] = "IconCheck", ["tooltips"] = "IconMessage", ["alerts"] = "IconAlert", ["dialog"] = "IconWindow", ["drawer"] = "IconSidebar",
+        ["toasts"] = "IconBell", ["notify"] = "IconBell", ["badges"] = "IconTag", ["list"] = "IconList", ["comments"] = "IconInbox", ["dropdown"] = "IconMenuDown",
+        ["steps"] = "IconSteps", ["pagination"] = "IconPages", ["page-head"] = "IconRoute",
+        ["hijri"] = "IconMoon", ["palette"] = "IconSearch", ["otp"] = "IconLock", ["phone"] = "IconPhone", ["birthdate"] = "IconCalendar", ["file"] = "IconUpload",
+        ["scrollspy"] = "IconList", ["timeline"] = "IconClock", ["tree"] = "IconFolder", ["charts"] = "IconChart", ["month"] = "IconCalendar",
+        ["login-simple"] = "IconLock", ["login"] = "IconUser", ["tpl-dashboard"] = "IconHome", ["tpl-tickets"] = "IconInbox", ["tpl-order"] = "IconCart",
+        ["tpl-settings"] = "IconCog", ["tpl-review"] = "IconFile", ["tpl-booking"] = "IconClock", ["tpl-error"] = "IconAlert",
+        ["navbar"] = "IconCompass", ["carousel"] = "IconSlides", ["colorpicker"] = "IconDroplet", ["reveal"] = "IconSparkle",
+    };
+
+    // The pages the web NAV flags `fresh`.
+    private static readonly HashSet<string> Fresh =
+    [
+        "split", "tables", "description", "quote", "inputs", "pickers", "chips", "matrix", "stats", "countdown", "save", "notify", "badges", "comments", "steps",
+        "birthdate", "charts", "month", "login-simple", "tpl-dashboard", "tpl-tickets", "tpl-order", "tpl-settings", "tpl-review", "tpl-booking", "tpl-error",
+    ];
+
     public static IReadOnlyList<GalleryPage> All { get; } = Discover();
 
     public static GalleryPage? Find(string slug) => All.FirstOrDefault(p => p.Slug == slug);
@@ -45,9 +71,12 @@ public static class GalleryPages
         foreach (var (group, slugs) in Nav)
             foreach (var slug in slugs)
                 if (found.Remove(slug, out var hit))
-                    pages.Add(new GalleryPage(slug, hit.Info!.Title, group, hit.Type));
+                    pages.Add(Page(slug, hit.Info!.Title, group, hit.Type));
         foreach (var (slug, hit) in found)
-            pages.Add(new GalleryPage(slug, hit.Info!.Title, "أخرى", hit.Type));
+            pages.Add(Page(slug, hit.Info!.Title, "أخرى", hit.Type));
         return pages;
     }
+
+    private static GalleryPage Page(string slug, string title, string group, Type type) =>
+        new(slug, title, group, type, Icons.GetValueOrDefault(slug, "IconFile"), Fresh.Contains(slug));
 }
