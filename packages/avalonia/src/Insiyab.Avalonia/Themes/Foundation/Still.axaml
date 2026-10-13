@@ -1,0 +1,31 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <!-- The web's effects-off hovers and presses: the movement goes, the colour change stays, so what is under the pointer still shows -->
+  <Style Selector=":is(TopLevel):ins-still :is(Button):pointerover, :is(TopLevel):ins-still :is(Button):pressed">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-still :is(Button):pressed /template/ Panel#PART_Root, :is(TopLevel):ins-still :is(Button).lift:pointerover /template/ Panel#PART_Root">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-still :is(Button).icon:pointerover /template/ ContentPresenter#PART_ContentPresenter, :is(TopLevel):ins-still :is(Button):pointerover /template/ Ellipse#PART_Dot">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-still ListBoxItem:pointerover, :is(TopLevel):ins-still MenuItem:selected">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-still ListBox.shell-nav ListBoxItem:pointerover ins|Icon, :is(TopLevel):ins-still Button.shell-link:pointerover ins|Icon, :is(TopLevel):ins-still Button.shell-brand:pointerover Border.shell-mark">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-still Border.hoverable:pointerover, :is(TopLevel):ins-still Border.stat.hoverable:pointerover Border.stat-ico, :is(TopLevel):ins-still Button.stat-link:pointerover Border.stat-ico">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-still TextBox:focus-within /template/ Panel#PART_Field, :is(TopLevel):ins-still ComboBox:focus-within /template/ Panel#PART_Field, :is(TopLevel):ins-still ComboBox:dropdownopen /template/ Panel#PART_Field, :is(TopLevel):ins-still NumericUpDown:focus-within /template/ Panel#PART_Field, :is(TopLevel):ins-still ins|DateTimeGroup:focus-within">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-still Slider:pointerover /template/ Thumb, :is(TopLevel):ins-still Slider /template/ Thumb:pressed">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+
+</Styles>

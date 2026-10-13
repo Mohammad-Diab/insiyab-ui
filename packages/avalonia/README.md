@@ -16,6 +16,7 @@ Set `FlowDirection="RightToLeft"` on the window for an Arabic UI; a Latin field 
 |---|---|
 | Brand colour | `InsiyabTheme.SetPrimary(Color.Parse("#0F766E"))` re-derives every tinted token, light and dark at once. `InsiyabTheme.Primary` reads it back. |
 | Light / dark | `Application.RequestedThemeVariant` |
+| Effects off | `ins:Motion.Still="True"` on a window is the web's «تخفيف المؤثرات»: hovers and presses keep their colour and lose their movement. The system's reduced motion (Windows) counts too; `Motion.IsStill(visual)` asks from code, and the window carries `:ins-still` meanwhile |
 | Text | `TextBlock` classes `display h1 h2 h3 h4 lead prose muted eyebrow num` |
 | Surfaces | `Border` classes `card`, `glass`, `glass-inner`, `hoverable` |
 | Panel | `Border.panel` around a `DockPanel` of `Border.panel-head` (top), `Border.panel-foot` (bottom) and `Border.panel-body`; `panel alert` for the tinted variant; `panel-title`, `panel-ico`, `panel-actions`, `panel-note` inside the head |
