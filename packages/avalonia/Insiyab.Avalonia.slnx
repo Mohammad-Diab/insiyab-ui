@@ -8,6 +8,9 @@
   <Folder Name="/tests/">
     <Project Path="tests/Insiyab.Avalonia.Tests/Insiyab.Avalonia.Tests.csproj" />
   </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Shots/Shots.csproj" />
+  </Folder>
   <Folder Name="/aot-check/">
     <Project Path="aot-check/AotCheck/AotCheck.csproj" />
   </Folder>

@@ -3,7 +3,18 @@
              xmlns:ins="using:Insiyab.Avalonia"
              x:Class="Insiyab.Avalonia.Gallery.App"
              RequestedThemeVariant="Light">
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://Insiyab.Avalonia.Gallery/Icons.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
   <Application.Styles>
     <ins:InsiyabTheme />
+    <Style Selector="Button.bare.current">
+      <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+      <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+    </Style>
   </Application.Styles>
 </Application>
