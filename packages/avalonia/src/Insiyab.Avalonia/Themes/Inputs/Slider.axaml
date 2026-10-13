@@ -6,6 +6,8 @@
       <SolidColorBrush x:Key="InsRangeThumbRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
 
       <ControlTheme x:Key="InsRangeTrackPart" TargetType="RepeatButton">
+
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
           <ControlTemplate>
@@ -39,6 +41,8 @@
       </ControlTheme>
 
       <ControlTheme x:Key="InsRangeThumb" TargetType="Thumb">
+
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Width" Value="20" />
         <Setter Property="Height" Value="20" />
         <Setter Property="RenderTransform" Value="none" />
@@ -67,7 +71,7 @@
 
       <ControlTheme x:Key="{x:Type Slider}" TargetType="Slider">
         <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
-        <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsPrimaryMid}" />
         <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="ClipToBounds" Value="False" />

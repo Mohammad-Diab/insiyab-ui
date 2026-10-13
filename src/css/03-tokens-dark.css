@@ -108,6 +108,8 @@
      stand on its own does need it, and this is the kind of gap that only shows up
      in the theme nobody screenshotted. */
   --ins-primary-darker: #ae99cf;
+  --ins-primary-mid: #9d83c5;
+  --ins-on-primary-mid: #111111;
 
   /* The page ground. The source sheet carried these on the tenant's payload rather
      than in the sheet, so a stylesheet-only page had no dark ground at all — it

@@ -82,13 +82,13 @@
   transition: background var(--ins-t-pop) var(--ins-ease), transform var(--ins-t-pop) var(--ins-ease-spring);
 }
 .ins-otp-cell.is-filled { animation: ins-pop-in var(--ins-t-pop) var(--ins-ease); }
-.ins-otp-cell.is-filled::before { background: var(--ins-primary); transform: scale(1.15); }
+.ins-otp-cell.is-filled::before { background: var(--ins-primary-mid); transform: scale(1.15); }
 .ins-otp-cell.is-active:not(.is-filled)::after {
   content: "";
   inline-size: 2px;
   block-size: 1.5rem;
   border-radius: 1px;
-  background: var(--ins-tone-brand-soft);
+  background: var(--ins-primary-mid);
 }
 
 /* In error the strip keeps its normal fill, like a field: only the border and the dots turn red. */

@@ -39,6 +39,9 @@
   --ins-wash-1: #f2eff8;
   --ins-wash-2: #f3f1f6;
   --ins-on-primary: #ffffff;
+  /* The middle shade small brand accents take, and its label: brand() derives both, these are its values for the default. */
+  --ins-primary-mid: #704aaa;
+  --ins-on-primary-mid: #ffffff;
 
   /* Glass alpha ladder: the more "on top" a surface is, the more opaque. */
   --ins-glass: rgba(255, 255, 255, .58);

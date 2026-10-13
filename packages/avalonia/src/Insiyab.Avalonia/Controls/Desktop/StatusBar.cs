@@ -4,16 +4,18 @@ using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Metadata;
+using Avalonia.Threading;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The thin strip at the foot of a window: items on the start side and on the end side, muted and compact. Dock it at the bottom of the window, around the app shell, so it never covers the content.</summary>
+/// <summary>The thin strip at the foot of a window: items on the start side and on the end side, muted and compact. Dock it at the bottom of the window, around the app shell, so it never covers the content; toasts in the window's corner sit above it.</summary>
 [TemplatePart("PART_Start", typeof(Panel))]
 [TemplatePart("PART_End", typeof(Panel))]
 public class StatusBar : TemplatedControl
 {
     private Panel? _start;
     private Panel? _end;
+    private TopLevel? _top;
 
     public StatusBar()
     {
@@ -43,6 +45,18 @@ public class StatusBar : TemplatedControl
         if (change.Property == BoundsProperty || change.Property == IsVisibleProperty) ToastStrip.Refit(this);
     }
 
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        _top = TopLevel.GetTopLevel(this);
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        if (_top is { } top) Dispatcher.UIThread.Post(() => ToastStrip.Refit(top));
+        _top = null;
+    }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {

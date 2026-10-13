@@ -7,12 +7,12 @@
   </UserControl.Styles>
 
   <StackPanel>
-    <TextBlock Classes="intro" Text="مقاسات العناوين، والنص الطويل، والفاصل، والمفاتيح." />
+    <TextBlock Classes="intro" Text="ثلاثة خطوط مضمنة في المكتبة، وسلم للعناوين، ونص طويل لا يتجاوز تنسيقه العنصر الذي يحمله." />
     <pg:PlayExample Layout="Stack" Code="{x:Static pg:TypographyPlay.Example}" />
 
     <TextBlock Classes="section" Text="الخطوط الثلاثة" />
     <pg:PlayText Classes="p" Markup="تُكتب العربية بخط تجوال ومعه حروفه اللاتينية، والأرقام والنص اللاتيني بخط Inter، أما العناوين في الواجهات التي تجري من اليسار إلى اليمين فبخط Cause." />
-    <pg:PlayExample Layout="Stack" ShowCode="False" Code="{x:Static pg:TypographyPlay.Faces}" />
+    <pg:PlayExample Layout="Stack" ShowCode="False" Code="{x:Static pg:TypographyPlay.FacesExample}" />
 
     <TextBlock Classes="section" Text="العناوين" />
     <pg:PlayText Classes="p" Markup="مظهر العنوان مستقل عن مستواه، فالمستوى في `AutomationProperties.HeadingLevel` يخدم بنية الصفحة وقارئ الشاشة، والكلاس يخدم التصميم. لذا لا غرابة في عنوان من المستوى الثاني بالكلاس `h4`. وتجد الخيارات كلها بشرحها في آخر الصفحة." />

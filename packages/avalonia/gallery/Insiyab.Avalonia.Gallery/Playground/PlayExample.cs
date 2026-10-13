@@ -19,12 +19,14 @@ public class PlayExample : Border
 
     private readonly Border _view = new();
     private readonly PlayListing _listing = new();
+    private Action<Control>? _stage;
 
     protected override Type StyleKeyOverride => typeof(Border);
 
     public PlayExample()
     {
         _view.Classes.Add("play-example");
+        _listing.Classes.Add("attached");
         Child = new StackPanel { Children = { _view, _listing } };
     }
 
@@ -35,6 +37,16 @@ public class PlayExample : Border
     /// <summary>False shows the example alone, as the web's <c>code="none"</c>.</summary>
     public bool ShowCode { get => GetValue(ShowCodeProperty); set => SetValue(ShowCodeProperty, value); }
 
+    /// <summary>Wires the rendered example each time it renders, as a page's code-behind would: events, sample data. Given the example's panel.</summary>
+    public Action<Control>? Stage
+    {
+        get => _stage;
+        set
+        {
+            _stage = value;
+            if (_view.Child is Panel panel) value?.Invoke(panel);
+        }
+    }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -49,6 +61,7 @@ public class PlayExample : Border
         _view.Child = Layout == ExampleLayout.Row
             ? PlayCode.Render(code, "WrapPanel", "ItemSpacing=\"10\" LineSpacing=\"10\"")
             : PlayCode.Render(code, "StackPanel", "Spacing=\"12\"");
+        if (_view.Child is Panel panel) _stage?.Invoke(panel);
         _listing.Code = code;
     }
 }

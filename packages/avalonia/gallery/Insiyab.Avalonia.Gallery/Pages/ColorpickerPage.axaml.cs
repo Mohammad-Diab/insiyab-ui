@@ -5,9 +5,5 @@ namespace Insiyab.Avalonia.Gallery.Pages;
 [GalleryPage("colorpicker", "منتقي الألوان")]
 public partial class ColorpickerPage : UserControl
 {
-    public ColorpickerPage()
-    {
-        InitializeComponent();
-        Brand.ColorCommitted += (_, e) => InsiyabTheme.SetPrimary(e.Value);
-    }
+    public ColorpickerPage() => InitializeComponent();
 }

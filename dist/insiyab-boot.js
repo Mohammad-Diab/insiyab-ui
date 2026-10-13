@@ -54,10 +54,13 @@
   function gradientEnd(hex, label) {
     return label === '#ffffff' ? shift(hex, -0.32) : shift(hex, 0.30);
   }
+  // The middle shade small brand accents take, as a shift toward white per theme; big fills keep the primary.
+  var MID_SHIFT = { light: 0.20, dark: 0.45 };
   function derive(hex, theme) {
     var dark = theme === 'dark';
     var onPrimary = labelFor(hex);
     var primaryDark = gradientEnd(hex, onPrimary);
+    var primaryMid = shift(hex, dark ? MID_SHIFT.dark : MID_SHIFT.light);
     return {
       'primary': hex,
       'primary-dark': primaryDark,
@@ -66,6 +69,8 @@
       'grad-rgb': hexToRgb(primaryDark).join(', '),
       'accent-rgb': hexToRgb(primaryDark).join(', '),
       'on-primary': onPrimary,
+      'primary-mid': primaryMid,
+      'on-primary-mid': labelFor(primaryMid),
       'wash-1': dark ? '#0f1115' : shift(hex, 0.93),
       'wash-2': dark ? '#12141a' : shift(primaryDark, 0.94)
     };
@@ -134,7 +139,7 @@
     var state = { done: false }, side = null;
     var place = function () {
       side = side || document.querySelector('.ins-shell-side');
-      if (side) navPlace(side, note, state);
+      if (side) { filterBuild(side); navPlace(side, note, state); }
     };
     var finish = function () { place(); state.done = true; if (mo) mo.disconnect(); };
     var mo = window.MutationObserver ? new MutationObserver(function () {
@@ -143,6 +148,31 @@
     }) : null;
     if (mo) mo.observe(root, { childList: true, subtree: true });
     document.addEventListener('DOMContentLoaded', finish);
+  }
+  var FILTER_WORDS = { ar: ['بحث', 'لا نتائج'], en: ['Search', 'No results'] };
+  function filterBuild(side) {
+    if (!side.hasAttribute('data-ins-filter')) return null;
+    var box = side.querySelector('.ins-shell-filter');
+    if (box) return box;
+    var first = side.querySelector('.ins-shell-group, .ins-shell-link');
+    if (!first) return null;
+    var lang = ((side.closest('[lang]') || root).getAttribute('lang') || 'en').slice(0, 2).toLowerCase();
+    var words = FILTER_WORDS[lang] || FILTER_WORDS.en, hint = side.getAttribute('data-ins-filter') || words[0];
+    box = document.createElement('div');
+    box.className = 'ins-shell-filter ins-search';
+    box.innerHTML = '<svg class="ins-search-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">' +
+      '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="ins-input ins-input--sm" type="search" autocomplete="off" spellcheck="false">';
+    var input = box.lastChild;
+    input.placeholder = hint;
+    input.setAttribute('aria-label', hint);
+    var empty = document.createElement('p');
+    empty.className = 'ins-shell-filter-empty';
+    empty.setAttribute('role', 'status');
+    empty.hidden = true;
+    empty.textContent = side.getAttribute('data-ins-filter-empty') || words[1];
+    first.parentNode.insertBefore(box, first);
+    first.parentNode.insertBefore(empty, first);
+    return box;
   }
   function earlyPaint(booted) {
     root.setAttribute('data-ins-js', '');

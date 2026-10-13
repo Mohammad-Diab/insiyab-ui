@@ -167,7 +167,7 @@
     </Setter>
   </Style>
   <Style Selector="ins|BirthDateField Ellipse.birth-dot.on">
-    <Setter Property="Fill" Value="{DynamicResource InsPrimary}" />
+    <Setter Property="Fill" Value="{DynamicResource InsPrimaryMid}" />
     <Setter Property="RenderTransform" Value="scale(1.15)" />
   </Style>
   <Style Selector="ins|BirthDateField TextBlock.birth-cap">

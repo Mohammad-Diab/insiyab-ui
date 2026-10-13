@@ -213,7 +213,7 @@
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  background: var(--ins-primary-mid);
   opacity: 0;
   transition: opacity var(--ins-t-pop) var(--ins-ease);
 }
@@ -228,7 +228,7 @@
   inset-inline-start: 4px;
   inline-size: .3125rem;
   block-size: .625rem;
-  border: solid var(--ins-on-primary);
+  border: solid var(--ins-on-primary-mid);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg) scale(0);
   transform-origin: center;
@@ -246,7 +246,7 @@
   inline-size: .4375rem;
   block-size: .4375rem;
   border-radius: 50%;
-  background: var(--ins-on-primary);
+  background: var(--ins-on-primary-mid);
   transform: scale(0);
   transition: transform var(--ins-t-pop) var(--ins-ease);
 }
@@ -311,7 +311,7 @@
   transition: transform .32s var(--ins-ease-spring);
 }
 .ins-switch > input:checked + .ins-switch-track {
-  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  background: var(--ins-primary-mid);
   border-color: transparent;
   box-shadow: var(--ins-glow-ring), inset 0 1px 0 rgba(255, 255, 255, .20);
 }
@@ -752,7 +752,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
   block-size: 2px;
   border: 0;
   border-radius: 1px;
-  background: var(--ins-on-primary);
+  background: var(--ins-on-primary-mid);
   transform: none;
 }
 
@@ -781,11 +781,11 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-range::-webkit-slider-runnable-track {
   block-size: .375rem;
   border-radius: var(--ins-r-pill);
-  background: linear-gradient(to right, var(--ins-tone-brand-soft) var(--ins-fill), var(--ins-ctl-bg-hover) var(--ins-fill));
+  background: linear-gradient(to right, var(--ins-primary-mid) var(--ins-fill), var(--ins-ctl-bg-hover) var(--ins-fill));
   box-shadow: inset 0 1px 2px rgba(15, 23, 42, .08);
 }
 [dir="rtl"] .ins-range::-webkit-slider-runnable-track {
-  background: linear-gradient(to left, var(--ins-tone-brand-soft) var(--ins-fill), var(--ins-ctl-bg-hover) var(--ins-fill));
+  background: linear-gradient(to left, var(--ins-primary-mid) var(--ins-fill), var(--ins-ctl-bg-hover) var(--ins-fill));
 }
 .ins-range::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -809,7 +809,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-range::-moz-range-progress {
   block-size: .375rem;
   border-radius: var(--ins-r-pill);
-  background: var(--ins-tone-brand-soft);
+  background: var(--ins-primary-mid);
 }
 .ins-range::-moz-range-thumb {
   inline-size: 1.25rem;
@@ -958,7 +958,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 }
 .ins-tile:has(> input[type="checkbox"])::before { border-radius: var(--ins-r-xs); }
 .ins-tile::after {
-  background: var(--ins-on-primary);
+  background: var(--ins-on-primary-mid);
   -webkit-mask: var(--ins-tile-mark) center / .75rem no-repeat;
           mask: var(--ins-tile-mark) center / .75rem no-repeat;
   transform: scale(0);
@@ -968,13 +968,13 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-tile-desc { font-size: var(--ins-fs-xs); color: var(--ins-label); line-height: 1.6; }
 .ins-tile:hover { border-color: rgba(var(--ins-primary-rgb), .35); background: var(--ins-ctl-bg-hover); }
 .ins-tile:has(> input:checked) {
-  border-color: var(--ins-tone-brand-soft);
+  border-color: var(--ins-primary-mid);
   background: var(--ins-tone-brand-bg);
-  box-shadow: inset 0 0 0 1px var(--ins-tone-brand-soft);
+  box-shadow: inset 0 0 0 1px var(--ins-primary-mid);
 }
 .ins-tile:has(> input:checked)::before {
   border-color: transparent;
-  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  background: var(--ins-primary-mid);
 }
 .ins-tile:has(> input:checked)::after { transform: scale(1); }
 .ins-tile:has(> input:checked) .ins-tile-title { color: var(--ins-tone-brand); }
@@ -1281,9 +1281,9 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
 }
 .ins-matrix-cell:hover { border-color: rgba(var(--ins-primary-rgb), .35); }
 .ins-matrix-cell:has(> input:checked) {
-  border-color: var(--ins-tone-brand-soft);
+  border-color: var(--ins-primary-mid);
   background: var(--ins-tone-brand-bg);
-  box-shadow: inset 0 0 0 1px var(--ins-tone-brand-soft);
+  box-shadow: inset 0 0 0 1px var(--ins-primary-mid);
   color: var(--ins-text-1);
 }
 .ins-matrix-cell:has(> input:focus-visible) { outline: 2px solid var(--ins-tone-brand-soft); outline-offset: 2px; }
@@ -1297,4 +1297,4 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
-.ins-matrix-cell:has(> input:checked) .ins-matrix-points { background: var(--ins-tone-brand-soft); color: var(--ins-on-primary); }
+.ins-matrix-cell:has(> input:checked) .ins-matrix-points { background: var(--ins-primary-mid); color: var(--ins-on-primary-mid); }

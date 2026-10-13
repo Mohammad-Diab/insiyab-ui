@@ -105,6 +105,14 @@ public static class Ui
         Settle();
     }
 
+    // One pixel of a rendered frame, whichever byte order the frame uses.
+    public static Color PixelAt(global::Avalonia.Platform.ILockedFramebuffer buffer, int x, int y)
+    {
+        var i = y * buffer.RowBytes + x * 4;
+        byte B(int k) => System.Runtime.InteropServices.Marshal.ReadByte(buffer.Address, i + k);
+        return buffer.Format == global::Avalonia.Platform.PixelFormat.Rgba8888 ? Color.FromArgb(B(3), B(0), B(1), B(2)) : Color.FromArgb(B(3), B(2), B(1), B(0));
+    }
+
     public static Color ColorOf(IBrush? brush) => Assert.IsAssignableFrom<ISolidColorBrush>(brush).Color;
 
     // A finished brush transition can land a few units off its target, so colours are compared with a small tolerance.

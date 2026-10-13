@@ -20,6 +20,7 @@
 
       <!-- .ins-chip-x: the ×, a 22px circle. -->
       <ControlTheme x:Key="InsChipRemove" TargetType="Button">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Width" Value="22" />
         <Setter Property="Height" Value="22" />
         <Setter Property="Padding" Value="0" />
@@ -60,6 +61,7 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type ins:Chip}" TargetType="ins:Chip">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="MinHeight" Value="30" />
         <Setter Property="Padding" Value="12,3" />
         <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
@@ -102,6 +104,7 @@
 
       <!-- A chip that is a button: a link chip (`Button Classes="chip"`, `active` when chosen) or a filter (`ToggleButton Classes="chip"`, which takes the brand and a tick when on). -->
       <ControlTheme x:Key="InsChipButton" TargetType="Button">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="MinHeight" Value="30" />
         <Setter Property="Padding" Value="12,3" />
         <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />

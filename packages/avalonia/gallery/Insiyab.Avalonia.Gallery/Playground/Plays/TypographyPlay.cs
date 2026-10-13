@@ -13,7 +13,7 @@ public static class TypographyPlay
         <TextBlock Classes="h4" Text="عنوان رابع" />
         """;
 
-    public const string Faces =
+    public const string FacesExample =
         """
         <TextBlock Classes="h3" Text="تجوال · Tajawal" />
         <TextBlock Classes="h3" FlowDirection="LeftToRight" FontFamily="{DynamicResource InsFontBodyEn}" Text="Inter · 1,240,905" />

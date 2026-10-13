@@ -31,8 +31,8 @@ public static class GalleryPages
         ("النماذج", ["inputs", "checks", "input-group", "pickers", "chips", "matrix", "validation"]),
         ("المكونات", ["buttons", "accordion", "tabs", "stats", "loading", "progress", "countdown", "save", "tooltips", "alerts", "dialog", "drawer", "toasts", "notify", "badges", "list", "comments", "dropdown", "steps", "pagination", "page-head"]),
         ("الإضافات", ["hijri", "palette", "otp", "phone", "birthdate", "file", "scrollspy", "timeline", "tree", "charts", "month"]),
-        ("القوالب", ["login-simple", "login", "tpl-dashboard", "tpl-tickets", "tpl-order", "tpl-settings", "tpl-review", "tpl-booking", "tpl-error"]),
-        ("الملحقات", ["navbar", "carousel", "colorpicker", "reveal"]),
+        ("القوالب", ["login-simple", "login"]),
+        ("الملحقات", ["carousel", "colorpicker", "reveal"]),
     ];
 
     // Each link's icon, the web NAV's `icon`; tokens, fonts, window, titlebar, toolbar and statusbar are Avalonia's own and borrow one from the sprite.
@@ -48,7 +48,7 @@ public static class GalleryPages
         ["steps"] = "IconSteps", ["pagination"] = "IconPages", ["page-head"] = "IconRoute",
         ["hijri"] = "IconMoon", ["palette"] = "IconSearch", ["otp"] = "IconLock", ["phone"] = "IconPhone", ["birthdate"] = "IconCalendar", ["file"] = "IconUpload",
         ["scrollspy"] = "IconList", ["timeline"] = "IconClock", ["tree"] = "IconFolder", ["charts"] = "IconChart", ["month"] = "IconCalendar",
-        ["login-simple"] = "IconLock", ["login"] = "IconUser", ["tpl-dashboard"] = "IconHome", ["tpl-tickets"] = "IconInbox", ["tpl-order"] = "IconCart",
+        ["login-simple"] = "IconLock", ["login"] = "IconUser",
         ["carousel"] = "IconSlides", ["colorpicker"] = "IconDroplet", ["reveal"] = "IconSparkle",
     };
 

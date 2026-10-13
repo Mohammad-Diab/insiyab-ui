@@ -68,6 +68,7 @@
 
       <!-- a.ins-card: a card that is a control, so it lifts under the pointer and gives a little when pressed -->
       <ControlTheme x:Key="InsCardButton" TargetType="Button">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Background" Value="{DynamicResource InsGlassFill}" />
         <Setter Property="BorderBrush" Value="{DynamicResource InsGlassRim}" />
         <Setter Property="BorderThickness" Value="1" />

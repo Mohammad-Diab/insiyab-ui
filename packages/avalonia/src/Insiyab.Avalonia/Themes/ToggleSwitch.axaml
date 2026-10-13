@@ -5,10 +5,7 @@
   <Styles.Resources>
     <ResourceDictionary>
 
-      <LinearGradientBrush x:Key="InsSwitchFill" StartPoint="0%,0%" EndPoint="100%,100%">
-        <GradientStop Offset="0" Color="{DynamicResource InsPrimaryColor}" />
-        <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
-      </LinearGradientBrush>
+      <SolidColorBrush x:Key="InsSwitchFill" Color="{DynamicResource InsPrimaryMidColor}" />
       <SolidColorBrush x:Key="InsSwitchHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.40" />
       <SolidColorBrush x:Key="InsSwitchRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
 

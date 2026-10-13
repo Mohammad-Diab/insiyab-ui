@@ -76,6 +76,18 @@
   border-color: var(--ins-tone-bad-bd);
   background: var(--ins-tone-bad-bg);
 }
+/* On the dark ground the red wash reads as a maroon slab, so dark takes a faint wash of its own light red instead. */
+:root[data-ins-theme="dark"] .ins-file:has(> input:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)) > .ins-file-zone,
+:root[data-ins-theme="dark"] .ins-file-item.is-failed {
+  background: color-mix(in srgb, var(--ins-tone-bad) 8%, transparent);
+}
+/* The rule above, for an OS set to dark — emitted by build.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .ins-file:has(> input:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)) > .ins-file-zone,
+  :root:not([data-ins-theme="light"]) .ins-file-item.is-failed {
+    background: color-mix(in srgb, var(--ins-tone-bad) 8%, transparent);
+  }
+}
 .ins-file:has(> input:disabled) > .ins-file-zone { opacity: .55; cursor: not-allowed; }
 
 /* A phone has nothing to drag: the zone just asks for a file. */

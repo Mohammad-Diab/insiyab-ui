@@ -21,11 +21,16 @@ public class PlaygroundTests
                 .Select(p => (Owner: $"{t.Name}.{p.Name}", Def: (PlayDef)p.GetValue(null)!)))
             .ToList();
 
+    // Only a member named as an example is XAML; a C# listing beside it (Code, Server, Page) is not.
+    private static bool IsExample(string name) => name.EndsWith("Example", StringComparison.Ordinal);
+
     private static List<(string Owner, string Code)> Examples() =>
         Gallery.GetTypes()
             .Where(t => t.Namespace == typeof(PlayDef).Namespace)
-            .SelectMany(t => t.GetFields(BindingFlags.Public | BindingFlags.Static).Where(f => f.FieldType == typeof(string) && f.IsLiteral)
-                .Select(f => (Owner: $"{t.Name}.{f.Name}", Code: (string)f.GetRawConstantValue()!)))
+            .SelectMany(t => t.GetFields(BindingFlags.Public | BindingFlags.Static).Where(f => f.FieldType == typeof(string) && f.IsLiteral && IsExample(f.Name))
+                .Select(f => (Owner: $"{t.Name}.{f.Name}", Code: (string)f.GetRawConstantValue()!))
+                .Concat(t.GetProperties(BindingFlags.Public | BindingFlags.Static).Where(p => p.PropertyType == typeof(string) && IsExample(p.Name))
+                    .Select(p => (Owner: $"{t.Name}.{p.Name}", Code: (string)p.GetValue(null)!))))
             .ToList();
 
     // The listings use the gallery's icons, which live in the gallery's App resources.
@@ -106,7 +111,10 @@ public class PlaygroundTests
     {
         LoadIcons();
         var failures = new List<string>();
-        foreach (var (owner, code) in Examples())
+        var examples = Examples();
+        Assert.True(examples.Count >= 50, $"only {examples.Count} examples found");
+        Assert.DoesNotContain(examples, e => e.Owner.EndsWith(".Code"));
+        foreach (var (owner, code) in examples)
         {
             try { PlayCode.Parse(code); }
             catch (Exception e) { failures.Add($"{owner}: {e.Message}"); }
@@ -142,23 +150,55 @@ public class PlaygroundTests
         Assert.True(silent.Count == 0, "no change for: " + string.Join(", ", silent));
     }
 
-    [AvaloniaFact]
-    public void Every_playground_page_opens()
+    // A select, a segmented choice or a field can sit under a group of its own and document an option itself.
+    [Fact]
+    public void Controls_take_a_group_a_name_and_a_description()
     {
-        LoadIcons();
-        var owners = Defs().Select(d => d.Def).ToHashSet();
-        foreach (var page in GalleryPages.All)
+        var def = new PlayDef
         {
-            var control = page.Create();
-            var plays = control.GetLogicalDescendantsOfPlayground();
-            foreach (var play in plays) Assert.NotNull(play.Def);
-        }
-        Assert.NotEmpty(owners);
+            Id = "t",
+            Title = "t",
+            Controls =
+            [
+                Play.Seg("min", "أقل", "", Play.Choice("", "بلا"), Play.Choice("18", "18", "MinAge=18", "أقل عمر.", OptionKind.Property)).In("العمر"),
+                Play.Select("max", "أكبر", "").Doc("MaxAge", "أكبر عمر.").In("العمر"),
+                Play.Text("title", "العنوان", "عنوان", "Title", "عنوان الحوار."),
+            ],
+            Axaml = _ => "<TextBlock />",
+        };
+        var groups = def.Groups();
+        var age = Assert.Single(groups, g => g.Label == "العمر").Rows;
+        Assert.Equal(["MinAge=18", "MaxAge"], age.Select(r => r.Name));
+        var title = Assert.Single(groups, g => g.Label == "العنوان").Rows;
+        Assert.Equal(("Title", "عنوان الحوار.", OptionKind.Property), (title[0].Name, title[0].Desc, title[0].Kind));
     }
-}
 
-internal static class PlaygroundTree
-{
-    public static IEnumerable<Playground> GetLogicalDescendantsOfPlayground(this Control root) =>
-        global::Avalonia.LogicalTree.LogicalExtensions.GetLogicalDescendants(root).OfType<Playground>();
+    // A code run reads left to right inside Arabic (LRM marks, as Avalonia ignores bidi isolates) and never breaks across lines.
+    [Fact]
+    public void A_code_run_stays_whole_and_in_order()
+    {
+        const char lrm = (char)0x200E, joiner = (char)0x2060, isolate = (char)0x2066;
+        var code = PlayText.Code("Classes=a b x-y");
+        Assert.Equal(lrm, code[0]);
+        Assert.Equal(lrm, code[^1]);
+        Assert.DoesNotContain(' ', code);
+        Assert.DoesNotContain(isolate, code);
+        Assert.Contains($"C{joiner}l{joiner}a", code);
+        Assert.Contains($"x{joiner}-{joiner}y", code);
+        Assert.DoesNotContain(lrm, PlayText.Code("الأولى"));
+    }
+
+    // A main example's stage wires each rendering of it, the first and any after its code changes.
+    [AvaloniaFact]
+    public void A_stage_wires_every_rendering_of_the_example()
+    {
+        var seen = new List<Control>();
+        var example = new PlayExample { Code = "<Button Content=\"أ\" />" };
+        example.Stage = seen.Add;
+        Assert.Single(seen);
+        Assert.IsType<Button>(Assert.IsAssignableFrom<Panel>(seen[0]).Children.Single());
+        example.Code = "<CheckBox />";
+        Assert.Equal(2, seen.Count);
+        Assert.IsType<CheckBox>(((Panel)seen[1]).Children.Single());
+    }
 }

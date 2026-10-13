@@ -37,6 +37,7 @@
 
     <TextBlock Classes="section" Text="ما يصل إلى الخادم" />
     <pg:PlayText Classes="p" Markup="يحمل `Value` التاريخ بصيغة ISO، مثل `&#x200E;1993-01-22&#x200E;`، فلا يحتاج الخادم شيئًا جديدًا. وتضع التاريخ في `SelectedDate` فيبدأ الحقل منه. ومع `IsRequired` يقول الحقل الفارغ إنه مطلوب، والتاريخ الناقص غير صالح برسالة «أكمل تاريخ الميلاد»." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:BirthdatePlay.FormExample}" Stage="{x:Static pg:BirthdatePlay.FormStage}" />
 
     <TextBlock Classes="section" Text="التحكم من الشيفرة" />
     <pg:PlayListing Code="{x:Static pg:BirthdatePlay.Code}" Margin="0,0,0,24" />

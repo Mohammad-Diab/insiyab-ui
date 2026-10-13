@@ -258,7 +258,7 @@ html .ins-panel .ins-table tbody td:is(:first-child, :last-child) { border-left:
   inset-block: .5rem;
   inline-size: 3px;
   border-radius: var(--ins-r-pill);
-  background: var(--ins-tone-brand-soft);
+  background: var(--ins-primary-mid);
   transform: scaleY(0);
   transition: transform var(--ins-t-pop) var(--ins-ease);
 }

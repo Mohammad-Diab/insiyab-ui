@@ -1439,10 +1439,10 @@ public class DataTests
         Assert.Same(Res(m, "InsMatrixCard"), radios[0].Theme);
         Assert.True(radios[0].Bounds.Width >= 128);
         AssertBrush(m, "InsToneBrandBg", () => radios[1].Background);
-        AssertBrush(m, "InsToneBrandSoft", () => radios[1].BorderBrush);
+        AssertBrush(m, "InsPrimaryMid", () => radios[1].BorderBrush);
         Assert.Equal(1, Part<Border>(radios[1], "PART_Ring").Opacity);
         var pill = radios[1].GetVisualDescendants().OfType<Border>().First(b => b.Classes.Contains("matrix-points"));
-        AssertBrush(m, "InsToneBrandSoft", () => pill.Background);
+        AssertBrush(m, "InsPrimaryMid", () => pill.Background);
         Assert.Equal(Colors.Transparent, ColorOf(((Border)radios[0].Parent!).Background));
         Assert.Equal(radios[0].Bounds.Height, radios[2].Bounds.Height, 0);
         Capture(window, "data-matrix-cards");

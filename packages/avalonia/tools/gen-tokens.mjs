@@ -22,6 +22,8 @@ const BRAND_BASE = {
   '--ins-on-primary': { field: 'OnPrimary', triplet: false },
   '--ins-wash-1': { field: 'Wash1', triplet: false },
   '--ins-wash-2': { field: 'Wash2', triplet: false },
+  '--ins-primary-mid': { field: 'PrimaryMid', triplet: false },
+  '--ins-on-primary-mid': { field: 'OnPrimaryMid', triplet: false },
 };
 
 const FONT_WHY = 'font stack: a FontFamily, owned by Themes/Fonts.axaml';

@@ -17,6 +17,7 @@
 
       <!-- The island: every object in the bar is one, so they share a height, a rim and a shadow -->
       <ControlTheme x:Key="InsIsland" TargetType="ContentControl">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Height" Value="{DynamicResource InsAppbarH}" />
         <Setter Property="Padding" Value="14,0" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />

@@ -130,7 +130,7 @@
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
   </Style>
   <Style Selector="Button.carousel-dot.current">
-    <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsPrimaryMid}" />
   </Style>
   <Style Selector="Button.carousel-dot.current /template/ Border#PART_Dot">
     <Setter Property="Width" Value="20" />

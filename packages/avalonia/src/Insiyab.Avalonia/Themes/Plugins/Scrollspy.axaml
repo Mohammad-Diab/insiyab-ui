@@ -116,7 +116,7 @@
                            Foreground="{DynamicResource InsText3}" IsVisible="{TemplateBinding Title, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                 <Panel>
                   <ItemsPresenter x:Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
-                  <Border x:Name="PART_Marker" Width="3" Height="0" CornerRadius="999" Background="{DynamicResource InsToneBrandSoft}"
+                  <Border x:Name="PART_Marker" Width="3" Height="0" CornerRadius="999" Background="{DynamicResource InsPrimaryMid}"
                           HorizontalAlignment="Left" VerticalAlignment="Top" IsHitTestVisible="False" Opacity="0" RenderTransformOrigin="50%,50%">
                     <Border.Transitions>
                       <Transitions>

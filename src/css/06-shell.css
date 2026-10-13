@@ -190,7 +190,7 @@
   inset-inline-start: 0;
   inline-size: 3px;
   border-radius: var(--ins-r-pill);
-  background: var(--ins-tone-brand-soft);
+  background: var(--ins-primary-mid);
   transform: scaleY(0);
   transform-origin: center;
   transition: transform var(--ins-t-pop) var(--ins-ease);
@@ -225,7 +225,7 @@
   position: absolute;
   z-index: 1;
   border-radius: var(--ins-r-pill);
-  background: var(--ins-tone-brand-soft);
+  background: var(--ins-primary-mid);
   pointer-events: none;
 }
 .ins-shell-moving .ins-shell-link::before,

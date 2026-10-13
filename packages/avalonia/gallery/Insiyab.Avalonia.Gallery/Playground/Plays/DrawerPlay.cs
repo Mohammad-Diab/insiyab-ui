@@ -53,7 +53,7 @@ public static class DrawerPlay
             Select("closedby", "ما يغلقه", "",
                 Choice("", "Esc والنقر خارجه"),
                 Choice("CloseRequest", "Esc وأزراره", "ClosedBy=\"CloseRequest\"", "لا يغلقه النقر خارجه، بل `Esc` وأزراره، لدرج فيه نموذج لا تريد أن تضيعه نقرة شاردة.", OptionKind.Property),
-                Choice("None", "أزراره وحدها", "ClosedBy=\"None\"", "لا يغلقه `Esc` ولا النقر خارجه، بل أزراره وحدها.", OptionKind.Property)) with { Group = "الإغلاق" },
+                Choice("None", "أزراره وحدها", "ClosedBy=\"None\"", "لا يغلقه `Esc` ولا النقر خارجه، بل أزراره وحدها.", OptionKind.Property)).In("الإغلاق"),
         ],
         Extra =
         [

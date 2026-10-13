@@ -126,6 +126,9 @@
     return label === '#ffffff' ? shift(hex, -0.32) : shift(hex, 0.30);
   }
 
+  // The middle shade small brand accents take, as a shift toward white per theme; big fills keep the primary.
+  var MID_SHIFT = { light: 0.20, dark: 0.45 };
+
   /* One hex in, the whole set out. `theme` decides which way the readable shade
      and the page washes go — on dark they move toward white, not toward black,
      and forgetting that is how a brand-tinted foreground ends up invisible. */
@@ -133,6 +136,7 @@
     var dark = theme === 'dark';
     var onPrimary = labelFor(hex);
     var primaryDark = gradientEnd(hex, onPrimary);
+    var primaryMid = shift(hex, dark ? MID_SHIFT.dark : MID_SHIFT.light);
     return {
       'primary': hex,
       'primary-dark': primaryDark,
@@ -141,6 +145,8 @@
       'grad-rgb': hexToRgb(primaryDark).join(', '),
       'accent-rgb': hexToRgb(primaryDark).join(', '),
       'on-primary': onPrimary,
+      'primary-mid': primaryMid,
+      'on-primary-mid': labelFor(primaryMid),
       /* Dark gets its depth from the orbs, not from a tinted ground, so the washes
          are near-black constants rather than a wash of the hue. */
       'wash-1': dark ? '#0f1115' : shift(hex, 0.93),

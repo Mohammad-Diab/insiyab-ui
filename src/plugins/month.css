@@ -87,7 +87,7 @@ a.ins-month-event:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring);
 .ins-month-more { padding-inline: .375rem; font-size: .6875rem; font-weight: 700; color: var(--ins-text-2); direction: ltr; unicode-bidi: isolate; text-align: start; }
 
 .ins-month-dots { display: none; gap: 3px; justify-content: center; margin-block-start: .25rem; }
-.ins-month-dots > i { inline-size: 5px; block-size: 5px; border-radius: 50%; background: var(--ins-tone-brand-soft); }
+.ins-month-dots > i { inline-size: 5px; block-size: 5px; border-radius: 50%; background: var(--ins-primary-mid); }
 .ins-month-dots > .ins-month-dot--ok { background: var(--ins-tone-ok); }
 .ins-month-dots > .ins-month-dot--warn { background: var(--ins-tone-warn); }
 .ins-month-dots > .ins-month-dot--bad { background: var(--ins-tone-bad); }

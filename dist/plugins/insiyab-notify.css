@@ -83,7 +83,7 @@
   inline-size: .4375rem;
   block-size: .4375rem;
   border-radius: 50%;
-  background: var(--ins-primary);
+  background: var(--ins-primary-mid);
 }
 :root[data-ins-theme="dark"] .ins-notify-list [data-ins-unread] { background: rgba(var(--ins-primary-rgb), .12); }
 /* The rule above, for an OS set to dark — emitted by build.mjs. */

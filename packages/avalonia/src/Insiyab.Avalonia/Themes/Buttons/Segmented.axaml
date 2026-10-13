@@ -6,6 +6,8 @@
     <ResourceDictionary>
 
       <ControlTheme x:Key="{x:Type ins:Segmented}" TargetType="ins:Segmented">
+
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
         <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
         <Setter Property="BorderThickness" Value="1" />
@@ -36,6 +38,8 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type ins:SegmentedItem}" TargetType="ins:SegmentedItem">
+
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
         <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
