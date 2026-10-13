@@ -112,6 +112,26 @@ function subset(font, ranges) {
   return bytes;
 }
 
+// Browsers on Windows place the baseline by the win metrics, Avalonia by hhea: move hhea and typo to the win baseline, keeping hhea's line height.
+function matchWinBaseline(font) {
+  const tables = {};
+  for (let i = 0; i < font.readUInt16BE(4); i++) {
+    const p = 12 + i * 16;
+    tables[font.toString('latin1', p, p + 4)] = { dir: p, off: font.readUInt32BE(p + 8), len: font.readUInt32BE(p + 12) };
+  }
+  const hhea = tables.hhea.off, os2 = tables['OS/2'].off, head = tables.head.off;
+  const height = font.readInt16BE(hhea + 4) - font.readInt16BE(hhea + 6) + font.readInt16BE(hhea + 8);
+  const ascent = Math.round((height + font.readUInt16BE(os2 + 74) - font.readUInt16BE(os2 + 76)) / 2);
+  for (const at of [hhea + 4, os2 + 68]) font.writeInt16BE(ascent, at);
+  for (const at of [hhea + 6, os2 + 70]) font.writeInt16BE(ascent - height, at);
+  for (const at of [hhea + 8, os2 + 72]) font.writeInt16BE(0, at);
+  const sum = (off, len) => { let s = 0; for (let i = 0; i < len; i += 4) s = (s + (((font[off + i] << 24) | (font[off + i + 1] << 16) | (font[off + i + 2] << 8) | font[off + i + 3]) >>> 0)) >>> 0; return s; };
+  font.writeUInt32BE(0, head + 8);
+  for (const t of Object.values(tables)) font.writeUInt32BE(sum(t.off, t.len), t.dir + 4);
+  font.writeUInt32BE((0xB1B0AFBA - sum(0, font.length)) >>> 0, head + 8);
+  return font;
+}
+
 const tajawalRanges = parseRanges(`${cssRange('tajawal-arabic-400')},${cssRange('tajawal-latin-400')}`);
 const latinRanges = parseRanges(`${cssRange('inter-latin-400')},${LATIN_EXT}`);
 
@@ -132,7 +152,7 @@ for (const f of readdirSync(out)) rmSync(join(out, f));
 
 let before = 0, after = 0;
 for (const [name, full, ranges] of fonts) {
-  const small = subset(full, ranges);
+  const small = matchWinBaseline(subset(full, ranges));
   writeFileSync(join(out, name), small);
   before += full.length;
   after += small.length;

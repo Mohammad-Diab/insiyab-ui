@@ -340,7 +340,7 @@ public class DisclosureTests
         Assert.Equal(14, head.FontSize);
         Assert.Equal(FontWeight.Bold, head.FontWeight);
         if (rtl) Assert.InRange(head.Bounds.Height, 50.8, 52.8);
-        else Assert.InRange(head.Bounds.Height, 48, 53);
+        else Assert.InRange(head.Bounds.Height, 45, 47);
         var title = head.GetVisualDescendants().OfType<TextBlock>().First(t => t.Parent == head);
         if (rtl) Assert.Equal(23.8, title.LineHeight);
         else Assert.True(double.IsNaN(title.LineHeight));
