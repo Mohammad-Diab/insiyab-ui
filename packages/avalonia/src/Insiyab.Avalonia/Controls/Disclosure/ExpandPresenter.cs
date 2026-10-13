@@ -57,7 +57,7 @@ public class ExpandPresenter : Decorator
                 _transition.Easing = Easing;
                 Transitions ??= [_transition];
             }
-            SetCurrentValue(ProgressProperty, open ? 1d : 0d);
+            SetValue(ProgressProperty, open ? 1d : 0d);
         }
         else if (change.Property == ProgressProperty)
         {
