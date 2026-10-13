@@ -1,0 +1,214 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <SolidColorBrush x:Key="InsChipHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.35" />
+      <StreamGeometry x:Key="InsChipTick">M20 6 L9 17 l-5 -5</StreamGeometry>
+      <StreamGeometry x:Key="InsChipX">M6 6 l12 12 M18 6 L6 18</StreamGeometry>
+
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsChipOnFg" Color="{DynamicResource InsToneBrandColor}" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsChipOnFg" Color="{DynamicResource InsText1Color}" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- .ins-chip-x: the ×, a 22px circle. -->
+      <ControlTheme x:Key="InsChipRemove" TargetType="Button">
+        <Setter Property="Width" Value="22" />
+        <Setter Property="Height" Value="22" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        <Setter Property="CornerRadius" Value="11" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="PART_Face"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+              <Viewbox Width="10" Height="10" FlowDirection="LeftToRight">
+                <Path Width="24" Height="24"
+                      Data="{StaticResource InsChipX}"
+                      Stroke="{TemplateBinding Foreground}"
+                      StrokeThickness="3.5"
+                      StrokeLineCap="Round" />
+              </Viewbox>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_Face">
+          <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:Chip}" TargetType="ins:Chip">
+        <Setter Property="MinHeight" Value="30" />
+        <Setter Property="Padding" Value="12,3" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+        <Setter Property="Background" Value="{DynamicResource InsSurface}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+        <Setter Property="Template">
+          <ControlTemplate TargetType="ins:Chip">
+            <Border x:Name="PART_Face"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    BoxShadow="{DynamicResource InsBevelDim}"
+                    Padding="{TemplateBinding Padding}">
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <ContentPresenter x:Name="PART_ContentPresenter"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  TextBlock.LineHeight="18" />
+                <Button x:Name="PART_Remove"
+                        Theme="{StaticResource InsChipRemove}"
+                        IsVisible="{TemplateBinding IsRemovable}" />
+              </StackPanel>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:removable">
+          <Setter Property="Padding" Value="12,3,4,3" />
+        </Style>
+      </ControlTheme>
+
+      <!-- A chip that is a button: a link chip (`Button Classes="chip"`, `active` when chosen) or a filter (`ToggleButton Classes="chip"`, which takes the brand and a tick when on). -->
+      <ControlTheme x:Key="InsChipButton" TargetType="Button">
+        <Setter Property="MinHeight" Value="30" />
+        <Setter Property="Padding" Value="12,3" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+        <Setter Property="Background" Value="{DynamicResource InsSurface}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate TargetType="Button">
+            <Panel>
+              <Border x:Name="PART_Ring" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" IsVisible="False" />
+              <Border x:Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BoxShadow="{DynamicResource InsBevelDim}"
+                      Padding="{TemplateBinding Padding}">
+                <StackPanel Orientation="Horizontal">
+                  <Viewbox x:Name="PART_Tick" Height="12" Stretch="Uniform" FlowDirection="LeftToRight" VerticalAlignment="Center">
+                    <Viewbox.Transitions>
+                      <Transitions>
+                        <DoubleTransition Property="Width" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                        <ThicknessTransition Property="Margin" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                      </Transitions>
+                    </Viewbox.Transitions>
+                    <Path Width="24" Height="24"
+                          Data="{StaticResource InsChipTick}"
+                          Stroke="{TemplateBinding Foreground}"
+                          StrokeThickness="3"
+                          StrokeLineCap="Round"
+                          StrokeJoin="Round" />
+                  </Viewbox>
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    RecognizesAccessKey="True"
+                                    TextBlock.LineHeight="18" />
+                </StackPanel>
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsChipHoverBorder}" />
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        </Style>
+        <Style Selector="^ /template/ Viewbox#PART_Tick">
+          <Setter Property="IsVisible" Value="False" />
+          <Setter Property="Width" Value="0" />
+          <Setter Property="Margin" Value="0" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_Ring">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:checked, ^.active">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandBd}" />
+          <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsChipOnFg}" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.55" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsChipToggle" TargetType="ToggleButton" BasedOn="{StaticResource InsChipButton}">
+        <Style Selector="^ /template/ Viewbox#PART_Tick">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:checked /template/ Viewbox#PART_Tick">
+          <Setter Property="Width" Value="12" />
+          <Setter Property="Margin" Value="0,0,6,0" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="Button.chip">
+    <Setter Property="Theme" Value="{StaticResource InsChipButton}" />
+  </Style>
+  <Style Selector="HyperlinkButton.chip">
+    <Setter Property="Theme" Value="{StaticResource InsChipButton}" />
+  </Style>
+  <Style Selector="ToggleButton.chip">
+    <Setter Property="Theme" Value="{StaticResource InsChipToggle}" />
+  </Style>
+
+  <!-- .ins-chips: chips in a row that wraps. -->
+  <Style Selector="WrapPanel.chips">
+    <Setter Property="ItemSpacing" Value="6" />
+    <Setter Property="LineSpacing" Value="6" />
+  </Style>
+
+</Styles>

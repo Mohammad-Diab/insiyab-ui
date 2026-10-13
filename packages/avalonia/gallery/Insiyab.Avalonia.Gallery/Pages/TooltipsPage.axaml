@@ -1,0 +1,90 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.TooltipsPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/MenusFrames.axaml" />
+    <!-- The stages draw the tip as it shows on hover, beside its control. -->
+    <Style Selector="ToolTip.still">
+      <Setter Property="Opacity" Value="1" />
+      <Setter Property="RenderTransform" Value="none" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="TextBlock.plain">
+      <Setter Property="Focusable" Value="True" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    </Style>
+  </UserControl.Styles>
+  <StackPanel>
+
+    <Border Classes="dx">
+      <StackPanel Orientation="Horizontal" Spacing="12">
+        <Button Classes="secondary icon" AutomationProperties.Name="تعديل" ToolTip.Tip="تعديل">
+          <ins:Icon Data="{StaticResource IconEdit}" />
+        </Button>
+        <Button Classes="secondary icon" AutomationProperties.Name="مشاركة" ToolTip.Tip="مشاركة">
+          <ins:Icon Data="{StaticResource IconShare}" />
+        </Button>
+      </StackPanel>
+    </Border>
+
+    <TextBlock Classes="section" Text="التلميح" />
+    <Border Classes="stage">
+      <Grid RowDefinitions="Auto,Auto">
+        <ToolTip Classes="still" Content="تعديل" />
+        <Button Grid.Row="1" Classes="secondary icon" HorizontalAlignment="Center" AutomationProperties.Name="تعديل" ToolTip.Tip="تعديل">
+          <ins:Icon Data="{StaticResource IconEdit}" />
+        </Button>
+      </Grid>
+    </Border>
+
+    <TextBlock Classes="variant" Text="زر بنص" />
+    <Border Classes="stage">
+      <Grid RowDefinitions="Auto,Auto">
+        <ToolTip Classes="still" Content="تعديل" />
+        <Button Grid.Row="1" Classes="secondary" HorizontalAlignment="Center" Content="حذف" ToolTip.Tip="تعديل" />
+      </Grid>
+    </Border>
+
+    <TextBlock Classes="variant" Text="نص عادي" />
+    <Border Classes="stage">
+      <Grid RowDefinitions="Auto,Auto">
+        <ToolTip Classes="still" Content="تعديل" />
+        <TextBlock Grid.Row="1" Classes="plain" HorizontalAlignment="Center" Text="نص عادي" ToolTip.Tip="تعديل" />
+      </Grid>
+    </Border>
+
+    <TextBlock Classes="variant" Text="تحت" />
+    <Border Classes="stage">
+      <Grid RowDefinitions="Auto,Auto">
+        <Button Classes="secondary icon" HorizontalAlignment="Center" AutomationProperties.Name="تعديل" ToolTip.Tip="تعديل" ToolTip.Placement="Bottom">
+          <ins:Icon Data="{StaticResource IconEdit}" />
+        </Button>
+        <ToolTip Grid.Row="1" Classes="still" Content="تعديل" />
+      </Grid>
+    </Border>
+
+    <TextBlock Classes="variant" Text="البداية" />
+    <Border Classes="stage">
+      <Grid ColumnDefinitions="Auto,Auto">
+        <ToolTip Classes="still" Content="تعديل" />
+        <Button Grid.Column="1" Classes="secondary icon" AutomationProperties.Name="تعديل" ToolTip.Tip="تعديل" ToolTip.Placement="Left">
+          <ins:Icon Data="{StaticResource IconEdit}" />
+        </Button>
+      </Grid>
+    </Border>
+
+    <TextBlock Classes="variant" Text="النهاية" />
+    <Border Classes="stage">
+      <Grid ColumnDefinitions="Auto,Auto">
+        <Button Classes="secondary icon" AutomationProperties.Name="تعديل" ToolTip.Tip="تعديل" ToolTip.Placement="Right">
+          <ins:Icon Data="{StaticResource IconEdit}" />
+        </Button>
+        <ToolTip Grid.Column="1" Classes="still" Content="تعديل" />
+      </Grid>
+    </Border>
+
+  </StackPanel>
+</UserControl>

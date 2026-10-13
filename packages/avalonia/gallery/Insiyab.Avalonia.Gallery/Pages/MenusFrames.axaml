@@ -1,0 +1,56 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsMenusViewBd" Color="#1A0F172A" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsMenusViewBd" Color="#1AFFFFFF" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+      <SolidColorBrush x:Key="InsMenusViewBg" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.025" />
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- The docs page frames, so a page reads like its web twin: a section heading, an example view, a playground stage -->
+  <Style Selector="TextBlock.section">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsH3}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="LineHeight" Value="25.2" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="Margin" Value="0,48,0,12" />
+  </Style>
+  <Style Selector="TextBlock.section:nth-child(1)">
+    <Setter Property="Margin" Value="0,0,0,12" />
+  </Style>
+  <Style Selector="Border.dx, Border.stage">
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsMenusViewBd}" />
+    <Setter Property="Background" Value="{DynamicResource InsMenusViewBg}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+    <Setter Property="Padding" Value="24" />
+    <Setter Property="Margin" Value="0,0,0,24" />
+  </Style>
+  <Style Selector="Border.stage">
+    <Setter Property="Padding" Value="24,64" />
+    <Setter Property="MinHeight" Value="208" />
+  </Style>
+  <Style Selector="Border.stage > :is(Control)">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Border.stage.wide > :is(Control)">
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+  </Style>
+  <!-- A playground shown in several states: each state is a stage of its own, labelled underneath -->
+  <Style Selector="TextBlock.variant">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+    <Setter Property="Margin" Value="0,0,0,8" />
+  </Style>
+
+</Styles>

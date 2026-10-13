@@ -1,0 +1,387 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:conv="using:Avalonia.Controls.Converters"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <conv:PlatformKeyGestureConverter x:Key="InsPopGestureText" />
+      <SolidColorBrush x:Key="InsPopItemHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
+      <StreamGeometry x:Key="InsPopCheck">M5 12.5 l4.5 4.5 L19 7.5</StreamGeometry>
+      <StreamGeometry x:Key="InsPopChevron">M9 6 l6 6 -6 6</StreamGeometry>
+
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsPopItemHoverFg" Color="{DynamicResource InsPrimaryDarkerColor}" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsPopItemHoverFg" Color="{DynamicResource InsText1Color}" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- .ins-pop-body: the raised glass card a menu's items sit in. -->
+      <ControlTheme x:Key="{x:Type MenuFlyoutPresenter}" TargetType="MenuFlyoutPresenter">
+        <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="Padding" Value="6" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontFamily" Value="{DynamicResource InsFontBody}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ins:PopMotion.Enabled" Value="True" />
+        <Setter Property="ins:PopMotion.Stagger" Value="True" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Name="PART_Room">
+              <Border Name="LayoutRoot"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BoxShadow="{DynamicResource InsShLg}"
+                      MinWidth="192"
+                      MaxHeight="384">
+                <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                              VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+                  <ItemsPresenter Name="PART_ItemsPresenter"
+                                  ItemsPanel="{TemplateBinding ItemsPanel}"
+                                  Margin="{TemplateBinding Padding}"
+                                  KeyboardNavigation.TabNavigation="Continue" />
+                </ScrollViewer>
+              </Border>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <!-- A popup clips to its own box, so a pop body keeps clear room for its shadow, and the PopMenu offsets take it back out. -->
+        <Style Selector="^.pop /template/ Border#PART_Room">
+          <Setter Property="Padding" Value="40,16,40,64" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ContextMenu}" TargetType="ContextMenu">
+        <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="Padding" Value="6" />
+        <Setter Property="MinWidth" Value="192" />
+        <Setter Property="MaxHeight" Value="384" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontFamily" Value="{DynamicResource InsFontBody}" />
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="WindowManagerAddShadowHint" Value="False" />
+        <Setter Property="ins:PopMotion.Enabled" Value="True" />
+        <Setter Property="ins:PopMotion.Stagger" Value="True" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    BoxShadow="{DynamicResource InsShLg}">
+              <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                <ItemsPresenter Name="PART_ItemsPresenter"
+                                ItemsPanel="{TemplateBinding ItemsPanel}"
+                                Margin="{TemplateBinding Padding}"
+                                KeyboardNavigation.TabNavigation="Continue" />
+              </ScrollViewer>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <!-- A Flyout's presenter: the same card, holding free content. `card` is the card variant of .ins-pop-body. -->
+      <ControlTheme x:Key="{x:Type FlyoutPresenter}" TargetType="FlyoutPresenter">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="Padding" Value="6" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontFamily" Value="{DynamicResource InsFontBody}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ins:PopMotion.Enabled" Value="True" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Name="PART_Room">
+              <Border Name="LayoutRoot"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BoxShadow="{DynamicResource InsShLg}"
+                      MinWidth="192"
+                      MaxHeight="384">
+                <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                              VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    Margin="{TemplateBinding Padding}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch" />
+                </ScrollViewer>
+              </Border>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <!-- A popup clips to its own box, so a pop body keeps clear room for its shadow, and the PopMenu offsets take it back out. -->
+        <Style Selector="^.pop /template/ Border#PART_Room">
+          <Setter Property="Padding" Value="40,16,40,64" />
+        </Style>
+        <Style Selector="^.card">
+          <Setter Property="Padding" Value="16" />
+        </Style>
+        <Style Selector="^.card /template/ Border#LayoutRoot">
+          <Setter Property="Width" Value="320" />
+        </Style>
+      </ControlTheme>
+
+      <!-- .ins-pop-item. -->
+      <ControlTheme x:Key="{x:Type MenuItem}" TargetType="MenuItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Name="PART_LayoutRoot"
+                      Padding="{TemplateBinding Padding}"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}">
+                <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto">
+                  <Panel x:Name="PART_ToggleIconPresenter" Grid.Column="0" Width="16" Height="16" Margin="0,0,8,0" IsVisible="False">
+                    <Viewbox x:Name="PART_Mark" FlowDirection="LeftToRight" Opacity="0" RenderTransform="scale(0.5)">
+                      <Viewbox.Transitions>
+                        <Transitions>
+                          <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+                        </Transitions>
+                      </Viewbox.Transitions>
+                      <Panel Width="24" Height="24">
+                        <Path x:Name="PART_Check"
+                              Data="{StaticResource InsPopCheck}"
+                              Stroke="{TemplateBinding Foreground}"
+                              StrokeThickness="2.6"
+                              StrokeLineCap="Round"
+                              StrokeJoin="Round" />
+                        <Ellipse x:Name="PART_Radio" Width="9" Height="9" Fill="{TemplateBinding Foreground}" IsVisible="False" />
+                      </Panel>
+                    </Viewbox>
+                  </Panel>
+                  <ContentPresenter x:Name="PART_IconPresenter"
+                                    Grid.Column="1"
+                                    Content="{TemplateBinding Icon}"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,8,0"
+                                    IsVisible="False" />
+                  <ContentPresenter Name="PART_HeaderPresenter"
+                                    Grid.Column="2"
+                                    Content="{TemplateBinding Header}"
+                                    ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                    RecognizesAccessKey="True"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Stretch" />
+                  <Border x:Name="PART_Kbd"
+                          Grid.Column="3"
+                          Classes="kbd"
+                          Margin="8,0,0,0"
+                          IsVisible="{TemplateBinding InputGesture, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <TextBlock x:Name="PART_InputGestureText"
+                               Text="{TemplateBinding InputGesture, Converter={StaticResource InsPopGestureText}}" />
+                  </Border>
+                  <Viewbox x:Name="PART_ChevronPath" Grid.Column="4" Width="14" Height="14" Margin="8,0,0,0">
+                    <Path Width="24" Height="24"
+                          Data="{StaticResource InsPopChevron}"
+                          Stroke="{TemplateBinding Foreground}"
+                          StrokeThickness="2"
+                          StrokeLineCap="Round"
+                          StrokeJoin="Round" />
+                  </Viewbox>
+                </Grid>
+              </Border>
+              <Popup Name="PART_Popup"
+                     WindowManagerAddShadowHint="False"
+                     ShouldUseOverlayLayer="True"
+                     Placement="RightEdgeAlignedTop"
+                     HorizontalOffset="4"
+                     IsLightDismissEnabled="False"
+                     IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
+                <Border Background="{DynamicResource InsGlassStrong}"
+                        BorderBrush="{DynamicResource InsRim}"
+                        BorderThickness="1"
+                        CornerRadius="{DynamicResource InsRMd}"
+                        BoxShadow="{DynamicResource InsShLg}"
+                        MinWidth="192"
+                        MaxHeight="384">
+                  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                    <ItemsPresenter Name="PART_ItemsPresenter"
+                                    ItemsPanel="{TemplateBinding ItemsPanel}"
+                                    Margin="6" />
+                  </ScrollViewer>
+                </Border>
+              </Popup>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:icon /template/ ContentPresenter#PART_IconPresenter">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^ /template/ ContentPresenter#PART_IconPresenter > ins|Icon">
+          <Setter Property="Size" Value="16" />
+        </Style>
+        <Style Selector="^:empty /template/ Viewbox#PART_ChevronPath">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+
+        <!-- Hover and keyboard focus are one state: the item a keypress would choose. It nudges toward the end, as the sidebar's links do. -->
+        <Style Selector="^:selected">
+          <Setter Property="Background" Value="{DynamicResource InsPopItemHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
+          <Setter Property="RenderTransform" Value="translateX(3px)" />
+        </Style>
+
+        <Style Selector="^.bad">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+        </Style>
+        <Style Selector="^.bad:selected">
+          <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+        </Style>
+
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.45" />
+        </Style>
+
+        <Style Selector="^:toggle /template/ Panel#PART_ToggleIconPresenter">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:checked /template/ Viewbox#PART_Mark">
+          <Setter Property="Opacity" Value="1" />
+          <Setter Property="RenderTransform" Value="none" />
+        </Style>
+        <Style Selector="^:radio">
+          <Style Selector="^ /template/ Path#PART_Check">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_Radio">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+        </Style>
+        <!-- A checkbox item is a setting being flipped, so its menu stays open for the next one. -->
+        <Style Selector="^[ToggleType=CheckBox]">
+          <Setter Property="StaysOpenOnClick" Value="True" />
+        </Style>
+
+        <!-- .ins-pop-label: a heading over a run of items, never chosen. -->
+        <Style Selector="^.label">
+          <Setter Property="Focusable" Value="False" />
+          <Setter Property="IsHitTestVisible" Value="False" />
+          <Setter Property="Cursor" Value="Arrow" />
+          <Setter Property="Padding" Value="12,8,12,4" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+        </Style>
+
+        <Style Selector="^:separator">
+          <Setter Property="Template">
+            <ControlTemplate>
+              <Separator />
+            </ControlTemplate>
+          </Setter>
+        </Style>
+      </ControlTheme>
+
+      <!-- A menu bar: the same items, side by side. -->
+      <ControlTheme x:Key="InsMenuBarItem" TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+        <Setter Property="Padding" Value="12,6" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Style Selector="^:selected">
+          <Setter Property="RenderTransform" Value="none" />
+        </Style>
+        <Style Selector="^ /template/ Viewbox#PART_ChevronPath">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^ /template/ Popup#PART_Popup">
+          <Setter Property="Placement" Value="BottomEdgeAlignedLeft" />
+          <Setter Property="HorizontalOffset" Value="0" />
+          <Setter Property="VerticalOffset" Value="6" />
+          <Setter Property="IsLightDismissEnabled" Value="True" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type Menu}" TargetType="Menu">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="ItemContainerTheme" Value="{StaticResource InsMenuBarItem}" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}">
+              <ItemsPresenter Name="PART_ItemsPresenter"
+                              ItemsPanel="{TemplateBinding ItemsPanel}"
+                              VerticalAlignment="Stretch"
+                              KeyboardNavigation.TabNavigation="Continue" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- .ins-pop-sep, inside a menu only. -->
+  <Style Selector="MenuFlyoutPresenter Separator, ContextMenu Separator, MenuItem Separator">
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Height" Value="1" />
+    <Setter Property="Margin" Value="0,4" />
+    <Setter Property="Background" Value="{DynamicResource InsLine}" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}" />
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <!-- .ins-pop-title and .ins-pop-text, in a card. -->
+  <Style Selector="TextBlock.pop-title">
+    <Setter Property="Margin" Value="0,0,0,4" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="TextBlock.pop-text">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+    <Setter Property="LineHeight" Value="22" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+
+</Styles>

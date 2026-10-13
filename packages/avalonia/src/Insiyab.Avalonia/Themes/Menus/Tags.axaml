@@ -1,0 +1,188 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <SolidColorBrush x:Key="InsTagsHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
+      <SolidColorBrush x:Key="InsTagsFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
+      <SolidColorBrush x:Key="InsTagsSelection" Color="{DynamicResource InsPrimaryColor}" Opacity="0.22" />
+      <SolidColorBrush x:Key="InsComboOptionHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
+
+      <!-- .ins-tags-input: the bare box after the chips; the field around it draws the border and the focus. -->
+      <ControlTheme x:Key="InsTagsBox" TargetType="TextBox">
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="CaretBrush" Value="{DynamicResource InsText1}" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource InsTagsSelection}" />
+        <Setter Property="SelectionForegroundBrush" Value="{DynamicResource InsText1}" />
+        <Setter Property="PlaceholderForeground" Value="{DynamicResource InsText3}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
+        <Setter Property="Template">
+          <ControlTemplate TargetType="TextBox">
+            <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" MinHeight="{TemplateBinding MinHeight}">
+              <ScrollViewer x:Name="PART_ScrollViewer"
+                            HorizontalScrollBarVisibility="Hidden"
+                            VerticalScrollBarVisibility="Disabled"
+                            VerticalAlignment="Center">
+                <Panel>
+                  <TextBlock x:Name="PART_Placeholder"
+                             Foreground="{TemplateBinding PlaceholderForeground}"
+                             Text="{TemplateBinding PlaceholderText}"
+                             VerticalAlignment="Center">
+                    <TextBlock.IsVisible>
+                      <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding ElementName="PART_TextPresenter" Path="PreeditText" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Text" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                      </MultiBinding>
+                    </TextBlock.IsVisible>
+                  </TextBlock>
+                  <TextPresenter x:Name="PART_TextPresenter"
+                                 Text="{TemplateBinding Text, Mode=TwoWay}"
+                                 CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                                 CaretIndex="{TemplateBinding CaretIndex}"
+                                 SelectionStart="{TemplateBinding SelectionStart}"
+                                 SelectionEnd="{TemplateBinding SelectionEnd}"
+                                 TextAlignment="Start"
+                                 TextWrapping="NoWrap"
+                                 SelectionBrush="{TemplateBinding SelectionBrush}"
+                                 SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                 CaretBrush="{TemplateBinding CaretBrush}"
+                                 VerticalAlignment="Center" />
+                </Panel>
+                <ScrollViewer.Styles>
+                  <Style Selector="ScrollContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Cursor" Value="IBeam" />
+                  </Style>
+                </ScrollViewer.Styles>
+              </ScrollViewer>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:TagsInput}" TargetType="ins:TagsInput">
+        <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="MinHeight" Value="{DynamicResource InsFieldH}" />
+        <Setter Property="Padding" Value="7,5" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Cursor" Value="IBeam" />
+        <Setter Property="Template">
+          <ControlTemplate TargetType="ins:TagsInput">
+            <Panel>
+              <Border x:Name="PART_Shadow"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BoxShadow="{DynamicResource InsShSubtle}">
+                <Border.Transitions>
+                  <Transitions>
+                    <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                  </Transitions>
+                </Border.Transitions>
+              </Border>
+              <Border x:Name="PART_Field"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BoxShadow="{DynamicResource InsBevelDim}"
+                      MinHeight="{TemplateBinding MinHeight}"
+                      Padding="{TemplateBinding Padding}">
+                <Border.Transitions>
+                  <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                  </Transitions>
+                </Border.Transitions>
+                <ins:TagsPanel x:Name="PART_Panel" Spacing="5" VerticalAlignment="Center">
+                  <TextBox x:Name="PART_Input" Theme="{StaticResource InsTagsBox}" />
+                </ins:TagsPanel>
+              </Border>
+              <Popup x:Name="PART_Popup"
+                     ShouldUseOverlayLayer="True"
+                     WindowManagerAddShadowHint="False"
+                     IsLightDismissEnabled="False"
+                     Placement="BottomEdgeAlignedLeft">
+                <Border x:Name="PART_Room" Padding="40,16,40,64">
+                  <Border x:Name="PART_ListBox"
+                          Classes="combo-list"
+                          ins:PopMotion.Enabled="True">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                      <StackPanel x:Name="PART_List" Margin="6">
+                        <TextBlock x:Name="PART_Empty" Classes="combo-empty" Text="{TemplateBinding EmptyText}" />
+                      </StackPanel>
+                    </ScrollViewer>
+                  </Border>
+                </Border>
+              </Popup>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:pointerover:not(:focus-within-box) /template/ Border#PART_Field">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsTagsHoverBorder}" />
+        </Style>
+        <Style Selector="^:focus-within-box">
+          <Style Selector="^ /template/ Border#PART_Field">
+            <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsTagsFocusBorder}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
+          </Style>
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.55" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="ins|TagsInput ins|Chip">
+    <Setter Property="MinHeight" Value="28" />
+    <Setter Property="Cursor" Value="Arrow" />
+  </Style>
+
+  <!-- .ins-combo-list, .ins-combo-option and .ins-combo-empty, as the tags field's list draws them. -->
+  <Style Selector="Border.combo-list">
+    <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+    <Setter Property="BoxShadow" Value="{DynamicResource InsShLg}" />
+    <Setter Property="MaxHeight" Value="288" />
+  </Style>
+  <Style Selector="Border.tags-option">
+    <Setter Property="Padding" Value="12,8" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Border.tags-option > TextBlock">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+  <Style Selector="Border.tags-option.active">
+    <Setter Property="Background" Value="{DynamicResource InsComboOptionHover}" />
+  </Style>
+  <Style Selector="Border.tags-option.active > TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+  </Style>
+  <Style Selector="TextBlock.combo-empty">
+    <Setter Property="Padding" Value="12,8" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+  </Style>
+
+</Styles>
