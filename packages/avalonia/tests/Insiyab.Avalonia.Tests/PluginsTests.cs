@@ -102,17 +102,36 @@ public class PluginsTests
         Assert.Equal("482", otp.Text);
     }
 
-    [AvaloniaFact]
-    public void Otp_invalid_is_red_until_typed_again()
+    // Like a field in error: the normal fill, the border at 55% of the bad colour, and the full colour with the red glow on focus.
+    [AvaloniaTheory]
+    [InlineData("Light")]
+    [InlineData("Dark")]
+    public void Otp_invalid_is_red_until_typed_again(string theme)
     {
         var otp = new OtpBox();
-        var window = Show(Page(otp), FlowDirection.RightToLeft);
+        var calm = new OtpBox();
+        var window = Show(Page(otp, calm), FlowDirection.RightToLeft, theme == "Dark" ? ThemeVariant.Dark : ThemeVariant.Light);
         otp.IsInvalid = true;
         Settle();
         Assert.Contains(":invalid", otp.Classes);
-        AssertBrush(otp, "InsToneBadBd", () => Part<Border>(otp, "PART_Cells").BorderBrush);
+        var cells = Part<Border>(otp, "PART_Cells");
+        var bad = (Color)Res(otp, "InsToneBadColor");
+        var wait = Stopwatch.StartNew();
+        while (wait.ElapsedMilliseconds < 2000 && !(cells.BorderBrush is ISolidColorBrush b && b.Color == bad && Math.Abs(b.Opacity - 0.55) < 0.01)) Settle(16);
+        Assert.Equal(bad, ColorOf(cells.BorderBrush));
+        Assert.Equal(0.55, ((ISolidColorBrush)cells.BorderBrush!).Opacity, 2);
+        AssertBrush(otp, "InsCtlBg", () => cells.Background);
+        Assert.Equal(ColorOf(Part<Border>(calm, "PART_Cells").Background), ColorOf(cells.Background));
+
         otp.Focus();
         Settle(150);
+        AssertBrush(otp, "InsToneBad", () => cells.BorderBrush);
+        AssertBrush(otp, "InsGlassStrong", () => cells.Background);
+        var glow = (BoxShadows)Res(otp, "InsGlowBad");
+        var shadow = Part<Border>(otp, "PART_Shadow");
+        var clock = Stopwatch.StartNew();
+        while (clock.ElapsedMilliseconds < 2000 && !shadow.BoxShadow.Equals(glow)) Settle(16);
+        Assert.Equal(glow, shadow.BoxShadow);
         Type(window, "5");
         Assert.False(otp.IsInvalid);
     }
@@ -418,6 +437,31 @@ public class PluginsTests
     private static FileItem RowOf(FileUpload upload, FileEntry entry) =>
         upload.GetVisualDescendants().OfType<FileItem>().First(r => r.Entry == entry);
 
+    // In error the zone keeps the light red wash in light; dark takes 8% of its own light red (#FCA5A5) instead of the maroon slab, and both keep the dashed red rim.
+    [AvaloniaTheory]
+    [InlineData("Light", "#1AEF4444")]
+    [InlineData("Dark", "#14FCA5A5")]
+    public void File_zone_in_error_keeps_a_clean_wash(string theme, string fill)
+    {
+        var upload = Uploader(u => u.Upload = true);
+        var window = Show(Page(new TextBlock { Classes = { "label" }, Text = "المرفقات" }, upload), FlowDirection.RightToLeft, theme == "Dark" ? ThemeVariant.Dark : ThemeVariant.Light, 480, 240);
+        var one = Entry("a.pdf");
+        upload.AddFiles([one]);
+        upload.Fail(one, null);
+        Settle();
+        Assert.Contains(":invalid", upload.Classes);
+        var zone = Part<Border>(upload, "PART_Zone");
+        var want = Color.Parse(fill);
+        var clock = Stopwatch.StartNew();
+        while (clock.ElapsedMilliseconds < 2000 && !(zone.Background is ISolidColorBrush b && b.Color == want)) Settle(16);
+        Assert.Equal(want, ColorOf(zone.Background));
+        AssertBrush(upload, "InsToneBadBd", () => Part<global::Avalonia.Controls.Shapes.Rectangle>(upload, "PART_Rim").Stroke);
+        Capture(window, $"file-error-{theme.ToLowerInvariant()}");
+    }
+
+    [AvaloniaTheory]
+    [InlineData("Light", "#1AEF4444")]
+    [InlineData("Dark", "#14FCA5A5")]
 
     [AvaloniaFact]
     public void File_limits_report_what_was_left_out()
@@ -777,6 +821,7 @@ public class PluginsTests
         Assert.Contains("current", dots[0].Classes);
     }
 
+    [AvaloniaTheory]
 
     [AvaloniaTheory]
     [InlineData(true)]

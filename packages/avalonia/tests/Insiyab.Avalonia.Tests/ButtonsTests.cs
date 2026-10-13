@@ -33,6 +33,19 @@ public class ButtonsTests
         Settle(40);
     }
 
+    // A spring transition passes its target before it settles there, so the state must hold for longer than the whole transition, not merely be met once.
+    private static void WaitSteady(Func<bool> condition, int holdMilliseconds = 400, int milliseconds = 6000)
+    {
+        var clock = System.Diagnostics.Stopwatch.StartNew();
+        var held = System.Diagnostics.Stopwatch.StartNew();
+        while (clock.ElapsedMilliseconds < milliseconds)
+        {
+            if (!condition()) held.Restart();
+            else if (held.ElapsedMilliseconds >= holdMilliseconds) break;
+            Settle(16);
+        }
+    }
+
     // A brush transition can stop a few units short of its target, more so on a loaded machine.
     private static void AssertNear(Visual anchor, string key, IBrush? actual, int tolerance = 12)
     {
@@ -233,7 +246,7 @@ public class ButtonsTests
 
         window.MouseMove(Center(close, window));
         var closeRoot = Part<Panel>(close, "PART_Root");
-        WaitFor(() => closeRoot.RenderTransform is { } t && Math.Abs(t.Value.M11) < 0.005);
+        WaitSteady(() => closeRoot.RenderTransform is { } t && Math.Abs(t.Value.M11) < 0.005);
         AssertNear(close, "InsCtlBgHover", () => close.Background);
         AssertNear(close, "InsText1", () => close.Foreground);
         Assert.Equal(0, closeRoot.RenderTransform!.Value.M11, 2);

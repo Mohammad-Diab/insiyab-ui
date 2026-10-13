@@ -91,9 +91,9 @@
   background: var(--ins-tone-brand-soft);
 }
 
+/* In error the strip keeps its normal fill, like a field: only the border and the dots turn red. */
 .ins-otp:has(> .ins-otp-input:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)) .ins-otp-cells {
-  border-color: var(--ins-tone-bad-bd);
-  background: var(--ins-tone-bad-bg);
+  border-color: color-mix(in srgb, var(--ins-tone-bad) 55%, transparent);
 }
 .ins-otp:has(> .ins-otp-input:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)):focus-within .ins-otp-cells {
   border-color: var(--ins-tone-bad);

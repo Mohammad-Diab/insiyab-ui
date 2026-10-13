@@ -639,11 +639,33 @@ public class InputsTests
     [InlineData("ok", "InsToneOkColor")]
     public void Number_field_states_keep_the_fill(string state, string tone)
     {
+        var num = new NumericUpDown { Value = 2, Classes = { state } };
         Show(Page(num));
         var border = Part<Border>(num, "PART_BorderElement");
         SettledBrush(num, state == "bad" ? "InsSpinBadBorder" : "InsSpinOkBorder", () => border.BorderBrush);
         AssertHalfTone(num, tone, border.BorderBrush);
         AssertBrush(num, "InsCtlBg", () => border.Background);
+    }
+
+    // The 55% border takes the theme's own tone, so a dark page gets the light red and green the web's dark tokens give.
+    [AvaloniaTheory]
+    [InlineData("bad", "InsToneBadColor", "Light")]
+    [InlineData("bad", "InsToneBadColor", "Dark")]
+    [InlineData("ok", "InsToneOkColor", "Light")]
+    [InlineData("ok", "InsToneOkColor", "Dark")]
+    public void State_borders_follow_the_theme_tone(string state, string tone, string theme)
+    {
+        var box = new TextBox { Text = "x", Classes = { state } };
+        var combo = new ComboBox { Items = { "الأول" }, Classes = { state } };
+        var num = new NumericUpDown { Value = 2, Classes = { state } };
+        Show(Page(box, combo, num), FlowDirection.RightToLeft, theme == "Dark" ? ThemeVariant.Dark : ThemeVariant.Light);
+        var want = (Color)Res(box, tone);
+        foreach (var border in new[] { Part<Border>(box, "PART_BorderElement"), Part<Border>(combo, "Background"), Part<Border>(num, "PART_BorderElement") })
+        {
+            var clock = System.Diagnostics.Stopwatch.StartNew();
+            while (clock.ElapsedMilliseconds < 2000 && !(border.BorderBrush is ISolidColorBrush b && b.Color == want)) Settle(16);
+            AssertHalfTone(box, tone, border.BorderBrush);
+        }
     }
 
     [AvaloniaTheory]

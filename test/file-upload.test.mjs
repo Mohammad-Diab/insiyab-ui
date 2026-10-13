@@ -160,6 +160,21 @@ const own = await E(`(() => { const box = document.getElementById('f-own-box'), 
 ok('a box already around the input is kept, with the input where it was', own.kept && own.first && own.one && own.compact, JSON.stringify(own));
 ok('and gets the zone, the messages and the list after the input', own.parts === 'INPUT ins-file-zone ins-file-issues ins-file-list', own.parts);
 
+// In error the zone keeps the light theme's red wash; dark takes 8% of its own light red, and the dashed red rim stays in both.
+const zoneLook = () => E(`(() => { const s = getComputedStyle(document.querySelector('#f-one ~ .ins-file-zone')); return { bg: s.backgroundColor, bd: s.borderTopColor }; })()`);
+const probe = (prop, css) => E(`(() => { const p = document.createElement('div'); p.style.cssText = 'border:1px solid transparent'; p.style[${JSON.stringify(prop)}] = ${JSON.stringify(css)}; document.body.appendChild(p); const c = getComputedStyle(p)[${JSON.stringify(prop)}]; p.remove(); return c; })()`);
+await E(`document.getElementById('f-one').setAttribute('aria-invalid', 'true'); 0`);
+for (const theme of ['light', 'dark']) {
+  await E(`Insiyab.theme(${JSON.stringify(theme)}); 0`);
+  await b.mouseTo(5, 5);
+  await b.sleep(500);
+  const z = await zoneLook();
+  const want = await probe('backgroundColor', theme === 'light' ? 'var(--ins-tone-bad-bg)' : 'color-mix(in srgb, var(--ins-tone-bad) 8%, transparent)');
+  ok(`${theme}: the zone in error has its wash`, z.bg === want, `${z.bg} vs ${want}`);
+  ok(`${theme}: and the red rim`, z.bd === await probe('borderTopColor', 'var(--ins-tone-bad-bd)'), z.bd);
+}
+await E(`Insiyab.theme('light'); document.getElementById('f-one').removeAttribute('aria-invalid'); 0`);
+
 ok('no console errors, warnings or exceptions', b.logs.length === 0, b.logs.join(' | '));
 await b.close();
 end();

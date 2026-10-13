@@ -75,6 +75,8 @@
   border-color: var(--ins-tone-bad-bd);
   background: var(--ins-tone-bad-bg);
 }
+/* On the dark ground the red wash reads as a maroon slab, so dark takes a faint wash of its own light red instead. */
+:root[data-ins-theme="dark"] .ins-file:has(> input:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid)) > .ins-file-zone,
 .ins-file:has(> input:disabled) > .ins-file-zone { opacity: .55; cursor: not-allowed; }
 
 /* A phone has nothing to drag: the zone just asks for a file. */

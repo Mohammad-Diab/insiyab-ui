@@ -278,13 +278,18 @@
 
     var clean = function () {
       root.classList.remove('ins-theme-sweep');
+      root.classList.remove('ins-theme-sweep--close');
       root.style.removeProperty('--ins-sweep-x');
       root.style.removeProperty('--ins-sweep-y');
       root.style.removeProperty('--ins-sweep-r');
     };
     var run;
     try {
-      run = document.startViewTransition(apply);
+      // Going dark, the light switches off: the old picture closes onto the switch instead of the new one growing out of it.
+      run = document.startViewTransition(function () {
+        apply();
+        if (effectiveTheme() === 'dark') root.classList.add('ins-theme-sweep--close');
+      });
     } catch (e) {
       /* Refused to start — another transition mid-flight, a page being unloaded. The
          change still has to happen. */

@@ -36,7 +36,7 @@ SitePlay.define({
   ],
   extra: [
     { group: 'الأساس', first: true, name: 'ins-btn', desc: 'أساس كل زر، على `<button>` أو `<a>`، ومعه كلاس للنمط.' },
-    { group: 'زر تبديل', name: 'aria-pressed="true"', level: 'advanced', desc: 'الزر مضغوط. ضعها بنفسك ليبدأ الزر مضغوطًا.' },
+    { group: 'زر تبديل', name: 'aria-pressed="true"', level: 'advanced', desc: 'الزر مضغوط، فيأخذ لون نمطه، وهو رمادي ما دام غير مضغوط. ضعها بنفسك ليبدأ الزر مضغوطًا.' },
     { group: 'زر تبديل', name: 'ins:toggle', kind: 'event', level: 'advanced', desc: 'يُطلق عند كل ضغطة، وفي `detail` الزر نفسه `el` وحالته `pressed`.' }
   ],
   events: ['ins:toggle'],
@@ -56,9 +56,7 @@ SitePlay.define({
     if (s.icon === 'only') out.push('لا نص على الزر، فصار نصه تسمية `aria-label` يقرؤها قارئ الشاشة.');
     if (s.lift) out.push('مرر المؤشر على الزر، فيرتفع قليلًا.');
     if (s.link) out.push('الرابط لا يُعطَّل ولا يكون زر تبديل، فهذان الخياران للأزرار وحدها.');
-    if (s.toggle && !s.link) out.push(s.look === 'primary'
-      ? 'الزر الرئيسي لا يتغير شكله حين يُضغط، فاختر نمطًا آخر لترى حالته المضغوطة. واضغطه يظهر هنا الحدث الذي يطلقه.'
-      : 'يبدو الزر هنا مضغوطًا، فاضغطه يرجع إلى حاله ويظهر هنا الحدث الذي يطلقه.');
+    if (s.toggle && !s.link) out.push('يبدو الزر هنا مضغوطًا، فاضغطه يرجع رماديًا ويظهر هنا الحدث الذي يطلقه.');
     return out;
   }
 });

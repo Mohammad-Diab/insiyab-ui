@@ -298,18 +298,29 @@
 /* A button that stays down: bold in a toolbar, a filter that is on, "show
    archived". The state is `aria-pressed`, which is what a screen reader announces,
    so the appearance keys on the same attribute and the two cannot disagree;
-   `data-ins-toggle` flips it on a click.
+   `data-ins-toggle` flips it on a click. */
+/* Off, any toggle is the neutral grey button; on, it takes its own style's colour (the brand for secondary, plain and bare). */
+.ins-btn[aria-pressed="false"]:not(.ins-btn--bare) {
+  background: var(--ins-ctl-bg);
+  border-color: var(--ins-ctl-bd);
+  color: var(--ins-text-1);
+  box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim);
+}
+.ins-btn[aria-pressed="false"]:not(.ins-btn--bare):hover:not(:disabled),
+.ins-btn[aria-pressed="false"]:not(.ins-btn--bare):focus-visible { background: var(--ins-ctl-bg-hover); border-color: var(--ins-ctl-bd); color: var(--ins-text-1); }
+.ins-btn[aria-pressed="false"]:not(.ins-btn--bare):focus-visible { box-shadow: var(--ins-focus-ring); }
+.ins-btn[aria-pressed="false"]:not(.ins-btn--bare):active:not(:disabled) { background: var(--ins-ctl-bd); }
+.ins-btn[aria-pressed="false"]:not(.ins-btn--bare)::before { background: var(--ins-shimmer-dark); }
 
-   Pressed reads as *pressed in* — the brand tint and an inset shade — rather than
-   as filled. A filled brand face is what the primary button means, and a row of
-   three pressed toggles would otherwise be three primary buttons. */
-.ins-btn[aria-pressed="true"]:not(.ins-btn--primary),
-.ins-btn[aria-pressed="true"]:not(.ins-btn--primary):hover:not(:disabled) {
+.ins-btn[aria-pressed="true"]:not(.ins-btn--primary, .ins-btn--success, .ins-btn--danger, .ins-btn--warning, .ins-btn--info, .ins-btn--ghost, .ins-btn--ghost-danger, .ins-btn--ghost-success, .ins-btn--ghost-warning, .ins-btn--ghost-info, .ins-btn--bare),
+.ins-btn[aria-pressed="true"]:not(.ins-btn--primary, .ins-btn--success, .ins-btn--danger, .ins-btn--warning, .ins-btn--info, .ins-btn--ghost, .ins-btn--ghost-danger, .ins-btn--ghost-success, .ins-btn--ghost-warning, .ins-btn--ghost-info, .ins-btn--bare):hover:not(:disabled) {
   background: rgba(var(--ins-primary-rgb), .14);
   border-color: rgba(var(--ins-primary-rgb), .40);
   color: var(--ins-primary-darker);
   box-shadow: inset 0 1px 3px rgba(15, 23, 42, .12);
 }
+.ins-btn--bare[aria-pressed="true"],
+.ins-btn--bare[aria-pressed="true"]:hover:not(:disabled) { color: var(--ins-primary-darker); }
 
 /* --------------------------------------------------------------- group */
 /* Buttons joined into one object — a split button, a pager, a set of alignment

@@ -649,7 +649,7 @@
       :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *),
 .ins-input-group:is(:has(:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid, .ins-input--bad, .ins-select--bad)),
                     .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty)) *) {
-  border-color: var(--ins-tone-bad-bd);
+  border-color: color-mix(in srgb, var(--ins-tone-bad) 55%, transparent);
 }
 :is(:is(.ins-input, .ins-select, .ins-textarea):is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid),
     .ins-input--bad, .ins-select--bad,
