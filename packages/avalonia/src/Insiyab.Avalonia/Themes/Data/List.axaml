@@ -1,0 +1,181 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <!-- The web's .ins-list: rows with dividers between them and no surface of its own; it goes in a panel or a card -->
+      <ControlTheme x:Key="{x:Type ListBox}" TargetType="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border x:Name="border"
+                    ClipToBounds="{TemplateBinding ClipToBounds}"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+              <ScrollViewer x:Name="PART_ScrollViewer"
+                            HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                            VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+                            IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+                            AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
+                <ItemsPresenter x:Name="PART_ItemsPresenter"
+                                ItemsPanel="{TemplateBinding ItemsPanel}"
+                                Margin="{TemplateBinding Padding}" />
+              </ScrollViewer>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <!-- A row: a divider above it, the content, and the chevron of a destination toward the end of the line -->
+      <ControlTheme x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
+        <Setter Property="ins:ListRows.Track" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Padding" Value="12,10" />
+        <Setter Property="MinHeight" Value="52" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border x:Name="PART_Back"
+                      Background="{TemplateBinding Background}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      Padding="{TemplateBinding Padding}">
+                <DockPanel HorizontalSpacing="12">
+                  <Border x:Name="PART_Chevron" DockPanel.Dock="Right" Width="9" Height="9" VerticalAlignment="Center"
+                          BorderThickness="0,2,2,0" BorderBrush="{DynamicResource InsText3}"
+                          RenderTransform="rotate(45deg)" />
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                </DockPanel>
+              </Border>
+              <Border x:Name="PART_Divider" Height="1" VerticalAlignment="Top" Background="{DynamicResource InsLine}" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Border#PART_Back">
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Border#PART_Chevron">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:nth-child(1) /template/ Border#PART_Divider">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:pointerover, ^:selected">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+          <Style Selector="^ /template/ Border#PART_Divider">
+            <Setter Property="Opacity" Value="0" />
+          </Style>
+        </Style>
+        <Style Selector="^.after-hot /template/ Border#PART_Divider">
+          <Setter Property="Opacity" Value="0" />
+        </Style>
+        <!-- The chevron nudges toward where it points -->
+        <Style Selector="^:pointerover /template/ Border#PART_Chevron">
+          <Setter Property="RenderTransform" Value="translateX(2px) rotate(45deg)" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_Back">
+          <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.55" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- Concentric with the panel: its radius less the insets between the two edges -->
+  <Style Selector="Border.panel > ListBox > ListBoxItem, Border.panel > ListBox ListBoxItem">
+    <Setter Property="CornerRadius" Value="17" />
+  </Style>
+  <Style Selector="Border.panel-body.flush > ListBox ListBoxItem">
+    <Setter Property="CornerRadius" Value="7" />
+  </Style>
+
+  <!-- A display-only list is not a tab stop -->
+  <Style Selector="ListBox.static">
+    <Setter Property="Focusable" Value="False" />
+  </Style>
+
+  <!-- Rows that go nowhere: the web's plain <li> rows -->
+  <Style Selector="ListBox.static ListBoxItem">
+    <Setter Property="Cursor" Value="Arrow" />
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ListBox.static ListBoxItem /template/ Border#PART_Chevron">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+  <Style Selector="ListBox.static ListBoxItem /template/ Border#PART_Divider">
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+
+  <!-- The slots of a row: a leading chip or avatar, the text, and the trailing end -->
+  <Style Selector="ListBoxItem > DockPanel">
+    <Setter Property="HorizontalSpacing" Value="12" />
+  </Style>
+  <Style Selector="StackPanel.list-text">
+    <Setter Property="Spacing" Value="2" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.list-title">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+  <Style Selector="ListBox:not(.static) ListBoxItem:selected TextBlock.list-title">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+  </Style>
+  <!-- Arabic takes the web's 1.7 line height; Latin keeps the font's own, as the browser's normal does -->
+  <Style Selector="TextBlock.list-title[FlowDirection=RightToLeft]">
+    <Setter Property="LineHeight" Value="23.8" />
+  </Style>
+  <Style Selector="TextBlock.list-desc[FlowDirection=RightToLeft]">
+    <Setter Property="LineHeight" Value="20.4" />
+  </Style>
+  <Style Selector="ListBoxItem Border.panel-ico > :is(Control)">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.list-desc">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+  </Style>
+  <Style Selector="TextBlock.list-end, StackPanel.list-end">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsLabel}" />
+  </Style>
+  <Style Selector="StackPanel.list-end">
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="Spacing" Value="8" />
+  </Style>
+
+</Styles>

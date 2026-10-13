@@ -1,0 +1,61 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.DescriptionPage">
+  <UserControl.Resources>
+    <SolidColorBrush x:Key="ExampleTint" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
+  </UserControl.Resources>
+  <UserControl.Styles>
+    <Style Selector="Border.example">
+      <Setter Property="Padding" Value="24" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+      <Setter Property="Background" Value="{StaticResource ExampleTint}" />
+    </Style>
+    <Style Selector="TextBlock.cap">
+      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+      <Setter Property="Margin" Value="0,0,0,8" />
+    </Style>
+    <Style Selector="TextBlock.h3">
+      <Setter Property="Margin" Value="0,24,0,0" />
+    </Style>
+  </UserControl.Styles>
+
+  <ScrollViewer>
+    <StackPanel Spacing="16" MaxWidth="832" HorizontalAlignment="Stretch">
+      <Border Classes="example">
+        <ins:DescriptionList>
+          <ins:DescriptionItem Term="رقم الطلب" Content="1042" Classes="num" />
+          <ins:DescriptionItem Term="العميل" Content="ليلى حداد" />
+          <ins:DescriptionItem Term="المدينة" Content="الرياض" />
+          <ins:DescriptionItem Term="الحالة" Content="قيد التجهيز" />
+          <ins:DescriptionItem Term="ملاحظات" Content="التسليم بعد الساعة الرابعة، والاتصال قبل الوصول." />
+        </ins:DescriptionList>
+      </Border>
+
+      <TextBlock Classes="h3" Text="قائمة الوصف" />
+      <Border Classes="example">
+        <StackPanel Spacing="24">
+        <ins:DescriptionList>
+          <ins:DescriptionItem Term="الاسم" Content="سلمى" />
+          <ins:DescriptionItem Term="الفرق" Content="-12" Classes="num" />
+          <ins:DescriptionItem Term="الحالة" Content="مفتوح" />
+        </ins:DescriptionList>
+          <StackPanel>
+            <TextBlock Classes="cap" Text="في أعمدة، وستة أزواج" />
+        <ins:DescriptionList Classes="grid">
+          <ins:DescriptionItem Term="الاسم" Content="سلمى" />
+          <ins:DescriptionItem Term="الفرق" Content="-12" Classes="num" />
+          <ins:DescriptionItem Term="الحالة" Content="مفتوح" />
+          <ins:DescriptionItem Term="التاريخ" Content="26 سبتمبر 2026" />
+          <ins:DescriptionItem Term="المدة" Content="14 يومًا" />
+          <ins:DescriptionItem Term="ملاحظات" Content="رسالة قصيرة" />
+        </ins:DescriptionList>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
