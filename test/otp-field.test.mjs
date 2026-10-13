@@ -96,6 +96,20 @@ const before = await red();
 await E(`document.getElementById('otp').setAttribute('aria-invalid', 'true'); 0`);
 await b.sleep(400);                                 /* the border eases over */
 ok('aria-invalid turns the field red', (await red()) !== before, `${before} → ${await red()}`);
+// Like a field in error: the normal fill, the border at 55% of the bad colour, and the full colour with the glow on focus.
+const cells = (sel) => E(`(() => { const s = getComputedStyle(document.querySelector(${JSON.stringify(sel)})); return { bg: s.backgroundColor, bd: s.borderTopColor, sh: s.boxShadow }; })()`);
+const tone = (css) => E(`(() => { const p = document.createElement('div'); p.style.cssText = 'border:1px solid ' + ${JSON.stringify(css)}; document.body.appendChild(p); const c = getComputedStyle(p).borderTopColor; p.remove(); return c; })()`);
+const bad = await cells('#otp ~ .ins-otp-cells'), calm = await cells('#otp-en ~ .ins-otp-cells');
+ok('in error the strip keeps its normal fill', bad.bg === calm.bg, `${bad.bg} vs ${calm.bg}`);
+ok('in error the border is the bad colour at 55%', bad.bd === await tone('color-mix(in srgb, var(--ins-tone-bad) 55%, transparent)'), bad.bd);
+await b.click('#otp');
+await b.sleep(400);
+const badFocus = await cells('#otp ~ .ins-otp-cells');
+await b.click('#otp-en');
+await b.sleep(400);
+const calmFocus = await cells('#otp-en ~ .ins-otp-cells');
+ok('focused in error: the full bad colour and the red glow', badFocus.bd === await tone('var(--ins-tone-bad)') && badFocus.sh !== calmFocus.sh && /rgba?\(/.test(badFocus.sh), `${badFocus.bd} ${badFocus.sh}`);
+ok('focused in error: the normal focused fill', badFocus.bg === calmFocus.bg, `${badFocus.bg} vs ${calmFocus.bg}`);
 await b.click('#otp');
 await raw('Backspace', 'Backspace', 8);
 ok('and comes off as the code is typed again', !(await E(`document.getElementById('otp').hasAttribute('aria-invalid')`)));

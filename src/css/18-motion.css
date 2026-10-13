@@ -148,10 +148,20 @@
        watched, and it crosses the whole viewport rather than a control. */
     animation: ins-theme-sweep .6s var(--ins-ease) forwards;
   }
+  /* Going dark, the light switches off: the old light picture stays on top, inside a circle that closes from the screen's edges onto the switch. */
+  :root.ins-theme-sweep--close::view-transition-new(root) { z-index: 1; animation: none; }
+  :root.ins-theme-sweep--close::view-transition-old(root) {
+    z-index: 2;
+    animation: ins-theme-sweep-close .6s var(--ins-ease) forwards;
+  }
 }
 @keyframes ins-theme-sweep {
   from { clip-path: circle(0 at var(--ins-sweep-x) var(--ins-sweep-y)); }
   to   { clip-path: circle(var(--ins-sweep-r) at var(--ins-sweep-x) var(--ins-sweep-y)); }
+}
+@keyframes ins-theme-sweep-close {
+  from { clip-path: circle(var(--ins-sweep-r) at var(--ins-sweep-x) var(--ins-sweep-y)); }
+  to   { clip-path: circle(0 at var(--ins-sweep-x) var(--ins-sweep-y)); }
 }
 
 /* --------------------------------------------------------------- utilities */

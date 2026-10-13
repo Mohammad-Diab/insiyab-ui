@@ -157,8 +157,7 @@
         </Style>
         <Style Selector="^:invalid">
           <Style Selector="^ /template/ Border#PART_Cells, ^:pointerover:not(:focus) /template/ Border#PART_Cells">
-            <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsTextBoxBadBorder}" />
           </Style>
           <Style Selector="^:focus /template/ Border#PART_Cells">
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />

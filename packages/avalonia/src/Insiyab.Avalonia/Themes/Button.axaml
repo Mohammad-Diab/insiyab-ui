@@ -478,9 +478,36 @@
 
       <ControlTheme x:Key="{x:Type RepeatButton}" TargetType="RepeatButton" BasedOn="{StaticResource {x:Type Button}}" />
 
-      <!-- A toggle reads as pressed in, not filled: a filled brand face is what primary means. -->
+      <!-- Off, any toggle is the neutral grey button; on, it takes its own style's colour (the brand for secondary, plain and bare). -->
       <ControlTheme x:Key="{x:Type ToggleButton}" TargetType="ToggleButton" BasedOn="{StaticResource {x:Type Button}}">
-        <Style Selector="^:checked:not(.primary)">
+        <Style Selector="^:not(:checked):not(.bare):not(.close)">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Fill">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Sweep">
+            <Setter Property="Background" Value="{DynamicResource InsButtonSweepDarkRest}" />
+          </Style>
+          <Style Selector="^:pointerover /template/ Border#PART_Sweep">
+            <Setter Property="Background" Value="{DynamicResource InsButtonSweepDarkHover}" />
+          </Style>
+          <Style Selector="^:pointerover:not(:disabled), ^:focus-visible">
+            <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+          </Style>
+          <Style Selector="^:pressed">
+            <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
+          </Style>
+        </Style>
+        <Style Selector="^:checked.bare">
+          <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+        </Style>
+        <Style Selector="^:checked:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.close)">
           <Setter Property="Background" Value="{DynamicResource InsButtonToggleOn}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsButtonToggleOnBorder}" />
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />

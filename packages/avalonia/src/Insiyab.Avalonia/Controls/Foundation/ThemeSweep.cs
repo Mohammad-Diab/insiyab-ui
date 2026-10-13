@@ -3,11 +3,13 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
+/// <summary>The web's theme sweep, over 600ms from the control that was pressed: switching to light, the new palette grows out of it in a circle to the window's furthest corner (the light switching on); switching to dark, the old light picture stays inside a circle that closes from the window's edges onto it (the light switching off). Skipped, and the theme simply applied, while <see cref="Motion.IsStill"/>.</summary>
 public static class ThemeSweep
 {
     private const double Duration = 600;
@@ -16,7 +18,7 @@ public static class ThemeSweep
     /// <summary>For tests: while set, a sweep that starts keeps its first frame and does not land on its own, so it can be read mid-way.</summary>
     internal static bool Held { get; set; }
 
-    /// <summary>Takes a picture of the window, runs <paramref name="apply"/> (the theme change) at once, then wipes the picture away from <paramref name="origin"/>.</summary>
+    /// <summary>Takes a picture of the window, runs <paramref name="apply"/> (the theme change) at once, then wipes the picture away from <paramref name="origin"/>, or closes it onto <paramref name="origin"/> when the window is now dark.</summary>
     public static void Run(Visual origin, Action apply)
     {
         var top = OverlayHost.Top(origin);
@@ -50,17 +52,20 @@ public static class ThemeSweep
         layer.Children.Add(picture);
 
         apply();
+        var closing = top.ActualThemeVariant == ThemeVariant.Dark;
+        var radius = Math.Ceiling(far);
 
         var sweep = s_current = new Sweep(layer, picture, bitmap);
         var easing = Motion.Ease(origin as Control ?? top);
         var clock = System.Diagnostics.Stopwatch.StartNew();
-        picture.Clip = Hole(size, centre, 0);
+        picture.Clip = closing ? Circle(centre, radius) : Hole(size, centre, 0);
         DispatcherTimer.RunOnce(() => { if (!Held) sweep.Land(); }, TimeSpan.FromMilliseconds(Duration + 150));
         void Frame(TimeSpan _)
         {
             if (sweep.Done) return;
             var t = Held ? 0 : Math.Clamp(clock.Elapsed.TotalMilliseconds / Duration, 0, 1);
-            picture.Clip = Hole(size, centre, Math.Ceiling(far) * easing.Ease(t));
+            var p = easing.Ease(t);
+            picture.Clip = closing ? Circle(centre, radius * (1 - p)) : Hole(size, centre, radius * p);
             if (t >= 1) sweep.Land(); else top.RequestAnimationFrame(Frame);
         }
         top.RequestAnimationFrame(Frame);
@@ -75,9 +80,10 @@ public static class ThemeSweep
     }
 
     private static Geometry Hole(Size size, Point centre, double radius) =>
-        new CombinedGeometry(GeometryCombineMode.Exclude,
-            new RectangleGeometry(new Rect(size)),
-            new EllipseGeometry(new Rect(centre.X - radius, centre.Y - radius, radius * 2, radius * 2)));
+        new CombinedGeometry(GeometryCombineMode.Exclude, new RectangleGeometry(new Rect(size)), Circle(centre, radius));
+
+    private static EllipseGeometry Circle(Point centre, double radius) =>
+        new(new Rect(centre.X - radius, centre.Y - radius, radius * 2, radius * 2));
 
     private sealed class Sweep(AdornerLayer layer, Image picture, RenderTargetBitmap bitmap)
     {
