@@ -39,7 +39,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Panel>
+            <Panel x:Name="PART_Press">
               <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
               <Border Name="PART_Face"
                       Background="{TemplateBinding Background}"
@@ -73,6 +73,9 @@
       <!-- A clickable island rises rather than filling: the shadow lengthens and the pill lifts a pixel -->
       <ControlTheme x:Key="InsIslandButton" TargetType="Button" BasedOn="{StaticResource InsIsland}">
         <Setter Property="Cursor" Value="Hand" />
+        <Style Selector="^ /template/ Panel#PART_Press">
+          <Setter Property="ins:PressDip.Depth" Value="0.97" />
+        </Style>
         <Style Selector="^:pointerover">
           <Setter Property="Background" Value="{DynamicResource InsGlassHover}" />
           <Setter Property="RenderTransform" Value="translateY(-1px)" />

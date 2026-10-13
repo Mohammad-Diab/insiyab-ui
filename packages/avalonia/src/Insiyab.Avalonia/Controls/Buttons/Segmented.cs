@@ -56,7 +56,7 @@ public class Segmented : SelectingItemsControl
 
     private void Fly(int from, int to)
     {
-        if (_flight?.Parent is not Visual layer || from < 0 || to < 0 || from == to || !IsEffectivelyVisible) return;
+        if (_flight?.Parent is not Visual layer || from < 0 || to < 0 || from == to || !IsEffectivelyVisible || Motion.IsStill(this)) return;
         if (ContainerFromIndex(from) is not Control a || ContainerFromIndex(to) is not Control b) return;
         if (a.TranslatePoint(default, layer) is not Point pa || b.TranslatePoint(default, layer) is not Point pb || b.Bounds.Width <= 0) return;
 
@@ -85,16 +85,16 @@ public class Segmented : SelectingItemsControl
         {
             if (_run != run) return;
             var t = Math.Clamp(clock.Elapsed.TotalMilliseconds / Duration, 0, 1);
-            var e = Ease.Ease(t);
-            if (e < 1d / 3) { var k = e * 3; Place(ax + (left - ax) * k, aw + (right - left - aw) * k); }
-            else { var k = (e - 1d / 3) * 1.5; Place(left + (bx - left) * k, right - left + (bw - (right - left)) * k); }
+            if (t < 1d / 3) { var k = EaseOut.Ease(t * 3); Place(ax + (left - ax) * k, aw + (right - left - aw) * k); }
+            else { var k = EaseIn.Ease((t - 1d / 3) * 1.5); Place(left + (bx - left) * k, right - left + (bw - (right - left)) * k); }
             if (t >= 1) Land(run); else top.RequestAnimationFrame(Frame);
         }
         top.RequestAnimationFrame(Frame);
     }
 
     private const double Duration = 600;
-    private static readonly SplineEasing Ease = new(0.22, 1, 0.36, 1);
+    private static readonly SplineEasing EaseOut = new(0.9, 0.1, 1, 0.2);
+    private static readonly SplineEasing EaseIn = new(0.1, 0.9, 0.2, 1);
     private object? _run;
 
     private void Place(double x, double width)
