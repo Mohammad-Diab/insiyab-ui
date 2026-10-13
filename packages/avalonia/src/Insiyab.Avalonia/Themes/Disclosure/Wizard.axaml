@@ -5,6 +5,35 @@
   <Styles.Resources>
     <ResourceDictionary>
 
+      <!-- The wizard's waiting spinner turns at .6s, the web's .ins-wizard[aria-busy] one; it fades in as every spinner does -->
+      <ControlTheme x:Key="InsWizardSpinner" TargetType="ins:LoadingSpinner">
+        <Setter Property="Width" Value="15" />
+        <Setter Property="Height" Value="15" />
+        <Setter Property="Thickness" Value="2" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Style Selector="^">
+          <Style.Animations>
+            <Animation Duration="0:0:0.6" IterationCount="Infinite">
+              <KeyFrame Cue="0%">
+                <Setter Property="Angle" Value="0" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Angle" Value="360" />
+              </KeyFrame>
+            </Animation>
+            <Animation Duration="0:0:0.28" Easing="0.22,1,0.36,1">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="1" />
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </ControlTheme>
+
       <ControlTheme x:Key="{x:Type ins:WizardPanel}" TargetType="ins:WizardPanel">
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="FocusAdorner" Value="{x:Null}" />
@@ -37,13 +66,13 @@
                 <Button Name="PART_Next" Grid.Column="3" Classes="primary" MinWidth="{DynamicResource InsFootMin}">
                   <StackPanel Orientation="Horizontal" Spacing="8">
                     <TextBlock Text="{TemplateBinding NextText}" />
-                    <ins:LoadingSpinner Name="PART_NextSpinner" Classes="sm" IsVisible="False" />
+                    <ins:LoadingSpinner Name="PART_NextSpinner" Classes="sm" Theme="{StaticResource InsWizardSpinner}" IsVisible="False" />
                   </StackPanel>
                 </Button>
                 <Button Name="PART_Finish" Grid.Column="3" Classes="primary" MinWidth="{DynamicResource InsFootMin}" IsVisible="False">
                   <StackPanel Orientation="Horizontal" Spacing="8">
                     <TextBlock Text="{TemplateBinding FinishText}" />
-                    <ins:LoadingSpinner Name="PART_FinishSpinner" Classes="sm" IsVisible="False" />
+                    <ins:LoadingSpinner Name="PART_FinishSpinner" Classes="sm" Theme="{StaticResource InsWizardSpinner}" IsVisible="False" />
                   </StackPanel>
                 </Button>
               </Grid>
@@ -93,7 +122,7 @@
       <DataTemplate x:DataType="x:Object">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <ContentPresenter Content="{Binding}" />
-          <ins:LoadingSpinner Classes="sm" />
+          <ins:LoadingSpinner Classes="sm" Theme="{StaticResource InsWizardSpinner}" />
         </StackPanel>
       </DataTemplate>
     </Setter>

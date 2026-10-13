@@ -12,7 +12,7 @@ namespace Insiyab.Avalonia.Controls;
 /// <summary>The drawing of a <see cref="Chart"/>. Positions are physical, worked out for either direction as the web plugin does, so this part stays left to right.</summary>
 public class ChartPlot : Control
 {
-    private const double BarGrow = 280, LineDraw = 800, SliceFade = 280;
+    private const double BarGrow = 280, LineDraw = 800, SliceFade = 280, LitFade = 220;
 
     private readonly List<Hit> _hits = [];
     private readonly Stopwatch _clock = new();
@@ -22,6 +22,18 @@ public class ChartPlot : Control
     private int _cross = -1;
     private bool _framing;
     private (double X0, double Step, int N, bool Rtl, double W, double Y0, double Y1) _axis;
+    private readonly Stopwatch _litClock = Stopwatch.StartNew();
+    private readonly Dictionary<(int Kind, int Series, int Index), Fade> _fades = new();
+    private bool _fading;
+    private bool _fadeFrame;
+
+    // What hovering changes on a mark: a bar's opacity, a dot's radius, a slice's dimming.
+    internal const int BarKind = 0, DotKind = 1, SliceKind = 2;
+
+    private sealed class Fade(double value)
+    {
+        public double From = value, To = value, Start = double.MinValue;
+    }
 
     internal Chart? Owner { get; set; }
 
@@ -87,6 +99,7 @@ public class ChartPlot : Control
 
     internal void Replay()
     {
+        _fades.Clear();
         _clock.Restart();
         Frame();
     }
@@ -105,6 +118,48 @@ public class ChartPlot : Control
             InvalidateVisual();
             if (Elapsed < LineDraw + 400) Frame();
             else _clock.Stop();
+        });
+    }
+
+    /// <summary>A mark's hover value as it is now (a bar's opacity, a dot's radius, a slice's dimming), or NaN before it is drawn.</summary>
+    internal double FadeOf(int kind, int series, int index) =>
+        _fades.TryGetValue((kind, series, index), out var f) ? FadeValue(f, _litClock.Elapsed.TotalMilliseconds) : double.NaN;
+
+    // A mark eases to its lit or dimmed look over 220ms, as the web's opacity and r transitions do.
+    private double Toward(int kind, int series, int index, double target)
+    {
+        var key = (kind, series, index);
+        var now = _litClock.Elapsed.TotalMilliseconds;
+        if (!_fades.TryGetValue(key, out var f) || Motion.IsStill(this))
+        {
+            _fades[key] = new Fade(target);
+            return target;
+        }
+        var current = FadeValue(f, now);
+        if (f.To != target)
+        {
+            f.From = current;
+            f.To = target;
+            f.Start = now;
+        }
+        if (now - f.Start < LitFade) _fading = true;
+        return current;
+    }
+
+    private double FadeValue(Fade f, double now)
+    {
+        var p = (now - f.Start) / LitFade;
+        return p >= 1 ? f.To : p <= 0 ? f.From : f.From + (f.To - f.From) * _ease.Ease(p);
+    }
+
+    private void FadeFrame()
+    {
+        if (_fadeFrame || TopLevel.GetTopLevel(this) is not { } top) return;
+        _fadeFrame = true;
+        top.RequestAnimationFrame(_ =>
+        {
+            _fadeFrame = false;
+            InvalidateVisual();
         });
     }
 
@@ -201,6 +256,7 @@ public class ChartPlot : Control
         var owner = Owner;
         var litHit = _lit >= 0 && _lit < _hits.Count ? _hits[_lit] : null;
         _hits.Clear();
+        _fading = false;
         if (owner is null) return;
         context.FillRectangle(Brushes.Transparent, new Rect(Bounds.Size));
         var box = new Box(Bounds.Width, Bounds.Height, owner.IsRtl);
@@ -220,6 +276,7 @@ public class ChartPlot : Control
         {
             _lit = _hits.FindIndex(h => h.Series == litHit.Series && h.Index == litHit.Index);
         }
+        if (_fading) FadeFrame();
     }
 
     private readonly record struct Box(double W, double H, bool Rtl);
@@ -403,6 +460,7 @@ public class ChartPlot : Control
                 var p = Progress(Math.Min(i * 30, 300), BarGrow);
                 var opacity = overlap ? .55 : 1;
                 if (d.AnyLit) opacity = d.IsLit(k, i) ? 1 : .45;
+                opacity = Toward(BarKind, k, i, opacity);
                 bars.Add((new RoundedRect(rect, rx), d.Owner.BrushAt(k), opacity, p, k, i));
                 Rect? area = null;
                 if (!stacked && !overlap)
@@ -514,9 +572,10 @@ public class ChartPlot : Control
             foreach (var q in pts)
             {
                 var lit = d.IsLit(k, q.I) || q.I == _cross;
-                var r = lit ? 5.5 : 3.5;
+                var rest = lit ? 5.5 : 3.5;
+                var r = Toward(DotKind, k, q.I, rest);
                 d.Ctx.DrawEllipse(lit ? brush : d.Owner.DotBrush, ring, q.P, r, r);
-                _hits.Add(new Hit(new Rect(q.P.X - r, q.P.Y - r, r * 2, r * 2), q.L, s.Name, q.V, k, q.I, q.P, Radius: 5.5));
+                _hits.Add(new Hit(new Rect(q.P.X - rest, q.P.Y - rest, rest * 2, rest * 2), q.L, s.Name, q.V, k, q.I, q.P, Radius: 5.5));
             }
         }
         if (bare) return;
@@ -546,7 +605,7 @@ public class ChartPlot : Control
             var a0 = at / ring;
             var a1 = (at + Math.Max(0, len - 2)) / ring;
             var opacity = Progress(Math.Min(i * 60, 360), SliceFade);
-            if (d.AnyLit && !d.IsLit(0, i)) opacity *= .45;
+            opacity *= Toward(SliceKind, 0, i, d.AnyLit && !d.IsLit(0, i) ? .45 : 1);
             var arc = Arc(center, ring, a0, a1);
             using (d.Ctx.PushOpacity(opacity))
                 d.Ctx.DrawGeometry(null, PenFor(d.Owner.BrushAt(i), width), arc);
