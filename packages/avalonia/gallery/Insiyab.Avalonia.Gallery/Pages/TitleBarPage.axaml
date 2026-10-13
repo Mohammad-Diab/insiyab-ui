@@ -1,0 +1,116 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.TitleBarPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/FoundationFrames.axaml" />
+    <Style Selector="TextBlock.p">
+      <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+      <Setter Property="LineHeight" Value="25.9" />
+      <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+      <Setter Property="Margin" Value="0,0,0,12" />
+    </Style>
+    <Style Selector="Border.pre">
+      <Setter Property="Margin" Value="0,0,0,16" />
+    </Style>
+    <Style Selector="Border.frame">
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Height" Value="160" />
+      <Setter Property="ClipToBounds" Value="True" />
+    </Style>
+    <Style Selector="StackPanel.state">
+      <Setter Property="Spacing" Value="8" />
+    </Style>
+    <Style Selector="StackPanel.state > ins|CaptionButtons">
+      <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="StackPanel.state > TextBlock.variant">
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="Margin" Value="0" />
+    </Style>
+  </UserControl.Styles>
+
+  <StackPanel>
+
+    <TextBlock Classes="p" Text="على ويندوز، يرسم التطبيق شريط العنوان بنفسه داخل إطار النافذة، فيصير شريطه العلوي هو شريط العنوان: منه تُسحب النافذة، وفي آخره أزرار التصغير والتكبير والإغلاق. وتأتي هذه الأزرار جزيرة زجاجية واحدة، لها ارتفاع جزر الشريط الأخرى وحافتها وظلها." />
+
+    <TextBlock Classes="section" Text="في النافذة" />
+    <Border Classes="dx frame">
+      <Border Classes="topbar" VerticalAlignment="Top">
+        <Grid ColumnDefinitions="*,Auto,*,Auto">
+          <StackPanel Classes="zone start">
+            <!-- No sidebar here shows the brand, so the bar does -->
+            <Border Classes="island brand" IsVisible="True">
+              <StackPanel>
+                <Border Classes="shell-mark"><TextBlock Text="م" /></Border>
+                <TextBlock Text="تطبيقي" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+          <StackPanel Classes="zone center">
+            <Border Classes="island title">
+              <StackPanel Classes="shell-head">
+                <TextBlock Classes="shell-title" Text="العنوان" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+          <ins:CaptionButtons Grid.Column="3" Preview="Normal" />
+        </Grid>
+      </Border>
+    </Border>
+
+    <TextBlock Classes="section" Text="الحالات" />
+    <Border Classes="dx">
+      <WrapPanel HorizontalAlignment="Center" ItemSpacing="48" LineSpacing="24">
+        <StackPanel Classes="state">
+          <ins:CaptionButtons Preview="Normal" />
+          <TextBlock Classes="variant" Text="الحجم العادي" />
+        </StackPanel>
+        <StackPanel Classes="state">
+          <ins:CaptionButtons Preview="Maximized" />
+          <TextBlock Classes="variant" Text="مكبّرة: زر الاستعادة مكان التكبير" />
+        </StackPanel>
+        <StackPanel Classes="state">
+          <ins:CaptionButtons Preview="Inactive" />
+          <TextBlock Classes="variant" Text="غير نشطة: تخفت الرموز" />
+        </StackPanel>
+      </WrapPanel>
+    </Border>
+    <TextBlock Classes="p" Text="وحين يقف المؤشر على زر الإغلاق يحمرّ بلون ويندوز نفسه، أما الزران الآخران فيظللهما الزجاج تظليلًا خفيفًا." />
+
+    <TextBlock Classes="section" Text="الاستخدام" />
+    <TextBlock Classes="p">
+      <Run Text="فعّل " /><Run Classes="code" Text="&#x2066;&#x202F;TitleBar.Extends&#x202F;&#x2069;" /><Run Text=" على النافذة، فيأخذ التطبيق مكان شريط العنوان:" />
+    </TextBlock>
+    <Border Classes="pre">
+      <TextBlock Text="&lt;Window xmlns:ins=&quot;using:Insiyab.Avalonia.Controls&quot;&#10;        ins:TitleBar.Extends=&quot;True&quot;&gt;" />
+    </Border>
+    <TextBlock Classes="p">
+      <Run Text="ثم ضع " /><Run Classes="code" Text="&#x2066;&#x202F;CaptionButtons&#x202F;&#x2069;" /><Run Text=" في آخر الشريط العلوي، في عمود رابع بعد المناطق الثلاث:" />
+    </TextBlock>
+    <Border Classes="pre">
+      <TextBlock Text="&lt;Border Classes=&quot;topbar&quot; ins:TitleBar.IsDragArea=&quot;True&quot;&gt;&#10;  &lt;Grid ColumnDefinitions=&quot;*,Auto,*,Auto&quot;&gt;&#10;    &lt;StackPanel Classes=&quot;zone start&quot;&gt;&#10;      &lt;Border Classes=&quot;island brand&quot;&gt;&#10;        &lt;StackPanel&gt;&#10;          &lt;Border Classes=&quot;shell-mark&quot; ins:TitleBar.IsSystemMenuArea=&quot;True&quot;&gt;…&lt;/Border&gt;&#10;          …&#10;        &lt;/StackPanel&gt;&#10;      &lt;/Border&gt;&#10;    &lt;/StackPanel&gt;&#10;    &lt;StackPanel Classes=&quot;zone center&quot;&gt;…&lt;/StackPanel&gt;&#10;    &lt;StackPanel Classes=&quot;zone end&quot;&gt;…&lt;/StackPanel&gt;&#10;    &lt;ins:CaptionButtons Grid.Column=&quot;3&quot; /&gt;&#10;  &lt;/Grid&gt;&#10;&lt;/Border&gt;" />
+    </Border>
+    <TextBlock Classes="p">
+      <Run Classes="code" Text="&#x2066;&#x202F;IsDragArea&#x202F;&#x2069;" /><Run Text=" تجعل العنصر مقبضًا للنافذة: تسحبها منه، وتكبّرها أو تستعيدها بنقرة مزدوجة عليه. وما يأخذ التركيز داخله، كالأزرار والحقول، يبقى قابلًا للنقر كما هو." />
+    </TextBlock>
+    <TextBlock Classes="p">
+      <Run Classes="code" Text="&#x2066;&#x202F;IsSystemMenuArea&#x202F;&#x2069;" /><Run Text=" توضع على أيقونة التطبيق، فإذا نقرتها بالزر الأيمن فُتحت قائمة النظام، وتفتحها أيضًا Alt+Space من أي مكان. أما النقر بالزر الأيمن في بقية الشريط فلا يفتح شيئًا." />
+    </TextBlock>
+    <TextBlock Classes="p">
+      <Run Text="ولعرض الأزرار خارج شريط العنوان، كما في هذه الصفحة، أعطها " /><Run Classes="code" Text="&#x2066;&#x202F;Preview&#x202F;&#x2069;" /><Run Text=" بإحدى الحالات الثلاث، فتظهر بها ولا تمسّ النافذة:" />
+    </TextBlock>
+    <Border Classes="pre">
+      <TextBlock Text="&lt;ins:CaptionButtons Preview=&quot;Maximized&quot; /&gt;" />
+    </Border>
+
+    <TextBlock Classes="section" Text="ملاحظات" />
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0" Text="يرسم التطبيق شريط العنوان على ويندوز وحده، أما الأنظمة الأخرى فتبقي إطارها الأصلي ولا تظهر فيها الأزرار. وتختفي الأزرار كذلك في ملء الشاشة." />
+      <TextBlock Classes="p" Margin="0" Text="لا تفقد النافذة شيئًا من ميزات ويندوز: يظهر مخطط الالتصاق (Snap layouts) حين يقف المؤشر على زر التكبير، وتلتصق النافذة بالحواف، ويتغير حجمها من أطرافها." />
+      <TextBlock Classes="p" Margin="0" Text="تتبع الأزرار اتجاه الصفحة: في الواجهة العربية تقع في الزاوية اليسرى، وفي الإنجليزية في اليمنى، وزر الإغلاق في الطرف دائمًا." />
+    </ins:ProseList>
+
+  </StackPanel>
+</UserControl>
