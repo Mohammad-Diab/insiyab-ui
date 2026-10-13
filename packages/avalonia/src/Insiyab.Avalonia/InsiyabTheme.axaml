@@ -29,5 +29,6 @@
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Feedback.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Overlays.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Data.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Content.axaml" />
 
 </Styles>

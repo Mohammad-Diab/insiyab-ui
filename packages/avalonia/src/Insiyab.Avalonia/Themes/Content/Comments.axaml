@@ -1,0 +1,88 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ControlTheme x:Key="{x:Type ctl:Comment}" TargetType="ctl:Comment">
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="ContentTemplate">
+          <DataTemplate x:DataType="x:String">
+            <SelectableTextBlock Text="{Binding}" Background="Transparent" />
+          </DataTemplate>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <DockPanel>
+              <ctl:Avatar Name="PART_Avatar" Classes="sm" DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Top" Content="{TemplateBinding Avatar}" />
+              <StackPanel Name="PART_Body" Spacing="2" Margin="0,2,0,0">
+                <Grid Name="PART_Head" ColumnDefinitions="Auto,Auto,Auto" HorizontalAlignment="Left">
+                  <TextBlock Name="PART_Name" Text="{TemplateBinding Author}" VerticalAlignment="Bottom"
+                             FontSize="{DynamicResource InsFsMd}" FontWeight="Bold" Foreground="{DynamicResource InsText1}" />
+                  <TextBlock Name="PART_Dot" Grid.Column="1" Text="·" Margin="8,0" VerticalAlignment="Bottom" IsVisible="False"
+                             FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsText3}" />
+                  <TextBlock Name="PART_Time" Grid.Column="2" Text="{TemplateBinding Time}" VerticalAlignment="Bottom"
+                             FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsText3}" />
+                </Grid>
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  TextWrapping="Wrap" LineHeight="25.9" />
+                <ContentPresenter Name="PART_Actions" Content="{TemplateBinding Actions}" Margin="-8,0,0,0" HorizontalAlignment="Left" IsVisible="False" />
+                <!-- The replies hang under the avatar: pulled back to its centre line, then padded to the body again -->
+                <Border Name="PART_Replies" Margin="-28,12,0,0" Padding="26,0,0,0" BorderThickness="2,0,0,0"
+                        BorderBrush="{DynamicResource InsLine}" IsVisible="False">
+                  <ItemsControl Name="PART_RepliesList" ItemsSource="{TemplateBinding Replies}">
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <StackPanel Spacing="16" />
+                      </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                  </ItemsControl>
+                </Border>
+              </StackPanel>
+            </DockPanel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:time /template/ TextBlock#PART_Dot"><Setter Property="IsVisible" Value="True" /></Style>
+        <Style Selector="^:actions /template/ ContentPresenter#PART_Actions"><Setter Property="IsVisible" Value="True" /></Style>
+        <Style Selector="^:replies /template/ Border#PART_Replies"><Setter Property="IsVisible" Value="True" /></Style>
+
+        <!-- own: the reader's message, on the other side, its name in the brand colour -->
+        <Style Selector="^.own">
+          <Style Selector="^ /template/ ctl|Avatar#PART_Avatar">
+            <Setter Property="DockPanel.Dock" Value="Right" />
+            <Setter Property="Margin" Value="12,0,0,0" />
+          </Style>
+          <Style Selector="^ /template/ Grid#PART_Head"><Setter Property="HorizontalAlignment" Value="Right" /></Style>
+          <Style Selector="^ /template/ TextBlock#PART_Name"><Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" /></Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter"><Setter Property="TextAlignment" Value="End" /></Style>
+          <!-- The head runs the other way: name nearest the avatar, then the dot, then the time -->
+          <Style Selector="^ /template/ TextBlock#PART_Name"><Setter Property="Grid.Column" Value="2" /></Style>
+          <Style Selector="^ /template/ TextBlock#PART_Time"><Setter Property="Grid.Column" Value="0" /></Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_Actions">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="0,0,-8,0" />
+          </Style>
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- thread: comments stacked, 1.25rem apart -->
+  <Style Selector="StackPanel.thread">
+    <Setter Property="Spacing" Value="20" />
+  </Style>
+
+  <!-- comment-actions: bare buttons stay quiet until hovered -->
+  <Style Selector="ctl|Comment Button.bare">
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+    <Setter Property="Padding" Value="8,4" />
+    <Setter Property="MinHeight" Value="0" />
+  </Style>
+  <Style Selector="ctl|Comment Button.bare:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+  </Style>
+
+</Styles>

@@ -1,0 +1,65 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <StreamGeometry x:Key="InsCountdownIcon">M20 13a8 8 0 1 1-16 0a8 8 0 1 1 16 0z M12 9v4l2 2 M9 2h6</StreamGeometry>
+
+      <ControlTheme x:Key="{x:Type ctl:Countdown}" TargetType="ctl:Countdown">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Padding" Value="10,4,12,4" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsToneMuteBd}" />
+        <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Name="PART_Face"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}">
+              <StackPanel Name="PART_Row" Orientation="Horizontal" Spacing="6">
+                <ctl:Icon Name="PART_Icon" Data="{StaticResource InsCountdownIcon}" StrokeThickness="2.2" VerticalAlignment="Center" />
+                <TextBlock Name="PART_Days" Text="{TemplateBinding DaysText}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,2,0,0" IsVisible="False" />
+                <!-- The clock is its own left-to-right run, so 09:59 is never mirrored -->
+                <TextBlock Name="PART_Clock" Text="{TemplateBinding ClockText}" FlowDirection="LeftToRight" VerticalAlignment="Center"
+                           FontFamily="{DynamicResource InsFontBodyEn}" FontFeatures="+tnum" />
+              </StackPanel>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:days /template/ TextBlock#PART_Days"><Setter Property="IsVisible" Value="True" /></Style>
+        <Style Selector="^:warn">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneWarnBd}" />
+          <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneWarn}" />
+        </Style>
+        <Style Selector="^:done">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+          <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+        </Style>
+        <Style Selector="^.lg">
+          <Setter Property="Padding" Value="16,8,20,8" />
+          <Setter Property="FontSize" Value="24" />
+          <Style Selector="^ /template/ StackPanel#PART_Row"><Setter Property="Spacing" Value="8" /></Style>
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+</Styles>
