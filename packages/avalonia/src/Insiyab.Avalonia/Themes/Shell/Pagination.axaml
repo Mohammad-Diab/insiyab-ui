@@ -1,0 +1,143 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <!-- A page: transparent in a recessed track, the current one raised out of it like a segmented control's selection -->
+      <ControlTheme x:Key="InsPage" TargetType="Button">
+        <Setter Property="MinWidth" Value="34" />
+        <Setter Property="MinHeight" Value="34" />
+        <Setter Property="Padding" Value="8,0" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <Border Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      Padding="{TemplateBinding Padding}">
+                <!-- The arrows point toward the start and the end of the reading direction; the RTL mirror turns them for free -->
+                <StackPanel Orientation="Horizontal"
+                            Spacing="6"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                  <Path Name="PART_PrevArrow" Width="7" Height="10" VerticalAlignment="Center" IsVisible="False"
+                        Data="M5.5,1 L1.5,5 L5.5,9" Stroke="{TemplateBinding Foreground}" StrokeThickness="2" />
+                  <ContentPresenter Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    VerticalAlignment="Center" />
+                  <Path Name="PART_NextArrow" Width="7" Height="10" VerticalAlignment="Center" IsVisible="False"
+                        Data="M1.5,1 L5.5,5 L1.5,9" Stroke="{TemplateBinding Foreground}" StrokeThickness="2" />
+                </StackPanel>
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Border#PART_Face">
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^.current">
+          <Setter Property="Background" Value="{DynamicResource InsSegOnBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsSegOnFg}" />
+          <Setter Property="Cursor" Value="Arrow" />
+          <Style Selector="^ /template/ Border#PART_Face">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
+          </Style>
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.4" />
+        </Style>
+        <Style Selector="^.prev, ^.next">
+          <Setter Property="Padding" Value="12,0" />
+        </Style>
+        <Style Selector="^.prev /template/ Path#PART_PrevArrow, ^.next /template/ Path#PART_NextArrow">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:Pagination}" TargetType="ins:Pagination">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+        <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Name="PART_Track"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}">
+              <WrapPanel Name="PART_Items" ItemSpacing="3" LineSpacing="3" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="Button.page">
+    <Setter Property="Theme" Value="{StaticResource InsPage}" />
+  </Style>
+  <!-- Numbers in Inter with tabular figures, so the row keeps its width from 9 to 10; the arrows' words keep the page's face -->
+  <Style Selector="Button.page:not(.prev):not(.next)">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    <Setter Property="FontFeatures" Value="+tnum" />
+  </Style>
+  <Style Selector="TextBlock.page-gap">
+    <Setter Property="MinWidth" Value="24" />
+    <Setter Property="TextAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+  </Style>
+  <!-- The same track for a pagination put together by hand -->
+  <Style Selector="Border.pagination">
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="Padding" Value="4" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+  </Style>
+  <Style Selector="Border.pagination > StackPanel">
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="Spacing" Value="3" />
+  </Style>
+
+</Styles>

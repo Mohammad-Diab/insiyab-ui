@@ -1,0 +1,178 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <ControlTheme x:Key="{x:Type ins:PageHead}" TargetType="ins:PageHead">
+        <Setter Property="Margin" Value="0,0,0,24" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Grid Name="PART_Root" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+              <ContentPresenter Name="PART_Breadcrumb"
+                                Grid.ColumnSpan="2"
+                                Margin="0,0,0,12"
+                                HorizontalAlignment="Left"
+                                Content="{TemplateBinding Breadcrumb}"
+                                IsVisible="{TemplateBinding Breadcrumb, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <StackPanel Name="PART_Text" Grid.Row="1" VerticalAlignment="Bottom">
+                <TextBlock Name="PART_Title" Classes="page-title" Text="{TemplateBinding Title}" />
+                <TextBlock Name="PART_Subtitle"
+                           Classes="page-sub"
+                           Text="{TemplateBinding Subtitle}"
+                           IsVisible="{TemplateBinding Subtitle, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+              </StackPanel>
+              <ContentPresenter Name="PART_Actions"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="16,0,0,0"
+                                VerticalAlignment="Bottom"
+                                Content="{TemplateBinding Actions}"
+                                IsVisible="{TemplateBinding Actions, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </Grid>
+          </ControlTemplate>
+        </Setter>
+        <!-- Too narrow for both: the actions drop under the title rather than squeezing it -->
+        <Style Selector="^:stacked /template/ ContentPresenter#PART_Actions">
+          <Setter Property="Grid.Row" Value="2" />
+          <Setter Property="Grid.Column" Value="0" />
+          <Setter Property="Margin" Value="0,12,0,0" />
+          <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The trail is a glass island as wide as its crumbs -->
+      <ControlTheme x:Key="{x:Type ins:Breadcrumb}" TargetType="ins:Breadcrumb">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
+        <Setter Property="Background" Value="{DynamicResource InsGlass}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="ItemsPanel">
+          <ItemsPanelTemplate>
+            <StackPanel Orientation="Horizontal" Spacing="2" />
+          </ItemsPanelTemplate>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Name="PART_Track"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}"
+                    BoxShadow="{DynamicResource InsIslandShadow}">
+              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <!-- Each crumb is a pill; the current page is the raised one, as a segmented control shows its selection -->
+      <ControlTheme x:Key="{x:Type ins:BreadcrumbItem}" TargetType="ins:BreadcrumbItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+        <Setter Property="Padding" Value="12,6" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <StackPanel Orientation="Horizontal" Spacing="2">
+              <!-- Drawn, not typed, so it is not read aloud; it points the way the trail runs and mirrors with the page -->
+              <Path Name="PART_Separator"
+                    Width="5"
+                    Height="8"
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    Data="M1,0.5 L4.5,4 L1,7.5"
+                    Stroke="{DynamicResource InsText3}"
+                    StrokeThickness="1.5"
+                    StrokeLineCap="Square" />
+              <Panel>
+                <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+                <Border Name="PART_Pill"
+                        MaxWidth="114"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Padding="{TemplateBinding Padding}">
+                  <ContentPresenter Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    LineHeight="22.1"
+                                    TextTrimming="CharacterEllipsis"
+                                    TextWrapping="NoWrap" />
+                </Border>
+              </Panel>
+            </StackPanel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Border#PART_Pill">
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:first /template/ Path#PART_Separator">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:current">
+          <Setter Property="Background" Value="{DynamicResource InsSegOnBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsSegOnFg}" />
+          <Setter Property="Cursor" Value="Arrow" />
+          <Setter Property="Focusable" Value="False" />
+          <Setter Property="IsHitTestVisible" Value="False" />
+          <Style Selector="^ /template/ Border#PART_Pill">
+            <Setter Property="MaxWidth" Value="172" />
+            <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- For a header put together by hand: the same text styles PageHead uses -->
+  <Style Selector="TextBlock.page-title">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsH1}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="LineHeight" Value="36.4" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="TextBlock.page-title[FlowDirection=LeftToRight]">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontHeadingEn}" />
+    <Setter Property="LetterSpacing" Value="-0.56" />
+  </Style>
+  <Style Selector="TextBlock.page-sub">
+    <Setter Property="Margin" Value="0,6,0,0" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+    <Setter Property="LineHeight" Value="23.8" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="StackPanel.page-actions">
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="Spacing" Value="8" />
+    <Setter Property="VerticalAlignment" Value="Bottom" />
+  </Style>
+
+</Styles>
