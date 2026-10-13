@@ -137,7 +137,7 @@
   </Style>
 
   <!-- The slots of a row: a leading chip or avatar, the text, and the trailing end -->
-  <Style Selector="ListBoxItem > DockPanel">
+  <Style Selector="ListBox:not(.shell-nav) ListBoxItem > DockPanel">
     <Setter Property="HorizontalSpacing" Value="12" />
   </Style>
   <Style Selector="StackPanel.list-text">
