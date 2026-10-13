@@ -173,7 +173,7 @@
       </Border>
       <ScrollViewer x:Name="Scroller" ins:Shell.FrostsTopbar="True">
         <Border Classes="shell-content" Margin="0,72,0,0">
-          <ContentControl x:Name="Host" />
+          <TransitioningContentControl x:Name="Host" Classes="shell-content" />
         </Border>
       </ScrollViewer>
     </Panel>
