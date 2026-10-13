@@ -21,7 +21,7 @@ namespace Insiyab.Avalonia.Tests;
 public class ControlsTests
 {
     [AvaloniaFact]
-    public void Button_gets_the_insiyab_template_at_field_height()
+    public void Button_gets_the_insiyab_template_at_control_height()
     {
         var button = new Button { Content = "حفظ" };
         Show(button);
@@ -29,8 +29,10 @@ public class ControlsTests
         Part<Border>(button, "PART_Face");
         Part<Border>(button, "PART_Shadow");
         Part<Border>(button, "PART_FocusRing");
+        Part<Border>(button, "PART_Fill");
+        Part<Border>(button, "PART_Border");
         Part<ContentPresenter>(button, "PART_ContentPresenter");
-        Assert.Equal(46, button.Bounds.Height);
+        Assert.Equal(38, button.Bounds.Height);
         Assert.Equal(FontWeight.Bold, button.FontWeight);
     }
 
@@ -280,7 +282,8 @@ public class ControlsTests
         var button = new Button { Content = "حفظ", Classes = { "primary" } };
         Show(button, FlowDirection.RightToLeft);
 
-        Assert.Equal(FlowDirection.LeftToRight, Part<Border>(button, "PART_Face").FlowDirection);
+        Assert.Equal(FlowDirection.LeftToRight, Part<Border>(button, "PART_Fill").FlowDirection);
+        Assert.Equal(FlowDirection.RightToLeft, Part<Border>(button, "PART_Face").FlowDirection);
         Assert.Equal(FlowDirection.RightToLeft, Part<ContentPresenter>(button, "PART_ContentPresenter").FlowDirection);
     }
 }

@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
 
   <Styles.Resources>
     <ResourceDictionary>
@@ -9,7 +10,11 @@
         <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
       </LinearGradientBrush>
       <SolidColorBrush x:Key="InsButtonGhostBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+      <SolidColorBrush x:Key="InsButtonGhostHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.12" />
       <SolidColorBrush x:Key="InsButtonGhostPressed" Color="{DynamicResource InsPrimaryColor}" Opacity="0.22" />
+      <SolidColorBrush x:Key="InsButtonToggleOn" Color="{DynamicResource InsPrimaryColor}" Opacity="0.14" />
+      <SolidColorBrush x:Key="InsButtonToggleOnBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.40" />
+      <BoxShadows x:Key="InsButtonToggleOnShadow">inset 0 1 3 0 #1F0F172A</BoxShadows>
 
       <LinearGradientBrush x:Key="InsButtonSuccessFill" StartPoint="0%,0%" EndPoint="100%,100%">
         <GradientStop Offset="0" Color="#22C55E" />
@@ -83,7 +88,7 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
         <Setter Property="Padding" Value="16,6" />
-        <Setter Property="MinHeight" Value="{DynamicResource InsFieldH}" />
+        <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
         <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="HorizontalAlignment" Value="Left" />
@@ -93,96 +98,103 @@
         <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="RenderTransformOrigin" Value="50%,50%" />
-        <Setter Property="RenderTransform" Value="none" />
         <Setter Property="Transitions">
           <Transitions>
-            <TransformOperationsTransition Property="RenderTransform" Duration="{DynamicResource InsTExit}" Easing="{DynamicResource InsEase}" />
-            <BrushTransition Property="Foreground" Duration="{DynamicResource InsTExit}" Easing="{DynamicResource InsEase}" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Background" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="BorderBrush" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
 
         <Setter Property="Template">
           <ControlTemplate>
-            <Panel>
+            <!-- The press, lift and turn move this root, not the button: a transform set in the template survives styles that animate RenderTransform on every panel child. -->
+            <Panel x:Name="PART_Root" RenderTransformOrigin="50%,50%" RenderTransform="none">
               <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
               <Border x:Name="PART_FocusRing"
                       CornerRadius="{TemplateBinding CornerRadius}"
                       BoxShadow="{DynamicResource InsFocusRing}"
                       Opacity="0" />
-              <!-- Gradients are physical on the web, so the face stays LTR and the content takes the button's direction back. -->
-              <Border x:Name="PART_Face"
-                      FlowDirection="LeftToRight"
-                      Background="{TemplateBinding Background}"
-                      BorderBrush="{TemplateBinding BorderBrush}"
-                      BorderThickness="{TemplateBinding BorderThickness}"
-                      CornerRadius="{TemplateBinding CornerRadius}"
-                      ClipToBounds="True">
+              <Border x:Name="PART_Outline"
+                      Margin="-4"
+                      BorderThickness="2"
+                      BorderBrush="{DynamicResource InsToneBrandSoft}"
+                      CornerRadius="14"
+                      IsVisible="False" />
+              <Border x:Name="PART_Face" CornerRadius="{TemplateBinding CornerRadius}" ClipToBounds="True">
                 <Panel>
+                  <!-- Gradients are physical on the web, so only the fill stays LTR; the corners, the sweep and the content follow the button. -->
+                  <Border x:Name="PART_Fill" FlowDirection="LeftToRight" Background="{TemplateBinding Background}" />
                   <Border x:Name="PART_Sweep" IsHitTestVisible="False" Background="{DynamicResource InsButtonSweepRest}" />
+                  <Panel x:Name="PART_CrossHost" IsVisible="False" IsHitTestVisible="False">
+                    <Grid x:Name="PART_Cross"
+                          ColumnDefinitions="28*,44*,28*"
+                          IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNull}}">
+                      <Border Grid.Column="1" Height="2" CornerRadius="2" Background="{TemplateBinding Foreground}" RenderTransform="rotate(45deg)" />
+                      <Border Grid.Column="1" Height="2" CornerRadius="2" Background="{TemplateBinding Foreground}" RenderTransform="rotate(-45deg)" />
+                    </Grid>
+                  </Panel>
                   <ContentPresenter x:Name="PART_ContentPresenter"
-                                    FlowDirection="{TemplateBinding FlowDirection}"
                                     Content="{TemplateBinding Content}"
                                     ContentTemplate="{TemplateBinding ContentTemplate}"
                                     Padding="{TemplateBinding Padding}"
                                     RecognizesAccessKey="True"
+                                    RenderTransform="none"
+                                    LineHeight="18.9"
                                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
                 </Panel>
               </Border>
+              <Border x:Name="PART_Border"
+                      IsHitTestVisible="False"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}" />
             </Panel>
           </ControlTemplate>
         </Setter>
 
-        <Style Selector="^ /template/ Border#PART_Face">
+        <Style Selector="^ /template/ Panel#PART_Root">
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="{DynamicResource InsTExit}" Easing="{DynamicResource InsEase}" />
-              <BrushTransition Property="BorderBrush" Duration="{DynamicResource InsTExit}" Easing="{DynamicResource InsEase}" />
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
+        </Style>
+        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^.icon:pointerover:not(:disabled) /template/ ContentPresenter#PART_ContentPresenter">
+          <Setter Property="RenderTransform" Value="scale(1.15)" />
         </Style>
         <Style Selector="^ /template/ Border#PART_Shadow">
           <Setter Property="Transitions">
             <Transitions>
-              <BoxShadowsTransition Property="BoxShadow" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+              <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
         <Style Selector="^ /template/ Border#PART_FocusRing">
           <Setter Property="Transitions">
             <Transitions>
-              <DoubleTransition Property="Opacity" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+              <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
         <Style Selector="^ /template/ Border#PART_Sweep">
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.6" Easing="{DynamicResource InsEase}" />
+              <BrushTransition Property="Background" Duration="0:0:0.6" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
 
-        <!-- Enter is slower than exit: the face eases into its hover and snaps back out of it. -->
-        <Style Selector="^:pointerover">
-          <Setter Property="Transitions">
-            <Transitions>
-              <TransformOperationsTransition Property="RenderTransform" Duration="{DynamicResource InsTExit}" Easing="{DynamicResource InsEase}" />
-              <BrushTransition Property="Foreground" Duration="{DynamicResource InsTEnter}" Easing="{DynamicResource InsEase}" />
-            </Transitions>
-          </Setter>
-          <Style Selector="^ /template/ Border#PART_Face">
-            <Setter Property="Transitions">
-              <Transitions>
-                <BrushTransition Property="Background" Duration="{DynamicResource InsTEnter}" Easing="{DynamicResource InsEase}" />
-                <BrushTransition Property="BorderBrush" Duration="{DynamicResource InsTEnter}" Easing="{DynamicResource InsEase}" />
-              </Transitions>
-            </Setter>
-          </Style>
-          <Style Selector="^ /template/ Border#PART_Sweep">
-            <Setter Property="Background" Value="{DynamicResource InsButtonSweepHover}" />
-          </Style>
+        <Style Selector="^:pointerover /template/ Border#PART_Sweep">
+          <Setter Property="Background" Value="{DynamicResource InsButtonSweepHover}" />
         </Style>
 
         <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
@@ -190,11 +202,14 @@
         </Style>
 
         <Style Selector="^:pressed">
-          <Setter Property="RenderTransform" Value="scale(0.97)" />
+          <Style Selector="^ /template/ Panel#PART_Root">
+            <Setter Property="RenderTransform" Value="scale(0.97)" />
+          </Style>
         </Style>
 
         <Style Selector="^:disabled">
           <Setter Property="Opacity" Value="0.5" />
+          <Setter Property="Cursor" Value="No" />
           <Style Selector="^ /template/ Border#PART_Sweep">
             <Setter Property="IsVisible" Value="False" />
           </Style>
@@ -205,24 +220,33 @@
           <Setter Property="Padding" Value="10,4" />
           <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
           <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+          <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="LineHeight" Value="17.55" />
+          </Style>
         </Style>
         <Style Selector="^.lg">
           <Setter Property="MinHeight" Value="48" />
           <Setter Property="Padding" Value="24,10" />
           <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
+          <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="LineHeight" Value="21.6" />
+          </Style>
         </Style>
         <Style Selector="^.icon">
-          <Setter Property="Width" Value="{DynamicResource InsFieldH}" />
-          <Setter Property="Padding" Value="0" />
+          <Setter Property="Width" Value="{DynamicResource InsCtlH}" />
+          <Setter Property="Padding" Value="0,6" />
         </Style>
         <Style Selector="^.icon.sm">
           <Setter Property="Width" Value="{DynamicResource InsCtlSmH}" />
+          <Setter Property="Padding" Value="0,4" />
         </Style>
-        <Style Selector="^.lift:pointerover">
-          <Setter Property="RenderTransform" Value="translateY(-2px)" />
+        <Style Selector="^.full">
+          <Setter Property="HorizontalAlignment" Value="Stretch" />
         </Style>
-        <Style Selector="^.lift:pressed">
-          <Setter Property="RenderTransform" Value="translateY(-2px) scale(0.97)" />
+        <Style Selector="^.lift:pointerover:not(:disabled), ^.lift:pressed">
+          <Style Selector="^ /template/ Panel#PART_Root">
+            <Setter Property="RenderTransform" Value="translateY(-2px)" />
+          </Style>
         </Style>
 
         <Style Selector="^.primary">
@@ -231,10 +255,10 @@
           <Style Selector="^ /template/ Border#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandMd}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Face">
+          <Style Selector="^ /template/ Border#PART_Fill">
             <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
           </Style>
-          <Style Selector="^:pointerover /template/ Border#PART_Shadow, ^:focus-visible /template/ Border#PART_Shadow">
+          <Style Selector="^:pointerover:not(:disabled) /template/ Border#PART_Shadow, ^:focus-visible /template/ Border#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandLg}" />
           </Style>
         </Style>
@@ -242,7 +266,7 @@
         <!-- filled tones: the ink never changes, only the face -->
         <Style Selector="^.success, ^.danger, ^.warning, ^.info">
           <Setter Property="Foreground" Value="#FFFFFF" />
-          <Style Selector="^ /template/ Border#PART_Face">
+          <Style Selector="^ /template/ Border#PART_Fill">
             <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
           </Style>
         </Style>
@@ -271,14 +295,13 @@
           </Style>
         </Style>
 
-        <!-- the neutral and ghost sets share the control fill, the subtle drop and the dark sweep -->
-        <!-- A button with no variant class looks like secondary, so a plain Button in any app still reads as a button. -->
-        <Style Selector="^.secondary, ^.ghost, ^.ghost-danger, ^.ghost-success, ^.ghost-warning, ^.ghost-info, ^:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare)">
+        <!-- the neutral and ghost sets share the control fill, the subtle drop and the dark sweep; a button with no variant class looks like secondary -->
+        <Style Selector="^.secondary, ^.ghost, ^.ghost-danger, ^.ghost-success, ^.ghost-warning, ^.ghost-info, ^:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.close)">
           <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
           <Style Selector="^ /template/ Border#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Face">
+          <Style Selector="^ /template/ Border#PART_Fill">
             <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
           </Style>
           <Style Selector="^ /template/ Border#PART_Sweep">
@@ -289,9 +312,9 @@
           </Style>
         </Style>
 
-        <Style Selector="^.secondary, ^:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare)">
+        <Style Selector="^.secondary, ^:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.close)">
           <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
-          <Style Selector="^:pointerover, ^:focus-visible">
+          <Style Selector="^:pointerover:not(:disabled), ^:focus-visible">
             <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
           </Style>
           <Style Selector="^:pressed">
@@ -302,8 +325,8 @@
         <Style Selector="^.ghost">
           <Setter Property="BorderBrush" Value="{DynamicResource InsButtonGhostBorder}" />
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
-          <Style Selector="^:pointerover, ^:focus-visible">
-            <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+          <Style Selector="^:pointerover:not(:disabled), ^:focus-visible">
+            <Setter Property="Background" Value="{DynamicResource InsButtonGhostHover}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandSoft}" />
           </Style>
           <Style Selector="^:pressed">
@@ -314,7 +337,7 @@
         <Style Selector="^.ghost-danger">
           <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
           <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
-          <Style Selector="^:pointerover, ^:focus-visible">
+          <Style Selector="^:pointerover:not(:disabled), ^:focus-visible">
             <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
           </Style>
@@ -325,7 +348,7 @@
         <Style Selector="^.ghost-success">
           <Setter Property="BorderBrush" Value="{DynamicResource InsToneOkBd}" />
           <Setter Property="Foreground" Value="{DynamicResource InsToneOk}" />
-          <Style Selector="^:pointerover, ^:focus-visible">
+          <Style Selector="^:pointerover:not(:disabled), ^:focus-visible">
             <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneOk}" />
           </Style>
@@ -336,7 +359,7 @@
         <Style Selector="^.ghost-warning">
           <Setter Property="BorderBrush" Value="{DynamicResource InsToneWarnBd}" />
           <Setter Property="Foreground" Value="{DynamicResource InsToneWarn}" />
-          <Style Selector="^:pointerover, ^:focus-visible">
+          <Style Selector="^:pointerover:not(:disabled), ^:focus-visible">
             <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneWarn}" />
           </Style>
@@ -347,7 +370,7 @@
         <Style Selector="^.ghost-info">
           <Setter Property="BorderBrush" Value="{DynamicResource InsToneInfoBd}" />
           <Setter Property="Foreground" Value="{DynamicResource InsToneInfo}" />
-          <Style Selector="^:pointerover, ^:focus-visible">
+          <Style Selector="^:pointerover:not(:disabled), ^:focus-visible">
             <Setter Property="Background" Value="{DynamicResource InsToneInfoBg}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneInfo}" />
           </Style>
@@ -359,20 +382,124 @@
         <!-- bare: an action that is a word, with no face in any state -->
         <Style Selector="^.bare">
           <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+          <Setter Property="FontWeight" Value="Bold" />
           <Setter Property="Padding" Value="0" />
           <Setter Property="MinHeight" Value="0" />
           <Style Selector="^ /template/ Border#PART_Sweep">
             <Setter Property="IsVisible" Value="False" />
           </Style>
-          <Style Selector="^:pointerover, ^:focus-visible">
+          <Style Selector="^:pointerover:not(:disabled), ^:focus-visible">
             <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
           </Style>
           <Style Selector="^:pressed">
-            <Setter Property="RenderTransform" Value="none" />
+            <Style Selector="^ /template/ Panel#PART_Root">
+              <Setter Property="RenderTransform" Value="none" />
+            </Style>
+          </Style>
+        </Style>
+
+        <!-- close: draws its own cross, and turns under the pointer -->
+        <Style Selector="^.close">
+          <Setter Property="Width" Value="{DynamicResource InsCtlSmH}" />
+          <Setter Property="Height" Value="{DynamicResource InsCtlSmH}" />
+          <Setter Property="MinHeight" Value="0" />
+          <Setter Property="Padding" Value="0" />
+          <Setter Property="BorderThickness" Value="0" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+          <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+          <Style Selector="^ /template/ Panel#PART_CrossHost">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+          <Style Selector="^ /template/ Panel#PART_Root">
+            <Setter Property="Transitions">
+              <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+              </Transitions>
+            </Setter>
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Sweep">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+            <Setter Property="Opacity" Value="0" />
+          </Style>
+          <Style Selector="^:focus-visible /template/ Border#PART_Outline">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+          <Style Selector="^:pressed">
+            <Style Selector="^ /template/ Panel#PART_Root">
+              <Setter Property="RenderTransform" Value="none" />
+            </Style>
+          </Style>
+          <Style Selector="^:pointerover">
+            <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+            <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+            <Style Selector="^ /template/ Panel#PART_Root">
+              <Setter Property="RenderTransform" Value="rotate(90deg)" />
+            </Style>
+          </Style>
+        </Style>
+        <Style Selector="^.close.sm">
+          <Setter Property="Width" Value="24" />
+          <Setter Property="Height" Value="24" />
+        </Style>
+        <Style Selector="^.close.bare">
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="Foreground" Value="{Binding $parent[Control].(TextElement.Foreground)}" />
+          <Setter Property="Opacity" Value="0.6" />
+          <Style Selector="^:pointerover">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{Binding $parent[Control].(TextElement.Foreground)}" />
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+        </Style>
+
+        <!-- in a button group the face under the pointer or the focus is drawn over its neighbours -->
+        <Style Selector="^:pointerover, ^:focus-within">
+          <Setter Property="ZIndex" Value="2" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type RepeatButton}" TargetType="RepeatButton" BasedOn="{StaticResource {x:Type Button}}" />
+
+      <!-- A toggle reads as pressed in, not filled: a filled brand face is what primary means. -->
+      <ControlTheme x:Key="{x:Type ToggleButton}" TargetType="ToggleButton" BasedOn="{StaticResource {x:Type Button}}">
+        <Style Selector="^:checked:not(.primary)">
+          <Setter Property="Background" Value="{DynamicResource InsButtonToggleOn}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsButtonToggleOnBorder}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="none" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Fill">
+            <Setter Property="BoxShadow" Value="{StaticResource InsButtonToggleOnShadow}" />
           </Style>
         </Style>
       </ControlTheme>
 
+      <!-- A link in the shape of a button: <HyperlinkButton Theme="{StaticResource InsLinkButton}" Classes="primary" NavigateUri="…"> -->
+      <ControlTheme x:Key="InsLinkButton" TargetType="HyperlinkButton" BasedOn="{StaticResource {x:Type Button}}" />
+
     </ResourceDictionary>
   </Styles.Resources>
+
+  <!-- An icon beside a label nudges toward the trailing edge; a logical margin, so it mirrors with the page. -->
+  <Style Selector=":is(Button) ins|Icon">
+    <Setter Property="Transitions">
+      <Transitions>
+        <ThicknessTransition Property="Margin" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector=":is(Button):pointerover:not(.icon):not(:disabled) ins|Icon">
+    <Setter Property="Margin" Value="2,0,-2,0" />
+  </Style>
 </Styles>
