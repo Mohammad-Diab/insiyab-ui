@@ -2,4 +2,5 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Buttons/ButtonGroup.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Buttons/Segmented.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Buttons/SplitButton.axaml" />
 </Styles>

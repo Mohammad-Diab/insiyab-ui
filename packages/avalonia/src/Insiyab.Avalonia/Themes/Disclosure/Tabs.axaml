@@ -33,6 +33,7 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type TabItem}" TargetType="TabItem" BasedOn="{StaticResource InsTabFace}">
+
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
@@ -103,6 +104,7 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type TabStripItem}" TargetType="TabStripItem" BasedOn="{StaticResource InsTabFace}">
+
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
@@ -240,6 +242,186 @@
         </Setter>
       </ControlTheme>
 
+      <StreamGeometry x:Key="InsDocTabsBack">M15 6 l-6 6 6 6</StreamGeometry>
+      <StreamGeometry x:Key="InsDocTabsForward">M9 6 l6 6 -6 6</StreamGeometry>
+      <StreamGeometry x:Key="InsDocTabsPlus">M12 5 v14 M5 12 h14</StreamGeometry>
+
+      <!-- The strip's own small buttons: the scroll arrows and the new-tab "+". -->
+      <ControlTheme x:Key="InsDocTabsButton" TargetType="Button">
+        <Setter Property="Width" Value="30" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border x:Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+              <Viewbox Width="14" Height="14">
+                <ContentPresenter Content="{TemplateBinding Content}" />
+              </Viewbox>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+        </Style>
+        <Style Selector="^:pressed">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_Face">
+          <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.35" />
+          <Setter Property="Cursor" Value="Arrow" />
+        </Style>
+      </ControlTheme>
+
+      <!-- DocumentTabs: the TabControl's strip and keys, the strip scrolling between arrows when the tabs overflow, and the "+" after the last tab. -->
+      <ControlTheme x:Key="{x:Type ins:DocumentTabs}" TargetType="ins:DocumentTabs" BasedOn="{StaticResource {x:Type TabControl}}">
+        <Setter Property="Template">
+          <ControlTemplate>
+            <DockPanel Background="{TemplateBinding Background}">
+              <Border Name="PART_Strip" DockPanel.Dock="Top">
+                <DockPanel>
+                  <RepeatButton Name="PART_Back" DockPanel.Dock="Left" Theme="{StaticResource InsDocTabsButton}" Focusable="False" Margin="3,0,0,0">
+                    <Path Width="24" Height="24" Data="{StaticResource InsDocTabsBack}" Stroke="{Binding $parent[Button].Foreground}" StrokeThickness="2.2" StrokeLineCap="Round" StrokeJoin="Round" />
+                  </RepeatButton>
+                  <Button Name="PART_New"
+                          DockPanel.Dock="Right"
+                          Theme="{StaticResource InsDocTabsButton}"
+                          Margin="2,0,4,0"
+                          IsVisible="{TemplateBinding ShowNewButton}"
+                          AutomationProperties.Name="{TemplateBinding NewLabel}">
+                    <Path Width="24" Height="24" Data="{StaticResource InsDocTabsPlus}" Stroke="{Binding $parent[Button].Foreground}" StrokeThickness="2.2" StrokeLineCap="Round" />
+                  </Button>
+                  <RepeatButton Name="PART_Forward" DockPanel.Dock="Right" Theme="{StaticResource InsDocTabsButton}" Focusable="False" Margin="0,0,3,0">
+                    <Path Width="24" Height="24" Data="{StaticResource InsDocTabsForward}" Stroke="{Binding $parent[Button].Foreground}" StrokeThickness="2.2" StrokeLineCap="Round" StrokeJoin="Round" />
+                  </RepeatButton>
+                  <ScrollViewer Name="PART_Scroll" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
+                    <Panel Margin="3">
+                      <Canvas Name="PART_FlightLayer" IsHitTestVisible="False">
+                        <Border Name="PART_Flight" IsVisible="False" />
+                      </Canvas>
+                      <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                    </Panel>
+                  </ScrollViewer>
+                </DockPanel>
+              </Border>
+              <Panel>
+                <ContentPresenter Name="PART_SelectedContentHost2"
+                                  Margin="{TemplateBinding Padding}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  IsVisible="False" />
+                <ContentPresenter Name="PART_SelectedContentHost"
+                                  Margin="{TemplateBinding Padding}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+              </Panel>
+            </DockPanel>
+          </ControlTemplate>
+        </Setter>
+        <!-- The strip hugs its tabs, up to the width it is given; past that it scrolls. -->
+        <Style Selector="^ /template/ Border#PART_Strip">
+          <Setter Property="HorizontalAlignment" Value="Left" />
+          <Setter Property="Padding" Value="1" />
+          <Setter Property="Margin" Value="0,0,0,12" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        </Style>
+        <Style Selector="^ /template/ RepeatButton#PART_Back, ^ /template/ RepeatButton#PART_Forward">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:overflow /template/ RepeatButton#PART_Back, ^:overflow /template/ RepeatButton#PART_Forward">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^ /template/ Border#PART_Flight">
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+          <Setter Property="Background" Value="{DynamicResource InsSegOnBg}" />
+          <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- A DocumentTabs tab: the tab's face with a close button at its end, shown on the selected tab and under the pointer, its room kept so the tab never changes width. -->
+      <ControlTheme x:Key="{x:Type ins:DocumentTab}" TargetType="ins:DocumentTab" BasedOn="{StaticResource {x:Type TabItem}}">
+        <Setter Property="Padding" Value="14,6,6,6" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel Name="PART_Slide" RenderTransform="none">
+              <Border Name="PART_LayoutRoot"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      Padding="{TemplateBinding Padding}">
+                <DockPanel>
+                  <Panel Name="PART_CloseHost" DockPanel.Dock="Right" Margin="6,0,0,0" VerticalAlignment="Center">
+                    <Button Name="PART_Close"
+                            Classes="close sm bare"
+                            Focusable="False"
+                            AutomationProperties.Name="{Binding $parent[ins:DocumentTabs].CloseLabel, FallbackValue={x:Null}}" />
+                  </Panel>
+                  <ContentPresenter Name="PART_ContentPresenter"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    Content="{TemplateBinding Header}"
+                                    ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                    RecognizesAccessKey="True" />
+                </DockPanel>
+              </Border>
+              <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2"
+                      BorderBrush="{DynamicResource InsToneBrandSoft}" IsVisible="False" IsHitTestVisible="False" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Panel#PART_Slide">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:dragging">
+          <Setter Property="ZIndex" Value="5" />
+          <Setter Property="Cursor" Value="SizeWestEast" />
+          <Style Selector="^ /template/ Panel#PART_Slide">
+            <Setter Property="Transitions" Value="{x:Null}" />
+          </Style>
+        </Style>
+        <Style Selector="^ /template/ Panel#PART_CloseHost">
+          <Setter Property="Opacity" Value="0" />
+          <Setter Property="IsHitTestVisible" Value="False" />
+          <Setter Property="Transitions">
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:selected /template/ Panel#PART_CloseHost, ^:pointerover /template/ Panel#PART_CloseHost">
+          <Setter Property="Opacity" Value="1" />
+          <Setter Property="IsHitTestVisible" Value="True" />
+        </Style>
+        <Style Selector="^[IsClosable=False]">
+          <Setter Property="Padding" Value="14,6" />
+          <Style Selector="^ /template/ Panel#PART_CloseHost">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -325,6 +507,16 @@
   </Style>
   <Style Selector="TabControl.line.moving > TabItem /template/ Panel#PART_SelectedPipe, TabStrip.line.moving > TabStripItem /template/ Panel#PART_SelectedPipe">
     <Setter Property="Opacity" Value="0" />
+  </Style>
+
+  <!-- The close button sized to sit inside a tab. -->
+  <Style Selector="ins|DocumentTab /template/ Button#PART_Close.close">
+    <Setter Property="Width" Value="20" />
+    <Setter Property="Height" Value="20" />
+  </Style>
+  <Style Selector="ins|DocumentTabs.moving > ins|DocumentTab:selected /template/ Border#PART_LayoutRoot">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BoxShadow" Value="none" />
   </Style>
 
 </Styles>

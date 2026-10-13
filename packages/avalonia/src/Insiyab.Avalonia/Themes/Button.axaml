@@ -523,6 +523,85 @@
       <!-- A link in the shape of a button: <HyperlinkButton Theme="{StaticResource InsLinkButton}" Classes="primary" NavigateUri="…"> -->
       <ControlTheme x:Key="InsLinkButton" TargetType="HyperlinkButton" BasedOn="{StaticResource {x:Type Button}}" />
 
+      <StreamGeometry x:Key="InsDropChevron">M6 9 l6 6 6-6</StreamGeometry>
+
+      <!-- DropDownButton: the button with a chevron at its trailing end, which turns over while its menu is open. -->
+      <ControlTheme x:Key="{x:Type DropDownButton}" TargetType="DropDownButton" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel x:Name="PART_Press">
+              <Panel x:Name="PART_Root" RenderTransformOrigin="50%,50%" RenderTransform="none">
+                <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
+                <Border x:Name="PART_FocusRing"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        BoxShadow="{DynamicResource InsFocusRing}"
+                        Opacity="0" />
+                <Border x:Name="PART_Face" CornerRadius="{TemplateBinding CornerRadius}" ClipToBounds="True">
+                  <Panel>
+                    <Border x:Name="PART_Fill" FlowDirection="LeftToRight" Background="{TemplateBinding Background}" />
+                    <Border x:Name="PART_Sweep" IsHitTestVisible="False" Background="{DynamicResource InsButtonSweepRest}" />
+                    <DockPanel Margin="{TemplateBinding Padding}">
+                      <Viewbox x:Name="PART_Chevron" DockPanel.Dock="Right" VerticalAlignment="Center" RenderTransform="none">
+                        <Viewbox.Transitions>
+                          <Transitions>
+                            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                          </Transitions>
+                        </Viewbox.Transitions>
+                        <Path Width="24" Height="24"
+                              Data="{StaticResource InsDropChevron}"
+                              Stroke="{TemplateBinding Foreground}"
+                              StrokeThickness="2.4"
+                              StrokeLineCap="Round"
+                              StrokeJoin="Round" />
+                      </Viewbox>
+                      <ContentPresenter x:Name="PART_ContentPresenter"
+                                        Content="{TemplateBinding Content}"
+                                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                                        RecognizesAccessKey="True"
+                                        RenderTransform="none"
+                                        LineHeight="18.9"
+                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </DockPanel>
+                  </Panel>
+                </Border>
+                <Border x:Name="PART_Border"
+                        IsHitTestVisible="False"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}" />
+              </Panel>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Viewbox#PART_Chevron">
+          <Setter Property="Width" Value="12" />
+          <Setter Property="Height" Value="12" />
+          <Setter Property="Margin" Value="8,0,0,0" />
+        </Style>
+        <Style Selector="^:flyout-open /template/ Viewbox#PART_Chevron">
+          <Setter Property="RenderTransform" Value="rotate(180deg)" />
+        </Style>
+        <Style Selector="^.sm /template/ Viewbox#PART_Chevron">
+          <Setter Property="Width" Value="10" />
+          <Setter Property="Height" Value="10" />
+          <Setter Property="Margin" Value="6,0,0,0" />
+        </Style>
+        <Style Selector="^.lg /template/ Viewbox#PART_Chevron">
+          <Setter Property="Width" Value="14" />
+          <Setter Property="Height" Value="14" />
+          <Setter Property="Margin" Value="10,0,0,0" />
+        </Style>
+        <!-- An icon with its chevron needs more than the square of an icon button. -->
+        <Style Selector="^.icon">
+          <Setter Property="Width" Value="NaN" />
+          <Setter Property="Padding" Value="10,6" />
+          <Style Selector="^ /template/ Viewbox#PART_Chevron">
+            <Setter Property="Margin" Value="4,0,0,0" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
 

@@ -1,3 +1,5 @@
+using Avalonia.Controls;
+using Avalonia.LogicalTree;
 using static Insiyab.Avalonia.Gallery.Playground.Play;
 
 namespace Insiyab.Avalonia.Gallery.Playground;
@@ -188,19 +190,68 @@ public static class InputsPlay
         },
     };
 
+    public static PlayDef Masked { get; } = new()
+    {
+        Id = "masked",
+        Title = "حقل بقناع",
         Wide = _ => true,
         WideMax = 416,
         Controls =
         [
+            Select("mask", "القناع", "phone",
+                Choice("phone", "رقم الجوال"),
+                Choice("card", "رقم البطاقة"),
+                Choice("date", "تاريخ"),
+                Choice("code", "رمز الحجز")),
             Seg("size", "المقاس", "",
                 Choice("sm", "صغير"),
                 Choice("", "عادي"),
                 Choice("lg", "كبير")),
+            Seg("state", "الحالة", "",
                 Choice("", "عادي"),
+                Choice("bad", "خطأ"),
+                Choice("ok", "مقبول")),
+            Seg("prompt", "علامة الفراغ", "",
+                Choice("", "_"),
+                Choice("dot", "·", "PromptChar", "العلامة التي تملأ أماكن القناع الفارغة، وتظهر باهتة حتى يُكتب مكانها.", OptionKind.Property)),
+            Switch("filled", "فيه قيمة"),
+            Switch("hide", "يخفي الفراغ عند الخروج", "HidePromptOnLeave=\"True\"", "يخفي أماكن القناع الفارغة إذا خرج التركيز من الحقل.", OptionKind.Property),
+        ],
+        Extra =
+        [
+            Row("الأساس", "MaskedTextBox", "حقل بقناع ثابت، كرقم الجوال أو البطاقة أو التاريخ: لا يقبل كل مكان فيه إلا ما يسمح به القناع، وتبقى الأماكن الفارغة باهتة حتى تمتلئ. وأرقامه متساوية العرض، فلا يتحرك ما بعدها إذا امتلأت.", OptionKind.Element, true),
+            Row("الأساس", "Mask", "القناع: `0` رقم لا بد منه، و`9` رقم يجوز تركه، و`L` حرف لا بد منه، و`>` يكبّر ما بعده من الحروف، وما سوى ذلك يبقى كما هو.", OptionKind.Property, true),
+            Row("الأساس", "FlowDirection=\"LeftToRight\"", "الأقنعة تُكتب من اليسار، فضعها على الحقل وحده ويبقى سائر النموذج عربيًا.", OptionKind.Property),
+            Row("الأساس", "MaskCompleted", "صحيحة إذا امتلأت كل الأماكن التي لا بد منها في القناع.", OptionKind.Property),
+            Row("الحالة", "bad", "يدل على الخطأ كما في الحقل، وكذلك `ok` للقبول. ولا يتلون فيهما إلا الإطار.", OptionKind.Class),
         ],
         Axaml = s =>
         {
+            var (label, mask, value) = s["mask"] switch
+            {
+                "card" => ("رقم البطاقة", "0000 0000 0000 0000", "41111111"),
+                "date" => ("تاريخ الميلاد", "00/00/0000", "1504"),
+                "code" => ("رمز الحجز", ">LL-0000", "QA12"),
+                _ => ("رقم الجوال", "000 000 0000", "0501234"),
+            };
+            var attrs = Classes(s["size"], s["state"]) + $" Mask=\"{mask}\" FlowDirection=\"LeftToRight\"" +
+                (s["prompt"] == "dot" ? " PromptChar=\"·\"" : "") +
+                (s.On("hide") ? " HidePromptOnLeave=\"True\"" : "") +
+                (s.On("filled") ? $" Text=\"{value}\"" : "");
+            return "<StackPanel Classes=\"field\">\n" +
+                $"  <TextBlock Classes=\"label\" Text=\"{label}\" />\n" +
+                $"  <MaskedTextBox{attrs} />\n" +
+                (s["state"] == "bad" ? "  <ContentControl Classes=\"error\" Content=\"القيمة ناقصة.\" />\n" : "") +
+                (s["state"] == "ok" ? "  <ContentControl Classes=\"success\" Content=\"القيمة كاملة.\" />\n" : "") +
                 "</StackPanel>";
         },
-    public static PlayDef[] All { get; } = [Field, Search, Form];
+        Notes = _ => ["اكتب في الحقل: يمتلئ القناع بالترتيب، ولا يقبل كل مكان إلا ما يسمح به. وإذا امتلأ ظهر هنا."],
+        Stage = (view, _, say) =>
+        {
+            foreach (var box in view.GetLogicalDescendants().OfType<MaskedTextBox>())
+                box.TextChanged += (_, _) => { if (box.MaskCompleted is true) say("امتلأ القناع، و`MaskCompleted` الآن `True`"); };
+        },
+    };
+
+    public static PlayDef[] All { get; } = [Field, Search, Form, Masked];
 }

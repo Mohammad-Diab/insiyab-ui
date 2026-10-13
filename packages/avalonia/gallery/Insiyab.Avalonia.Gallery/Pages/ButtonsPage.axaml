@@ -22,7 +22,9 @@
     <pg:PlayText Classes="p" Markup="يرسم الكلاس `close` علامة الإغلاق بنفسه، فيغنيك عن الأيقونة." />
     <pg:Playground Def="{x:Static pg:ButtonsPlay.Close}" />
 
-      <TextBlock Classes="h3" Text="زر الإغلاق" />
+    <TextBlock Classes="section" Text="زر بقائمة" />
+    <pg:PlayText Classes="p" Markup="الزر المقسم `SplitButton` جزءان: الأول ينفذ الإجراء، والسهم يفتح قائمة بما يقاربه. والمنسدل `DropDownButton` زر يفتح قائمته كلها. ويأخذان كلاسات الزر نفسها، ويمر المؤشر على كل جزء وحده." />
+    <pg:Playground Def="{x:Static pg:ButtonsPlay.Split}" />
 
     <TextBlock Classes="section" Text="الخيارات" />
     <pg:PlayText Classes="p" Markup="كل ما في الأزرار من كلاسات وخصائص وأحداث، لكل مكون صندوق يفتح بالنقر." />

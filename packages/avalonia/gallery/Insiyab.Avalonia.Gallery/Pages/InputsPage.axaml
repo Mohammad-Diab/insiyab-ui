@@ -22,7 +22,9 @@
     <pg:PlayText Classes="p" Markup="ترتب لوحات Avalonia الحقول في عمود أو سطر أو شبكة، ويجمع الكلاس `form-commit` أزرار الحفظ في آخر النموذج. أما التحقق من الحقول وإظهار رسائلها تحتها ففي صفحة التحقق." />
     <pg:Playground Def="{x:Static pg:InputsPlay.Form}" />
 
-              <TextBlock Classes="label" Text="الاسم" />
+    <TextBlock Classes="section" Text="حقل بقناع" />
+    <pg:PlayText Classes="p" Markup="يقبل `MaskedTextBox` قيمة بشكل ثابت، كرقم الجوال أو البطاقة، من عائلة حقلي الرمز وتاريخ الميلاد: أرقامه متساوية العرض، وأماكنه الفارغة باهتة حتى تمتلئ." />
+    <pg:Playground Def="{x:Static pg:InputsPlay.Masked}" />
 
     <TextBlock Classes="section" Text="الخيارات" />
     <pg:PlayText Classes="p" Markup="كل ما في الحقول من عناصر وكلاسات وخصائص، لكل مكون صندوق يفتح بالنقر." />

@@ -14,7 +14,9 @@
     <pg:PlayText Classes="p" Markup="يضم `TabControl` تبويبات `TabItem`، لكل تبويب عنوانه في `Header` ولوحه في `Content`، وتتنقل بينها أسهم لوحة المفاتيح مع اتجاه الواجهة. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
     <pg:Playground Def="{x:Static pg:TabsPlay.Tabs}" />
 
-      <TextBlock Classes="h2" Text="علامات التبويب" />
+    <TextBlock Classes="section" Text="تبويبات الملفات" />
+    <pg:PlayText Classes="p" Markup="يعرض `ins:DocumentTabs` ما فتحه المستخدم من ملفات أو صفحات في تبويبات بهيئة علامات التبويب نفسها. يُغلق التبويب بزره، أو بـ`Ctrl+W`، أو بـ`Delete` إذا كان عليه التركيز، أو بالنقر بالزر الأوسط. ويُنقل بالسحب أو بـ`Ctrl+Shift+PageDown` و`Ctrl+Shift+PageUp`، وتتنقل `Ctrl+Tab` بين التبويبات. وإذا كثرت التبويبات مرّ الشريط بسهمين. والقائمة لتطبيقك: يسمع الأحداث ويضيف التبويبات بنفسه." />
+    <pg:Playground Def="{x:Static pg:TabsPlay.Documents}" />
 
     <TextBlock Classes="section" Text="الخيارات" />
     <pg:PlayText Classes="p" Markup="كل ما في علامات التبويب من عناصر وكلاسات وخصائص وأحداث، في صندوق يفتح بالنقر." />

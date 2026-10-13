@@ -116,46 +116,4 @@ public class ShellMotionTests
         }
         finally { Still(w, false); }
     }
-
-    private static Navbar Folded() => new()
-    {
-        Brand = "الموقع",
-        ItemsSource = new[] { "الرئيسية", "المدونة", "تواصل معنا" },
-        SelectedIndex = 0,
-        Width = 600,
-    };
-
-    [AvaloniaFact]
-    public void Folded_navbar_menu_rises_in_when_it_opens()
-    {
-        var bar = Folded();
-        var w = Show(bar, FlowDirection.RightToLeft, width: 640, height: 480);
-        Assert.True(bar.IsCollapsed);
-        var menu = Part<Border>(bar, "PART_Menu");
-        Assert.False(menu.IsVisible);
-
-        bar.IsOpen = true;
-        var low = Lowest(w, () => menu.Opacity, 200);
-        Assert.True(low < 0.9, $"lowest opacity {low}");
-        Settle();
-        Assert.True(menu.IsEffectivelyVisible);
-        Assert.Equal(1, menu.Opacity);
-        Assert.True(menu.RenderTransform is null || menu.RenderTransform.Value.IsIdentity);
-    }
-
-    [AvaloniaFact]
-    public void Folded_navbar_menu_opens_still_when_motion_is_still()
-    {
-        var bar = Folded();
-        var w = Show(bar, width: 640, height: 480);
-        var menu = Part<Border>(bar, "PART_Menu");
-        Still(w, true);
-        try
-        {
-            bar.IsOpen = true;
-            Assert.Equal(1, Lowest(w, () => menu.Opacity, 200));
-            Assert.True(menu.IsEffectivelyVisible);
-        }
-        finally { Still(w, false); }
-    }
 }
