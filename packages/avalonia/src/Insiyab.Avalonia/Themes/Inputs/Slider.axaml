@@ -1,0 +1,161 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <SolidColorBrush x:Key="InsRangeThumbRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
+
+      <ControlTheme x:Key="InsRangeTrackPart" TargetType="RepeatButton">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Grid>
+              <Border Name="FocusTarget" Margin="0,-9" Background="Transparent" />
+              <Border Name="TrackBackground"
+                      Background="{TemplateBinding Background}"
+                      BoxShadow="inset 0 1 2 0 #140F172A"
+                      CornerRadius="{DynamicResource InsRPill}"
+                      Height="6"
+                      VerticalAlignment="Center" />
+            </Grid>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsRangeTrackPartVertical" TargetType="RepeatButton">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Grid>
+              <Border Name="FocusTarget" Margin="-9,0" Background="Transparent" />
+              <Border Name="TrackBackground"
+                      Background="{TemplateBinding Background}"
+                      CornerRadius="{DynamicResource InsRPill}"
+                      Width="6"
+                      HorizontalAlignment="Center" />
+            </Grid>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsRangeThumb" TargetType="Thumb">
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Height" Value="20" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Name="PART_Glow" CornerRadius="10" BoxShadow="{DynamicResource InsGlow}" Opacity="0">
+                <Border.Transitions>
+                  <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+                  </Transitions>
+                </Border.Transitions>
+              </Border>
+              <Border Name="PART_Focus" CornerRadius="10" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <Border Name="PART_Ring" CornerRadius="11" Margin="-1" Background="{DynamicResource InsRangeThumbRing}" />
+              <Border Name="PART_Face" CornerRadius="10" Background="White" BoxShadow="0 2 6 0 #470F172A" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type Slider}" TargetType="Slider">
+        <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Style Selector="^:horizontal">
+          <Setter Property="MinHeight" Value="24" />
+          <Setter Property="Template">
+            <ControlTemplate>
+              <DataValidationErrors>
+                <Track Name="PART_Track"
+                       Minimum="{TemplateBinding Minimum}"
+                       Maximum="{TemplateBinding Maximum}"
+                       Value="{TemplateBinding Value, Mode=TwoWay}"
+                       IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                       Orientation="Horizontal"
+                       MinHeight="24">
+                  <Track.DecreaseButton>
+                    <RepeatButton Name="PART_DecreaseButton"
+                                  Theme="{StaticResource InsRangeTrackPart}"
+                                  Background="{TemplateBinding Foreground}" />
+                  </Track.DecreaseButton>
+                  <Track.IncreaseButton>
+                    <RepeatButton Name="PART_IncreaseButton"
+                                  Theme="{StaticResource InsRangeTrackPart}"
+                                  Background="{TemplateBinding Background}" />
+                  </Track.IncreaseButton>
+                  <Thumb Name="thumb"
+                         Theme="{StaticResource InsRangeThumb}"
+                         DataContext="{TemplateBinding Value}" />
+                </Track>
+              </DataValidationErrors>
+            </ControlTemplate>
+          </Setter>
+        </Style>
+        <Style Selector="^:vertical">
+          <Setter Property="MinWidth" Value="24" />
+          <Setter Property="Template">
+            <ControlTemplate>
+              <DataValidationErrors>
+                <Track Name="PART_Track"
+                       Minimum="{TemplateBinding Minimum}"
+                       Maximum="{TemplateBinding Maximum}"
+                       Value="{TemplateBinding Value, Mode=TwoWay}"
+                       IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                       Orientation="Vertical"
+                       MinWidth="24">
+                  <Track.DecreaseButton>
+                    <RepeatButton Name="PART_DecreaseButton"
+                                  Theme="{StaticResource InsRangeTrackPartVertical}"
+                                  Background="{TemplateBinding Foreground}" />
+                  </Track.DecreaseButton>
+                  <Track.IncreaseButton>
+                    <RepeatButton Name="PART_IncreaseButton"
+                                  Theme="{StaticResource InsRangeTrackPartVertical}"
+                                  Background="{TemplateBinding Background}" />
+                  </Track.IncreaseButton>
+                  <Thumb Name="thumb"
+                         Theme="{StaticResource InsRangeThumb}"
+                         DataContext="{TemplateBinding Value}" />
+                </Track>
+              </DataValidationErrors>
+            </ControlTemplate>
+          </Setter>
+        </Style>
+
+        <Style Selector="^:pointerover /template/ Thumb">
+          <Setter Property="RenderTransform" Value="scale(1.1)" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Thumb">
+          <Style Selector="^ /template/ Border#PART_Focus">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Ring">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+        </Style>
+        <Style Selector="^ /template/ Thumb:pressed">
+          <Setter Property="RenderTransform" Value="scale(1.18)" />
+          <Style Selector="^ /template/ Border#PART_Glow">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Ring">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.5" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+</Styles>

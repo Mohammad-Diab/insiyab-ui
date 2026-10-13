@@ -1,0 +1,308 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsSelectChevron" Color="#6B7280" />
+          <SolidColorBrush x:Key="InsSelectOptionOn" Color="{DynamicResource InsPrimaryDarkerColor}" />
+          <SolidColorBrush x:Key="InsSelectFocusBg" Color="{DynamicResource InsGlassStrongColor}" />
+          <BoxShadows x:Key="InsSelectGlowOk">0 0 0 4 #1F22C55E</BoxShadows>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsSelectChevron" Color="#94A3B8" />
+          <SolidColorBrush x:Key="InsSelectOptionOn" Color="{DynamicResource InsText1Color}" />
+          <SolidColorBrush x:Key="InsSelectFocusBg" Color="#17FFFFFF" />
+          <BoxShadows x:Key="InsSelectGlowOk">0 0 0 4 #2E22C55E</BoxShadows>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <SolidColorBrush x:Key="InsSelectHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
+      <SolidColorBrush x:Key="InsSelectFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
+      <SolidColorBrush x:Key="InsSelectOptionHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
+      <SolidColorBrush x:Key="InsSelectOkBorder" Color="{DynamicResource InsToneOkColor}" Opacity="0.55" />
+      <StreamGeometry x:Key="InsSelectChevronData">M6 9 l6 6 6-6</StreamGeometry>
+      <StreamGeometry x:Key="InsSelectCheckData">M5 13 l4 4L19 7</StreamGeometry>
+
+      <ControlTheme x:Key="{x:Type ComboBox}" TargetType="ComboBox">
+        <Setter Property="Padding" Value="14,8,38,8" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="MaxDropDownHeight" Value="384" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="MinHeight" Value="{DynamicResource InsFieldH}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="PlaceholderForeground" Value="{DynamicResource InsText3}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <DataValidationErrors ClipToBounds="False">
+              <Panel x:Name="PART_Field" RenderTransform="none" MinHeight="{TemplateBinding MinHeight}">
+                <Panel.Transitions>
+                  <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                  </Transitions>
+                </Panel.Transitions>
+                <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShSubtle}">
+                  <Border.Transitions>
+                    <Transitions>
+                      <BoxShadowsTransition Property="BoxShadow" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                    </Transitions>
+                  </Border.Transitions>
+                </Border>
+                <Border x:Name="PART_Halo"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Tag="{DynamicResource InsPrimaryColor}"
+                        BoxShadow="{Binding $self.Tag, Converter={x:Static ins:InputHalo.Instance}}"
+                        Opacity="0">
+                  <Border.Transitions>
+                    <Transitions>
+                      <DoubleTransition Property="Opacity" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                    </Transitions>
+                  </Border.Transitions>
+                </Border>
+                <Border x:Name="Background"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        BoxShadow="{DynamicResource InsBevelDim}">
+                  <Border.Transitions>
+                    <Transitions>
+                      <BrushTransition Property="Background" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                      <BrushTransition Property="BorderBrush" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                    </Transitions>
+                  </Border.Transitions>
+                </Border>
+                <TextBlock x:Name="PlaceholderTextBlock"
+                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                           Margin="{TemplateBinding Padding}"
+                           Text="{TemplateBinding PlaceholderText}"
+                           Foreground="{TemplateBinding PlaceholderForeground}">
+                  <TextBlock.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                      <Binding Path="SelectionBoxItem" RelativeSource="{RelativeSource TemplatedParent}" Converter="{x:Static ObjectConverters.IsNull}" />
+                      <Binding Path="!IsEditable" RelativeSource="{RelativeSource TemplatedParent}" />
+                    </MultiBinding>
+                  </TextBlock.IsVisible>
+                </TextBlock>
+                <ContentControl x:Name="ContentPresenter"
+                                Content="{TemplateBinding SelectionBoxItem}"
+                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                IsVisible="{TemplateBinding IsEditable, Converter={x:Static BoolConverters.Not}}" />
+                <TextBox x:Name="PART_EditableTextBox"
+                         Classes="bare"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         MinHeight="0"
+                         Padding="{TemplateBinding Padding}"
+                         Foreground="{TemplateBinding Foreground}"
+                         Text="{TemplateBinding Text, Mode=TwoWay}"
+                         PlaceholderText="{TemplateBinding PlaceholderText}"
+                         IsVisible="{TemplateBinding IsEditable}" />
+                <ins:Icon x:Name="DropDownGlyph"
+                          Size="16"
+                          StrokeThickness="2.5"
+                          Margin="0,0,14,0"
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Center"
+                          IsHitTestVisible="False"
+                          Foreground="{DynamicResource InsSelectChevron}"
+                          Data="{StaticResource InsSelectChevronData}" />
+                <Popup x:Name="PART_Popup"
+                       WindowManagerAddShadowHint="False"
+                       IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
+                       MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+                       MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                       PlacementTarget="Background"
+                       Placement="BottomEdgeAlignedLeft"
+                       VerticalOffset="6"
+                       IsLightDismissEnabled="True"
+                       InheritsTransform="True">
+                  <Border x:Name="PopupBorder"
+                          Background="{DynamicResource InsGlassStrong}"
+                          BorderBrush="{DynamicResource InsRim}"
+                          BorderThickness="1"
+                          Padding="6"
+                          HorizontalAlignment="Stretch"
+                          CornerRadius="{DynamicResource InsRMd}"
+                          BoxShadow="{DynamicResource InsShLg}">
+                    <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                  IsScrollChainingEnabled="False"
+                                  VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                  IsDeferredScrollingEnabled="{TemplateBinding (ScrollViewer.IsDeferredScrollingEnabled)}">
+                      <ItemsPresenter x:Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                    </ScrollViewer>
+                  </Border>
+                </Popup>
+              </Panel>
+            </DataValidationErrors>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:pointerover:not(:focus-within) /template/ Border#Background">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsSelectHoverBorder}" />
+        </Style>
+
+        <Style Selector="^:focus-within, ^:dropdownopen">
+          <Style Selector="^ /template/ Panel#PART_Field">
+            <Setter Property="RenderTransform" Value="translateY(-1px)" />
+          </Style>
+          <Style Selector="^ /template/ Border#Background">
+            <Setter Property="Background" Value="{DynamicResource InsSelectFocusBg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsSelectFocusBorder}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Halo">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+        </Style>
+
+        <Style Selector="^.ok">
+          <Style Selector="^ /template/ Border#Background, ^:pointerover:not(:focus-within) /template/ Border#Background">
+            <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsSelectOkBorder}" />
+          </Style>
+          <Style Selector="^:focus-within /template/ Border#Background">
+            <Setter Property="BorderBrush" Value="{DynamicResource InsToneOk}" />
+          </Style>
+          <Style Selector="^:focus-within /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsSelectGlowOk}" />
+          </Style>
+          <Style Selector="^:focus-within /template/ Border#PART_Halo">
+            <Setter Property="Opacity" Value="0" />
+          </Style>
+        </Style>
+
+        <Style Selector="^:error, ^.bad">
+          <Style Selector="^ /template/ Border#Background, ^:pointerover:not(:focus-within) /template/ Border#Background">
+            <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+          </Style>
+          <Style Selector="^:focus-within /template/ Border#Background">
+            <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
+          </Style>
+          <Style Selector="^:focus-within /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsGlowBad}" />
+          </Style>
+          <Style Selector="^:focus-within /template/ Border#PART_Halo">
+            <Setter Property="Opacity" Value="0" />
+          </Style>
+        </Style>
+
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.55" />
+        </Style>
+
+        <Style Selector="^:dropdownopen /template/ Border#PopupBorder">
+          <Style.Animations>
+            <Animation Duration="0:0:0.22" FillMode="Forward">
+              <Animation.Easing>
+                <SplineEasing X1="0.22" Y1="1" X2="0.36" Y2="1" />
+              </Animation.Easing>
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="1" />
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+
+        <Style Selector="^.sm">
+          <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
+          <Setter Property="Padding" Value="10,4,38,4" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        </Style>
+        <Style Selector="^.lg">
+          <Setter Property="MinHeight" Value="52" />
+          <Setter Property="Padding" Value="16,8,42,8" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
+        </Style>
+
+        <Style Selector="^[IsEditable=true]">
+          <Setter Property="IsTabStop" Value="False" />
+          <Setter Property="KeyboardNavigation.TabNavigation" Value="Local" />
+        </Style>
+      </ControlTheme>
+
+
+      <ControlTheme x:Key="{x:Type ComboBoxItem}" TargetType="ComboBoxItem">
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border x:Name="PART_Face"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}">
+              <Border.Transitions>
+                <Transitions>
+                  <BrushTransition Property="Background" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+                </Transitions>
+              </Border.Transitions>
+              <DockPanel>
+                <ins:Icon x:Name="PART_Check"
+                          DockPanel.Dock="Left"
+                          Size="14"
+                          StrokeThickness="2.5"
+                          Margin="0,0,8,0"
+                          VerticalAlignment="Center"
+                          Foreground="{DynamicResource InsToneBrandSoft}"
+                          Data="{StaticResource InsSelectCheckData}"
+                          Opacity="0" />
+                <ContentPresenter x:Name="PART_ContentPresenter"
+                                  Foreground="{TemplateBinding Foreground}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  Content="{TemplateBinding Content}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+              </DockPanel>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:pointerover, ^:focus-visible">
+          <Setter Property="Background" Value="{DynamicResource InsSelectOptionHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsSelectOptionOn}" />
+        </Style>
+        <Style Selector="^:selected">
+          <Setter Property="Foreground" Value="{DynamicResource InsSelectOptionOn}" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Style Selector="^ /template/ ins|Icon#PART_Check">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.45" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+</Styles>

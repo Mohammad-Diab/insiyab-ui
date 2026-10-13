@@ -1,44 +1,240 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
              x:Class="Insiyab.Avalonia.Gallery.Pages.InputsPage">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsInputsViewBd" Color="#1A0F172A" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsInputsViewBd" Color="#1AFFFFFF" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <UserControl.Styles>
+    <Style Selector="Border.dx">
+      <Setter Property="Padding" Value="24" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="{DynamicResource InsInputsViewBd}" />
+      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+      <Setter Property="Background">
+        <SolidColorBrush Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
+      </Setter>
+    </Style>
+    <Style Selector="TextBlock.doc-h2">
+      <Setter Property="FontSize" Value="{DynamicResource InsFsH3}" />
+      <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+      <Setter Property="Margin" Value="0,24,0,0" />
+    </Style>
+    <Style Selector="TextBlock.cap">
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+      <Setter Property="Margin" Value="0,0,0,2" />
+    </Style>
+  </UserControl.Styles>
+
   <ScrollViewer>
-    <StackPanel Margin="24" Spacing="20" MaxWidth="420" HorizontalAlignment="Left">
+    <StackPanel Spacing="16">
 
-      <StackPanel Spacing="6">
-        <TextBlock Classes="label" Text="الاسم الكامل" />
-        <TextBox PlaceholderText="اكتب اسمك الكامل" />
-        <TextBlock Classes="hint" Text="يظهر هذا الاسم لأعضاء فريقك." />
-      </StackPanel>
+      <Border Classes="dx">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="الاسم" />
+          <TextBox />
+          <TextBlock Classes="hint" Text="تلميح قصير." />
+        </StackPanel>
+      </Border>
 
-      <StackPanel Spacing="6">
-        <TextBlock Classes="label" Text="البريد الإلكتروني" />
-        <TextBox x:Name="EmailBox" Text="name@example" FlowDirection="LeftToRight" />
-      </StackPanel>
+      <TextBlock Classes="doc-h2" Text="الحقل" />
+      <Border Classes="dx">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="الاسم" />
+          <TextBox />
+        </StackPanel>
+      </Border>
+      <Border Classes="dx">
+        <Grid Classes="variants" ColumnDefinitions="*,*" ColumnSpacing="24" RowSpacing="20">
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="العنصر: قائمة" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <ComboBox SelectedIndex="0">
+              <ComboBoxItem Content="الأول" />
+              <ComboBoxItem Content="الثاني" />
+              <ComboBoxItem Content="الثالث" />
+            </ComboBox>
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="العنصر: نص طويل" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox AcceptsReturn="True" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="النوع: بريد" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox FlowDirection="LeftToRight" PlaceholderText="name@example.com" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="النوع: هاتف" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox FlowDirection="LeftToRight" PlaceholderText="+966 50 000 0000" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="النوع: رقم" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox Text="12" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="النوع: كلمة مرور" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox Text="secret" PasswordChar="•" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="المقاس: صغير" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox Classes="sm" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="المقاس: كبير" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox Classes="lg" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="الحالة: معطل" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox Text="نص قصير" IsEnabled="False" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="الحالة: للقراءة فقط" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox Text="نص قصير" IsReadOnly="True" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="الحالة: خطأ" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox x:Name="BadBox" Text="نص قصير" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="الحالة: مقبول" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox Classes="ok" Text="نص قصير" />
+            <ContentControl Classes="success" Content="رسالة القبول." />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="العداد: أحرف" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox MaxLength="60" ins:InputCount.Mode="Chars" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="العداد: كلمات" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox ins:InputCount.Mode="Words" ins:InputCount.Max="50" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="تلميح" />
+            <TextBlock Classes="label" Text="الاسم" />
+            <TextBox />
+            <TextBlock Classes="hint" Text="تلميح قصير." />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="مطلوب" />
+            <TextBlock Classes="label"><Run Text="الاسم" /><Run Classes="req" Text=" *" /></TextBlock>
+            <TextBox />
+          </StackPanel>
+        </Grid>
+      </Border>
 
-      <StackPanel Spacing="6">
-        <TextBlock Classes="label" Text="اسم المستخدم" />
-        <TextBox Text="user.name" FlowDirection="LeftToRight" />
-      </StackPanel>
+      <TextBlock Classes="doc-h2" Text="حقل البحث" />
+      <Border Classes="dx">
+        <TextBox Classes="search" PlaceholderText="بحث" />
+      </Border>
+      <Border Classes="dx">
+        <Grid Classes="variants" ColumnDefinitions="*,*" ColumnSpacing="24" RowSpacing="20">
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="المقاس: صغير" />
+            <TextBox Classes="search sm" PlaceholderText="بحث" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="cap" Text="المقاس: كبير" />
+            <TextBox Classes="search lg" PlaceholderText="بحث" />
+          </StackPanel>
+        </Grid>
+      </Border>
+      <Border Classes="dx">
+        <StackPanel Classes="field">
+          <TextBlock Classes="cap" Text="مع زر" />
+          <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" MaxWidth="512" HorizontalAlignment="Stretch">
+            <TextBox Classes="search" PlaceholderText="بحث" />
+            <Button Grid.Column="1" Classes="primary" Content="بحث" />
+          </Grid>
+        </StackPanel>
+      </Border>
 
-      <StackPanel Spacing="6">
-        <TextBlock Classes="label" Text="كلمة المرور" />
-        <TextBox Text="password123" PasswordChar="•" Classes="revealPasswordButton" FlowDirection="LeftToRight" />
-      </StackPanel>
-
-      <StackPanel Spacing="6">
-        <TextBlock Classes="label" Text="رمز الحماية" />
-        <TextBox Text="٤٨١٥" PasswordChar="•" Classes="revealPasswordButton" />
-      </StackPanel>
-
-      <StackPanel Spacing="6">
-        <TextBlock Classes="label" Text="ملاحظات" />
-        <TextBox AcceptsReturn="True" PlaceholderText="أضف ما تريد أن يعرفه الفريق" />
-      </StackPanel>
-
-      <StackPanel Spacing="6">
-        <TextBlock Classes="label" Text="القسم" />
-        <TextBox Text="الإدارة العامة" IsEnabled="False" />
-      </StackPanel>
+      <TextBlock Classes="doc-h2" Text="النموذج" />
+      <Border Classes="dx">
+        <StackPanel>
+          <StackPanel Spacing="16">
+            <StackPanel Classes="field">
+              <TextBlock Classes="label" Text="الاسم" />
+              <TextBox />
+            </StackPanel>
+            <StackPanel Classes="field">
+              <TextBlock Classes="label" Text="المدينة" />
+              <TextBox />
+            </StackPanel>
+            <StackPanel Classes="field">
+              <TextBlock Classes="label" Text="الهاتف" />
+              <TextBox />
+            </StackPanel>
+          </StackPanel>
+          <StackPanel Classes="form-commit">
+            <Button Classes="primary" Content="حفظ" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+      <Border Classes="dx">
+        <StackPanel Spacing="20">
+          <StackPanel>
+            <TextBlock Classes="cap" Text="ترتيب الحقول: سطر" />
+            <UniformGrid Columns="3" ColumnSpacing="8">
+              <StackPanel Classes="field">
+                <TextBlock Classes="label" Text="الاسم" />
+                <TextBox />
+              </StackPanel>
+              <StackPanel Classes="field">
+                <TextBlock Classes="label" Text="المدينة" />
+                <TextBox />
+              </StackPanel>
+              <StackPanel Classes="field">
+                <TextBlock Classes="label" Text="الهاتف" />
+                <TextBox />
+              </StackPanel>
+            </UniformGrid>
+            <StackPanel Classes="form-commit">
+              <Button Classes="primary" Content="حفظ" />
+            </StackPanel>
+          </StackPanel>
+          <StackPanel>
+            <TextBlock Classes="cap" Text="ترتيب الحقول: شبكة" />
+            <UniformGrid Columns="3" ColumnSpacing="8" RowSpacing="12">
+              <StackPanel Classes="field">
+                <TextBlock Classes="label" Text="الاسم" />
+                <TextBox />
+              </StackPanel>
+              <StackPanel Classes="field">
+                <TextBlock Classes="label" Text="المدينة" />
+                <TextBox />
+              </StackPanel>
+              <StackPanel Classes="field">
+                <TextBlock Classes="label" Text="الهاتف" />
+                <TextBox />
+              </StackPanel>
+            </UniformGrid>
+          </StackPanel>
+        </StackPanel>
+      </Border>
 
     </StackPanel>
   </ScrollViewer>

@@ -1,32 +1,46 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:sys="using:System">
+        xmlns:sys="using:System"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
 
   <Styles.Resources>
     <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsTextBoxFocusBg" Color="{DynamicResource InsGlassStrongColor}" />
+          <BoxShadows x:Key="InsTextBoxGlowOk">0 0 0 4 #1F22C55E</BoxShadows>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsTextBoxFocusBg" Color="#17FFFFFF" />
+          <BoxShadows x:Key="InsTextBoxGlowOk">0 0 0 4 #2E22C55E</BoxShadows>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
 
       <SolidColorBrush x:Key="InsTextBoxHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
       <SolidColorBrush x:Key="InsTextBoxFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
       <SolidColorBrush x:Key="InsTextBoxSelection" Color="{DynamicResource InsPrimaryColor}" Opacity="0.22" />
+      <SolidColorBrush x:Key="InsTextBoxOkBorder" Color="{DynamicResource InsToneOkColor}" Opacity="0.55" />
 
       <StreamGeometry x:Key="InsTextBoxEye">M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z M15 12a3 3 0 1 1-6 0a3 3 0 1 1 6 0Z</StreamGeometry>
       <StreamGeometry x:Key="InsTextBoxEyeOff">M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z M15 12a3 3 0 1 1-6 0a3 3 0 1 1 6 0Z M4 4l16 16</StreamGeometry>
       <StreamGeometry x:Key="InsTextBoxErrorMark">M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0Z M12 7.5v5.5 M12 16.5v.01</StreamGeometry>
+      <StreamGeometry x:Key="InsTextBoxOkMark">M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0Z M8 12.5l2.5 2.5L16 9.5</StreamGeometry>
+      <StreamGeometry x:Key="InsTextBoxSearchIcon">M4,11 A7,7 0 1 0 18,11 A7,7 0 1 0 4,11 Z M20 20 l-3.5-3.5</StreamGeometry>
 
       <ControlTheme x:Key="InsTextBoxRevealButton" TargetType="ToggleButton">
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Width" Value="36" />
         <Setter Property="Height" Value="36" />
-        <Setter Property="Margin" Value="4,0" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
         <Setter Property="Cursor" Value="Hand" />
+        <!-- Literal times: a DynamicResource inside a setter's Transitions never resolves, which leaves a zero-length transition stuck at its start. -->
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Background" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
-            <BrushTransition Property="Foreground" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
@@ -96,7 +110,7 @@
             <!-- The message is in the page's language, so it takes the direction around the field, not the field's own. -->
             <ItemsControl x:DataType="DataValidationErrors"
                           ItemsSource="{Binding}"
-                          FlowDirection="{Binding $parent[TextBox].((Visual)Parent).FlowDirection, FallbackValue={x:Static FlowDirection.RightToLeft}}"
+                          FlowDirection="{Binding $parent[DataValidationErrors].Owner.((Visual)Parent).FlowDirection, FallbackValue={x:Static FlowDirection.RightToLeft}}"
                           Foreground="{DynamicResource InsToneBad}"
                           FontSize="{DynamicResource InsFsXs}"
                           FontWeight="SemiBold">
@@ -123,6 +137,8 @@
         </Setter>
       </ControlTheme>
 
+      <ControlTheme x:Key="{x:Type DataValidationErrors}" TargetType="DataValidationErrors" BasedOn="{StaticResource InsTextBoxErrors}" />
+
       <ControlTheme x:Key="{x:Type TextBox}" TargetType="TextBox">
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
@@ -141,107 +157,143 @@
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
         <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
-        <Setter Property="RenderTransform" Value="none" />
-        <Setter Property="Transitions">
-          <Transitions>
-            <TransformOperationsTransition Property="RenderTransform" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
-          </Transitions>
-        </Setter>
         <Setter Property="Template">
           <ControlTemplate>
             <DataValidationErrors Theme="{StaticResource InsTextBoxErrors}" ClipToBounds="False">
-              <Panel>
-                <Border x:Name="PART_Shadow"
-                        CornerRadius="{TemplateBinding CornerRadius}"
-                        BoxShadow="{DynamicResource InsShSubtle}">
-                  <Border.Transitions>
+              <DockPanel>
+                <!-- The counter belongs to the page line, so it sits at the page's end even under a field in the other direction. -->
+                <Panel DockPanel.Dock="Bottom"
+                       Margin="0,6,0,0"
+                       FlowDirection="{Binding $parent[TextBox].((Visual)Parent).FlowDirection, FallbackValue={x:Static FlowDirection.RightToLeft}}"
+                       IsVisible="{TemplateBinding (ins:InputCount.Text), Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                  <TextBlock x:Name="PART_Count"
+                             HorizontalAlignment="Right"
+                             FontSize="11"
+                             Foreground="{DynamicResource InsText3}"
+                             Text="{TemplateBinding (ins:InputCount.Text)}">
+                    <TextBlock.Transitions>
+                      <Transitions>
+                        <BrushTransition Property="Foreground" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+                      </Transitions>
+                    </TextBlock.Transitions>
+                  </TextBlock>
+                </Panel>
+                <Panel x:Name="PART_Field" MinHeight="{TemplateBinding MinHeight}" RenderTransform="none">
+                  <Panel.Transitions>
                     <Transitions>
-                      <BoxShadowsTransition Property="BoxShadow" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                      <TransformOperationsTransition Property="RenderTransform" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
                     </Transitions>
-                  </Border.Transitions>
-                </Border>
-                <Border x:Name="PART_BorderElement"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{TemplateBinding CornerRadius}"
-                        BoxShadow="{DynamicResource InsBevelDim}"
-                        MinWidth="{TemplateBinding MinWidth}"
-                        MinHeight="{TemplateBinding MinHeight}">
-                  <Border.Transitions>
-                    <Transitions>
-                      <BrushTransition Property="Background" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
-                      <BrushTransition Property="BorderBrush" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
-                    </Transitions>
-                  </Border.Transitions>
-                </Border>
+                  </Panel.Transitions>
+                  <Border x:Name="PART_Shadow"
+                          CornerRadius="{TemplateBinding CornerRadius}"
+                          BoxShadow="{DynamicResource InsShSubtle}">
+                    <Border.Transitions>
+                      <Transitions>
+                        <BoxShadowsTransition Property="BoxShadow" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                      </Transitions>
+                    </Border.Transitions>
+                  </Border>
+                  <Border x:Name="PART_Halo"
+                          CornerRadius="{TemplateBinding CornerRadius}"
+                          Tag="{DynamicResource InsPrimaryColor}"
+                          BoxShadow="{Binding $self.Tag, Converter={x:Static ins:InputHalo.Instance}}"
+                          Opacity="0">
+                    <Border.Transitions>
+                      <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                      </Transitions>
+                    </Border.Transitions>
+                  </Border>
+                  <Border x:Name="PART_BorderElement"
+                          Background="{TemplateBinding Background}"
+                          BorderBrush="{TemplateBinding BorderBrush}"
+                          BorderThickness="{TemplateBinding BorderThickness}"
+                          CornerRadius="{TemplateBinding CornerRadius}"
+                          BoxShadow="{DynamicResource InsBevelDim}"
+                          MinWidth="{TemplateBinding MinWidth}">
+                    <Border.Transitions>
+                      <Transitions>
+                        <BrushTransition Property="Background" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                        <BrushTransition Property="BorderBrush" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                      </Transitions>
+                    </Border.Transitions>
+                  </Border>
 
-                <Border Margin="{TemplateBinding BorderThickness}">
-                  <Grid ColumnDefinitions="Auto,*,Auto">
-                    <ContentPresenter Grid.Column="0"
-                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                      Content="{TemplateBinding InnerLeftContent}" />
-                    <DockPanel x:Name="PART_InnerDockPanel"
-                               Grid.Column="1"
-                               Margin="{TemplateBinding Padding}">
-                      <TextBlock x:Name="PART_FloatingPlaceholder"
-                                 Foreground="{TemplateBinding PlaceholderForeground}"
-                                 FontSize="{DynamicResource InsFsXs}"
-                                 IsVisible="False"
-                                 Text="{TemplateBinding PlaceholderText}"
-                                 DockPanel.Dock="Top" />
-                      <ScrollViewer x:Name="PART_ScrollViewer"
-                                    HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
-                                    VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
-                                    IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
-                                    AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
-                                    BringIntoViewOnFocusChange="{TemplateBinding (ScrollViewer.BringIntoViewOnFocusChange)}">
-                        <Panel>
-                          <TextBlock x:Name="PART_Placeholder"
-                                     Foreground="{TemplateBinding PlaceholderForeground}"
-                                     Text="{TemplateBinding PlaceholderText}"
-                                     TextAlignment="{TemplateBinding TextAlignment}"
-                                     TextWrapping="{TemplateBinding TextWrapping}"
-                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                            <TextBlock.IsVisible>
-                              <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                <Binding ElementName="PART_TextPresenter" Path="PreeditText" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
-                                <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Text" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
-                              </MultiBinding>
-                            </TextBlock.IsVisible>
-                          </TextBlock>
-                          <TextPresenter x:Name="PART_TextPresenter"
-                                         Text="{TemplateBinding Text, Mode=TwoWay}"
-                                         CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
-                                         CaretIndex="{TemplateBinding CaretIndex}"
-                                         SelectionStart="{TemplateBinding SelectionStart}"
-                                         SelectionEnd="{TemplateBinding SelectionEnd}"
-                                         TextAlignment="{TemplateBinding TextAlignment}"
-                                         TextWrapping="{TemplateBinding TextWrapping}"
-                                         LineHeight="{TemplateBinding LineHeight}"
-                                         LetterSpacing="{TemplateBinding LetterSpacing}"
-                                         PasswordChar="{TemplateBinding PasswordChar}"
-                                         RevealPassword="{TemplateBinding RevealPassword}"
-                                         SelectionBrush="{TemplateBinding SelectionBrush}"
-                                         SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
-                                         CaretBrush="{TemplateBinding CaretBrush}"
-                                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        </Panel>
-                        <ScrollViewer.Styles>
-                          <Style Selector="ScrollContentPresenter#PART_ContentPresenter">
-                            <Setter Property="Cursor" Value="IBeam" />
-                          </Style>
-                        </ScrollViewer.Styles>
-                      </ScrollViewer>
-                    </DockPanel>
-                    <ContentPresenter Grid.Column="2"
-                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                      Content="{TemplateBinding InnerRightContent}" />
-                  </Grid>
-                </Border>
-              </Panel>
+                  <Border x:Name="PART_Inner" Margin="{TemplateBinding BorderThickness}">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                      <ContentPresenter x:Name="PART_InnerLeft"
+                                        Grid.Column="0"
+                                        Margin="0,0,4,0"
+                                        VerticalAlignment="Stretch"
+                                        VerticalContentAlignment="Stretch"
+                                        Content="{TemplateBinding InnerLeftContent}"
+                                        IsVisible="{TemplateBinding InnerLeftContent, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                      <DockPanel x:Name="PART_InnerDockPanel"
+                                 Grid.Column="1"
+                                 Margin="{TemplateBinding Padding}">
+                        <TextBlock x:Name="PART_FloatingPlaceholder"
+                                   Foreground="{TemplateBinding PlaceholderForeground}"
+                                   FontSize="{DynamicResource InsFsXs}"
+                                   IsVisible="False"
+                                   Text="{TemplateBinding PlaceholderText}"
+                                   DockPanel.Dock="Top" />
+                        <ScrollViewer x:Name="PART_ScrollViewer"
+                                      HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                      VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+                                      IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+                                      AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
+                                      BringIntoViewOnFocusChange="{TemplateBinding (ScrollViewer.BringIntoViewOnFocusChange)}">
+                          <Panel>
+                            <TextBlock x:Name="PART_Placeholder"
+                                       Foreground="{TemplateBinding PlaceholderForeground}"
+                                       Text="{TemplateBinding PlaceholderText}"
+                                       TextAlignment="{TemplateBinding TextAlignment}"
+                                       TextWrapping="{TemplateBinding TextWrapping}"
+                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                              <TextBlock.IsVisible>
+                                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                  <Binding ElementName="PART_TextPresenter" Path="PreeditText" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                                  <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Text" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                                </MultiBinding>
+                              </TextBlock.IsVisible>
+                            </TextBlock>
+                            <TextPresenter x:Name="PART_TextPresenter"
+                                           Text="{TemplateBinding Text, Mode=TwoWay}"
+                                           CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                                           CaretIndex="{TemplateBinding CaretIndex}"
+                                           SelectionStart="{TemplateBinding SelectionStart}"
+                                           SelectionEnd="{TemplateBinding SelectionEnd}"
+                                           TextAlignment="{TemplateBinding TextAlignment}"
+                                           TextWrapping="{TemplateBinding TextWrapping}"
+                                           LineHeight="{TemplateBinding LineHeight}"
+                                           LetterSpacing="{TemplateBinding LetterSpacing}"
+                                           PasswordChar="{TemplateBinding PasswordChar}"
+                                           RevealPassword="{TemplateBinding RevealPassword}"
+                                           SelectionBrush="{TemplateBinding SelectionBrush}"
+                                           SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                           CaretBrush="{TemplateBinding CaretBrush}"
+                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                          </Panel>
+                          <ScrollViewer.Styles>
+                            <Style Selector="ScrollContentPresenter#PART_ContentPresenter">
+                              <Setter Property="Cursor" Value="IBeam" />
+                            </Style>
+                          </ScrollViewer.Styles>
+                        </ScrollViewer>
+                      </DockPanel>
+                      <ContentPresenter x:Name="PART_InnerRight"
+                                        Grid.Column="2"
+                                        Margin="4,0,0,0"
+                                        VerticalAlignment="Stretch"
+                                        VerticalContentAlignment="Stretch"
+                                        Content="{TemplateBinding InnerRightContent}"
+                                        IsVisible="{TemplateBinding InnerRightContent, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                    </Grid>
+                  </Border>
+                </Panel>
+              </DockPanel>
             </DataValidationErrors>
           </ControlTemplate>
         </Setter>
@@ -258,32 +310,57 @@
         </Style>
 
         <!-- The pointer deepens the fill and brightens the hairline; only focus lifts. -->
-        <Style Selector="^:pointerover:not(:focus) /template/ Border#PART_BorderElement">
+        <Style Selector="^:pointerover:not(:focus-within) /template/ Border#PART_BorderElement">
           <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsTextBoxHoverBorder}" />
         </Style>
 
-        <Style Selector="^:focus">
-          <Setter Property="RenderTransform" Value="translateY(-1px)" />
+        <Style Selector="^:focus-within">
+          <Style Selector="^ /template/ Panel#PART_Field">
+            <Setter Property="RenderTransform" Value="translateY(-1px)" />
+          </Style>
           <Style Selector="^ /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+            <Setter Property="Background" Value="{DynamicResource InsTextBoxFocusBg}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsTextBoxFocusBorder}" />
           </Style>
           <Style Selector="^ /template/ Border#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
           </Style>
+          <Style Selector="^ /template/ Border#PART_Halo">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
         </Style>
 
-        <Style Selector="^:error">
-          <Style Selector="^ /template/ Border#PART_BorderElement, ^:pointerover:not(:focus) /template/ Border#PART_BorderElement">
+        <!-- Valid, for a value worth confirming, as the web marks it with its ok modifier. -->
+        <Style Selector="^.ok">
+          <Style Selector="^ /template/ Border#PART_BorderElement, ^:pointerover:not(:focus-within) /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsTextBoxOkBorder}" />
+          </Style>
+          <Style Selector="^:focus-within /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="{DynamicResource InsToneOk}" />
+          </Style>
+          <Style Selector="^:focus-within /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsTextBoxGlowOk}" />
+          </Style>
+          <Style Selector="^:focus-within /template/ Border#PART_Halo">
+            <Setter Property="Opacity" Value="0" />
+          </Style>
+        </Style>
+
+        <Style Selector="^:error, ^.bad">
+          <Style Selector="^ /template/ Border#PART_BorderElement, ^:pointerover:not(:focus-within) /template/ Border#PART_BorderElement">
             <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
           </Style>
-          <Style Selector="^:focus /template/ Border#PART_BorderElement">
+          <Style Selector="^:focus-within /template/ Border#PART_BorderElement">
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
           </Style>
-          <Style Selector="^:focus /template/ Border#PART_Shadow">
+          <Style Selector="^:focus-within /template/ Border#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsGlowBad}" />
+          </Style>
+          <Style Selector="^:focus-within /template/ Border#PART_Halo">
+            <Setter Property="Opacity" Value="0" />
           </Style>
         </Style>
 
@@ -309,6 +386,29 @@
           <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
         </Style>
 
+        <!-- The counter under the field, as the web's .ins-count. -->
+        <Style Selector="^[(ins|InputCount.State)=Near] /template/ TextBlock#PART_Count">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneWarn}" />
+        </Style>
+        <Style Selector="^[(ins|InputCount.State)=Over] /template/ TextBlock#PART_Count">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+          <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+
+        <!-- One control holding its addons, buttons or eye: the group draws the box, the text gives up its side padding. -->
+        <Style Selector="^.input-group, ^.revealPasswordButton[AcceptsReturn=False][IsReadOnly=False]">
+          <Setter Property="Padding" Value="8,8" />
+          <Style Selector="^ /template/ Border#PART_Inner">
+            <Setter Property="Padding" Value="6,0" />
+          </Style>
+          <Style Selector="^:focus-within /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+          </Style>
+        </Style>
+        <Style Selector="^.input-group.sm">
+          <Setter Property="Padding" Value="8,4" />
+        </Style>
+
         <!-- The eye sits in the end slot, so it follows the field's own direction. -->
         <Style Selector="^.revealPasswordButton[AcceptsReturn=False][IsReadOnly=False]">
           <Setter Property="InnerRightContent">
@@ -318,8 +418,47 @@
             </Template>
           </Setter>
         </Style>
-        <Style Selector="^.revealPasswordButton[AcceptsReturn=False][IsReadOnly=False] /template/ DockPanel#PART_InnerDockPanel">
-          <Setter Property="Margin" Value="14,8,4,8" />
+
+        <!-- The search glyph at the start, which takes the brand colour and grows a little while the field has focus. -->
+        <Style Selector="^.search">
+          <Setter Property="Padding" Value="12,8,14,8" />
+          <Setter Property="InnerLeftContent">
+            <Template>
+              <ins:Icon Size="13" VerticalAlignment="Center" Data="{StaticResource InsTextBoxSearchIcon}" />
+            </Template>
+          </Setter>
+          <Style Selector="^ /template/ ContentPresenter#PART_InnerLeft">
+            <Setter Property="Margin" Value="13,0,0,0" />
+            <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+            <Setter Property="RenderTransform" Value="none" />
+            <Setter Property="Transitions">
+              <Transitions>
+                <BrushTransition Property="Foreground" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+              </Transitions>
+            </Setter>
+          </Style>
+          <Style Selector="^:focus-within /template/ ContentPresenter#PART_InnerLeft">
+            <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+            <Setter Property="RenderTransform" Value="scale(1.12)" />
+          </Style>
+        </Style>
+        <Style Selector="^.search.sm">
+          <Setter Property="Padding" Value="12,4,10,4" />
+        </Style>
+        <Style Selector="^.search.lg">
+          <Setter Property="Padding" Value="12,8,16,8" />
+        </Style>
+
+        <!-- No box of its own, for a field inside another control's box (an editable select, a stepper). -->
+        <Style Selector="^.bare">
+          <Setter Property="MinHeight" Value="0" />
+          <Style Selector="^ /template/ Border#PART_Shadow, ^ /template/ Border#PART_Halo, ^ /template/ Border#PART_BorderElement">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^:focus-within /template/ Panel#PART_Field">
+            <Setter Property="RenderTransform" Value="none" />
+          </Style>
         </Style>
 
         <Style Selector="^.clearButton[AcceptsReturn=False][IsReadOnly=False]:focus:not(TextBox:empty)">
@@ -338,11 +477,17 @@
     </ResourceDictionary>
   </Styles.Resources>
 
-  <!-- The field's label and hint, as .ins-label and .ins-hint. -->
+  <!-- The field's label and hint, as .ins-label and .ins-hint; the required mark as .ins-req. -->
   <Style Selector="TextBlock.label">
     <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
     <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+  </Style>
+  <Style Selector="TextBlock.label[FlowDirection=LeftToRight]">
+    <Setter Property="LetterSpacing" Value="0.13" />
+  </Style>
+  <Style Selector="Run.req">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
   </Style>
   <Style Selector="TextBlock.hint">
     <Setter Property="FontSize" Value="11" />
