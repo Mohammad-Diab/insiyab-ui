@@ -1,0 +1,138 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <StreamGeometry x:Key="InsCarouselChevron">M9 5 L16 12 L9 19</StreamGeometry>
+
+      <!-- Floating over the row's edges in the glass of the top bar's islands; at an end it steps aside rather than greying out. -->
+      <ControlTheme x:Key="InsCarouselButton" TargetType="Button">
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Margin" Value="10,0" />
+        <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate TargetType="Button">
+            <Panel>
+              <Border CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShLg}" />
+              <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}">
+                <!-- Drawn pointing along the row: mirrored with the page, so next is toward the end the page reads to. -->
+                <Viewbox x:Name="PART_Chevron" Width="18" Height="18">
+                  <Path Width="24" Height="24" Data="{StaticResource InsCarouselChevron}" Stroke="{TemplateBinding Foreground}" StrokeThickness="2.25" StrokeLineCap="Round" StrokeJoin="Round" />
+                </Viewbox>
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^.prev /template/ Viewbox#PART_Chevron">
+          <Setter Property="RenderTransform" Value="scaleX(-1)" />
+        </Style>
+        <Style Selector="^:pointerover">
+          <Setter Property="RenderTransform" Value="scale(1.06)" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0" />
+          <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type Carousel}" TargetType="Carousel">
+        <Setter Property="ins:CarouselOptions.IsEnabled" Value="True" />
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="PageTransition">
+          <PageSlide Orientation="Horizontal" Duration="0:0:0.42" />
+        </Setter>
+        <Setter Property="IsSwipeEnabled" Value="False" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="ItemsPanel">
+          <ItemsPanelTemplate>
+            <ins:CarouselTrack />
+          </ItemsPanelTemplate>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate TargetType="Carousel">
+            <Grid RowDefinitions="Auto,Auto">
+              <Border x:Name="PART_Track" CornerRadius="{DynamicResource InsRLg}" ClipToBounds="True" Background="{TemplateBinding Background}">
+                <ItemsPresenter x:Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" Margin="{TemplateBinding Padding}" />
+              </Border>
+              <Border x:Name="PART_Ring" CornerRadius="{DynamicResource InsRLg}" BorderThickness="2" Margin="-2" BorderBrush="Transparent" IsHitTestVisible="False" />
+              <StackPanel x:Name="PART_Dots" Grid.Row="1" Orientation="Horizontal" Spacing="2" HorizontalAlignment="Center" Margin="0,8,0,0" />
+              <Button x:Name="PART_Prev" Grid.RowSpan="2" Classes="prev" Theme="{StaticResource InsCarouselButton}" HorizontalAlignment="Left" />
+              <Button x:Name="PART_Next" Grid.RowSpan="2" Classes="next" Theme="{StaticResource InsCarouselButton}" HorizontalAlignment="Right" />
+            </Grid>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:focus-visible /template/ Border#PART_Ring">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandSoft}" />
+        </Style>
+        <Style Selector="^.two">
+          <Setter Property="ins:CarouselTrack.PerView" Value="2" />
+        </Style>
+        <Style Selector="^.three">
+          <Setter Property="ins:CarouselTrack.PerView" Value="3" />
+        </Style>
+        <Style Selector="^.peek">
+          <Setter Property="ins:CarouselTrack.Peek" Value="True" />
+        </Style>
+        <Style Selector="^.no-dots">
+          <Setter Property="ins:CarouselOptions.HideDots" Value="True" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- A 24px target around an 8px dot; the current one stretches into a bar. -->
+  <Style Selector="Button.carousel-dot">
+    <Setter Property="MinWidth" Value="24" />
+    <Setter Property="Height" Value="24" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource InsCtlBd}" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate TargetType="Button">
+        <Panel Background="Transparent">
+          <Border x:Name="PART_Dot" Width="8" Height="8" CornerRadius="999" Background="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Border.Transitions>
+              <Transitions>
+                <DoubleTransition Property="Width" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="Button.carousel-dot:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+  </Style>
+  <Style Selector="Button.carousel-dot.current">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+  </Style>
+  <Style Selector="Button.carousel-dot.current /template/ Border#PART_Dot">
+    <Setter Property="Width" Value="20" />
+  </Style>
+
+</Styles>

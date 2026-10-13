@@ -1,0 +1,233 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <StreamGeometry x:Key="InsFileUploadIcon">M12 16V4m0 0-4.5 4.5M12 4l4.5 4.5 M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3</StreamGeometry>
+      <SolidColorBrush x:Key="InsFileOverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+
+      <ControlTheme x:Key="{x:Type ins:FileItem}" TargetType="ins:FileItem">
+        <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="Padding" Value="10,8,8,8" />
+        <Setter Property="Template">
+          <ControlTemplate TargetType="ins:FileItem" x:DataType="ins:FileItem">
+            <Border x:Name="PART_Row"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}"
+                    RenderTransform="none">
+              <DockPanel>
+                <Panel DockPanel.Dock="Left" Width="40" Height="40" Margin="0,0,12,0" VerticalAlignment="Center">
+                  <Border x:Name="PART_Type" CornerRadius="{DynamicResource InsRXs}" Background="{DynamicResource InsPluginsTint}">
+                    <TextBlock Text="{Binding Extension, RelativeSource={RelativeSource TemplatedParent}}" FontFamily="{DynamicResource InsFontBodyEn}" FontSize="10" FontWeight="ExtraBold" LetterSpacing="0.3"
+                               Foreground="{DynamicResource InsPrimaryDarker}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Border>
+                  <Border x:Name="PART_Thumb" CornerRadius="{DynamicResource InsRXs}" ClipToBounds="True" IsVisible="False">
+                    <Image Source="{Binding Thumbnail, RelativeSource={RelativeSource TemplatedParent}}" Stretch="UniformToFill" />
+                  </Border>
+                </Panel>
+                <Button x:Name="PART_Remove" Classes="close sm" DockPanel.Dock="Right" Margin="12,0,0,0" VerticalAlignment="Center"
+                        AutomationProperties.Name="{TemplateBinding RemoveLabel}" />
+                <StackPanel Spacing="3" VerticalAlignment="Center">
+                  <TextBlock Text="{Binding FileName, RelativeSource={RelativeSource TemplatedParent}}" FontWeight="SemiBold" FontSize="{DynamicResource InsFsMd}" LineHeight="20.8"
+                             Foreground="{DynamicResource InsText1}" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Text="{TemplateBinding SizeText}" FontSize="{DynamicResource InsFsXs}" LineHeight="19.2" Foreground="{DynamicResource InsText3}" />
+                  <ProgressBar x:Name="PART_Progress" Height="5" Margin="0,2,0,0" Minimum="0" Maximum="1" Value="{TemplateBinding Fraction}"
+                               IsIndeterminate="{TemplateBinding IsIndeterminate}" IsVisible="False" />
+                  <TextBlock x:Name="PART_Status" Text="{TemplateBinding StatusText}" FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsToneBad}" IsVisible="False" TextWrapping="Wrap" />
+                </StackPanel>
+              </DockPanel>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Border#PART_Row">
+          <Style.Animations>
+            <Animation Duration="0:0:0.22" Easing="0.22,1,0.36,1">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0" />
+                <Setter Property="RenderTransform" Value="translateY(-4px)" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="1" />
+                <Setter Property="RenderTransform" Value="none" />
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+        <Style Selector="^:image /template/ Border#PART_Thumb">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:image /template/ Border#PART_Type">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:sending /template/ ProgressBar#PART_Progress">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:failed">
+          <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+          <Style Selector="^ /template/ TextBlock#PART_Status">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:FileUpload}" TargetType="ins:FileUpload">
+        <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate TargetType="ins:FileUpload" x:DataType="ins:FileUpload">
+            <StackPanel Spacing="10">
+              <Panel x:Name="PART_ZoneBox" HorizontalAlignment="Stretch" RenderTransform="none">
+                <Panel.Transitions>
+                  <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.25" />
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                  </Transitions>
+                </Panel.Transitions>
+                <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}">
+                  <Border.Transitions>
+                    <Transitions>
+                      <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                    </Transitions>
+                  </Border.Transitions>
+                </Border>
+                <Border x:Name="PART_Zone" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Cursor="Hand" Padding="17.5,25.5">
+                  <Border.Transitions>
+                    <Transitions>
+                      <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                    </Transitions>
+                  </Border.Transitions>
+                  <StackPanel x:Name="PART_ZoneContent" Spacing="6" HorizontalAlignment="Center">
+                    <ins:Icon x:Name="PART_Icon" Data="{StaticResource InsFileUploadIcon}" Size="28" Foreground="{DynamicResource InsToneBrandSoft}" HorizontalAlignment="Center" RenderTransform="none">
+                      <ins:Icon.Transitions>
+                        <Transitions>
+                          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+                        </Transitions>
+                      </ins:Icon.Transitions>
+                    </ins:Icon>
+                    <!-- The pick words get their own underline: a run has none, and the bold face of the font draws none. -->
+                    <WrapPanel x:Name="PART_Lead" HorizontalAlignment="Center">
+                      <TextBlock x:Name="PART_Drag" Text="{TemplateBinding DragText}" LineHeight="22.4" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Top" />
+                      <Border x:Name="PART_Pick" Margin="5,0,0,0" VerticalAlignment="Top" BorderBrush="{DynamicResource InsToneBrandSoft}" BorderThickness="0,0,0,1">
+                        <TextBlock Text="{TemplateBinding PickText}" LineHeight="22.4" Margin="0,0,0,-3" FontWeight="Bold" Foreground="{DynamicResource InsToneBrandSoft}" />
+                      </Border>
+                    </WrapPanel>
+                    <TextBlock x:Name="PART_CompactPick" Text="{TemplateBinding PickText}" FontWeight="Bold" Foreground="{DynamicResource InsText1}" VerticalAlignment="Center" IsVisible="False" />
+                    <TextBlock x:Name="PART_Note" Text="{TemplateBinding NoteText}" LineHeight="19.2" TextAlignment="Center" TextWrapping="Wrap" FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsText3}"
+                               IsVisible="{TemplateBinding NoteText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                  </StackPanel>
+                </Border>
+                <!-- The dashed rim: the one mark that says "drop here" in every design language. -->
+                <Rectangle x:Name="PART_Rim" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1.5" StrokeDashArray="3,2.5" RadiusX="22" RadiusY="22" IsHitTestVisible="False">
+                  <Rectangle.Transitions>
+                    <Transitions>
+                      <BrushTransition Property="Stroke" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                    </Transitions>
+                  </Rectangle.Transitions>
+                </Rectangle>
+              </Panel>
+              <StackPanel x:Name="PART_Issues" Spacing="4" IsVisible="False" />
+              <StackPanel x:Name="PART_List" Spacing="8" IsVisible="False" />
+            </StackPanel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ Panel#PART_ZoneBox:pointerover > Border#PART_Zone, ^:over /template/ Border#PART_Zone">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        </Style>
+        <Style Selector="^ /template/ Panel#PART_ZoneBox:pointerover > Rectangle#PART_Rim, ^:over /template/ Rectangle#PART_Rim">
+          <Setter Property="Stroke" Value="{DynamicResource InsFileOverBorder}" />
+        </Style>
+        <!-- A file held over the zone: the rim goes solid and the arrow rises to take it. -->
+        <Style Selector="^:over /template/ Rectangle#PART_Rim">
+          <Setter Property="StrokeDashArray" Value="{x:Null}" />
+        </Style>
+        <Style Selector="^:over /template/ ins|Icon#PART_Icon">
+          <Setter Property="RenderTransform" Value="translateY(-3px)" />
+        </Style>
+        <Style Selector="^:focus-visible">
+          <Style Selector="^ /template/ Rectangle#PART_Rim">
+            <Setter Property="Stroke" Value="{DynamicResource InsPluginsFocusBorder}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
+          </Style>
+          <Style Selector="^ /template/ Panel#PART_ZoneBox">
+            <Setter Property="RenderTransform" Value="translateY(-1px)" />
+          </Style>
+        </Style>
+        <Style Selector="^:invalid /template/ Border#PART_Zone">
+          <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+        </Style>
+        <Style Selector="^:invalid /template/ Rectangle#PART_Rim">
+          <Setter Property="Stroke" Value="{DynamicResource InsToneBadBd}" />
+        </Style>
+        <Style Selector="^:disabled /template/ Panel#PART_ZoneBox">
+          <Setter Property="Opacity" Value="0.55" />
+        </Style>
+        <Style Selector="^:disabled /template/ Border#PART_Zone">
+          <Setter Property="Cursor" Value="No" />
+        </Style>
+
+        <Style Selector="^.compact">
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Style Selector="^ /template/ Panel#PART_ZoneBox">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Zone">
+            <Setter Property="Padding" Value="14,6" />
+            <Setter Property="MinHeight" Value="{DynamicResource InsFieldH}" />
+            <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />
+          </Style>
+          <Style Selector="^ /template/ StackPanel#PART_ZoneContent">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Spacing" Value="8" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+          </Style>
+          <Style Selector="^ /template/ ins|Icon#PART_Icon">
+            <Setter Property="Size" Value="18" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+          </Style>
+          <Style Selector="^ /template/ Rectangle#PART_Rim">
+            <Setter Property="StrokeDashArray" Value="{x:Null}" />
+            <Setter Property="StrokeThickness" Value="1.5" />
+            <Setter Property="RadiusX" Value="14" />
+            <Setter Property="RadiusY" Value="14" />
+          </Style>
+          <Style Selector="^ /template/ TextBlock#PART_Note">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ WrapPanel#PART_Lead">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ TextBlock#PART_CompactPick">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="TextBlock.file-issue">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+  </Style>
+
+</Styles>

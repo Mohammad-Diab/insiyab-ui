@@ -1,0 +1,86 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.PhonePage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PluginsFrames.axaml" />
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel>
+
+      <TextBlock Classes="section" Text="حقل الهاتف" />
+      <Border Classes="dx">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="الهاتف" />
+          <ins:PhoneBox x:Name="Demo" Value="+966501234567" />
+          <TextBlock x:Name="DemoOut" Classes="hint" Text="يُرسل: &#x200E;+966501234567" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="section" Text="جرّب الحقل" />
+      <Border Classes="stage wide">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="الهاتف" />
+          <ins:PhoneBox />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="فيه رقم" />
+      <Border Classes="stage wide">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="الهاتف" />
+          <ins:PhoneBox Value="+966501234567" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="الدولة الأولى: الإمارات" />
+      <Border Classes="stage wide">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="الهاتف" />
+          <ins:PhoneBox DefaultCountry="AE" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="الدولة الأولى: الكويت" />
+      <Border Classes="stage wide">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="الهاتف" />
+          <ins:PhoneBox DefaultCountry="KW" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="الدولة الأولى: قطر" />
+      <Border Classes="stage wide">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="الهاتف" />
+          <ins:PhoneBox DefaultCountry="QA" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="دول محددة وحدها" />
+      <Border Classes="stage wide">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="الهاتف" />
+          <ins:PhoneBox OnlyCountries="SA,AE,KW,QA,BH,OM" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="دول تتصدر القائمة" />
+      <Border Classes="stage wide">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="الهاتف" />
+          <ins:PhoneBox PreferredCountries="EG,JO,SY,LB" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="معطل" />
+      <Border Classes="stage wide">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="الهاتف" />
+          <ins:PhoneBox IsEnabled="False" />
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
