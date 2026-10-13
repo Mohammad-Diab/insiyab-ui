@@ -22,7 +22,7 @@ public partial class GalleryShell : UserControl
     {
         InitializeComponent();
         VersionText.Text = typeof(InsiyabTheme).Assembly.GetName().Version?.ToString(3);
-        DirectionSeg.SelectionChanged += (_, _) => ApplyDirection();
+        DirectionSeg.SelectionChanged += (_, _) => DirectionFlip.Run(this, ApplyDirection);
         ResetButton.Click += (_, _) => Reset();
         EffectsButton.Click += (_, _) =>
         {
