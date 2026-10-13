@@ -107,7 +107,7 @@
         </Setter>
         <Setter Property="ErrorTemplate">
           <DataTemplate>
-            <!-- The message is in the page's language, so it takes the direction around the field, not the field's own. -->
+            <!-- A message takes the direction of its first letter, as the web's dir="auto"; with none, the direction around the field, not the field's own. -->
             <ItemsControl x:DataType="DataValidationErrors"
                           ItemsSource="{Binding}"
                           FlowDirection="{Binding $parent[DataValidationErrors].Owner.((Visual)Parent).FlowDirection, FallbackValue={x:Static FlowDirection.RightToLeft}}"
@@ -116,7 +116,7 @@
                           FontWeight="SemiBold">
               <ItemsControl.DataTemplates>
                 <DataTemplate DataType="sys:Exception">
-                  <DockPanel>
+                  <DockPanel FlowDirection="{Binding Message, Converter={x:Static ins:TextDirection.Auto}}">
                     <Viewbox DockPanel.Dock="Left" Width="15" Height="15" Margin="0,2,6,0" VerticalAlignment="Top" FlowDirection="LeftToRight">
                       <Path Width="24" Height="24" Data="{StaticResource InsTextBoxErrorMark}" Stroke="{DynamicResource InsToneBad}" StrokeThickness="2.2" StrokeLineCap="Round" />
                     </Viewbox>
@@ -124,7 +124,7 @@
                   </DockPanel>
                 </DataTemplate>
                 <DataTemplate x:DataType="x:Object">
-                  <DockPanel>
+                  <DockPanel FlowDirection="{Binding Converter={x:Static ins:TextDirection.Auto}}">
                     <Viewbox DockPanel.Dock="Left" Width="15" Height="15" Margin="0,2,6,0" VerticalAlignment="Top" FlowDirection="LeftToRight">
                       <Path Width="24" Height="24" Data="{StaticResource InsTextBoxErrorMark}" Stroke="{DynamicResource InsToneBad}" StrokeThickness="2.2" StrokeLineCap="Round" />
                     </Viewbox>
