@@ -777,6 +777,7 @@ public class PluginsTests
         Assert.Contains("current", dots[0].Classes);
     }
 
+
     [AvaloniaTheory]
     [InlineData(true)]
     [InlineData(false)]
@@ -813,10 +814,32 @@ public class PluginsTests
         var carousel = Make(4);
         var window = ShowCarousel(carousel);
         var at = Center(carousel, window);
-        window.MouseWheel(at, new Vector(0, -1), RawInputModifiers.Shift);
+        // The gesture clock moves only where the test says, so a slow first step under load does not end the gesture.
+        var real = CarouselNav.Now;
+        var ms = 0L;
+        CarouselNav.Now = () => ms;
+        try
+        {
+            window.MouseWheel(at, new Vector(0, -1), RawInputModifiers.Shift);
             Assert.Equal(1, CarouselOptions.GetStop(carousel));
             ms += 100;
+            window.MouseWheel(at, new Vector(0, -1), RawInputModifiers.Shift);
             Assert.Equal(1, CarouselOptions.GetStop(carousel));
+            Settle(400);
+            ms += 400;
+            window.MouseWheel(at, new Vector(0, -1), RawInputModifiers.Shift);
+            Settle(100);
+            Assert.Equal(2, CarouselOptions.GetStop(carousel));
+            Settle(400);
+            window.MouseWheel(at, new Vector(0, -1), RawInputModifiers.None);
+            Settle(400);
+            Assert.Equal(2, CarouselOptions.GetStop(carousel));
+            ms += 900;
+            window.MouseWheel(at, new Vector(-1, 0), RawInputModifiers.None);
+            Settle(100);
+            Assert.Equal(3, CarouselOptions.GetStop(carousel));
+        }
+        finally { CarouselNav.Now = real; }
     }
 
     [AvaloniaFact]
