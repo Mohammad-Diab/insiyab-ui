@@ -1,0 +1,328 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsPillBrandInk" Color="{DynamicResource InsToneBrandColor}" />
+          <SolidColorBrush x:Key="InsBadgeInk" Color="{DynamicResource InsToneBrandColor}" />
+          <SolidColorBrush x:Key="InsBadgeOkInk" Color="{DynamicResource InsToneOkColor}" />
+          <SolidColorBrush x:Key="InsBadgeWarnInk" Color="{DynamicResource InsToneWarnColor}" />
+          <SolidColorBrush x:Key="InsBadgeBadInk" Color="{DynamicResource InsToneBadColor}" />
+          <SolidColorBrush x:Key="InsBadgeMuteInk" Color="{DynamicResource InsToneMuteColor}" />
+          <SolidColorBrush x:Key="InsAvatarMoreBg" Color="{DynamicResource InsToneMuteBgColor}" />
+          <SolidColorBrush x:Key="InsAvatarMoreInk" Color="{DynamicResource InsText2Color}" />
+          <LinearGradientBrush x:Key="InsAvatarFill" StartPoint="0%,0%" EndPoint="100%,100%">
+            <GradientStop Offset="0" Color="{DynamicResource InsPrimaryColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
+          </LinearGradientBrush>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsPillBrandInk" Color="{DynamicResource InsText1Color}" />
+          <SolidColorBrush x:Key="InsBadgeInk" Color="{DynamicResource InsText1Color}" />
+          <SolidColorBrush x:Key="InsBadgeOkInk" Color="{DynamicResource InsText1Color}" />
+          <SolidColorBrush x:Key="InsBadgeWarnInk" Color="{DynamicResource InsText1Color}" />
+          <SolidColorBrush x:Key="InsBadgeBadInk" Color="{DynamicResource InsText1Color}" />
+          <SolidColorBrush x:Key="InsBadgeMuteInk" Color="{DynamicResource InsText1Color}" />
+          <SolidColorBrush x:Key="InsAvatarMoreBg" Color="#1FFFFFFF" />
+          <SolidColorBrush x:Key="InsAvatarMoreInk" Color="{DynamicResource InsText1Color}" />
+          <LinearGradientBrush x:Key="InsAvatarFill" StartPoint="0%,0%" EndPoint="100%,100%">
+            <GradientStop Offset="0" Color="{DynamicResource InsPrimaryColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
+          </LinearGradientBrush>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- Pill: 3px/12px, a 5px gap, .75rem at 700 -->
+      <ControlTheme x:Key="{x:Type ctl:Pill}" TargetType="ctl:Pill">
+        <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsToneMute}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsToneMuteBd}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+        <Setter Property="Padding" Value="12,3" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border x:Name="PART_Face"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}">
+              <StackPanel Orientation="Horizontal" Spacing="5">
+                <Ellipse x:Name="PART_Dot" Width="7" Height="7" VerticalAlignment="Center" IsVisible="False"
+                         Fill="{TemplateBinding Foreground}" />
+                <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  VerticalAlignment="Center" LineHeight="18" />
+              </StackPanel>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^.dot /template/ Ellipse#PART_Dot">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+      </ControlTheme>
+
+      <!-- A pressable pill lifts a pixel under the pointer and its dot grows; a read-only Pill stays still -->
+      <ControlTheme x:Key="InsPillButton" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsToneMute}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsToneMuteBd}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+        <Setter Property="Padding" Value="12,3" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border x:Name="PART_Face"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}">
+              <Border.Transitions>
+                <Transitions>
+                  <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                </Transitions>
+              </Border.Transitions>
+              <StackPanel Orientation="Horizontal" Spacing="5">
+                <Ellipse x:Name="PART_Dot" Width="7" Height="7" VerticalAlignment="Center" IsVisible="False"
+                         Fill="{TemplateBinding Foreground}" RenderTransformOrigin="50%,50%" RenderTransform="none">
+                  <Ellipse.Transitions>
+                    <Transitions>
+                      <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+                    </Transitions>
+                  </Ellipse.Transitions>
+                </Ellipse>
+                <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  VerticalAlignment="Center" LineHeight="18" RecognizesAccessKey="True" />
+              </StackPanel>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^.dot /template/ Ellipse#PART_Dot">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:pointerover">
+          <Setter Property="RenderTransform" Value="translateY(-1px)" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#PART_Face">
+          <Setter Property="BoxShadow" Value="{DynamicResource InsShSm}" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Ellipse#PART_Dot">
+          <Setter Property="RenderTransform" Value="scale(1.35)" />
+        </Style>
+        <Style Selector="^:pressed">
+          <Setter Property="RenderTransform" Value="scale(0.96)" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_Face">
+          <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- Badge: a count, not a status, so no border and no dot -->
+      <ControlTheme x:Key="{x:Type ctl:Badge}" TargetType="ctl:Badge">
+        <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsBadgeInk}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+        <Setter Property="Padding" Value="8,3" />
+        <Setter Property="MinWidth" Value="22" />
+        <Setter Property="FontFeatures" Value="+tnum" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+              <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                FontFamily="{DynamicResource InsFontBodyEn}" LineHeight="15.4" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^.ok">
+          <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsBadgeOkInk}" />
+        </Style>
+        <Style Selector="^.warn">
+          <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsBadgeWarnInk}" />
+        </Style>
+        <Style Selector="^.bad">
+          <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsBadgeBadInk}" />
+        </Style>
+        <Style Selector="^.mute">
+          <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsBadgeMuteInk}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- Avatar: a brand-gradient disc; the gradient is physical, so the face is an LTR layer under the content -->
+      <ControlTheme x:Key="{x:Type ctl:Avatar}" TargetType="ctl:Avatar">
+        <Setter Property="Width" Value="38" />
+        <Setter Property="Height" Value="38" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontWeight" Value="ExtraBold" />
+        <Setter Property="Background" Value="{DynamicResource InsAvatarFill}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Ellipse x:Name="PART_Ring" Margin="-2" Fill="{DynamicResource InsGlassStrong}" IsVisible="False" />
+              <Border x:Name="PART_Face" FlowDirection="LeftToRight" Background="{TemplateBinding Background}" CornerRadius="999" />
+              <Border CornerRadius="999" ClipToBounds="True">
+                <ContentPresenter x:Name="PART_ContentPresenter"
+                                  Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <!-- In a group each avatar is ringed in the surface colour, so two that overlap keep a gap -->
+        <Style Selector="^:grouped /template/ Ellipse#PART_Ring">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^.sm">
+          <Setter Property="Width" Value="30" />
+          <Setter Property="Height" Value="30" />
+          <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style Selector="^.lg">
+          <Setter Property="Width" Value="46" />
+          <Setter Property="Height" Value="46" />
+          <Setter Property="FontSize" Value="18" />
+        </Style>
+        <!-- "+4", not "4+": the count is its own LTR run -->
+        <Style Selector="^.more">
+          <Setter Property="Background" Value="{DynamicResource InsAvatarMoreBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsAvatarMoreInk}" />
+          <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style Selector="^.more /template/ ContentPresenter#PART_ContentPresenter">
+          <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ctl:AvatarGroup}" TargetType="ctl:AvatarGroup">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+      </ControlTheme>
+
+      <!-- Money: the figure semibold in tabular Inter, the unit .68 of it in a quieter colour -->
+      <ControlTheme x:Key="{x:Type ctl:Money}" TargetType="ctl:Money">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock x:Name="PART_Value" Text="{TemplateBinding Value}" FlowDirection="LeftToRight"
+                         FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="SemiBold" FontFeatures="+tnum"
+                         VerticalAlignment="Bottom" />
+              <TextBlock x:Name="PART_Currency" Text="{TemplateBinding Currency}"
+                         FontSize="{TemplateBinding CurrencyFontSize}" FontWeight="Medium"
+                         Foreground="{DynamicResource InsText2}" VerticalAlignment="Bottom" />
+            </StackPanel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ TextBlock#PART_Currency">
+          <Setter Property="Margin" Value="4,0,0,1" />
+        </Style>
+        <Style Selector="^.pos /template/ TextBlock#PART_Value">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneOk}" />
+        </Style>
+        <Style Selector="^.neg /template/ TextBlock#PART_Value">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- Empty state: a faded glyph, not a tinted chip -->
+      <ControlTheme x:Key="{x:Type ctl:EmptyState}" TargetType="ctl:EmptyState">
+        <Setter Property="Padding" Value="24,44" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <StackPanel Margin="{TemplateBinding Padding}" Spacing="10" HorizontalAlignment="Center">
+              <ctl:Icon x:Name="PART_Icon" Data="{TemplateBinding Icon}" Size="32" Opacity="0.35"
+                        Foreground="{DynamicResource InsText3}" HorizontalAlignment="Center"
+                        IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <TextBlock x:Name="PART_Title" Text="{TemplateBinding Title}" FontSize="15" FontWeight="Bold" LineHeight="25.5"
+                         Foreground="{DynamicResource InsText1}" TextAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"
+                         IsVisible="{TemplateBinding Title, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <TextBlock x:Name="PART_Hint" Text="{TemplateBinding Hint}" FontSize="{DynamicResource InsFsSm}" LineHeight="22.1"
+                         MaxWidth="240" Foreground="{DynamicResource InsText2}" TextAlignment="Center" TextWrapping="Wrap"
+                         HorizontalAlignment="Center"
+                         IsVisible="{TemplateBinding Hint, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="Center"
+                                IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </StackPanel>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="Button.pill">
+    <Setter Property="Theme" Value="{StaticResource InsPillButton}" />
+  </Style>
+
+  <Style Selector="ctl|Pill.ok, Button.pill.ok">
+    <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsToneOk}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneOkBd}" />
+  </Style>
+  <Style Selector="ctl|Pill.warn, Button.pill.warn">
+    <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsToneWarn}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneWarnBd}" />
+  </Style>
+  <Style Selector="ctl|Pill.bad, Button.pill.bad">
+    <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+  </Style>
+  <Style Selector="ctl|Pill.info, Button.pill.info">
+    <Setter Property="Background" Value="{DynamicResource InsToneInfoBg}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsToneInfo}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneInfoBd}" />
+  </Style>
+  <Style Selector="ctl|Pill.brand, Button.pill.brand">
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsPillBrandInk}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandBd}" />
+  </Style>
+
+  <Style Selector="ctl|Avatar.more TextBlock">
+    <Setter Property="FlowDirection" Value="LeftToRight" />
+  </Style>
+
+
+</Styles>

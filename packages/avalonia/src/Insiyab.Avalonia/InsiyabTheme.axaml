@@ -24,5 +24,6 @@
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Buttons.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Inputs.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Menus.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Feedback.axaml" />
 
 </Styles>
