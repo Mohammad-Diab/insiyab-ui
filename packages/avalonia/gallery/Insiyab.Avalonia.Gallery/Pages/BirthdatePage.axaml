@@ -1,92 +1,48 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.BirthdatePage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PickersFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <TextBlock Classes="section" Text="حقل الميلاد" />
-      <Border Classes="dx">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="تاريخ الميلاد" />
-          <ins:BirthDateField />
-        </StackPanel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="يكتبه صاحبه كما يقوله، أو يختاره بإصبعه: حقل لتاريخ الميلاد لا يقبل تاريخًا مستحيلًا، ويحمل التاريخ بصيغة ISO." />
+    <pg:PlayText Classes="p" Markup="`ins:BirthDateField` حقل بارتفاع أي حقل في النموذج، فيه اليوم والشهر والسنة بترتيب القراءة، تكتب فيها مباشرة. وفي طرفه زر يفتح أعمدة التمرير في نافذة منبثقة تحته، وتحته سطر يقرأ لك التاريخ بيومه وعمرك وما يوافقه بالهجري حين يكتمل." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:BirthdatePlay.Example}" />
+    <TextBlock Classes="p"><Bold>ولحقل التاريخ العادي مكانه:</Bold> هذا الحقل لتاريخ يعرفه صاحبه عن ظهر قلب، أما موعد أو فترة بين تاريخين فمكانهما حقل التاريخ بتقويمه.</TextBlock>
+    <TextBlock Classes="p"><Bold>ولقارئ الشاشة</Bold> ثلاثة حقول مسماة: اليوم والشهر والسنة، وزر يُعلن أنه يفتح نافذة، ويُعلن السطر تحتها التاريخ حين يكتمل. والنصوص بالعربية أو الإنجليزية بحسب اتجاه الواجهة أو Locale.</TextBlock>
 
-      <TextBlock Classes="section" Text="جرّب الحقل" />
-      <Border Classes="stage">
-        <StackPanel Classes="field" Width="320">
-          <TextBlock Classes="label" Text="تاريخ الميلاد" />
-          <ins:BirthDateField />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="جرّب الحقل" />
+    <pg:PlayText Classes="p" Markup="اختر من الخيارات، فيتغير الحقل وشيفرته معًا. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:BirthdatePlay.Birth}" />
 
-      <TextBlock Classes="variant" Text="الشكل: كبير" />
-      <Border Classes="stage">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="تاريخ الميلاد" />
-          <ins:BirthDateField Layout="Inline" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="الكتابة" />
+    <TextBlock Classes="p" Text="تكتب في الحقل مباشرة، وينتقل التركيز وحده من اليوم إلى الشهر إلى السنة، بهذه القواعد:" />
+    <ins:ProseList Margin="0,0,0,16">
+      <TextBlock Classes="p" Margin="0"><Bold>الصفر وحده:</Bold> يوم يبدأ بـ 4 لا يكون إلا 04، فيكتمل الحقل وينتقل التركيز إلى الشهر.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>الفاصل:</Bold> بعد يوم أو شهر من رقم واحد اضغط / أو النقطة أو Enter أو Tab، فتكتب 2/3/93 كما اعتدت.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>ترحيل الرقم:</Bold> الرقم الذي لا يكمل الحقل ينتقل إلى الحقل التالي، فتكتب 22193 دون فاصل فيصير 22/01/1993.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>السنة من رقمين:</Bold> 93 تعني 1993، و12 تعني 2012. ومن كتب السنة كاملة كُتبت كما هي.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>لا تاريخ مستحيلًا:</Bold> الرقم الذي يصنع 31 فبراير أو شهرًا رقمه 13 لا يُقبل، فتومض الكتلة بالأحمر.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>الرجوع:</Bold> Backspace في حقل فارغ يعود إلى الحقل السابق ويمحو آخر رقم فيه، وEsc يمسح التاريخ كله.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>اللصق:</Bold> يفهم التاريخ الملصوق بأي صيغة شائعة: &#x200E;1993-01-22&#x200E;، و«22 يناير 1993»، و«22 كانون الثاني 93»، و«22 جانفي 93»، وحتى «29 رجب 1413».</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>الأرقام العربية:</Bold> تُقرأ ٢٢ كما تُقرأ 22.</TextBlock>
+    </ins:ProseList>
 
-      <TextBlock Classes="variant" Text="أقل عمر: 18" />
-      <Border Classes="stage">
-        <StackPanel Classes="field" Width="320">
-          <TextBlock Classes="label" Text="تاريخ الميلاد" />
-          <ins:BirthDateField MinAge="18" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="أعمدة التمرير" />
+    <TextBlock Classes="p" Text="يفتحها زر التقويم، أو Alt + ↓ من الحقل، وتغلقها بزر «تم» أو Esc أو بالنقر خارجها. ولكل جزء عموده، فتمرر العمود بإصبعك، أو تسحبه بالفأرة فيستمر بالقصور الذاتي إن أفلته مسرعًا، أو تحركه بالعجلة، أو تنقر قيمة فيه، أو تنتقل إليه بـ Tab وتحركه بالأسهم. والعمود الذي لم تلمسه يبقى باهتًا ولا يُحسب، فلا يكتمل التاريخ إلا حين تختار الثلاثة. والكتابة والأعمدة متزامنة في الاتجاهين: ما تكتبه تدور إليه الأعمدة، وما تختاره بها يظهر رقمه في حقله." />
+    <TextBlock Classes="p"><Bold>وتبدأ الأعمدة من المنتصف</Bold> حتى تكون المسافة إلى أي تاريخ أقصر ما يمكن: اليوم 16، والشهر يونيو، والسنة من عمر 31، وهو الوسيط العالمي للعمر بتقديرات الأمم المتحدة.</TextBlock>
 
-      <TextBlock Classes="variant" Text="أكبر عمر: 70" />
-      <Border Classes="stage">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="تاريخ الميلاد" />
-          <ins:BirthDateField MaxAge="70" Layout="Inline" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="ما يصل إلى الخادم" />
+    <pg:PlayText Classes="p" Markup="يحمل `Value` التاريخ بصيغة ISO، مثل `&#x200E;1993-01-22&#x200E;`، فلا يحتاج الخادم شيئًا جديدًا. وتضع التاريخ في `SelectedDate` فيبدأ الحقل منه. ومع `IsRequired` يقول الحقل الفارغ إنه مطلوب، والتاريخ الناقص غير صالح برسالة «أكمل تاريخ الميلاد»." />
 
-      <TextBlock Classes="variant" Text="عمر البداية: 22" />
-      <Border Classes="stage">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="تاريخ الميلاد" />
-          <ins:BirthDateField StartAge="22" Layout="Inline" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="التحكم من الشيفرة" />
+    <pg:PlayListing Code="{x:Static pg:BirthdatePlay.Code}" Margin="0,0,0,24" />
 
-      <TextBlock Classes="variant" Text="فيه تاريخ" />
-      <Border Classes="stage">
-        <StackPanel Classes="field" Width="320">
-          <TextBlock Classes="label" Text="تاريخ الميلاد" />
-          <ins:BirthDateField x:Name="PlayFilled" />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="معطل" />
-      <Border Classes="stage">
-        <StackPanel Classes="field" Width="320">
-          <TextBlock Classes="label" Text="تاريخ الميلاد" />
-          <ins:BirthDateField x:Name="PlayDisabled" IsEnabled="False" />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="section" Text="ما يصل إلى الخادم" />
-      <Border Classes="stage wide">
-        <StackPanel Spacing="16">
-          <StackPanel Classes="field">
-            <TextBlock Classes="label" Text="تاريخ الميلاد" />
-            <ins:BirthDateField x:Name="ServerField" IsRequired="True" />
-          </StackPanel>
-          <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12">
-            <Button x:Name="ServerReset" Classes="secondary" Content="إعادة الضبط" />
-            <Button x:Name="ServerSend" Classes="primary" Content="إرسال" />
-          </StackPanel>
-          <TextBlock x:Name="ServerHint" Classes="hint" />
-        </StackPanel>
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في حقل الميلاد من خصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:BirthdatePlay.All}" />
+  </StackPanel>
 </UserControl>

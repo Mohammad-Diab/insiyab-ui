@@ -1,48 +1,37 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.PalettePage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/MenusFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <UserControl.Resources>
-    <ins:CommandPalette x:Key="DemoPalette">
-      <ins:PaletteItem Label="الأزرار" Group="الصفحات" Keywords="buttons" />
-      <ins:PaletteItem Label="الجداول" Group="الصفحات" Keywords="tables" />
-      <ins:PaletteItem Label="الحوار" Group="الصفحات" Keywords="dialog" />
-      <ins:PaletteItem Label="حفظ" Group="إجراءات" Keywords="save" Hint="Ctrl S" />
-    </ins:CommandPalette>
-  </UserControl.Resources>
+
   <StackPanel>
+    <TextBlock Classes="intro" Text="لوحة الأوامر بحث واحد يصل إلى كل صفحة وكل أمر، تفتحها بـ Ctrl+K. عناصرها صفحات التطبيق وأوامره، تكتبها مرة واحدة." />
+    <pg:PlayExample x:Name="Example" Layout="Row" Code="{x:Static pg:PalettePlay.Example}" />
 
-    <Border Classes="dx">
-      <Button x:Name="OpenDemo" Classes="secondary" Content="فتح" />
-    </Border>
+    <TextBlock Classes="section" Text="لوحة تبنيها بالعناصر" />
+    <pg:PlayText Classes="p" Markup="املأ `ins:CommandPalette` بعناصر `ins:PaletteItem`، ثم تتولى بناء حقل البحث والقائمة والعناوين والتنقل بلوحة المفاتيح. واختيار العنصر كالنقر عليه: يؤدي أمره ثم يعمل `Run`. ولا اختصار للوحات هذه الصفحة حتى لا تزاحم بحث المعرض. وتجد الخيارات بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:PalettePlay.Palette}" />
 
-    <TextBlock Classes="section" Text="لوحة تبنيها بـ HTML" />
-    <Border Classes="stage">
-      <Button x:Name="OpenPlay" Classes="secondary" Content="فتح" />
-    </Border>
+    <TextBlock Classes="section" Text="البحث والترتيب" />
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0"><Bold>بالعربية كما تُكتب:</Bold> لا يلتفت البحث إلى الهمزات ولا إلى التشكيل، ويساوي بين التاء المربوطة والهاء، وبين الأرقام العربية واللاتينية، فإذا كتبت «اضافه» وجدت «إضافة».</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>كلمات مفتاحية:</Bold> ما تضعه في Keywords يدخل في البحث ولا يظهر.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>الترتيب بموضع التطابق:</Bold> يتقدم ما يبدأ اسمه بما كتبت، ثم ما تبدأ به كلمة من اسمه (ولو بعد «ال»)، ثم ما وقع في وسط الاسم، وأخيرًا ما في الكلمات المفتاحية.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>تطابق كل الكلمات:</Bold> فلا تجد «فاتورة شهر» إلا ما جمع الكلمتين.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>في أثناء البحث</Bold> تجتمع النتائج في قائمة واحدة، ويحمل كل سطر في آخره اسم مجموعته.</TextBlock>
+    </ins:ProseList>
 
-    <TextBlock Classes="variant" Text="لوحة الأوامر" />
-    <Border Classes="dx" Padding="0" Height="560" ClipToBounds="True">
-      <ins:CommandPalette x:Name="Still" />
-    </Border>
+    <TextBlock Classes="section" Text="التحكم من الشيفرة" />
+    <pg:PlayText Classes="p" Markup="أما العناصر التي تُعرف وقت التشغيل فتضيفها `Add()`: فمع `Run` يستدعي العنصر الدالة، ومع `Command` يؤدي الأمر." />
+    <pg:PlayListing Code="{x:Static pg:PalettePlay.Code}" Margin="0,0,0,16" />
+    <TextBlock Classes="p" Text="يضيف هذا الزر أمرًا إلى اللوحة التي في أول الصفحة ثم يفتحها:" />
+    <Button x:Name="AddCommand" Classes="secondary" Content="إضافة أمر" HorizontalAlignment="Left" Margin="0,0,0,24" />
 
-    <TextBlock Classes="variant" Text="اختصار اللوحة: Alt+K" />
-    <Border Classes="stage">
-      <Button x:Name="OpenAltK" Classes="secondary">
-        <StackPanel Orientation="Horizontal" Spacing="8">
-          <TextBlock Text="فتح" VerticalAlignment="Center" />
-          <Border Classes="kbd"><TextBlock Text="Alt K" /></Border>
-        </StackPanel>
-      </Button>
-    </Border>
-
-    <TextBlock Classes="section" Text="التحكم بـ JavaScript" />
-    <Border Classes="dx">
-      <Button x:Name="AddCommand" Classes="secondary" Content="إضافة أمر" />
-    </Border>
-
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في لوحة الأوامر من عناصر وخصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:PalettePlay.All}" />
   </StackPanel>
 </UserControl>

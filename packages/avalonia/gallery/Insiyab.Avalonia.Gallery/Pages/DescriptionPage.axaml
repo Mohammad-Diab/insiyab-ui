@@ -1,61 +1,21 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.DescriptionPage">
-  <UserControl.Resources>
-    <SolidColorBrush x:Key="ExampleTint" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.example">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background" Value="{StaticResource ExampleTint}" />
-    </Style>
-    <Style Selector="TextBlock.cap">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-      <Setter Property="Margin" Value="0,0,0,8" />
-    </Style>
-    <Style Selector="TextBlock.h3">
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
 
-  <ScrollViewer>
-    <StackPanel Spacing="16" MaxWidth="832" HorizontalAlignment="Stretch">
-      <Border Classes="example">
-        <ins:DescriptionList>
-          <ins:DescriptionItem Term="رقم الطلب" Content="1042" Classes="num" />
-          <ins:DescriptionItem Term="العميل" Content="ليلى حداد" />
-          <ins:DescriptionItem Term="المدينة" Content="الرياض" />
-          <ins:DescriptionItem Term="الحالة" Content="قيد التجهيز" />
-          <ins:DescriptionItem Term="ملاحظات" Content="التسليم بعد الساعة الرابعة، والاتصال قبل الوصول." />
-        </ins:DescriptionList>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="تفاصيل سجل واحد، تسمية وقيمة: صف لكل زوج، أو أعمدة لملخص قصير." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:DescriptionPlay.Example}" />
 
-      <TextBlock Classes="h3" Text="قائمة الوصف" />
-      <Border Classes="example">
-        <StackPanel Spacing="24">
-        <ins:DescriptionList>
-          <ins:DescriptionItem Term="الاسم" Content="سلمى" />
-          <ins:DescriptionItem Term="الفرق" Content="-12" Classes="num" />
-          <ins:DescriptionItem Term="الحالة" Content="مفتوح" />
-        </ins:DescriptionList>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="في أعمدة، وستة أزواج" />
-        <ins:DescriptionList Classes="grid">
-          <ins:DescriptionItem Term="الاسم" Content="سلمى" />
-          <ins:DescriptionItem Term="الفرق" Content="-12" Classes="num" />
-          <ins:DescriptionItem Term="الحالة" Content="مفتوح" />
-          <ins:DescriptionItem Term="التاريخ" Content="26 سبتمبر 2026" />
-          <ins:DescriptionItem Term="المدة" Content="14 يومًا" />
-          <ins:DescriptionItem Term="ملاحظات" Content="رسالة قصيرة" />
-        </ins:DescriptionList>
-          </StackPanel>
-        </StackPanel>
-      </Border>
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="قائمة الوصف" />
+    <pg:PlayText Classes="p" Markup="ضع `ins:DescriptionList` لتعرض تفاصيل سجل واحد، وفيه `ins:DescriptionItem` لكل زوج من تسمية وقيمة. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:DescriptionPlay.List}" />
+
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في قائمة الوصف من عناصر وكلاسات." />
+    <pg:OptionsList Defs="{x:Static pg:DescriptionPlay.All}" />
+  </StackPanel>
 </UserControl>

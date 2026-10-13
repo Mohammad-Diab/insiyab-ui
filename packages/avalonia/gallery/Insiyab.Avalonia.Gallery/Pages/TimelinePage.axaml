@@ -1,107 +1,24 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.TimelinePage">
-  <UserControl.Resources>
-    <SolidColorBrush x:Key="ExampleTint" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.example">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background" Value="{StaticResource ExampleTint}" />
-    </Style>
-    <Style Selector="TextBlock.cap">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-      <Setter Property="Margin" Value="0,0,0,8" />
-    </Style>
-    <Style Selector="TextBlock.h2">
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
 
-  <ScrollViewer>
-    <StackPanel Spacing="16" MaxWidth="832" HorizontalAlignment="Stretch">
+  <StackPanel>
+    <TextBlock Classes="intro" Text="ما جرى بترتيبه: مسار طلب، أو نشاط حساب، أو تاريخ ملف، وأوقات نسبية تُكتب كما تُقال." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:TimelinePlay.Example}" />
 
-      <Border Classes="example">
-        <ins:Timeline>
-          <ins:TimelineDay Content="24 سبتمبر" />
-          <ins:TimelineItem Classes="ok" Header="استُلم الطلب" Time="8:02 ص" />
-          <ins:TimelineItem Classes="ok" Header="تم الدفع" Time="8:05 ص" Content="نص الحدث." />
-          <ins:TimelineItem Header="قيد التجهيز" IsCurrent="True" />
-          <ins:TimelineItem Header="التسليم" IsPending="True" />
-        </ins:Timeline>
-      </Border>
+    <TextBlock Classes="section" Text="الخط الزمني" />
+    <pg:PlayText Classes="p" Markup="الخط الزمني `ins:Timeline` لكل حدث فيه نقطة، ويفصل `ins:TimelineDay` بين الأيام بعنوان. ويأخذ الحدث الجاري `IsCurrent`، والذي لم يأت بعد `IsPending`. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:TimelinePlay.Timeline}" />
 
-      <TextBlock Classes="h2" Text="الخط الزمني" />
-      <Border Classes="example">
-        <StackPanel Spacing="28">
-          <StackPanel>
-            <TextBlock Classes="cap" Text="عادي" />
-            <ins:Timeline>
-              <ins:TimelineDay Content="24 سبتمبر" />
-              <ins:TimelineItem Classes="ok" Header="أُنشئ الملف" Time="8:02 ص" />
-              <ins:TimelineItem Classes="ok" Header="أُرسل للمراجعة" Time="8:05 ص" Content="نص قصير عن الحدث." />
-              <ins:TimelineItem Header="قيد المراجعة" IsCurrent="True" />
-              <ins:TimelineItem Header="الاعتماد" IsPending="True" />
-            </ins:Timeline>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="مضغوط" />
-            <ins:Timeline Classes="compact">
-              <ins:TimelineDay Content="24 سبتمبر" />
-              <ins:TimelineItem Classes="ok" Header="أُنشئ الملف" Time="8:02 ص" />
-              <ins:TimelineItem Classes="ok" Header="أُرسل للمراجعة" Time="8:05 ص" Content="نص قصير عن الحدث." />
-              <ins:TimelineItem Header="قيد المراجعة" IsCurrent="True" />
-              <ins:TimelineItem Header="الاعتماد" IsPending="True" />
-            </ins:Timeline>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="على جانبين" />
-            <ins:Timeline Classes="split">
-              <ins:TimelineDay Content="24 سبتمبر" />
-              <ins:TimelineItem Classes="ok" Header="أُنشئ الملف" Time="8:02 ص" />
-              <ins:TimelineItem Classes="ok" Header="أُرسل للمراجعة" Time="8:05 ص" Content="نص قصير عن الحدث." />
-              <ins:TimelineItem Header="قيد المراجعة" IsCurrent="True" />
-              <ins:TimelineItem Header="الاعتماد" IsPending="True" />
-            </ins:Timeline>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="بالأيقونات" />
-            <ins:Timeline>
-              <ins:TimelineDay Content="24 سبتمبر" />
-              <ins:TimelineItem Classes="ok" Header="أُنشئ الملف" Time="8:02 ص" Icon="{StaticResource IconFile}" />
-              <ins:TimelineItem Classes="ok" Header="أُرسل للمراجعة" Time="8:05 ص" Content="نص قصير عن الحدث." Icon="{StaticResource IconUpload}" />
-              <ins:TimelineItem Header="قيد المراجعة" IsCurrent="True" Icon="{StaticResource IconClock}" />
-              <ins:TimelineItem Header="الاعتماد" IsPending="True" Icon="{StaticResource IconCheck}" />
-            </ins:Timeline>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="وقت نسبي" />
-            <ins:Timeline>
-              <ins:TimelineDay Content="24 سبتمبر" />
-              <ins:TimelineItem x:Name="RelFirst" Classes="ok" Header="أُنشئ الملف" TimeMode="Relative" />
-              <ins:TimelineItem x:Name="RelSecond" Classes="ok" Header="أُرسل للمراجعة" TimeMode="Relative" Content="نص قصير عن الحدث." />
-              <ins:TimelineItem Header="قيد المراجعة" IsCurrent="True" />
-              <ins:TimelineItem Header="الاعتماد" IsPending="True" />
-            </ins:Timeline>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="تاريخ" />
-            <ins:Timeline>
-              <ins:TimelineDay Content="24 سبتمبر" />
-              <ins:TimelineItem x:Name="DateFirst" Classes="ok" Header="أُنشئ الملف" TimeMode="Date" />
-              <ins:TimelineItem x:Name="DateSecond" Classes="ok" Header="أُرسل للمراجعة" TimeMode="Date" Content="نص قصير عن الحدث." />
-              <ins:TimelineItem Header="قيد المراجعة" IsCurrent="True" />
-              <ins:TimelineItem Header="الاعتماد" IsPending="True" />
-            </ins:Timeline>
-          </StackPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="التحكم من الشيفرة" />
+    <pg:PlayListing Code="{x:Static pg:TimelinePlay.Code}" Margin="0,0,0,24" />
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في الخط الزمني من كلاسات وخصائص، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:TimelinePlay.All}" />
+  </StackPanel>
 </UserControl>

@@ -1,71 +1,23 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.TabsPage">
-  <UserControl.Resources>
-    <SolidColorBrush x:Key="ExampleTint" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.example">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background" Value="{StaticResource ExampleTint}" />
-    </Style>
-    <Style Selector="TextBlock.cap">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-      <Setter Property="Margin" Value="0,0,0,8" />
-    </Style>
-    <Style Selector="TextBlock.h2">
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
 
-  <ScrollViewer>
-    <StackPanel Spacing="16" MaxWidth="832" HorizontalAlignment="Stretch">
+  <StackPanel>
+    <TextBlock Classes="intro" Text="تبويبات تبدل الألواح بالنقر وبالأسهم، في ثلاث هيئات: عادية، وبخط، وشريط مقسم." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:TabsPlay.Example}" />
 
-      <Border Classes="example">
-        <TabControl AutomationProperties.Name="الإعدادات">
-          <TabItem Header="عام" Content="محتوى «عام»." />
-          <TabItem Header="الدفع" Content="محتوى «الدفع»." />
-          <TabItem Header="الشحن" Content="محتوى «الشحن»." />
-          <ins:TabLink Header="رابط" />
-        </TabControl>
-      </Border>
+    <TextBlock Classes="section" Text="علامات التبويب" />
+    <pg:PlayText Classes="p" Markup="يضم `TabControl` تبويبات `TabItem`، لكل تبويب عنوانه في `Header` ولوحه في `Content`، وتتنقل بينها أسهم لوحة المفاتيح مع اتجاه الواجهة. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:TabsPlay.Tabs}" />
 
       <TextBlock Classes="h2" Text="علامات التبويب" />
-      <Border Classes="example">
-        <StackPanel Spacing="28">
-          <StackPanel>
-            <TextBlock Classes="cap" Text="عادية" />
-            <TabControl AutomationProperties.Name="الإعدادات">
-              <TabItem Header="عام" Content="محتوى «عام»." />
-              <TabItem Header="الحساب" Content="محتوى «الحساب»." />
-              <TabItem Header="الإشعارات" Content="محتوى «الإشعارات»." />
-            </TabControl>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="بخط، ومعها تبويب رابط" />
-            <TabControl Classes="line" AutomationProperties.Name="الإعدادات">
-              <TabItem Header="عام" Content="محتوى «عام»." />
-              <TabItem Header="الحساب" Content="محتوى «الحساب»." />
-              <TabItem Header="الإشعارات" Content="محتوى «الإشعارات»." />
-              <ins:TabLink Header="المساعدة" />
-            </TabControl>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="مقسمة" />
-            <TabControl Classes="seg" AutomationProperties.Name="الإعدادات">
-              <TabItem Header="عام" Content="محتوى «عام»." />
-              <TabItem Header="الحساب" Content="محتوى «الحساب»." />
-              <TabItem Header="الإشعارات" Content="محتوى «الإشعارات»." />
-            </TabControl>
-          </StackPanel>
-        </StackPanel>
-      </Border>
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في علامات التبويب من عناصر وكلاسات وخصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:TabsPlay.All}" />
+  </StackPanel>
 </UserControl>

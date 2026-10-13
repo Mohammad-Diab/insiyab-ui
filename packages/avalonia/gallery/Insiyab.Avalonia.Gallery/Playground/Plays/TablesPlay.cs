@@ -1,0 +1,303 @@
+using Avalonia.Controls;
+using Avalonia.LogicalTree;
+using Insiyab.Avalonia.Controls;
+using static Insiyab.Avalonia.Gallery.Playground.Play;
+
+namespace Insiyab.Avalonia.Gallery.Playground;
+
+public static class TablesPlay
+{
+    public const string Example =
+        """
+        <ins:Table>
+          <ins:Table.Columns>
+            <ins:TableColumn Header="الاسم" />
+            <ins:TableColumn Header="المدينة" />
+            <ins:TableColumn Header="الحالة" />
+          </ins:Table.Columns>
+          <ins:TableRow><ins:TableCell>ليلى</ins:TableCell><ins:TableCell>الرياض</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
+          <ins:TableRow IsSelected="True"><ins:TableCell>عمر</ins:TableCell><ins:TableCell>عمّان</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
+          <ins:TableRow><ins:TableCell>سارة</ins:TableCell><ins:TableCell>القاهرة</ins:TableCell><ins:TableCell>موقوف</ins:TableCell></ins:TableRow>
+          <ins:TableRow><ins:TableCell>كريم</ins:TableCell><ins:TableCell>دبي</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
+        </ins:Table>
+        """;
+
+    private static string Cells(params string[] cells) => string.Concat(cells.Select(c => $"<ins:TableCell>{c}</ins:TableCell>"));
+
+    private static string Indent(string code, int by) => string.Join("\n", code.Split('\n').Select(l => new string(' ', by) + l));
+
+    public static PlayDef Table { get; } = new()
+    {
+        Id = "table",
+        Title = "الجدول",
+        Wide = _ => true,
+        Controls =
+        [
+            Switch("empty", "فارغ", "Table.Empty", "ما يعرضه الجدول إذا لم تكن فيه صفوف: حالة فارغة مكان الرأس والصفوف.", OptionKind.Property),
+            Switch("num", "عمود أرقام", "Classes=\"num\"", "على `ins:TableColumn`: خط Inter بأرقام متساوية العرض، فتصطف القيم وتبقى إشارة السالب في مكانها.", OptionKind.Property),
+            Switch("current", "الصف المحدد", "IsSelected=\"True\"", "على `ins:TableRow`: صف اخترته من القائمة، أو السجل الذي تعرضه الشاشة. يتلون، ويظهر على حافته في جهة البداية شريط صغير.", OptionKind.Property),
+            Switch("panel", "في لوح", "panel-body flush", "ضع الجدول في جسم لوح بلا فراغ داخلي، فيمتد إلى حواف اللوح وتهدأ خلفية صفوفه."),
+            Switch("actions", "إجراءات الصف", "RowContextMenu", "قائمة تفتح بالنقر بالزر الأيمن على الصف أو بمفتاح القائمة. ولك أن تضع معها زرًا في آخر الصف يفتح القائمة نفسها في `Flyout`.", OptionKind.Property),
+        ],
+        Extra =
+        [
+            Row("الأساس", "ins:Table", "رأس عائم فوق بطاقة من الصفوف، ويتلون الصف الذي تحت المؤشر. أعمدته في `Columns` وصفوفه `ins:TableRow` فيها `ins:TableCell`.", OptionKind.Element, true),
+            Row("الأساس", "ItemsSource", "بدل كتابة الصفوف بيدك: صف لكل عنصر، ونص خلاياه من `CellText` على كل عمود أو قالبه من `CellTemplate`.", OptionKind.Property),
+            Row("الأساس", "RowActivated", "يُطلق إذا نقر المستخدم صفًا مرتين أو ضغط عليه `Enter`، لفتح السجل.", OptionKind.Event),
+        ],
+        Disable = s => s.On("empty") ? ["num", "current", "actions"] : [],
+        Axaml = s =>
+        {
+            var full = !s.On("empty");
+            var num = full && s.On("num") ? " Classes=\"num\"" : "";
+            var act = full && s.On("actions");
+            var lines = new List<string>
+            {
+                "<ins:Table>",
+                "  <ins:Table.Columns>",
+                "    <ins:TableColumn Header=\"الاسم\" />",
+                "    <ins:TableColumn Header=\"المدينة\" />",
+                $"    <ins:TableColumn Header=\"القيمة\"{num} />",
+            };
+            if (act) lines.Add("    <ins:TableColumn Header=\"\" IsFit=\"True\" />");
+            lines.Add("  </ins:Table.Columns>");
+            if (!full)
+                lines.AddRange([
+                    "  <ins:Table.Empty>",
+                    "    <StackPanel Spacing=\"10\">",
+                    "      <TextBlock Classes=\"empty-title\" Text=\"لا بيانات\" />",
+                    "      <TextBlock Classes=\"empty-hint\" Text=\"ستظهر الصفوف هنا.\" />",
+                    "    </StackPanel>",
+                    "  </ins:Table.Empty>",
+                ]);
+            else
+            {
+                if (act)
+                    lines.AddRange([
+                        "  <ins:Table.RowContextMenu>",
+                        "    <ContextMenu>",
+                        "      <MenuItem Header=\"تعديل\" />",
+                        "      <MenuItem Header=\"حذف\" Classes=\"bad\" />",
+                        "    </ContextMenu>",
+                        "  </ins:Table.RowContextMenu>",
+                    ]);
+                string[][] rows = [["ليلى", "الرياض", "249.00"], ["عمر", "عمّان", "1,180.00"], ["سارة", "القاهرة", "-89.50"]];
+                for (var i = 0; i < rows.Length; i++)
+                {
+                    var sel = i == 1 && s.On("current") ? " IsSelected=\"True\"" : "";
+                    if (!act) lines.Add($"  <ins:TableRow{sel}>{Cells(rows[i])}</ins:TableRow>");
+                    else
+                        lines.AddRange([
+                            $"  <ins:TableRow{sel}>",
+                            $"    {Cells(rows[i])}",
+                            "    <ins:TableCell>",
+                            "      <Button Classes=\"secondary sm\" Content=\"إجراءات\">",
+                            "        <Button.Flyout>",
+                            "          <MenuFlyout>",
+                            "            <MenuItem Header=\"تعديل\" />",
+                            "            <MenuItem Header=\"حذف\" Classes=\"bad\" />",
+                            "          </MenuFlyout>",
+                            "        </Button.Flyout>",
+                            "      </Button>",
+                            "    </ins:TableCell>",
+                            "  </ins:TableRow>",
+                        ]);
+                }
+            }
+            lines.Add("</ins:Table>");
+            var table = string.Join("\n", lines);
+            if (!s.On("panel")) return table;
+            return "<Border Classes=\"panel\">\n  <Border Classes=\"panel-body flush\">\n" + Indent(table, 4) + "\n  </Border>\n</Border>";
+        },
+        Notes = s =>
+        {
+            if (s.On("empty")) return ["لا صفوف في الجدول، فحلت الحالة الفارغة مكان رأسه وصفوفه."];
+            return s.On("actions") ? ["انقر صفًا بالزر الأيمن، أو اضغط زر «إجراءات» في آخره، فتفتح قائمته."] : [];
+        },
+    };
+
+    public static PlayDef Wrap { get; } = new()
+    {
+        Id = "wrap",
+        Title = "تمرير الجدول",
+        Wide = _ => true,
+        Controls =
+        [
+            Switch("sticky", "تثبيت الرأس", "sticky", "يضع الجدول الطويل في صندوق يتمرر ضمن `MaxHeight`، وهو 512 إن لم تذكره، ويبقي رأسه ظاهرًا."),
+            Switch("pin", "تثبيت العمود الأول", "pin", "يبقي العمود الأول ظاهرًا حين يتمرر الجدول العريض أفقيًا. ولك أن تجمعه مع `sticky`."),
+        ],
+        Extra =
+        [
+            Row("الأساس", "TableMinWidth", "أضيق ما يكون عليه الجدول، فإذا ضاقت حاويته عنه تمرر أفقيًا وبقيت الصفحة على عرضها.", OptionKind.Property, true),
+            Row("الأساس", "CanResizeColumns", "يسحب المستخدم الحافة في آخر عنوان العمود فيغير عرضه.", OptionKind.Property, true),
+            Row("الأساس", "IsFit", "على `ins:TableColumn`: يضيق العمود على قدر محتواه، ويذهب ما بقي من العرض إلى غيره.", OptionKind.Property, true),
+        ],
+        Axaml = s =>
+        {
+            string[][] rows =
+            [
+                ["ليلى", "الرياض", "layla@example.com", "+966 50 000 0001", "نشط"],
+                ["عمر", "عمّان", "omar@example.com", "+962 79 000 0002", "نشط"],
+                ["سارة", "القاهرة", "sara@example.com", "+20 10 0000 0003", "موقوف"],
+                ["كريم", "دبي", "karim@example.com", "+971 50 000 0004", "نشط"],
+                ["نور", "الدوحة", "nour@example.com", "+974 5000 0005", "نشط"],
+            ];
+            var cls = Classes(s.On("sticky") ? "sticky" : null, s.On("pin") ? "pin" : null);
+            return $"<ins:Table{cls} TableMinWidth=\"768\"{(s.On("sticky") ? " MaxHeight=\"256\"" : "")}>\n" +
+                "  <ins:Table.Columns>\n" +
+                "    <ins:TableColumn Header=\"الاسم\" /><ins:TableColumn Header=\"المدينة\" /><ins:TableColumn Header=\"البريد\" /><ins:TableColumn Header=\"الهاتف\" /><ins:TableColumn Header=\"الحالة\" />\n" +
+                "  </ins:Table.Columns>\n" +
+                string.Concat(rows.Select(r =>
+                    $"  <ins:TableRow><ins:TableCell>{r[0]}</ins:TableCell><ins:TableCell>{r[1]}</ins:TableCell><ins:TableCell FlowDirection=\"LeftToRight\">{r[2]}</ins:TableCell><ins:TableCell FlowDirection=\"LeftToRight\">{r[3]}</ins:TableCell><ins:TableCell>{r[4]}</ins:TableCell></ins:TableRow>\n")) +
+                "</ins:Table>";
+        },
+        Notes = s =>
+        {
+            if (s.On("sticky") && s.On("pin")) return ["مرر الجدول عموديًا وأفقيًا، فيبقى رأسه وعموده الأول ظاهرين."];
+            if (s.On("sticky")) return ["مرر الجدول داخل صندوقه، وقد قصّرناه بـ`MaxHeight`، فيبقى رأسه ظاهرًا."];
+            if (s.On("pin")) return ["مرر الجدول أفقيًا، فيبقى العمود الأول في مكانه."];
+            return ["الجدول هنا أعرض من حاويته بـ`TableMinWidth`، فمرره أفقيًا."];
+        },
+    };
+
+    public static PlayDef Sort { get; } = new()
+    {
+        Id = "sort",
+        Title = "الترتيب",
+        Wide = _ => true,
+        Controls =
+        [
+            Switch("value", "قيمة للترتيب", "SortValue", "على `ins:TableCell` إذا لم يكن نصها هو قيمتها، كتاريخ مكتوب بالكلمات، فيرتبها بهذه القيمة.", OptionKind.Property, "قيمة الخلية"),
+            Seg("start", "مرتب من البداية", "",
+                Choice("", "لا"),
+                Choice("Ascending", "تصاعديًا", "SortDirection=\"Ascending\"", "على العمود إذا جاءت الصفوف من الخادم مرتبة به تصاعديًا، فيظهر السهم في مكانه.", OptionKind.Property),
+                Choice("Descending", "تنازليًا", "SortDirection=\"Descending\"", "مثلها، للصفوف المرتبة تنازليًا.", OptionKind.Property)),
+        ],
+        Extra =
+        [
+            Row("الأساس", "Sort=\"Auto\"", "على `ins:TableColumn`: يصير عنوانه زرًا يرتب الصفوف تصاعديًا ثم تنازليًا، ويدل السهم على الاتجاه. والخلية الفارغة تأتي في الآخر دائمًا. ويرتب العمود بالأرقام إذا كانت خلاياه كلها أرقامًا، وبالنص فيما سوى ذلك.", OptionKind.Property, true),
+            Row("نوع القيم", "Sort=\"Number\"", "يرتب العمود بالأرقام في كل حال.", OptionKind.Property),
+            Row("نوع القيم", "Sort=\"Text\"", "يرتب العمود نصًا ولو كانت خلاياه أرقامًا.", OptionKind.Property),
+            Row("قيمة الخلية", "Value", "يرتب بها إذا لم تجد `SortValue`، ويبدأ بها التعديل في مكانه أيضًا.", OptionKind.Property),
+            Row("الحدث", "Sorting", "يُطلق قبل الترتيب، ومعه العمود `Column` ورقمه `ColumnIndex` والاتجاه `Direction`. ألغه بـ`Cancel` إذا كان الترتيب على الخادم، فيتحرك السهم وحده. ويرتب `SortBy` من الشيفرة.", OptionKind.Event),
+        ],
+        Axaml = s =>
+        {
+            string[][] rows = [["عمر", "2026-01-15", "15 يناير", "1,180.00"], ["ليلى", "2026-03-02", "2 مارس", "249.00"], ["سارة", "2026-02-20", "20 فبراير", "89.50"]];
+            if (s.Has("start"))
+            {
+                string[] order = ["سارة", "عمر", "ليلى"];
+                rows = rows.OrderBy(r => Array.IndexOf(order, r[0])).ToArray();
+                if (s["start"] == "Descending") rows = rows.Reverse().ToArray();
+            }
+            return "<ins:Table>\n" +
+                "  <ins:Table.Columns>\n" +
+                $"    <ins:TableColumn Header=\"الاسم\" Sort=\"Auto\"{(s.Has("start") ? $" SortDirection=\"{s["start"]}\"" : "")} />\n" +
+                "    <ins:TableColumn Header=\"التاريخ\" Sort=\"Auto\" />\n" +
+                "    <ins:TableColumn Header=\"القيمة\" Sort=\"Auto\" Classes=\"num\" />\n" +
+                "  </ins:Table.Columns>\n" +
+                string.Concat(rows.Select(r =>
+                    $"  <ins:TableRow><ins:TableCell>{r[0]}</ins:TableCell><ins:TableCell{(s.On("value") ? $" SortValue=\"{r[1]}\"" : "")}>{r[2]}</ins:TableCell><ins:TableCell>{r[3]}</ins:TableCell></ins:TableRow>\n")) +
+                "</ins:Table>";
+        },
+        Notes = s =>
+        [
+            s.On("value")
+                ? "رتب عمود التاريخ، فيرتبه بالقيمة التي في `SortValue`، ويظهر هنا الحدث."
+                : "رتب عمود التاريخ، فيرتبه بنصه فيأتي 2 مارس قبل 15 يناير، ثم شغّل «قيمة للترتيب» وقارن.",
+        ],
+        Stage = (view, _, say) =>
+        {
+            foreach (var t in view.GetLogicalDescendants().OfType<Table>())
+                t.Sorting += (_, e) => say($"حدث `Sorting` على العمود `{e.ColumnIndex}`، والاتجاه `{e.Direction}`");
+        },
+    };
+
+    public static PlayDef Select { get; } = new()
+    {
+        Id = "select",
+        Title = "تحديد الصفوف",
+        Wide = _ => true,
+        Controls =
+        [
+            Switch("all", "مربع للكل", "HasSelectAll", "مربع في رأس الجدول يحدد الصفوف كلها أو يلغي تحديدها، ويصير محددًا كله أو جزئيًا بحسبها. وهو ظاهر إن لم تذكره، فاكتب `HasSelectAll=\"False\"` لتخفيه.", OptionKind.Property, on: true),
+            Switch("checked", "صف محدد من البداية", "IsSelected=\"True\"", "على صف أرسله الخادم محددًا، فيتلون ويُعلَّم مربعه ويظهر الشريط من البداية.", OptionKind.Property, on: true),
+            Switch("bulk", "شريط الإجراءات", "ins:BulkBar", "شريط يظهر ما دام في الجدول صف محدد، فيه عدد المحدد والإجراءات المتاحة له.", OptionKind.Element, "شريط الإجراءات", on: true),
+            Switch("text", "صيغة العدد", "Text", "صيغة للعدد غير الافتراضية، و`{n}` مكان العدد.", OptionKind.Property, "شريط الإجراءات"),
+        ],
+        Extra =
+        [
+            Row("الأساس", "IsSelectable", "يضيف عمودًا من المربعات يحدد الصفوف، وإذا نقرت مع `Shift` حددت ما بين صفين.", OptionKind.Property, true),
+            Row("الأساس", "SelectedRows", "الصفوف المحددة بترتيب ظهورها، و`SelectAll(false)` تلغي التحديد.", OptionKind.Property),
+            Row("شريط الإجراءات", "Table", "يربط الشريط بجدوله: `Table=\"{Binding #People}\"`.", OptionKind.Property),
+            Row("شريط الإجراءات", "ins:BulkBar.ClearsSelection", "على زر في الشريط يلغي التحديد كله.", OptionKind.Property),
+            Row("الحدث", "SelectionChanged", "يُطلق مع كل تغيير في التحديد، ومعه الصفوف المحددة `Rows` وعددها `Count`.", OptionKind.Event),
+        ],
+        Disable = s => s.On("bulk") ? [] : ["text"],
+        Axaml = s =>
+        {
+            var table = $"<ins:Table x:Name=\"People\" IsSelectable=\"True\"{(s.On("all") ? "" : " HasSelectAll=\"False\"")}>\n" +
+                "  <ins:Table.Columns>\n" +
+                "    <ins:TableColumn Header=\"الاسم\" />\n" +
+                "    <ins:TableColumn Header=\"المدينة\" />\n" +
+                "  </ins:Table.Columns>\n" +
+                $"  <ins:TableRow{(s.On("checked") ? " IsSelected=\"True\"" : "")}>{Cells("ليلى", "الرياض")}</ins:TableRow>\n" +
+                $"  <ins:TableRow>{Cells("عمر", "عمّان")}</ins:TableRow>\n" +
+                $"  <ins:TableRow>{Cells("سارة", "القاهرة")}</ins:TableRow>\n" +
+                "</ins:Table>";
+            if (!s.On("bulk")) return table;
+            return "<StackPanel>\n" + Indent(table, 2) + "\n" +
+                $"  <ins:BulkBar Table=\"{{Binding #People}}\"{(s.On("text") ? " Text=\"الصفوف المحددة: {n}\"" : "")}>\n" +
+                "    <StackPanel>\n" +
+                "      <Button Classes=\"secondary sm\" Content=\"تصدير\" />\n" +
+                "      <Button Classes=\"danger sm\" Content=\"حذف\" />\n" +
+                "      <Button Classes=\"bare sm\" Content=\"إلغاء\" ins:BulkBar.ClearsSelection=\"True\" />\n" +
+                "    </StackPanel>\n" +
+                "  </ins:BulkBar>\n" +
+                "</StackPanel>";
+        },
+        Notes = s => s.On("bulk") ? ["حدد الصفوف أو ألغ تحديدها، فيظهر الشريط ويختفي معها، ويكتب العدد بنفسه."] : ["حدد الصفوف أو ألغ تحديدها، فيظهر هنا الحدث."],
+        Stage = (view, _, say) =>
+        {
+            foreach (var t in view.GetLogicalDescendants().OfType<Table>())
+                t.SelectionChanged += (_, e) => say($"حدث `SelectionChanged`، و`Count` الآن `{e.Count}`");
+        },
+    };
+
+    public static PlayDef Edit { get; } = new()
+    {
+        Id = "edit",
+        Title = "التعديل في مكانه",
+        Wide = _ => true,
+        Controls =
+        [
+            Switch("number", "عمود أرقام", "Edit=\"Number\"", "حقل للأرقام، يُكتب من اليسار.", OptionKind.Property),
+            Switch("select", "اختيار من قائمة", "Edit=\"Select\"", "قائمة تختار منها بدل الحقل، ومعها خياراتها في `Options`.", OptionKind.Property),
+        ],
+        Extra =
+        [
+            Row("الأساس", "Edit=\"Text\"", "على `ins:TableColumn`: ينقر المستخدم الخلية مرتين، أو يضغط `F2`، أو يبدأ الكتابة، فتصير حقلًا. ثم يحفظ `Enter` أو مغادرة الحقل ما كتب، ويعيد `Esc` القيمة السابقة.", OptionKind.Property, true),
+            Row("خيارات أخرى", "Options", "خيارات القائمة، بينها `|`: `Options=\"نشط|موقوف\"`.", OptionKind.Property),
+            Row("خيارات أخرى", "Value", "على `ins:TableCell`: قيمة الخلية إذا اختلفت عن نصها، فيبدأ بها الحقل وتتحدث بعد الحفظ.", OptionKind.Property),
+            Row("الحدث", "CellEditing", "يُطلق قبل حفظ التغيير، ومعه الخلية `Cell` والصف `Row` والقيمة الجديدة `Value` والسابقة `Old`، و`Revert()` تعيد السابقة. ألغه بـ`Cancel` لترفض القيمة.", OptionKind.Event),
+        ],
+        Axaml = s =>
+            "<ins:Table>\n" +
+            "  <ins:Table.Columns>\n" +
+            "    <ins:TableColumn Header=\"الاسم\" Edit=\"Text\" />\n" +
+            $"    <ins:TableColumn Header=\"الكمية\" Classes=\"num\"{(s.On("number") ? " Edit=\"Number\"" : "")} />\n" +
+            $"    <ins:TableColumn Header=\"الحالة\"{(s.On("select") ? " Edit=\"Select\" Options=\"نشط|موقوف\"" : "")} />\n" +
+            "  </ins:Table.Columns>\n" +
+            $"  <ins:TableRow>{Cells("ليلى", "12", "نشط")}</ins:TableRow>\n" +
+            $"  <ins:TableRow>{Cells("عمر", "7", "موقوف")}</ins:TableRow>\n" +
+            "</ins:Table>",
+        Notes = _ => ["انقر خلية تقبل التعديل مرتين، أو اضغط `F2`، ثم احفظ بـ`Enter` أو تراجع بـ`Esc`."],
+        Stage = (view, _, say) =>
+        {
+            foreach (var t in view.GetLogicalDescendants().OfType<Table>())
+                t.CellEditing += (_, e) => say($"حدث `CellEditing`، والقيمة `{e.Old}` صارت `{e.Value}`");
+        },
+    };
+
+    public static PlayDef[] All { get; } = [Table, Wrap, Sort, Select, Edit];
+}

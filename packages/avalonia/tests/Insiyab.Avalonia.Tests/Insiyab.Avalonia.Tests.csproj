@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Insiyab.Avalonia\Insiyab.Avalonia.csproj" />
+    <ProjectReference Include="..\..\gallery\Insiyab.Avalonia.Gallery\Insiyab.Avalonia.Gallery.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,47 +1,26 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.MonthPage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PickersFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <Border Classes="dx">
-        <ins:MonthCalendar x:Name="Demo" />
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="شهر على شبكة بمواعيد كل يوم، أو أسبوع أو يوم بالساعات، ويبدأ أسبوعه كما تبدؤه لغة الواجهة." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:MonthPlay.Example}" Stage="{x:Static pg:MonthPlay.ExampleStage}" />
 
-      <TextBlock Classes="section" Text="شهر بمواعيده" />
-      <Border Classes="stage wide">
-        <ins:MonthCalendar x:Name="Play" />
-      </Border>
+    <TextBlock Classes="section" Text="شهر بمواعيده" />
+    <pg:PlayText Classes="p" Markup="اجعل في `ins:MonthCalendar` الشهر `Month`، ومواعيده في `Events`، لكل موعد يومه. ومنها يرسم الشهر جدول أسابيع يميز اليوم الحالي، وعلى الهاتف تصير المواعيد نقاطًا. ومن مبدّل العرض في رأسه تنتقل إلى الأسبوع أو اليوم، فيقع كل موعد في ساعته بطول مدته. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:MonthPlay.Month}" />
 
-      <TextBlock Classes="variant" Text="رابط" />
-      <Border Classes="stage wide">
-        <ins:MonthCalendar x:Name="PlayLink" />
-      </Border>
+    <TextBlock Classes="section" Text="الأحداث" />
+    <pg:PlayText Classes="p" Markup="إذا انتقلت إلى شهر آخر أُطلق `MonthChanged` ومعه الشهر الجديد، فتضع الصفحة مواعيده في `Events`. وفي الأسبوع واليوم يُطلق `DateChanged` ومعه اليوم الجديد. وإذا نقرت على يوم في موضع خال من مواعيده أُطلق `DayInvoked` ومعه تاريخه، وساعته في الأسبوع واليوم." />
+    <pg:PlayListing Code="{x:Static pg:MonthPlay.Code}" Margin="0,0,0,24" />
 
-      <TextBlock Classes="variant" Text="أكثر من ثلاثة في يوم" />
-      <Border Classes="stage wide">
-        <ins:MonthCalendar x:Name="PlayMany" />
-      </Border>
-
-      <TextBlock Classes="variant" Text="النبرة: تحذير" />
-      <Border Classes="stage wide">
-        <ins:MonthCalendar x:Name="PlayWarn" />
-      </Border>
-
-      <TextBlock Classes="variant" Text="بالإنجليزية" />
-      <Border Classes="stage wide">
-        <ins:MonthCalendar x:Name="PlayEnglish" Locale="en" FlowDirection="LeftToRight" />
-      </Border>
-
-      <TextBlock Classes="variant" Text="على الهاتف" />
-      <Border Classes="stage">
-        <ins:MonthCalendar x:Name="PlayPhone" Width="400" HorizontalAlignment="Center" />
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في تقويم الشهر من خصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:MonthPlay.All}" />
+  </StackPanel>
 </UserControl>

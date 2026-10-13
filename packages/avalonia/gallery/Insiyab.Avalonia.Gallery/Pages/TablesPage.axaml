@@ -1,225 +1,40 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.TablesPage">
-  <UserControl.Resources>
-    <SolidColorBrush x:Key="ExampleTint" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-    <MenuFlyout x:Key="RowActions" x:Shared="False">
-      <MenuItem Header="تعديل" />
-      <MenuItem Header="حذف" Classes="bad" />
-    </MenuFlyout>
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.example">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background" Value="{StaticResource ExampleTint}" />
-    </Style>
-    <Style Selector="TextBlock.cap">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-      <Setter Property="Margin" Value="0,0,0,8" />
-    </Style>
-    <Style Selector="TextBlock.h3">
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
 
-  <ScrollViewer>
-    <StackPanel Spacing="16" MaxWidth="832" HorizontalAlignment="Stretch">
+  <StackPanel>
+    <TextBlock Classes="intro" Text="جدول بيانات تصطف أرقامه، ويتمرر عرضًا داخل حاويته فلا تتسع الصفحة معه." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:TablesPlay.Example}" />
 
-      <Border Classes="example">
-        <ins:Table>
-          <ins:Table.Columns>
-            <ins:TableColumn Header="الاسم" />
-            <ins:TableColumn Header="المدينة" />
-            <ins:TableColumn Header="الحالة" />
-          </ins:Table.Columns>
-          <ins:TableRow><ins:TableCell>ليلى</ins:TableCell><ins:TableCell>الرياض</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
-          <ins:TableRow IsSelected="True"><ins:TableCell>عمر</ins:TableCell><ins:TableCell>عمّان</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
-          <ins:TableRow><ins:TableCell>سارة</ins:TableCell><ins:TableCell>القاهرة</ins:TableCell><ins:TableCell>موقوف</ins:TableCell></ins:TableRow>
-          <ins:TableRow><ins:TableCell>كريم</ins:TableCell><ins:TableCell>دبي</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
-        </ins:Table>
-      </Border>
+    <TextBlock Classes="section" Text="الجدول" />
+    <pg:PlayText Classes="p" Markup="يكتب `ins:Table` أعمدته في `Columns` وصفوفه بعدها، فإذا ضاقت الحاوية عن الجدول تمرر أفقيًا وبقيت الصفحة على عرضها. واختر من الخيارات، فيتغير الجدول وشيفرته معًا، وتجدها كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:TablesPlay.Table}" />
 
-      <TextBlock Classes="h3" Text="الجدول" />
-      <Border Classes="example">
-        <StackPanel Spacing="24">
-          <ins:Table>
-            <ins:Table.Columns>
-              <ins:TableColumn Header="الاسم" />
-              <ins:TableColumn Header="المدينة" />
-              <ins:TableColumn Header="القيمة" />
-            </ins:Table.Columns>
-            <ins:TableRow><ins:TableCell>ليلى</ins:TableCell><ins:TableCell>الرياض</ins:TableCell><ins:TableCell>249.00</ins:TableCell></ins:TableRow>
-            <ins:TableRow><ins:TableCell>عمر</ins:TableCell><ins:TableCell>عمّان</ins:TableCell><ins:TableCell>1,180.00</ins:TableCell></ins:TableRow>
-            <ins:TableRow><ins:TableCell>سارة</ins:TableCell><ins:TableCell>القاهرة</ins:TableCell><ins:TableCell>-89.50</ins:TableCell></ins:TableRow>
-          </ins:Table>
+    <TextBlock Classes="section" Text="تثبيت رأس الجدول وعموده الأول" />
+    <pg:Playground Def="{x:Static pg:TablesPlay.Wrap}" />
 
-          <StackPanel>
-            <TextBlock Classes="cap" Text="عمود أرقام، والصف المحدد" />
-            <ins:Table>
-              <ins:Table.Columns>
-                <ins:TableColumn Header="الاسم" />
-                <ins:TableColumn Header="المدينة" />
-                <ins:TableColumn Header="القيمة" Classes="num" />
-              </ins:Table.Columns>
-              <ins:TableRow><ins:TableCell>ليلى</ins:TableCell><ins:TableCell>الرياض</ins:TableCell><ins:TableCell>249.00</ins:TableCell></ins:TableRow>
-              <ins:TableRow IsSelected="True"><ins:TableCell>عمر</ins:TableCell><ins:TableCell>عمّان</ins:TableCell><ins:TableCell>1,180.00</ins:TableCell></ins:TableRow>
-              <ins:TableRow><ins:TableCell>سارة</ins:TableCell><ins:TableCell>القاهرة</ins:TableCell><ins:TableCell>-89.50</ins:TableCell></ins:TableRow>
-            </ins:Table>
-          </StackPanel>
+    <TextBlock Classes="section" Text="الترتيب" />
+    <pg:PlayText Classes="p" Markup="إذا وضعت `Sort=&quot;Auto&quot;` على عمود صار عنوانه زرًا يرتب الصفوف تصاعديًا ثم تنازليًا. وترتب الأرقام بقيمها والنصوص بحسب اللغة." />
+    <pg:Playground Def="{x:Static pg:TablesPlay.Sort}" />
+    <pg:PlayText Classes="p" Markup="ويُطلق حدث `Sorting` قبل الترتيب، فإذا كان الترتيب على الخادم فألغه، ليتحرك السهم وحده وتجلب أنت الصفوف مرتبة." />
 
-          <StackPanel>
-            <TextBlock Classes="cap" Text="فارغ" />
-            <ins:Table>
-              <ins:Table.Columns>
-                <ins:TableColumn Header="الاسم" />
-                <ins:TableColumn Header="المدينة" />
-                <ins:TableColumn Header="القيمة" />
-              </ins:Table.Columns>
-              <ins:Table.Empty>
-                <StackPanel Spacing="10">
-                  <TextBlock Classes="empty-title" Text="لا بيانات" />
-                  <TextBlock Classes="empty-hint" Text="ستظهر الصفوف هنا." />
-                </StackPanel>
-              </ins:Table.Empty>
-            </ins:Table>
-          </StackPanel>
+    <TextBlock Classes="section" Text="تحديد الصفوف" />
+    <pg:PlayText Classes="p" Markup="عمود من المربعات يحدد الصفوف، وشريط يعرض عدد المحدد منها وما يمكن فعله بها. وتعيد لك `SelectedRows` الصفوف المحددة." />
+    <pg:Playground Def="{x:Static pg:TablesPlay.Select}" />
 
-          <StackPanel>
-            <TextBlock Classes="cap" Text="في لوح، مع إجراءات الصف" />
-            <Border Classes="panel">
-              <Border Classes="panel-body flush">
-                <ins:Table>
-                  <ins:Table.Columns>
-                    <ins:TableColumn Header="الاسم" />
-                    <ins:TableColumn Header="المدينة" />
-                    <ins:TableColumn Header="القيمة" Classes="num" />
-                    <ins:TableColumn Header="" />
-                  </ins:Table.Columns>
-                  <ins:Table.RowContextMenu>
-                    <ContextMenu>
-                      <MenuItem Header="تعديل" />
-                      <MenuItem Header="حذف" Classes="bad" />
-                    </ContextMenu>
-                  </ins:Table.RowContextMenu>
-                  <ins:TableRow>
-                    <ins:TableCell>ليلى</ins:TableCell><ins:TableCell>الرياض</ins:TableCell><ins:TableCell>249.00</ins:TableCell>
-                    <ins:TableCell><Button Classes="secondary sm" Content="إجراءات" Flyout="{StaticResource RowActions}" /></ins:TableCell>
-                  </ins:TableRow>
-                  <ins:TableRow>
-                    <ins:TableCell>عمر</ins:TableCell><ins:TableCell>عمّان</ins:TableCell><ins:TableCell>1,180.00</ins:TableCell>
-                    <ins:TableCell><Button Classes="secondary sm" Content="إجراءات" Flyout="{StaticResource RowActions}" /></ins:TableCell>
-                  </ins:TableRow>
-                  <ins:TableRow>
-                    <ins:TableCell>سارة</ins:TableCell><ins:TableCell>القاهرة</ins:TableCell><ins:TableCell>-89.50</ins:TableCell>
-                    <ins:TableCell><Button Classes="secondary sm" Content="إجراءات" Flyout="{StaticResource RowActions}" /></ins:TableCell>
-                  </ins:TableRow>
-                </ins:Table>
-              </Border>
-            </Border>
-          </StackPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="التعديل في مكانه" />
+    <pg:PlayText Classes="p" Markup="خلية تصير حقلًا إذا نقرتها مرتين، فيعدل المستخدم القيمة دون أن يغادر الجدول." />
+    <pg:Playground Def="{x:Static pg:TablesPlay.Edit}" />
+    <pg:PlayText Classes="p" Markup="ويُطلق حدث `CellEditing` قبل حفظ التغيير، فألغه إن أردت رفض القيمة، أو احفظها على الخادم واستدع `Revert()` إذا فشل الحفظ." />
 
       <TextBlock Classes="h3" Text="تثبيت رأس الجدول وعموده الأول" />
-      <Border Classes="example">
-        <StackPanel Spacing="24">
-          <ins:Table TableMinWidth="768">
-            <ins:Table.Columns>
-              <ins:TableColumn Header="الاسم" /><ins:TableColumn Header="المدينة" /><ins:TableColumn Header="البريد" /><ins:TableColumn Header="الهاتف" /><ins:TableColumn Header="الحالة" />
-            </ins:Table.Columns>
-            <ins:TableRow><ins:TableCell>ليلى</ins:TableCell><ins:TableCell>الرياض</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">layla@example.com</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">+966 50 000 0001</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
-            <ins:TableRow><ins:TableCell>عمر</ins:TableCell><ins:TableCell>عمّان</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">omar@example.com</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">+962 79 000 0002</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
-            <ins:TableRow><ins:TableCell>سارة</ins:TableCell><ins:TableCell>القاهرة</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">sara@example.com</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">+20 10 0000 0003</ins:TableCell><ins:TableCell>موقوف</ins:TableCell></ins:TableRow>
-            <ins:TableRow><ins:TableCell>كريم</ins:TableCell><ins:TableCell>دبي</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">karim@example.com</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">+971 50 000 0004</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
-            <ins:TableRow><ins:TableCell>نور</ins:TableCell><ins:TableCell>الدوحة</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">nour@example.com</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">+974 5000 0005</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
-          </ins:Table>
 
-          <StackPanel>
-            <TextBlock Classes="cap" Text="تثبيت الرأس والعمود الأول" />
-            <ins:Table x:Name="StickyTable" Classes="sticky pin" TableMinWidth="768" MaxHeight="256">
-              <ins:Table.Columns>
-                <ins:TableColumn Header="الاسم" /><ins:TableColumn Header="المدينة" /><ins:TableColumn Header="البريد" /><ins:TableColumn Header="الهاتف" /><ins:TableColumn Header="الحالة" />
-              </ins:Table.Columns>
-              <ins:TableRow><ins:TableCell>ليلى</ins:TableCell><ins:TableCell>الرياض</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">layla@example.com</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">+966 50 000 0001</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
-              <ins:TableRow><ins:TableCell>عمر</ins:TableCell><ins:TableCell>عمّان</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">omar@example.com</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">+962 79 000 0002</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
-              <ins:TableRow><ins:TableCell>سارة</ins:TableCell><ins:TableCell>القاهرة</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">sara@example.com</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">+20 10 0000 0003</ins:TableCell><ins:TableCell>موقوف</ins:TableCell></ins:TableRow>
-              <ins:TableRow><ins:TableCell>كريم</ins:TableCell><ins:TableCell>دبي</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">karim@example.com</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">+971 50 000 0004</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
-              <ins:TableRow><ins:TableCell>نور</ins:TableCell><ins:TableCell>الدوحة</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">nour@example.com</ins:TableCell><ins:TableCell FlowDirection="LeftToRight">+974 5000 0005</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
-            </ins:Table>
-          </StackPanel>
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="h3" Text="الترتيب" />
-      <Border Classes="example">
-        <StackPanel Spacing="24">
-          <ins:Table>
-            <ins:Table.Columns>
-              <ins:TableColumn Header="الاسم" Sort="Auto" />
-              <ins:TableColumn Header="التاريخ" Sort="Auto" />
-              <ins:TableColumn Header="القيمة" Sort="Auto" Classes="num" />
-            </ins:Table.Columns>
-            <ins:TableRow><ins:TableCell>عمر</ins:TableCell><ins:TableCell>15 يناير</ins:TableCell><ins:TableCell>1,180.00</ins:TableCell></ins:TableRow>
-            <ins:TableRow><ins:TableCell>ليلى</ins:TableCell><ins:TableCell>2 مارس</ins:TableCell><ins:TableCell>249.00</ins:TableCell></ins:TableRow>
-            <ins:TableRow><ins:TableCell>سارة</ins:TableCell><ins:TableCell>20 فبراير</ins:TableCell><ins:TableCell>89.50</ins:TableCell></ins:TableRow>
-          </ins:Table>
-
-          <StackPanel>
-            <TextBlock Classes="cap" Text="قيمة للترتيب، ومرتب من البداية تصاعديًا" />
-            <ins:Table>
-              <ins:Table.Columns>
-                <ins:TableColumn Header="الاسم" Sort="Auto" SortDirection="Ascending" />
-                <ins:TableColumn Header="التاريخ" Sort="Auto" />
-                <ins:TableColumn Header="القيمة" Sort="Auto" Classes="num" />
-              </ins:Table.Columns>
-              <ins:TableRow><ins:TableCell>سارة</ins:TableCell><ins:TableCell SortValue="2026-02-20">20 فبراير</ins:TableCell><ins:TableCell>89.50</ins:TableCell></ins:TableRow>
-              <ins:TableRow><ins:TableCell>عمر</ins:TableCell><ins:TableCell SortValue="2026-01-15">15 يناير</ins:TableCell><ins:TableCell>1,180.00</ins:TableCell></ins:TableRow>
-              <ins:TableRow><ins:TableCell>ليلى</ins:TableCell><ins:TableCell SortValue="2026-03-02">2 مارس</ins:TableCell><ins:TableCell>249.00</ins:TableCell></ins:TableRow>
-            </ins:Table>
-          </StackPanel>
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="h3" Text="تحديد الصفوف" />
-      <Border Classes="example">
-        <StackPanel>
-          <ins:Table x:Name="People" IsSelectable="True">
-            <ins:Table.Columns>
-              <ins:TableColumn Header="الاسم" />
-              <ins:TableColumn Header="المدينة" />
-            </ins:Table.Columns>
-            <ins:TableRow IsSelected="True"><ins:TableCell>ليلى</ins:TableCell><ins:TableCell>الرياض</ins:TableCell></ins:TableRow>
-            <ins:TableRow><ins:TableCell>عمر</ins:TableCell><ins:TableCell>عمّان</ins:TableCell></ins:TableRow>
-            <ins:TableRow><ins:TableCell>سارة</ins:TableCell><ins:TableCell>القاهرة</ins:TableCell></ins:TableRow>
-          </ins:Table>
-          <ins:BulkBar Table="{Binding #People}" Text="المحدد: {n}">
-            <StackPanel>
-              <Button Classes="secondary sm" Content="تصدير" />
-              <Button Classes="danger sm" Content="حذف" />
-              <Button Classes="bare sm" Content="إلغاء" ins:BulkBar.ClearsSelection="True" />
-            </StackPanel>
-          </ins:BulkBar>
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="h3" Text="التعديل في مكانه" />
-      <Border Classes="example">
-        <ins:Table>
-          <ins:Table.Columns>
-            <ins:TableColumn Header="الاسم" Edit="Text" />
-            <ins:TableColumn Header="الكمية" Classes="num" Edit="Number" />
-            <ins:TableColumn Header="الحالة" Edit="Select" Options="نشط|موقوف" />
-          </ins:Table.Columns>
-          <ins:TableRow><ins:TableCell>ليلى</ins:TableCell><ins:TableCell>12</ins:TableCell><ins:TableCell>نشط</ins:TableCell></ins:TableRow>
-          <ins:TableRow><ins:TableCell>عمر</ins:TableCell><ins:TableCell>7</ins:TableCell><ins:TableCell>موقوف</ins:TableCell></ins:TableRow>
-        </ins:Table>
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في الجداول من عناصر وخصائص وأحداث، لكل مكون صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:TablesPlay.All}" />
+  </StackPanel>
 </UserControl>

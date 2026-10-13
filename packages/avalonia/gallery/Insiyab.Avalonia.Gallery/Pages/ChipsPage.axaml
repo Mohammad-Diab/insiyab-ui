@@ -1,96 +1,25 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.ChipsPage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/MenusFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <StackPanel>
 
-    <Border Classes="dx">
-      <WrapPanel Classes="chips">
-        <ins:Chip Content="الرياض" IsRemovable="True" />
-        <ins:Chip Content="عمّان" IsRemovable="True" />
-        <ins:Chip Content="القاهرة" IsRemovable="True" />
-      </WrapPanel>
-    </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="الرقاقات (Chips) قيم صغيرة تُزال أو تُضغط، وحقل يجمع عدة قيم: اختيار متعدد من قائمة، أو وسوم تكتبها بنفسك." />
+    <pg:PlayExample Layout="Row" Code="{x:Static pg:ChipsPlay.Example}" />
 
     <TextBlock Classes="section" Text="الرقاقة" />
-    <Border Classes="stage">
-      <WrapPanel Classes="chips">
-        <ins:Chip Content="الأول" IsRemovable="True" />
-        <ins:Chip Content="الثاني" IsRemovable="True" />
-        <ins:Chip Content="الثالث" IsRemovable="True" />
-      </WrapPanel>
-    </Border>
-
-    <TextBlock Classes="variant" Text="فلتر" />
-    <Border Classes="stage">
-      <WrapPanel Classes="chips">
-        <ToggleButton Classes="chip" Content="الأول" IsChecked="True" />
-        <ToggleButton Classes="chip" Content="الثاني" />
-        <ToggleButton Classes="chip" Content="الثالث" />
-      </WrapPanel>
-    </Border>
-
-    <TextBlock Classes="variant" Text="رابط" />
-    <Border Classes="stage">
-      <WrapPanel Classes="chips">
-        <Button Classes="chip active" Content="الأول" />
-        <Button Classes="chip" Content="الثاني" />
-        <Button Classes="chip" Content="الثالث" />
-      </WrapPanel>
-    </Border>
+    <pg:PlayText Classes="p" Markup="الرقاقة `ins:Chip` قيمة صغيرة يتصرف فيها المستخدم، أما الشارة فللقراءة وحدها. وقد تكون الرقاقة فلترًا تزيله، أو خيارًا تشغله وتطفئه، أو وسمًا. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:ChipsPlay.Chip}" />
 
     <TextBlock Classes="section" Text="الاختيار المتعدد" />
-    <Border Classes="stage wide">
-      <StackPanel Spacing="6">
-        <TextBlock Classes="label" Text="العناصر" />
-        <ins:TagsInput PlaceholderText="اختر" x:Name="ListTags">
-          <ins:TagsOption Value="a" Label="الأول" />
-          <ins:TagsOption Value="b" Label="الثاني" />
-          <ins:TagsOption Value="c" Label="الثالث" />
-          <ins:TagsOption Value="d" Label="الرابع" />
-          <ins:TagsOption Value="e" Label="الخامس" />
-        </ins:TagsInput>
-      </StackPanel>
-    </Border>
+    <pg:PlayText Classes="p" Markup="يجمع `ins:TagsInput` قيمًا عدة في حقل واحد. فإذا وضعت فيه خيارات `ins:TagsOption` صار اختيارًا متعددًا يطابق كما يطابق الإكمال التلقائي، وكلما اخترت خيارًا صار رقاقة وخرج من القائمة. وتجد القيم كلها في `Values`." />
+    <pg:Playground Def="{x:Static pg:ChipsPlay.Tags}" />
 
-    <TextBlock Classes="variant" Text="بلا قائمة" />
-    <Border Classes="stage wide">
-      <StackPanel Spacing="6">
-        <TextBlock Classes="label" Text="الوسوم" />
-        <ins:TagsInput x:Name="FreeTags" PlaceholderText="اكتب واضغط Enter" />
-      </StackPanel>
-    </Border>
-
-    <TextBlock Classes="variant" Text="كتابة حرة مع القائمة" />
-    <Border Classes="stage wide">
-      <StackPanel Spacing="6">
-        <TextBlock Classes="label" Text="العناصر" />
-        <ins:TagsInput x:Name="FreeListTags" IsFree="True" PlaceholderText="اختر">
-          <ins:TagsOption Value="a" Label="الأول" />
-          <ins:TagsOption Value="b" Label="الثاني" />
-          <ins:TagsOption Value="c" Label="الثالث" />
-          <ins:TagsOption Value="d" Label="الرابع" />
-          <ins:TagsOption Value="e" Label="الخامس" />
-        </ins:TagsInput>
-      </StackPanel>
-    </Border>
-
-    <TextBlock Classes="variant" Text="حد أعلى: 3" />
-    <Border Classes="stage wide">
-      <StackPanel Spacing="6">
-        <TextBlock Classes="label" Text="العناصر" />
-        <ins:TagsInput x:Name="MaxTags" Max="3" PlaceholderText="اختر">
-          <ins:TagsOption Value="a" Label="الأول" />
-          <ins:TagsOption Value="b" Label="الثاني" />
-          <ins:TagsOption Value="c" Label="الثالث" />
-          <ins:TagsOption Value="d" Label="الرابع" />
-          <ins:TagsOption Value="e" Label="الخامس" />
-        </ins:TagsInput>
-      </StackPanel>
-    </Border>
-
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في الرقاقات والوسوم من عناصر وكلاسات وخصائص وأحداث، لكل مكون صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:ChipsPlay.All}" />
   </StackPanel>
 </UserControl>

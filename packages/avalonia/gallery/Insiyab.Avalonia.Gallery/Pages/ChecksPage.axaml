@@ -1,160 +1,33 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.ChecksPage">
-  <UserControl.Resources>
-    <SolidColorBrush x:Key="ExampleTint" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.example">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background" Value="{StaticResource ExampleTint}" />
-    </Style>
-    <Style Selector="TextBlock.cap">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-      <Setter Property="Margin" Value="0,0,0,8" />
-      <Setter Property="LineHeight" Value="20.4" />
-    </Style>
-    <Style Selector="TextBlock.h3">
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
 
-  <ScrollViewer>
-    <StackPanel Spacing="16" MaxWidth="832" HorizontalAlignment="Stretch">
+  <StackPanel>
+    <TextBlock Classes="intro" Text="مربعات ودوائر ومفاتيح وبطاقات اختيار، وكلها عناصر Avalonia الأصلية بمظهر المكتبة." />
+    <pg:PlayExample Layout="Row" Code="{x:Static pg:ChecksPlay.Example}" />
 
-      <Border Classes="example">
-        <WrapPanel ItemSpacing="10" LineSpacing="10">
-          <CheckBox Content="محدد" IsChecked="True" />
-          <RadioButton GroupName="r-demo" Content="دائرة" IsChecked="True" />
-          <ToggleSwitch Content="مفتاح" IsChecked="True" />
-        </WrapPanel>
-      </Border>
+    <TextBlock Classes="section" Text="مربعات الاختيار وأزراره" />
+    <pg:PlayText Classes="p" Markup="المربع `CheckBox` والدائرة `RadioButton`، فإذا نقرت النص تبدلت حالته، وتبقى لوحة المفاتيح من شأن Avalonia. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:ChecksPlay.Check}" />
 
-      <TextBlock Classes="h3" Text="مربعات الاختيار وأزراره" />
-      <Border Classes="example">
-        <StackPanel Spacing="20">
-          <StackPanel>
-            <TextBlock Classes="cap" Text="مربع" />
-            <WrapPanel ItemSpacing="24" LineSpacing="10">
-              <CheckBox Content="الأول" IsChecked="True" />
-              <CheckBox Content="الأول" />
-              <CheckBox Content="الأول" IsChecked="{x:Null}" />
-            </WrapPanel>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="دائرة" />
-            <StackPanel Spacing="16" AutomationProperties.Name="الخيارات">
-              <RadioButton GroupName="p-radio" Content="الأول" IsChecked="True" />
-              <RadioButton GroupName="p-radio" Content="الثاني" />
-            </StackPanel>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="الإلغاء بنقرة ثانية" />
-            <StackPanel Spacing="16" ins:Choice.Deselect="True" AutomationProperties.Name="الخيارات">
-              <RadioButton GroupName="p-radio-2" Content="الأول" IsChecked="True" />
-              <RadioButton GroupName="p-radio-2" Content="الثاني" />
-            </StackPanel>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="معطل" />
-            <WrapPanel ItemSpacing="24" LineSpacing="10">
-              <CheckBox Content="الأول" IsChecked="True" IsEnabled="False" />
-              <CheckBox Content="الأول" IsEnabled="False" />
-              <RadioButton GroupName="p-radio-3" Content="الأول" IsChecked="True" IsEnabled="False" />
-              <RadioButton GroupName="p-radio-3" Content="الثاني" IsEnabled="False" />
-            </WrapPanel>
-          </StackPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="المفتاح" />
+    <pg:PlayText Classes="p" Markup="يصلح `ToggleSwitch` لكل إعداد له حالتان، فحالته ظاهرة دون أن يُفتح شيء." />
+    <pg:Playground Def="{x:Static pg:ChecksPlay.Toggle}" />
 
-      <TextBlock Classes="h3" Text="المفتاح" />
-      <Border Classes="example">
-        <StackPanel Spacing="20">
-          <WrapPanel ItemSpacing="24" LineSpacing="10">
-            <ToggleSwitch Content="الإشعارات" IsChecked="True" />
-            <ToggleSwitch Content="الإشعارات" />
-            <ToggleSwitch Content="الإشعارات" IsChecked="True" ins:Choice.Description="وصف قصير" />
-          </WrapPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="في بطاقة" />
-            <ToggleSwitch Classes="card" Content="الإشعارات" IsChecked="True" />
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="في شبكة" />
-            <ins:ChoiceGrid Classes="switch-grid">
-              <ToggleSwitch Content="الإشعارات" IsChecked="True" ins:Choice.Description="وصف قصير" />
-              <ToggleSwitch Content="التقرير اليومي" />
-            </ins:ChoiceGrid>
-          </StackPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="بطاقات الاختيار" />
+    <pg:PlayText Classes="p" Markup="إذا احتاج الخيار إلى أكثر من سطر فضع الكلاس `tile` على زر الاختيار أو مربع الاختيار نفسه، وما البطاقة إلا مظهر لحالته." />
+    <pg:Playground Def="{x:Static pg:ChecksPlay.Tile}" />
 
-      <TextBlock Classes="h3" Text="بطاقات الاختيار" />
-      <Border Classes="example">
-        <StackPanel Spacing="20">
-          <ins:ChoiceGrid Classes="tile-grid" AutomationProperties.Name="الخيارات">
-            <RadioButton Classes="tile" GroupName="p-tile" Content="الأول" ins:Choice.Description="وصف قصير" />
-            <RadioButton Classes="tile" GroupName="p-tile" Content="الثاني" ins:Choice.Description="وصف قصير" IsChecked="True" />
-            <RadioButton Classes="tile" GroupName="p-tile" Content="الثالث" ins:Choice.Description="وصف قصير" />
-          </ins:ChoiceGrid>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="أكثر من واحد" />
-            <ins:ChoiceGrid Classes="tile-grid" AutomationProperties.Name="الخيارات">
-              <CheckBox Classes="tile" Content="الأول" ins:Choice.Description="وصف قصير" />
-              <CheckBox Classes="tile" Content="الثاني" ins:Choice.Description="وصف قصير" IsChecked="True" />
-              <CheckBox Classes="tile" Content="الثالث" ins:Choice.Description="وصف قصير" />
-            </ins:ChoiceGrid>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="بلا وصف، وبطاقة معطلة" />
-            <ins:ChoiceGrid Classes="tile-grid" AutomationProperties.Name="الخيارات">
-              <RadioButton Classes="tile" GroupName="p-tile-2" Content="الأول" />
-              <RadioButton Classes="tile" GroupName="p-tile-2" Content="الثاني" IsChecked="True" />
-              <RadioButton Classes="tile" GroupName="p-tile-2" Content="الثالث" IsEnabled="False" />
-            </ins:ChoiceGrid>
-          </StackPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="الشريط المقسم" />
+    <pg:PlayText Classes="p" Markup="الشريط المقسم `ins:Segmented` يختار منه المستخدم بديلًا واحدًا من بدائل قليلة قصيرة." />
+    <pg:Playground Def="{x:Static pg:ChecksPlay.SegBar}" />
 
-      <TextBlock Classes="h3" Text="الشريط المقسم" />
-      <Border Classes="example">
-        <StackPanel Spacing="20">
-          <ins:Segmented AutomationProperties.Name="الفترة">
-            <ins:SegmentedItem Content="اليوم" Tag="day" />
-            <ins:SegmentedItem Content="الأسبوع" Tag="week" />
-            <ins:SegmentedItem Content="الشهر" Tag="month" />
-          </ins:Segmented>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="بأيقونات" />
-            <ins:Segmented AutomationProperties.Name="الفترة">
-              <ins:SegmentedItem Tag="day">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                  <ins:Icon Data="{StaticResource IconCalendar}" VerticalAlignment="Center" />
-                  <TextBlock Text="اليوم" VerticalAlignment="Center" />
-                </StackPanel>
-              </ins:SegmentedItem>
-              <ins:SegmentedItem Tag="week">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                  <ins:Icon Data="{StaticResource IconList}" VerticalAlignment="Center" />
-                  <TextBlock Text="الأسبوع" VerticalAlignment="Center" />
-                </StackPanel>
-              </ins:SegmentedItem>
-              <ins:SegmentedItem Tag="month">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                  <ins:Icon Data="{StaticResource IconGrid}" VerticalAlignment="Center" />
-                  <TextBlock Text="الشهر" VerticalAlignment="Center" />
-                </StackPanel>
-              </ins:SegmentedItem>
-            </ins:Segmented>
-          </StackPanel>
-        </StackPanel>
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في الاختيار والمفاتيح من عناصر وكلاسات وخصائص وأحداث، لكل مكون صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:ChecksPlay.All}" />
+  </StackPanel>
 </UserControl>

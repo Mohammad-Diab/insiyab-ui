@@ -1,119 +1,25 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.ChartsPage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/ContentFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <Border Classes="dx">
-        <ins:Chart Type="Bar" Labels="يناير,فبراير,مارس,أبريل,مايو,يونيو">
-          <ins:ChartSeries Name="الطلبات" Values="120,150,98,174,160,210" />
-          <ins:ChartSeries Name="المرتجعات" Values="14,9,12,18,11,15" />
-        </ins:Chart>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="أعمدة وخطوط وحلقات وتوزيعات ترسم من سلاسل أرقام، بألوان المكتبة واتجاه القراءة، وتبقى أرقامها مقروءة لقارئ الشاشة." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:ChartsPlay.Example}" />
 
-      <TextBlock Classes="section" Text="الرسم البياني" />
-      <Border Classes="stage wide">
-        <ins:Chart Type="Bar" Labels="يناير,فبراير,مارس,أبريل,مايو">
-          <ins:ChartSeries Name="هذا العام" Values="120,150,98,174,160" />
-          <ins:ChartSeries Name="العام الماضي" Values="90,130,110,140,150" />
-        </ins:Chart>
-      </Border>
-      <TextBlock Classes="variant" Text="أعمدة أفقية" />
-      <Border Classes="stage wide">
-        <ins:Chart Type="HBar" Labels="يناير,فبراير,مارس,أبريل,مايو">
-          <ins:ChartSeries Name="هذا العام" Values="120,150,98,174,160" />
-          <ins:ChartSeries Name="العام الماضي" Values="90,130,110,140,150" />
-        </ins:Chart>
-      </Border>
-      <TextBlock Classes="variant" Text="توزيع" />
-      <Border Classes="stage wide">
-        <ins:Chart Type="Histogram" Labels="0–2,2–4,4–6,6–8,8–10">
-          <ins:ChartSeries Name="المجموعة الأولى" Values="3,8,19,27,12" />
-          <ins:ChartSeries Name="المجموعة الثانية" Values="2,6,15,31,16" />
-        </ins:Chart>
-      </Border>
-      <TextBlock Classes="variant" Text="خط" />
-      <Border Classes="stage wide">
-        <ins:Chart Type="Line" Labels="يناير,فبراير,مارس,أبريل,مايو">
-          <ins:ChartSeries Name="هذا العام" Values="120,150,98,174,160" />
-          <ins:ChartSeries Name="العام الماضي" Values="90,130,110,140,150" />
-        </ins:Chart>
-      </Border>
-      <TextBlock Classes="variant" Text="مساحة" />
-      <Border Classes="stage wide">
-        <ins:Chart Type="Area" Labels="يناير,فبراير,مارس,أبريل,مايو">
-          <ins:ChartSeries Name="هذا العام" Values="120,150,98,174,160" />
-          <ins:ChartSeries Name="العام الماضي" Values="90,130,110,140,150" />
-        </ins:Chart>
-      </Border>
-      <TextBlock Classes="variant" Text="حلقة" />
-      <Border Classes="stage wide">
-        <ins:Chart Type="Donut" Labels="يناير,فبراير,مارس,أبريل,مايو">
-          <ins:ChartSeries Name="هذا العام" Values="120,150,98,174,160" />
-        </ins:Chart>
-      </Border>
-      <TextBlock Classes="variant" Text="خط مصغر" />
-      <Border Classes="stage wide">
-        <Border Classes="glass" Padding="16,12" HorizontalAlignment="Center">
-          <DockPanel>
-            <ins:Chart DockPanel.Dock="Right" Type="Spark" Values="12,18,14,22,19,27,31" Margin="12,0,0,0" />
-            <StackPanel Spacing="1" VerticalAlignment="Center">
-              <TextBlock Text="الزيارات" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource InsText2}" />
-              <TextBlock Text="31" FontSize="24" FontWeight="ExtraBold" FontFamily="{DynamicResource InsFontBodyEn}" Foreground="{DynamicResource InsToneBrandSoft}" />
-            </StackPanel>
-          </DockPanel>
-        </Border>
-      </Border>
-      <TextBlock Classes="variant" Text="سلسلة واحدة" />
-      <Border Classes="stage wide">
-        <ins:Chart Type="Bar" Labels="يناير,فبراير,مارس,أبريل,مايو">
-          <ins:ChartSeries Name="هذا العام" Values="120,150,98,174,160" />
-        </ins:Chart>
-      </Border>
-      <TextBlock Classes="variant" Text="ثلاث سلاسل" />
-      <Border Classes="stage wide">
-        <ins:Chart Type="Bar" Labels="يناير,فبراير,مارس,أبريل,مايو">
-          <ins:ChartSeries Name="هذا العام" Values="120,150,98,174,160" />
-          <ins:ChartSeries Name="العام الماضي" Values="90,130,110,140,150" />
-          <ins:ChartSeries Name="قبل عامين" Values="60,80,95,100,120" />
-        </ins:Chart>
-      </Border>
-      <TextBlock Classes="variant" Text="مكدسة" />
-      <Border Classes="stage wide">
-        <ins:Chart Type="Bar" Labels="يناير,فبراير,مارس,أبريل,مايو" Stacked="True">
-          <ins:ChartSeries Name="هذا العام" Values="120,150,98,174,160" />
-          <ins:ChartSeries Name="العام الماضي" Values="90,130,110,140,150" />
-        </ins:Chart>
-      </Border>
-      <TextBlock Classes="variant" Text="من سمة" />
-      <Border Classes="stage wide">
-        <ins:Chart Type="Bar" Values="120,150,98,174,160" Labels="يناير,فبراير,مارس,أبريل,مايو" SeriesName="هذا العام" />
-      </Border>
-      <TextBlock Classes="variant" Text="حلقة تحت مجموعها نص" />
-      <Border Classes="stage wide">
-        <ins:Chart Type="Donut" Labels="يناير,فبراير,مارس,أبريل,مايو" CenterLabel="المجموع">
-          <ins:ChartSeries Name="هذا العام" Values="120,150,98,174,160" />
-        </ins:Chart>
-      </Border>
-      <TextBlock Classes="variant" Text="بعنوان" />
-      <Border Classes="stage wide">
-        <ins:Chart Type="Bar" Labels="يناير,فبراير,مارس,أبريل,مايو" Caption="الأشهر الخمسة الأولى">
-          <ins:ChartSeries Name="هذا العام" Values="120,150,98,174,160" />
-          <ins:ChartSeries Name="العام الماضي" Values="90,130,110,140,150" />
-        </ins:Chart>
-      </Border>
-      <TextBlock Classes="variant" Text="من اليسار" />
-      <Border Classes="stage wide">
-        <ins:Chart Type="Bar" Labels="يناير,فبراير,مارس,أبريل,مايو" FlowDirection="LeftToRight">
-          <ins:ChartSeries Name="هذا العام" Values="120,150,98,174,160" />
-          <ins:ChartSeries Name="العام الماضي" Values="90,130,110,140,150" />
-        </ins:Chart>
-      </Border>
+    <TextBlock Classes="section" Text="الرسم البياني" />
+    <pg:PlayText Classes="p" Markup="ضع في `ins:Chart` سلاسل `ins:ChartSeries`، وأسماء الفئات في `Labels`، ونوع الرسم في `Type`. وتسير الفئات مع اتجاه القراءة، وتُنسق الأرقام بأرقام لاتينية. وارتفاع الرسم في `PlotHeight`، وألوان سلاسله في `Brush1` إلى `Brush6`." />
+    <pg:Playground Def="{x:Static pg:ChartsPlay.Chart}" />
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="التحكم من الشيفرة" />
+    <pg:PlayText Classes="p" Markup="تغير السلاسل وقيمها من الشيفرة، فيُعاد الرسم وحده، ويقرأ قارئ الشاشة الأرقام الجديدة." />
+    <pg:PlayListing Code="{x:Static pg:ChartsPlay.Code}" Margin="0,0,0,24" />
+
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في الرسوم البيانية من عناصر وخصائص، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:ChartsPlay.All}" />
+  </StackPanel>
 </UserControl>

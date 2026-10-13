@@ -14,6 +14,9 @@ public class PlayExample : Border
     public static readonly StyledProperty<ExampleLayout> LayoutProperty =
         AvaloniaProperty.Register<PlayExample, ExampleLayout>(nameof(Layout));
 
+    public static readonly StyledProperty<bool> ShowCodeProperty =
+        AvaloniaProperty.Register<PlayExample, bool>(nameof(ShowCode), true);
+
     private readonly Border _view = new();
     private readonly PlayListing _listing = new();
 
@@ -29,9 +32,18 @@ public class PlayExample : Border
 
     public ExampleLayout Layout { get => GetValue(LayoutProperty); set => SetValue(LayoutProperty, value); }
 
+    /// <summary>False shows the example alone, as the web's <c>code="none"</c>.</summary>
+    public bool ShowCode { get => GetValue(ShowCodeProperty); set => SetValue(ShowCodeProperty, value); }
+
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
+        if (change.Property == ShowCodeProperty)
+        {
+            _listing.IsVisible = ShowCode;
+            _view.Classes.Set("solo", !ShowCode);
+        }
         if (change.Property != CodeProperty && change.Property != LayoutProperty) return;
         var code = Code ?? "";
         _view.Child = Layout == ExampleLayout.Row

@@ -1,58 +1,37 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.HijriPage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PickersFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <Border Classes="dx">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="التاريخ" />
-          <ins:DateField x:Name="Demo" CalendarKind="Hijri" />
-        </StackPanel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="حقل التاريخ بالتقويم الهجري، أم القرى أو الحسابي، ومفتاح يقلبه إلى الميلادي. أما الخادم فيستلم التاريخ الميلادي كما اعتاد." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:HijriPlay.Example}" />
 
-      <TextBlock Classes="section" Text="حقل هجري" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="التاريخ" />
-          <ins:DateField x:Name="Play" CalendarKind="Hijri" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="حقل هجري" />
+    <pg:PlayText Classes="p" Markup="اجعل `CalendarKind` حقل التاريخ الذي في صفحة أدوات الاختيار `Hijri` فيصير هجريًا. وما يصل إلى الخادم لا يتغير: يحمل `Value` التاريخ ميلاديًا بصيغة ISO مثل `&#x200E;2026-09-24&#x200E;`، كأي حقل تاريخ." />
+    <pg:Playground Def="{x:Static pg:HijriPlay.Field}" />
 
-      <TextBlock Classes="variant" Text="فترة بين تاريخين" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الفترة" />
-          <ins:DateField x:Name="PlayRange" CalendarKind="Hijri" Mode="Range" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="الكتابة" />
+    <ins:ProseList>
+      <pg:PlayText Classes="p" Margin="0" Markup="يوم/شهر/سنة هجرية: `13/4/1448` أو `١٣/٤/١٤٤٨`، ولك أن تبدأ بالسنة: `&#x200E;1448-04-13&#x200E;`" />
+      <pg:PlayText Classes="p" Margin="0" Markup="سنة من رقمين: تُحسب من القرن الهجري الحالي: `13/4/48`" />
+      <pg:PlayText Classes="p" Margin="0" Markup="سنة بعد 1700: يقرؤها الحقل ميلادية: `24/9/2026` و`&#x200E;2026-09-24&#x200E;`" />
+      <pg:PlayText Classes="p" Margin="0" Markup="يوم لا وجود له: يرفضه الحقل برسالة تظهر فيه." />
+    </ins:ProseList>
 
-      <TextBlock Classes="variant" Text="الحسابي" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="التاريخ" />
-          <ins:DateField x:Name="PlayCivil" CalendarKind="HijriCivil" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="التطبيق كله" />
+    <pg:PlayText Classes="p" Markup="اجعل `CalendarKind` في نمط يعم `ins:DateField` يصر كل حقل تاريخ في التطبيق هجريًا، وإن أردت حقلًا بعينه ميلاديًا فاجعله `Gregorian`." />
+    <pg:PlayListing Code="{x:Static pg:HijriPlay.Page}" Margin="0,0,0,24" />
 
-      <TextBlock Classes="variant" Text="التقويم" />
-      <Border Classes="stage">
-        <FlyoutPresenter Classes="picker" HorizontalAlignment="Center" ClipToBounds="False">
-          <ins:DateCalendar x:Name="StillHijri" CalendarKind="Hijri" />
-        </FlyoutPresenter>
-      </Border>
+    <TextBlock Classes="section" Text="التحكم من الشيفرة" />
+    <pg:PlayListing Code="{x:Static pg:HijriPlay.Code}" Margin="0,0,0,24" />
 
-      <TextBlock Classes="variant" Text="بعد قلبه إلى الميلادي" />
-      <Border Classes="stage">
-        <FlyoutPresenter Classes="picker" HorizontalAlignment="Center" ClipToBounds="False">
-          <ins:DateCalendar x:Name="StillGregorian" CalendarKind="Hijri" ShowGregorian="True" />
-        </FlyoutPresenter>
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في الحقل الهجري من خصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:HijriPlay.All}" />
+  </StackPanel>
 </UserControl>

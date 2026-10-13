@@ -1,27 +1,33 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.ToastsPage">
-  <ScrollViewer>
-    <StackPanel Spacing="24">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
+  </UserControl.Styles>
 
-      <Border Classes="card" Padding="24">
-        <WrapPanel ItemSpacing="12" LineSpacing="12">
-          <Button Classes="secondary" Content="نجاح" ins:Toast.Text="تم الحفظ" ins:Toast.Tone="Ok" />
-          <Button Classes="secondary" Content="خطأ" ins:Toast.Text="حدث خطأ" ins:Toast.Tone="Bad" />
-          <Button Classes="secondary" Content="تحذير" ins:Toast.Text="انتبه" ins:Toast.Tone="Warn" />
-          <Button Classes="secondary" Content="معلومة" ins:Toast.Text="للعلم" ins:Toast.Tone="Info" />
-        </WrapPanel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="الرسالة العابرة إشعار يظهر ثم يختفي وحده، بخاصية على زر أو بسطر من الشيفرة." />
+    <pg:PlayExample Layout="Row" Code="{x:Static pg:ToastsPlay.Example}" />
 
-      <TextBlock Classes="h2" Text="الرسالة العابرة" />
-      <Border Classes="card" Padding="24">
-        <StackPanel Spacing="12">
-          <Button Classes="secondary" Content="اعرض الرسالة" HorizontalAlignment="Center" Click="OnShowToast" />
-          <TextBlock Classes="muted" HorizontalAlignment="Center" TextWrapping="Wrap" Text="اضغط F8 لتنتقل إلى الرسائل بلوحة المفاتيح، وتبقى رسالة الخطأ حتى تغلقها." />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="الرسالة العابرة" />
+    <pg:PlayText Classes="p" Markup="ضع `ins:Toast.Text` على زر، أو استدع `Toast.Show()`، فتطل الرسالة من زاوية النافذة ثم تغيب وحدها، ويقرؤها قارئ الشاشة دون أن تنتزع التركيز. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:ToastsPlay.Toast}" />
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="متى تستعمل الرسالة العابرة" />
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0" Text="لتأكيد ما جرى للتو بفعل المستخدم: حُفظ، أُرسل، نُسخ." />
+      <TextBlock Classes="p" Margin="0" Text="أما خطأ الحقل فموضعه الحقل نفسه، كما في صفحة التحقق." />
+      <TextBlock Classes="p" Margin="0" Text="وأما الرسالة التي يجب أن تبقى فحقها أن تكون تنبيهًا في الصفحة." />
+    </ins:ProseList>
+
+    <TextBlock Classes="section" Text="التحكم من الشيفرة" />
+    <pg:PlayText Classes="p" Markup="استدعها بـ `Toast.Show(anchor, text, tone)`، وأكثر ما تحتاجها بعد عملية غير متزامنة." />
+    <pg:PlayListing Code="{x:Static pg:ToastsPlay.Code}" Margin="0,0,0,24" />
+
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في الرسالة العابرة من خصائص، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:ToastsPlay.All}" />
+  </StackPanel>
 </UserControl>
