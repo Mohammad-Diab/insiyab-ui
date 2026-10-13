@@ -1,0 +1,75 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <!-- A pair: the label in a 13rem column and the value beside it, ruled off from the next pair -->
+      <ControlTheme x:Key="{x:Type ins:DescriptionItem}" TargetType="ins:DescriptionItem">
+        <Setter Property="Padding" Value="0,12" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="ContentTemplate">
+          <DataTemplate x:DataType="x:String">
+            <SelectableTextBlock Text="{Binding}" />
+          </DataTemplate>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                    Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+              <Grid ColumnDefinitions="208,*" RowDefinitions="Auto,Auto" ColumnSpacing="16">
+                <ContentPresenter x:Name="PART_Term" Content="{TemplateBinding Term}" Margin="0,1,0,0"
+                                  VerticalAlignment="Top" TextElement.FontSize="{DynamicResource InsFsSm}"
+                                  TextElement.FontWeight="Bold" TextElement.Foreground="{DynamicResource InsLabel}" TextBlock.TextWrapping="Wrap" />
+                <ContentPresenter x:Name="PART_Value" Grid.Column="1" VerticalAlignment="Top" TextBlock.TextWrapping="Wrap"
+                                  Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+              </Grid>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:nth-child(1)">
+          <Setter Property="Padding" Value="0,0,0,12" />
+        </Style>
+        <Style Selector="^:nth-last-child(1)">
+          <Setter Property="Padding" Value="0,12,0,0" />
+          <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="^:nth-child(1):nth-last-child(1)">
+          <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="^:stacked">
+          <Style Selector="^ /template/ ContentPresenter#PART_Term">
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="Margin" Value="0" />
+          </Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_Value">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="Margin" Value="0,4,0,0" />
+          </Style>
+        </Style>
+        <Style Selector="^:grid">
+          <Setter Property="Padding" Value="0" />
+          <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="^[FlowDirection=RightToLeft]">
+          <Style Selector="^ /template/ ContentPresenter#PART_Term">
+            <Setter Property="TextBlock.LineHeight" Value="22.1" />
+          </Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_Value">
+            <Setter Property="TextBlock.LineHeight" Value="23.8" />
+          </Style>
+        </Style>
+        <Style Selector="^.num /template/ ContentPresenter#PART_Value">
+          <Setter Property="FlowDirection" Value="LeftToRight" />
+          <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+</Styles>

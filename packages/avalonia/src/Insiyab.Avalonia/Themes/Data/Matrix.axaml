@@ -1,0 +1,143 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <SolidColorBrush x:Key="InsMatrixCardHover" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.35" />
+
+      <ControlTheme x:Key="{x:Type ins:ChoiceMatrix}" TargetType="ins:ChoiceMatrix">
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+              <StackPanel x:Name="PART_Host" Spacing="4" Margin="0,4" />
+            </ScrollViewer>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <!-- A choice with words: the whole card is the radio, its own dot hidden -->
+      <ControlTheme x:Key="InsMatrixCard" TargetType="RadioButton">
+        <Setter Property="Background" Value="{DynamicResource InsSurface}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="Padding" Value="12,10" />
+        <Setter Property="MinWidth" Value="128" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border x:Name="PART_Focus" Margin="-4" BorderThickness="2" CornerRadius="14" Opacity="0"
+                      BorderBrush="{DynamicResource InsToneBrandSoft}" />
+              <Border x:Name="PART_Back" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" />
+              <Border x:Name="PART_Ring" BorderThickness="2" CornerRadius="{TemplateBinding CornerRadius}" Opacity="0"
+                      BorderBrush="{DynamicResource InsToneBrandSoft}" />
+              <ContentPresenter x:Name="PART_ContentPresenter" Padding="{TemplateBinding Padding}"
+                                Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Border#PART_Back">
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:pointerover">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsMatrixCardHover}" />
+        </Style>
+        <Style Selector="^:checked">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandSoft}" />
+          <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          <Style Selector="^ /template/ Border#PART_Ring">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_Focus">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="ins|ChoiceMatrix TextBlock.matrix-col">
+    <Setter Property="Margin" Value="8,4,8,8" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="ExtraBold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Bottom" />
+  </Style>
+  <Style Selector="ins|ChoiceMatrix Border.matrix-th, ins|ChoiceMatrix Border.matrix-cell">
+    <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ins|ChoiceMatrix Border.matrix-th">
+    <Setter Property="Padding" Value="12,10,16,10" />
+    <Setter Property="TextElement.FontWeight" Value="Bold" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+  <Style Selector="ins|ChoiceMatrix Border.matrix-th > TextBlock[FlowDirection=RightToLeft]">
+    <Setter Property="LineHeight" Value="22.1" />
+  </Style>
+  <Style Selector="ins|ChoiceMatrix Border.matrix-cell">
+    <Setter Property="Padding" Value="6" />
+  </Style>
+  <Style Selector="ins|ChoiceMatrix Border.matrix-row:pointerover Border.matrix-th, ins|ChoiceMatrix Border.matrix-row:pointerover Border.matrix-cell">
+    <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
+  </Style>
+  <Style Selector="ins|ChoiceMatrix Border.matrix-cell.checked">
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+  </Style>
+  <Style Selector="ins|ChoiceMatrix RadioButton.matrix-radio">
+    <Setter Property="MinWidth" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+  <!-- The cards: the cells drop their fill and each card fills its cell -->
+  <Style Selector="ins|ChoiceMatrix.cards Border.matrix-cell, ins|ChoiceMatrix.cards Border.matrix-row:pointerover Border.matrix-cell, ins|ChoiceMatrix.cards Border.matrix-cell.checked">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Padding" Value="4" />
+  </Style>
+  <Style Selector="ins|ChoiceMatrix TextBlock.matrix-desc">
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="ins|ChoiceMatrix TextBlock.matrix-desc[FlowDirection=RightToLeft]">
+    <Setter Property="LineHeight" Value="20.4" />
+  </Style>
+  <Style Selector="ins|ChoiceMatrix Border.matrix-points">
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="Padding" Value="8,1" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+    <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    <Setter Property="TextElement.FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector="ins|ChoiceMatrix RadioButton:checked Border.matrix-points">
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandSoft}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsOnPrimary}" />
+  </Style>
+
+</Styles>

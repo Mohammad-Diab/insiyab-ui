@@ -1,0 +1,8 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Data/Table.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Data/List.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Data/Description.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Data/Stat.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Data/Matrix.axaml" />
+</Styles>
