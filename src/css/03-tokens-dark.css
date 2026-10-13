@@ -107,11 +107,11 @@
      injected the per-theme value into the same namespace; a stylesheet that has to
      stand on its own does need it, and this is the kind of gap that only shows up
      in the theme nobody screenshotted. */
-  --ins-primary-darker: #d2a0b7;
+  --ins-primary-darker: #ae99cf;
 
   /* The page ground. The source sheet carried these on the tenant's payload rather
      than in the sheet, so a stylesheet-only page had no dark ground at all — it
-     kept the light washes and every panel floated on pink. Declared here so the
+     kept the light washes and every panel floated on a pale tint. Declared here so the
      dark theme stands up from the CSS alone. */
   --ins-wash-1: #0f1115;
   --ins-wash-2: #12141a;

@@ -26,20 +26,18 @@
      and nothing else we set. Without it a dark page keeps light scrollbars. */
   color-scheme: light;
 
-  /* Brand. The default is a mulberry, which is what the reference screenshots in
-     reference/ are shot in — keeping it makes a side-by-side comparison during
-     extraction meaningful. Change it in one line and the rest retunes. */
-  --ins-primary: #9B2C5E;
-  --ins-primary-dark: #691E40;
-  --ins-primary-darker: #46142A;
-  --ins-primary-rgb: 155, 44, 94;
-  --ins-grad-rgb: 105, 30, 64;
-  --ins-accent-rgb: 105, 30, 64;
+  /* Brand. The default is a deep violet; change it in one line and the rest retunes. */
+  --ins-primary: #4C1D95;
+  --ins-primary-dark: #341465;
+  --ins-primary-darker: #220D43;
+  --ins-primary-rgb: 76, 29, 149;
+  --ins-grad-rgb: 52, 20, 101;
+  --ins-accent-rgb: 52, 20, 101;
   /* Derived, not picked: wash-1 is the primary at 93% toward white, wash-2 the
      gradient end-stop at 94%. These are the values `Insiyab.brand()` computes, so
      the stylesheet's default ground and a JS-set one are the same ground. */
-  --ins-wash-1: #f8f0f4;
-  --ins-wash-2: #f6f2f4;
+  --ins-wash-1: #f2eff8;
+  --ins-wash-2: #f3f1f6;
   --ins-on-primary: #ffffff;
 
   /* Glass alpha ladder: the more "on top" a surface is, the more opaque. */

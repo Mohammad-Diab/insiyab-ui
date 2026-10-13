@@ -2,6 +2,40 @@
   "source": "src/js/insiyab.js",
   "cases": [
     {
+      "hex": "#4C1D95",
+      "theme": "light",
+      "tokens": {
+        "primary": "#4C1D95",
+        "primary-dark": "#341465",
+        "primary-darker": "#220d43",
+        "primary-rgb": "76, 29, 149",
+        "grad-rgb": "52, 20, 101",
+        "accent-rgb": "52, 20, 101",
+        "on-primary": "#ffffff",
+        "primary-mid": "#704aaa",
+        "on-primary-mid": "#ffffff",
+        "wash-1": "#f2eff8",
+        "wash-2": "#f3f1f6"
+      }
+    },
+    {
+      "hex": "#4C1D95",
+      "theme": "dark",
+      "tokens": {
+        "primary": "#4C1D95",
+        "primary-dark": "#341465",
+        "primary-darker": "#ae99cf",
+        "primary-rgb": "76, 29, 149",
+        "grad-rgb": "52, 20, 101",
+        "accent-rgb": "52, 20, 101",
+        "on-primary": "#ffffff",
+        "primary-mid": "#9d83c5",
+        "on-primary-mid": "#111111",
+        "wash-1": "#0f1115",
+        "wash-2": "#12141a"
+      }
+    },
+    {
       "hex": "#9B2C5E",
       "theme": "light",
       "tokens": {
@@ -12,6 +46,8 @@
         "grad-rgb": "105, 30, 64",
         "accent-rgb": "105, 30, 64",
         "on-primary": "#ffffff",
+        "primary-mid": "#af567e",
+        "on-primary-mid": "#ffffff",
         "wash-1": "#f8f0f4",
         "wash-2": "#f6f2f4"
       }
@@ -27,6 +63,8 @@
         "grad-rgb": "105, 30, 64",
         "accent-rgb": "105, 30, 64",
         "on-primary": "#ffffff",
+        "primary-mid": "#c88ba6",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -42,6 +80,8 @@
         "grad-rgb": "248, 238, 194",
         "accent-rgb": "248, 238, 194",
         "on-primary": "#111111",
+        "primary-mid": "#f7ebb9",
+        "on-primary-mid": "#111111",
         "wash-1": "#fefdf9",
         "wash-2": "#fffefb"
       }
@@ -57,6 +97,8 @@
         "grad-rgb": "248, 238, 194",
         "accent-rgb": "248, 238, 194",
         "on-primary": "#111111",
+        "primary-mid": "#faf1cf",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -72,6 +114,8 @@
         "grad-rgb": "255, 255, 255",
         "accent-rgb": "255, 255, 255",
         "on-primary": "#111111",
+        "primary-mid": "#ffffff",
+        "on-primary-mid": "#111111",
         "wash-1": "#ffffff",
         "wash-2": "#ffffff"
       }
@@ -87,6 +131,8 @@
         "grad-rgb": "255, 255, 255",
         "accent-rgb": "255, 255, 255",
         "on-primary": "#111111",
+        "primary-mid": "#ffffff",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -102,6 +148,8 @@
         "grad-rgb": "252, 252, 252",
         "accent-rgb": "252, 252, 252",
         "on-primary": "#111111",
+        "primary-mid": "#fbfbfb",
+        "on-primary-mid": "#111111",
         "wash-1": "#ffffff",
         "wash-2": "#ffffff"
       }
@@ -117,6 +165,8 @@
         "grad-rgb": "252, 252, 252",
         "accent-rgb": "252, 252, 252",
         "on-primary": "#111111",
+        "primary-mid": "#fcfcfc",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -132,6 +182,8 @@
         "grad-rgb": "254, 238, 173",
         "accent-rgb": "254, 238, 173",
         "on-primary": "#111111",
+        "primary-mid": "#fdeba1",
+        "on-primary-mid": "#111111",
         "wash-1": "#fffdf7",
         "wash-2": "#fffefa"
       }
@@ -147,6 +199,8 @@
         "grad-rgb": "254, 238, 173",
         "accent-rgb": "254, 238, 173",
         "on-primary": "#111111",
+        "primary-mid": "#fef1bf",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -162,6 +216,8 @@
         "grad-rgb": "193, 247, 222",
         "accent-rgb": "193, 247, 222",
         "on-primary": "#111111",
+        "primary-mid": "#b9f5d9",
+        "on-primary-mid": "#111111",
         "wash-1": "#f9fefc",
         "wash-2": "#fbfffd"
       }
@@ -177,6 +233,8 @@
         "grad-rgb": "193, 247, 222",
         "accent-rgb": "193, 247, 222",
         "on-primary": "#111111",
+        "primary-mid": "#cff8e5",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -192,6 +250,8 @@
         "grad-rgb": "252, 221, 239",
         "accent-rgb": "252, 221, 239",
         "on-primary": "#111111",
+        "primary-mid": "#fcd9ed",
+        "on-primary-mid": "#111111",
         "wash-1": "#fffcfd",
         "wash-2": "#fffdfe"
       }
@@ -207,6 +267,8 @@
         "grad-rgb": "252, 221, 239",
         "accent-rgb": "252, 221, 239",
         "on-primary": "#111111",
+        "primary-mid": "#fde5f2",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -222,6 +284,8 @@
         "grad-rgb": "217, 190, 104",
         "accent-rgb": "217, 190, 104",
         "on-primary": "#111111",
+        "primary-mid": "#d4b552",
+        "on-primary-mid": "#111111",
         "wash-1": "#fbf8f0",
         "wash-2": "#fdfbf6"
       }
@@ -237,6 +301,8 @@
         "grad-rgb": "217, 190, 104",
         "accent-rgb": "217, 190, 104",
         "on-primary": "#111111",
+        "primary-mid": "#e1cc88",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -252,6 +318,8 @@
         "grad-rgb": "248, 187, 84",
         "accent-rgb": "248, 187, 84",
         "on-primary": "#111111",
+        "primary-mid": "#f7b13c",
+        "on-primary-mid": "#111111",
         "wash-1": "#fef8ee",
         "wash-2": "#fffbf5"
       }
@@ -267,6 +335,8 @@
         "grad-rgb": "248, 187, 84",
         "accent-rgb": "248, 187, 84",
         "on-primary": "#111111",
+        "primary-mid": "#faca79",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -282,6 +352,8 @@
         "grad-rgb": "240, 138, 85",
         "accent-rgb": "240, 138, 85",
         "on-primary": "#111111",
+        "primary-mid": "#ee793d",
+        "on-primary-mid": "#111111",
         "wash-1": "#fef3ee",
         "wash-2": "#fef8f5"
       }
@@ -297,6 +369,8 @@
         "grad-rgb": "240, 138, 85",
         "accent-rgb": "240, 138, 85",
         "on-primary": "#111111",
+        "primary-mid": "#f3a379",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -312,6 +386,8 @@
         "grad-rgb": "88, 206, 167",
         "accent-rgb": "88, 206, 167",
         "on-primary": "#111111",
+        "primary-mid": "#40c79a",
+        "on-primary-mid": "#111111",
         "wash-1": "#eefaf6",
         "wash-2": "#f5fcfa"
       }
@@ -327,6 +403,8 @@
         "grad-rgb": "88, 206, 167",
         "accent-rgb": "88, 206, 167",
         "on-primary": "#111111",
+        "primary-mid": "#7cd9ba",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -342,6 +420,8 @@
         "grad-rgb": "86, 192, 240",
         "accent-rgb": "86, 192, 240",
         "on-primary": "#111111",
+        "primary-mid": "#3eb7ed",
+        "on-primary-mid": "#111111",
         "wash-1": "#eef9fd",
         "wash-2": "#f5fbfe"
       }
@@ -357,6 +437,8 @@
         "grad-rgb": "86, 192, 240",
         "accent-rgb": "86, 192, 240",
         "on-primary": "#111111",
+        "primary-mid": "#7acef3",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -372,6 +454,8 @@
         "grad-rgb": "80, 80, 80",
         "accent-rgb": "80, 80, 80",
         "on-primary": "#ffffff",
+        "primary-mid": "#919191",
+        "on-primary-mid": "#111111",
         "wash-1": "#f5f5f5",
         "wash-2": "#f5f5f5"
       }
@@ -387,6 +471,8 @@
         "grad-rgb": "80, 80, 80",
         "accent-rgb": "80, 80, 80",
         "on-primary": "#ffffff",
+        "primary-mid": "#b4b4b4",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -402,6 +488,8 @@
         "grad-rgb": "80, 80, 80",
         "accent-rgb": "80, 80, 80",
         "on-primary": "#ffffff",
+        "primary-mid": "#919191",
+        "on-primary-mid": "#111111",
         "wash-1": "#f5f5f5",
         "wash-2": "#f5f5f5"
       }
@@ -417,6 +505,8 @@
         "grad-rgb": "80, 80, 80",
         "accent-rgb": "80, 80, 80",
         "on-primary": "#ffffff",
+        "primary-mid": "#b3b3b3",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -432,6 +522,8 @@
         "grad-rgb": "81, 81, 81",
         "accent-rgb": "81, 81, 81",
         "on-primary": "#ffffff",
+        "primary-mid": "#929292",
+        "on-primary-mid": "#111111",
         "wash-1": "#f5f5f5",
         "wash-2": "#f5f5f5"
       }
@@ -447,6 +539,8 @@
         "grad-rgb": "81, 81, 81",
         "accent-rgb": "81, 81, 81",
         "on-primary": "#ffffff",
+        "primary-mid": "#b4b4b4",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -462,6 +556,8 @@
         "grad-rgb": "79, 79, 79",
         "accent-rgb": "79, 79, 79",
         "on-primary": "#ffffff",
+        "primary-mid": "#909090",
+        "on-primary-mid": "#111111",
         "wash-1": "#f5f5f5",
         "wash-2": "#f4f4f4"
       }
@@ -477,6 +573,8 @@
         "grad-rgb": "79, 79, 79",
         "accent-rgb": "79, 79, 79",
         "on-primary": "#ffffff",
+        "primary-mid": "#b3b3b3",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -492,6 +590,8 @@
         "grad-rgb": "82, 82, 82",
         "accent-rgb": "82, 82, 82",
         "on-primary": "#ffffff",
+        "primary-mid": "#939393",
+        "on-primary-mid": "#111111",
         "wash-1": "#f6f6f6",
         "wash-2": "#f5f5f5"
       }
@@ -507,6 +607,8 @@
         "grad-rgb": "82, 82, 82",
         "accent-rgb": "82, 82, 82",
         "on-primary": "#ffffff",
+        "primary-mid": "#b5b5b5",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -522,6 +624,8 @@
         "grad-rgb": "166, 166, 166",
         "accent-rgb": "166, 166, 166",
         "on-primary": "#111111",
+        "primary-mid": "#999999",
+        "on-primary-mid": "#111111",
         "wash-1": "#f6f6f6",
         "wash-2": "#fafafa"
       }
@@ -537,6 +641,8 @@
         "grad-rgb": "166, 166, 166",
         "accent-rgb": "166, 166, 166",
         "on-primary": "#111111",
+        "primary-mid": "#b9b9b9",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -552,6 +658,8 @@
         "grad-rgb": "68, 79, 95",
         "accent-rgb": "68, 79, 95",
         "on-primary": "#ffffff",
+        "primary-mid": "#8390a2",
+        "on-primary-mid": "#111111",
         "wash-1": "#f4f5f7",
         "wash-2": "#f4f4f5"
       }
@@ -567,6 +675,8 @@
         "grad-rgb": "68, 79, 95",
         "accent-rgb": "68, 79, 95",
         "on-primary": "#ffffff",
+        "primary-mid": "#aab3bf",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -582,6 +692,8 @@
         "grad-rgb": "0, 0, 0",
         "accent-rgb": "0, 0, 0",
         "on-primary": "#ffffff",
+        "primary-mid": "#333333",
+        "on-primary-mid": "#ffffff",
         "wash-1": "#ededed",
         "wash-2": "#f0f0f0"
       }
@@ -597,6 +709,8 @@
         "grad-rgb": "0, 0, 0",
         "accent-rgb": "0, 0, 0",
         "on-primary": "#ffffff",
+        "primary-mid": "#737373",
+        "on-primary-mid": "#ffffff",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -612,6 +726,8 @@
         "grad-rgb": "12, 12, 12",
         "accent-rgb": "12, 12, 12",
         "on-primary": "#ffffff",
+        "primary-mid": "#414141",
+        "on-primary-mid": "#ffffff",
         "wash-1": "#eeeeee",
         "wash-2": "#f0f0f0"
       }
@@ -627,6 +743,8 @@
         "grad-rgb": "12, 12, 12",
         "accent-rgb": "12, 12, 12",
         "on-primary": "#ffffff",
+        "primary-mid": "#7c7c7c",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -642,6 +760,8 @@
         "grad-rgb": "7, 7, 7",
         "accent-rgb": "7, 7, 7",
         "on-primary": "#ffffff",
+        "primary-mid": "#3b3b3b",
+        "on-primary-mid": "#ffffff",
         "wash-1": "#eeeeee",
         "wash-2": "#f0f0f0"
       }
@@ -657,6 +777,8 @@
         "grad-rgb": "7, 7, 7",
         "accent-rgb": "7, 7, 7",
         "on-primary": "#ffffff",
+        "primary-mid": "#787878",
+        "on-primary-mid": "#ffffff",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -672,6 +794,8 @@
         "grad-rgb": "18, 18, 18",
         "accent-rgb": "18, 18, 18",
         "on-primary": "#ffffff",
+        "primary-mid": "#484848",
+        "on-primary-mid": "#ffffff",
         "wash-1": "#efefef",
         "wash-2": "#f1f1f1"
       }
@@ -687,6 +811,8 @@
         "grad-rgb": "18, 18, 18",
         "accent-rgb": "18, 18, 18",
         "on-primary": "#ffffff",
+        "primary-mid": "#818181",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -702,6 +828,8 @@
         "grad-rgb": "35, 35, 35",
         "accent-rgb": "35, 35, 35",
         "on-primary": "#ffffff",
+        "primary-mid": "#5c5c5c",
+        "on-primary-mid": "#ffffff",
         "wash-1": "#f1f1f1",
         "wash-2": "#f2f2f2"
       }
@@ -717,6 +845,8 @@
         "grad-rgb": "35, 35, 35",
         "accent-rgb": "35, 35, 35",
         "on-primary": "#ffffff",
+        "primary-mid": "#8f8f8f",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -732,6 +862,8 @@
         "grad-rgb": "255, 77, 77",
         "accent-rgb": "255, 77, 77",
         "on-primary": "#111111",
+        "primary-mid": "#ff3333",
+        "on-primary-mid": "#111111",
         "wash-1": "#ffeded",
         "wash-2": "#fff4f4"
       }
@@ -747,6 +879,8 @@
         "grad-rgb": "255, 77, 77",
         "accent-rgb": "255, 77, 77",
         "on-primary": "#111111",
+        "primary-mid": "#ff7373",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -762,6 +896,8 @@
         "grad-rgb": "77, 255, 77",
         "accent-rgb": "77, 255, 77",
         "on-primary": "#111111",
+        "primary-mid": "#33ff33",
+        "on-primary-mid": "#111111",
         "wash-1": "#edffed",
         "wash-2": "#f4fff4"
       }
@@ -777,6 +913,8 @@
         "grad-rgb": "77, 255, 77",
         "accent-rgb": "77, 255, 77",
         "on-primary": "#111111",
+        "primary-mid": "#73ff73",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -792,6 +930,8 @@
         "grad-rgb": "0, 0, 173",
         "accent-rgb": "0, 0, 173",
         "on-primary": "#ffffff",
+        "primary-mid": "#3333ff",
+        "on-primary-mid": "#ffffff",
         "wash-1": "#ededff",
         "wash-2": "#f0f0fa"
       }
@@ -807,6 +947,8 @@
         "grad-rgb": "0, 0, 173",
         "accent-rgb": "0, 0, 173",
         "on-primary": "#ffffff",
+        "primary-mid": "#7373ff",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -822,6 +964,8 @@
         "grad-rgb": "255, 255, 77",
         "accent-rgb": "255, 255, 77",
         "on-primary": "#111111",
+        "primary-mid": "#ffff33",
+        "on-primary-mid": "#111111",
         "wash-1": "#ffffed",
         "wash-2": "#fffff4"
       }
@@ -837,6 +981,8 @@
         "grad-rgb": "255, 255, 77",
         "accent-rgb": "255, 255, 77",
         "on-primary": "#111111",
+        "primary-mid": "#ffff73",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -852,6 +998,8 @@
         "grad-rgb": "77, 255, 255",
         "accent-rgb": "77, 255, 255",
         "on-primary": "#111111",
+        "primary-mid": "#33ffff",
+        "on-primary-mid": "#111111",
         "wash-1": "#edffff",
         "wash-2": "#f4ffff"
       }
@@ -867,6 +1015,8 @@
         "grad-rgb": "77, 255, 255",
         "accent-rgb": "77, 255, 255",
         "on-primary": "#111111",
+        "primary-mid": "#73ffff",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -882,6 +1032,8 @@
         "grad-rgb": "255, 77, 255",
         "accent-rgb": "255, 77, 255",
         "on-primary": "#111111",
+        "primary-mid": "#ff33ff",
+        "on-primary-mid": "#111111",
         "wash-1": "#ffedff",
         "wash-2": "#fff4ff"
       }
@@ -897,6 +1049,8 @@
         "grad-rgb": "255, 77, 255",
         "accent-rgb": "255, 77, 255",
         "on-primary": "#111111",
+        "primary-mid": "#ff73ff",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -912,6 +1066,8 @@
         "grad-rgb": "255, 255, 255",
         "accent-rgb": "255, 255, 255",
         "on-primary": "#111111",
+        "primary-mid": "#ffffff",
+        "on-primary-mid": "#111111",
         "wash-1": "#ffffff",
         "wash-2": "#ffffff"
       }
@@ -927,6 +1083,8 @@
         "grad-rgb": "255, 255, 255",
         "accent-rgb": "255, 255, 255",
         "on-primary": "#111111",
+        "primary-mid": "#ffffff",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -942,6 +1100,8 @@
         "grad-rgb": "0, 0, 0",
         "accent-rgb": "0, 0, 0",
         "on-primary": "#ffffff",
+        "primary-mid": "#333333",
+        "on-primary-mid": "#ffffff",
         "wash-1": "#ededed",
         "wash-2": "#f0f0f0"
       }
@@ -957,6 +1117,8 @@
         "grad-rgb": "0, 0, 0",
         "accent-rgb": "0, 0, 0",
         "on-primary": "#ffffff",
+        "primary-mid": "#737373",
+        "on-primary-mid": "#ffffff",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -972,6 +1134,8 @@
         "grad-rgb": "255, 77, 196",
         "accent-rgb": "255, 77, 196",
         "on-primary": "#111111",
+        "primary-mid": "#ff33bb",
+        "on-primary-mid": "#111111",
         "wash-1": "#ffedf9",
         "wash-2": "#fff4fb"
       }
@@ -987,6 +1151,8 @@
         "grad-rgb": "255, 77, 196",
         "accent-rgb": "255, 77, 196",
         "on-primary": "#111111",
+        "primary-mid": "#ff73d0",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -1002,6 +1168,8 @@
         "grad-rgb": "196, 207, 219",
         "accent-rgb": "196, 207, 219",
         "on-primary": "#111111",
+        "primary-mid": "#bbc9d6",
+        "on-primary-mid": "#111111",
         "wash-1": "#f9fafb",
         "wash-2": "#fbfcfd"
       }
@@ -1017,6 +1185,8 @@
         "grad-rgb": "196, 207, 219",
         "accent-rgb": "196, 207, 219",
         "on-primary": "#111111",
+        "primary-mid": "#d0dae3",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -1032,6 +1202,8 @@
         "grad-rgb": "105, 30, 64",
         "accent-rgb": "105, 30, 64",
         "on-primary": "#ffffff",
+        "primary-mid": "#af567e",
+        "on-primary-mid": "#ffffff",
         "wash-1": "#f8f0f4",
         "wash-2": "#f6f2f4"
       }
@@ -1047,6 +1219,8 @@
         "grad-rgb": "105, 30, 64",
         "accent-rgb": "105, 30, 64",
         "on-primary": "#ffffff",
+        "primary-mid": "#c88ba6",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -1062,6 +1236,8 @@
         "grad-rgb": "10, 80, 75",
         "accent-rgb": "10, 80, 75",
         "on-primary": "#ffffff",
+        "primary-mid": "#3f918b",
+        "on-primary-mid": "#111111",
         "wash-1": "#eef5f5",
         "wash-2": "#f0f5f4"
       }
@@ -1077,6 +1253,8 @@
         "grad-rgb": "10, 80, 75",
         "accent-rgb": "10, 80, 75",
         "on-primary": "#ffffff",
+        "primary-mid": "#7bb4af",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -1092,6 +1270,8 @@
         "grad-rgb": "25, 67, 160",
         "accent-rgb": "25, 67, 160",
         "on-primary": "#ffffff",
+        "primary-mid": "#5182ef",
+        "on-primary-mid": "#111111",
         "wash-1": "#f0f4fe",
         "wash-2": "#f1f4f9"
       }
@@ -1107,6 +1287,8 @@
         "grad-rgb": "25, 67, 160",
         "accent-rgb": "25, 67, 160",
         "on-primary": "#ffffff",
+        "primary-mid": "#87a9f4",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -1122,6 +1304,8 @@
         "grad-rgb": "84, 39, 161",
         "accent-rgb": "84, 39, 161",
         "on-primary": "#ffffff",
+        "primary-mid": "#9661f1",
+        "on-primary-mid": "#111111",
         "wash-1": "#f6f1fe",
         "wash-2": "#f5f2f9"
       }
@@ -1137,6 +1321,8 @@
         "grad-rgb": "84, 39, 161",
         "accent-rgb": "84, 39, 161",
         "on-primary": "#ffffff",
+        "primary-mid": "#b793f5",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -1152,6 +1338,8 @@
         "grad-rgb": "150, 26, 26",
         "accent-rgb": "150, 26, 26",
         "on-primary": "#ffffff",
+        "primary-mid": "#e35151",
+        "on-primary-mid": "#111111",
         "wash-1": "#fdf0f0",
         "wash-2": "#f9f1f1"
       }
@@ -1167,6 +1355,8 @@
         "grad-rgb": "150, 26, 26",
         "accent-rgb": "150, 26, 26",
         "on-primary": "#ffffff",
+        "primary-mid": "#ec8888",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -1182,6 +1372,8 @@
         "grad-rgb": "92, 191, 128",
         "accent-rgb": "92, 191, 128",
         "on-primary": "#111111",
+        "primary-mid": "#45b56e",
+        "on-primary-mid": "#111111",
         "wash-1": "#eff9f2",
         "wash-2": "#f5fbf7"
       }
@@ -1197,6 +1389,8 @@
         "grad-rgb": "92, 191, 128",
         "accent-rgb": "92, 191, 128",
         "on-primary": "#111111",
+        "primary-mid": "#7fcc9b",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -1212,6 +1406,8 @@
         "grad-rgb": "153, 20, 49",
         "accent-rgb": "153, 20, 49",
         "on-primary": "#ffffff",
+        "primary-mid": "#e74a6d",
+        "on-primary-mid": "#111111",
         "wash-1": "#fdeff2",
         "wash-2": "#f9f1f3"
       }
@@ -1227,6 +1423,8 @@
         "grad-rgb": "153, 20, 49",
         "accent-rgb": "153, 20, 49",
         "on-primary": "#ffffff",
+        "primary-mid": "#ef839a",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -1242,6 +1440,8 @@
         "grad-rgb": "54, 48, 156",
         "accent-rgb": "54, 48, 156",
         "on-primary": "#ffffff",
+        "primary-mid": "#726bea",
+        "on-primary-mid": "#111111",
         "wash-1": "#f3f2fd",
         "wash-2": "#f3f3f9"
       }
@@ -1257,6 +1457,8 @@
         "grad-rgb": "54, 48, 156",
         "accent-rgb": "54, 48, 156",
         "on-primary": "#ffffff",
+        "primary-mid": "#9e99f1",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }
@@ -1272,6 +1474,8 @@
         "grad-rgb": "174, 141, 249",
         "accent-rgb": "174, 141, 249",
         "on-primary": "#111111",
+        "primary-mid": "#a27df8",
+        "on-primary-mid": "#111111",
         "wash-1": "#f7f4fe",
         "wash-2": "#faf8ff"
       }
@@ -1287,6 +1491,8 @@
         "grad-rgb": "174, 141, 249",
         "accent-rgb": "174, 141, 249",
         "on-primary": "#111111",
+        "primary-mid": "#bfa5fa",
+        "on-primary-mid": "#111111",
         "wash-1": "#0f1115",
         "wash-2": "#12141a"
       }

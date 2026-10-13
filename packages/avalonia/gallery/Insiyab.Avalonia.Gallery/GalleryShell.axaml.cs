@@ -14,8 +14,8 @@ public partial class GalleryShell : UserControl
     // The docs site's brand swatches, with the names its tooltips give them.
     private static readonly (string Hex, string Name)[] Brands =
     [
-        ("#0F766E", "أخضر مزرق"), ("#1D4ED8", "أزرق"), ("#9B2C5E", "عنابي"),
-        ("#4C1D95", "بنفسجي"), ("#B45309", "كهرماني"), ("#C9A063", "ذهبي فاتح"),
+        ("#4C1D95", "بنفسجي"), ("#0F766E", "أخضر مزرق"), ("#1D4ED8", "أزرق"),
+        ("#9B2C5E", "عنابي"), ("#B45309", "كهرماني"), ("#C9A063", "ذهبي فاتح"),
     ];
 
     public GalleryShell()

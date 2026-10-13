@@ -16,7 +16,7 @@ public class FrostTests
     private static readonly Color LightMaterialFloor = Color.FromRgb(214, 214, 214);
     private static readonly Color LightText2 = Color.Parse("#64748B");
     private static readonly Color DarkText2 = Color.Parse("#94A3B8");
-    private static readonly Color Primary = Color.FromRgb(155, 44, 94);
+    private static readonly Color Primary = Color.FromRgb(76, 29, 149);
 
     private static Window ShowWindow(bool? material = null)
     {

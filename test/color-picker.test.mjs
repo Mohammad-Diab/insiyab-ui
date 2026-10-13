@@ -31,11 +31,11 @@ const built = await E(`(() => { const i = document.getElementById('c-brand'), g 
   return { type: i.type, name: i.name, value: i.value, dir: g.dir, cls: g.classList.contains('ins-color'), first: g.firstElementChild.className,
            swatch: getComputedStyle(g.firstElementChild).backgroundColor, label: g.firstElementChild.getAttribute('aria-label'),
            bare: document.getElementById('c-bare').parentNode.classList.contains('ins-input-group'), bareValue: document.getElementById('c-bare').value }; })()`);
-ok('the field becomes a hex field, keeping its name and value', built.type === 'text' && built.name === 'brand' && built.value === '#9b2c5e', JSON.stringify(built));
-ok('with a swatch in front, in a left-to-right group', built.cls && built.dir === 'ltr' && built.first === 'ins-color-swatch' && built.swatch === 'rgb(155, 44, 94)', built.swatch);
+ok('the field becomes a hex field, keeping its name and value', built.type === 'text' && built.name === 'brand' && built.value === '#4c1d95', JSON.stringify(built));
+ok('with a swatch in front, in a left-to-right group', built.cls && built.dir === 'ltr' && built.first === 'ins-color-swatch' && built.swatch === 'rgb(76, 29, 149)', built.swatch);
 ok('the swatch is named in the page\'s language', built.label === 'اختر لونًا');
 ok('a field outside a group gets one, its value written in lower case', built.bare && built.bareValue === '#0f766e');
-ok('the form sends #rrggbb', (await E(`new FormData(document.getElementById('cf')).get('brand')`)) === '#9b2c5e');
+ok('the form sends #rrggbb', (await E(`new FormData(document.getElementById('cf')).get('brand')`)) === '#4c1d95');
 
 await E(`(() => { const i = document.getElementById('c-bare'); i.focus(); i.select(); return 0; })()`);
 await b.type('abc');
@@ -45,7 +45,7 @@ ok('and are written out in full when the field is left', (await val('c-bare')) =
 await E(`(() => { const i = document.getElementById('c-bare'); i.focus(); i.select(); return 0; })()`);
 await b.type('#12');
 await E(`document.activeElement.blur(); 0`);
-ok('a hex that is not a colour is invalid, with a message', !(await E(`document.getElementById('c-bare').validity.valid`)) && (await E(`document.getElementById('c-bare').validationMessage`)) === 'اكتب لونًا مثل #9B2C5E.');
+ok('a hex that is not a colour is invalid, with a message', !(await E(`document.getElementById('c-bare').validity.valid`)) && (await E(`document.getElementById('c-bare').validationMessage`)) === 'اكتب لونًا مثل #4C1D95.');
 await E(`(() => { const i = document.getElementById('c-bare'); i.focus(); i.select(); return 0; })()`);
 await b.type('0F766E');
 await raw('Enter', 'Enter', 13);
@@ -56,17 +56,17 @@ await b.click('.ins-color:has(#c-brand) .ins-color-swatch');
 await b.sleep(200);
 let p = await pop();
 ok('the swatch opens the picker, with the square focused', p && /ins-color-area/.test(p.focus), JSON.stringify(p));
-ok('the presets are the brand colour and a palette', p.presets[0] === '#9b2c5e' && p.presets.length === 10, JSON.stringify(p.presets));
+ok('the presets are the brand colour and a palette', p.presets[0] === '#4c1d95' && p.presets.length === 10, JSON.stringify(p.presets));
 ok('the contrast of the colour on white and on black', /على الأبيض/.test(p.text) && /على الأسود/.test(p.text) && /:1/.test(p.text), p.text);
 ok('the brand colour passes on white and fails on black', JSON.stringify(p.pass) === JSON.stringify([true, false]), JSON.stringify(p.pass));
-ok('the hue slider sits at the colour\'s hue', Math.abs(+p.hue - 333) <= 2, p.hue);
+ok('the hue slider sits at the colour\'s hue', Math.abs(+p.hue - 264) <= 2, p.hue);
 ok('the square says where it is', /تشبع \d+٪، سطوع \d+٪/.test(p.valuetext), p.valuetext);
 
 const before = await val('c-brand');
 await raw('ArrowUp', 'ArrowUp', 38, 8);
-ok('Shift+↑ brightens by ten', (await val('c-brand')) !== before && (await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`)).includes('سطوع 71٪'), await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`));
+ok('Shift+↑ brightens by ten', (await val('c-brand')) !== before && (await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`)).includes('سطوع 68٪'), await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`));
 await raw('ArrowLeft', 'ArrowLeft', 37, 8);
-ok('Shift+← takes saturation off', (await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`)).startsWith('تشبع 62٪'), await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`));
+ok('Shift+← takes saturation off', (await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`)).startsWith('تشبع 71٪'), await E(`document.querySelector('.ins-color-area').getAttribute('aria-valuetext')`));
 ok('each key sets the colour: input, change and ins:color', (await E(`__in`)) >= 2 && (await E(`__ch`)) === 2 && (await E(`__c.filter((x) => x.startsWith('c-brand')).length`)) === 2, `${await E('__in')} ${await E('__ch')} ${await E('__c.length')}`);
 
 const area = await E(`(() => { const r = document.querySelector('.ins-color-area').getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; })()`);
@@ -76,7 +76,7 @@ await b.send('Input.dispatchMouseEvent', { type: 'mousePressed', x: area.x + are
 const chBefore = await E(`__ch`);
 await b.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: area.x + area.w / 2, y: area.y + area.h / 2, button: 'left', buttons: 1 });
 await b.sleep(60);
-ok('dragging moves the colour live, without a change yet', (await E(`__ch`)) === chBefore && (await val('c-brand')) !== '#9b2c5e');
+ok('dragging moves the colour live, without a change yet', (await E(`__ch`)) === chBefore && (await val('c-brand')) !== '#4c1d95');
 /* Past the corner, outside the square: the pointer is captured, so it clamps. */
 await b.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: area.x - 30, y: area.y + area.h + 30, button: 'left', buttons: 1 });
 await b.send('Input.dispatchMouseEvent', { type: 'mouseReleased', x: area.x - 30, y: area.y + area.h + 30, button: 'left', clickCount: 1 });
@@ -110,7 +110,7 @@ await raw('Escape', 'Escape', 27);
 // ------------------------------------------------------------------ reset, API
 await E(`document.getElementById('cf').reset(); 0`);
 await b.sleep(80);
-ok('a form reset brings back the first colours', (await val('c-brand')) === '#9b2c5e' && (await val('c-bare')) === '#0f766e');
+ok('a form reset brings back the first colours', (await val('c-brand')) === '#4c1d95' && (await val('c-bare')) === '#0f766e');
 const n = await E(`__c.length`);
 ok('Insiyab.colorField(field, colour) sets it quietly', (await E(`Insiyab.colorField('#c-brand', '#ABC')`)) === '#aabbcc' && (await E(`__c.length`)) === n);
 ok('Insiyab.colorField(field) reads it', (await E(`Insiyab.colorField('#c-brand')`)) === '#aabbcc');

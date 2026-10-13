@@ -16,12 +16,12 @@ public class FrostGround : Control
     public static readonly StyledProperty<Color> VeilColorProperty = AvaloniaProperty.Register<FrostGround, Color>(nameof(VeilColor), Colors.White);
     public static readonly StyledProperty<double> VeilOpacityProperty = AvaloniaProperty.Register<FrostGround, double>(nameof(VeilOpacity), 1d);
 
-    private static readonly Color LightWash1 = Color.FromRgb(0xF8, 0xF0, 0xF4);
-    private static readonly Color LightWash2 = Color.FromRgb(0xF6, 0xF2, 0xF4);
+    private static readonly Color LightWash1 = Color.FromRgb(0xF2, 0xEF, 0xF8);
+    private static readonly Color LightWash2 = Color.FromRgb(0xF3, 0xF1, 0xF6);
     private static readonly Color DarkWash1 = Color.FromRgb(0x0F, 0x11, 0x15);
     private static readonly Color DarkWash2 = Color.FromRgb(0x12, 0x14, 0x1A);
-    private static readonly Color DefaultPrimary = Color.FromRgb(155, 44, 94);
-    private static readonly Color DefaultAccent = Color.FromRgb(105, 30, 64);
+    private static readonly Color DefaultPrimary = Color.FromRgb(76, 29, 149);
+    private static readonly Color DefaultAccent = Color.FromRgb(52, 20, 101);
 
     private const double OrbBlur = 24;
 

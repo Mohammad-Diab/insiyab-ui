@@ -245,7 +245,7 @@ public class ColorField : TemplatedControl
             return;
         }
         if (ColorMath.ParseHex(raw) is { } c) Set(c, false);
-        else SetMessage(Arabic ? "اكتب لونًا مثل #9B2C5E." : "Enter a color like #9B2C5E.");
+        else SetMessage(Arabic ? "اكتب لونًا مثل #4C1D95." : "Enter a color like #4C1D95.");
     }
 
     private void OnSwatchClick(object? sender, RoutedEventArgs e) => SetCurrentValue(IsDropDownOpenProperty, !IsDropDownOpen);

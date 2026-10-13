@@ -586,7 +586,7 @@ public class PluginsTests
         Type(window, "xyz");
         other.Focus();
         Settle();
-        Assert.Equal("اكتب لونًا مثل #9B2C5E.", field.ValidationMessage);
+        Assert.Equal("اكتب لونًا مثل #4C1D95.", field.ValidationMessage);
         Assert.True(DataValidationErrors.GetHasErrors(input));
     }
 
@@ -695,15 +695,15 @@ public class PluginsTests
     [AvaloniaFact]
     public void Color_contrast_readout()
     {
-        var field = OpenColor(f => f.Value = Color.Parse("#9b2c5e"));
+        var field = OpenColor(f => f.Value = Color.Parse("#4c1d95"));
         Show(Page(field), FlowDirection.RightToLeft);
         field.IsDropDownOpen = true;
         Settle(300);
         var white = InPopup<ColorContrastLine>(field, "PART_OnWhite");
         var black = InPopup<ColorContrastLine>(field, "PART_OnBlack");
-        Assert.Equal("7.2:1", white.Ratio);
+        Assert.Equal("11.0:1", white.Ratio);
         Assert.Contains(":pass", white.Classes);
-        Assert.Equal("2.9:1", black.Ratio);
+        Assert.Equal("1.9:1", black.Ratio);
         Assert.Contains(":fail", black.Classes);
     }
 
@@ -1025,7 +1025,7 @@ public class PluginsTests
     public void Plugins_popups_capture(string theme, string dir)
     {
         var phone = new PhoneBox();
-        var color = new ColorField { Value = Color.Parse("#9b2c5e") };
+        var color = new ColorField { Value = Color.Parse("#4c1d95") };
         var page = new StackPanel { Margin = new Thickness(64), Spacing = 24, Width = 360, HorizontalAlignment = HorizontalAlignment.Left };
         page.Children.Add(phone);
         page.Children.Add(color);

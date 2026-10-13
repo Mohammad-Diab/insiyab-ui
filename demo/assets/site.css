@@ -417,6 +417,7 @@
   font: 700 .75rem var(--ins-font-body-en);
 }
 .demo-box--tall { min-block-size: 5rem; display: grid; place-items: center; }
+.ins-split-pane > .demo-box--tall { block-size: 100%; min-block-size: 0; box-sizing: border-box; }
 .demo-frame { border: 1px dashed var(--ins-ctl-bd); border-radius: var(--ins-r-md); padding-block: .75rem; }
 .sp-sq { display: block; inline-size: var(--s); block-size: var(--s); background: var(--ins-tone-brand-soft); border-radius: 2px; }
 .sp-key { min-inline-size: 2.5em; text-align: center; }
@@ -579,7 +580,7 @@
 .car-demo b { font-size: 1.375rem; }
 .car-demo span { opacity: .85; font-size: var(--ins-fs-sm); }
 .car-demo--1 { --car-a: #0f766e; --car-b: #134e4a; }
-.car-demo--2 { --car-a: #9b2c5e; --car-b: #4a1530; }
+.car-demo--2 { --car-a: #4c1d95; --car-b: #2e1065; }
 .car-demo--3 { --car-a: #1d4ed8; --car-b: #1e1b4b; }
 .car-demo--4 { --car-a: #b45309; --car-b: #451a03; }
 

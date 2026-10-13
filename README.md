@@ -942,7 +942,7 @@ Insiyab.tree('#files');               // the selected item, or the ticked ones
 <link rel="stylesheet" href="insiyab/plugins/insiyab-color.css">
 <script src="insiyab/plugins/insiyab-color.js" defer></script>
 
-<input type="color" data-ins-color name="brand" value="#9b2c5e">
+<input type="color" data-ins-color name="brand" value="#4c1d95">
 ```
 
 A color field that tells you whether the color can carry text. The field becomes
