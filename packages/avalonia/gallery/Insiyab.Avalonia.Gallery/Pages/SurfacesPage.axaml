@@ -1,46 +1,159 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
              x:Class="Insiyab.Avalonia.Gallery.Pages.SurfacesPage">
-  <ScrollViewer>
-    <StackPanel Margin="24" Spacing="24" MaxWidth="760" HorizontalAlignment="Left">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/FoundationFrames.axaml" />
+    <Style Selector="Border.radius">
+      <Setter Property="Width" Value="72" />
+      <Setter Property="Height" Value="72" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandBd}" />
+      <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneBrand}" />
+      <Setter Property="TextElement.FontSize" Value="12" />
+      <Setter Property="TextElement.FontWeight" Value="Bold" />
+      <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    </Style>
+    <Style Selector="Border.radius > TextBlock">
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="Border.list-item">
+      <Setter Property="MinHeight" Value="52" />
+      <Setter Property="Padding" Value="12,10" />
+      <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsMd}" />
+    </Style>
+    <Style Selector="Border.list-item:nth-child(n+2)">
+      <Setter Property="BorderThickness" Value="0,1,0,0" />
+      <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+    </Style>
+    <Style Selector="Border.list-item > TextBlock">
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+  </UserControl.Styles>
+  <StackPanel>
 
-      <WrapPanel ItemSpacing="20" LineSpacing="20">
-        <Border Classes="card" Width="230" Padding="20">
-          <TextBlock Text="بطاقة بسيطة تحمل محتوى قصيرًا." TextWrapping="Wrap" />
-        </Border>
-        <Border Classes="card hoverable" Width="230" Padding="20">
-          <TextBlock Text="بطاقة ترتفع عند مرور المؤشر." TextWrapping="Wrap" />
-        </Border>
-        <Border Classes="glass" Width="230" Padding="20">
-          <TextBlock Text="سطح زجاجي باللمعة المائلة." TextWrapping="Wrap" />
-        </Border>
-      </WrapPanel>
+    <Border Classes="dx">
+      <StackPanel Spacing="12">
+        <Border Classes="glass" Padding="20"><TextBlock Text=".ins-glass" /></Border>
+        <Border Classes="card hoverable" Padding="20"><TextBlock Text=".ins-card" /></Border>
+        <Border Classes="glass-inner" Padding="20"><TextBlock Text=".ins-glass-inner" /></Border>
+      </StackPanel>
+    </Border>
 
+    <TextBlock Classes="section" Text="الزجاج" />
+    <Border Classes="stage">
+      <Border Classes="glass" Padding="20"><TextBlock Text="سطح من زجاج" /></Border>
+    </Border>
+    <TextBlock Classes="variant" Text="مسطح" />
+    <Border Classes="stage">
+      <Border Classes="glass-inner" Padding="20"><TextBlock Text="سطح مسطح" /></Border>
+    </Border>
+    <TextBlock Classes="variant" Text="زجاج داخل زجاج" />
+    <Border Classes="stage">
+      <Border Classes="glass" Padding="20">
+        <StackPanel Spacing="14">
+          <TextBlock Text="السطح الخارجي" />
+          <Border Classes="glass" Padding="16"><TextBlock Text="السطح الداخلي" /></Border>
+        </StackPanel>
+      </Border>
+    </Border>
+
+    <TextBlock Classes="section" Text="البطاقة" />
+    <Border Classes="stage">
+      <Border Classes="card" Padding="20"><TextBlock Text="بطاقة" /></Border>
+    </Border>
+    <TextBlock Classes="variant" Text="ترتفع تحت المؤشر" />
+    <Border Classes="stage">
+      <Border Classes="card hoverable" Padding="20"><TextBlock Text="بطاقة" /></Border>
+    </Border>
+    <TextBlock Classes="variant" Text="رابط بهيئة بطاقة" />
+    <Border Classes="stage">
+      <Button Theme="{StaticResource InsCardButton}" Padding="20" Content="بطاقة تُنقر" />
+    </Border>
+
+    <TextBlock Classes="section" Text="اللوح" />
+    <Border Classes="stage">
       <Border Classes="panel">
         <DockPanel>
           <Border Classes="panel-head" DockPanel.Dock="Top">
-            <TextBlock Classes="panel-title" Text="الإعدادات العامة" />
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+              <Border Classes="panel-ico"><ins:Icon Data="{StaticResource IconUsers}" /></Border>
+              <TextBlock Grid.Column="1" Classes="panel-title" Text="العنوان" />
+              <StackPanel Grid.Column="2" Classes="panel-actions"><Button Classes="bare sm" Content="تعديل" /></StackPanel>
+            </Grid>
           </Border>
           <Border Classes="panel-foot" DockPanel.Dock="Bottom">
-            <TextBlock Classes="muted" Text="آخر تحديث قبل ساعة" />
+            <Button Classes="primary sm" Content="حفظ" />
           </Border>
-          <Border Classes="panel-body">
-            <TextBlock Text="تظهر هنا إعدادات الحساب التي يشترك فيها جميع أعضاء الفريق." TextWrapping="Wrap" />
-          </Border>
+          <Border Classes="panel-body"><TextBlock Text="المحتوى." /></Border>
         </DockPanel>
       </Border>
-
+    </Border>
+    <TextBlock Classes="variant" Text="يحتاج انتباهًا، ومعه سطر شرح" />
+    <Border Classes="stage">
       <Border Classes="panel alert">
         <DockPanel>
           <Border Classes="panel-head" DockPanel.Dock="Top">
-            <TextBlock Classes="panel-title" Text="مهام متأخرة" />
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+              <Border Classes="panel-ico"><ins:Icon Data="{StaticResource IconUsers}" /></Border>
+              <TextBlock Grid.Column="1" Classes="panel-title" Text="العنوان" />
+              <StackPanel Grid.Column="2" Classes="panel-actions"><Button Classes="bare sm" Content="تعديل" /></StackPanel>
+            </Grid>
           </Border>
-          <Border Classes="panel-body">
-            <TextBlock Text="تجاوزت ثلاث مهام موعد تسليمها، وتحتاج إلى مراجعة." TextWrapping="Wrap" />
+          <Border Classes="panel-note" DockPanel.Dock="Top"><TextBlock Text="سطر شرح." /></Border>
+          <Border Classes="panel-foot" DockPanel.Dock="Bottom">
+            <Button Classes="primary sm" Content="حفظ" />
+          </Border>
+          <Border Classes="panel-body"><TextBlock Text="المحتوى." /></Border>
+        </DockPanel>
+      </Border>
+    </Border>
+    <TextBlock Classes="variant" Text="جسم بلا فراغ داخلي، ومعه سطر شرح" />
+    <Border Classes="stage">
+      <Border Classes="panel">
+        <DockPanel>
+          <Border Classes="panel-head" DockPanel.Dock="Top">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+              <Border Classes="panel-ico"><ins:Icon Data="{StaticResource IconUsers}" /></Border>
+              <TextBlock Grid.Column="1" Classes="panel-title" Text="العنوان" />
+              <StackPanel Grid.Column="2" Classes="panel-actions"><Button Classes="bare sm" Content="تعديل" /></StackPanel>
+            </Grid>
+          </Border>
+          <Border Classes="panel-foot" DockPanel.Dock="Bottom">
+            <Button Classes="primary sm" Content="حفظ" />
+          </Border>
+          <Border Classes="panel-body flush">
+            <StackPanel>
+              <Border Classes="panel-note"><TextBlock Text="سطر شرح." /></Border>
+              <StackPanel Margin="4">
+                <Border Classes="list-item"><TextBlock Text="البند الأول" /></Border>
+                <Border Classes="list-item"><TextBlock Text="البند الثاني" /></Border>
+              </StackPanel>
+            </StackPanel>
           </Border>
         </DockPanel>
       </Border>
+    </Border>
+    <TextBlock Classes="variant" Text="بلا رأس ولا تذييل" />
+    <Border Classes="stage">
+      <Border Classes="panel">
+        <Border Classes="panel-body"><TextBlock Text="المحتوى." /></Border>
+      </Border>
+    </Border>
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="انحناء الزوايا" />
+    <Border Classes="dx">
+      <WrapPanel ItemSpacing="12" LineSpacing="12">
+        <Border Classes="radius" CornerRadius="{DynamicResource InsRXs}"><TextBlock Text="xs · 7" /></Border>
+        <Border Classes="radius" CornerRadius="{DynamicResource InsRSm}"><TextBlock Text="sm · 10" /></Border>
+        <Border Classes="radius" CornerRadius="{DynamicResource InsRMd}"><TextBlock Text="md · 14" /></Border>
+        <Border Classes="radius" CornerRadius="{DynamicResource InsRLg}"><TextBlock Text="lg · 22" /></Border>
+        <Border Classes="radius" CornerRadius="{DynamicResource InsRXl}"><TextBlock Text="xl · 32" /></Border>
+        <Border Classes="radius" CornerRadius="{DynamicResource InsRPill}"><TextBlock Text="pill" /></Border>
+      </WrapPanel>
+    </Border>
+
+  </StackPanel>
 </UserControl>

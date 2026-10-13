@@ -13,6 +13,7 @@
   </Styles.Resources>
 
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Fonts.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Base.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Window.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Type.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Panel.axaml" />
