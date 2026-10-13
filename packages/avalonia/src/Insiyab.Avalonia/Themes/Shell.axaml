@@ -21,6 +21,7 @@
 
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Shell/SplitView.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Shell/Topbar.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Shell/TitleBar.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Shell/DayNight.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Shell/PageHead.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Shell/Navbar.axaml" />

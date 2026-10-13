@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Insiyab.Avalonia;
+using Insiyab.Avalonia.Controls;
 
 namespace AotCheck;
 
@@ -30,13 +31,22 @@ internal sealed class App : Application
             form.Children.Add(new CheckBox { Content = "تذكرني" });
             form.Children.Add(new ToggleSwitch { Content = "الوضع الداكن" });
             form.Children.Add(new Button { Content = "دخول", Classes = { "primary" }, HorizontalAlignment = HorizontalAlignment.Stretch });
+            var drag = new Border { Background = Brushes.Transparent };
+            TitleBar.SetIsDragArea(drag, true);
+            var caption = new CaptionButtons();
+            Grid.SetColumn(caption, 1);
+            var bar = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), Children = { drag, caption } };
+            DockPanel.SetDock(bar, Dock.Top);
             var window = new Window
             {
                 Width = 480,
                 Height = 560,
+                // opens without taking focus from the user
+                ShowActivated = false,
                 FlowDirection = FlowDirection.RightToLeft,
-                Content = new Border { Classes = { "panel" }, Margin = new Thickness(24), Child = form },
+                Content = new DockPanel { Children = { bar, new Border { Classes = { "panel" }, Margin = new Thickness(24), Child = form } } },
             };
+            TitleBar.SetExtends(window, true);
             desktop.MainWindow = window;
             if (desktop.Args is { Length: > 0 } a && a[0] == "--smoke")
             {

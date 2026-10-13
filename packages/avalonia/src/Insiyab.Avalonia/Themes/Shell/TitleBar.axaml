@@ -1,0 +1,110 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls"
+        xmlns:chrome="using:Avalonia.Controls.Chrome">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsCaptionHover" Color="#0F000000" />
+          <SolidColorBrush x:Key="InsCaptionPressed" Color="#0A000000" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsCaptionHover" Color="#0FFFFFFF" />
+          <SolidColorBrush x:Key="InsCaptionPressed" Color="#0AFFFFFF" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+      <!-- Windows' own close red, in both themes -->
+      <SolidColorBrush x:Key="InsCaptionClose" Color="#C42B1C" />
+      <SolidColorBrush x:Key="InsCaptionClosePressed" Color="#E6C42B1C" />
+      <!-- Drawn, not a font glyph: an app's FontFamily or TextBlock styles can't turn them into boxes, and Windows 10 lacks Segoe Fluent Icons -->
+      <StreamGeometry x:Key="InsCaptionGlyphMinimize">M0,5.5 H10</StreamGeometry>
+      <StreamGeometry x:Key="InsCaptionGlyphMaximize">M0.5,0.5 H9.5 V9.5 H0.5 Z</StreamGeometry>
+      <StreamGeometry x:Key="InsCaptionGlyphRestore">M0.5,2.5 H7.5 V9.5 H0.5 Z M2.5,2.5 V0.5 H9.5 V7.5 H7.5</StreamGeometry>
+      <StreamGeometry x:Key="InsCaptionGlyphClose">M0.5,0.5 L9.5,9.5 M9.5,0.5 L0.5,9.5</StreamGeometry>
+
+      <ControlTheme x:Key="InsCaptionButton" TargetType="Button">
+        <Setter Property="Width" Value="46" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Name="PART_Face" Background="{TemplateBinding Background}">
+              <Path Name="PART_Glyph"
+                    Data="{TemplateBinding Content}"
+                    Stroke="{TemplateBinding Foreground}"
+                    StrokeThickness="1"
+                    Width="10"
+                    Height="10"
+                    Stretch="None"
+                    FlowDirection="LeftToRight"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsCaptionHover}" />
+        </Style>
+        <Style Selector="^:pressed">
+          <Setter Property="Background" Value="{DynamicResource InsCaptionPressed}" />
+        </Style>
+        <Style Selector="^.inactive:not(:pointerover) /template/ Path#PART_Glyph">
+          <Setter Property="Opacity" Value="0.45" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsCaptionCloseButton" TargetType="Button" BasedOn="{StaticResource InsCaptionButton}">
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsCaptionClose}" />
+          <Setter Property="Foreground" Value="White" />
+        </Style>
+        <Style Selector="^:pressed">
+          <Setter Property="Background" Value="{DynamicResource InsCaptionClosePressed}" />
+          <Setter Property="Foreground" Value="#E6FFFFFF" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:CaptionButtons}" TargetType="ins:CaptionButtons">
+        <Setter Property="IsVisible" Value="False" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <StackPanel Orientation="Horizontal">
+              <Button Name="PART_Minimize" Theme="{StaticResource InsCaptionButton}" Content="{StaticResource InsCaptionGlyphMinimize}"
+                      ToolTip.Tip="{TemplateBinding MinimizeText}" AutomationProperties.Name="{TemplateBinding MinimizeText}" />
+              <Button Name="PART_Maximize" Theme="{StaticResource InsCaptionButton}" Content="{StaticResource InsCaptionGlyphMaximize}" />
+              <Button Name="PART_Close" Theme="{StaticResource InsCaptionCloseButton}" Content="{StaticResource InsCaptionGlyphClose}"
+                      ToolTip.Tip="{TemplateBinding CloseText}" AutomationProperties.Name="{TemplateBinding CloseText}" />
+            </StackPanel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:shown">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:maximized /template/ Button#PART_Maximize">
+          <Setter Property="Content" Value="{StaticResource InsCaptionGlyphRestore}" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- Inside a drag area, anything that takes focus stays a normal control -->
+  <Style Selector=":is(Control)[(ins|TitleBar.IsDragArea)=True] :is(InputElement)[Focusable=True]">
+    <Setter Property="(chrome:WindowDecorationProperties.ElementRole)" Value="User" />
+  </Style>
+
+  <!-- In the shell's top bar the buttons sit flush in the window's top-end corner, over the bar's padding -->
+  <Style Selector="Border.topbar ins|CaptionButtons">
+    <Setter Property="Margin" Value="0,-12,-16,0" />
+  </Style>
+  <Style Selector="SplitView.narrow Border.topbar ins|CaptionButtons">
+    <Setter Property="Margin" Value="0,-10,-12,0" />
+  </Style>
+
+</Styles>
