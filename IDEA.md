@@ -195,6 +195,7 @@ typography.
 | `insiyab` | **This is the library.** One CSS file, one JS file, no build. |
 | `@insiyab/react` | Built, in `packages/react`. TypeScript, React 18 or later. |
 | `insiyab` (PyPI) | Built, in `packages/jinja`: Jinja macros, with the library's files in the package. |
+| `Insiyab.Avalonia` (NuGet) | In progress, in `packages/avalonia`: Avalonia 12 themes, re-implemented (see below). |
 
 Deferred until the core was done: a wrapper written against an unfinished class
 vocabulary has to be rewritten when the vocabulary settles. They live in this
@@ -205,6 +206,13 @@ wrapper, has to come out the same as the example.
 **The CSS stays the source of truth.** The wrappers are thin
 covers over the same classes, never re-implementations — that rule is what stops
 three entry points becoming three libraries.
+
+**The one exception is `Insiyab.Avalonia`** (NuGet, in `packages/avalonia`).
+Avalonia has no CSS, so there are no classes to cover: its components are
+re-implemented as Avalonia themes. What keeps it the same library is that its
+tokens are not copied. They are generated from `02-tokens.css` and
+`03-tokens-dark.css`, and the generator fails on any token it cannot map, so a
+renamed or new token breaks the Avalonia build in the same commit.
 
 ---
 

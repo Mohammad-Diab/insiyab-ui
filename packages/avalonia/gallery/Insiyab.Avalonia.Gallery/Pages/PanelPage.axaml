@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.PanelPage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="24" MaxWidth="760" HorizontalAlignment="Left">
+
+      <WrapPanel ItemSpacing="20" LineSpacing="20">
+        <Border Classes="card" Width="230" Padding="20">
+          <TextBlock Text="بطاقة بسيطة تحمل محتوى قصيرًا." TextWrapping="Wrap" />
+        </Border>
+        <Border Classes="card hoverable" Width="230" Padding="20">
+          <TextBlock Text="بطاقة ترتفع عند مرور المؤشر." TextWrapping="Wrap" />
+        </Border>
+        <Border Classes="glass" Width="230" Padding="20">
+          <TextBlock Text="سطح زجاجي باللمعة المائلة." TextWrapping="Wrap" />
+        </Border>
+      </WrapPanel>
+
+      <Border Classes="panel">
+        <DockPanel>
+          <Border Classes="panel-head" DockPanel.Dock="Top">
+            <TextBlock Classes="panel-title" Text="الإعدادات العامة" />
+          </Border>
+          <Border Classes="panel-foot" DockPanel.Dock="Bottom">
+            <TextBlock Classes="muted" Text="آخر تحديث قبل ساعة" />
+          </Border>
+          <Border Classes="panel-body">
+            <TextBlock Text="تظهر هنا إعدادات الحساب التي يشترك فيها جميع أعضاء الفريق." TextWrapping="Wrap" />
+          </Border>
+        </DockPanel>
+      </Border>
+
+      <Border Classes="panel alert">
+        <DockPanel>
+          <Border Classes="panel-head" DockPanel.Dock="Top">
+            <TextBlock Classes="panel-title" Text="مهام متأخرة" />
+          </Border>
+          <Border Classes="panel-body">
+            <TextBlock Text="تجاوزت ثلاث مهام موعد تسليمها، وتحتاج إلى مراجعة." TextWrapping="Wrap" />
+          </Border>
+        </DockPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

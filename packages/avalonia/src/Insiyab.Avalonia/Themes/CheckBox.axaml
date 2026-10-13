@@ -1,0 +1,153 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <LinearGradientBrush x:Key="InsCheckBoxFill" StartPoint="0%,0%" EndPoint="100%,100%">
+        <GradientStop Offset="0" Color="{DynamicResource InsPrimaryColor}" />
+        <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
+      </LinearGradientBrush>
+      <SolidColorBrush x:Key="InsCheckBoxHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+      <SolidColorBrush x:Key="InsCheckBoxRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+
+      <ControlTheme x:Key="{x:Type CheckBox}" TargetType="CheckBox">
+        <Setter Property="Padding" Value="8,0,0,0" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*">
+              <Border x:Name="PART_Border"
+                      Grid.ColumnSpan="2"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}" />
+
+              <Panel x:Name="BoxHost" Width="18" Height="18" VerticalAlignment="Center">
+                <Border x:Name="FocusRing"
+                        Margin="-5"
+                        BorderThickness="3"
+                        CornerRadius="12"
+                        BorderBrush="{DynamicResource InsCheckBoxRing}"
+                        IsVisible="False" />
+                <Border x:Name="HoverGlow"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        BoxShadow="{DynamicResource InsGlow}"
+                        Opacity="0" />
+                <Border x:Name="NormalRectangle"
+                        Background="{DynamicResource InsCtlBg}"
+                        BorderBrush="{DynamicResource InsCtlBd}"
+                        BorderThickness="1"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        BoxShadow="{DynamicResource InsBevelDim}">
+                  <Border.Transitions>
+                    <Transitions>
+                      <BrushTransition Property="BorderBrush" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+                    </Transitions>
+                  </Border.Transitions>
+                </Border>
+                <Border x:Name="CheckFill"
+                        FlowDirection="LeftToRight"
+                        Background="{DynamicResource InsCheckBoxFill}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Opacity="0" />
+                <Panel FlowDirection="LeftToRight">
+                  <Path x:Name="CheckGlyph"
+                        Data="M3.4,8.4 L6,11 L12.4,4.6"
+                        Stroke="{DynamicResource InsOnPrimary}"
+                        StrokeThickness="2"
+                        StrokeJoin="Miter"
+                        RenderTransformOrigin="7.75,7.75"
+                        RenderTransform="scale(0)" />
+                  <Border x:Name="IndeterminateGlyph"
+                          Width="9"
+                          Height="2"
+                          CornerRadius="1"
+                          Background="{DynamicResource InsOnPrimary}"
+                          Opacity="0" />
+                </Panel>
+              </Panel>
+
+              <ContentPresenter x:Name="PART_ContentPresenter"
+                                Grid.Column="1"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Content="{TemplateBinding Content}"
+                                Margin="{TemplateBinding Padding}"
+                                RecognizesAccessKey="True"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                TextWrapping="Wrap" />
+            </Grid>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ Border#CheckFill, ^ /template/ Border#HoverGlow, ^ /template/ Border#IndeterminateGlyph">
+          <Setter Property="Transitions">
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Path#CheckGlyph">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+            </Transitions>
+          </Setter>
+        </Style>
+
+        <Style Selector="^:pointerover">
+          <Style Selector="^ /template/ Border#NormalRectangle">
+            <Setter Property="BorderBrush" Value="{DynamicResource InsCheckBoxHoverBorder}" />
+          </Style>
+          <Style Selector="^ /template/ Border#HoverGlow">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+        </Style>
+
+        <Style Selector="^:checked, ^:indeterminate">
+          <Style Selector="^ /template/ Border#NormalRectangle">
+            <Setter Property="BorderBrush" Value="Transparent" />
+          </Style>
+          <Style Selector="^ /template/ Border#CheckFill">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+        </Style>
+
+        <!-- The tick lands on the overshoot curve, and leaves on the plain one. -->
+        <Style Selector="^:checked /template/ Path#CheckGlyph">
+          <Setter Property="RenderTransform" Value="scale(1)" />
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.28" Easing="{DynamicResource InsEaseSpring}" />
+            </Transitions>
+          </Setter>
+        </Style>
+
+        <Style Selector="^:indeterminate /template/ Border#IndeterminateGlyph">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+
+        <Style Selector="^:focus-visible /template/ Border#FocusRing">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.5" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+</Styles>

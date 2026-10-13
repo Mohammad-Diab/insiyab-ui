@@ -1,0 +1,158 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Fluent's text brushes, pointed at InsText1 so plain text and stock controls follow light and dark -->
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="{DynamicResource InsText1Color}" />
+          <StaticResource x:Key="ButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="RepeatButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="ToggleButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="ToggleButtonForegroundIndeterminate" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="SplitButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="ComboBoxForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="ComboBoxItemForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="MenuFlyoutItemForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="TextControlForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="TextControlForegroundPointerOver" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="TextControlForegroundFocused" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundUnchecked" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundUncheckedPointerOver" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundUncheckedPressed" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundChecked" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundCheckedPointerOver" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundCheckedPressed" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundIndeterminate" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundIndeterminatePointerOver" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundIndeterminatePressed" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="RadioButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="RadioButtonForegroundPointerOver" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="RadioButtonForegroundPressed" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="ToggleSwitchContentForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="ToolTipForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="DatePickerButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="TimePickerButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CalendarDatePickerForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CalendarViewCalendarItemForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="TreeViewItemForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="NotificationCardForegroundBrush" ResourceKey="SystemControlForegroundBaseHighBrush" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="{DynamicResource InsText1Color}" />
+          <StaticResource x:Key="ButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="RepeatButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="ToggleButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="ToggleButtonForegroundIndeterminate" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="SplitButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="ComboBoxForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="ComboBoxItemForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="MenuFlyoutItemForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="TextControlForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="TextControlForegroundPointerOver" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="TextControlForegroundFocused" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundUnchecked" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundUncheckedPointerOver" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundUncheckedPressed" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundChecked" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundCheckedPointerOver" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundCheckedPressed" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundIndeterminate" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundIndeterminatePointerOver" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CheckBoxForegroundIndeterminatePressed" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="RadioButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="RadioButtonForegroundPointerOver" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="RadioButtonForegroundPressed" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="ToggleSwitchContentForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="ToolTipForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="DatePickerButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="TimePickerButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CalendarDatePickerForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="CalendarViewCalendarItemForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="TreeViewItemForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+          <StaticResource x:Key="NotificationCardForegroundBrush" ResourceKey="SystemControlForegroundBaseHighBrush" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- Avalonia's LineHeight is in pixels, so each one below is the CSS ratio times its size token -->
+  <Style Selector="TextBlock.display, TextBlock.h1, TextBlock.h2, TextBlock.h3, TextBlock.h4">
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="TextBlock.display">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsDisplay}" />
+    <Setter Property="LineHeight" Value="57.6" />
+  </Style>
+  <Style Selector="TextBlock.h1">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsH1}" />
+    <Setter Property="LineHeight" Value="36.4" />
+  </Style>
+  <Style Selector="TextBlock.h2">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsH2}" />
+    <Setter Property="LineHeight" Value="28.6" />
+  </Style>
+  <Style Selector="TextBlock.h3">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsH3}" />
+    <Setter Property="LineHeight" Value="23.4" />
+  </Style>
+  <Style Selector="TextBlock.h4">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsH4}" />
+    <Setter Property="LineHeight" Value="20.8" />
+  </Style>
+
+  <!-- Tracking is LTR only: on Arabic it pulls the joins apart -->
+  <Style Selector="TextBlock.display[FlowDirection=LeftToRight]">
+    <Setter Property="LetterSpacing" Value="-0.96" />
+  </Style>
+  <Style Selector="TextBlock.h1[FlowDirection=LeftToRight]">
+    <Setter Property="LetterSpacing" Value="-0.56" />
+  </Style>
+  <Style Selector="TextBlock.h2[FlowDirection=LeftToRight]">
+    <Setter Property="LetterSpacing" Value="-0.44" />
+  </Style>
+  <Style Selector="TextBlock.h3[FlowDirection=LeftToRight]">
+    <Setter Property="LetterSpacing" Value="-0.36" />
+  </Style>
+
+  <Style Selector="TextBlock.lead">
+    <Setter Property="FontSize" Value="18" />
+    <Setter Property="LineHeight" Value="32.4" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+
+  <Style Selector="TextBlock.prose">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
+    <Setter Property="LineHeight" Value="28.8" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="TextBlock.prose[FlowDirection=LeftToRight]">
+    <Setter Property="LineHeight" Value="26.4" />
+  </Style>
+
+  <Style Selector="TextBlock.eyebrow">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+  </Style>
+  <Style Selector="TextBlock.eyebrow[FlowDirection=LeftToRight]">
+    <Setter Property="LetterSpacing" Value="0.96" />
+  </Style>
+
+  <Style Selector="TextBlock.muted">
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+  </Style>
+
+  <!-- An LTR island so a sign stays on its figure; Left is the start edge, since an RTL parent mirrors it -->
+  <Style Selector="TextBlock.num">
+    <Setter Property="FlowDirection" Value="LeftToRight" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="FontFeatures" Value="+tnum,+lnum" />
+  </Style>
+
+</Styles>

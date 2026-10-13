@@ -1,0 +1,60 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <!-- Veil opacities are the least that keep text-2 at 4.5:1 over the darkest and brightest the OS material gets (black for dark, light acrylic's floor for light); FrostTests proves them. -->
+        <ResourceDictionary x:Key="Light">
+          <Color x:Key="InsFrostVeilColor">#FFFFFF</Color>
+          <x:Double x:Key="InsFrostVeilOpacity">0.85</x:Double>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <Color x:Key="InsFrostVeilColor">#0F1115</Color>
+          <x:Double x:Key="InsFrostVeilOpacity">0.88</x:Double>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector=":is(Window)">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="TransparencyBackgroundFallback" Value="{DynamicResource InsWash1}" />
+    <Setter Property="TransparencyLevelHint" Value="Mica, AcrylicBlur, None" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_TransparencyFallback" IsHitTestVisible="False" />
+          <ins:FrostGround Name="PART_InsGround"
+                           IsHitTestVisible="False"
+                           Wash1="{DynamicResource InsWash1}"
+                           Wash2="{DynamicResource InsWash2}"
+                           Orb1="{DynamicResource InsOrb1}"
+                           Orb2="{DynamicResource InsOrb2}"
+                           VeilColor="{DynamicResource InsFrostVeilColor}"
+                           VeilOpacity="{DynamicResource InsFrostVeilOpacity}" />
+          <Border Background="{TemplateBinding Background}" IsHitTestVisible="False" />
+          <Panel Background="Transparent" Margin="{TemplateBinding WindowDecorationMargin}" />
+          <VisualLayerManager Name="PART_VisualLayerManager">
+            <ContentPresenter Name="PART_ContentPresenter"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Content="{TemplateBinding Content}"
+                              Margin="{TemplateBinding Padding}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+          </VisualLayerManager>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector=":is(Window)[(ins|Frost.Material)=False]">
+    <Setter Property="TransparencyLevelHint" Value="None" />
+  </Style>
+
+  <Style Selector=":is(Window):ins-material /template/ ins|FrostGround#PART_InsGround">
+    <Setter Property="Frosted" Value="True" />
+  </Style>
+
+</Styles>

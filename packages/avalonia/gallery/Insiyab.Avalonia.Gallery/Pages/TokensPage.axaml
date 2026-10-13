@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.TokensPage">
+  <UserControl.Styles>
+    <Style Selector="TextBlock.section">
+      <Setter Property="FontSize" Value="{DynamicResource InsFsXl}" />
+      <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    </Style>
+    <Style Selector="TextBlock.note">
+      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style Selector="TextBlock.key">
+      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+      <Setter Property="FlowDirection" Value="LeftToRight" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16">
+      <TextBlock Classes="section" Text="الألوان" />
+      <TextBlock Classes="note" Text="كل عيّنة مرسومة بالمفتاح المكتوب تحتها، فتتغير مع الوضع الفاتح والداكن. ألوان العلامة في صفحة «اللون الأساسي»." />
+      <WrapPanel x:Name="ColorList" ItemSpacing="12" LineSpacing="12" />
+
+      <TextBlock Classes="section" Text="الزوايا" Margin="0,16,0,0" />
+      <TextBlock Classes="note" Text="انحناء الزوايا من الأصغر إلى الأكبر." />
+      <WrapPanel x:Name="RadiusList" ItemSpacing="16" LineSpacing="16" />
+
+      <TextBlock Classes="section" Text="الظلال" Margin="0,16,0,0" />
+      <TextBlock Classes="note" Text="الظلال كما يرسمها الوضع الحالي، ومنها ما يقع داخل الإطار." />
+      <WrapPanel x:Name="ShadowList" ItemSpacing="32" LineSpacing="32" Margin="8" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

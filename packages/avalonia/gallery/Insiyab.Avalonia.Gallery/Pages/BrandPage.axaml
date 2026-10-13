@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.BrandPage">
+  <UserControl.Styles>
+    <Style Selector="Button.swatch">
+      <Setter Property="Width" Value="40" />
+      <Setter Property="Height" Value="40" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="CornerRadius" Value="20" />
+    </Style>
+    <Style Selector="Button.swatch > Border">
+      <Setter Property="Width" Value="32" />
+      <Setter Property="Height" Value="32" />
+      <Setter Property="CornerRadius" Value="16" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="#33000000" />
+    </Style>
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16">
+      <TextBlock Text="اختر لونا أساسيا، فيتبعه كل ما يحمل لون العلامة في الوضعين الفاتح والداكن." TextWrapping="Wrap" />
+
+      <WrapPanel ItemSpacing="8" LineSpacing="8">
+        <Button Classes="swatch" Tag="#9B2C5E" Click="OnSwatch" ToolTip.Tip="عنابي" AutomationProperties.Name="عنابي"><Border Background="#9B2C5E" /></Button>
+        <Button Classes="swatch" Tag="#2563EB" Click="OnSwatch" ToolTip.Tip="أزرق" AutomationProperties.Name="أزرق"><Border Background="#2563EB" /></Button>
+        <Button Classes="swatch" Tag="#0F766E" Click="OnSwatch" ToolTip.Tip="فيروزي" AutomationProperties.Name="فيروزي"><Border Background="#0F766E" /></Button>
+        <Button Classes="swatch" Tag="#7C3AED" Click="OnSwatch" ToolTip.Tip="بنفسجي" AutomationProperties.Name="بنفسجي"><Border Background="#7C3AED" /></Button>
+        <Button Classes="swatch" Tag="#DC2626" Click="OnSwatch" ToolTip.Tip="أحمر" AutomationProperties.Name="أحمر"><Border Background="#DC2626" /></Button>
+        <Button Classes="swatch" Tag="#EA580C" Click="OnSwatch" ToolTip.Tip="برتقالي" AutomationProperties.Name="برتقالي"><Border Background="#EA580C" /></Button>
+        <Button Classes="swatch" Tag="#C9A227" Click="OnSwatch" ToolTip.Tip="ذهبي" AutomationProperties.Name="ذهبي"><Border Background="#C9A227" /></Button>
+        <Button Classes="swatch" Tag="#F5E6A8" Click="OnSwatch" ToolTip.Tip="أصفر باهت" AutomationProperties.Name="أصفر باهت"><Border Background="#F5E6A8" /></Button>
+      </WrapPanel>
+
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <TextBlock Text="اللون الحالي:" VerticalAlignment="Center" />
+        <TextBlock x:Name="Current" FlowDirection="LeftToRight" VerticalAlignment="Center" />
+      </StackPanel>
+
+      <WrapPanel ItemSpacing="12" LineSpacing="12">
+        <Button Classes="primary" Content="حفظ" />
+        <Button Classes="primary" Content="متابعة" />
+        <Button Classes="primary" Content="إرسال" />
+      </WrapPanel>
+
+      <Border Background="{DynamicResource InsToneBrandBg}"
+              BorderBrush="{DynamicResource InsToneBrandBd}"
+              BorderThickness="1" CornerRadius="12" Padding="16">
+        <TextBlock Foreground="{DynamicResource InsToneBrand}" TextWrapping="Wrap"
+                   Text="إطار بلون العلامة: الخلفية والحد والنص كلها مشتقة من اللون الأساسي." />
+      </Border>
+
+      <Border Background="{DynamicResource InsPrimary}" CornerRadius="12" Padding="16">
+        <TextBlock Foreground="{DynamicResource InsOnPrimary}" TextWrapping="Wrap"
+                   Text="نص على اللون الأساسي: يصير داكنا تلقائيا حين يكون اللون فاتحا." />
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

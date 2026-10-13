@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.FontsPage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="32" MaxWidth="760" HorizontalAlignment="Left">
+
+      <StackPanel Spacing="20" TextElement.FontFamily="{DynamicResource InsFontArabic}">
+        <TextBlock Text="Tajawal" FontSize="24" FontWeight="700" />
+        <StackPanel Spacing="4" TextElement.FontWeight="Light">
+          <TextBlock Classes="muted" Text="300 Light" FontSize="13" />
+          <TextBlock Text="تبقى القراءة مريحة حين تكون الحروف واضحة ومتناسقة، مهما طال النص." FontSize="20" TextWrapping="Wrap" />
+          <TextBlock Text="The quick brown fox jumps over the lazy dog. 0123456789" FontSize="20" TextWrapping="Wrap" />
+        </StackPanel>
+        <StackPanel Spacing="4" TextElement.FontWeight="Normal">
+          <TextBlock Classes="muted" Text="400 Regular" FontSize="13" />
+          <TextBlock Text="تبقى القراءة مريحة حين تكون الحروف واضحة ومتناسقة، مهما طال النص." FontSize="20" TextWrapping="Wrap" />
+          <TextBlock Text="The quick brown fox jumps over the lazy dog. 0123456789" FontSize="20" TextWrapping="Wrap" />
+        </StackPanel>
+        <StackPanel Spacing="4" TextElement.FontWeight="Medium">
+          <TextBlock Classes="muted" Text="500 Medium" FontSize="13" />
+          <TextBlock Text="تبقى القراءة مريحة حين تكون الحروف واضحة ومتناسقة، مهما طال النص." FontSize="20" TextWrapping="Wrap" />
+          <TextBlock Text="The quick brown fox jumps over the lazy dog. 0123456789" FontSize="20" TextWrapping="Wrap" />
+        </StackPanel>
+        <StackPanel Spacing="4" TextElement.FontWeight="Bold">
+          <TextBlock Classes="muted" Text="700 Bold" FontSize="13" />
+          <TextBlock Text="تبقى القراءة مريحة حين تكون الحروف واضحة ومتناسقة، مهما طال النص." FontSize="20" TextWrapping="Wrap" />
+          <TextBlock Text="The quick brown fox jumps over the lazy dog. 0123456789" FontSize="20" TextWrapping="Wrap" />
+        </StackPanel>
+      </StackPanel>
+
+      <StackPanel Spacing="20" TextElement.FontFamily="{DynamicResource InsFontBodyEn}">
+        <TextBlock Text="Inter" FontSize="24" FontWeight="700" />
+        <StackPanel Spacing="4" TextElement.FontWeight="Light">
+          <TextBlock Classes="muted" Text="300 Light" FontSize="13" />
+          <TextBlock Text="تبقى القراءة مريحة حين تكون الحروف واضحة ومتناسقة، مهما طال النص." FontSize="20" TextWrapping="Wrap" />
+          <TextBlock Text="The quick brown fox jumps over the lazy dog. 0123456789" FontSize="20" TextWrapping="Wrap" />
+        </StackPanel>
+        <StackPanel Spacing="4" TextElement.FontWeight="Normal">
+          <TextBlock Classes="muted" Text="400 Regular" FontSize="13" />
+          <TextBlock Text="تبقى القراءة مريحة حين تكون الحروف واضحة ومتناسقة، مهما طال النص." FontSize="20" TextWrapping="Wrap" />
+          <TextBlock Text="The quick brown fox jumps over the lazy dog. 0123456789" FontSize="20" TextWrapping="Wrap" />
+        </StackPanel>
+        <StackPanel Spacing="4" TextElement.FontWeight="Medium">
+          <TextBlock Classes="muted" Text="500 Medium" FontSize="13" />
+          <TextBlock Text="تبقى القراءة مريحة حين تكون الحروف واضحة ومتناسقة، مهما طال النص." FontSize="20" TextWrapping="Wrap" />
+          <TextBlock Text="The quick brown fox jumps over the lazy dog. 0123456789" FontSize="20" TextWrapping="Wrap" />
+        </StackPanel>
+        <StackPanel Spacing="4" TextElement.FontWeight="SemiBold">
+          <TextBlock Classes="muted" Text="600 SemiBold" FontSize="13" />
+          <TextBlock Text="تبقى القراءة مريحة حين تكون الحروف واضحة ومتناسقة، مهما طال النص." FontSize="20" TextWrapping="Wrap" />
+          <TextBlock Text="The quick brown fox jumps over the lazy dog. 0123456789" FontSize="20" TextWrapping="Wrap" />
+        </StackPanel>
+        <StackPanel Spacing="4" TextElement.FontWeight="Bold">
+          <TextBlock Classes="muted" Text="700 Bold" FontSize="13" />
+          <TextBlock Text="تبقى القراءة مريحة حين تكون الحروف واضحة ومتناسقة، مهما طال النص." FontSize="20" TextWrapping="Wrap" />
+          <TextBlock Text="The quick brown fox jumps over the lazy dog. 0123456789" FontSize="20" TextWrapping="Wrap" />
+        </StackPanel>
+      </StackPanel>
+
+      <StackPanel Spacing="20" TextElement.FontFamily="{DynamicResource InsFontHeadingEn}">
+        <TextBlock Text="Cause" FontSize="24" FontWeight="700" />
+        <StackPanel Spacing="4" TextElement.FontWeight="Normal">
+          <TextBlock Classes="muted" Text="400 Regular" FontSize="13" />
+          <TextBlock Text="تبقى القراءة مريحة حين تكون الحروف واضحة ومتناسقة، مهما طال النص." FontSize="20" TextWrapping="Wrap" />
+          <TextBlock Text="The quick brown fox jumps over the lazy dog. 0123456789" FontSize="20" TextWrapping="Wrap" />
+        </StackPanel>
+        <StackPanel Spacing="4" TextElement.FontWeight="SemiBold">
+          <TextBlock Classes="muted" Text="600 SemiBold" FontSize="13" />
+          <TextBlock Text="تبقى القراءة مريحة حين تكون الحروف واضحة ومتناسقة، مهما طال النص." FontSize="20" TextWrapping="Wrap" />
+          <TextBlock Text="The quick brown fox jumps over the lazy dog. 0123456789" FontSize="20" TextWrapping="Wrap" />
+        </StackPanel>
+        <StackPanel Spacing="4" TextElement.FontWeight="Bold">
+          <TextBlock Classes="muted" Text="700 Bold" FontSize="13" />
+          <TextBlock Text="تبقى القراءة مريحة حين تكون الحروف واضحة ومتناسقة، مهما طال النص." FontSize="20" TextWrapping="Wrap" />
+          <TextBlock Text="The quick brown fox jumps over the lazy dog. 0123456789" FontSize="20" TextWrapping="Wrap" />
+        </StackPanel>
+      </StackPanel>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

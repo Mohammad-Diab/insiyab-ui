@@ -1,0 +1,25 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:pages="using:Insiyab.Avalonia.Gallery.Pages"
+        x:Class="Insiyab.Avalonia.Gallery.MainWindow"
+        Title="Insiyab Gallery"
+        Width="1180" Height="820"
+        FlowDirection="RightToLeft">
+  <DockPanel>
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12" Margin="24,16">
+      <ToggleSwitch x:Name="DarkSwitch" OnContent="داكن" OffContent="فاتح" />
+      <ToggleSwitch x:Name="LtrSwitch" OnContent="LTR" OffContent="RTL" />
+    </StackPanel>
+    <TabControl Margin="16,0,16,16" TabStripPlacement="Top">
+      <TabItem Header="التوكنز"><pages:TokensPage /></TabItem>
+      <TabItem Header="الخطوط"><pages:FontsPage /></TabItem>
+      <TabItem Header="اللون الأساسي"><pages:BrandPage /></TabItem>
+      <TabItem Header="النافذة"><pages:WindowPage /></TabItem>
+      <TabItem Header="النصوص"><pages:TypePage /></TabItem>
+      <TabItem Header="اللوحات"><pages:PanelPage /></TabItem>
+      <TabItem Header="الأزرار"><pages:ButtonsPage /></TabItem>
+      <TabItem Header="الحقول"><pages:FieldsPage /></TabItem>
+      <TabItem Header="الاختيار"><pages:ChecksPage /></TabItem>
+    </TabControl>
+  </DockPanel>
+</Window>

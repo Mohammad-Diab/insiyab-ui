@@ -1,0 +1,24 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Insiyab.Avalonia.InsiyabTheme">
+
+  <FluentTheme />
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://Insiyab.Avalonia/Generated/Tokens.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Fonts.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Window.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Type.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Panel.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Button.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/TextBox.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/CheckBox.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/ToggleSwitch.axaml" />
+
+</Styles>

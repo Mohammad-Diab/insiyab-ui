@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.ChecksPage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="28" MaxWidth="760" HorizontalAlignment="Left">
+
+      <StackPanel Spacing="14">
+        <CheckBox Content="تذكّرني على هذا الجهاز" />
+        <CheckBox Content="أوافق على شروط الاستخدام" IsChecked="True" />
+        <CheckBox Content="تحديد الكل" IsThreeState="True" IsChecked="{x:Null}" />
+        <CheckBox Content="خيار غير متاح" IsEnabled="False" />
+        <CheckBox Content="خيار مفروض" IsChecked="True" IsEnabled="False" />
+      </StackPanel>
+
+      <StackPanel Spacing="14">
+        <ToggleSwitch OnContent="مفعّل" OffContent="متوقف" />
+        <ToggleSwitch OnContent="مفعّل" OffContent="متوقف" IsChecked="True" />
+        <ToggleSwitch Content="الإشعارات" OnContent="تصلك التنبيهات فور وصولها" OffContent="لن تصلك أي تنبيهات" IsChecked="True" />
+        <ToggleSwitch Content="الحفظ التلقائي" OnContent="تُحفظ التغييرات كل دقيقة" OffContent="احفظ التغييرات بنفسك" />
+        <ToggleSwitch Content="المزامنة" OnContent="مفعّلة" OffContent="غير متاحة الآن" IsEnabled="False" />
+      </StackPanel>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
