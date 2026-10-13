@@ -60,13 +60,13 @@
     <Setter Property="Padding" Value="0" />
   </Style>
 
-  <!-- The message under a field, on its own: .ins-error and .ins-success. -->
+  <!-- The message under a field, on its own: .ins-error and .ins-success, in the direction of its first letter. -->
   <Style Selector="ContentControl.error, ContentControl.success">
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
     <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="Template">
       <ControlTemplate>
-        <DockPanel>
+        <DockPanel FlowDirection="{Binding $parent[ContentControl].Content, Converter={x:Static ins:TextDirection.Auto}}">
           <Viewbox DockPanel.Dock="Left" Width="15" Height="15" Margin="0,2,6,0" VerticalAlignment="Top" FlowDirection="LeftToRight">
             <Path x:Name="PART_Mark" Width="24" Height="24" Stroke="{TemplateBinding Foreground}" StrokeThickness="2.2" StrokeLineCap="Round" StrokeJoin="Round" />
           </Viewbox>

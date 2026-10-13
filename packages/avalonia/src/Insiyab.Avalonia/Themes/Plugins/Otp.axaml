@@ -80,7 +80,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Padding" Value="18,0" />
         <Setter Property="FontSize" Value="16" />
@@ -90,8 +90,9 @@
         <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
         <Setter Property="Template">
           <ControlTemplate TargetType="ins:OtpBox">
-            <DataValidationErrors ClipToBounds="False">
-              <Panel Height="52">
+            <!-- The message spans the field in the page's direction, as the web's .ins-error; the block stays at the start, its cells left to right -->
+            <DataValidationErrors ClipToBounds="False" FlowDirection="{Binding $parent[ins:OtpBox].((Visual)Parent).FlowDirection, FallbackValue={x:Static FlowDirection.RightToLeft}}">
+              <Panel Height="52" HorizontalAlignment="Left" FlowDirection="LeftToRight">
                 <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShSubtle}">
                   <Border.Transitions>
                     <Transitions>
