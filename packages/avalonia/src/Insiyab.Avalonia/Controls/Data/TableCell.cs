@@ -13,7 +13,7 @@ namespace Insiyab.Avalonia.Controls;
 
 /// <summary>One cell of a <see cref="TableRow"/>: the web's <c>&lt;td&gt;</c>.</summary>
 [TemplatePart("PART_EditorHost", typeof(Panel))]
-[PseudoClasses(":editable", ":editing", ":pinned", ":check", ":current")]
+[PseudoClasses(":editable", ":editing", ":pinned", ":pin-edge", ":pin-flip", ":check", ":current")]
 public class TableCell : ContentControl
 {
     public static readonly StyledProperty<string?> SortValueProperty =
@@ -59,7 +59,12 @@ public class TableCell : ContentControl
 
     internal bool IsCheck { get; set; }
 
-    internal void SetPinned(bool on) => PseudoClasses.Set(":pinned", on);
+    internal void SetPinned(bool on, bool edge = false, bool flip = false)
+    {
+        PseudoClasses.Set(":pinned", on);
+        PseudoClasses.Set(":pin-edge", edge);
+        PseudoClasses.Set(":pin-flip", flip);
+    }
 
     internal void SetCurrent(bool on) => PseudoClasses.Set(":current", on);
 

@@ -61,6 +61,9 @@ public class TableColumn : AvaloniaObject
     public static readonly StyledProperty<bool> IsFitProperty =
         AvaloniaProperty.Register<TableColumn, bool>(nameof(IsFit));
 
+    public static readonly StyledProperty<double> MinWidthProperty =
+        AvaloniaProperty.Register<TableColumn, double>(nameof(MinWidth), ColumnLayout.MinWidth);
+
     public static readonly StyledProperty<IDataTemplate?> CellTemplateProperty =
         AvaloniaProperty.Register<TableColumn, IDataTemplate?>(nameof(CellTemplate));
 
@@ -84,6 +87,9 @@ public class TableColumn : AvaloniaObject
 
     /// <summary>Keeps the column as narrow as its content: the spare width goes to the others.</summary>
     public bool IsFit { get => GetValue(IsFitProperty); set => SetValue(IsFitProperty, value); }
+
+    /// <summary>The narrowest the user can drag the column to; never under <see cref="ColumnLayout.MinWidth"/>.</summary>
+    public double MinWidth { get => GetValue(MinWidthProperty); set => SetValue(MinWidthProperty, value); }
 
     /// <summary>For rows made from <see cref="Table.ItemsSource"/>: the template of each cell, given the row's item.</summary>
     public IDataTemplate? CellTemplate { get => GetValue(CellTemplateProperty); set => SetValue(CellTemplateProperty, value); }

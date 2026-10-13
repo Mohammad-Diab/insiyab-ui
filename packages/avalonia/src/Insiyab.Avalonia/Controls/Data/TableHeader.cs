@@ -8,7 +8,7 @@ namespace Insiyab.Avalonia.Controls;
 
 /// <summary>A column heading in a <see cref="Table"/>'s header bar: the web's <c>&lt;th&gt;</c>. The table makes these from its columns.</summary>
 [TemplatePart("PART_Grip", typeof(Border))]
-[PseudoClasses(":pinned", ":check", ":resizable")]
+[PseudoClasses(":pinned", ":pin-edge", ":pin-flip", ":check", ":resizable", ":grip-flip")]
 public class TableHeader : ContentControl
 {
     private Border? _grip;
@@ -19,7 +19,12 @@ public class TableHeader : ContentControl
     /// <summary>The column this heading names; <c>null</c> for the selection column.</summary>
     public TableColumn? Column { get; internal set; }
 
-    internal void SetPinned(bool on) => PseudoClasses.Set(":pinned", on);
+    internal void SetPinned(bool on, bool edge = false, bool flip = false)
+    {
+        PseudoClasses.Set(":pinned", on);
+        PseudoClasses.Set(":pin-edge", edge);
+        PseudoClasses.Set(":pin-flip", flip);
+    }
 
     internal void MarkCheck() => PseudoClasses.Set(":check", true);
 
@@ -47,13 +52,28 @@ public class TableHeader : ContentControl
         _grip.PointerCaptureLost += OnGripCaptureLost;
     }
 
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        Align();
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == FlowDirectionProperty) Align();
+    }
+
+    // A heading that reads the other way from its table (a figures column) keeps its grip on the table's trailing edge.
+    private void Align() => PseudoClasses.Set(":grip-flip", Parent is Visual p && p.FlowDirection != FlowDirection);
+
     private void OnGripPressed(object? sender, PointerPressedEventArgs e)
     {
         if (!e.GetCurrentPoint(_grip).Properties.IsLeftButtonPressed || Owner is null) return;
         e.Handled = true;
         if (e.ClickCount >= 2)
         {
-            Owner.ColumnWidths.ClearWidth(Index);
+            Owner.ColumnWidths.Fit(Index, Column?.MinWidth ?? 0);
             return;
         }
         _drag = true;
@@ -65,7 +85,7 @@ public class TableHeader : ContentControl
     private void OnGripMoved(object? sender, PointerEventArgs e)
     {
         if (!_drag || Owner is null) return;
-        Owner.ColumnWidths.SetWidth(Index, _startWidth + e.GetPosition(Parent as Visual).X - _startX);
+        Owner.ColumnWidths.SetWidth(Index, Math.Max(Column?.MinWidth ?? 0, _startWidth + e.GetPosition(Parent as Visual).X - _startX));
         e.Handled = true;
     }
 

@@ -185,4 +185,123 @@
     <Setter Property="IsVisible" Value="True" />
   </Style>
 
+  <!-- The view switch sits before the arrows, a step away from them. -->
+  <Style Selector="ins|MonthCalendar ins|Segmented.month-views">
+    <Setter Property="Margin" Value="0,0,8,0" />
+    <Setter Property="Padding" Value="3" />
+  </Style>
+
+  <!-- The week and day views: a quiet glass card, the hours down its start edge, a hairline under every hour and between the days. -->
+  <Style Selector="ins|MonthCalendar Border.week-frame">
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+    <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-head">
+    <Setter Property="Padding" Value="4,8" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderThickness" Value="1,0,0,1" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-head.link">
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-head.link:pointerover">
+    <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-head > StackPanel">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="Spacing" Value="2" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-head Border.month-num">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-head.today Border.month-num">
+    <Setter Property="Background" Value="{StaticResource InsPickerBrandFill}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-head.today Border.month-num > TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar TextBlock.week-wd">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-corner">
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+  </Style>
+  <Style Selector="ins|MonthCalendar TextBlock.week-allday-label">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Margin" Value="8,6" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-allday-cell">
+    <Setter Property="MinHeight" Value="30" />
+    <Setter Property="Padding" Value="2,3" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderThickness" Value="1,0,0,1" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-hour-cell">
+    <Setter Property="MinWidth" Value="64" />
+    <Setter Property="Padding" Value="8,2" />
+  </Style>
+  <Style Selector="ins|MonthCalendar TextBlock.week-hour">
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-line">
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-day">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderThickness" Value="1,0,0,0" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-day.today">
+    <Setter Property="Background" Value="{DynamicResource InsZebra}" />
+  </Style>
+
+  <!-- An event by the hour: its title wraps as far as its length allows, its times under it. -->
+  <Style Selector="ins|MonthCalendar Border.month-event.timed">
+    <Setter Property="Padding" Value="6,3" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-event.timed > :is(Control)">
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+  <Style Selector="ins|MonthCalendar TextBlock.week-event-title">
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="ins|MonthCalendar TextBlock.week-event-time">
+    <Setter Property="FontSize" Value="10" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-event.link:pointerover TextBlock.week-event-time">
+    <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
+  </Style>
+
+  <!-- The now line across today, with a dot at its start. -->
+  <Style Selector="ins|MonthCalendar Border.week-now-line">
+    <Setter Property="Height" Value="2" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Background" Value="{DynamicResource InsToneBad}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Ellipse.week-now-dot">
+    <Setter Property="Width" Value="10" />
+    <Setter Property="Height" Value="10" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="Margin" Value="-5,0,0,0" />
+    <Setter Property="Fill" Value="{DynamicResource InsToneBad}" />
+  </Style>
+
 </Styles>

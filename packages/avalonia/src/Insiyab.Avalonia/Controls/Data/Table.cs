@@ -20,7 +20,7 @@ using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>A data table, the web's <c>.ins-table</c> in its <c>.ins-table-wrap</c>: a header bar over a card of rows; classes <c>sticky</c> (header kept in view inside MaxHeight, 32rem unless set) and <c>pin</c> (first column kept in view).</summary>
+/// <summary>A data table, the web's <c>.ins-table</c> in its <c>.ins-table-wrap</c>: a header bar over a card of rows; classes <c>sticky</c> (header kept in view inside MaxHeight, 32rem unless set) and <c>pin</c> (first column kept in view, as <see cref="FrozenColumns"/> 1).</summary>
 [TemplatePart("PART_Scroll", typeof(ScrollViewer))]
 [TemplatePart("PART_Head", typeof(Control))]
 [TemplatePart("PART_HeadCells", typeof(ColumnsPanel))]
@@ -52,6 +52,12 @@ public partial class Table : TemplatedControl
     public static readonly StyledProperty<bool> CanResizeColumnsProperty =
         AvaloniaProperty.Register<Table, bool>(nameof(CanResizeColumns), true);
 
+    public static readonly StyledProperty<bool> IsCellNavigationProperty =
+        AvaloniaProperty.Register<Table, bool>(nameof(IsCellNavigation));
+
+    public static readonly StyledProperty<int> FrozenColumnsProperty =
+        AvaloniaProperty.Register<Table, int>(nameof(FrozenColumns));
+
     public static readonly DirectProperty<Table, TableRow?> CurrentRowProperty =
         AvaloniaProperty.RegisterDirect<Table, TableRow?>(nameof(CurrentRow), o => o.CurrentRow);
 
@@ -72,6 +78,7 @@ public partial class Table : TemplatedControl
     private int _currentColumn = -1;
     private bool _shift;
     private bool _inPanel;
+    private int _pinned;
 
     static Table()
     {
@@ -128,10 +135,16 @@ public partial class Table : TemplatedControl
     /// <summary>Lets the user drag a heading's trailing edge to size its column.</summary>
     public bool CanResizeColumns { get => GetValue(CanResizeColumnsProperty); set => SetValue(CanResizeColumnsProperty, value); }
 
+    /// <summary>Moves the keyboard from cell to cell as a spreadsheet does: arrows, Home/End in the row, Ctrl+Home/End to the corners, Tab across cells, Enter, F2 or typing to edit.</summary>
+    public bool IsCellNavigation { get => GetValue(IsCellNavigationProperty); set => SetValue(IsCellNavigationProperty, value); }
+
+    /// <summary>How many leading columns stay in place while the rows scroll sideways under them; the selection column stays with them.</summary>
+    public int FrozenColumns { get => GetValue(FrozenColumnsProperty); set => SetValue(FrozenColumnsProperty, value); }
+
     /// <summary>The row the keyboard is on.</summary>
     public TableRow? CurrentRow => _current;
 
-    /// <summary>The column of the keyboard's cell, an index into Columns; -1 unless a column is editable.</summary>
+    /// <summary>The column of the keyboard's cell, an index into Columns; -1 unless a column is editable or <see cref="IsCellNavigation"/> is on.</summary>
     public int CurrentColumn => _currentColumn;
 
     /// <summary>The widths the header and every row share.</summary>
@@ -162,6 +175,10 @@ public partial class Table : TemplatedControl
     private bool HasEditable => Columns.Any(c => c.Edit != TableEdit.None);
 
     private int FirstEditable => Columns.ToList().FindIndex(c => c.Edit != TableEdit.None);
+
+    private bool CellCursor => (IsCellNavigation || HasEditable) && Columns.Count > 0;
+
+    private int PinnedCells => FrozenColumns > 0 ? Math.Min(FrozenColumns, Columns.Count) + Offset : Classes.Contains("pin") ? 1 : 0;
 
     internal TableCell? CurrentCell => _current is { } r && _currentColumn >= 0 && _currentColumn + Offset < r.Cells.Count ? r.Cells[_currentColumn + Offset] : null;
 
@@ -208,9 +225,13 @@ public partial class Table : TemplatedControl
             Rebuild();
         }
         else if (change.Property == IsSelectableProperty || change.Property == HasSelectAllProperty || change.Property == EmptyProperty
-            || change.Property == CanResizeColumnsProperty || change.Property == SelectionModeProperty)
+            || change.Property == CanResizeColumnsProperty || change.Property == SelectionModeProperty || change.Property == IsCellNavigationProperty)
         {
             Rebuild();
+        }
+        else if (change.Property == FrozenColumnsProperty)
+        {
+            Dispatcher.UIThread.Post(UpdateSticky, DispatcherPriority.Render);
         }
     }
 
@@ -291,7 +312,7 @@ public partial class Table : TemplatedControl
 
         Arrive(shown);
         PseudoClasses.Set(":empty", _display.Count == 0 && Empty is not null);
-        PseudoClasses.Set(":cell-cursor", HasEditable);
+        PseudoClasses.Set(":cell-cursor", CellCursor);
         if (_current is null || !_display.Contains(_current))
         {
             SetCurrent(null, -1);
@@ -434,11 +455,27 @@ public partial class Table : TemplatedControl
             CurrentCell?.SetCurrent(false);
         }
         SetAndRaise(CurrentRowProperty, ref _current, row);
-        SetAndRaise(CurrentColumnProperty, ref _currentColumn, row is not null && HasEditable ? Math.Clamp(column, 0, Columns.Count - 1) : -1);
+        SetAndRaise(CurrentColumnProperty, ref _currentColumn, row is not null && CellCursor ? Math.Clamp(column, 0, Columns.Count - 1) : -1);
         if (_current is null) return;
         _current.SetCurrent(true);
         CurrentCell?.SetCurrent(true);
         ScrollIntoView(_current);
+        if (CurrentCell is { } cell) ScrollIntoView(cell);
+    }
+
+    // Sideways, the cell comes clear of the frozen columns as well as of the box's edges.
+    private void ScrollIntoView(TableCell cell)
+    {
+        if (_scroll is null || _scroll.Extent.Width <= _scroll.Viewport.Width + 0.5 || cell.Bounds.Width <= 0 || cell.Row is not { } row) return;
+        var pinned = PinnedCells;
+        if (row.Cells.IndexOf(cell) < pinned) return;
+        if (cell.TranslatePoint(default, _scroll) is not { } p) return;
+        var frozen = 0.0;
+        for (var i = 0; i < pinned && i < row.Cells.Count; i++) frozen += row.Cells[i].Bounds.Width;
+        var view = _scroll.Viewport.Width;
+        var right = p.X + cell.Bounds.Width;
+        var dx = p.X < frozen ? p.X - frozen : right > view ? Math.Min(right - view, p.X - frozen) : 0;
+        if (Math.Abs(dx) >= 0.5) _scroll.Offset = new Vector(Math.Max(0, _scroll.Offset.X + dx), _scroll.Offset.Y);
     }
 
     private void ScrollIntoView(TableRow row)
@@ -495,7 +532,7 @@ public partial class Table : TemplatedControl
         SyncSelection(false);
     }
 
-    private void MoveTo(int index, KeyModifiers mods)
+    private void MoveTo(int index, KeyModifiers mods, int? column = null)
     {
         if (_display.Count == 0) return;
         var row = _display[Math.Clamp(index, 0, _display.Count - 1)];
@@ -513,7 +550,7 @@ public partial class Table : TemplatedControl
                 _anchor = row;
             }
         }
-        SetCurrent(row, _currentColumn);
+        SetCurrent(row, column ?? _currentColumn);
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
@@ -568,7 +605,7 @@ public partial class Table : TemplatedControl
                 }
                 break;
         }
-        SetCurrent(row, HasEditable && col >= 0 ? col : _currentColumn);
+        SetCurrent(row, CellCursor && col >= 0 ? col : _currentColumn);
     }
 
     protected override void OnGotFocus(FocusChangedEventArgs e)
@@ -585,8 +622,20 @@ public partial class Table : TemplatedControl
         var i = _current is null ? -1 : _display.IndexOf(_current);
         var ctrl = e.KeyModifiers.HasFlag(KeyModifiers.Control) || e.KeyModifiers.HasFlag(KeyModifiers.Meta);
         var rtl = FlowDirection == FlowDirection.RightToLeft;
+        var sheet = IsCellNavigation && CellCursor;
         switch (e.Key)
         {
+            case Key.Home or Key.End when sheet && !ctrl:
+                SetCurrent(_current ?? _display[0], e.Key == Key.Home ? 0 : Columns.Count - 1);
+                e.Handled = true;
+                break;
+            case Key.Home or Key.End when sheet:
+                MoveTo(e.Key == Key.Home ? 0 : _display.Count - 1, e.KeyModifiers & ~(KeyModifiers.Control | KeyModifiers.Meta), e.Key == Key.Home ? 0 : Columns.Count - 1);
+                e.Handled = true;
+                break;
+            case Key.Tab when sheet && (e.KeyModifiers & ~KeyModifiers.Shift) == KeyModifiers.None:
+                e.Handled = Step(i, e.KeyModifiers.HasFlag(KeyModifiers.Shift));
+                break;
             case Key.Down:
                 MoveTo(i + 1, e.KeyModifiers);
                 e.Handled = true;
@@ -611,7 +660,7 @@ public partial class Table : TemplatedControl
                 MoveTo(Math.Max(0, i - PageSize()), e.KeyModifiers);
                 e.Handled = true;
                 break;
-            case Key.Left or Key.Right when HasEditable:
+            case Key.Left or Key.Right when CellCursor:
                 var forward = (e.Key == Key.Right) != rtl;
                 SetCurrent(_current ?? _display[0], (_currentColumn < 0 ? 0 : _currentColumn) + (forward ? 1 : -1));
                 e.Handled = true;
@@ -630,11 +679,41 @@ public partial class Table : TemplatedControl
                 cell.BeginEdit();
                 e.Handled = true;
                 break;
+            case Key.Enter when e.KeyModifiers == KeyModifiers.None && CurrentCell is { Column.Edit: not TableEdit.None } edit:
+                edit.BeginEdit();
+                e.Handled = true;
+                break;
             case Key.Enter when _current is not null:
                 RowActivated?.Invoke(this, new TableRowEventArgs(_current));
                 e.Handled = true;
                 break;
         }
+    }
+
+    // Tab's next cell, on into the next row at the end of one; false past the table's last cell, so focus leaves it.
+    private bool Step(int row, bool back)
+    {
+        if (row < 0)
+        {
+            SetCurrent(_display[0], 0);
+            return true;
+        }
+        var c = _currentColumn + (back ? -1 : 1);
+        var r = row;
+        if (c >= Columns.Count)
+        {
+            c = 0;
+            r++;
+        }
+        if (c < 0)
+        {
+            c = Columns.Count - 1;
+            r--;
+        }
+        if (r < 0 || r >= _display.Count) return false;
+        if (r == row) SetCurrent(_current, c);
+        else MoveTo(r, KeyModifiers.None, c);
+        return true;
     }
 
     protected override void OnKeyUp(KeyEventArgs e)
@@ -670,7 +749,7 @@ public partial class Table : TemplatedControl
             return;
         }
         if (key != Key.Tab) return;
-        var editable = Enumerable.Range(0, Columns.Count).Where(i => Columns[i].Edit != TableEdit.None).ToList();
+        var editable = Enumerable.Range(0, Columns.Count).Where(i => IsCellNavigation || Columns[i].Edit != TableEdit.None).ToList();
         var at = editable.IndexOf(c) + (back ? -1 : 1);
         if (at >= editable.Count)
         {
@@ -815,24 +894,32 @@ public partial class Table : TemplatedControl
     {
         if (_scroll is null || _headCells is null) return;
         var sticky = Classes.Contains("sticky");
-        var pin = Classes.Contains("pin");
         var offset = _scroll.Offset;
         if (_head is not null)
             _head.RenderTransform = sticky && offset.Y > 0 ? new TranslateTransform(0, offset.Y) : null;
-        var x = pin ? offset.X : 0;
-        Pin(_headCells.Children.Count > 0 ? _headCells.Children[0] : null, pin, x);
-        foreach (var row in _display)
-            Pin(row.Cells.Count > 0 ? row.Cells[0] : null, pin, x);
+        var n = PinnedCells;
+        var x = n > 0 ? offset.X : 0;
+        Pin(_headCells.Children, n, x);
+        foreach (var row in _display) Pin(row.Cells, n, x);
+        _pinned = n;
     }
 
-    private static void Pin(Control? cell, bool on, double x)
+    // The frozen cells ride along with the scroll, and the last of them casts a shade on the cells passing under it.
+    private void Pin(IReadOnlyList<Control> cells, int n, double x)
     {
-        if (cell is null) return;
-        var moved = on && x > 0;
-        cell.ZIndex = on ? 1 : 0;
-        cell.RenderTransform = moved ? new TranslateTransform(x, 0) : null;
-        if (cell is TableCell c) c.SetPinned(moved);
-        else if (cell is TableHeader h) h.SetPinned(moved);
+        var upto = Math.Min(cells.Count, Math.Max(n, _pinned));
+        for (var i = 0; i < upto; i++)
+        {
+            var cell = cells[i];
+            var on = i < n;
+            var moved = on && x > 0;
+            var edge = moved && i == n - 1;
+            var flip = cell.FlowDirection != FlowDirection;
+            cell.ZIndex = on ? 1 : 0;
+            cell.RenderTransform = moved ? new TranslateTransform(x, 0) : null;
+            if (cell is TableCell c) c.SetPinned(moved, edge, flip);
+            else if (cell is TableHeader h) h.SetPinned(moved, edge, flip);
+        }
     }
 }
 

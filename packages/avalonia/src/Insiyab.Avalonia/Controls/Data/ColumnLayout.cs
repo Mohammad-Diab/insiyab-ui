@@ -51,6 +51,15 @@ public sealed class ColumnLayout
         Invalidate();
     }
 
+    /// <summary>Fixes a column at the width of its widest cell, heading included, as double-clicking its heading's edge does.</summary>
+    public void Fit(int column, double min = 0)
+    {
+        var width = 0.0;
+        foreach (var p in _panels)
+            if (column < p.Natural.Length) width = Math.Max(width, p.Natural[column]);
+        if (width > 0) SetWidth(column, Math.Max(min, Math.Ceiling(width)));
+    }
+
     /// <summary>Gives a column back its automatic width.</summary>
     public void ClearWidth(int column)
     {

@@ -30,6 +30,10 @@
     <pg:PlayText Classes="p" Markup="يرسم `Border.kbd` اسم المفتاح في هيئة زر من لوحة المفاتيح، لاختصار في قائمة أو تلميح." />
     <pg:Playground Def="{x:Static pg:TypographyPlay.Kbd}" />
 
+    <TextBlock Classes="section" Text="البحث في الصفحة" />
+    <pg:PlayText Classes="p" Markup="علّم الحاوية التي يُبحث فيها بـ`ins:Find.IsSearchable`، وضع `ins:FindBar` في أعلى الصفحة، فيفتحه `Ctrl+F` ويظلل ما يجد في نصوصها دون أن يمس النص نفسه." />
+    <pg:Playground Def="{x:Static pg:TypographyPlay.Search}" />
+
     <TextBlock Classes="section" Text="الخيارات" />
     <pg:PlayText Classes="p" Markup="كل ما في الخطوط والنصوص من كلاسات وعناصر وخصائص، لكل مكون صندوق يفتح بالنقر." />
     <pg:OptionsList Defs="{x:Static pg:TypographyPlay.All}" />

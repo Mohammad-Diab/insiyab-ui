@@ -180,5 +180,44 @@ public static class TypographyPlay
             "</StackPanel>",
     };
 
-    public static PlayDef[] All { get; } = [Heading, Prose, Divider, Kbd];
+    public static PlayDef Search { get; } = new()
+    {
+        Id = "find",
+        Title = "البحث في الصفحة",
+        Wide = _ => true,
+        Controls =
+        [
+            Text("text", "النص", "تقرير"),
+            Switch("open", "مفتوح من البداية", "IsOpen", "يظهر الشريط من البداية، وإن تركته فتحه `Ctrl+F`.", OptionKind.Property, on: true),
+            Switch("target", "في منطقة واحدة", "Target", "يحصر البحث في عنصر واحد بدل كل المناطق المعلَّمة في النافذة: `Target=\"{Binding #Help}\"`.", OptionKind.Property),
+        ],
+        Extra =
+        [
+            Row("الأساس", "ins:FindBar", "شريط بحث صغير يفتحه `Ctrl+F`: فيه الحقل وعدد النتائج وزرا السابقة والتالية وزر الإغلاق. يظلل النتائج كلها ويميز الحالية ويمرر الصفحة إليها، وينتقل `Enter` و`F3` إلى التالية، و`Shift+Enter` و`Shift+F3` إلى السابقة، ويغلقه `Esc`.", OptionKind.Element, true),
+            Row("الأساس", "ins:Find.IsSearchable", "على حاوية: يبحث الشريط في كل `TextBlock` داخلها. ولا يفرق البحث بين حرف بحركاته وبغيرها، ولا بين الهمزات، ولا بين ة وه، ولا بين ى وي.", OptionKind.Property, true),
+            Row("الأساس", "Text", "ما يُبحث عنه، وهو نص الحقل.", OptionKind.Property),
+            Row("النتائج", "MatchCount", "عدد النتائج، ومعه `CurrentMatch` رقم الحالية منها، و`Step(1)` و`Step(-1)` تنتقلان بينها.", OptionKind.Property),
+        ],
+        Axaml = s =>
+        {
+            var bar = "<ins:FindBar" + (s.On("open") ? " IsOpen=\"True\"" : "") + (s.Has("text") ? $" Text=\"{s["text"]}\"" : "") + (s.On("target") ? " Target=\"{Binding #Help}\"" : "") + " />";
+            return "<StackPanel Spacing=\"12\">\n" +
+                $"  {bar}\n" +
+                $"  <StackPanel x:Name=\"Help\"{(s.On("target") ? "" : " ins:Find.IsSearchable=\"True\"")} Spacing=\"8\">\n" +
+                "    <TextBlock Classes=\"h4\" Text=\"تقارير الشهر\" />\n" +
+                "    <TextBlock TextWrapping=\"Wrap\" Text=\"يصل التَّقرير الشهري إلى بريدك في أول يوم من كل شهر، وفيه ملخص المبيعات والطلبات.\" />\n" +
+                "    <TextBlock TextWrapping=\"Wrap\" Text=\"وإن أردت تقريرًا لفترة أخرى فاختر بدايتها ونهايتها من صفحة التقارير، ثم اضغط «إنشاء».\" />\n" +
+                "    <TextBlock TextWrapping=\"Wrap\" Text=\"ولا يُحذف أي تقرير قبل مرور سنة على إنشائه.\" />\n" +
+                "  </StackPanel>\n" +
+                "</StackPanel>";
+        },
+        Notes = s =>
+        [
+            s.On("open")
+                ? "اكتب في الحقل، ثم تنقل بين النتائج بـ`Enter` و`Shift+Enter`، وأغلقه بـ`Esc`. ولاحظ أن «تقرير» وجدت «التَّقرير» بحركاته و«تقريرًا» بتنوينها."
+                : "اضغط `Ctrl+F` في أي مكان من الصفحة فيظهر الشريط وفي حقله المؤشر.",
+        ],
+    };
+
+    public static PlayDef[] All { get; } = [Heading, Prose, Divider, Kbd, Search];
 }
