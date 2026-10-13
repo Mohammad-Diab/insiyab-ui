@@ -33,4 +33,12 @@
     <Setter Property="Transitions" Value="{x:Null}" />
   </Style>
 
+  <!-- A split button's keyboard press, and the tabs a dragged document tab passes, move at once -->
+  <Style Selector=":is(TopLevel):ins-still SplitButton:pressed /template/ Panel#PART_Root">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-still ins|DocumentTab /template/ Panel#PART_Slide">
+    <Setter Property="Transitions" Value="{x:Null}" />
+  </Style>
+
 </Styles>

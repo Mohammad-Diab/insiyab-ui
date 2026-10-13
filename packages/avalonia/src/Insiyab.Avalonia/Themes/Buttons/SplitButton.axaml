@@ -1,0 +1,265 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:conv="using:Avalonia.Controls.Converters"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <conv:CornerRadiusFilterConverter x:Key="InsSplitStart" Filter="TopLeft, BottomLeft" />
+      <conv:CornerRadiusFilterConverter x:Key="InsSplitEnd" Filter="TopRight, BottomRight" />
+      <CornerRadius x:Key="InsSplitSmStart">10,0,0,10</CornerRadius>
+      <CornerRadius x:Key="InsSplitSmEnd">0,10,10,0</CornerRadius>
+      <BoxShadows x:Key="InsSplitPressed">inset 0 1 3 0 #1F0F172A</BoxShadows>
+      <StreamGeometry x:Key="InsSplitChevron">M6 9 l6 6 6-6</StreamGeometry>
+
+      <!-- SplitButton and ToggleSplitButton: two buttons joined as in a btn-group; SplitFace hands them the split button's classes, the split button draws the one shadow, focus ring and gradient. -->
+      <ControlTheme x:Key="{x:Type SplitButton}" TargetType="SplitButton">
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="Padding" Value="16,6" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel x:Name="PART_Root" RenderTransformOrigin="50%,50%" RenderTransform="none">
+              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
+              <Border x:Name="PART_FocusRing"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BoxShadow="{DynamicResource InsFocusRing}"
+                      Opacity="0" />
+              <Border x:Name="PART_Fill" FlowDirection="LeftToRight" CornerRadius="{TemplateBinding CornerRadius}" />
+              <Grid ColumnDefinitions="*,Auto">
+                <Button x:Name="PART_PrimaryButton"
+                        Classes="split-half"
+                        ins:SplitFace.Mirror="True"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Focusable="False"
+                        KeyboardNavigation.IsTabStop="False"
+                        CornerRadius="{TemplateBinding CornerRadius, Converter={StaticResource InsSplitStart}}"
+                        Padding="{TemplateBinding Padding}"
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                <Button x:Name="PART_SecondaryButton"
+                        Grid.Column="1"
+                        Classes="split-half split-arrow"
+                        ins:SplitFace.Mirror="True"
+                        Margin="-1,0,0,0"
+                        Padding="0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Focusable="False"
+                        KeyboardNavigation.IsTabStop="False"
+                        CornerRadius="{TemplateBinding CornerRadius, Converter={StaticResource InsSplitEnd}}">
+                  <Viewbox x:Name="PART_Chevron" RenderTransform="none">
+                    <Path Width="24" Height="24"
+                          Data="{StaticResource InsSplitChevron}"
+                          Stroke="{Binding $parent[Button].Foreground}"
+                          StrokeThickness="2.4"
+                          StrokeLineCap="Round"
+                          StrokeJoin="Round" />
+                  </Viewbox>
+                </Button>
+                <Border x:Name="PART_Divider"
+                        Grid.Column="1"
+                        Width="1"
+                        ZIndex="3"
+                        HorizontalAlignment="Left"
+                        IsHitTestVisible="False"
+                        IsVisible="False"
+                        Opacity="0.4"
+                        Background="{Binding #PART_SecondaryButton.Foreground}" />
+              </Grid>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ Border#PART_Divider">
+          <Setter Property="Margin" Value="0,8" />
+        </Style>
+        <Style Selector="^ /template/ Viewbox#PART_Chevron">
+          <Setter Property="Width" Value="12" />
+          <Setter Property="Height" Value="12" />
+          <Setter Property="Margin" Value="11,0" />
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:flyout-open /template/ Viewbox#PART_Chevron">
+          <Setter Property="RenderTransform" Value="rotate(180deg)" />
+        </Style>
+        <Style Selector="^ /template/ Panel#PART_Root">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:pressed /template/ Panel#PART_Root">
+          <Setter Property="RenderTransform" Value="scale(0.97)" />
+        </Style>
+        <Style Selector="^ /template/ Border#PART_Shadow">
+          <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />
+          <Setter Property="Transitions">
+            <Transitions>
+              <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Border#PART_FocusRing">
+          <Setter Property="Transitions">
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.5" />
+          <Setter Property="Cursor" Value="No" />
+        </Style>
+
+        <Style Selector="^.sm">
+          <Setter Property="Padding" Value="10,4" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+          <Style Selector="^ /template/ Viewbox#PART_Chevron">
+            <Setter Property="Width" Value="10" />
+            <Setter Property="Height" Value="10" />
+            <Setter Property="Margin" Value="8,0" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Divider">
+            <Setter Property="Margin" Value="0,6" />
+          </Style>
+        </Style>
+        <Style Selector="^.lg">
+          <Setter Property="Padding" Value="24,10" />
+          <Style Selector="^ /template/ Viewbox#PART_Chevron">
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Height" Value="14" />
+            <Setter Property="Margin" Value="14,0" />
+          </Style>
+        </Style>
+        <Style Selector="^.full">
+          <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+
+        <!-- The filled tones: one gradient and one coloured drop under both halves, a faint rule between them. The tone is the one SplitFace worked out, so an unchecked toggle split stays neutral. -->
+        <Style Selector="^[(ins|SplitFace.Tone)=primary], ^[(ins|SplitFace.Tone)=success], ^[(ins|SplitFace.Tone)=danger], ^[(ins|SplitFace.Tone)=warning], ^[(ins|SplitFace.Tone)=info]">
+          <Style Selector="^ /template/ Border#PART_Divider">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+        </Style>
+        <Style Selector="^[(ins|SplitFace.Tone)=primary]">
+          <Style Selector="^ /template/ Border#PART_Fill">
+            <Setter Property="Background" Value="{DynamicResource InsButtonPrimaryFill}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandMd}" />
+          </Style>
+          <Style Selector="^:pointerover:not(:disabled) /template/ Border#PART_Shadow, ^:focus-visible /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandLg}" />
+          </Style>
+        </Style>
+        <Style Selector="^[(ins|SplitFace.Tone)=success]">
+          <Style Selector="^ /template/ Border#PART_Fill">
+            <Setter Property="Background" Value="{DynamicResource InsButtonSuccessFill}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="0 8 24 0 #4722C55E" />
+          </Style>
+        </Style>
+        <Style Selector="^[(ins|SplitFace.Tone)=danger]">
+          <Style Selector="^ /template/ Border#PART_Fill">
+            <Setter Property="Background" Value="{DynamicResource InsButtonDangerFill}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="0 8 24 0 #42EF4444" />
+          </Style>
+        </Style>
+        <Style Selector="^[(ins|SplitFace.Tone)=warning]">
+          <Style Selector="^ /template/ Border#PART_Fill">
+            <Setter Property="Background" Value="{DynamicResource InsButtonWarningFill}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="0 8 24 0 #42F59E0B" />
+          </Style>
+        </Style>
+        <Style Selector="^[(ins|SplitFace.Tone)=info]">
+          <Style Selector="^ /template/ Border#PART_Fill">
+            <Setter Property="Background" Value="{DynamicResource InsButtonInfoFill}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="0 8 24 0 #423B82F6" />
+          </Style>
+        </Style>
+        <Style Selector="^.bare">
+          <Setter Property="Padding" Value="0" />
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="none" />
+          </Style>
+          <Style Selector="^ /template/ Viewbox#PART_Chevron">
+            <Setter Property="Margin" Value="6,0,0,0" />
+          </Style>
+        </Style>
+        <Style Selector="^[(ins|SplitFace.Tone)=bare] /template/ Border#PART_Shadow, ^[(ins|SplitFace.Tone)=on] /template/ Border#PART_Shadow">
+          <Setter Property="BoxShadow" Value="none" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- The halves give their own drop, press and fill to the split button: the face stays one piece. -->
+  <Style Selector="Button.split-half /template/ Border#PART_Shadow">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+  <Style Selector="Button.split-half /template/ Panel#PART_Press">
+    <Setter Property="ins:PressDip.Depth" Value="0" />
+  </Style>
+  <Style Selector="Button.split-half:pressed /template/ Panel#PART_Root">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+  <Style Selector="Button.split-half:pressed:not(.bare) /template/ Border#PART_Fill">
+    <Setter Property="BoxShadow" Value="{StaticResource InsSplitPressed}" />
+  </Style>
+  <Style Selector="Button.split-half:focus-visible /template/ Border#PART_FocusRing">
+    <Setter Property="Opacity" Value="0" />
+  </Style>
+  <Style Selector="Button.split-half.primary, Button.split-half.success, Button.split-half.danger, Button.split-half.warning, Button.split-half.info">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <!-- A button's size classes would round all four corners and pad the arrow; the joined corners stay square and the chevron's margin is the arrow's only room. -->
+  <Style Selector="Button.split-half.split-arrow">
+    <Setter Property="Padding" Value="0" />
+  </Style>
+  <Style Selector="SplitButton.sm /template/ Button#PART_PrimaryButton.split-half">
+    <Setter Property="CornerRadius" Value="{StaticResource InsSplitSmStart}" />
+  </Style>
+  <Style Selector="SplitButton.sm /template/ Button#PART_SecondaryButton.split-half">
+    <Setter Property="CornerRadius" Value="{StaticResource InsSplitSmEnd}" />
+  </Style>
+  <Style Selector="SplitButton:disabled /template/ Button.split-half">
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+  <!-- A checked toggle split with no tone of its own takes the brand tint, as a checked ToggleButton does. -->
+  <Style Selector="Button.split-half.on">
+    <Setter Property="Background" Value="{DynamicResource InsButtonToggleOn}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsButtonToggleOnBorder}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+  </Style>
+  <Style Selector="Button.split-half.on /template/ Border#PART_Fill">
+    <Setter Property="BoxShadow" Value="{StaticResource InsSplitPressed}" />
+  </Style>
+
+</Styles>

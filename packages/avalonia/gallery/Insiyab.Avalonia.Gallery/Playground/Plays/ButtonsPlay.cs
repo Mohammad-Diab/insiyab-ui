@@ -60,7 +60,7 @@ public static class ButtonsPlay
         Extra =
         [
             Row("الأساس", "Button", "أساس كل زر، ومعه كلاس للنمط، فإن لم تذكره بدا ثانويًا.", OptionKind.Element, true),
-            Row("زر تبديل", "IsChecked=\"True\"", "الزر مضغوط. ضعها بنفسك ليبدأ الزر مضغوطًا.", OptionKind.Property),
+            Row("زر تبديل", "IsChecked=\"True\"", "الزر مضغوط، فيأخذ لون نمطه، وهو رمادي ما دام غير مضغوط. ضعها بنفسك ليبدأ الزر مضغوطًا.", OptionKind.Property),
             Row("زر تبديل", "IsCheckedChanged", "يُطلق عند كل ضغطة، وحالة الزر الجديدة في `IsChecked`.", OptionKind.Event),
         ],
         Disable = s => s.On("link") ? ["toggle"] : [],
@@ -83,15 +83,13 @@ public static class ButtonsPlay
         },
         Notes = s =>
         {
-            var out = new List<string>();
-            if (s["icon"] == "only") out.Add("لا نص على الزر، فصار نصه اسمًا في `AutomationProperties.Name` يقرؤه قارئ الشاشة.");
-            if (s.On("lift")) out.Add("مرر المؤشر على الزر، فيرتفع قليلًا.");
-            if (s.On("link")) out.Add("الرابط لا يكون زر تبديل، فهذا الخيار للأزرار وحدها. ولا يفتح الرابط هنا شيئًا.");
+            var notes = new List<string>();
+            if (s["icon"] == "only") notes.Add("لا نص على الزر، فصار نصه اسمًا في `AutomationProperties.Name` يقرؤه قارئ الشاشة.");
+            if (s.On("lift")) notes.Add("مرر المؤشر على الزر، فيرتفع قليلًا.");
+            if (s.On("link")) notes.Add("الرابط لا يكون زر تبديل، فهذا الخيار للأزرار وحدها. ولا يفتح الرابط هنا شيئًا.");
             if (s.On("toggle") && !s.On("link"))
-                out.Add(s["look"] == "primary"
-                    ? "الزر الرئيسي لا يتغير شكله حين يُضغط، فاختر نمطًا آخر لترى حالته المضغوطة. واضغطه يظهر هنا الحدث الذي يطلقه."
-                    : "يبدو الزر هنا مضغوطًا، فاضغطه يرجع إلى حاله ويظهر هنا الحدث الذي يطلقه.");
-            return out;
+                notes.Add("يبدو الزر هنا مضغوطًا، فاضغطه يرجع رماديًا ويظهر هنا الحدث الذي يطلقه.");
+            return notes;
         },
         Stage = (view, _, say) =>
         {
@@ -167,5 +165,78 @@ public static class ButtonsPlay
         },
     };
 
-    public static PlayDef[] All { get; } = [Button, Group, Close];
+    public static PlayDef Split { get; } = new()
+    {
+        Id = "split",
+        Title = "زر بقائمة",
+        WideMax = 416,
+        Controls =
+        [
+            Seg("kind", "النوع", "split",
+                Choice("split", "مقسم", "SplitButton", "زر بجزأين: الأول ينفذ الإجراء، والسهم بجانبه يفتح قائمة بإجراءات قريبة منه.", OptionKind.Element),
+                Choice("toggle", "مقسم للتبديل", "ToggleSplitButton", "مثل المقسم، لكن جزأه الأول زر تبديل يبقى مضغوطًا أو غير مضغوط، وهو رمادي ما دام غير مضغوط.", OptionKind.Element),
+                Choice("drop", "منسدل", "DropDownButton", "زر واحد يفتح قائمته عند الضغط، وفي طرفه سهم يدل على ذلك.", OptionKind.Element)),
+            Select("look", "النمط", "primary",
+                Choice("primary", "رئيسي"),
+                Choice("secondary", "ثانوي"),
+                Choice("success", "نجاح"),
+                Choice("danger", "خطر"),
+                Choice("warning", "تحذير"),
+                Choice("info", "معلومة"),
+                Choice("ghost", "هادئ"),
+                Choice("ghost-danger", "هادئ بنبرة الخطر"),
+                Choice("bare", "بلا خلفية")),
+            Seg("size", "المقاس", "",
+                Choice("sm", "صغير"),
+                Choice("", "عادي"),
+                Choice("lg", "كبير")),
+            Switch("disabled", "معطل", "IsEnabled=\"False\"", "يعطل الزر كله، بجزأيه إن كان مقسمًا.", OptionKind.Property),
+        ],
+        Extra =
+        [
+            Row("الأساس", "Flyout", "القائمة التي يفتحها السهم. اجعلها `ins:PopMenu` لتأخذ هيئة قوائم المكتبة وموضعها تحت الزر.", OptionKind.Property, true),
+            Row("الأساس", "Click", "يُطلق عند الضغط على الجزء الأول من الزر المقسم، لا على سهمه.", OptionKind.Event),
+            Row("الأساس", "IsChecked", "حالة الزر المقسم للتبديل: مضغوط أو غير مضغوط.", OptionKind.Property),
+            Row("الأساس", "IsCheckedChanged", "يُطلق عند كل ضغطة على الجزء الأول من الزر المقسم للتبديل.", OptionKind.Event),
+            Row("النمط", "Classes", "كلاسات الزر نفسها: النمط من `primary` إلى `bare`، والمقاس `sm` و`lg`، و`full` ليمتد على عرض حاويته. والزر المقسم للتبديل رمادي ما دام غير مضغوط، أيًا كان نمطه.", OptionKind.Property),
+        ],
+        Axaml = s =>
+        {
+            var (tag, text, items) = s["kind"] switch
+            {
+                "toggle" => ("ToggleSplitButton", "التدقيق", new[] { "العربية", "الإنجليزية", "اللغتان معًا" }),
+                "drop" => ("DropDownButton", "ترتيب", new[] { "الأحدث", "الأقدم", "الاسم" }),
+                _ => ("SplitButton", "حفظ", new[] { "حفظ باسم جديد", "حفظ نسخة", "حفظ الكل" }),
+            };
+            return $"<{tag}{Classes(s["look"], s["size"])} Content=\"{text}\"" + (s.On("disabled") ? " IsEnabled=\"False\"" : "") + (s["kind"] == "toggle" ? " IsChecked=\"True\"" : "") + ">\n" +
+                $"  <{tag}.Flyout>\n" +
+                "    <ins:PopMenu>\n" +
+                string.Concat(items.Select(i => $"      <MenuItem Header=\"{i}\" />\n")) +
+                "    </ins:PopMenu>\n" +
+                $"  </{tag}.Flyout>\n" +
+                $"</{tag}>";
+        },
+        Notes = s => s["kind"] switch
+        {
+            "toggle" => ["يبدو الزر هنا مضغوطًا، فاضغط جزأه الأول يرجع رماديًا ويظهر هنا الحدث، واضغط السهم تفتح القائمة."],
+            "drop" => ["اضغط الزر فتفتح قائمته، ويقلب السهم ما دامت مفتوحة."],
+            _ => ["اضغط الجزء الأول فيظهر هنا الحدث، واضغط السهم تفتح القائمة."],
+        },
+        Stage = (view, _, say) =>
+        {
+            foreach (var t in view.GetLogicalDescendants().OfType<ToggleSplitButton>())
+                t.IsCheckedChanged += (_, _) => say($"حدث `IsCheckedChanged`، و`IsChecked` الآن `{t.IsChecked}`");
+            foreach (var b in view.GetLogicalDescendants().OfType<SplitButton>().Where(b => b is not ToggleSplitButton))
+                b.Click += (_, _) => say("حدث `Click` على الجزء الأول");
+            foreach (var m in view.GetLogicalDescendants().OfType<Control>().Where(c => c is SplitButton or DropDownButton))
+            {
+                var flyout = m is SplitButton sb ? sb.Flyout : ((DropDownButton)m).Flyout;
+                if (flyout is MenuFlyout menu)
+                    foreach (var item in menu.Items.OfType<MenuItem>())
+                        item.Click += (_, _) => say($"اختير «{item.Header}» من القائمة");
+            }
+        },
+    };
+
+    public static PlayDef[] All { get; } = [Button, Group, Close, Split];
 }

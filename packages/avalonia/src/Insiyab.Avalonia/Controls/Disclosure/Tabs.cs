@@ -26,6 +26,12 @@ public static class Tabs
     private static readonly AttachedProperty<Flight?> FlightProperty =
         AvaloniaProperty.RegisterAttached<SelectingItemsControl, Flight?>("Flight", typeof(Tabs));
 
+    // Set while a strip reshuffles its own items (DocumentTabs moving a tab), so the selection it restores does not fly.
+    private static readonly AttachedProperty<bool> HushProperty =
+        AvaloniaProperty.RegisterAttached<SelectingItemsControl, bool>("Hush", typeof(Tabs));
+
+    internal static void Hush(SelectingItemsControl strip, bool on) => strip.SetValue(HushProperty, on);
+
     static Tabs()
     {
         KeysProperty.Changed.AddClassHandler<SelectingItemsControl>((c, e) =>
@@ -115,7 +121,7 @@ public static class Tabs
 
     private static void OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (sender is not SelectingItemsControl strip || e.Source != strip) return;
+        if (sender is not SelectingItemsControl strip || e.Source != strip || strip.GetValue(HushProperty)) return;
         if (e.RemovedItems.Count != 1 || e.AddedItems.Count != 1) return;
         var from = Container(strip, e.RemovedItems[0]);
         var to = Container(strip, e.AddedItems[0]);

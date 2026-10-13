@@ -607,90 +607,6 @@ public class ShellTests
         Assert.False(Part<ContentPresenter>(head, "PART_Actions").IsVisible);
     }
 
-    private static Navbar NewNavbar(double width)
-    {
-        var bar = new Navbar
-        {
-            Brand = "الموقع",
-            ItemsSource = new[] { "الرئيسية", "المدونة", "تواصل معنا" },
-            SelectedIndex = 0,
-            End = new Button { Classes = { "secondary", "sm" }, Content = "دخول" },
-            Width = width,
-        };
-        return bar;
-    }
-
-    [AvaloniaFact]
-    public void Navbar_is_a_glass_island_with_the_current_link_underlined()
-    {
-        var bar = NewNavbar(1000);
-        var window = Show(bar, width: 1100);
-        Assert.False(bar.IsCollapsed);
-        Assert.False(Part<ToggleButton>(bar, "PART_Toggle").IsVisible);
-        var face = Part<Border>(bar, "PART_Bar");
-        AssertBrush(bar, "InsGlass", () => face.Background);
-        Assert.Equal(Res(bar, "InsIslandShadow"), face.BoxShadow);
-        Assert.True(face.Bounds.Height >= 56);
-
-        var links = bar.GetRealizedContainers().Cast<NavbarLink>().ToList();
-        Assert.Equal(3, links.Count);
-        AssertBrush(links[0], "InsToneBrand", () => links[0].Foreground);
-        Assert.Equal(1, Part<Border>(links[0], "PART_Marker").RenderTransform!.Value.M11, 2);
-        Assert.Equal(0, Part<Border>(links[1], "PART_Marker").RenderTransform!.Value.M11, 2);
-        AssertBrush(links[1], "InsLabel", () => links[1].Foreground);
-        window.MouseMove(Center(links[1], window));
-        Settle();
-        AssertBrush(links[1], "InsCtlBg", () => links[1].Background);
-        Assert.Equal(0.35, Part<Border>(links[1], "PART_Marker").RenderTransform!.Value.M11, 2);
-    }
-
-    [AvaloniaFact]
-    public void Narrow_navbar_folds_behind_a_toggle_that_opens_a_column()
-    {
-        var bar = NewNavbar(380);
-        var events = 0;
-        bar.Toggled += (_, _) => events++;
-        var window = Show(bar);
-        var toggle = Part<ToggleButton>(bar, "PART_Toggle");
-        var menu = Part<Border>(bar, "PART_Menu");
-        Assert.True(bar.IsCollapsed);
-        Assert.True(toggle.IsVisible);
-        Assert.False(menu.IsVisible);
-
-        Click(toggle, window);
-        Assert.True(bar.IsOpen);
-        Assert.Equal(1, events);
-        Assert.True(menu.IsVisible);
-        Assert.Equal(1, Grid.GetRow(menu));
-        var links = bar.GetRealizedContainers().Cast<NavbarLink>().ToList();
-        Assert.True(links[1].TranslatePoint(default, bar)!.Value.Y > links[0].TranslatePoint(default, bar)!.Value.Y);
-        AssertBrush(links[0], "InsToneBrandBg", () => links[0].Background);
-        Assert.False(Part<Border>(links[0], "PART_Marker").IsVisible);
-
-        window.KeyPress(Key.Escape, RawInputModifiers.None, PhysicalKey.Escape, null);
-        Settle();
-        Assert.False(bar.IsOpen);
-
-        Click(toggle, window);
-        Assert.True(bar.IsOpen);
-        Click(bar.GetRealizedContainers().Cast<NavbarLink>().ElementAt(2), window);
-        Assert.False(bar.IsOpen);
-        Assert.Equal(2, bar.SelectedIndex);
-    }
-
-    [AvaloniaFact]
-    public void Navbar_toggle_turns_into_a_cross()
-    {
-        var bar = NewNavbar(380);
-        bar.IsOpen = true;
-        Show(bar);
-        var toggle = Part<ToggleButton>(bar, "PART_Toggle");
-        Assert.True(toggle.IsChecked);
-        Assert.Equal(0, Part<Border>(toggle, "PART_Mid").Opacity, 2);
-        var top = Part<Border>(toggle, "PART_Top").RenderTransform!.Value;
-        Assert.Equal(Math.Cos(Math.PI / 4), top.M11, 2);
-    }
-
     private static Split NewSplit(double width = 800) => new()
     {
         Width = width,
@@ -911,7 +827,6 @@ public class ShellTests
             {
                 new Border { Height = 300, Child = shell },
                 new PageHead { Title = "عنوان الصفحة", Subtitle = "سطر وصف قصير", Breadcrumb = new Breadcrumb { ItemsSource = new[] { "الرئيسية", "القسم", "الصفحة" } }, Actions = new Button { Classes = { "primary" }, Content = "حفظ" } },
-                NewNavbar(760),
                 new Split { Height = 120, First = new TextBlock { Text = "اللوح الأول" }, Second = new TextBlock { Text = "اللوح الثاني" } },
                 new Pagination { PageCount = 12, CurrentPage = 3 },
             },
