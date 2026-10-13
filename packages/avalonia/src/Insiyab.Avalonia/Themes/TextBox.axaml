@@ -1,0 +1,352 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="using:System">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <SolidColorBrush x:Key="InsTextBoxHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
+      <SolidColorBrush x:Key="InsTextBoxFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
+      <SolidColorBrush x:Key="InsTextBoxSelection" Color="{DynamicResource InsPrimaryColor}" Opacity="0.22" />
+
+      <StreamGeometry x:Key="InsTextBoxEye">M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z M15 12a3 3 0 1 1-6 0a3 3 0 1 1 6 0Z</StreamGeometry>
+      <StreamGeometry x:Key="InsTextBoxEyeOff">M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z M15 12a3 3 0 1 1-6 0a3 3 0 1 1 6 0Z M4 4l16 16</StreamGeometry>
+      <StreamGeometry x:Key="InsTextBoxErrorMark">M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0Z M12 7.5v5.5 M12 16.5v.01</StreamGeometry>
+
+      <ControlTheme x:Key="InsTextBoxRevealButton" TargetType="ToggleButton">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Width" Value="36" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Margin" Value="4,0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+            <BrushTransition Property="Foreground" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate TargetType="ToggleButton">
+            <Border x:Name="PART_Face"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+              <Viewbox Width="18" Height="18" FlowDirection="LeftToRight">
+                <Panel Width="24" Height="24">
+                  <Path x:Name="PART_Eye"
+                        Data="{StaticResource InsTextBoxEye}"
+                        Stroke="{TemplateBinding Foreground}"
+                        StrokeThickness="2"
+                        StrokeLineCap="Round"
+                        StrokeJoin="Round" />
+                  <Path x:Name="PART_EyeOff"
+                        Data="{StaticResource InsTextBoxEyeOff}"
+                        Stroke="{TemplateBinding Foreground}"
+                        StrokeThickness="2"
+                        StrokeLineCap="Round"
+                        StrokeJoin="Round"
+                        IsVisible="False" />
+                </Panel>
+              </Viewbox>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        </Style>
+        <Style Selector="^:checked">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+          <Style Selector="^ /template/ Path#PART_Eye">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ Path#PART_EyeOff">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsTextBoxErrors" TargetType="DataValidationErrors">
+        <Setter Property="Template">
+          <ControlTemplate TargetType="DataValidationErrors">
+            <DockPanel LastChildFill="True">
+              <ContentControl x:Name="InlineDataValidationContentControl"
+                              Margin="0,6,0,0"
+                              Content="{Binding (DataValidationErrors.Errors)}"
+                              ContentTemplate="{TemplateBinding ErrorTemplate}"
+                              DataContext="{TemplateBinding Owner}"
+                              DockPanel.Dock="Bottom"
+                              IsVisible="{Binding (DataValidationErrors.HasErrors)}" />
+              <ContentPresenter x:Name="PART_ContentPresenter"
+                                ClipToBounds="False"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                CornerRadius="{TemplateBinding CornerRadius}" />
+            </DockPanel>
+          </ControlTemplate>
+        </Setter>
+        <Setter Property="ErrorTemplate">
+          <DataTemplate>
+            <!-- The message is in the page's language, so it takes the direction around the field, not the field's own. -->
+            <ItemsControl x:DataType="DataValidationErrors"
+                          ItemsSource="{Binding}"
+                          FlowDirection="{Binding $parent[TextBox].((Visual)Parent).FlowDirection, FallbackValue={x:Static FlowDirection.RightToLeft}}"
+                          Foreground="{DynamicResource InsToneBad}"
+                          FontSize="{DynamicResource InsFsXs}"
+                          FontWeight="SemiBold">
+              <ItemsControl.DataTemplates>
+                <DataTemplate DataType="sys:Exception">
+                  <DockPanel>
+                    <Viewbox DockPanel.Dock="Left" Width="15" Height="15" Margin="0,2,6,0" VerticalAlignment="Top" FlowDirection="LeftToRight">
+                      <Path Width="24" Height="24" Data="{StaticResource InsTextBoxErrorMark}" Stroke="{DynamicResource InsToneBad}" StrokeThickness="2.2" StrokeLineCap="Round" />
+                    </Viewbox>
+                    <TextBlock Text="{Binding Message}" TextWrapping="Wrap" LineHeight="19" />
+                  </DockPanel>
+                </DataTemplate>
+                <DataTemplate x:DataType="x:Object">
+                  <DockPanel>
+                    <Viewbox DockPanel.Dock="Left" Width="15" Height="15" Margin="0,2,6,0" VerticalAlignment="Top" FlowDirection="LeftToRight">
+                      <Path Width="24" Height="24" Data="{StaticResource InsTextBoxErrorMark}" Stroke="{DynamicResource InsToneBad}" StrokeThickness="2.2" StrokeLineCap="Round" />
+                    </Viewbox>
+                    <TextBlock Text="{Binding}" TextWrapping="Wrap" LineHeight="19" />
+                  </DockPanel>
+                </DataTemplate>
+              </ItemsControl.DataTemplates>
+            </ItemsControl>
+          </DataTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type TextBox}" TargetType="TextBox">
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        <Setter Property="CaretBrush" Value="{DynamicResource InsText1}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource InsTextBoxSelection}" />
+        <Setter Property="SelectionForegroundBrush" Value="{DynamicResource InsText1}" />
+        <Setter Property="PlaceholderForeground" Value="{DynamicResource InsText3}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="MinHeight" Value="{DynamicResource InsFieldH}" />
+        <Setter Property="Padding" Value="14,8" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
+        <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <TransformOperationsTransition Property="RenderTransform" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <DataValidationErrors Theme="{StaticResource InsTextBoxErrors}" ClipToBounds="False">
+              <Panel>
+                <Border x:Name="PART_Shadow"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        BoxShadow="{DynamicResource InsShSubtle}">
+                  <Border.Transitions>
+                    <Transitions>
+                      <BoxShadowsTransition Property="BoxShadow" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                    </Transitions>
+                  </Border.Transitions>
+                </Border>
+                <Border x:Name="PART_BorderElement"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        BoxShadow="{DynamicResource InsBevelDim}"
+                        MinWidth="{TemplateBinding MinWidth}"
+                        MinHeight="{TemplateBinding MinHeight}">
+                  <Border.Transitions>
+                    <Transitions>
+                      <BrushTransition Property="Background" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                      <BrushTransition Property="BorderBrush" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                    </Transitions>
+                  </Border.Transitions>
+                </Border>
+
+                <Border Margin="{TemplateBinding BorderThickness}">
+                  <Grid ColumnDefinitions="Auto,*,Auto">
+                    <ContentPresenter Grid.Column="0"
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      Content="{TemplateBinding InnerLeftContent}" />
+                    <DockPanel x:Name="PART_InnerDockPanel"
+                               Grid.Column="1"
+                               Margin="{TemplateBinding Padding}">
+                      <TextBlock x:Name="PART_FloatingPlaceholder"
+                                 Foreground="{TemplateBinding PlaceholderForeground}"
+                                 FontSize="{DynamicResource InsFsXs}"
+                                 IsVisible="False"
+                                 Text="{TemplateBinding PlaceholderText}"
+                                 DockPanel.Dock="Top" />
+                      <ScrollViewer x:Name="PART_ScrollViewer"
+                                    HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                    VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+                                    IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+                                    AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
+                                    BringIntoViewOnFocusChange="{TemplateBinding (ScrollViewer.BringIntoViewOnFocusChange)}">
+                        <Panel>
+                          <TextBlock x:Name="PART_Placeholder"
+                                     Foreground="{TemplateBinding PlaceholderForeground}"
+                                     Text="{TemplateBinding PlaceholderText}"
+                                     TextAlignment="{TemplateBinding TextAlignment}"
+                                     TextWrapping="{TemplateBinding TextWrapping}"
+                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <TextBlock.IsVisible>
+                              <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding ElementName="PART_TextPresenter" Path="PreeditText" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                                <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Text" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                              </MultiBinding>
+                            </TextBlock.IsVisible>
+                          </TextBlock>
+                          <TextPresenter x:Name="PART_TextPresenter"
+                                         Text="{TemplateBinding Text, Mode=TwoWay}"
+                                         CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                                         CaretIndex="{TemplateBinding CaretIndex}"
+                                         SelectionStart="{TemplateBinding SelectionStart}"
+                                         SelectionEnd="{TemplateBinding SelectionEnd}"
+                                         TextAlignment="{TemplateBinding TextAlignment}"
+                                         TextWrapping="{TemplateBinding TextWrapping}"
+                                         LineHeight="{TemplateBinding LineHeight}"
+                                         LetterSpacing="{TemplateBinding LetterSpacing}"
+                                         PasswordChar="{TemplateBinding PasswordChar}"
+                                         RevealPassword="{TemplateBinding RevealPassword}"
+                                         SelectionBrush="{TemplateBinding SelectionBrush}"
+                                         SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                         CaretBrush="{TemplateBinding CaretBrush}"
+                                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Panel>
+                        <ScrollViewer.Styles>
+                          <Style Selector="ScrollContentPresenter#PART_ContentPresenter">
+                            <Setter Property="Cursor" Value="IBeam" />
+                          </Style>
+                        </ScrollViewer.Styles>
+                      </ScrollViewer>
+                    </DockPanel>
+                    <ContentPresenter Grid.Column="2"
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      Content="{TemplateBinding InnerRightContent}" />
+                  </Grid>
+                </Border>
+              </Panel>
+            </DataValidationErrors>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:touch-mode">
+          <Setter Property="ContextFlyout" Value="{DynamicResource HorizontalTextBoxContextFlyout}" />
+        </Style>
+
+        <Style Selector="^ /template/ TextBlock#PART_FloatingPlaceholder">
+          <Setter Property="Cursor" Value="IBeam" />
+        </Style>
+        <Style Selector="^[UseFloatingPlaceholder=true]:not(:empty) /template/ TextBlock#PART_FloatingPlaceholder">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+
+        <!-- The pointer deepens the fill and brightens the hairline; only focus lifts. -->
+        <Style Selector="^:pointerover:not(:focus) /template/ Border#PART_BorderElement">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsTextBoxHoverBorder}" />
+        </Style>
+
+        <Style Selector="^:focus">
+          <Setter Property="RenderTransform" Value="translateY(-1px)" />
+          <Style Selector="^ /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsTextBoxFocusBorder}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
+          </Style>
+        </Style>
+
+        <Style Selector="^:error">
+          <Style Selector="^ /template/ Border#PART_BorderElement, ^:pointerover:not(:focus) /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+          </Style>
+          <Style Selector="^:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
+          </Style>
+          <Style Selector="^:focus /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsGlowBad}" />
+          </Style>
+        </Style>
+
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.55" />
+        </Style>
+
+        <Style Selector="^[AcceptsReturn=True]">
+          <Setter Property="MinHeight" Value="88" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+          <Setter Property="VerticalContentAlignment" Value="Top" />
+        </Style>
+
+        <Style Selector="^.sm">
+          <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
+          <Setter Property="Padding" Value="10,4" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        </Style>
+        <Style Selector="^.lg">
+          <Setter Property="MinHeight" Value="52" />
+          <Setter Property="Padding" Value="16,8" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
+        </Style>
+
+        <!-- The eye sits in the end slot, so it follows the field's own direction. -->
+        <Style Selector="^.revealPasswordButton[AcceptsReturn=False][IsReadOnly=False]">
+          <Setter Property="InnerRightContent">
+            <Template>
+              <ToggleButton Theme="{StaticResource InsTextBoxRevealButton}"
+                            IsChecked="{Binding $parent[TextBox].RevealPassword, Mode=TwoWay}" />
+            </Template>
+          </Setter>
+        </Style>
+        <Style Selector="^.revealPasswordButton[AcceptsReturn=False][IsReadOnly=False] /template/ DockPanel#PART_InnerDockPanel">
+          <Setter Property="Margin" Value="14,8,4,8" />
+        </Style>
+
+        <Style Selector="^.clearButton[AcceptsReturn=False][IsReadOnly=False]:focus:not(TextBox:empty)">
+          <Setter Property="InnerRightContent">
+            <Template>
+              <Button Theme="{DynamicResource FluentTextBoxButton}"
+                      Command="{Binding $parent[TextBox].Clear}"
+                      ClipToBounds="True">
+                <PathIcon Data="{DynamicResource TextBoxClearButtonData}" Height="10" Width="10" />
+              </Button>
+            </Template>
+          </Setter>
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- The field's label and hint, as .ins-label and .ins-hint. -->
+  <Style Selector="TextBlock.label">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+  </Style>
+  <Style Selector="TextBlock.hint">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+</Styles>

@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.FieldsPage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="20" MaxWidth="420" HorizontalAlignment="Left">
+
+      <StackPanel Spacing="6">
+        <TextBlock Classes="label" Text="الاسم الكامل" />
+        <TextBox PlaceholderText="اكتب اسمك الكامل" />
+        <TextBlock Classes="hint" Text="يظهر هذا الاسم لأعضاء فريقك." />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Classes="label" Text="البريد الإلكتروني" />
+        <TextBox x:Name="EmailBox" Text="name@example" FlowDirection="LeftToRight" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Classes="label" Text="اسم المستخدم" />
+        <TextBox Text="user.name" FlowDirection="LeftToRight" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Classes="label" Text="كلمة المرور" />
+        <TextBox Text="password123" PasswordChar="•" Classes="revealPasswordButton" FlowDirection="LeftToRight" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Classes="label" Text="رمز الحماية" />
+        <TextBox Text="٤٨١٥" PasswordChar="•" Classes="revealPasswordButton" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Classes="label" Text="ملاحظات" />
+        <TextBox AcceptsReturn="True" PlaceholderText="أضف ما تريد أن يعرفه الفريق" />
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Classes="label" Text="القسم" />
+        <TextBox Text="الإدارة العامة" IsEnabled="False" />
+      </StackPanel>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

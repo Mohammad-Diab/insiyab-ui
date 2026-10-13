@@ -1,0 +1,202 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <!-- The 145° fill from InsGlass to the CSS end stop, rgba(255, 255, 255, .38) -->
+          <LinearGradientBrush x:Key="InsGlassFill" StartPoint="10%,-7%" EndPoint="90%,107%">
+            <GradientStop Offset="0" Color="{DynamicResource InsGlassColor}" />
+            <GradientStop Offset="1" Color="#61FFFFFF" />
+          </LinearGradientBrush>
+          <LinearGradientBrush x:Key="InsGlassFillRtl" StartPoint="90%,-7%" EndPoint="10%,107%">
+            <GradientStop Offset="0" Color="{DynamicResource InsGlassColor}" />
+            <GradientStop Offset="1" Color="#61FFFFFF" />
+          </LinearGradientBrush>
+          <!-- A Border has one background, so the 130° sheen is laid over the fill here: rgba(255, 255, 255, .45 / 0 / .12 / 0) on .58 to .38 -->
+          <LinearGradientBrush x:Key="InsGlassSheenFill" StartPoint="-4%,4.7%" EndPoint="104%,95.3%">
+            <GradientStop Offset="0" Color="#C4FFFFFF" />
+            <GradientStop Offset="0.26" Color="#87FFFFFF" />
+            <GradientStop Offset="0.55" Color="#88FFFFFF" />
+            <GradientStop Offset="1" Color="#61FFFFFF" />
+          </LinearGradientBrush>
+          <LinearGradientBrush x:Key="InsGlassSheenFillRtl" StartPoint="104%,4.7%" EndPoint="-4%,95.3%">
+            <GradientStop Offset="0" Color="#C4FFFFFF" />
+            <GradientStop Offset="0.26" Color="#87FFFFFF" />
+            <GradientStop Offset="0.55" Color="#88FFFFFF" />
+            <GradientStop Offset="1" Color="#61FFFFFF" />
+          </LinearGradientBrush>
+          <!-- The rim, its top edge brighter: absolute points, so only the top few pixels take InsRimTop -->
+          <LinearGradientBrush x:Key="InsGlassRim" StartPoint="0,0" EndPoint="0,6">
+            <GradientStop Offset="0" Color="{DynamicResource InsRimTopColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsRimColor}" />
+          </LinearGradientBrush>
+          <SolidColorBrush x:Key="InsPanelTitleBrush" Color="{DynamicResource InsPrimaryDarkerColor}" />
+          <SolidColorBrush x:Key="InsPanelIcoBrush" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.1" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <LinearGradientBrush x:Key="InsGlassFill" StartPoint="10%,-7%" EndPoint="90%,107%">
+            <GradientStop Offset="0" Color="{DynamicResource InsGlassColor}" />
+            <GradientStop Offset="1" Color="#08FFFFFF" />
+          </LinearGradientBrush>
+          <LinearGradientBrush x:Key="InsGlassFillRtl" StartPoint="90%,-7%" EndPoint="10%,107%">
+            <GradientStop Offset="0" Color="{DynamicResource InsGlassColor}" />
+            <GradientStop Offset="1" Color="#08FFFFFF" />
+          </LinearGradientBrush>
+          <LinearGradientBrush x:Key="InsGlassSheenFill" StartPoint="-4%,4.7%" EndPoint="104%,95.3%">
+            <GradientStop Offset="0" Color="#1EFFFFFF" />
+            <GradientStop Offset="0.26" Color="#0DFFFFFF" />
+            <GradientStop Offset="0.55" Color="#12FFFFFF" />
+            <GradientStop Offset="1" Color="#08FFFFFF" />
+          </LinearGradientBrush>
+          <LinearGradientBrush x:Key="InsGlassSheenFillRtl" StartPoint="104%,4.7%" EndPoint="-4%,95.3%">
+            <GradientStop Offset="0" Color="#1EFFFFFF" />
+            <GradientStop Offset="0.26" Color="#0DFFFFFF" />
+            <GradientStop Offset="0.55" Color="#12FFFFFF" />
+            <GradientStop Offset="1" Color="#08FFFFFF" />
+          </LinearGradientBrush>
+          <LinearGradientBrush x:Key="InsGlassRim" StartPoint="0,0" EndPoint="0,6">
+            <GradientStop Offset="0" Color="{DynamicResource InsRimTopColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsRimColor}" />
+          </LinearGradientBrush>
+          <SolidColorBrush x:Key="InsPanelTitleBrush" Color="{DynamicResource InsText1Color}" />
+          <SolidColorBrush x:Key="InsPanelIcoBrush" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.1" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- The glass surfaces: card, glass and panel share the rim and the shadow with its bevel -->
+  <Style Selector="Border.card, Border.glass, Border.panel">
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsGlassRim}" />
+    <Setter Property="BoxShadow">
+      <MultiBinding Converter="{x:Static ctl:PanelShadows.Join}">
+        <DynamicResource ResourceKey="InsShGlass" />
+        <DynamicResource ResourceKey="InsBevel" />
+      </MultiBinding>
+    </Setter>
+  </Style>
+  <Style Selector="Border.card">
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+    <Setter Property="Background" Value="{DynamicResource InsGlassFill}" />
+  </Style>
+  <Style Selector="Border.glass">
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+    <Setter Property="Background" Value="{DynamicResource InsGlassSheenFill}" />
+  </Style>
+  <Style Selector="Border.panel">
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+    <Setter Property="Background" Value="{DynamicResource InsGlassFill}" />
+  </Style>
+  <!-- RTL mirrors the drawing, so these brushes are mirrored back: the light stays at the top left, as on the web -->
+  <Style Selector="Border.card[FlowDirection=RightToLeft], Border.panel[FlowDirection=RightToLeft]">
+    <Setter Property="Background" Value="{DynamicResource InsGlassFillRtl}" />
+  </Style>
+  <Style Selector="Border.glass[FlowDirection=RightToLeft]">
+    <Setter Property="Background" Value="{DynamicResource InsGlassSheenFillRtl}" />
+  </Style>
+
+  <!-- Glass inside glass strips to a flat fill: a second frost is what turns the effect to mush -->
+  <Style Selector="Border.glass Border.glass">
+    <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BoxShadow" Value="none" />
+  </Style>
+  <Style Selector="Border.glass-inner">
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
+  </Style>
+
+  <!-- The panel's parts, as children of a Border.panel (usually in a DockPanel) -->
+  <Style Selector="Border.panel-head">
+    <Setter Property="Padding" Value="20,14" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+  </Style>
+  <Style Selector="TextBlock.panel-title">
+    <Setter Property="FontSize" Value="17" />
+    <Setter Property="FontWeight" Value="ExtraBold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsPanelTitleBrush}" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Border.panel-ico">
+    <Setter Property="Width" Value="36" />
+    <Setter Property="Height" Value="36" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+    <Setter Property="Background" Value="{DynamicResource InsPanelIcoBrush}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+    <Setter Property="TextElement.FontSize" Value="15" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Border.panel-ico > Control">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <!-- Right is the end edge: an RTL parent mirrors it -->
+  <Style Selector="StackPanel.panel-actions">
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="Spacing" Value="8" />
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Border.panel-note">
+    <Setter Property="Padding" Value="18,10" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+    <Setter Property="TextElement.FontSize" Value="13" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText2}" />
+  </Style>
+  <Style Selector="Border.panel-body">
+    <Setter Property="Padding" Value="20" />
+  </Style>
+  <Style Selector="Border.panel-body.flush">
+    <Setter Property="Padding" Value="10" />
+  </Style>
+  <Style Selector="Border.panel-foot">
+    <Setter Property="Padding" Value="18,12" />
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+  </Style>
+
+  <!-- A panel whose contents are the problem: the tint is on the head only -->
+  <!-- No clip on the panel, since Avalonia's clip would cut its shadow, so the tinted head rounds itself inside the 1px rim -->
+  <Style Selector="Border.panel.alert Border.panel-head">
+    <Setter Property="CornerRadius" Value="21,21,0,0" />
+    <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+  </Style>
+  <Style Selector="Border.panel.alert TextBlock.panel-title">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+  </Style>
+  <Style Selector="Border.panel.alert Border.panel-ico">
+    <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneBad}" />
+  </Style>
+
+  <!-- Only a surface that opted in moves under the pointer -->
+  <Style Selector="Border.hoverable">
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+        <BoxShadowsTransition Property="BoxShadow" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+        <BrushTransition Property="BorderBrush" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Border.hoverable:pointerover">
+    <Setter Property="RenderTransform" Value="translateY(-2px)" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsRimTop}" />
+    <Setter Property="BoxShadow">
+      <MultiBinding Converter="{x:Static ctl:PanelShadows.Join}">
+        <DynamicResource ResourceKey="InsShLg" />
+        <DynamicResource ResourceKey="InsBevel" />
+      </MultiBinding>
+    </Setter>
+  </Style>
+
+</Styles>

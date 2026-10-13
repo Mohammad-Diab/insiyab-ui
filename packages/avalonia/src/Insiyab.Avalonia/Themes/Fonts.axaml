@@ -1,0 +1,32 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <!-- Same stacks as 02-tokens.css: Tajawal sits behind Inter and Cause so Arabic inside English text never drops to a system face -->
+      <FontFamily x:Key="InsFontArabic">avares://Insiyab.Avalonia/Assets/Fonts#Tajawal, Segoe UI, Tahoma</FontFamily>
+      <FontFamily x:Key="InsFontBodyEn">avares://Insiyab.Avalonia/Assets/Fonts#Inter, avares://Insiyab.Avalonia/Assets/Fonts#Tajawal</FontFamily>
+      <FontFamily x:Key="InsFontHeadingEn">avares://Insiyab.Avalonia/Assets/Fonts#Cause, avares://Insiyab.Avalonia/Assets/Fonts#Tajawal</FontFamily>
+      <FontFamily x:Key="InsFontMono">Cascadia Mono, Cascadia Code, Consolas, Courier New</FontFamily>
+      <StaticResource x:Key="InsFontBody" ResourceKey="InsFontArabic" />
+      <StaticResource x:Key="ContentControlThemeFontFamily" ResourceKey="InsFontBody" />
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- html[dir="ltr"] swaps the body face; here every templated control, the window included, follows its inherited FlowDirection -->
+  <Style Selector=":is(TemplatedControl)[FlowDirection=RightToLeft]">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontArabic}" />
+  </Style>
+  <Style Selector=":is(TemplatedControl)[FlowDirection=LeftToRight]">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+  </Style>
+
+  <!-- The display face is LTR-only and only on display and h1-h3, as in 08-type.css; h4 keeps the body face -->
+  <Style Selector=":is(TextBlock).display[FlowDirection=RightToLeft], :is(TextBlock).h1[FlowDirection=RightToLeft], :is(TextBlock).h2[FlowDirection=RightToLeft], :is(TextBlock).h3[FlowDirection=RightToLeft]">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontArabic}" />
+  </Style>
+  <Style Selector=":is(TextBlock).display[FlowDirection=LeftToRight], :is(TextBlock).h1[FlowDirection=LeftToRight], :is(TextBlock).h2[FlowDirection=LeftToRight], :is(TextBlock).h3[FlowDirection=LeftToRight]">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontHeadingEn}" />
+  </Style>
+
+</Styles>

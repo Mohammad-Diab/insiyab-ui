@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Insiyab.Avalonia/Insiyab.Avalonia.csproj" />
+  </Folder>
+  <Folder Name="/gallery/">
+    <Project Path="gallery/Insiyab.Avalonia.Gallery/Insiyab.Avalonia.Gallery.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Insiyab.Avalonia.Tests/Insiyab.Avalonia.Tests.csproj" />
+  </Folder>
+  <Folder Name="/aot-check/">
+    <Project Path="aot-check/AotCheck/AotCheck.csproj" />
+  </Folder>
+</Solution>

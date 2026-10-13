@@ -1,0 +1,162 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <LinearGradientBrush x:Key="InsSwitchFill" StartPoint="0%,0%" EndPoint="100%,100%">
+        <GradientStop Offset="0" Color="{DynamicResource InsPrimaryColor}" />
+        <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
+      </LinearGradientBrush>
+      <SolidColorBrush x:Key="InsSwitchHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.40" />
+      <SolidColorBrush x:Key="InsSwitchRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+
+      <ControlTheme x:Key="{x:Type ToggleSwitch}" TargetType="ToggleSwitch">
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="0,6" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Cursor" Value="Hand" />
+        <!-- The thumb travels on the overshoot curve: a switch is the one control whose whole job is to move. -->
+        <Setter Property="KnobTransitions">
+          <Transitions>
+            <DoubleTransition Property="Canvas.Left" Duration="0:0:0.32" Easing="{DynamicResource InsEaseSpring}" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Grid Background="{TemplateBinding Background}"
+                  Margin="{TemplateBinding Padding}"
+                  ColumnDefinitions="Auto,Auto">
+
+              <Panel x:Name="SwitchAreaGrid"
+                     Width="48"
+                     Height="26"
+                     VerticalAlignment="Center">
+                <Border x:Name="FocusRing"
+                        Margin="-5"
+                        BorderThickness="3"
+                        CornerRadius="{DynamicResource InsRPill}"
+                        BorderBrush="{DynamicResource InsSwitchRing}"
+                        IsVisible="False" />
+                <Border x:Name="OuterBorder"
+                        Background="{DynamicResource InsCtlBgHover}"
+                        BorderBrush="{DynamicResource InsCtlBd}"
+                        BorderThickness="1"
+                        CornerRadius="{DynamicResource InsRPill}"
+                        BoxShadow="inset 0 2 4 0 #140F172A">
+                  <Border.Transitions>
+                    <Transitions>
+                      <BrushTransition Property="BorderBrush" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                    </Transitions>
+                  </Border.Transitions>
+                </Border>
+                <Border x:Name="SwitchKnobBounds"
+                        FlowDirection="LeftToRight"
+                        Background="{DynamicResource InsSwitchFill}"
+                        CornerRadius="{DynamicResource InsRPill}"
+                        BoxShadow="{DynamicResource InsGlowRing}"
+                        Opacity="0">
+                  <Border.Transitions>
+                    <Transitions>
+                      <DoubleTransition Property="Opacity" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                    </Transitions>
+                  </Border.Transitions>
+                  <Border CornerRadius="{DynamicResource InsRPill}" BoxShadow="inset 0 1 0 0 #33FFFFFF" />
+                </Border>
+                <Canvas x:Name="PART_SwitchKnob"
+                        Width="22"
+                        Height="20"
+                        Margin="3,3,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top">
+                  <Panel x:Name="PART_MovingKnobs" Width="20" Height="20">
+                    <Border x:Name="SwitchKnob"
+                            Background="#FFFFFF"
+                            CornerRadius="10"
+                            BoxShadow="0 2 6 0 #470F172A" />
+                  </Panel>
+                </Canvas>
+              </Panel>
+
+              <StackPanel x:Name="TextStack"
+                          Grid.Column="1"
+                          Margin="10,0,0,0"
+                          Spacing="1"
+                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                <ContentPresenter x:Name="PART_ContentPresenter"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  RecognizesAccessKey="True"
+                                  FontWeight="Bold"
+                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                <Panel x:Name="StatePanel" Classes.desc="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}">
+                  <ContentPresenter x:Name="PART_OffContentPresenter"
+                                    Content="{TemplateBinding OffContent}"
+                                    ContentTemplate="{TemplateBinding OffContentTemplate}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                  <ContentPresenter x:Name="PART_OnContentPresenter"
+                                    Content="{TemplateBinding OnContent}"
+                                    ContentTemplate="{TemplateBinding OnContentTemplate}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                </Panel>
+              </StackPanel>
+            </Grid>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter:empty">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <!-- With a label above it, the state reads as the label's description. -->
+        <Style Selector="^ /template/ Panel#StatePanel.desc">
+          <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsXs}" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText2}" />
+        </Style>
+
+        <Style Selector="^:pointerover /template/ Border#OuterBorder">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsSwitchHoverBorder}" />
+        </Style>
+
+        <Style Selector="^:checked">
+          <Style Selector="^ /template/ Border#OuterBorder">
+            <Setter Property="BorderBrush" Value="Transparent" />
+          </Style>
+          <Style Selector="^ /template/ Border#SwitchKnobBounds">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_OffContentPresenter">
+            <Setter Property="Opacity" Value="0" />
+          </Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_OnContentPresenter">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+        </Style>
+
+        <Style Selector="^:unchecked">
+          <Style Selector="^ /template/ ContentPresenter#PART_OffContentPresenter">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_OnContentPresenter">
+            <Setter Property="Opacity" Value="0" />
+          </Style>
+        </Style>
+
+        <Style Selector="^:focus-visible /template/ Border#FocusRing">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.5" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+</Styles>

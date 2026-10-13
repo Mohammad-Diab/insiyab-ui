@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.TypePage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16" MaxWidth="760" HorizontalAlignment="Left">
+      <TextBlock Classes="eyebrow" Text="التقارير الشهرية" />
+      <TextBlock Classes="display" Text="مرحبًا بك" />
+      <TextBlock Classes="h1" Text="إدارة المشاريع" />
+      <TextBlock Classes="h2" Text="المهام المفتوحة" />
+      <TextBlock Classes="h3" Text="تفاصيل المهمة" />
+      <TextBlock Classes="h4" Text="الملاحظات" />
+      <TextBlock Classes="lead" Text="تابع سير العمل في فريقك من مكان واحد، واعرف ما أُنجز وما ينتظر المراجعة." />
+      <TextBlock Classes="prose" Text="يعرض هذا القسم ملخص نشاط الأسبوع. راجع المهام المتأخرة أولًا، ثم انتقل إلى ما يحتاج موافقتك قبل نهاية اليوم." />
+      <TextBlock Text="نص عادي بالحجم الافتراضي." />
+      <TextBlock Classes="muted" Text="آخر تحديث قبل خمس دقائق" />
+      <TextBlock Classes="num" Text="-2,375,000" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

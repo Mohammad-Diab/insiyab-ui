@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.ButtonsPage">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="24" MaxWidth="760" HorizontalAlignment="Left">
+
+      <WrapPanel ItemSpacing="12" LineSpacing="12">
+        <Button Classes="primary" Content="حفظ التغييرات" />
+        <Button Classes="secondary" Content="إلغاء" />
+        <Button Classes="ghost" Content="تعديل" />
+        <Button Content="المزيد" />
+        <Button Classes="bare" Content="لاحقًا" />
+      </WrapPanel>
+
+      <WrapPanel ItemSpacing="12" LineSpacing="12">
+        <Button Classes="success" Content="اعتماد" />
+        <Button Classes="danger" Content="حذف" />
+        <Button Classes="warning" Content="تأجيل" />
+        <Button Classes="info" Content="التفاصيل" />
+      </WrapPanel>
+
+      <WrapPanel ItemSpacing="12" LineSpacing="12">
+        <Button Classes="ghost-success" Content="قبول" />
+        <Button Classes="ghost-danger" Content="إزالة" />
+        <Button Classes="ghost-warning" Content="مراجعة" />
+        <Button Classes="ghost-info" Content="اعرف المزيد" />
+      </WrapPanel>
+
+      <WrapPanel ItemSpacing="12" LineSpacing="12">
+        <Button Classes="primary sm" Content="إضافة" VerticalAlignment="Center" />
+        <Button Classes="primary" Content="إضافة" VerticalAlignment="Center" />
+        <Button Classes="primary lg" Content="إضافة" VerticalAlignment="Center" />
+        <Button Classes="secondary icon" Content="+" VerticalAlignment="Center" />
+        <Button Classes="secondary icon sm" Content="+" VerticalAlignment="Center" />
+      </WrapPanel>
+
+      <WrapPanel ItemSpacing="12" LineSpacing="12">
+        <Button Classes="primary lift" Content="ابدأ الآن" />
+        <Button Classes="primary" Content="إرسال" IsEnabled="False" />
+        <Button Classes="secondary" Content="رجوع" IsEnabled="False" />
+      </WrapPanel>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
