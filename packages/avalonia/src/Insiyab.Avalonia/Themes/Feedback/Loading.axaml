@@ -1,0 +1,136 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsSpinnerTrack" Color="{DynamicResource InsPrimaryColor}" Opacity="0.18" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsSpinnerTrack" Color="{DynamicResource InsPrimaryColor}" Opacity="0.18" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- Skeleton: the ins-skel sweep, 1.8s with the CSS default ease, one of the two loops the library allows -->
+      <ControlTheme x:Key="{x:Type ctl:Skeleton}" TargetType="ctl:Skeleton">
+        <Setter Property="Base" Value="{DynamicResource InsSkelBase}" />
+        <Setter Property="Highlight" Value="{DynamicResource InsSkelHi}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Style Selector="^">
+          <Style.Animations>
+            <Animation Duration="0:0:1.8" IterationCount="Infinite" Easing="0.25,0.1,0.25,1">
+              <KeyFrame Cue="0%">
+                <Setter Property="Phase" Value="0" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Phase" Value="1" />
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+        <Style Selector="^.text">
+          <Setter Property="Height" Value="12" />
+          <Setter Property="Margin" Value="0,6" />
+        </Style>
+        <!-- A paragraph's last line is short, or the lines read as a table of bars -->
+        <Style Selector="^.text:nth-last-child(1):not(:nth-child(1))">
+          <Setter Property="FillWidth" Value="0.6" />
+        </Style>
+        <Style Selector="^.title">
+          <Setter Property="Height" Value="20" />
+          <Setter Property="FillWidth" Value="0.4" />
+        </Style>
+        <Style Selector="^.circle">
+          <Setter Property="Width" Value="40" />
+          <Setter Property="Height" Value="40" />
+          <Setter Property="CornerRadius" Value="999" />
+          <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style Selector="^.block">
+          <Setter Property="Height" Value="128" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- Spinner: .7s a turn, linear, and a fade-in so a fast response never flashes a wheel -->
+      <ControlTheme x:Key="{x:Type ctl:LoadingSpinner}" TargetType="ctl:LoadingSpinner">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Thickness" Value="3" />
+        <Setter Property="Arc" Value="{DynamicResource InsToneBrandSoft}" />
+        <Setter Property="Track" Value="{DynamicResource InsSpinnerTrack}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Style Selector="^">
+          <Style.Animations>
+            <Animation Duration="0:0:0.7" IterationCount="Infinite">
+              <KeyFrame Cue="0%">
+                <Setter Property="Angle" Value="0" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Angle" Value="360" />
+              </KeyFrame>
+            </Animation>
+            <Animation Duration="0:0:0.28" Easing="0.22,1,0.36,1">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="1" />
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+        <Style Selector="^.sm">
+          <Setter Property="Width" Value="15" />
+          <Setter Property="Height" Value="15" />
+          <Setter Property="Thickness" Value="2" />
+        </Style>
+      </ControlTheme>
+
+      <!-- Ring: the arc on a 6px band, clockwise from twelve, the label in tabular Inter -->
+      <ControlTheme x:Key="{x:Type ctl:ProgressRing}" TargetType="ctl:ProgressRing">
+        <Setter Property="Width" Value="52" />
+        <Setter Property="Height" Value="52" />
+        <Setter Property="Thickness" Value="6" />
+        <Setter Property="Track" Value="{DynamicResource InsCtlBgHover}" />
+        <Setter Property="Fill" Value="{DynamicResource InsToneBrandSoft}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <TextBlock x:Name="PART_Label" Text="{TemplateBinding Label}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       FontFamily="{DynamicResource InsFontBodyEn}" FontFeatures="+tnum" />
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^.lg">
+          <Setter Property="Width" Value="80" />
+          <Setter Property="Height" Value="80" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- In a button the spinner takes the button's text colour, its ring at 28% -->
+  <Style Selector="Button ctl|LoadingSpinner">
+    <Setter Property="Arc" Value="{x:Null}" />
+    <Setter Property="Track" Value="{x:Null}" />
+  </Style>
+
+  <!-- .ins-loading: a waiting area that keeps a sensible height, its spinner in the middle -->
+  <Style Selector="Border.loading">
+    <Setter Property="MinHeight" Value="200" />
+  </Style>
+  <Style Selector="Border.loading > :is(Control)">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+</Styles>

@@ -1,0 +1,133 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <LinearGradientBrush x:Key="InsProgressFill" StartPoint="0%,50%" EndPoint="100%,50%">
+            <GradientStop Offset="0" Color="{DynamicResource InsPrimaryColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
+          </LinearGradientBrush>
+          <SolidColorBrush x:Key="InsProgressSweep" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <LinearGradientBrush x:Key="InsProgressFill" StartPoint="0%,50%" EndPoint="100%,50%">
+            <GradientStop Offset="0" Color="{DynamicResource InsPrimaryColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
+          </LinearGradientBrush>
+          <SolidColorBrush x:Key="InsProgressSweep" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- The tone follows the meaning: a quota at 95% is a warning, not a brand moment -->
+      <LinearGradientBrush x:Key="InsProgressOkFill" StartPoint="0%,50%" EndPoint="100%,50%">
+        <GradientStop Offset="0" Color="#22C55E" />
+        <GradientStop Offset="1" Color="#15803D" />
+      </LinearGradientBrush>
+      <LinearGradientBrush x:Key="InsProgressWarnFill" StartPoint="0%,50%" EndPoint="100%,50%">
+        <GradientStop Offset="0" Color="#F59E0B" />
+        <GradientStop Offset="1" Color="#B45309" />
+      </LinearGradientBrush>
+      <LinearGradientBrush x:Key="InsProgressBadFill" StartPoint="0%,50%" EndPoint="100%,50%">
+        <GradientStop Offset="0" Color="#EF4444" />
+        <GradientStop Offset="1" Color="#B91C1C" />
+      </LinearGradientBrush>
+
+      <!-- The indeterminate sweep: the skeleton's keyframes in the brand tint -->
+      <ControlTheme x:Key="InsProgressSweepTheme" TargetType="ctl:Shimmer">
+        <Style Selector="^">
+          <Style.Animations>
+            <Animation Duration="0:0:1.8" IterationCount="Infinite" Easing="0.25,0.1,0.25,1">
+              <KeyFrame Cue="0%">
+                <Setter Property="Phase" Value="0" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Phase" Value="1" />
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </ControlTheme>
+
+      <!-- .ins-progress: an 8px pill track with a faint inset; the fill grows from the start edge, its gradient physical -->
+      <ControlTheme x:Key="{x:Type ProgressBar}" TargetType="ProgressBar">
+        <Setter Property="Foreground" Value="{DynamicResource InsProgressFill}" />
+        <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+        <Setter Property="Height" Value="8" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="Maximum" Value="100" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Template">
+          <ControlTemplate TargetType="ProgressBar">
+            <Border x:Name="ProgressBarRoot"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    BoxShadow="inset 0 1 2 0 #140F172A"
+                    ClipToBounds="True">
+              <Panel>
+                <Panel x:Name="DeterminateRoot">
+                  <!-- The fill glides to a new value; its first width is set at once -->
+                  <ctl:ProgressFill x:Name="PART_Indicator"
+                                    FlowDirection="LeftToRight"
+                                    Margin="{TemplateBinding Padding}"
+                                    Background="{TemplateBinding Foreground}"
+                                    CornerRadius="{TemplateBinding CornerRadius}" />
+                </Panel>
+                <ctl:Shimmer x:Name="IndeterminateRoot" Theme="{StaticResource InsProgressSweepTheme}" IsVisible="False" Inset="0.3"
+                             Base="Transparent" Highlight="{DynamicResource InsProgressSweep}" />
+                <TextBlock x:Name="PART_ProgressText" IsVisible="{TemplateBinding ShowProgressText}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           FontSize="{DynamicResource InsFsXs}" FontWeight="Bold" Foreground="{DynamicResource InsText1}"
+                           Text="{Binding Percentage, RelativeSource={RelativeSource TemplatedParent}, StringFormat={}{0:0}%}" />
+              </Panel>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:horizontal /template/ Border#PART_Indicator">
+          <Setter Property="HorizontalAlignment" Value="Left" />
+          <Setter Property="VerticalAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="^:vertical /template/ Border#PART_Indicator">
+          <Setter Property="HorizontalAlignment" Value="Stretch" />
+          <Setter Property="VerticalAlignment" Value="Bottom" />
+        </Style>
+        <Style Selector="^:vertical">
+          <Setter Property="Width" Value="8" />
+          <Setter Property="Height" Value="NaN" />
+          <Setter Property="HorizontalAlignment" Value="Center" />
+          <Setter Property="VerticalAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="^:indeterminate /template/ Panel#DeterminateRoot">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:indeterminate /template/ ctl|Shimmer#IndeterminateRoot">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^.sm">
+          <Setter Property="Height" Value="4" />
+        </Style>
+        <Style Selector="^.lg">
+          <Setter Property="Height" Value="12" />
+        </Style>
+        <Style Selector="^.ok">
+          <Setter Property="Foreground" Value="{StaticResource InsProgressOkFill}" />
+        </Style>
+        <Style Selector="^.warn">
+          <Setter Property="Foreground" Value="{StaticResource InsProgressWarnFill}" />
+        </Style>
+        <Style Selector="^.bad">
+          <Setter Property="Foreground" Value="{StaticResource InsProgressBadFill}" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+</Styles>

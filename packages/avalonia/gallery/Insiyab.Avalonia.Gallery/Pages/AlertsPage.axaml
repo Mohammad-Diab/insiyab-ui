@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.AlertsPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/FeedbackFrames.axaml" />
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel>
+
+      <Border Classes="dx">
+        <StackPanel Spacing="12">
+          <ins:Alert Classes="ok" Content="تم الحفظ." />
+          <ins:Alert Classes="info" Content="معلومة للاطلاع." />
+          <ins:Alert Classes="warn" Content="انتبه قبل المتابعة." />
+          <ins:Alert Classes="bad" Content="حدث خطأ." />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="section" Text="التنبيه" />
+      <Border Classes="stage">
+        <ins:Alert Classes="info" Content="رسالة قصيرة للاطلاع." MaxWidth="416" HorizontalAlignment="Stretch" />
+      </Border>
+      <TextBlock Classes="variant" Text="مع رابط" />
+      <Border Classes="stage">
+        <ins:Alert Classes="info" MaxWidth="416" HorizontalAlignment="Stretch">
+          <TextBlock TextWrapping="Wrap" LineHeight="21">
+            <Run Text="رسالة قصيرة للاطلاع." />
+            <Run Text="التفاصيل" Foreground="{DynamicResource InsPrimaryDarker}" />
+          </TextBlock>
+        </ins:Alert>
+      </Border>
+      <TextBlock Classes="variant" Text="يمكن إغلاقه" />
+      <Border Classes="stage">
+        <ins:Alert x:Name="Dismissible" Classes="info" Content="رسالة قصيرة للاطلاع." IsDismissible="True"
+                   MaxWidth="416" HorizontalAlignment="Stretch" />
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

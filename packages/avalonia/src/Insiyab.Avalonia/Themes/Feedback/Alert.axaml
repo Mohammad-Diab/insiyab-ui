@@ -1,0 +1,156 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <StreamGeometry x:Key="InsAlertIconOk">M5 13 l4 4L19 7</StreamGeometry>
+      <StreamGeometry x:Key="InsAlertIconInfo">M3,12 A9,9 0 1 0 21,12 A9,9 0 1 0 3,12 Z M12 11v5m0-9h.01</StreamGeometry>
+      <StreamGeometry x:Key="InsAlertIconWarn">M12 9v4m0 4h.01M10.3 3.9 2.4 17.1A2 2 0 0 0 4.1 20h15.8a2 2 0 0 0 1.7-2.9L13.7 3.9a2 2 0 0 0-3.4 0Z</StreamGeometry>
+      <StreamGeometry x:Key="InsAlertIconBad">M6 6l12 12M18 6 6 18</StreamGeometry>
+      <!-- The cross of .ins-close: two 2px bars at 44% of the button, turned 45 degrees -->
+      <StreamGeometry x:Key="InsCloseCross">M8.27,8.27 L15.73,15.73 M15.73,8.27 L8.27,15.73</StreamGeometry>
+
+      <SolidColorBrush x:Key="InsAlertOkCircle" Color="#16A34A" />
+      <SolidColorBrush x:Key="InsAlertBadCircle" Color="#DC2626" />
+      <SolidColorBrush x:Key="InsAlertWarnCircle" Color="#D97706" />
+      <SolidColorBrush x:Key="InsAlertOkBorder" Color="#7322C55E" />
+      <SolidColorBrush x:Key="InsAlertBadBorder" Color="#73EF4444" />
+      <SolidColorBrush x:Key="InsAlertWarnBorder" Color="#73F59E0B" />
+
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsAlertOn" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="InsAlertInfoText" Color="{DynamicResource InsPrimaryDarkerColor}" />
+          <SolidColorBrush x:Key="InsAlertInfoBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsAlertOn" Color="#0B1220" />
+          <SolidColorBrush x:Key="InsAlertInfoText" Color="{DynamicResource InsText1Color}" />
+          <SolidColorBrush x:Key="InsAlertInfoBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- The bare small close of .ins-close: no chip on the alert's own tint, and it turns under the pointer -->
+      <ControlTheme x:Key="InsAlertClose" TargetType="Button">
+        <Setter Property="Width" Value="24" />
+        <Setter Property="Height" Value="24" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="Opacity" Value="0.6" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+            <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border x:Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+              <ctl:Icon Data="{StaticResource InsCloseCross}" Size="24" StrokeThickness="2" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Opacity" Value="1" />
+          <Setter Property="RenderTransform" Value="rotate(90deg)" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_Face">
+          <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ctl:Alert}" TargetType="ctl:Alert">
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsAlertInfoText}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsAlertInfoBorder}" />
+        <Setter Property="IconBackground" Value="{DynamicResource InsPrimary}" />
+        <Setter Property="IconForeground" Value="{DynamicResource InsOnPrimary}" />
+        <Setter Property="Icon" Value="{StaticResource InsAlertIconInfo}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <!-- The message starts under the circle's centre and clears the bite with half the circle plus .9rem -->
+              <Border x:Name="PART_Message"
+                      Margin="22,0,0,0"
+                      Padding="36.4,10,16,10"
+                      MinHeight="44"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="1"
+                      CornerRadius="{TemplateBinding CornerRadius}">
+                <DockPanel>
+                  <Button x:Name="PART_Close"
+                          DockPanel.Dock="Right"
+                          Margin="8,0,0,0"
+                          Theme="{StaticResource InsAlertClose}"
+                          IsVisible="{TemplateBinding IsDismissible}"
+                          AutomationProperties.Name="{TemplateBinding CloseLabel}" />
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    TextWrapping="Wrap"
+                                    LineHeight="21" />
+                </DockPanel>
+              </Border>
+              <Border x:Name="PART_Icon"
+                      Width="44" Height="44"
+                      CornerRadius="22"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Center"
+                      Background="{TemplateBinding IconBackground}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="1">
+                <ctl:Icon Data="{TemplateBinding Icon}" Size="16" Foreground="{TemplateBinding IconForeground}"
+                          HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^.ok">
+          <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneOk}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsAlertOkBorder}" />
+          <Setter Property="IconBackground" Value="{DynamicResource InsAlertOkCircle}" />
+          <Setter Property="IconForeground" Value="{DynamicResource InsAlertOn}" />
+          <Setter Property="Icon" Value="{StaticResource InsAlertIconOk}" />
+        </Style>
+        <Style Selector="^.warn">
+          <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneWarn}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsAlertWarnBorder}" />
+          <Setter Property="IconBackground" Value="{DynamicResource InsAlertWarnCircle}" />
+          <Setter Property="IconForeground" Value="{DynamicResource InsAlertOn}" />
+          <Setter Property="Icon" Value="{StaticResource InsAlertIconWarn}" />
+        </Style>
+        <Style Selector="^.bad">
+          <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsAlertBadBorder}" />
+          <Setter Property="IconBackground" Value="{DynamicResource InsAlertBadCircle}" />
+          <Setter Property="IconForeground" Value="{DynamicResource InsAlertOn}" />
+          <Setter Property="Icon" Value="{StaticResource InsAlertIconBad}" />
+        </Style>
+
+        <!-- Arabic text runs at 1.7, Latin at the alert's own 1.5 -->
+        <Style Selector="^[FlowDirection=RightToLeft] /template/ ContentPresenter#PART_ContentPresenter">
+          <Setter Property="LineHeight" Value="23.8" />
+        </Style>
+
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+</Styles>

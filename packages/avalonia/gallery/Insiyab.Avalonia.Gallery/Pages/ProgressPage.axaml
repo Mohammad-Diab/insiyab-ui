@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.ProgressPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/FeedbackFrames.axaml" />
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel>
+
+      <Border Classes="dx">
+        <StackPanel Spacing="12">
+          <ProgressBar Value="64" AutomationProperties.Name="عادي" />
+          <ProgressBar Classes="ok" Value="100" AutomationProperties.Name="نجاح" />
+          <ProgressBar Classes="warn" Value="88" AutomationProperties.Name="تحذير" />
+          <ProgressBar Classes="bad" Value="97" AutomationProperties.Name="خطر" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="section" Text="الشريط" />
+      <Border Classes="stage wide">
+        <ProgressBar Value="64" AutomationProperties.Name="التقدم" />
+      </Border>
+      <TextBlock Classes="variant" Text="المقاس" />
+      <Border Classes="stage wide">
+        <StackPanel Spacing="16">
+          <ProgressBar Classes="sm" Value="64" AutomationProperties.Name="التقدم" />
+          <ProgressBar Value="64" AutomationProperties.Name="التقدم" />
+          <ProgressBar Classes="lg" Value="64" AutomationProperties.Name="التقدم" />
+        </StackPanel>
+      </Border>
+      <TextBlock Classes="variant" Text="مدة غير معروفة" />
+      <Border Classes="stage wide">
+        <ProgressBar IsIndeterminate="True" AutomationProperties.Name="جارٍ التحميل" />
+      </Border>
+      <TextBlock Classes="variant" Text="تحديث القيمة" />
+      <Border Classes="stage wide">
+        <DockPanel>
+          <Button x:Name="Advance" DockPanel.Dock="Right" Classes="secondary sm" Content="تقدم" Margin="12,0,0,0" />
+          <ProgressBar x:Name="LiveBar" Value="64" AutomationProperties.Name="التقدم" />
+        </DockPanel>
+      </Border>
+
+      <TextBlock Classes="section" Text="الحلقة" />
+      <Border Classes="stage">
+        <ins:ProgressRing Value="72" AutomationProperties.Name="التقدم" />
+      </Border>
+      <TextBlock Classes="variant" Text="كبير" />
+      <Border Classes="stage">
+        <ins:ProgressRing Classes="lg" Value="72" AutomationProperties.Name="التقدم" />
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

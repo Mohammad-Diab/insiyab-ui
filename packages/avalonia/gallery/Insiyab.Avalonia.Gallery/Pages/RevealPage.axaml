@@ -1,0 +1,68 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.RevealPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/FeedbackFrames.axaml" />
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel>
+
+      <Border Classes="dx">
+        <StackPanel x:Name="Example" Spacing="12">
+          <UniformGrid ins:Entrance.Reveal="True" Columns="4" ColumnSpacing="16" RowSpacing="16">
+            <ContentControl Classes="demo-box" Content="1" />
+            <ContentControl Classes="demo-box" Content="2" />
+            <ContentControl Classes="demo-box" Content="3" />
+            <ContentControl Classes="demo-box" Content="4" />
+          </UniformGrid>
+          <DockPanel>
+            <Button x:Name="Replay" DockPanel.Dock="Right" Classes="secondary" Content="أعد" />
+            <WrapPanel ItemSpacing="12" LineSpacing="12" VerticalAlignment="Center">
+              <ContentControl Classes="demo-box" ins:Entrance.Effect="Rise" Content="ins-anim-rise" />
+              <ContentControl Classes="demo-box" ins:Entrance.Effect="Pop" Content="ins-anim-pop" />
+              <ContentControl Classes="demo-box" ins:Entrance.Effect="Slide" Content="ins-anim-slide" />
+            </WrapPanel>
+          </DockPanel>
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="section" Text="دخول الأبناء متتابعين" />
+      <Border Classes="stage wide">
+        <UniformGrid ins:Entrance.Reveal="True" Columns="4" ColumnSpacing="16" RowSpacing="16">
+          <ContentControl Classes="demo-box" Content="1" />
+          <ContentControl Classes="demo-box" Content="2" />
+          <ContentControl Classes="demo-box" Content="3" />
+          <ContentControl Classes="demo-box" Content="4" />
+        </UniformGrid>
+      </Border>
+      <TextBlock Classes="variant" Text="8" />
+      <Border Classes="stage wide">
+        <UniformGrid ins:Entrance.Reveal="True" Columns="4" ColumnSpacing="16" RowSpacing="16">
+          <ContentControl Classes="demo-box" Content="1" />
+          <ContentControl Classes="demo-box" Content="2" />
+          <ContentControl Classes="demo-box" Content="3" />
+          <ContentControl Classes="demo-box" Content="4" />
+          <ContentControl Classes="demo-box" Content="5" />
+          <ContentControl Classes="demo-box" Content="6" />
+          <ContentControl Classes="demo-box" Content="7" />
+          <ContentControl Classes="demo-box" Content="8" />
+        </UniformGrid>
+      </Border>
+
+      <TextBlock Classes="section" Text="حركة لعنصر بمفرده" />
+      <Border Classes="stage">
+        <ContentControl x:Name="Rise" Classes="demo-box" ins:Entrance.Effect="Rise" Content="عنصر" />
+      </Border>
+      <TextBlock Classes="variant" Text="نبضة" />
+      <Border Classes="stage">
+        <ContentControl x:Name="Pop" Classes="demo-box" ins:Entrance.Effect="Pop" Content="عنصر" />
+      </Border>
+      <TextBlock Classes="variant" Text="انزلاق" />
+      <Border Classes="stage">
+        <ContentControl x:Name="Slide" Classes="demo-box" ins:Entrance.Effect="Slide" Content="عنصر" />
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
