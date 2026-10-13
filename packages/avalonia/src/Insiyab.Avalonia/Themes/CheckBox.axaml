@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
 
   <Styles.Resources>
     <ResourceDictionary>
@@ -10,6 +11,76 @@
       </LinearGradientBrush>
       <SolidColorBrush x:Key="InsCheckBoxHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
       <SolidColorBrush x:Key="InsCheckBoxRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+      <SolidColorBrush x:Key="InsTileHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.35" />
+
+      <!-- The tile: a choice that deserves more than a line; the mark sits at the leading top corner. -->
+      <ControlTemplate x:Key="InsTileTemplate" TargetType="ToggleButton">
+        <Panel>
+          <Border x:Name="TileOutline"
+                  Margin="-4"
+                  BorderThickness="2"
+                  CornerRadius="18"
+                  BorderBrush="{DynamicResource InsToneBrandSoft}"
+                  IsVisible="False" />
+          <Border x:Name="PART_Border"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="1"
+                  CornerRadius="{DynamicResource InsRMd}" />
+          <Border x:Name="TileRing"
+                  Margin="1"
+                  BorderThickness="1"
+                  CornerRadius="13"
+                  BorderBrush="{DynamicResource InsToneBrandSoft}"
+                  Opacity="0" />
+          <Panel x:Name="BoxHost"
+                 Width="18"
+                 Height="18"
+                 Margin="14,14,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top">
+            <Border x:Name="NormalRectangle"
+                    Background="{DynamicResource InsSurface}"
+                    BorderBrush="{DynamicResource InsCtlBd}"
+                    BorderThickness="1"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    BoxShadow="{DynamicResource InsBevelDim}" />
+            <Border x:Name="CheckFill"
+                    FlowDirection="LeftToRight"
+                    Background="{DynamicResource InsCheckBoxFill}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Opacity="0" />
+            <Panel x:Name="TileMark" FlowDirection="LeftToRight" RenderTransform="scale(0)">
+              <Path x:Name="TileTick"
+                    Width="18"
+                    Height="18"
+                    Data="M5.75,9.25 L7.75,11.25 L12.25,6.75"
+                    Stroke="{DynamicResource InsOnPrimary}"
+                    StrokeThickness="1.5"
+                    StrokeLineCap="Round"
+                    StrokeJoin="Round" />
+              <Ellipse x:Name="TileDot" Width="5" Height="5" Fill="{DynamicResource InsOnPrimary}" IsVisible="False" />
+            </Panel>
+          </Panel>
+          <StackPanel Margin="44,14,16,14" Spacing="3">
+            <ContentPresenter x:Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              RecognizesAccessKey="True"
+                              FontSize="{DynamicResource InsFsMd}"
+                              FontWeight="Bold"
+                              LineHeight="23.8"
+                              TextWrapping="Wrap" />
+            <ContentPresenter x:Name="TileDesc"
+                              Content="{TemplateBinding (ins:Choice.Description)}"
+                              IsVisible="{TemplateBinding (ins:Choice.Description), Converter={x:Static ObjectConverters.IsNotNull}}"
+                              FontSize="{DynamicResource InsFsXs}"
+                              Foreground="{DynamicResource InsLabel}"
+                              LineHeight="19.2"
+                              TextWrapping="Wrap" />
+          </StackPanel>
+        </Panel>
+      </ControlTemplate>
 
       <ControlTheme x:Key="{x:Type CheckBox}" TargetType="CheckBox">
         <Setter Property="Padding" Value="8,0,0,0" />
@@ -27,13 +98,7 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*">
-              <Border x:Name="PART_Border"
-                      Grid.ColumnSpan="2"
-                      Background="{TemplateBinding Background}"
-                      BorderBrush="{TemplateBinding BorderBrush}"
-                      BorderThickness="{TemplateBinding BorderThickness}" />
-
+            <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*" Background="{TemplateBinding Background}">
               <Panel x:Name="BoxHost" Width="18" Height="18" VerticalAlignment="Center">
                 <Border x:Name="FocusRing"
                         Margin="-5"
@@ -53,7 +118,7 @@
                         BoxShadow="{DynamicResource InsBevelDim}">
                   <Border.Transitions>
                     <Transitions>
-                      <BrushTransition Property="BorderBrush" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+                      <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                     </Transitions>
                   </Border.Transitions>
                 </Border>
@@ -64,11 +129,13 @@
                         Opacity="0" />
                 <Panel FlowDirection="LeftToRight">
                   <Path x:Name="CheckGlyph"
-                        Data="M3.4,8.4 L6,11 L12.4,4.6"
+                        Width="18"
+                        Height="18"
+                        Data="M2.9,8.06 L5.73,10.89 L12.1,4.53"
                         Stroke="{DynamicResource InsOnPrimary}"
                         StrokeThickness="2"
                         StrokeJoin="Miter"
-                        RenderTransformOrigin="7.75,7.75"
+                        RenderTransformOrigin="41.7%,38.9%"
                         RenderTransform="scale(0)" />
                   <Border x:Name="IndeterminateGlyph"
                           Width="9"
@@ -87,27 +154,31 @@
                                 RecognizesAccessKey="True"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                LineHeight="23.8"
                                 TextWrapping="Wrap" />
             </Grid>
           </ControlTemplate>
         </Setter>
 
+        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter:empty">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
         <Style Selector="^ /template/ Border#CheckFill, ^ /template/ Border#HoverGlow, ^ /template/ Border#IndeterminateGlyph">
           <Setter Property="Transitions">
             <Transitions>
-              <DoubleTransition Property="Opacity" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+              <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
         <Style Selector="^ /template/ Path#CheckGlyph">
           <Setter Property="Transitions">
             <Transitions>
-              <TransformOperationsTransition Property="RenderTransform" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
 
-        <Style Selector="^:pointerover">
+        <Style Selector="^:pointerover:not(:disabled)">
           <Style Selector="^ /template/ Border#NormalRectangle">
             <Setter Property="BorderBrush" Value="{DynamicResource InsCheckBoxHoverBorder}" />
           </Style>
@@ -130,7 +201,7 @@
           <Setter Property="RenderTransform" Value="scale(1)" />
           <Setter Property="Transitions">
             <Transitions>
-              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.28" Easing="{DynamicResource InsEaseSpring}" />
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.28" Easing="0.34,1.56,0.64,1" />
             </Transitions>
           </Setter>
         </Style>
@@ -143,11 +214,225 @@
           <Setter Property="IsVisible" Value="True" />
         </Style>
 
+        <!-- As on the web, a disabled choice dims its box and keeps its label legible. -->
         <Style Selector="^:disabled">
-          <Setter Property="Opacity" Value="0.5" />
+          <Setter Property="Cursor" Value="No" />
+          <Style Selector="^ /template/ Panel#BoxHost">
+            <Setter Property="Opacity" Value="0.5" />
+          </Style>
+        </Style>
+
+        <Style Selector="^.tile">
+          <Setter Property="Template" Value="{StaticResource InsTileTemplate}" />
+          <Setter Property="HorizontalAlignment" Value="Stretch" />
+          <Setter Property="VerticalAlignment" Value="Stretch" />
+          <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+      </ControlTheme>
+
+
+      <ControlTheme x:Key="{x:Type RadioButton}" TargetType="RadioButton">
+        <Setter Property="Padding" Value="8,0,0,0" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="CornerRadius" Value="9" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*" Background="{TemplateBinding Background}">
+              <Panel x:Name="BoxHost" Width="18" Height="18" VerticalAlignment="Center">
+                <Border x:Name="FocusRing"
+                        Margin="-5"
+                        BorderThickness="3"
+                        CornerRadius="14"
+                        BorderBrush="{DynamicResource InsCheckBoxRing}"
+                        IsVisible="False" />
+                <Border x:Name="HoverGlow"
+                        CornerRadius="9"
+                        BoxShadow="{DynamicResource InsGlow}"
+                        Opacity="0" />
+                <Border x:Name="NormalRectangle"
+                        Background="{DynamicResource InsCtlBg}"
+                        BorderBrush="{DynamicResource InsCtlBd}"
+                        BorderThickness="1"
+                        CornerRadius="9"
+                        BoxShadow="{DynamicResource InsBevelDim}">
+                  <Border.Transitions>
+                    <Transitions>
+                      <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                    </Transitions>
+                  </Border.Transitions>
+                </Border>
+                <Border x:Name="CheckFill"
+                        FlowDirection="LeftToRight"
+                        Background="{DynamicResource InsCheckBoxFill}"
+                        CornerRadius="9"
+                        Opacity="0" />
+                <Ellipse x:Name="CheckGlyph"
+                         Width="7"
+                         Height="7"
+                         Fill="{DynamicResource InsOnPrimary}"
+                         RenderTransform="scale(0)" />
+              </Panel>
+
+              <ContentPresenter x:Name="PART_ContentPresenter"
+                                Grid.Column="1"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Content="{TemplateBinding Content}"
+                                Margin="{TemplateBinding Padding}"
+                                RecognizesAccessKey="True"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                LineHeight="23.8"
+                                TextWrapping="Wrap" />
+            </Grid>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter:empty">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^ /template/ Border#CheckFill, ^ /template/ Border#HoverGlow">
+          <Setter Property="Transitions">
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Ellipse#CheckGlyph">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+
+        <Style Selector="^:pointerover:not(:disabled)">
+          <Style Selector="^ /template/ Border#NormalRectangle">
+            <Setter Property="BorderBrush" Value="{DynamicResource InsCheckBoxHoverBorder}" />
+          </Style>
+          <Style Selector="^ /template/ Border#HoverGlow">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+        </Style>
+
+        <Style Selector="^:checked">
+          <Style Selector="^ /template/ Border#NormalRectangle">
+            <Setter Property="BorderBrush" Value="Transparent" />
+          </Style>
+          <Style Selector="^ /template/ Border#CheckFill">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#CheckGlyph">
+            <Setter Property="RenderTransform" Value="scale(1)" />
+            <Setter Property="Transitions">
+              <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.28" Easing="0.34,1.56,0.64,1" />
+              </Transitions>
+            </Setter>
+          </Style>
+        </Style>
+
+        <Style Selector="^:focus-visible /template/ Border#FocusRing">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+
+        <Style Selector="^:disabled">
+          <Setter Property="Cursor" Value="No" />
+          <Style Selector="^ /template/ Panel#BoxHost">
+            <Setter Property="Opacity" Value="0.5" />
+          </Style>
+        </Style>
+
+        <Style Selector="^.tile">
+          <Setter Property="Template" Value="{StaticResource InsTileTemplate}" />
+          <Setter Property="HorizontalAlignment" Value="Stretch" />
+          <Setter Property="VerticalAlignment" Value="Stretch" />
+          <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
         </Style>
       </ControlTheme>
 
     </ResourceDictionary>
   </Styles.Resources>
+
+  <!-- The tile states, shared by the tile check box and the tile radio button -->
+  <Style Selector=":is(ToggleButton).tile">
+    <Style Selector="^ /template/ Panel#TileMark">
+      <Setter Property="Transitions">
+        <Transitions>
+          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.28" Easing="0.34,1.56,0.64,1" />
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="^ /template/ Border#CheckFill, ^ /template/ Border#TileRing">
+      <Setter Property="Transitions">
+        <Transitions>
+          <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="^:pointerover:not(:disabled)">
+      <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource InsTileHoverBorder}" />
+    </Style>
+    <Style Selector="^:checked">
+      <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandSoft}" />
+      <Style Selector="^ /template/ Border#TileRing">
+        <Setter Property="Opacity" Value="1" />
+      </Style>
+      <Style Selector="^ /template/ Border#NormalRectangle">
+        <Setter Property="BorderBrush" Value="Transparent" />
+      </Style>
+      <Style Selector="^ /template/ Border#CheckFill">
+        <Setter Property="Opacity" Value="1" />
+      </Style>
+      <Style Selector="^ /template/ Panel#TileMark">
+        <Setter Property="RenderTransform" Value="scale(1)" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+      </Style>
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#TileOutline">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:disabled">
+      <Setter Property="Opacity" Value="0.5" />
+      <Setter Property="Cursor" Value="No" />
+      <Style Selector="^ /template/ Panel#BoxHost">
+        <Setter Property="Opacity" Value="1" />
+      </Style>
+    </Style>
+  </Style>
+  <Style Selector="RadioButton.tile">
+    <Style Selector="^ /template/ Path#TileTick">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^ /template/ Ellipse#TileDot">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+  </Style>
 </Styles>

@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
 
   <Styles.Resources>
     <ResourceDictionary>
@@ -14,114 +15,154 @@
       <ControlTheme x:Key="{x:Type ToggleSwitch}" TargetType="ToggleSwitch">
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Padding" Value="0,6" />
+        <Setter Property="OnContent" Value="{x:Null}" />
+        <Setter Property="OffContent" Value="{x:Null}" />
         <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Cursor" Value="Hand" />
         <!-- The thumb travels on the overshoot curve: a switch is the one control whose whole job is to move. -->
         <Setter Property="KnobTransitions">
           <Transitions>
-            <DoubleTransition Property="Canvas.Left" Duration="0:0:0.32" Easing="{DynamicResource InsEaseSpring}" />
+            <DoubleTransition Property="Canvas.Left" Duration="0:0:0.32" Easing="0.34,1.56,0.64,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Grid Background="{TemplateBinding Background}"
-                  Margin="{TemplateBinding Padding}"
-                  ColumnDefinitions="Auto,Auto">
+            <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}">
+              <Grid x:Name="SwitchGrid" ColumnDefinitions="Auto,*" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
 
-              <Panel x:Name="SwitchAreaGrid"
-                     Width="48"
-                     Height="26"
-                     VerticalAlignment="Center">
-                <Border x:Name="FocusRing"
-                        Margin="-5"
-                        BorderThickness="3"
-                        CornerRadius="{DynamicResource InsRPill}"
-                        BorderBrush="{DynamicResource InsSwitchRing}"
-                        IsVisible="False" />
-                <Border x:Name="OuterBorder"
-                        Background="{DynamicResource InsCtlBgHover}"
-                        BorderBrush="{DynamicResource InsCtlBd}"
-                        BorderThickness="1"
-                        CornerRadius="{DynamicResource InsRPill}"
-                        BoxShadow="inset 0 2 4 0 #140F172A">
-                  <Border.Transitions>
-                    <Transitions>
-                      <BrushTransition Property="BorderBrush" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
-                    </Transitions>
-                  </Border.Transitions>
-                </Border>
-                <Border x:Name="SwitchKnobBounds"
-                        FlowDirection="LeftToRight"
-                        Background="{DynamicResource InsSwitchFill}"
-                        CornerRadius="{DynamicResource InsRPill}"
-                        BoxShadow="{DynamicResource InsGlowRing}"
-                        Opacity="0">
-                  <Border.Transitions>
-                    <Transitions>
-                      <DoubleTransition Property="Opacity" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
-                    </Transitions>
-                  </Border.Transitions>
-                  <Border CornerRadius="{DynamicResource InsRPill}" BoxShadow="inset 0 1 0 0 #33FFFFFF" />
-                </Border>
-                <Canvas x:Name="PART_SwitchKnob"
-                        Width="22"
-                        Height="20"
-                        Margin="3,3,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top">
-                  <Panel x:Name="PART_MovingKnobs" Width="20" Height="20">
-                    <Border x:Name="SwitchKnob"
-                            Background="#FFFFFF"
-                            CornerRadius="10"
-                            BoxShadow="0 2 6 0 #470F172A" />
-                  </Panel>
-                </Canvas>
-              </Panel>
-
-              <StackPanel x:Name="TextStack"
-                          Grid.Column="1"
-                          Margin="10,0,0,0"
-                          Spacing="1"
-                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                <ContentPresenter x:Name="PART_ContentPresenter"
-                                  Content="{TemplateBinding Content}"
-                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                                  RecognizesAccessKey="True"
-                                  FontWeight="Bold"
-                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
-                <Panel x:Name="StatePanel" Classes.desc="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}">
-                  <ContentPresenter x:Name="PART_OffContentPresenter"
-                                    Content="{TemplateBinding OffContent}"
-                                    ContentTemplate="{TemplateBinding OffContentTemplate}"
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
-                  <ContentPresenter x:Name="PART_OnContentPresenter"
-                                    Content="{TemplateBinding OnContent}"
-                                    ContentTemplate="{TemplateBinding OnContentTemplate}"
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                <Panel x:Name="SwitchAreaGrid"
+                       Width="48"
+                       Height="26"
+                       VerticalAlignment="Center">
+                  <Border x:Name="FocusRing"
+                          Margin="-5"
+                          BorderThickness="3"
+                          CornerRadius="{DynamicResource InsRPill}"
+                          BorderBrush="{DynamicResource InsSwitchRing}"
+                          IsVisible="False" />
+                  <Border x:Name="OuterBorder"
+                          Background="{DynamicResource InsCtlBgHover}"
+                          BorderBrush="{DynamicResource InsCtlBd}"
+                          BorderThickness="1"
+                          CornerRadius="{DynamicResource InsRPill}"
+                          BoxShadow="inset 0 2 4 0 #140F172A">
+                    <Border.Transitions>
+                      <Transitions>
+                        <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                      </Transitions>
+                    </Border.Transitions>
+                  </Border>
+                  <Border x:Name="SwitchKnobBounds"
+                          FlowDirection="LeftToRight"
+                          Background="{DynamicResource InsSwitchFill}"
+                          CornerRadius="{DynamicResource InsRPill}"
+                          BoxShadow="{DynamicResource InsGlowRing}"
+                          Opacity="0">
+                    <Border.Transitions>
+                      <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                      </Transitions>
+                    </Border.Transitions>
+                    <Panel>
+                      <Border CornerRadius="{DynamicResource InsRPill}" BoxShadow="inset 0 1 0 0 #33FFFFFF" />
+                      <!-- brightness(1.08) under the pointer, as a faint white wash -->
+                      <Border x:Name="Brighten" CornerRadius="{DynamicResource InsRPill}" Background="#FFFFFF" Opacity="0" />
+                    </Panel>
+                  </Border>
+                  <Canvas x:Name="PART_SwitchKnob"
+                          Width="22"
+                          Height="20"
+                          Margin="3,3,0,0"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top">
+                    <Panel x:Name="PART_MovingKnobs" Width="20" Height="20">
+                      <Border x:Name="SwitchKnob"
+                              Background="#FFFFFF"
+                              CornerRadius="10"
+                              BoxShadow="0 2 6 0 #470F172A" />
+                    </Panel>
+                  </Canvas>
                 </Panel>
-              </StackPanel>
-            </Grid>
+
+                <StackPanel x:Name="TextStack"
+                            Grid.Column="1"
+                            Margin="10,0,0,0"
+                            Spacing="1"
+                            VerticalAlignment="Center">
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    RecognizesAccessKey="True"
+                                    FontWeight="Bold"
+                                    LineHeight="23.8"
+                                    TextWrapping="Wrap"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                  <ContentPresenter x:Name="DescPresenter"
+                                    Content="{TemplateBinding (ins:Choice.Description)}"
+                                    IsVisible="{TemplateBinding (ins:Choice.Description), Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    FontSize="{DynamicResource InsFsXs}"
+                                    Foreground="{DynamicResource InsText2}"
+                                    LineHeight="20.4"
+                                    TextWrapping="Wrap"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                  <Panel x:Name="StatePanel" Classes.desc="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <ContentPresenter x:Name="PART_OffContentPresenter"
+                                      Content="{TemplateBinding OffContent}"
+                                      ContentTemplate="{TemplateBinding OffContentTemplate}"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                    <ContentPresenter x:Name="PART_OnContentPresenter"
+                                      Content="{TemplateBinding OnContent}"
+                                      ContentTemplate="{TemplateBinding OnContentTemplate}"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                  </Panel>
+                </StackPanel>
+              </Grid>
+            </Border>
           </ControlTemplate>
         </Setter>
 
         <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter:empty">
           <Setter Property="IsVisible" Value="False" />
         </Style>
-        <!-- With a label above it, the state reads as the label's description. -->
+        <Style Selector="^ /template/ ContentPresenter#PART_OffContentPresenter:empty, ^ /template/ ContentPresenter#PART_OnContentPresenter:empty">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <!-- With a label above it, the on/off text reads as the label's description. -->
         <Style Selector="^ /template/ Panel#StatePanel.desc">
           <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsXs}" />
           <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText2}" />
         </Style>
+        <Style Selector="^ /template/ Border#Brighten">
+          <Setter Property="Transitions">
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
 
         <Style Selector="^:pointerover /template/ Border#OuterBorder">
           <Setter Property="BorderBrush" Value="{DynamicResource InsSwitchHoverBorder}" />
+        </Style>
+        <Style Selector="^:pointerover:checked /template/ Border#Brighten">
+          <Setter Property="Opacity" Value="0.08" />
         </Style>
 
         <Style Selector="^:checked">
@@ -154,9 +195,45 @@
 
         <Style Selector="^:disabled">
           <Setter Property="Opacity" Value="0.5" />
+          <Setter Property="Cursor" Value="No" />
+        </Style>
+
+        <!-- card: a setting that is its own row in a bordered, tinted block -->
+        <Style Selector="^.card">
+          <Setter Property="Padding" Value="14,12" />
+          <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Style Selector="^:pointerover">
+            <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
+          </Style>
         </Style>
       </ControlTheme>
 
     </ResourceDictionary>
   </Styles.Resources>
+
+  <Style Selector="ins|ChoiceGrid.tile-grid">
+    <Setter Property="MinColumnWidth" Value="192" />
+    <Setter Property="Spacing" Value="10" />
+  </Style>
+  <!-- switch-grid: settings as cards in a grid; each card sits its content at the top -->
+  <Style Selector="ins|ChoiceGrid.switch-grid">
+    <Setter Property="MinColumnWidth" Value="240" />
+    <Setter Property="Spacing" Value="8" />
+  </Style>
+  <Style Selector="ins|ChoiceGrid.switch-grid > ToggleSwitch">
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="VerticalAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Top" />
+    <Setter Property="Padding" Value="14,12" />
+    <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+  </Style>
+  <Style Selector="ins|ChoiceGrid.switch-grid > ToggleSwitch:pointerover">
+    <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
+  </Style>
 </Styles>

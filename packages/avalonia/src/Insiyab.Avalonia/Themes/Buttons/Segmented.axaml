@@ -1,0 +1,116 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <ControlTheme x:Key="{x:Type ins:Segmented}" TargetType="ins:Segmented">
+        <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}">
+              <Panel>
+                <Canvas IsHitTestVisible="False">
+                  <Border x:Name="PART_Flight"
+                          CornerRadius="{DynamicResource InsRSm}"
+                          Background="{DynamicResource InsSegOnBg}"
+                          BoxShadow="{DynamicResource InsSegOnShadow}"
+                          IsVisible="False" />
+                </Canvas>
+                <ItemsPresenter x:Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+              </Panel>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:SegmentedItem}" TargetType="ins:SegmentedItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+        <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
+        <Setter Property="Padding" Value="14,8" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border x:Name="PART_Outline"
+                      Margin="-4"
+                      BorderThickness="2"
+                      CornerRadius="14"
+                      BorderBrush="{DynamicResource InsToneBrandSoft}"
+                      IsVisible="False" />
+              <ContentPresenter x:Name="PART_ContentPresenter"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Padding="{TemplateBinding Padding}"
+                                LineHeight="22"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                <ContentPresenter.Transitions>
+                  <Transitions>
+                    <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                  </Transitions>
+                </ContentPresenter.Transitions>
+              </ContentPresenter>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:pointerover">
+          <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+          <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
+        </Style>
+        <Style Selector="^:selected">
+          <Setter Property="Background" Value="{DynamicResource InsSegOnBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsSegOnFg}" />
+          <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
+          </Style>
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_Outline">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.5" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- While the face is in flight the chosen segment draws none of its own. -->
+  <Style Selector="ins|Segmented.moving ins|SegmentedItem:selected">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Transitions" Value="{x:Null}" />
+    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="BoxShadow" Value="none" />
+      <Setter Property="Transitions" Value="{x:Null}" />
+    </Style>
+  </Style>
+
+</Styles>
