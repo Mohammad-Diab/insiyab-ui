@@ -242,11 +242,11 @@
     <Setter Property="Foreground" Value="{DynamicResource InsQuoteLink}" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
-  <Style Selector="ContentControl.quote-source HyperlinkButton TextBlock">
+  <Style Selector="ContentControl.quote-source HyperlinkButton :is(TextBlock)">
     <Setter Property="Foreground" Value="{DynamicResource InsQuoteLink}" />
     <Setter Property="FontWeight" Value="Bold" />
   </Style>
-  <Style Selector="ContentControl.quote-source HyperlinkButton:pointerover TextBlock">
+  <Style Selector="ContentControl.quote-source HyperlinkButton:pointerover :is(TextBlock)">
     <Setter Property="TextDecorations" Value="Underline" />
   </Style>
   <Style Selector="ContentControl.quote-source HyperlinkButton /template/ ContentPresenter">

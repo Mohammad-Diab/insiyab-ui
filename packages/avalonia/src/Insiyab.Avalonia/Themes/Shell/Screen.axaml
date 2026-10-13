@@ -1,0 +1,48 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- .ins-screen: one card in the middle of the page, at most 448 wide and 32 clear of the edges -->
+  <Style Selector="Panel.screen > :is(Control)">
+    <Setter Property="MaxWidth" Value="448" />
+    <Setter Property="Margin" Value="32" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+  <!-- .ins-brand: the mark, the name and one line under them, centred at the top of a card -->
+  <Style Selector="StackPanel.brand">
+    <Setter Property="Spacing" Value="6" />
+    <Setter Property="Margin" Value="0,0,0,24" />
+  </Style>
+  <Style Selector="StackPanel.brand > :is(Control)">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="StackPanel.brand > Border.shell-mark">
+    <Setter Property="Width" Value="60" />
+    <Setter Property="Height" Value="60" />
+    <Setter Property="Margin" Value="0,0,0,8" />
+    <Setter Property="TextElement.FontSize" Value="26" />
+    <Setter Property="TextElement.FontWeight" Value="ExtraBold" />
+  </Style>
+  <Style Selector="TextBlock.brand-name">
+    <Setter Property="FontSize" Value="24" />
+    <Setter Property="LineHeight" Value="40.8" />
+    <Setter Property="FontWeight" Value="ExtraBold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsShellInk}" />
+    <Setter Property="TextAlignment" Value="Center" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <!-- The display face and the tracking are LTR only, as on the headings -->
+  <Style Selector="TextBlock.brand-name[FlowDirection=LeftToRight]">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontHeadingEn}" />
+    <Setter Property="LetterSpacing" Value="-0.48" />
+  </Style>
+  <Style Selector="TextBlock.brand-sub">
+    <Setter Property="FontSize" Value="15" />
+    <Setter Property="LineHeight" Value="25.5" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+    <Setter Property="TextAlignment" Value="Center" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+
+</Styles>

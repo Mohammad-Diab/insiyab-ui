@@ -27,7 +27,7 @@ public static class GalleryPages
         ("النماذج", ["inputs", "checks", "input-group", "pickers", "chips", "matrix", "validation"]),
         ("المكونات", ["buttons", "accordion", "tabs", "stats", "loading", "progress", "countdown", "save", "tooltips", "alerts", "dialog", "drawer", "toasts", "notify", "badges", "list", "comments", "dropdown", "steps", "pagination", "page-head"]),
         ("الإضافات", ["hijri", "palette", "otp", "phone", "birthdate", "file", "scrollspy", "timeline", "tree", "charts", "month"]),
-        ("القوالب", ["login", "tpl-dashboard", "tpl-tickets", "tpl-order", "tpl-settings", "tpl-review", "tpl-booking", "tpl-error"]),
+        ("القوالب", ["login-simple", "login", "tpl-dashboard", "tpl-tickets", "tpl-order", "tpl-settings", "tpl-review", "tpl-booking", "tpl-error"]),
         ("الملحقات", ["navbar", "carousel", "colorpicker", "reveal"]),
     ];
 

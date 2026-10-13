@@ -4,6 +4,16 @@
 
   <Styles.Resources>
     <ResourceDictionary>
+      <!-- A hovered link: toward more light, the mid brand on light and plain text on dark -->
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsLinkHover" Color="{DynamicResource InsToneBrandSoftColor}" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsLinkHover" Color="{DynamicResource InsText1Color}" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
       <!-- The web's scrollbar: 5px, no arrows, a brand-tinted thumb, the track stopping 10px short of each end -->
       <x:Double x:Key="InsScrollbarSize">5</x:Double>
       <SolidColorBrush x:Key="InsScrollbarThumb" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.28" />
@@ -162,6 +172,35 @@
         <Style Selector="^[IsEnabled=True]">
           <Setter Property="Cursor" Value="IBeam" />
           <Setter Property="ContextFlyout" Value="{StaticResource InsSelectableTextFlyout}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- An a: the darkest brand shade with no underline, lighter under the pointer; the focus ring is the shared one -->
+      <ControlTheme x:Key="{x:Type HyperlinkButton}" TargetType="HyperlinkButton">
+        <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Background="{TemplateBinding Background}"
+                              Padding="{TemplateBinding Padding}"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              RecognizesAccessKey="True"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Foreground" Value="{DynamicResource InsLinkHover}" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.55" />
         </Style>
       </ControlTheme>
     </ResourceDictionary>

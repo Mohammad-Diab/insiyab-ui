@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.LoginSimplePage">
+  <Panel Classes="screen" MinHeight="704">
+    <Border Classes="glass" Padding="32">
+      <StackPanel x:Name="Form" ins:Validate.Form="True">
+        <StackPanel Classes="brand">
+          <Border Classes="shell-mark"><TextBlock Text="م" /></Border>
+          <TextBlock Classes="brand-name" Text="متجري" />
+          <TextBlock Classes="brand-sub" Text="تسجيل الدخول" />
+        </StackPanel>
+        <StackPanel Spacing="16">
+          <StackPanel Classes="field">
+            <TextBlock Classes="label" Text="رقم الهاتف أو اسم المستخدم" />
+            <TextBox x:Name="Account" Classes="lg" FlowDirection="LeftToRight"
+                     ins:Validate.Required="True" ins:Validate.Pattern="09[0-9]{8}|[A-Za-z][A-Za-z0-9._]{2,}" />
+          </StackPanel>
+          <StackPanel Classes="field">
+            <TextBlock Classes="label" Text="كلمة المرور" />
+            <TextBox x:Name="Password" Classes="revealPasswordButton lg" PasswordChar="•" ins:Validate.Required="True" />
+          </StackPanel>
+          <Grid ColumnDefinitions="*,Auto">
+            <CheckBox Content="تذكرني" VerticalAlignment="Center" />
+            <HyperlinkButton Grid.Column="1" Content="نسيت كلمة المرور" />
+          </Grid>
+          <Button Classes="primary lg full" IsDefault="True" ins:Validate.Submit="True">
+            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+              <TextBlock Text="دخول" />
+              <ins:LoadingSpinner x:Name="Busy" Classes="sm" IsVisible="False" />
+            </StackPanel>
+          </Button>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+  </Panel>
+</UserControl>
