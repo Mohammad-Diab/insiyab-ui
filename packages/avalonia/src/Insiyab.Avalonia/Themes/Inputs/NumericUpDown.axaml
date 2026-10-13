@@ -6,16 +6,19 @@
     <ResourceDictionary>
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsSpinOkBorder" Color="{DynamicResource InsToneOkColor}" Opacity="0.55" />
+          <SolidColorBrush x:Key="InsSpinBadBorder" Color="{DynamicResource InsToneBadColor}" Opacity="0.55" />
           <BoxShadows x:Key="InsSpinGlowOk">0 0 0 4 #1F22C55E</BoxShadows>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsSpinOkBorder" Color="{DynamicResource InsToneOkColor}" Opacity="0.55" />
+          <SolidColorBrush x:Key="InsSpinBadBorder" Color="{DynamicResource InsToneBadColor}" Opacity="0.55" />
           <BoxShadows x:Key="InsSpinGlowOk">0 0 0 4 #2E22C55E</BoxShadows>
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
       <SolidColorBrush x:Key="InsSpinHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
       <SolidColorBrush x:Key="InsSpinFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
-      <SolidColorBrush x:Key="InsSpinOkBorder" Color="{DynamicResource InsToneOkColor}" Opacity="0.55" />
 
       <!-- The − and + of the web's .ins-spin. -->
       <ControlTheme x:Key="InsSpinButton" TargetType="RepeatButton">
@@ -210,7 +213,6 @@
         </Style>
         <Style Selector="^.ok">
           <Style Selector="^ /template/ Border#PART_BorderElement, ^:pointerover:not(:focus-within) /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsSpinOkBorder}" />
           </Style>
           <Style Selector="^:focus-within /template/ Border#PART_BorderElement">
@@ -225,8 +227,7 @@
         </Style>
         <Style Selector="^:error, ^.bad">
           <Style Selector="^ /template/ Border#PART_BorderElement, ^:pointerover:not(:focus-within) /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsSpinBadBorder}" />
           </Style>
           <Style Selector="^:focus-within /template/ Border#PART_BorderElement">
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />

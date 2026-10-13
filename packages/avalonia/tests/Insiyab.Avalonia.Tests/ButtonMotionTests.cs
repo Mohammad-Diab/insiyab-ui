@@ -1,11 +1,13 @@
 using System.Diagnostics;
 using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Headless.XUnit;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Media.Transformation;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Insiyab.Avalonia.Controls;
@@ -43,17 +45,37 @@ public class ButtonMotionTests
         return (ControlTheme)theme!;
     }
 
+    // The clock stands still, so the click counts as a tap however slow the run, and the depth is read from the dip's keyframes rather than from frames that load can skip.
     private static double QuickClickDip(Button button, Window window)
     {
         var part = Part<Panel>(button, "PART_Press");
         var p = Center(button, window);
         window.MouseMove(p);
         Settle(300);
-        window.MouseDown(p, MouseButton.Left);
-        window.MouseUp(p, MouseButton.Left);
+        var real = PressDip.Now;
+        var at = real();
+        PressDip.Now = () => at;
+        var dips = new List<(Control Part, Animation Run)>();
+        PressDip.Started = (c, a) => dips.Add((c, a));
+        try
+        {
+            window.MouseDown(p, MouseButton.Left);
+            window.MouseUp(p, MouseButton.Left);
+        }
+        finally
+        {
+            PressDip.Now = real;
+            PressDip.Started = null;
+        }
         var samples = Sample(window, 400, () => ScaleOf(part));
         Assert.Equal(1, samples[^1].Value, 3);
-        return samples.Min(s => s.Value);
+        if (dips.Count == 0) return 1;
+        var (dipped, run) = Assert.Single(dips);
+        Assert.Same(part, dipped);
+        var scales = run.Children.Select(k => ((TransformOperations)k.Setters.OfType<Setter>().Single(s => s.Property == Visual.RenderTransformProperty).Value!).Value.M11).ToList();
+        Assert.Equal(1, scales[0], 3);
+        Assert.Equal(1, scales[^1], 3);
+        return scales.Min();
     }
 
     [AvaloniaFact]

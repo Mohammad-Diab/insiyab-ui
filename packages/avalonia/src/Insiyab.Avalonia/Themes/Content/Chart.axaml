@@ -36,7 +36,7 @@
                   <Border Name="PART_Tip" IsVisible="False" ZIndex="5" AutomationProperties.LiveSetting="Polite"
                           FlowDirection="{TemplateBinding FlowDirection}"
                           Padding="10,6" CornerRadius="{DynamicResource InsRSm}" BorderThickness="1"
-                          BorderBrush="{DynamicResource InsRim}" Background="{DynamicResource InsGlassStrong}"
+                          BorderBrush="{DynamicResource InsRim}" Background="{DynamicResource InsGlassStrongGround}"
                           BoxShadow="{DynamicResource InsShMd}">
                     <StackPanel Spacing="2">
                       <TextBlock Name="PART_TipLabel" FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsText2}" />

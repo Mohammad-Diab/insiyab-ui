@@ -158,7 +158,8 @@ ok('validation: both messages shown after submit', v.shown === 'true,true', v.sh
 ok('validation: empty message filled from the browser', v.text0.length > 3, v.text0);
 ok('validation: page-written message kept', v.text1.startsWith('كلمة المرور قصيرة'), v.text1);
 ok('validation: first invalid field focused', v.focus === 'v-email', v.focus);
-ok('validation: invalid input + group turn red', /(239, 68, 68|153, 27, 27)/.test(v.emailBorder) && /239, 68, 68/.test(v.groupBorder), `${v.emailBorder} / ${v.groupBorder}`);
+const badBd = await E(`(() => { const p = document.createElement('div'); p.style.border = '1px solid color-mix(in srgb, var(--ins-tone-bad) 55%, transparent)'; document.body.appendChild(p); const c = getComputedStyle(p).borderTopColor; p.remove(); return c; })()`);
+ok('validation: invalid input + group turn red', [badBd, 'rgb(153, 27, 27)'].includes(v.emailBorder) && v.groupBorder === badBd, `${v.emailBorder} / ${v.groupBorder}`);
 await E(`document.getElementById('v-email').focus()`);
 await b.type('a@b.co');
 await b.sleep(100);
@@ -173,13 +174,13 @@ ok('validation reset: no field stays reported', rs.reported === 0, String(rs.rep
 ok('validation reset: every message hidden', rs.hidden);
 ok('validation reset: the library-written message is emptied', rs.text0 === '', rs.text0);
 ok('validation reset: the page-written message is kept', rs.text1.startsWith('كلمة المرور قصيرة'), rs.text1);
-ok('validation reset: the field is not red', !/(239, 68, 68|153, 27, 27)/.test(rs.emailBorder), rs.emailBorder);
+ok('validation reset: the field is not red', ![badBd, 'rgb(153, 27, 27)'].includes(rs.emailBorder), rs.emailBorder);
 await b.click('#v-form .ins-btn--primary');
 await b.sleep(200);
 ok('validation reset: a new submit reports again', await E(`(() => { const e = document.querySelectorAll('#v-form .ins-error')[0]; return getComputedStyle(e).display !== 'none' && e.textContent.length > 3; })()`));
 const srv = await E(`(() => ({ code: getComputedStyle(document.getElementById('g-code').closest('.ins-input-group')).borderColor,
   innerBg: getComputedStyle(document.getElementById('g-code')).backgroundColor, ok: getComputedStyle(document.getElementById('g-user')).borderColor }))()`);
-ok('validation: server error reddens the group, not the inner input', /239, 68, 68/.test(srv.code) && srv.innerBg === 'rgba(0, 0, 0, 0)', JSON.stringify(srv));
+ok('validation: server error reddens the group, not the inner input', srv.code === badBd && srv.innerBg === 'rgba(0, 0, 0, 0)', JSON.stringify(srv));
 ok('validation: success message greens the field', /21, 128, 61|0\.08\d* 0\.50\d* 0\.23\d*/.test(srv.ok), srv.ok);
 
 // ------------------------------------------------------------------ navbar

@@ -68,14 +68,65 @@ public class ShellTests
         AssertBrush(shell, "InsGlass", () => chrome.Background);
         AssertBrush(shell, "InsRim", () => chrome.BorderBrush);
         Assert.Equal(new Thickness(0, 0, 1, 0), chrome.BorderThickness);
-        Assert.Equal(new Thickness(12, 18), Part<ContentPresenter>(shell, "PART_PanePresenter").Padding);
+        Assert.Equal(new Thickness(12, 18, 12, 0), Part<ContentPresenter>(shell, "PART_PanePresenter").Padding);
+    }
+
+    private static (SplitView Shell, ListBox Nav, Border Head, Window Window) LongSidebar(bool headScrolls)
+    {
         var shell = NewShell(out var nav, out _, out _);
         for (var i = 0; i < 30; i++) nav.Items.Add(new ListBoxItem { Content = $"صفحة {i}" });
         var head = new Border { Classes = { "shell-brand" }, Child = new TextBlock { Classes = { "shell-brand-name" }, Text = "تطبيقي" } };
         DockPanel.SetDock(head, Dock.Top);
+        shell.Pane = null;
+        shell.Pane = new DockPanel { Children = { head, nav } };
         Shell.SetHeadScrolls(shell, headScrolls);
         var w = Show(shell, FlowDirection.RightToLeft, width: 1200, height: 400);
         return (shell, nav, head, w);
+    }
+
+    private static Rect InWindow(Visual v, Visual w) => new Rect(v.Bounds.Size).TransformToAABB(v.TransformToVisual(w)!.Value);
+
+    private static ScrollBar PaneBar(SplitView shell) =>
+        Part<Border>(shell, "PART_PaneChrome").GetVisualDescendants().OfType<ScrollBar>().Single(b => b.Orientation == Orientation.Vertical && b.IsEffectivelyVisible);
+
+    [AvaloniaFact]
+    public void Sidebar_head_stays_pinned_while_the_links_scroll()
+    {
+        var (shell, nav, head, w) = LongSidebar(headScrolls: false);
+        var chrome = InWindow(Part<Border>(shell, "PART_PaneChrome"), w);
+        var headAt = InWindow(head, w);
+        var bar = PaneBar(shell);
+        Assert.Same(Part<ScrollViewer>(nav, "PART_ScrollViewer"), bar.FindAncestorOfType<ScrollViewer>());
+        var barAt = InWindow(bar, w);
+        Assert.Equal(chrome.Left + 1, barAt.Left, 0.5);
+        Assert.True(barAt.Top >= headAt.Bottom, $"the bar starts at {barAt.Top}, above the head's foot at {headAt.Bottom}");
+        Assert.Equal(400, barAt.Bottom, 0.5);
+        Assert.Equal(12, chrome.Right - InWindow(nav.ContainerFromIndex(1)!, w).Right, 0.5);
+
+        var links = Part<ScrollViewer>(nav, "PART_ScrollViewer");
+        links.Offset = new Vector(0, 200);
+        Settle(100);
+        Assert.Equal(200, links.Offset.Y, 0.5);
+        Assert.Equal(headAt, InWindow(head, w));
+        Assert.Equal(0, Part<ScrollViewer>(shell, "PART_PaneScroll").Offset.Y);
+    }
+
+    [AvaloniaFact]
+    public void HeadScrolls_lets_the_head_scroll_away_with_the_links()
+    {
+        var (shell, nav, head, w) = LongSidebar(headScrolls: true);
+        var chrome = InWindow(Part<Border>(shell, "PART_PaneChrome"), w);
+        var headAt = InWindow(head, w);
+        var pane = Part<ScrollViewer>(shell, "PART_PaneScroll");
+        var bar = PaneBar(shell);
+        Assert.Same(pane, bar.FindAncestorOfType<ScrollViewer>());
+        var barAt = InWindow(bar, w);
+        Assert.Equal(chrome.Left + 1, barAt.Left, 0.5);
+        Assert.Equal(400, barAt.Height, 0.5);
+
+        pane.Offset = new Vector(0, 120);
+        Settle(100);
+        Assert.Equal(headAt.Top - 120, InWindow(head, w).Top, 0.5);
     }
 
     [AvaloniaFact]
@@ -372,6 +423,29 @@ public class ShellTests
         Assert.True(active[1].IsInset);
     }
 
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void Island_text_sits_on_the_island_centre(string dir)
+    {
+        TextBlock Text(string text) => new() { Text = text };
+        var brandName = Text("انسياب");
+        var brand = new Border { Classes = { "island", "brand" }, IsVisible = true, Child = new StackPanel { Children = { new Border { Classes = { "shell-mark" }, Child = Text("ان") }, brandName } } };
+        var label = Text("المظهر");
+        var custom = new Button { Classes = { "island" }, Content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Children = { new Border { Width = 24, Height = 24 }, label } } };
+        var version = Text("الإصدار");
+        var versionIsland = new Border { Classes = { "island" }, Child = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 4, Children = { version, Text("0.1.0") } } };
+        var title = new TextBlock { Classes = { "shell-title" }, Text = "الأزرار" };
+        var titleIsland = new Border { Classes = { "island", "title" }, Child = new StackPanel { Classes = { "shell-head" }, Children = { title } } };
+        Show(new StackPanel { Classes = { "zone" }, Children = { brand, custom, versionIsland, titleIsland } }, dir == "rtl" ? FlowDirection.RightToLeft : FlowDirection.LeftToRight, width: 900);
+
+        foreach (var (text, island) in new (TextBlock, Control)[] { (brandName, brand), (label, custom), (version, versionIsland), (title, titleIsland) })
+        {
+            var middle = text.TranslatePoint(new Point(0, text.Padding.Top + text.TextLayout.Height / 2), island)!.Value.Y;
+            Assert.True(Math.Abs(middle - island.Bounds.Height / 2) <= 0.5, $"{text.Text}: line centre at {middle:0.##}, island centre at {island.Bounds.Height / 2:0.##}");
+        }
+    }
+
     [AvaloniaFact]
     public void Island_button_rises_under_the_pointer()
     {
@@ -401,7 +475,7 @@ public class ShellTests
         scroller.Offset = new Vector(0, 40);
         Settle();
         Assert.Contains("scrolled", bar.Classes);
-        AssertBrush(bar, "InsGlass", () => bar.Background);
+        AssertBrush(bar, "InsGlassGround", () => bar.Background);
         scroller.Offset = default;
         Settle();
         Assert.DoesNotContain("scrolled", bar.Classes);

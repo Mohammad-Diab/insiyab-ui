@@ -46,10 +46,12 @@
                           Background="{TemplateBinding PaneBackground}"
                           BorderBrush="{DynamicResource InsRim}"
                           BorderThickness="0,0,1,0">
-                    <ContentPresenter x:Name="PART_PanePresenter"
-                                      Padding="12,18"
-                                      Content="{TemplateBinding Pane}"
-                                      ContentTemplate="{TemplateBinding PaneTemplate}" />
+                    <ScrollViewer x:Name="PART_PaneScroll" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
+                      <ContentPresenter x:Name="PART_PanePresenter"
+                                        Padding="12,18,12,0"
+                                        Content="{TemplateBinding Pane}"
+                                        ContentTemplate="{TemplateBinding PaneTemplate}" />
+                    </ScrollViewer>
                   </Border>
                 </Panel>
                 <Panel Name="ContentRoot" Grid.Column="1">
@@ -77,10 +79,12 @@
                           Background="{TemplateBinding PaneBackground}"
                           BorderBrush="{DynamicResource InsRim}"
                           BorderThickness="1,0,0,0">
-                    <ContentPresenter x:Name="PART_PanePresenter"
-                                      Padding="12,18"
-                                      Content="{TemplateBinding Pane}"
-                                      ContentTemplate="{TemplateBinding PaneTemplate}" />
+                    <ScrollViewer x:Name="PART_PaneScroll" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
+                      <ContentPresenter x:Name="PART_PanePresenter"
+                                        Padding="12,18,12,0"
+                                        Content="{TemplateBinding Pane}"
+                                        ContentTemplate="{TemplateBinding PaneTemplate}" />
+                    </ScrollViewer>
                   </Border>
                 </Panel>
                 <Panel Name="ContentRoot">
@@ -150,6 +154,10 @@
               </Grid>
             </ControlTemplate>
           </Setter>
+        </Style>
+        <!-- The head stays pinned and only the links scroll, unless Shell.HeadScrolls lets the whole pane scroll as on the web -->
+        <Style Selector="^[(ins|Shell.HeadScrolls)=True] /template/ ScrollViewer#PART_PaneScroll">
+          <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
         </Style>
         <!-- Column: the pane narrows to its closed width (0, or the compact rail) and the content widens with it -->
         <Style Selector="^:inline, ^:compactinline">
@@ -267,6 +275,7 @@
             <Setter Property="Grid.Column" Value="1" />
           </Style>
           <Style Selector="^ /template/ Panel#PART_PaneRoot">
+            <Setter Property="Background" Value="{DynamicResource InsWash1}" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Transitions">
               <Transitions>
@@ -463,6 +472,11 @@
   <Style Selector="ListBox.shell-nav">
     <Setter Property="Theme" Value="{StaticResource InsShellNav}" />
   </Style>
+  <!-- In a sidebar the links reach the pane's sides, so their scrollbar sits at its edge and the inset scrolls with them -->
+  <Style Selector="SplitView ListBox.shell-nav">
+    <Setter Property="Margin" Value="-12,0" />
+    <Setter Property="Padding" Value="12,0,12,18" />
+  </Style>
   <Style Selector="Button.shell-link">
     <Setter Property="Theme" Value="{StaticResource InsShellLinkButton}" />
   </Style>
@@ -584,6 +598,7 @@
   <!-- What is not a destination, sign-out, set apart at the foot of the sidebar -->
   <Style Selector="Border.shell-bottom">
     <Setter Property="Padding" Value="0,8,0,0" />
+    <Setter Property="Margin" Value="0,0,0,18" />
     <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
     <Setter Property="BorderThickness" Value="0,1,0,0" />
   </Style>

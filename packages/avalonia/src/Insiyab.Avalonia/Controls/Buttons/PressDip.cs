@@ -23,6 +23,12 @@ public static class PressDip
     private static readonly Easing EaseOut = new SplineEasing(0, 0, 0.58, 1);
     private static readonly System.Diagnostics.Stopwatch Clock = System.Diagnostics.Stopwatch.StartNew();
     private static Button? s_button;
+
+    /// <summary>For tests: the milliseconds that tell a tap from a held press.</summary>
+    internal static Func<long> Now { get; set; } = () => Clock.ElapsedMilliseconds;
+
+    /// <summary>For tests: sees each dip as it starts, with the part it scales.</summary>
+    internal static Action<Control, Animation>? Started { get; set; }
     private static long s_at;
 
     static PressDip()
@@ -45,14 +51,14 @@ public static class PressDip
     {
         if (s_button == button) return;
         s_button = button;
-        s_at = Clock.ElapsedMilliseconds;
+        s_at = Now();
     }
 
     private static void End(Button button, bool inside)
     {
         if (s_button != button) return;
         s_button = null;
-        if (inside && Clock.ElapsedMilliseconds - s_at < 150) Dip(button);
+        if (inside && Now() - s_at < 150) Dip(button);
     }
 
     private static void OnPointerPressed(Button button, PointerPressedEventArgs e)
@@ -96,6 +102,7 @@ public static class PressDip
                 new KeyFrame { Cue = new Cue(1), Setters = { new Setter(Visual.RenderTransformProperty, TransformOperations.Parse("scale(1)")) } },
             },
         };
+        Started?.Invoke(part, animation);
         _ = animation.RunAsync(part, run.Token);
     }
 }

@@ -99,6 +99,7 @@
                       BoxShadow="{DynamicResource InsFocusRing}"
                       Opacity="0"
                       IsHitTestVisible="False" />
+              <Border Name="PART_Ground" CornerRadius="{TemplateBinding CornerRadius}" Background="{DynamicResource InsWash1}" IsHitTestVisible="False" />
               <Border Name="PART_Card"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"

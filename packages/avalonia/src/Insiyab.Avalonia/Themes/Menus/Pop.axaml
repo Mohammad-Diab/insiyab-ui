@@ -240,7 +240,7 @@
                      HorizontalOffset="4"
                      IsLightDismissEnabled="False"
                      IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
-                <Border Background="{DynamicResource InsGlassStrong}"
+                <Border Background="{DynamicResource InsGlassStrongGround}"
                         BorderBrush="{DynamicResource InsRim}"
                         BorderThickness="1"
                         CornerRadius="{DynamicResource InsRMd}"

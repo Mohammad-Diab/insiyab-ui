@@ -70,6 +70,7 @@ public partial class InsiyabTheme
     private void ApplyBrand(Color primary)
     {
         var next = CreateBrandDictionary(primary);
+        AddGrounds(next);
         var merged = Resources.MergedDictionaries;
         var at = _brand is null ? -1 : merged.IndexOf(_brand);
         if (at >= 0)
@@ -77,6 +78,30 @@ public partial class InsiyabTheme
         else
             merged.Add(next);
         _brand = next;
+    }
+
+    // A surface floating over the app's own content cannot blur it, so it takes the web's no-blur fallback: its glass laid on the opaque wash.
+    private void AddGrounds(ResourceDictionary brand)
+    {
+        foreach (var variant in new[] { ThemeVariant.Light, ThemeVariant.Dark })
+        {
+            var target = (ResourceDictionary)brand.ThemeDictionaries[variant];
+            var wash = (Color)target["InsWash1Color"]!;
+            foreach (var key in new[] { "InsGlass", "InsGlassStrong" })
+            {
+                if (!Resources.TryGetResource(key + "Color", variant, out var value) || value is not Color glass) continue;
+                var ground = Over(glass, wash);
+                target[key + "Ground"] = new SolidColorBrush(ground);
+                target[key + "GroundColor"] = ground;
+            }
+        }
+    }
+
+    internal static Color Over(Color top, Color under)
+    {
+        var a = top.A / 255.0;
+        byte Mix(byte t, byte u) => (byte)Math.Round(t * a + u * (1 - a));
+        return Color.FromRgb(Mix(top.R, under.R), Mix(top.G, under.G), Mix(top.B, under.B));
     }
 
     internal static ResourceDictionary CreateBrandDictionary(Color primary)

@@ -96,11 +96,12 @@
                 <Border Name="PART_SuggestionsContainer"
                         BorderThickness="1"
                         BorderBrush="{DynamicResource InsRim}"
-                        Background="{DynamicResource InsGlassStrong}"
+                        Background="{DynamicResource InsGlassStrongGround}"
                         CornerRadius="{DynamicResource InsRMd}"
                         BoxShadow="{DynamicResource InsShLg}">
                   <ListBox Name="PART_SelectingItemsControl"
                            Theme="{StaticResource InsComboList}"
+                           Padding="6"
                            ItemTemplate="{TemplateBinding ItemTemplate}" />
                 </Border>
               </Popup>
