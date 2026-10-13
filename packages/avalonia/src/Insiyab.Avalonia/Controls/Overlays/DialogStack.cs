@@ -334,17 +334,3 @@ internal sealed class DialogLayer : ThemeVariantScope
         }
     }
 }
-
-/// <summary>The motion tokens, read where the control is so a theme can retime them.</summary>
-internal static class Motion
-{
-    public static TimeSpan Enter(Control at) => Time(at, "InsTEnter", 280);
-    public static TimeSpan Exit(Control at) => Time(at, "InsTExit", 180);
-    public static TimeSpan Pop(Control at) => Time(at, "InsTPop", 220);
-
-    public static Easing Ease(Control at) =>
-        at.TryFindResource("InsEase", at.ActualThemeVariant, out var value) && value is Easing easing ? easing : new SplineEasing(0.22, 1, 0.36, 1);
-
-    private static TimeSpan Time(Control at, string key, int fallback) =>
-        at.TryFindResource(key, at.ActualThemeVariant, out var value) && value is TimeSpan time ? time : TimeSpan.FromMilliseconds(fallback);
-}

@@ -11,6 +11,7 @@ public partial class InsiyabTheme : Styles
         AvaloniaXamlLoader.Load(serviceProvider, this);
         OnLoadedBrand();
         OnLoadedFrost();
+        Controls.Motion.Register();
     }
 
     partial void OnLoadedBrand();
