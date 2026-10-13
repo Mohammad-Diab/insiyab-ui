@@ -1,99 +1,37 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.BadgesPage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/FeedbackFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <Border Classes="dx">
-        <WrapPanel ItemSpacing="10" LineSpacing="10">
-          <ins:Pill Classes="ok dot" Content="مكتمل" />
-          <ins:Pill Classes="warn dot" Content="معلق" />
-          <ins:Pill Classes="bad dot" Content="ملغى" />
-          <ins:Pill Classes="info dot" Content="جارٍ" />
-          <ins:Pill Classes="brand dot" Content="مميز" />
-          <ins:Pill Classes="dot" Content="مسودة" />
-        </WrapPanel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="شارات للحالة وللعدد، وصور رمزية، ومبالغ وأرقام لا تضطرب في السطر العربي." />
+    <pg:PlayExample Layout="Row" Code="{x:Static pg:BadgesPlay.Example}" />
 
-      <TextBlock Classes="section" Text="شارات الحالة" />
-      <Border Classes="stage">
-        <ins:Pill Classes="ok dot" Content="مكتمل" />
-      </Border>
-      <TextBlock Classes="variant" Text="بلا نقطة" />
-      <Border Classes="stage">
-        <ins:Pill Classes="ok" Content="مكتمل" />
-      </Border>
-      <TextBlock Classes="variant" Text="قابلة للنقر" />
-      <Border Classes="stage">
-        <StackPanel Orientation="Horizontal" Spacing="8">
-          <Button Classes="pill ok dot" Content="مكتمل" />
-          <Button Classes="pill dot" Content="الأول" />
-          <Button Classes="pill dot" Content="الثاني" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="شارات الحالة" />
+    <pg:PlayText Classes="p" Markup="تجمع `ins:Pill` نقطة ونصًا، وتأتي بست نبرات. اختر من الخيارات فتتغير الشارة وشيفرتها معًا، وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:BadgesPlay.Pill}" />
 
-      <TextBlock Classes="section" Text="شارات العدد" />
-      <Border Classes="stage">
-        <ins:Badge Content="12" />
-      </Border>
-      <TextBlock Classes="variant" Text="النبرة" />
-      <Border Classes="stage">
-        <StackPanel Orientation="Horizontal" Spacing="12">
-          <ins:Badge Content="12" />
-          <ins:Badge Classes="ok" Content="12" />
-          <ins:Badge Classes="warn" Content="12" />
-          <ins:Badge Classes="bad" Content="12" />
-          <ins:Badge Classes="mute" Content="12" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="شارات العدد" />
+    <pg:PlayText Classes="p" Markup="تحمل `ins:Badge` عددًا صغيرًا، فهي للعدد لا للحالة: بلا حد ولا نقطة، وتسكن على شيء آخر." />
+    <pg:Playground Def="{x:Static pg:BadgesPlay.Count}" />
 
-      <TextBlock Classes="section" Text="الصورة الرمزية" />
-      <Border Classes="stage">
-        <ins:Avatar Content="ل ح" />
-      </Border>
-      <TextBlock Classes="variant" Text="المقاس" />
-      <Border Classes="stage">
-        <StackPanel Orientation="Horizontal" Spacing="12">
-          <ins:Avatar Classes="sm" Content="ل ح" />
-          <ins:Avatar Content="ل ح" />
-          <ins:Avatar Classes="lg" Content="ل ح" />
-        </StackPanel>
-      </Border>
-      <TextBlock Classes="variant" Text="مجموعة صور" />
-      <Border Classes="stage">
-        <ins:AvatarGroup AutomationProperties.Name="المشاركون: 7">
-          <ins:Avatar Content="ل" />
-          <ins:Avatar Content="ع" />
-          <ins:Avatar Content="س" />
-          <ins:Avatar Classes="more" Content="+4" />
-        </ins:AvatarGroup>
-      </Border>
+    <TextBlock Classes="section" Text="الصورة الرمزية" />
+    <pg:PlayText Classes="p" Markup="تحمل `ins:Avatar` حرفين أو صورة، ويرص `ins:AvatarGroup` عدة صور يتداخل بعضها في بعض." />
+    <pg:Playground Def="{x:Static pg:BadgesPlay.Avatar}" />
 
-      <TextBlock Classes="section" Text="المبالغ" />
-      <Border Classes="stage">
-        <ins:Money Value="1,249.00" Currency="ر.س" />
-      </Border>
-      <TextBlock Classes="variant" Text="زيادة" />
-      <Border Classes="stage">
-        <ins:Money Classes="pos" Value="1,249.00" Currency="ر.س" />
-      </Border>
-      <TextBlock Classes="variant" Text="نقص" />
-      <Border Classes="stage">
-        <ins:Money Classes="neg" Value="-1,500.00" Currency="ر.س" />
-      </Border>
+    <TextBlock Classes="section" Text="المبالغ" />
+    <pg:PlayText Classes="p" Markup="يكتب `ins:Money` القيمة من `Value` وتليها العملة من `Currency`. ولأن اتجاه القيمة معزول عما حولها تبقى إشارة السالب في مكانها." />
+    <pg:Playground Def="{x:Static pg:BadgesPlay.Money}" />
 
-      <TextBlock Classes="section" Text="الأرقام" />
-      <Border Classes="stage">
-        <StackPanel Orientation="Horizontal" Spacing="4">
-          <TextBlock Text="رقم المرجع" />
-          <TextBlock Classes="num" Text="#40218" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="الأرقام" />
+    <pg:PlayText Classes="p" Markup="أما ما ليس مبلغًا من الأرقام، كرقم المرجع والهاتف والتاريخ، فضعه في `TextBlock` بالكلاس `num` ليُعزل اتجاهه كذلك." />
+    <pg:Playground Def="{x:Static pg:BadgesPlay.Num}" />
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في الشارات والصور الرمزية والأرقام من كلاسات وخصائص، لكل مكون صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:BadgesPlay.All}" />
+  </StackPanel>
 </UserControl>
