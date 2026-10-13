@@ -36,22 +36,25 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Border Name="PART_Room">
-              <Border Name="LayoutRoot"
-                      Background="{TemplateBinding Background}"
-                      BorderBrush="{TemplateBinding BorderBrush}"
-                      BorderThickness="{TemplateBinding BorderThickness}"
-                      CornerRadius="{TemplateBinding CornerRadius}"
-                      BoxShadow="{DynamicResource InsShLg}"
-                      MinWidth="192"
-                      MaxHeight="384">
-                <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
-                              VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
-                  <ItemsPresenter Name="PART_ItemsPresenter"
-                                  ItemsPanel="{TemplateBinding ItemsPanel}"
-                                  Margin="{TemplateBinding Padding}"
-                                  KeyboardNavigation.TabNavigation="Continue" />
-                </ScrollViewer>
-              </Border>
+              <Panel>
+                <Border Name="PART_Ground" Background="{DynamicResource InsWash1}" CornerRadius="{TemplateBinding CornerRadius}" />
+                <Border Name="LayoutRoot"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        BoxShadow="{DynamicResource InsShLg}"
+                        MinWidth="192"
+                        MaxHeight="384">
+                  <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+                    <ItemsPresenter Name="PART_ItemsPresenter"
+                                    ItemsPanel="{TemplateBinding ItemsPanel}"
+                                    Margin="{TemplateBinding Padding}"
+                                    KeyboardNavigation.TabNavigation="Continue" />
+                  </ScrollViewer>
+                </Border>
+              </Panel>
             </Border>
           </ControlTemplate>
         </Setter>
@@ -77,18 +80,21 @@
         <Setter Property="ins:PopMotion.Stagger" Value="True" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="{TemplateBinding CornerRadius}"
-                    BoxShadow="{DynamicResource InsShLg}">
-              <ScrollViewer HorizontalScrollBarVisibility="Disabled">
-                <ItemsPresenter Name="PART_ItemsPresenter"
-                                ItemsPanel="{TemplateBinding ItemsPanel}"
-                                Margin="{TemplateBinding Padding}"
-                                KeyboardNavigation.TabNavigation="Continue" />
-              </ScrollViewer>
-            </Border>
+            <Panel>
+              <Border Name="PART_Ground" Background="{DynamicResource InsWash1}" CornerRadius="{TemplateBinding CornerRadius}" />
+              <Border Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BoxShadow="{DynamicResource InsShLg}">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                  <ItemsPresenter Name="PART_ItemsPresenter"
+                                  ItemsPanel="{TemplateBinding ItemsPanel}"
+                                  Margin="{TemplateBinding Padding}"
+                                  KeyboardNavigation.TabNavigation="Continue" />
+                </ScrollViewer>
+              </Border>
+            </Panel>
           </ControlTemplate>
         </Setter>
       </ControlTheme>
@@ -110,26 +116,29 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Border Name="PART_Room">
-              <Border Name="LayoutRoot"
-                      Background="{TemplateBinding Background}"
-                      BorderBrush="{TemplateBinding BorderBrush}"
-                      BorderThickness="{TemplateBinding BorderThickness}"
-                      CornerRadius="{TemplateBinding CornerRadius}"
-                      BoxShadow="{DynamicResource InsShLg}"
-                      MinWidth="192"
-                      MaxHeight="384">
-                <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
-                              VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
-                  <ContentPresenter x:Name="PART_ContentPresenter"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                    Margin="{TemplateBinding Padding}"
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    HorizontalContentAlignment="Stretch"
-                                    VerticalContentAlignment="Stretch" />
-                </ScrollViewer>
-              </Border>
+              <Panel>
+                <Border Name="PART_Ground" Background="{DynamicResource InsWash1}" CornerRadius="{TemplateBinding CornerRadius}" />
+                <Border Name="LayoutRoot"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        BoxShadow="{DynamicResource InsShLg}"
+                        MinWidth="192"
+                        MaxHeight="384">
+                  <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+                    <ContentPresenter x:Name="PART_ContentPresenter"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      Margin="{TemplateBinding Padding}"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      HorizontalContentAlignment="Stretch"
+                                      VerticalContentAlignment="Stretch" />
+                  </ScrollViewer>
+                </Border>
+              </Panel>
             </Border>
           </ControlTemplate>
         </Setter>
@@ -315,6 +324,58 @@
         </Style>
       </ControlTheme>
 
+      <!-- .ins-pop-item as a button, for a card that mixes items with other controls. -->
+      <ControlTheme x:Key="InsPopItemButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Name="PART_Face"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}">
+              <ContentPresenter Name="PART_ContentPresenter"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover, ^:focus-visible">
+          <Setter Property="Background" Value="{DynamicResource InsPopItemHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
+          <Setter Property="RenderTransform" Value="translateX(3px)" />
+        </Style>
+        <Style Selector="^.bad">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+        </Style>
+        <Style Selector="^.bad:pointerover, ^.bad:focus-visible">
+          <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.45" />
+        </Style>
+      </ControlTheme>
+
       <!-- A menu bar: the same items, side by side. -->
       <ControlTheme x:Key="InsMenuBarItem" TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
         <Setter Property="Padding" Value="12,6" />
@@ -355,8 +416,8 @@
     </ResourceDictionary>
   </Styles.Resources>
 
-  <!-- .ins-pop-sep, inside a menu only. -->
-  <Style Selector="MenuFlyoutPresenter Separator, ContextMenu Separator, MenuItem Separator">
+  <!-- .ins-pop-sep, inside a menu or a pop card. -->
+  <Style Selector="MenuFlyoutPresenter Separator, ContextMenu Separator, MenuItem Separator, FlyoutPresenter.pop Separator">
     <Setter Property="Focusable" Value="False" />
     <Setter Property="Height" Value="1" />
     <Setter Property="Margin" Value="0,4" />
@@ -367,6 +428,17 @@
         <Border Background="{TemplateBinding Background}" />
       </ControlTemplate>
     </Setter>
+  </Style>
+
+  <Style Selector="Button.pop-item">
+    <Setter Property="Theme" Value="{StaticResource InsPopItemButton}" />
+  </Style>
+  <!-- .ins-pop-label in a card: a heading over a run of items, never chosen. -->
+  <Style Selector="TextBlock.pop-label">
+    <Setter Property="Padding" Value="12,8,12,4" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
   </Style>
 
   <!-- .ins-pop-title and .ins-pop-text, in a card. -->

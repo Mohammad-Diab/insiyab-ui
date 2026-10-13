@@ -2,6 +2,104 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ins="using:Insiyab.Avalonia.Controls"
              x:Class="Insiyab.Avalonia.Gallery.GalleryShell">
+  <UserControl.Resources>
+    <!-- The docs site's brand swatch: a 30px disc in a 2px surface rim, ringed in its own colour while chosen -->
+    <ControlTheme x:Key="SiteSwatch" TargetType="Button">
+      <Setter Property="Width" Value="30" />
+      <Setter Property="Height" Value="30" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusAdorner" Value="{x:Null}" />
+      <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+      <Setter Property="RenderTransform" Value="none" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+        </Transitions>
+      </Setter>
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Panel>
+            <Border Name="PART_Ring" Margin="-2" CornerRadius="17" BorderThickness="2" BorderBrush="{TemplateBinding Background}" Opacity="0" />
+            <Border Name="PART_Face"
+                    CornerRadius="15"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{DynamicResource InsSurface}"
+                    BorderThickness="2"
+                    BoxShadow="{DynamicResource InsShSm}" />
+            <Border Name="PART_Focus" CornerRadius="15" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:pointerover">
+        <Setter Property="RenderTransform" Value="scale(1.12)" />
+      </Style>
+      <Style Selector="^.on /template/ Border#PART_Ring">
+        <Setter Property="Opacity" Value="1" />
+      </Style>
+      <Style Selector="^:focus-visible /template/ Border#PART_Focus">
+        <Setter Property="Opacity" Value="1" />
+      </Style>
+    </ControlTheme>
+  </UserControl.Resources>
+  <UserControl.Styles>
+    <Style Selector="Border.island.site-version">
+      <Setter Property="TextElement.FontWeight" Value="SemiBold" />
+      <Setter Property="TextElement.FontSize" Value="13" />
+      <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText2}" />
+    </Style>
+    <Style Selector="SplitView:overlay Border.island.site-version">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="Button.island.site-custom">
+      <Setter Property="Padding" Value="10,0,14,0" />
+    </Style>
+    <Style Selector="Border.site-custom-dot">
+      <Setter Property="Width" Value="24" />
+      <Setter Property="Height" Value="24" />
+      <Setter Property="Margin" Value="-2" />
+      <Setter Property="Padding" Value="2" />
+      <Setter Property="CornerRadius" Value="12" />
+      <Setter Property="Background" Value="{DynamicResource InsSurface}" />
+    </Style>
+    <Style Selector="Border.site-custom-dot > Border">
+      <Setter Property="CornerRadius" Value="10" />
+      <Setter Property="Background" Value="{DynamicResource InsShellMarkFill}" />
+    </Style>
+    <Style Selector="ins|Icon.site-custom-chev">
+      <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+      <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+      <Setter Property="RenderTransform" Value="none" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="Button.site-custom:flyout-open ins|Icon.site-custom-chev">
+      <Setter Property="RenderTransform" Value="rotate(180deg)" />
+    </Style>
+    <Style Selector="SplitView.xnarrow TextBlock.site-custom-text">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="WrapPanel.site-swatches">
+      <Setter Property="ItemSpacing" Value="8" />
+      <Setter Property="LineSpacing" Value="8" />
+      <Setter Property="Margin" Value="4,4,4,12" />
+    </Style>
+    <Style Selector="ins|Segmented.site-dir">
+      <Setter Property="Margin" Value="4,0,4,8" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <UniformGrid Rows="1" ColumnSpacing="3" />
+        </ItemsPanelTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="ins|Segmented.site-dir > ins|SegmentedItem">
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+  </UserControl.Styles>
+
   <SplitView x:Name="ShellView" IsPaneOpen="True">
     <SplitView.Pane>
       <DockPanel>
@@ -30,6 +128,12 @@
                 <TextBlock Text="انسياب" />
               </StackPanel>
             </Border>
+            <Border Classes="island site-version">
+              <StackPanel Orientation="Horizontal" Spacing="4">
+                <TextBlock Text="الإصدار" />
+                <TextBlock x:Name="VersionText" Classes="num" />
+              </StackPanel>
+            </Border>
           </StackPanel>
           <StackPanel Classes="zone center">
             <Border Classes="island title">
@@ -39,12 +143,31 @@
             </Border>
           </StackPanel>
           <StackPanel Classes="zone end">
-            <Border Classes="island">
-              <ToggleSwitch x:Name="DarkSwitch" OnContent="داكن" OffContent="فاتح" />
-            </Border>
-            <Border Classes="island">
-              <ToggleSwitch x:Name="LtrSwitch" OnContent="LTR" OffContent="RTL" />
-            </Border>
+            <ins:DayNight x:Name="DayNightToggle" ToolTip.Tip="الوضع الداكن" AutomationProperties.Name="الوضع الداكن" />
+            <Button x:Name="AppearanceButton" Classes="island site-custom" AutomationProperties.Name="تخصيص المظهر">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Border x:Name="BrandDot" Classes="site-custom-dot"><Border /></Border>
+                <TextBlock Classes="site-custom-text" Text="المظهر" />
+                <ins:Icon Classes="site-custom-chev" Data="{StaticResource IconChevDown}" />
+              </StackPanel>
+              <Button.Flyout>
+                <ins:PopCard IsEnd="True">
+                  <StackPanel>
+                    <TextBlock Classes="pop-label" Text="لون الهوية" />
+                    <WrapPanel x:Name="Swatches" Classes="site-swatches" />
+                    <TextBlock Classes="pop-label" Text="اتجاه الصفحة" />
+                    <ins:Segmented x:Name="DirectionSeg" Classes="site-dir" SelectedIndex="0">
+                      <ins:SegmentedItem Content="من اليمين · RTL" />
+                      <ins:SegmentedItem Content="من اليسار · LTR" />
+                    </ins:Segmented>
+                    <Separator />
+                    <Button x:Name="EffectsButton" Classes="pop-item" Content="تخفيف المؤثرات" />
+                    <Button Classes="pop-item" ins:ThemeToggle.Mode="system" Content="اتبع وضع النظام" />
+                    <Button x:Name="ResetButton" Classes="pop-item" Content="إعادة الضبط" />
+                  </StackPanel>
+                </ins:PopCard>
+              </Button.Flyout>
+            </Button>
           </StackPanel>
         </Grid>
       </Border>

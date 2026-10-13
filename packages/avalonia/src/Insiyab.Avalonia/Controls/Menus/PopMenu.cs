@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 
 namespace Insiyab.Avalonia.Controls;
@@ -39,6 +41,22 @@ public class PopCard : Flyout
         Pop.Init(this);
         FlyoutPresenterClasses.Add("pop");
         FlyoutPresenterClasses.Add("card");
+        Opened += (_, _) =>
+        {
+            if (_hooked || Popup.Child is not Control body) return;
+            body.AddHandler(Button.ClickEvent, OnItemClick);
+            _hooked = true;
+        };
+    }
+
+    private bool _hooked;
+
+    // Choosing a pop item closes the card and hands focus back to its trigger, as a menu does; a toggle item stays open for the next one.
+    private void OnItemClick(object? sender, RoutedEventArgs e)
+    {
+        if (e.Source is not Button item || item is ToggleButton || !item.Classes.Contains("pop-item")) return;
+        Hide();
+        (Target as InputElement)?.Focus();
     }
 
     public bool IsEnd { get => GetValue(IsEndProperty); set => SetValue(IsEndProperty, value); }
