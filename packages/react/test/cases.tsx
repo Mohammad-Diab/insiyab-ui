@@ -245,7 +245,7 @@ export const cases: Record<string, Case> = {
   color: {
     el: (
       <Field label="لون الهوية" controlId="cp-brand" hint="جرّب لونًا فاتحًا وانظر التباين في أسفل المنتقي.">
-        <ColorField name="brand" defaultValue="#9b2c5e" />
+        <ColorField name="brand" defaultValue="#4c1d95" />
       </Field>
     )
   },

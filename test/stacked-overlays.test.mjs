@@ -126,7 +126,7 @@ await at('#d3 .ins-phone-cc'); await b.sleep(300);
 await E(`document.getElementById('d3').close(); 0`); await b.sleep(300);
 ok('F3 phone: closing the dialog closes the list in it', !(await E(`__t.shown('.ins-phone-pop')`)));
 
-await page('color.html', `<button class="ins-btn" id="op4" style="${FIX}" data-ins-dialog="#d4">open</button>${dlg('d4', '<div class="ins-input-group"><input type="color" id="co" value="#9b2c5e" data-ins-color></div>')}`);
+await page('color.html', `<button class="ins-btn" id="op4" style="${FIX}" data-ins-dialog="#d4">open</button>${dlg('d4', '<div class="ins-input-group"><input type="color" id="co" value="#4c1d95" data-ins-color></div>')}`);
 await at('#op4'); await b.sleep(450);
 await at('#d4 .ins-color-swatch'); await b.sleep(350);
 ok('F2 colour picker over a modal: its area has focus and takes the pointer', (await E(`document.activeElement.classList.contains('ins-color-area')`)) && (await E(`__t.hits('.ins-color-pop')`)));

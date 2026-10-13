@@ -9,7 +9,7 @@ const source = resolve(here, '../../../src/js/insiyab.js');
 const out = resolve(here, '../tests/Insiyab.Avalonia.Tests/Fixtures/brand-parity.json');
 
 const COLOURS = [
-  '#9B2C5E',
+  '#4C1D95', '#9B2C5E',
   '#F5E6A8', '#FFFFFF', '#FAFAFA', '#FDE68A', '#A7F3D0', '#FBCFE8',
   '#C9A227', '#F59E0B', '#EA580C', '#10B981', '#0EA5E9',
   '#767676', '#757575', '#777777', '#747474', '#787878', '#808080', '#64748B',
@@ -74,7 +74,7 @@ for (const hex of COLOURS) {
     for (const [name, value] of Object.entries(captured)) tokens[name.replace(/^--ins-/, '')] = value;
     const direct = Insiyab.color.derive(hex, theme);
     if (JSON.stringify(direct) !== JSON.stringify(tokens)) throw new Error('brand() and color.derive() disagree for ' + hex);
-    if (Object.keys(tokens).length !== 9) throw new Error('unexpected token count for ' + hex);
+    if (Object.keys(tokens).length !== 11) throw new Error('unexpected token count for ' + hex);
     cases.push({ hex, theme, tokens });
   }
 }

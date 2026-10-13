@@ -15,7 +15,7 @@ await b.goto(`${BASE}/test/fixtures/components.html`);
 await b.click('[data-ins-toggle][aria-label="مائل"]');
 ok('toggle: click presses', await E(`document.querySelector('[data-ins-toggle][aria-label="مائل"]').getAttribute('aria-pressed') === 'true'`));
 await b.sleep(400);
-ok('toggle: pressed look', await E(`/155, 44, 94, 0\\.14\\)/.test(getComputedStyle(document.querySelector('[data-ins-toggle][aria-label="مائل"]')).backgroundColor)`),
+ok('toggle: pressed look', await E(`/76, 29, 149, 0\\.14\\)/.test(getComputedStyle(document.querySelector('[data-ins-toggle][aria-label="مائل"]')).backgroundColor)`),
   await E(`getComputedStyle(document.querySelector('[data-ins-toggle][aria-label="مائل"]')).backgroundColor`));
 const g = await E(`(() => { const btns = [...document.querySelectorAll('.ins-btn-group')[1].children]; const cs = (e) => getComputedStyle(e);
   return { firstRight: btns[0].getBoundingClientRect().left > btns[2].getBoundingClientRect().left,

@@ -86,10 +86,10 @@
     <Border Classes="dx">
       <StackPanel Spacing="12">
         <WrapPanel ItemSpacing="10" LineSpacing="10">
+          <Button Classes="brand-swatch" Tag="#4C1D95" Click="OnSwatch"><StackPanel><Border Classes="dot" Background="#4C1D95" /><TextBlock Text="#4C1D95" /></StackPanel></Button>
           <Button Classes="brand-swatch" Tag="#0F766E" Click="OnSwatch"><StackPanel><Border Classes="dot" Background="#0F766E" /><TextBlock Text="#0F766E" /></StackPanel></Button>
           <Button Classes="brand-swatch" Tag="#1D4ED8" Click="OnSwatch"><StackPanel><Border Classes="dot" Background="#1D4ED8" /><TextBlock Text="#1D4ED8" /></StackPanel></Button>
           <Button Classes="brand-swatch" Tag="#9B2C5E" Click="OnSwatch"><StackPanel><Border Classes="dot" Background="#9B2C5E" /><TextBlock Text="#9B2C5E" /></StackPanel></Button>
-          <Button Classes="brand-swatch" Tag="#4C1D95" Click="OnSwatch"><StackPanel><Border Classes="dot" Background="#4C1D95" /><TextBlock Text="#4C1D95" /></StackPanel></Button>
           <Button Classes="brand-swatch" Tag="#B45309" Click="OnSwatch"><StackPanel><Border Classes="dot" Background="#B45309" /><TextBlock Text="#B45309" /></StackPanel></Button>
           <Button Classes="brand-swatch" Tag="#C9A063" Click="OnSwatch"><StackPanel><Border Classes="dot" Background="#C9A063" /><TextBlock Text="#C9A063" /></StackPanel></Button>
           <Button Classes="brand-swatch" AutomationProperties.Name="لون مخصص">

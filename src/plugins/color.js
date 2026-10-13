@@ -9,7 +9,7 @@
      <script src="insiyab.js"></script>
      <script src="plugins/insiyab-color.js"></script>
 
-     <input type="color" data-ins-color name="brand" value="#9b2c5e">
+     <input type="color" data-ins-color name="brand" value="#4c1d95">
 
    The field becomes a hex field with a swatch in front of it, in an input group
    (made if there is none). It keeps its name and sends `#rrggbb`, exactly what the
@@ -19,7 +19,7 @@
    against white and against black — the library's own contrast maths — marked
    against the 4.5:1 that body text needs.
 
-     data-ins-color-swatches="#9b2c5e,#0f766e,…"   the presets; the default is the
+     data-ins-color-swatches="#4c1d95,#0f766e,…"   the presets; the default is the
                                                    page's brand colour and a
                                                    palette around it
      data-ins-color-swatches="none"                 no presets
@@ -46,12 +46,12 @@
     ar: {
       pick: 'اختر لونًا', area: 'التشبع والسطوع', hue: 'درجة اللون', swatches: 'ألوان جاهزة', drop: 'التقاط لون من الشاشة',
       value: 'تشبع {s}٪، سطوع {v}٪', contrast: 'التباين', onWhite: 'على الأبيض', onBlack: 'على الأسود',
-      pass: 'يصلح للنص', fail: 'لا يكفي للنص', bad: 'اكتب لونًا مثل #9B2C5E.'
+      pass: 'يصلح للنص', fail: 'لا يكفي للنص', bad: 'اكتب لونًا مثل #4C1D95.'
     },
     en: {
       pick: 'Choose a color', area: 'Saturation and brightness', hue: 'Hue', swatches: 'Presets', drop: 'Pick a color from the screen',
       value: 'saturation {s}%, brightness {v}%', contrast: 'Contrast', onWhite: 'on white', onBlack: 'on black',
-      pass: 'fine for text', fail: 'too low for text', bad: 'Enter a color like #9B2C5E.'
+      pass: 'fine for text', fail: 'too low for text', bad: 'Enter a color like #4C1D95.'
     }
   };
 

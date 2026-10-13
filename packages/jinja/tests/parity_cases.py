@@ -125,7 +125,7 @@ CASES['seg'] = """
 
 CASES['color'] = """
 {% call ins.field('لون الهوية', id='cp-brand', hint='جرّب لونًا فاتحًا وانظر التباين في أسفل المنتقي.') %}
-{{ ins.color(id='cp-brand', name='brand', value='#9b2c5e') }}
+{{ ins.color(id='cp-brand', name='brand', value='#4c1d95') }}
 {% endcall %}
 """
 
