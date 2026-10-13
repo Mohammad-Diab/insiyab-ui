@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.StatusBarPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
+    <!-- The example box is the window: no gutter, so the bar sits on its bottom edge -->
+    <Style Selector="pg|PlayExample.window Border.play-example">
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="ClipToBounds" Value="True" />
+    </Style>
+  </UserControl.Styles>
+
+  <StackPanel>
+    <TextBlock Classes="intro" Text="شريط رفيع في أسفل النافذة يخبر بحال التطبيق: نص، ومهمة جارية، وحالة الحفظ، وعناصر تُنقر فتفتح قائمة." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:StatusBarPlay.Example}" />
+
+    <TextBlock Classes="section" Text="شريط الحالة" />
+    <pg:PlayText Classes="p" Markup="ما تضعه في `ins:StatusBar` مباشرة يكون في جهة البداية، وما تضعه في `ins:StatusBar.End` في جهة النهاية. والعنصر `ins:StatusItem` يخبر، و`ins:StatusButton` يُنقر، ويقبل الشريط كذلك `ins:SaveStatus` وشريط تقدم `ProgressBar`." />
+    <pg:Playground Def="{x:Static pg:StatusBarPlay.StatusBar}" />
+
+    <TextBlock Classes="section" Text="تحت هيكل التطبيق" />
+    <pg:PlayText Classes="p" Markup="ضع الهيكل وشريط الحالة في `DockPanel`، والشريط في أسفله بـ`DockPanel.Dock=&quot;Bottom&quot;`، فيأخذ سطره تحت الهيكل كله، فلا يغطي المحتوى، ولا يغطيه الدرج حين ينفتح." />
+    <pg:PlayExample Classes="window" Layout="Stack" Code="{x:Static pg:StatusBarPlay.WindowExample}" />
+
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في شريط الحالة من عناصر وخصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:StatusBarPlay.All}" />
+  </StackPanel>
+</UserControl>

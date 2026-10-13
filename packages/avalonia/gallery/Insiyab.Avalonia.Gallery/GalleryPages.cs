@@ -26,7 +26,7 @@ public static class GalleryPages
     public static readonly (string Group, string[] Slugs)[] Nav =
     [
         ("التخصيص", ["color", "tokens", "fonts", "window"]),
-        ("التخطيط", ["shell", "split"]),
+        ("التخطيط", ["shell", "titlebar", "toolbar", "statusbar", "split"]),
         ("المحتوى", ["typography", "surfaces", "tables", "description", "quote"]),
         ("النماذج", ["inputs", "checks", "input-group", "pickers", "chips", "matrix", "validation"]),
         ("المكونات", ["buttons", "accordion", "tabs", "stats", "loading", "progress", "countdown", "save", "tooltips", "alerts", "dialog", "drawer", "toasts", "notify", "badges", "list", "comments", "dropdown", "steps", "pagination", "page-head"]),
@@ -35,11 +35,11 @@ public static class GalleryPages
         ("الملحقات", ["navbar", "carousel", "colorpicker", "reveal"]),
     ];
 
-    // Each link's icon, the web NAV's `icon`; tokens, fonts and window are Avalonia's own and borrow one from the sprite.
+    // Each link's icon, the web NAV's `icon`; tokens, fonts, window, titlebar, toolbar and statusbar are Avalonia's own and borrow one from the sprite.
     private static readonly Dictionary<string, string> Icons = new()
     {
         ["color"] = "IconPalette", ["tokens"] = "IconSliders", ["fonts"] = "IconType", ["window"] = "IconWindow",
-        ["shell"] = "IconLayout", ["split"] = "IconSidebar",
+        ["shell"] = "IconLayout", ["titlebar"] = "IconWindow", ["toolbar"] = "IconWrench", ["statusbar"] = "IconInfo", ["split"] = "IconSidebar",
         ["typography"] = "IconType", ["surfaces"] = "IconLayers", ["tables"] = "IconTable", ["description"] = "IconList", ["quote"] = "IconMessage",
         ["inputs"] = "IconEdit", ["checks"] = "IconCheckSquare", ["input-group"] = "IconLink", ["pickers"] = "IconCalendar", ["chips"] = "IconTag", ["matrix"] = "IconGrid", ["validation"] = "IconShield",
         ["buttons"] = "IconPointer", ["accordion"] = "IconChevrons", ["tabs"] = "IconTabs", ["stats"] = "IconChart", ["loading"] = "IconLoader", ["progress"] = "IconGauge",
@@ -76,8 +76,8 @@ public static class GalleryPages
     // The pages the web NAV flags `fresh`.
     private static readonly HashSet<string> Fresh =
     [
-        "split", "tables", "description", "quote", "inputs", "pickers", "chips", "matrix", "stats", "countdown", "save", "notify", "badges", "comments", "steps",
-        "birthdate", "charts", "month", "login-simple", "tpl-dashboard", "tpl-tickets", "tpl-order", "tpl-settings", "tpl-review", "tpl-booking", "tpl-error",
+        "titlebar", "toolbar", "statusbar", "split", "tables", "description", "quote", "inputs", "pickers", "chips", "matrix", "stats", "countdown", "save", "notify", "badges", "comments", "steps",
+        "birthdate", "charts", "month", "login-simple",
     ];
 
     public static IReadOnlyList<GalleryPage> All { get; } = Discover();
