@@ -1,0 +1,181 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <SolidColorBrush x:Key="InsTreeSelected" Color="{DynamicResource InsPrimaryColor}" Opacity="0.1" />
+
+      <!-- The chevron: into a closed branch (toward the end of the line) and down once open -->
+      <ControlTheme x:Key="InsTreeToggle" TargetType="ToggleButton">
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Height" Value="20" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+              <Path Name="PART_Chevron" Data="M 0,0 L 5,5 L 0,10" Width="5" Height="10"
+                    Stroke="{TemplateBinding Foreground}" StrokeThickness="1.5" StrokeJoin="Miter"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    RenderTransformOrigin="50%,50%" RenderTransform="rotate(0deg)" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Border#PART_Face">
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Path#PART_Chevron">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        </Style>
+        <Style Selector="^:checked /template/ Path#PART_Chevron">
+          <Setter Property="RenderTransform" Value="rotate(90deg)" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type TreeView}" TargetType="TreeView">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="ins:Tree.Navigation" Value="True" />
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="Once" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+              <ScrollViewer Name="PART_ScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="{TemplateBinding Padding}">
+                <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+              </ScrollViewer>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type TreeViewItem}" TargetType="TreeViewItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="Padding" Value="6,3,8,3" />
+        <Setter Property="MinHeight" Value="34" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <StackPanel>
+              <Panel>
+                <Border Name="PART_LayoutRoot"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        MinHeight="{TemplateBinding MinHeight}"
+                        Padding="{TemplateBinding Padding}">
+                  <Grid Name="PART_HeaderRow" ColumnDefinitions="Auto,*" ColumnSpacing="6">
+                    <Panel Name="PART_ExpandCollapseChevronContainer" Width="20" Height="20" VerticalAlignment="Center">
+                      <ToggleButton Name="PART_ExpandCollapseChevron"
+                                    Theme="{StaticResource InsTreeToggle}"
+                                    IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}" />
+                    </Panel>
+                    <ContentPresenter Name="PART_HeaderPresenter" Grid.Column="1"
+                                      Focusable="False"
+                                      VerticalAlignment="Center"
+                                      HorizontalContentAlignment="Stretch"
+                                      Content="{TemplateBinding Header}"
+                                      ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                  </Grid>
+                </Border>
+                <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2"
+                        BorderBrush="{DynamicResource InsToneBrandSoft}" IsVisible="False" IsHitTestVisible="False" />
+              </Panel>
+              <Border Name="PART_Branch" Margin="14,0,0,0" Padding="8,0,0,0" BorderThickness="1,0,0,0"
+                      BorderBrush="{DynamicResource InsLine}" IsVisible="{TemplateBinding IsExpanded}">
+                <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+              </Border>
+            </StackPanel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ Border#PART_LayoutRoot">
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Border#PART_LayoutRoot:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:selected /template/ Border#PART_LayoutRoot, ^:selected /template/ Border#PART_LayoutRoot:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsTreeSelected}" />
+        </Style>
+        <Style Selector="^:selected /template/ ContentPresenter#PART_HeaderPresenter">
+          <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+          <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style Selector="^:empty /template/ ToggleButton#PART_ExpandCollapseChevron">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:expanded /template/ Border#PART_Branch">
+          <Style.Animations>
+            <Animation Duration="0:0:0.22" Easing="0.22,1,0.36,1">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0" />
+                <Setter Property="RenderTransform" Value="translateY(-4px)" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="1" />
+                <Setter Property="RenderTransform" Value="translateY(0px)" />
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.5" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- The row's parts: a 16px icon in the third text colour, a check box that fills the row -->
+  <Style Selector="TreeViewItem ins|Icon">
+    <Setter Property="Size" Value="16" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TreeViewItem StackPanel.tree-label">
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="Spacing" Value="8" />
+  </Style>
+  <Style Selector="TreeViewItem TextBlock">
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TreeViewItem CheckBox">
+    <Setter Property="Focusable" Value="False" />
+  </Style>
+  <Style Selector="TreeViewItem TextBlock.tree-end">
+    <Setter Property="Margin" Value="8,0,0,0" />
+    <Setter Property="TextTrimming" Value="None" />
+  </Style>
+
+</Styles>

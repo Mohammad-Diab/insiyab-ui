@@ -1,0 +1,168 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <!-- The summary row of .ins-collapse: the title and a chevron that turns from down to up -->
+      <ControlTheme x:Key="InsCollapseSummary" TargetType="ToggleButton">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Padding" Value="16,14" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      Padding="{TemplateBinding Padding}">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                  <ContentPresenter Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    RecognizesAccessKey="True" />
+                  <Path Name="PART_Chevron" Grid.Column="1"
+                        Data="M 1,1 L 6.5,6.5 L 12,1"
+                        Width="13" Height="8"
+                        Stroke="{DynamicResource InsText3}" StrokeThickness="2"
+                        StrokeJoin="Miter"
+                        VerticalAlignment="Center"
+                        RenderTransformOrigin="50%,50%"
+                        RenderTransform="translateY(-1px)" />
+                </Grid>
+              </Border>
+              <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2"
+                      BorderBrush="{DynamicResource InsToneBrandSoft}" IsVisible="False" IsHitTestVisible="False" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ Border#PART_Face">
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Path#PART_Chevron">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#PART_Face">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        </Style>
+        <Style Selector="^:checked">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+          <Style Selector="^ /template/ Path#PART_Chevron">
+            <Setter Property="Stroke" Value="{DynamicResource InsToneBrandSoft}" />
+            <Setter Property="RenderTransform" Value="translateY(1px) rotate(180deg)" />
+          </Style>
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.5" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type Expander}" TargetType="Expander">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="16,0,16,16" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Name="PART_Root"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+              <DockPanel>
+                <ToggleButton Name="ExpanderHeader"
+                              DockPanel.Dock="Top"
+                              Theme="{StaticResource InsCollapseSummary}"
+                              CornerRadius="{TemplateBinding CornerRadius}"
+                              IsEnabled="{TemplateBinding IsEnabled}"
+                              Content="{TemplateBinding Header}"
+                              ContentTemplate="{TemplateBinding HeaderTemplate}"
+                              IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}" />
+                <ins:ExpandPresenter Name="PART_Expand"
+                                     IsOpen="{TemplateBinding IsExpanded}"
+                                     OpenDuration="{DynamicResource InsTEnter}"
+                                     CloseDuration="{DynamicResource InsTExit}"
+                                     Easing="{DynamicResource InsEase}">
+                  <Border Name="ExpanderContent" Padding="{TemplateBinding Padding}">
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                  </Border>
+                </ins:ExpandPresenter>
+              </DockPanel>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- Arabic summary text at the page's 1.7; the body at .ins-collapse-body's 1.8 in both directions -->
+  <Style Selector="ToggleButton#ExpanderHeader > :is(TextBlock)[FlowDirection=RightToLeft]">
+    <Setter Property="LineHeight" Value="23.8" />
+  </Style>
+  <Style Selector="Expander > TextBlock">
+    <Setter Property="LineHeight" Value="25.2" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="StackPanel.accordion">
+    <Setter Property="ins:Collapse.Keys" Value="True" />
+  </Style>
+
+  <!-- .ins-accordion: only the dividers between sections; in a panel the rows go square and only the panel's corners stay round -->
+  <Style Selector="StackPanel.accordion > Expander">
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+  </Style>
+  <Style Selector="StackPanel.accordion > Expander:not(:nth-child(1))">
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+  </Style>
+  <Style Selector="Border.panel > StackPanel.accordion > Expander, Border.panel > Expander">
+    <Setter Property="CornerRadius" Value="0" />
+  </Style>
+  <Style Selector="Border.panel > StackPanel.accordion > Expander:nth-child(1), Border.panel > Expander">
+    <Setter Property="CornerRadius" Value="21,21,0,0" />
+  </Style>
+  <Style Selector="Border.panel > StackPanel.accordion > Expander:nth-last-child(1):not(:expanded)">
+    <Setter Property="CornerRadius" Value="0,0,21,21" />
+  </Style>
+  <Style Selector="Border.panel > StackPanel.accordion > Expander:nth-child(1):nth-last-child(1):not(:expanded), Border.panel > Expander:not(:expanded)">
+    <Setter Property="CornerRadius" Value="21" />
+  </Style>
+
+</Styles>

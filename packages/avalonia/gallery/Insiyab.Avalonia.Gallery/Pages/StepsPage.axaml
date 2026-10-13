@@ -1,0 +1,134 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.StepsPage">
+  <UserControl.Resources>
+    <SolidColorBrush x:Key="ExampleTint" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
+  </UserControl.Resources>
+  <UserControl.Styles>
+    <Style Selector="Border.example">
+      <Setter Property="Padding" Value="24" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+      <Setter Property="Background" Value="{StaticResource ExampleTint}" />
+    </Style>
+    <Style Selector="TextBlock.cap">
+      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+      <Setter Property="Margin" Value="0,0,0,8" />
+    </Style>
+    <Style Selector="TextBlock.h2">
+      <Setter Property="Margin" Value="0,24,0,0" />
+    </Style>
+  </UserControl.Styles>
+
+  <ScrollViewer>
+    <StackPanel Spacing="16" MaxWidth="832" HorizontalAlignment="Stretch">
+
+      <Border Classes="example">
+        <ins:Steps>
+          <ins:StepsItem Content="الأولى" IsDone="True" />
+          <ins:StepsItem Content="الثانية" IsCurrent="True" />
+          <ins:StepsItem Content="الثالثة" />
+        </ins:Steps>
+      </Border>
+
+      <TextBlock Classes="h2" Text="الخطوات" />
+      <Border Classes="example">
+        <StackPanel Spacing="28">
+          <StackPanel>
+            <TextBlock Classes="cap" Text="أرقام" />
+            <ins:Steps>
+              <ins:StepsItem Content="الأولى" IsDone="True" />
+              <ins:StepsItem Content="الثانية" IsCurrent="True" />
+              <ins:StepsItem Content="الثالثة" />
+              <ins:StepsItem Content="الرابعة" />
+            </ins:Steps>
+          </StackPanel>
+          <StackPanel>
+            <TextBlock Classes="cap" Text="نقاط" />
+            <ins:Steps Classes="dots">
+              <ins:StepsItem Content="الأولى" IsDone="True" />
+              <ins:StepsItem Content="الثانية" IsCurrent="True" />
+              <ins:StepsItem Content="الثالثة" />
+              <ins:StepsItem Content="الرابعة" />
+            </ins:Steps>
+          </StackPanel>
+          <StackPanel>
+            <TextBlock Classes="cap" Text="شبكة" />
+            <ins:Steps x:Name="GridSteps" Classes="grid" />
+          </StackPanel>
+          <StackPanel>
+            <TextBlock Classes="cap" Text="خطوة مؤجلة" />
+            <ins:Steps>
+              <ins:StepsItem Content="الأولى" IsDone="True" IsFlagged="True" />
+              <ins:StepsItem Content="الثانية" IsCurrent="True" />
+              <ins:StepsItem Content="الثالثة" />
+              <ins:StepsItem Content="الرابعة" />
+            </ins:Steps>
+          </StackPanel>
+          <StackPanel>
+            <TextBlock Classes="cap" Text="خطوة فيها خطأ" />
+            <ins:Steps>
+              <ins:StepsItem Content="الأولى" IsDone="True" />
+              <ins:StepsItem Content="الثانية" IsDone="True" IsError="True" />
+              <ins:StepsItem Content="الثالثة" IsCurrent="True" />
+              <ins:StepsItem Content="الرابعة" />
+            </ins:Steps>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="h2" Text="المعالج" />
+      <Border Classes="example">
+        <StackPanel Spacing="28">
+          <StackPanel>
+            <TextBlock Classes="cap" Text="في الخطوة الثانية، والبريد فارغ" />
+            <ins:Wizard x:Name="FormWizard">
+              <ins:WizardPanel Header="الاسم">
+                <StackPanel Spacing="6">
+                  <TextBlock Classes="label" Text="الاسم" />
+                  <TextBox x:Name="NameField" ins:Wizard.Required="True" Text="سارة" />
+                </StackPanel>
+              </ins:WizardPanel>
+              <ins:WizardPanel Header="البريد">
+                <StackPanel Spacing="6">
+                  <TextBlock Classes="label" Text="البريد" />
+                  <TextBox x:Name="EmailField" ins:Wizard.Required="True" FlowDirection="LeftToRight" />
+                </StackPanel>
+              </ins:WizardPanel>
+              <ins:WizardPanel Header="التأكيد">
+                <CheckBox ins:Wizard.Required="True" Content="أوافق" />
+              </ins:WizardPanel>
+            </ins:Wizard>
+          </StackPanel>
+          <StackPanel>
+            <TextBlock Classes="cap" Text="مع زر إلغاء، في الخطوة الأخيرة" />
+            <ins:Wizard x:Name="CancelWizard" CancelContent="إلغاء">
+              <ins:WizardPanel Header="الاسم">
+                <StackPanel Spacing="6">
+                  <TextBlock Classes="label" Text="الاسم" />
+                  <TextBox ins:Wizard.Required="True" Text="سارة" />
+                </StackPanel>
+              </ins:WizardPanel>
+              <ins:WizardPanel Header="البريد">
+                <StackPanel Spacing="6">
+                  <TextBlock Classes="label" Text="البريد" />
+                  <TextBox ins:Wizard.Required="True" FlowDirection="LeftToRight" />
+                </StackPanel>
+              </ins:WizardPanel>
+              <ins:WizardPanel Header="التأكيد">
+                <StackPanel Spacing="12">
+                  <CheckBox ins:Wizard.Required="True" Content="أوافق" />
+                  <Button Classes="bare" Content="البدء من جديد" ins:Wizard.Action="Restart" HorizontalAlignment="Left" />
+                </StackPanel>
+              </ins:WizardPanel>
+            </ins:Wizard>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
