@@ -38,12 +38,6 @@
                   <ColumnDefinition Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.PaneColumnGridLength}" />
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Panel Name="ContentRoot" Grid.Column="1">
-                  <ContentPresenter x:Name="PART_ContentPresenter"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
-                  <Rectangle Name="LightDismissLayer" Fill="{DynamicResource InsShellScrim}" IsVisible="False" />
-                </Panel>
                 <Panel Name="PART_PaneRoot" HorizontalAlignment="Left" ClipToBounds="True" ZIndex="100">
                   <!-- Fixed at the open width inside a pane that narrows, so collapsing clips the sidebar rather than re-flowing it -->
                   <Border Name="PART_PaneChrome"
@@ -58,6 +52,12 @@
                                       ContentTemplate="{TemplateBinding PaneTemplate}" />
                   </Border>
                 </Panel>
+                <Panel Name="ContentRoot" Grid.Column="1">
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
+                  <Rectangle Name="LightDismissLayer" Fill="{DynamicResource InsShellScrim}" IsVisible="False" />
+                </Panel>
               </Grid>
             </ControlTemplate>
           </Setter>
@@ -70,12 +70,6 @@
                   <ColumnDefinition Width="*" />
                   <ColumnDefinition Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.PaneColumnGridLength}" />
                 </Grid.ColumnDefinitions>
-                <Panel Name="ContentRoot">
-                  <ContentPresenter x:Name="PART_ContentPresenter"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
-                  <Rectangle Name="LightDismissLayer" Fill="{DynamicResource InsShellScrim}" IsVisible="False" />
-                </Panel>
                 <Panel Name="PART_PaneRoot" Grid.Column="1" HorizontalAlignment="Right" ClipToBounds="True" ZIndex="100">
                   <Border Name="PART_PaneChrome"
                           Width="{TemplateBinding OpenPaneLength}"
@@ -89,6 +83,12 @@
                                       ContentTemplate="{TemplateBinding PaneTemplate}" />
                   </Border>
                 </Panel>
+                <Panel Name="ContentRoot">
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
+                  <Rectangle Name="LightDismissLayer" Fill="{DynamicResource InsShellScrim}" IsVisible="False" />
+                </Panel>
               </Grid>
             </ControlTemplate>
           </Setter>
@@ -101,12 +101,6 @@
                   <RowDefinition Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.PaneRowGridLength}" />
                   <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Panel Name="ContentRoot" Grid.Row="1">
-                  <ContentPresenter x:Name="PART_ContentPresenter"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
-                  <Rectangle Name="LightDismissLayer" Fill="{DynamicResource InsShellScrim}" IsVisible="False" />
-                </Panel>
                 <Panel Name="PART_PaneRoot" VerticalAlignment="Top" ClipToBounds="True" ZIndex="100">
                   <Border Name="PART_PaneChrome"
                           Background="{TemplateBinding PaneBackground}"
@@ -117,6 +111,12 @@
                                       Content="{TemplateBinding Pane}"
                                       ContentTemplate="{TemplateBinding PaneTemplate}" />
                   </Border>
+                </Panel>
+                <Panel Name="ContentRoot" Grid.Row="1">
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
+                  <Rectangle Name="LightDismissLayer" Fill="{DynamicResource InsShellScrim}" IsVisible="False" />
                 </Panel>
               </Grid>
             </ControlTemplate>
@@ -130,12 +130,6 @@
                   <RowDefinition Height="*" />
                   <RowDefinition Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.PaneRowGridLength}" />
                 </Grid.RowDefinitions>
-                <Panel Name="ContentRoot">
-                  <ContentPresenter x:Name="PART_ContentPresenter"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
-                  <Rectangle Name="LightDismissLayer" Fill="{DynamicResource InsShellScrim}" IsVisible="False" />
-                </Panel>
                 <Panel Name="PART_PaneRoot" Grid.Row="1" VerticalAlignment="Bottom" ClipToBounds="True" ZIndex="100">
                   <Border Name="PART_PaneChrome"
                           Background="{TemplateBinding PaneBackground}"
@@ -146,6 +140,12 @@
                                       Content="{TemplateBinding Pane}"
                                       ContentTemplate="{TemplateBinding PaneTemplate}" />
                   </Border>
+                </Panel>
+                <Panel Name="ContentRoot">
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
+                  <Rectangle Name="LightDismissLayer" Fill="{DynamicResource InsShellScrim}" IsVisible="False" />
                 </Panel>
               </Grid>
             </ControlTemplate>
@@ -193,6 +193,10 @@
           <Setter Property="Opacity" Value="0" />
           <Setter Property="IsHitTestVisible" Value="False" />
         </Style>
+        <!-- A hidden sidebar, collapsed or a closed drawer, leaves the Tab order -->
+        <Style Selector="^:inline:closed /template/ Panel#PART_PaneRoot, ^:overlay:closed /template/ Panel#PART_PaneRoot">
+          <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
+        </Style>
 
         <!-- Drawer: the pane keeps its width and slides in from the start edge over a scrim -->
         <Style Selector="^:overlay">
@@ -205,7 +209,9 @@
             <Setter Property="Grid.Row" Value="0" />
             <Setter Property="Grid.RowSpan" Value="2" />
           </Style>
+          <!-- The drawer floats over the page with no backdrop blur, so its glass lies on the wash, as a dialog's does -->
           <Style Selector="^ /template/ Panel#PART_PaneRoot">
+            <Setter Property="Background" Value="{DynamicResource InsWash1}" />
             <Setter Property="ClipToBounds" Value="False" />
             <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=OpenPaneLength}" />
             <Setter Property="Grid.ColumnSpan" Value="2" />

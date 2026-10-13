@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.GalleryShell">
+  <SplitView x:Name="ShellView" IsPaneOpen="True">
+    <SplitView.Pane>
+      <DockPanel>
+        <Border Classes="shell-brand" DockPanel.Dock="Top">
+          <StackPanel>
+            <Border Classes="shell-mark"><TextBlock Text="ان" /></Border>
+            <StackPanel>
+              <TextBlock Classes="shell-brand-name" Text="انسياب" />
+              <TextBlock Classes="shell-brand-role" Text="المعرض · Avalonia" />
+            </StackPanel>
+          </StackPanel>
+        </Border>
+        <ListBox x:Name="Nav" Classes="shell-nav" AutomationProperties.Name="صفحات المعرض" />
+      </DockPanel>
+    </SplitView.Pane>
+    <Panel>
+      <Border Classes="topbar" VerticalAlignment="Top" ZIndex="1">
+        <Grid ColumnDefinitions="*,Auto,*">
+          <StackPanel Classes="zone start">
+            <Button Classes="island icon" ins:Shell.TogglesSidebar="True" ToolTip.Tip="القائمة" AutomationProperties.Name="القائمة">
+              <ins:Icon Data="{StaticResource IconMenu}" />
+            </Button>
+            <Border Classes="island brand">
+              <StackPanel>
+                <Border Classes="shell-mark"><TextBlock Text="ان" /></Border>
+                <TextBlock Text="انسياب" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+          <StackPanel Classes="zone center">
+            <Border Classes="island title">
+              <StackPanel Classes="shell-head">
+                <TextBlock x:Name="PageTitle" Classes="shell-title" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+          <StackPanel Classes="zone end">
+            <Border Classes="island">
+              <ToggleSwitch x:Name="DarkSwitch" OnContent="داكن" OffContent="فاتح" />
+            </Border>
+            <Border Classes="island">
+              <ToggleSwitch x:Name="LtrSwitch" OnContent="LTR" OffContent="RTL" />
+            </Border>
+          </StackPanel>
+        </Grid>
+      </Border>
+      <ScrollViewer x:Name="Scroller" ins:Shell.FrostsTopbar="True">
+        <Border Classes="shell-content" Margin="0,72,0,0">
+          <ContentControl x:Name="Host" />
+        </Border>
+      </ScrollViewer>
+    </Panel>
+  </SplitView>
+</UserControl>
