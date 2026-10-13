@@ -1,0 +1,213 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <!-- The ::backdrop, rgba(15, 23, 42, .38) in both themes -->
+      <SolidColorBrush x:Key="InsDialogScrim" Color="#610F172A" />
+
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <!-- linear-gradient(145deg, glass-strong, glass-hover), laid over the wash by the template -->
+          <LinearGradientBrush x:Key="InsDialogFill" StartPoint="10%,-7%" EndPoint="90%,107%">
+            <GradientStop Offset="0" Color="{DynamicResource InsGlassStrongColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsGlassHoverColor}" />
+          </LinearGradientBrush>
+          <LinearGradientBrush x:Key="InsDialogFillRtl" StartPoint="90%,-7%" EndPoint="10%,107%">
+            <GradientStop Offset="0" Color="{DynamicResource InsGlassStrongColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsGlassHoverColor}" />
+          </LinearGradientBrush>
+          <LinearGradientBrush x:Key="InsDialogRim" StartPoint="0,0" EndPoint="0,6">
+            <GradientStop Offset="0" Color="{DynamicResource InsRimTopColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsRimColor}" />
+          </LinearGradientBrush>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <LinearGradientBrush x:Key="InsDialogFill" StartPoint="10%,-7%" EndPoint="90%,107%">
+            <GradientStop Offset="0" Color="{DynamicResource InsGlassStrongColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsGlassHoverColor}" />
+          </LinearGradientBrush>
+          <LinearGradientBrush x:Key="InsDialogFillRtl" StartPoint="90%,-7%" EndPoint="10%,107%">
+            <GradientStop Offset="0" Color="{DynamicResource InsGlassStrongColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsGlassHoverColor}" />
+          </LinearGradientBrush>
+          <LinearGradientBrush x:Key="InsDialogRim" StartPoint="0,0" EndPoint="0,6">
+            <GradientStop Offset="0" Color="{DynamicResource InsRimTopColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsRimColor}" />
+          </LinearGradientBrush>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <ControlTheme x:Key="{x:Type ctl:Dialog}" TargetType="ctl:Dialog">
+        <Setter Property="MaxWidth" Value="608" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="MaxHeight" Value="704" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Background" Value="{DynamicResource InsDialogFill}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsDialogRim}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRXl}" />
+        <Setter Property="Padding" Value="24" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="Cycle" />
+        <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Name="PART_Ground"
+                      Background="{DynamicResource InsWash1}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BoxShadow="{DynamicResource InsShLg}" />
+              <Border Name="PART_Fill"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}">
+                <DockPanel>
+                  <Border Name="PART_Head" Classes="dialog-head" DockPanel.Dock="Top">
+                    <DockPanel>
+                      <Button Name="PART_Close"
+                              Classes="close"
+                              DockPanel.Dock="Right"
+                              Margin="10,0,0,0"
+                              VerticalAlignment="Center"
+                              IsVisible="{TemplateBinding ShowClose}"
+                              AutomationProperties.Name="{TemplateBinding CloseLabel}"
+                              ToolTip.Tip="{TemplateBinding CloseLabel}" />
+                      <ContentPresenter Name="PART_Title"
+                                        Classes="dialog-title"
+                                        Content="{TemplateBinding Title}"
+                                        VerticalAlignment="Center" />
+                    </DockPanel>
+                  </Border>
+                  <Border Name="PART_Foot" Classes="dialog-foot" DockPanel.Dock="Bottom">
+                    <ContentPresenter Content="{TemplateBinding Foot}" />
+                  </Border>
+                  <ScrollViewer Name="PART_Scroll"
+                                Classes="dialog-body"
+                                HorizontalScrollBarVisibility="Disabled"
+                                VerticalScrollBarVisibility="Auto">
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      Padding="{TemplateBinding Padding}"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                  </ScrollViewer>
+                </DockPanel>
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ Border#PART_Head">
+          <Setter Property="Padding" Value="24,18" />
+          <Setter Property="BorderThickness" Value="0,0,0,1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+        </Style>
+        <Style Selector="^ /template/ ContentPresenter#PART_Title">
+          <Setter Property="FontSize" Value="17" />
+          <Setter Property="FontWeight" Value="ExtraBold" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        </Style>
+        <Style Selector="^ /template/ Border#PART_Foot">
+          <Setter Property="Padding" Value="24,16" />
+          <Setter Property="BorderThickness" Value="0,1,0,0" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+        </Style>
+        <Style Selector="^:not(:titled) /template/ Border#PART_Head">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:not(:footed) /template/ Border#PART_Foot">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <!-- RTL mirrors the drawing, so the fill is mirrored back: the light stays at the top left, as on the web -->
+        <Style Selector="^[FlowDirection=RightToLeft]">
+          <Setter Property="Background" Value="{DynamicResource InsDialogFillRtl}" />
+        </Style>
+
+        <Style Selector="^.sm">
+          <Setter Property="MaxWidth" Value="416" />
+        </Style>
+        <Style Selector="^.lg">
+          <Setter Property="MaxWidth" Value="896" />
+        </Style>
+
+        <!-- The drawer: attached to the edge it came out of, so only its inner corners round and only its inner side has a rim -->
+        <Style Selector="^.drawer">
+          <Setter Property="MaxWidth" Value="384" />
+          <Setter Property="MaxHeight" Value="Infinity" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
+          <Setter Property="BorderThickness" Value="0,0,1,0" />
+          <Setter Property="CornerRadius" Value="0,32,32,0" />
+          <Setter Property="VerticalContentAlignment" Value="Top" />
+        </Style>
+        <Style Selector="^.drawer.end">
+          <Setter Property="BorderThickness" Value="1,0,0,0" />
+          <Setter Property="CornerRadius" Value="32,0,0,32" />
+        </Style>
+        <Style Selector="^.drawer.bottom">
+          <Setter Property="MaxWidth" Value="Infinity" />
+          <Setter Property="BorderThickness" Value="0,1,0,0" />
+          <Setter Property="CornerRadius" Value="32,32,0,0" />
+        </Style>
+        <!-- Pinned beside the content: square, no shadow, the column decides the size -->
+        <Style Selector="^.drawer:pinned">
+          <Setter Property="CornerRadius" Value="0" />
+          <Setter Property="MaxWidth" Value="Infinity" />
+          <Setter Property="MaxHeight" Value="Infinity" />
+        </Style>
+        <Style Selector="^:pinned /template/ Border#PART_Ground">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <!-- In its own window the OS draws the title and the edges -->
+        <Style Selector="^:window">
+          <Setter Property="CornerRadius" Value="0" />
+          <Setter Property="BorderThickness" Value="0" />
+          <Setter Property="MaxHeight" Value="Infinity" />
+        </Style>
+        <Style Selector="^:window /template/ Border#PART_Ground">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:window /template/ Border#PART_Head">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="Border.dialog-scrim">
+    <Setter Property="Background" Value="{DynamicResource InsDialogScrim}" />
+  </Style>
+
+  <!-- A question with no title above it is drawn as the title, as Insiyab.confirm() does -->
+  <Style Selector="ctl|Dialog TextBlock.dialog-title">
+    <Setter Property="FontSize" Value="17" />
+    <Setter Property="FontWeight" Value="ExtraBold" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+
+  <!-- The footer standard: actions at least 5rem wide, a cancel that keeps its padding and height, and on a phone a finger's height -->
+  <Style Selector="ctl|DialogFoot">
+    <Setter Property="Spacing" Value="{DynamicResource InsFootGap}" />
+  </Style>
+  <Style Selector="ctl|DialogFoot > Button:not(.icon)">
+    <Setter Property="MinWidth" Value="{DynamicResource InsFootMin}" />
+  </Style>
+  <Style Selector="ctl|DialogFoot > Button.bare">
+    <Setter Property="Padding" Value="16,6" />
+    <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
+  </Style>
+  <Style Selector="ctl|DialogFoot > Button.bare.sm">
+    <Setter Property="Padding" Value="10,4" />
+    <Setter Property="MinHeight" Value="{DynamicResource InsCtlSmH}" />
+  </Style>
+  <Style Selector="ctl|DialogFoot:phone > Button:not(.icon)">
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="MinHeight" Value="{DynamicResource InsFieldH}" />
+  </Style>
+
+</Styles>
