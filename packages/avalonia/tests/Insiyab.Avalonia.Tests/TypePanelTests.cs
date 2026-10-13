@@ -23,6 +23,7 @@ public class TypePanelTests
             Content = content,
         };
         window.Show();
+        Ui.Track(window);
         return window;
     }
 
@@ -291,7 +292,10 @@ public class TypePanelTests
         Assert.Equal(3, card.Transitions!.Count);
         card.Transitions = new Transitions();
 
+        window.MouseMove(new Point(1, 1));
         window.MouseMove(new Point(450, 400));
+        Ui.Settle(100);
+        Assert.True(card.IsPointerOver);
         Assert.Equal(Token<BoxShadows>("InsShLg", ThemeVariant.Light)[0], card.BoxShadow[0]);
         Assert.True(card.BoxShadow[1].IsInset);
         Assert.Equal(Token<Color>("InsRimTopColor", ThemeVariant.Light), Assert.IsAssignableFrom<ISolidColorBrush>(card.BorderBrush).Color);

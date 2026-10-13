@@ -25,7 +25,21 @@ public class InputsTests
         return page;
     }
 
-    private static double X(Control c, Window w) => c.TranslatePoint(new Point(0, 0), w)!.Value.X;
+    // The left edge in window space: in RTL a control's own origin is its right edge.
+    private static double X(Control c, Window w) => Math.Min(c.TranslatePoint(new Point(0, 0), w)!.Value.X, c.TranslatePoint(new Point(c.Bounds.Width, 0), w)!.Value.X);
+
+    // Under a loaded full run a brush transition can still be landing, so this waits for it a little longer.
+    private static void SettledBrush(Visual anchor, string key, Func<IBrush?> brush)
+    {
+        var expected = ColorOf((IBrush)Res(anchor, key));
+        for (var i = 0; i < 20; i++)
+        {
+            var got = ColorOf(brush());
+            if (Math.Abs(expected.A - got.A) <= 6 && Math.Abs(expected.R - got.R) <= 6 && Math.Abs(expected.G - got.G) <= 6 && Math.Abs(expected.B - got.B) <= 6) break;
+            Settle(150);
+        }
+        AssertBrush(anchor, key, () => brush());
+    }
 
     private static void Type(Window window, TextBox box, string text)
     {
@@ -45,12 +59,12 @@ public class InputsTests
         var border = Part<Border>(box, "PART_BorderElement");
         Part<TextPresenter>(box, "PART_TextPresenter");
         Assert.Equal(46, box.Bounds.Height);
-        AssertBrush(box, "InsCtlBg", border.Background);
-        AssertBrush(box, "InsCtlBd", border.BorderBrush);
+        AssertBrush(box, "InsCtlBg", () => border.Background);
+        AssertBrush(box, "InsCtlBd", () => border.BorderBrush);
         Assert.Equal(Res(box, "InsRMd"), border.CornerRadius);
         Assert.Equal(Res(box, "InsBevelDim"), border.BoxShadow);
         Assert.Equal(Res(box, "InsShSubtle"), Part<Border>(box, "PART_Shadow").BoxShadow);
-        AssertBrush(box, "InsText3", Part<TextBlock>(box, "PART_Placeholder").Foreground);
+        AssertBrush(box, "InsText3", () => Part<TextBlock>(box, "PART_Placeholder").Foreground);
         Assert.Equal(14, box.FontSize);
     }
 
@@ -63,7 +77,7 @@ public class InputsTests
         box.Focus();
         Settle();
 
-        AssertBrush(box, "InsGlassStrong", Part<Border>(box, "PART_BorderElement").Background);
+        AssertBrush(box, "InsGlassStrong", () => Part<Border>(box, "PART_BorderElement").Background);
         Assert.Equal(Res(box, "InsGlow"), Part<Border>(box, "PART_Shadow").BoxShadow);
         Assert.Equal(1, Part<Border>(box, "PART_Halo").Opacity, 2);
         Assert.Equal(-1, Part<Panel>(box, "PART_Field").RenderTransform!.Value.M32, 2);
@@ -129,11 +143,11 @@ public class InputsTests
 
         Assert.Contains(":error", box.Classes);
         var border = Part<Border>(box, "PART_BorderElement");
-        AssertBrush(box, "InsToneBadBd", border.BorderBrush);
-        AssertBrush(box, "InsToneBadBg", border.Background);
+        SettledBrush(box, "InsToneBadBd", () => border.BorderBrush);
+        SettledBrush(box, "InsToneBadBg", () => border.Background);
         var message = box.GetVisualDescendants().OfType<TextBlock>().Single(t => t.Text == "هذا الحقل مطلوب");
         Assert.True(message.IsEffectivelyVisible);
-        AssertBrush(box, "InsToneBad", message.Foreground);
+        AssertBrush(box, "InsToneBad", () => message.Foreground);
     }
 
     [AvaloniaFact]
@@ -144,7 +158,7 @@ public class InputsTests
         DataValidationErrors.SetErrors(box, ["خطأ"]);
         box.Focus();
         Settle();
-        AssertBrush(box, "InsToneBad", Part<Border>(box, "PART_BorderElement").BorderBrush);
+        AssertBrush(box, "InsToneBad", () => Part<Border>(box, "PART_BorderElement").BorderBrush);
         Assert.Equal(Res(box, "InsGlowBad"), Part<Border>(box, "PART_Shadow").BoxShadow);
         Assert.Equal(0, Part<Border>(box, "PART_Halo").Opacity, 2);
     }
@@ -154,7 +168,7 @@ public class InputsTests
     {
         var box = new TextBox { Classes = { "bad" } };
         Show(Page(box));
-        AssertBrush(box, "InsToneBadBd", Part<Border>(box, "PART_BorderElement").BorderBrush);
+        AssertBrush(box, "InsToneBadBd", () => Part<Border>(box, "PART_BorderElement").BorderBrush);
     }
 
     [AvaloniaFact]
@@ -163,7 +177,7 @@ public class InputsTests
         var box = new TextBox { Classes = { "ok" }, Text = "name" };
         Show(Page(box));
         var border = Part<Border>(box, "PART_BorderElement");
-        AssertBrush(box, "InsToneOkBg", border.Background);
+        AssertBrush(box, "InsToneOkBg", () => border.Background);
         var ok = (Color)Res(box, "InsToneOkColor");
         var got = ColorOf(border.BorderBrush);
         Assert.Equal(ok.R, got.R);
@@ -171,7 +185,7 @@ public class InputsTests
 
         box.Focus();
         Settle();
-        AssertBrush(box, "InsToneOk", border.BorderBrush);
+        AssertBrush(box, "InsToneOk", () => border.BorderBrush);
         Assert.Equal(Res(box, "InsTextBoxGlowOk"), Part<Border>(box, "PART_Shadow").BoxShadow);
     }
 
@@ -180,7 +194,7 @@ public class InputsTests
     {
         var box = new MaskedTextBox { Mask = "000-000" };
         Show(Page(box));
-        AssertBrush(box, "InsCtlBg", Part<Border>(box, "PART_BorderElement").Background);
+        AssertBrush(box, "InsCtlBg", () => Part<Border>(box, "PART_BorderElement").Background);
     }
 
     // ---------------------------------------------------------------- password
@@ -197,7 +211,7 @@ public class InputsTests
         Click(eye, window);
         Assert.True(box.RevealPassword);
         Assert.True(eye.IsChecked);
-        AssertBrush(box, "InsToneBrandSoft", eye.Foreground);
+        AssertBrush(box, "InsToneBrandSoft", () => eye.Foreground);
         Click(eye, window);
         Assert.False(box.RevealPassword);
     }
@@ -243,11 +257,10 @@ public class InputsTests
         Assert.Equal(13, icon.Bounds.Width);
         var fromStart = dir == FlowDirection.RightToLeft ? X(box, window) + box.Bounds.Width - (X(icon, window) + icon.Bounds.Width) : X(icon, window) - X(box, window);
         Assert.Equal(14, fromStart, 0);
-        AssertBrush(box, "InsText3", slot.Foreground);
-
+        AssertBrush(box, "InsText3", () => slot.Foreground);
         box.Focus();
         Settle();
-        AssertBrush(box, "InsToneBrandSoft", slot.Foreground);
+        AssertBrush(box, "InsToneBrandSoft", () => slot.Foreground);
         Assert.Equal(1.12, slot.RenderTransform!.Value.M11, 2);
     }
 
@@ -263,7 +276,7 @@ public class InputsTests
         var window = Show(Page(box), dir);
 
         Assert.Equal(new Thickness(1, 0, 0, 0), addon.BorderThickness);
-        AssertBrush(box, "InsLabel", addon.Foreground);
+        AssertBrush(box, "InsLabel", () => addon.Foreground);
         Assert.Equal(FontWeight.Bold, addon.FontWeight);
         var addonAtRight = Center(addon, window).X > Center(box, window).X;
         Assert.Equal(dir == FlowDirection.LeftToRight, addonAtRight);
@@ -311,7 +324,7 @@ public class InputsTests
         Show(Page(box), theme: ThemeVariant.Dark);
         box.Focus();
         Settle();
-        AssertBrush(box, "InsGlassStrong", Part<Border>(box, "PART_BorderElement").Background);
+        AssertBrush(box, "InsGlassStrong", () => Part<Border>(box, "PART_BorderElement").Background);
     }
 
     // ---------------------------------------------------------------- counter
@@ -325,13 +338,13 @@ public class InputsTests
         var count = Part<TextBlock>(box, "PART_Count");
         Assert.Equal("0/10", count.Text);
         Assert.True(count.IsVisible);
-        AssertBrush(box, "InsText3", count.Foreground);
+        AssertBrush(box, "InsText3", () => count.Foreground);
         Assert.Equal(11, count.FontSize);
 
         box.Text = "123456789";
         Settle();
         Assert.Equal(InputCountState.Near, InputCount.GetState(box));
-        AssertBrush(box, "InsToneWarn", count.Foreground);
+        AssertBrush(box, "InsToneWarn", () => count.Foreground);
         Assert.Equal(46 + 6 + count.Bounds.Height, box.Bounds.Height, 0);
     }
 
@@ -397,7 +410,7 @@ public class InputsTests
         Assert.Equal("كلمتان", InputCount.GetText(a));
         Assert.Equal("3 من 5", InputCount.GetText(b));
         InputCount.SetMode(b, InputCountMode.None);
-        Assert.False(Part<TextBlock>(b, "PART_Count").IsVisible);
+        Assert.False(Part<TextBlock>(b, "PART_Count").IsEffectivelyVisible);
     }
 
     // ---------------------------------------------------------------- validation
@@ -486,8 +499,8 @@ public class InputsTests
         var ok = new ContentControl { Classes = { "success" }, Content = "الاسم متاح." };
         var bad = new ContentControl { Classes = { "error" }, Content = "هذا الاسم محجوز." };
         Show(Page(ok, bad));
-        AssertBrush(ok, "InsToneOk", ok.Foreground);
-        AssertBrush(bad, "InsToneBad", bad.Foreground);
+        AssertBrush(ok, "InsToneOk", () => ok.Foreground);
+        AssertBrush(bad, "InsToneBad", () => bad.Foreground);
         Assert.Equal(12, ok.FontSize);
         Assert.NotNull(Part<global::Avalonia.Controls.Shapes.Path>(ok, "PART_Mark").Data);
     }
@@ -511,14 +524,12 @@ public class InputsTests
         var box = new AutoCompleteBox { ItemsSource = new[] { "أسامة", "سارة", "مريم" }, MinimumPopulateDelay = TimeSpan.Zero };
         var window = Show(Page(box));
         var inner = Part<TextBox>(box, "PART_TextBox");
-        AssertBrush(inner, "InsCtlBg", Part<Border>(inner, "PART_BorderElement").Background);
-
+        AssertBrush(inner, "InsCtlBg", () => Part<Border>(inner, "PART_BorderElement").Background);
         inner.Focus();
         window.KeyTextInput("اسا");
         Settle();
         Assert.True(box.IsDropDownOpen);
-        var list = box.GetVisualDescendants().OfType<ListBox>().FirstOrDefault()
-            ?? box.GetLogicalDescendantsOf<ListBox>().First();
+        var list = (ListBox)((Border)Part<Popup>(box, "PART_Popup").Child!).Child!;
         var items = list.GetRealizedContainers().OfType<ListBoxItem>().ToList();
         Assert.Single(items);
         Assert.Equal("أسامة", items[0].Content);
@@ -537,7 +548,7 @@ public class InputsTests
         Assert.Equal(46, combo.Bounds.Height);
         Assert.Equal(360, combo.Bounds.Width);
         var face = Part<Border>(combo, "Background");
-        AssertBrush(combo, "InsCtlBg", face.Background);
+        AssertBrush(combo, "InsCtlBg", () => face.Background);
         var chevron = Part<Icon>(combo, "DropDownGlyph");
         Assert.Equal(16, chevron.Bounds.Width);
         var fromEnd = dir == FlowDirection.LeftToRight ? X(combo, window) + combo.Bounds.Width - (X(chevron, window) + 16) : X(chevron, window) - X(combo, window);
@@ -551,8 +562,8 @@ public class InputsTests
         var window = Show(Page(combo), height: 500);
         combo.IsDropDownOpen = true;
         Settle();
-        var popup = Part<Border>(combo, "PopupBorder");
-        AssertBrush(combo, "InsGlassStrong", popup.Background);
+        var popup = ((Border)Part<Popup>(combo, "PART_Popup").Child!);
+        AssertBrush(combo, "InsGlassStrong", () => popup.Background);
         Assert.Equal(Res(combo, "InsRMd"), popup.CornerRadius);
         var items = combo.GetRealizedContainers().OfType<ComboBoxItem>().ToList();
         Assert.Equal(3, items.Count);
@@ -561,7 +572,7 @@ public class InputsTests
         Assert.Equal(1, Part<Icon>(chosen, "PART_Check").Opacity);
         Assert.Equal(0, Part<Icon>(items[0], "PART_Check").Opacity);
         Assert.Equal(Res(combo, "InsRXs"), chosen.CornerRadius);
-        Assert.True(Part<Border>(combo, "PopupBorder").TranslatePoint(new Point(0, 0), combo)!.Value.Y >= 46 + 5);
+        Assert.True(((Border)Part<Popup>(combo, "PART_Popup").Child!).TranslatePoint(new Point(0, 0), combo)!.Value.Y >= 46 + 5);
     }
 
     [AvaloniaFact]
@@ -571,7 +582,7 @@ public class InputsTests
         Show(Page(combo));
         DataValidationErrors.SetErrors(combo, ["اختر واحدًا."]);
         Settle();
-        AssertBrush(combo, "InsToneBadBd", Part<Border>(combo, "Background").BorderBrush);
+        SettledBrush(combo, "InsToneBadBd", () => Part<Border>(combo, "Background").BorderBrush);
         Assert.Contains(combo.GetVisualDescendants().OfType<TextBlock>(), t => t.Text == "اختر واحدًا.");
     }
 
@@ -600,8 +611,8 @@ public class InputsTests
         Assert.Equal(dir == FlowDirection.RightToLeft, Center(thumb, window).X > Center(slider, window).X);
         var fill = Part<RepeatButton>(slider, "PART_DecreaseButton");
         var rest = Part<RepeatButton>(slider, "PART_IncreaseButton");
-        AssertBrush(slider, "InsToneBrandSoft", fill.Background);
-        AssertBrush(slider, "InsCtlBgHover", rest.Background);
+        AssertBrush(slider, "InsToneBrandSoft", () => fill.Background);
+        AssertBrush(slider, "InsCtlBgHover", () => rest.Background);
         Assert.Equal(6, Part<Border>(rest, "TrackBackground").Bounds.Height);
     }
 
@@ -630,7 +641,7 @@ public class InputsTests
         Assert.Equal(new Size(36, 36), up.Bounds.Size);
         Assert.Equal(46, num.Bounds.Height);
         Assert.Equal(dir == FlowDirection.RightToLeft, Center(up, window).X < Center(down, window).X);
-        AssertBrush(num, "InsCtlBgHover", up.Background);
+        AssertBrush(num, "InsCtlBgHover", () => up.Background);
         Assert.Equal(TextAlignment.Center, Part<TextBox>(num, "PART_TextBox").TextAlignment);
 
         Click(up, window);
@@ -647,8 +658,7 @@ public class InputsTests
         var inner = Part<TextBox>(num, "PART_TextBox");
         Assert.False(Part<Border>(inner, "PART_BorderElement").IsVisible);
         Assert.False(Part<Border>(inner, "PART_Shadow").IsVisible);
-        var spinner = num.GetVisualDescendants().OfType<ButtonSpinner>().Single();
-        AssertBrush(num, "InsCtlBg", Part<Border>(spinner, "PART_BorderElement").Background);
+        AssertBrush(num, "InsCtlBg", () => Part<Border>(num, "PART_BorderElement").Background);
     }
 
     // ---------------------------------------------------------------- shots

@@ -24,6 +24,7 @@ public class FrostTests
         if (material is { } m)
             Frost.SetMaterial(window, m);
         window.Show();
+        Ui.Track(window);
         return window;
     }
 

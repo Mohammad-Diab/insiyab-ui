@@ -53,7 +53,7 @@
               <Border Name="PART_Glow" CornerRadius="10" BoxShadow="{DynamicResource InsGlow}" Opacity="0">
                 <Border.Transitions>
                   <Transitions>
-                    <DoubleTransition Property="Opacity" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                   </Transitions>
                 </Border.Transitions>
               </Border>
