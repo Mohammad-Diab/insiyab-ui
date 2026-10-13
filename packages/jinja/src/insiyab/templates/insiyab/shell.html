@@ -9,9 +9,9 @@
 <div class="ins-shell-main">{{ topbar if topbar is not none }}<main class="{{ cls(['ins-shell-content', content_class]) }}">{{ caller() if caller }}</main></div></div>
 {%- endmacro %}
 
-{#- id: the drawer's :target below 900px, so it works with no script. -#}
-{% macro sidebar(label=none, brand=none, bottom=none, id='nav', class=none) -%}
-<aside class="{{ cls(['ins-shell-side', class]) }}" id="{{ id|e }}"{% if label %} aria-label="{{ label|e }}"{% endif %}{{ attrs(kwargs) }}>{{ brand if brand is not none }}{{ caller() if caller }}
+{#- id: the drawer's :target below 900px, so it works with no script. filter: a filter field over the links; a string is its placeholder. -#}
+{% macro sidebar(label=none, brand=none, bottom=none, id='nav', filter=none, class=none) -%}
+<aside class="{{ cls(['ins-shell-side', class]) }}" id="{{ id|e }}"{% if label %} aria-label="{{ label|e }}"{% endif %}{% if filter is sameas true %} data-ins-filter{% elif filter %} data-ins-filter="{{ filter|e }}"{% endif %}{{ attrs(kwargs) }}>{{ brand if brand is not none }}{{ caller() if caller }}
 {%- if bottom is not none %}<div class="ins-shell-bottom">{{ bottom }}</div>{% endif -%}
 </aside>
 {%- endmacro %}
@@ -28,9 +28,9 @@
 <div class="ins-shell-group">{{ label }}</div>
 {%- endmacro %}
 
-{#- current: this page; badge: a count at the end. -#}
-{% macro sidebar_link(label, href, icon=none, current=false, badge=none, class=none) -%}
-<a class="{{ cls(['ins-shell-link', 'is-active' if current, class]) }}" href="{{ href|e }}"{% if current %} aria-current="page"{% endif %}{{ attrs(kwargs) }}>{{ icon if icon is not none }}{{ label }}
+{#- current: this page; badge: a count at the end; keywords: more words the sidebar filter finds it by. -#}
+{% macro sidebar_link(label, href, icon=none, current=false, badge=none, keywords=none, class=none) -%}
+<a class="{{ cls(['ins-shell-link', 'is-active' if current, class]) }}" href="{{ href|e }}"{% if current %} aria-current="page"{% endif %}{% if keywords %} data-keywords="{{ keywords|e }}"{% endif %}{{ attrs(kwargs) }}>{{ icon if icon is not none }}{{ label }}
 {%- if badge is not none %}<span class="ins-shell-link-badge">{{ badge }}</span>{% endif %}</a>
 {%- endmacro %}
 

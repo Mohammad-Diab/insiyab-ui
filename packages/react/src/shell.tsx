@@ -44,12 +44,14 @@ export interface SidebarProps extends HTMLAttributes<HTMLElement> {
   brand?: ReactNode;
   /** Held at the bottom (`.ins-shell-bottom`). */
   bottom?: ReactNode;
+  /** A filter field over the links (`data-ins-filter`); a string is its placeholder. */
+  filter?: boolean | string;
 }
 /* The id is the drawer's `:target` below 900px, so it works with no script; it is
    `nav` unless given. */
-export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar({ label, brand, bottom, id = 'nav', className, children, ...rest }, ref) {
+export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar({ label, brand, bottom, filter, id = 'nav', className, children, ...rest }, ref) {
   return (
-    <aside ref={ref} className={cx('ins-shell-side', className)} id={id} aria-label={label} {...rest}>
+    <aside ref={ref} className={cx('ins-shell-side', className)} id={id} aria-label={label} data-ins-filter={filter === true ? '' : filter || undefined} {...rest}>
       {brand}
       {children}
       {bottom != null && <div className="ins-shell-bottom">{bottom}</div>}
@@ -96,12 +98,14 @@ export interface SidebarLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement
   current?: boolean;
   /** A count at the end (`.ins-shell-link-badge`). */
   badge?: ReactNode;
+  /** More words the sidebar filter finds it by (`data-keywords`). */
+  keywords?: string;
 }
 /* The selected link is drawn from the first render; after that the core owns the
    selection, so a `current` that moves is handed to `Insiyab.sidebarSelect`, which
    flies the marker from the old link to the new one as the Windows navigation
    pane's does. */
-export const SidebarLink = forwardRef<HTMLAnchorElement, SidebarLinkProps>(function SidebarLink({ icon, current, badge, className, children, ...rest }, ref) {
+export const SidebarLink = forwardRef<HTMLAnchorElement, SidebarLinkProps>(function SidebarLink({ icon, current, badge, keywords, className, children, ...rest }, ref) {
   const el = useRef<HTMLAnchorElement>(null);
   useImperativeHandle(ref, () => el.current!, []);
   const [first] = useState(!!current);
@@ -114,7 +118,7 @@ export const SidebarLink = forwardRef<HTMLAnchorElement, SidebarLinkProps>(funct
     if (current && el.current) core()?.sidebarSelect(el.current);
   }, [current]);
   return (
-    <a ref={el} className={cx('ins-shell-link', first && 'is-active', className)} aria-current={first ? 'page' : undefined} {...rest}>
+    <a ref={el} className={cx('ins-shell-link', first && 'is-active', className)} aria-current={first ? 'page' : undefined} data-keywords={keywords} {...rest}>
       {icon}
       {children}
       {badge != null && <span className="ins-shell-link-badge">{badge}</span>}

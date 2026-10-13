@@ -89,7 +89,9 @@ public partial class GalleryShell : UserControl
             row.Children.Add(badge);
         }
         row.Children.Add(new TextBlock { Text = page.Title, VerticalAlignment = VerticalAlignment.Center });
-        return new ListBoxItem { Content = row, Tag = page };
+        var item = new ListBoxItem { Content = row, Tag = page };
+        Shell.SetKeywords(item, page.En);
+        return item;
     }
 
     private void Open(GalleryPage page)

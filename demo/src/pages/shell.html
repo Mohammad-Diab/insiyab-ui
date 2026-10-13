@@ -56,6 +56,23 @@ Insiyab.sidebar('collapsed');   // أو 'open' أو 'toggle'
 document.addEventListener('ins:sidebar', (e) => e.detail.state);
 </demo-code>
 
+<h2 id="filter">تصفية الروابط</h2>
+<p>
+  أضف <code>data-ins-filter</code> إلى الشريط الجانبي، فيظهر فوق روابطه حقل يخفي منها ما لا يطابق ما تكتبه، ومعها عنوان كل مجموعة
+  لم يبقَ فيها رابط. ويبحث في نص الرابط وفي كلماته <code>data-keywords</code>، ولا يفرق بين أشكال الهمزة ولا يلتفت إلى الحركات.
+  وقيمة السمة النص الباهت في الحقل، فإن تركتها فارغة كان «بحث». وشريط هذه الصفحة مثال عليه.
+</p>
+<p>
+  اضغط <kbd class="ins-kbd">/</kbd> لتنتقل إلى الحقل، و<kbd class="ins-kbd">Esc</kbd> لتمسحه، والسهم إلى الأسفل لتنزل إلى أول رابط ظاهر،
+  و<kbd class="ins-kbd">Enter</kbd> لتفتحه. ويترك الحقل مفتاح <kbd class="ins-kbd">/</kbd> للوحة الأوامر إن كانت في الصفحة لوحة تستعمله.
+</p>
+<demo-code lang="html">
+<aside class="ins-shell-side" id="nav" data-ins-filter="ابحث في الصفحات">
+  …
+  <a class="ins-shell-link" href="/orders" data-keywords="orders invoices"><svg>…</svg>الطلبات</a>
+</aside>
+</demo-code>
+
 <h2 id="options">الخيارات</h2>
 <p>كل ما في هيكل التطبيق من كلاسات وسمات وأحداث، لكل جزء صندوق يفتح بالنقر.</p>
 <demo-options></demo-options>

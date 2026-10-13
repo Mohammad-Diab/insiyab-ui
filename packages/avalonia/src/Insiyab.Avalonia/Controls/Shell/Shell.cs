@@ -44,6 +44,24 @@ public static class Shell
     public static readonly AttachedProperty<bool> FlyMarkerProperty =
         AvaloniaProperty.RegisterAttached<ListBox, bool>("FlyMarker", typeof(Shell));
 
+    /// <summary>On a <c>ListBox.shell-nav</c>: a search field over the links that hides the ones not matching what is typed, and a heading left with none (the web's <c>data-ins-filter</c>). «/» outside a text field focuses it.</summary>
+    public static readonly AttachedProperty<bool> HasFilterProperty =
+        AvaloniaProperty.RegisterAttached<ListBox, bool>("HasFilter", typeof(Shell));
+
+    /// <summary>On a ListBox with <see cref="HasFilterProperty"/>: the field's placeholder, «بحث» unless set.</summary>
+    public static readonly AttachedProperty<string> FilterPlaceholderProperty =
+        AvaloniaProperty.RegisterAttached<ListBox, string>("FilterPlaceholder", typeof(Shell), "بحث");
+
+    /// <summary>On a ListBox with <see cref="HasFilterProperty"/>: the line shown when nothing matches, «لا نتائج» unless set.</summary>
+    public static readonly AttachedProperty<string> FilterEmptyTextProperty =
+        AvaloniaProperty.RegisterAttached<ListBox, string>("FilterEmptyText", typeof(Shell), "لا نتائج");
+
+    /// <summary>On a link in a filtered list: more words the filter finds it by, such as its English name (the web's <c>data-keywords</c>).</summary>
+    public static readonly AttachedProperty<string?> KeywordsProperty =
+        AvaloniaProperty.RegisterAttached<Control, string?>("Keywords", typeof(Shell));
+
+    private static readonly AttachedProperty<NavFilter?> NavFilterProperty =
+        AvaloniaProperty.RegisterAttached<ListBox, NavFilter?>("NavFilter", typeof(Shell));
 
     /// <summary>Raised on the shell each time <see cref="Sidebar"/> changes it (the web's <c>ins:sidebar</c>).</summary>
     public static readonly RoutedEvent<SidebarChangedEventArgs> SidebarChangedEvent =
@@ -97,6 +115,11 @@ public static class Shell
             list.SelectionChanged -= OnNavSelectionChanged;
             if (e.GetNewValue<bool>()) list.SelectionChanged += OnNavSelectionChanged;
         });
+        HasFilterProperty.Changed.AddClassHandler<ListBox>((list, e) =>
+        {
+            list.GetValue(NavFilterProperty)?.Dispose();
+            list.SetValue(NavFilterProperty, e.GetNewValue<bool>() ? new NavFilter(list) : null);
+        });
         EntersProperty.Changed.AddClassHandler<Control>((c, e) =>
         {
             c.AttachedToVisualTree -= OnEnterAttached;
@@ -126,6 +149,14 @@ public static class Shell
     public static void SetFrostsTopbar(ScrollViewer scroller, bool value) => scroller.SetValue(FrostsTopbarProperty, value);
     public static bool GetFlyMarker(ListBox list) => list.GetValue(FlyMarkerProperty);
     public static void SetFlyMarker(ListBox list, bool value) => list.SetValue(FlyMarkerProperty, value);
+    public static bool GetHasFilter(ListBox list) => list.GetValue(HasFilterProperty);
+    public static void SetHasFilter(ListBox list, bool value) => list.SetValue(HasFilterProperty, value);
+    public static string GetFilterPlaceholder(ListBox list) => list.GetValue(FilterPlaceholderProperty);
+    public static void SetFilterPlaceholder(ListBox list, string value) => list.SetValue(FilterPlaceholderProperty, value);
+    public static string GetFilterEmptyText(ListBox list) => list.GetValue(FilterEmptyTextProperty);
+    public static void SetFilterEmptyText(ListBox list, string value) => list.SetValue(FilterEmptyTextProperty, value);
+    public static string? GetKeywords(Control control) => control.GetValue(KeywordsProperty);
+    public static void SetKeywords(Control control, string? value) => control.SetValue(KeywordsProperty, value);
 
     /// <summary>Whether the shell is in its drawer form right now.</summary>
     public static bool IsDrawer(SplitView view) => view.GetValue(IsDrawerModeProperty);
@@ -323,6 +354,163 @@ public static class Shell
             if (list.GetValue(FlightProperty) != this) return;
             list.SetValue(FlightProperty, null);
             list.Classes.Remove("moving");
+        }
+    }
+
+    /// <summary>Filters a shell-nav ListBox the way its field does: every word must occur in a link's text, its <see cref="KeywordsProperty"/> or its heading. Returns how many links show.</summary>
+    internal static int Filter(ListBox list, string? query)
+    {
+        var terms = ArabicSearch.Terms(query);
+        list.GetValue(FlightProperty)?.Land();
+        var heads = new List<(Control Head, List<Control> Links)>();
+        var links = new List<Control>();
+        string? headText = null;
+        for (var i = 0; i < list.ItemCount; i++)
+        {
+            if (list.ContainerFromIndex(i) is not Control c) continue;
+            if (c.Classes.Contains("shell-group"))
+            {
+                heads.Add((c, new List<Control>()));
+                headText = ItemText(c);
+                continue;
+            }
+            var hay = ArabicSearch.Normalize($"{ItemText(c)} {GetKeywords(c)} {headText}");
+            c.Classes.Set("filtered-out", !terms.All(t => hay.Contains(t, StringComparison.Ordinal)));
+            links.Add(c);
+            if (heads.Count > 0) heads[^1].Links.Add(c);
+        }
+        foreach (var (head, under) in heads)
+            head.Classes.Set("filtered-out", terms.Length > 0 && !under.Any(l => l.IsVisible));
+        var shown = links.Count(l => l.IsVisible);
+        list.Classes.Set("filtering", terms.Length > 0);
+        if (list.GetValue(NavFilterProperty)?.Empty is { } empty) empty.IsVisible = terms.Length > 0 && shown == 0;
+        return shown;
+    }
+
+    // A link's own words: its text, or every TextBlock in it but the badge's.
+    private static string ItemText(Control c)
+    {
+        if (c is ContentControl { Content: string s }) return s;
+        var blocks = c.GetLogicalDescendants().OfType<TextBlock>()
+            .Where(t => !t.GetLogicalAncestors().OfType<StyledElement>().Any(a => a.Classes.Contains("shell-link-badge")))
+            .Select(t => t.Text);
+        return string.Join(" ", blocks);
+    }
+
+    private static Control? FirstShown(ListBox list)
+    {
+        for (var i = 0; i < list.ItemCount; i++)
+            if (list.ContainerFromIndex(i) is Control c && c.IsVisible && !c.Classes.Contains("shell-group")) return c;
+        return null;
+    }
+
+    // The field's keys, the «/» that reaches it, and the parts it drives, for one ListBox.
+    private sealed class NavFilter : IDisposable
+    {
+        private readonly ListBox _list;
+        private TextBox? _box;
+        private TopLevel? _top;
+
+        public TextBlock? Empty { get; private set; }
+
+        public NavFilter(ListBox list)
+        {
+            _list = list;
+            list.TemplateApplied += OnTemplate;
+            list.AttachedToVisualTree += OnAttached;
+            list.DetachedFromVisualTree += OnDetached;
+            Bind(list.GetVisualDescendants().OfType<TextBox>().FirstOrDefault(t => t.Name == "PART_Filter"),
+                 list.GetVisualDescendants().OfType<TextBlock>().FirstOrDefault(t => t.Name == "PART_FilterEmpty"));
+            if (TopLevel.GetTopLevel(list) is { } top) Hook(top);
+        }
+
+        public void Dispose()
+        {
+            _list.TemplateApplied -= OnTemplate;
+            _list.AttachedToVisualTree -= OnAttached;
+            _list.DetachedFromVisualTree -= OnDetached;
+            if (_box is { Text.Length: > 0 }) _box.Text = string.Empty;
+            Filter(_list, null);
+            Bind(null, null);
+            Hook(null);
+        }
+
+        private void OnTemplate(object? sender, TemplateAppliedEventArgs e) =>
+            Bind(e.NameScope.Find<TextBox>("PART_Filter"), e.NameScope.Find<TextBlock>("PART_FilterEmpty"));
+
+        private void OnAttached(object? sender, VisualTreeAttachmentEventArgs e) => Hook(TopLevel.GetTopLevel(_list));
+
+        private void OnDetached(object? sender, VisualTreeAttachmentEventArgs e) => Hook(null);
+
+        private void Bind(TextBox? box, TextBlock? empty)
+        {
+            if (_box is not null)
+            {
+                _box.TextChanged -= OnText;
+                _box.RemoveHandler(InputElement.KeyDownEvent, OnFieldKey);
+            }
+            _box = box;
+            Empty = empty;
+            if (box is null) return;
+            box.TextChanged += OnText;
+            box.AddHandler(InputElement.KeyDownEvent, OnFieldKey, RoutingStrategies.Tunnel);
+        }
+
+        private void Hook(TopLevel? top)
+        {
+            _top?.RemoveHandler(InputElement.KeyDownEvent, OnSlash);
+            _top = top;
+            top?.AddHandler(InputElement.KeyDownEvent, OnSlash, RoutingStrategies.Bubble);
+        }
+
+        private void OnText(object? sender, TextChangedEventArgs e) => Filter(_list, _box?.Text);
+
+        private void OnFieldKey(object? sender, KeyEventArgs e)
+        {
+            if (_box is null) return;
+            switch (e.Key)
+            {
+                case Key.Escape when !string.IsNullOrEmpty(_box.Text):
+                    _box.Text = string.Empty;
+                    e.Handled = true;
+                    break;
+                case Key.Escape:
+                    // Left unhandled, so a drawer closes on it as well.
+                    (_list.ContainerFromIndex(_list.SelectedIndex) ?? _list).Focus(NavigationMethod.Tab);
+                    break;
+                case Key.Down:
+                    FirstShown(_list)?.Focus(NavigationMethod.Tab);
+                    e.Handled = true;
+                    break;
+                case Key.Up or Key.PageUp or Key.PageDown:
+                    e.Handled = true;
+                    break;
+                case Key.Enter:
+                    if (FirstShown(_list) is { } first) _list.SelectedIndex = _list.IndexFromContainer(first);
+                    e.Handled = true;
+                    break;
+            }
+        }
+
+        // Bubbling, so a command palette that claims «/» on the way down keeps it.
+        private void OnSlash(object? sender, KeyEventArgs e)
+        {
+            if (e.Handled || e.KeyModifiers != KeyModifiers.None || _box is null || _top is null) return;
+            if (e.Key != Key.Oem2 && e.Key != Key.Divide && e.PhysicalKey != PhysicalKey.Slash) return;
+            if (_top.FocusManager?.GetFocusedElement() is TextBox) return;
+            if (_list.FindAncestorOfType<SplitView>() is { } view)
+            {
+                if (IsDrawer(view)) { if (!view.IsPaneOpen) Sidebar(view, "open"); }
+                else if (!view.IsPaneOpen) return;
+            }
+            if (!_list.IsEffectivelyVisible) return;
+            e.Handled = true;
+            var box = _box;
+            Dispatcher.UIThread.Post(() =>
+            {
+                box.Focus(NavigationMethod.Tab);
+                box.SelectAll();
+            }, DispatcherPriority.Loaded);
         }
     }
 

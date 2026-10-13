@@ -15,6 +15,9 @@ public sealed class GalleryPageAttribute(string slug, string title) : Attribute
 public sealed record GalleryPage(string Slug, string Title, string Group, Type Type, string Icon, bool Fresh)
 {
     public Control Create() => (Control)Activator.CreateInstance(Type)!;
+
+    /// <summary>The page's English name, the web NAV's <c>en</c>, which the sidebar filter also finds it by.</summary>
+    public string En => GalleryPages.English.GetValueOrDefault(Slug, Slug);
 }
 
 public static class GalleryPages
@@ -46,8 +49,28 @@ public static class GalleryPages
         ["hijri"] = "IconMoon", ["palette"] = "IconSearch", ["otp"] = "IconLock", ["phone"] = "IconPhone", ["birthdate"] = "IconCalendar", ["file"] = "IconUpload",
         ["scrollspy"] = "IconList", ["timeline"] = "IconClock", ["tree"] = "IconFolder", ["charts"] = "IconChart", ["month"] = "IconCalendar",
         ["login-simple"] = "IconLock", ["login"] = "IconUser", ["tpl-dashboard"] = "IconHome", ["tpl-tickets"] = "IconInbox", ["tpl-order"] = "IconCart",
-        ["tpl-settings"] = "IconCog", ["tpl-review"] = "IconFile", ["tpl-booking"] = "IconClock", ["tpl-error"] = "IconAlert",
-        ["navbar"] = "IconCompass", ["carousel"] = "IconSlides", ["colorpicker"] = "IconDroplet", ["reveal"] = "IconSparkle",
+        ["carousel"] = "IconSlides", ["colorpicker"] = "IconDroplet", ["reveal"] = "IconSparkle",
+    };
+
+    // Each page's English name, the web NAV's `en`; tokens, fonts, window, titlebar, toolbar and statusbar are Avalonia's own.
+    internal static readonly Dictionary<string, string> English = new()
+    {
+        ["index"] = "Introduction", ["start"] = "Quick start", ["javascript"] = "JavaScript", ["faq"] = "FAQ", ["color"] = "Color & branding", ["dark"] = "Dark mode",
+        ["rtl"] = "Arabic & RTL", ["motion"] = "Motion", ["shell"] = "App shell", ["grid"] = "Grid", ["spacing"] = "Spacing & page layout", ["split"] = "Split view",
+        ["typography"] = "Typography", ["surfaces"] = "Surfaces & panels", ["tables"] = "Tables", ["description"] = "Description list",
+        ["quote"] = "Quote, reference & highlight", ["inputs"] = "Form controls", ["checks"] = "Checks & switches", ["input-group"] = "Input groups",
+        ["pickers"] = "Pickers", ["chips"] = "Chips, tags & multi-select", ["matrix"] = "Choice matrix", ["validation"] = "Validation", ["buttons"] = "Buttons",
+        ["accordion"] = "Accordion", ["tabs"] = "Tabs", ["stats"] = "Stat tiles", ["loading"] = "Loading & empty states", ["progress"] = "Progress",
+        ["countdown"] = "Countdown timer", ["save"] = "Save status autosave", ["tooltips"] = "Tooltips", ["alerts"] = "Alerts", ["dialog"] = "Dialog",
+        ["drawer"] = "Drawer", ["toasts"] = "Toasts", ["notify"] = "Notification center", ["badges"] = "Badges & numbers", ["list"] = "Lists",
+        ["comments"] = "Comments & messages", ["dropdown"] = "Dropdowns", ["steps"] = "Steps & wizard", ["pagination"] = "Pagination",
+        ["page-head"] = "Page header & breadcrumb", ["utilities"] = "Utilities", ["hijri"] = "Hijri calendar", ["palette"] = "Command palette", ["otp"] = "One-time code",
+        ["phone"] = "Phone number", ["birthdate"] = "Birth date", ["file"] = "File upload", ["scrollspy"] = "Scrollspy", ["timeline"] = "Timeline", ["tree"] = "Tree",
+        ["charts"] = "Charts", ["month"] = "Month calendar", ["login-simple"] = "Login template", ["login"] = "Login wizard template",
+        ["tpl-dashboard"] = "Dashboard template", ["tpl-tickets"] = "List page template", ["tpl-order"] = "Detail page template", ["tpl-settings"] = "Settings template",
+        ["tpl-review"] = "Criteria review template", ["tpl-booking"] = "Timed multi-step form template", ["tpl-error"] = "Error page template", ["navbar"] = "Navbar",
+        ["carousel"] = "Carousel", ["colorpicker"] = "Color picker", ["reveal"] = "Entrance motion & scroll reveal", ["tokens"] = "Design tokens", ["fonts"] = "Fonts",
+        ["window"] = "Window", ["titlebar"] = "Title bar", ["toolbar"] = "Toolbar", ["statusbar"] = "Status bar",
     };
 
     // The pages the web NAV flags `fresh`.

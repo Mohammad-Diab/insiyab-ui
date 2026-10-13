@@ -417,7 +417,7 @@
     var state = { done: false }, side = null;
     var place = function () {
       side = side || document.querySelector('.ins-shell-side');
-      if (side) navPlace(side, note, state);
+      if (side) { filterBuild(side); navPlace(side, note, state); }
     };
     var finish = function () { place(); state.done = true; if (mo) mo.disconnect(); };
     var mo = window.MutationObserver ? new MutationObserver(function () {
@@ -426,6 +426,34 @@
     }) : null;
     if (mo) mo.observe(root, { childList: true, subtree: true });
     document.addEventListener('DOMContentLoaded', finish);
+  }
+
+  /* The sidebar's filter field, built before first paint so the links never shift down under it. */
+  var FILTER_WORDS = { ar: ['بحث', 'لا نتائج'], en: ['Search', 'No results'] };
+
+  function filterBuild(side) {
+    if (!side.hasAttribute('data-ins-filter')) return null;
+    var box = side.querySelector('.ins-shell-filter');
+    if (box) return box;
+    var first = side.querySelector('.ins-shell-group, .ins-shell-link');
+    if (!first) return null;
+    var lang = ((side.closest('[lang]') || root).getAttribute('lang') || 'en').slice(0, 2).toLowerCase();
+    var words = FILTER_WORDS[lang] || FILTER_WORDS.en, hint = side.getAttribute('data-ins-filter') || words[0];
+    box = document.createElement('div');
+    box.className = 'ins-shell-filter ins-search';
+    box.innerHTML = '<svg class="ins-search-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">' +
+      '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="ins-input ins-input--sm" type="search" autocomplete="off" spellcheck="false">';
+    var input = box.lastChild;
+    input.placeholder = hint;
+    input.setAttribute('aria-label', hint);
+    var empty = document.createElement('p');
+    empty.className = 'ins-shell-filter-empty';
+    empty.setAttribute('role', 'status');
+    empty.hidden = true;
+    empty.textContent = side.getAttribute('data-ins-filter-empty') || words[1];
+    first.parentNode.insertBefore(box, first);
+    first.parentNode.insertBefore(empty, first);
+    return box;
   }
   /* }boot */
 
@@ -544,6 +572,101 @@
     link.setAttribute('aria-current', 'page');
     navFly(side, old, link);
     return link;
+  }
+
+  /* ------------------------------------------------------ sidebar filter */
+  function filterItems(side) {
+    var all = side.querySelectorAll('.ins-shell-group, .ins-shell-link'), out = [];
+    for (var i = 0; i < all.length; i++) if (!all[i].closest('.ins-shell-bottom')) out.push(all[i]);
+    return out;
+  }
+
+  function filterLabel(link) {
+    var text = '';
+    for (var n = link.firstChild; n; n = n.nextSibling) {
+      if (n.nodeType === 3) text += n.nodeValue;
+      else if (n.nodeType === 1 && !n.classList.contains('ins-shell-link-badge')) text += ' ' + n.textContent;
+    }
+    return text;
+  }
+
+  function filterShown(link) {
+    return !link.classList.contains('is-filtered-out') && link.getClientRects().length > 0;
+  }
+
+  /* Hides the links that miss every word typed, and a heading left with none; text, keywords and the heading itself all count. */
+  function filterRun(side) {
+    var box = side.querySelector('.ins-shell-filter'), input = box && box.querySelector('input');
+    if (!input) return 0;
+    var terms = norm(input.value).split(/\s+/).filter(Boolean), items = filterItems(side), heads = [], head = null, i;
+    if (side.__insFlight) side.__insFlight.halt();
+    for (i = 0; i < items.length; i++) {
+      var item = items[i];
+      if (item.classList.contains('ins-shell-group')) { head = { el: item, text: norm(item.textContent), links: [] }; heads.push(head); continue; }
+      var hay = norm(filterLabel(item) + ' ' + (item.getAttribute('data-keywords') || '') + ' ' + (head ? head.text : ''));
+      var hit = true;
+      for (var t = 0; t < terms.length && hit; t++) hit = hay.indexOf(terms[t]) !== -1;
+      item.classList.toggle('is-filtered-out', !hit);
+      if (head) head.links.push(item);
+    }
+    var shown = 0;
+    for (i = 0; i < items.length; i++) if (items[i].classList.contains('ins-shell-link') && filterShown(items[i])) shown++;
+    for (i = 0; i < heads.length; i++) {
+      var any = !terms.length;
+      for (var j = 0; j < heads[i].links.length && !any; j++) any = filterShown(heads[i].links[j]);
+      heads[i].el.classList.toggle('is-filtered-out', !any);
+    }
+    side.classList.toggle('is-filtering', terms.length > 0);
+    var empty = side.querySelector('.ins-shell-filter-empty');
+    if (empty) empty.hidden = !(terms.length && !shown);
+    return shown;
+  }
+
+  function filterFirst(side) {
+    var items = filterItems(side);
+    for (var i = 0; i < items.length; i++) if (items[i].classList.contains('ins-shell-link') && filterShown(items[i])) return items[i];
+    return null;
+  }
+
+  /* `/` belongs to a command palette that claims it; otherwise it focuses the filter. */
+  function slashTaken() {
+    var p = document.querySelectorAll('[data-ins-palette]');
+    for (var i = 0; i < p.length; i++) {
+      var keys = p[i].hasAttribute('data-ins-palette-keys') ? p[i].getAttribute('data-ins-palette-keys') : 'mod+k /';
+      if ((' ' + keys.toLowerCase() + ' ').indexOf(' / ') !== -1) return true;
+    }
+    return false;
+  }
+
+  function typingIn(el) {
+    return !!el && (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) || el.isContentEditable);
+  }
+
+  function filterKey(event) {
+    var t = event.target, box = t.closest ? t.closest('.ins-shell-filter') : null;
+    if (box && t.tagName === 'INPUT') {
+      var side = box.closest('.ins-shell-side');
+      if (event.key === 'Escape') {
+        if (t.value) { t.value = ''; filterRun(side); event.preventDefault(); } else t.blur();
+        return;
+      }
+      if (event.key !== 'ArrowDown' && event.key !== 'Enter') return;
+      var first = filterFirst(side);
+      if (!first) return;
+      event.preventDefault();
+      if (event.key === 'Enter') first.click(); else first.focus();
+      return;
+    }
+    var slash = (event.key === '/' || (event.code === 'Slash' && !event.shiftKey)) && !event.ctrlKey && !event.metaKey && !event.altKey;
+    if (!slash || typingIn(t) || slashTaken()) return;
+    var input = document.querySelector('.ins-shell-side .ins-shell-filter input');
+    if (!input) return;
+    var panel = input.closest('.ins-shell-side');
+    if (isDrawer()) { if (!panel.classList.contains('is-open')) sidebar('open'); }
+    else if (root.classList.contains('ins-sidebar-collapsed') || !input.getClientRects().length) return;
+    event.preventDefault();
+    input.focus();
+    input.select();
   }
 
   /* Is this click about to load another page, in this tab? */
@@ -3967,7 +4090,8 @@
     if (!link || !navigates(event, link)) return;
     if (samePage(link)) { sidebarSelect(link); return; }
     var side = link.closest('.ins-shell-side'), old = navActive(side);
-    var note = { top: side.scrollTop, t: Date.now() };
+    var note = { t: Date.now() };
+    if (!side.classList.contains('is-filtering')) note.top = side.scrollTop;
     if (old && old !== link && old.href) note.from = old.href;
     try {
       window.sessionStorage.setItem(NAV_KEY, JSON.stringify(note));
@@ -4396,6 +4520,16 @@
     if (event.target.classList && event.target.classList.contains('ins-shell-scrim')) {
       sidebar('closed');
     }
+  }, false);
+
+  /* The sidebar filter, ahead of the Escape below: its first Escape clears the field and must not also close the drawer. */
+  document.addEventListener('input', function (event) {
+    var box = event.target.closest ? event.target.closest('.ins-shell-filter') : null;
+    var side = box && box.closest('.ins-shell-side');
+    if (side) filterRun(side);
+  }, false);
+  document.addEventListener('keydown', function (event) {
+    if (!event.defaultPrevented && !event.isComposing) filterKey(event);
   }, false);
 
   /* The keyboard. Menus and tabs first, because they own their arrow keys; then
@@ -4937,6 +5071,16 @@
   });
 
   /* A split gets its handle, and the share it was left at. */
+  define('shell-filter', function (scope) {
+    var sides = scope.querySelectorAll('.ins-shell-side[data-ins-filter]');
+    for (var i = 0; i < sides.length; i++) {
+      var box = filterBuild(sides[i]), input = box && box.querySelector('input');
+      if (!input) continue;
+      if (slashTaken()) input.removeAttribute('aria-keyshortcuts'); else input.setAttribute('aria-keyshortcuts', '/');
+      if (input.value) filterRun(sides[i]);
+    }
+  });
+
   define('split', function (scope) {
     var splits = scope.querySelectorAll('.ins-split');
     for (var i = 0; i < splits.length; i++) {
