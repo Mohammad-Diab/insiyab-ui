@@ -61,7 +61,7 @@ public class PickersBuiltinTests
         var chosen = Day(calendar, pick);
         Assert.IsType<LinearGradientBrush>(Part<Border>(chosen, "PART_Face").Background);
         var today = Day(calendar, t);
-        Assert.True(today.Classes.Contains(":today"));
+        Assert.Contains(":today", today.Classes);
         AssertBrush(calendar, "InsToneBrandBd", () => Part<Border>(today, "PART_Face").BorderBrush);
         AssertBrush(calendar, "InsCtlBg", () => Part<Button>(calendar, "PART_PreviousButton").Background);
         Assert.Equal(38, chosen.Bounds.Height);

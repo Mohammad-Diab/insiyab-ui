@@ -287,6 +287,8 @@ public class PickersBirthTests : IDisposable
     }
 
     [AvaloniaFact]
+
+    [AvaloniaFact]
     public void Birth_inline_shows_its_drums()
     {
         var field = new BirthDateField { Layout = BirthLayout.Inline };
@@ -318,9 +320,9 @@ public class PickersBirthTests : IDisposable
 
         Typed(w, "3102");
         var seg = Seg(field, 'm');
-        Assert.True(seg.Classes.Contains("no"));
+        Assert.Contains("no", seg.Classes);
         Assert.Equal("0", field.Engine.Str('m'));
         Settle(400);
-        Assert.False(seg.Classes.Contains("no"));
+        Assert.DoesNotContain("no", seg.Classes);
     }
 }

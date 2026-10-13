@@ -154,8 +154,8 @@ public class FoundationTests
         else
             Assert.True(X(word, w) > X(line, w), "RTL: the word leads at the right");
 
-        Assert.True(empty.Classes.Contains(":empty"));
-        Assert.False(labelled.Classes.Contains(":empty"));
+        Assert.Contains(":empty", empty.Classes);
+        Assert.DoesNotContain(":empty", labelled.Classes);
         Assert.Single(empty.GetVisualDescendants().OfType<Border>(), x => x.Height == 1);
     }
 

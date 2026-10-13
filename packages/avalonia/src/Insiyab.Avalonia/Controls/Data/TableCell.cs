@@ -192,7 +192,7 @@ public class TableCell : ContentControl
     }
 }
 
-/// <summary>A cell edit about to be kept: set <see cref="CancelEventArgs.Cancel"/> to refuse the value, or call <see cref="Revert"/> later if saving it fails.</summary>
+/// <summary>A cell edit about to be kept: set <see cref="System.ComponentModel.CancelEventArgs.Cancel"/> to refuse the value, or call <see cref="Revert"/> later if saving it fails.</summary>
 public sealed class TableEditEventArgs(TableCell cell, TableRow row, string value, string old, Action revert) : System.ComponentModel.CancelEventArgs
 {
     public TableCell Cell { get; } = cell;

@@ -82,7 +82,30 @@ internal static class Pop
         flyout.VerticalOffset = Gap - Room.Top;
         flyout.Popup.ShouldUseOverlayLayer = true;
         flyout.Opening += (_, _) => Offset(flyout);
-        flyout.Opened += (_, _) => Flip(flyout);
+        flyout.Opened += (_, _) =>
+        {
+            Flip(flyout);
+            Follow(flyout);
+        };
+    }
+
+    // The page can turn while the body is open: its offset swaps sides and the popup is placed again under the trigger.
+    private static void Follow(PopupFlyoutBase flyout)
+    {
+        if (flyout.Target is not Control target) return;
+        void Turned(object? sender, AvaloniaPropertyChangedEventArgs e)
+        {
+            if (e.Property != Visual.FlowDirectionProperty) return;
+            Offset(flyout);
+            flyout.Popup.HorizontalOffset = flyout.HorizontalOffset;
+        }
+        void Closed(object? sender, EventArgs e)
+        {
+            target.PropertyChanged -= Turned;
+            flyout.Closed -= Closed;
+        }
+        target.PropertyChanged += Turned;
+        flyout.Closed += Closed;
     }
 
     private static void Offset(PopupFlyoutBase flyout)

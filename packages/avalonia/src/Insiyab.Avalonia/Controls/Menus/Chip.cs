@@ -8,7 +8,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using Avalonia.Media.Transformation;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
@@ -145,10 +144,7 @@ public class Chip : ContentControl
         if (AdornerLayer.GetAdornerLayer(this) is not { } layer || TopLevel.GetTopLevel(this) is not { } top || this.TranslatePoint(default, layer) is not { } at) return null;
         var scale = top.RenderScaling;
         var size = Bounds.Size;
-        var bitmap = new RenderTargetBitmap(
-            new PixelSize(Math.Max(1, (int)Math.Ceiling(size.Width * scale)), Math.Max(1, (int)Math.Ceiling(size.Height * scale))),
-            new Vector(96 * scale, 96 * scale));
-        bitmap.Render(this);
+        var bitmap = Snapshot.Take(this, size, scale);
         var image = new Image
         {
             Source = bitmap,

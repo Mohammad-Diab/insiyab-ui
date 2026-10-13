@@ -1,10 +1,12 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
 using Avalonia.Headless;
 using Avalonia.Headless.XUnit;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Avalonia.VisualTree;
 using Insiyab.Avalonia.Controls;
 
@@ -102,5 +104,60 @@ public class PopCardTests
         Settle();
         AssertBrush(context, "InsWash1", () => Part<Border>(context, "PART_Ground").Background);
         context.Close();
+    }
+
+    // A segmented given inline is its own containers; a card that reopens with a styled panel prepares them again, and the choice must survive it.
+    [AvaloniaFact]
+    public void A_segmented_in_a_card_keeps_its_choice_when_the_card_opens_again()
+    {
+        var seg = new Segmented { Classes = { "wide" }, SelectedIndex = 0, Items = { new SegmentedItem { Content = "من اليمين" }, new SegmentedItem { Content = "من اليسار" } } };
+        var wide = new Style(x => x.OfType<Segmented>().Class("wide"))
+        {
+            Setters = { new Setter(ItemsControl.ItemsPanelProperty, new FuncTemplate<Panel?>(() => new UniformGrid { Rows = 1 })) },
+        };
+        var card = new PopCard { Content = new StackPanel { Styles = { wide }, Children = { seg } } };
+        var trigger = new Button { Content = "المظهر", Flyout = card, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
+        var window = Show(new StackPanel { Margin = new Thickness(40), Children = { trigger } }, FlowDirection.RightToLeft, null, 800, 600);
+        Click(trigger, window);
+        Click((Control)seg.ContainerFromIndex(1)!, window);
+        Assert.Equal(1, seg.SelectedIndex);
+        card.Hide();
+        Settle();
+        var changes = 0;
+        seg.SelectionChanged += (_, _) => changes++;
+        Click(trigger, window);
+        Assert.True(card.IsOpen);
+        Assert.Equal(1, seg.SelectedIndex);
+        Assert.Equal(0, changes);
+    }
+
+    // The page can turn while the card is open: it moves to its trigger's other edge, as the web's anchored card does.
+    [AvaloniaFact]
+    public void An_open_card_follows_its_trigger_when_the_page_turns()
+    {
+        var card = new PopCard { IsEnd = true, Content = new StackPanel { Width = 240, Children = { new TextBlock { Classes = { "pop-label" }, Text = "اتجاه الصفحة" } } } };
+        var trigger = new Button { Content = "المظهر", Flyout = card, HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Top };
+        var window = Show(new StackPanel { Margin = new Thickness(40), Children = { trigger } }, FlowDirection.RightToLeft, null, 800, 600);
+        Click(trigger, window);
+        var body = Part<Border>((Control)card.Popup.Child!, "LayoutRoot");
+        var a = Rect(trigger, window);
+        var b = Rect(body, window);
+        Assert.Equal(a.Left, b.Left, 1);
+
+        window.FlowDirection = FlowDirection.LeftToRight;
+        Settle();
+        Assert.True(card.IsOpen);
+        a = Rect(trigger, window);
+        b = Rect(body, window);
+        Assert.Equal(a.Right, b.Right, 1);
+        Assert.True(b.Top >= a.Bottom, "the card still hangs below its trigger");
+    }
+
+    // Where a control is drawn in the window, whichever corner its origin is in RTL.
+    private static Rect Rect(Control c, Window window)
+    {
+        var p = c.TranslatePoint(default, window)!.Value;
+        var q = c.TranslatePoint(new Point(c.Bounds.Width, c.Bounds.Height), window)!.Value;
+        return new Rect(new Point(Math.Min(p.X, q.X), Math.Min(p.Y, q.Y)), new Point(Math.Max(p.X, q.X), Math.Max(p.Y, q.Y)));
     }
 }

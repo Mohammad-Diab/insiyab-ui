@@ -548,7 +548,7 @@ public class MenusTests
         Settle();
         Type(w, "جداول");
         Assert.Equal(["الجداول"], palette.Shown.Select(i => i.Label));
-        Assert.True(palette.GetVisualDescendants().OfType<TextBlock>().Any(t => t.Classes.Contains("palette-where") && t.IsVisible));
+        Assert.Contains(palette.GetVisualDescendants().OfType<TextBlock>(), t => t.Classes.Contains("palette-where") && t.IsVisible);
         Assert.Empty(Heads(palette));
         palette.InputBox!.Text = "";
         Settle(200);

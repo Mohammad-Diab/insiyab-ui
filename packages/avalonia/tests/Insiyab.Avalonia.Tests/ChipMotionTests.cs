@@ -120,6 +120,39 @@ public class ChipMotionTests
         Assert.True(same > chip.Length * 0.85, $"{same} of {chip.Length} pixels match");
     }
 
+    // At 150% the picture is taken at the screen's density and lies over the chip at its own size: the ink of its text stays where it was (a zoomed picture moves it by tens of pixels).
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void The_picture_of_a_chip_matches_it_on_a_scaled_screen(string dir)
+    {
+        var (_, _, _, c, window) = Row(dir);
+        window.SetRenderScaling(1.5);
+        Settle(100);
+        var box = Box(c, window);
+        box = new PixelRect((int)(box.X * 1.5), (int)(box.Y * 1.5), (int)(box.Width * 1.5), (int)(box.Height * 1.5));
+        var chip = Ink(Red(window.CaptureRenderedFrame()!, box), box.Width);
+        c.Remove();
+        Frame(window);
+        var ghost = Ink(Red(window.CaptureRenderedFrame()!, box), box.Width);
+        Assert.True(ghost.Count > 0 && Math.Abs(chip.X - ghost.X) < 8 && Math.Abs(chip.Y - ghost.Y) < 4, $"the text moved from {chip} to {ghost}");
+    }
+
+    // The dark pixels of a box (the text and the remove mark): how many and their centre.
+    private static (int Count, double X, double Y) Ink(int[] red, int width)
+    {
+        int n = 0;
+        double x = 0, y = 0;
+        for (var i = 0; i < red.Length; i++)
+        {
+            if (red[i] >= 110) continue;
+            n++;
+            x += i % width;
+            y += i / width;
+        }
+        return n == 0 ? (0, 0, 0) : (n, x / n, y / n);
+    }
+
     // Where a control is drawn in the window, whichever corner its origin is in RTL.
     private static PixelRect Box(Control c, Window window)
     {
