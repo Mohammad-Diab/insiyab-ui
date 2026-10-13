@@ -600,5 +600,11 @@
   <Style Selector="SplitView:overlay ScrollViewer.shell-content">
     <Setter Property="Padding" Value="16,8,16,24" />
   </Style>
+  <!-- The page host: each new page rises 6px as it fades in, the web's .ins-shell-content > * -->
+  <Style Selector="TransitioningContentControl.shell-content">
+    <Setter Property="PageTransition">
+      <ins:RiseTransition />
+    </Setter>
+  </Style>
 
 </Styles>

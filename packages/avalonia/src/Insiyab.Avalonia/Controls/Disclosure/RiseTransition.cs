@@ -20,6 +20,7 @@ public class RiseTransition : IPageTransition
         if (from is not null) from.IsVisible = false;
         if (to is null) return;
         to.IsVisible = true;
+        if (Motion.IsStill(to)) return;
         TransformOperationsAnimator.Ensure();
         var animation = new Animation
         {
