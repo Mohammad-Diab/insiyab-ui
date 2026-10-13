@@ -22,7 +22,7 @@
   <ScrollViewer>
     <StackPanel Margin="24" Spacing="16">
       <TextBlock Classes="section" Text="الألوان" />
-      <TextBlock Classes="note" Text="كل عيّنة مرسومة بالمفتاح المكتوب تحتها، فتتغير مع الوضع الفاتح والداكن. ألوان العلامة في صفحة «اللون الأساسي»." />
+      <TextBlock Classes="note" Text="كل عيّنة مرسومة بالمفتاح المكتوب تحتها، فتتغير مع الوضع الفاتح والداكن. ألوان العلامة في صفحة «اللون والهوية»." />
       <WrapPanel x:Name="ColorList" ItemSpacing="12" LineSpacing="12" />
 
       <TextBlock Classes="section" Text="الزوايا" Margin="0,16,0,0" />

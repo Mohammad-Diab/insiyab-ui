@@ -1,19 +1,123 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
              x:Class="Insiyab.Avalonia.Gallery.Pages.TypographyPage">
-  <ScrollViewer>
-    <StackPanel Margin="24" Spacing="16" MaxWidth="760" HorizontalAlignment="Left">
-      <TextBlock Classes="eyebrow" Text="التقارير الشهرية" />
-      <TextBlock Classes="display" Text="مرحبًا بك" />
-      <TextBlock Classes="h1" Text="إدارة المشاريع" />
-      <TextBlock Classes="h2" Text="المهام المفتوحة" />
-      <TextBlock Classes="h3" Text="تفاصيل المهمة" />
-      <TextBlock Classes="h4" Text="الملاحظات" />
-      <TextBlock Classes="lead" Text="تابع سير العمل في فريقك من مكان واحد، واعرف ما أُنجز وما ينتظر المراجعة." />
-      <TextBlock Classes="prose" Text="يعرض هذا القسم ملخص نشاط الأسبوع. راجع المهام المتأخرة أولًا، ثم انتقل إلى ما يحتاج موافقتك قبل نهاية اليوم." />
-      <TextBlock Text="نص عادي بالحجم الافتراضي." />
-      <TextBlock Classes="muted" Text="آخر تحديث قبل خمس دقائق" />
-      <TextBlock Classes="num" Text="-2,375,000" />
-    </StackPanel>
-  </ScrollViewer>
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/FoundationFrames.axaml" />
+  </UserControl.Styles>
+  <StackPanel>
+
+    <Border Classes="dx">
+      <StackPanel>
+        <TextBlock Classes="display" Text="انسياب" Margin="0,0,0,24" />
+        <TextBlock Classes="h1" Text="عنوان أول" Margin="0,0,0,14" />
+        <TextBlock Classes="h2" Text="عنوان ثان" Margin="0,0,0,11" />
+        <TextBlock Classes="h3" Text="عنوان ثالث" Margin="0,0,0,9" />
+        <TextBlock Classes="h4" Text="عنوان رابع" />
+      </StackPanel>
+    </Border>
+
+    <TextBlock Classes="section" Text="الخطوط الثلاثة" />
+    <Border Classes="dx">
+      <StackPanel Spacing="12">
+        <TextBlock Classes="h3" Text="تجوال · Tajawal" Margin="0,0,0,9" />
+        <TextBlock Classes="h3" FlowDirection="LeftToRight" FontFamily="{DynamicResource InsFontBodyEn}" Text="Inter · 1,240,905" Margin="0,0,0,9" />
+        <TextBlock Classes="h3" FlowDirection="LeftToRight" FontFamily="{DynamicResource InsFontHeadingEn}" Text="Cause" />
+      </StackPanel>
+    </Border>
+
+    <TextBlock Classes="section" Text="العناوين" />
+    <Border Classes="stage">
+      <TextBlock Classes="h2" Text="الإعدادات" />
+    </Border>
+    <TextBlock Classes="variant" Text="عنوان صغير فوقه، وتمهيد تحته" />
+    <Border Classes="stage">
+      <StackPanel>
+        <TextBlock Classes="eyebrow" Text="الحساب" Margin="0,0,0,6" />
+        <TextBlock Classes="h2" Text="الإعدادات" Margin="0,0,0,11" />
+        <TextBlock Classes="lead" Text="الاسم والبريد وكلمة المرور." Margin="0,0,0,18" />
+      </StackPanel>
+    </Border>
+
+    <TextBlock Classes="section" Text="النص الطويل" />
+    <Border Classes="stage wide">
+      <ins:Prose>
+        <TextBlock Classes="h2" Text="عنوان" />
+        <TextBlock>
+          <Run Text="فقرة فيها " /><Run Classes="strong" Text="نص عريض" /><Run Text=" و" /><Run Classes="em" Text="توكيد" /><Run Text=" و" /><Run Classes="mark" Text="تظليل" /><Run Text=" و" /><Run Classes="code" Text="&#x2066;&#x202F;code&#x202F;&#x2069;" /><Run Text=" و" /><Run Classes="a" Text="رابط" /><Run Text="." />
+        </TextBlock>
+      </ins:Prose>
+    </Border>
+    <TextBlock Classes="variant" Text="قائمة، واقتباس، وشيفرة، وجدول، وقائمة وصف" />
+    <Border Classes="stage wide">
+      <ins:Prose>
+        <TextBlock Classes="h2" Text="عنوان" />
+        <TextBlock>
+          <Run Text="فقرة فيها " /><Run Classes="strong" Text="نص عريض" /><Run Text=" و" /><Run Classes="em" Text="توكيد" /><Run Text=" و" /><Run Classes="mark" Text="تظليل" /><Run Text=" و" /><Run Classes="code" Text="&#x2066;&#x202F;code&#x202F;&#x2069;" /><Run Text=" و" /><Run Classes="a" Text="رابط" /><Run Text="." />
+        </TextBlock>
+        <ins:ProseList IsOrdered="True">
+          <TextBlock Text="البند الأول" />
+          <StackPanel>
+            <TextBlock Text="البند الثاني" />
+            <ins:ProseList>
+              <TextBlock Text="بند متداخل" />
+            </ins:ProseList>
+          </StackPanel>
+        </ins:ProseList>
+        <Border Classes="blockquote">
+          <TextBlock Text="اقتباس قصير." />
+        </Border>
+        <Border Classes="pre">
+          <TextBlock Text="GET /api/items" />
+        </Border>
+        <Grid Classes="table" ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
+          <Border Classes="th" Grid.Row="0" Grid.Column="0"><TextBlock Text="الاسم" /></Border>
+          <Border Classes="th" Grid.Row="0" Grid.Column="1"><TextBlock Text="القيمة" /></Border>
+          <Border Classes="td" Grid.Row="1" Grid.Column="0"><TextBlock Text="الأول" /></Border>
+          <Border Classes="td" Grid.Row="1" Grid.Column="1"><TextBlock Text="12" /></Border>
+          <Border Classes="td" Grid.Row="2" Grid.Column="0"><TextBlock Text="الثاني" /></Border>
+          <Border Classes="td" Grid.Row="2" Grid.Column="1"><TextBlock Text="7" /></Border>
+        </Grid>
+        <StackPanel>
+          <TextBlock Classes="dt" Text="المدة" />
+          <TextBlock Classes="dd" Text="14 يومًا" />
+        </StackPanel>
+      </ins:Prose>
+    </Border>
+
+    <TextBlock Classes="section" Text="الفاصل" />
+    <Border Classes="stage wide">
+      <ins:Divider Content="أو" />
+    </Border>
+    <TextBlock Classes="variant" Text="بلا نص" />
+    <Border Classes="stage wide">
+      <Separator />
+    </Border>
+    <TextBlock Classes="variant" Text="النص في البداية" />
+    <Border Classes="stage wide">
+      <ins:Divider Classes="start" Content="أو" />
+    </Border>
+    <TextBlock Classes="variant" Text="عمودي" />
+    <Border Classes="stage">
+      <StackPanel Orientation="Horizontal" Spacing="10">
+        <TextBlock Text="ملف" />
+        <Separator Classes="v" />
+        <TextBlock Text="تعديل" />
+      </StackPanel>
+    </Border>
+
+    <TextBlock Classes="section" Text="المفاتيح" />
+    <Border Classes="stage">
+      <TextBlock>
+        <Run Text="اضغط " /><InlineUIContainer BaselineAlignment="TextBottom"><StackPanel Orientation="Horizontal"><Border Classes="kbd"><TextBlock Text="Ctrl" /></Border><TextBlock Text=" + " VerticalAlignment="Bottom" Margin="0,0,0,2" /><Border Classes="kbd"><TextBlock Text="K" /></Border></StackPanel></InlineUIContainer><Run Text=" للبحث." />
+      </TextBlock>
+    </Border>
+    <TextBlock Classes="variant" Text="بلا Ctrl" />
+    <Border Classes="stage">
+      <TextBlock>
+        <Run Text="اضغط " /><InlineUIContainer BaselineAlignment="TextBottom"><Border Classes="kbd"><TextBlock Text="K" /></Border></InlineUIContainer><Run Text=" للبحث." />
+      </TextBlock>
+    </Border>
+
+  </StackPanel>
 </UserControl>

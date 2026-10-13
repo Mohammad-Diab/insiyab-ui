@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
 
   <!-- Fluent's text brushes, pointed at InsText1 so plain text and stock controls follow light and dark -->
   <Styles.Resources>
@@ -155,4 +156,7 @@
     <Setter Property="FontFeatures" Value="+tnum,+lnum" />
   </Style>
 
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Foundation/Prose.axaml" />
+
 </Styles>
+

@@ -65,6 +65,72 @@
           <SolidColorBrush x:Key="InsPanelIcoBrush" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.1" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
+
+      <!-- a.ins-card: a card that is a control, so it lifts under the pointer and gives a little when pressed -->
+      <ControlTheme x:Key="InsCardButton" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource InsGlassFill}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsGlassRim}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Name="PART_Face"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+              <Border.Transitions>
+                <Transitions>
+                  <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                </Transitions>
+              </Border.Transitions>
+              <ContentPresenter Name="PART_ContentPresenter"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Padding="{TemplateBinding Padding}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Border#PART_Face">
+          <Setter Property="BoxShadow">
+            <MultiBinding Converter="{x:Static ctl:PanelShadows.Join}">
+              <DynamicResource ResourceKey="InsShGlass" />
+              <DynamicResource ResourceKey="InsBevel" />
+            </MultiBinding>
+          </Setter>
+        </Style>
+        <Style Selector="^[FlowDirection=RightToLeft]">
+          <Setter Property="Background" Value="{DynamicResource InsGlassFillRtl}" />
+        </Style>
+        <Style Selector="^:pointerover">
+          <Setter Property="RenderTransform" Value="translateY(-2px)" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsRimTop}" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#PART_Face">
+          <Setter Property="BoxShadow">
+            <MultiBinding Converter="{x:Static ctl:PanelShadows.Join}">
+              <DynamicResource ResourceKey="InsShLg" />
+              <DynamicResource ResourceKey="InsBevel" />
+            </MultiBinding>
+          </Setter>
+        </Style>
+        <Style Selector="^:pressed">
+          <Setter Property="RenderTransform" Value="scale(0.995)" />
+        </Style>
+      </ControlTheme>
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -133,7 +199,7 @@
     <Setter Property="TextElement.FontSize" Value="15" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
-  <Style Selector="Border.panel-ico > Control">
+  <Style Selector="Border.panel-ico > :is(Control)">
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
@@ -156,6 +222,11 @@
   </Style>
   <Style Selector="Border.panel-body.flush">
     <Setter Property="Padding" Value="10" />
+  </Style>
+  <!-- Inside a flush body the note drops its rule and keeps a smaller inset of its own -->
+  <Style Selector="Border.panel-body.flush Border.panel-note">
+    <Setter Property="Padding" Value="10,6,10,12" />
+    <Setter Property="BorderThickness" Value="0" />
   </Style>
   <Style Selector="Border.panel-foot">
     <Setter Property="Padding" Value="18,12" />
@@ -182,9 +253,9 @@
   <Style Selector="Border.hoverable">
     <Setter Property="Transitions">
       <Transitions>
-        <TransformOperationsTransition Property="RenderTransform" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
-        <BoxShadowsTransition Property="BoxShadow" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
-        <BrushTransition Property="BorderBrush" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
       </Transitions>
     </Setter>
   </Style>

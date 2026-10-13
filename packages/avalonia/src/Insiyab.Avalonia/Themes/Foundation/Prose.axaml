@@ -1,0 +1,176 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <!-- The labelled divider: the word between two hairlines, or after one with .start -->
+  <Style Selector="ctl|Divider">
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Margin" Value="0,16" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="12">
+          <Border Name="PART_Start" Grid.Column="0" Height="1" VerticalAlignment="Center" Background="{TemplateBinding BorderBrush}" />
+          <ContentPresenter Name="PART_ContentPresenter" Grid.Column="1"
+                            Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+                            VerticalAlignment="Center" />
+          <Border Name="PART_End" Grid.Column="2" Height="1" VerticalAlignment="Center" Background="{TemplateBinding BorderBrush}" />
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="ctl|Divider.start">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DockPanel>
+          <ContentPresenter Name="PART_ContentPresenter" DockPanel.Dock="Left" Margin="0,0,12,0"
+                            Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+                            VerticalAlignment="Center" />
+          <Border Name="PART_End" Height="1" VerticalAlignment="Center" Background="{TemplateBinding BorderBrush}" />
+        </DockPanel>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="ctl|Divider:empty">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="PART_End" Height="1" VerticalAlignment="Center" Background="{TemplateBinding BorderBrush}" />
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <!-- Long-form text: Prose stacks the blocks, these set each one as .ins-prose does -->
+  <Style Selector="ctl|Prose">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+  <Style Selector="ctl|Prose TextBlock">
+    <Setter Property="LineHeight" Value="28.8" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="ctl|Prose[FlowDirection=LeftToRight] TextBlock">
+    <Setter Property="LineHeight" Value="26.4" />
+  </Style>
+  <!-- Prose spaces a rule itself, 2em each side -->
+  <Style Selector="ctl|Prose > Separator">
+    <Setter Property="Margin" Value="0" />
+  </Style>
+  <Style Selector="ctl|Prose TextBlock.h1">
+    <Setter Property="LineHeight" Value="36.4" />
+  </Style>
+  <Style Selector="ctl|Prose TextBlock.h2">
+    <Setter Property="LineHeight" Value="28.6" />
+  </Style>
+  <Style Selector="ctl|Prose TextBlock.h3">
+    <Setter Property="LineHeight" Value="23.4" />
+  </Style>
+  <Style Selector="ctl|Prose TextBlock.h4">
+    <Setter Property="LineHeight" Value="20.8" />
+  </Style>
+
+  <!-- Emphasis is colour, never a slant; a link is underlined clear of the Arabic dots -->
+  <Style Selector="Run.em, Span.em">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+  </Style>
+  <Style Selector="Run.strong, Span.strong">
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector="Run.mark, Span.mark">
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+  </Style>
+  <Style Selector="Run.a, Span.a">
+    <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+    <Setter Property="TextDecorations">
+      <TextDecorationCollection>
+        <TextDecoration Location="Underline" StrokeThickness="1" StrokeThicknessUnit="Pixel"
+                        StrokeOffset="4.8" StrokeOffsetUnit="Pixel" Stroke="{DynamicResource InsToneBrandBd}" />
+      </TextDecorationCollection>
+    </Setter>
+  </Style>
+
+  <!-- Code in a sentence: a Run keeps the sentence's bidi order (wrap its text in U+2066 and U+2069 to isolate it); Border.code is the boxed chip for use outside running text -->
+  <Style Selector="Run.code, Span.code">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontMono}" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+  </Style>
+  <Style Selector="Border.code">
+    <Setter Property="FlowDirection" Value="LeftToRight" />
+    <Setter Property="Padding" Value="5.25,1.75" />
+    <Setter Property="CornerRadius" Value="5" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+    <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+    <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontMono}" />
+    <Setter Property="TextElement.FontSize" Value="14" />
+  </Style>
+  <Style Selector="Border.code > TextBlock">
+    <Setter Property="LineHeight" Value="NaN" />
+  </Style>
+
+  <!-- A code block starts at the left in either direction -->
+  <Style Selector="Border.pre">
+    <Setter Property="FlowDirection" Value="LeftToRight" />
+    <Setter Property="Padding" Value="16.25,13" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+    <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+    <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontMono}" />
+    <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsSm}" />
+  </Style>
+  <Style Selector="Border.pre TextBlock">
+    <Setter Property="LineHeight" Value="20.8" />
+    <Setter Property="TextWrapping" Value="NoWrap" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+  </Style>
+
+  <!-- The quote's bar is on the start edge and its rounding on the end edge, both mirroring with the page -->
+  <Style Selector="Border.blockquote">
+    <Setter Property="Padding" Value="20,12" />
+    <Setter Property="BorderThickness" Value="3,0,0,0" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandSoft}" />
+    <Setter Property="CornerRadius" Value="0,10,10,0" />
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+  </Style>
+
+  <Style Selector="ctl|ProseList">
+    <Setter Property="MarkerBrush" Value="{DynamicResource InsToneBrandSoft}" />
+  </Style>
+  <Style Selector="ctl|ProseList ctl|ProseList">
+    <Setter Property="Margin" Value="0,6,0,0" />
+  </Style>
+
+  <!-- A plain table in an article: rules and alignment, no glass -->
+  <Style Selector="Grid.table">
+    <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsMd}" />
+  </Style>
+  <Style Selector="Grid.table > Border.th, Grid.table > Border.td">
+    <Setter Property="Padding" Value="10.5,7" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+  </Style>
+  <Style Selector="Grid.table > Border.th">
+    <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+    <Setter Property="TextElement.FontWeight" Value="Bold" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsLabel}" />
+  </Style>
+  <Style Selector="Grid.table TextBlock">
+    <Setter Property="LineHeight" Value="25.2" />
+  </Style>
+  <Style Selector="ctl|Prose[FlowDirection=LeftToRight] Grid.table TextBlock">
+    <Setter Property="LineHeight" Value="23.1" />
+  </Style>
+
+  <Style Selector="TextBlock.dt">
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector="TextBlock.dd">
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+    <Setter Property="Margin" Value="0,0,0,8" />
+  </Style>
+
+</Styles>
