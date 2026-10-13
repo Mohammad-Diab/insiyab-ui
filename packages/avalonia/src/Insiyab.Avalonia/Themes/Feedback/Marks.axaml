@@ -92,33 +92,38 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border x:Name="PART_Face"
-                    Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="{TemplateBinding CornerRadius}"
-                    Padding="{TemplateBinding Padding}">
-              <Border.Transitions>
-                <Transitions>
-                  <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-                </Transitions>
-              </Border.Transitions>
-              <StackPanel Orientation="Horizontal" Spacing="5">
-                <Ellipse x:Name="PART_Dot" Width="7" Height="7" VerticalAlignment="Center" IsVisible="False"
-                         Fill="{TemplateBinding Foreground}" RenderTransformOrigin="50%,50%" RenderTransform="none">
-                  <Ellipse.Transitions>
-                    <Transitions>
-                      <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
-                    </Transitions>
-                  </Ellipse.Transitions>
-                </Ellipse>
-                <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
-                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                                  VerticalAlignment="Center" LineHeight="18" RecognizesAccessKey="True" />
-              </StackPanel>
-            </Border>
+            <Panel x:Name="PART_Press">
+              <Border x:Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      Padding="{TemplateBinding Padding}">
+                <Border.Transitions>
+                  <Transitions>
+                    <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                  </Transitions>
+                </Border.Transitions>
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                  <Ellipse x:Name="PART_Dot" Width="7" Height="7" VerticalAlignment="Center" IsVisible="False"
+                           Fill="{TemplateBinding Foreground}" RenderTransformOrigin="50%,50%" RenderTransform="none">
+                    <Ellipse.Transitions>
+                      <Transitions>
+                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+                      </Transitions>
+                    </Ellipse.Transitions>
+                  </Ellipse>
+                  <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    VerticalAlignment="Center" LineHeight="18" RecognizesAccessKey="True" />
+                </StackPanel>
+              </Border>
+            </Panel>
           </ControlTemplate>
         </Setter>
+        <Style Selector="^ /template/ Panel#PART_Press">
+          <Setter Property="ctl:PressDip.Depth" Value="0.96" />
+        </Style>
         <Style Selector="^.dot /template/ Ellipse#PART_Dot">
           <Setter Property="IsVisible" Value="True" />
         </Style>

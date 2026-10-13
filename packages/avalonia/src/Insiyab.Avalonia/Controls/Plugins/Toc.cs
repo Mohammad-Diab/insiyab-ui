@@ -199,7 +199,7 @@ public class Toc : ItemsControl
     // The marker flies from the old entry to the new one, as the sidebar's does; the first time it grows in place.
     private void PlaceMarker(bool moved)
     {
-        if (_marker is null || _host is null) return;
+        if (_marker is null || _host is null || _flight is not null && !moved) return;
         if (_active is null || !_active.IsArrangeValid)
         {
             if (_active is null) { _marker.Opacity = 0; _markerShown = false; }
@@ -210,21 +210,91 @@ public class Toc : ItemsControl
         var y = top.Value.Y + 7;
         var h = Math.Max(0, _active.Bounds.Height - 14);
         if (!moved && Math.Abs(_marker.Height - h) < 0.5 && _marker.Tag is double last && Math.Abs(last - y) < 0.5) return;
+        var flying = _flight is not null;
+        var from = flying ? _flightY : _marker.Tag as double?;
+        var fromHeight = flying ? _flightHeight : _marker.Height;
         _marker.Tag = y;
-        if (!_markerShown)
+        if (!_markerShown || Motion.IsStill(this))
         {
             var transitions = _marker.Transitions;
             _marker.Transitions = null;
             _marker.Height = h;
-            _marker.RenderTransform = TransformOperations.Parse(FormattableString.Invariant($"translateY({y}px) scaleY(0)"));
+            _marker.RenderTransform = Shift(y, _markerShown ? 1 : 0);
             _marker.Opacity = 1;
             _marker.Transitions = transitions;
+            if (_markerShown) return;
             _markerShown = true;
-            Dispatcher.UIThread.Post(() => _marker.RenderTransform = TransformOperations.Parse(FormattableString.Invariant($"translateY({y}px) scaleY(1)")), DispatcherPriority.Render);
+            Dispatcher.UIThread.Post(() => _marker.RenderTransform = Shift(y, 1), DispatcherPriority.Render);
+            return;
+        }
+        if (moved && from is double y0 && fromHeight > 0 && TopLevel.GetTopLevel(this) is { } level)
+        {
+            Fly(level, y0, fromHeight, y, h);
             return;
         }
         _marker.Height = h;
-        _marker.RenderTransform = TransformOperations.Parse(FormattableString.Invariant($"translateY({y}px) scaleY(1)"));
+        _marker.RenderTransform = Shift(y, 1);
+    }
+
+    private static ITransform Shift(double y, double scale) =>
+        TransformOperations.Parse(FormattableString.Invariant($"translateY({y}px) scaleY({scale})"));
+
+    private static readonly global::Avalonia.Animation.Easings.SplineEasing FlyOut = new(0.9, 0.1, 1, 0.2);
+    private static readonly global::Avalonia.Animation.Easings.SplineEasing FlyIn = new(0.1, 0.9, 0.2, 1);
+    private const double FlightMs = 600;
+    private object? _flight;
+    private Transitions? _resting;
+    private double _flightY, _flightHeight;
+
+    // Stretches from the old entry to cover the new one, then lets go of the old end: 600ms, two splines, as Shell's marker flies.
+    private void Fly(TopLevel level, double y0, double h0, double y1, double h1)
+    {
+        var marker = _marker!;
+        var run = new object();
+        _resting ??= marker.Transitions;
+        marker.Transitions = null;
+        var down = y1 > y0;
+        var spanTop = down ? y0 : y1;
+        var span = down ? y1 + h1 - y0 : y0 + h0 - y1;
+        var clock = System.Diagnostics.Stopwatch.StartNew();
+        _flight = run;
+        Set(y0, h0);
+        DispatcherTimer.RunOnce(() => Land(run), TimeSpan.FromMilliseconds(FlightMs + 150));
+        void Frame(TimeSpan _)
+        {
+            if (_flight != run) return;
+            var t = Math.Clamp(clock.Elapsed.TotalMilliseconds / FlightMs, 0, 1);
+            if (t < 1d / 3)
+            {
+                var k = FlyOut.Ease(t * 3);
+                Set(y0 + (spanTop - y0) * k, h0 + (span - h0) * k);
+            }
+            else
+            {
+                var k = FlyIn.Ease((t - 1d / 3) * 1.5);
+                Set(spanTop + (y1 - spanTop) * k, span + (h1 - span) * k);
+            }
+            if (t >= 1) Land(run); else level.RequestAnimationFrame(Frame);
+        }
+        level.RequestAnimationFrame(Frame);
+    }
+
+    private void Set(double y, double h)
+    {
+        _flightY = y;
+        _flightHeight = h;
+        _marker!.Height = Math.Max(0, h);
+        _marker.RenderTransform = Shift(y, 1);
+    }
+
+    private void Land(object run)
+    {
+        if (_flight != run || _marker is null) return;
+        _flight = null;
+        _marker.Tag = null;
+        PlaceMarker(true);
+        _marker.Transitions = _resting;
+        _resting = null;
     }
 
     // A click marks the link at once, and the marker stays on it through the scroll the click started.
