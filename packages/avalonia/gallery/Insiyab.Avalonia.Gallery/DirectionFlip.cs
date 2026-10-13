@@ -29,11 +29,12 @@ internal static class DirectionFlip
         }
         s_land?.Invoke();
 
+        // As ThemeSweep's picture: drawn at 96 dpi through a VisualBrush, since Render at the window's dpi misplaces RenderTransforms and an Image misreads its size.
         var scale = top.RenderScaling;
-        var bitmap = new RenderTargetBitmap(
-            new PixelSize(Math.Max(1, (int)Math.Ceiling(size.Width * scale)), Math.Max(1, (int)Math.Ceiling(size.Height * scale))),
-            new Vector(96 * scale, 96 * scale));
-        bitmap.Render(top);
+        var bitmap = new RenderTargetBitmap(new PixelSize(Math.Max(1, (int)Math.Ceiling(size.Width * scale)), Math.Max(1, (int)Math.Ceiling(size.Height * scale))));
+        using (var context = bitmap.CreateDrawingContext())
+        using (context.PushTransform(Matrix.CreateScale(scale, scale)))
+            context.DrawRectangle(new VisualBrush(top) { Stretch = Stretch.None, AlignmentX = AlignmentX.Left, AlignmentY = AlignmentY.Top }, null, new Rect(size));
         var old = new Image
         {
             Source = bitmap,
@@ -45,10 +46,12 @@ internal static class DirectionFlip
             HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left,
             VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Top,
         };
+        // A plain child, not an adorner of the layer: the layer places its adorners mirrored in RTL.
         layer.Children.Add(old);
-        AdornerLayer.SetAdornedElement(old, layer);
 
         apply();
+        // Laid out before the page turns, so an open popup is placed again under its trigger rather than under the turning page.
+        top.UpdateLayout();
 
         // The hinge is the page's start edge, which its own mirrored coordinates put at 0 on either side.
         var book = new Rotate3DTransform { Depth = 1600 };

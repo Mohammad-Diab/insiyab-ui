@@ -32,6 +32,14 @@ public class Segmented : SelectingItemsControl
     protected override bool NeedsContainerOverride(object? item, int index, out object? recycleKey) =>
         NeedsContainer<SegmentedItem>(item, out recycleKey);
 
+    // Segments given inline are their own containers and keep the IsSelected of their last showing; prepared again (a card that reopens) Avalonia reads that as a toggle, which drops the chosen one and falls back to the first.
+    protected override void PrepareContainerForItemOverride(Control container, object? item, int index)
+    {
+        if (container == item && container.IsSet(IsSelectedProperty) && container.GetValue(IsSelectedProperty) == Selection.IsSelected(index))
+            container.ClearValue(IsSelectedProperty);
+        base.PrepareContainerForItemOverride(container, item, index);
+    }
+
     protected override bool ShouldTriggerSelection(Visual selectable, PointerEventArgs e) =>
         e.Properties.PointerUpdateKind is PointerUpdateKind.LeftButtonPressed or PointerUpdateKind.LeftButtonReleased && base.ShouldTriggerSelection(selectable, e);
 

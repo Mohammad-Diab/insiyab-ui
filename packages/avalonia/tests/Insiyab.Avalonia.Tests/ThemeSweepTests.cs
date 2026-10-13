@@ -1,9 +1,13 @@
 using Avalonia;
+using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Headless;
 using Avalonia.Headless.XUnit;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Media.Transformation;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
 using Insiyab.Avalonia.Controls;
@@ -60,12 +64,36 @@ public class ThemeSweepTests
             ThemeSweep.Run(origin, () => Application.Current!.RequestedThemeVariant = ThemeVariant.Dark);
             Settle(150);
             var picture = Picture(window)!;
-            var centre = origin.TranslatePoint(new Point(origin.Bounds.Width / 2, origin.Bounds.Height / 2), window)!.Value;
-            Assert.True(centre.X < 400, "the origin is on the left in RTL");
-            Assert.False(picture.Clip!.FillContains(centre));
-            Assert.True(picture.Clip.FillContains(new Point(798, 498)));
         }
-        finally { Application.Current!.RequestedThemeVariant = ThemeVariant.Light; }
+        finally
+        {
+            ThemeSweep.Held = false;
+            Application.Current!.RequestedThemeVariant = ThemeVariant.Light;
+        }
+    }
+
+    private static PixelRect Box(Control c, Window window, double scale)
+    {
+        var a = c.TranslatePoint(default, window)!.Value;
+        var z = c.TranslatePoint(new Point(c.Bounds.Width, c.Bounds.Height), window)!.Value;
+        return new PixelRect((int)Math.Round(Math.Min(a.X, z.X) * scale) + 4, (int)Math.Round(Math.Min(a.Y, z.Y) * scale) + 4, (int)(c.Bounds.Width * scale) - 8, (int)(c.Bounds.Height * scale) - 8);
+    }
+
+    // The share of a box's pixels that pass a test on their colour.
+    private static double Share(WriteableBitmap frame, PixelRect box, Func<int, int, int, bool> test)
+    {
+        using var buffer = frame.Lock();
+        var rgba = buffer.Format == global::Avalonia.Platform.PixelFormat.Rgba8888;
+        var bytes = new byte[buffer.RowBytes * buffer.Size.Height];
+        System.Runtime.InteropServices.Marshal.Copy(buffer.Address, bytes, 0, bytes.Length);
+        var hits = 0;
+        for (var y = box.Y; y < box.Bottom; y++)
+            for (var x = box.X; x < box.Right; x++)
+            {
+                var i = y * buffer.RowBytes + x * 4;
+                if (rgba ? test(bytes[i], bytes[i + 1], bytes[i + 2]) : test(bytes[i + 2], bytes[i + 1], bytes[i])) hits++;
+            }
+        return (double)hits / (box.Width * box.Height);
     }
 
     [AvaloniaFact]

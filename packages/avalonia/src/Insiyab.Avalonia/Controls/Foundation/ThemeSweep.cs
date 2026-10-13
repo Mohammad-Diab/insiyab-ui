@@ -27,11 +27,7 @@ public static class ThemeSweep
         }
         s_current?.Land();
 
-        var scale = top.RenderScaling;
-        var bitmap = new RenderTargetBitmap(
-            new PixelSize(Math.Max(1, (int)Math.Ceiling(size.Width * scale)), Math.Max(1, (int)Math.Ceiling(size.Height * scale))),
-            new Vector(96 * scale, 96 * scale));
-        bitmap.Render(top);
+        var bitmap = Snapshot.Take(top, size, top.RenderScaling);
 
         var centre = RestCentre(origin, top);
         var far = new[] { new Point(0, 0), new Point(size.Width, 0), new Point(0, size.Height), new Point(size.Width, size.Height) }
@@ -48,8 +44,8 @@ public static class ThemeSweep
             HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left,
             VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Top,
         };
+        // A plain child, not an adorner of the layer: the layer places its adorners mirrored in RTL.
         layer.Children.Add(picture);
-        AdornerLayer.SetAdornedElement(picture, layer);
 
         apply();
 
