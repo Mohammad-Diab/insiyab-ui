@@ -28,4 +28,9 @@
     <Setter Property="RenderTransform" Value="none" />
   </Style>
 
+  <!-- The system's reduced motion is one switch with the app's here, so the day/night sky changes at once -->
+  <Style Selector=":is(TopLevel):ins-still ins|DayNight /template/ :is(Control)">
+    <Setter Property="Transitions" Value="{x:Null}" />
+  </Style>
+
 </Styles>

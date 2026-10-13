@@ -1,0 +1,236 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <!-- The web's 165deg skies on a 72x36 box; the Rtl copies are mirrored back, since the gradients are physical on the web -->
+      <LinearGradientBrush x:Key="InsDnDay" StartPoint="40.4%,-21.6%" EndPoint="59.6%,121.6%">
+        <GradientStop Offset="0" Color="#8ECDF3" />
+        <GradientStop Offset="1" Color="#4F9FE0" />
+      </LinearGradientBrush>
+      <LinearGradientBrush x:Key="InsDnDayRtl" StartPoint="59.6%,-21.6%" EndPoint="40.4%,121.6%">
+        <GradientStop Offset="0" Color="#8ECDF3" />
+        <GradientStop Offset="1" Color="#4F9FE0" />
+      </LinearGradientBrush>
+      <LinearGradientBrush x:Key="InsDnNight" StartPoint="40.4%,-21.6%" EndPoint="59.6%,121.6%">
+        <GradientStop Offset="0" Color="#26325C" />
+        <GradientStop Offset="1" Color="#0F1730" />
+      </LinearGradientBrush>
+      <LinearGradientBrush x:Key="InsDnNightRtl" StartPoint="59.6%,-21.6%" EndPoint="40.4%,121.6%">
+        <GradientStop Offset="0" Color="#26325C" />
+        <GradientStop Offset="1" Color="#0F1730" />
+      </LinearGradientBrush>
+      <!-- circle at 34% 30% to the farthest corner: a radius of 96.2% of the 24px orb -->
+      <RadialGradientBrush x:Key="InsDnSun" Center="34%,30%" GradientOrigin="34%,30%" RadiusX="96.2%" RadiusY="96.2%">
+        <GradientStop Offset="0" Color="#FFF3C4" />
+        <GradientStop Offset="0.55" Color="#FFC94F" />
+        <GradientStop Offset="1" Color="#F5A623" />
+      </RadialGradientBrush>
+      <RadialGradientBrush x:Key="InsDnSunRtl" Center="66%,30%" GradientOrigin="66%,30%" RadiusX="96.2%" RadiusY="96.2%">
+        <GradientStop Offset="0" Color="#FFF3C4" />
+        <GradientStop Offset="0.55" Color="#FFC94F" />
+        <GradientStop Offset="1" Color="#F5A623" />
+      </RadialGradientBrush>
+      <RadialGradientBrush x:Key="InsDnMoon" Center="34%,30%" GradientOrigin="34%,30%" RadiusX="96.2%" RadiusY="96.2%">
+        <GradientStop Offset="0" Color="#FFFFFF" />
+        <GradientStop Offset="0.7" Color="#DDE5F4" />
+        <GradientStop Offset="1" Color="#C3CEE3" />
+      </RadialGradientBrush>
+      <RadialGradientBrush x:Key="InsDnMoonRtl" Center="66%,30%" GradientOrigin="66%,30%" RadiusX="96.2%" RadiusY="96.2%">
+        <GradientStop Offset="0" Color="#FFFFFF" />
+        <GradientStop Offset="0.7" Color="#DDE5F4" />
+        <GradientStop Offset="1" Color="#C3CEE3" />
+      </RadialGradientBrush>
+      <SolidColorBrush x:Key="InsDnCloud" Color="#EBFFFFFF" />
+      <SolidColorBrush x:Key="InsDnRay" Color="#FFD97A" />
+      <SolidColorBrush x:Key="InsDnShade" Color="#1B2547" />
+
+      <ControlTheme x:Key="{x:Type ins:DayNight}" TargetType="ins:DayNight" BasedOn="{StaticResource InsIslandButton}">
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <Border Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BoxShadow="{DynamicResource InsIslandShadow}"
+                      Padding="{TemplateBinding Padding}">
+                <Border Name="PART_Sky"
+                        Width="72" Height="36"
+                        VerticalAlignment="Center"
+                        CornerRadius="18"
+                        ClipToBounds="True"
+                        Background="{StaticResource InsDnDay}"
+                        BoxShadow="inset 0 1 3 0 #4D0F172A, inset 0 -1 0 0 #38FFFFFF">
+                  <Canvas Width="72" Height="36">
+                    <Border Name="PART_Night" Width="72" Height="36" Background="{StaticResource InsDnNight}" Opacity="0" />
+                    <Ellipse Name="PART_Star1" Canvas.Left="12" Canvas.Top="8" Width="3" Height="3" Fill="White" Opacity="0" RenderTransform="scale(0.2)" />
+                    <Ellipse Name="PART_Star2" Canvas.Left="21" Canvas.Top="17" Width="4" Height="4" Fill="White" Opacity="0" RenderTransform="scale(0.2)" />
+                    <Ellipse Name="PART_Star3" Canvas.Left="10" Canvas.Top="26" Width="3" Height="3" Fill="White" Opacity="0" RenderTransform="scale(0.2)" />
+                    <Canvas Name="PART_Cloud" Canvas.Left="45" Canvas.Top="22" Width="18" Height="8" RenderTransform="none">
+                      <Border Width="18" Height="8" CornerRadius="4" Background="{StaticResource InsDnCloud}" />
+                      <Ellipse Canvas.Left="4" Canvas.Top="-5" Width="9" Height="9" Fill="{StaticResource InsDnCloud}" />
+                    </Canvas>
+                    <Panel Name="PART_Orb" Canvas.Left="6" Canvas.Top="6" Width="24" Height="24" RenderTransform="none">
+                      <Border Name="PART_OrbFace"
+                              CornerRadius="12"
+                              Background="{StaticResource InsDnSun}"
+                              BoxShadow="0 0 12 0 #CCFFB23E, 0 1 4 0 #4D0F172A" />
+                      <Border CornerRadius="12" ClipToBounds="True">
+                        <Canvas>
+                          <Ellipse Name="PART_Shade" Canvas.Left="8" Canvas.Top="-4" Width="20" Height="20" Fill="{StaticResource InsDnShade}" RenderTransform="scale(0)" />
+                        </Canvas>
+                      </Border>
+                    </Panel>
+                    <!-- The rays: eight 3px dots 15px from the orb's centre, turning about it -->
+                    <Canvas Name="PART_Rays" Canvas.Left="16" Canvas.Top="16" Width="4" Height="4" RenderTransform="none">
+                      <Ellipse Canvas.Left="15.5" Canvas.Top="0.5" Width="3" Height="3" Fill="{StaticResource InsDnRay}" />
+                      <Ellipse Canvas.Left="11.5" Canvas.Top="11.5" Width="3" Height="3" Fill="{StaticResource InsDnRay}" />
+                      <Ellipse Canvas.Left="0.5" Canvas.Top="15.5" Width="3" Height="3" Fill="{StaticResource InsDnRay}" />
+                      <Ellipse Canvas.Left="-10.5" Canvas.Top="11.5" Width="3" Height="3" Fill="{StaticResource InsDnRay}" />
+                      <Ellipse Canvas.Left="-14.5" Canvas.Top="0.5" Width="3" Height="3" Fill="{StaticResource InsDnRay}" />
+                      <Ellipse Canvas.Left="-10.5" Canvas.Top="-10.5" Width="3" Height="3" Fill="{StaticResource InsDnRay}" />
+                      <Ellipse Canvas.Left="0.5" Canvas.Top="-14.5" Width="3" Height="3" Fill="{StaticResource InsDnRay}" />
+                      <Ellipse Canvas.Left="11.5" Canvas.Top="-10.5" Width="3" Height="3" Fill="{StaticResource InsDnRay}" />
+                    </Canvas>
+                  </Canvas>
+                </Border>
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ Border#PART_Sky">
+          <Setter Property="Transitions">
+            <Transitions>
+              <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Border#PART_Night">
+          <Setter Property="Transitions">
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Ellipse#PART_Star1, ^ /template/ Ellipse#PART_Star2, ^ /template/ Ellipse#PART_Star3">
+          <Setter Property="Transitions">
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.4" Easing="0.34,1.56,0.64,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Canvas#PART_Cloud">
+          <Setter Property="Transitions">
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.38" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Panel#PART_Orb">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.42" Easing="0.34,1.56,0.64,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Border#PART_OrbFace">
+          <Setter Property="Transitions">
+            <Transitions>
+              <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Ellipse#PART_Shade">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.38" Easing="0.34,1.56,0.64,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Canvas#PART_Rays">
+          <Setter Property="Transitions">
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.42" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+
+        <!-- Night: the dark sky fades in, the stars come out one after another, the cloud sinks, the sun crosses and becomes a moon -->
+        <Style Selector="^:checked">
+          <Style Selector="^ /template/ Border#PART_Sky">
+            <Setter Property="BoxShadow" Value="inset 0 1 3 0 #80000000, inset 0 -1 0 0 #12FFFFFF" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Night">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_Star1, ^ /template/ Ellipse#PART_Star2, ^ /template/ Ellipse#PART_Star3">
+            <Setter Property="Opacity" Value="0.92" />
+            <Setter Property="RenderTransform" Value="none" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_Star2">
+            <Setter Property="Transitions">
+              <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.25" Delay="0:0:0.07" Easing="0.22,1,0.36,1" />
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.4" Delay="0:0:0.07" Easing="0.34,1.56,0.64,1" />
+              </Transitions>
+            </Setter>
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_Star3">
+            <Setter Property="Transitions">
+              <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.25" Delay="0:0:0.13" Easing="0.22,1,0.36,1" />
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.4" Delay="0:0:0.13" Easing="0.34,1.56,0.64,1" />
+              </Transitions>
+            </Setter>
+          </Style>
+          <Style Selector="^ /template/ Canvas#PART_Cloud">
+            <Setter Property="Opacity" Value="0" />
+            <Setter Property="RenderTransform" Value="translateY(15px)" />
+          </Style>
+          <Style Selector="^ /template/ Panel#PART_Orb">
+            <Setter Property="RenderTransform" Value="translateX(36px)" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_OrbFace">
+            <Setter Property="Background" Value="{StaticResource InsDnMoon}" />
+            <Setter Property="BoxShadow" Value="0 0 12 0 #8CC6D6FF, 0 1 4 0 #73000000" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_Shade">
+            <Setter Property="RenderTransform" Value="none" />
+          </Style>
+          <Style Selector="^ /template/ Canvas#PART_Rays">
+            <Setter Property="Opacity" Value="0" />
+            <Setter Property="RenderTransform" Value="translateX(36px) rotate(75deg) scale(0.35)" />
+          </Style>
+        </Style>
+
+        <!-- RTL mirrors the whole sky, as the web's logical insets and hand-flipped transforms do; only the light, which is physical there, is mirrored back -->
+        <Style Selector="^[FlowDirection=RightToLeft]">
+          <Style Selector="^ /template/ Border#PART_Sky">
+            <Setter Property="Background" Value="{StaticResource InsDnDayRtl}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Night">
+            <Setter Property="Background" Value="{StaticResource InsDnNightRtl}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_OrbFace">
+            <Setter Property="Background" Value="{StaticResource InsDnSunRtl}" />
+          </Style>
+        </Style>
+        <Style Selector="^[FlowDirection=RightToLeft]:checked /template/ Border#PART_OrbFace">
+          <Setter Property="Background" Value="{StaticResource InsDnMoonRtl}" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+</Styles>
