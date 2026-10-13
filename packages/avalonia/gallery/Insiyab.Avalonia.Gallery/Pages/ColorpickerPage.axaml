@@ -1,53 +1,37 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.ColorpickerPage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PluginsFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <TextBlock Classes="section" Text="حقل اللون" />
-      <Border Classes="dx">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="لون الهوية" />
-          <ins:ColorField x:Name="Brand" Value="#9b2c5e" />
-        </StackPanel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="حقل لون بمنتقٍ كامل، يخبرك قبل الحفظ هل يصلح اللون للنص، بتباينه على الأبيض وعلى الأسود." />
+    <pg:PlayText Classes="p" Markup="`ins:ColorField` حقل نصي لرمز hex، أمامه عينة تفتح المنتقي، ويحمل اللون في `Value`. وهذا الحقل موصول بلون الهوية، فغيّره يتغير المعرض كله:" />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:ColorpickerPlay.Example}" Stage="{x:Static pg:ColorpickerPlay.ExampleStage}" />
 
-      <TextBlock Classes="section" Text="جرّب الحقل" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="اللون" />
-          <ins:ColorField Value="#0f766e" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="جرّب الحقل" />
+    <pg:PlayText Classes="p" Markup="اختر من الخيارات، فيتغير الحقل وشيفرته معًا. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:ColorpickerPlay.Color}" />
 
-      <TextBlock Classes="variant" Text="الألوان الجاهزة: ألوان محددة" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="اللون" />
-          <ins:ColorField Value="#0f766e" Swatches="#15803d,#a16207,#b91c1c" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="التباين" />
+    <TextBlock Classes="p" Text="في أسفل المنتقي ترى نصًا بهذا اللون على الأبيض وعلى الأسود، ومعه نسبة التباين، وهل تبلغ 4.5:1 التي يحتاجها نص الفقرات." />
 
-      <TextBlock Classes="variant" Text="الألوان الجاهزة: بلا ألوان جاهزة" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="اللون" />
-          <ins:ColorField Value="#0f766e" Swatches="none" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="المنتقي" />
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0"><Bold>المربع</Bold> للتشبع والسطوع، تسحب فيه أو تستعمل لوحة المفاتيح: ← → للتشبع و↑ ↓ للسطوع، ومع Shift تمضي عشرًا عشرًا.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>شريط درجة اللون</Bold> شريط حقيقي، فيعمل بلوحة المفاتيح كما يعمل أي شريط مثله.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>ألوان جاهزة</Bold> هي لون الهوية ولوحة من الألوان حوله، أو ما تحدده في Swatches، والقيمة none تخفيها.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>الكتابة</Bold> تقبل &#x200E;#abc&#x200E; و abc و aabbcc، ثم يكتب الحقل الرمز كاملًا حين تغادره، ويرفض ما ليس لونًا برسالة.</TextBlock>
+    </ins:ProseList>
 
-      <TextBlock Classes="variant" Text="معطل" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="اللون" />
-          <ins:ColorField Value="#0f766e" IsEnabled="False" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="التحكم من الشيفرة" />
+    <pg:PlayListing Code="{x:Static pg:ColorpickerPlay.Code}" Margin="0,0,0,24" />
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في حقل اللون من خصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:ColorpickerPlay.All}" />
+  </StackPanel>
 </UserControl>

@@ -1,68 +1,46 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.RevealPage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/FeedbackFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
+    <!-- The docs' dashed placeholder box, for the examples only -->
+    <Style Selector="ContentControl.demo-box">
+      <Setter Property="Padding" Value="12" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Panel>
+            <Rectangle Fill="{DynamicResource InsToneBrandBg}" Stroke="{DynamicResource InsToneBrandBd}" StrokeThickness="1"
+                       StrokeDashArray="3,3" RadiusX="10" RadiusY="10" />
+            <ContentPresenter Content="{TemplateBinding Content}" Padding="{TemplateBinding Padding}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="Center" />
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+    </Style>
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <Border Classes="dx">
-        <StackPanel x:Name="Example" Spacing="12">
-          <UniformGrid ins:Entrance.Reveal="True" Columns="4" ColumnSpacing="16" RowSpacing="16">
-            <ContentControl Classes="demo-box" Content="1" />
-            <ContentControl Classes="demo-box" Content="2" />
-            <ContentControl Classes="demo-box" Content="3" />
-            <ContentControl Classes="demo-box" Content="4" />
-          </UniformGrid>
-          <DockPanel>
-            <Button x:Name="Replay" DockPanel.Dock="Right" Classes="secondary" Content="أعد" />
-            <WrapPanel ItemSpacing="12" LineSpacing="12" VerticalAlignment="Center">
-              <ContentControl Classes="demo-box" ins:Entrance.Effect="Rise" Content="ins-anim-rise" />
-              <ContentControl Classes="demo-box" ins:Entrance.Effect="Pop" Content="ins-anim-pop" />
-              <ContentControl Classes="demo-box" ins:Entrance.Effect="Slide" Content="ins-anim-slide" />
-            </WrapPanel>
-          </DockPanel>
-        </StackPanel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="أبناء لوح يدخلون تباعًا حين يظهر، وثلاث حركات تمنح عنصرًا واحدًا حركة دخول." />
+    <pg:PlayExample x:Name="Example" Layout="Stack" Code="{x:Static pg:RevealPlay.Example}" />
+    <Button x:Name="Replay" Classes="secondary" Content="أعد" HorizontalAlignment="Left" />
 
-      <TextBlock Classes="section" Text="دخول الأبناء متتابعين" />
-      <Border Classes="stage wide">
-        <UniformGrid ins:Entrance.Reveal="True" Columns="4" ColumnSpacing="16" RowSpacing="16">
-          <ContentControl Classes="demo-box" Content="1" />
-          <ContentControl Classes="demo-box" Content="2" />
-          <ContentControl Classes="demo-box" Content="3" />
-          <ContentControl Classes="demo-box" Content="4" />
-        </UniformGrid>
-      </Border>
-      <TextBlock Classes="variant" Text="8" />
-      <Border Classes="stage wide">
-        <UniformGrid ins:Entrance.Reveal="True" Columns="4" ColumnSpacing="16" RowSpacing="16">
-          <ContentControl Classes="demo-box" Content="1" />
-          <ContentControl Classes="demo-box" Content="2" />
-          <ContentControl Classes="demo-box" Content="3" />
-          <ContentControl Classes="demo-box" Content="4" />
-          <ContentControl Classes="demo-box" Content="5" />
-          <ContentControl Classes="demo-box" Content="6" />
-          <ContentControl Classes="demo-box" Content="7" />
-          <ContentControl Classes="demo-box" Content="8" />
-        </UniformGrid>
-      </Border>
+    <TextBlock Classes="section" Text="دخول الأبناء متتابعين" />
+    <pg:PlayText Classes="p" Markup="ضع `ins:Entrance.Reveal` على لوح فيدخل أبناؤه متتابعين. واضغط «أعد» تحت المثال أعلاه لتراه مرة أخرى. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:RevealPlay.Reveal}" />
 
-      <TextBlock Classes="section" Text="حركة لعنصر بمفرده" />
-      <Border Classes="stage">
-        <ContentControl x:Name="Rise" Classes="demo-box" ins:Entrance.Effect="Rise" Content="عنصر" />
-      </Border>
-      <TextBlock Classes="variant" Text="نبضة" />
-      <Border Classes="stage">
-        <ContentControl x:Name="Pop" Classes="demo-box" ins:Entrance.Effect="Pop" Content="عنصر" />
-      </Border>
-      <TextBlock Classes="variant" Text="انزلاق" />
-      <Border Classes="stage">
-        <ContentControl x:Name="Slide" Classes="demo-box" ins:Entrance.Effect="Slide" Content="عنصر" />
-      </Border>
+    <TextBlock Classes="section" Text="حركة لعنصر بمفرده" />
+    <pg:PlayText Classes="p" Markup="تمنح `ins:Entrance.Effect` عنصرًا بمفرده حركة دخول من ثلاث." />
+    <pg:Playground Def="{x:Static pg:RevealPlay.Anim}" />
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في حركات الدخول من خصائص، لكل منها صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:RevealPlay.All}" />
+  </StackPanel>
 </UserControl>

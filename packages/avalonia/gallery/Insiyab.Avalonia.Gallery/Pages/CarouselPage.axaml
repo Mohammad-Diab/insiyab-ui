@@ -1,8 +1,10 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.CarouselPage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PluginsFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
+    <!-- The docs' coloured slides, for the examples only -->
     <Style Selector="Border.car">
       <Setter Property="Height" Value="240" />
       <Setter Property="Padding" Value="24,20" />
@@ -25,8 +27,8 @@
     <Style Selector="Border.car2">
       <Setter Property="Background">
         <LinearGradientBrush StartPoint="33%,0%" EndPoint="67%,100%">
-          <GradientStop Offset="0" Color="#9b2c5e" />
-          <GradientStop Offset="1" Color="#4a1530" />
+          <GradientStop Offset="0" Color="#4c1d95" />
+          <GradientStop Offset="1" Color="#2e1065" />
         </LinearGradientBrush>
       </Setter>
     </Style>
@@ -47,87 +49,23 @@
       </Setter>
     </Style>
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <Border Classes="dx">
-        <Carousel AutomationProperties.Name="شرائح">
-          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
-          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
-          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
-          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
-        </Carousel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="عرض شرائح في صف تسحبه بإصبعك، وأزرار ونقاط وأسهم تتبع اتجاه القراءة، ولا يتحرك من تلقاء نفسه." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:CarouselPlay.Example}" />
 
-      <TextBlock Classes="section" Text="عرض الشرائح" />
-      <Border Classes="stage wide">
-        <Carousel AutomationProperties.Name="شرائح">
-          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
-          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
-          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
-          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
-        </Carousel>
-      </Border>
+    <TextBlock Classes="section" Text="عرض الشرائح" />
+    <pg:PlayText Classes="p" Markup="كل عنصر في `Carousel` شريحة، تسحب صفها بإصبعك، ويضيف العرض زري السابق والتالي، ونقطة لكل موضع، وأسهم لوحة المفاتيح تسير مع اتجاه القراءة، ويخبر قارئ الشاشة عند كل شريحة أنها «2 من 4». وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:CarouselPlay.Carousel}" />
 
-      <TextBlock Classes="variant" Text="شرائح معًا: اثنتان" />
-      <Border Classes="stage wide">
-        <Carousel Classes="two" AutomationProperties.Name="شرائح">
-          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
-          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
-          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
-          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
-        </Carousel>
-      </Border>
+    <TextBlock Classes="section" Text="بلا تشغيل تلقائي" />
+    <TextBlock Classes="p" Text="لا يدور العرض من تلقاء نفسه، فلا تنتقل الشرائح إلا بيد المستخدم. ومن أطفأ المؤثرات انتقل عنده الصف فورًا بلا انزلاق." />
 
-      <TextBlock Classes="variant" Text="شرائح معًا: ثلاث" />
-      <Border Classes="stage wide">
-        <Carousel Classes="three" AutomationProperties.Name="شرائح">
-          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
-          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
-          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
-          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
-        </Carousel>
-      </Border>
+    <TextBlock Classes="section" Text="التحكم من الشيفرة" />
+    <pg:PlayListing Code="{x:Static pg:CarouselPlay.Code}" Margin="0,0,0,24" />
 
-      <TextBlock Classes="variant" Text="عدد الشرائح: 1" />
-      <Border Classes="stage wide">
-        <Carousel AutomationProperties.Name="شرائح">
-          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
-        </Carousel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="عدد الشرائح: 6" />
-      <Border Classes="stage wide">
-        <Carousel AutomationProperties.Name="شرائح">
-          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
-          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
-          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
-          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
-          <Border Classes="car car1"><TextBlock Text="الخامسة" /></Border>
-          <Border Classes="car car2"><TextBlock Text="السادسة" /></Border>
-        </Carousel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="طرف التالية" />
-      <Border Classes="stage wide">
-        <Carousel Classes="peek" AutomationProperties.Name="شرائح">
-          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
-          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
-          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
-          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
-        </Carousel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="بلا نقاط" />
-      <Border Classes="stage wide">
-        <Carousel Classes="no-dots" AutomationProperties.Name="شرائح">
-          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
-          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
-          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
-          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
-        </Carousel>
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في عرض الشرائح من كلاسات وخصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:CarouselPlay.All}" />
+  </StackPanel>
 </UserControl>

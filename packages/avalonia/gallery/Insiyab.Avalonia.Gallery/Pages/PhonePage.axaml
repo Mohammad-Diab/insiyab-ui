@@ -1,86 +1,38 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.PhonePage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PluginsFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <TextBlock Classes="section" Text="حقل الهاتف" />
-      <Border Classes="dx">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الهاتف" />
-          <ins:PhoneBox x:Name="Demo" Value="+966501234567" />
-          <TextBlock x:Name="DemoOut" Classes="hint" Text="يُرسل: &#x200E;+966501234567" />
-        </StackPanel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="حقل الهاتف بدولته: يُكتب الرقم كما يكتبه أهل بلده، ويحمله الحقل بصيغة E.164 الدولية." />
+    <pg:PlayText Classes="p" Markup="في أول `ins:PhoneBox` زر تختار منه الدولة من قائمة تبحث فيها بالعربية أو بالإنجليزية أو برمز الدولة أو بمفتاحها الدولي، وبالأسماء المختصرة الشائعة، فتجد الإمارات إذا كتبت UAE، والولايات المتحدة إذا كتبت أمريكا:" />
+    <pg:PlayExample x:Name="Example" Layout="Stack" Code="{x:Static pg:PhonePlay.Example}" />
+    <TextBlock Classes="p"><Bold>ما يصل إلى الخادم رقم بصيغة E.164:</Bold> يحمله Value أيًا كانت صورة ما كتبت، كما ترى تحت الحقل. أما الحقل الظاهر فيعرض الرقم كما يكتبه أهل بلده.</TextBlock>
 
-      <TextBlock Classes="section" Text="جرّب الحقل" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الهاتف" />
-          <ins:PhoneBox />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="جرّب الحقل" />
+    <pg:PlayText Classes="p" Markup="اختر من الخيارات، فيتغير الحقل وشيفرته معًا. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:PhonePlay.Phone}" />
 
-      <TextBlock Classes="variant" Text="فيه رقم" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الهاتف" />
-          <ins:PhoneBox Value="+966501234567" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="الكتابة" />
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0"><Bold>تنتظم أرقامه وأنت تكتب:</Bold> ويبقى المؤشر بعد الرقم الذي كان يليه، وإذا ضغطت Backspace بعد مسافة حذف الرقم الذي قبلها.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>الأرقام العربية:</Bold> يقبل الحقل ٠٥٠١٢٣٤٥٦٧ ويكتبها لاتينية.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>رقم يبدأ بـ + أو 00:</Bold> يختار دولته بنفسه، فإذا كتبت &#x200E;+971&#x200E; انتقل الزر إلى الإمارات. وإذا اشتركت دول في مفتاح واحد عُرفت كل منها بما يليه، كجامايكا بين دول المفتاح 1، وكازاخستان بين دول المفتاح 7.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>الطول:</Bold> الرقم الذي يقصر عن أرقام دولته أو يزيد عليها غير صالح، وتذكر الرسالة اسم الدولة.</TextBlock>
+    </ins:ProseList>
 
-      <TextBlock Classes="variant" Text="الدولة الأولى: الإمارات" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الهاتف" />
-          <ins:PhoneBox DefaultCountry="AE" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="الدول" />
+    <TextBlock Classes="p" Text="في القائمة دول العالم كلها بمفاتيحها وأسمائها بالعربية والإنجليزية. أما الدول العربية، ومعها الولايات المتحدة وكندا وبريطانيا وفرنسا وألمانيا وتركيا والهند وباكستان، فيُفحص طول أرقامها وتنتظم كما تُكتب هناك، ويبقى غيرها على الحد الدولي، 15 رقمًا، بلا مجموعات." />
 
-      <TextBlock Classes="variant" Text="الدولة الأولى: الكويت" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الهاتف" />
-          <ins:PhoneBox DefaultCountry="KW" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="التحكم من الشيفرة" />
+    <pg:PlayListing Code="{x:Static pg:PhonePlay.Code}" Margin="0,0,0,24" />
 
-      <TextBlock Classes="variant" Text="الدولة الأولى: قطر" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الهاتف" />
-          <ins:PhoneBox DefaultCountry="QA" />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="دول محددة وحدها" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الهاتف" />
-          <ins:PhoneBox OnlyCountries="SA,AE,KW,QA,BH,OM" />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="دول تتصدر القائمة" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الهاتف" />
-          <ins:PhoneBox PreferredCountries="EG,JO,SY,LB" />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="معطل" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الهاتف" />
-          <ins:PhoneBox IsEnabled="False" />
-        </StackPanel>
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في حقل الهاتف من خصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:PhonePlay.All}" />
+  </StackPanel>
 </UserControl>

@@ -1,241 +1,31 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.InputsPage">
-  <UserControl.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Light">
-          <SolidColorBrush x:Key="InsInputsViewBd" Color="#1A0F172A" />
-        </ResourceDictionary>
-        <ResourceDictionary x:Key="Dark">
-          <SolidColorBrush x:Key="InsInputsViewBd" Color="#1AFFFFFF" />
-        </ResourceDictionary>
-      </ResourceDictionary.ThemeDictionaries>
-    </ResourceDictionary>
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.dx">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource InsInputsViewBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background">
-        <SolidColorBrush Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-      </Setter>
-    </Style>
-    <Style Selector="TextBlock.doc-h2">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsH3}" />
-      <Setter Property="FontWeight" Value="Bold" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
-    <Style Selector="TextBlock.cap">
-      <Setter Property="FontSize" Value="11" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
-      <Setter Property="Margin" Value="0,0,0,2" />
-    </Style>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
 
-  <ScrollViewer>
-    <StackPanel Spacing="16">
+  <StackPanel>
+    <TextBlock Classes="intro" Text="حقل النص والقائمة ومربع النص الطويل، بثلاثة مقاسات، ومعها التسمية والتلميح." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:InputsPlay.Example}" />
 
-      <Border Classes="dx">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الاسم" />
-          <TextBox />
-          <TextBlock Classes="hint" Text="تلميح قصير." />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="الحقل" />
+    <pg:PlayText Classes="p" Markup="يجمع `StackPanel` بالكلاس `field` التسمية والحقل والتلميح في عمود واحد. والحقل `TextBox` لكل ما يُكتب، ومعه `ComboBox` للقائمة، و`TextBox` بالخاصية `AcceptsReturn` للنص الطويل. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:InputsPlay.Field}" />
 
-      <TextBlock Classes="doc-h2" Text="الحقل" />
-      <Border Classes="dx">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الاسم" />
-          <TextBox />
-        </StackPanel>
-      </Border>
-      <Border Classes="dx">
-        <Grid Classes="variants" ColumnDefinitions="*,*" ColumnSpacing="24" RowSpacing="20">
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="العنصر: قائمة" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <ComboBox SelectedIndex="0">
-              <ComboBoxItem Content="الأول" />
-              <ComboBoxItem Content="الثاني" />
-              <ComboBoxItem Content="الثالث" />
-            </ComboBox>
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="العنصر: نص طويل" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox AcceptsReturn="True" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="النوع: بريد" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox FlowDirection="LeftToRight" PlaceholderText="name@example.com" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="النوع: هاتف" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox FlowDirection="LeftToRight" PlaceholderText="+966 50 000 0000" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="النوع: رقم" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox Text="12" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="النوع: كلمة مرور" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox Text="secret" PasswordChar="•" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="المقاس: صغير" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox Classes="sm" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="المقاس: كبير" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox Classes="lg" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="الحالة: معطل" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox Text="نص قصير" IsEnabled="False" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="الحالة: للقراءة فقط" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox Text="نص قصير" IsReadOnly="True" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="الحالة: خطأ" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox x:Name="BadBox" Text="نص قصير" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="الحالة: مقبول" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox Classes="ok" Text="نص قصير" />
-            <ContentControl Classes="success" Content="رسالة القبول." />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="العداد: أحرف" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox MaxLength="60" ins:InputCount.Mode="Chars" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="العداد: كلمات" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox ins:InputCount.Mode="Words" ins:InputCount.Max="50" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="تلميح" />
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox />
-            <TextBlock Classes="hint" Text="تلميح قصير." />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="مطلوب" />
-            <TextBlock Classes="label"><Run Text="الاسم" /><Run Classes="req" Text=" *" /></TextBlock>
-            <TextBox />
-          </StackPanel>
-        </Grid>
-      </Border>
+    <TextBlock Classes="section" Text="حقل البحث" />
+    <pg:PlayText Classes="p" Markup="يضع الكلاس `search` أيقونة البحث داخل الحقل، فتأخذ لون الهوية إذا تركّز فيه." />
+    <pg:Playground Def="{x:Static pg:InputsPlay.Search}" />
 
-      <TextBlock Classes="doc-h2" Text="حقل البحث" />
-      <Border Classes="dx">
-        <TextBox Classes="search" PlaceholderText="بحث" />
-      </Border>
-      <Border Classes="dx">
-        <Grid Classes="variants" ColumnDefinitions="*,*" ColumnSpacing="24" RowSpacing="20">
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="المقاس: صغير" />
-            <TextBox Classes="search sm" PlaceholderText="بحث" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="المقاس: كبير" />
-            <TextBox Classes="search lg" PlaceholderText="بحث" />
-          </StackPanel>
-        </Grid>
-      </Border>
-      <Border Classes="dx">
-        <StackPanel Classes="field">
-          <TextBlock Classes="cap" Text="مع زر" />
-          <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" MaxWidth="512" HorizontalAlignment="Stretch">
-            <TextBox Classes="search" PlaceholderText="بحث" />
-            <Button Grid.Column="1" Classes="primary" Content="بحث" />
-          </Grid>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="النموذج" />
+    <pg:PlayText Classes="p" Markup="ترتب لوحات Avalonia الحقول في عمود أو سطر أو شبكة، ويجمع الكلاس `form-commit` أزرار الحفظ في آخر النموذج. أما التحقق من الحقول وإظهار رسائلها تحتها ففي صفحة التحقق." />
+    <pg:Playground Def="{x:Static pg:InputsPlay.Form}" />
 
-      <TextBlock Classes="doc-h2" Text="النموذج" />
-      <Border Classes="dx">
-        <StackPanel>
-          <StackPanel Spacing="16">
-            <StackPanel Classes="field">
               <TextBlock Classes="label" Text="الاسم" />
-              <TextBox />
-            </StackPanel>
-            <StackPanel Classes="field">
-              <TextBlock Classes="label" Text="المدينة" />
-              <TextBox />
-            </StackPanel>
-            <StackPanel Classes="field">
-              <TextBlock Classes="label" Text="الهاتف" />
-              <TextBox />
-            </StackPanel>
-          </StackPanel>
-          <StackPanel Classes="form-commit">
-            <Button Classes="primary" Content="حفظ" />
-          </StackPanel>
-        </StackPanel>
-      </Border>
-      <Border Classes="dx">
-        <StackPanel Spacing="20">
-          <StackPanel>
-            <TextBlock Classes="cap" Text="ترتيب الحقول: سطر" />
-            <UniformGrid Columns="3" ColumnSpacing="8">
-              <StackPanel Classes="field">
-                <TextBlock Classes="label" Text="الاسم" />
-                <TextBox />
-              </StackPanel>
-              <StackPanel Classes="field">
-                <TextBlock Classes="label" Text="المدينة" />
-                <TextBox />
-              </StackPanel>
-              <StackPanel Classes="field">
-                <TextBlock Classes="label" Text="الهاتف" />
-                <TextBox />
-              </StackPanel>
-            </UniformGrid>
-            <StackPanel Classes="form-commit">
-              <Button Classes="primary" Content="حفظ" />
-            </StackPanel>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="ترتيب الحقول: شبكة" />
-            <UniformGrid Columns="3" ColumnSpacing="8" RowSpacing="12">
-              <StackPanel Classes="field">
-                <TextBlock Classes="label" Text="الاسم" />
-                <TextBox />
-              </StackPanel>
-              <StackPanel Classes="field">
-                <TextBlock Classes="label" Text="المدينة" />
-                <TextBox />
-              </StackPanel>
-              <StackPanel Classes="field">
-                <TextBlock Classes="label" Text="الهاتف" />
-                <TextBox />
-              </StackPanel>
-            </UniformGrid>
-          </StackPanel>
-        </StackPanel>
-      </Border>
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في الحقول من عناصر وكلاسات وخصائص، لكل مكون صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:InputsPlay.All}" />
+  </StackPanel>
 </UserControl>

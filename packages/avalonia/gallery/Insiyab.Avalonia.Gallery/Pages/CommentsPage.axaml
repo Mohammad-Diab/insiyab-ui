@@ -1,101 +1,25 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.CommentsPage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/ContentFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <Border Classes="dx">
-        <StackPanel Classes="thread">
-          <ins:Comment Avatar="ل" Author="ليلى" Time="قبل ساعتين" Content="العنوان يحتاج تعديلًا بسيطًا.">
-            <ins:Comment.Replies>
-              <ins:Comment Avatar="ع" Author="عمر" Time="قبل ساعة" Content="عدلته، وهو جاهز الآن." />
-            </ins:Comment.Replies>
-          </ins:Comment>
-          <ins:Comment Avatar="س" Author="سارة" Time="قبل دقائق" Content="شكرًا لكما." />
-        </StackPanel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="كلام الناس في سلسلة: تعليق على سجل وردود عليه، أو رسائل محادثة." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:CommentsPlay.Example}" />
 
-      <TextBlock Classes="section" Text="التعليق" />
-      <Border Classes="stage wide">
-        <ins:Comment Avatar="ل" Author="ليلى" Time="قبل ساعتين" Content="راجعت الملف، والعنوان يحتاج تعديلًا بسيطًا.">
-          <ins:Comment.Actions>
-            <StackPanel Orientation="Horizontal" Spacing="2">
-              <Button Classes="bare sm" Content="رد" />
-            </StackPanel>
-          </ins:Comment.Actions>
-        </ins:Comment>
-      </Border>
-      <TextBlock Classes="variant" Text="رسالتك أنت" />
-      <Border Classes="stage wide">
-        <ins:Comment Classes="own" Avatar="أ" Author="أنت" Time="قبل ساعتين" Content="راجعت الملف، والعنوان يحتاج تعديلًا بسيطًا.">
-          <ins:Comment.Actions>
-            <StackPanel Orientation="Horizontal" Spacing="2">
-              <Button Classes="bare sm" Content="رد" />
-            </StackPanel>
-          </ins:Comment.Actions>
-        </ins:Comment>
-      </Border>
-      <TextBlock Classes="variant" Text="بلا إجراءات" />
-      <Border Classes="stage wide">
-        <ins:Comment Avatar="ل" Author="ليلى" Time="قبل ساعتين" Content="راجعت الملف، والعنوان يحتاج تعديلًا بسيطًا." />
-      </Border>
-      <TextBlock Classes="variant" Text="قائمة بالنقر الأيمن" />
-      <Border Classes="stage wide">
-        <ins:Comment Name="MenuComment" Avatar="ل" Author="ليلى" Time="قبل ساعتين" Content="راجعت الملف، والعنوان يحتاج تعديلًا بسيطًا.">
-          <ins:Comment.ContextMenu>
-            <ContextMenu>
-              <MenuItem Header="رد" />
-              <MenuItem Name="MenuCopy" Header="نسخ" InputGesture="Ctrl+C" />
-              <Separator />
-              <MenuItem Header="حذف" Classes="bad" />
-            </ContextMenu>
-          </ins:Comment.ContextMenu>
-        </ins:Comment>
-      </Border>
+    <TextBlock Classes="section" Text="التعليق" />
+    <pg:PlayText Classes="p" Markup="يحمل `ins:Comment` كلام شخص واحد: صورته في `Avatar`، ثم اسمه ووقته في `Author` و`Time`، والنص في `Content`، وإن شئت أضفت إجراءات في `Actions`. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:CommentsPlay.Comment}" />
 
-      <TextBlock Classes="section" Text="السلسلة والردود" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="thread">
-          <ins:Comment Avatar="ل" Author="ليلى" Time="قبل ساعتين" Content="العنوان يحتاج تعديلًا بسيطًا.">
-            <ins:Comment.Replies>
-              <ins:Comment Avatar="ع" Author="عمر" Time="قبل ساعة" Content="عدلته، وهو جاهز الآن." />
-            </ins:Comment.Replies>
-          </ins:Comment>
-          <ins:Comment Avatar="س" Author="سارة" Time="قبل دقائق" Content="شكرًا لكما." />
-        </StackPanel>
-      </Border>
-      <TextBlock Classes="variant" Text="محادثة" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="thread">
-          <ins:Comment Avatar="ل" Author="ليلى" Time="10:02" Content="هل وصل الملف؟" />
-          <ins:Comment Classes="own" Avatar="أ" Author="أنت" Time="10:05" Content="نعم، وصل صباحًا." />
-        </StackPanel>
-      </Border>
-      <TextBlock Classes="variant" Text="بلا ردود متداخلة" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="thread">
-          <ins:Comment Avatar="ل" Author="ليلى" Time="قبل ساعتين" Content="العنوان يحتاج تعديلًا بسيطًا." />
-          <ins:Comment Avatar="ع" Author="عمر" Time="قبل ساعة" Content="عدلته، وهو جاهز الآن." />
-          <ins:Comment Avatar="س" Author="سارة" Time="قبل دقائق" Content="شكرًا لكما." />
-        </StackPanel>
-      </Border>
-      <TextBlock Classes="variant" Text="مع مربع للرد" />
-      <Border Classes="stage wide">
-        <StackPanel Spacing="16">
-          <StackPanel Name="ReplyThread" Classes="thread">
-            <ins:Comment Avatar="ل" Author="ليلى" Time="10:02" Content="هل وصل الملف؟" />
-          </StackPanel>
-          <DockPanel>
-            <Button Name="ReplySend" DockPanel.Dock="Right" Classes="primary" Content="أرسل" Margin="8,0,0,0" VerticalAlignment="Bottom" ToolTip.Tip="Ctrl+Enter" />
-            <TextBox Name="ReplyBox" AcceptsReturn="True" TextWrapping="Wrap" PlaceholderText="اكتب ردك" />
-          </DockPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="السلسلة والردود" />
+    <pg:PlayText Classes="p" Markup="يرص الكلاس `thread` على `StackPanel` التعليقات بعضها فوق بعض، وإذا وضعت الردود في `Replies` أزاحها تحت التعليق إلى الداخل. وفي المحادثة تنتقل رسائلك بالكلاس `own` إلى الجهة المقابلة." />
+    <pg:Playground Def="{x:Static pg:CommentsPlay.Thread}" />
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في التعليقات والرسائل من كلاسات وخصائص، لكل مكون صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:CommentsPlay.All}" />
+  </StackPanel>
 </UserControl>

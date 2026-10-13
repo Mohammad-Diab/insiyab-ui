@@ -1,143 +1,35 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.TreePage">
-  <UserControl.Resources>
-    <SolidColorBrush x:Key="ExampleTint" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.example">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background" Value="{StaticResource ExampleTint}" />
-    </Style>
-    <Style Selector="TextBlock.cap">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-      <Setter Property="Margin" Value="0,0,0,8" />
-    </Style>
-    <Style Selector="TextBlock.h2">
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
 
-  <ScrollViewer>
-    <StackPanel Spacing="16" MaxWidth="832" HorizontalAlignment="Stretch">
+  <StackPanel>
+    <TextBlock Classes="intro" Text="قوائم متداخلة تصير شجرة: ملفات أو تصنيفات أو صلاحيات، تتنقل فيها بالأسهم، ومعها مربعات اختيار متسلسلة." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:TreePlay.Example}" />
 
-      <Border Classes="example">
-        <TreeView AutomationProperties.Name="الملفات">
-          <TreeViewItem IsExpanded="True">
-            <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFolder}" /><TextBlock Text="العقود" /></StackPanel></TreeViewItem.Header>
-            <TreeViewItem>
-              <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconPages}" /><TextBlock Text="عقد.pdf" /></StackPanel></TreeViewItem.Header>
-            </TreeViewItem>
-            <TreeViewItem>
-              <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFolder}" /><TextBlock Text="الملاحق" /></StackPanel></TreeViewItem.Header>
-              <TreeViewItem>
-                <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconPages}" /><TextBlock Text="ملحق 1.pdf" /></StackPanel></TreeViewItem.Header>
-              </TreeViewItem>
-              <TreeViewItem>
-                <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconPages}" /><TextBlock Text="ملحق 2.pdf" /></StackPanel></TreeViewItem.Header>
-              </TreeViewItem>
-            </TreeViewItem>
-          </TreeViewItem>
-          <TreeViewItem>
-            <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFolder}" /><TextBlock Text="الفواتير" /></StackPanel></TreeViewItem.Header>
-            <TreeViewItem>
-              <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconPages}" /><TextBlock Text="فاتورة.pdf" /></StackPanel></TreeViewItem.Header>
-            </TreeViewItem>
-          </TreeViewItem>
-          <TreeViewItem>
-            <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconPages}" /><TextBlock Text="ملاحظات.txt" /></StackPanel></TreeViewItem.Header>
-          </TreeViewItem>
-        </TreeView>
-      </Border>
+    <TextBlock Classes="section" Text="شجرة ملفات" />
+    <pg:PlayText Classes="p" Markup="يصير `TreeView` شجرة ملفات: تسمية كل بند في `Header`، والبنود التي داخله فرعه، ويبقى مغلقًا ما لم تجعل `IsExpanded` عليه. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:TreePlay.Files}" />
 
-      <TextBlock Classes="h2" Text="شجرة ملفات" />
-      <Border Classes="example">
-        <StackPanel Spacing="28">
-          <StackPanel>
-            <TextBlock Classes="cap" Text="بأيقونات، ولكل بند قائمة بالزر الأيمن" />
-            <TreeView AutomationProperties.Name="الملفات">
-              <TreeView.ContextMenu>
-                <ContextMenu>
-                  <MenuItem Header="فتح" />
-                  <MenuItem Header="إعادة تسمية" />
-                  <Separator />
-                  <MenuItem Header="حذف" Classes="bad" />
-                </ContextMenu>
-              </TreeView.ContextMenu>
-              <TreeViewItem IsExpanded="True">
-                <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFolder}" /><TextBlock Text="المستندات" /></StackPanel></TreeViewItem.Header>
-                <TreeViewItem>
-                  <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFile}" /><TextBlock Text="ملف.pdf" /></StackPanel></TreeViewItem.Header>
-                </TreeViewItem>
-                <TreeViewItem>
-                  <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFolder}" /><TextBlock Text="الصور" /></StackPanel></TreeViewItem.Header>
-                  <TreeViewItem>
-                    <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFile}" /><TextBlock Text="صورة 1.png" /></StackPanel></TreeViewItem.Header>
-                  </TreeViewItem>
-                  <TreeViewItem>
-                    <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFile}" /><TextBlock Text="صورة 2.png" /></StackPanel></TreeViewItem.Header>
-                  </TreeViewItem>
-                </TreeViewItem>
-              </TreeViewItem>
-              <TreeViewItem>
-                <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFile}" /><TextBlock Text="ملاحظات.txt" /></StackPanel></TreeViewItem.Header>
-              </TreeViewItem>
-            </TreeView>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="بمربعات اختيار" />
-            <TreeView ins:Tree.Checks="True" AutomationProperties.Name="الملفات">
-              <TreeViewItem IsExpanded="True">
-                <TreeViewItem.Header><CheckBox Content="المستندات" /></TreeViewItem.Header>
-                <TreeViewItem>
-                  <TreeViewItem.Header><CheckBox Content="ملف.pdf" IsChecked="True" /></TreeViewItem.Header>
-                </TreeViewItem>
-                <TreeViewItem>
-                  <TreeViewItem.Header><CheckBox Content="الصور" /></TreeViewItem.Header>
-                  <TreeViewItem>
-                    <TreeViewItem.Header><CheckBox Content="صورة 1.png" /></TreeViewItem.Header>
-                  </TreeViewItem>
-                  <TreeViewItem>
-                    <TreeViewItem.Header><CheckBox Content="صورة 2.png" /></TreeViewItem.Header>
-                  </TreeViewItem>
-                </TreeViewItem>
-              </TreeViewItem>
-              <TreeViewItem>
-                <TreeViewItem.Header><CheckBox Content="ملاحظات.txt" /></TreeViewItem.Header>
-              </TreeViewItem>
-            </TreeView>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="عدد في آخر الصف، وبند مختار" />
-            <TreeView AutomationProperties.Name="الملفات">
-              <TreeViewItem IsExpanded="True">
-                <TreeViewItem.Header><DockPanel><TextBlock Classes="tree-end" DockPanel.Dock="Right" Text="2" /><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFolder}" /><TextBlock Text="المستندات" /></StackPanel></DockPanel></TreeViewItem.Header>
-                <TreeViewItem>
-                  <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFile}" /><TextBlock Text="ملف.pdf" /></StackPanel></TreeViewItem.Header>
-                </TreeViewItem>
-                <TreeViewItem>
-                  <TreeViewItem.Header><DockPanel><TextBlock Classes="tree-end" DockPanel.Dock="Right" Text="2" /><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFolder}" /><TextBlock Text="الصور" /></StackPanel></DockPanel></TreeViewItem.Header>
-                  <TreeViewItem>
-                    <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFile}" /><TextBlock Text="صورة 1.png" /></StackPanel></TreeViewItem.Header>
-                  </TreeViewItem>
-                  <TreeViewItem>
-                    <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFile}" /><TextBlock Text="صورة 2.png" /></StackPanel></TreeViewItem.Header>
-                  </TreeViewItem>
-                </TreeViewItem>
-              </TreeViewItem>
-              <TreeViewItem IsSelected="True">
-                <TreeViewItem.Header><StackPanel Classes="tree-label"><ins:Icon Data="{StaticResource IconFile}" /><TextBlock Text="ملاحظات.txt" /></StackPanel></TreeViewItem.Header>
-              </TreeViewItem>
-            </TreeView>
-          </StackPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="لوحة المفاتيح" />
+    <TextBlock Classes="p" Text="تصل إلى الشجرة بضغطة Tab واحدة، ثم تتنقل فيها بالأسهم كما تتنقل في شجرة الملفات:" />
+    <ins:ProseList Margin="0,0,0,16">
+      <TextBlock Classes="p" Margin="0" Text="↑ ↓ تنقلك بين الصفوف الظاهرة، وHome وEnd إلى أولها وآخرها." />
+      <TextBlock Classes="p" Margin="0"><Bold>السهم نحو الداخل</Bold>، ← في العربية و→ في الإنجليزية، يفتح الفرع أولًا ثم يدخله.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>السهم نحو الخارج</Bold> يغلق الفرع المفتوح، وإلا خرج إلى البند الأب.</TextBlock>
+      <TextBlock Classes="p" Margin="0" Text="* يفتح كل الفروع التي تحت البند، و+ و- في لوحة الأرقام تفتح وتغلق، وكتابة حرف تنقلك إلى أول صف يبدأ به." />
+      <TextBlock Classes="p" Margin="0" Text="Enter ونقرتان تفتحان الفرع أو الملف، وSpace يختار البند، أو يحدده إن كانت الشجرة بمربعات اختيار." />
+    </ins:ProseList>
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="التحكم من الشيفرة" />
+    <pg:PlayListing Code="{x:Static pg:TreePlay.Code}" Margin="0,0,0,24" />
+
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في الشجرة من كلاسات وخصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:TreePlay.All}" />
+  </StackPanel>
 </UserControl>

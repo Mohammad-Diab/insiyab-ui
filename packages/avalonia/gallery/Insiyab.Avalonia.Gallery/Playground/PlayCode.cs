@@ -12,7 +12,7 @@ namespace Insiyab.Avalonia.Gallery.Playground;
 public static partial class PlayCode
 {
     private const string Namespaces =
-        "xmlns=\"https://github.com/avaloniaui\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ins=\"using:Insiyab.Avalonia.Controls\"";
+        "xmlns=\"https://github.com/avaloniaui\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ins=\"using:Insiyab.Avalonia.Controls\" xmlns:col=\"using:Avalonia.Collections\"";
 
     /// <summary>Parses the code inside a panel of the given element and attributes; throws when the code is not valid.</summary>
     public static Panel Parse(string code, string panel = "Panel", string attributes = "") =>

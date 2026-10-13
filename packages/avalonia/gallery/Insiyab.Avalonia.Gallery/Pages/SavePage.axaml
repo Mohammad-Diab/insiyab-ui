@@ -1,40 +1,21 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.SavePage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/FeedbackFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <Border Classes="dx">
-        <WrapPanel ItemSpacing="10" LineSpacing="10">
-          <ins:SaveStatus State="Saving" />
-          <ins:SaveStatus State="Saved" />
-          <ins:SaveStatus State="Error" />
-        </WrapPanel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="هل حُفظ آخر تغيير: جارٍ الحفظ، أو حُفظ، أو تعذر. ومعها نموذج يحفظ نفسه." />
+    <pg:PlayExample Layout="Row" Code="{x:Static pg:SavePlay.Example}" />
 
-      <TextBlock Classes="section" Text="حالة الحفظ" />
-      <Border Classes="stage">
-        <ins:SaveStatus State="Saved" />
-      </Border>
-      <TextBlock Classes="variant" Text="بلا حالة" />
-      <Border Classes="stage">
-        <ins:SaveStatus />
-      </Border>
-      <TextBlock Classes="variant" Text="في نموذج يحفظ نفسه" />
-      <Border Classes="stage wide">
-        <StackPanel ins:Autosave.Delay="800" Spacing="6">
-          <DockPanel>
-            <ins:SaveStatus DockPanel.Dock="Right" />
-            <TextBlock Classes="label" Text="ملاحظة" />
-          </DockPanel>
-          <TextBox AcceptsReturn="True" TextWrapping="Wrap" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="حالة الحفظ" />
+    <pg:PlayText Classes="p" Markup="يخبر `ins:SaveStatus` بمصير آخر تغيير: جارٍ حفظه، ثم حُفظ، أو تعذر حفظه. تضع الحالة في `State`، أو تتركها للنموذج الذي يحفظ نفسه." />
+    <pg:Playground Def="{x:Static pg:SavePlay.Save}" />
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في حالة الحفظ من عناصر وخصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:SavePlay.All}" />
+  </StackPanel>
 </UserControl>

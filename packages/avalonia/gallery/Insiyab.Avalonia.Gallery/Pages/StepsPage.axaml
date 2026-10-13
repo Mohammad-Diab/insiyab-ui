@@ -1,134 +1,32 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.StepsPage">
-  <UserControl.Resources>
-    <SolidColorBrush x:Key="ExampleTint" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.example">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background" Value="{StaticResource ExampleTint}" />
-    </Style>
-    <Style Selector="TextBlock.cap">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-      <Setter Property="Margin" Value="0,0,0,8" />
-    </Style>
-    <Style Selector="TextBlock.h2">
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
 
-  <ScrollViewer>
-    <StackPanel Spacing="16" MaxWidth="832" HorizontalAlignment="Stretch">
+  <StackPanel>
+    <TextBlock Classes="intro" Text="المعالج نموذج مقسم إلى خطوات، لا يغادر خطوة حتى يتحقق منها." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:StepsPlay.Example}" />
 
-      <Border Classes="example">
-        <ins:Steps>
-          <ins:StepsItem Content="الأولى" IsDone="True" />
-          <ins:StepsItem Content="الثانية" IsCurrent="True" />
-          <ins:StepsItem Content="الثالثة" />
-        </ins:Steps>
-      </Border>
+    <TextBlock Classes="section" Text="الخطوات" />
+    <pg:PlayText Classes="p" Markup="`ins:Steps` خطوات مرقمة، تميز فيها الخطوة المنجزة بـ `IsDone` والحالية بـ `IsCurrent`. وتصلح وحدها لمسار موزع على عدة شاشات، وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:StepsPlay.Steps}" />
 
-      <TextBlock Classes="h2" Text="الخطوات" />
-      <Border Classes="example">
-        <StackPanel Spacing="28">
-          <StackPanel>
-            <TextBlock Classes="cap" Text="أرقام" />
-            <ins:Steps>
-              <ins:StepsItem Content="الأولى" IsDone="True" />
-              <ins:StepsItem Content="الثانية" IsCurrent="True" />
-              <ins:StepsItem Content="الثالثة" />
-              <ins:StepsItem Content="الرابعة" />
-            </ins:Steps>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="نقاط" />
-            <ins:Steps Classes="dots">
-              <ins:StepsItem Content="الأولى" IsDone="True" />
-              <ins:StepsItem Content="الثانية" IsCurrent="True" />
-              <ins:StepsItem Content="الثالثة" />
-              <ins:StepsItem Content="الرابعة" />
-            </ins:Steps>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="شبكة" />
-            <ins:Steps x:Name="GridSteps" Classes="grid" />
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="خطوة مؤجلة" />
-            <ins:Steps>
-              <ins:StepsItem Content="الأولى" IsDone="True" IsFlagged="True" />
-              <ins:StepsItem Content="الثانية" IsCurrent="True" />
-              <ins:StepsItem Content="الثالثة" />
-              <ins:StepsItem Content="الرابعة" />
-            </ins:Steps>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="خطوة فيها خطأ" />
-            <ins:Steps>
-              <ins:StepsItem Content="الأولى" IsDone="True" />
-              <ins:StepsItem Content="الثانية" IsDone="True" IsError="True" />
-              <ins:StepsItem Content="الثالثة" IsCurrent="True" />
-              <ins:StepsItem Content="الرابعة" />
-            </ins:Steps>
-          </StackPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="المعالج" />
+    <pg:PlayText Classes="p" Markup="يُظهر `ins:Wizard` لوحًا واحدًا من ألواحه `ins:WizardPanel` في كل مرة، ويقود الخطوات فوقه. ولا ينتقل «التالي» حتى يتحقق من حقول الخطوة الحالية، ومفتاح `Enter` داخل الحقل يعمل عمل «التالي»، ثم ينتقل التركيز إلى الخطوة الجديدة." />
+    <pg:Playground Def="{x:Static pg:StepsPlay.Wizard}" />
 
-      <TextBlock Classes="h2" Text="المعالج" />
-      <Border Classes="example">
-        <StackPanel Spacing="28">
-          <StackPanel>
-            <TextBlock Classes="cap" Text="في الخطوة الثانية، والبريد فارغ" />
-            <ins:Wizard x:Name="FormWizard">
-              <ins:WizardPanel Header="الاسم">
-                <StackPanel Spacing="6">
-                  <TextBlock Classes="label" Text="الاسم" />
-                  <TextBox x:Name="NameField" ins:Wizard.Required="True" Text="سارة" />
-                </StackPanel>
-              </ins:WizardPanel>
-              <ins:WizardPanel Header="البريد">
-                <StackPanel Spacing="6">
-                  <TextBlock Classes="label" Text="البريد" />
-                  <TextBox x:Name="EmailField" ins:Wizard.Required="True" FlowDirection="LeftToRight" />
-                </StackPanel>
-              </ins:WizardPanel>
-              <ins:WizardPanel Header="التأكيد">
-                <CheckBox ins:Wizard.Required="True" Content="أوافق" />
-              </ins:WizardPanel>
-            </ins:Wizard>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="مع زر إلغاء، في الخطوة الأخيرة" />
-            <ins:Wizard x:Name="CancelWizard" CancelContent="إلغاء">
-              <ins:WizardPanel Header="الاسم">
-                <StackPanel Spacing="6">
-                  <TextBlock Classes="label" Text="الاسم" />
-                  <TextBox ins:Wizard.Required="True" Text="سارة" />
-                </StackPanel>
-              </ins:WizardPanel>
-              <ins:WizardPanel Header="البريد">
-                <StackPanel Spacing="6">
-                  <TextBlock Classes="label" Text="البريد" />
-                  <TextBox ins:Wizard.Required="True" FlowDirection="LeftToRight" />
-                </StackPanel>
-              </ins:WizardPanel>
-              <ins:WizardPanel Header="التأكيد">
-                <StackPanel Spacing="12">
-                  <CheckBox ins:Wizard.Required="True" Content="أوافق" />
-                  <Button Classes="bare" Content="البدء من جديد" ins:Wizard.Action="Restart" HorizontalAlignment="Left" />
-                </StackPanel>
-              </ins:WizardPanel>
-            </ins:Wizard>
-          </StackPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="خطوة تنتظر الخادم" />
+    <pg:PlayText Classes="p" Markup="يُطلق «التالي» الحدث `Leaving` قبل أن ينتقل، فإذا استدعى مستمعك `e.Wait()` انتظر المعالج مشغولًا، يدور في زره مؤشر التحميل ولا يقبل ضغطة ثانية. فإذا قبل الخادم استدعيت `Proceed()`، وإلا عرضت الخطأ على الحقل نفسه ثم استدعيت `Stay()`. وتجد مثالًا حيًا في معالج تسجيل الدخول." />
+    <pg:PlayListing Code="{x:Static pg:StepsPlay.Server}" Margin="0,0,0,24" />
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="التحكم من الشيفرة" />
+    <pg:PlayListing Code="{x:Static pg:StepsPlay.Code}" Margin="0,0,0,24" />
+
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في الخطوات والمعالج من كلاسات وخصائص وأحداث، لكل مكون صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:StepsPlay.All}" />
+  </StackPanel>
 </UserControl>

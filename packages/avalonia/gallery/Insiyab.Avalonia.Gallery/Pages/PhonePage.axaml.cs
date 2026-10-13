@@ -1,4 +1,7 @@
 using Avalonia.Controls;
+using Avalonia.LogicalTree;
+using Insiyab.Avalonia.Controls;
+using Insiyab.Avalonia.Gallery.Playground;
 
 namespace Insiyab.Avalonia.Gallery.Pages;
 
@@ -8,6 +11,11 @@ public partial class PhonePage : UserControl
     public PhonePage()
     {
         InitializeComponent();
-        Demo.PhoneChanged += (_, e) => DemoOut.Text = "يُرسل: ‎" +(e.Value.Length > 0 ? e.Value : "—");
+        var parts = Example.GetLogicalDescendants().ToList();
+        var hint = parts.OfType<TextBlock>().First(t => t.Classes.Contains("hint"));
+        var box = parts.OfType<PhoneBox>().First();
+        void Show(string value) => hint.Text = "يُرسل: ‎" + (value.Length > 0 ? value : "—");
+        Show(box.Value ?? "");
+        box.PhoneChanged += (_, e) => Show(e.Value);
     }
 }

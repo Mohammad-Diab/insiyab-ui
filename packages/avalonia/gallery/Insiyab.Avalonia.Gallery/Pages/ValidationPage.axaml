@@ -1,151 +1,25 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.ValidationPage">
-  <UserControl.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Light">
-          <SolidColorBrush x:Key="InsInputsViewBd" Color="#1A0F172A" />
-        </ResourceDictionary>
-        <ResourceDictionary x:Key="Dark">
-          <SolidColorBrush x:Key="InsInputsViewBd" Color="#1AFFFFFF" />
-        </ResourceDictionary>
-      </ResourceDictionary.ThemeDictionaries>
-    </ResourceDictionary>
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.dx">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource InsInputsViewBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background">
-        <SolidColorBrush Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-      </Setter>
-    </Style>
-    <Style Selector="TextBlock.doc-h2">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsH3}" />
-      <Setter Property="FontWeight" Value="Bold" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
-    <Style Selector="TextBlock.cap">
-      <Setter Property="FontSize" Value="11" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
-      <Setter Property="Margin" Value="0,0,0,2" />
-    </Style>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
 
-  <ScrollViewer>
-    <StackPanel Spacing="16">
+  <StackPanel>
+    <TextBlock Classes="intro" Text="قيود على الحقول، ورسائلها تحت الحقل لا في فقاعة، دون مكتبة تحقق." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:ValidationPlay.Example}" />
 
-      <Border Classes="dx">
-        <StackPanel ins:Validate.Form="True">
-          <StackPanel Spacing="16">
-            <StackPanel Classes="field">
-              <TextBlock Classes="label" Text="البريد" />
-              <TextBox FlowDirection="LeftToRight" ins:Validate.Required="True" ins:Validate.Email="True" />
-            </StackPanel>
-            <StackPanel Classes="field">
-              <TextBlock Classes="label" Text="كلمة المرور" />
-              <TextBox PasswordChar="•" ins:Validate.Required="True" ins:Validate.MinLength="8" ins:Validate.Message="كلمة المرور قصيرة." />
-              <TextBlock Classes="hint" Text="ثمانية أحرف على الأقل." />
-            </StackPanel>
-          </StackPanel>
-          <StackPanel Classes="form-commit">
-            <Button Classes="primary" Content="إرسال" ins:Validate.Submit="True" />
-          </StackPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="قيود الحقول" />
+    <pg:PlayText Classes="p" Markup="ضع `ins:Validate.Form` على الحاوية، وقيودًا على الحقول: `Required` و`Email` و`MinLength` و`Pattern`، و`ins:Validate.Submit` على زر الإرسال. فتكتب المكتبة رسالة كل حقل تحته. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:ValidationPlay.Rules}" />
 
-      <TextBlock Classes="doc-h2" Text="تحقق المتصفح" />
-      <Border Classes="dx">
-        <StackPanel x:Name="ReportedForm" ins:Validate.Form="True">
-          <StackPanel Classes="field">
-            <TextBlock Classes="label" Text="الاسم" />
-            <TextBox ins:Validate.Required="True" />
-          </StackPanel>
-          <StackPanel Classes="form-commit">
-            <Button Classes="primary" Content="إرسال" ins:Validate.Submit="True" />
-          </StackPanel>
-        </StackPanel>
-      </Border>
-      <Border Classes="dx">
-        <Grid Classes="variants" ColumnDefinitions="*,*" ColumnSpacing="24" RowSpacing="20">
-          <StackPanel x:Name="RuleEmail" ins:Validate.Form="True">
-            <TextBlock Classes="cap" Text="القيد: بريد صحيح، الرسالة: رسالتك" />
-            <StackPanel Classes="field">
-              <TextBlock Classes="label" Text="البريد" />
-              <TextBox FlowDirection="LeftToRight" ins:Validate.Required="True" ins:Validate.Email="True" ins:Validate.Message="اكتب بريدًا صحيحًا." />
-            </StackPanel>
-          </StackPanel>
-          <StackPanel x:Name="RuleLength" ins:Validate.Form="True">
-            <TextBlock Classes="cap" Text="القيد: ثمانية أحرف على الأقل، الرسالة: رسالتك" />
-            <StackPanel Classes="field">
-              <TextBlock Classes="label" Text="كلمة المرور" />
-              <TextBox PasswordChar="•" ins:Validate.Required="True" ins:Validate.MinLength="8" ins:Validate.Message="كلمة المرور قصيرة." />
-            </StackPanel>
-          </StackPanel>
-          <StackPanel x:Name="RulePattern" ins:Validate.Form="True">
-            <TextBlock Classes="cap" Text="القيد: أرقام فقط، الرسالة: رسالتك" />
-            <StackPanel Classes="field">
-              <TextBlock Classes="label" Text="الرمز" />
-              <TextBox ins:Validate.Required="True" ins:Validate.Pattern="[0-9]+" ins:Validate.Message="اكتب أرقامًا فقط." />
-            </StackPanel>
-          </StackPanel>
-          <StackPanel x:Name="RuleHint" ins:Validate.Form="True">
-            <TextBlock Classes="cap" Text="تلميح" />
-            <StackPanel Classes="field">
-              <TextBlock Classes="label" Text="الاسم" />
-              <TextBox ins:Validate.Required="True" ins:Validate.Message="اكتب الاسم." />
-              <TextBlock Classes="hint" Text="تلميح قصير." />
-            </StackPanel>
-          </StackPanel>
-        </Grid>
-      </Border>
+    <TextBlock Classes="section" Text="أخطاء من الخادم" />
+    <pg:PlayText Classes="p" Markup="أما الخطأ الذي لا تعرفه القيود، كاسم مستخدم محجوز أو رمز انتهت صلاحيته، فتضعه أنت: الكلاس `bad` على الحقل، ونص في `ContentControl.error`. وتدل على القبول بالكلاس `ok` و`ContentControl.success`." />
+    <pg:Playground Def="{x:Static pg:ValidationPlay.Server}" />
 
-      <TextBlock Classes="doc-h2" Text="أخطاء من الخادم" />
-      <Border Classes="dx">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="اسم المستخدم" />
-          <TextBox x:Name="TakenName" Text="name" FlowDirection="LeftToRight" />
-        </StackPanel>
-      </Border>
-      <Border Classes="dx">
-        <Grid Classes="variants" ColumnDefinitions="*,*" ColumnSpacing="24" RowSpacing="20">
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="الحالة: مقبول" />
-            <TextBlock Classes="label" Text="اسم المستخدم" />
-            <TextBox Classes="ok" Text="name" FlowDirection="LeftToRight" />
-            <ContentControl Classes="success" Content="الاسم متاح." />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="العنصر: قائمة" />
-            <TextBlock Classes="label" Text="الخيار" />
-            <ComboBox x:Name="BadChoice" PlaceholderText="اختر…">
-              <ComboBoxItem Content="الأول" />
-              <ComboBoxItem Content="الثاني" />
-            </ComboBox>
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="العنصر: قائمة، الحالة: مقبول" />
-            <TextBlock Classes="label" Text="الخيار" />
-            <ComboBox Classes="ok" SelectedIndex="0">
-              <ComboBoxItem Content="الأول" />
-              <ComboBoxItem Content="الثاني" />
-            </ComboBox>
-            <ContentControl Classes="success" Content="اختيار صحيح." />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="بالكلاس وحده" />
-            <TextBlock Classes="label" Text="اسم المستخدم" />
-            <TextBox Classes="bad" Text="name" FlowDirection="LeftToRight" />
-            <ContentControl Classes="error" Content="هذا الاسم محجوز." />
-          </StackPanel>
-        </Grid>
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في التحقق من عناصر وكلاسات وخصائص وأحداث، لكل مكون صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:ValidationPlay.All}" />
+  </StackPanel>
 </UserControl>

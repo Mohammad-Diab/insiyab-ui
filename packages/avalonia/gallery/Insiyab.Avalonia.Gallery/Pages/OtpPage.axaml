@@ -1,79 +1,34 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.OtpPage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PluginsFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <TextBlock Classes="section" Text="حقل الرمز" />
-      <Border Classes="dx">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="رمز التحقق" />
-          <ins:OtpBox x:Name="Demo" Length="6" />
-          <TextBlock x:Name="DemoHint" Classes="hint" Text="رمز من ستة أرقام." />
-        </StackPanel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="حقل رمز التحقق المرسل في رسالة، لكل رقم مربع، وهو في الحقيقة حقل واحد: يُلصق فيه، ويقترحه الهاتف، ويقرؤه قارئ الشاشة." />
+    <pg:PlayText Classes="p" Markup="يكفيك `ins:OtpBox` بعدد الخانات في `Length`، فتظهر تحت الأرقام نقطة لكل خانة تمتلئ بلون الهوية كلما كتبت رقمًا، فيعرف صاحب الرمز كم بقي عليه. والرمز الصحيح في هذا المثال `123456`، وما سواه مرفوض:" />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:OtpPlay.Example}" Stage="{x:Static pg:OtpPlay.ExampleStage}" />
 
-      <TextBlock Classes="section" Text="جرّب الحقل" />
-      <Border Classes="stage">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="رمز التحقق" />
-          <ins:OtpBox x:Name="Play" Length="6" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="جرّب الحقل" />
+    <pg:PlayText Classes="p" Markup="يبقى حقلًا نصيًا واحدًا، فالأرقام ونقاطها مرسومة فوقه، ولا يرى قارئ الشاشة إلا الحقل باسمه. اختر من الخيارات فيتغير الحقل وشيفرته معًا، وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:OtpPlay.Otp}" />
 
-      <TextBlock Classes="variant" Text="عدد الخانات: 4" />
-      <Border Classes="stage">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="رمز التحقق" />
-          <ins:OtpBox x:Name="Play4" Length="4" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="الكتابة" />
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0"><Bold>في الخانة التالية دائمًا:</Bold> أينما نقرت في الحقل وقع المؤشر بعد آخر رقم، ويحذف Backspace آخر رقم.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>الأرقام العربية:</Bold> تصير ١٢٣٤٥٦ في الحقل 123456.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>اللصق:</Bold> لا يأخذ الحقل إلا الرمز، فإذا لصقت «رمزك هو ١٢٣ ٤٥٦» امتلأ بـ 123456.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>الرمز الناقص:</Bold> تظهر تحت الحقل رسالة «اكتب الرمز كاملًا» حتى تمتلئ خاناته.</TextBlock>
+    </ins:ProseList>
 
-      <TextBlock Classes="variant" Text="عدد الخانات: 8" />
-      <Border Classes="stage">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="رمز التحقق" />
-          <ins:OtpBox x:Name="Play8" Length="8" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="التحكم من الشيفرة" />
+    <pg:PlayListing Code="{x:Static pg:OtpPlay.Code}" Margin="0,0,0,24" />
 
-      <TextBlock Classes="variant" Text="حروف وأرقام" />
-      <Border Classes="stage">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="رمز التحقق" />
-          <ins:OtpBox x:Name="PlayAlnum" Length="6" Alphanumeric="True" />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="معطل" />
-      <Border Classes="stage">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="رمز التحقق" />
-          <ins:OtpBox x:Name="PlayDisabled" Length="6" IsEnabled="False" />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="يُرسل وحده" />
-      <Border Classes="stage">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="رمز التحقق" />
-          <ins:OtpBox x:Name="PlaySubmit" Length="6" />
-          <TextBlock x:Name="SubmitNote" Classes="hint" IsVisible="False" />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="رمز مرفوض" />
-      <Border Classes="stage">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="رمز التحقق" />
-          <ins:OtpBox x:Name="PlayInvalid" Length="6" />
-        </StackPanel>
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في حقل الرمز من خصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:OtpPlay.All}" />
+  </StackPanel>
 </UserControl>

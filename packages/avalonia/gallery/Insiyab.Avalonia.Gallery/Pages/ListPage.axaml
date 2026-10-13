@@ -1,173 +1,21 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.ListPage">
-  <UserControl.Resources>
-    <SolidColorBrush x:Key="ExampleTint" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.example">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background" Value="{StaticResource ExampleTint}" />
-    </Style>
-    <Style Selector="TextBlock.cap">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-      <Setter Property="Margin" Value="0,0,0,8" />
-    </Style>
-    <Style Selector="TextBlock.h3">
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
 
-  <ScrollViewer>
-    <StackPanel Spacing="16" MaxWidth="832" HorizontalAlignment="Stretch">
-      <Border Classes="example">
-        <Border Classes="panel">
-          <ListBox Classes="static">
-            <ListBoxItem>
-              <DockPanel>
-                <Border Classes="panel-ico" DockPanel.Dock="Left"><ins:Icon Data="{StaticResource IconFile}" /></Border>
-                <TextBlock Classes="list-end" DockPanel.Dock="Right" Text="أمس" />
-                <StackPanel Classes="list-text">
-                  <TextBlock Classes="list-title" Text="العنوان" />
-                  <TextBlock Classes="list-desc" Text="سطر الوصف" />
-                </StackPanel>
-              </DockPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-              <DockPanel>
-                <StackPanel Classes="list-text">
-                  <TextBlock Classes="list-title" Text="العنوان" />
-                  <TextBlock Classes="list-desc" Text="سطر الوصف" />
-                </StackPanel>
-              </DockPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-              <DockPanel>
-                <StackPanel Classes="list-text">
-                  <TextBlock Classes="list-title" Text="عنوان فقط" />
-                </StackPanel>
-              </DockPanel>
-            </ListBoxItem>
-          </ListBox>
-        </Border>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="صفوف متتالية فيها صورة ونصان وخاتمة، ثابتة أو قابلة للنقر." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:ListPlay.Example}" />
 
-      <TextBlock Classes="h3" Text="القائمة" />
-      <Border Classes="example">
-        <StackPanel Spacing="24">
-          <Border Classes="panel">
-          <ListBox Classes="static">
-            <ListBoxItem>
-              <DockPanel>
-                <Border Classes="panel-ico" DockPanel.Dock="Left"><ins:Icon Data="{StaticResource IconCog}" /></Border>
-                <TextBlock Classes="list-end" DockPanel.Dock="Right" Text="أمس" />
-                <StackPanel Classes="list-text">
-                  <TextBlock Classes="list-title" Text="عام" />
-                  <TextBlock Classes="list-desc" Text="الاسم واللغة" />
-                </StackPanel>
-              </DockPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-              <DockPanel>
-                <Border Classes="panel-ico" DockPanel.Dock="Left"><ins:Icon Data="{StaticResource IconUser}" /></Border>
-                <TextBlock Classes="list-end" DockPanel.Dock="Right" Text="اليوم" />
-                <StackPanel Classes="list-text">
-                  <TextBlock Classes="list-title" Text="الحساب" />
-                  <TextBlock Classes="list-desc" Text="البريد وكلمة المرور" />
-                </StackPanel>
-              </DockPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-              <DockPanel>
-                <Border Classes="panel-ico" DockPanel.Dock="Left"><ins:Icon Data="{StaticResource IconLock}" /></Border>
-                <TextBlock Classes="list-end" DockPanel.Dock="Right" Text="قبل ساعة" />
-                <StackPanel Classes="list-text">
-                  <TextBlock Classes="list-title" Text="الأمان" />
-                  <TextBlock Classes="list-desc" Text="الجلسات والأجهزة" />
-                </StackPanel>
-              </DockPanel>
-            </ListBoxItem>
-          </ListBox>
-          </Border>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="صفوف روابط، والرابط الحالي" />
-            <Border Classes="panel">
-          <ListBox SelectedIndex="0">
-            <ListBoxItem>
-              <DockPanel>
-                <Border Classes="panel-ico" DockPanel.Dock="Left"><ins:Icon Data="{StaticResource IconCog}" /></Border>
-                <TextBlock Classes="list-end" DockPanel.Dock="Right" Text="أمس" />
-                <StackPanel Classes="list-text">
-                  <TextBlock Classes="list-title" Text="عام" />
-                  <TextBlock Classes="list-desc" Text="الاسم واللغة" />
-                </StackPanel>
-              </DockPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-              <DockPanel>
-                <Border Classes="panel-ico" DockPanel.Dock="Left"><ins:Icon Data="{StaticResource IconUser}" /></Border>
-                <TextBlock Classes="list-end" DockPanel.Dock="Right" Text="اليوم" />
-                <StackPanel Classes="list-text">
-                  <TextBlock Classes="list-title" Text="الحساب" />
-                  <TextBlock Classes="list-desc" Text="البريد وكلمة المرور" />
-                </StackPanel>
-              </DockPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-              <DockPanel>
-                <Border Classes="panel-ico" DockPanel.Dock="Left"><ins:Icon Data="{StaticResource IconLock}" /></Border>
-                <TextBlock Classes="list-end" DockPanel.Dock="Right" Text="قبل ساعة" />
-                <StackPanel Classes="list-text">
-                  <TextBlock Classes="list-title" Text="الأمان" />
-                  <TextBlock Classes="list-desc" Text="الجلسات والأجهزة" />
-                </StackPanel>
-              </DockPanel>
-            </ListBoxItem>
-          </ListBox>
-            </Border>
-          </StackPanel>
-          <StackPanel>
-            <TextBlock Classes="cap" Text="خارج اللوح" />
-          <ListBox Classes="static">
-            <ListBoxItem>
-              <DockPanel>
-                <Border Classes="panel-ico" DockPanel.Dock="Left"><ins:Icon Data="{StaticResource IconCog}" /></Border>
-                <TextBlock Classes="list-end" DockPanel.Dock="Right" Text="أمس" />
-                <StackPanel Classes="list-text">
-                  <TextBlock Classes="list-title" Text="عام" />
-                  <TextBlock Classes="list-desc" Text="الاسم واللغة" />
-                </StackPanel>
-              </DockPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-              <DockPanel>
-                <Border Classes="panel-ico" DockPanel.Dock="Left"><ins:Icon Data="{StaticResource IconUser}" /></Border>
-                <TextBlock Classes="list-end" DockPanel.Dock="Right" Text="اليوم" />
-                <StackPanel Classes="list-text">
-                  <TextBlock Classes="list-title" Text="الحساب" />
-                  <TextBlock Classes="list-desc" Text="البريد وكلمة المرور" />
-                </StackPanel>
-              </DockPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-              <DockPanel>
-                <Border Classes="panel-ico" DockPanel.Dock="Left"><ins:Icon Data="{StaticResource IconLock}" /></Border>
-                <TextBlock Classes="list-end" DockPanel.Dock="Right" Text="قبل ساعة" />
-                <StackPanel Classes="list-text">
-                  <TextBlock Classes="list-title" Text="الأمان" />
-                  <TextBlock Classes="list-desc" Text="الجلسات والأجهزة" />
-                </StackPanel>
-              </DockPanel>
-            </ListBoxItem>
-          </ListBox>
-          </StackPanel>
-        </StackPanel>
-      </Border>
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="القائمة" />
+    <pg:PlayText Classes="p" Markup="تتألف القائمة `ListBox` من صفوف `ListBoxItem`، وفي كل صف ما يبدأ به كصورة أو أيقونة، ثم نص من سطرين (`list-title` و`list-desc`)، ثم ما ينتهي به (`list-end`). وكلها اختيارية، وتجدها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:ListPlay.List}" />
+
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في القوائم من كلاسات وخصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:ListPlay.All}" />
+  </StackPanel>
 </UserControl>

@@ -1,82 +1,32 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.NotifyPage">
-  <ScrollViewer>
-    <StackPanel Spacing="24">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
+  </UserControl.Styles>
 
-      <Border Classes="card" Padding="24">
-        <WrapPanel ItemSpacing="12" LineSpacing="12">
-          <ins:Notify>
-            <ins:NotifyItem Icon="{StaticResource IconDownload}" Title="اكتمل التصدير" Description="الملف جاهز للتنزيل." End="الآن" IsUnread="True" />
-            <ins:NotifyItem Icon="{StaticResource IconMessage}" Title="تعليق جديد على المستند" Description="على الفقرة الثانية." End="قبل ساعة" IsUnread="True" />
-            <ins:NotifyItem Icon="{StaticResource IconCheck}" Title="تم حفظ التغييرات" Description="حُفظت نسخة جديدة من الملف." End="أمس" />
-          </ins:Notify>
-        </WrapPanel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="جرس يعد ما لم يُقرأ من الإشعارات، وتحته قائمتها: يصير الإشعار مقروءًا بنقرة، ويهتز الجرس حين يصل جديد." />
+    <pg:PlayExample Layout="Row" Code="{x:Static pg:NotifyPlay.Example}" />
 
-      <TextBlock Classes="h2" Text="مركز الإشعارات" />
-      <Border Classes="card" Padding="24">
-        <StackPanel Spacing="16" HorizontalAlignment="Center">
-          <ins:Notify x:Name="Play" FootText="عرض الكل" HorizontalAlignment="Center">
-            <ins:NotifyItem Icon="{StaticResource IconDownload}" Title="اكتمل التصدير" Description="الملف جاهز للتنزيل." End="الآن" IsUnread="True" />
-            <ins:NotifyItem Icon="{StaticResource IconMessage}" Title="تعليق جديد على المستند" Description="على الفقرة الثانية." End="قبل ساعة" IsUnread="True" />
-            <ins:NotifyItem Icon="{StaticResource IconCheck}" Title="تم حفظ التغييرات" Description="حُفظت نسخة جديدة من الملف." End="أمس" IsUnread="True" />
-          </ins:Notify>
-          <Button Classes="secondary sm" Content="إشعار جديد" HorizontalAlignment="Center" Click="OnAdd" />
-          <WrapPanel ItemSpacing="32" LineSpacing="16" HorizontalAlignment="Center" Margin="0,8,0,0">
-            <StackPanel Spacing="8">
-              <ins:Notify FootText="عرض الكل" HorizontalAlignment="Center" />
-              <TextBlock Classes="muted" Text="بلا إشعارات" HorizontalAlignment="Center" />
-            </StackPanel>
-            <StackPanel Spacing="8">
-              <ins:Notify FootText="عرض الكل" HorizontalAlignment="Center">
-                <ins:NotifyItem Icon="{StaticResource IconDownload}" Title="اكتمل التصدير" Description="الملف جاهز للتنزيل." End="الآن" />
-                <ins:NotifyItem Icon="{StaticResource IconMessage}" Title="تعليق جديد على المستند" Description="على الفقرة الثانية." End="قبل ساعة" />
-                <ins:NotifyItem Icon="{StaticResource IconCheck}" Title="تم حفظ التغييرات" Description="حُفظت نسخة جديدة من الملف." End="أمس" />
-              </ins:Notify>
-              <TextBlock Classes="muted" Text="لا شيء" HorizontalAlignment="Center" />
-            </StackPanel>
-            <StackPanel Spacing="8">
-              <ins:Notify FootText="عرض الكل" HorizontalAlignment="Center">
-                <ins:NotifyItem Icon="{StaticResource IconDownload}" Title="اكتمل التصدير" Description="الملف جاهز للتنزيل." End="الآن" IsUnread="True" />
-                <ins:NotifyItem Icon="{StaticResource IconMessage}" Title="تعليق جديد على المستند" Description="على الفقرة الثانية." End="قبل ساعة" />
-                <ins:NotifyItem Icon="{StaticResource IconCheck}" Title="تم حفظ التغييرات" Description="حُفظت نسخة جديدة من الملف." End="أمس" />
-              </ins:Notify>
-              <TextBlock Classes="muted" Text="واحد" HorizontalAlignment="Center" />
-            </StackPanel>
-            <StackPanel Spacing="8">
-              <ins:Notify x:Name="Many" FootText="عرض الكل" HorizontalAlignment="Center" />
-              <TextBlock Classes="muted" Text="أكثر من 99" HorizontalAlignment="Center" />
-            </StackPanel>
-            <StackPanel Spacing="8">
-              <ins:Notify FootText="عرض الكل" HorizontalAlignment="Center">
-                <ins:NotifyItem Avatar="م" Title="اكتمل التصدير" Description="الملف جاهز للتنزيل." End="الآن" IsUnread="True" />
-                <ins:NotifyItem Avatar="س" Title="تعليق جديد على المستند" Description="على الفقرة الثانية." End="قبل ساعة" IsUnread="True" />
-                <ins:NotifyItem Avatar="ل" Title="تم حفظ التغييرات" Description="حُفظت نسخة جديدة من الملف." End="أمس" IsUnread="True" />
-              </ins:Notify>
-              <TextBlock Classes="muted" Text="صورة رمزية" HorizontalAlignment="Center" />
-            </StackPanel>
-            <StackPanel Spacing="8">
-              <ins:Notify ReadAllText="{x:Null}" FootText="عرض الكل" HorizontalAlignment="Center">
-                <ins:NotifyItem Icon="{StaticResource IconDownload}" Title="اكتمل التصدير" Description="الملف جاهز للتنزيل." End="الآن" IsUnread="True" />
-                <ins:NotifyItem Icon="{StaticResource IconMessage}" Title="تعليق جديد على المستند" Description="على الفقرة الثانية." End="قبل ساعة" IsUnread="True" />
-                <ins:NotifyItem Icon="{StaticResource IconCheck}" Title="تم حفظ التغييرات" Description="حُفظت نسخة جديدة من الملف." End="أمس" IsUnread="True" />
-              </ins:Notify>
-              <TextBlock Classes="muted" Text="بلا زر تعليم الكل" HorizontalAlignment="Center" />
-            </StackPanel>
-            <StackPanel Spacing="8">
-              <ins:Notify HorizontalAlignment="Center">
-                <ins:NotifyItem Icon="{StaticResource IconDownload}" Title="اكتمل التصدير" Description="الملف جاهز للتنزيل." End="الآن" IsUnread="True" />
-                <ins:NotifyItem Icon="{StaticResource IconMessage}" Title="تعليق جديد على المستند" Description="على الفقرة الثانية." End="قبل ساعة" IsUnread="True" />
-                <ins:NotifyItem Icon="{StaticResource IconCheck}" Title="تم حفظ التغييرات" Description="حُفظت نسخة جديدة من الملف." End="أمس" IsUnread="True" />
-              </ins:Notify>
-              <TextBlock Classes="muted" Text="بلا رابط عرض الكل" HorizontalAlignment="Center" />
-            </StackPanel>
-          </WrapPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="مركز الإشعارات" />
+    <pg:PlayText Classes="p" Markup="ضع صفوف `ins:NotifyItem` في `ins:Notify`، فيعد الجرس الصفوف التي عليها `IsUnread` ويكتب عددها على زاويته، ويصير الصف مقروءًا حين يُنقر. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:NotifyPlay.Notify}" />
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="متى تستعمل مركز الإشعارات" />
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0" Text="لما يحدث والمستخدم بعيد عنه، ويبقى حتى يراه: اكتمل عمل طويل، أو وصل تعليق." />
+      <TextBlock Classes="p" Margin="0" Text="أما تأكيد ما فعله المستخدم للتو فمكانه الرسالة العابرة، تظهر ثم تغيب." />
+    </ins:ProseList>
+
+    <TextBlock Classes="section" Text="التحكم من الشيفرة" />
+    <pg:PlayText Classes="p" Markup="إذا وصل إشعار من الخادم فأضف صفه إلى `Items`، فيعده الجرس ويهتز مرة واحدة." />
+    <pg:PlayListing Code="{x:Static pg:NotifyPlay.Code}" Margin="0,0,0,24" />
+
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في مركز الإشعارات من عناصر وخصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:NotifyPlay.All}" />
+  </StackPanel>
 </UserControl>

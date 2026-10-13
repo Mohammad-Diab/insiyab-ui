@@ -1,198 +1,42 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.PickersPage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PickersFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <Border Classes="dx">
-        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
-          <StackPanel Classes="field">
-            <TextBlock Classes="label" Text="المدينة" />
-            <AutoCompleteBox x:Name="MainCity" />
-          </StackPanel>
-          <StackPanel Classes="field" Grid.Column="1">
-            <TextBlock Classes="label" Text="التاريخ" />
-            <ins:DateField x:Name="MainDate" />
-          </StackPanel>
-          <StackPanel Classes="field" Grid.Column="2">
-            <TextBlock Classes="label" Text="الوقت" />
-            <ins:TimeField x:Name="MainTime" />
-          </StackPanel>
-        </Grid>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="الإكمال التلقائي والتاريخ والوقت والمنزلق والعداد، أدوات لا يستغني عنها نموذج جاد." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:PickersPlay.Example}" />
 
-      <TextBlock Classes="section" Text="الإكمال التلقائي" />
-      <Border Classes="stage wide">
-        <AutoCompleteBox x:Name="ComboPlay" />
-      </Border>
+    <TextBlock Classes="section" Text="الإكمال التلقائي" />
+    <pg:PlayText Classes="p" Markup="يضم `AutoCompleteBox` حقلًا وقائمة خيارات تنفتح وهو يكتب، تتنقل فيها الأسهم، و`Enter` للاختيار و`Esc` للإغلاق. ومعه `ArabicMatch.Contains` تفهم مطابقته العربية، فلا تلتفت إلى التشكيل ولا إلى صور الهمزة. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:PickersPlay.Combo}" />
 
-      <TextBlock Classes="section" Text="التاريخ" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="التاريخ" />
-          <ins:DateField x:Name="DatePlay" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="التاريخ" />
+    <pg:PlayText Classes="p" Markup="يكتب `ins:DateField` التاريخ بلغة الواجهة، ويفتح تقويمًا يبدأ أسبوعه يوم السبت في الواجهة العربية، وتتنقل فيه الأسهم بين الأيام مع اتجاهها. ويبقى ما في `Value` بالصيغة `2026-09-23`، كما يتلقاه الخادم." />
+    <pg:Playground Def="{x:Static pg:PickersPlay.Date}" />
+    <pg:PlayText Classes="p" Markup="أما تاريخ الميلاد، فلا يبحث عنه صاحبه في تقويم، ولذا له حقل خاص يُكتب ويُختار بالأعمدة، في صفحة تاريخ الميلاد." />
 
-      <TextBlock Classes="variant" Text="فترة بين تاريخين" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الفترة" />
-          <ins:DateField x:Name="RangePlay" Mode="Range" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="الوقت" />
+    <pg:PlayText Classes="p" Markup="يعرض `ins:TimeField` الوقت كما تكتبه لغة الواجهة، وتظهر تحته أعمدة للساعة والدقيقة والفترة (ص/م)، ويقبل الكتابة أيضًا، مثل «14:30» و«2:30 م»." />
+    <pg:Playground Def="{x:Static pg:PickersPlay.Time}" />
 
-      <TextBlock Classes="variant" Text="تاريخ ووقت" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الموعد" />
-          <ins:DateField x:Name="DateTimePlay" Mode="DateTime" MinuteStep="15" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="المنزلق" />
+    <pg:PlayText Classes="p" Markup="المنزلق `Slider` الأصلي بمظهر المكتبة، فلوحة المفاتيح وما يسمعه قارئ الشاشة من شأن Avalonia، وكذلك اتجاهه، ففي الواجهة العربية يقع الحد الأدنى على اليمين." />
+    <pg:Playground Def="{x:Static pg:PickersPlay.Range}" />
 
-      <TextBlock Classes="variant" Text="تاريخ ووقت في حقلين" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الموعد" />
-          <ins:DateTimeGroup x:Name="GroupPlay" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="العداد" />
+    <pg:PlayText Classes="p" Markup="حقل `NumericUpDown` رقمي بين زرين، يزيدانه وينقصانه بخطوة `Increment` ولا يتجاوزان `Minimum` و`Maximum`." />
+    <pg:Playground Def="{x:Static pg:PickersPlay.Stepper}" />
 
-      <TextBlock Classes="variant" Text="حدود للتاريخ" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="التاريخ" />
-          <ins:DateField x:Name="BoundedPlay" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="الأدوات الأصلية" />
+    <pg:PlayText Classes="p" Markup="وأدوات Avalonia الأصلية للتاريخ والوقت تأخذ مظهر المكتبة أيضًا، إن احتجت إليها." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:PickersPlay.NativeExample}" />
 
-      <TextBlock Classes="variant" Text="التقويم" />
-      <Border Classes="stage">
-        <FlyoutPresenter Classes="picker" HorizontalAlignment="Center" ClipToBounds="False">
-          <ins:DateCalendar x:Name="StillSingle" />
-        </FlyoutPresenter>
-      </Border>
-
-      <TextBlock Classes="variant" Text="التقويم: فترة" />
-      <Border Classes="stage">
-        <FlyoutPresenter Classes="picker" HorizontalAlignment="Center" ClipToBounds="False">
-          <ins:DateCalendar x:Name="StillRange" Mode="Range" IsDual="True" />
-        </FlyoutPresenter>
-      </Border>
-
-      <TextBlock Classes="variant" Text="التقويم: تاريخ ووقت" />
-      <Border Classes="stage">
-        <FlyoutPresenter Classes="picker" HorizontalAlignment="Center" ClipToBounds="False">
-          <ins:DateCalendar x:Name="StillDateTime" Mode="DateTime" MinuteStep="15" />
-        </FlyoutPresenter>
-      </Border>
-
-      <TextBlock Classes="section" Text="الوقت" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الموعد" />
-          <ins:TimeField x:Name="TimePlay" />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="الخطوة بالدقائق: 15" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الموعد" />
-          <ins:TimeField x:Name="Step15" MinuteStep="15" />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="الخطوة بالدقائق: 60" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الموعد" />
-          <ins:TimeField x:Name="Step60" MinuteStep="60" />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="حدود للوقت" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="الموعد" />
-          <ins:TimeField x:Name="BoundedTime" />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="الأعمدة" />
-      <Border Classes="stage">
-        <FlyoutPresenter Classes="picker" HorizontalAlignment="Center" ClipToBounds="False">
-          <Panel>
-            <Border Classes="picker-glass" />
-            <ins:TimeDrum x:Name="StillDrum" Margin="8" MinuteStep="30" />
-          </Panel>
-        </FlyoutPresenter>
-      </Border>
-
-      <TextBlock Classes="section" Text="المنزلق" />
-      <Border Classes="stage">
-        <Slider Minimum="0" Maximum="50" TickFrequency="5" IsSnapToTickEnabled="True" Value="25" Width="480" />
-      </Border>
-
-      <TextBlock Classes="variant" Text="الخطوة: 1" />
-      <Border Classes="stage">
-        <Slider Minimum="0" Maximum="50" TickFrequency="1" IsSnapToTickEnabled="True" Value="21" Width="480" />
-      </Border>
-
-      <TextBlock Classes="variant" Text="الخطوة: 10" />
-      <Border Classes="stage">
-        <Slider Minimum="0" Maximum="50" TickFrequency="10" IsSnapToTickEnabled="True" Value="30" Width="480" />
-      </Border>
-
-      <TextBlock Classes="variant" Text="معطل" />
-      <Border Classes="stage">
-        <Slider Minimum="0" Maximum="50" TickFrequency="5" IsSnapToTickEnabled="True" Value="25" Width="480" IsEnabled="False" />
-      </Border>
-
-      <TextBlock Classes="section" Text="العداد" />
-      <Border Classes="stage">
-        <NumericUpDown Value="6" Minimum="0" Maximum="20" Width="137" />
-      </Border>
-
-      <TextBlock Classes="variant" Text="الخطوة: 5" />
-      <Border Classes="stage">
-        <NumericUpDown Value="10" Minimum="0" Maximum="20" Increment="5" Width="137" />
-      </Border>
-
-      <TextBlock Classes="variant" Text="معطل" />
-      <Border Classes="stage">
-        <NumericUpDown Value="6" Minimum="0" Maximum="20" Width="137" IsEnabled="False" />
-      </Border>
-
-      <TextBlock Classes="section" Text="الأدوات الأصلية" />
-      <Border Classes="stage">
-        <CalendarDatePicker x:Name="NativeDatePicker" Width="300" />
-      </Border>
-
-      <Border Classes="stage">
-        <DatePicker x:Name="NativeDate" />
-      </Border>
-
-      <Border Classes="stage">
-        <TimePicker x:Name="NativeTime" />
-      </Border>
-
-      <Border Classes="stage">
-        <Calendar x:Name="NativeCalendar" />
-      </Border>
-
-      <Border Classes="stage">
-        <DatePickerPresenter x:Name="StillDatePresenter" HorizontalAlignment="Center" />
-      </Border>
-
-      <Border Classes="stage">
-        <TimePickerPresenter x:Name="StillTimePresenter" HorizontalAlignment="Center" />
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في أدوات الاختيار من عناصر وخصائص وأحداث، لكل أداة صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:PickersPlay.All}" />
+  </StackPanel>
 </UserControl>

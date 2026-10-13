@@ -1,52 +1,11 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.SplitPage">
-  <UserControl.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Light">
-          <SolidColorBrush x:Key="DemoViewBd" Color="#1A0F172A" />
-        </ResourceDictionary>
-        <ResourceDictionary x:Key="Dark">
-          <SolidColorBrush x:Key="DemoViewBd" Color="#1AFFFFFF" />
-        </ResourceDictionary>
-      </ResourceDictionary.ThemeDictionaries>
-      <SolidColorBrush x:Key="DemoViewBg" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-    </ResourceDictionary>
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.ex">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource DemoViewBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background" Value="{DynamicResource DemoViewBg}" />
-    </Style>
-    <Style Selector="Border.ex.flush">
-      <Setter Property="Padding" Value="0" />
-      <Setter Property="ClipToBounds" Value="True" />
-    </Style>
-    <Style Selector="Border.ex.play">
-      <Setter Property="Padding" Value="24,64" />
-    </Style>
-    <Style Selector="TextBlock.h3">
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
-    <Style Selector="TextBlock.variant">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-      <Setter Property="Margin" Value="0,0,0,8" />
-    </Style>
-    <Style Selector="TextBlock.p">
-      <Setter Property="TextWrapping" Value="Wrap" />
-      <Setter Property="LineHeight" Value="27.2" />
-      <Setter Property="Margin" Value="0,0,0,16" />
-    </Style>
-    <!-- The docs' demo box: a dashed brand-tinted placeholder -->
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
     <Style Selector="Panel.demo-box">
       <Setter Property="MinHeight" Value="80" />
-      <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
     <Style Selector="Panel.demo-box > Rectangle">
       <Setter Property="RadiusX" Value="10" />
@@ -66,89 +25,16 @@
     </Style>
   </UserControl.Styles>
 
-  <StackPanel Spacing="12">
+  <StackPanel>
+    <TextBlock Classes="intro" Text="لوحان يتقاسمان العرض بخط تسحبه: مستند بجانب نموذجه، أو قائمة بجانب ما تفتحه منها." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:SplitPlay.Example}" />
 
-    <Border Classes="ex flush">
-      <ins:Split Height="288" Padding="20">
-        <ins:Split.First>
-          <StackPanel>
-            <TextBlock Classes="h4" Text="المستند" Margin="0,0,0,12" />
-            <TextBlock Classes="p" Text="تُرد المنتجات خلال أربعة عشر يومًا من الاستلام، بشرط أن تكون في عبوتها الأصلية ومعها الفاتورة." />
-            <TextBlock Classes="p" Text="ويستبدل المنتج التالف دون رسوم خلال ثلاثين يومًا." />
-          </StackPanel>
-        </ins:Split.First>
-        <ins:Split.Second>
-          <StackPanel>
-            <TextBlock Classes="h4" Text="الملاحظات" Margin="0,0,0,12" />
-            <TextBlock Classes="p" Text="المدة واضحة، لكن شرط العبوة يحتاج تفصيلًا." />
-          </StackPanel>
-        </ins:Split.Second>
-      </ins:Split>
-    </Border>
+    <TextBlock Classes="section" Text="العرض المقسوم" />
+    <pg:PlayText Classes="p" Markup="يضع `ins:Split` لوحين جنبًا إلى جنب يتقاسمان العرض، ويفصل بينهما خط تسحبه فتتبدل القسمة: مستند بجوار النموذج الخاص به، أو قائمة بجوار العنصر الذي تفتحه منها. ويتمرر كل لوح وحده، فإذا ضاق عن 640 صار اللوحان أحدهما فوق الآخر. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:SplitPlay.Split}" />
 
-    <TextBlock Classes="h3" Text="العرض المقسوم" />
-    <Border Classes="ex play">
-      <ins:Split Height="192">
-        <ins:Split.First>
-          <Panel Classes="demo-box"><Rectangle /><TextBlock Text="اللوح الأول" /></Panel>
-        </ins:Split.First>
-        <ins:Split.Second>
-          <Panel Classes="demo-box"><Rectangle /><TextBlock Text="اللوح الثاني" /></Panel>
-        </ins:Split.Second>
-      </ins:Split>
-    </Border>
-    <Border Classes="ex">
-      <StackPanel>
-        <TextBlock Classes="variant" Text="حصة اللوح الأول: 30%" />
-        <ins:Split Height="120" Share="30" DefaultShare="30">
-          <ins:Split.First>
-            <Panel Classes="demo-box"><Rectangle /><TextBlock Text="اللوح الأول" /></Panel>
-          </ins:Split.First>
-          <ins:Split.Second>
-            <Panel Classes="demo-box"><Rectangle /><TextBlock Text="اللوح الثاني" /></Panel>
-          </ins:Split.Second>
-        </ins:Split>
-      </StackPanel>
-    </Border>
-    <Border Classes="ex">
-      <StackPanel>
-        <TextBlock Classes="variant" Text="حصة اللوح الأول: 70%" />
-        <ins:Split Height="120" Share="70" DefaultShare="70">
-          <ins:Split.First>
-            <Panel Classes="demo-box"><Rectangle /><TextBlock Text="اللوح الأول" /></Panel>
-          </ins:Split.First>
-          <ins:Split.Second>
-            <Panel Classes="demo-box"><Rectangle /><TextBlock Text="اللوح الثاني" /></Panel>
-          </ins:Split.Second>
-        </ins:Split>
-      </StackPanel>
-    </Border>
-    <Border Classes="ex">
-      <StackPanel>
-        <TextBlock Classes="variant" Text="حدود أضيق للسحب: بين 60% و75%" />
-        <ins:Split Height="120" Min="60" Max="75">
-          <ins:Split.First>
-            <Panel Classes="demo-box"><Rectangle /><TextBlock Text="اللوح الأول" /></Panel>
-          </ins:Split.First>
-          <ins:Split.Second>
-            <Panel Classes="demo-box"><Rectangle /><TextBlock Text="اللوح الثاني" /></Panel>
-          </ins:Split.Second>
-        </ins:Split>
-      </StackPanel>
-    </Border>
-    <Border Classes="ex">
-      <StackPanel>
-        <TextBlock Classes="variant" Text="لوح فوق لوح" />
-        <ins:Split Height="240" Orientation="Vertical">
-          <ins:Split.First>
-            <Panel Classes="demo-box"><Rectangle /><TextBlock Text="اللوح الأول" /></Panel>
-          </ins:Split.First>
-          <ins:Split.Second>
-            <Panel Classes="demo-box"><Rectangle /><TextBlock Text="اللوح الثاني" /></Panel>
-          </ins:Split.Second>
-        </ins:Split>
-      </StackPanel>
-    </Border>
-
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في العرض المقسوم من عناصر وخصائص وأحداث." />
+    <pg:OptionsList Defs="{x:Static pg:SplitPlay.All}" />
   </StackPanel>
 </UserControl>

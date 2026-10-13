@@ -1,156 +1,25 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.PageHeadPage">
-  <UserControl.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Light">
-          <SolidColorBrush x:Key="DemoViewBd" Color="#1A0F172A" />
-        </ResourceDictionary>
-        <ResourceDictionary x:Key="Dark">
-          <SolidColorBrush x:Key="DemoViewBd" Color="#1AFFFFFF" />
-        </ResourceDictionary>
-      </ResourceDictionary.ThemeDictionaries>
-      <SolidColorBrush x:Key="DemoViewBg" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-    </ResourceDictionary>
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.ex">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource DemoViewBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background" Value="{DynamicResource DemoViewBg}" />
-    </Style>
-    <Style Selector="Border.ex.play">
-      <Setter Property="Padding" Value="24,64" />
-    </Style>
-    <Style Selector="Border.ex ins|PageHead">
-      <Setter Property="Margin" Value="0" />
-    </Style>
-    <Style Selector="TextBlock.h3">
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
-    <Style Selector="TextBlock.variant">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-      <Setter Property="Margin" Value="0,0,0,8" />
-    </Style>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
 
-  <StackPanel Spacing="12">
+  <StackPanel>
+    <TextBlock Classes="intro" Text="عنوان الصفحة وسطر تحته وإجراءاتها، ومسار التنقل فوقها." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:PageHeadPlay.Example}" />
 
-    <Border Classes="ex">
-      <ins:PageHead Title="عنوان الصفحة" Subtitle="سطر وصف قصير">
-        <ins:PageHead.Breadcrumb>
-          <ins:Breadcrumb>
-            <x:String>الرئيسية</x:String>
-            <x:String>القسم</x:String>
-            <x:String>الصفحة</x:String>
-          </ins:Breadcrumb>
-        </ins:PageHead.Breadcrumb>
-        <ins:PageHead.Actions>
-          <Button Classes="primary" Content="حفظ" />
-        </ins:PageHead.Actions>
-      </ins:PageHead>
-    </Border>
+    <TextBlock Classes="section" Text="رأس الصفحة" />
+    <pg:PlayText Classes="p" Markup="يضم `ins:PageHead` العنوان وسطرًا تحته، ثم الإجراءات في آخره، وتنزل تحت العنوان إذا ضاق السطر. والمسار والإجراءات وسطر الوصف كلها اختيارية، وتجد الخيارات بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:PageHeadPlay.Head}" />
 
-    <TextBlock Classes="h3" Text="رأس الصفحة" />
-    <Border Classes="ex play">
-      <ins:PageHead Title="عنوان الصفحة" Subtitle="سطر وصف قصير">
-        <ins:PageHead.Breadcrumb>
-          <ins:Breadcrumb>
-            <x:String>الرئيسية</x:String>
-            <x:String>القسم</x:String>
-            <x:String>الصفحة</x:String>
-          </ins:Breadcrumb>
-        </ins:PageHead.Breadcrumb>
-        <ins:PageHead.Actions>
-          <Button Classes="primary" Content="حفظ" />
-        </ins:PageHead.Actions>
-      </ins:PageHead>
-    </Border>
-    <Border Classes="ex">
-      <StackPanel>
-        <TextBlock Classes="variant" Text="بلا سطر الوصف" />
-        <ins:PageHead Title="عنوان الصفحة">
-          <ins:PageHead.Breadcrumb>
-            <ins:Breadcrumb>
-              <x:String>الرئيسية</x:String>
-              <x:String>القسم</x:String>
-              <x:String>الصفحة</x:String>
-            </ins:Breadcrumb>
-          </ins:PageHead.Breadcrumb>
-          <ins:PageHead.Actions>
-            <Button Classes="primary" Content="حفظ" />
-          </ins:PageHead.Actions>
-        </ins:PageHead>
-      </StackPanel>
-    </Border>
-    <Border Classes="ex">
-      <StackPanel>
-        <TextBlock Classes="variant" Text="بلا إجراءات" />
-        <ins:PageHead Title="عنوان الصفحة" Subtitle="سطر وصف قصير">
-          <ins:PageHead.Breadcrumb>
-            <ins:Breadcrumb>
-              <x:String>الرئيسية</x:String>
-              <x:String>القسم</x:String>
-              <x:String>الصفحة</x:String>
-            </ins:Breadcrumb>
-          </ins:PageHead.Breadcrumb>
-        </ins:PageHead>
-      </StackPanel>
-    </Border>
-    <Border Classes="ex">
-      <StackPanel>
-        <TextBlock Classes="variant" Text="بلا مسار" />
-        <ins:PageHead Title="عنوان الصفحة" Subtitle="سطر وصف قصير">
-          <ins:PageHead.Actions>
-            <Button Classes="primary" Content="حفظ" />
-          </ins:PageHead.Actions>
-        </ins:PageHead>
-      </StackPanel>
-    </Border>
+    <TextBlock Classes="section" Text="مسار التنقل" />
+    <pg:PlayText Classes="p" Markup="موضع `ins:Breadcrumb` الصفحات التي تقع على عمق ثلاثة مستويات فأكثر، أما الصفحة التي يبلغها الشريط الجانبي مباشرة فتستغني عنه، فالشريط يدل على مكانها. وإذا كان للصفحة مسار جاء في أول رأسها على سطر وحده." />
+    <pg:Playground Def="{x:Static pg:PageHeadPlay.Crumbs}" />
 
-    <TextBlock Classes="h3" Text="مسار التنقل" />
-    <Border Classes="ex play">
-      <ins:Breadcrumb>
-        <x:String>الرئيسية</x:String>
-        <x:String>الإعدادات</x:String>
-        <x:String>الفواتير</x:String>
-      </ins:Breadcrumb>
-    </Border>
-    <Border Classes="ex">
-      <StackPanel>
-        <TextBlock Classes="variant" Text="مستويان" />
-        <ins:Breadcrumb>
-          <x:String>الرئيسية</x:String>
-          <x:String>الفواتير</x:String>
-        </ins:Breadcrumb>
-      </StackPanel>
-    </Border>
-    <Border Classes="ex">
-      <StackPanel>
-        <TextBlock Classes="variant" Text="أربعة مستويات" />
-        <ins:Breadcrumb>
-          <x:String>الرئيسية</x:String>
-          <x:String>الإعدادات</x:String>
-          <x:String>الحساب</x:String>
-          <x:String>الفواتير</x:String>
-        </ins:Breadcrumb>
-      </StackPanel>
-    </Border>
-    <Border Classes="ex">
-      <StackPanel>
-        <TextBlock Classes="variant" Text="اسم طويل للصفحة الحالية يُختصر بثلاث نقاط" />
-        <ins:Breadcrumb>
-          <x:String>الرئيسية</x:String>
-          <x:String>الإعدادات</x:String>
-          <x:String>فواتير الربع الأول من العام الحالي</x:String>
-        </ins:Breadcrumb>
-      </StackPanel>
-    </Border>
-
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في رأس الصفحة ومسار التنقل من خصائص وأحداث، لكل مكون صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:PageHeadPlay.All}" />
   </StackPanel>
 </UserControl>

@@ -1,121 +1,27 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.FilePage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PluginsFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <TextBlock Classes="section" Text="منطقة السحب والإفلات" />
-      <Border Classes="dx">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="المرفقات" />
-          <ins:FileUpload Multiple="True" Accept=".pdf,image/*" MaxSize="5MB" MaxCount="5" />
-          <TextBlock Classes="hint" Text="ملفات PDF أو صور." />
-        </StackPanel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="اسحب الملفات إلى منطقة الإفلات فتظهر في قائمة، تقرؤها الصفحة من الحقل نفسه." />
+    <pg:PlayText Classes="p" Markup="تسحب الملفات إلى `ins:FileUpload` أو تختارها أو تلصقها، وتظهر تحته في قائمة: للصورة نسخة مصغرة ولغيرها نوعه، ومع كل ملف اسمه وحجمه وزر لإزالته." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:FilePlay.Example}" />
+    <TextBlock Classes="p"><Bold>تبقى الملفات في الحقل:</Bold> تقرؤها من Files، ويبقى الحقل بتسميته في ترتيب التنقل بمفتاح Tab، فتصل إليه لوحة المفاتيح ويفهمه قارئ الشاشة.</TextBlock>
 
-      <TextBlock Classes="section" Text="جرّب الحقل" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="المرفقات" />
-          <ins:FileUpload Multiple="True" Accept=".pdf,image/*" MaxSize="5MB" MaxCount="5" />
-          <TextBlock Classes="hint" Text="ملفات PDF أو صور." />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="جرّب الحقل" />
+    <pg:PlayText Classes="p" Markup="اختر من الخيارات، فيتغير الحقل وشيفرته معًا. والملف الذي يتجاوز الحدود لا يُضاف، ويذكر الحقل اسمه وسبب رفضه. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:FilePlay.File}" />
 
-      <TextBlock Classes="variant" Text="مضغوط" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="المرفقات" />
-          <ins:FileUpload Multiple="True" Accept=".pdf,image/*" MaxSize="5MB" MaxCount="5" Classes="compact" />
-          <TextBlock Classes="hint" Text="ملفات PDF أو صور." />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="الرفع الفوري" />
+    <pg:PlayText Classes="p" Markup="مع `Upload` يُطلق كل ملف تضيفه حدث `FileAdded`، فترفعه الصفحة ثم تخبر الحقل بما جرى. ويبقى الحقل غير صالح ما دام ملف قيد الرفع أو تعذر رفعه. وتجربه في الحقل أعلاه بخيار «يُرفع فورًا»، والصفحة ترفع الملفات هكذا:" />
+    <pg:PlayListing Code="{x:Static pg:FilePlay.Code}" Margin="0,0,0,24" />
 
-      <TextBlock Classes="variant" Text="ملف واحد" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="المرفقات" />
-          <ins:FileUpload Multiple="False" Accept=".pdf,image/*" MaxSize="5MB" />
-          <TextBlock Classes="hint" Text="ملفات PDF أو صور." />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="الأنواع المقبولة: كل الأنواع" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="المرفقات" />
-          <ins:FileUpload Multiple="True" MaxSize="5MB" MaxCount="5" />
-          <TextBlock Classes="hint" Text="أي نوع من الملفات." />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="الأنواع المقبولة: صور فقط" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="المرفقات" />
-          <ins:FileUpload Multiple="True" Accept="image/*" MaxSize="5MB" MaxCount="5" />
-          <TextBlock Classes="hint" Text="صور فقط." />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="أكبر حجم: 500KB" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="المرفقات" />
-          <ins:FileUpload Multiple="True" Accept=".pdf,image/*" MaxSize="500KB" MaxCount="5" />
-          <TextBlock Classes="hint" Text="ملفات PDF أو صور." />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="أكبر حجم: بلا" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="المرفقات" />
-          <ins:FileUpload Multiple="True" Accept=".pdf,image/*" MaxCount="5" />
-          <TextBlock Classes="hint" Text="ملفات PDF أو صور." />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="أكبر عدد: 2" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="المرفقات" />
-          <ins:FileUpload Multiple="True" Accept=".pdf,image/*" MaxSize="5MB" MaxCount="2" />
-          <TextBlock Classes="hint" Text="ملفات PDF أو صور." />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="السطر الصغير" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="المرفقات" />
-          <ins:FileUpload Multiple="True" Accept=".pdf,image/*" MaxSize="5MB" MaxCount="5" Note="ملفات PDF أو صور." />
-          <TextBlock Classes="hint" Text="ملفات PDF أو صور." />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="يُرفع فورًا" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="المرفقات" />
-          <ins:FileUpload x:Name="PlayUpload" Multiple="True" Accept=".pdf,image/*" MaxSize="5MB" MaxCount="5" Upload="True" />
-          <TextBlock Classes="hint" Text="ملفات PDF أو صور." />
-        </StackPanel>
-      </Border>
-
-      <TextBlock Classes="variant" Text="معطل" />
-      <Border Classes="stage wide">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="المرفقات" />
-          <ins:FileUpload Multiple="True" Accept=".pdf,image/*" MaxSize="5MB" MaxCount="5" IsEnabled="False" />
-          <TextBlock Classes="hint" Text="ملفات PDF أو صور." />
-        </StackPanel>
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في رفع الملفات من كلاسات وخصائص وأحداث، في صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:FilePlay.All}" />
+  </StackPanel>
 </UserControl>

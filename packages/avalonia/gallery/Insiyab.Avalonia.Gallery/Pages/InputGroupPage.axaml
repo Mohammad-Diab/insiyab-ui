@@ -1,194 +1,29 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.InputGroupPage">
-  <UserControl.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Light">
-          <SolidColorBrush x:Key="InsInputsViewBd" Color="#1A0F172A" />
-        </ResourceDictionary>
-        <ResourceDictionary x:Key="Dark">
-          <SolidColorBrush x:Key="InsInputsViewBd" Color="#1AFFFFFF" />
-        </ResourceDictionary>
-      </ResourceDictionary.ThemeDictionaries>
-    </ResourceDictionary>
-  </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Border.dx">
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="BorderBrush" Value="{DynamicResource InsInputsViewBd}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-      <Setter Property="Background">
-        <SolidColorBrush Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
-      </Setter>
-    </Style>
-    <Style Selector="TextBlock.doc-h2">
-      <Setter Property="FontSize" Value="{DynamicResource InsFsH3}" />
-      <Setter Property="FontWeight" Value="Bold" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-      <Setter Property="Margin" Value="0,24,0,0" />
-    </Style>
-    <Style Selector="TextBlock.cap">
-      <Setter Property="FontSize" Value="11" />
-      <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
-      <Setter Property="Margin" Value="0,0,0,2" />
-    </Style>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
 
-  <ScrollViewer>
-    <StackPanel Spacing="16">
+  <StackPanel>
+    <TextBlock Classes="intro" Text="حقل وملحقاته قطعة واحدة: وحدة قياس، أو بادئة، أو زر، أو إظهار كلمة المرور." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:InputGroupPlay.Example}" />
 
-      <Border Classes="dx">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="السعر" />
-          <TextBox Classes="input-group" Text="249">
-            <TextBox.InnerRightContent>
-              <ContentControl Classes="addon" Content="ر.س" />
-            </TextBox.InnerRightContent>
-          </TextBox>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="مجموعة الحقل" />
+    <pg:PlayText Classes="p" Markup="يضم الكلاس `input-group` على `TextBox` الحقل وملحقاته في قطعة واحدة، لها إطار واحد وحلقة تركيز واحدة. والملحق `ContentControl` بالكلاس `addon` في أول الحقل أو آخره. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:InputGroupPlay.Group}" />
 
-      <TextBlock Classes="doc-h2" Text="مجموعة الحقل" />
-      <Border Classes="dx">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="المبلغ" />
-          <TextBox Classes="input-group" Text="249">
-            <TextBox.InnerRightContent>
-              <ContentControl Classes="addon" Content="ر.س" />
-            </TextBox.InnerRightContent>
-          </TextBox>
-        </StackPanel>
-      </Border>
-      <Border Classes="dx">
-        <Grid Classes="variants" ColumnDefinitions="*,*" ColumnSpacing="24" RowSpacing="20">
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="الملحق: بلا" />
-            <TextBlock Classes="label" Text="المبلغ" />
-            <TextBox Classes="input-group" Text="249" />
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="موضع الملحق: قبل الحقل" />
-            <TextBlock Classes="label" Text="المبلغ" />
-            <TextBox Classes="input-group" Text="249">
-              <TextBox.InnerLeftContent>
-                <ContentControl Classes="addon" Content="ر.س" />
-              </TextBox.InnerLeftContent>
-            </TextBox>
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="الملحق: أيقونة" />
-            <TextBlock Classes="label" Text="المبلغ" />
-            <TextBox Classes="input-group" Text="249">
-              <TextBox.InnerRightContent>
-                <ContentControl Classes="addon">
-                  <ins:Icon Data="{StaticResource IconWallet}" />
-                </ContentControl>
-              </TextBox.InnerRightContent>
-            </TextBox>
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="زر ملحق: بنص" />
-            <TextBlock Classes="label" Text="المبلغ" />
-            <TextBox Classes="input-group" Text="249">
-              <TextBox.InnerRightContent>
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                  <ContentControl Classes="addon" Content="ر.س" />
-                  <Button Classes="secondary" Content="تطبيق" />
-                </StackPanel>
-              </TextBox.InnerRightContent>
-            </TextBox>
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="زر ملحق: بأيقونة" />
-            <TextBlock Classes="label" Text="المبلغ" />
-            <TextBox Classes="input-group" Text="249">
-              <TextBox.InnerRightContent>
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                  <ContentControl Classes="addon" Content="ر.س" />
-                  <Button Classes="secondary icon" ToolTip.Tip="تطبيق">
-                    <ins:Icon Data="{StaticResource IconCheck}" />
-                  </Button>
-                </StackPanel>
-              </TextBox.InnerRightContent>
-            </TextBox>
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="خطأ" />
-            <TextBlock Classes="label" Text="المبلغ" />
-            <TextBox x:Name="BadGroup" Classes="input-group" Text="249">
-              <TextBox.InnerRightContent>
-                <ContentControl Classes="addon" Content="ر.س" />
-              </TextBox.InnerRightContent>
-            </TextBox>
-          </StackPanel>
-          <StackPanel Classes="field">
-            <TextBlock Classes="cap" Text="باتجاه LTR" />
-            <TextBlock Classes="label" Text="الرابط" />
-            <TextBox Classes="input-group" PlaceholderText="my-site" FlowDirection="LeftToRight">
-              <TextBox.InnerRightContent>
-                <ContentControl Classes="addon" Content="ر.س" />
-              </TextBox.InnerRightContent>
-            </TextBox>
-          </StackPanel>
-        </Grid>
-      </Border>
+    <TextBlock Classes="section" Text="إظهار كلمة المرور" />
+    <pg:PlayText Classes="p" Markup="يضع الكلاس `revealPasswordButton` زر العين في آخر حقل كلمة المرور، فتظهر أو تختفي، ويخبر قارئ الشاشة بحالته." />
+    <pg:Playground Def="{x:Static pg:InputGroupPlay.Password}" />
 
-      <TextBlock Classes="doc-h2" Text="إظهار كلمة المرور" />
-      <Border Classes="dx">
-        <StackPanel Classes="field">
-          <TextBlock Classes="label" Text="كلمة المرور" />
-          <TextBox Classes="revealPasswordButton" PasswordChar="•" Text="secret" />
-        </StackPanel>
-      </Border>
-      <Border Classes="dx">
-        <StackPanel Spacing="6">
-          <TextBlock Classes="cap" Text="يجد الحقل: بمعرّفه" />
-          <StackPanel Classes="field">
-            <TextBlock Classes="label" Text="كلمة المرور" />
-            <TextBox x:Name="LoosePassword" PasswordChar="•" Text="secret" />
-          </StackPanel>
-          <ToggleButton Theme="{DynamicResource InsTextBoxRevealButton}"
-                        HorizontalAlignment="Left"
-                        ToolTip.Tip="إظهار كلمة المرور"
-                        IsChecked="{Binding #LoosePassword.RevealPassword, Mode=TwoWay}" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="العداد" />
+    <pg:PlayText Classes="p" Markup="يحيط زران بحقل `NumericUpDown` الرقمي، فيزيدانه وينقصانه بخطوة `Increment` ولا يتجاوزان `Minimum` و`Maximum`." />
+    <pg:Playground Def="{x:Static pg:InputGroupPlay.Stepper}" />
 
-      <TextBlock Classes="doc-h2" Text="العداد" />
-      <Border Classes="dx">
-        <StackPanel Classes="field" HorizontalAlignment="Center">
-          <TextBlock Classes="label" Text="الكمية" />
-          <NumericUpDown Width="137" Value="2" Minimum="0" Maximum="10" Increment="1" />
-        </StackPanel>
-      </Border>
-      <Border Classes="dx">
-        <Grid Classes="variants" ColumnDefinitions="*,*" ColumnSpacing="24" RowSpacing="20">
-          <StackPanel Classes="field" HorizontalAlignment="Center">
-            <TextBlock Classes="cap" Text="الخطوة: 5" />
-            <TextBlock Classes="label" Text="الكمية" />
-            <NumericUpDown Width="137" Value="5" Minimum="0" Maximum="10" Increment="5" />
-          </StackPanel>
-          <StackPanel Classes="field" HorizontalAlignment="Center">
-            <TextBlock Classes="cap" Text="الخطوة: 0.5" />
-            <TextBlock Classes="label" Text="الكمية" />
-            <NumericUpDown Width="137" Value="2.5" Minimum="0" Maximum="10" Increment="0.5" />
-          </StackPanel>
-          <StackPanel Classes="field" HorizontalAlignment="Center">
-            <TextBlock Classes="cap" Text="بلا حد أدنى وأعلى" />
-            <TextBlock Classes="label" Text="الكمية" />
-            <NumericUpDown Width="137" Value="2" Increment="1" />
-          </StackPanel>
-          <StackPanel Classes="field" HorizontalAlignment="Center">
-            <TextBlock Classes="cap" Text="معطل" />
-            <TextBlock Classes="label" Text="الكمية" />
-            <NumericUpDown Width="137" Value="2" Minimum="0" Maximum="10" Increment="1" IsEnabled="False" />
-          </StackPanel>
-        </Grid>
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في مجموعات الحقول من عناصر وكلاسات وخصائص، لكل مكون صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:InputGroupPlay.All}" />
+  </StackPanel>
 </UserControl>

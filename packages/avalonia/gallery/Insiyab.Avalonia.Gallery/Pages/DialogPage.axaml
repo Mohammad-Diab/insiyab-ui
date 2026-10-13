@@ -1,128 +1,27 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.DialogPage">
-  <UserControl.Resources>
-    <ins:Dialog x:Key="Dlg" Title="عنوان الحوار">
-      <TextBlock Text="نص الحوار." TextWrapping="Wrap" />
-      <ins:Dialog.Foot>
-        <ins:DialogFoot>
-          <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
-          <Button Classes="primary" Content="موافق" ins:Dialog.Result="ok" />
-        </ins:DialogFoot>
-      </ins:Dialog.Foot>
-    </ins:Dialog>
-    <ins:Dialog x:Key="DlgWin" Title="عنوان الحوار">
-      <TextBlock Text="نص الحوار." TextWrapping="Wrap" />
-      <ins:Dialog.Foot>
-        <ins:DialogFoot>
-          <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
-          <Button Classes="primary" Content="موافق" ins:Dialog.Result="ok" />
-        </ins:DialogFoot>
-      </ins:Dialog.Foot>
-    </ins:Dialog>
-    <ins:Dialog x:Key="DlgSm" Title="عنوان الحوار" Classes="sm">
-      <TextBlock Text="نص الحوار." TextWrapping="Wrap" />
-      <ins:Dialog.Foot>
-        <ins:DialogFoot>
-          <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
-          <Button Classes="primary" Content="موافق" ins:Dialog.Result="ok" />
-        </ins:DialogFoot>
-      </ins:Dialog.Foot>
-    </ins:Dialog>
-    <ins:Dialog x:Key="DlgLg" Title="عنوان الحوار" Classes="lg">
-      <TextBlock Text="نص الحوار." TextWrapping="Wrap" />
-      <ins:Dialog.Foot>
-        <ins:DialogFoot>
-          <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
-          <Button Classes="primary" Content="موافق" ins:Dialog.Result="ok" />
-        </ins:DialogFoot>
-      </ins:Dialog.Foot>
-    </ins:Dialog>
-    <ins:Dialog x:Key="DlgBare" Title="عنوان الحوار">
-      <TextBlock Text="نص الحوار." TextWrapping="Wrap" />
-    </ins:Dialog>
-    <ins:Dialog x:Key="DlgForm" Title="عنوان الحوار">
-      <StackPanel Spacing="20">
-        <StackPanel Spacing="6">
-          <TextBlock Classes="label" Text="الاسم" />
-          <TextBox />
-        </StackPanel>
-        <StackPanel Spacing="6">
-          <TextBlock Classes="label" Text="النوع" />
-          <ComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
-            <ComboBoxItem Content="عام" />
-            <ComboBoxItem Content="خاص" />
-          </ComboBox>
-        </StackPanel>
-        <StackPanel Spacing="6">
-          <TextBlock Classes="label" Text="ملاحظة" />
-          <TextBox AcceptsReturn="True" TextWrapping="Wrap" MinHeight="88" />
-        </StackPanel>
-        <CheckBox Content="أرسل لي نسخة" />
-      </StackPanel>
-      <ins:Dialog.Foot>
-        <ins:DialogFoot>
-          <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
-          <Button Classes="primary" Content="موافق" ins:Dialog.Result="ok" />
-        </ins:DialogFoot>
-      </ins:Dialog.Foot>
-    </ins:Dialog>
-    <ins:Dialog x:Key="DlgAny" Title="عنوان الحوار" ClosedBy="Any">
-      <TextBlock Text="نص الحوار." TextWrapping="Wrap" />
-      <ins:Dialog.Foot>
-        <ins:DialogFoot>
-          <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
-          <Button Classes="primary" Content="موافق" ins:Dialog.Result="ok" />
-        </ins:DialogFoot>
-      </ins:Dialog.Foot>
-    </ins:Dialog>
-    <ins:Dialog x:Key="DlgNone" Title="عنوان الحوار" ClosedBy="None">
-      <TextBlock Text="نص الحوار." TextWrapping="Wrap" />
-      <ins:Dialog.Foot>
-        <ins:DialogFoot>
-          <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
-          <Button Classes="primary" Content="موافق" ins:Dialog.Result="ok" />
-        </ins:DialogFoot>
-      </ins:Dialog.Foot>
-    </ins:Dialog>
-  </UserControl.Resources>
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
+  </UserControl.Styles>
 
-  <ScrollViewer>
-    <StackPanel Spacing="24">
+  <StackPanel>
+    <TextBlock Classes="intro" Text="لوح فوق النافذة المعتمة، يحبس التركيز ما دام مفتوحًا، ويغلقه Esc ويعيد التركيز إلى الزر الذي فتحه." />
+    <pg:PlayExample Layout="Row" Code="{x:Static pg:DialogPlay.Example}" />
 
-      <Border Classes="card" Padding="24">
-        <WrapPanel ItemSpacing="12" LineSpacing="12">
-          <Button Classes="primary" Content="فتح الحوار" ins:Dialog.Opens="{StaticResource Dlg}" />
-        </WrapPanel>
-      </Border>
+    <TextBlock Classes="section" Text="مربع الحوار" />
+    <pg:PlayText Classes="p" Markup="يفتح `ins:Dialog` زرٌ يحمل `ins:Dialog.Opens`، ويبقى التركيز محبوسًا فيه حتى يُغلق. أما النقر خارجه فلا يغلقه، حتى لا تذهب نقرة شاردة بما كتبته فيه. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:DialogPlay.Dialog}" />
+    <pg:PlayText Classes="p" Markup="وأزرار الذيل على قاعدة واحدة في المكتبة كلها، في الحوار والدرج والتأكيد والنوافذ المنبثقة: تصطف في نهاية السطر، والزر الرئيسي آخرها وقبله زر الإلغاء، وما لا يُنهي الحوار، كالحذف أو «اليوم»، يقف وحده في أوله. وعلى الهاتف تتقاسم الأزرار العرض بارتفاع يناسب الإصبع." />
+    <pg:PlayText Classes="p" Markup="وإذا فتحت حوارًا من حوار، أظلمت النافذة مرة واحدة وبقي الأول خلف الثاني. ويغلق `Esc` والنقر خارجه أعلاهما وحده، ثم يعود التركيز إلى الزر الذي فتحه. وعلى الحاسوب تفتحه `ShowAsWindowAsync` في نافذة منفصلة إن شئت." />
 
-      <TextBlock Classes="h2" Text="مربع الحوار" />
-      <Border Classes="card" Padding="24">
-        <StackPanel Spacing="16" HorizontalAlignment="Center">
-          <Button Classes="primary" Content="فتح الحوار" HorizontalAlignment="Center" ins:Dialog.Opens="{StaticResource Dlg}" />
-          <WrapPanel ItemSpacing="12" LineSpacing="12" HorizontalAlignment="Center">
-            <Button Classes="secondary sm" Content="صغير" ins:Dialog.Opens="{StaticResource DlgSm}" />
-            <Button Classes="secondary sm" Content="كبير" ins:Dialog.Opens="{StaticResource DlgLg}" />
-            <Button Classes="secondary sm" Content="بلا ذيل" ins:Dialog.Opens="{StaticResource DlgBare}" />
-            <Button Classes="secondary sm" Content="فيه نموذج" ins:Dialog.Opens="{StaticResource DlgForm}" />
-            <Button Classes="secondary sm" Content="والنقر خارجه أيضًا" ins:Dialog.Opens="{StaticResource DlgAny}" />
-            <Button Classes="secondary sm" Content="أزراره وحدها" ins:Dialog.Opens="{StaticResource DlgNone}" />
-            <Button Classes="secondary sm" Content="في نافذة منفصلة" Click="OnWindow" />
-          </WrapPanel>
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="التأكيد" />
+    <pg:PlayText Classes="p" Markup="ضع `ins:Dialog.Confirm` على زر، فيسأل المستخدم قبل أن يمضي الإجراء. وإذا كان الزر من أزرار الخطر جاء زر التأكيد أحمر تلقائيًا. ومن الشيفرة تعيد `Dialog.ConfirmAsync` القيمة `true` أو `false`." />
+    <pg:Playground Def="{x:Static pg:DialogPlay.Confirm}" />
 
-      <TextBlock Classes="h2" Text="التأكيد" />
-      <Border Classes="card" Padding="24">
-        <WrapPanel ItemSpacing="12" LineSpacing="12" HorizontalAlignment="Center">
-          <Button Classes="secondary" Content="أرشفة" ins:Dialog.Confirm="أرشفة الملف؟" ins:Dialog.ConfirmOk="أرشفة" />
-          <Button Classes="ghost-danger" Content="أرشفة" ins:Dialog.Confirm="أرشفة الملف؟" ins:Dialog.ConfirmOk="أرشفة" />
-          <Button Classes="secondary" Content="أرشفة" ins:Dialog.Confirm="أرشفة الملف؟" ins:Dialog.ConfirmOk="أرشفة" ins:Dialog.ConfirmTone="danger" />
-          <Button Classes="secondary" Content="أرشفة" Click="OnConfirm" />
-        </WrapPanel>
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في مربع الحوار والتأكيد من عناصر وكلاسات وخصائص، لكل منهما صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:DialogPlay.All}" />
+  </StackPanel>
 </UserControl>

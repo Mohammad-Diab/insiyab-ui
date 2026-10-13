@@ -1,69 +1,29 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.LoadingPage">
   <UserControl.Styles>
-    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/FeedbackFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
-  <ScrollViewer>
-    <StackPanel>
 
-      <Border Classes="dx">
-        <StackPanel Spacing="12">
-          <ins:Skeleton Classes="circle" />
-          <ins:Skeleton Classes="title" />
-          <ins:Skeleton Classes="block" />
-          <ins:Skeleton Classes="text" />
-          <ins:Skeleton Classes="text" />
-        </StackPanel>
-      </Border>
+  <StackPanel>
+    <TextBlock Classes="intro" Text="هيكل التحميل (skeleton) ومؤشر التحميل والحالة الفارغة: ما يراه المستخدم قبل وصول البيانات، أو حين لا تصل." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:LoadingPlay.Example}" />
 
-      <TextBlock Classes="section" Text="هيكل التحميل" />
-      <Border Classes="stage wide">
-        <StackPanel Spacing="12">
-          <ins:Skeleton Classes="text" />
-          <ins:Skeleton Classes="text" />
-          <ins:Skeleton Classes="text" />
-        </StackPanel>
-      </Border>
+    <TextBlock Classes="section" Text="هيكل التحميل" />
+    <pg:PlayText Classes="p" Markup="يرسم هيكل التحميل `ins:Skeleton` هيئة المحتوى قبل أن يصل، فإذا وصل أخذ مكانها ولم تقفز الشاشة. اختر الشكل الأقرب إلى ما سيصل، وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:Playground Def="{x:Static pg:LoadingPlay.Skeleton}" />
 
-      <TextBlock Classes="section" Text="مؤشر التحميل" />
-      <Border Classes="stage">
-        <ins:LoadingSpinner AutomationProperties.Name="جارٍ التحميل" />
-      </Border>
-      <TextBlock Classes="variant" Text="صغير" />
-      <Border Classes="stage">
-        <ins:LoadingSpinner Classes="sm" AutomationProperties.Name="جارٍ التحميل" />
-      </Border>
-      <TextBlock Classes="variant" Text="في زر" />
-      <Border Classes="stage">
-        <Button Classes="primary" IsEnabled="False">
-          <StackPanel Orientation="Horizontal" Spacing="8">
-            <ins:LoadingSpinner Classes="sm" />
-            <TextBlock Text="جارٍ الحفظ…" VerticalAlignment="Center" />
-          </StackPanel>
-        </Button>
-      </Border>
-      <TextBlock Classes="variant" Text="في حاوية" />
-      <Border Classes="stage wide">
-        <Border Classes="loading">
-          <ins:LoadingSpinner AutomationProperties.Name="جارٍ التحميل" />
-        </Border>
-      </Border>
+    <TextBlock Classes="section" Text="مؤشر التحميل" />
+    <pg:PlayText Classes="p" Markup="يصلح مؤشر التحميل `ins:LoadingSpinner` لانتظار قصير لا تُعرف هيئة ما يأتي بعده. أعطه اسمًا يقرؤه قارئ الشاشة، أو دعه بلا اسم إذا كان نص الزر يغني عنه." />
+    <pg:Playground Def="{x:Static pg:LoadingPlay.Spinner}" />
 
-      <TextBlock Classes="section" Text="الحالة الفارغة" />
-      <Border Classes="stage wide">
-        <ins:EmptyState Icon="{StaticResource IconFolder}" Title="لا ملفات بعد" Hint="أضف أول ملف ليظهر هنا.">
-          <Button Classes="primary" Content="ملف جديد" />
-        </ins:EmptyState>
-      </Border>
-      <TextBlock Classes="variant" Text="لا نتائج" />
-      <Border Classes="stage wide">
-        <ins:EmptyState Icon="{StaticResource IconSearch}" Title="لا نتائج" Hint="جرب كلمة أخرى.">
-          <Button Classes="secondary" Content="امسح البحث" />
-        </ins:EmptyState>
-      </Border>
+    <TextBlock Classes="section" Text="الحالة الفارغة" />
+    <pg:PlayText Classes="p" Markup="تجمع `ins:EmptyState` أيقونة وعنوانًا وتلميحًا، وزرًا إن كان للقارئ ما يفعله. ودعها تخبره بما سيظهر هنا، وبما يفعله بعد ذلك." />
+    <pg:Playground Def="{x:Static pg:LoadingPlay.Empty}" />
 
-    </StackPanel>
-  </ScrollViewer>
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في هيكل التحميل ومؤشر التحميل والحالة الفارغة من عناصر وكلاسات وخصائص، لكل مكون صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:LoadingPlay.All}" />
+  </StackPanel>
 </UserControl>
