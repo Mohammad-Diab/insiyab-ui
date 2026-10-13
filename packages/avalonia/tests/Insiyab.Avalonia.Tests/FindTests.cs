@@ -49,6 +49,7 @@ public class FindTests
         Assert.Equal("تقرير", ArabicSearch.Normalize(b));
         Assert.Equal('ً', b[^1]);
         Assert.Single(Find.Matches("أحمد وإيمان", "احمد"));
+        Assert.Single(Find.Matches("حديقة", "حديقه"));
         Assert.Single(Find.Matches("مستشفى", "مستشفي"));
         Assert.Single(Find.Matches("الطلب ١٢٣", "123"));
         Assert.Equal((4, 6), Find.Matches("The Report", "report").Single());
