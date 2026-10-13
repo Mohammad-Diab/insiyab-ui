@@ -103,9 +103,9 @@
   <SplitView x:Name="ShellView" IsPaneOpen="True">
     <SplitView.Pane>
       <DockPanel>
-        <Border Classes="shell-brand" DockPanel.Dock="Top">
+        <Border Classes="shell-brand" DockPanel.Dock="Top" ins:TitleBar.IsDragArea="True" Background="Transparent">
           <StackPanel>
-            <Border Classes="shell-mark"><TextBlock Text="ان" /></Border>
+            <Border Classes="shell-mark" ins:TitleBar.IsSystemMenuArea="True"><TextBlock Text="ان" /></Border>
             <StackPanel>
               <TextBlock Classes="shell-brand-name" Text="انسياب" />
               <TextBlock Classes="shell-brand-role" Text="المعرض · Avalonia" />
@@ -116,15 +116,15 @@
       </DockPanel>
     </SplitView.Pane>
     <Panel>
-      <Border Classes="topbar" VerticalAlignment="Top" ZIndex="1">
-        <Grid ColumnDefinitions="*,Auto,*">
+      <Border Classes="topbar" VerticalAlignment="Top" ZIndex="1" ins:TitleBar.IsDragArea="True">
+        <Grid ColumnDefinitions="*,Auto,*,Auto">
           <StackPanel Classes="zone start">
             <Button Classes="island icon" ins:Shell.TogglesSidebar="True" ToolTip.Tip="القائمة" AutomationProperties.Name="القائمة">
               <ins:Icon Data="{StaticResource IconMenu}" />
             </Button>
             <Border Classes="island brand">
               <StackPanel>
-                <Border Classes="shell-mark"><TextBlock Text="ان" /></Border>
+                <Border Classes="shell-mark" ins:TitleBar.IsSystemMenuArea="True"><TextBlock Text="ان" /></Border>
                 <TextBlock Text="انسياب" />
               </StackPanel>
             </Border>
@@ -169,6 +169,7 @@
               </Button.Flyout>
             </Button>
           </StackPanel>
+          <ins:CaptionButtons Grid.Column="3" />
         </Grid>
       </Border>
       <ScrollViewer x:Name="Scroller" ins:Shell.FrostsTopbar="True">
