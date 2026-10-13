@@ -22,5 +22,6 @@
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/CheckBox.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/ToggleSwitch.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Buttons.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Inputs.axaml" />
 
 </Styles>
