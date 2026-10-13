@@ -1,0 +1,113 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.NavbarPage">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="DemoViewBd" Color="#1A0F172A" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="DemoViewBd" Color="#1AFFFFFF" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+      <SolidColorBrush x:Key="DemoViewBg" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <UserControl.Styles>
+    <Style Selector="Border.ex">
+      <Setter Property="Padding" Value="24" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="{DynamicResource DemoViewBd}" />
+      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+      <Setter Property="Background" Value="{DynamicResource DemoViewBg}" />
+    </Style>
+    <Style Selector="Border.ex.play">
+      <Setter Property="Padding" Value="24,64" />
+    </Style>
+    <Style Selector="TextBlock.h3">
+      <Setter Property="Margin" Value="0,24,0,0" />
+    </Style>
+    <Style Selector="TextBlock.variant">
+      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+      <Setter Property="Margin" Value="0,0,0,8" />
+    </Style>
+  </UserControl.Styles>
+
+  <!-- The examples sit in a docs-width frame, as the web's sit in a wide window, so they fold only when narrower than a phone -->
+  <StackPanel Spacing="12">
+
+    <Border Classes="ex">
+      <ins:Navbar Brand="الموقع" SelectedIndex="0" CollapseWidth="480">
+        <x:String>الرئيسية</x:String>
+        <x:String>المدونة</x:String>
+        <x:String>تواصل معنا</x:String>
+        <ins:Navbar.End>
+          <Button Classes="secondary sm" Content="دخول" />
+        </ins:Navbar.End>
+      </ins:Navbar>
+    </Border>
+
+    <TextBlock Classes="h3" Text="شريط الموقع" />
+    <Border Classes="ex play">
+      <ins:Navbar Brand="الموقع" SelectedIndex="0" CollapseWidth="480">
+        <x:String>الرئيسية</x:String>
+        <x:String>المدونة</x:String>
+        <x:String>تواصل معنا</x:String>
+        <ins:Navbar.End>
+          <Button Classes="secondary sm" Content="دخول" />
+        </ins:Navbar.End>
+      </ins:Navbar>
+    </Border>
+    <Border Classes="ex">
+      <StackPanel>
+        <TextBlock Classes="variant" Text="بلا رابط حالي" />
+        <ins:Navbar Brand="الموقع" CollapseWidth="480">
+          <x:String>الرئيسية</x:String>
+          <x:String>المدونة</x:String>
+          <x:String>تواصل معنا</x:String>
+          <ins:Navbar.End>
+            <Button Classes="secondary sm" Content="دخول" />
+          </ins:Navbar.End>
+        </ins:Navbar>
+      </StackPanel>
+    </Border>
+    <Border Classes="ex">
+      <StackPanel>
+        <TextBlock Classes="variant" Text="بلا أزرار في آخره" />
+        <ins:Navbar Brand="الموقع" SelectedIndex="0" CollapseWidth="480">
+          <x:String>الرئيسية</x:String>
+          <x:String>المدونة</x:String>
+          <x:String>تواصل معنا</x:String>
+        </ins:Navbar>
+      </StackPanel>
+    </Border>
+
+    <TextBlock Classes="h3" Text="على الهاتف" />
+    <Border Classes="ex">
+      <StackPanel Spacing="8">
+        <TextBlock Classes="variant" Text="الروابط مطوية خلف زر القائمة" />
+        <ins:Navbar Brand="الموقع" SelectedIndex="0" Width="380" HorizontalAlignment="Left">
+          <x:String>الرئيسية</x:String>
+          <x:String>المدونة</x:String>
+          <x:String>تواصل معنا</x:String>
+          <ins:Navbar.End>
+            <Button Classes="secondary sm" Content="دخول" />
+          </ins:Navbar.End>
+        </ins:Navbar>
+        <TextBlock Classes="variant" Text="والقائمة مفتوحة عمودًا داخل الشريط" />
+        <ins:Navbar Brand="الموقع" SelectedIndex="0" Width="380" HorizontalAlignment="Left" IsOpen="True">
+          <x:String>الرئيسية</x:String>
+          <x:String>المدونة</x:String>
+          <x:String>تواصل معنا</x:String>
+          <ins:Navbar.End>
+            <Button Classes="secondary sm" Content="دخول" />
+          </ins:Navbar.End>
+        </ins:Navbar>
+      </StackPanel>
+    </Border>
+
+  </StackPanel>
+</UserControl>

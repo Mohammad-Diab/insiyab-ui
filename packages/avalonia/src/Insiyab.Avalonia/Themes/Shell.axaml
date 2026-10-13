@@ -1,0 +1,29 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <!-- Shared by the shell's pieces: what light draws in the darkest brand shade and dark in plain text, and the island's drop plus its bevel -->
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsShellInk" Color="{DynamicResource InsPrimaryDarkerColor}" />
+          <BoxShadows x:Key="InsIslandShadow">0 4 16 0 #0F0F172A, inset 0 1 0 0 #E6FFFFFF</BoxShadows>
+          <BoxShadows x:Key="InsIslandShadowHover">0 4 6 -1 #120F172A, 0 2 4 -2 #0D0F172A, inset 0 1 0 0 #E6FFFFFF</BoxShadows>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsShellInk" Color="{DynamicResource InsText1Color}" />
+          <BoxShadows x:Key="InsIslandShadow">0 4 16 0 #61000000, inset 0 1 0 0 #1AFFFFFF</BoxShadows>
+          <BoxShadows x:Key="InsIslandShadowHover">0 4 8 -1 #73000000, 0 2 4 -2 #59000000, inset 0 1 0 0 #1AFFFFFF</BoxShadows>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Shell/SplitView.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Shell/Topbar.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Shell/PageHead.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Shell/Navbar.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Shell/Split.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Shell/Pagination.axaml" />
+
+</Styles>

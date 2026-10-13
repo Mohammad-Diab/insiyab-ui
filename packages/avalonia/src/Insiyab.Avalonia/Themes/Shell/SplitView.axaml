@@ -1,0 +1,597 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <!-- The mark's 135deg brand gradient, physical as on the web -->
+      <LinearGradientBrush x:Key="InsShellMarkFill" StartPoint="0%,0%" EndPoint="100%,100%">
+        <GradientStop Offset="0" Color="{DynamicResource InsPrimaryColor}" />
+        <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
+      </LinearGradientBrush>
+      <SolidColorBrush x:Key="InsShellScrim" Color="#590F172A" />
+
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <BoxShadows x:Key="InsShellLinkActiveShadow">0 4 12 0 #0F0F172A, inset 0 1 0 0 #F2FFFFFF</BoxShadows>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <BoxShadows x:Key="InsShellLinkActiveShadow">0 4 12 0 #0F0F172A, inset 0 1 0 0 #29FFFFFF</BoxShadows>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- The SplitView is the shell: a glass sidebar that collapses on the desktop and becomes a drawer below DrawerWidth -->
+      <ControlTheme x:Key="{x:Type SplitView}" TargetType="SplitView">
+        <Setter Property="OpenPaneLength" Value="{DynamicResource InsShellSidebar}" />
+        <Setter Property="CompactPaneLength" Value="{DynamicResource InsAppbarH}" />
+        <Setter Property="DisplayMode" Value="Inline" />
+        <Setter Property="PaneBackground" Value="{DynamicResource InsGlass}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="ins:Shell.DrawerWidth" Value="900" />
+
+        <Style Selector="^:left">
+          <Setter Property="Template">
+            <ControlTemplate>
+              <Grid Name="Container" Background="{TemplateBinding Background}">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.PaneColumnGridLength}" />
+                  <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Panel Name="ContentRoot" Grid.Column="1">
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
+                  <Rectangle Name="LightDismissLayer" Fill="{DynamicResource InsShellScrim}" IsVisible="False" />
+                </Panel>
+                <Panel Name="PART_PaneRoot" HorizontalAlignment="Left" ClipToBounds="True" ZIndex="100">
+                  <!-- Fixed at the open width inside a pane that narrows, so collapsing clips the sidebar rather than re-flowing it -->
+                  <Border Name="PART_PaneChrome"
+                          Width="{TemplateBinding OpenPaneLength}"
+                          HorizontalAlignment="Left"
+                          Background="{TemplateBinding PaneBackground}"
+                          BorderBrush="{DynamicResource InsRim}"
+                          BorderThickness="0,0,1,0">
+                    <ContentPresenter x:Name="PART_PanePresenter"
+                                      Padding="12,18"
+                                      Content="{TemplateBinding Pane}"
+                                      ContentTemplate="{TemplateBinding PaneTemplate}" />
+                  </Border>
+                </Panel>
+              </Grid>
+            </ControlTemplate>
+          </Setter>
+        </Style>
+        <Style Selector="^:right">
+          <Setter Property="Template">
+            <ControlTemplate>
+              <Grid Name="Container" Background="{TemplateBinding Background}">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.PaneColumnGridLength}" />
+                </Grid.ColumnDefinitions>
+                <Panel Name="ContentRoot">
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
+                  <Rectangle Name="LightDismissLayer" Fill="{DynamicResource InsShellScrim}" IsVisible="False" />
+                </Panel>
+                <Panel Name="PART_PaneRoot" Grid.Column="1" HorizontalAlignment="Right" ClipToBounds="True" ZIndex="100">
+                  <Border Name="PART_PaneChrome"
+                          Width="{TemplateBinding OpenPaneLength}"
+                          HorizontalAlignment="Right"
+                          Background="{TemplateBinding PaneBackground}"
+                          BorderBrush="{DynamicResource InsRim}"
+                          BorderThickness="1,0,0,0">
+                    <ContentPresenter x:Name="PART_PanePresenter"
+                                      Padding="12,18"
+                                      Content="{TemplateBinding Pane}"
+                                      ContentTemplate="{TemplateBinding PaneTemplate}" />
+                  </Border>
+                </Panel>
+              </Grid>
+            </ControlTemplate>
+          </Setter>
+        </Style>
+        <Style Selector="^:top">
+          <Setter Property="Template">
+            <ControlTemplate>
+              <Grid Name="Container" Background="{TemplateBinding Background}">
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.PaneRowGridLength}" />
+                  <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Panel Name="ContentRoot" Grid.Row="1">
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
+                  <Rectangle Name="LightDismissLayer" Fill="{DynamicResource InsShellScrim}" IsVisible="False" />
+                </Panel>
+                <Panel Name="PART_PaneRoot" VerticalAlignment="Top" ClipToBounds="True" ZIndex="100">
+                  <Border Name="PART_PaneChrome"
+                          Background="{TemplateBinding PaneBackground}"
+                          BorderBrush="{DynamicResource InsRim}"
+                          BorderThickness="0,0,0,1">
+                    <ContentPresenter x:Name="PART_PanePresenter"
+                                      Padding="12"
+                                      Content="{TemplateBinding Pane}"
+                                      ContentTemplate="{TemplateBinding PaneTemplate}" />
+                  </Border>
+                </Panel>
+              </Grid>
+            </ControlTemplate>
+          </Setter>
+        </Style>
+        <Style Selector="^:bottom">
+          <Setter Property="Template">
+            <ControlTemplate>
+              <Grid Name="Container" Background="{TemplateBinding Background}">
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="*" />
+                  <RowDefinition Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.PaneRowGridLength}" />
+                </Grid.RowDefinitions>
+                <Panel Name="ContentRoot">
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
+                  <Rectangle Name="LightDismissLayer" Fill="{DynamicResource InsShellScrim}" IsVisible="False" />
+                </Panel>
+                <Panel Name="PART_PaneRoot" Grid.Row="1" VerticalAlignment="Bottom" ClipToBounds="True" ZIndex="100">
+                  <Border Name="PART_PaneChrome"
+                          Background="{TemplateBinding PaneBackground}"
+                          BorderBrush="{DynamicResource InsRim}"
+                          BorderThickness="0,1,0,0">
+                    <ContentPresenter x:Name="PART_PanePresenter"
+                                      Padding="12"
+                                      Content="{TemplateBinding Pane}"
+                                      ContentTemplate="{TemplateBinding PaneTemplate}" />
+                  </Border>
+                </Panel>
+              </Grid>
+            </ControlTemplate>
+          </Setter>
+        </Style>
+        <!-- Column: the pane narrows to its closed width (0, or the compact rail) and the content widens with it -->
+        <Style Selector="^:inline, ^:compactinline">
+          <Style Selector="^ /template/ Panel#PART_PaneRoot">
+            <Setter Property="Transitions">
+              <Transitions>
+                <DoubleTransition Property="Width" Duration="0:0:0.35" Easing="0.22,1,0.36,1" />
+                <DoubleTransition Property="Height" Duration="0:0:0.35" Easing="0.22,1,0.36,1" />
+              </Transitions>
+            </Setter>
+          </Style>
+          <Style Selector="^ /template/ Border#PART_PaneChrome">
+            <Setter Property="Transitions">
+              <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+              </Transitions>
+            </Setter>
+          </Style>
+        </Style>
+        <Style Selector="^:left:open, ^:right:open">
+          <Style Selector="^ /template/ Panel#PART_PaneRoot">
+            <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=OpenPaneLength}" />
+          </Style>
+        </Style>
+        <Style Selector="^:left:closed, ^:right:closed">
+          <Style Selector="^ /template/ Panel#PART_PaneRoot">
+            <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.ClosedPaneWidth}" />
+          </Style>
+        </Style>
+        <Style Selector="^:top:open, ^:bottom:open">
+          <Style Selector="^ /template/ Panel#PART_PaneRoot">
+            <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=OpenPaneLength}" />
+          </Style>
+        </Style>
+        <Style Selector="^:top:closed, ^:bottom:closed">
+          <Style Selector="^ /template/ Panel#PART_PaneRoot">
+            <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.ClosedPaneHeight}" />
+          </Style>
+        </Style>
+        <Style Selector="^:inline:closed /template/ Border#PART_PaneChrome">
+          <Setter Property="Opacity" Value="0" />
+          <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+
+        <!-- Drawer: the pane keeps its width and slides in from the start edge over a scrim -->
+        <Style Selector="^:overlay">
+          <Style Selector="^ /template/ Grid#Container">
+            <Setter Property="ClipToBounds" Value="True" />
+          </Style>
+          <Style Selector="^ /template/ Panel#ContentRoot">
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.RowSpan" Value="2" />
+          </Style>
+          <Style Selector="^ /template/ Panel#PART_PaneRoot">
+            <Setter Property="ClipToBounds" Value="False" />
+            <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=OpenPaneLength}" />
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="RenderTransform" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=OpenPaneLength, Converter={x:Static ins:Shell.DrawerOffset}}" />
+            <Setter Property="Transitions">
+              <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.3" Easing="0.22,1,0.36,1" />
+              </Transitions>
+            </Setter>
+          </Style>
+          <Style Selector="^ /template/ Border#PART_PaneChrome">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShLg}" />
+            <Setter Property="BorderThickness" Value="0" />
+          </Style>
+          <Style Selector="^ /template/ Rectangle#LightDismissLayer">
+            <Setter Property="IsVisible" Value="True" />
+            <Setter Property="Opacity" Value="0" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+            <Setter Property="Transitions">
+              <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+              </Transitions>
+            </Setter>
+          </Style>
+        </Style>
+        <Style Selector="^:right:overlay /template/ Panel#PART_PaneRoot">
+          <Setter Property="RenderTransform" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=OpenPaneLength, Converter={x:Static ins:Shell.DrawerOffsetEnd}}" />
+        </Style>        <Style Selector="^:overlay:open">
+          <Style Selector="^ /template/ Panel#PART_PaneRoot">
+            <Setter Property="RenderTransform" Value="translateX(0px)" />
+          </Style>
+          <Style Selector="^ /template/ Rectangle#LightDismissLayer">
+            <Setter Property="Opacity" Value="1" />
+            <Setter Property="IsHitTestVisible" Value="True" />
+          </Style>
+        </Style>
+        <Style Selector="^:top:overlay, ^:bottom:overlay">
+          <Style Selector="^ /template/ Panel#PART_PaneRoot">
+            <Setter Property="RenderTransform" Value="none" />
+            <Setter Property="Width" Value="NaN" />
+            <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.ClosedPaneHeight}" />
+          </Style>
+        </Style>
+        <Style Selector="^:top:overlay:open, ^:bottom:overlay:open">
+          <Style Selector="^ /template/ Panel#PART_PaneRoot">
+            <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=OpenPaneLength}" />
+          </Style>
+        </Style>
+
+        <!-- Compact overlay keeps Fluent's behaviour: a rail that widens over the content -->
+        <Style Selector="^:compactoverlay">
+          <Style Selector="^ /template/ Panel#ContentRoot">
+            <Setter Property="Grid.Column" Value="1" />
+          </Style>
+          <Style Selector="^ /template/ Panel#PART_PaneRoot">
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="Transitions">
+              <Transitions>
+                <DoubleTransition Property="Width" Duration="0:0:0.3" Easing="0.22,1,0.36,1" />
+              </Transitions>
+            </Setter>
+          </Style>
+        </Style>
+        <Style Selector="^:compactoverlay:open /template/ Rectangle#LightDismissLayer">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+      </ControlTheme>
+
+      <!-- A sidebar link: the shared face of a nav item and a link button -->
+      <ControlTheme x:Key="InsShellLinkBase" TargetType="ContentControl">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Padding" Value="12,10" />
+        <Setter Property="MinHeight" Value="44" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <Border Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      ClipToBounds="True">
+                <Panel>
+                  <ContentPresenter Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    Padding="{TemplateBinding Padding}"
+                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                  <!-- The marker sits inside the item's own box, so the item's rounded clip shapes it -->
+                  <Border Name="PART_Marker"
+                          Width="3"
+                          Margin="0,8"
+                          HorizontalAlignment="Left"
+                          CornerRadius="{DynamicResource InsRPill}"
+                          Background="{DynamicResource InsToneBrandSoft}"
+                          RenderTransformOrigin="50%,50%"
+                          RenderTransform="scaleY(0)" />
+                </Panel>
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ Border#PART_Face">
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ Border#PART_Marker">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+
+        <!-- The hover nudges toward the content: +2px in an RTL subtree is mirrored to -2px, as the web flips it by hand -->
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+          <Setter Property="RenderTransform" Value="translateX(2px)" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsShellLink" TargetType="ListBoxItem" BasedOn="{StaticResource InsShellLinkBase}">
+        <Style Selector="^:selected">
+          <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsShellInk}" />
+          <Style Selector="^ /template/ Border#PART_Face">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShellLinkActiveShadow}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Marker">
+            <Setter Property="RenderTransform" Value="scaleY(1)" />
+          </Style>
+
+        </Style>
+        <!-- A group heading inside the list: not a link, never selected -->
+        <Style Selector="^.shell-group">
+          <Setter Property="IsEnabled" Value="False" />
+          <Setter Property="Focusable" Value="False" />
+          <Setter Property="Cursor" Value="Arrow" />
+          <Setter Property="MinHeight" Value="0" />
+          <Setter Property="Padding" Value="10,14,10,6" />
+          <Setter Property="FontSize" Value="11" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+          <Style Selector="^ /template/ Border#PART_Marker">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+        </Style>
+        <Style Selector="^.shell-group[FlowDirection=LeftToRight]">
+          <Setter Property="LetterSpacing" Value="0.44" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsShellLinkButton" TargetType="Button" BasedOn="{StaticResource InsShellLinkBase}" />
+
+      <!-- The brand block as a link home: the same block, with a mark that tilts under the pointer -->
+      <ControlTheme x:Key="InsShellBrandButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="6,0,6,16" />
+        <Setter Property="Margin" Value="0,0,0,6" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Name="PART_FocusRing" CornerRadius="{DynamicResource InsRSm}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <Border Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      Padding="{TemplateBinding Padding}">
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" />
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The sidebar's links: a ListBox whose selection is the current page, with the marker flying between items -->
+      <ControlTheme x:Key="InsShellNav" TargetType="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="ItemContainerTheme" Value="{StaticResource InsShellLink}" />
+        <Setter Property="ins:Shell.FlyMarker" Value="True" />
+        <Setter Property="ItemsPanel">
+          <ItemsPanelTemplate>
+            <StackPanel Spacing="4" />
+          </ItemsPanelTemplate>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+              <ScrollViewer Name="PART_ScrollViewer"
+                            HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Auto">
+                <Panel>
+                  <ItemsPresenter Name="PART_ItemsPresenter"
+                                  ItemsPanel="{TemplateBinding ItemsPanel}"
+                                  Margin="{TemplateBinding Padding}" />
+                  <Canvas Name="PART_Flight" IsHitTestVisible="False" />
+                </Panel>
+              </ScrollViewer>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="ListBox.shell-nav">
+    <Setter Property="Theme" Value="{StaticResource InsShellNav}" />
+  </Style>
+  <Style Selector="Button.shell-link">
+    <Setter Property="Theme" Value="{StaticResource InsShellLinkButton}" />
+  </Style>
+  <Style Selector="Button.shell-brand">
+    <Setter Property="Theme" Value="{StaticResource InsShellBrandButton}" />
+  </Style>
+  <!-- The link's icon: quiet at rest, the brand ink and a spring under the pointer, the soft brand when current -->
+  <Style Selector="ListBox.shell-nav ListBoxItem ins|Icon, Button.shell-link ins|Icon">
+    <Setter Property="Size" Value="18" />
+    <Setter Property="Margin" Value="0,0,10,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+    <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+    <Setter Property="RenderTransform" Value="none" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Foreground" Duration="0:0:0.25" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ListBox.shell-nav ListBoxItem:pointerover ins|Icon, Button.shell-link:pointerover ins|Icon">
+    <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+    <Setter Property="RenderTransform" Value="scale(1.12)" />
+  </Style>
+  <Style Selector="ListBox.shell-nav ListBoxItem:selected ins|Icon">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+  </Style>
+  <!-- While the marker flies, the real markers hide, or the new one would be waiting before the bar arrived -->
+  <Style Selector="ListBox.moving ListBoxItem /template/ Border#PART_Marker">
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="Transitions" Value="{x:Null}" />
+  </Style>
+  <Style Selector="Border.shell-indicator">
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandSoft}" />
+  </Style>
+
+  <!-- Brand block -->
+  <Style Selector="Border.shell-brand">
+    <Setter Property="Padding" Value="6,0,6,16" />
+    <Setter Property="Margin" Value="0,0,0,6" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+  </Style>
+  <Style Selector="Border.shell-brand > StackPanel, Button.shell-brand > StackPanel">
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="Spacing" Value="10" />
+  </Style>
+  <Style Selector="Border.shell-brand > StackPanel > :is(Control), Button.shell-brand > StackPanel > :is(Control)">
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Border.shell-mark">
+    <Setter Property="FlowDirection" Value="LeftToRight" />
+    <Setter Property="Width" Value="34" />
+    <Setter Property="Height" Value="34" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+    <Setter Property="Background" Value="{DynamicResource InsShellMarkFill}" />
+    <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandSm}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsOnPrimary}" />
+    <Setter Property="TextElement.FontWeight" Value="Bold" />
+    <Setter Property="TextElement.FontSize" Value="14.4" />
+    <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+    <Setter Property="RenderTransform" Value="none" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+        <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Border.shell-mark > TextBlock">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <!-- Only a brand that is a link tilts its mark: a label must not promise a click -->
+  <Style Selector="Button.shell-brand:pointerover Border.shell-mark">
+    <Setter Property="RenderTransform" Value="scale(1.06) rotate(-4deg)" />
+    <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandMd}" />
+  </Style>
+  <Style Selector="TextBlock.shell-brand-name">
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="FontSize" Value="15" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+  </Style>
+  <Style Selector="TextBlock.shell-brand-role">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+  </Style>
+
+  <Style Selector="TextBlock.shell-group">
+    <Setter Property="Padding" Value="10,14,10,6" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+  </Style>
+  <Style Selector="TextBlock.shell-group[FlowDirection=LeftToRight]">
+    <Setter Property="LetterSpacing" Value="0.44" />
+  </Style>
+
+  <Style Selector="Border.shell-link-badge">
+    <Setter Property="MinWidth" Value="20" />
+    <Setter Property="Padding" Value="6,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+    <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneWarn}" />
+    <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    <Setter Property="TextElement.FontSize" Value="11" />
+    <Setter Property="TextElement.FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector="Border.shell-link-badge > TextBlock">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="LineHeight" Value="18" />
+  </Style>
+
+  <!-- What is not a destination, sign-out, set apart at the foot of the sidebar -->
+  <Style Selector="Border.shell-bottom">
+    <Setter Property="Padding" Value="0,8,0,0" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+  </Style>
+
+  <Style Selector="Border.shell-content">
+    <Setter Property="Padding" Value="28,8,28,32" />
+  </Style>
+  <Style Selector="ScrollViewer.shell-content">
+    <Setter Property="Padding" Value="28,8,28,32" />
+  </Style>
+  <Style Selector="SplitView:overlay Border.shell-content">
+    <Setter Property="Padding" Value="16,8,16,24" />
+  </Style>
+  <Style Selector="SplitView:overlay ScrollViewer.shell-content">
+    <Setter Property="Padding" Value="16,8,16,24" />
+  </Style>
+
+</Styles>
