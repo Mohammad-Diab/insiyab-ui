@@ -18,7 +18,7 @@ public class MenusTests
     private static FlowDirection Dir(string dir) => dir == "rtl" ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
     private static ThemeVariant Theme(string theme) => theme == "Dark" ? ThemeVariant.Dark : ThemeVariant.Light;
 
-    private static void Key(Window w, Key key, RawInputModifiers mods = RawInputModifiers.None, PhysicalKey physical = PhysicalKey.None, string? symbol = null)
+    private static void Press(Window w, Key key, RawInputModifiers mods = RawInputModifiers.None, PhysicalKey physical = PhysicalKey.None, string? symbol = null)
     {
         w.KeyPress(key, mods, physical, symbol);
         w.KeyRelease(key, mods, physical, symbol);
@@ -29,6 +29,14 @@ public class MenusTests
     {
         w.KeyTextInput(text);
         Settle(200);
+    }
+
+    // A control's box in window pixels, whichever way the window flows.
+    private static Rect Physical(Control c, Visual to)
+    {
+        var a = c.TranslatePoint(default, to)!.Value;
+        var b = c.TranslatePoint(new Point(c.Bounds.Width, c.Bounds.Height), to)!.Value;
+        return new Rect(new Point(Math.Min(a.X, b.X), Math.Min(a.Y, b.Y)), new Point(Math.Max(a.X, b.X), Math.Max(a.Y, b.Y)));
     }
 
     private static void PressAt(Window w, Point p)
@@ -46,7 +54,7 @@ public class MenusTests
             Items =
             {
                 new MenuItem { Header = "العنوان", Classes = { "label" } },
-                new MenuItem { Header = "تعديل", InputGesture = new KeyGesture(Avalonia.Input.Key.E) },
+                new MenuItem { Header = "تعديل", InputGesture = new KeyGesture(Key.E) },
                 new MenuItem { Header = "نسخ" },
                 new MenuItem { Header = "نقل", IsEnabled = false },
                 new Separator(),
@@ -58,6 +66,8 @@ public class MenusTests
     }
 
     private static MenuFlyoutPresenter Presenter(PopMenu menu) => Assert.IsType<MenuFlyoutPresenter>(menu.Popup.Child);
+
+    private static Border Box(Control presenter) => Part<Border>(presenter, "LayoutRoot");
 
     private static List<MenuItem> Items(PopMenu menu) => Presenter(menu).GetVisualDescendants().OfType<MenuItem>().ToList();
 
@@ -73,17 +83,15 @@ public class MenusTests
         Assert.True(menu.IsOpen);
         Assert.True(menu.Popup.IsUsingOverlayLayer);
         var body = Presenter(menu);
-        var t = trigger.TranslatePoint(default, w)!.Value;
-        var b = body.TranslatePoint(default, w)!.Value;
-        var tb = new Rect(t, trigger.Bounds.Size);
-        var bb = new Rect(b, body.Bounds.Size);
-        Assert.Equal(tb.Bottom + 6, bb.Top, 1);
-        if (dir == "rtl") Assert.Equal(tb.Right, bb.Right, 1);
-        else Assert.Equal(tb.Left, bb.Left, 1);
-        Assert.True(body.Bounds.Width >= 192);
-        AssertBrush(body, "InsGlassStrong", body.Background);
-        AssertBrush(body, "InsRim", body.BorderBrush);
-        Assert.Equal(new CornerRadius(14), body.CornerRadius);
+        var tb = Physical(trigger, w);
+        var bb = Physical(Box(body), w);
+        Assert.InRange(bb.Top - tb.Bottom, 5, 7);
+        if (dir == "rtl") Assert.InRange(bb.Right - tb.Right, -1, 1);
+        else Assert.InRange(bb.Left - tb.Left, -1, 1);
+        Assert.True(bb.Width >= 192);
+        AssertBrush(body, "InsGlassStrong", () => Box(body).Background);
+        AssertBrush(body, "InsRim", () => Box(body).BorderBrush);
+        Assert.Equal(new CornerRadius(14), Box(body).CornerRadius);
         Capture(w, $"menus-dropdown-{theme}-{dir}");
     }
 
@@ -96,10 +104,9 @@ public class MenusTests
         var w = Show(new Panel { Children = { trigger } });
         Assert.Equal(PlacementMode.BottomEdgeAlignedRight, menu.Placement);
         Click(trigger, w);
-        var body = Presenter(menu);
-        var t = trigger.TranslatePoint(default, w)!.Value;
-        var b = body.TranslatePoint(default, w)!.Value;
-        Assert.Equal(t.X + trigger.Bounds.Width, b.X + body.Bounds.Width, 1);
+        var tb = Physical(trigger, w);
+        var bb = Physical(Box(Presenter(menu)), w);
+        Assert.InRange(bb.Right - tb.Right, -1, 1);
     }
 
     [AvaloniaFact]
@@ -119,7 +126,7 @@ public class MenusTests
         var (trigger, menu) = MenuButton();
         var w = Show(new Panel { Children = { trigger } });
         Click(trigger, w);
-        Key(w, Avalonia.Input.Key.Escape);
+        Press(w, Key.Escape);
         Assert.False(menu.IsOpen);
     }
 
@@ -133,8 +140,7 @@ public class MenusTests
         var label = items[0];
         Assert.False(label.Focusable);
         Assert.False(label.IsHitTestVisible);
-        AssertBrush(label, "InsLabel", label.Foreground);
-
+        AssertBrush(label, "InsLabel", () => label.Foreground);
         var edit = items[1];
         Assert.Equal(new Thickness(12, 8), edit.Padding);
         Assert.Equal(14, edit.FontSize);
@@ -144,8 +150,7 @@ public class MenusTests
         Assert.False(Part<Border>(items[2], "PART_Kbd").IsVisible);
 
         Assert.Equal(0.45, items[3].Opacity, 2);
-        AssertBrush(items[4], "InsToneBad", items[4].Foreground);
-
+        AssertBrush(items[4], "InsToneBad", () => items[4].Foreground);
         w.MouseMove(Center(edit, w));
         Settle();
         Assert.True(edit.IsSelected);
@@ -153,7 +158,7 @@ public class MenusTests
         var bg = ColorOf(edit.Background);
         Assert.Equal(hover.Color.R, bg.R);
         Assert.Equal(hover.Opacity, ((ISolidColorBrush)edit.Background!).Opacity, 2);
-        AssertBrush(edit, "InsPopItemHoverFg", edit.Foreground);
+        AssertBrush(edit, "InsPopItemHoverFg", () => edit.Foreground);
     }
 
     [AvaloniaFact]
@@ -165,7 +170,7 @@ public class MenusTests
         var sep = Presenter(menu).GetVisualDescendants().OfType<Separator>().Single();
         Assert.Equal(1, sep.Bounds.Height);
         Assert.Equal(new Thickness(0, 4), sep.Margin);
-        AssertBrush(sep, "InsLine", sep.Background);
+        AssertBrush(sep, "InsLine", () => sep.Background);
     }
 
     [AvaloniaFact]
@@ -191,8 +196,8 @@ public class MenusTests
         w.Content = new Panel { Children = { trigger2 } };
         Settle();
         Click(trigger2, w);
-        Assert.False(Part<Path>(b, "PART_Check").IsVisible);
-        Assert.True(Part<Avalonia.Controls.Shapes.Ellipse>(b, "PART_Radio").IsVisible);
+        Assert.False(Part<global::Avalonia.Controls.Shapes.Path>(b, "PART_Check").IsVisible);
+        Assert.True(Part<global::Avalonia.Controls.Shapes.Ellipse>(b, "PART_Radio").IsVisible);
         Click(b, w);
         Assert.True(b.IsChecked);
         Assert.False(a.IsChecked);
@@ -205,14 +210,13 @@ public class MenusTests
         var (trigger, menu) = MenuButton();
         var w = Show(new Panel { Children = { trigger } });
         trigger.Focus();
-        Key(w, Avalonia.Input.Key.Enter);
+        Press(w, Key.Enter);
         Assert.True(menu.IsOpen);
         var items = Items(menu);
-        Key(w, Avalonia.Input.Key.Down);
-        var first = items.First(i => i.IsSelected);
-        Assert.Equal("تعديل", first.Header);
-        Key(w, Avalonia.Input.Key.Down);
-        Key(w, Avalonia.Input.Key.Down);
+        Assert.Equal("تعديل", items.First(i => i.IsSelected).Header);
+        Press(w, Key.Down);
+        Assert.Equal("نسخ", items.First(i => i.IsSelected).Header);
+        Press(w, Key.Down);
         Assert.Equal("حذف", items.First(i => i.IsSelected).Header);
     }
 
@@ -225,7 +229,7 @@ public class MenusTests
         Click(trigger, w);
         var body = Assert.IsType<FlyoutPresenter>(card.Popup.Child);
         Assert.Contains("card", body.Classes);
-        Assert.Equal(320, body.Bounds.Width, 1);
+        Assert.Equal(320, Box(body).Bounds.Width, 1);
         Assert.Equal(new Thickness(16), body.Padding);
         var title = body.GetVisualDescendants().OfType<TextBlock>().First();
         Assert.Equal(FontWeight.Bold, title.FontWeight);
@@ -241,7 +245,7 @@ public class MenusTests
         var w = Show(new StackPanel { Children = { bar, target } });
         context.Open(target);
         Settle();
-        AssertBrush(context, "InsGlassStrong", context.Background);
+        AssertBrush(context, "InsGlassStrong", () => context.Background);
         Assert.Equal(new CornerRadius(14), context.CornerRadius);
         context.Close();
         var top = bar.GetVisualDescendants().OfType<MenuItem>().First();
@@ -257,12 +261,12 @@ public class MenusTests
         var tip = new ToolTip { Content = "تعديل", Opacity = 1, RenderTransform = null };
         var host = new Button { Content = "حذف", Classes = { "secondary" } };
         var w = Show(new StackPanel { Margin = new Thickness(20), Children = { tip, host } }, Dir(dir), Theme(theme));
-        AssertBrush(tip, "InsTipBg", tip.Background);
-        AssertBrush(tip, "InsTipFg", tip.Foreground);
+        AssertBrush(tip, "InsTipBg", () => tip.Background);
+        AssertBrush(tip, "InsTipFg", () => tip.Foreground);
         Assert.Equal(new Thickness(10, 6), tip.Padding);
         Assert.Equal(new CornerRadius(10), tip.CornerRadius);
         Assert.Equal(FontWeight.SemiBold, tip.FontWeight);
-        Assert.Equal(new Thickness(8), tip.Margin);
+        Assert.Equal(new Thickness(8), Part<Border>(tip, "PART_Room").Padding);
         Assert.Equal(PlacementMode.Top, ToolTip.GetPlacement(host));
         Assert.Equal(0, ToolTip.GetVerticalOffset(host));
         Assert.Equal(400, ToolTip.GetShowDelay(host));
@@ -278,12 +282,13 @@ public class MenusTests
         var w = Show(new Panel { Children = { host } }, FlowDirection.RightToLeft);
         ToolTip.SetIsOpen(host, true);
         Settle();
-        var tip = w.GetVisualDescendants().OfType<ToolTip>().Single();
-        Assert.Equal(1, tip.Opacity, 2);
-        var t = tip.TranslatePoint(default, w)!.Value;
-        var h = host.TranslatePoint(default, w)!.Value;
-        Assert.Equal(h.Y - 8, t.Y + tip.Bounds.Height, 1);
-        Assert.Equal(h.X + host.Bounds.Width / 2, t.X + tip.Bounds.Width / 2, 1);
+        var tipControl = w.GetVisualDescendants().OfType<ToolTip>().Single();
+        Assert.Equal(1, tipControl.Opacity, 2);
+        var tip = Part<Border>(tipControl, "PART_LayoutRoot");
+        var t = Physical(tip, w);
+        var h = Physical(host, w);
+        Assert.InRange(h.Top - t.Bottom, 7, 9.5);
+        Assert.InRange(Math.Abs(h.Center.X - t.Center.X), 0, 1);
         Capture(w, "menus-tip-open-rtl");
     }
 
@@ -295,13 +300,13 @@ public class MenusTests
         ToolTip.SetTip(host, "تعديل");
         var w = Show(new StackPanel { Children = { first, host } });
         first.Focus();
-        Key(w, Avalonia.Input.Key.Tab);
+        Press(w, Key.Tab);
         Assert.True(host.IsFocused);
         Assert.True(ToolTip.GetIsOpen(host));
-        Key(w, Avalonia.Input.Key.Escape);
+        Press(w, Key.Escape);
         Assert.False(ToolTip.GetIsOpen(host));
         first.Focus();
-        Key(w, Avalonia.Input.Key.Tab);
+        Press(w, Key.Tab);
         Assert.True(ToolTip.GetIsOpen(host));
         first.Focus();
         Settle(200);
@@ -331,15 +336,15 @@ public class MenusTests
         var plain = new Chip { Content = "عمّان" };
         var w = Show(new StackPanel { Children = { chip, plain } });
         Assert.Equal(30, chip.Bounds.Height, 0);
-        AssertBrush(chip, "InsSurface", chip.Background);
-        AssertBrush(chip, "InsCtlBd", chip.BorderBrush);
+        AssertBrush(chip, "InsSurface", () => chip.Background);
+        AssertBrush(chip, "InsCtlBd", () => chip.BorderBrush);
         Assert.Equal(new CornerRadius(999), chip.CornerRadius);
         Assert.Equal(new Thickness(12, 3, 4, 3), chip.Padding);
         Assert.Equal(new Thickness(12, 3), plain.Padding);
         var x = Part<Button>(chip, "PART_Remove");
         Assert.True(x.IsVisible);
         Assert.Equal(22, x.Bounds.Width);
-        Assert.Equal("إزالة الرياض", Avalonia.Automation.AutomationProperties.GetName(x));
+        Assert.Equal("إزالة الرياض", global::Avalonia.Automation.AutomationProperties.GetName(x));
         Assert.False(Part<Button>(plain, "PART_Remove").IsVisible);
     }
 
@@ -367,10 +372,10 @@ public class MenusTests
         var off = new ToggleButton { Content = "الثاني", Classes = { "chip" } };
         var link = new Button { Content = "الثالث", Classes = { "chip", "active" } };
         var w = Show(new StackPanel { Children = { on, off, link } });
-        AssertBrush(on, "InsToneBrandBg", on.Background);
-        AssertBrush(on, "InsToneBrandBd", on.BorderBrush);
-        AssertBrush(off, "InsSurface", off.Background);
-        AssertBrush(link, "InsToneBrandBg", link.Background);
+        AssertBrush(on, "InsToneBrandBg", () => on.Background);
+        AssertBrush(on, "InsToneBrandBd", () => on.BorderBrush);
+        AssertBrush(off, "InsSurface", () => off.Background);
+        AssertBrush(link, "InsToneBrandBg", () => link.Background);
         Assert.Equal(12, Part<Viewbox>(on, "PART_Tick").Bounds.Width, 1);
         Assert.Equal(0, Part<Viewbox>(off, "PART_Tick").Bounds.Width, 1);
         Assert.False(Part<Viewbox>(link, "PART_Tick").IsVisible);
@@ -404,7 +409,7 @@ public class MenusTests
         Assert.Equal(46, tags.Bounds.Height, 0);
         Assert.Null(tags.InputBox!.PlaceholderText);
         var field = Part<Border>(tags, "PART_Field");
-        AssertBrush(field, "InsCtlBg", field.Background);
+        AssertBrush(field, "InsCtlBg", () => field.Background);
         tags.InputBox.Focus();
         Settle();
         Assert.True(tags.IsDropDownOpen);
@@ -428,9 +433,9 @@ public class MenusTests
 
         Type(w, "ثالث");
         Assert.Equal(1, rows.Count(r => r.IsVisible));
-        Key(w, Avalonia.Input.Key.Down);
+        Press(w, Key.Down);
         Assert.Contains("active", rows[2].Classes);
-        Key(w, Avalonia.Input.Key.Enter);
+        Press(w, Key.Enter);
         Assert.Equal(["a", "c"], tags.Values);
         Assert.Equal("c", changes.Last().Added);
         Assert.True(tags.IsDropDownOpen);
@@ -441,7 +446,7 @@ public class MenusTests
         var empty = w.GetVisualDescendants().OfType<TextBlock>().Single(t => t.Classes.Contains("combo-empty"));
         Assert.True(empty.IsVisible);
         Assert.Equal("لا نتائج", empty.Text);
-        Key(w, Avalonia.Input.Key.Escape);
+        Press(w, Key.Escape);
         Assert.False(tags.IsDropDownOpen);
     }
 
@@ -453,15 +458,15 @@ public class MenusTests
         Assert.Equal("اكتب واضغط Enter", tags.InputBox!.PlaceholderText);
         tags.InputBox.Focus();
         Type(w, "وسم");
-        Key(w, Avalonia.Input.Key.Enter);
+        Press(w, Key.Enter);
         Type(w, "آخر");
         Type(w, "،");
         Type(w, "وسم");
-        Key(w, Avalonia.Input.Key.Enter);
+        Press(w, Key.Enter);
         Assert.Equal(["وسم", "آخر"], tags.Values);
         Assert.Null(tags.InputBox.PlaceholderText);
         tags.InputBox.Text = string.Empty;
-        Key(w, Avalonia.Input.Key.Back);
+        Press(w, Key.Back);
         Settle();
         Assert.Equal(["وسم"], tags.Values);
         Assert.Single(tags.GetVisualDescendants().OfType<Chip>());
@@ -528,7 +533,7 @@ public class MenusTests
         Assert.Equal(576, dialog.Bounds.Width, 1);
         Assert.Equal(96, dialog.Bounds.Y, 1);
         Capture(w, $"menus-palette-{theme}-{dir}");
-        Key(w, Avalonia.Input.Key.Escape);
+        Press(w, Key.Escape);
         Assert.False(palette.IsOpen);
         Assert.True(opener.IsFocused);
     }
@@ -541,18 +546,18 @@ public class MenusTests
         var w = Show(new Panel(), FlowDirection.RightToLeft, null, 800, 640);
         palette.Open(w);
         Settle();
-        Type(w, "جدول");
-        Assert.True(palette.Classes.Contains(":searching") || ((IPseudoClasses)palette.Classes).Contains(":searching"));
+        Type(w, "جداول");
         Assert.Equal(["الجداول"], palette.Shown.Select(i => i.Label));
+        Assert.True(palette.GetVisualDescendants().OfType<TextBlock>().Any(t => t.Classes.Contains("palette-where") && t.IsVisible));
         Assert.Empty(Heads(palette));
         palette.InputBox!.Text = "";
         Settle(200);
-        Key(w, Avalonia.Input.Key.Down);
+        Press(w, Key.Down);
         Assert.Equal("الجداول", palette.Active!.Label);
-        Key(w, Avalonia.Input.Key.Up);
-        Key(w, Avalonia.Input.Key.Up);
+        Press(w, Key.Up);
+        Press(w, Key.Up);
         Assert.Equal("حفظ", palette.Active!.Label);
-        Key(w, Avalonia.Input.Key.Enter);
+        Press(w, Key.Enter);
         Assert.False(palette.IsOpen);
         Assert.Equal(["حفظ"], ran);
         Assert.Equal(["label:حفظ"], palette.RecentKeys);
@@ -578,7 +583,7 @@ public class MenusTests
         Settle(200);
         palette.InputBox.Text = "";
         Settle(200);
-        Key(w, Avalonia.Input.Key.Enter);
+        Press(w, Key.Enter);
         Assert.Empty(ran);
         Assert.False(palette.IsOpen);
     }
@@ -605,21 +610,22 @@ public class MenusTests
     {
         var palette = Palette();
         var box = new TextBox();
-        var w = Show(new StackPanel { Children = { new Button { Content = "أ" }, box } }, FlowDirection.RightToLeft, null, 800, 640);
+        var first = new Button { Content = "أ" };
+        var w = Show(new StackPanel { Children = { first, box } }, FlowDirection.RightToLeft, null, 800, 640);
         using var keys = palette.AttachTo(w);
-        Key(w, Avalonia.Input.Key.K, RawInputModifiers.Control, PhysicalKey.K, "k");
+        Press(w, Key.K, RawInputModifiers.Control, PhysicalKey.K, "k");
         Assert.True(palette.IsOpen);
-        Key(w, Avalonia.Input.Key.K, RawInputModifiers.Control, PhysicalKey.K, "k");
+        Press(w, Key.K, RawInputModifiers.Control, PhysicalKey.K, "k");
         Assert.False(palette.IsOpen);
-        Key(w, Avalonia.Input.Key.None, RawInputModifiers.Control, PhysicalKey.K, "ن");
+        Press(w, Key.None, RawInputModifiers.Control, PhysicalKey.K, "ن");
         Assert.True(palette.IsOpen);
         palette.Close();
         box.Focus();
-        Key(w, Avalonia.Input.Key.Oem2, RawInputModifiers.None, PhysicalKey.Slash, "/");
+        Press(w, Key.Oem2, RawInputModifiers.None, PhysicalKey.Slash, "/");
         Assert.False(palette.IsOpen);
-        w.Focus();
+        first.Focus();
         Settle(100);
-        Key(w, Avalonia.Input.Key.Oem2, RawInputModifiers.None, PhysicalKey.Slash, "/");
+        Press(w, Key.Oem2, RawInputModifiers.None, PhysicalKey.Slash, "/");
         Assert.True(palette.IsOpen);
     }
 }

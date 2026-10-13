@@ -48,11 +48,11 @@ public class FeedbackTests
 
         var message = Part<Border>(alert, "PART_Message");
         var disc = Part<Border>(alert, "PART_Icon");
-        AssertBrush(alert, bg, message.Background);
-        AssertBrush(alert, text, alert.Foreground);
-        AssertBrush(alert, border, message.BorderBrush);
-        AssertBrush(alert, border, disc.BorderBrush);
-        AssertBrush(alert, circle, disc.Background);
+        AssertBrush(alert, bg, () => message.Background);
+        AssertBrush(alert, text, () => alert.Foreground);
+        AssertBrush(alert, border, () => message.BorderBrush);
+        AssertBrush(alert, border, () => disc.BorderBrush);
+        AssertBrush(alert, circle, () => disc.Background);
         Assert.Same(Res(alert, icon), alert.Icon);
         Assert.Equal(44, disc.Bounds.Width);
         Assert.Equal(Res(alert, "InsRMd"), message.CornerRadius);
@@ -67,8 +67,8 @@ public class FeedbackTests
         var window = Show(new StackPanel { Children = { ok, info } }, theme: ThemeVariant.Dark);
 
         Assert.Equal(Color.Parse("#0B1220"), ColorOf(ok.IconForeground));
-        AssertBrush(info, "InsOnPrimary", info.IconForeground);
-        AssertBrush(info, "InsText1", info.Foreground);
+        AssertBrush(info, "InsOnPrimary", () => info.IconForeground);
+        AssertBrush(info, "InsText1", () => info.Foreground);
         window.Close();
     }
 
@@ -133,15 +133,15 @@ public class FeedbackTests
         var dotted = new Pill { Classes = { "ok", "dot" }, Content = "مكتمل" };
         Show(new StackPanel { Margin = new Thickness(20), Spacing = 8, Children = { plain, dotted } });
 
-        AssertBrush(plain, "InsToneMuteBg", Part<Border>(plain, "PART_Face").Background);
-        AssertBrush(plain, "InsToneMute", plain.Foreground);
+        AssertBrush(plain, "InsToneMuteBg", () => Part<Border>(plain, "PART_Face").Background);
+        AssertBrush(plain, "InsToneMute", () => plain.Foreground);
         Assert.False(Part<Ellipse>(plain, "PART_Dot").IsVisible);
 
         var dot = Part<Ellipse>(dotted, "PART_Dot");
         Assert.True(dot.IsVisible);
         Assert.Equal(7, dot.Bounds.Width);
-        AssertBrush(dotted, "InsToneOk", dot.Fill);
-        AssertBrush(dotted, "InsToneOkBd", Part<Border>(dotted, "PART_Face").BorderBrush);
+        AssertBrush(dotted, "InsToneOk", () => dot.Fill);
+        AssertBrush(dotted, "InsToneOkBd", () => Part<Border>(dotted, "PART_Face").BorderBrush);
         Assert.Equal(26, dotted.Bounds.Height, 0);
     }
 
@@ -152,9 +152,9 @@ public class FeedbackTests
         var badge = new Badge { Classes = { "ok" }, Content = "12" };
         Show(new StackPanel { Children = { pill, badge } }, theme: ThemeVariant.Dark);
 
-        AssertBrush(pill, "InsText1", pill.Foreground);
-        AssertBrush(badge, "InsText1", badge.Foreground);
-        AssertBrush(badge, "InsToneOkBg", badge.Background);
+        AssertBrush(pill, "InsText1", () => pill.Foreground);
+        AssertBrush(badge, "InsText1", () => badge.Foreground);
+        AssertBrush(badge, "InsToneOkBg", () => badge.Background);
     }
 
     [AvaloniaFact]
@@ -164,7 +164,7 @@ public class FeedbackTests
         var window = ShowIn(button);
 
         Assert.True(Part<Ellipse>(button, "PART_Dot").IsVisible);
-        AssertBrush(button, "InsToneOkBg", Part<Border>(button, "PART_Face").Background);
+        AssertBrush(button, "InsToneOkBg", () => Part<Border>(button, "PART_Face").Background);
         window.MouseMove(Center(button, window));
         Settle();
         Assert.Contains(":pointerover", button.Classes);
@@ -177,8 +177,8 @@ public class FeedbackTests
         var badge = new Badge { Content = "12" };
         ShowIn(badge);
 
-        AssertBrush(badge, "InsToneBrandBg", badge.Background);
-        AssertBrush(badge, "InsToneBrand", badge.Foreground);
+        AssertBrush(badge, "InsToneBrandBg", () => badge.Background);
+        AssertBrush(badge, "InsToneBrand", () => badge.Foreground);
         Assert.True(badge.Bounds.Width >= 22);
 
         badge.Content = "13";
@@ -197,7 +197,7 @@ public class FeedbackTests
     {
         var badge = new Badge { Classes = { tone }, Content = "3" };
         ShowIn(badge);
-        AssertBrush(badge, bg, badge.Background);
+        AssertBrush(badge, bg, () => badge.Background);
     }
 
     // ---------------------------------------------------------------- avatar, money
@@ -220,7 +220,7 @@ public class FeedbackTests
         Assert.True(a.ZIndex > b.ZIndex && b.ZIndex > more.ZIndex);
         Assert.True(Part<Ellipse>(a, "PART_Ring").IsVisible);
         Assert.False(Part<Ellipse>(sm, "PART_Ring").IsVisible);
-        AssertBrush(more, "InsToneMuteBg", more.Background);
+        AssertBrush(more, "InsToneMuteBg", () => more.Background);
         Assert.Equal(FlowDirection.LeftToRight, more.GetVisualDescendants().OfType<TextBlock>().First().FlowDirection);
         Assert.IsType<LinearGradientBrush>(a.Background);
         Assert.Equal(FlowDirection.LeftToRight, Part<Border>(a, "PART_Face").FlowDirection);
@@ -239,8 +239,8 @@ public class FeedbackTests
         var currency = Part<TextBlock>(money, "PART_Currency");
         Assert.Equal(FlowDirection.LeftToRight, value.FlowDirection);
         Assert.Equal(14 * 0.68, currency.FontSize, 2);
-        AssertBrush(money, "InsToneBad", value.Foreground);
-        AssertBrush(money, "InsText2", currency.Foreground);
+        AssertBrush(money, "InsToneBad", () => value.Foreground);
+        AssertBrush(money, "InsText2", () => currency.Foreground);
         var vx = Center(value, window).X;
         var cx = Center(currency, window).X;
         Assert.True(dir == "rtl" ? cx < vx : cx > vx);
@@ -266,7 +266,7 @@ public class FeedbackTests
         Assert.Equal(12, t1.Bounds.Height);
         Assert.Equal(1, t1.FillWidth);
         Assert.Equal(0.6, t2.FillWidth);
-        AssertBrush(t1, "InsSkelBase", t1.Base);
+        AssertBrush(t1, "InsSkelBase", () => t1.Base);
         // The headless clock can stall under an endless animation once the window settles, so this checks the loop has started, not its pace.
         Assert.InRange(t1.Phase, 1e-6, 1);
         window.Close();
@@ -294,7 +294,7 @@ public class FeedbackTests
         Assert.Equal(3, spinner.Thickness);
         Assert.Equal(15, small.Bounds.Width);
         Assert.Equal(2, small.Thickness);
-        AssertBrush(spinner, "InsToneBrandSoft", spinner.Arc);
+        AssertBrush(spinner, "InsToneBrandSoft", () => spinner.Arc);
         Assert.Null(inButton.Arc);
         Assert.Null(inButton.Track);
         Assert.Equal(FlowDirection.LeftToRight, spinner.FlowDirection);
@@ -314,7 +314,7 @@ public class FeedbackTests
         Assert.True(Part<Icon>(empty, "PART_Icon").IsVisible);
         Assert.Equal(32, Part<Icon>(empty, "PART_Icon").Bounds.Width);
         Assert.Equal("لا ملفات بعد", Part<TextBlock>(empty, "PART_Title").Text);
-        AssertBrush(empty, "InsText2", Part<TextBlock>(empty, "PART_Hint").Foreground);
+        AssertBrush(empty, "InsText2", () => Part<TextBlock>(empty, "PART_Hint").Foreground);
         Assert.True(action.IsEffectivelyVisible);
         Assert.False(Part<Icon>(bare, "PART_Icon").IsVisible);
         Assert.False(Part<TextBlock>(bare, "PART_Hint").IsVisible);
@@ -333,7 +333,7 @@ public class FeedbackTests
         var indicator = Part<Border>(bar, "PART_Indicator");
         Assert.Equal(8, bar.Bounds.Height);
         Assert.Equal(256, indicator.Bounds.Width, 0);
-        AssertBrush(bar, "InsCtlBgHover", bar.Background);
+        AssertBrush(bar, "InsCtlBgHover", () => bar.Background);
         Assert.IsType<LinearGradientBrush>(indicator.Background);
         Assert.Equal(FlowDirection.LeftToRight, indicator.FlowDirection);
         var ix = Center(indicator, window).X;
@@ -388,7 +388,7 @@ public class FeedbackTests
         Assert.Equal(52, ring.Bounds.Width);
         Assert.Equal(80, lg.Bounds.Width);
         Assert.Equal(16, Part<TextBlock>(lg, "PART_Label").FontSize);
-        AssertBrush(ring, "InsToneBrandSoft", ring.Fill);
+        AssertBrush(ring, "InsToneBrandSoft", () => ring.Fill);
         Assert.Equal(FlowDirection.LeftToRight, ring.FlowDirection);
         ring.Maximum = 200;
         Assert.Equal("36%", ring.Label);
@@ -426,12 +426,11 @@ public class FeedbackTests
         Assert.Equal("حُفظ", status.DisplayText);
         Assert.Equal(0, Part<LoadingSpinner>(status, "PART_Spinner").Opacity);
         Assert.True(Part<Icon>(status, "PART_Glyph").IsVisible);
-        AssertBrush(status, "InsToneOk", status.Foreground);
-
+        AssertBrush(status, "InsToneOk", () => status.Foreground);
         status.SetState(SaveState.Error, "تعذر حفظ المسودة");
         Settle(400);
         Assert.Equal("تعذر حفظ المسودة", status.DisplayText);
-        AssertBrush(status, "InsToneBad", status.Foreground);
+        AssertBrush(status, "InsToneBad", () => status.Foreground);
         Assert.Equal(2.5, Part<Icon>(status, "PART_Glyph").StrokeThickness);
 
         status.SetState(SaveState.Saved);
@@ -550,8 +549,7 @@ public class FeedbackTests
         status.State = SaveState.Saved;
         Settle(600);
         Assert.Equal(-1, pill.RenderTransform!.Value.M32, 2);
-        AssertBrush(status, "InsToneOk", status.Foreground);
-
+        AssertBrush(status, "InsToneOk", () => status.Foreground);
         window.MouseMove(Center(revealed, window));
         Settle(600);
         Assert.Equal(-1, revealed.RenderTransform!.Value.M32, 2);

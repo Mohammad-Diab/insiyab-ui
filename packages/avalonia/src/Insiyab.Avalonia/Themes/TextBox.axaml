@@ -173,7 +173,7 @@
                              Text="{TemplateBinding (ins:InputCount.Text)}">
                     <TextBlock.Transitions>
                       <Transitions>
-                        <BrushTransition Property="Foreground" Duration="{DynamicResource InsTPop}" Easing="{DynamicResource InsEase}" />
+                        <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                       </Transitions>
                     </TextBlock.Transitions>
                   </TextBlock>
@@ -181,7 +181,7 @@
                 <Panel x:Name="PART_Field" MinHeight="{TemplateBinding MinHeight}" RenderTransform="none">
                   <Panel.Transitions>
                     <Transitions>
-                      <TransformOperationsTransition Property="RenderTransform" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                      <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                     </Transitions>
                   </Panel.Transitions>
                   <Border x:Name="PART_Shadow"
@@ -189,7 +189,7 @@
                           BoxShadow="{DynamicResource InsShSubtle}">
                     <Border.Transitions>
                       <Transitions>
-                        <BoxShadowsTransition Property="BoxShadow" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                        <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                       </Transitions>
                     </Border.Transitions>
                   </Border>
@@ -200,7 +200,7 @@
                           Opacity="0">
                     <Border.Transitions>
                       <Transitions>
-                        <DoubleTransition Property="Opacity" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                        <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                       </Transitions>
                     </Border.Transitions>
                   </Border>
@@ -213,8 +213,8 @@
                           MinWidth="{TemplateBinding MinWidth}">
                     <Border.Transitions>
                       <Transitions>
-                        <BrushTransition Property="Background" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
-                        <BrushTransition Property="BorderBrush" Duration="{DynamicResource InsTBase}" Easing="{DynamicResource InsEase}" />
+                        <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                        <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                       </Transitions>
                     </Border.Transitions>
                   </Border>

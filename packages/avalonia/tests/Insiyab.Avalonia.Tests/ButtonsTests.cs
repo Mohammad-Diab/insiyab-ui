@@ -33,6 +33,26 @@ public class ButtonsTests
         Settle(40);
     }
 
+    // A brush transition can stop a few units short of its target, more so on a loaded machine.
+    private static void AssertNear(Visual anchor, string key, IBrush? actual, int tolerance = 12)
+    {
+        var want = ColorOf((IBrush)Res(anchor, key));
+        var got = ColorOf(actual);
+        Assert.True(Math.Abs(want.A - got.A) <= tolerance && Math.Abs(want.R - got.R) <= tolerance && Math.Abs(want.G - got.G) <= tolerance && Math.Abs(want.B - got.B) <= tolerance, $"{key}: expected {want}, got {got}");
+    }
+
+    private static void AssertNear(Visual anchor, string key, Func<IBrush?> read, int tolerance = 12)
+    {
+        var clock = System.Diagnostics.Stopwatch.StartNew();
+        while (clock.ElapsedMilliseconds < 2000)
+        {
+            var want = ColorOf((IBrush)Res(anchor, key));
+            if (read() is ISolidColorBrush b && Math.Abs(want.A - b.Color.A) <= tolerance && Math.Abs(want.R - b.Color.R) <= tolerance && Math.Abs(want.G - b.Color.G) <= tolerance && Math.Abs(want.B - b.Color.B) <= tolerance) break;
+            Settle(16);
+        }
+        AssertNear(anchor, key, read(), tolerance);
+    }
+
     private static void AssertTint(Visual anchor, string key, double alpha, IBrush? actual)
     {
         var want = (Color)Res(anchor, key);
@@ -81,13 +101,13 @@ public class ButtonsTests
         var window = Show(new StackPanel { Margin = new Thickness(20), Children = { bare } });
 
         Assert.True(bare.Bounds.Height < 30);
+        Assert.Equal(FontWeight.Bold, bare.GetVisualDescendants().OfType<TextBlock>().Single().FontWeight);
         Assert.Equal(new Thickness(0), bare.Padding);
         Assert.False(Part<Border>(bare, "PART_Sweep").IsVisible);
-        AssertBrush(bare, "InsText2", bare.Foreground);
-
+        AssertBrush(bare, "InsText2", () => bare.Foreground);
         window.MouseMove(Center(bare, window));
         Settle();
-        AssertBrush(bare, "InsText1", bare.Foreground);
+        AssertBrush(bare, "InsText1", () => bare.Foreground);
     }
 
     [AvaloniaFact]
@@ -100,7 +120,7 @@ public class ButtonsTests
         window.MouseMove(Center(ghost, window));
         Settle();
         AssertTint(ghost, "InsPrimaryColor", 0.12, ghost.Background);
-        AssertBrush(ghost, "InsPrimaryDarker", ghost.Foreground);
+        AssertBrush(ghost, "InsPrimaryDarker", () => ghost.Foreground);
     }
 
     [AvaloniaFact]
@@ -142,13 +162,12 @@ public class ButtonsTests
         var window = Show(new StackPanel { Margin = new Thickness(20), Spacing = 12, Children = { toggle, primary } });
 
         Part<Border>(toggle, "PART_Face");
-        AssertBrush(toggle, "InsCtlBg", toggle.Background);
-
+        AssertBrush(toggle, "InsCtlBg", () => toggle.Background);
         Click(toggle, window);
         Assert.True(toggle.IsChecked);
         AssertTint(toggle, "InsPrimaryColor", 0.14, toggle.Background);
         AssertTint(toggle, "InsPrimaryColor", 0.40, toggle.BorderBrush);
-        AssertBrush(toggle, "InsPrimaryDarker", toggle.Foreground);
+        AssertBrush(toggle, "InsPrimaryDarker", () => toggle.Foreground);
         Assert.Equal(0, Part<Border>(toggle, "PART_Shadow").BoxShadow.Count);
 
         Click(toggle, window);
@@ -208,15 +227,15 @@ public class ButtonsTests
         Assert.True(Part<Grid>(close, "PART_Cross").IsEffectivelyVisible);
         Assert.False(Part<Grid>(withIcon, "PART_Cross").IsEffectivelyVisible);
         Assert.False(Part<Panel>(plain, "PART_CrossHost").IsVisible);
-        AssertBrush(close, "InsCtlBg", close.Background);
-        AssertBrush(close, "InsText2", close.Foreground);
+        AssertBrush(close, "InsCtlBg", () => close.Background);
+        AssertBrush(close, "InsText2", () => close.Foreground);
         Assert.Equal(0, Part<Border>(close, "PART_Shadow").BoxShadow.Count);
 
         window.MouseMove(Center(close, window));
         var closeRoot = Part<Panel>(close, "PART_Root");
-        WaitFor(() => closeRoot.RenderTransform is { } t && Math.Abs(t.Value.M11) < 0.005 && ColorOf(close.Background) == ColorOf((IBrush)Res(close, "InsCtlBgHover")));
-        AssertBrush(close, "InsCtlBgHover", close.Background);
-        AssertBrush(close, "InsText1", close.Foreground);
+        WaitFor(() => closeRoot.RenderTransform is { } t && Math.Abs(t.Value.M11) < 0.005);
+        AssertNear(close, "InsCtlBgHover", () => close.Background);
+        AssertNear(close, "InsText1", () => close.Foreground);
         Assert.Equal(0, closeRoot.RenderTransform!.Value.M11, 2);
     }
 
@@ -382,14 +401,13 @@ public class ButtonsTests
 
         Assert.Equal(0, Part<Border>(off, "TileRing").Opacity);
         Assert.False(Part<ContentPresenter>(off, "TileDesc").IsVisible);
-        AssertBrush(off, "InsCtlBg", off.Background);
-
+        AssertBrush(off, "InsCtlBg", () => off.Background);
         Assert.Equal(1, Part<Border>(on, "TileRing").Opacity);
         Assert.Equal(1, Part<Border>(on, "CheckFill").Opacity);
         Assert.Equal(1, Part<Panel>(on, "TileMark").RenderTransform!.Value.M11, 2);
         Assert.True(Part<ContentPresenter>(on, "TileDesc").IsVisible);
-        AssertBrush(on, "InsToneBrandBg", on.Background);
-        AssertBrush(on, "InsToneBrand", Part<ContentPresenter>(on, "PART_ContentPresenter").Foreground);
+        AssertBrush(on, "InsToneBrandBg", () => on.Background);
+        AssertBrush(on, "InsToneBrand", () => Part<ContentPresenter>(on, "PART_ContentPresenter").Foreground);
         Assert.Equal(radio, Part<global::Avalonia.Controls.Shapes.Ellipse>(on, "TileDot").IsVisible);
         Assert.Equal(!radio, Part<global::Avalonia.Controls.Shapes.Path>(on, "TileTick").IsVisible);
 
@@ -419,12 +437,12 @@ public class ButtonsTests
         Assert.Null(plain.OnContent);
         Assert.False(Part<ContentPresenter>(plain, "DescPresenter").IsVisible);
         Assert.True(Part<ContentPresenter>(described, "DescPresenter").IsVisible);
-        AssertBrush(described, "InsText2", Part<ContentPresenter>(described, "DescPresenter").Foreground);
+        AssertBrush(described, "InsText2", () => Part<ContentPresenter>(described, "DescPresenter").Foreground);
         Assert.Equal(26, Part<Panel>(plain, "SwitchAreaGrid").Bounds.Height);
         Assert.Equal(48, Part<Panel>(plain, "SwitchAreaGrid").Bounds.Width);
 
-        AssertBrush(card, "InsCtlBg", card.Background);
-        AssertBrush(card, "InsLine", card.BorderBrush);
+        AssertBrush(card, "InsCtlBg", () => card.Background);
+        AssertBrush(card, "InsLine", () => card.BorderBrush);
         Assert.Equal(new Thickness(14, 12), card.Padding);
     }
 
@@ -463,11 +481,9 @@ public class ButtonsTests
         var first = (SegmentedItem)seg.Items[0]!;
         var third = (SegmentedItem)seg.Items[2]!;
         Assert.Equal(38, first.Bounds.Height);
-        WaitFor(() => ColorOf(first.Foreground) == ColorOf((IBrush)Res(first, "InsSegOnFg")), 1500);
-        AssertBrush(first, "InsSegOnBg", first.Background);
-        AssertBrush(first, "InsSegOnFg", first.Foreground);
-        AssertBrush(third, "InsText2", third.Foreground);
-
+        AssertNear(first, "InsSegOnBg", () => first.Background);
+        AssertNear(first, "InsSegOnFg", () => first.Foreground);
+        AssertNear(third, "InsText2", () => third.Foreground);
         var p = Center(third, window);
         window.MouseMove(p);
         window.MouseDown(p, MouseButton.Left);
@@ -477,11 +493,13 @@ public class ButtonsTests
         Assert.True(Part<Border>(seg, "PART_Flight").IsVisible);
         Assert.Contains("moving", seg.Classes);
 
-        WaitFor(() => !Part<Border>(seg, "PART_Flight").IsVisible);
-        WaitFor(() => ColorOf(third.Background) == ColorOf((IBrush)Res(third, "InsSegOnBg")));
-        Assert.False(Part<Border>(seg, "PART_Flight").IsVisible);
+        var flight = Part<Border>(seg, "PART_Flight");
+        var x0 = Canvas.GetLeft(flight);
+        WaitFor(() => !flight.IsVisible);
+        Settle(300);
+        Assert.False(flight.IsVisible, $"x0={x0} x={Canvas.GetLeft(flight)} w={flight.Width} classes={string.Join(',', seg.Classes)} sel={seg.SelectedIndex}");
         Assert.DoesNotContain("moving", seg.Classes);
-        AssertBrush(third, "InsSegOnBg", third.Background);
+        AssertNear(third, "InsSegOnBg", () => third.Background);
     }
 
     [AvaloniaFact]

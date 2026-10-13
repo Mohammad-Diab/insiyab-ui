@@ -33,6 +33,7 @@ public class FontTests
     {
         var window = new Window { FlowDirection = direction, Content = content };
         window.Show();
+        Ui.Track(window);
         return window;
     }
 

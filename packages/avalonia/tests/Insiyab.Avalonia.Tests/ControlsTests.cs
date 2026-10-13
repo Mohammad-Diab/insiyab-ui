@@ -46,19 +46,17 @@ public class ControlsTests
         var small = new Button { Content = "صغير", Classes = { "sm" } };
         Show(new StackPanel { Children = { plain, primary, secondary, ghost, small } });
 
-        AssertBrush(plain, "InsCtlBg", plain.Background);
-        AssertBrush(plain, "InsCtlBd", plain.BorderBrush);
-
+        AssertBrush(plain, "InsCtlBg", () => plain.Background);
+        AssertBrush(plain, "InsCtlBd", () => plain.BorderBrush);
         var fill = Assert.IsAssignableFrom<ILinearGradientBrush>(primary.Background);
         Assert.Equal(Res(primary, "InsPrimaryColor"), fill.GradientStops[0].Color);
         Assert.Equal(Res(primary, "InsPrimaryDarkColor"), fill.GradientStops[1].Color);
-        AssertBrush(primary, "InsOnPrimary", primary.Foreground);
+        AssertBrush(primary, "InsOnPrimary", () => primary.Foreground);
         Assert.Equal(Res(primary, "InsShBrandMd"), Part<Border>(primary, "PART_Shadow").BoxShadow);
 
-        AssertBrush(secondary, "InsCtlBg", secondary.Background);
-        AssertBrush(secondary, "InsCtlBd", secondary.BorderBrush);
-
-        AssertBrush(ghost, "InsPrimaryDarker", ghost.Foreground);
+        AssertBrush(secondary, "InsCtlBg", () => secondary.Background);
+        AssertBrush(secondary, "InsCtlBd", () => secondary.BorderBrush);
+        AssertBrush(ghost, "InsPrimaryDarker", () => ghost.Foreground);
         var ghostBorder = ColorOf(ghost.BorderBrush);
         Assert.Equal(Res(ghost, "InsPrimaryColor"), Color.FromRgb(ghostBorder.R, ghostBorder.G, ghostBorder.B));
 
@@ -75,7 +73,7 @@ public class ControlsTests
         Settle();
 
         Assert.True(secondary.IsPointerOver);
-        AssertBrush(secondary, "InsCtlBgHover", secondary.Background);
+        AssertBrush(secondary, "InsCtlBgHover", () => secondary.Background);
     }
 
     [AvaloniaFact]
