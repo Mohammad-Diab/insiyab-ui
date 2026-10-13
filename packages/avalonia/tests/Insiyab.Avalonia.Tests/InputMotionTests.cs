@@ -8,6 +8,7 @@ using Avalonia.Headless.XUnit;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Insiyab.Avalonia.Controls;
@@ -103,13 +104,18 @@ public class InputMotionTests
         var next = Named<TextBlock>(box, "PART_RollIn");
         var down = Named<RepeatButton>(box, "PART_DecreaseButton");
         var p = Center(down, window);
+        // Every value the animations set is kept, as under load a frame read at 90ms can already be in the spring's overshoot.
+        var outs = new List<double>();
+        var ins = new List<double>();
+        gone.PropertyChanged += (_, e) => { if (e.Property == Visual.RenderTransformProperty) outs.Add(gone.RenderTransform?.Value.M32 ?? 0); };
+        next.PropertyChanged += (_, e) => { if (e.Property == Visual.RenderTransformProperty) ins.Add(next.RenderTransform?.Value.M32 ?? 0); };
         window.MouseMove(p);
         window.MouseDown(p, MouseButton.Left);
         window.MouseUp(p, MouseButton.Left);
-        Pump(window, 90);
+        Pump(window, 300);
         Assert.Equal("4", box.Text);
-        Assert.True(gone.RenderTransform!.Value.M32 > 2, $"out y {gone.RenderTransform.Value.M32}");
-        Assert.True(next.RenderTransform!.Value.M32 < 0, $"in y {next.RenderTransform.Value.M32}");
+        Assert.True(outs.Max() > 2, $"out y {outs.Max()}");
+        Assert.True(ins[0] < 0, $"in y {ins[0]}");
     }
 
     [AvaloniaFact]
@@ -137,11 +143,19 @@ public class InputMotionTests
         var field = Named<TextBox>(box, "PART_TextBox");
         field.Focus();
         Settle(100);
-        window.KeyPress(Key.Up, RawInputModifiers.None, PhysicalKey.ArrowUp, null);
-        window.KeyRelease(Key.Up, RawInputModifiers.None, PhysicalKey.ArrowUp, null);
-        Assert.True(roll.IsVisible);
-        window.KeyPress(Key.Up, RawInputModifiers.None, PhysicalKey.ArrowUp, null);
-        window.KeyRelease(Key.Up, RawInputModifiers.None, PhysicalKey.ArrowUp, null);
+        // The clock stands still, so the second step is quick however long the first one takes under load.
+        var real = NumberRoll.Now;
+        var at = real();
+        NumberRoll.Now = () => at;
+        try
+        {
+            window.KeyPress(Key.Up, RawInputModifiers.None, PhysicalKey.ArrowUp, null);
+            window.KeyRelease(Key.Up, RawInputModifiers.None, PhysicalKey.ArrowUp, null);
+            Assert.True(roll.IsVisible);
+            window.KeyPress(Key.Up, RawInputModifiers.None, PhysicalKey.ArrowUp, null);
+            window.KeyRelease(Key.Up, RawInputModifiers.None, PhysicalKey.ArrowUp, null);
+        }
+        finally { NumberRoll.Now = real; }
         Pump(window, 40);
         Assert.False(roll.IsVisible);
         Assert.False(Rolling(box));
@@ -212,11 +226,14 @@ public class InputMotionTests
         auto.IsDropDownOpen = false;
         auto.Text = "";
         Settle(300);
+        // Every value the animation sets is kept, as under load the first sampled frame can come after most of its 220ms.
+        var moves = new List<double>();
+        border.PropertyChanged += (_, e) => { if (e.Property == Visual.RenderTransformProperty) moves.Add(border.RenderTransform?.Value.M32 ?? 0); };
         window.KeyTextInput("الر");
-        var samples = Sample(window, 500, () => border.RenderTransform?.Value.M32 ?? 0);
+        Pump(window, 500);
         Assert.True(auto.IsDropDownOpen);
         Assert.True(popup.IsOpen);
-        Assert.InRange(samples.Min(s => s.Value), -4.01, -1);
-        Assert.Equal(0, samples[^1].Value, 2);
+        Assert.InRange(moves.Min(), -4.01, -1);
+        Assert.Equal(0, border.RenderTransform?.Value.M32 ?? 0, 2);
     }
 }

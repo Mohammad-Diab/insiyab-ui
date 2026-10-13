@@ -23,6 +23,9 @@ public static class NumberRoll
     private static readonly Easing Spring = new SplineEasing(0.34, 1.56, 0.64, 1);
     private static readonly System.Diagnostics.Stopwatch Clock = System.Diagnostics.Stopwatch.StartNew();
 
+    /// <summary>For tests: the milliseconds that tell a burst of steps from single ones.</summary>
+    internal static Func<long> Now { get; set; } = () => Clock.ElapsedMilliseconds;
+
     // Steps closer than this are a held button or a spun wheel: the number just counts, since a roll restarted every 100ms would hide it.
     private const long Burst = 150;
 
@@ -60,7 +63,7 @@ public static class NumberRoll
     private static void OnSpinned(object? sender, SpinEventArgs e)
     {
         if (sender is not NumericUpDown box || box.GetValue(StateProperty) is not { } state) return;
-        var now = Clock.ElapsedMilliseconds;
+        var now = Now();
         var burst = now - state.LastStep < Burst;
         state.LastStep = now;
         var from = state.Before;

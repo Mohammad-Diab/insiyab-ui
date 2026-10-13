@@ -6,7 +6,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using Avalonia.Threading;
 using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
@@ -133,7 +132,10 @@ internal sealed class CarouselNav
     private int _stop;
     private bool _moving, _dragging, _wheelLocked;
     private double _dragStart, _dragFrom, _dragDx, _wheel;
-    private IDisposable? _wheelQuiet;
+    private long _wheelAt = long.MinValue / 2;
+
+    /// <summary>For tests: the milliseconds that tell one wheel gesture from the next.</summary>
+    internal static Func<long> Now { get; set; } = () => Environment.TickCount64;
 
     private CarouselNav(Carousel carousel)
     {
@@ -209,8 +211,14 @@ internal sealed class CarouselNav
         var h = sideways ? e.Delta.X : e.KeyModifiers.HasFlag(KeyModifiers.Shift) ? e.Delta.Y : 0;
         if (h == 0 || StopCount < 2) return;
         e.Handled = true;
-        _wheelQuiet?.Dispose();
-        _wheelQuiet = DispatcherTimer.RunOnce(() => { _wheelLocked = false; _wheel = 0; }, TimeSpan.FromMilliseconds(250));
+        // A gesture ends after 250ms without a wheel event.
+        var now = Now();
+        if (now - _wheelAt >= 250)
+        {
+            _wheelLocked = false;
+            _wheel = 0;
+        }
+        _wheelAt = now;
         if (_wheelLocked) return;
         _wheel += h;
         if (Math.Abs(_wheel) < 1) return;

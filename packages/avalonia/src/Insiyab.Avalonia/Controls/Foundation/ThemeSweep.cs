@@ -8,11 +8,13 @@ using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The web's theme sweep: the new palette is revealed through a circle that grows from the control that was pressed out to the window's furthest corner, over 600ms. Skipped, and the theme simply applied, while <see cref="Motion.IsStill"/>.</summary>
 public static class ThemeSweep
 {
     private const double Duration = 600;
     private static Sweep? s_current;
+
+    /// <summary>For tests: while set, a sweep that starts keeps its first frame and does not land on its own, so it can be read mid-way.</summary>
+    internal static bool Held { get; set; }
 
     /// <summary>Takes a picture of the window, runs <paramref name="apply"/> (the theme change) at once, then wipes the picture away from <paramref name="origin"/>.</summary>
     public static void Run(Visual origin, Action apply)
@@ -53,11 +55,11 @@ public static class ThemeSweep
         var easing = Motion.Ease(origin as Control ?? top);
         var clock = System.Diagnostics.Stopwatch.StartNew();
         picture.Clip = Hole(size, centre, 0);
-        DispatcherTimer.RunOnce(sweep.Land, TimeSpan.FromMilliseconds(Duration + 150));
+        DispatcherTimer.RunOnce(() => { if (!Held) sweep.Land(); }, TimeSpan.FromMilliseconds(Duration + 150));
         void Frame(TimeSpan _)
         {
             if (sweep.Done) return;
-            var t = Math.Clamp(clock.Elapsed.TotalMilliseconds / Duration, 0, 1);
+            var t = Held ? 0 : Math.Clamp(clock.Elapsed.TotalMilliseconds / Duration, 0, 1);
             picture.Clip = Hole(size, centre, Math.Ceiling(far) * easing.Ease(t));
             if (t >= 1) sweep.Land(); else top.RequestAnimationFrame(Frame);
         }
