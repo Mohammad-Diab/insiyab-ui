@@ -1,0 +1,159 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <!-- The item's spinner, in the text colour; it turns only while the item is busy -->
+      <ControlTheme x:Key="InsStatusSpinner" TargetType="ins:LoadingSpinner">
+        <Setter Property="Width" Value="12" />
+        <Setter Property="Height" Value="12" />
+        <Setter Property="Thickness" Value="2" />
+        <Setter Property="ArcLength" Value="270" />
+        <Setter Property="Track" Value="Transparent" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+      </ControlTheme>
+
+      <!-- The strip: frosted ground, a hairline on top, small muted words -->
+      <ControlTheme x:Key="{x:Type ins:StatusBar}" TargetType="ins:StatusBar">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Background" Value="{DynamicResource InsGlassGround}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+        <Setter Property="BorderThickness" Value="0,1,0,0" />
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Padding="{TemplateBinding Padding}">
+              <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                <StackPanel x:Name="PART_Start" Orientation="Horizontal" Spacing="2" ClipToBounds="True" VerticalAlignment="Center" />
+                <StackPanel x:Name="PART_End" Grid.Column="1" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center" />
+              </Grid>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:StatusItem}" TargetType="ins:StatusItem">
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="Height" Value="22" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" CornerRadius="6">
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <Panel x:Name="PART_Glyph" Width="13" Height="13" VerticalAlignment="Center" IsVisible="False">
+                  <ins:Icon x:Name="PART_Icon" Data="{TemplateBinding Icon}" Size="13" />
+                  <ins:LoadingSpinner x:Name="PART_Spinner" Theme="{StaticResource InsStatusSpinner}" IsVisible="False" />
+                </Panel>
+                <ContentPresenter x:Name="PART_ContentPresenter"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+              </StackPanel>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:icon /template/ Panel#PART_Glyph, ^:busy /template/ Panel#PART_Glyph">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:busy /template/ ins|Icon#PART_Icon">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:busy /template/ ins|LoadingSpinner#PART_Spinner">
+          <Setter Property="IsVisible" Value="True" />
+          <Style.Animations>
+            <Animation Duration="0:0:0.7" IterationCount="Infinite">
+              <KeyFrame Cue="0%">
+                <Setter Property="Angle" Value="0" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Angle" Value="360" />
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </ControlTheme>
+
+      <!-- A clickable item: plain text that fills softly under the pointer, as in an editor's status bar -->
+      <ControlTheme x:Key="{x:Type ins:StatusButton}" TargetType="ins:StatusButton">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="7,0" />
+        <Setter Property="Height" Value="22" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" CornerRadius="{TemplateBinding CornerRadius}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                  <ins:Icon x:Name="PART_Icon" Data="{TemplateBinding Icon}" Size="13" VerticalAlignment="Center" IsVisible="False" />
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                </StackPanel>
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:icon /template/ ins|Icon#PART_Icon">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:pointerover, ^:flyout-open">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        </Style>
+        <Style Selector="^:pressed">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.45" />
+          <Setter Property="Cursor" Value="Arrow" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="ins|StatusBar Separator">
+    <Setter Property="Width" Value="1" />
+    <Setter Property="Height" Value="14" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="Margin" Value="5,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Background" Value="{DynamicResource InsLine}" />
+  </Style>
+  <Style Selector="ins|StatusBar ProgressBar">
+    <Setter Property="Width" Value="96" />
+    <Setter Property="Height" Value="4" />
+    <Setter Property="MinWidth" Value="0" />
+    <Setter Property="Margin" Value="4,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ins|StatusBar ins|SaveStatus">
+    <Setter Property="Margin" Value="6,0" />
+    <Setter Property="MinHeight" Value="0" />
+  </Style>
+
+</Styles>

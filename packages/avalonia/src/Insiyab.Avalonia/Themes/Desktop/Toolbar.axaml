@@ -1,0 +1,223 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <StreamGeometry x:Key="InsToolbarMoreIcon">M3.6,12 A1.4,1.4 0 1 0 6.4,12 A1.4,1.4 0 1 0 3.6,12 Z M10.6,12 A1.4,1.4 0 1 0 13.4,12 A1.4,1.4 0 1 0 10.6,12 Z M17.6,12 A1.4,1.4 0 1 0 20.4,12 A1.4,1.4 0 1 0 17.6,12 Z</StreamGeometry>
+      <StreamGeometry x:Key="InsToolbarChevron">M6 9 l6 6 6-6</StreamGeometry>
+      <SolidColorBrush x:Key="InsToolbarOn" Color="{DynamicResource InsPrimaryColor}" Opacity="0.14" />
+
+      <!-- One command's face: quiet until the pointer is on it, a soft fill under the pointer, the brand tint while a toggle is on -->
+      <ControlTheme x:Key="InsToolbarFace" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="7,0" />
+        <Setter Property="Height" Value="{DynamicResource InsCtlSmH}" />
+        <Setter Property="MinWidth" Value="{DynamicResource InsCtlSmH}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel x:Name="PART_Press">
+              <Border x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <Border x:Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}">
+                <ContentPresenter x:Name="PART_ContentPresenter"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  Padding="{TemplateBinding Padding}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Panel#PART_Press">
+          <Setter Property="ins:PressDip.Depth" Value="0.94" />
+        </Style>
+        <Style Selector="^ /template/ Border#PART_FocusRing">
+          <Setter Property="Transitions">
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:0.2" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:labelled">
+          <Setter Property="Padding" Value="10,0" />
+        </Style>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        </Style>
+        <Style Selector="^:pressed, ^:flyout-open">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
+        </Style>
+        <Style Selector="^:checked">
+          <Setter Property="Background" Value="{DynamicResource InsToolbarOn}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.45" />
+          <Setter Property="Cursor" Value="Arrow" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:ToolbarButton}" TargetType="ins:ToolbarButton" BasedOn="{StaticResource InsToolbarFace}" />
+      <ControlTheme x:Key="{x:Type ins:ToolbarToggleButton}" TargetType="ins:ToolbarToggleButton" BasedOn="{StaticResource InsToolbarFace}" />
+
+      <!-- The main action and the chevron as one command: each lights on its own, a faint rim joins them under the pointer -->
+      <ControlTheme x:Key="{x:Type ins:ToolbarSplitButton}" TargetType="ins:ToolbarSplitButton">
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Height" Value="{DynamicResource InsCtlSmH}" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <StackPanel Orientation="Horizontal">
+                <Button x:Name="PART_PrimaryButton"
+                        Theme="{StaticResource InsToolbarFace}"
+                        Focusable="False"
+                        CornerRadius="8,0,0,8"
+                        Height="{TemplateBinding Height}" />
+                <Button x:Name="PART_SecondaryButton"
+                        Theme="{StaticResource InsToolbarFace}"
+                        Focusable="False"
+                        CornerRadius="0,8,8,0"
+                        Padding="3,0"
+                        MinWidth="20"
+                        Height="{TemplateBinding Height}">
+                  <ins:Icon Classes="toolbar-chevron" />
+                </Button>
+              </StackPanel>
+              <Border x:Name="PART_Rim" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="1" BorderBrush="Transparent" IsHitTestVisible="False" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:labelled /template/ Button#PART_PrimaryButton">
+          <Setter Property="Padding" Value="10,0" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#PART_Rim">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+        </Style>
+        <Style Selector="^:flyout-open /template/ Button#PART_SecondaryButton">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
+        </Style>
+        <Style Selector="^:checked /template/ Button#PART_PrimaryButton">
+          <Setter Property="Background" Value="{DynamicResource InsToolbarOn}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.45" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The strip: a glass bar with the island's rim and drop by default, or plain, flush with the window and a hairline under it -->
+      <ControlTheme x:Key="{x:Type ins:Toolbar}" TargetType="ins:Toolbar">
+        <Setter Property="Background" Value="{DynamicResource InsGlass}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border x:Name="PART_Face"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}">
+              <ins:ToolbarPanel x:Name="PART_Panel" KeyboardNavigation.TabNavigation="Once">
+                <ins:ToolbarButton x:Name="PART_More"
+                                   Classes="toolbar-more"
+                                   Icon="{StaticResource InsToolbarMoreIcon}"
+                                   Label="{TemplateBinding MoreText}" />
+              </ins:ToolbarPanel>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Border#PART_Face">
+          <Setter Property="BoxShadow" Value="{DynamicResource InsIslandShadow}" />
+        </Style>
+        <Style Selector="^.plain">
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+          <Setter Property="BorderThickness" Value="0,0,0,1" />
+          <Setter Property="CornerRadius" Value="0" />
+          <Setter Property="Padding" Value="4" />
+        </Style>
+        <Style Selector="^.plain /template/ Border#PART_Face">
+          <Setter Property="BoxShadow" Value="none" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="ins|Toolbar :is(Control).toolbar-overflowed">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+  <Style Selector="ins|Toolbar Separator">
+    <Setter Property="Width" Value="1" />
+    <Setter Property="Height" Value="18" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="Margin" Value="4,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Background" Value="{DynamicResource InsLine}" />
+  </Style>
+
+  <Style Selector="ins|Icon.toolbar-icon">
+    <Setter Property="Size" Value="16" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ins|Icon.toolbar-chevron">
+    <Setter Property="Size" Value="12" />
+    <Setter Property="StrokeThickness" Value="2.2" />
+    <Setter Property="Data" Value="{StaticResource InsToolbarChevron}" />
+    <Setter Property="Opacity" Value="0.7" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.toolbar-label">
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBlock.toolbar-key">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    <Setter Property="Opacity" Value="0.7" />
+  </Style>
+
+</Styles>
