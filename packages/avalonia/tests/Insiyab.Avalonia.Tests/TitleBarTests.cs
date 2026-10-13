@@ -161,7 +161,37 @@ public class TitleBarTests
 
         w.MouseMove(Center(minimize, w));
         Settle();
-        AssertBrush(minimize, "InsCaptionHover", () => Part<Border>(minimize, "PART_Face").Background);
+        AssertBrush(minimize, "InsGlassHover", () => Part<Border>(minimize, "PART_Face").Background);
+    }
+
+    [AvaloniaTheory]
+    [MemberData(nameof(Looks), MemberType = typeof(Ui))]
+    public void Buttons_are_one_island_centred_with_the_others(string theme, string dir)
+    {
+        var caps = new CaptionButtons { ForceShown = true };
+        var other = new Border { Classes = { "island" }, Child = new TextBlock { Text = "المظهر" } };
+        var zone = new StackPanel { Classes = { "zone", "end" }, Children = { other } };
+        Grid.SetColumn(caps, 3);
+        var bar = new Border { Classes = { "topbar" }, VerticalAlignment = VerticalAlignment.Top, Child = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto,*,Auto"), Children = { zone, caps } } };
+        var w = Show(new Panel { Children = { bar } }, Dir(dir), Variant(theme), 900);
+
+        Assert.Equal(default, caps.Margin);
+        var island = Part<Border>(caps, "PART_Island");
+        Assert.Equal(48, island.Bounds.Height);
+        Assert.Equal(new Thickness(4), island.Padding);
+        Assert.Equal(Res(caps, "InsRPill"), island.CornerRadius);
+        AssertBrush(island, "InsGlass", () => island.Background);
+        AssertBrush(island, "InsRim", () => island.BorderBrush);
+        Assert.Equal(Center(other, w).Y, Center(island, w).Y, 0.5);
+        var box = new Rect(island.Bounds.Size).TransformToAABB(island.TransformToVisual(w)!.Value);
+        Assert.Equal(16, dir == "rtl" ? box.Left : w.Bounds.Width - box.Right, 0.5);
+        foreach (var name in new[] { "PART_Minimize", "PART_Maximize", "PART_Close" })
+        {
+            var button = Part<Button>(caps, name);
+            Assert.Equal(40, button.Bounds.Width);
+            Assert.Equal(38, button.Bounds.Height);
+            Assert.Equal(Res(caps, "InsRPill"), Part<Border>(button, "PART_Face").CornerRadius);
+        }
     }
 
     [AvaloniaFact]
@@ -228,6 +258,50 @@ public class TitleBarTests
         Assert.All(moves, Assert.False);
     }
 
+    // TITLEBARINFOEX as user32 lays it out: cbSize, rcTitleBar, rgstate[6], rgrect[6].
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    private struct TitleBarInfo
+    {
+        public int Size, BarLeft, BarTop, BarRight, BarBottom;
+        public int State0, State1, StateMin, StateMax, State4, StateClose;
+        public TitleBarNative.RECT Rect0, Rect1, Min, Max, Rect4, Close;
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void Title_bar_info_names_our_buttons_for_snap_layouts(string dir)
+    {
+        var caps = Shown(out var w, Dir(dir));
+        var size = System.Runtime.InteropServices.Marshal.SizeOf<TitleBarInfo>();
+        Assert.Equal(140, size);
+        var info = System.Runtime.InteropServices.Marshal.AllocHGlobal(size);
+        try
+        {
+            TitleBar.FillTitleBarInfo(info, caps, new TitleBarNative.RECT { Left = 0, Top = 0, Right = 640, Bottom = 420 });
+            var read = System.Runtime.InteropServices.Marshal.PtrToStructure<TitleBarInfo>(info);
+            Assert.Equal(TitleBar.ScreenRect(Part<Button>(caps, "PART_Maximize")), read.Max);
+            Assert.Equal(TitleBar.ScreenRect(Part<Button>(caps, "PART_Minimize")), read.Min);
+            Assert.Equal(TitleBar.ScreenRect(Part<Button>(caps, "PART_Close")), read.Close);
+            Assert.Equal(40, read.Max.Right - read.Max.Left);
+            Assert.Equal((0, 0, 0), (read.StateMin, read.StateMax, read.StateClose));
+            Assert.Equal((0, 640, TitleBar.ScreenRect(caps).Bottom), (read.BarLeft, read.BarRight, read.BarBottom));
+            var max = Center(Part<Button>(caps, "PART_Maximize"), w);
+            Assert.InRange(max.X, read.Max.Left, read.Max.Right);
+
+            w.CanMaximize = false;
+            Settle(100);
+            TitleBar.FillTitleBarInfo(info, caps, new TitleBarNative.RECT { Right = 640, Bottom = 420 });
+            read = System.Runtime.InteropServices.Marshal.PtrToStructure<TitleBarInfo>(info);
+            Assert.Equal(0x8000, read.StateMax);
+            Assert.Equal(0, read.StateClose);
+        }
+        finally
+        {
+            System.Runtime.InteropServices.Marshal.FreeHGlobal(info);
+        }
+    }
+
     [AvaloniaFact]
     public void Inactive_window_dims_the_glyphs_but_not_a_hovered_close()
     {
@@ -242,4 +316,6 @@ public class TitleBarTests
         Assert.Equal(1, Part<ShapePath>(close, "PART_Glyph").Opacity);
         AssertBrush(close, "InsCaptionClose", () => Part<Border>(close, "PART_Face").Background);
     }
+
+    [AvaloniaFact]
 }

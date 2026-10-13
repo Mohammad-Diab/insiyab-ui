@@ -69,6 +69,13 @@ public class ShellTests
         AssertBrush(shell, "InsRim", () => chrome.BorderBrush);
         Assert.Equal(new Thickness(0, 0, 1, 0), chrome.BorderThickness);
         Assert.Equal(new Thickness(12, 18), Part<ContentPresenter>(shell, "PART_PanePresenter").Padding);
+        var shell = NewShell(out var nav, out _, out _);
+        for (var i = 0; i < 30; i++) nav.Items.Add(new ListBoxItem { Content = $"صفحة {i}" });
+        var head = new Border { Classes = { "shell-brand" }, Child = new TextBlock { Classes = { "shell-brand-name" }, Text = "تطبيقي" } };
+        DockPanel.SetDock(head, Dock.Top);
+        Shell.SetHeadScrolls(shell, headScrolls);
+        var w = Show(shell, FlowDirection.RightToLeft, width: 1200, height: 400);
+        return (shell, nav, head, w);
     }
 
     [AvaloniaFact]

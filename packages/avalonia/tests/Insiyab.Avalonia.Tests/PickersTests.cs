@@ -356,6 +356,13 @@ public class PickersTests : IDisposable
         w.MouseWheel(Center(cal.DayButtons[new DateTime(2026, 10, 10)], w), new Vector(0, 1));
         Settle(250);
         Assert.Equal(new DateTime(2026, 9, 1), cal.DisplayMonth);
+
+        var grid = cal.GetVisualDescendants().OfType<Grid>().First(g => g.Classes.Contains("cal-grid") && g.IsEffectivelyVisible);
+        var gap = grid.TranslatePoint(new Point(1, 1), w)!.Value;
+        Assert.Same(grid, w.InputHitTest(gap));
+        w.MouseWheel(gap, new Vector(0, -1));
+        Settle(250);
+        Assert.Equal(new DateTime(2026, 10, 1), cal.DisplayMonth);
     }
 
     [AvaloniaFact]

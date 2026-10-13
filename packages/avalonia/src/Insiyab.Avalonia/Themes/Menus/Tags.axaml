@@ -166,18 +166,26 @@
   <Style Selector="Border.tags-option">
     <Setter Property="Padding" Value="12,8" />
     <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
-    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Background" Value="{DynamicResource InsPopItemRest}" />
     <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="RenderTransform" Value="none" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
   </Style>
   <Style Selector="Border.tags-option > TextBlock">
     <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
     <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
   </Style>
   <Style Selector="Border.tags-option.active">
-    <Setter Property="Background" Value="{DynamicResource InsComboOptionHover}" />
+    <Setter Property="Background" Value="{DynamicResource InsPopItemHover}" />
+    <Setter Property="RenderTransform" Value="translateX(3px)" />
   </Style>
   <Style Selector="Border.tags-option.active > TextBlock">
-    <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
   </Style>
   <Style Selector="TextBlock.combo-empty">
     <Setter Property="Padding" Value="12,8" />

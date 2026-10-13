@@ -362,6 +362,7 @@ public class DrumColumn : Control
         var row = RowHeight;
         var h = Bounds.Height;
         var w = Bounds.Width;
+        context.FillRectangle(Brushes.Transparent, new Rect(Bounds.Size));
         if (n > 0)
         {
             var mid = _offset / row;

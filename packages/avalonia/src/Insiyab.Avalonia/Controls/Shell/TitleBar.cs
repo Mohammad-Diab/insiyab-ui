@@ -30,6 +30,9 @@ public static class TitleBar
     private static readonly AttachedProperty<MenuHook?> HookProperty =
         AvaloniaProperty.RegisterAttached<Window, MenuHook?>("Hook", typeof(TitleBar));
 
+    internal static readonly AttachedProperty<CaptionButtons?> CaptionsProperty =
+        AvaloniaProperty.RegisterAttached<Window, CaptionButtons?>("Captions", typeof(TitleBar));
+
     private static readonly ControlTheme Bare = new(typeof(WindowDrawnDecorations))
     {
         Setters =
@@ -101,6 +104,25 @@ public static class TitleBar
         return WindowDecorationsElementRole.None;
     }
 
+    /// <summary>Writes the caption buttons' boxes into a TITLEBARINFOEX, the band from the window's top edge to the island's foot as its title bar.</summary>
+    internal static void FillTitleBarInfo(nint info, CaptionButtons caps, RECT frame)
+    {
+        WriteTitleBarRect(info, new RECT { Left = frame.Left, Top = frame.Top, Right = frame.Right, Bottom = ScreenRect(caps).Bottom });
+        foreach (var (index, button) in new[] { (TitleBarMinimize, caps.MinimizeButton), (TitleBarMaximize, caps.MaximizeButton), (TitleBarClose, caps.CloseButton) })
+        {
+            var shown = button is { IsEffectivelyVisible: true };
+            WriteTitleBarPart(info, index, shown ? ScreenRect(button!) : default, shown);
+        }
+    }
+
+    /// <summary>A control's box on the screen in device pixels, whichever way the window flows.</summary>
+    internal static RECT ScreenRect(Control control)
+    {
+        var a = control.PointToScreen(default);
+        var b = control.PointToScreen(new Point(control.Bounds.Width, control.Bounds.Height));
+        return new RECT { Left = Math.Min(a.X, b.X), Top = Math.Min(a.Y, b.Y), Right = Math.Max(a.X, b.X), Bottom = Math.Max(a.Y, b.Y) };
+    }
+
     private static void OnIconReleased(object? sender, PointerReleasedEventArgs e)
     {
         if (e.InitialPressMouseButton != MouseButton.Right || sender is not Control control) return;
@@ -140,6 +162,15 @@ public static class TitleBar
                 var corner = StartCorner(hWnd);
                 ShowMenu(corner.X, corner.Y);
                 handled = true;
+            }
+            else if (msg == WM_GETTITLEBARINFOEX && lParam != 0 && _window.GetValue(CaptionsProperty) is { IsVisible: true } caps)
+            {
+                // Windows' own answer names no caption buttons for a drawn title bar, so this reports ours, where Snap layouts can find the maximise button
+                var result = DefWindowProcW(hWnd, msg, wParam, lParam);
+                GetWindowRect(hWnd, out var frame);
+                FillTitleBarInfo(lParam, caps, frame);
+                handled = true;
+                return result;
             }
             return 0;
         }

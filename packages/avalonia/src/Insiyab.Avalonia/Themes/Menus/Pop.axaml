@@ -8,6 +8,8 @@
 
       <conv:PlatformKeyGestureConverter x:Key="InsPopGestureText" />
       <SolidColorBrush x:Key="InsPopItemHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
+      <!-- An item at rest wears the hover's own colour unseen, so the fade only changes how much shows and never passes through white. -->
+      <SolidColorBrush x:Key="InsPopItemRest" Color="{DynamicResource InsPrimaryColor}" Opacity="0" />
       <StreamGeometry x:Key="InsPopCheck">M5 12.5 l4.5 4.5 L19 7.5</StreamGeometry>
       <StreamGeometry x:Key="InsPopChevron">M9 6 l6 6 -6 6</StreamGeometry>
 
@@ -156,7 +158,8 @@
 
       <!-- .ins-pop-item. -->
       <ControlTheme x:Key="{x:Type MenuItem}" TargetType="MenuItem">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Background" Value="{DynamicResource InsPopItemRest}" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="Padding" Value="12,8" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
@@ -326,7 +329,7 @@
 
       <!-- .ins-pop-item as a button, for a card that mixes items with other controls. -->
       <ControlTheme x:Key="InsPopItemButton" TargetType="Button">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{DynamicResource InsPopItemRest}" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="Padding" Value="12,8" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
@@ -380,9 +383,6 @@
       <ControlTheme x:Key="InsMenuBarItem" TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
         <Setter Property="Padding" Value="12,6" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
-        <Style Selector="^:selected">
-          <Setter Property="RenderTransform" Value="none" />
-        </Style>
         <Style Selector="^ /template/ Viewbox#PART_ChevronPath">
           <Setter Property="IsVisible" Value="False" />
         </Style>
