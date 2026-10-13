@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.LoginPage">
+  <Panel Classes="screen" MinHeight="704">
+    <Border Classes="glass" Width="448" Padding="32" HorizontalAlignment="Center" VerticalAlignment="Center">
+      <StackPanel>
+        <StackPanel Classes="brand">
+          <Border Classes="shell-mark">
+            <TextBlock Text="م" />
+          </Border>
+          <TextBlock Classes="brand-name" Text="متجري" />
+          <TextBlock Classes="brand-sub" Text="تسجيل الدخول" />
+        </StackPanel>
+        <ins:Wizard x:Name="Login" Motion="Slide" StepsLook="Dots" ShowFoot="False">
+          <ins:WizardPanel Header="رقم الهاتف">
+            <StackPanel Spacing="16">
+              <StackPanel Classes="field">
+                <TextBlock Classes="label" Text="رقم الهاتف" />
+                <TextBox x:Name="Phone" Classes="lg" FlowDirection="LeftToRight" PlaceholderText="09XXXXXXXX"
+                         ins:Validate.Required="True" ins:Validate.Pattern="09[0-9]{8}" ins:Wizard.AutoFocus="True" />
+              </StackPanel>
+              <Button Classes="primary lg full" Content="متابعة" ins:Wizard.Action="Next" />
+            </StackPanel>
+          </ins:WizardPanel>
+          <ins:WizardPanel Header="كلمة المرور">
+            <StackPanel Spacing="16">
+              <TextBlock x:Name="PhoneEcho" Classes="muted" FlowDirection="LeftToRight" HorizontalAlignment="Center" />
+              <StackPanel Classes="field">
+                <TextBlock Classes="label" Text="كلمة المرور" />
+                <TextBox x:Name="Password" Classes="lg revealPasswordButton" PasswordChar="•"
+                         ins:Validate.Required="True" ins:Wizard.AutoFocus="True" />
+              </StackPanel>
+              <Button Classes="primary lg full" Content="متابعة" ins:Wizard.Action="Next" />
+              <Button Classes="bare sm" HorizontalAlignment="Center" Content="البدء من جديد" ins:Wizard.Action="Restart" />
+            </StackPanel>
+          </ins:WizardPanel>
+          <ins:WizardPanel Header="رمز التحقق">
+            <StackPanel Spacing="16">
+              <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center">
+                <TextBlock Classes="muted" Text="أُرسل الرمز إلى" />
+                <TextBlock x:Name="CodeTo" Classes="muted num" />
+              </StackPanel>
+              <StackPanel Classes="field">
+                <TextBlock Classes="label" Text="رمز التحقق" />
+                <ins:OtpBox x:Name="Code" Length="6" ins:Validate.Required="True" ins:Wizard.AutoFocus="True" />
+              </StackPanel>
+              <Button Classes="primary lg full" Content="دخول" ins:Wizard.Action="Finish" />
+              <Button Classes="bare sm" HorizontalAlignment="Center" Content="البدء من جديد" ins:Wizard.Action="Restart" />
+            </StackPanel>
+          </ins:WizardPanel>
+        </ins:Wizard>
+      </StackPanel>
+    </Border>
+  </Panel>
+</UserControl>

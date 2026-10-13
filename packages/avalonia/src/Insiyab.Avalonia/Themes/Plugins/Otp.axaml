@@ -82,58 +82,60 @@
         <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="Height" Value="52" />
         <Setter Property="Padding" Value="18,0" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="Cursor" Value="IBeam" />
         <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
         <Setter Property="Template">
           <ControlTemplate TargetType="ins:OtpBox">
-            <Panel>
-              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShSubtle}">
-                <Border.Transitions>
-                  <Transitions>
-                    <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
-                  </Transitions>
-                </Border.Transitions>
-              </Border>
-              <Border x:Name="PART_Halo" CornerRadius="{TemplateBinding CornerRadius}" Tag="{DynamicResource InsPrimaryColor}"
-                      BoxShadow="{Binding $self.Tag, Converter={x:Static ins:InputHalo.Instance}}" Opacity="0">
-                <Border.Transitions>
-                  <Transitions>
-                    <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
-                  </Transitions>
-                </Border.Transitions>
-              </Border>
-              <Border x:Name="PART_Cells"
-                      Background="{TemplateBinding Background}"
-                      BorderBrush="{TemplateBinding BorderBrush}"
-                      BorderThickness="{TemplateBinding BorderThickness}"
-                      CornerRadius="{TemplateBinding CornerRadius}"
-                      Padding="{TemplateBinding Padding}"
-                      BoxShadow="{DynamicResource InsBevelDim}">
-                <Border.Transitions>
-                  <Transitions>
-                    <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
-                    <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
-                  </Transitions>
-                </Border.Transitions>
-                <StackPanel x:Name="PART_CellsHost" Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center" />
-              </Border>
-              <!-- The real field, on top and see-through: it takes the clicks, the typing and the paste. -->
-              <TextPresenter x:Name="PART_TextPresenter"
-                             Background="Transparent"
-                             Foreground="Transparent"
-                             CaretBrush="Transparent"
-                             SelectionBrush="Transparent"
-                             SelectionForegroundBrush="Transparent"
-                             Text="{TemplateBinding Text, Mode=TwoWay}"
-                             CaretIndex="{TemplateBinding CaretIndex}"
-                             SelectionStart="{TemplateBinding SelectionStart}"
-                             SelectionEnd="{TemplateBinding SelectionEnd}"
-                             VerticalAlignment="Stretch" />
-            </Panel>
+            <DataValidationErrors ClipToBounds="False">
+              <Panel Height="52">
+                <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShSubtle}">
+                  <Border.Transitions>
+                    <Transitions>
+                      <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                    </Transitions>
+                  </Border.Transitions>
+                </Border>
+                <Border x:Name="PART_Halo" CornerRadius="{TemplateBinding CornerRadius}" Tag="{DynamicResource InsPrimaryColor}"
+                        BoxShadow="{Binding $self.Tag, Converter={x:Static ins:InputHalo.Instance}}" Opacity="0">
+                  <Border.Transitions>
+                    <Transitions>
+                      <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                    </Transitions>
+                  </Border.Transitions>
+                </Border>
+                <Border x:Name="PART_Cells"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Padding="{TemplateBinding Padding}"
+                        BoxShadow="{DynamicResource InsBevelDim}">
+                  <Border.Transitions>
+                    <Transitions>
+                      <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                      <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                    </Transitions>
+                  </Border.Transitions>
+                  <StackPanel x:Name="PART_CellsHost" Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center" />
+                </Border>
+                <!-- The real field, on top and see-through: it takes the clicks, the typing and the paste. -->
+                <TextPresenter x:Name="PART_TextPresenter"
+                               Background="Transparent"
+                               Foreground="Transparent"
+                               CaretBrush="Transparent"
+                               SelectionBrush="Transparent"
+                               SelectionForegroundBrush="Transparent"
+                               Text="{TemplateBinding Text, Mode=TwoWay}"
+                               CaretIndex="{TemplateBinding CaretIndex}"
+                               SelectionStart="{TemplateBinding SelectionStart}"
+                               SelectionEnd="{TemplateBinding SelectionEnd}"
+                               VerticalAlignment="Stretch" />
+              </Panel>
+            </DataValidationErrors>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover:not(:focus) /template/ Border#PART_Cells">

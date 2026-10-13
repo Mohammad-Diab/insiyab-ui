@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
@@ -85,6 +86,7 @@ public sealed class Validate : AvaloniaObject
         string? found = null;
         if (GetRequired(box) && v.Trim().Length == 0) found = "املأ هذا الحقل.";
         else if (v.Length == 0) return null;
+        else if (box is OtpBox { ValidationMessage: { } partial }) found = partial;
         else if (GetEmail(box) && !EmailShape.IsMatch(v)) found = "اكتب بريدًا إلكترونيًا صحيحًا.";
         else if (GetMinLength(box) is var min and > 0 && v.Length < min)
             found = "اكتب " + InputCount.ArCount(min, ["حرفًا واحدًا", "حرفين", "أحرف", "حرفًا", "حرف"]) + " على الأقل.";
@@ -98,15 +100,31 @@ public sealed class Validate : AvaloniaObject
     {
         TextBox? first = null;
         foreach (var box in form.GetVisualDescendants().OfType<TextBox>())
-        {
-            if (!HasRules(box)) continue;
-            box.SetValue(ReportedProperty, true);
-            var problem = Problem(box);
-            SetOwnError(box, problem);
-            if (problem is not null) first ??= box;
-        }
+            if (!Report(box)) first ??= box;
         first?.Focus();
         return first is null;
+    }
+
+    /// <summary>The web's form reset for the checks: every field in <paramref name="form"/> drops its message and waits again to be left changed or submitted.</summary>
+    public static void Reset(Control form)
+    {
+        foreach (var box in form.GetLogicalDescendants().OfType<TextBox>())
+        {
+            if (!HasRules(box)) continue;
+            box.ClearValue(DirtyProperty);
+            box.ClearValue(ReportedProperty);
+            SetOwnError(box, null);
+        }
+    }
+
+    /// <summary>Checks one field as a submit does and shows its message: true when it has no rule or breaks none.</summary>
+    internal static bool Report(TextBox box)
+    {
+        if (!HasRules(box)) return true;
+        box.SetValue(ReportedProperty, true);
+        var problem = Problem(box);
+        SetOwnError(box, problem);
+        return problem is null;
     }
 
     private static bool HasRules(TextBox box) =>

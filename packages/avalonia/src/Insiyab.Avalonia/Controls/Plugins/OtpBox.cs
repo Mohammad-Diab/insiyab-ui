@@ -20,7 +20,7 @@ public class OtpCompletedEventArgs(RoutedEvent routedEvent, string value) : Rout
     public string Value { get; } = value;
 }
 
-/// <summary>The one-time code field, the web's <c>data-ins-otp</c>: one real text box drawn as a block with a dot per character. Paste, an OTP suggestion and a screen reader all meet one ordinary field; typing is always at the end.</summary>
+/// <summary>The one-time code field, the web's <c>data-ins-otp</c>: one real text box drawn as a block with a dot per character. Paste, an OTP suggestion and a screen reader all meet one ordinary field; typing is always at the end. Its errors show under the block, which turns red.</summary>
 [TemplatePart("PART_CellsHost", typeof(Panel))]
 [PseudoClasses(":invalid", ":complete")]
 public class OtpBox : TextBox
@@ -180,7 +180,7 @@ public class OtpBox : TextBox
             if (CaretIndex != end || SelectionStart != end || SelectionEnd != end)
                 Dispatcher.UIThread.Post(ToEnd);
         }
-        else if (change.Property == IsInvalidProperty || change.Property == IsEnabledProperty)
+        else if (change.Property == IsInvalidProperty || change.Property == IsEnabledProperty || change.Property == DataValidationErrors.HasErrorsProperty)
         {
             Render();
         }
@@ -287,7 +287,7 @@ public class OtpBox : TextBox
     private void Render()
     {
         var value = Text ?? string.Empty;
-        var invalid = IsInvalid || (_left && ValidationMessage is not null);
+        var invalid = IsInvalid || (_left && ValidationMessage is not null) || DataValidationErrors.GetHasErrors(this);
         PseudoClasses.Set(":invalid", invalid);
         PseudoClasses.Set(":complete", value.Length == Length);
         var focused = IsFocused && IsEffectivelyEnabled;
