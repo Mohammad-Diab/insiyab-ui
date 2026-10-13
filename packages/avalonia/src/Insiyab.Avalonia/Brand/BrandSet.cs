@@ -12,4 +12,6 @@ public readonly record struct BrandSet(
     Color AccentRgb,
     Color OnPrimary,
     Color Wash1,
-    Color Wash2);
+    Color Wash2,
+    Color PrimaryMid,
+    Color OnPrimaryMid);

@@ -63,6 +63,8 @@ public static class ScrollspyPlay
     };
 
     /// <summary>Scrolls the box a little once it is laid out, so the current link is not the first, and reports each change.</summary>
+    /// <summary>The main example scrolls and marks its own entries.</summary>
+    public static Action<Control> ExampleStage { get; } = view => Wire(view, null);
 
     public static void Wire(Control root, Action<string>? say)
     {

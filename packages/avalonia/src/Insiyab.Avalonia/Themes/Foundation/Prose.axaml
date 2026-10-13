@@ -132,7 +132,7 @@
   <Style Selector="Border.blockquote">
     <Setter Property="Padding" Value="20,12" />
     <Setter Property="BorderThickness" Value="3,0,0,0" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandSoft}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsPrimaryMid}" />
     <Setter Property="CornerRadius" Value="0,10,10,0" />
     <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
   </Style>

@@ -5,10 +5,8 @@
   <Styles.Resources>
     <ResourceDictionary>
 
-      <LinearGradientBrush x:Key="InsCheckBoxFill" StartPoint="0%,0%" EndPoint="100%,100%">
-        <GradientStop Offset="0" Color="{DynamicResource InsPrimaryColor}" />
-        <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
-      </LinearGradientBrush>
+      <!-- A small brand accent, so the middle shade, with the label it needs. -->
+      <SolidColorBrush x:Key="InsCheckBoxFill" Color="{DynamicResource InsPrimaryMidColor}" />
       <SolidColorBrush x:Key="InsCheckBoxHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
       <SolidColorBrush x:Key="InsCheckBoxRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
       <SolidColorBrush x:Key="InsTileHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.35" />
@@ -31,7 +29,7 @@
                   Margin="1"
                   BorderThickness="1"
                   CornerRadius="13"
-                  BorderBrush="{DynamicResource InsToneBrandSoft}"
+                  BorderBrush="{DynamicResource InsPrimaryMid}"
                   Opacity="0" />
           <Panel x:Name="BoxHost"
                  Width="18"
@@ -55,11 +53,11 @@
                     Width="18"
                     Height="18"
                     Data="M5.75,9.25 L7.75,11.25 L12.25,6.75"
-                    Stroke="{DynamicResource InsOnPrimary}"
+                    Stroke="{DynamicResource InsOnPrimaryMid}"
                     StrokeThickness="1.5"
                     StrokeLineCap="Round"
                     StrokeJoin="Round" />
-              <Ellipse x:Name="TileDot" Width="5" Height="5" Fill="{DynamicResource InsOnPrimary}" IsVisible="False" />
+              <Ellipse x:Name="TileDot" Width="5" Height="5" Fill="{DynamicResource InsOnPrimaryMid}" IsVisible="False" />
             </Panel>
           </Panel>
           <StackPanel Margin="44,14,16,14" Spacing="3">
@@ -132,7 +130,7 @@
                         Width="18"
                         Height="18"
                         Data="M2.9,8.06 L5.73,10.89 L12.1,4.53"
-                        Stroke="{DynamicResource InsOnPrimary}"
+                        Stroke="{DynamicResource InsOnPrimaryMid}"
                         StrokeThickness="2"
                         StrokeJoin="Miter"
                         RenderTransformOrigin="41.7%,38.9%"
@@ -141,7 +139,7 @@
                           Width="9"
                           Height="2"
                           CornerRadius="1"
-                          Background="{DynamicResource InsOnPrimary}"
+                          Background="{DynamicResource InsOnPrimaryMid}"
                           Opacity="0" />
                 </Panel>
               </Panel>
@@ -286,7 +284,7 @@
                 <Ellipse x:Name="CheckGlyph"
                          Width="7"
                          Height="7"
-                         Fill="{DynamicResource InsOnPrimary}"
+                         Fill="{DynamicResource InsOnPrimaryMid}"
                          RenderTransform="scale(0)" />
               </Panel>
 
@@ -399,7 +397,7 @@
     </Style>
     <Style Selector="^:checked">
       <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
-      <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandSoft}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource InsPrimaryMid}" />
       <Style Selector="^ /template/ Border#TileRing">
         <Setter Property="Opacity" Value="1" />
       </Style>

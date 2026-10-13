@@ -12,6 +12,7 @@
       <SolidColorBrush x:Key="InsChart6" Color="#64748B" />
 
       <ControlTheme x:Key="{x:Type ctl:Chart}" TargetType="ctl:Chart">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Brush1" Value="{DynamicResource InsPrimary}" />
         <Setter Property="Brush2" Value="{DynamicResource InsChart2}" />
         <Setter Property="Brush3" Value="{DynamicResource InsChart3}" />

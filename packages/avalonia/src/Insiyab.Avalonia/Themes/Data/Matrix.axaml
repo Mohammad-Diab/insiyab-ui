@@ -61,7 +61,7 @@
           <Setter Property="BorderBrush" Value="{DynamicResource InsMatrixCardHover}" />
         </Style>
         <Style Selector="^:checked">
-          <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandSoft}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsPrimaryMid}" />
           <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
           <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
           <Style Selector="^ /template/ Border#PART_Ring">
@@ -136,8 +136,8 @@
     <Setter Property="TextElement.FontWeight" Value="Bold" />
   </Style>
   <Style Selector="ins|ChoiceMatrix RadioButton:checked Border.matrix-points">
-    <Setter Property="Background" Value="{DynamicResource InsToneBrandSoft}" />
-    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsOnPrimary}" />
+    <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsOnPrimaryMid}" />
   </Style>
 
 </Styles>

@@ -120,17 +120,35 @@ internal sealed class ToastStrip
 
     private bool Paused => _hover || Manager.IsKeyboardFocusWithin;
 
-    // At a phone width the strip spans the bottom, clear of the system's gesture area.
+    public static void Refit(Visual anchor)
+    {
+        if (OverlayHost.Top(anchor) is { } top && Strips.TryGetValue(top, out var strip)) strip.Fit();
+    }
+
+    // At a phone width the strip spans the bottom, clear of the system's gesture area and of a status bar along the window's foot.
     private void Fit()
     {
         OverlayHost.SetClass(Manager.Classes, "phone", OverlayHost.IsPhone(_top));
         var inset = _top.InsetsManager?.SafeAreaPadding.Bottom ?? 0;
-        Manager.Margin = new Thickness(0, 0, 0, inset);
+        Manager.Margin = new Thickness(0, 0, 0, Math.Max(inset, StatusRoom()));
+    }
+
+    private double StatusRoom()
+    {
+        var room = 0d;
+        var height = _top.Bounds.Height;
+        foreach (var bar in _top.GetVisualDescendants().OfType<StatusBar>())
+        {
+            if (!bar.IsEffectivelyVisible || bar.TranslatePoint(default, _top) is not { } at) continue;
+            if (height - (at.Y + bar.Bounds.Height) <= 1) room = Math.Max(room, height - at.Y);
+        }
+        return room;
     }
 
     public void Show(string text, ToastTone tone, TimeSpan? duration, FlowDirection direction)
     {
         Manager.FlowDirection = direction;
+        Fit();
         Manager.MaxItems = Toast.MaxItems;
         var persist = duration is null && tone == ToastTone.Bad;
         Manager.Show(text, Toast.TypeOf(tone), TimeSpan.Zero, null, null, persist ? ["persist"] : null);

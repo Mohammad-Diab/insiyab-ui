@@ -477,8 +477,8 @@ public class DateCalendar : TemplatedControl
         var home = new Button { Content = words.HijriLabel, Classes = { "cal-switch-option" }, Tag = "home" };
         var greg = new Button { Content = words.Gregorian, Classes = { "cal-switch-option" }, Tag = "gregory" };
         (ShowGregorian ? greg : home).Classes.Add("active");
-        home.Click += (_, _) => Flip(false);
-        greg.Click += (_, _) => Flip(true);
+        home.Click += (s, _) => Flip(false, s as Button);
+        greg.Click += (s, _) => Flip(true, s as Button);
         row.Children.Add(home);
         row.Children.Add(greg);
         var track = new Border { Child = new Panel { Children = { flight, row } }, Classes = { "cal-switch" } };
@@ -486,9 +486,11 @@ public class DateCalendar : TemplatedControl
         return track;
     }
 
-    private void Flip(bool gregorian)
+    // The new side takes the focus as the old one had it: a keyboard focus shows its ring, a click's does not.
+    private void Flip(bool gregorian, Button? from = null)
     {
         if (ShowGregorian == gregorian) return;
+        var keyboard = from?.Classes.Contains(":focus-visible") == true;
         var before = CalendarTurn.Snap(this, _turn);
         SetCurrentValue(ShowGregorianProperty, gregorian);
         _view = ViewCalendar.MonthStart(_focus);
@@ -496,7 +498,7 @@ public class DateCalendar : TemplatedControl
         _turn = CalendarTurn.Play(this, before);
         SystemInvoked?.Invoke(this, gregorian);
         var back = _host?.GetLogicalDescendantsOfButtons().FirstOrDefault(b => b.Tag as string == (gregorian ? "gregory" : "home"));
-        back?.Focus(NavigationMethod.Tab);
+        back?.Focus(keyboard ? NavigationMethod.Tab : NavigationMethod.Pointer);
     }
 
     private void Turn(int by, string? tag)

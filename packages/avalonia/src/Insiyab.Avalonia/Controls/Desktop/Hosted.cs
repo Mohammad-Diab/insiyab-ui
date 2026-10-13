@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
+using Avalonia.Media;
 
 namespace Insiyab.Avalonia.Controls;
 
@@ -40,6 +41,23 @@ internal static class Hosted
 /// <summary>One side of a status bar: a row that shows the bar's items. Part of the StatusBar template.</summary>
 public class StatusBarZone : StackPanel
 {
+    private const double Room = 6;
+
+    /// <summary>Cuts what runs past the zone's end, but leaves room above, below and at the start for a focus ring or a glow.</summary>
+    public static readonly StyledProperty<bool> CutsOverflowProperty =
+        AvaloniaProperty.Register<StatusBarZone, bool>(nameof(CutsOverflow));
+
+    static StatusBarZone() => AffectsArrange<StatusBarZone>(CutsOverflowProperty);
+
+    public bool CutsOverflow { get => GetValue(CutsOverflowProperty); set => SetValue(CutsOverflowProperty, value); }
+
+    protected override Size ArrangeOverride(Size finalSize)
+    {
+        var size = base.ArrangeOverride(finalSize);
+        Clip = CutsOverflow ? new RectangleGeometry(new Rect(-Room, -Room, finalSize.Width + Room, finalSize.Height + 2 * Room)) : null;
+        return size;
+    }
+
     protected override void ChildrenChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         Hosted.Show(this, VisualChildren, LogicalChildren);

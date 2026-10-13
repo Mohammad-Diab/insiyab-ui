@@ -10,12 +10,19 @@ public static class BrandDerivation
     private static readonly Color DarkWash1 = Color.FromRgb(0x0f, 0x11, 0x15);
     private static readonly Color DarkWash2 = Color.FromRgb(0x12, 0x14, 0x1a);
 
+    /// <summary>How far toward white the middle shade sits on light, the shade small brand accents take; big fills keep the primary.</summary>
+    public const double MidShiftLight = 0.20;
+
+    /// <summary>How far toward white the middle shade sits on dark.</summary>
+    public const double MidShiftDark = 0.45;
+
     /// <summary>The brand set for one theme. The alpha of <paramref name="primary"/> is ignored.</summary>
     public static BrandSet Derive(Color primary, bool dark)
     {
         var hex = Color.FromRgb(primary.R, primary.G, primary.B);
         var onPrimary = LabelFor(hex);
         var primaryDark = GradientEnd(hex, onPrimary);
+        var primaryMid = Shift(hex, dark ? MidShiftDark : MidShiftLight);
         return new BrandSet(
             Primary: hex,
             PrimaryDark: primaryDark,
@@ -25,7 +32,9 @@ public static class BrandDerivation
             AccentRgb: primaryDark,
             OnPrimary: onPrimary,
             Wash1: dark ? DarkWash1 : Shift(hex, 0.93),
-            Wash2: dark ? DarkWash2 : Shift(primaryDark, 0.94));
+            Wash2: dark ? DarkWash2 : Shift(primaryDark, 0.94),
+            PrimaryMid: primaryMid,
+            OnPrimaryMid: LabelFor(primaryMid));
     }
 
     /// <summary>Toward black when <paramref name="amount"/> is negative, toward white when positive.</summary>

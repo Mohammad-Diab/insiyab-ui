@@ -631,7 +631,7 @@ public class ShellTests
         window.MouseMove(Center(handle, window));
         Settle();
         Assert.Equal(64, grip.Bounds.Height, 1);
-        AssertBrush(split, "InsToneBrandSoft", () => grip.Background);
+        AssertBrush(split, "InsPrimaryMid", () => grip.Background);
     }
 
     [AvaloniaFact]

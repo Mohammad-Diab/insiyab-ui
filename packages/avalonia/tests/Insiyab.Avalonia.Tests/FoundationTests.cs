@@ -216,7 +216,7 @@ public class FoundationTests
         Assert.Equal(new Thickness(3, 0, 0, 0), quote.BorderThickness);
         Assert.Equal(new CornerRadius(0, 10, 10, 0), quote.CornerRadius);
         Assert.Equal(new Thickness(20, 12, 20, 12), quote.Padding);
-        AssertBrush(quote, "InsToneBrandSoft", () => quote.BorderBrush);
+        AssertBrush(quote, "InsPrimaryMid", () => quote.BorderBrush);
         AssertBrush(quote, "InsToneBrandBg", () => quote.Background);
     }
 

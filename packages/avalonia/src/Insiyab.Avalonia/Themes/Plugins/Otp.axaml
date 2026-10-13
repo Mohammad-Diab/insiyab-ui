@@ -43,7 +43,7 @@
                       CornerRadius="1"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center"
-                      Background="{DynamicResource InsToneBrandSoft}"
+                      Background="{DynamicResource InsPrimaryMid}"
                       IsVisible="False" />
             </Panel>
           </ControlTemplate>
@@ -63,7 +63,7 @@
           </Style.Animations>
         </Style>
         <Style Selector="^:filled /template/ Ellipse#PART_Dot">
-          <Setter Property="Fill" Value="{DynamicResource InsPrimary}" />
+          <Setter Property="Fill" Value="{DynamicResource InsPrimaryMid}" />
           <Setter Property="RenderTransform" Value="scale(1.15)" />
         </Style>
         <Style Selector="^:filled:invalid /template/ Ellipse#PART_Dot">

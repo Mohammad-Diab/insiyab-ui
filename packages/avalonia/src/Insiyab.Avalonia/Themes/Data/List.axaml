@@ -38,6 +38,7 @@
 
       <!-- A row: a divider above it, the content, and the chevron of a destination toward the end of the line -->
       <ControlTheme x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="ins:ListRows.Track" Value="True" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />

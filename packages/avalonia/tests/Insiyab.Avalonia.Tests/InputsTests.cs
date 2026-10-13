@@ -693,7 +693,7 @@ public class InputsTests
         Assert.Equal(dir == FlowDirection.RightToLeft, Center(thumb, window).X > Center(slider, window).X);
         var fill = Part<RepeatButton>(slider, "PART_DecreaseButton");
         var rest = Part<RepeatButton>(slider, "PART_IncreaseButton");
-        AssertBrush(slider, "InsToneBrandSoft", () => fill.Background);
+        AssertBrush(slider, "InsPrimaryMid", () => fill.Background);
         AssertBrush(slider, "InsCtlBgHover", () => rest.Background);
         Assert.Equal(6, Part<Border>(rest, "TrackBackground").Bounds.Height);
     }

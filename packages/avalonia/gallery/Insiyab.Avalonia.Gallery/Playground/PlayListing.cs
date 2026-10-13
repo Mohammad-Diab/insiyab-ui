@@ -8,7 +8,7 @@ using Avalonia.Threading;
 
 namespace Insiyab.Avalonia.Gallery.Playground;
 
-/// <summary>A code listing under an example or a playground, with a button that copies it.</summary>
+/// <summary>A code listing with a button that copies it: a whole box on its own, or with the <c>attached</c> class the foot of an example or a playground.</summary>
 public class PlayListing : Border
 {
     public static readonly StyledProperty<string?> CodeProperty =

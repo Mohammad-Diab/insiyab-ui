@@ -33,8 +33,8 @@
                     BorderThickness="{TemplateBinding BorderThickness}"
                     Padding="{TemplateBinding Padding}">
               <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                <StackPanel x:Name="PART_Start" Orientation="Horizontal" Spacing="2" ClipToBounds="True" VerticalAlignment="Center" />
-                <StackPanel x:Name="PART_End" Grid.Column="1" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center" />
+                <ins:StatusBarZone x:Name="PART_Start" Orientation="Horizontal" Spacing="2" CutsOverflow="True" VerticalAlignment="Center" />
+                <ins:StatusBarZone x:Name="PART_End" Grid.Column="1" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center" />
               </Grid>
             </Border>
           </ControlTemplate>

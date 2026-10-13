@@ -482,10 +482,10 @@ public class DisclosureTests
         var done = StepAt(first, 0);
         Assert.Equal(1, Part<Border>(done, "PART_Fill").Opacity);
         var number = Part<TextBlock>(done, "PART_Number");
-        AssertBrush(number, "InsOnPrimary", () => number.Foreground);
+        AssertBrush(number, "InsOnPrimaryMid", () => number.Foreground);
         var current = StepAt(first, 1);
         var currentCircle = Part<Border>(current, "PART_Circle");
-        AssertBrush(currentCircle, "InsToneBrandSoft", () => currentCircle.BorderBrush);
+        AssertBrush(currentCircle, "InsPrimaryMid", () => currentCircle.BorderBrush);
         AssertBrush(current, "InsToneBrand", () => current.Foreground);
         var bad = StepAt(second, 1);
         var badCircle = Part<Border>(bad, "PART_Circle");
@@ -494,7 +494,7 @@ public class DisclosureTests
         Assert.Equal(0, Part<Border>(bad, "PART_Fill").Opacity);
         Assert.True(Part<Border>(done, "PART_Flag").IsVisible);
         var joinIn = Part<Border>(current, "PART_LineStart");
-        AssertBrush(joinIn, "InsToneBrandSoft", () => joinIn.Background);
+        AssertBrush(joinIn, "InsPrimaryMid", () => joinIn.Background);
         Assert.False(Part<Border>(done, "PART_LineStart").IsVisible);
         Assert.False(Part<Border>(StepAt(first, 3), "PART_LineEnd").IsVisible);
         var label = plain.GetVisualDescendants().OfType<TextBlock>().First(t => t.Parent == plain);
@@ -518,7 +518,7 @@ public class DisclosureTests
         Assert.False(Part<TextBlock>(StepAt(steps, 1), "PART_Number").IsVisible);
         Assert.False(Part<ContentPresenter>(StepAt(steps, 1), "PART_ContentPresenter").IsVisible);
         var done = Part<Border>(StepAt(steps, 0), "PART_Circle");
-        AssertBrush(done, "InsToneBrandSoft", () => done.Background);
+        AssertBrush(done, "InsPrimaryMid", () => done.Background);
     }
 
     [AvaloniaTheory]

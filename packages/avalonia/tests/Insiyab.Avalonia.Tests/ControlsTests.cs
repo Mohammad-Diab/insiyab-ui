@@ -124,8 +124,9 @@ public class ControlsTests
             Assert.Equal(teal, Assert.IsAssignableFrom<ILinearGradientBrush>(primary.Background).GradientStops[0].Color);
             var ghostBorder = ColorOf(ghost.BorderBrush);
             Assert.Equal(teal, Color.FromRgb(ghostBorder.R, ghostBorder.G, ghostBorder.B));
-            Assert.Equal(teal, Assert.IsAssignableFrom<ILinearGradientBrush>(Part<Border>(check, "CheckFill").Background).GradientStops[0].Color);
-            Assert.Equal(teal, Assert.IsAssignableFrom<ILinearGradientBrush>(Part<Border>(toggle, "SwitchKnobBounds").Background).GradientStops[0].Color);
+            var mid = global::Insiyab.Avalonia.Brand.BrandDerivation.Shift(teal, global::Insiyab.Avalonia.Brand.BrandDerivation.MidShiftLight);
+            Assert.Equal(mid, ColorOf(Part<Border>(check, "CheckFill").Background));
+            Assert.Equal(mid, ColorOf(Part<Border>(toggle, "SwitchKnobBounds").Background));
         }
         finally
         {

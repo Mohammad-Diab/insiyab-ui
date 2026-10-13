@@ -137,7 +137,7 @@ html[dir="ltr"] .ins-page-title {
 .ins-tab-flight {
   block-size: 3px;
   border-radius: var(--ins-r-pill);
-  background: linear-gradient(90deg, var(--ins-primary), var(--ins-primary-dark));
+  background: var(--ins-primary-mid);
   box-shadow: 0 0 10px rgba(var(--ins-primary-rgb), .45), 0 1px 3px rgba(var(--ins-primary-rgb), .35);
 }
 .ins-tablist--line > .ins-tab::after {
@@ -329,7 +329,7 @@ html[dir="ltr"] .ins-page-title {
   inset-block-end: .25rem;
   block-size: 2px;
   border-radius: var(--ins-r-pill);
-  background: var(--ins-tone-brand-soft);
+  background: var(--ins-primary-mid);
   transform: scaleX(0);
   transition: transform var(--ins-t-pop) var(--ins-ease);
 }
@@ -637,13 +637,13 @@ html[dir="ltr"] .ins-page-title {
 }
 .ins-steps-item.is-done::before {
   border-color: transparent;
-  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
-  color: var(--ins-on-primary);
+  background: var(--ins-primary-mid);
+  color: var(--ins-on-primary-mid);
 }
-.ins-steps-item.is-done + .ins-steps-item::after { background: var(--ins-tone-brand-soft); }
+.ins-steps-item.is-done + .ins-steps-item::after { background: var(--ins-primary-mid); }
 .ins-steps-item[aria-current="step"] { color: var(--ins-tone-brand); }
 .ins-steps-item[aria-current="step"]::before {
-  border-color: var(--ins-tone-brand-soft);
+  border-color: var(--ins-primary-mid);
   color: var(--ins-tone-brand);
   box-shadow: var(--ins-glow-ring);
 }
@@ -662,7 +662,7 @@ html[dir="ltr"] .ins-page-title {
   transition: background var(--ins-t-pop) var(--ins-ease), transform var(--ins-t-pop) var(--ins-ease);
 }
 .ins-steps--dots .ins-steps-item + .ins-steps-item::after { content: none; }
-.ins-steps--dots .ins-steps-item:is(.is-done, [aria-current="step"])::before { background: var(--ins-tone-brand-soft); box-shadow: none; }
+.ins-steps--dots .ins-steps-item:is(.is-done, [aria-current="step"])::before { background: var(--ins-primary-mid); box-shadow: none; }
 .ins-steps--dots .ins-steps-item[aria-current="step"]::before { transform: scale(1.5); }
 .ins-steps--dots .ins-steps-label {
   position: absolute;
@@ -719,7 +719,7 @@ html[dir="ltr"] .ins-page-title {
   cursor: pointer;
 }
 .ins-steps--grid .ins-steps-label:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
-.ins-steps--grid .ins-steps-item:not([aria-current="step"]):hover::before { border-color: var(--ins-tone-brand-soft); }
+.ins-steps--grid .ins-steps-item:not([aria-current="step"]):hover::before { border-color: var(--ins-primary-mid); }
 .ins-steps--grid .ins-steps-item.is-flagged .ins-steps-label::after { inset-inline-start: auto; inset-inline-end: -.1875rem; inset-block-start: -.1875rem; }
 /* On a phone four step names do not fit under four circles. The current one keeps
    its name; the rest keep their numbers, and their names stay for screen readers. */

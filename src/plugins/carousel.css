@@ -115,4 +115,4 @@
   transition: inline-size var(--ins-t-pop) var(--ins-ease), background var(--ins-t-pop) var(--ins-ease);
 }
 .ins-carousel-dot:hover::before { background: var(--ins-text-3); }
-.ins-carousel-dot[aria-current="true"]::before { inline-size: 1.25rem; background: var(--ins-tone-brand-soft); }
+.ins-carousel-dot[aria-current="true"]::before { inline-size: 1.25rem; background: var(--ins-primary-mid); }

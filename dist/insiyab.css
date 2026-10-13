@@ -182,21 +182,22 @@
      and nothing else we set. Without it a dark page keeps light scrollbars. */
   color-scheme: light;
 
-  /* Brand. The default is a mulberry, which is what the reference screenshots in
-     reference/ are shot in — keeping it makes a side-by-side comparison during
-     extraction meaningful. Change it in one line and the rest retunes. */
-  --ins-primary: #9B2C5E;
-  --ins-primary-dark: #691E40;
-  --ins-primary-darker: #46142A;
-  --ins-primary-rgb: 155, 44, 94;
-  --ins-grad-rgb: 105, 30, 64;
-  --ins-accent-rgb: 105, 30, 64;
+  /* Brand. The default is a deep violet; change it in one line and the rest retunes. */
+  --ins-primary: #4C1D95;
+  --ins-primary-dark: #341465;
+  --ins-primary-darker: #220D43;
+  --ins-primary-rgb: 76, 29, 149;
+  --ins-grad-rgb: 52, 20, 101;
+  --ins-accent-rgb: 52, 20, 101;
   /* Derived, not picked: wash-1 is the primary at 93% toward white, wash-2 the
      gradient end-stop at 94%. These are the values `Insiyab.brand()` computes, so
      the stylesheet's default ground and a JS-set one are the same ground. */
-  --ins-wash-1: #f8f0f4;
-  --ins-wash-2: #f6f2f4;
+  --ins-wash-1: #f2eff8;
+  --ins-wash-2: #f3f1f6;
   --ins-on-primary: #ffffff;
+  /* The middle shade small brand accents take, and its label: brand() derives both, these are its values for the default. */
+  --ins-primary-mid: #704aaa;
+  --ins-on-primary-mid: #ffffff;
 
   /* Glass alpha ladder: the more "on top" a surface is, the more opaque. */
   --ins-glass: rgba(255, 255, 255, .58);
@@ -567,11 +568,13 @@ html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }
      injected the per-theme value into the same namespace; a stylesheet that has to
      stand on its own does need it, and this is the kind of gap that only shows up
      in the theme nobody screenshotted. */
-  --ins-primary-darker: #d2a0b7;
+  --ins-primary-darker: #ae99cf;
+  --ins-primary-mid: #9d83c5;
+  --ins-on-primary-mid: #111111;
 
   /* The page ground. The source sheet carried these on the tenant's payload rather
      than in the sheet, so a stylesheet-only page had no dark ground at all — it
-     kept the light washes and every panel floated on pink. Declared here so the
+     kept the light washes and every panel floated on a pale tint. Declared here so the
      dark theme stands up from the CSS alone. */
   --ins-wash-1: #0f1115;
   --ins-wash-2: #12141a;
@@ -645,7 +648,9 @@ html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }
     --ins-surface-2: rgba(255, 255, 255, .03);
     --ins-surface-hover: rgba(255, 255, 255, .09);
     --ins-focus-ring: 0 0 0 3px rgba(var(--ins-primary-rgb), .60);
-    --ins-primary-darker: #d2a0b7;
+    --ins-primary-darker: #ae99cf;
+    --ins-primary-mid: #9d83c5;
+    --ins-on-primary-mid: #111111;
     --ins-wash-1: #0f1115;
     --ins-wash-2: #12141a;
     --ins-orb-1: rgba(var(--ins-primary-rgb), .30);
@@ -1160,7 +1165,7 @@ html[data-ins-gutter]:has(dialog:modal) { scrollbar-gutter: stable; }
   inset-inline-start: 0;
   inline-size: 3px;
   border-radius: var(--ins-r-pill);
-  background: var(--ins-tone-brand-soft);
+  background: var(--ins-primary-mid);
   transform: scaleY(0);
   transform-origin: center;
   transition: transform var(--ins-t-pop) var(--ins-ease);
@@ -1201,7 +1206,7 @@ html[data-ins-gutter]:has(dialog:modal) { scrollbar-gutter: stable; }
   position: absolute;
   z-index: 1;
   border-radius: var(--ins-r-pill);
-  background: var(--ins-tone-brand-soft);
+  background: var(--ins-primary-mid);
   pointer-events: none;
 }
 .ins-shell-moving .ins-shell-link::before,
@@ -1219,6 +1224,13 @@ html[data-ins-gutter]:has(dialog:modal) { scrollbar-gutter: stable; }
   font-weight: 700;
   text-align: center;
 }
+
+/* The filter field from `data-ins-filter`, at the top of the links; what it hides goes with no motion. */
+.ins-shell-filter { flex-shrink: 0; margin: 0 .25rem .25rem; }
+.ins-shell-filter > .ins-search-ico { inline-size: .875rem; block-size: .875rem; inset-inline-start: .625rem; }
+.ins-shell-filter > .ins-input { padding-inline-start: 2rem; }
+.ins-shell-side .is-filtered-out { display: none !important; }
+.ins-shell-filter-empty { margin: 0; padding: .5rem .875rem; font-size: .8125rem; color: var(--ins-text-3); }
 
 /* The trailing nav block, divided from the rest. Sign-out is not a destination,
    and putting it in the same undifferentiated run as the twenty that are is how
@@ -1921,7 +1933,7 @@ html[data-ins-scrollbar="lead"]:has(.ins-topbar) > body {
   transition: background var(--ins-t-pop) var(--ins-ease), block-size var(--ins-t-pop) var(--ins-ease), inline-size var(--ins-t-pop) var(--ins-ease);
 }
 .ins-split--v > .ins-split-handle::before { inline-size: 2.5rem; block-size: 4px; }
-.ins-split-handle:is(:hover, :focus-visible, .is-dragging)::before { background: var(--ins-tone-brand-soft); block-size: 4rem; }
+.ins-split-handle:is(:hover, :focus-visible, .is-dragging)::before { background: var(--ins-primary-mid); block-size: 4rem; }
 .ins-split--v > .ins-split-handle:is(:hover, :focus-visible, .is-dragging)::before { inline-size: 4rem; block-size: 4px; }
 .ins-split-handle:focus-visible::before { box-shadow: var(--ins-focus-ring); }
 /* While dragging, the text under the pointer is not being selected. */
@@ -2078,7 +2090,7 @@ html[dir="ltr"] .ins-prose { line-height: 1.65; }
 .ins-prose blockquote {
   margin-inline: 0;
   padding: .75em 1.25em;
-  border-inline-start: 3px solid var(--ins-tone-brand-soft);
+  border-inline-start: 3px solid var(--ins-primary-mid);
   border-start-end-radius: var(--ins-r-sm);
   border-end-end-radius: var(--ins-r-sm);
   background: var(--ins-tone-brand-bg);
@@ -2290,7 +2302,7 @@ html[dir="ltr"] .ins-dl dd.ins-num { text-align: left; }
   padding-inline: 1.125rem 1rem;
   border-radius: var(--ins-r-md);
   border: 1px solid var(--ins-line);
-  border-inline-start: 3px solid var(--ins-tone-brand-soft);
+  border-inline-start: 3px solid var(--ins-primary-mid);
   background: var(--ins-glass-inner);
 }
 .ins-quote > blockquote { margin: 0; font-size: var(--ins-fs-md); line-height: 1.9; color: var(--ins-text-1); }
@@ -2342,7 +2354,7 @@ html[dir="ltr"] .ins-dl dd.ins-num { text-align: left; }
   text-decoration: none;
   transition: background var(--ins-t-pop) var(--ins-ease), color var(--ins-t-pop) var(--ins-ease);
 }
-.ins-ref:hover, .ins-ref.is-lit { background: var(--ins-tone-brand-soft); color: var(--ins-on-primary); }
+.ins-ref:hover, .ins-ref.is-lit { background: var(--ins-primary-mid); color: var(--ins-on-primary-mid); }
 .ins-ref:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
 :root[data-ins-theme="dark"] .ins-ref:not(:hover, .is-lit) { color: var(--ins-text-1); }
 /* The rule above, for an OS set to dark — emitted by build.mjs. */
@@ -2398,7 +2410,7 @@ html[dir="ltr"] .ins-dl dd.ins-num { text-align: left; }
 .ins-note--ok    { --ins-note-bar: var(--ins-tone-ok); }
 .ins-note--bad   { --ins-note-bar: var(--ins-tone-bad); }
 .ins-note--info  { --ins-note-bar: var(--ins-tone-info); }
-.ins-note--brand { --ins-note-bar: var(--ins-tone-brand-soft); }
+.ins-note--brand { --ins-note-bar: var(--ins-primary-mid); }
 .ins-note.is-lit { background: var(--ins-glass-strong); box-shadow: 0 0 0 2px var(--ins-note-bar), var(--ins-sh-md); }
 
 /* --------------------------------------------------------------- icon */
@@ -3174,7 +3186,7 @@ html .ins-panel .ins-table tbody td:is(:first-child, :last-child) { border-left:
   inset-block: .5rem;
   inline-size: 3px;
   border-radius: var(--ins-r-pill);
-  background: var(--ins-tone-brand-soft);
+  background: var(--ins-primary-mid);
   transform: scaleY(0);
   transition: transform var(--ins-t-pop) var(--ins-ease);
 }
@@ -3653,18 +3665,29 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
 /* A button that stays down: bold in a toolbar, a filter that is on, "show
    archived". The state is `aria-pressed`, which is what a screen reader announces,
    so the appearance keys on the same attribute and the two cannot disagree;
-   `data-ins-toggle` flips it on a click.
+   `data-ins-toggle` flips it on a click. */
+/* Off, any toggle is the neutral grey button; on, it takes its own style's colour (the brand for secondary, plain and bare). */
+.ins-btn[aria-pressed="false"]:not(.ins-btn--bare) {
+  background: var(--ins-ctl-bg);
+  border-color: var(--ins-ctl-bd);
+  color: var(--ins-text-1);
+  box-shadow: var(--ins-sh-subtle), var(--ins-bevel-dim);
+}
+.ins-btn[aria-pressed="false"]:not(.ins-btn--bare):hover:not(:disabled),
+.ins-btn[aria-pressed="false"]:not(.ins-btn--bare):focus-visible { background: var(--ins-ctl-bg-hover); border-color: var(--ins-ctl-bd); color: var(--ins-text-1); }
+.ins-btn[aria-pressed="false"]:not(.ins-btn--bare):focus-visible { box-shadow: var(--ins-focus-ring); }
+.ins-btn[aria-pressed="false"]:not(.ins-btn--bare):active:not(:disabled) { background: var(--ins-ctl-bd); }
+.ins-btn[aria-pressed="false"]:not(.ins-btn--bare)::before { background: var(--ins-shimmer-dark); }
 
-   Pressed reads as *pressed in* — the brand tint and an inset shade — rather than
-   as filled. A filled brand face is what the primary button means, and a row of
-   three pressed toggles would otherwise be three primary buttons. */
-.ins-btn[aria-pressed="true"]:not(.ins-btn--primary),
-.ins-btn[aria-pressed="true"]:not(.ins-btn--primary):hover:not(:disabled) {
+.ins-btn[aria-pressed="true"]:not(.ins-btn--primary, .ins-btn--success, .ins-btn--danger, .ins-btn--warning, .ins-btn--info, .ins-btn--ghost, .ins-btn--ghost-danger, .ins-btn--ghost-success, .ins-btn--ghost-warning, .ins-btn--ghost-info, .ins-btn--bare),
+.ins-btn[aria-pressed="true"]:not(.ins-btn--primary, .ins-btn--success, .ins-btn--danger, .ins-btn--warning, .ins-btn--info, .ins-btn--ghost, .ins-btn--ghost-danger, .ins-btn--ghost-success, .ins-btn--ghost-warning, .ins-btn--ghost-info, .ins-btn--bare):hover:not(:disabled) {
   background: rgba(var(--ins-primary-rgb), .14);
   border-color: rgba(var(--ins-primary-rgb), .40);
   color: var(--ins-primary-darker);
   box-shadow: inset 0 1px 3px rgba(15, 23, 42, .12);
 }
+.ins-btn--bare[aria-pressed="true"],
+.ins-btn--bare[aria-pressed="true"]:hover:not(:disabled) { color: var(--ins-primary-darker); }
 
 /* --------------------------------------------------------------- group */
 /* Buttons joined into one object — a split button, a pager, a set of alignment
@@ -3943,7 +3966,7 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  background: var(--ins-primary-mid);
   opacity: 0;
   transition: opacity var(--ins-t-pop) var(--ins-ease);
 }
@@ -3958,7 +3981,7 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
   inset-inline-start: 4px;
   inline-size: .3125rem;
   block-size: .625rem;
-  border: solid var(--ins-on-primary);
+  border: solid var(--ins-on-primary-mid);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg) scale(0);
   transform-origin: center;
@@ -3976,7 +3999,7 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
   inline-size: .4375rem;
   block-size: .4375rem;
   border-radius: 50%;
-  background: var(--ins-on-primary);
+  background: var(--ins-on-primary-mid);
   transform: scale(0);
   transition: transform var(--ins-t-pop) var(--ins-ease);
 }
@@ -4041,7 +4064,7 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
   transition: transform .32s var(--ins-ease-spring);
 }
 .ins-switch > input:checked + .ins-switch-track {
-  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  background: var(--ins-primary-mid);
   border-color: transparent;
   box-shadow: var(--ins-glow-ring), inset 0 1px 0 rgba(255, 255, 255, .20);
 }
@@ -4379,8 +4402,7 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
       :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *),
 .ins-input-group:is(:has(:is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid, .ins-input--bad, .ins-select--bad)),
                     .ins-field:not(form[data-ins-validate] *):has(> .ins-error:not([hidden], :empty)) *) {
-  border-color: var(--ins-tone-bad-bd);
-  background: var(--ins-tone-bad-bg);
+  border-color: color-mix(in srgb, var(--ins-tone-bad) 55%, transparent);
 }
 :is(:is(.ins-input, .ins-select, .ins-textarea):is([aria-invalid="true"], :user-invalid, [data-ins-reported]:invalid),
     .ins-input--bad, .ins-select--bad,
@@ -4399,7 +4421,6 @@ html[dir="ltr"] .ins-table-wrap--pin .ins-table :is(th, td):first-child { positi
     .ins-field:has(> .ins-success:not(:empty)) :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *),
 .ins-input-group:is(.ins-field:has(> .ins-success:not(:empty)) *) {
   border-color: color-mix(in srgb, var(--ins-tone-ok) 55%, transparent);
-  background: var(--ins-tone-ok-bg);
 }
 :is(.ins-input--ok,
     .ins-field:has(> .ins-success:not(:empty)) :is(.ins-input, .ins-select, .ins-textarea)):not(.ins-input-group > *):focus,
@@ -4484,7 +4505,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
   block-size: 2px;
   border: 0;
   border-radius: 1px;
-  background: var(--ins-on-primary);
+  background: var(--ins-on-primary-mid);
   transform: none;
 }
 
@@ -4513,11 +4534,11 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-range::-webkit-slider-runnable-track {
   block-size: .375rem;
   border-radius: var(--ins-r-pill);
-  background: linear-gradient(to right, var(--ins-tone-brand-soft) var(--ins-fill), var(--ins-ctl-bg-hover) var(--ins-fill));
+  background: linear-gradient(to right, var(--ins-primary-mid) var(--ins-fill), var(--ins-ctl-bg-hover) var(--ins-fill));
   box-shadow: inset 0 1px 2px rgba(15, 23, 42, .08);
 }
 [dir="rtl"] .ins-range::-webkit-slider-runnable-track {
-  background: linear-gradient(to left, var(--ins-tone-brand-soft) var(--ins-fill), var(--ins-ctl-bg-hover) var(--ins-fill));
+  background: linear-gradient(to left, var(--ins-primary-mid) var(--ins-fill), var(--ins-ctl-bg-hover) var(--ins-fill));
 }
 .ins-range::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -4541,7 +4562,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-range::-moz-range-progress {
   block-size: .375rem;
   border-radius: var(--ins-r-pill);
-  background: var(--ins-tone-brand-soft);
+  background: var(--ins-primary-mid);
 }
 .ins-range::-moz-range-thumb {
   inline-size: 1.25rem;
@@ -4690,7 +4711,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 }
 .ins-tile:has(> input[type="checkbox"])::before { border-radius: var(--ins-r-xs); }
 .ins-tile::after {
-  background: var(--ins-on-primary);
+  background: var(--ins-on-primary-mid);
   -webkit-mask: var(--ins-tile-mark) center / .75rem no-repeat;
           mask: var(--ins-tile-mark) center / .75rem no-repeat;
   transform: scale(0);
@@ -4700,13 +4721,13 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 .ins-tile-desc { font-size: var(--ins-fs-xs); color: var(--ins-label); line-height: 1.6; }
 .ins-tile:hover { border-color: rgba(var(--ins-primary-rgb), .35); background: var(--ins-ctl-bg-hover); }
 .ins-tile:has(> input:checked) {
-  border-color: var(--ins-tone-brand-soft);
+  border-color: var(--ins-primary-mid);
   background: var(--ins-tone-brand-bg);
-  box-shadow: inset 0 0 0 1px var(--ins-tone-brand-soft);
+  box-shadow: inset 0 0 0 1px var(--ins-primary-mid);
 }
 .ins-tile:has(> input:checked)::before {
   border-color: transparent;
-  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
+  background: var(--ins-primary-mid);
 }
 .ins-tile:has(> input:checked)::after { transform: scale(1); }
 .ins-tile:has(> input:checked) .ins-tile-title { color: var(--ins-tone-brand); }
@@ -5013,9 +5034,9 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
 }
 .ins-matrix-cell:hover { border-color: rgba(var(--ins-primary-rgb), .35); }
 .ins-matrix-cell:has(> input:checked) {
-  border-color: var(--ins-tone-brand-soft);
+  border-color: var(--ins-primary-mid);
   background: var(--ins-tone-brand-bg);
-  box-shadow: inset 0 0 0 1px var(--ins-tone-brand-soft);
+  box-shadow: inset 0 0 0 1px var(--ins-primary-mid);
   color: var(--ins-text-1);
 }
 .ins-matrix-cell:has(> input:focus-visible) { outline: 2px solid var(--ins-tone-brand-soft); outline-offset: 2px; }
@@ -5029,7 +5050,7 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
-.ins-matrix-cell:has(> input:checked) .ins-matrix-points { background: var(--ins-tone-brand-soft); color: var(--ins-on-primary); }
+.ins-matrix-cell:has(> input:checked) .ins-matrix-points { background: var(--ins-primary-mid); color: var(--ins-on-primary-mid); }
 
 /* ==========================================================================
    Insiyab · pill, badge, money, avatar
@@ -5556,8 +5577,8 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
    exception: `build.mjs` names the two animations that may loop, and this is one of
    them wearing the brand tint. */
 .ins-progress {
-  --ins-progress-a: var(--ins-primary);
-  --ins-progress-b: var(--ins-primary-dark);
+  --ins-progress-a: var(--ins-primary-mid);
+  --ins-progress-b: var(--ins-primary-mid);
   -webkit-appearance: none;
           appearance: none;
   display: block;
@@ -5622,7 +5643,7 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: conic-gradient(var(--ins-tone-brand-soft) calc(var(--ins-value) * 1%), var(--ins-ctl-bg-hover) 0);
+  background: conic-gradient(var(--ins-primary-mid) calc(var(--ins-value) * 1%), var(--ins-ctl-bg-hover) 0);
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - .375rem), #000 calc(100% - .375rem + .5px));
           mask: radial-gradient(farthest-side, transparent calc(100% - .375rem), #000 calc(100% - .375rem + .5px));
 }
@@ -5637,7 +5658,7 @@ html[dir] .ins-matrix--cards tbody tr > th:first-child { border-radius: var(--in
   inline-size: 32px;
   block-size: 32px;
   border: 3px solid rgba(var(--ins-primary-rgb), .18);
-  border-block-start-color: var(--ins-tone-brand-soft);
+  border-block-start-color: var(--ins-primary-mid);
   border-radius: 50%;
   animation: ins-spin .7s linear infinite;
 }
@@ -6624,7 +6645,7 @@ html[dir="ltr"] .ins-page-title {
 .ins-tab-flight {
   block-size: 3px;
   border-radius: var(--ins-r-pill);
-  background: linear-gradient(90deg, var(--ins-primary), var(--ins-primary-dark));
+  background: var(--ins-primary-mid);
   box-shadow: 0 0 10px rgba(var(--ins-primary-rgb), .45), 0 1px 3px rgba(var(--ins-primary-rgb), .35);
 }
 .ins-tablist--line > .ins-tab::after {
@@ -6816,7 +6837,7 @@ html[dir="ltr"] .ins-page-title {
   inset-block-end: .25rem;
   block-size: 2px;
   border-radius: var(--ins-r-pill);
-  background: var(--ins-tone-brand-soft);
+  background: var(--ins-primary-mid);
   transform: scaleX(0);
   transition: transform var(--ins-t-pop) var(--ins-ease);
 }
@@ -7124,13 +7145,13 @@ html[dir="ltr"] .ins-page-title {
 }
 .ins-steps-item.is-done::before {
   border-color: transparent;
-  background: linear-gradient(135deg, var(--ins-primary), var(--ins-primary-dark));
-  color: var(--ins-on-primary);
+  background: var(--ins-primary-mid);
+  color: var(--ins-on-primary-mid);
 }
-.ins-steps-item.is-done + .ins-steps-item::after { background: var(--ins-tone-brand-soft); }
+.ins-steps-item.is-done + .ins-steps-item::after { background: var(--ins-primary-mid); }
 .ins-steps-item[aria-current="step"] { color: var(--ins-tone-brand); }
 .ins-steps-item[aria-current="step"]::before {
-  border-color: var(--ins-tone-brand-soft);
+  border-color: var(--ins-primary-mid);
   color: var(--ins-tone-brand);
   box-shadow: var(--ins-glow-ring);
 }
@@ -7149,7 +7170,7 @@ html[dir="ltr"] .ins-page-title {
   transition: background var(--ins-t-pop) var(--ins-ease), transform var(--ins-t-pop) var(--ins-ease);
 }
 .ins-steps--dots .ins-steps-item + .ins-steps-item::after { content: none; }
-.ins-steps--dots .ins-steps-item:is(.is-done, [aria-current="step"])::before { background: var(--ins-tone-brand-soft); box-shadow: none; }
+.ins-steps--dots .ins-steps-item:is(.is-done, [aria-current="step"])::before { background: var(--ins-primary-mid); box-shadow: none; }
 .ins-steps--dots .ins-steps-item[aria-current="step"]::before { transform: scale(1.5); }
 .ins-steps--dots .ins-steps-label {
   position: absolute;
@@ -7206,7 +7227,7 @@ html[dir="ltr"] .ins-page-title {
   cursor: pointer;
 }
 .ins-steps--grid .ins-steps-label:focus-visible { outline: 0; box-shadow: var(--ins-focus-ring); }
-.ins-steps--grid .ins-steps-item:not([aria-current="step"]):hover::before { border-color: var(--ins-tone-brand-soft); }
+.ins-steps--grid .ins-steps-item:not([aria-current="step"]):hover::before { border-color: var(--ins-primary-mid); }
 .ins-steps--grid .ins-steps-item.is-flagged .ins-steps-label::after { inset-inline-start: auto; inset-inline-end: -.1875rem; inset-block-start: -.1875rem; }
 /* On a phone four step names do not fit under four circles. The current one keeps
    its name; the rest keep their numbers, and their names stay for screen readers. */
@@ -7441,10 +7462,20 @@ html[dir="ltr"] .ins-page-title {
        watched, and it crosses the whole viewport rather than a control. */
     animation: ins-theme-sweep .6s var(--ins-ease) forwards;
   }
+  /* Going dark, the light switches off: the old light picture stays on top, inside a circle that closes from the screen's edges onto the switch. */
+  :root.ins-theme-sweep--close::view-transition-new(root) { z-index: 1; animation: none; }
+  :root.ins-theme-sweep--close::view-transition-old(root) {
+    z-index: 2;
+    animation: ins-theme-sweep-close .6s var(--ins-ease) forwards;
+  }
 }
 @keyframes ins-theme-sweep {
   from { clip-path: circle(0 at var(--ins-sweep-x) var(--ins-sweep-y)); }
   to   { clip-path: circle(var(--ins-sweep-r) at var(--ins-sweep-x) var(--ins-sweep-y)); }
+}
+@keyframes ins-theme-sweep-close {
+  from { clip-path: circle(var(--ins-sweep-r) at var(--ins-sweep-x) var(--ins-sweep-y)); }
+  to   { clip-path: circle(0 at var(--ins-sweep-x) var(--ins-sweep-y)); }
 }
 
 /* --------------------------------------------------------------- utilities */
@@ -7916,7 +7947,8 @@ html[dir="ltr"] .ins-page-title {
 [data-ins-fx="off"] .ins-skel { animation: none; background: var(--ins-skel-base); }
 /* The script already skips the transition with effects off; this covers a page that
    turns them off while one is running. */
-[data-ins-fx="off"].ins-theme-sweep::view-transition-new(root) { animation: none; }
+[data-ins-fx="off"].ins-theme-sweep::view-transition-new(root),
+[data-ins-fx="off"].ins-theme-sweep::view-transition-old(root) { animation: none; }
 /* The spinner keeps spinning -- it is the one thing whose animation IS its meaning.
    It loses only the fade it arrives on. */
 [data-ins-fx="off"] .ins-spinner { animation: ins-spin .7s linear infinite; }

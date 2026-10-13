@@ -11,7 +11,7 @@ public static class SurfacesPlay
         <Border Classes="glass-inner" Padding="20"><TextBlock Text="glass-inner" /></Border>
         """;
 
-    public const string Radii =
+    public const string RadiiExample =
         """
         <Border Classes="radius" CornerRadius="{DynamicResource InsRXs}"><TextBlock Text="xs · 7" /></Border>
         <Border Classes="radius" CornerRadius="{DynamicResource InsRSm}"><TextBlock Text="sm · 10" /></Border>

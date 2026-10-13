@@ -125,12 +125,14 @@
     <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
   </Style>
 
-  <!-- A listing: the code from the left in either direction, a copy button at its start corner -->
+  <!-- A listing: the code from the left in either direction, a copy button at its start corner; a whole box on its own, the foot of an example or a playground under one -->
   <Style Selector="Border.play-listing">
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="BorderBrush" Value="{DynamicResource PlayViewBd}" />
     <Setter Property="Background" Value="{DynamicResource PlayCodeBg}" />
     <Setter Property="CornerRadius" Value="22" />
+  </Style>
+  <Style Selector="Border.play-listing.attached">
     <Setter Property="BorderThickness" Value="1,0,1,1" />
     <Setter Property="CornerRadius" Value="0,0,22,22" />
   </Style>

@@ -459,9 +459,26 @@ public class PluginsTests
         Capture(window, $"file-error-{theme.ToLowerInvariant()}");
     }
 
+    // A failed file's row takes the same wash as the zone in error: the light red wash in light, 8% of the light red in dark.
     [AvaloniaTheory]
     [InlineData("Light", "#1AEF4444")]
     [InlineData("Dark", "#14FCA5A5")]
+    public void File_failed_row_keeps_a_clean_wash(string theme, string fill)
+    {
+        var upload = Uploader(u => u.Upload = true);
+        Show(Page(upload), FlowDirection.RightToLeft, theme == "Dark" ? ThemeVariant.Dark : ThemeVariant.Light, 480, 240);
+        var one = Entry("a.pdf");
+        upload.AddFiles([one]);
+        upload.Fail(one, "الخادم مشغول");
+        Settle();
+        var row = RowOf(upload, one);
+        Assert.Contains(":failed", row.Classes);
+        var want = Color.Parse(fill);
+        var clock = Stopwatch.StartNew();
+        while (clock.ElapsedMilliseconds < 2000 && !(row.Background is ISolidColorBrush b && b.Color == want)) Settle(16);
+        Assert.Equal(want, ColorOf(row.Background));
+        AssertBrush(row, "InsToneBadBd", () => row.BorderBrush);
+    }
 
     [AvaloniaFact]
     public void File_limits_report_what_was_left_out()
@@ -821,7 +838,25 @@ public class PluginsTests
         Assert.Contains("current", dots[0].Classes);
     }
 
+    // As on the web, the dots run with the page: the first slide's dot sits at the start edge, on the right in Arabic.
     [AvaloniaTheory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void Carousel_dots_start_at_the_start_edge(bool rtl)
+    {
+        var carousel = Make(4);
+        var window = ShowCarousel(carousel, rtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);
+        Settle(150);
+        var dots = carousel.GetVisualDescendants().OfType<Button>().Where(b => b.Classes.Contains("carousel-dot")).ToList();
+        double X(Button dot) => dot.TranslatePoint(new Point(dot.Bounds.Width / 2, 0), window)!.Value.X;
+        Assert.Contains("current", dots[0].Classes);
+        Assert.True(rtl ? X(dots[0]) > X(dots[3]) : X(dots[0]) < X(dots[3]), $"{X(dots[0])} vs {X(dots[3])}");
+        carousel.SelectedIndex = 3;
+        Settle(300);
+        var bar = (Border)dots[3].GetVisualDescendants().OfType<Border>().First(b => b.Name == "PART_Dot");
+        Assert.True(rtl ? X(dots[3]) < X(dots[0]) : X(dots[3]) > X(dots[0]));
+        Assert.Equal(20, bar.Width);
+    }
 
     [AvaloniaTheory]
     [InlineData(true)]

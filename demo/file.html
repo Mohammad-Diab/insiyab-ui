@@ -107,7 +107,7 @@
 <div class="ins-shell">
 
   <!-- ============================================================ sidebar -->
-  <aside class="ins-shell-side" id="nav" aria-label="أقسام التوثيق">
+  <aside class="ins-shell-side" id="nav" aria-label="أقسام التوثيق" data-ins-filter="ابحث في الصفحات">
     <a class="ins-shell-brand" href="index.html">
       <span class="ins-shell-mark">ان</span>
       <span class="ins-shell-brand-text">
@@ -236,7 +236,7 @@
         <div class="ins-island ins-island--title">
           <div class="ins-shell-head"><h1 class="ins-shell-title">رفع الملفات</h1></div>
         </div>
-        <button class="ins-island ins-island--icon" data-ins-dialog="#site-search" aria-label="بحث في التوثيق" aria-keyshortcuts="Control+K /" data-ins-tip data-ins-tip-side="bottom">
+        <button class="ins-island ins-island--icon" data-ins-dialog="#site-search" aria-label="بحث في التوثيق" aria-keyshortcuts="Control+K" data-ins-tip data-ins-tip-side="bottom">
           <svg class="ico" aria-hidden="true"><use href="#i-search"/></svg>
         </button>
       </div>
@@ -252,10 +252,10 @@
           <div class="ins-pop-body ins-pop-body--card site-custom-body">
             <div class="ins-pop-label">لون الهوية</div>
             <div class="site-swatches">
+              <button class="site-swatch" data-brand="#4C1D95" style="--c:#4C1D95" aria-label="بنفسجي" data-ins-tip></button>
               <button class="site-swatch" data-brand="#0F766E" style="--c:#0F766E" aria-label="أخضر مزرق" data-ins-tip></button>
               <button class="site-swatch" data-brand="#1D4ED8" style="--c:#1D4ED8" aria-label="أزرق" data-ins-tip></button>
               <button class="site-swatch" data-brand="#9B2C5E" style="--c:#9B2C5E" aria-label="عنابي" data-ins-tip></button>
-              <button class="site-swatch" data-brand="#4C1D95" style="--c:#4C1D95" aria-label="بنفسجي" data-ins-tip></button>
               <button class="site-swatch" data-brand="#B45309" style="--c:#B45309" aria-label="كهرماني" data-ins-tip></button>
               <button class="site-swatch" data-brand="#C9A063" style="--c:#C9A063" aria-label="ذهبي فاتح" data-ins-tip></button>
             </div>
@@ -442,7 +442,7 @@ SitePlay.define({
 <!-- ============================================================== search -->
 <!-- The command palette plugin: every page from the sidebar, read from it when the
      palette opens (each link carries its English name as a keyword), and one action. -->
-<dialog class="ins-dialog ins-palette" id="site-search" data-ins-palette data-ins-palette-from=".ins-shell-side"
+<dialog class="ins-dialog ins-palette" id="site-search" data-ins-palette data-ins-palette-keys="mod+k" data-ins-palette-from=".ins-shell-side"
         data-ins-palette-placeholder="ابحث عن مكون: زر، جدول، مربع حوار… أو بالإنجليزية" aria-label="بحث في التوثيق">
   <div data-ins-palette-group="إجراءات">
     <button data-ins-theme-toggle data-keywords="dark light theme mode داكن فاتح"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg>تبديل الوضع الداكن</button>

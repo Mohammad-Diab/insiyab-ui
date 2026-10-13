@@ -4,7 +4,10 @@
              x:Class="Insiyab.Avalonia.Gallery.GalleryShell">
   <UserControl.Resources>
     <!-- The docs site's brand swatch: a 30px disc in a 2px surface rim, ringed in its own colour while chosen -->
+    <!-- The chosen swatch's mark: four arcs of its own colour on the diagonals, 2px clear of the swatch -->
+    <StreamGeometry x:Key="SiteSwatchArcs">M37.387,24.659 A18,18 0 0 1 24.659,37.387 M15.341,37.387 A18,18 0 0 1 2.613,24.659 M2.613,15.341 A18,18 0 0 1 15.341,2.613 M24.659,2.613 A18,18 0 0 1 37.387,15.341</StreamGeometry>
     <ControlTheme x:Key="SiteSwatch" TargetType="Button">
+      <Setter Property="ClipToBounds" Value="False" />
       <Setter Property="Width" Value="30" />
       <Setter Property="Height" Value="30" />
       <Setter Property="Cursor" Value="Hand" />
@@ -19,7 +22,8 @@
       <Setter Property="Template">
         <ControlTemplate>
           <Panel>
-            <Border Name="PART_Ring" Margin="-2" CornerRadius="17" BorderThickness="2" BorderBrush="{TemplateBinding Background}" Opacity="0" />
+            <Path Name="PART_Ring" Width="40" Height="40" Margin="-5" Stretch="None" Data="{StaticResource SiteSwatchArcs}"
+                  Stroke="{TemplateBinding Background}" StrokeThickness="2" StrokeLineCap="Round" Opacity="0" />
             <Border Name="PART_Face"
                     CornerRadius="15"
                     Background="{TemplateBinding Background}"
@@ -33,7 +37,7 @@
       <Style Selector="^:pointerover">
         <Setter Property="RenderTransform" Value="scale(1.12)" />
       </Style>
-      <Style Selector="^.on /template/ Border#PART_Ring">
+      <Style Selector="^.on /template/ Path#PART_Ring">
         <Setter Property="Opacity" Value="1" />
       </Style>
       <Style Selector="^:focus-visible /template/ Border#PART_Focus">

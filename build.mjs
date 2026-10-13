@@ -376,6 +376,26 @@ const bootBody = bootParts.join('\n').replace(/\/\*[\s\S]*?\*\//g, '').split(/\r
 const boot = banner + "(function (window, document) {\n  'use strict';\n" + bootBody +
   "\n  earlyPaint(false);\n  window.InsiyabBoot = { version: VERSION };\n}(window, document));\n";
 try { new vm.Script(boot, { filename: 'insiyab-boot.js' }); } catch (e) { fail(`insiyab-boot.js does not parse: ${e.message}`); }
+
+// The stylesheet's brand defaults are brand()'s own output for the default primary, so a changed shift in the script shows up here.
+await (async () => {
+  const stub = new Proxy(function () {}, { get: (t, k) => (k === Symbol.toPrimitive ? () => 0 : k === 'then' ? undefined : stub), apply: () => stub, construct: () => stub, set: () => true, has: () => true });
+  const context = vm.createContext({ window: stub, document: stub });
+  let derive;
+  try { vm.runInContext(bootBody + '\n;globalThis.__derive = derive;', context); derive = context.__derive; } catch (e) { fail(`brand defaults: the boot code does not run on its own: ${e.message}`); return; }
+  const tokensOf = async (file) => {
+    const text = (await readFile(join(SRC_CSS, file), 'utf8')).replace(/\/\*[\s\S]*?\*\//g, '');
+    return Object.fromEntries([...text.matchAll(/--ins-([a-z0-9-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()]));
+  };
+  const light = await tokensOf('02-tokens.css');
+  const dark = { ...light, ...(await tokensOf('03-tokens-dark.css')) };
+  for (const [theme, set] of [['light', light], ['dark', dark]]) {
+    const want = derive(set.primary, theme);
+    for (const [name, value] of Object.entries(want)) {
+      if ((set[name] || '').toLowerCase() !== String(value).toLowerCase()) fail(`brand defaults: --ins-${name} on ${theme} is ${set[name] || 'missing'}, brand() derives ${value} from ${set.primary}.`);
+    }
+  }
+})();
 const min = banner + minify(css);
 
 /* Plugins: one file per plugin in src/plugins/, shipped beside the core as

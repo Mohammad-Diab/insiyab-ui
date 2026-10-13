@@ -43,7 +43,7 @@ public static class PickersPlay
         </UniformGrid>
         """;
 
-    public const string Native =
+    public const string NativeExample =
         """
         <CalendarDatePicker SelectedDate="2026-09-30" Width="300" />
         <DatePicker />

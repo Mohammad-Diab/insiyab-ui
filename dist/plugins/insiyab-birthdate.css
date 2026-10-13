@@ -24,7 +24,7 @@
 .ins-birth-ph { font: 600 var(--ins-fs-md)/1 var(--ins-font-body); letter-spacing: 0; color: var(--ins-text-3); }
 .ins-birth-dots { position: absolute; inset-block-end: .3rem; inset-inline: 0; display: flex; justify-content: center; gap: .25rem; }
 .ins-birth-dots i { inline-size: .3rem; block-size: .3rem; border-radius: 50%; background: var(--ins-ctl-bd); transition: background var(--ins-t-pop) var(--ins-ease), transform var(--ins-t-pop) var(--ins-ease-spring); }
-.ins-birth-dots i.is-on { background: var(--ins-primary); transform: scale(1.15); }
+.ins-birth-dots i.is-on { background: var(--ins-primary-mid); transform: scale(1.15); }
 .ins-birth-cap { font-size: var(--ins-fs-xs); font-weight: 700; color: var(--ins-label); transition: opacity var(--ins-t-pop) var(--ins-ease); }
 .ins-birth-seg:not(.is-filled) .ins-birth-cap { opacity: 0; }
 .ins-birth-seg[data-part="m"].is-filled .ins-birth-cap { color: var(--ins-tone-brand); }

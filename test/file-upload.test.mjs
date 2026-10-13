@@ -175,6 +175,18 @@ for (const theme of ['light', 'dark']) {
 }
 await E(`Insiyab.theme('light'); document.getElementById('f-one').removeAttribute('aria-invalid'); 0`);
 
+// A failed file's row takes the zone's wash: the light red wash in light, 8% of the light red in dark.
+await E(`__up.length = 0; __pick('f-up', [['three.pdf', 100, 'application/pdf']]); 0`);
+await E(`Insiyab.file.fail(__up[0], 'الخادم مشغول'); 0`);
+for (const theme of ['light', 'dark']) {
+  await E(`Insiyab.theme(${JSON.stringify(theme)}); 0`);
+  await b.sleep(500);
+  const bg = await E(`(() => { const r = document.querySelector('#f-up ~ .ins-file-list .ins-file-item.is-failed'); return r ? getComputedStyle(r).backgroundColor : 'none'; })()`);
+  const want = await probe('backgroundColor', theme === 'light' ? 'var(--ins-tone-bad-bg)' : 'color-mix(in srgb, var(--ins-tone-bad) 8%, transparent)');
+  ok(`${theme}: a failed file's row has the same wash`, bg === want, `${bg} vs ${want}`);
+}
+await E(`Insiyab.theme('light'); 0`);
+
 ok('no console errors, warnings or exceptions', b.logs.length === 0, b.logs.join(' | '));
 await b.close();
 end();

@@ -7,6 +7,7 @@
 
       <!-- A page: transparent in a recessed track, the current one raised out of it like a segmented control's selection -->
       <ControlTheme x:Key="InsPage" TargetType="Button">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="MinWidth" Value="34" />
         <Setter Property="MinHeight" Value="34" />
         <Setter Property="Padding" Value="8,0" />
@@ -87,6 +88,7 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type ins:Pagination}" TargetType="ins:Pagination">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="Padding" Value="4" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />

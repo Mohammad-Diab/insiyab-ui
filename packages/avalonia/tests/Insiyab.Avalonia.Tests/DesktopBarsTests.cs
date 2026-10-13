@@ -3,7 +3,10 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Headless;
 using Avalonia.Headless.XUnit;
+using Avalonia.Automation;
 using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -27,7 +30,7 @@ public class ToolbarTests
     // Five commands with a separator, a toggle and a dropdown; the width decides what moves.
     private static Toolbar Bar(double width = double.NaN)
     {
-        var bar = new Toolbar { Width = width, HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left };
+        var bar = new Toolbar { Width = width, HorizontalAlignment = HorizontalAlignment.Left };
         bar.Items.Add(Cmd("جديد", "Ctrl+N"));
         bar.Items.Add(Cmd("فتح"));
         bar.Items.Add(new Separator());
@@ -104,7 +107,7 @@ public class ToolbarTests
         var bar = Bar();
         Toolbar.SetOverflow(bar.Items[1], ToolbarOverflow.Always);
         Show(new StackPanel { Children = { bar } });
-        Assert.Equal([bar.Items[1]], bar.OverflowItems);
+        Assert.Equal(new[] { bar.Items[1] }, bar.OverflowItems);
         Assert.True(bar.MoreButton!.IsVisible);
     }
 
@@ -136,7 +139,7 @@ public class ToolbarTests
         Show(new StackPanel { Children = { bar } });
         var entries = bar.MenuEntries();
         var items = entries.OfType<MenuItem>().ToList();
-        Assert.Equal(["جديد", "فتح", "مميّز", "مشاركة", "حذف"], items.Select(i => (string)i.Header!));
+        Assert.Equal(new[] { "جديد", "فتح", "مميّز", "مشاركة", "حذف" }, items.Select(i => (string)i.Header!));
         Assert.Single(entries.OfType<Separator>());
         Assert.Equal(MenuItemToggleType.CheckBox, items[2].ToggleType);
         Assert.Equal(2, items[3].Items.Count);
@@ -155,10 +158,10 @@ public class ToolbarTests
         var items = bar.MenuEntries().OfType<MenuItem>().ToList();
         Toolbar.Invoke(bar.Items[0]);
         Assert.Equal(1, clicks);
-        items[0].RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(MenuItem.ClickEvent));
+        items[0].RaiseEvent(new RoutedEventArgs(MenuItem.ClickEvent));
         Assert.Equal(2, clicks);
         var toggle = (ToolbarToggleButton)bar.Items[3];
-        items[2].RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(MenuItem.ClickEvent));
+        items[2].RaiseEvent(new RoutedEventArgs(MenuItem.ClickEvent));
         Assert.True(toggle.IsChecked);
     }
 
@@ -172,7 +175,7 @@ public class ToolbarTests
         original.Click += (_, _) => clicked = true;
         Show(new StackPanel { Children = { bar } });
         var share = bar.MenuEntries().OfType<MenuItem>().Single();
-        ((MenuItem)share.Items[1]!).RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(MenuItem.ClickEvent));
+        ((MenuItem)share.Items[1]!).RaiseEvent(new RoutedEventArgs(MenuItem.ClickEvent));
         Assert.True(clicked);
     }
 
@@ -189,7 +192,7 @@ public class ToolbarTests
         var entry = bar.MenuEntries().OfType<MenuItem>().Single();
         Assert.Equal(3, entry.Items.Count);
         Assert.Equal("تصدير", ((MenuItem)entry.Items[0]!).Header);
-        ((MenuItem)entry.Items[0]!).RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(MenuItem.ClickEvent));
+        ((MenuItem)entry.Items[0]!).RaiseEvent(new RoutedEventArgs(MenuItem.ClickEvent));
         Assert.Equal(1, clicks);
     }
 
@@ -254,9 +257,9 @@ public class ToolbarTests
         var bar = Shown(out _);
         var tip = Assert.IsType<StackPanel>(ToolTip.GetTip(bar.Items[0]));
         var texts = tip.Children.OfType<TextBlock>().Select(t => t.Text).ToList();
-        Assert.Equal(["جديد", "Ctrl+N"], texts);
+        Assert.Equal(new[] { "جديد", "Ctrl+N" }, texts);
         Assert.Equal("فتح", ToolTip.GetTip(bar.Items[1]));
-        Assert.Equal("جديد", Avalonia.Automation.AutomationProperties.GetName(bar.Items[0]));
+        Assert.Equal("جديد", AutomationProperties.GetName(bar.Items[0]));
     }
 
     [AvaloniaFact]
@@ -391,10 +394,44 @@ public class StatusBarTests
         Assert.True(shellBottom <= barTop + 0.5, $"the shell ends at {shellBottom}, the bar starts at {barTop}");
     }
 
+    // The start side cuts items past its end, yet a focus ring or glow keeps room above, below and at the start.
     [AvaloniaFact]
+    public void The_start_side_cuts_its_end_but_not_a_ring()
+    {
+        var bar = Bar(out var start, out _);
+        Show(new DockPanel { Children = { bar } });
+        var zone = Part<StatusBarZone>(bar, "PART_Start");
+        Assert.False(bar.ClipToBounds);
+        Assert.False(zone.ClipToBounds);
+        var clip = Assert.IsType<RectangleGeometry>(zone.Clip).Rect;
+        Assert.True(clip.Top <= -3 && clip.Bottom >= zone.Bounds.Height + 3 && clip.Left <= -3, clip.ToString());
+        Assert.Equal(zone.Bounds.Width, clip.Right, 1);
+    }
+
+    // Toasts live in the window's bottom end corner, so a status bar at the foot lifts them above it, and they drop back when it goes.
     [AvaloniaTheory]
     [InlineData("ltr")]
     [InlineData("rtl")]
+    public void Toasts_sit_above_the_bar(string dir)
+    {
+        var bar = Bar(out _, out _);
+        DockPanel.SetDock(bar, Dock.Bottom);
+        var anchor = new Button { Content = "حفظ" };
+        var root = new DockPanel { Children = { bar, new StackPanel { Margin = new Thickness(24), Children = { anchor } } } };
+        var w = Show(root, Dir(dir), width: 900, height: 600);
+        Toast.Show(anchor, "تم الحفظ", ToastTone.Ok);
+        Settle();
+        var card = Toast.ManagerFor(anchor)!.GetVisualDescendants().OfType<global::Avalonia.Controls.Notifications.NotificationCard>().Single();
+        var barTop = bar.TranslatePoint(default, w)!.Value.Y;
+        var cardBottom = card.TranslatePoint(new Point(0, card.Bounds.Height), w)!.Value.Y;
+        Assert.Equal(barTop - 16, cardBottom, 1);
+
+        root.Children.Remove(bar);
+        Settle();
+        cardBottom = card.TranslatePoint(new Point(0, card.Bounds.Height), w)!.Value.Y;
+        Assert.Equal(600 - 16, cardBottom, 1);
+    }
+
     [AvaloniaFact]
     public void A_busy_item_spins_instead_of_its_icon()
     {

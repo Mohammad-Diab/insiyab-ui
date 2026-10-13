@@ -12,8 +12,8 @@ public sealed record PlayChoice(string Value, string Label, string? Name = null,
 /// <summary>A documented option that no control sets: a row of the options list only.</summary>
 public sealed record PlayRow(string Group, string Name, string Desc, OptionKind Kind = OptionKind.Class, bool First = false);
 
-/// <summary>One control of a playground: a select, a segmented choice, a text field or a switch.</summary>
-public sealed class PlayControl
+/// <summary>One control of a playground: a select, a segmented choice, a text field or a switch. A Name makes the control itself a row of the options list, under its Group.</summary>
+public sealed record PlayControl
 {
     public required string Key { get; init; }
     public required string Label { get; init; }
@@ -90,8 +90,8 @@ public sealed class PlayDef
         }
         foreach (var c in Controls)
         {
-                ? c.Name is null ? [] : new List<PlayRow> { new(c.Group ?? "", c.Name, c.Desc ?? "", c.Kind) }
-                : c.Choices.Where(x => x.Name is not null).Select(x => new PlayRow(c.Group ?? "", x.Name!, x.Desc ?? "", x.Kind)).ToList();
+            var rows = c.Name is null ? new List<PlayRow>() : [new(c.Group ?? "", c.Name, c.Desc ?? "", c.Kind)];
+            rows.AddRange(c.Choices.Where(x => x.Name is not null).Select(x => new PlayRow(c.Group ?? "", x.Name!, x.Desc ?? "", x.Kind)));
             if (rows.Count > 0) Group(c.Group ?? (c.Type == ControlType.Switch ? "خيارات أخرى" : c.Label), false).AddRange(rows);
         }
         foreach (var x in Extra) Group(x.Group, x.First).Add(x);
@@ -111,8 +111,15 @@ public static class Play
     public static PlayControl Seg(string key, string label, string value, params PlayChoice[] choices) =>
         new() { Key = key, Label = label, Type = ControlType.Seg, Value = value, Choices = choices };
 
-    public static PlayControl Text(string key, string label, string value) =>
-        new() { Key = key, Label = label, Type = ControlType.Text, Value = value };
+    public static PlayControl Text(string key, string label, string value, string? name = null, string? desc = null, OptionKind kind = OptionKind.Property, string? group = null) =>
+        new() { Key = key, Label = label, Type = ControlType.Text, Value = value, Name = name, Desc = desc, Kind = kind, Group = group };
+
+    /// <summary>The control's rows go under <paramref name="group"/> in the options list.</summary>
+    public static PlayControl In(this PlayControl control, string group) => control with { Group = group };
+
+    /// <summary>The control is a row of the options list itself: the option it sets and what it does.</summary>
+    public static PlayControl Doc(this PlayControl control, string name, string desc, OptionKind kind = OptionKind.Property) =>
+        control with { Name = name, Desc = desc, Kind = kind };
 
     public static PlayControl Switch(string key, string label, string? name = null, string? desc = null, OptionKind kind = OptionKind.Class, string? group = null, bool on = false) =>
         new() { Key = key, Label = label, Type = ControlType.Switch, Name = name, Desc = desc, Kind = kind, Group = group, Value = on ? "true" : "" };

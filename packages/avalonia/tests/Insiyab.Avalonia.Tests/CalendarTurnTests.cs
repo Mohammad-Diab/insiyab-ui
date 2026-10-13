@@ -206,6 +206,42 @@ public class CalendarTurnTests : IDisposable
         finally { Still(w, false); }
     }
 
+    // A click on the switch leaves no ring or brand patch on the chosen face; reached by the keyboard, the face shows its own rounded ring.
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void The_switch_face_is_clean_after_a_click(string dir)
+    {
+        var (cal, w) = Hijri(dir);
+        Tap(Option(cal, "gregory"), w);
+        Settle(900);
+        w.MouseMove(new Point(790, 690));
+        Settle(300);
+        var chosen = Option(cal, "gregory");
+        Assert.Contains("active", chosen.Classes);
+        Assert.Null(chosen.FocusAdorner);
+        Assert.DoesNotContain(":focus-visible", chosen.Classes);
+        Assert.False(Part<Border>(chosen, "PART_Ring").IsVisible);
+        var face = Part<Border>(chosen, "PART_Face");
+        var brand = ColorOf((IBrush)Res(chosen, "InsToneBrandSoft"));
+        var frame = w.CaptureRenderedFrame()!;
+        using var buffer = frame.Lock();
+        foreach (var corner in new[] { new Point(1, 1), new Point(face.Bounds.Width - 2, 1), new Point(1, face.Bounds.Height - 2), new Point(face.Bounds.Width - 2, face.Bounds.Height - 2) })
+        {
+            var at = face.TranslatePoint(corner, w)!.Value;
+            var c = PixelAt(buffer, (int)at.X, (int)at.Y);
+            Assert.True(Math.Abs(c.R - brand.R) + Math.Abs(c.G - brand.G) + Math.Abs(c.B - brand.B) > 90, $"{dir}: brand at {corner}: {c}");
+        }
+
+        Option(cal, "home").Focus(NavigationMethod.Tab);
+        PressSpace(w);
+        Settle(900);
+        var home = Option(cal, "home");
+        Assert.Contains("active", home.Classes);
+        Assert.Contains(":focus-visible", home.Classes);
+        Assert.True(Part<Border>(home, "PART_Ring").IsVisible);
+    }
+
     [AvaloniaFact]
     public void Month_arrows_do_not_turn()
     {

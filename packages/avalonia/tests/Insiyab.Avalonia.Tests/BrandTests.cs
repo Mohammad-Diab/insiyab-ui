@@ -67,6 +67,8 @@ public class BrandTests
         Assert.Equal(Color.Parse(expected["on-primary"]), actual.OnPrimary);
         Assert.Equal(Color.Parse(expected["wash-1"]), actual.Wash1);
         Assert.Equal(Color.Parse(expected["wash-2"]), actual.Wash2);
+        Assert.Equal(Color.Parse(expected["primary-mid"]), actual.PrimaryMid);
+        Assert.Equal(Color.Parse(expected["on-primary-mid"]), actual.OnPrimaryMid);
     }
 
     [Fact]
@@ -137,6 +139,49 @@ public class BrandTests
 
         Assert.True(theme.TryGetResource("InsPrimaryColor", ThemeVariant.Light, out var value));
         Assert.Equal(Teal, value);
+    }
+
+    // The middle shade small accents take: the default primary 20% toward white on light, 45% on dark, with the label each needs.
+    [Fact]
+    public void The_middle_shade_shifts_toward_white_per_theme()
+    {
+        var light = BrandDerivation.Derive(InsiyabTheme.DefaultPrimary, false);
+        var dark = BrandDerivation.Derive(InsiyabTheme.DefaultPrimary, true);
+        Assert.Equal(Color.Parse("#704AAA"), light.PrimaryMid);
+        Assert.Equal(Color.Parse("#9D83C5"), dark.PrimaryMid);
+        Assert.Equal(BrandDerivation.Shift(InsiyabTheme.DefaultPrimary, BrandDerivation.MidShiftLight), light.PrimaryMid);
+        Assert.Equal(BrandDerivation.Shift(InsiyabTheme.DefaultPrimary, BrandDerivation.MidShiftDark), dark.PrimaryMid);
+        Assert.Equal(Colors.White, light.OnPrimaryMid);
+        Assert.Equal(Color.Parse("#111111"), dark.OnPrimaryMid);
+        Assert.True(BrandDerivation.Contrast(light.PrimaryMid, light.OnPrimaryMid) >= 4.5 && BrandDerivation.Contrast(dark.PrimaryMid, dark.OnPrimaryMid) >= 4.5);
+        // The better of white and near-black never measures under about 4.35, which only a near-black primary on dark comes close to.
+        foreach (var hex in Fixture.Value.Keys.Select(k => k.Split('|')[0]).Distinct())
+        {
+            foreach (var set in new[] { BrandDerivation.Derive(Color.Parse(hex), false), BrandDerivation.Derive(Color.Parse(hex), true) })
+                Assert.True(BrandDerivation.Contrast(set.PrimaryMid, set.OnPrimaryMid) >= 4.35, $"{hex}: {set.OnPrimaryMid} on {set.PrimaryMid}");
+        }
+    }
+
+    [AvaloniaFact]
+    public void SetPrimary_follows_with_the_middle_shade()
+    {
+        var app = Application.Current!;
+        try
+        {
+            Assert.True(app.TryGetResource("InsPrimaryMidColor", ThemeVariant.Light, out var before));
+            Assert.Equal(Color.Parse("#704AAA"), before);
+            InsiyabTheme.SetPrimary(Teal);
+            Assert.True(app.TryGetResource("InsPrimaryMidColor", ThemeVariant.Light, out var light));
+            Assert.Equal(BrandDerivation.Shift(Teal, BrandDerivation.MidShiftLight), light);
+            Assert.True(app.TryGetResource("InsPrimaryMidColor", ThemeVariant.Dark, out var dark));
+            Assert.Equal(BrandDerivation.Shift(Teal, BrandDerivation.MidShiftDark), dark);
+            Assert.True(app.TryGetResource("InsOnPrimaryMid", ThemeVariant.Dark, out var label));
+            Assert.Equal(BrandDerivation.LabelFor(BrandDerivation.Shift(Teal, BrandDerivation.MidShiftDark)), Assert.IsAssignableFrom<ISolidColorBrush>(label).Color);
+        }
+        finally
+        {
+            InsiyabTheme.SetPrimary(InsiyabTheme.DefaultPrimary);
+        }
     }
 
     [AvaloniaFact]

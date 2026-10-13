@@ -92,5 +92,15 @@ public static class BirthdatePlay
         },
     };
 
+    /// <summary>The form example's buttons: one sets a date quietly, the other sends the form.</summary>
+    public static Action<Control> FormStage { get; } = view =>
+    {
+        var parts = view.GetLogicalDescendants().ToList();
+        var field = parts.OfType<BirthDateField>().First();
+        var buttons = parts.OfType<Button>().ToList();
+        buttons[0].Click += (_, _) => field.SetDate(new DateTime(1993, 1, 22));
+        buttons[1].Click += (_, _) => Toast.Show(field, "أُرسل " + field.Value, ToastTone.Ok);
+    };
+
     public static PlayDef[] All { get; } = [Birth];
 }

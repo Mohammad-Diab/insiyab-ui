@@ -68,6 +68,7 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type ins:TagsInput}" TargetType="ins:TagsInput">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
         <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
         <Setter Property="BorderThickness" Value="1" />

@@ -10,6 +10,7 @@
 
       <!-- The swatch in front of the hex: the colour itself, or a slash through an empty chip. -->
       <ControlTheme x:Key="InsColorSwatch" TargetType="Button">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Width" Value="28" />
         <Setter Property="Height" Value="28" />
         <Setter Property="Margin" Value="2,0,0,0" />
@@ -57,6 +58,8 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type ins:ColorPreset}" TargetType="ins:ColorPreset">
+
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="BorderBrush" Value="{DynamicResource InsColorChipBorder}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="6" />

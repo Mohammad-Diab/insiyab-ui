@@ -13,7 +13,7 @@ public static class MonthPlay
         <!-- والمواعيد في Events من الشيفرة، كما في «الأحداث» -->
         """;
 
-    internal static string Code { get; } =
+    public static string Code { get; } =
         """
         Calendar.Events =
         [
@@ -137,6 +137,9 @@ public static class MonthPlay
             }
         },
     };
+
+    /// <summary>Fills the main example with the sample events.</summary>
+    public static Action<Control> ExampleStage { get; } = view => view.GetLogicalDescendants().OfType<MonthCalendar>().First().Events = Sample();
 
     public static PlayDef[] All { get; } = [Month];
 }

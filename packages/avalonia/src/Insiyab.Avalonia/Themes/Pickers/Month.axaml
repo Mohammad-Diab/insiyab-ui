@@ -157,7 +157,7 @@
   <Style Selector="ins|MonthCalendar Ellipse.month-dot">
     <Setter Property="Width" Value="5" />
     <Setter Property="Height" Value="5" />
-    <Setter Property="Fill" Value="{DynamicResource InsToneBrandSoft}" />
+    <Setter Property="Fill" Value="{DynamicResource InsPrimaryMid}" />
   </Style>
   <Style Selector="ins|MonthCalendar Ellipse.month-dot.ok">
     <Setter Property="Fill" Value="{DynamicResource InsToneOk}" />
@@ -274,6 +274,7 @@
   <Style Selector="ins|MonthCalendar Border.month-event.timed">
     <Setter Property="Padding" Value="6,3" />
   </Style>
+  <!-- Its text is cut inside the event, so a focus ring around it is not -->
   <Style Selector="ins|MonthCalendar Border.month-event.timed > :is(Control)">
     <Setter Property="ClipToBounds" Value="True" />
   </Style>

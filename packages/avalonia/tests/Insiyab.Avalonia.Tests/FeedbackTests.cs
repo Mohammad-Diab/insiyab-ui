@@ -294,7 +294,7 @@ public class FeedbackTests
         Assert.Equal(3, spinner.Thickness);
         Assert.Equal(15, small.Bounds.Width);
         Assert.Equal(2, small.Thickness);
-        AssertBrush(spinner, "InsToneBrandSoft", () => spinner.Arc);
+        AssertBrush(spinner, "InsPrimaryMid", () => spinner.Arc);
         Assert.Null(inButton.Arc);
         Assert.Null(inButton.Track);
         Assert.Equal(FlowDirection.LeftToRight, spinner.FlowDirection);
@@ -334,7 +334,7 @@ public class FeedbackTests
         Assert.Equal(8, bar.Bounds.Height);
         Assert.Equal(256, indicator.Bounds.Width, 0);
         AssertBrush(bar, "InsCtlBgHover", () => bar.Background);
-        Assert.IsType<LinearGradientBrush>(indicator.Background);
+        AssertBrush(bar, "InsPrimaryMid", () => indicator.Background);
         Assert.Equal(FlowDirection.LeftToRight, indicator.FlowDirection);
         var ix = Center(indicator, window).X;
         var bx = Center(bar, window).X;
@@ -388,7 +388,7 @@ public class FeedbackTests
         Assert.Equal(52, ring.Bounds.Width);
         Assert.Equal(80, lg.Bounds.Width);
         Assert.Equal(16, Part<TextBlock>(lg, "PART_Label").FontSize);
-        AssertBrush(ring, "InsToneBrandSoft", () => ring.Fill);
+        AssertBrush(ring, "InsPrimaryMid", () => ring.Fill);
         Assert.Equal(FlowDirection.LeftToRight, ring.FlowDirection);
         ring.Maximum = 200;
         Assert.Equal("36%", ring.Label);

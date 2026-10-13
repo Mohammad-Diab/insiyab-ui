@@ -14,6 +14,7 @@
 
       <!-- The search field: the large input with the search glyph at its start, drawn here so the palette does not hang on the text box theme. -->
       <ControlTheme x:Key="InsPaletteBox" TargetType="TextBox">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
         <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
@@ -107,6 +108,7 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type ins:CommandPalette}" TargetType="ins:CommandPalette">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="FontFamily" Value="{DynamicResource InsFontBody}" />
         <Setter Property="Template">

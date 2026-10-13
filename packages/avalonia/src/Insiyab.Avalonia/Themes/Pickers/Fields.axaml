@@ -47,6 +47,7 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type ins:DateTimeGroup}" TargetType="ins:DateTimeGroup">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="MinHeight" Value="{DynamicResource InsFieldH}" />
         <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
         <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />

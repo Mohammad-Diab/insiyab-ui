@@ -20,6 +20,8 @@ internal static class BrandTokens
             SetColor(target, "InsWash1", brand.Wash1);
             SetColor(target, "InsWash2", brand.Wash2);
             SetColor(target, "InsOnPrimary", brand.OnPrimary);
+            SetColor(target, "InsPrimaryMid", brand.PrimaryMid);
+            SetColor(target, "InsOnPrimaryMid", brand.OnPrimaryMid);
             SetColor(target, "InsSegOnFg", Color.FromUInt32(0xFFF1F5F9u));
             target["InsShBrandSm"] = new BoxShadows(new BoxShadow { OffsetX = 0, OffsetY = 6, Blur = 16, Spread = 0, Color = WithAlpha(brand.PrimaryRgb, 77) });
             target["InsShBrandMd"] = new BoxShadows(new BoxShadow { OffsetX = 0, OffsetY = 8, Blur = 24, Spread = 0, Color = WithAlpha(brand.PrimaryRgb, 71) });
@@ -45,6 +47,8 @@ internal static class BrandTokens
             SetColor(target, "InsWash1", brand.Wash1);
             SetColor(target, "InsWash2", brand.Wash2);
             SetColor(target, "InsOnPrimary", brand.OnPrimary);
+            SetColor(target, "InsPrimaryMid", brand.PrimaryMid);
+            SetColor(target, "InsOnPrimaryMid", brand.OnPrimaryMid);
             SetColor(target, "InsSegOnFg", brand.PrimaryDarker);
             target["InsShBrandSm"] = new BoxShadows(new BoxShadow { OffsetX = 0, OffsetY = 6, Blur = 16, Spread = 0, Color = WithAlpha(brand.PrimaryRgb, 77) });
             target["InsShBrandMd"] = new BoxShadows(new BoxShadow { OffsetX = 0, OffsetY = 8, Blur = 24, Spread = 0, Color = WithAlpha(brand.PrimaryRgb, 71) });

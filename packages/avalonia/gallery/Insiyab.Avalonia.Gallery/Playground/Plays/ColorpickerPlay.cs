@@ -60,6 +60,9 @@ public static class ColorpickerPlay
         },
     };
 
+    /// <summary>The main example's field sets the gallery's brand colour.</summary>
+    public static Action<Control> ExampleStage { get; } = view =>
+        view.GetLogicalDescendants().OfType<ColorField>().First().ColorCommitted += (_, e) => InsiyabTheme.SetPrimary(e.Value);
 
     public static PlayDef[] All { get; } = [Color];
 }

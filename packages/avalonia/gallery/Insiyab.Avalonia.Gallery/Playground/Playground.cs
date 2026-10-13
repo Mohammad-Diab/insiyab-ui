@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
@@ -45,6 +46,7 @@ public class Playground : Border
         _grid.Children.Add(_controls);
         var top = new Border { Child = _grid };
         top.Classes.Add("play-top");
+        _listing.Classes.Add("attached");
         Child = new StackPanel { Children = { top, _listing } };
     }
 

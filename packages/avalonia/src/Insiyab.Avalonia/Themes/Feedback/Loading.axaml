@@ -60,7 +60,7 @@
         <Setter Property="Width" Value="32" />
         <Setter Property="Height" Value="32" />
         <Setter Property="Thickness" Value="3" />
-        <Setter Property="Arc" Value="{DynamicResource InsToneBrandSoft}" />
+        <Setter Property="Arc" Value="{DynamicResource InsPrimaryMid}" />
         <Setter Property="Track" Value="{DynamicResource InsSpinnerTrack}" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -97,7 +97,7 @@
         <Setter Property="Height" Value="52" />
         <Setter Property="Thickness" Value="6" />
         <Setter Property="Track" Value="{DynamicResource InsCtlBgHover}" />
-        <Setter Property="Fill" Value="{DynamicResource InsToneBrandSoft}" />
+        <Setter Property="Fill" Value="{DynamicResource InsPrimaryMid}" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
         <Setter Property="FontWeight" Value="Bold" />

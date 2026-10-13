@@ -302,7 +302,7 @@
   transition: background var(--ins-t-pop) var(--ins-ease), block-size var(--ins-t-pop) var(--ins-ease), inline-size var(--ins-t-pop) var(--ins-ease);
 }
 .ins-split--v > .ins-split-handle::before { inline-size: 2.5rem; block-size: 4px; }
-.ins-split-handle:is(:hover, :focus-visible, .is-dragging)::before { background: var(--ins-tone-brand-soft); block-size: 4rem; }
+.ins-split-handle:is(:hover, :focus-visible, .is-dragging)::before { background: var(--ins-primary-mid); block-size: 4rem; }
 .ins-split--v > .ins-split-handle:is(:hover, :focus-visible, .is-dragging)::before { inline-size: 4rem; block-size: 4px; }
 .ins-split-handle:focus-visible::before { box-shadow: var(--ins-focus-ring); }
 /* While dragging, the text under the pointer is not being selected. */

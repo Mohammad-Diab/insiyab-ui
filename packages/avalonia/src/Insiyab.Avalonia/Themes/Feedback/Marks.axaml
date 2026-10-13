@@ -72,6 +72,7 @@
 
       <!-- A pressable pill lifts a pixel under the pointer and its dot grows; a read-only Pill stays still -->
       <ControlTheme x:Key="InsPillButton" TargetType="Button">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
         <Setter Property="Foreground" Value="{DynamicResource InsToneMute}" />
         <Setter Property="BorderBrush" Value="{DynamicResource InsToneMuteBd}" />
@@ -237,6 +238,7 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type ctl:AvatarGroup}" TargetType="ctl:AvatarGroup">
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Center" />
       </ControlTheme>

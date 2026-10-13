@@ -29,7 +29,7 @@ public static class StatusBarPlay
         </ins:StatusBar>
         """;
 
-    public const string Window =
+    public const string WindowExample =
         """
         <DockPanel Height="380">
           <ins:StatusBar DockPanel.Dock="Bottom">
