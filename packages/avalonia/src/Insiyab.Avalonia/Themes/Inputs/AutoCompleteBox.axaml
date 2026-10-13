@@ -101,6 +101,24 @@
             </Grid>
           </ControlTemplate>
         </Setter>
+        <!-- The list drops in as the web's .ins-combo-list does: a fade and 4px, .22s. -->
+        <Style Selector="^:dropdownopen /template/ Border#PART_SuggestionsContainer">
+          <Style.Animations>
+            <Animation Duration="0:0:0.22" FillMode="Forward">
+              <Animation.Easing>
+                <SplineEasing X1="0.22" Y1="1" X2="0.36" Y2="1" />
+              </Animation.Easing>
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0" />
+                <Setter Property="RenderTransform" Value="translateY(-4px)" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="1" />
+                <Setter Property="RenderTransform" Value="none" />
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
       </ControlTheme>
     </ResourceDictionary>
   </Styles.Resources>

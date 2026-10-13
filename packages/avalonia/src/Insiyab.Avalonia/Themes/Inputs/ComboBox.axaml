@@ -220,9 +220,11 @@
               </Animation.Easing>
               <KeyFrame Cue="0%">
                 <Setter Property="Opacity" Value="0" />
+                <Setter Property="RenderTransform" Value="translateY(-4px)" />
               </KeyFrame>
               <KeyFrame Cue="100%">
                 <Setter Property="Opacity" Value="1" />
+                <Setter Property="RenderTransform" Value="none" />
               </KeyFrame>
             </Animation>
           </Style.Animations>

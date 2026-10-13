@@ -36,14 +36,19 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
-              <Panel Width="12" Height="12">
-                <Border Width="12" Height="2" CornerRadius="1" Background="{TemplateBinding Foreground}" />
-                <Border x:Name="PART_Upright" Width="2" Height="12" CornerRadius="1" Background="{TemplateBinding Foreground}" IsVisible="False" />
-              </Panel>
-            </Border>
+            <Panel x:Name="PART_Press">
+              <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+                <Panel Width="12" Height="12">
+                  <Border Width="12" Height="2" CornerRadius="1" Background="{TemplateBinding Foreground}" />
+                  <Border x:Name="PART_Upright" Width="2" Height="12" CornerRadius="1" Background="{TemplateBinding Foreground}" IsVisible="False" />
+                </Panel>
+              </Border>
+            </Panel>
           </ControlTemplate>
         </Setter>
+        <Style Selector="^ /template/ Panel#PART_Press">
+          <Setter Property="ins:PressDip.Depth" Value="0.92" />
+        </Style>
         <Style Selector="^.up /template/ Border#PART_Upright">
           <Setter Property="IsVisible" Value="True" />
         </Style>
@@ -100,6 +105,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="ins:NumberRoll.Enabled" Value="True" />
         <Setter Property="Template">
           <ControlTemplate>
             <DataValidationErrors ClipToBounds="False">
@@ -146,31 +152,43 @@
                                AllowSpin="{TemplateBinding AllowSpin}"
                                ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}"
                                ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}">
-                  <TextBox Name="PART_TextBox"
-                           Classes="bare"
-                           Background="Transparent"
-                           BorderThickness="0"
-                           MinWidth="0"
-                           Padding="{TemplateBinding Padding}"
-                           VerticalAlignment="Stretch"
-                           Foreground="{TemplateBinding Foreground}"
-                           PlaceholderText="{TemplateBinding PlaceholderText}"
-                           PlaceholderForeground="{TemplateBinding PlaceholderForeground}"
-                           IsReadOnly="{TemplateBinding IsReadOnly}"
-                           VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                           HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                           Text="{TemplateBinding Text}"
-                           TextAlignment="{TemplateBinding TextAlignment}"
-                           AcceptsReturn="False"
-                           TextWrapping="NoWrap"
-                           InnerLeftContent="{Binding InnerLeftContent, RelativeSource={RelativeSource TemplatedParent}}"
-                           InnerRightContent="{Binding InnerRightContent, RelativeSource={RelativeSource TemplatedParent}}" />
+                  <Panel>
+                    <TextBox Name="PART_TextBox"
+                             Classes="bare"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             MinWidth="0"
+                             Padding="{TemplateBinding Padding}"
+                             VerticalAlignment="Stretch"
+                             Foreground="{TemplateBinding Foreground}"
+                             PlaceholderText="{TemplateBinding PlaceholderText}"
+                             PlaceholderForeground="{TemplateBinding PlaceholderForeground}"
+                             IsReadOnly="{TemplateBinding IsReadOnly}"
+                             VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                             HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                             Text="{TemplateBinding Text}"
+                             TextAlignment="{TemplateBinding TextAlignment}"
+                             AcceptsReturn="False"
+                             TextWrapping="NoWrap"
+                             InnerLeftContent="{Binding InnerLeftContent, RelativeSource={RelativeSource TemplatedParent}}"
+                             InnerRightContent="{Binding InnerRightContent, RelativeSource={RelativeSource TemplatedParent}}" />
+                  <!-- The odometer layer: NumberRoll plays a step on it while the text under it is hidden. -->
+                  <Panel x:Name="PART_Roll" IsVisible="False" IsHitTestVisible="False" ClipToBounds="True" Margin="{TemplateBinding Padding}">
+                    <TextBlock x:Name="PART_RollOut" TextAlignment="{TemplateBinding TextAlignment}" VerticalAlignment="Center" RenderTransformOrigin="50%,50%"
+                               Foreground="{TemplateBinding Foreground}" FontSize="{Binding #PART_TextBox.FontSize}" FontWeight="{Binding #PART_TextBox.FontWeight}" FontFamily="{Binding #PART_TextBox.FontFamily}" />
+                    <TextBlock x:Name="PART_RollIn" TextAlignment="{TemplateBinding TextAlignment}" VerticalAlignment="Center" RenderTransformOrigin="50%,50%"
+                               Foreground="{TemplateBinding Foreground}" FontSize="{Binding #PART_TextBox.FontSize}" FontWeight="{Binding #PART_TextBox.FontWeight}" FontFamily="{Binding #PART_TextBox.FontFamily}" />
+                  </Panel>
+                  </Panel>
                 </ButtonSpinner>
               </Panel>
             </DataValidationErrors>
           </ControlTemplate>
         </Setter>
 
+        <Style Selector="^:rolling /template/ TextBox#PART_TextBox">
+          <Setter Property="Opacity" Value="0" />
+        </Style>
         <Style Selector="^:pointerover:not(:focus-within) /template/ Border#PART_BorderElement">
           <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsSpinHoverBorder}" />
