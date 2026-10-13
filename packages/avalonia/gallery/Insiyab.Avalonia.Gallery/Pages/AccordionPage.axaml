@@ -1,0 +1,86 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.AccordionPage">
+  <UserControl.Resources>
+    <SolidColorBrush x:Key="ExampleTint" Color="{DynamicResource InsPrimaryColor}" Opacity="0.025" />
+  </UserControl.Resources>
+  <UserControl.Styles>
+    <Style Selector="Border.example">
+      <Setter Property="Padding" Value="24" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+      <Setter Property="Background" Value="{StaticResource ExampleTint}" />
+    </Style>
+    <Style Selector="TextBlock.cap">
+      <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+      <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+      <Setter Property="Margin" Value="0,0,0,8" />
+    </Style>
+    <Style Selector="TextBlock.h2">
+      <Setter Property="Margin" Value="0,24,0,0" />
+    </Style>
+  </UserControl.Styles>
+
+  <ScrollViewer>
+    <StackPanel Spacing="16" MaxWidth="832" HorizontalAlignment="Stretch">
+
+      <Border Classes="example">
+        <Border Classes="panel">
+          <StackPanel Classes="accordion">
+            <Expander Header="القسم الأول" Content="محتوى القسم الأول." IsExpanded="True" />
+            <Expander Header="القسم الثاني" Content="محتوى القسم الثاني." />
+            <Expander Header="القسم الثالث" Content="محتوى القسم الثالث." />
+          </StackPanel>
+        </Border>
+      </Border>
+
+      <TextBlock Classes="h2" Text="الأكورديون" />
+      <Border Classes="example">
+        <StackPanel Spacing="28">
+          <StackPanel>
+            <TextBlock Classes="cap" Text="الأول مفتوح، وفُتح الثالث كأنك نقرته" />
+            <Border Classes="panel">
+              <StackPanel Classes="accordion">
+                <Expander Header="القسم الأول" Content="محتوى القسم الأول." IsExpanded="True" />
+                <Expander Header="القسم الثاني" Content="محتوى القسم الثاني." />
+                <Expander Header="القسم الثالث" Content="محتوى القسم الثالث." IsExpanded="True" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+          <StackPanel>
+            <TextBlock Classes="cap" Text="قسم واحد مفتوح" />
+            <Border Classes="panel">
+              <StackPanel Classes="accordion">
+                <Expander ins:Collapse.Group="group" Header="القسم الأول" Content="محتوى القسم الأول." IsExpanded="True" />
+                <Expander ins:Collapse.Group="group" Header="القسم الثاني" Content="محتوى القسم الثاني." />
+                <Expander x:Name="OneOpenLast" ins:Collapse.Group="group" Header="القسم الثالث" Content="محتوى القسم الثالث." />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+          <StackPanel>
+            <TextBlock Classes="cap" Text="خارج اللوح" />
+            <StackPanel Classes="accordion">
+              <Expander Header="القسم الأول" Content="محتوى القسم الأول." IsExpanded="True" />
+              <Expander Header="القسم الثاني" Content="محتوى القسم الثاني." />
+              <Expander Header="القسم الثالث" Content="محتوى القسم الثالث." IsExpanded="True" />
+            </StackPanel>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="h2" Text="قسم منفرد" />
+      <Border Classes="example">
+        <StackPanel Spacing="28">
+          <Expander Header="خيارات متقدمة" Content="محتوى إضافي." />
+          <StackPanel>
+            <TextBlock Classes="cap" Text="مفتوح" />
+            <Expander Header="خيارات متقدمة" Content="محتوى إضافي." IsExpanded="True" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

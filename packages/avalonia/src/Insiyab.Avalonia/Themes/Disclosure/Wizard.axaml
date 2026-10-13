@@ -1,0 +1,92 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <ControlTheme x:Key="{x:Type ins:WizardPanel}" TargetType="ins:WizardPanel">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Padding="{TemplateBinding Padding}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:Wizard}" TargetType="ins:Wizard">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="ItemsPanel">
+          <ItemsPanelTemplate>
+            <Panel />
+          </ItemsPanelTemplate>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <DockPanel>
+              <ins:Steps Name="PART_Steps" DockPanel.Dock="Top" IsVisible="{TemplateBinding ShowSteps}" />
+              <Grid Name="PART_Foot" DockPanel.Dock="Bottom" Margin="0,20,0,0" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="8">
+                <Button Name="PART_Cancel" Classes="bare" Content="{TemplateBinding CancelContent}" IsVisible="False" />
+                <Button Name="PART_Previous" Classes="secondary" Content="{TemplateBinding PreviousText}" />
+                <Button Name="PART_Next" Grid.Column="3" Classes="primary">
+                  <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBlock Text="{TemplateBinding NextText}" />
+                    <ins:LoadingSpinner Name="PART_NextSpinner" Classes="sm" IsVisible="False" />
+                  </StackPanel>
+                </Button>
+                <Button Name="PART_Finish" Grid.Column="3" Classes="primary" IsVisible="False">
+                  <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBlock Text="{TemplateBinding FinishText}" />
+                    <ins:LoadingSpinner Name="PART_FinishSpinner" Classes="sm" IsVisible="False" />
+                  </StackPanel>
+                </Button>
+              </Grid>
+              <Border Name="PART_Body" Padding="6" Margin="-6" ClipToBounds="True">
+                <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+              </Border>
+            </DockPanel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:first /template/ Button#PART_Previous">
+          <Setter Property="Opacity" Value="0" />
+          <Setter Property="IsHitTestVisible" Value="False" />
+          <Setter Property="Focusable" Value="False" />
+        </Style>
+        <Style Selector="^:last /template/ Button#PART_Next">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:last /template/ Button#PART_Finish">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:busy /template/ Button#PART_Next, ^:busy /template/ Button#PART_Finish">
+          <Setter Property="Opacity" Value="0.75" />
+          <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+        <Style Selector="^:busy /template/ ins|LoadingSpinner">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:has-cancel /template/ Button#PART_Cancel">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:has-cancel /template/ Button#PART_Previous">
+          <Setter Property="Grid.Column" Value="2" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- Names the bare class too, so it outranks the bare button's own zero padding and height -->
+  <Style Selector="ins|Wizard /template/ Button#PART_Cancel.bare">
+    <Setter Property="Padding" Value="16,6" />
+    <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
+  </Style>
+
+</Styles>

@@ -1,0 +1,283 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsTimelineRing" Color="#B3FFFFFF" />
+          <SolidColorBrush x:Key="InsTimelineHalo" Color="{DynamicResource InsToneBrandSoftColor}" Opacity="0.25" />
+          <SolidColorBrush x:Key="InsTimelineHaloOk" Color="{DynamicResource InsToneOkColor}" Opacity="0.25" />
+          <SolidColorBrush x:Key="InsTimelineHaloBad" Color="{DynamicResource InsToneBadColor}" Opacity="0.25" />
+          <SolidColorBrush x:Key="InsTimelineHaloWarn" Color="{DynamicResource InsToneWarnColor}" Opacity="0.25" />
+          <SolidColorBrush x:Key="InsTimelineHaloInfo" Color="{DynamicResource InsToneInfoColor}" Opacity="0.25" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsTimelineRing" Color="#BF0F172A" />
+          <SolidColorBrush x:Key="InsTimelineHalo" Color="{DynamicResource InsToneBrandSoftColor}" Opacity="0.3" />
+          <SolidColorBrush x:Key="InsTimelineHaloOk" Color="{DynamicResource InsToneOkColor}" Opacity="0.3" />
+          <SolidColorBrush x:Key="InsTimelineHaloBad" Color="{DynamicResource InsToneBadColor}" Opacity="0.3" />
+          <SolidColorBrush x:Key="InsTimelineHaloWarn" Color="{DynamicResource InsToneWarnColor}" Opacity="0.3" />
+          <SolidColorBrush x:Key="InsTimelineHaloInfo" Color="{DynamicResource InsToneInfoColor}" Opacity="0.3" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <SolidColorBrush x:Key="InsTimelineChip" Color="{DynamicResource InsToneBrandSoftColor}" Opacity="0.14" />
+      <SolidColorBrush x:Key="InsTimelineChipOk" Color="{DynamicResource InsToneOkColor}" Opacity="0.14" />
+      <SolidColorBrush x:Key="InsTimelineChipBad" Color="{DynamicResource InsToneBadColor}" Opacity="0.14" />
+      <SolidColorBrush x:Key="InsTimelineChipWarn" Color="{DynamicResource InsToneWarnColor}" Opacity="0.14" />
+      <SolidColorBrush x:Key="InsTimelineChipInfo" Color="{DynamicResource InsToneInfoColor}" Opacity="0.14" />
+      <!-- The dashed rule toward an event still to come: repeating-linear-gradient(ctl-bd 0 4px, transparent 4px 8px) -->
+      <LinearGradientBrush x:Key="InsTimelineDash" StartPoint="0,0" EndPoint="0,8" SpreadMethod="Repeat">
+        <GradientStop Offset="0" Color="{DynamicResource InsCtlBdColor}" />
+        <GradientStop Offset="0.5" Color="{DynamicResource InsCtlBdColor}" />
+        <GradientStop Offset="0.5" Color="Transparent" />
+        <GradientStop Offset="1" Color="Transparent" />
+      </LinearGradientBrush>
+
+      <ControlTheme x:Key="{x:Type ins:Timeline}" TargetType="ins:Timeline">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="ItemsPanel">
+          <ItemsPanelTemplate>
+            <ins:TimelinePanel />
+          </ItemsPanelTemplate>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:TimelineDay}" TargetType="ins:TimelineDay">
+        <Setter Property="Padding" Value="28,8,0,14" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Padding="{TemplateBinding Padding}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" />
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:first">
+          <Setter Property="Padding" Value="28,4,0,14" />
+        </Style>
+        <Style Selector="^[FlowDirection=LeftToRight] /template/ ContentPresenter#PART_ContentPresenter">
+          <Setter Property="LetterSpacing" Value="0.44" />
+        </Style>
+        <Style Selector="^:split">
+          <Setter Property="HorizontalContentAlignment" Value="Center" />
+          <Setter Property="Padding" Value="0,8,0,14" />
+        </Style>
+        <Style Selector="^:split:first">
+          <Setter Property="Padding" Value="0,4,0,14" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:TimelineItem}" TargetType="ins:TimelineItem">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Name="PART_Rail" Width="2" CornerRadius="1" HorizontalAlignment="Left" Margin="5,20,0,0"
+                      Background="{DynamicResource InsLine}" />
+              <Panel Name="PART_Marker" Width="12" Height="12" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0">
+                <Ellipse Name="PART_Halo" Width="24" Height="24" Margin="-6" Fill="{DynamicResource InsTimelineHalo}" IsVisible="False" />
+                <Ellipse Name="PART_Ring" Width="18" Height="18" Margin="-3" Fill="{DynamicResource InsTimelineRing}" />
+                <Ellipse Name="PART_Dot" Fill="{DynamicResource InsToneBrandSoft}" />
+              </Panel>
+              <Border Name="PART_Chip" Width="32" Height="32" CornerRadius="16" HorizontalAlignment="Left" VerticalAlignment="Top"
+                      Background="{DynamicResource InsTimelineChip}" IsVisible="False">
+                <ins:Icon Name="PART_Icon" Data="{TemplateBinding Icon}" Size="16" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          Foreground="{DynamicResource InsToneBrandSoft}" />
+              </Border>
+              <StackPanel Name="PART_Text" Margin="28,0,0,22" Spacing="3">
+                <ContentPresenter Name="PART_HeaderPresenter"
+                                  Content="{TemplateBinding Header}"
+                                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                  FontWeight="Bold"
+                                  Foreground="{DynamicResource InsText1}" />
+                <TextBlock Name="PART_Time" Text="{TemplateBinding TimeText}" IsVisible="False" FontFeatures="+tnum"
+                           FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsText3}" />
+                <ContentPresenter Name="PART_ContentPresenter" Margin="0,4,0,0" IsVisible="False"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  FontSize="{DynamicResource InsFsSm}"
+                                  Foreground="{DynamicResource InsText2}" />
+              </StackPanel>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+          <Setter Property="LineHeight" Value="22.1" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style Selector="^ /template/ ContentPresenter#PART_HeaderPresenter">
+          <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style Selector="^[FlowDirection=RightToLeft] /template/ ContentPresenter#PART_HeaderPresenter">
+          <Setter Property="LineHeight" Value="23.8" />
+        </Style>
+        <Style Selector="^[FlowDirection=RightToLeft] /template/ TextBlock#PART_Time">
+          <Setter Property="LineHeight" Value="20.4" />
+        </Style>
+        <Style Selector="^:has-time /template/ TextBlock#PART_Time">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:has-body /template/ ContentPresenter#PART_ContentPresenter">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:last">
+          <Style Selector="^ /template/ Border#PART_Rail">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ StackPanel#PART_Text">
+            <Setter Property="Margin" Value="28,0,0,0" />
+          </Style>
+        </Style>
+
+        <Style Selector="^.ok">
+          <Style Selector="^ /template/ Ellipse#PART_Dot"><Setter Property="Fill" Value="{DynamicResource InsToneOk}" /></Style>
+          <Style Selector="^ /template/ Ellipse#PART_Halo"><Setter Property="Fill" Value="{DynamicResource InsTimelineHaloOk}" /></Style>
+          <Style Selector="^ /template/ Border#PART_Chip"><Setter Property="Background" Value="{DynamicResource InsTimelineChipOk}" /></Style>
+          <Style Selector="^ /template/ ins|Icon#PART_Icon"><Setter Property="Foreground" Value="{DynamicResource InsToneOk}" /></Style>
+        </Style>
+        <Style Selector="^.bad">
+          <Style Selector="^ /template/ Ellipse#PART_Dot"><Setter Property="Fill" Value="{DynamicResource InsToneBad}" /></Style>
+          <Style Selector="^ /template/ Ellipse#PART_Halo"><Setter Property="Fill" Value="{DynamicResource InsTimelineHaloBad}" /></Style>
+          <Style Selector="^ /template/ Border#PART_Chip"><Setter Property="Background" Value="{DynamicResource InsTimelineChipBad}" /></Style>
+          <Style Selector="^ /template/ ins|Icon#PART_Icon"><Setter Property="Foreground" Value="{DynamicResource InsToneBad}" /></Style>
+        </Style>
+        <Style Selector="^.warn">
+          <Style Selector="^ /template/ Ellipse#PART_Dot"><Setter Property="Fill" Value="{DynamicResource InsToneWarn}" /></Style>
+          <Style Selector="^ /template/ Ellipse#PART_Halo"><Setter Property="Fill" Value="{DynamicResource InsTimelineHaloWarn}" /></Style>
+          <Style Selector="^ /template/ Border#PART_Chip"><Setter Property="Background" Value="{DynamicResource InsTimelineChipWarn}" /></Style>
+          <Style Selector="^ /template/ ins|Icon#PART_Icon"><Setter Property="Foreground" Value="{DynamicResource InsToneWarn}" /></Style>
+        </Style>
+        <Style Selector="^.info">
+          <Style Selector="^ /template/ Ellipse#PART_Dot"><Setter Property="Fill" Value="{DynamicResource InsToneInfo}" /></Style>
+          <Style Selector="^ /template/ Ellipse#PART_Halo"><Setter Property="Fill" Value="{DynamicResource InsTimelineHaloInfo}" /></Style>
+          <Style Selector="^ /template/ Border#PART_Chip"><Setter Property="Background" Value="{DynamicResource InsTimelineChipInfo}" /></Style>
+          <Style Selector="^ /template/ ins|Icon#PART_Icon"><Setter Property="Foreground" Value="{DynamicResource InsToneInfo}" /></Style>
+        </Style>
+
+        <Style Selector="^:current /template/ Ellipse#PART_Halo">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:pending">
+          <Style Selector="^ /template/ Ellipse#PART_Dot">
+            <Setter Property="Fill" Value="{DynamicResource InsCtlBg}" />
+            <Setter Property="Stroke" Value="{DynamicResource InsCtlBd}" />
+            <Setter Property="StrokeThickness" Value="2" />
+          </Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_HeaderPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+          </Style>
+        </Style>
+        <Style Selector="^:pending /template/ Border#PART_Rail, ^:next-pending /template/ Border#PART_Rail">
+          <Setter Property="Background" Value="{DynamicResource InsTimelineDash}" />
+          <Setter Property="CornerRadius" Value="0" />
+        </Style>
+
+        <!-- An icon chip in place of the dot -->
+        <Style Selector="^:icon">
+          <Style Selector="^ /template/ Panel#PART_Marker">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Chip">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Rail">
+            <Setter Property="Margin" Value="15,40,0,0" />
+          </Style>
+          <Style Selector="^ /template/ StackPanel#PART_Text">
+            <Setter Property="Margin" Value="48,0,0,22" />
+          </Style>
+          <Style Selector="^:last /template/ StackPanel#PART_Text">
+            <Setter Property="Margin" Value="48,0,0,0" />
+          </Style>
+        </Style>
+
+        <!-- split: the events take turns on either side of the centre rule -->
+        <Style Selector="^:split">
+          <Style Selector="^ /template/ Panel#PART_Marker">
+            <Setter Property="Margin" Value="-6,5,0,0" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Rail">
+            <Setter Property="Margin" Value="-1,20,0,0" />
+          </Style>
+        </Style>
+        <Style Selector="^:split-start">
+          <Style Selector="^ /template/ Panel#PART_Marker">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="0,5,-6,0" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Rail">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="0,20,-1,0" />
+          </Style>
+          <Style Selector="^ /template/ StackPanel#PART_Text">
+            <Setter Property="Margin" Value="0,0,28,22" />
+          </Style>
+          <Style Selector="^:last /template/ StackPanel#PART_Text">
+            <Setter Property="Margin" Value="0,0,28,0" />
+          </Style>
+          <Style Selector="^ /template/ StackPanel#PART_Text > :is(Control)">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+          </Style>
+          <Style Selector="^ /template/ TextBlock#PART_Time">
+            <Setter Property="TextAlignment" Value="Right" />
+          </Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_HeaderPresenter, ^ /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="TextAlignment" Value="Right" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- compact: smaller dots and tighter spacing, for a narrow column -->
+  <Style Selector="ins|Timeline.compact ins|TimelineItem">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+    <Style Selector="^ /template/ Panel#PART_Marker">
+      <Setter Property="Width" Value="9" />
+      <Setter Property="Height" Value="9" />
+      <Setter Property="Margin" Value="0,6,0,0" />
+    </Style>
+    <Style Selector="^ /template/ Ellipse#PART_Halo">
+      <Setter Property="Width" Value="21" />
+      <Setter Property="Height" Value="21" />
+    </Style>
+    <Style Selector="^ /template/ Ellipse#PART_Ring">
+      <Setter Property="Width" Value="15" />
+      <Setter Property="Height" Value="15" />
+    </Style>
+    <Style Selector="^ /template/ Border#PART_Rail">
+      <Setter Property="Margin" Value="3.5,17,0,0" />
+    </Style>
+    <Style Selector="^ /template/ StackPanel#PART_Text">
+      <Setter Property="Margin" Value="20,0,0,14" />
+      <Setter Property="Spacing" Value="1" />
+    </Style>
+    <Style Selector="^:last /template/ StackPanel#PART_Text">
+      <Setter Property="Margin" Value="20,0,0,0" />
+    </Style>
+  </Style>
+  <Style Selector="ins|Timeline.compact ins|TimelineDay">
+    <Setter Property="Padding" Value="20,8,0,14" />
+  </Style>
+  <Style Selector="ins|Timeline.compact ins|TimelineDay:first">
+    <Setter Property="Padding" Value="20,4,0,14" />
+  </Style>
+
+</Styles>
