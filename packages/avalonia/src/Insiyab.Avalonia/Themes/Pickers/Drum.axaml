@@ -1,0 +1,65 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ControlTheme x:Key="{x:Type ins:TimeDrum}" TargetType="ins:TimeDrum">
+        <Setter Property="Padding" Value="4,0" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border x:Name="PART_Lens" Classes="drum-lens" />
+              <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}">
+                <StackPanel Orientation="Horizontal" Spacing="2" FlowDirection="LeftToRight">
+                  <ins:DrumColumn x:Name="PART_Hour" Width="48" />
+                  <TextBlock Classes="drum-sep" Text=":" />
+                  <ins:DrumColumn x:Name="PART_Minute" Width="48" />
+                </StackPanel>
+                <ins:DrumColumn x:Name="PART_Period" Width="52" Classes="period" />
+              </StackPanel>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- .ins-drum-item: Inter at 17px, the lens's item in the brand at 800, an out-of-range one in the faint grey. -->
+  <Style Selector="ins|DrumColumn">
+    <Setter Property="RowHeight" Value="36" />
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    <Setter Property="FontSize" Value="17" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+    <Setter Property="SelectedForeground" Value="{DynamicResource InsToneBrand}" />
+    <Setter Property="DimForeground" Value="{DynamicResource InsText3}" />
+    <Setter Property="FocusRing" Value="{DynamicResource InsPickerFocusOutline}" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="ins|DrumColumn.period">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+  </Style>
+  <Style Selector="ins|DrumColumn.period.ar">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontArabic}" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+  </Style>
+
+  <Style Selector="Border.drum-lens">
+    <Setter Property="Height" Value="36" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandBd}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
+    <Setter Property="IsHitTestVisible" Value="False" />
+  </Style>
+  <Style Selector="TextBlock.drum-sep">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="FontWeight" Value="ExtraBold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+  </Style>
+
+</Styles>

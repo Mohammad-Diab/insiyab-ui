@@ -23,6 +23,7 @@
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/ToggleSwitch.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Buttons.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Inputs.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Pickers.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Menus.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Shell.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Disclosure.axaml" />

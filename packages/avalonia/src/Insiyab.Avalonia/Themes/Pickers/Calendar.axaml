@@ -1,0 +1,238 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <ControlTheme x:Key="{x:Type ins:DateCalendar}" TargetType="ins:DateCalendar">
+        <Setter Property="Width" Value="304" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Classes="picker-glass" />
+              <Decorator x:Name="PART_Host" Margin="12" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:dual">
+          <Setter Property="Width" Value="608" />
+        </Style>
+        <Style Selector="^:datetime">
+          <Setter Property="Width" Value="496" />
+        </Style>
+        <Style Selector="^:stacked">
+          <Setter Property="Width" Value="304" />
+        </Style>
+      </ControlTheme>
+
+      <!-- .ins-cal-nav: a 32px square in the control tint with a chevron toward the start or the end of the line. -->
+      <ControlTheme x:Key="InsCalNav" TargetType="Button">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+              <Path x:Name="PART_Chevron" Width="10" Height="10" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Data="M6.5,1.5 L3,5 L6.5,8.5"
+                    Stroke="{TemplateBinding Foreground}" StrokeThickness="2" StrokeLineCap="Square" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        </Style>
+        <Style Selector="^.next /template/ Path#PART_Chevron">
+          <Setter Property="Data" Value="M3.5,1.5 L7,5 L3.5,8.5" />
+        </Style>
+      </ControlTheme>
+
+      <!-- .ins-cal-day: a square day; today ringed, the chosen day (and a range's other end) filled with the brand gradient. -->
+      <ControlTheme x:Key="InsCalDay" TargetType="Button">
+        <Setter Property="Height" Value="38" />
+        <Setter Property="Margin" Value="0,1" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
+              <Border x:Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}" />
+              <ContentPresenter x:Name="PART_ContentPresenter"
+                                Content="{TemplateBinding Content}"
+                                Foreground="{TemplateBinding Foreground}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+              <Border x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2" BorderBrush="{DynamicResource InsToneBrand}" IsVisible="False" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover:not(.blocked)">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^.outside">
+          <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        </Style>
+        <Style Selector="^.today">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandBd}" />
+          <Setter Property="BorderThickness" Value="1" />
+        </Style>
+        <Style Selector="^.selected, ^.edge, ^.selected:pointerover, ^.edge:pointerover">
+          <Setter Property="Background" Value="{StaticResource InsPickerBrandFill}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
+          <Setter Property="BorderThickness" Value="0" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandSm}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Face">
+            <Setter Property="FlowDirection" Value="LeftToRight" />
+          </Style>
+        </Style>
+        <Style Selector="^.blocked">
+          <Setter Property="Opacity" Value="0.3" />
+          <Setter Property="Cursor" Value="No" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsCalSwitchOption" TargetType="Button">
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="Padding" Value="10,4" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border x:Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+              <ContentPresenter Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+          <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
+        </Style>
+        <Style Selector="^.active, ^.active:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsSegOnBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsSegOnFg}" />
+          <Style Selector="^ /template/ Border#PART_Face">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="ins|DateCalendar Button.cal-nav">
+    <Setter Property="Theme" Value="{StaticResource InsCalNav}" />
+  </Style>
+  <Style Selector="ins|DateCalendar Button.cal-day">
+    <Setter Property="Theme" Value="{StaticResource InsCalDay}" />
+  </Style>
+  <Style Selector="ins|DateCalendar ComboBox.cal-select">
+    <Setter Property="MinHeight" Value="32" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector="ins|DateCalendar Button.cal-switch-option">
+    <Setter Property="Theme" Value="{StaticResource InsCalSwitchOption}" />
+  </Style>
+
+  <Style Selector="ins|DateCalendar Grid.cal-head">
+    <Setter Property="Margin" Value="0,0,0,8" />
+  </Style>
+  <Style Selector="ins|DateCalendar TextBlock.cal-title-next">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+  <Style Selector="ins|DateCalendar TextBlock.cal-wd">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="Margin" Value="0,4,0,6" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+  </Style>
+  <Style Selector="ins|DateCalendar Border.cal-cell.band">
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+  </Style>
+  <Style Selector="ins|DateCalendar Border.cal-time">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Padding" Value="12,0,0,0" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+    <Setter Property="BorderThickness" Value="1,0,0,0" />
+  </Style>
+  <Style Selector="ins|DateCalendar:stacked Border.cal-time">
+    <Setter Property="Padding" Value="0,12,0,0" />
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+  </Style>
+
+  <!-- .ins-cal-foot: Today at the start, Clear and Done together at the end, the calendar switch between. -->
+  <Style Selector="ins|DateCalendar Border.cal-foot">
+    <Setter Property="Margin" Value="0,8,0,0" />
+    <Setter Property="Padding" Value="4,8,4,0" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+  </Style>
+  <Style Selector="ins|DateCalendar Border.cal-foot Grid > Button">
+    <Setter Property="MinWidth" Value="{DynamicResource InsFootMinSm}" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ins|DateCalendar Border.cal-foot Grid > Button.bare.sm">
+    <Setter Property="Padding" Value="10,4" />
+    <Setter Property="MinHeight" Value="{DynamicResource InsCtlSmH}" />
+  </Style>
+  <Style Selector="ins|DateCalendar TextBlock.cal-hint">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+  </Style>
+  <Style Selector="ins|DateCalendar Border.cal-switch">
+    <Setter Property="Padding" Value="3" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+    <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+</Styles>

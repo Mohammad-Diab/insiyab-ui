@@ -1,0 +1,340 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <ControlTheme x:Key="{x:Type ins:BirthDateField}" TargetType="ins:BirthDateField">
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <DataValidationErrors ClipToBounds="False">
+              <Decorator x:Name="PART_Host" ClipToBounds="False" />
+            </DataValidationErrors>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.55" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The real field under each part: it takes the focus, the typing and the paste, and draws nothing. -->
+      <ControlTheme x:Key="InsBirthIn" TargetType="TextBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="Transparent" />
+        <Setter Property="CaretBrush" Value="Transparent" />
+        <Setter Property="SelectionBrush" Value="Transparent" />
+        <Setter Property="SelectionForegroundBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="IBeam" />
+        <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
+        <Setter Property="Template">
+          <ControlTemplate TargetType="TextBox">
+            <Border Background="Transparent">
+              <TextPresenter x:Name="PART_TextPresenter"
+                             Text="{TemplateBinding Text, Mode=TwoWay}"
+                             CaretIndex="{TemplateBinding CaretIndex}"
+                             SelectionStart="{TemplateBinding SelectionStart}"
+                             SelectionEnd="{TemplateBinding SelectionEnd}"
+                             Background="Transparent"
+                             Foreground="Transparent"
+                             CaretBrush="Transparent"
+                             SelectionBrush="Transparent"
+                             SelectionForegroundBrush="Transparent"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <!-- .ins-birth-btn: a 36px square at the field's end, the calendar glyph in the label grey; under the pointer or while open, in the brand. -->
+      <ControlTheme x:Key="InsBirthBtn" TargetType="Button">
+        <Setter Property="Width" Value="36" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Margin" Value="4,0,0,0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+              <ins:Icon Data="{StaticResource InsBirthBtnIcon}" Size="18" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover, ^.open">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="ins|BirthDateField TextBox.birth-in">
+    <Setter Property="Theme" Value="{StaticResource InsBirthIn}" />
+  </Style>
+  <Style Selector="ins|BirthDateField Button.birth-btn">
+    <Setter Property="Theme" Value="{StaticResource InsBirthBtn}" />
+  </Style>
+
+  <!-- The layout: the inline blocks are centred, six apart; the field is its control and the line four under it. -->
+  <Style Selector="ins|BirthDateField StackPanel.birth-root.inline">
+    <Setter Property="Spacing" Value="6" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-root.field">
+    <Setter Property="Spacing" Value="0" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-seg">
+    <Setter Property="Spacing" Value="4" />
+  </Style>
+
+  <!-- Inline: three blocks 52 high; the parts are 76, 96 and 156 wide. -->
+  <Style Selector="ins|BirthDateField Border.birth-box">
+    <Setter Property="Height" Value="52" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+    <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-seg.d Border.birth-box">
+    <Setter Property="Width" Value="76" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-seg.m Border.birth-box">
+    <Setter Property="Width" Value="96" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-seg.y Border.birth-box">
+    <Setter Property="Width" Value="156" />
+  </Style>
+  <Style Selector="ins|BirthDateField TextBlock.birth-val">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    <Setter Property="FontSize" Value="28" />
+    <Setter Property="FontWeight" Value="ExtraBold" />
+    <Setter Property="LetterSpacing" Value="1.7" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+  <Style Selector="ins|BirthDateField TextBlock.birth-ph">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBody}" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-dots">
+    <Setter Property="VerticalAlignment" Value="Bottom" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="Margin" Value="0,0,0,5" />
+    <Setter Property="Spacing" Value="4" />
+    <Setter Property="IsHitTestVisible" Value="False" />
+  </Style>
+  <Style Selector="ins|BirthDateField Ellipse.birth-dot">
+    <Setter Property="Width" Value="5" />
+    <Setter Property="Height" Value="5" />
+    <Setter Property="Fill" Value="{DynamicResource InsCtlBd}" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Fill" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ins|BirthDateField Ellipse.birth-dot.on">
+    <Setter Property="Fill" Value="{DynamicResource InsPrimary}" />
+    <Setter Property="RenderTransform" Value="scale(1.15)" />
+  </Style>
+  <Style Selector="ins|BirthDateField TextBlock.birth-cap">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-seg.filled TextBlock.birth-cap">
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-seg.m.filled TextBlock.birth-cap">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-root.inline StackPanel.birth-seg:pointerover:not(:focus-within) Border.birth-box">
+    <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsPickerHoverBorder}" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-seg:focus-within Border.birth-box">
+    <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsPickerFocusBorder}" />
+    <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-seg.no Border.birth-box">
+    <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
+    <Setter Property="BoxShadow" Value="{DynamicResource InsGlowBad}" />
+  </Style>
+  <Style Selector="ins|BirthDateField TextBlock.birth-line">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+    <Setter Property="TextAlignment" Value="Center" />
+    <Setter Property="MinHeight" Value="21" />
+  </Style>
+
+  <!-- Field: one input-sized control with the parts typed in place and the button at its end. -->
+  <Style Selector="ins|BirthDateField Border.birth-control">
+    <Setter Property="MinHeight" Value="{DynamicResource InsFieldH}" />
+    <Setter Property="Padding" Value="8,0,4,0" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+    <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+    <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+        <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ins|BirthDateField Border.birth-shadow">
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+    <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ins|BirthDateField Panel.birth-wrap:pointerover:not(:focus-within):not(.open) Border.birth-control">
+    <Setter Property="BorderBrush" Value="{DynamicResource InsPickerHoverBorder}" />
+    <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+  </Style>
+  <Style Selector="ins|BirthDateField Panel.birth-wrap:focus-within Border.birth-control, ins|BirthDateField Panel.birth-wrap.open Border.birth-control">
+    <Setter Property="BorderBrush" Value="{DynamicResource InsPickerFocusBorder}" />
+    <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+  </Style>
+  <Style Selector="ins|BirthDateField Panel.birth-wrap:focus-within Border.birth-shadow, ins|BirthDateField Panel.birth-wrap.open Border.birth-shadow">
+    <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-root.field Border.birth-box">
+    <Setter Property="Height" Value="32" />
+    <Setter Property="Padding" Value="6,0" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="BoxShadow" Value="none" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-root.field StackPanel.birth-seg.d Border.birth-box">
+    <Setter Property="Width" Value="NaN" />
+    <Setter Property="MinWidth" Value="40" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-root.field StackPanel.birth-seg.m Border.birth-box">
+    <Setter Property="Width" Value="NaN" />
+    <Setter Property="MinWidth" Value="52" />
+  </Style>
+  <Style Selector="ins|BirthDateField[FlowDirection=RightToLeft] StackPanel.birth-root.field StackPanel.birth-seg.m Border.birth-box">
+    <Setter Property="MinWidth" Value="44" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-root.field StackPanel.birth-seg.y Border.birth-box">
+    <Setter Property="Width" Value="NaN" />
+    <Setter Property="MinWidth" Value="56" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-root.field StackPanel.birth-seg:focus-within Border.birth-box">
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BoxShadow" Value="none" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-root.field StackPanel.birth-seg.no Border.birth-box">
+    <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BoxShadow" Value="none" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-root.field TextBlock.birth-val">
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="LetterSpacing" Value="0.64" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-root.field TextBlock.birth-ph">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector="ins|BirthDateField TextBlock.birth-sep">
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+    <Setter Property="FontSize" Value="14" />
+  </Style>
+  <Style Selector="ins|BirthDateField StackPanel.birth-root.field > TextBlock.birth-line">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="TextAlignment" Value="Start" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    <Setter Property="TextWrapping" Value="NoWrap" />
+    <Setter Property="MinHeight" Value="19" />
+    <Setter Property="Margin" Value="0,4,0,0" />
+  </Style>
+
+  <!-- The columns, under the parts (inline) or in the pop-up. -->
+  <Style Selector="ins|DrumColumn.birth-col">
+    <Setter Property="FontSize" Value="18" />
+  </Style>
+  <Style Selector="ins|DrumColumn.birth-col.pop">
+    <Setter Property="FontSize" Value="17" />
+  </Style>
+  <Style Selector="ins|DrumColumn.birth-col.m">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBody}" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+  </Style>
+  <Style Selector="Border.birth-pop">
+    <Setter Property="Width" Value="304" />
+  </Style>
+  <Style Selector="Border.birth-pop TextBlock.birth-line">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+    <Setter Property="TextAlignment" Value="Center" />
+    <Setter Property="MinHeight" Value="19" />
+  </Style>
+  <Style Selector="Border.birth-foot">
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+    <Setter Property="Padding" Value="0,8,0,0" />
+  </Style>
+  <Style Selector="StackPanel.birth-foot-row">
+    <Setter Property="Spacing" Value="{DynamicResource InsFootGap}" />
+  </Style>
+  <Style Selector="Border.birth-foot Button">
+    <Setter Property="MinWidth" Value="{DynamicResource InsFootMinSm}" />
+  </Style>
+  <Style Selector="Border.birth-foot Button.bare.sm">
+    <Setter Property="Padding" Value="10,4" />
+    <Setter Property="MinHeight" Value="{DynamicResource InsCtlSmH}" />
+  </Style>
+
+</Styles>
