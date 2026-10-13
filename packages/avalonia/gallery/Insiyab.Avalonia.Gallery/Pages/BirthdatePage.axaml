@@ -1,0 +1,92 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.BirthdatePage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PickersFrames.axaml" />
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel>
+
+      <TextBlock Classes="section" Text="حقل الميلاد" />
+      <Border Classes="dx">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="تاريخ الميلاد" />
+          <ins:BirthDateField />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="section" Text="جرّب الحقل" />
+      <Border Classes="stage">
+        <StackPanel Classes="field" Width="320">
+          <TextBlock Classes="label" Text="تاريخ الميلاد" />
+          <ins:BirthDateField />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="الشكل: كبير" />
+      <Border Classes="stage">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="تاريخ الميلاد" />
+          <ins:BirthDateField Layout="Inline" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="أقل عمر: 18" />
+      <Border Classes="stage">
+        <StackPanel Classes="field" Width="320">
+          <TextBlock Classes="label" Text="تاريخ الميلاد" />
+          <ins:BirthDateField MinAge="18" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="أكبر عمر: 70" />
+      <Border Classes="stage">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="تاريخ الميلاد" />
+          <ins:BirthDateField MaxAge="70" Layout="Inline" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="عمر البداية: 22" />
+      <Border Classes="stage">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="تاريخ الميلاد" />
+          <ins:BirthDateField StartAge="22" Layout="Inline" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="فيه تاريخ" />
+      <Border Classes="stage">
+        <StackPanel Classes="field" Width="320">
+          <TextBlock Classes="label" Text="تاريخ الميلاد" />
+          <ins:BirthDateField x:Name="PlayFilled" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="معطل" />
+      <Border Classes="stage">
+        <StackPanel Classes="field" Width="320">
+          <TextBlock Classes="label" Text="تاريخ الميلاد" />
+          <ins:BirthDateField x:Name="PlayDisabled" IsEnabled="False" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="section" Text="ما يصل إلى الخادم" />
+      <Border Classes="stage wide">
+        <StackPanel Spacing="16">
+          <StackPanel Classes="field">
+            <TextBlock Classes="label" Text="تاريخ الميلاد" />
+            <ins:BirthDateField x:Name="ServerField" IsRequired="True" />
+          </StackPanel>
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12">
+            <Button x:Name="ServerReset" Classes="secondary" Content="إعادة الضبط" />
+            <Button x:Name="ServerSend" Classes="primary" Content="إرسال" />
+          </StackPanel>
+          <TextBlock x:Name="ServerHint" Classes="hint" />
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

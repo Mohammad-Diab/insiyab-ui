@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.MonthPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PickersFrames.axaml" />
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel>
+
+      <Border Classes="dx">
+        <ins:MonthCalendar x:Name="Demo" />
+      </Border>
+
+      <TextBlock Classes="section" Text="شهر بمواعيده" />
+      <Border Classes="stage wide">
+        <ins:MonthCalendar x:Name="Play" />
+      </Border>
+
+      <TextBlock Classes="variant" Text="رابط" />
+      <Border Classes="stage wide">
+        <ins:MonthCalendar x:Name="PlayLink" />
+      </Border>
+
+      <TextBlock Classes="variant" Text="أكثر من ثلاثة في يوم" />
+      <Border Classes="stage wide">
+        <ins:MonthCalendar x:Name="PlayMany" />
+      </Border>
+
+      <TextBlock Classes="variant" Text="النبرة: تحذير" />
+      <Border Classes="stage wide">
+        <ins:MonthCalendar x:Name="PlayWarn" />
+      </Border>
+
+      <TextBlock Classes="variant" Text="بالإنجليزية" />
+      <Border Classes="stage wide">
+        <ins:MonthCalendar x:Name="PlayEnglish" Locale="en" FlowDirection="LeftToRight" />
+      </Border>
+
+      <TextBlock Classes="variant" Text="على الهاتف" />
+      <Border Classes="stage">
+        <ins:MonthCalendar x:Name="PlayPhone" Width="400" HorizontalAlignment="Center" />
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

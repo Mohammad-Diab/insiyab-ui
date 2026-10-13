@@ -1,0 +1,149 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <!-- .ins-date-btn: a 36px square at the field's end, the calendar glyph in faint grey; under the pointer or while open, tinted with the brand glyph. -->
+      <ControlTheme x:Key="InsDateBtn" TargetType="Button">
+        <Setter Property="Width" Value="36" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Margin" Value="4,0,5,0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+              <ins:Icon Data="{StaticResource InsDateBtnIcon}" Size="18" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover, ^.open">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The time field's clock: the date button with a 16px clock in place of the calendar. -->
+      <ControlTheme x:Key="InsTimeBtn" TargetType="Button" BasedOn="{StaticResource InsDateBtn}">
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+              <ins:Icon Data="{StaticResource InsTimeClockIcon}" Size="16" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:DateTimeGroup}" TargetType="ins:DateTimeGroup">
+        <Setter Property="MinHeight" Value="{DynamicResource InsFieldH}" />
+        <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShSubtle}" />
+              <Border x:Name="PART_BorderElement"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BoxShadow="{DynamicResource InsBevelDim}"
+                      Padding="{TemplateBinding Padding}">
+                <Grid ColumnDefinitions="*,Auto">
+                  <ins:DateField x:Name="PART_Date" Classes="grouped" />
+                  <Border Grid.Column="1" Width="144" BorderBrush="{DynamicResource InsLine}" BorderThickness="1,0,0,0">
+                    <ins:TimeField x:Name="PART_Time" Classes="grouped" />
+                  </Border>
+                </Grid>
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover:not(:focus-within) /template/ Border#PART_BorderElement">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsPickerHoverBorder}" />
+        </Style>
+        <Style Selector="^:focus-within">
+          <Setter Property="RenderTransform" Value="translateY(-1px)" />
+          <Style Selector="^ /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsPickerFocusBorder}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- The date field: text 14px from the start as in the group, the button inset 6px from the end. -->
+  <Style Selector="TextBox.date-field">
+    <Setter Property="Padding" Value="14,8,8,8" />
+  </Style>
+  <Style Selector="TextBox.date-field Button.date-btn">
+    <Setter Property="Theme" Value="{StaticResource InsDateBtn}" />
+  </Style>
+
+  <!-- The time field: the text kept clear of the clock button at its end. -->
+  <Style Selector="TextBox.time-field">
+    <Setter Property="Padding" Value="14,8,8,8" />
+  </Style>
+  <Style Selector="TextBox.time-field Button.time-btn">
+    <Setter Property="Theme" Value="{StaticResource InsTimeBtn}" />
+  </Style>
+
+  <!-- Inside a date-and-time group the two fields give up their own box: the group draws it. -->
+  <Style Selector="ins|DateTimeGroup TextBox.grouped">
+    <Setter Property="MinHeight" Value="44" />
+    <Setter Property="RenderTransform" Value="none" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+  <Style Selector="ins|DateTimeGroup TextBox.grouped /template/ Border#PART_Shadow">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+  <Style Selector="ins|DateTimeGroup TextBox.grouped /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="BoxShadow" Value="none" />
+  </Style>
+  <Style Selector="ins|DateTimeGroup TextBox.grouped:focus">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+  <Style Selector="ins|DateTimeGroup TextBox.date-field.grouped">
+    <Setter Property="Padding" Value="8,8,4,8" />
+  </Style>
+  <Style Selector="ins|DateTimeGroup TextBox.date-field.grouped Button.date-btn">
+    <Setter Property="Margin" Value="4,0,4,0" />
+  </Style>
+  <Style Selector="ins|DateTimeGroup TextBox.time-field.grouped">
+    <Setter Property="Padding" Value="12,8,4,8" />
+  </Style>
+  <Style Selector="ins|DateTimeGroup TextBox.time-field.grouped Button.time-btn">
+    <Setter Property="Margin" Value="4,0,4,0" />
+  </Style>
+
+</Styles>

@@ -1,0 +1,726 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <x:Double x:Key="InsPickerItemHeight">36</x:Double>
+      <StreamGeometry x:Key="InsPickerCheck">M5 12.5 l4.5 4.5 L19 7.5</StreamGeometry>
+      <StreamGeometry x:Key="InsPickerCross">M6 6 L18 18 M18 6 L6 18</StreamGeometry>
+
+      <!-- A day of the built-in Calendar: a square day; today ringed, the chosen day filled with the brand gradient. -->
+      <ControlTheme x:Key="{x:Type CalendarDayButton}" TargetType="CalendarDayButton">
+        <Setter Property="ClickMode" Value="Release" />
+        <Setter Property="MinWidth" Value="38" />
+        <Setter Property="Height" Value="38" />
+        <Setter Property="Margin" Value="1" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
+              <Border x:Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      FlowDirection="LeftToRight" />
+              <ContentPresenter x:Name="PART_ContentPresenter"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Foreground="{TemplateBinding Foreground}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+              <Border x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2" BorderBrush="{DynamicResource InsToneBrand}" IsVisible="False" IsHitTestVisible="False" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        </Style>
+        <Style Selector="^:inactive">
+          <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        </Style>
+        <Style Selector="^:today">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandBd}" />
+          <Setter Property="BorderThickness" Value="1" />
+        </Style>
+        <Style Selector="^:selected, ^:selected:pointerover">
+          <Setter Property="Background" Value="{StaticResource InsPickerBrandFill}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="BorderThickness" Value="0" />
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandSm}" />
+          </Style>
+        </Style>
+        <Style Selector="^:blackout, ^:disabled">
+          <Setter Property="Opacity" Value="0.3" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing, ^:dayfocused:focus-within /template/ Border#PART_FocusRing">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+      </ControlTheme>
+
+      <!-- A month or a year of the built-in Calendar's year view: the day's look, taller. -->
+      <ControlTheme x:Key="{x:Type CalendarButton}" TargetType="CalendarButton">
+        <Setter Property="ClickMode" Value="Release" />
+        <Setter Property="MinWidth" Value="38" />
+        <Setter Property="Height" Value="52" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="FontFamily" Value="{DynamicResource InsFontBody}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
+              <Border x:Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      FlowDirection="LeftToRight" />
+              <ContentPresenter x:Name="PART_ContentPresenter"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Foreground="{TemplateBinding Foreground}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+              <Border x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2" BorderBrush="{DynamicResource InsToneBrand}" IsVisible="False" IsHitTestVisible="False" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        </Style>
+        <Style Selector="^:inactive">
+          <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        </Style>
+        <Style Selector="^:selected, ^:selected:pointerover">
+          <Setter Property="Background" Value="{StaticResource InsPickerBrandFill}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="BorderThickness" Value="0" />
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandSm}" />
+          </Style>
+        </Style>
+        <Style Selector="^:blackout, ^:disabled">
+          <Setter Property="Opacity" Value="0.3" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The month title between the arrows: a bare button in the calendar's head. -->
+      <ControlTheme x:Key="InsCalHeader" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="MinHeight" Value="32" />
+        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+              <ContentPresenter x:Name="PART_ContentPresenter"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Foreground="{TemplateBinding Foreground}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type CalendarItem}" TargetType="CalendarItem">
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="DayTitleTemplate">
+          <Template x:DataType="x:String">
+            <TextBlock Text="{Binding}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="{DynamicResource InsFsXs}"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource InsLabel}"
+                       Margin="0,4,0,6" />
+          </Template>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}">
+              <Grid RowDefinitions="Auto,*" MinWidth="280">
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="6" Margin="0,0,0,8">
+                  <Button x:Name="PART_PreviousButton" Classes="cal-nav prev" Theme="{StaticResource InsCalNav}" />
+                  <Button x:Name="PART_HeaderButton" Grid.Column="1" Theme="{StaticResource InsCalHeader}" />
+                  <Button x:Name="PART_NextButton" Grid.Column="2" Classes="cal-nav next" Theme="{StaticResource InsCalNav}" />
+                </Grid>
+                <Grid x:Name="PART_MonthView" Grid.Row="1" IsVisible="False"
+                      RowDefinitions="30,Auto,Auto,Auto,Auto,Auto,Auto"
+                      ColumnDefinitions="*,*,*,*,*,*,*" />
+                <Grid x:Name="PART_YearView" Grid.Row="1" IsVisible="False" MinHeight="270"
+                      RowDefinitions="*,*,*"
+                      ColumnDefinitions="*,*,*,*" />
+              </Grid>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type Calendar}" TargetType="Calendar">
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel ClipToBounds="False">
+              <Border CornerRadius="{DynamicResource InsRLg}" Background="{DynamicResource InsWash1}" BoxShadow="{DynamicResource InsShLg}" FlowDirection="LeftToRight" />
+              <Border Classes="picker-glass" />
+              <Panel x:Name="PART_Root" ClipToBounds="False">
+                <CalendarItem x:Name="PART_CalendarItem"
+                              BorderBrush="{DynamicResource InsRim}"
+                              BorderThickness="1"
+                              CornerRadius="{DynamicResource InsRLg}" />
+              </Panel>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type CalendarDatePicker}" TargetType="CalendarDatePicker">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="MinHeight" Value="{DynamicResource InsFieldH}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <DataValidationErrors ClipToBounds="False">
+              <Panel x:Name="LayoutRoot" ClipToBounds="False">
+                <Grid ColumnDefinitions="*,Auto">
+                  <TextBox x:Name="PART_TextBox"
+                           Grid.ColumnSpan="2"
+                           Padding="14,8,50,8"
+                           PlaceholderText="{TemplateBinding PlaceholderText}" />
+                  <Button x:Name="PART_Button" Grid.Column="1" Theme="{StaticResource InsDateBtn}" Focusable="False" Margin="4,0,5,0" />
+                  <Popup x:Name="PART_Popup"
+                         PlacementTarget="{Binding #PART_TextBox}"
+                         Placement="BottomEdgeAlignedLeft"
+                         HorizontalOffset="-40"
+                         VerticalOffset="-10"
+                         IsLightDismissEnabled="True"
+                         WindowManagerAddShadowHint="False"
+                         ShouldUseOverlayLayer="True">
+                    <Border Padding="40,16,40,64">
+                      <Calendar x:Name="PART_Calendar"
+                                FirstDayOfWeek="{TemplateBinding FirstDayOfWeek}"
+                                IsTodayHighlighted="{TemplateBinding IsTodayHighlighted}"
+                                SelectedDate="{TemplateBinding SelectedDate, Mode=TwoWay}"
+                                DisplayDate="{TemplateBinding DisplayDate}"
+                                DisplayDateStart="{TemplateBinding DisplayDateStart}"
+                                DisplayDateEnd="{TemplateBinding DisplayDateEnd}" />
+                    </Border>
+                  </Popup>
+                </Grid>
+              </Panel>
+            </DataValidationErrors>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^[FlowDirection=RightToLeft] /template/ Popup#PART_Popup">
+          <Setter Property="HorizontalOffset" Value="40" />
+        </Style>
+        <Style Selector="^:flyout-open /template/ Button#PART_Button">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- An item of a spinner picker's wheel: Inter at 17px, the chosen one in the brand at 800. -->
+      <ControlTheme x:Key="InsDrumItem" TargetType="ListBoxItem">
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+        <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+        <Setter Property="FontSize" Value="17" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <ContentPresenter x:Name="PART_ContentPresenter"
+                              Background="{TemplateBinding Background}"
+                              Foreground="{TemplateBinding Foreground}"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Padding="{TemplateBinding Padding}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        </Style>
+        <Style Selector="^.MonthItem">
+          <Setter Property="FontFamily" Value="{DynamicResource InsFontBody}" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        </Style>
+        <Style Selector="^:selected, ^:selected:pointerover">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+          <Setter Property="FontWeight" Value="ExtraBold" />
+          <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The strip at a wheel's end that steps it; the presenter shows it while the pointer is over the wheel. -->
+      <ControlTheme x:Key="InsDrumStep" TargetType="RepeatButton">
+        <Setter Property="Height" Value="24" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="IsVisible" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}">
+              <ins:Icon Data="{StaticResource InsPickerChevronDown}" Size="14" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        </Style>
+        <Style Selector="^.up">
+          <Setter Property="VerticalAlignment" Value="Top" />
+        </Style>
+        <Style Selector="^.up /template/ ins|Icon">
+          <Setter Property="RenderTransform" Value="rotate(180deg)" />
+        </Style>
+        <Style Selector="^.down">
+          <Setter Property="VerticalAlignment" Value="Bottom" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The check and the cross under a spinner picker's wheels. -->
+      <ControlTheme x:Key="InsDrumFootBtn" TargetType="Button">
+        <Setter Property="Height" Value="40" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+              <ContentPresenter x:Name="PART_ContentPresenter"
+                                Content="{TemplateBinding Content}"
+                                Foreground="{TemplateBinding Foreground}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        </Style>
+        <Style Selector="^.accept">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The face of a DatePicker or a TimePicker: the field's box, bevel and shadow around the parts. -->
+      <ControlTheme x:Key="InsPickerFaceBtn" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="MinHeight" Value="{DynamicResource InsFieldH}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShSubtle}" />
+              <Border x:Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BoxShadow="{DynamicResource InsBevelDim}">
+                <Border.Transitions>
+                  <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                  </Transitions>
+                </Border.Transitions>
+                <ContentPresenter x:Name="PART_ContentPresenter"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  Foreground="{TemplateBinding Foreground}"
+                                  HorizontalContentAlignment="Stretch"
+                                  VerticalContentAlignment="Stretch" />
+              </Border>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover /template/ Border#PART_Face">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsPickerHoverBorder}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_Shadow">
+          <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.55" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type DatePicker}" TargetType="DatePicker">
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="MinWidth" Value="296" />
+        <Setter Property="MaxWidth" Value="456" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <DataValidationErrors ClipToBounds="False">
+              <Grid x:Name="LayoutRoot" Margin="{TemplateBinding Padding}" ClipToBounds="False">
+                <Button x:Name="PART_FlyoutButton"
+                        Theme="{StaticResource InsPickerFaceBtn}"
+                        Foreground="{TemplateBinding Foreground}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        IsEnabled="{TemplateBinding IsEnabled}"
+                        MinWidth="{TemplateBinding MinWidth}"
+                        MaxWidth="{TemplateBinding MaxWidth}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        TemplatedControl.IsTemplateFocusTarget="True">
+                  <Grid x:Name="PART_ButtonContentGrid" ColumnDefinitions="78*,Auto,132*,Auto,78*">
+                    <TextBlock x:Name="PART_DayTextBlock" Text="{DynamicResource StringDatePickerDayText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
+                    <TextBlock x:Name="PART_MonthTextBlock" Text="{DynamicResource StringDatePickerMonthText}" TextAlignment="Left" Padding="12,0" VerticalAlignment="Center" />
+                    <TextBlock x:Name="PART_YearTextBlock" Text="{DynamicResource StringDatePickerYearText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
+                    <Rectangle x:Name="PART_FirstSpacer" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="1" />
+                    <Rectangle x:Name="PART_SecondSpacer" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="3" />
+                  </Grid>
+                </Button>
+                <Popup x:Name="PART_Popup" WindowManagerAddShadowHint="False" IsLightDismissEnabled="True" PlacementTarget="{TemplateBinding}" Placement="Bottom">
+                  <DatePickerPresenter x:Name="PART_PickerPresenter" />
+                </Popup>
+              </Grid>
+            </DataValidationErrors>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Button#PART_FlyoutButton TextBlock">
+          <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="^:hasnodate /template/ Button#PART_FlyoutButton TextBlock">
+          <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        </Style>
+        <Style Selector="^:error /template/ Button#PART_FlyoutButton">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type TimePicker}" TargetType="TimePicker">
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="MinWidth" Value="242" />
+        <Setter Property="MaxWidth" Value="456" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <DataValidationErrors ClipToBounds="False">
+              <Grid x:Name="LayoutRoot" Margin="{TemplateBinding Padding}" ClipToBounds="False">
+                <Button x:Name="PART_FlyoutButton"
+                        Theme="{StaticResource InsPickerFaceBtn}"
+                        Foreground="{TemplateBinding Foreground}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        IsEnabled="{TemplateBinding IsEnabled}"
+                        MinWidth="{TemplateBinding MinWidth}"
+                        MaxWidth="{TemplateBinding MaxWidth}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                  <Grid x:Name="PART_FlyoutButtonContentGrid">
+                    <Border x:Name="PART_FirstPickerHost" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                      <TextBlock x:Name="PART_HourTextBlock" Text="{DynamicResource StringTimePickerHourText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
+                    </Border>
+                    <Rectangle x:Name="PART_FirstColumnDivider" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="1" />
+                    <Border x:Name="PART_SecondPickerHost" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                      <TextBlock x:Name="PART_MinuteTextBlock" Text="{DynamicResource StringTimePickerMinuteText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
+                    </Border>
+                    <Rectangle x:Name="PART_SecondColumnDivider" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="3" />
+                    <Border x:Name="PART_ThirdPickerHost" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                      <TextBlock x:Name="PART_SecondTextBlock" Text="{DynamicResource StringTimePickerSecondText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
+                    </Border>
+                    <Rectangle x:Name="PART_ThirdColumnDivider" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="5" />
+                    <Border x:Name="PART_FourthPickerHost" Grid.Column="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                      <TextBlock x:Name="PART_PeriodTextBlock" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
+                    </Border>
+                  </Grid>
+                </Button>
+                <Popup x:Name="PART_Popup" WindowManagerAddShadowHint="False" IsLightDismissEnabled="True" PlacementTarget="{TemplateBinding}" Placement="Bottom">
+                  <TimePickerPresenter x:Name="PART_PickerPresenter" />
+                </Popup>
+              </Grid>
+            </DataValidationErrors>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Button#PART_FlyoutButton TextBlock">
+          <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="^:hasnotime /template/ Button#PART_FlyoutButton TextBlock">
+          <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        </Style>
+        <Style Selector="^:error /template/ Button#PART_FlyoutButton">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type DatePickerPresenter}" TargetType="DatePickerPresenter">
+        <Setter Property="Width" Value="296" />
+        <Setter Property="MinWidth" Value="296" />
+        <Setter Property="MaxHeight" Value="398" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border CornerRadius="{DynamicResource InsRLg}" Background="{DynamicResource InsWash1}" BorderBrush="{DynamicResource InsRim}" BorderThickness="1" FlowDirection="LeftToRight" />
+              <Border Classes="picker-glass" />
+              <Grid x:Name="ContentRoot" RowDefinitions="*,Auto" Margin="8">
+                <Grid x:Name="PART_PickerContainer">
+                  <Grid.Styles>
+                    <Style Selector="DateTimePickerPanel > ListBoxItem">
+                      <Setter Property="Theme" Value="{StaticResource InsDrumItem}" />
+                    </Style>
+                  </Grid.Styles>
+                  <Panel x:Name="PART_MonthHost" Classes="wheel">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                      <DateTimePickerPanel x:Name="PART_MonthSelector" PanelType="Month" ItemHeight="{StaticResource InsPickerItemHeight}" ShouldLoop="True" />
+                    </ScrollViewer>
+                    <RepeatButton x:Name="PART_MonthUpButton" Classes="up" Theme="{StaticResource InsDrumStep}" />
+                    <RepeatButton x:Name="PART_MonthDownButton" Classes="down" Theme="{StaticResource InsDrumStep}" />
+                  </Panel>
+                  <Panel x:Name="PART_DayHost" Classes="wheel">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                      <DateTimePickerPanel x:Name="PART_DaySelector" PanelType="Day" ItemHeight="{StaticResource InsPickerItemHeight}" ShouldLoop="True" />
+                    </ScrollViewer>
+                    <RepeatButton x:Name="PART_DayUpButton" Classes="up" Theme="{StaticResource InsDrumStep}" />
+                    <RepeatButton x:Name="PART_DayDownButton" Classes="down" Theme="{StaticResource InsDrumStep}" />
+                  </Panel>
+                  <Panel x:Name="PART_YearHost" Classes="wheel">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                      <DateTimePickerPanel x:Name="PART_YearSelector" PanelType="Year" ItemHeight="{StaticResource InsPickerItemHeight}" ShouldLoop="False" />
+                    </ScrollViewer>
+                    <RepeatButton x:Name="PART_YearUpButton" Classes="up" Theme="{StaticResource InsDrumStep}" />
+                    <RepeatButton x:Name="PART_YearDownButton" Classes="down" Theme="{StaticResource InsDrumStep}" />
+                  </Panel>
+                  <Border x:Name="HighlightRect"
+                          Height="36"
+                          VerticalAlignment="Center"
+                          CornerRadius="{DynamicResource InsRSm}"
+                          Background="{DynamicResource InsToneBrandBg}"
+                          BorderBrush="{DynamicResource InsToneBrandBd}"
+                          BorderThickness="1"
+                          BoxShadow="{DynamicResource InsBevelDim}"
+                          IsHitTestVisible="False"
+                          ZIndex="-1"
+                          Grid.Column="0"
+                          Grid.ColumnSpan="5" />
+                  <Rectangle x:Name="PART_FirstSpacer" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="1" />
+                  <Rectangle x:Name="PART_SecondSpacer" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="3" />
+                </Grid>
+                <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                  <Border Height="1" Background="{DynamicResource InsLine}" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,-8,0,0" />
+                  <Button x:Name="PART_DismissButton" Grid.Column="0" Theme="{StaticResource InsDrumFootBtn}">
+                    <ins:Icon Data="{StaticResource InsPickerCross}" Size="18" />
+                  </Button>
+                  <Button x:Name="PART_AcceptButton" Grid.Column="1" Classes="accept" Theme="{StaticResource InsDrumFootBtn}">
+                    <ins:Icon Data="{StaticResource InsPickerCheck}" Size="18" />
+                  </Button>
+                </Grid>
+              </Grid>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Panel.wheel:pointerover RepeatButton">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type TimePickerPresenter}" TargetType="TimePickerPresenter">
+        <Setter Property="Width" Value="242" />
+        <Setter Property="MinWidth" Value="242" />
+        <Setter Property="MaxHeight" Value="398" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border CornerRadius="{DynamicResource InsRLg}" Background="{DynamicResource InsWash1}" BorderBrush="{DynamicResource InsRim}" BorderThickness="1" FlowDirection="LeftToRight" />
+              <Border Classes="picker-glass" />
+              <Grid x:Name="ContentRoot" RowDefinitions="*,Auto" Margin="8">
+                <Grid x:Name="PART_PickerContainer">
+                  <Grid.Styles>
+                    <Style Selector="DateTimePickerPanel > ListBoxItem">
+                      <Setter Property="Theme" Value="{StaticResource InsDrumItem}" />
+                    </Style>
+                  </Grid.Styles>
+                  <Panel x:Name="PART_HourHost" Grid.Column="0" Classes="wheel">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                      <DateTimePickerPanel x:Name="PART_HourSelector" PanelType="Hour" ShouldLoop="True" ItemHeight="{StaticResource InsPickerItemHeight}" />
+                    </ScrollViewer>
+                    <RepeatButton x:Name="PART_HourUpButton" Classes="up" Theme="{StaticResource InsDrumStep}" />
+                    <RepeatButton x:Name="PART_HourDownButton" Classes="down" Theme="{StaticResource InsDrumStep}" />
+                  </Panel>
+                  <Panel x:Name="PART_MinuteHost" Grid.Column="2" Classes="wheel">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                      <DateTimePickerPanel x:Name="PART_MinuteSelector" PanelType="Minute" ShouldLoop="True" ItemHeight="{StaticResource InsPickerItemHeight}" />
+                    </ScrollViewer>
+                    <RepeatButton x:Name="PART_MinuteUpButton" Classes="up" Theme="{StaticResource InsDrumStep}" />
+                    <RepeatButton x:Name="PART_MinuteDownButton" Classes="down" Theme="{StaticResource InsDrumStep}" />
+                  </Panel>
+                  <Panel x:Name="PART_SecondHost" Grid.Column="4" Classes="wheel">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                      <DateTimePickerPanel x:Name="PART_SecondSelector" PanelType="Second" ShouldLoop="True" ItemHeight="{StaticResource InsPickerItemHeight}" />
+                    </ScrollViewer>
+                    <RepeatButton x:Name="PART_SecondUpButton" Classes="up" Theme="{StaticResource InsDrumStep}" />
+                    <RepeatButton x:Name="PART_SecondDownButton" Classes="down" Theme="{StaticResource InsDrumStep}" />
+                  </Panel>
+                  <Panel x:Name="PART_PeriodHost" Grid.Column="6" Classes="wheel">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                      <DateTimePickerPanel x:Name="PART_PeriodSelector" PanelType="TimePeriod" ShouldLoop="False" ItemHeight="{StaticResource InsPickerItemHeight}" />
+                    </ScrollViewer>
+                    <RepeatButton x:Name="PART_PeriodUpButton" Classes="up" Theme="{StaticResource InsDrumStep}" />
+                    <RepeatButton x:Name="PART_PeriodDownButton" Classes="down" Theme="{StaticResource InsDrumStep}" />
+                  </Panel>
+                  <Border x:Name="HighlightRect"
+                          Height="36"
+                          VerticalAlignment="Center"
+                          CornerRadius="{DynamicResource InsRSm}"
+                          Background="{DynamicResource InsToneBrandBg}"
+                          BorderBrush="{DynamicResource InsToneBrandBd}"
+                          BorderThickness="1"
+                          BoxShadow="{DynamicResource InsBevelDim}"
+                          IsHitTestVisible="False"
+                          ZIndex="-1"
+                          Grid.Column="0"
+                          Grid.ColumnSpan="7" />
+                  <Rectangle x:Name="PART_FirstSpacer" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="1" />
+                  <Rectangle x:Name="PART_SecondSpacer" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="3" />
+                  <Rectangle x:Name="PART_ThirdSpacer" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="5" />
+                </Grid>
+                <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                  <Border Height="1" Background="{DynamicResource InsLine}" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,-8,0,0" />
+                  <Button x:Name="PART_DismissButton" Grid.Column="0" Theme="{StaticResource InsDrumFootBtn}">
+                    <ins:Icon Data="{StaticResource InsPickerCross}" Size="18" />
+                  </Button>
+                  <Button x:Name="PART_AcceptButton" Grid.Column="1" Classes="accept" Theme="{StaticResource InsDrumFootBtn}">
+                    <ins:Icon Data="{StaticResource InsPickerCheck}" Size="18" />
+                  </Button>
+                </Grid>
+              </Grid>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Panel.wheel:pointerover RepeatButton">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+</Styles>

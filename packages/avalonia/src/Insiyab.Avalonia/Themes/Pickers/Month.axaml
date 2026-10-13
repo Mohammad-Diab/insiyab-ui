@@ -1,0 +1,188 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ControlTheme x:Key="{x:Type ins:MonthCalendar}" TargetType="ins:MonthCalendar">
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Decorator x:Name="PART_Host" />
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="ins|MonthCalendar Grid.month-head">
+    <Setter Property="Margin" Value="0,0,0,12" />
+  </Style>
+  <Style Selector="ins|MonthCalendar TextBlock.month-title">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
+    <Setter Property="FontWeight" Value="ExtraBold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar StackPanel.month-nav">
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Path.month-arrow">
+    <Setter Property="Stroke" Value="{Binding $parent[Button].Foreground}" />
+    <Setter Property="StrokeThickness" Value="2.5" />
+    <Setter Property="StrokeLineCap" Value="Round" />
+    <Setter Property="StrokeJoin" Value="Round" />
+  </Style>
+
+  <Style Selector="ins|MonthCalendar TextBlock.month-wd">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="Margin" Value="0,4,0,6" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+  </Style>
+
+  <!-- .ins-month-day: a quiet glass cell, today's number in the brand gradient, the other months' days left bare. -->
+  <Style Selector="ins|MonthCalendar Border.month-day">
+    <Setter Property="Height" Value="100" />
+    <Setter Property="Padding" Value="6" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+    <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-day:pointerover">
+    <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-day.other, ins|MonthCalendar Border.month-day.other:pointerover">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-num">
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="MinWidth" Value="26" />
+    <Setter Property="Height" Value="26" />
+    <Setter Property="CornerRadius" Value="13" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-num > TextBlock">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-day.other Border.month-num > TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+    <Setter Property="Opacity" Value="0.6" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-day.today Border.month-num">
+    <Setter Property="Background" Value="{StaticResource InsPickerBrandFill}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-day.today Border.month-num > TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
+  </Style>
+
+  <Style Selector="ins|MonthCalendar StackPanel.month-events">
+    <Setter Property="Margin" Value="0,4,0,0" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-event">
+    <Setter Property="Padding" Value="6,1" />
+    <Setter Property="CornerRadius" Value="5" />
+    <Setter Property="BorderThickness" Value="3,0,0,0" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandSoft}" />
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+    <Setter Property="TextElement.FontSize" Value="11" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-event.ok">
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneOk}" />
+    <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-event.warn">
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneWarn}" />
+    <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-event.bad">
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
+    <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-event.info">
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneInfo}" />
+    <Setter Property="Background" Value="{DynamicResource InsToneInfoBg}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-event.link">
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-event.link:pointerover">
+    <Setter Property="Background" Value="{Binding $self.BorderBrush}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsOnPrimary}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-event.link:pointerover TextBlock.month-time">
+    <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-event.link:focus-visible">
+    <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar TextBlock.month-time">
+    <Setter Property="Margin" Value="0,0,4,0" />
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+    <Setter Property="LineHeight" Value="17.6" />
+  </Style>
+  <Style Selector="ins|MonthCalendar TextBlock.month-event-title">
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    <Setter Property="TextWrapping" Value="NoWrap" />
+    <Setter Property="LineHeight" Value="17.6" />
+  </Style>
+  <!-- Read left to right and set at the left, on either page. -->
+  <Style Selector="ins|MonthCalendar TextBlock.month-more">
+    <Setter Property="FlowDirection" Value="LeftToRight" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="Margin" Value="6,0" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+  </Style>
+
+  <!-- Narrower than 34rem, a day shows dots for its events instead of their names. -->
+  <Style Selector="ins|MonthCalendar StackPanel.month-dots">
+    <Setter Property="IsVisible" Value="False" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="Margin" Value="0,4,0,0" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Ellipse.month-dot">
+    <Setter Property="Width" Value="5" />
+    <Setter Property="Height" Value="5" />
+    <Setter Property="Fill" Value="{DynamicResource InsToneBrandSoft}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Ellipse.month-dot.ok">
+    <Setter Property="Fill" Value="{DynamicResource InsToneOk}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Ellipse.month-dot.warn">
+    <Setter Property="Fill" Value="{DynamicResource InsToneWarn}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Ellipse.month-dot.bad">
+    <Setter Property="Fill" Value="{DynamicResource InsToneBad}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Ellipse.month-dot.info">
+    <Setter Property="Fill" Value="{DynamicResource InsToneInfo}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar:narrow Border.month-day">
+    <Setter Property="Height" Value="52" />
+    <Setter Property="Padding" Value="4" />
+  </Style>
+  <Style Selector="ins|MonthCalendar:narrow Border.month-num">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ins|MonthCalendar:narrow StackPanel.month-events">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+  <Style Selector="ins|MonthCalendar:narrow StackPanel.month-dots">
+    <Setter Property="IsVisible" Value="True" />
+  </Style>
+
+</Styles>
