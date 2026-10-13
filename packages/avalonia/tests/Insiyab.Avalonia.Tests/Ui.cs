@@ -19,6 +19,23 @@ namespace Insiyab.Avalonia.Tests;
 // Shared helpers for the headless control tests; copy one into your own file rather than changing it here.
 public static class Ui
 {
+    // A window left open by an earlier test (a spinner, an indeterminate bar) can stall the headless clock, freezing transitions mid-way, so a new test closes the last one's windows.
+    private static readonly List<Window> Open = new();
+    private static object? _openFor;
+
+    public static Window Track(Window window)
+    {
+        var test = TestContext.Current.Test;
+        if (!ReferenceEquals(test, _openFor))
+        {
+            foreach (var w in Open) if (w != window) w.Close();
+            Open.Clear();
+            _openFor = test;
+        }
+        Open.Add(window);
+        return window;
+    }
+
     public static Window Show(Control content, FlowDirection direction = FlowDirection.LeftToRight, ThemeVariant? theme = null, double width = 640, double height = 420)
     {
         var window = new Window
@@ -30,6 +47,7 @@ public static class Ui
             Content = content,
         };
         window.Show();
+        Track(window);
         Settle();
         return window;
     }
@@ -43,12 +61,19 @@ public static class Ui
         var clock = Stopwatch.StartNew();
         do
         {
-            Dispatcher.UIThread.RunJobs();
-            AvaloniaHeadlessPlatform.ForceRenderTimerTick();
-            Thread.Sleep(8);
+            Frame();
         }
         while (clock.ElapsedMilliseconds < milliseconds);
         Dispatcher.UIThread.RunJobs();
+    }
+
+    // Headless frames only run while something is dirty, so after the first animation ends later transitions would freeze mid-way; invalidating keeps the clock moving.
+    private static void Frame()
+    {
+        foreach (var w in Open) w.InvalidateVisual();
+        Dispatcher.UIThread.RunJobs();
+        AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+        Thread.Sleep(8);
     }
 
     public static T Part<T>(Visual root, string name) where T : Control =>
@@ -87,8 +112,20 @@ public static class Ui
     {
         var expected = ColorOf((IBrush)Res(anchor, key));
         var got = ColorOf(actual);
-        Assert.True(Math.Abs(expected.A - got.A) <= 6 && Math.Abs(expected.R - got.R) <= 6 && Math.Abs(expected.G - got.G) <= 6 && Math.Abs(expected.B - got.B) <= 6, $"{key}: expected {expected}, got {got}");
+        Assert.True(Near(expected, got), $"{key}: expected {expected}, got {got}");
     }
+
+    // Transitions run on real time, so a fixed wait can end just short of the target; this keeps pumping frames until the colour arrives or 2s pass.
+    public static void AssertBrush(Visual anchor, string key, Func<IBrush?> read)
+    {
+        var clock = Stopwatch.StartNew();
+        while (clock.ElapsedMilliseconds < 2000 && !(read() is ISolidColorBrush b && Near(ColorOf((IBrush)Res(anchor, key)), b.Color)))
+            Frame();
+        AssertBrush(anchor, key, read());
+    }
+
+    private static bool Near(Color a, Color b) =>
+        Math.Abs(a.A - b.A) <= 6 && Math.Abs(a.R - b.R) <= 6 && Math.Abs(a.G - b.G) <= 6 && Math.Abs(a.B - b.B) <= 6;
 
     public static IEnumerable<object[]> Looks() =>
         from theme in new[] { "Light", "Dark" }

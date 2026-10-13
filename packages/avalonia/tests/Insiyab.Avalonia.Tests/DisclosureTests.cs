@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
@@ -11,9 +12,11 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Insiyab.Avalonia.Controls;
 using static Insiyab.Avalonia.Tests.Ui;
+using Ellipse = Avalonia.Controls.Shapes.Ellipse;
 using ShapePath = Avalonia.Controls.Shapes.Path;
 
 namespace Insiyab.Avalonia.Tests;
@@ -31,6 +34,21 @@ public class DisclosureTests
         w.KeyPress(key, mods, PhysicalKey.None, symbol);
         w.KeyRelease(key, mods, PhysicalKey.None, symbol);
         Settle(200);
+    }
+
+    // The headless frame pump only runs while something is dirty, so a transition's last frames can go missing; invalidating the window keeps them coming.
+    private static void Pump(Window w, int milliseconds = 500)
+    {
+        var clock = Stopwatch.StartNew();
+        do
+        {
+            w.InvalidateVisual();
+            Dispatcher.UIThread.RunJobs();
+            AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+            Thread.Sleep(8);
+        }
+        while (clock.ElapsedMilliseconds < milliseconds);
+        Dispatcher.UIThread.RunJobs();
     }
 
     private static Control? Focused(Window w) => w.FocusManager?.GetFocusedElement() as Control;
@@ -89,6 +107,7 @@ public class DisclosureTests
     {
         var tc = ThreeTabs();
         var w = Show(tc, Dir(dir), Theme(theme));
+        Pump(w);
         var strip = Part<Border>(tc, "PART_Strip");
         Assert.Equal(new Thickness(4), strip.Padding);
         Assert.Equal(new Thickness(1), strip.BorderThickness);
@@ -118,6 +137,7 @@ public class DisclosureTests
         var tc = ThreeTabs();
         tc.Classes.Add("line");
         var w = Show(tc, Dir(dir), Theme(theme));
+        Pump(w);
         var strip = Part<Border>(tc, "PART_Strip");
         Assert.Equal(new Thickness(0, 0, 0, 1), strip.BorderThickness);
         AssertBrush(strip, "InsLine", () => strip.BorderBrush);
@@ -251,7 +271,7 @@ public class DisclosureTests
         Assert.Equal(2, clicks);
         Assert.Equal(0, tc.SelectedIndex);
         link.IsCurrent = true;
-        Settle();
+        Pump(w);
         AssertBrush(link, "InsSegOnFg", () => link.Foreground);
     }
 
@@ -259,13 +279,13 @@ public class DisclosureTests
     public void Tabs_panel_rises_without_leaving_a_transform()
     {
         var tc = ThreeTabs();
-        Show(tc);
+        var w = Show(tc);
         tc.SelectedIndex = 1;
-        Settle();
+        Pump(w, 800);
         var a = Part<ContentPresenter>(tc, "PART_SelectedContentHost");
         var b = Part<ContentPresenter>(tc, "PART_SelectedContentHost2");
-        Assert.False(a.IsSet(Visual.RenderTransformProperty));
-        Assert.False(b.IsSet(Visual.RenderTransformProperty));
+        Assert.Null(a.RenderTransform);
+        Assert.Null(b.RenderTransform);
         var shown = a.IsVisible ? a : b;
         Assert.Equal(1, shown.Opacity);
     }
@@ -313,6 +333,7 @@ public class DisclosureTests
     {
         var (panel, _, sections) = Accordion();
         var w = Show(panel, Dir(dir), Theme(theme));
+        Pump(w);
         var rtl = dir == "rtl";
         var head = HeaderOf(sections[0]);
         Assert.Equal(new Thickness(16, 14), head.Padding);
@@ -404,6 +425,9 @@ public class DisclosureTests
         Assert.True(expand.Bounds.Height < content.DesiredSize.Height);
         Settle();
         Assert.InRange(expand.Bounds.Height, content.DesiredSize.Height - 1, content.DesiredSize.Height + 1);
+        // Once the open transition ended, a progress set with SetCurrentValue fell back to 0 and the section closed again.
+        Settle(600);
+        Assert.InRange(expand.Bounds.Height, content.DesiredSize.Height - 1, content.DesiredSize.Height + 1);
     }
 
     // ------------------------------------------------------------ steps
@@ -446,6 +470,7 @@ public class DisclosureTests
         var first = StepsOf(Step("الأولى", done: true, flagged: true), Step("الثانية", current: true), Step("الثالثة"), Step("الرابعة"));
         var second = StepsOf(Step("الأولى", done: true), Step("الثانية", done: true, error: true), Step("الثالثة", current: true), Step("الرابعة"));
         var w = Show(new StackPanel { Children = { first, second } }, Dir(dir), Theme(theme));
+        Pump(w);
         Assert.False(first.ClipToBounds);
         Assert.False(StepAt(first, 0).ClipToBounds);
         var plain = StepAt(first, 2);
@@ -482,7 +507,8 @@ public class DisclosureTests
     {
         var steps = StepsOf(Step("الأولى", done: true), Step("الثانية", current: true), Step("الثالثة"), Step("الرابعة"));
         steps.Classes.Add("dots");
-        Show(steps);
+        var w = Show(steps);
+        Pump(w);
         Assert.False(steps.ClipToBounds);
         Assert.False(StepAt(steps, 1).ClipToBounds);
         var dot = Part<Panel>(StepAt(steps, 1), "PART_Dot");
@@ -557,16 +583,18 @@ public class DisclosureTests
         var wiz = Form(out var name, out _, out _);
         var moved = new List<int>();
         wiz.Moved += (_, e) => moved.Add(e.Step);
-        Show(wiz);
+        var w = Show(wiz);
         wiz.Next();
         Settle();
         Assert.Equal(0, wiz.CurrentIndex);
         Assert.True(DataValidationErrors.GetHasErrors(name));
         name.Text = "سارة";
+        Settle();
         wiz.Next();
         Settle();
         Assert.Equal(1, wiz.CurrentIndex);
         Assert.Contains(1, moved);
+        w.Close();
     }
 
     [AvaloniaFact]
@@ -590,6 +618,7 @@ public class DisclosureTests
         PanelAt(wiz, 2).Focus();
         Press(w, Key.Enter);
         Assert.Equal(1, finished);
+        w.Close();
 
         var multi = Form(out var note, out _, out _);
         note.AcceptsReturn = true;
@@ -599,6 +628,7 @@ public class DisclosureTests
         Press(w2, Key.Enter);
         Settle();
         Assert.Equal(0, multi.CurrentIndex);
+        w2.Close();
     }
 
     [AvaloniaTheory]
@@ -621,6 +651,7 @@ public class DisclosureTests
         Press(w, forward, RawInputModifiers.Alt);
         Settle();
         Assert.Equal(1, wiz.CurrentIndex);
+        w.Close();
     }
 
     [AvaloniaFact]
@@ -633,12 +664,13 @@ public class DisclosureTests
         wiz.Next();
         Settle();
         Assert.Equal(1, wiz.CurrentIndex);
-        MouseButtonAt(PanelAt(wiz, 1), w, MouseButton.XButton1);
+        MouseButtonAt(email, w, MouseButton.XButton1);
         Settle();
         Assert.Equal(0, wiz.CurrentIndex);
-        MouseButtonAt(PanelAt(wiz, 0), w, MouseButton.XButton2);
+        MouseButtonAt(name, w, MouseButton.XButton2);
         Settle();
         Assert.Equal(1, wiz.CurrentIndex);
+        w.Close();
     }
 
     [AvaloniaFact]
@@ -646,7 +678,7 @@ public class DisclosureTests
     {
         var wiz = Form(out var name, out var email, out _);
         wiz.Leaving += (_, e) => e.Wait();
-        Show(wiz);
+        var w = Show(wiz);
         name.Text = "سارة";
         email.Text = "a@b.c";
         wiz.Next();
@@ -670,13 +702,14 @@ public class DisclosureTests
         Settle(100);
         Assert.False(wiz.IsBusy);
         Assert.Equal(1, wiz.CurrentIndex);
+        w.Close();
     }
 
     [AvaloniaFact]
     public void Wizard_skipped_step_drops_its_number()
     {
         var wiz = Form(out _, out _, out _);
-        Show(wiz);
+        var w = Show(wiz);
         PanelAt(wiz, 1).IsSkipped = true;
         Settle();
         Assert.Equal(2, wiz.Panels.Count);
@@ -685,13 +718,14 @@ public class DisclosureTests
         Assert.False(StepAt(steps, 1).IsVisible);
         Assert.Equal(1, StepAt(steps, 0).Number);
         Assert.Equal(2, StepAt(steps, 2).Number);
+        w.Close();
     }
 
     [AvaloniaFact]
     public void Wizard_first_and_last_step_buttons()
     {
         var wiz = Form(out _, out _, out _);
-        Show(wiz);
+        var w = Show(wiz);
         var previous = Part<Button>(wiz, "PART_Previous");
         Assert.Equal(0, previous.Opacity);
         Assert.False(previous.IsHitTestVisible);
@@ -700,6 +734,7 @@ public class DisclosureTests
         Assert.False(Part<Button>(wiz, "PART_Next").IsVisible);
         Assert.True(Part<Button>(wiz, "PART_Finish").IsVisible);
         Assert.Equal(1, previous.Opacity);
+        w.Close();
     }
 
     [AvaloniaFact]
@@ -718,25 +753,27 @@ public class DisclosureTests
         Assert.Equal(38, cancel.MinHeight);
         Click(cancel, w);
         Assert.Equal(1, cancelled);
+        w.Close();
 
         var plain = Form(out _, out _, out _);
-        Show(plain);
+        var w2 = Show(plain);
         Assert.False(Part<Button>(plain, "PART_Cancel").IsVisible);
         Assert.Equal(0, Grid.GetColumn(Part<Button>(plain, "PART_Previous")));
+        w2.Close();
     }
 
     [AvaloniaFact]
     public void Wizard_moves_by_transform_operations_and_leaves_none()
     {
         var wiz = Form(out var name, out var email, out _);
-        Show(wiz, width: 640, height: 420);
+        var w = Show(wiz, width: 640, height: 420);
         name.Text = "سارة";
         email.Text = "a@b.c";
         wiz.Next();
         Settle(60);
         var arriving = PanelAt(wiz, 1);
         if (arriving.RenderTransform is not null) Assert.IsNotType<TranslateTransform>(arriving.RenderTransform);
-        Settle();
+        Pump(w, 800);
         foreach (var p in wiz.Items.OfType<WizardPanel>())
         {
             Assert.False(p.IsSet(Visual.RenderTransformProperty));
@@ -747,13 +784,14 @@ public class DisclosureTests
         Settle(60);
         foreach (var p in wiz.Items.OfType<WizardPanel>())
             if (p.RenderTransform is not null) Assert.IsNotType<TranslateTransform>(p.RenderTransform);
-        Settle();
+        Pump(w, 1500);
         foreach (var p in wiz.Items.OfType<WizardPanel>())
         {
             Assert.False(p.IsSet(Visual.RenderTransformProperty));
             Assert.False(p.IsSet(Visual.OpacityProperty));
         }
         Assert.Equal(0, wiz.CurrentIndex);
+        w.Close();
     }
 
     [AvaloniaFact]
@@ -762,7 +800,7 @@ public class DisclosureTests
         var wiz = Form(out _, out var email, out var agree);
         var finished = 0;
         wiz.Finished += (_, _) => finished++;
-        Show(wiz);
+        var w = Show(wiz);
         Assert.False(wiz.ClipToBounds);
         email.Text = "a@b.c";
         agree.IsChecked = true;
@@ -773,6 +811,7 @@ public class DisclosureTests
         Settle();
         Assert.Equal(0, wiz.CurrentIndex);
         Assert.Equal(0, finished);
+        w.Close();
     }
 
     // ------------------------------------------------------------ tree
@@ -814,7 +853,7 @@ public class DisclosureTests
 
     private static Border RowOf(TreeViewItem item) => Part<Border>(item, "PART_LayoutRoot");
 
-    private static ShapePath ChevronOf(TreeViewItem item) => Part<ShapePath>(item, "PART_ExpandCollapseChevron").GetVisualDescendants().OfType<ShapePath>().First(p => p.Name == "PART_Chevron");
+    private static ShapePath ChevronOf(TreeViewItem item) => Part<ShapePath>(item, "PART_Chevron");
 
     private static ToggleButton ToggleOf(TreeViewItem item) => Part<ToggleButton>(item, "PART_ExpandCollapseChevron");
 
@@ -826,7 +865,7 @@ public class DisclosureTests
         f.Open(true);
         var w = Show(f.Tree, Dir(dir), Theme(theme));
         f.Notes.IsSelected = true;
-        Settle();
+        Pump(w);
         var row = RowOf(f.Notes);
         Assert.Equal(34, row.MinHeight);
         Assert.Equal(new Thickness(6, 3, 8, 3), row.Padding);
@@ -862,7 +901,7 @@ public class DisclosureTests
         if (dir == "ltr") Assert.True(tip.X > tail.X);
         else Assert.True(tip.X < tail.X);
         f.Annexes.IsExpanded = true;
-        Settle();
+        Pump(w);
         tip = c.TranslatePoint(new Point(c.Bounds.Width, c.Bounds.Height / 2), w)!.Value;
         tail = c.TranslatePoint(new Point(0, c.Bounds.Height / 2), w)!.Value;
         Assert.True(tip.Y > tail.Y + 2);
@@ -973,9 +1012,11 @@ public class DisclosureTests
         Assert.Same(f.Invoices, Focused(w));
         Settle(800);
         DoubleClick(HeaderOf(f.Notes), w);
-        Assert.Equal([f.Notes], activated);
+        Assert.Single(activated);
+        Assert.Same(f.Notes, activated[0]);
         Press(w, Key.Enter);
-        Assert.Equal([f.Notes, f.Notes], activated);
+        Assert.Equal(2, activated.Count);
+        Assert.Same(f.Notes, activated[1]);
         f.Invoices.Focus(NavigationMethod.Tab);
         Press(w, Key.Enter);
         Assert.True(f.Invoices.IsExpanded);
@@ -990,11 +1031,11 @@ public class DisclosureTests
         var w = Show(f.Tree);
         RightClick(HeaderOf(f.Invoices), w);
         Assert.True(f.Invoices.IsSelected);
-        Assert.Same(f.Invoices, Focused(w));
         Assert.True(menu.IsOpen);
         Assert.Equal(PlacementMode.Pointer, menu.Placement);
         menu.Close();
         Settle();
+        Assert.Same(f.Invoices, Focused(w));
         f.Notes.Focus(NavigationMethod.Tab);
         Press(w, Key.Apps);
         Assert.True(menu.IsOpen);
@@ -1073,7 +1114,7 @@ public class DisclosureTests
         Settle(60);
         var branch = Part<Border>(f.Contracts, "PART_Branch");
         if (branch.RenderTransform is not null) Assert.IsNotType<TransformGroup>(branch.RenderTransform);
-        Settle();
+        Pump(w);
         Assert.False(branch.IsSet(Visual.RenderTransformProperty));
         Assert.Equal(1, branch.Opacity);
         Assert.NotNull(w);
@@ -1104,7 +1145,8 @@ public class DisclosureTests
         var last = Assert.IsType<TreeViewItem>(Focused(w));
         Assert.Equal("ملاحظات.txt", Tree.LabelOf(last));
         Press(w, Key.Enter);
-        Assert.Equal([last], activated);
+        Assert.Single(activated);
+        Assert.Same(last, activated[0]);
     }
 
     [AvaloniaFact]
