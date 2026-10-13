@@ -6,6 +6,7 @@ using Avalonia.Styling;
 
 namespace Insiyab.Avalonia.Gallery.Pages;
 
+[GalleryPage("tokens", "التوكنز")]
 public partial class TokensPage : UserControl
 {
     public TokensPage()

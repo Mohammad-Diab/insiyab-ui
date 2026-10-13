@@ -3,6 +3,7 @@ using Avalonia.Controls;
 
 namespace Insiyab.Avalonia.Gallery.Pages;
 
+[GalleryPage("window", "النافذة والزجاج")]
 public partial class WindowPage : UserControl
 {
     private Window? _window;

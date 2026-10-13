@@ -1,6 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="Insiyab.Avalonia.Gallery.Pages.FieldsPage">
+             x:Class="Insiyab.Avalonia.Gallery.Pages.InputsPage">
   <ScrollViewer>
     <StackPanel Margin="24" Spacing="20" MaxWidth="420" HorizontalAlignment="Left">
 

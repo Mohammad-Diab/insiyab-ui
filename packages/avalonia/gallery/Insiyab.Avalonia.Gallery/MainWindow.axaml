@@ -1,25 +1,22 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:pages="using:Insiyab.Avalonia.Gallery.Pages"
         x:Class="Insiyab.Avalonia.Gallery.MainWindow"
         Title="Insiyab Gallery"
-        Width="1180" Height="820"
+        Width="1440" Height="900"
         FlowDirection="RightToLeft">
   <DockPanel>
-    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12" Margin="24,16">
-      <ToggleSwitch x:Name="DarkSwitch" OnContent="داكن" OffContent="فاتح" />
-      <ToggleSwitch x:Name="LtrSwitch" OnContent="LTR" OffContent="RTL" />
-    </StackPanel>
-    <TabControl Margin="16,0,16,16" TabStripPlacement="Top">
-      <TabItem Header="التوكنز"><pages:TokensPage /></TabItem>
-      <TabItem Header="الخطوط"><pages:FontsPage /></TabItem>
-      <TabItem Header="اللون الأساسي"><pages:BrandPage /></TabItem>
-      <TabItem Header="النافذة"><pages:WindowPage /></TabItem>
-      <TabItem Header="النصوص"><pages:TypePage /></TabItem>
-      <TabItem Header="اللوحات"><pages:PanelPage /></TabItem>
-      <TabItem Header="الأزرار"><pages:ButtonsPage /></TabItem>
-      <TabItem Header="الحقول"><pages:FieldsPage /></TabItem>
-      <TabItem Header="الاختيار"><pages:ChecksPage /></TabItem>
-    </TabControl>
+    <Border DockPanel.Dock="Top" Padding="24,12">
+      <StackPanel Orientation="Horizontal" Spacing="16">
+        <TextBlock Classes="h4" Text="انسياب · Avalonia" VerticalAlignment="Center" />
+        <ToggleSwitch x:Name="DarkSwitch" OnContent="داكن" OffContent="فاتح" />
+        <ToggleSwitch x:Name="LtrSwitch" OnContent="LTR" OffContent="RTL" />
+      </StackPanel>
+    </Border>
+    <ScrollViewer DockPanel.Dock="Left" Width="240">
+      <StackPanel x:Name="Nav" Margin="16,0,8,24" Spacing="2" />
+    </ScrollViewer>
+    <ScrollViewer x:Name="Scroller">
+      <ContentControl x:Name="Host" Margin="8,0,24,24" />
+    </ScrollViewer>
   </DockPanel>
 </Window>

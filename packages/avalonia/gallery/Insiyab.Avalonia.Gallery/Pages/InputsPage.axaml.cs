@@ -2,9 +2,10 @@ using Avalonia.Controls;
 
 namespace Insiyab.Avalonia.Gallery.Pages;
 
-public partial class FieldsPage : UserControl
+[GalleryPage("inputs", "الحقول")]
+public partial class InputsPage : UserControl
 {
-    public FieldsPage()
+    public InputsPage()
     {
         InitializeComponent();
         DataValidationErrors.SetErrors(EmailBox, ["أدخل بريدًا إلكترونيًا صحيحًا."]);

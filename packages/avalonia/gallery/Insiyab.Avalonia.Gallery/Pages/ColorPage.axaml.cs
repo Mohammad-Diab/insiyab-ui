@@ -4,9 +4,10 @@ using Avalonia.Media;
 
 namespace Insiyab.Avalonia.Gallery.Pages;
 
-public partial class BrandPage : UserControl
+[GalleryPage("color", "اللون والهوية")]
+public partial class ColorPage : UserControl
 {
-    public BrandPage()
+    public ColorPage()
     {
         InitializeComponent();
         ShowCurrent();
