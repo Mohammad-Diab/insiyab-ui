@@ -318,4 +318,36 @@ public class TitleBarTests
     }
 
     [AvaloniaFact]
+    public void Preview_shows_its_state_and_leaves_the_window_alone()
+    {
+        var normal = new CaptionButtons { Preview = CaptionPreview.Normal };
+        var maximized = new CaptionButtons { Preview = CaptionPreview.Maximized };
+        var inactive = new CaptionButtons { Preview = CaptionPreview.Inactive };
+        var w = Show(new StackPanel { Children = { normal, maximized, inactive } });
+        Assert.False(TitleBar.IsActive(w));
+        Assert.Null(w.GetValue(TitleBar.CaptionsProperty));
+        foreach (var caps in new[] { normal, maximized, inactive })
+        {
+            Assert.True(caps.IsVisible);
+            foreach (var name in new[] { "PART_Minimize", "PART_Maximize", "PART_Close" })
+                Assert.Equal(WindowDecorationsElementRole.None, WindowDecorationProperties.GetElementRole(Part<Button>(caps, name)));
+        }
+        Assert.Same(Res(normal, "InsCaptionGlyphMaximize"), Part<ShapePath>(Part<Button>(normal, "PART_Maximize"), "PART_Glyph").Data);
+        Assert.Same(Res(maximized, "InsCaptionGlyphRestore"), Part<ShapePath>(Part<Button>(maximized, "PART_Maximize"), "PART_Glyph").Data);
+        Assert.Equal("استعادة", ToolTip.GetTip(Part<Button>(maximized, "PART_Maximize")));
+        Assert.Equal(1, Part<ShapePath>(Part<Button>(normal, "PART_Minimize"), "PART_Glyph").Opacity);
+        Assert.True(Part<ShapePath>(Part<Button>(inactive, "PART_Minimize"), "PART_Glyph").Opacity < 1);
+
+        Click(Part<Button>(normal, "PART_Maximize"), w);
+        Click(Part<Button>(normal, "PART_Minimize"), w);
+        Click(Part<Button>(normal, "PART_Close"), w);
+        Assert.Equal(WindowState.Normal, w.WindowState);
+        Assert.True(w.IsVisible);
+
+        normal.Preview = CaptionPreview.Off;
+        Settle();
+        Assert.Same(normal, w.GetValue(TitleBar.CaptionsProperty));
+        Assert.Equal(WindowDecorationsElementRole.CloseButton, WindowDecorationProperties.GetElementRole(Part<Button>(normal, "PART_Close")));
+        Assert.False(normal.IsVisible);
+    }
 }
