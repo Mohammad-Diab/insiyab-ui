@@ -99,7 +99,7 @@
                 <FlyoutPresenter Classes="pop card" FlowDirection="{TemplateBinding FlowDirection}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                   <StackPanel>
                     <TextBox x:Name="PART_Search" Classes="sm" />
-                    <ListBox x:Name="PART_List" Classes="phone-list" Theme="{DynamicResource InsComboList}" MaxHeight="288" Margin="0,8,0,0" Focusable="False">
+                    <ListBox x:Name="PART_List" Classes="phone-list" Theme="{DynamicResource InsComboList}" MaxHeight="304" Margin="-16,8,-16,-16" Padding="16,0,16,16" Focusable="False">
                       <ListBox.ItemTemplate>
                         <DataTemplate x:DataType="ins:PhoneCountryRow">
                           <Grid RowDefinitions="*,Auto">

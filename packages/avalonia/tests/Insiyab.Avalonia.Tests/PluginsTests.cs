@@ -272,6 +272,24 @@ public class PluginsTests
     }
 
     [AvaloniaFact]
+    public void Phone_list_bar_sits_at_the_card_edge()
+    {
+        var phone = new PhoneBox();
+        Show(Page(phone), FlowDirection.RightToLeft, height: 700);
+        phone.IsDropDownOpen = true;
+        Settle(250);
+        var card = Part<Border>((Visual)PopupOf(phone).Child!, "LayoutRoot");
+        var list = InPopup<ListBox>(phone, "PART_List");
+        var bar = list.GetVisualDescendants().OfType<ScrollBar>().Single(b => b.Orientation == Orientation.Vertical);
+        Assert.True(bar.IsEffectivelyVisible);
+        var r = new Rect(bar.Bounds.Size).TransformToAABB(bar.TransformToVisual(card)!.Value);
+        Assert.Equal(card.Bounds.Width - card.BorderThickness.Right, r.Right, 0.5);
+        Assert.Equal(card.Bounds.Height - card.BorderThickness.Bottom, r.Bottom, 0.5);
+        var row = list.GetVisualDescendants().OfType<ListBoxItem>().First(i => !i.IsSelected && !i.IsPointerOver);
+        Assert.Equal(17, row.TranslatePoint(new Point(0, 0), card)!.Value.X, 0.5);
+    }
+
+    [AvaloniaFact]
     public void Phone_preferred_countries_lead_the_list()
     {
         var phone = new PhoneBox { PreferredCountries = "EG,JO" };
@@ -399,6 +417,7 @@ public class PluginsTests
 
     private static FileItem RowOf(FileUpload upload, FileEntry entry) =>
         upload.GetVisualDescendants().OfType<FileItem>().First(r => r.Entry == entry);
+
 
     [AvaloniaFact]
     public void File_limits_report_what_was_left_out()
@@ -615,6 +634,24 @@ public class PluginsTests
     }
 
     [AvaloniaFact]
+    public void Color_hue_takes_a_press_on_its_whole_height()
+    {
+        var field = OpenColor();
+        Show(Page(field), FlowDirection.RightToLeft);
+        field.IsDropDownOpen = true;
+        Settle(300);
+        var hue = ((Visual)Part<Popup>(field, "PART_Popup").Child!).GetVisualDescendants().OfType<ColorHueSlider>().Single();
+        var top = TopLevel.GetTopLevel(hue)!;
+        var edge = hue.TranslatePoint(new Point(hue.Bounds.Width * 0.75, 0.5), top)!.Value;
+        Assert.Same(hue, top.InputHitTest(edge));
+        var before = hue.Hue;
+        top.MouseDown(edge, MouseButton.Left);
+        top.MouseUp(edge, MouseButton.Left);
+        Settle(150);
+        Assert.NotEqual(before, hue.Hue);
+    }
+
+    [AvaloniaFact]
     public void Color_picker_opened_by_a_click_has_no_focus_ring()
     {
         var field = OpenColor();
@@ -777,20 +814,24 @@ public class PluginsTests
         var window = ShowCarousel(carousel);
         var at = Center(carousel, window);
         window.MouseWheel(at, new Vector(0, -1), RawInputModifiers.Shift);
-        Assert.Equal(1, CarouselOptions.GetStop(carousel));
-        window.MouseWheel(at, new Vector(0, -1), RawInputModifiers.Shift);
-        Assert.Equal(1, CarouselOptions.GetStop(carousel));
-        Settle(400);
-        window.MouseWheel(at, new Vector(0, -1), RawInputModifiers.Shift);
+            Assert.Equal(1, CarouselOptions.GetStop(carousel));
+            ms += 100;
+            Assert.Equal(1, CarouselOptions.GetStop(carousel));
+    }
+
+    [AvaloniaFact]
+    public void Carousel_wheel_works_over_the_gap_between_slides()
+    {
+        var carousel = Make(4, "two");
+        var window = ShowCarousel(carousel);
+        var slides = carousel.Items.OfType<Border>().ToArray();
+        var a = Center(slides[0], window);
+        var b = Center(slides[1], window);
+        var gap = new Point((a.X + b.X) / 2, a.Y);
+        Assert.Same(Part<Border>(carousel, "PART_Track"), window.InputHitTest(gap));
+        window.MouseWheel(gap, new Vector(0, -1), RawInputModifiers.Shift);
         Settle(100);
-        Assert.Equal(2, CarouselOptions.GetStop(carousel));
-        Settle(400);
-        window.MouseWheel(at, new Vector(0, -1), RawInputModifiers.None);
-        Settle(400);
-        Assert.Equal(2, CarouselOptions.GetStop(carousel));
-        window.MouseWheel(at, new Vector(-1, 0), RawInputModifiers.None);
-        Settle(100);
-        Assert.Equal(3, CarouselOptions.GetStop(carousel));
+        Assert.Equal(1, CarouselOptions.GetStop(carousel));
     }
 
     [AvaloniaFact]

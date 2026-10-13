@@ -5,18 +5,9 @@
   <Styles.Resources>
     <ResourceDictionary>
 
-      <SolidColorBrush x:Key="InsPaletteActive" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
       <SolidColorBrush x:Key="InsPaletteBackdrop" Color="#0F172A" Opacity="0.38" />
       <StreamGeometry x:Key="InsPaletteSearch">M4,11 A7,7 0 1 0 18,11 A7,7 0 1 0 4,11 Z M20 20 l-3.5 -3.5</StreamGeometry>
 
-      <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Light">
-          <SolidColorBrush x:Key="InsPaletteActiveFg" Color="{DynamicResource InsPrimaryDarkerColor}" />
-        </ResourceDictionary>
-        <ResourceDictionary x:Key="Dark">
-          <SolidColorBrush x:Key="InsPaletteActiveFg" Color="{DynamicResource InsPrimaryDarkerColor}" />
-        </ResourceDictionary>
-      </ResourceDictionary.ThemeDictionaries>
 
       <SolidColorBrush x:Key="InsPaletteFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
       <SolidColorBrush x:Key="InsPaletteSelection" Color="{DynamicResource InsPrimaryColor}" Opacity="0.22" />
@@ -202,13 +193,21 @@
     <Setter Property="MinHeight" Value="44" />
     <Setter Property="Padding" Value="12,8" />
     <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
-    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Background" Value="{DynamicResource InsPopItemRest}" />
     <Setter Property="Cursor" Value="Hand" />
     <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="RenderTransform" Value="none" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
   </Style>
   <Style Selector="ins|CommandPalette Border.palette-item.active">
-    <Setter Property="Background" Value="{DynamicResource InsPaletteActive}" />
-    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsPaletteActiveFg}" />
+    <Setter Property="Background" Value="{DynamicResource InsPopItemHover}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
+    <Setter Property="RenderTransform" Value="translateX(3px)" />
   </Style>
   <Style Selector="ins|CommandPalette TextBlock.palette-label">
     <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
@@ -219,7 +218,7 @@
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <Style Selector="ins|CommandPalette Border.palette-item.active ins|Icon.palette-ico">
-    <Setter Property="Foreground" Value="{DynamicResource InsPaletteActiveFg}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
   </Style>
   <Style Selector="ins|CommandPalette TextBlock.palette-where">
     <Setter Property="IsVisible" Value="False" />

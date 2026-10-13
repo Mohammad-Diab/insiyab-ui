@@ -30,6 +30,10 @@ public class CaptionButtons : TemplatedControl
 
     internal bool ForceShown { get; set; }
 
+    internal Button? MinimizeButton => _minimize;
+    internal Button? MaximizeButton => _maximize;
+    internal Button? CloseButton => _close;
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
@@ -58,7 +62,11 @@ public class CaptionButtons : TemplatedControl
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        if (_window is not null) _window.PropertyChanged -= OnWindowChanged;
+        if (_window is not null)
+        {
+            _window.PropertyChanged -= OnWindowChanged;
+            if (_window.GetValue(TitleBar.CaptionsProperty) == this) _window.ClearValue(TitleBar.CaptionsProperty);
+        }
         _window = null;
         Refresh();
     }

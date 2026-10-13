@@ -370,7 +370,7 @@ public class DateCalendar : TemplatedControl
 
     private Grid BuildGrid(PickerLocale words, PickerCalendar sys, DateTime first, DateTime? min, DateTime? max)
     {
-        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("*,*,*,*,*,*,*"), RowDefinitions = new RowDefinitions("Auto,Auto,Auto,Auto,Auto,Auto,Auto"), Classes = { "cal-grid" } };
+        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("*,*,*,*,*,*,*"), RowDefinitions = new RowDefinitions("Auto,Auto,Auto,Auto,Auto,Auto,Auto"), Classes = { "cal-grid" }, Background = Brushes.Transparent };
         grid.PointerWheelChanged += (_, e) =>
         {
             if (e.Delta.Y == 0) return;

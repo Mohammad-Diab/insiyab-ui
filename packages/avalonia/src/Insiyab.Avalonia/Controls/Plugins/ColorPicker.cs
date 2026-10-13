@@ -131,6 +131,7 @@ public class ColorArea : Control
     public override void Render(DrawingContext context)
     {
         var rect = new Rect(Bounds.Size);
+        context.FillRectangle(Brushes.Transparent, rect);
         var rr = new RoundedRect(rect, CornerRadius);
         if (_ringPen is not null)
         {
@@ -256,6 +257,7 @@ public class ColorHueSlider : Control
     public override void Render(DrawingContext context)
     {
         var w = Bounds.Width;
+        context.FillRectangle(Brushes.Transparent, new Rect(Bounds.Size));
         var track = new RoundedRect(new Rect(0, 2, w, 12), 6);
         if (_ringPen is not null) context.DrawRectangle(null, _ringPen, track.Inflate(1, 1));
         context.DrawRectangle(Rainbow, null, track);

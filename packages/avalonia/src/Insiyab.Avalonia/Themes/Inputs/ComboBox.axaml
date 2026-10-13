@@ -138,7 +138,6 @@
                           Background="{DynamicResource InsGlassStrong}"
                           BorderBrush="{DynamicResource InsRim}"
                           BorderThickness="1"
-                          Padding="6"
                           HorizontalAlignment="Stretch"
                           CornerRadius="{DynamicResource InsRMd}"
                           BoxShadow="{DynamicResource InsShLg}">
@@ -146,7 +145,7 @@
                                   IsScrollChainingEnabled="False"
                                   VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
                                   IsDeferredScrollingEnabled="{TemplateBinding (ScrollViewer.IsDeferredScrollingEnabled)}">
-                      <ItemsPresenter x:Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                      <ItemsPresenter x:Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" Margin="6" />
                     </ScrollViewer>
                   </Border>
                 </Popup>
@@ -178,7 +177,6 @@
 
         <Style Selector="^.ok">
           <Style Selector="^ /template/ Border#Background, ^:pointerover:not(:focus-within) /template/ Border#Background">
-            <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsSelectOkBorder}" />
           </Style>
           <Style Selector="^:focus-within /template/ Border#Background">
@@ -194,7 +192,6 @@
 
         <Style Selector="^:error, ^.bad">
           <Style Selector="^ /template/ Border#Background, ^:pointerover:not(:focus-within) /template/ Border#Background">
-            <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
           </Style>
           <Style Selector="^:focus-within /template/ Border#Background">
@@ -251,7 +248,14 @@
 
       <ControlTheme x:Key="{x:Type ComboBoxItem}" TargetType="ComboBoxItem">
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{DynamicResource InsPopItemRest}" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
         <Setter Property="Padding" Value="12,8" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
         <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
@@ -291,8 +295,9 @@
         </Setter>
 
         <Style Selector="^:pointerover, ^:focus-visible">
-          <Setter Property="Background" Value="{DynamicResource InsSelectOptionHover}" />
-          <Setter Property="Foreground" Value="{DynamicResource InsSelectOptionOn}" />
+          <Setter Property="Background" Value="{DynamicResource InsPopItemHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
+          <Setter Property="RenderTransform" Value="translateX(3px)" />
         </Style>
         <Style Selector="^:selected">
           <Setter Property="Foreground" Value="{DynamicResource InsSelectOptionOn}" />

@@ -287,6 +287,22 @@ public class PickersBirthTests : IDisposable
     }
 
     [AvaloniaFact]
+    public void Birth_pop_up_column_turns_with_the_wheel_off_its_text()
+    {
+        var field = new BirthDateField { Locale = "en" };
+        var w = Show(Page(field), height: 700);
+        Click(field.PickButton!, w);
+        Assert.True(field.Flyout!.IsOpen);
+
+        var col = field.MonthColumn;
+        var before = col.Value;
+        var empty = col.TranslatePoint(new Point(2, col.Bounds.Height / 2 + col.RowHeight / 2), w)!.Value;
+        Assert.Same(col, w.InputHitTest(empty));
+        w.MouseWheel(empty, new Vector(0, -1));
+        Settle(450);
+        Assert.Equal(before + 1, col.Value);
+        Assert.True(field.Engine.IsSet('m'));
+    }
 
     [AvaloniaFact]
     public void Birth_inline_shows_its_drums()

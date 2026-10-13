@@ -575,6 +575,41 @@ public class InputsTests
         Assert.True(((Border)Part<Popup>(combo, "PART_Popup").Child!).TranslatePoint(new Point(0, 0), combo)!.Value.Y >= 46 + 5);
     }
 
+    // A long list's bar sits at the card's inner edge, its padding scrolling with the items.
+    private static void AssertBarAtEdge(Border card)
+    {
+        var bar = card.GetVisualDescendants().OfType<ScrollBar>().Single(b => b.Orientation == Orientation.Vertical && b.IsEffectivelyVisible);
+        var r = new Rect(bar.Bounds.Size).TransformToAABB(bar.TransformToVisual(card)!.Value);
+        Assert.Equal(card.Bounds.Width - card.BorderThickness.Right, r.Right, 0.5);
+        Assert.Equal(card.Bounds.Height - card.BorderThickness.Top - card.BorderThickness.Bottom, r.Height, 0.5);
+    }
+
+    [AvaloniaFact]
+    public void Select_and_autocomplete_lists_keep_the_bar_at_their_edge()
+    {
+        var combo = new ComboBox { SelectedIndex = 0 };
+        for (var i = 0; i < 30; i++) combo.Items.Add($"خيار {i}");
+        var auto = new AutoCompleteBox { ItemsSource = Enumerable.Range(0, 30).Select(i => $"اسم {i}").ToArray(), MinimumPopulateDelay = TimeSpan.Zero };
+        var window = Show(Page(combo, auto), height: 700);
+        combo.IsDropDownOpen = true;
+        Settle();
+        var list = (Border)Part<Popup>(combo, "PART_Popup").Child!;
+        AssertBarAtEdge(list);
+        var first = combo.ContainerFromIndex(0)!;
+        Assert.Equal(7, first.TranslatePoint(new Point(0, 0), list)!.Value.X, 0.5);
+        combo.IsDropDownOpen = false;
+        Settle(300);
+
+        Part<TextBox>(auto, "PART_TextBox").Focus();
+        window.KeyTextInput("اسم");
+        Settle();
+        Assert.True(auto.IsDropDownOpen);
+        var suggestions = (Border)Part<Popup>(auto, "PART_Popup").Child!;
+        AssertBarAtEdge(suggestions);
+        var row = suggestions.GetVisualDescendants().OfType<ListBoxItem>().First();
+        Assert.Equal(7, row.TranslatePoint(new Point(0, 0), suggestions)!.Value.X, 0.5);
+    }
+
     [AvaloniaFact]
     public void Select_error_turns_red()
     {

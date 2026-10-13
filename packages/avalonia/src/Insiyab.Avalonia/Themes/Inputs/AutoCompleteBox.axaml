@@ -4,12 +4,18 @@
 
   <Styles.Resources>
     <ResourceDictionary>
-      <SolidColorBrush x:Key="InsComboOptionHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
-
       <!-- One suggestion: the web's .ins-combo-option. -->
       <ControlTheme x:Key="InsComboOption" TargetType="ListBoxItem">
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{DynamicResource InsPopItemRest}" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
         <Setter Property="Padding" Value="12,8" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
         <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
@@ -30,8 +36,9 @@
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover, ^:selected">
-          <Setter Property="Background" Value="{DynamicResource InsComboOptionHover}" />
-          <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+          <Setter Property="Background" Value="{DynamicResource InsPopItemHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
+          <Setter Property="RenderTransform" Value="translateX(3px)" />
         </Style>
         <Style Selector="^:disabled">
           <Setter Property="Opacity" Value="0.45" />
@@ -50,7 +57,7 @@
                           HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
                           VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
                           IsScrollChainingEnabled="False">
-              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" Margin="{TemplateBinding Padding}" />
             </ScrollViewer>
           </ControlTemplate>
         </Setter>
@@ -87,7 +94,6 @@
                      VerticalOffset="6"
                      PlacementTarget="{TemplateBinding}">
                 <Border Name="PART_SuggestionsContainer"
-                        Padding="6"
                         BorderThickness="1"
                         BorderBrush="{DynamicResource InsRim}"
                         Background="{DynamicResource InsGlassStrong}"
