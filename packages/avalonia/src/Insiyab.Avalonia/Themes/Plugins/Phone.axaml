@@ -1,0 +1,138 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <StreamGeometry x:Key="InsPhoneChevron">M1 1 L5 5 L9 1</StreamGeometry>
+
+      <!-- The code as two letters in a pill rather than a flag: a flag emoji is two plain letters on Windows anyway. -->
+      <ControlTheme x:Key="InsPhoneIso" TargetType="Border">
+        <Setter Property="MinWidth" Value="28" />
+        <Setter Property="Padding" Value="5,1" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Background" Value="{DynamicResource InsPluginsTint}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsPhoneCountryButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+        <Setter Property="BorderThickness" Value="0,0,1,0" />
+        <Setter Property="CornerRadius" Value="10,0,0,10" />
+        <Setter Property="Padding" Value="8,0,6,0" />
+        <Setter Property="Margin" Value="0,5" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Template">
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="PART_Face" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+              <Border.Transitions>
+                <Transitions>
+                  <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                </Transitions>
+              </Border.Transitions>
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}" VerticalAlignment="Center" />
+                <Path x:Name="PART_Chevron" Data="{StaticResource InsPhoneChevron}" Width="10" Height="6" Stretch="None"
+                      Stroke="{DynamicResource InsText3}" StrokeThickness="1.5" StrokeLineCap="Round" StrokeJoin="Round"
+                      VerticalAlignment="Center" RenderTransform="none">
+                  <Path.Transitions>
+                    <Transitions>
+                      <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                    </Transitions>
+                  </Path.Transitions>
+                </Path>
+              </StackPanel>
+            </Border>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover, ^.open">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        </Style>
+        <Style Selector="^.open /template/ Path#PART_Chevron">
+          <Setter Property="RenderTransform" Value="rotate(180deg)" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_Face">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.55" />
+          <Setter Property="Cursor" Value="No" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:PhoneBox}" TargetType="ins:PhoneBox">
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate TargetType="ins:PhoneBox">
+            <Panel>
+              <!-- A number reads left to right in any language, with its code in front. -->
+              <TextBox x:Name="PART_Input" Classes="input-group" FlowDirection="LeftToRight" FontSize="{TemplateBinding FontSize}" LetterSpacing="0.14"
+                       PlaceholderText="{TemplateBinding ShownPlaceholder}" IsEnabled="{TemplateBinding IsEnabled}">
+                <TextBox.InnerLeftContent>
+                  <Button x:Name="PART_Country" Theme="{StaticResource InsPhoneCountryButton}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                      <Border Theme="{StaticResource InsPhoneIso}">
+                        <TextBlock Text="{Binding $parent[ins:PhoneBox].Country}" FontFamily="{DynamicResource InsFontBodyEn}" FontSize="11" FontWeight="Bold"
+                                   LetterSpacing="0.44" Foreground="{DynamicResource InsPrimaryDarker}" HorizontalAlignment="Center" />
+                      </Border>
+                      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="+" FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="SemiBold" Foreground="{DynamicResource InsLabel}" />
+                        <TextBlock Text="{Binding $parent[ins:PhoneBox].DialCode}" FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="SemiBold" Foreground="{DynamicResource InsLabel}" />
+                      </StackPanel>
+                    </StackPanel>
+                  </Button>
+                </TextBox.InnerLeftContent>
+              </TextBox>
+              <Popup x:Name="PART_Popup" PlacementTarget="{Binding #PART_Input}" Placement="BottomEdgeAlignedLeft"
+                     PlacementConstraintAdjustment="SlideX,FlipY" HorizontalOffset="-40" VerticalOffset="-10"
+                     ShouldUseOverlayLayer="True" IsLightDismissEnabled="True" OverlayDismissEventPassThrough="False"
+                     WindowManagerAddShadowHint="False" FlowDirection="LeftToRight">
+                <FlyoutPresenter Classes="pop card" FlowDirection="{TemplateBinding FlowDirection}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                  <StackPanel>
+                    <TextBox x:Name="PART_Search" Classes="sm" />
+                    <ListBox x:Name="PART_List" Classes="phone-list" Theme="{DynamicResource InsComboList}" MaxHeight="288" Margin="0,8,0,0" Focusable="False">
+                      <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="ins:PhoneCountryRow">
+                          <Grid RowDefinitions="*,Auto">
+                            <DockPanel>
+                              <Border Theme="{StaticResource InsPhoneIso}" DockPanel.Dock="Left" Margin="0,0,10,0">
+                                <TextBlock Text="{Binding Iso}" FontFamily="{DynamicResource InsFontBodyEn}" FontSize="11" FontWeight="Bold" LetterSpacing="0.44"
+                                           Foreground="{DynamicResource InsPrimaryDarker}" HorizontalAlignment="Center" />
+                              </Border>
+                              <TextBlock DockPanel.Dock="Right" Margin="10,0,0,0" FlowDirection="LeftToRight" VerticalAlignment="Center" Text="{Binding Dial}"
+                                         FontFamily="{DynamicResource InsFontBodyEn}" FontSize="{DynamicResource InsFsSm}" FontWeight="SemiBold" Foreground="{DynamicResource InsLabel}" />
+                              <TextBlock Text="{Binding Name}" FontWeight="{Binding Weight}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                            </DockPanel>
+                            <Border Grid.Row="1" Height="1" Margin="-2,12,-2,-6" Background="{DynamicResource InsLine}" IsVisible="{Binding EndsPreferred}" />
+                          </Grid>
+                        </DataTemplate>
+                      </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TextBlock x:Name="PART_None" IsVisible="False" Padding="10,14" FontSize="{DynamicResource InsFsSm}" Foreground="{DynamicResource InsLabel}" TextAlignment="Center" />
+                  </StackPanel>
+                </FlyoutPresenter>
+              </Popup>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="ListBox.phone-list ListBoxItem">
+    <Setter Property="Padding" Value="10,6" />
+    <Setter Property="MinHeight" Value="40" />
+    <Setter Property="Focusable" Value="False" />
+  </Style>
+
+</Styles>

@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.ColorpickerPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PluginsFrames.axaml" />
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel>
+
+      <TextBlock Classes="section" Text="حقل اللون" />
+      <Border Classes="dx">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="لون الهوية" />
+          <ins:ColorField x:Name="Brand" Value="#9b2c5e" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="section" Text="جرّب الحقل" />
+      <Border Classes="stage wide">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="اللون" />
+          <ins:ColorField Value="#0f766e" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="الألوان الجاهزة: ألوان محددة" />
+      <Border Classes="stage wide">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="اللون" />
+          <ins:ColorField Value="#0f766e" Swatches="#15803d,#a16207,#b91c1c" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="الألوان الجاهزة: بلا ألوان جاهزة" />
+      <Border Classes="stage wide">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="اللون" />
+          <ins:ColorField Value="#0f766e" Swatches="none" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="معطل" />
+      <Border Classes="stage wide">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="اللون" />
+          <ins:ColorField Value="#0f766e" IsEnabled="False" />
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

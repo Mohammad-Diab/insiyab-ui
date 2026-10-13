@@ -1,0 +1,14 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <SolidColorBrush x:Key="InsPluginsHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
+      <SolidColorBrush x:Key="InsPluginsFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
+      <SolidColorBrush x:Key="InsPluginsTint" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+</Styles>

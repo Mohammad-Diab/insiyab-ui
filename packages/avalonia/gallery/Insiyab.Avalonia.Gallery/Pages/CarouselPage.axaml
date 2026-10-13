@@ -1,0 +1,133 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.CarouselPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PluginsFrames.axaml" />
+    <Style Selector="Border.car">
+      <Setter Property="Height" Value="240" />
+      <Setter Property="Padding" Value="24,20" />
+      <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+    </Style>
+    <Style Selector="Border.car > TextBlock">
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="FontSize" Value="22" />
+      <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="VerticalAlignment" Value="Bottom" />
+    </Style>
+    <Style Selector="Border.car1">
+      <Setter Property="Background">
+        <LinearGradientBrush StartPoint="33%,0%" EndPoint="67%,100%">
+          <GradientStop Offset="0" Color="#0f766e" />
+          <GradientStop Offset="1" Color="#134e4a" />
+        </LinearGradientBrush>
+      </Setter>
+    </Style>
+    <Style Selector="Border.car2">
+      <Setter Property="Background">
+        <LinearGradientBrush StartPoint="33%,0%" EndPoint="67%,100%">
+          <GradientStop Offset="0" Color="#9b2c5e" />
+          <GradientStop Offset="1" Color="#4a1530" />
+        </LinearGradientBrush>
+      </Setter>
+    </Style>
+    <Style Selector="Border.car3">
+      <Setter Property="Background">
+        <LinearGradientBrush StartPoint="33%,0%" EndPoint="67%,100%">
+          <GradientStop Offset="0" Color="#1d4ed8" />
+          <GradientStop Offset="1" Color="#1e1b4b" />
+        </LinearGradientBrush>
+      </Setter>
+    </Style>
+    <Style Selector="Border.car4">
+      <Setter Property="Background">
+        <LinearGradientBrush StartPoint="33%,0%" EndPoint="67%,100%">
+          <GradientStop Offset="0" Color="#b45309" />
+          <GradientStop Offset="1" Color="#451a03" />
+        </LinearGradientBrush>
+      </Setter>
+    </Style>
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel>
+
+      <Border Classes="dx">
+        <Carousel AutomationProperties.Name="شرائح">
+          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
+          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
+          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
+          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
+        </Carousel>
+      </Border>
+
+      <TextBlock Classes="section" Text="عرض الشرائح" />
+      <Border Classes="stage wide">
+        <Carousel AutomationProperties.Name="شرائح">
+          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
+          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
+          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
+          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
+        </Carousel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="شرائح معًا: اثنتان" />
+      <Border Classes="stage wide">
+        <Carousel Classes="two" AutomationProperties.Name="شرائح">
+          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
+          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
+          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
+          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
+        </Carousel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="شرائح معًا: ثلاث" />
+      <Border Classes="stage wide">
+        <Carousel Classes="three" AutomationProperties.Name="شرائح">
+          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
+          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
+          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
+          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
+        </Carousel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="عدد الشرائح: 1" />
+      <Border Classes="stage wide">
+        <Carousel AutomationProperties.Name="شرائح">
+          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
+        </Carousel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="عدد الشرائح: 6" />
+      <Border Classes="stage wide">
+        <Carousel AutomationProperties.Name="شرائح">
+          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
+          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
+          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
+          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
+          <Border Classes="car car1"><TextBlock Text="الخامسة" /></Border>
+          <Border Classes="car car2"><TextBlock Text="السادسة" /></Border>
+        </Carousel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="طرف التالية" />
+      <Border Classes="stage wide">
+        <Carousel Classes="peek" AutomationProperties.Name="شرائح">
+          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
+          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
+          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
+          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
+        </Carousel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="بلا نقاط" />
+      <Border Classes="stage wide">
+        <Carousel Classes="no-dots" AutomationProperties.Name="شرائح">
+          <Border Classes="car car1"><TextBlock Text="الأولى" /></Border>
+          <Border Classes="car car2"><TextBlock Text="الثانية" /></Border>
+          <Border Classes="car car3"><TextBlock Text="الثالثة" /></Border>
+          <Border Classes="car car4"><TextBlock Text="الرابعة" /></Border>
+        </Carousel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

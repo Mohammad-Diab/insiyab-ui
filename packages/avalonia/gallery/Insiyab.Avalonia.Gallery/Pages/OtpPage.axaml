@@ -1,0 +1,79 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.OtpPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PluginsFrames.axaml" />
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel>
+
+      <TextBlock Classes="section" Text="حقل الرمز" />
+      <Border Classes="dx">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="رمز التحقق" />
+          <ins:OtpBox x:Name="Demo" Length="6" />
+          <TextBlock x:Name="DemoHint" Classes="hint" Text="رمز من ستة أرقام." />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="section" Text="جرّب الحقل" />
+      <Border Classes="stage">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="رمز التحقق" />
+          <ins:OtpBox x:Name="Play" Length="6" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="عدد الخانات: 4" />
+      <Border Classes="stage">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="رمز التحقق" />
+          <ins:OtpBox x:Name="Play4" Length="4" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="عدد الخانات: 8" />
+      <Border Classes="stage">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="رمز التحقق" />
+          <ins:OtpBox x:Name="Play8" Length="8" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="حروف وأرقام" />
+      <Border Classes="stage">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="رمز التحقق" />
+          <ins:OtpBox x:Name="PlayAlnum" Length="6" Alphanumeric="True" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="معطل" />
+      <Border Classes="stage">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="رمز التحقق" />
+          <ins:OtpBox x:Name="PlayDisabled" Length="6" IsEnabled="False" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="يُرسل وحده" />
+      <Border Classes="stage">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="رمز التحقق" />
+          <ins:OtpBox x:Name="PlaySubmit" Length="6" />
+          <TextBlock x:Name="SubmitNote" Classes="hint" IsVisible="False" />
+        </StackPanel>
+      </Border>
+
+      <TextBlock Classes="variant" Text="رمز مرفوض" />
+      <Border Classes="stage">
+        <StackPanel Classes="field">
+          <TextBlock Classes="label" Text="رمز التحقق" />
+          <ins:OtpBox x:Name="PlayInvalid" Length="6" />
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

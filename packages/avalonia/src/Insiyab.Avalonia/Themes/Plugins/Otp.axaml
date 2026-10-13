@@ -1,0 +1,179 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <ControlTheme x:Key="{x:Type ins:OtpCell}" TargetType="ins:OtpCell">
+        <Setter Property="Width" Value="24" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Template">
+          <ControlTemplate TargetType="ins:OtpCell">
+            <Panel x:Name="PART_Root" RenderTransform="none">
+              <TextBlock x:Name="PART_Char"
+                         Text="{TemplateBinding Character}"
+                         Foreground="{TemplateBinding Foreground}"
+                         FontFamily="{DynamicResource InsFontBodyEn}"
+                         FontSize="28"
+                         FontWeight="ExtraBold"
+                         LineHeight="28"
+                         Margin="0,0,0,8"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center" />
+              <Ellipse x:Name="PART_Dot"
+                       Width="4.8"
+                       Height="4.8"
+                       Margin="0,0,0,4.8"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
+                       Fill="{DynamicResource InsCtlBd}"
+                       RenderTransform="scale(1)">
+                <Ellipse.Transitions>
+                  <Transitions>
+                    <BrushTransition Property="Fill" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+                  </Transitions>
+                </Ellipse.Transitions>
+              </Ellipse>
+              <Border x:Name="PART_Caret"
+                      Width="2"
+                      Height="24"
+                      Margin="0,0,0,8"
+                      CornerRadius="1"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Background="{DynamicResource InsToneBrandSoft}"
+                      IsVisible="False" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:filled /template/ Panel#PART_Root">
+          <Style.Animations>
+            <Animation Duration="0:0:0.22" Easing="0.22,1,0.36,1">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0" />
+                <Setter Property="RenderTransform" Value="translateY(-4px)" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="1" />
+                <Setter Property="RenderTransform" Value="none" />
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+        <Style Selector="^:filled /template/ Ellipse#PART_Dot">
+          <Setter Property="Fill" Value="{DynamicResource InsPrimary}" />
+          <Setter Property="RenderTransform" Value="scale(1.15)" />
+        </Style>
+        <Style Selector="^:filled:invalid /template/ Ellipse#PART_Dot">
+          <Setter Property="Fill" Value="{DynamicResource InsToneBad}" />
+        </Style>
+        <Style Selector="^:active:not(:filled) /template/ Border#PART_Caret">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:OtpBox}" TargetType="ins:OtpBox">
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Height" Value="52" />
+        <Setter Property="Padding" Value="18,0" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Cursor" Value="IBeam" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
+        <Setter Property="Template">
+          <ControlTemplate TargetType="ins:OtpBox">
+            <Panel>
+              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShSubtle}">
+                <Border.Transitions>
+                  <Transitions>
+                    <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                  </Transitions>
+                </Border.Transitions>
+              </Border>
+              <Border x:Name="PART_Halo" CornerRadius="{TemplateBinding CornerRadius}" Tag="{DynamicResource InsPrimaryColor}"
+                      BoxShadow="{Binding $self.Tag, Converter={x:Static ins:InputHalo.Instance}}" Opacity="0">
+                <Border.Transitions>
+                  <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                  </Transitions>
+                </Border.Transitions>
+              </Border>
+              <Border x:Name="PART_Cells"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      Padding="{TemplateBinding Padding}"
+                      BoxShadow="{DynamicResource InsBevelDim}">
+                <Border.Transitions>
+                  <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                  </Transitions>
+                </Border.Transitions>
+                <StackPanel x:Name="PART_CellsHost" Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center" />
+              </Border>
+              <!-- The real field, on top and see-through: it takes the clicks, the typing and the paste. -->
+              <TextPresenter x:Name="PART_TextPresenter"
+                             Background="Transparent"
+                             Foreground="Transparent"
+                             CaretBrush="Transparent"
+                             SelectionBrush="Transparent"
+                             SelectionForegroundBrush="Transparent"
+                             Text="{TemplateBinding Text, Mode=TwoWay}"
+                             CaretIndex="{TemplateBinding CaretIndex}"
+                             SelectionStart="{TemplateBinding SelectionStart}"
+                             SelectionEnd="{TemplateBinding SelectionEnd}"
+                             VerticalAlignment="Stretch" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover:not(:focus) /template/ Border#PART_Cells">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsPluginsHoverBorder}" />
+        </Style>
+        <Style Selector="^:focus">
+          <Style Selector="^ /template/ Border#PART_Cells">
+            <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsPluginsFocusBorder}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Halo">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+        </Style>
+        <Style Selector="^:invalid">
+          <Style Selector="^ /template/ Border#PART_Cells, ^:pointerover:not(:focus) /template/ Border#PART_Cells">
+            <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+          </Style>
+          <Style Selector="^:focus /template/ Border#PART_Cells">
+            <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
+          </Style>
+          <Style Selector="^:focus /template/ Border#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsGlowBad}" />
+          </Style>
+          <Style Selector="^:focus /template/ Border#PART_Halo">
+            <Setter Property="Opacity" Value="0" />
+          </Style>
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.55" />
+          <Setter Property="Cursor" Value="No" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+</Styles>

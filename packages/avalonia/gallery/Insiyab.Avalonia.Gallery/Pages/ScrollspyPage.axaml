@@ -1,0 +1,152 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.ScrollspyPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/PluginsFrames.axaml" />
+  </UserControl.Styles>
+  <ScrollViewer>
+    <StackPanel>
+
+      <Border Classes="dx">
+        <Grid ColumnDefinitions="*,20,176">
+          <ScrollViewer x:Name="BoxDx" Height="256">
+            <StackPanel>
+              <Border x:Name="SecDx0" MinHeight="208">
+                <TextBlock Text="القسم الأول" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecDx1" MinHeight="208">
+                <TextBlock Text="القسم الثاني" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecDx2" MinHeight="208">
+                <TextBlock Text="قسم فرعي" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecDx3" MinHeight="208">
+                <TextBlock Text="القسم الثالث" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+            </StackPanel>
+          </ScrollViewer>
+          <ins:Toc Grid.Column="2" Title="المحتويات" AutomationProperties.Name="المحتويات">
+            <ins:TocLink Content="القسم الأول" Section="{Binding #SecDx0}" />
+            <ins:TocLink Content="القسم الثاني" Section="{Binding #SecDx1}" />
+            <ins:TocLink Classes="sub" Content="قسم فرعي" Section="{Binding #SecDx2}" />
+            <ins:TocLink Content="القسم الثالث" Section="{Binding #SecDx3}" />
+          </ins:Toc>
+        </Grid>
+      </Border>
+
+      <TextBlock Classes="section" Text="قائمة تتبع القراءة" />
+      <Border Classes="stage wide">
+        <Grid ColumnDefinitions="*,20,176">
+          <ScrollViewer x:Name="BoxA" Height="256">
+            <StackPanel>
+              <Border x:Name="SecA0" MinHeight="208">
+                <TextBlock Text="القسم الأول" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecA1" MinHeight="208">
+                <TextBlock Text="القسم الثاني" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecA2" MinHeight="208">
+                <TextBlock Text="قسم فرعي" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecA3" MinHeight="208">
+                <TextBlock Text="القسم الثالث" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+            </StackPanel>
+          </ScrollViewer>
+          <ins:Toc Grid.Column="2" Title="المحتويات" AutomationProperties.Name="المحتويات">
+            <ins:TocLink Content="القسم الأول" Section="{Binding #SecA0}" />
+            <ins:TocLink Content="القسم الثاني" Section="{Binding #SecA1}" />
+            <ins:TocLink Classes="sub" Content="قسم فرعي" Section="{Binding #SecA2}" />
+            <ins:TocLink Content="القسم الثالث" Section="{Binding #SecA3}" />
+          </ins:Toc>
+        </Grid>
+      </Border>
+
+      <TextBlock Classes="variant" Text="بلا عنوان للقائمة" />
+      <Border Classes="stage wide">
+        <Grid ColumnDefinitions="*,20,176">
+          <ScrollViewer x:Name="BoxB" Height="256">
+            <StackPanel>
+              <Border x:Name="SecB0" MinHeight="208">
+                <TextBlock Text="القسم الأول" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecB1" MinHeight="208">
+                <TextBlock Text="القسم الثاني" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecB2" MinHeight="208">
+                <TextBlock Text="قسم فرعي" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecB3" MinHeight="208">
+                <TextBlock Text="القسم الثالث" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+            </StackPanel>
+          </ScrollViewer>
+          <ins:Toc Grid.Column="2" AutomationProperties.Name="المحتويات">
+            <ins:TocLink Content="القسم الأول" Section="{Binding #SecB0}" />
+            <ins:TocLink Content="القسم الثاني" Section="{Binding #SecB1}" />
+            <ins:TocLink Classes="sub" Content="قسم فرعي" Section="{Binding #SecB2}" />
+            <ins:TocLink Content="القسم الثالث" Section="{Binding #SecB3}" />
+          </ins:Toc>
+        </Grid>
+      </Border>
+
+      <TextBlock Classes="variant" Text="بلا رابط فرعي" />
+      <Border Classes="stage wide">
+        <Grid ColumnDefinitions="*,20,176">
+          <ScrollViewer x:Name="BoxC" Height="256">
+            <StackPanel>
+              <Border x:Name="SecC0" MinHeight="208">
+                <TextBlock Text="القسم الأول" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecC1" MinHeight="208">
+                <TextBlock Text="القسم الثاني" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecC2" MinHeight="208">
+                <TextBlock Text="قسم فرعي" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecC3" MinHeight="208">
+                <TextBlock Text="القسم الثالث" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+            </StackPanel>
+          </ScrollViewer>
+          <ins:Toc Grid.Column="2" Title="المحتويات" AutomationProperties.Name="المحتويات">
+            <ins:TocLink Content="القسم الأول" Section="{Binding #SecC0}" />
+            <ins:TocLink Content="القسم الثاني" Section="{Binding #SecC1}" />
+            <ins:TocLink Content="قسم فرعي" Section="{Binding #SecC2}" />
+            <ins:TocLink Content="القسم الثالث" Section="{Binding #SecC3}" />
+          </ins:Toc>
+        </Grid>
+      </Border>
+
+      <TextBlock Classes="variant" Text="خط القسم الحالي: 40 بكسلًا" />
+      <Border Classes="stage wide">
+        <Grid ColumnDefinitions="*,20,176">
+          <ScrollViewer x:Name="BoxD" Height="256">
+            <StackPanel>
+              <Border x:Name="SecD0" MinHeight="208">
+                <TextBlock Text="القسم الأول" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecD1" MinHeight="208">
+                <TextBlock Text="القسم الثاني" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecD2" MinHeight="208">
+                <TextBlock Text="قسم فرعي" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+              <Border x:Name="SecD3" MinHeight="208">
+                <TextBlock Text="القسم الثالث" FontSize="16" FontWeight="Bold" Margin="0,0,0,8" />
+              </Border>
+            </StackPanel>
+          </ScrollViewer>
+          <ins:Toc Grid.Column="2" Title="المحتويات" AutomationProperties.Name="المحتويات" Offset="40">
+            <ins:TocLink Content="القسم الأول" Section="{Binding #SecD0}" />
+            <ins:TocLink Content="القسم الثاني" Section="{Binding #SecD1}" />
+            <ins:TocLink Classes="sub" Content="قسم فرعي" Section="{Binding #SecD2}" />
+            <ins:TocLink Content="القسم الثالث" Section="{Binding #SecD3}" />
+          </ins:Toc>
+        </Grid>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
