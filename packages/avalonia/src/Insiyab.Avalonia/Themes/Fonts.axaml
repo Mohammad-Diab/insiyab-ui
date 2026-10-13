@@ -4,9 +4,9 @@
   <Styles.Resources>
     <ResourceDictionary>
       <!-- Same stacks as 02-tokens.css: Tajawal sits behind Inter and Cause so Arabic inside English text never drops to a system face -->
-      <FontFamily x:Key="InsFontArabic">avares://Insiyab.Avalonia/Assets/Fonts#Tajawal, Segoe UI, Tahoma</FontFamily>
-      <FontFamily x:Key="InsFontBodyEn">avares://Insiyab.Avalonia/Assets/Fonts#Inter, avares://Insiyab.Avalonia/Assets/Fonts#Tajawal</FontFamily>
-      <FontFamily x:Key="InsFontHeadingEn">avares://Insiyab.Avalonia/Assets/Fonts#Cause, avares://Insiyab.Avalonia/Assets/Fonts#Tajawal</FontFamily>
+      <FontFamily x:Key="InsFontArabic">fonts:Insiyab#Tajawal, Segoe UI, Tahoma</FontFamily>
+      <FontFamily x:Key="InsFontBodyEn">fonts:Insiyab#Inter, fonts:Insiyab#Tajawal</FontFamily>
+      <FontFamily x:Key="InsFontHeadingEn">fonts:Insiyab#Cause, fonts:Insiyab#Tajawal</FontFamily>
       <FontFamily x:Key="InsFontMono">Cascadia Mono, Cascadia Code, Consolas, Courier New</FontFamily>
       <StaticResource x:Key="InsFontBody" ResourceKey="InsFontArabic" />
       <StaticResource x:Key="ContentControlThemeFontFamily" ResourceKey="InsFontBody" />

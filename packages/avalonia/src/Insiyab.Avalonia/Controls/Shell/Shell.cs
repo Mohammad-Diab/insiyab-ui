@@ -5,11 +5,14 @@ using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data.Converters;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
@@ -20,6 +23,10 @@ public static class Shell
     /// <summary>Below this width of its own the SplitView becomes a drawer (Overlay, closed); at or above it, a column (Inline). 0 turns the switch off. The Insiyab SplitView theme sets 900, the web's breakpoint. While on, the shell also takes the class <c>narrow</c> at 640px or less and <c>xnarrow</c> at 544px or less, the web's phone rules.</summary>
     public static readonly AttachedProperty<double> DrawerWidthProperty =
         AvaloniaProperty.RegisterAttached<SplitView, double>("DrawerWidth", typeof(Shell));
+
+    /// <summary>On a SplitView: the sidebar's head scrolls away with its links, as on the web, instead of staying pinned above them while only the links scroll.</summary>
+    public static readonly AttachedProperty<bool> HeadScrollsProperty =
+        AvaloniaProperty.RegisterAttached<SplitView, bool>("HeadScrolls", typeof(Shell));
 
     /// <summary>On a Button: a click collapses or restores the nearest shell's sidebar, or opens and closes it while it is a drawer (the web's <c>data-ins-sidebar</c>).</summary>
     public static readonly AttachedProperty<bool> TogglesSidebarProperty =
@@ -36,6 +43,7 @@ public static class Shell
     /// <summary>On a ListBox whose template has a <c>Canvas#PART_Flight</c>: a change of selection flies the marker from the old item to the new one. Set by the <c>shell-nav</c> theme.</summary>
     public static readonly AttachedProperty<bool> FlyMarkerProperty =
         AvaloniaProperty.RegisterAttached<ListBox, bool>("FlyMarker", typeof(Shell));
+
 
     /// <summary>Raised on the shell each time <see cref="Sidebar"/> changes it (the web's <c>ins:sidebar</c>).</summary>
     public static readonly RoutedEvent<SidebarChangedEventArgs> SidebarChangedEvent =
@@ -106,6 +114,8 @@ public static class Shell
 
     public static double GetDrawerWidth(SplitView view) => view.GetValue(DrawerWidthProperty);
     public static void SetDrawerWidth(SplitView view, double value) => view.SetValue(DrawerWidthProperty, value);
+    public static bool GetHeadScrolls(SplitView view) => view.GetValue(HeadScrollsProperty);
+    public static void SetHeadScrolls(SplitView view, bool value) => view.SetValue(HeadScrollsProperty, value);
     public static bool GetTogglesSidebar(Button button) => button.GetValue(TogglesSidebarProperty);
     public static void SetTogglesSidebar(Button button, bool value) => button.SetValue(TogglesSidebarProperty, value);
     public static bool GetEnters(Control control) => control.GetValue(EntersProperty);

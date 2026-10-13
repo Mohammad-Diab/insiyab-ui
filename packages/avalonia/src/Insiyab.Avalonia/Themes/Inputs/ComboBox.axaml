@@ -6,12 +6,16 @@
     <ResourceDictionary>
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsSelectOkBorder" Color="{DynamicResource InsToneOkColor}" Opacity="0.55" />
+          <SolidColorBrush x:Key="InsSelectBadBorder" Color="{DynamicResource InsToneBadColor}" Opacity="0.55" />
           <SolidColorBrush x:Key="InsSelectChevron" Color="#6B7280" />
           <SolidColorBrush x:Key="InsSelectOptionOn" Color="{DynamicResource InsPrimaryDarkerColor}" />
           <SolidColorBrush x:Key="InsSelectFocusBg" Color="{DynamicResource InsGlassStrongColor}" />
           <BoxShadows x:Key="InsSelectGlowOk">0 0 0 4 #1F22C55E</BoxShadows>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsSelectOkBorder" Color="{DynamicResource InsToneOkColor}" Opacity="0.55" />
+          <SolidColorBrush x:Key="InsSelectBadBorder" Color="{DynamicResource InsToneBadColor}" Opacity="0.55" />
           <SolidColorBrush x:Key="InsSelectChevron" Color="#94A3B8" />
           <SolidColorBrush x:Key="InsSelectOptionOn" Color="{DynamicResource InsText1Color}" />
           <SolidColorBrush x:Key="InsSelectFocusBg" Color="#17FFFFFF" />
@@ -21,8 +25,6 @@
 
       <SolidColorBrush x:Key="InsSelectHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
       <SolidColorBrush x:Key="InsSelectFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
-      <SolidColorBrush x:Key="InsSelectOptionHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
-      <SolidColorBrush x:Key="InsSelectOkBorder" Color="{DynamicResource InsToneOkColor}" Opacity="0.55" />
       <StreamGeometry x:Key="InsSelectChevronData">M6 9 l6 6 6-6</StreamGeometry>
       <StreamGeometry x:Key="InsSelectCheckData">M5 13 l4 4L19 7</StreamGeometry>
 
@@ -135,7 +137,7 @@
                        IsLightDismissEnabled="True"
                        InheritsTransform="True">
                   <Border x:Name="PopupBorder"
-                          Background="{DynamicResource InsGlassStrong}"
+                          Background="{DynamicResource InsGlassStrongGround}"
                           BorderBrush="{DynamicResource InsRim}"
                           BorderThickness="1"
                           HorizontalAlignment="Stretch"
@@ -192,7 +194,7 @@
 
         <Style Selector="^:error, ^.bad">
           <Style Selector="^ /template/ Border#Background, ^:pointerover:not(:focus-within) /template/ Border#Background">
-            <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsSelectBadBorder}" />
           </Style>
           <Style Selector="^:focus-within /template/ Border#Background">
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />

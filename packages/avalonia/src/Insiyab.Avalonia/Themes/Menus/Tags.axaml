@@ -8,7 +8,6 @@
       <SolidColorBrush x:Key="InsTagsHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
       <SolidColorBrush x:Key="InsTagsFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
       <SolidColorBrush x:Key="InsTagsSelection" Color="{DynamicResource InsPrimaryColor}" Opacity="0.22" />
-      <SolidColorBrush x:Key="InsComboOptionHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
 
       <!-- .ins-tags-input: the bare box after the chips; the field around it draws the border and the focus. -->
       <ControlTheme x:Key="InsTagsBox" TargetType="TextBox">
@@ -156,7 +155,7 @@
 
   <!-- .ins-combo-list, .ins-combo-option and .ins-combo-empty, as the tags field's list draws them. -->
   <Style Selector="Border.combo-list">
-    <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
+    <Setter Property="Background" Value="{DynamicResource InsGlassStrongGround}" />
     <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />

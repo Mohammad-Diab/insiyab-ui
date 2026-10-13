@@ -1,4 +1,4 @@
-// A class-marked invalid field stays red under the pointer, and turns its input group red, like the other invalid routes.
+// A class-marked invalid field stays red under the pointer, and turns its input group red, like the other invalid routes; a bad or ok field keeps the normal fill.
 import { launch, BASE } from './lib/cdp.mjs';
 import { suite } from './lib/check.mjs';
 const { ok, end } = suite();
@@ -16,16 +16,19 @@ await E(`(() => {
     <div class="ins-input-group" id="b-group"><input class="ins-input ins-input--bad" id="b-ginput" value="x"><span class="ins-addon">ل.س</span></div>
     <input class="ins-input" aria-invalid="true" id="a-input" value="x">
     <div class="ins-input-group" id="a-group"><input class="ins-input" aria-invalid="true" value="x"><span class="ins-addon">ل.س</span></div>
-    <input class="ins-input" id="plain" value="x">\`;
+    <input class="ins-input" id="plain" value="x">
+    <input class="ins-input ins-input--ok" id="ok-input" value="x">
+    <div class="ins-input-group" id="plain-group"><input class="ins-input" value="x"><span class="ins-addon">ل.س</span></div>\`;
   document.body.appendChild(f); return 0; })()`);
 await b.sleep(500);
 
 const bad = await E(`getComputedStyle(document.documentElement).getPropertyValue('--ins-tone-bad-bd').trim()`);
 const look = (sel) => E(`(() => { const s = getComputedStyle(document.querySelector(${JSON.stringify(sel)})); return { bd: s.borderTopColor, bg: s.backgroundColor, sh: s.boxShadow }; })()`);
 // The tone token resolved to a colour, for comparing against computed values.
-const red = await E(`(() => { const p = document.createElement('div'); p.style.borderTopColor = 'var(--ins-tone-bad-bd)'; p.style.borderTopStyle = 'solid'; document.body.appendChild(p); const c = getComputedStyle(p).borderTopColor; p.remove(); return c; })()`);
+const red = await E(`(() => { const p = document.createElement('div'); p.style.borderTopColor = 'color-mix(in srgb, var(--ins-tone-bad) 55%, transparent)'; p.style.borderTopStyle = 'solid'; document.body.appendChild(p); const c = getComputedStyle(p).borderTopColor; p.remove(); return c; })()`);
 const redFocus = await E(`(() => { const p = document.createElement('div'); p.style.borderTopColor = 'var(--ins-tone-bad)'; p.style.borderTopStyle = 'solid'; document.body.appendChild(p); const c = getComputedStyle(p).borderTopColor; p.remove(); return c; })()`);
-console.log('  tone-bad-bd =', red, ' tone-bad =', redFocus);
+const green = await E(`(() => { const p = document.createElement('div'); p.style.borderTopColor = 'color-mix(in srgb, var(--ins-tone-ok) 55%, transparent)'; p.style.borderTopStyle = 'solid'; document.body.appendChild(p); const c = getComputedStyle(p).borderTopColor; p.remove(); return c; })()`);
+console.log('  bad border =', red, ' tone-bad =', redFocus, ' ok border =', green);
 
 async function hovered(sel, target = sel) {
   await b.mouseTo(5, 990); await b.sleep(350);
@@ -41,6 +44,13 @@ for (const [sel, label, target] of [['#b-input', 'class-marked input'], ['#b-sel
   ok(`${label}: red at rest`, r.rest.bd === red, r.rest.bd);
   ok(`${label}: still red on hover`, r.hover.bd === red, r.hover.bd);
 }
+
+// No tinted fill: a bad or ok field and a bad group keep the plain field's background.
+await b.mouseTo(5, 990); await b.sleep(350);
+const plainBg = (await look('#plain')).bg, groupBg = (await look('#plain-group')).bg;
+for (const [sel, label, bg] of [['#b-input', 'class-marked input', plainBg], ['#a-input', 'aria-invalid input', plainBg], ['#b-group', 'bad group', groupBg], ['#ok-input', 'ok input', plainBg]])
+  ok(`${label}: keeps the normal fill`, (await look(sel)).bg === bg, `${(await look(sel)).bg} vs ${bg}`);
+ok('ok input: the ok colour at 55% for its border', (await look('#ok-input')).bd === green, (await look('#ok-input')).bd);
 
 // Focus: the class-marked field takes the stronger red and the red glow, like the others.
 await b.click('#b-input'); await b.sleep(350);

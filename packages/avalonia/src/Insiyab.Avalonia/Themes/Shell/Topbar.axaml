@@ -103,7 +103,7 @@
     </Setter>
   </Style>
   <Style Selector="Border.topbar.scrolled">
-    <Setter Property="Background" Value="{DynamicResource InsGlass}" />
+    <Setter Property="Background" Value="{DynamicResource InsGlassGround}" />
     <Setter Property="BoxShadow" Value="{DynamicResource InsTopbarFrostShadow}" />
   </Style>
   <!-- Three columns, 1fr auto 1fr, so the centre zone is centred on the bar and not on what the start zone leaves -->
@@ -165,6 +165,10 @@
     <Setter Property="TextElement.FontWeight" Value="Bold" />
   </Style>
   <Style Selector="Border.island > :is(Control)">
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <!-- A row beside a taller mark or dot would stretch its label to the row and draw it high -->
+  <Style Selector=":is(Control).island StackPanel[Orientation=Horizontal] > :is(Control)">
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
 

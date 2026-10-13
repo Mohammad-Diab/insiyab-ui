@@ -8,11 +8,14 @@ public partial class InsiyabTheme : Styles
 {
     public InsiyabTheme(IServiceProvider? serviceProvider = null)
     {
+        OnLoadingFonts();
         AvaloniaXamlLoader.Load(serviceProvider, this);
         OnLoadedBrand();
         OnLoadedFrost();
         Controls.Motion.Register();
     }
+
+    partial void OnLoadingFonts();
 
     partial void OnLoadedBrand();
 

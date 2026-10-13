@@ -2,13 +2,14 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Headless.XUnit;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Media.TextFormatting;
 
 namespace Insiyab.Avalonia.Tests;
 
 public class FontTests
 {
-    const string Source = "avares://Insiyab.Avalonia/Assets/Fonts#";
+    const string Source = "fonts:Insiyab#";
     const string Arabic = "الخط الواضح يريح العين";
     const string Latin = "Clear type rests the eye";
 
@@ -64,6 +65,35 @@ public class FontTests
         Assert.NotEmpty(runs);
         Assert.All(runs, r => Assert.Same(face, r.Face));
         window.Close();
+    }
+
+    [AvaloniaTheory]
+    [InlineData("InsFontArabic", "Tajawal", "انسياب يرسم الخط")]
+    [InlineData("InsFontBodyEn", "Inter", "Insiyab draws type")]
+    [InlineData("InsFontHeadingEn", "Cause", "Insiyab draws type")]
+    public void Weights_past_bold_draw_the_bold_face_without_synthetic_emboldening(string key, string family, string text)
+    {
+        var bold = Embedded(family, 700);
+        foreach (var weight in new[] { 800, 900 })
+        {
+            var face = Embedded(family, weight);
+            Assert.Equal(FontSimulations.None, face.FontSimulations);
+            Assert.Same(bold, face);
+        }
+
+        byte[] Draw(int weight)
+        {
+            var block = new TextBlock { Text = text, FontFamily = Resource(key), FontWeight = (FontWeight)weight, FontSize = 24, Foreground = Brushes.Black, Background = Brushes.White };
+            block.Measure(Size.Infinity);
+            block.Arrange(new Rect(new Size(Math.Ceiling(block.DesiredSize.Width), Math.Ceiling(block.DesiredSize.Height))));
+            using var bitmap = new RenderTargetBitmap(new PixelSize((int)block.Bounds.Width, (int)block.Bounds.Height));
+            bitmap.Render(block);
+            using var stream = new MemoryStream();
+            bitmap.Save(stream, PngBitmapEncoderOptions.Default);
+            return stream.ToArray();
+        }
+        Assert.Equal(Draw(700), Draw(800));
+        Assert.NotEqual(Draw(500), Draw(700));
     }
 
     [AvaloniaFact]

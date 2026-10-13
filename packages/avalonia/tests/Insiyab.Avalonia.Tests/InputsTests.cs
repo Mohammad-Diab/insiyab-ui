@@ -41,6 +41,15 @@ public class InputsTests
         AssertBrush(anchor, key, () => brush());
     }
 
+    // A bad or ok field keeps its fill and draws its border in the tone at 55%, as the web's color-mix does.
+    private static void AssertHalfTone(Visual anchor, string toneKey, IBrush? brush)
+    {
+        var tone = (Color)Res(anchor, toneKey);
+        var got = Assert.IsAssignableFrom<ISolidColorBrush>(brush);
+        Assert.Equal((tone.R, tone.G, tone.B), (got.Color.R, got.Color.G, got.Color.B));
+        Assert.Equal(0.55, got.Opacity, 2);
+    }
+
     private static void Type(Window window, TextBox box, string text)
     {
         box.Focus();
@@ -143,8 +152,9 @@ public class InputsTests
 
         Assert.Contains(":error", box.Classes);
         var border = Part<Border>(box, "PART_BorderElement");
-        SettledBrush(box, "InsToneBadBd", () => border.BorderBrush);
-        SettledBrush(box, "InsToneBadBg", () => border.Background);
+        SettledBrush(box, "InsTextBoxBadBorder", () => border.BorderBrush);
+        AssertHalfTone(box, "InsToneBadColor", border.BorderBrush);
+        SettledBrush(box, "InsCtlBg", () => border.Background);
         var message = box.GetVisualDescendants().OfType<TextBlock>().Single(t => t.Text == "هذا الحقل مطلوب");
         Assert.True(message.IsEffectivelyVisible);
         AssertBrush(box, "InsToneBad", () => message.Foreground);
@@ -168,7 +178,10 @@ public class InputsTests
     {
         var box = new TextBox { Classes = { "bad" } };
         Show(Page(box));
-        AssertBrush(box, "InsToneBadBd", () => Part<Border>(box, "PART_BorderElement").BorderBrush);
+        var border = Part<Border>(box, "PART_BorderElement");
+        AssertBrush(box, "InsTextBoxBadBorder", () => border.BorderBrush);
+        AssertHalfTone(box, "InsToneBadColor", border.BorderBrush);
+        AssertBrush(box, "InsCtlBg", () => border.Background);
     }
 
     [AvaloniaFact]
@@ -177,11 +190,8 @@ public class InputsTests
         var box = new TextBox { Classes = { "ok" }, Text = "name" };
         Show(Page(box));
         var border = Part<Border>(box, "PART_BorderElement");
-        AssertBrush(box, "InsToneOkBg", () => border.Background);
-        var ok = (Color)Res(box, "InsToneOkColor");
-        var got = ColorOf(border.BorderBrush);
-        Assert.Equal(ok.R, got.R);
-        Assert.Equal(0.55, ((ISolidColorBrush)border.BorderBrush!).Opacity, 2);
+        AssertBrush(box, "InsCtlBg", () => border.Background);
+        AssertHalfTone(box, "InsToneOkColor", border.BorderBrush);
 
         box.Focus();
         Settle();
@@ -563,7 +573,7 @@ public class InputsTests
         combo.IsDropDownOpen = true;
         Settle();
         var popup = ((Border)Part<Popup>(combo, "PART_Popup").Child!);
-        AssertBrush(combo, "InsGlassStrong", () => popup.Background);
+        AssertBrush(combo, "InsGlassStrongGround", () => popup.Background);
         Assert.Equal(Res(combo, "InsRMd"), popup.CornerRadius);
         var items = combo.GetRealizedContainers().OfType<ComboBoxItem>().ToList();
         Assert.Equal(3, items.Count);
@@ -617,8 +627,23 @@ public class InputsTests
         Show(Page(combo));
         DataValidationErrors.SetErrors(combo, ["اختر واحدًا."]);
         Settle();
-        SettledBrush(combo, "InsToneBadBd", () => Part<Border>(combo, "Background").BorderBrush);
+        var face = Part<Border>(combo, "Background");
+        SettledBrush(combo, "InsSelectBadBorder", () => face.BorderBrush);
+        AssertHalfTone(combo, "InsToneBadColor", face.BorderBrush);
+        AssertBrush(combo, "InsCtlBg", () => face.Background);
         Assert.Contains(combo.GetVisualDescendants().OfType<TextBlock>(), t => t.Text == "اختر واحدًا.");
+    }
+
+    [AvaloniaTheory]
+    [InlineData("bad", "InsToneBadColor")]
+    [InlineData("ok", "InsToneOkColor")]
+    public void Number_field_states_keep_the_fill(string state, string tone)
+    {
+        Show(Page(num));
+        var border = Part<Border>(num, "PART_BorderElement");
+        SettledBrush(num, state == "bad" ? "InsSpinBadBorder" : "InsSpinOkBorder", () => border.BorderBrush);
+        AssertHalfTone(num, tone, border.BorderBrush);
+        AssertBrush(num, "InsCtlBg", () => border.Background);
     }
 
     [AvaloniaTheory]

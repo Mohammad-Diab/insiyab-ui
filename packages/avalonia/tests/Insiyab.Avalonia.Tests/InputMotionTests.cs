@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
@@ -8,6 +9,7 @@ using Avalonia.Headless.XUnit;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Media.Transformation;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -181,11 +183,30 @@ public class InputMotionTests
         var p = Center(up, window);
         window.MouseMove(p);
         Pump(window, 200);
-        window.MouseDown(p, MouseButton.Left);
-        window.MouseUp(p, MouseButton.Left);
-        var samples = Sample(window, 400, () => part.RenderTransform?.Value.M11 ?? 1);
-        Assert.InRange(samples.Min(s => s.Value), 0.91, 0.935);
-        Assert.Equal(1, samples[^1].Value, 3);
+        // The clock stands still, so the press counts as a tap however slow the run, and the dip is read from its keyframes rather than from frames that load can skip.
+        var real = PressDip.Now;
+        var at = real();
+        PressDip.Now = () => at;
+        var dips = new List<(Control Part, Animation Run)>();
+        PressDip.Started = (c, a) => dips.Add((c, a));
+        try
+        {
+            window.MouseDown(p, MouseButton.Left);
+            window.MouseUp(p, MouseButton.Left);
+        }
+        finally
+        {
+            PressDip.Now = real;
+            PressDip.Started = null;
+        }
+        var (dipped, run) = Assert.Single(dips);
+        Assert.Same(part, dipped);
+        var scales = run.Children.Select(k => (k.Cue.CueValue, Scale: ((TransformOperations)k.Setters.OfType<Setter>().Single(s => s.Property == Visual.RenderTransformProperty).Value!).Value.M11)).ToList();
+        Assert.InRange(scales.Min(k => k.Scale), 0.91, 0.935);
+        Assert.Equal(1, scales[0].Scale, 3);
+        Assert.Equal(1, scales[^1].Scale, 3);
+        Pump(window, 400);
+        Assert.Equal(1, part.RenderTransform?.Value.M11 ?? 1, 3);
     }
 
     [AvaloniaFact]
