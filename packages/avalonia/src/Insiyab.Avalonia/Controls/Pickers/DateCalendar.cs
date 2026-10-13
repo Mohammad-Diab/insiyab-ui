@@ -20,6 +20,7 @@ public enum DatePickMode
 
 /// <summary>The date field's calendar (the web's <c>.ins-cal</c>): a month grid whose week starts where the locale starts it, month and year lists, arrow-key navigation in the page's direction, a range band, two months side by side for a range, time wheels beside a date-and-time, and a footer with Today, Clear, Done and the Hijri/Gregorian switch.</summary>
 [TemplatePart("PART_Host", typeof(Decorator))]
+[TemplatePart("PART_Turn", typeof(Canvas))]
 [PseudoClasses(":dual", ":datetime", ":stacked")]
 public class DateCalendar : TemplatedControl
 {
@@ -63,6 +64,8 @@ public class DateCalendar : TemplatedControl
         AvaloniaProperty.Register<DateCalendar, bool>(nameof(IsPickingEnd));
 
     private Decorator? _host;
+    private Canvas? _turnLayer;
+    private CalendarTurn? _turn;
     private DateTime _view = DateTime.Today;
     private DateTime _focus = DateTime.Today;
     private bool _dual;
@@ -143,12 +146,20 @@ public class DateCalendar : TemplatedControl
 
     internal IReadOnlyDictionary<DateTime, Border> DayCells => _cells;
 
+    internal Canvas? TurnLayer => _turnLayer;
+
+    internal CalendarTurn? RunningTurn => _turn;
+
+    internal IEnumerable<Control> HostControls() =>
+        _host is null ? [] : global::Avalonia.LogicalTree.LogicalExtensions.GetLogicalDescendants(_host).OfType<Control>();
+
     internal static Func<DateTime> Today { get; set; } = () => DateTime.Today;
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
         _host = e.NameScope.Find<Decorator>("PART_Host");
+        _turnLayer = e.NameScope.Find<Canvas>("PART_Turn");
         Rebuild();
     }
 
@@ -232,6 +243,8 @@ public class DateCalendar : TemplatedControl
     public void Rebuild()
     {
         if (_host is null) return;
+        _turn?.Stop();
+        _turn = null;
         var words = Words;
         var sys = ViewCalendar;
         var vp = sys.Parts(_view);
@@ -460,6 +473,7 @@ public class DateCalendar : TemplatedControl
     private Border BuildSwitch(PickerLocale words)
     {
         var row = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 3 };
+        var flight = new Canvas { Classes = { "cal-switch-flight" }, IsHitTestVisible = false };
         var home = new Button { Content = words.HijriLabel, Classes = { "cal-switch-option" }, Tag = "home" };
         var greg = new Button { Content = words.Gregorian, Classes = { "cal-switch-option" }, Tag = "gregory" };
         (ShowGregorian ? greg : home).Classes.Add("active");
@@ -467,7 +481,7 @@ public class DateCalendar : TemplatedControl
         greg.Click += (_, _) => Flip(true);
         row.Children.Add(home);
         row.Children.Add(greg);
-        var track = new Border { Child = row, Classes = { "cal-switch" } };
+        var track = new Border { Child = new Panel { Children = { flight, row } }, Classes = { "cal-switch" } };
         AutomationProperties.SetName(track, words.CalendarSystem);
         return track;
     }
@@ -475,9 +489,11 @@ public class DateCalendar : TemplatedControl
     private void Flip(bool gregorian)
     {
         if (ShowGregorian == gregorian) return;
+        var before = CalendarTurn.Snap(this, _turn);
         SetCurrentValue(ShowGregorianProperty, gregorian);
         _view = ViewCalendar.MonthStart(_focus);
         Rebuild();
+        _turn = CalendarTurn.Play(this, before);
         SystemInvoked?.Invoke(this, gregorian);
         var back = _host?.GetLogicalDescendantsOfButtons().FirstOrDefault(b => b.Tag as string == (gregorian ? "gregory" : "home"));
         back?.Focus(NavigationMethod.Tab);

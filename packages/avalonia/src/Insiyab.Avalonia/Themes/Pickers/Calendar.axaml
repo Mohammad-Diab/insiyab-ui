@@ -13,6 +13,7 @@
             <Panel>
               <Border Classes="picker-glass" />
               <Decorator x:Name="PART_Host" Margin="12" />
+              <Canvas x:Name="PART_Turn" IsHitTestVisible="False" />
             </Panel>
           </ControlTemplate>
         </Setter>
@@ -233,6 +234,18 @@
     <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <!-- The face that flies across the switch, then the chosen side draws none of its own until it lands -->
+  <Style Selector="ins|DateCalendar Border.cal-switch-face">
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+    <Setter Property="Background" Value="{DynamicResource InsSegOnBg}" />
+    <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
+  </Style>
+  <Style Selector="ins|DateCalendar Border.cal-switch.moving Button.cal-switch-option.active">
+    <Setter Property="Background" Value="Transparent" />
+    <Style Selector="^ /template/ Border#PART_Face">
+      <Setter Property="BoxShadow" Value="none" />
+    </Style>
   </Style>
 
 </Styles>
