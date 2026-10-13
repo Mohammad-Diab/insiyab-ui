@@ -395,6 +395,10 @@
         <Style Selector="^.shell-group[FlowDirection=LeftToRight]">
           <Setter Property="LetterSpacing" Value="0.44" />
         </Style>
+        <!-- Hidden by the sidebar filter, with no motion -->
+        <Style Selector="^.filtered-out">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
       </ControlTheme>
 
       <ControlTheme x:Key="InsShellLinkButton" TargetType="Button" BasedOn="{StaticResource InsShellLinkBase}" />
@@ -451,16 +455,26 @@
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="{TemplateBinding CornerRadius}">
-              <ScrollViewer Name="PART_ScrollViewer"
-                            HorizontalScrollBarVisibility="Disabled"
-                            VerticalScrollBarVisibility="Auto">
-                <Panel>
-                  <ItemsPresenter Name="PART_ItemsPresenter"
-                                  ItemsPanel="{TemplateBinding ItemsPanel}"
-                                  Margin="{TemplateBinding Padding}" />
-                  <Canvas Name="PART_Flight" IsHitTestVisible="False" />
+              <DockPanel>
+                <!-- Shell.HasFilter: a field over the links, pinned with the head unless the whole pane scrolls -->
+                <Panel Name="PART_FilterBox" DockPanel.Dock="Top" IsVisible="{TemplateBinding (ins:Shell.HasFilter)}">
+                  <TextBox Name="PART_Filter" Classes="search sm"
+                           PlaceholderText="{TemplateBinding (ins:Shell.FilterPlaceholder)}"
+                           AutomationProperties.Name="{TemplateBinding (ins:Shell.FilterPlaceholder)}" />
                 </Panel>
-              </ScrollViewer>
+                <TextBlock Name="PART_FilterEmpty" Classes="shell-filter-empty" DockPanel.Dock="Top" IsVisible="False"
+                           Text="{TemplateBinding (ins:Shell.FilterEmptyText)}" />
+                <ScrollViewer Name="PART_ScrollViewer"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
+                  <Panel>
+                    <ItemsPresenter Name="PART_ItemsPresenter"
+                                    ItemsPanel="{TemplateBinding ItemsPanel}"
+                                    Margin="{TemplateBinding Padding}" />
+                    <Canvas Name="PART_Flight" IsHitTestVisible="False" />
+                  </Panel>
+                </ScrollViewer>
+              </DockPanel>
             </Border>
           </ControlTemplate>
         </Setter>
@@ -476,6 +490,24 @@
   <Style Selector="SplitView ListBox.shell-nav">
     <Setter Property="Margin" Value="-12,0" />
     <Setter Property="Padding" Value="12,0,12,18" />
+  </Style>
+  <Style Selector="ListBox.shell-nav /template/ Panel#PART_FilterBox">
+    <Setter Property="Margin" Value="4,0,4,4" />
+  </Style>
+  <Style Selector="SplitView ListBox.shell-nav /template/ Panel#PART_FilterBox">
+    <Setter Property="Margin" Value="16,0,16,4" />
+  </Style>
+  <Style Selector="TextBlock.shell-filter-empty">
+    <Setter Property="Margin" Value="14,8" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+  </Style>
+  <Style Selector="SplitView TextBlock.shell-filter-empty">
+    <Setter Property="Margin" Value="26,8" />
+  </Style>
+  <!-- An icon-only rail has no room for the field -->
+  <Style Selector="SplitView:compactinline:closed ListBox.shell-nav /template/ Panel#PART_FilterBox, SplitView:compactoverlay:closed ListBox.shell-nav /template/ Panel#PART_FilterBox">
+    <Setter Property="IsVisible" Value="False" />
   </Style>
   <Style Selector="Button.shell-link">
     <Setter Property="Theme" Value="{StaticResource InsShellLinkButton}" />

@@ -112,7 +112,8 @@
             </StackPanel>
           </StackPanel>
         </Border>
-        <ListBox x:Name="Nav" Classes="shell-nav" AutomationProperties.Name="صفحات المعرض" />
+        <ListBox x:Name="Nav" Classes="shell-nav" AutomationProperties.Name="صفحات المعرض"
+                 ins:Shell.HasFilter="True" ins:Shell.FilterPlaceholder="ابحث في الصفحات" />
       </DockPanel>
     </SplitView.Pane>
     <Panel>

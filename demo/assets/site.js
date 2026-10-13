@@ -123,13 +123,19 @@
     });
   }
 
+  // The sidebar filter counts only links the mode shows, so a mode change filters again.
+  function refilter() {
+    var f = document.querySelector('.ins-shell-filter input');
+    if (f && f.value) f.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
   // What the new mode drops leaves first, then what it adds arrives.
   function setMode(next) {
     running.forEach(function (a) { a.finish(); });
     running = [];
     var me = ++turn;
     if (next === root.getAttribute('data-site-mode')) { syncCustomiser(); return; }
-    var apply = function () { root.setAttribute('data-site-mode', next); syncCustomiser(); refreshPlays(); };
+    var apply = function () { root.setAttribute('data-site-mode', next); syncCustomiser(); refreshPlays(); refilter(); };
     var still = root.getAttribute('data-ins-fx') === 'off' || !Element.prototype.animate || !window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (still) { apply(); return; }
     var drop = next === 'simple' ? '.site-adv' : '.site-simple', add = next === 'simple' ? '.site-simple' : '.site-adv';

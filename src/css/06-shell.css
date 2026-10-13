@@ -244,6 +244,13 @@
   text-align: center;
 }
 
+/* The filter field from `data-ins-filter`, at the top of the links; what it hides goes with no motion. */
+.ins-shell-filter { flex-shrink: 0; margin: 0 .25rem .25rem; }
+.ins-shell-filter > .ins-search-ico { inline-size: .875rem; block-size: .875rem; inset-inline-start: .625rem; }
+.ins-shell-filter > .ins-input { padding-inline-start: 2rem; }
+.ins-shell-side .is-filtered-out { display: none !important; }
+.ins-shell-filter-empty { margin: 0; padding: .5rem .875rem; font-size: .8125rem; color: var(--ins-text-3); }
+
 /* The trailing nav block, divided from the rest. Sign-out is not a destination,
    and putting it in the same undifferentiated run as the twenty that are is how
    somebody clicks it by accident. */

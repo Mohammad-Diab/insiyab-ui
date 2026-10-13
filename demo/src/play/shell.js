@@ -70,6 +70,10 @@ SitePlay.define({
     { group: 'الشريط الجانبي', name: 'ins-shell-bottom', desc: 'يعزل في أسفل الشريط ما لا يقود إلى صفحة، كالخروج، عن بقية الروابط.' },
     { group: 'الطي والدرج', name: 'data-ins-sidebar', desc: 'على زر يطوي الشريط على الحاسوب ويحفظ حالته، ويفتحه درجًا على الشاشة الضيقة. وقيمته `toggle` أو `open` أو `collapsed`.' },
     { group: 'الطي والدرج', name: 'ins-sidebar-collapsed', desc: 'يضعه السكربت على `<html>` ما دام الشريط مطويًا.' },
+    { group: 'التصفية', name: 'data-ins-filter', desc: 'على الشريط الجانبي، فيضع فوق روابطه حقلًا يخفي منها ما لا يطابق ما تكتبه. وقيمته النص الباهت في الحقل، وهو «بحث» إن تركتها فارغة.' },
+    { group: 'التصفية', name: 'data-keywords', desc: 'على الرابط: كلمات أخرى يُعثر عليه بها، كاسمه بالإنجليزية.' },
+    { group: 'التصفية', name: 'data-ins-filter-empty', level: 'advanced', desc: 'على الشريط الجانبي: ما يظهر حين لا يبقى رابط، وهو «لا نتائج» إن غابت.' },
+    { group: 'التصفية', name: 'is-filtered-out', kind: 'class', level: 'advanced', desc: 'يضعه السكربت على كل رابط أو عنوان أخفاه الحقل.' },
     { group: 'الطي والدرج', name: 'ins:sidebar', kind: 'event', desc: 'يُطلق كلما طُوي الشريط أو فُتح، وفي `detail` حالته `state`، و`drawer` إن كان درجًا.' },
     { group: 'الخلفية', name: 'data-ins-orbs="off"', level: 'advanced', desc: 'على `<html>`، فتوقف الكرات الثلاث التي تضعها المكتبة خلف الصفحة ليظهر عليها أثر الزجاج.' }
   ],
