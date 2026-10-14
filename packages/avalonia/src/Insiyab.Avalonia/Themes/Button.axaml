@@ -101,7 +101,7 @@
         <Setter Property="Transitions">
           <Transitions>
             <BrushTransition Property="Foreground" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
-            <BrushTransition Property="Background" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Background" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
             <BrushTransition Property="BorderBrush" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
@@ -419,7 +419,7 @@
           <Setter Property="Transitions">
             <Transitions>
               <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
               <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
@@ -605,7 +605,7 @@
     </ResourceDictionary>
   </Styles.Resources>
 
-  <!-- An icon beside a label nudges toward the trailing edge; a logical margin, so it mirrors with the page. -->
+  <!-- An icon beside a label nudges toward the trailing edge; a logical margin, so it mirrors with the page. A toolbar's icons and a notification's stay put: a row of them sliding as the pointer passes reads as a wave. -->
   <Style Selector=":is(Button) ins|Icon">
     <Setter Property="Transitions">
       <Transitions>
@@ -613,7 +613,7 @@
       </Transitions>
     </Setter>
   </Style>
-  <Style Selector=":is(Button):pointerover:not(.icon):not(:disabled) ins|Icon">
+  <Style Selector=":is(Button):pointerover:not(.icon):not(:disabled) ins|Icon:not(.toolbar-icon):not(.toolbar-chevron):not(.notify-icon)">
     <Setter Property="Margin" Value="2,0,-2,0" />
   </Style>
 </Styles>

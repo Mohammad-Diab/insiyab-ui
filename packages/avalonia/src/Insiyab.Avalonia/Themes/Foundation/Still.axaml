@@ -18,6 +18,9 @@
   <Style Selector=":is(TopLevel):ins-still ListBox.shell-nav ListBoxItem:pointerover ins|Icon, :is(TopLevel):ins-still Button.shell-link:pointerover ins|Icon, :is(TopLevel):ins-still Button.shell-brand:pointerover Border.shell-mark">
     <Setter Property="RenderTransform" Value="none" />
   </Style>
+  <Style Selector=":is(TopLevel):ins-still :is(Button):pointerover ins|Icon.toolbar-icon, :is(TopLevel):ins-still :is(Button):pressed ins|Icon.toolbar-icon">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
   <Style Selector=":is(TopLevel):ins-still Border.hoverable:pointerover, :is(TopLevel):ins-still Border.stat.hoverable:pointerover Border.stat-ico, :is(TopLevel):ins-still Button.stat-link:pointerover Border.stat-ico">
     <Setter Property="RenderTransform" Value="none" />
   </Style>
