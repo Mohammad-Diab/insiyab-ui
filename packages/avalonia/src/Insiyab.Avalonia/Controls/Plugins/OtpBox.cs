@@ -20,7 +20,7 @@ public class OtpCompletedEventArgs(RoutedEvent routedEvent, string value) : Rout
     public string Value { get; } = value;
 }
 
-/// <summary>The one-time code field, the web's <c>data-ins-otp</c>: one real text box drawn as a block with a dot per character. Paste, an OTP suggestion and a screen reader all meet one ordinary field; typing is always at the end. Its errors show under the block, which turns red.</summary>
+/// <summary>The one-time code field, the web's <c>data-ins-otp</c>: one real text box drawn as a block with a dot per character. Paste, an OTP suggestion and a screen reader all meet one ordinary field; one cell is selected or the caret waits at the end, so the code never has a gap. Its errors show under the block, which turns red.</summary>
 [TemplatePart("PART_CellsHost", typeof(Panel))]
 [PseudoClasses(":invalid", ":complete")]
 public class OtpBox : TextBox
@@ -51,7 +51,7 @@ public class OtpBox : TextBox
 
     private readonly List<OtpCell> _cells = [];
     private Panel? _host;
-    private bool _syncing, _quiet, _edited, _left, _complete;
+    private bool _syncing, _quiet, _edited, _left, _complete, _user, _picking;
     private string _last = string.Empty;
     private string? _message;
 
@@ -125,7 +125,8 @@ public class OtpBox : TextBox
         if (!IsEffectivelyEnabled || IsReadOnly) return;
         var code = Clean(pasted);
         if (code.Length == 0) return;
-        SetCurrentValue(TextProperty, code.Length == Length ? code : (Text ?? string.Empty) + (pasted ?? string.Empty));
+        SetCurrentValue(TextProperty, code.Length == Length || IsWholeSelected() ? code : (Text ?? string.Empty) + (pasted ?? string.Empty));
+        ToEnd();
     }
 
     internal string Clean(string? value)
@@ -161,7 +162,7 @@ public class OtpBox : TextBox
                 _edited = true;
                 if (IsInvalid) SetCurrentValue(IsInvalidProperty, false);
             }
-            Sync(_quiet || !_attached);
+            Sync(_quiet || !_attached, !_user);
         }
         else if (change.Property == LengthProperty)
         {
@@ -176,9 +177,9 @@ public class OtpBox : TextBox
         }
         else if (change.Property == CaretIndexProperty || change.Property == SelectionStartProperty || change.Property == SelectionEndProperty)
         {
-            var end = (Text ?? string.Empty).Length;
-            if (CaretIndex != end || SelectionStart != end || SelectionEnd != end)
-                Dispatcher.UIThread.Post(ToEnd);
+            if (_user || _picking) return;
+            if (IsTidy()) Render();
+            else Dispatcher.UIThread.Post(Normalize);
         }
         else if (change.Property == IsInvalidProperty || change.Property == IsEnabledProperty || change.Property == DataValidationErrors.HasErrorsProperty)
         {
@@ -204,21 +205,58 @@ public class OtpBox : TextBox
         _attached = false;
     }
 
-    // One place to type: the end. Arrows, Home and End have nowhere to go.
+    // Left, Right, Home and End move between cells, and the rest of the keys edit the one selected.
     protected override void OnKeyDown(KeyEventArgs e)
     {
-        if (e.Key is Key.Left or Key.Right or Key.Up or Key.Down or Key.Home or Key.End or Key.PageUp or Key.PageDown)
+        if (e.Key is Key.Up or Key.Down or Key.PageUp or Key.PageDown)
         {
             e.Handled = true;
             return;
         }
-        base.OnKeyDown(e);
+        if (e.Key is Key.Left or Key.Right or Key.Home or Key.End)
+        {
+            e.Handled = true;
+            Move(e.Key);
+            return;
+        }
+        _user = true;
+        try { base.OnKeyDown(e); }
+        finally { _user = false; }
+        Normalize();
+    }
+
+    protected override void OnTextInput(TextInputEventArgs e)
+    {
+        var typed = Clean(e.Text);
+        if (typed.Length == 0)
+        {
+            e.Handled = true;
+            return;
+        }
+        e.Text = typed;
+        _user = true;
+        try { base.OnTextInput(e); }
+        finally { _user = false; }
+        Normalize();
+    }
+
+    // A press picks the cell under it; the text underneath is see-through, so its own hit test is not used.
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    {
+        if (_host is null || !e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+        {
+            base.OnPointerPressed(e);
+            return;
+        }
+        e.Handled = true;
+        if (!IsFocused) Focus(NavigationMethod.Pointer);
+        Pick(CellAt(e.GetPosition(_host).X));
     }
 
     protected override void OnGotFocus(FocusChangedEventArgs e)
     {
         base.OnGotFocus(e);
-        Dispatcher.UIThread.Post(ToEnd);
+        if (e.NavigationMethod != NavigationMethod.Pointer) Dispatcher.UIThread.Post(ToEnd);
         Render();
     }
 
@@ -229,16 +267,79 @@ public class OtpBox : TextBox
         Render();
     }
 
-    private void ToEnd()
+    private void ToEnd() => Pick(int.MaxValue);
+
+    // The cell at i is selected, or the caret goes to the end when there is none there.
+    private void Pick(int i)
     {
-        var end = (Text ?? string.Empty).Length;
-        if (CaretIndex != end) SetCurrentValue(CaretIndexProperty, end);
-        if (SelectionStart != end) SetCurrentValue(SelectionStartProperty, end);
-        if (SelectionEnd != end) SetCurrentValue(SelectionEndProperty, end);
+        var len = (Text ?? string.Empty).Length;
+        var (start, end) = i >= len ? (len, len) : (i, i + 1);
+        _picking = true;
+        try
+        {
+            if (CaretIndex != start) SetCurrentValue(CaretIndexProperty, start);
+            if (SelectionStart != start) SetCurrentValue(SelectionStartProperty, start);
+            if (SelectionEnd != end) SetCurrentValue(SelectionEndProperty, end);
+        }
+        finally { _picking = false; }
+        Render();
+    }
+
+    private (int Start, int End) Picked()
+    {
+        var len = (Text ?? string.Empty).Length;
+        return (Math.Clamp(Math.Min(SelectionStart, SelectionEnd), 0, len), Math.Clamp(Math.Max(SelectionStart, SelectionEnd), 0, len));
+    }
+
+    private bool IsWholeSelected()
+    {
+        var (start, end) = Picked();
+        return end - start > 1 && start == 0 && end == (Text ?? string.Empty).Length;
+    }
+
+    // One cell, the whole code (Ctrl+A) or the caret at the end: anything else collapses to a cell or the end.
+    private bool IsTidy()
+    {
+        var len = (Text ?? string.Empty).Length;
+        var (start, end) = Picked();
+        return end - start == 1 || IsWholeSelected() || (start == end && start == len && CaretIndex == len);
+    }
+
+    private void Normalize()
+    {
+        if (IsTidy()) Render();
+        else
+        {
+            var (start, end) = Picked();
+            Pick(end > start ? start : Math.Clamp(CaretIndex, 0, (Text ?? string.Empty).Length));
+        }
+    }
+
+    private void Move(Key key)
+    {
+        var len = (Text ?? string.Empty).Length;
+        var (start, end) = Picked();
+        var whole = end - start > 1;
+        var at = end - start == 1 ? start : len;
+        Pick(key switch
+        {
+            Key.Home => 0,
+            Key.End => len,
+            Key.Left => whole ? 0 : Math.Max(0, at - 1),
+            _ => whole ? len : Math.Min(len, at + 1),
+        });
+    }
+
+    // The gap between two cells belongs half to each; past the last cell is the last.
+    private int CellAt(double x)
+    {
+        for (var i = 0; i < _cells.Count; i++)
+            if (x < _cells[i].Bounds.Right + 2) return i;
+        return _cells.Count - 1;
     }
 
     // After every change: cleaned, redrawn, checked, and announced the moment the last box fills.
-    private void Sync(bool quiet = true)
+    private void Sync(bool quiet = true, bool toEnd = true)
     {
         var was = _last;
         var value = Clean(Text);
@@ -248,7 +349,7 @@ public class OtpBox : TextBox
             try { SetCurrentValue(TextProperty, value); }
             finally { _syncing = false; }
         }
-        ToEnd();
+        if (toEnd) ToEnd();
         _last = value;
         IsComplete = value.Length == Length;
         Check();
@@ -291,17 +392,17 @@ public class OtpBox : TextBox
         PseudoClasses.Set(":invalid", invalid);
         PseudoClasses.Set(":complete", value.Length == Length);
         var focused = IsFocused && IsEffectivelyEnabled;
-        var at = Math.Min(value.Length, _cells.Count - 1);
+        var (start, end) = Picked();
         for (var i = 0; i < _cells.Count; i++)
         {
             var ch = i < value.Length ? value[i].ToString() : string.Empty;
             _cells[i].Character = ch;
-            _cells[i].SetState(ch.Length > 0, focused && i == at, invalid);
+            _cells[i].SetState(ch.Length > 0, focused && (end > start ? i >= start && i < end : i == value.Length), invalid);
         }
     }
 }
 
-/// <summary>One drawn box of an <see cref="OtpBox"/>: the character, the dot under it, and the caret on the next one to type.</summary>
+/// <summary>One drawn box of an <see cref="OtpBox"/>: the character, the dot under it, and a tint when selected or the caret when it is the next to type.</summary>
 [PseudoClasses(":filled", ":active", ":invalid")]
 public class OtpCell : TemplatedControl
 {

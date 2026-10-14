@@ -11,6 +11,14 @@
         <Setter Property="Template">
           <ControlTemplate TargetType="ins:OtpCell">
             <Panel x:Name="PART_Root" RenderTransform="none">
+              <ins:TemplateBorder x:Name="PART_Select"
+                      Height="34"
+                      Margin="0,0,0,8"
+                      CornerRadius="6"
+                      VerticalAlignment="Center"
+                      Background="{DynamicResource InsPrimaryMid}"
+                      Opacity="0.2"
+                      IsVisible="False" />
               <ins:TemplateText x:Name="PART_Char"
                          Text="{TemplateBinding Character}"
                          Foreground="{TemplateBinding Foreground}"
@@ -71,6 +79,12 @@
         </Style>
         <Style Selector="^:active:not(:filled) /template/ :is(Border)#PART_Caret">
           <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:active:filled /template/ :is(Border)#PART_Select">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:active:filled:invalid /template/ :is(Border)#PART_Select">
+          <Setter Property="Background" Value="{DynamicResource InsToneBad}" />
         </Style>
       </ControlTheme>
 

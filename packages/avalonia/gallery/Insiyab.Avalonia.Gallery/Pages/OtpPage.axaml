@@ -18,7 +18,7 @@
 
     <TextBlock Classes="section" Text="الكتابة" />
     <ins:ProseList>
-      <TextBlock Classes="p" Margin="0"><Bold>في الخانة التالية دائمًا:</Bold> أينما نقرت في الحقل وقع المؤشر بعد آخر رقم، ويحذف Backspace آخر رقم.</TextBlock>
+      <TextBlock Classes="p" Margin="0"><Bold>تصحيح رقم واحد:</Bold> انقر خانة ممتلئة تُحدَّد، فتكتب فوقها رقمًا آخر أو تحذفها بـ Backspace، وتنقلك الأسهم بين الخانات. وإذا نقرت خانة فارغة وقع المؤشر بعد آخر رقم.</TextBlock>
       <TextBlock Classes="p" Margin="0"><Bold>الأرقام العربية:</Bold> تصير ١٢٣٤٥٦ في الحقل 123456.</TextBlock>
       <TextBlock Classes="p" Margin="0"><Bold>اللصق:</Bold> لا يأخذ الحقل إلا الرمز، فإذا لصقت «رمزك هو ١٢٣ ٤٥٦» امتلأ بـ 123456.</TextBlock>
       <TextBlock Classes="p" Margin="0"><Bold>الرمز الناقص:</Bold> تظهر تحت الحقل رسالة «اكتب الرمز كاملًا» حتى تمتلئ خاناته.</TextBlock>
