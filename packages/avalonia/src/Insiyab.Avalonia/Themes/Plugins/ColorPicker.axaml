@@ -29,11 +29,11 @@
         <Setter Property="Template">
           <ControlTemplate TargetType="Button">
             <Panel>
-              <Border x:Name="PART_Empty" CornerRadius="{TemplateBinding CornerRadius}" Background="{DynamicResource InsCtlBg}" BorderBrush="{TemplateBinding BorderBrush}"
+              <ins:TemplateBorder x:Name="PART_Empty" CornerRadius="{TemplateBinding CornerRadius}" Background="{DynamicResource InsCtlBg}" BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}" ClipToBounds="True" IsVisible="False">
                 <Line StartPoint="0,28" EndPoint="28,0" Stroke="{DynamicResource InsToneBad}" StrokeThickness="2" />
-              </Border>
-              <Border x:Name="PART_Chip"
+              </ins:TemplateBorder>
+              <ins:TemplateBorder x:Name="PART_Chip"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -45,10 +45,10 @@
         <Style Selector="^:pointerover">
           <Setter Property="RenderTransform" Value="scale(1.08)" />
         </Style>
-        <Style Selector="^.empty /template/ Border#PART_Empty">
+        <Style Selector="^.empty /template/ :is(Border)#PART_Empty">
           <Setter Property="IsVisible" Value="True" />
         </Style>
-        <Style Selector="^.empty /template/ Border#PART_Chip">
+        <Style Selector="^.empty /template/ :is(Border)#PART_Chip">
           <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:disabled">
@@ -73,7 +73,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate TargetType="ins:ColorPreset">
-            <Border Background="{TemplateBinding Brush}"
+            <ins:TemplateBorder Background="{TemplateBinding Brush}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="{TemplateBinding CornerRadius}"
@@ -91,16 +91,16 @@
         <Setter Property="Template">
           <ControlTemplate TargetType="ins:ColorContrastLine">
             <DockPanel>
-              <Border DockPanel.Dock="Left" Width="28" Height="20" Margin="0,0,8,0" CornerRadius="5" BorderThickness="1"
+              <ins:TemplateBorder DockPanel.Dock="Left" Width="28" Height="20" Margin="0,0,8,0" CornerRadius="5" BorderThickness="1"
                       BorderBrush="{DynamicResource InsLine}" Background="{TemplateBinding SampleBackground}">
-                <TextBlock Text="Aa" FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="ExtraBold" FontSize="{TemplateBinding FontSize}"
+                <ins:TemplateText Text="Aa" FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="ExtraBold" FontSize="{TemplateBinding FontSize}"
                            Foreground="{TemplateBinding SampleForeground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-              </Border>
-              <TextBlock x:Name="PART_Verdict" DockPanel.Dock="Right" MinWidth="88" Margin="8,0,0,0" TextAlignment="Right" FontWeight="Bold"
+              </ins:TemplateBorder>
+              <ins:TemplateText x:Name="PART_Verdict" DockPanel.Dock="Right" MinWidth="88" Margin="8,0,0,0" TextAlignment="Right" FontWeight="Bold"
                          Text="{TemplateBinding Verdict}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" />
-              <TextBlock DockPanel.Dock="Right" Margin="8,0,0,0" FlowDirection="LeftToRight" FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="Bold"
+              <ins:TemplateText DockPanel.Dock="Right" Margin="8,0,0,0" FlowDirection="LeftToRight" FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="Bold"
                          Text="{TemplateBinding Ratio}" Foreground="{DynamicResource InsText1}" VerticalAlignment="Center" />
-              <TextBlock Text="{TemplateBinding Where}" Foreground="{DynamicResource InsText2}" VerticalAlignment="Center" />
+              <ins:TemplateText Text="{TemplateBinding Where}" Foreground="{DynamicResource InsText2}" VerticalAlignment="Center" />
             </DockPanel>
           </ControlTemplate>
         </Setter>
@@ -117,19 +117,19 @@
               <ins:ColorArea x:Name="PART_Area" Height="152" CornerRadius="{DynamicResource InsRSm}" />
               <ins:ColorHueSlider x:Name="PART_Hue" />
               <UniformGrid x:Name="PART_Swatches" Columns="8" ColumnSpacing="6" RowSpacing="6" HorizontalAlignment="Stretch" UseLayoutRounding="False" />
-              <Border BorderBrush="{DynamicResource InsLine}" BorderThickness="0,1,0,0" Padding="0,8,0,0"
+              <ins:TemplateBorder BorderBrush="{DynamicResource InsLine}" BorderThickness="0,1,0,0" Padding="0,8,0,0"
                       IsVisible="{TemplateBinding HexText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                 <StackPanel Spacing="5">
                   <DockPanel>
-                    <TextBlock DockPanel.Dock="Right" Text="{TemplateBinding ContrastLabel}" FontSize="{DynamicResource InsFsXs}" FontWeight="Bold"
+                    <ins:TemplateText DockPanel.Dock="Right" Text="{TemplateBinding ContrastLabel}" FontSize="{DynamicResource InsFsXs}" FontWeight="Bold"
                                Foreground="{DynamicResource InsText3}" VerticalAlignment="Bottom" />
-                    <TextBlock Text="{TemplateBinding HexText}" FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="Bold" FontSize="{DynamicResource InsFsSm}"
+                    <ins:TemplateText Text="{TemplateBinding HexText}" FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="Bold" FontSize="{DynamicResource InsFsSm}"
                                Foreground="{DynamicResource InsText1}" HorizontalAlignment="Left" />
                   </DockPanel>
                   <ins:ColorContrastLine x:Name="PART_OnWhite" />
                   <ins:ColorContrastLine x:Name="PART_OnBlack" />
                 </StackPanel>
-              </Border>
+              </ins:TemplateBorder>
             </StackPanel>
           </ControlTemplate>
         </Setter>
@@ -173,7 +173,7 @@
   <Style Selector="FlyoutPresenter.color">
     <Setter Property="Padding" Value="12" />
   </Style>
-  <Style Selector="FlyoutPresenter.color /template/ Border#LayoutRoot">
+  <Style Selector="FlyoutPresenter.color /template/ :is(Border)#LayoutRoot">
     <Setter Property="Width" Value="272" />
     <Setter Property="MaxHeight" Value="480" />
   </Style>

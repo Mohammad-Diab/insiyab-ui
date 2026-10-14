@@ -35,7 +35,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border Name="PART_LayoutRoot"
+              <ins:TemplateBorder Name="PART_LayoutRoot"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -47,23 +47,23 @@
                                   Content="{TemplateBinding Header}"
                                   ContentTemplate="{TemplateBinding HeaderTemplate}"
                                   RecognizesAccessKey="True" />
-              </Border>
-              <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2"
+              </ins:TemplateBorder>
+              <ins:TemplateBorder Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2"
                       BorderBrush="{DynamicResource InsToneBrandSoft}" IsVisible="False" IsHitTestVisible="False" />
               <Panel Name="PART_SelectedPipe" IsVisible="False" Height="3" VerticalAlignment="Bottom" Margin="10,0,10,-1"
                      RenderTransformOrigin="50%,50%" RenderTransform="scaleX(0)" IsHitTestVisible="False">
-                <Border Name="PART_PipeGlow" CornerRadius="{DynamicResource InsRPill}" Background="{DynamicResource InsTabLineGlow}">
-                  <Border.Effect>
+                <ins:TemplateBorder Name="PART_PipeGlow" CornerRadius="{DynamicResource InsRPill}" Background="{DynamicResource InsTabLineGlow}">
+                  <ins:TemplateBorder.Effect>
                     <BlurEffect Radius="10" />
-                  </Border.Effect>
-                </Border>
-                <Border Name="PART_Pipe" FlowDirection="LeftToRight" CornerRadius="{DynamicResource InsRPill}" Background="{DynamicResource InsTabLineFill}" />
+                  </ins:TemplateBorder.Effect>
+                </ins:TemplateBorder>
+                <ins:TemplateBorder Name="PART_Pipe" FlowDirection="LeftToRight" CornerRadius="{DynamicResource InsRPill}" Background="{DynamicResource InsTabLineFill}" />
               </Panel>
             </Panel>
           </ControlTemplate>
         </Setter>
 
-        <Style Selector="^ /template/ Border#PART_LayoutRoot">
+        <Style Selector="^ /template/ :is(Border)#PART_LayoutRoot">
           <Setter Property="Transitions">
             <Transitions>
               <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -81,18 +81,18 @@
 
         <Style Selector="^:pointerover">
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
-          <Style Selector="^ /template/ Border#PART_LayoutRoot">
+          <Style Selector="^ /template/ :is(Border)#PART_LayoutRoot">
             <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
           </Style>
         </Style>
         <Style Selector="^:selected, ^:current">
           <Setter Property="Foreground" Value="{DynamicResource InsSegOnFg}" />
-          <Style Selector="^ /template/ Border#PART_LayoutRoot">
+          <Style Selector="^ /template/ :is(Border)#PART_LayoutRoot">
             <Setter Property="Background" Value="{DynamicResource InsSegOnBg}" />
             <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
           </Style>
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="IsVisible" Value="True" />
         </Style>
         <Style Selector="^:disabled">
@@ -107,7 +107,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border Name="PART_LayoutRoot"
+              <ins:TemplateBorder Name="PART_LayoutRoot"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -119,23 +119,23 @@
                                   Content="{TemplateBinding Content}"
                                   ContentTemplate="{TemplateBinding ContentTemplate}"
                                   RecognizesAccessKey="True" />
-              </Border>
-              <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2"
+              </ins:TemplateBorder>
+              <ins:TemplateBorder Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2"
                       BorderBrush="{DynamicResource InsToneBrandSoft}" IsVisible="False" IsHitTestVisible="False" />
               <Panel Name="PART_SelectedPipe" IsVisible="False" Height="3" VerticalAlignment="Bottom" Margin="10,0,10,-1"
                      RenderTransformOrigin="50%,50%" RenderTransform="scaleX(0)" IsHitTestVisible="False">
-                <Border Name="PART_PipeGlow" CornerRadius="{DynamicResource InsRPill}" Background="{DynamicResource InsTabLineGlow}">
-                  <Border.Effect>
+                <ins:TemplateBorder Name="PART_PipeGlow" CornerRadius="{DynamicResource InsRPill}" Background="{DynamicResource InsTabLineGlow}">
+                  <ins:TemplateBorder.Effect>
                     <BlurEffect Radius="10" />
-                  </Border.Effect>
-                </Border>
-                <Border Name="PART_Pipe" FlowDirection="LeftToRight" CornerRadius="{DynamicResource InsRPill}" Background="{DynamicResource InsTabLineFill}" />
+                  </ins:TemplateBorder.Effect>
+                </ins:TemplateBorder>
+                <ins:TemplateBorder Name="PART_Pipe" FlowDirection="LeftToRight" CornerRadius="{DynamicResource InsRPill}" Background="{DynamicResource InsTabLineFill}" />
               </Panel>
             </Panel>
           </ControlTemplate>
         </Setter>
 
-        <Style Selector="^ /template/ Border#PART_LayoutRoot">
+        <Style Selector="^ /template/ :is(Border)#PART_LayoutRoot">
           <Setter Property="Transitions">
             <Transitions>
               <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -152,18 +152,18 @@
         </Style>
         <Style Selector="^:pointerover">
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
-          <Style Selector="^ /template/ Border#PART_LayoutRoot">
+          <Style Selector="^ /template/ :is(Border)#PART_LayoutRoot">
             <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
           </Style>
         </Style>
         <Style Selector="^:selected">
           <Setter Property="Foreground" Value="{DynamicResource InsSegOnFg}" />
-          <Style Selector="^ /template/ Border#PART_LayoutRoot">
+          <Style Selector="^ /template/ :is(Border)#PART_LayoutRoot">
             <Setter Property="Background" Value="{DynamicResource InsSegOnBg}" />
             <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
           </Style>
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="IsVisible" Value="True" />
         </Style>
         <Style Selector="^:disabled">
@@ -193,14 +193,14 @@
         <Setter Property="Template">
           <ControlTemplate>
             <DockPanel Background="{TemplateBinding Background}">
-              <Border Name="PART_Strip" DockPanel.Dock="Top">
+              <ins:TemplateBorder Name="PART_Strip" DockPanel.Dock="Top">
                 <Panel>
                   <Canvas Name="PART_FlightLayer" IsHitTestVisible="False">
-                    <Border Name="PART_Flight" IsVisible="False" />
+                    <ins:TemplateBorder Name="PART_Flight" IsVisible="False" />
                   </Canvas>
                   <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
                 </Panel>
-              </Border>
+              </ins:TemplateBorder>
               <Panel>
                 <ContentPresenter Name="PART_SelectedContentHost2"
                                   Margin="{TemplateBinding Padding}"
@@ -229,14 +229,14 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Name="PART_Strip">
+            <ins:TemplateBorder Name="PART_Strip">
               <Panel>
                 <Canvas Name="PART_FlightLayer" IsHitTestVisible="False">
-                  <Border Name="PART_Flight" IsVisible="False" />
+                  <ins:TemplateBorder Name="PART_Flight" IsVisible="False" />
                 </Canvas>
                 <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
               </Panel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
       </ControlTheme>
@@ -264,11 +264,11 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border x:Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+            <ins:TemplateBorder x:Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
               <Viewbox Width="14" Height="14">
                 <ContentPresenter Content="{TemplateBinding Content}" />
               </Viewbox>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover">
@@ -278,7 +278,7 @@
         <Style Selector="^:pressed">
           <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_Face">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Face">
           <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
         </Style>
         <Style Selector="^:disabled">
@@ -292,7 +292,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <DockPanel Background="{TemplateBinding Background}">
-              <Border Name="PART_Strip" DockPanel.Dock="Top">
+              <ins:TemplateBorder Name="PART_Strip" DockPanel.Dock="Top">
                 <DockPanel>
                   <RepeatButton Name="PART_Back" DockPanel.Dock="Left" Theme="{StaticResource InsDocTabsButton}" Focusable="False" Margin="3,0,0,0">
                     <Path Width="24" Height="24" Data="{StaticResource InsDocTabsBack}" Stroke="{Binding $parent[Button].Foreground}" StrokeThickness="2.2" StrokeLineCap="Round" StrokeJoin="Round" />
@@ -311,13 +311,13 @@
                   <ScrollViewer Name="PART_Scroll" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
                     <Panel Margin="3">
                       <Canvas Name="PART_FlightLayer" IsHitTestVisible="False">
-                        <Border Name="PART_Flight" IsVisible="False" />
+                        <ins:TemplateBorder Name="PART_Flight" IsVisible="False" />
                       </Canvas>
                       <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
                     </Panel>
                   </ScrollViewer>
                 </DockPanel>
-              </Border>
+              </ins:TemplateBorder>
               <Panel>
                 <ContentPresenter Name="PART_SelectedContentHost2"
                                   Margin="{TemplateBinding Padding}"
@@ -333,7 +333,7 @@
           </ControlTemplate>
         </Setter>
         <!-- The strip hugs its tabs, up to the width it is given; past that it scrolls. -->
-        <Style Selector="^ /template/ Border#PART_Strip">
+        <Style Selector="^ /template/ :is(Border)#PART_Strip">
           <Setter Property="HorizontalAlignment" Value="Left" />
           <Setter Property="Padding" Value="1" />
           <Setter Property="Margin" Value="0,0,0,12" />
@@ -348,7 +348,7 @@
         <Style Selector="^:overflow /template/ RepeatButton#PART_Back, ^:overflow /template/ RepeatButton#PART_Forward">
           <Setter Property="IsVisible" Value="True" />
         </Style>
-        <Style Selector="^ /template/ Border#PART_Flight">
+        <Style Selector="^ /template/ :is(Border)#PART_Flight">
           <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
           <Setter Property="Background" Value="{DynamicResource InsSegOnBg}" />
           <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
@@ -361,7 +361,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel Name="PART_Slide" RenderTransform="none">
-              <Border Name="PART_LayoutRoot"
+              <ins:TemplateBorder Name="PART_LayoutRoot"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -381,8 +381,8 @@
                                     ContentTemplate="{TemplateBinding HeaderTemplate}"
                                     RecognizesAccessKey="True" />
                 </DockPanel>
-              </Border>
-              <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2"
+              </ins:TemplateBorder>
+              <ins:TemplateBorder Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2"
                       BorderBrush="{DynamicResource InsToneBrandSoft}" IsVisible="False" IsHitTestVisible="False" />
             </Panel>
           </ControlTemplate>
@@ -426,7 +426,7 @@
   </Styles.Resources>
 
   <!-- The strip: a recessed track with the selected tab raised out of it (.ins-tablist, .ins-seg) -->
-  <Style Selector="TabControl /template/ Border#PART_Strip, TabStrip /template/ Border#PART_Strip">
+  <Style Selector="TabControl /template/ :is(Border)#PART_Strip, TabStrip /template/ :is(Border)#PART_Strip">
     <Setter Property="HorizontalAlignment" Value="Left" />
     <Setter Property="Padding" Value="4" />
     <Setter Property="BorderThickness" Value="1" />
@@ -434,30 +434,30 @@
     <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
     <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
   </Style>
-  <Style Selector="TabControl /template/ Border#PART_Strip">
+  <Style Selector="TabControl /template/ :is(Border)#PART_Strip">
     <Setter Property="Margin" Value="0,0,0,16" />
   </Style>
-  <Style Selector="TabControl > TextBlock">
+  <Style Selector="TabControl > TextBlock, TabControl > ins|TemplateText">
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
-  <Style Selector="TabControl > TextBlock[FlowDirection=RightToLeft]">
+  <Style Selector="TabControl > TextBlock[FlowDirection=RightToLeft], TabControl > ins|TemplateText[FlowDirection=RightToLeft]">
     <Setter Property="LineHeight" Value="23.8" />
   </Style>
-  <Style Selector="TabControl.seg /template/ Border#PART_Strip">
+  <Style Selector="TabControl.seg /template/ :is(Border)#PART_Strip">
     <Setter Property="Margin" Value="0" />
   </Style>
-  <Style Selector="TabControl /template/ Border#PART_Flight, TabStrip /template/ Border#PART_Flight">
+  <Style Selector="TabControl /template/ :is(Border)#PART_Flight, TabStrip /template/ :is(Border)#PART_Flight">
     <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
     <Setter Property="Background" Value="{DynamicResource InsSegOnBg}" />
     <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
   </Style>
-  <Style Selector="TabControl.moving > TabItem:selected /template/ Border#PART_LayoutRoot, TabStrip.moving > TabStripItem:selected /template/ Border#PART_LayoutRoot">
+  <Style Selector="TabControl.moving > TabItem:selected /template/ :is(Border)#PART_LayoutRoot, TabStrip.moving > TabStripItem:selected /template/ :is(Border)#PART_LayoutRoot">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BoxShadow" Value="none" />
   </Style>
 
   <!-- line: a row of sections over a hairline, the underline travelling to the selected one (the line modifier of .ins-tablist) -->
-  <Style Selector="TabControl.line /template/ Border#PART_Strip, TabStrip.line /template/ Border#PART_Strip">
+  <Style Selector="TabControl.line /template/ :is(Border)#PART_Strip, TabStrip.line /template/ :is(Border)#PART_Strip">
     <Setter Property="HorizontalAlignment" Value="Stretch" />
     <Setter Property="Padding" Value="0" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
@@ -471,7 +471,7 @@
   <Style Selector="TabControl.line /template/ ItemsPresenter#PART_ItemsPresenter > StackPanel, TabStrip.line /template/ ItemsPresenter#PART_ItemsPresenter > StackPanel">
     <Setter Property="Spacing" Value="4" />
   </Style>
-  <Style Selector="TabControl.line /template/ Border#PART_Flight, TabStrip.line /template/ Border#PART_Flight">
+  <Style Selector="TabControl.line /template/ :is(Border)#PART_Flight, TabStrip.line /template/ :is(Border)#PART_Flight">
     <Setter Property="Height" Value="3" />
     <Setter Property="FlowDirection" Value="LeftToRight" />
     <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
@@ -489,7 +489,7 @@
   <Style Selector="TabControl.line > TabItem:pointerover, TabStrip.line > TabStripItem:pointerover">
     <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
   </Style>
-  <Style Selector="TabControl.line > TabItem:pointerover /template/ Border#PART_LayoutRoot, TabStrip.line > TabStripItem:pointerover /template/ Border#PART_LayoutRoot">
+  <Style Selector="TabControl.line > TabItem:pointerover /template/ :is(Border)#PART_LayoutRoot, TabStrip.line > TabStripItem:pointerover /template/ :is(Border)#PART_LayoutRoot">
     <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
   </Style>
   <Style Selector="TabControl.line > TabItem:pointerover /template/ Panel#PART_SelectedPipe, TabStrip.line > TabStripItem:pointerover /template/ Panel#PART_SelectedPipe">
@@ -498,7 +498,7 @@
   <Style Selector="TabControl.line > TabItem:selected, TabControl.line > TabItem:current, TabStrip.line > TabStripItem:selected">
     <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
   </Style>
-  <Style Selector="TabControl.line > TabItem:selected /template/ Border#PART_LayoutRoot, TabControl.line > TabItem:current /template/ Border#PART_LayoutRoot, TabStrip.line > TabStripItem:selected /template/ Border#PART_LayoutRoot">
+  <Style Selector="TabControl.line > TabItem:selected /template/ :is(Border)#PART_LayoutRoot, TabControl.line > TabItem:current /template/ :is(Border)#PART_LayoutRoot, TabStrip.line > TabStripItem:selected /template/ :is(Border)#PART_LayoutRoot">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BoxShadow" Value="none" />
   </Style>
@@ -514,7 +514,7 @@
     <Setter Property="Width" Value="20" />
     <Setter Property="Height" Value="20" />
   </Style>
-  <Style Selector="ins|DocumentTabs.moving > ins|DocumentTab:selected /template/ Border#PART_LayoutRoot">
+  <Style Selector="ins|DocumentTabs.moving > ins|DocumentTab:selected /template/ :is(Border)#PART_LayoutRoot">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BoxShadow" Value="none" />
   </Style>

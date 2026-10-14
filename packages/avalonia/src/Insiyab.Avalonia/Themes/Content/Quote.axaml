@@ -116,34 +116,34 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border Name="PART_Ring" Margin="-2" BorderThickness="2" CornerRadius="12"
+              <ctl:TemplateBorder Name="PART_Ring" Margin="-2" BorderThickness="2" CornerRadius="12"
                       BorderBrush="{TemplateBinding BorderBrush}" Opacity="0" IsHitTestVisible="False">
-                <Border.Transitions>
+                <ctl:TemplateBorder.Transitions>
                   <Transitions>
                     <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                   </Transitions>
-                </Border.Transitions>
-              </Border>
-              <Border Name="PART_Face"
+                </ctl:TemplateBorder.Transitions>
+              </ctl:TemplateBorder>
+              <ctl:TemplateBorder Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{DynamicResource InsLine}"
                       BorderThickness="1"
                       CornerRadius="{TemplateBinding CornerRadius}">
-                <Border.Transitions>
+                <ctl:TemplateBorder.Transitions>
                   <Transitions>
                     <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                     <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                   </Transitions>
-                </Border.Transitions>
+                </ctl:TemplateBorder.Transitions>
                 <ContentPresenter Name="PART_ContentPresenter"
                                   Margin="{TemplateBinding Padding}"
                                   Content="{TemplateBinding Content}"
                                   ContentTemplate="{TemplateBinding ContentTemplate}"
                                   TextWrapping="Wrap"
                                   LineHeight="23.4" />
-              </Border>
+              </ctl:TemplateBorder>
               <!-- The tone bar: a start-edge-only border over the face, curving into its corners as the CSS one does -->
-              <Border Name="PART_Bar" BorderThickness="3,0,0,0"
+              <ctl:TemplateBorder Name="PART_Bar" BorderThickness="3,0,0,0"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       CornerRadius="{TemplateBinding CornerRadius}"
                       IsHitTestVisible="False" />
@@ -155,11 +155,11 @@
         <Style Selector="^.info"><Setter Property="BorderBrush" Value="{DynamicResource InsToneInfo}" /></Style>
         <Style Selector="^.brand"><Setter Property="BorderBrush" Value="{DynamicResource InsPrimaryMid}" /></Style>
         <Style Selector="^:lit">
-          <Style Selector="^ /template/ Border#PART_Face">
+          <Style Selector="^ /template/ :is(Border)#PART_Face">
             <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
             <Setter Property="BoxShadow" Value="{DynamicResource InsShMd}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Ring">
+          <Style Selector="^ /template/ :is(Border)#PART_Ring">
             <Setter Property="Opacity" Value="1" />
           </Style>
         </Style>
@@ -206,7 +206,7 @@
     <Setter Property="BorderBrush" Value="{DynamicResource InsQuoteBorder}" />
     <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
   </Style>
-  <Style Selector="Border.quote TextBlock">
+  <Style Selector="Border.quote TextBlock, Border.quote ctl|TemplateText">
     <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
     <Setter Property="LineHeight" Value="26.6" />
     <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
@@ -228,7 +228,7 @@
       </ControlTemplate>
     </Setter>
   </Style>
-  <Style Selector="ContentControl.quote-source TextBlock">
+  <Style Selector="ContentControl.quote-source TextBlock, ContentControl.quote-source ctl|TemplateText">
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
     <Setter Property="LineHeight" Value="NaN" />
     <Setter Property="Foreground" Value="{DynamicResource InsText2}" />

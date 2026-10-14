@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
 
   <Styles.Resources>
     <ResourceDictionary>
@@ -12,8 +13,8 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Grid>
-              <Border Name="FocusTarget" Margin="0,-9" Background="Transparent" />
-              <Border Name="TrackBackground"
+              <ins:TemplateBorder Name="FocusTarget" Margin="0,-9" Background="Transparent" />
+              <ins:TemplateBorder Name="TrackBackground"
                       Background="{TemplateBinding Background}"
                       BoxShadow="inset 0 1 2 0 #140F172A"
                       CornerRadius="{DynamicResource InsRPill}"
@@ -29,8 +30,8 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Grid>
-              <Border Name="FocusTarget" Margin="-9,0" Background="Transparent" />
-              <Border Name="TrackBackground"
+              <ins:TemplateBorder Name="FocusTarget" Margin="-9,0" Background="Transparent" />
+              <ins:TemplateBorder Name="TrackBackground"
                       Background="{TemplateBinding Background}"
                       CornerRadius="{DynamicResource InsRPill}"
                       Width="6"
@@ -54,16 +55,16 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border Name="PART_Glow" CornerRadius="10" BoxShadow="{DynamicResource InsGlow}" Opacity="0">
-                <Border.Transitions>
+              <ins:TemplateBorder Name="PART_Glow" CornerRadius="10" BoxShadow="{DynamicResource InsGlow}" Opacity="0">
+                <ins:TemplateBorder.Transitions>
                   <Transitions>
                     <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                   </Transitions>
-                </Border.Transitions>
-              </Border>
-              <Border Name="PART_Focus" CornerRadius="10" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
-              <Border Name="PART_Ring" CornerRadius="11" Margin="-1" Background="{DynamicResource InsRangeThumbRing}" />
-              <Border Name="PART_Face" CornerRadius="10" Background="White" BoxShadow="0 2 6 0 #470F172A" />
+                </ins:TemplateBorder.Transitions>
+              </ins:TemplateBorder>
+              <ins:TemplateBorder Name="PART_Focus" CornerRadius="10" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <ins:TemplateBorder Name="PART_Ring" CornerRadius="11" Margin="-1" Background="{DynamicResource InsRangeThumbRing}" />
+              <ins:TemplateBorder Name="PART_Face" CornerRadius="10" Background="White" BoxShadow="0 2 6 0 #470F172A" />
             </Panel>
           </ControlTemplate>
         </Setter>
@@ -140,19 +141,19 @@
           <Setter Property="RenderTransform" Value="scale(1.1)" />
         </Style>
         <Style Selector="^:focus-visible /template/ Thumb">
-          <Style Selector="^ /template/ Border#PART_Focus">
+          <Style Selector="^ /template/ :is(Border)#PART_Focus">
             <Setter Property="Opacity" Value="1" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Ring">
+          <Style Selector="^ /template/ :is(Border)#PART_Ring">
             <Setter Property="IsVisible" Value="False" />
           </Style>
         </Style>
         <Style Selector="^ /template/ Thumb:pressed">
           <Setter Property="RenderTransform" Value="scale(1.18)" />
-          <Style Selector="^ /template/ Border#PART_Glow">
+          <Style Selector="^ /template/ :is(Border)#PART_Glow">
             <Setter Property="Opacity" Value="1" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Ring">
+          <Style Selector="^ /template/ :is(Border)#PART_Ring">
             <Setter Property="IsVisible" Value="False" />
           </Style>
         </Style>

@@ -66,7 +66,7 @@
     <Setter Property="Height" Value="26" />
     <Setter Property="CornerRadius" Value="13" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-num > TextBlock">
+  <Style Selector="ins|MonthCalendar Border.month-num > TextBlock, ins|MonthCalendar Border.month-num > ins|TemplateText">
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
@@ -74,14 +74,14 @@
     <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-day.other Border.month-num > TextBlock">
+  <Style Selector="ins|MonthCalendar Border.month-day.other Border.month-num > TextBlock, ins|MonthCalendar Border.month-day.other Border.month-num > ins|TemplateText">
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
     <Setter Property="Opacity" Value="0.6" />
   </Style>
   <Style Selector="ins|MonthCalendar Border.month-day.today Border.month-num">
     <Setter Property="Background" Value="{StaticResource InsPickerBrandFill}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-day.today Border.month-num > TextBlock">
+  <Style Selector="ins|MonthCalendar Border.month-day.today Border.month-num > TextBlock, ins|MonthCalendar Border.month-day.today Border.month-num > ins|TemplateText">
     <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
   </Style>
 
@@ -221,7 +221,7 @@
   <Style Selector="ins|MonthCalendar Border.week-head.today Border.month-num">
     <Setter Property="Background" Value="{StaticResource InsPickerBrandFill}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-head.today Border.month-num > TextBlock">
+  <Style Selector="ins|MonthCalendar Border.week-head.today Border.month-num > TextBlock, ins|MonthCalendar Border.week-head.today Border.month-num > ins|TemplateText">
     <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
   </Style>
   <Style Selector="ins|MonthCalendar TextBlock.week-wd">

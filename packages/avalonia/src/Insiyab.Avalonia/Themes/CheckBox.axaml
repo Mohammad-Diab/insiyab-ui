@@ -14,18 +14,18 @@
       <!-- The tile: a choice that deserves more than a line; the mark sits at the leading top corner. -->
       <ControlTemplate x:Key="InsTileTemplate" TargetType="ToggleButton">
         <Panel>
-          <Border x:Name="TileOutline"
+          <ins:TemplateBorder x:Name="TileOutline"
                   Margin="-4"
                   BorderThickness="2"
                   CornerRadius="18"
                   BorderBrush="{DynamicResource InsToneBrandSoft}"
                   IsVisible="False" />
-          <Border x:Name="PART_Border"
+          <ins:TemplateBorder x:Name="PART_Border"
                   Background="{TemplateBinding Background}"
                   BorderBrush="{TemplateBinding BorderBrush}"
                   BorderThickness="1"
                   CornerRadius="{DynamicResource InsRMd}" />
-          <Border x:Name="TileRing"
+          <ins:TemplateBorder x:Name="TileRing"
                   Margin="1"
                   BorderThickness="1"
                   CornerRadius="13"
@@ -37,13 +37,13 @@
                  Margin="14,14,0,0"
                  HorizontalAlignment="Left"
                  VerticalAlignment="Top">
-            <Border x:Name="NormalRectangle"
+            <ins:TemplateBorder x:Name="NormalRectangle"
                     Background="{DynamicResource InsSurface}"
                     BorderBrush="{DynamicResource InsCtlBd}"
                     BorderThickness="1"
                     CornerRadius="{TemplateBinding CornerRadius}"
                     BoxShadow="{DynamicResource InsBevelDim}" />
-            <Border x:Name="CheckFill"
+            <ins:TemplateBorder x:Name="CheckFill"
                     FlowDirection="LeftToRight"
                     Background="{DynamicResource InsCheckBoxFill}"
                     CornerRadius="{TemplateBinding CornerRadius}"
@@ -98,29 +98,29 @@
           <ControlTemplate>
             <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*" Background="{TemplateBinding Background}">
               <Panel x:Name="BoxHost" Width="18" Height="18" VerticalAlignment="Center">
-                <Border x:Name="FocusRing"
+                <ins:TemplateBorder x:Name="FocusRing"
                         Margin="-5"
                         BorderThickness="3"
                         CornerRadius="12"
                         BorderBrush="{DynamicResource InsCheckBoxRing}"
                         IsVisible="False" />
-                <Border x:Name="HoverGlow"
+                <ins:TemplateBorder x:Name="HoverGlow"
                         CornerRadius="{TemplateBinding CornerRadius}"
                         BoxShadow="{DynamicResource InsGlow}"
                         Opacity="0" />
-                <Border x:Name="NormalRectangle"
+                <ins:TemplateBorder x:Name="NormalRectangle"
                         Background="{DynamicResource InsCtlBg}"
                         BorderBrush="{DynamicResource InsCtlBd}"
                         BorderThickness="1"
                         CornerRadius="{TemplateBinding CornerRadius}"
                         BoxShadow="{DynamicResource InsBevelDim}">
-                  <Border.Transitions>
+                  <ins:TemplateBorder.Transitions>
                     <Transitions>
                       <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                     </Transitions>
-                  </Border.Transitions>
-                </Border>
-                <Border x:Name="CheckFill"
+                  </ins:TemplateBorder.Transitions>
+                </ins:TemplateBorder>
+                <ins:TemplateBorder x:Name="CheckFill"
                         FlowDirection="LeftToRight"
                         Background="{DynamicResource InsCheckBoxFill}"
                         CornerRadius="{TemplateBinding CornerRadius}"
@@ -135,7 +135,7 @@
                         StrokeJoin="Miter"
                         RenderTransformOrigin="41.7%,38.9%"
                         RenderTransform="scale(0)" />
-                  <Border x:Name="IndeterminateGlyph"
+                  <ins:TemplateBorder x:Name="IndeterminateGlyph"
                           Width="9"
                           Height="2"
                           CornerRadius="1"
@@ -161,7 +161,7 @@
         <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter:empty">
           <Setter Property="IsVisible" Value="False" />
         </Style>
-        <Style Selector="^ /template/ Border#CheckFill, ^ /template/ Border#HoverGlow, ^ /template/ Border#IndeterminateGlyph">
+        <Style Selector="^ /template/ :is(Border)#CheckFill, ^ /template/ :is(Border)#HoverGlow, ^ /template/ :is(Border)#IndeterminateGlyph">
           <Setter Property="Transitions">
             <Transitions>
               <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -177,19 +177,19 @@
         </Style>
 
         <Style Selector="^:pointerover:not(:disabled)">
-          <Style Selector="^ /template/ Border#NormalRectangle">
+          <Style Selector="^ /template/ :is(Border)#NormalRectangle">
             <Setter Property="BorderBrush" Value="{DynamicResource InsCheckBoxHoverBorder}" />
           </Style>
-          <Style Selector="^ /template/ Border#HoverGlow">
+          <Style Selector="^ /template/ :is(Border)#HoverGlow">
             <Setter Property="Opacity" Value="1" />
           </Style>
         </Style>
 
         <Style Selector="^:checked, ^:indeterminate">
-          <Style Selector="^ /template/ Border#NormalRectangle">
+          <Style Selector="^ /template/ :is(Border)#NormalRectangle">
             <Setter Property="BorderBrush" Value="Transparent" />
           </Style>
-          <Style Selector="^ /template/ Border#CheckFill">
+          <Style Selector="^ /template/ :is(Border)#CheckFill">
             <Setter Property="Opacity" Value="1" />
           </Style>
         </Style>
@@ -204,11 +204,11 @@
           </Setter>
         </Style>
 
-        <Style Selector="^:indeterminate /template/ Border#IndeterminateGlyph">
+        <Style Selector="^:indeterminate /template/ :is(Border)#IndeterminateGlyph">
           <Setter Property="Opacity" Value="1" />
         </Style>
 
-        <Style Selector="^:focus-visible /template/ Border#FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#FocusRing">
           <Setter Property="IsVisible" Value="True" />
         </Style>
 
@@ -254,29 +254,29 @@
           <ControlTemplate>
             <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*" Background="{TemplateBinding Background}">
               <Panel x:Name="BoxHost" Width="18" Height="18" VerticalAlignment="Center">
-                <Border x:Name="FocusRing"
+                <ins:TemplateBorder x:Name="FocusRing"
                         Margin="-5"
                         BorderThickness="3"
                         CornerRadius="14"
                         BorderBrush="{DynamicResource InsCheckBoxRing}"
                         IsVisible="False" />
-                <Border x:Name="HoverGlow"
+                <ins:TemplateBorder x:Name="HoverGlow"
                         CornerRadius="9"
                         BoxShadow="{DynamicResource InsGlow}"
                         Opacity="0" />
-                <Border x:Name="NormalRectangle"
+                <ins:TemplateBorder x:Name="NormalRectangle"
                         Background="{DynamicResource InsCtlBg}"
                         BorderBrush="{DynamicResource InsCtlBd}"
                         BorderThickness="1"
                         CornerRadius="9"
                         BoxShadow="{DynamicResource InsBevelDim}">
-                  <Border.Transitions>
+                  <ins:TemplateBorder.Transitions>
                     <Transitions>
                       <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                     </Transitions>
-                  </Border.Transitions>
-                </Border>
-                <Border x:Name="CheckFill"
+                  </ins:TemplateBorder.Transitions>
+                </ins:TemplateBorder>
+                <ins:TemplateBorder x:Name="CheckFill"
                         FlowDirection="LeftToRight"
                         Background="{DynamicResource InsCheckBoxFill}"
                         CornerRadius="9"
@@ -305,7 +305,7 @@
         <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter:empty">
           <Setter Property="IsVisible" Value="False" />
         </Style>
-        <Style Selector="^ /template/ Border#CheckFill, ^ /template/ Border#HoverGlow">
+        <Style Selector="^ /template/ :is(Border)#CheckFill, ^ /template/ :is(Border)#HoverGlow">
           <Setter Property="Transitions">
             <Transitions>
               <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -321,19 +321,19 @@
         </Style>
 
         <Style Selector="^:pointerover:not(:disabled)">
-          <Style Selector="^ /template/ Border#NormalRectangle">
+          <Style Selector="^ /template/ :is(Border)#NormalRectangle">
             <Setter Property="BorderBrush" Value="{DynamicResource InsCheckBoxHoverBorder}" />
           </Style>
-          <Style Selector="^ /template/ Border#HoverGlow">
+          <Style Selector="^ /template/ :is(Border)#HoverGlow">
             <Setter Property="Opacity" Value="1" />
           </Style>
         </Style>
 
         <Style Selector="^:checked">
-          <Style Selector="^ /template/ Border#NormalRectangle">
+          <Style Selector="^ /template/ :is(Border)#NormalRectangle">
             <Setter Property="BorderBrush" Value="Transparent" />
           </Style>
-          <Style Selector="^ /template/ Border#CheckFill">
+          <Style Selector="^ /template/ :is(Border)#CheckFill">
             <Setter Property="Opacity" Value="1" />
           </Style>
           <Style Selector="^ /template/ Ellipse#CheckGlyph">
@@ -346,7 +346,7 @@
           </Style>
         </Style>
 
-        <Style Selector="^:focus-visible /template/ Border#FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#FocusRing">
           <Setter Property="IsVisible" Value="True" />
         </Style>
 
@@ -384,7 +384,7 @@
         </Transitions>
       </Setter>
     </Style>
-    <Style Selector="^ /template/ Border#CheckFill, ^ /template/ Border#TileRing">
+    <Style Selector="^ /template/ :is(Border)#CheckFill, ^ /template/ :is(Border)#TileRing">
       <Setter Property="Transitions">
         <Transitions>
           <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -398,13 +398,13 @@
     <Style Selector="^:checked">
       <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
       <Setter Property="BorderBrush" Value="{DynamicResource InsPrimaryMid}" />
-      <Style Selector="^ /template/ Border#TileRing">
+      <Style Selector="^ /template/ :is(Border)#TileRing">
         <Setter Property="Opacity" Value="1" />
       </Style>
-      <Style Selector="^ /template/ Border#NormalRectangle">
+      <Style Selector="^ /template/ :is(Border)#NormalRectangle">
         <Setter Property="BorderBrush" Value="Transparent" />
       </Style>
-      <Style Selector="^ /template/ Border#CheckFill">
+      <Style Selector="^ /template/ :is(Border)#CheckFill">
         <Setter Property="Opacity" Value="1" />
       </Style>
       <Style Selector="^ /template/ Panel#TileMark">
@@ -414,7 +414,7 @@
         <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
       </Style>
     </Style>
-    <Style Selector="^:focus-visible /template/ Border#TileOutline">
+    <Style Selector="^:focus-visible /template/ :is(Border)#TileOutline">
       <Setter Property="IsVisible" Value="True" />
     </Style>
     <Style Selector="^:disabled">

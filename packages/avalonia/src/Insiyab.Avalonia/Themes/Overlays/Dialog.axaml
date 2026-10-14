@@ -57,11 +57,11 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border Name="PART_Ground"
+              <ctl:TemplateBorder Name="PART_Ground"
                       Background="{DynamicResource InsWash1}"
                       CornerRadius="{TemplateBinding CornerRadius}"
                       BoxShadow="{DynamicResource InsShLg}" />
-              <Border Name="PART_Fill"
+              <ctl:TemplateBorder Name="PART_Fill"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -98,12 +98,12 @@
                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
                   </ScrollViewer>
                 </DockPanel>
-              </Border>
+              </ctl:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
 
-        <Style Selector="^ /template/ Border#PART_Head">
+        <Style Selector="^ /template/ :is(Border)#PART_Head">
           <Setter Property="Padding" Value="24,18" />
           <Setter Property="BorderThickness" Value="0,0,0,1" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
@@ -113,15 +113,15 @@
           <Setter Property="FontWeight" Value="ExtraBold" />
           <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         </Style>
-        <Style Selector="^ /template/ Border#PART_Foot">
+        <Style Selector="^ /template/ :is(Border)#PART_Foot">
           <Setter Property="Padding" Value="24,16" />
           <Setter Property="BorderThickness" Value="0,1,0,0" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
         </Style>
-        <Style Selector="^:not(:titled) /template/ Border#PART_Head">
+        <Style Selector="^:not(:titled) /template/ :is(Border)#PART_Head">
           <Setter Property="IsVisible" Value="False" />
         </Style>
-        <Style Selector="^:not(:footed) /template/ Border#PART_Foot">
+        <Style Selector="^:not(:footed) /template/ :is(Border)#PART_Foot">
           <Setter Property="IsVisible" Value="False" />
         </Style>
         <!-- RTL mirrors the drawing, so the fill is mirrored back: the light stays at the top left, as on the web -->
@@ -160,7 +160,7 @@
           <Setter Property="MaxWidth" Value="Infinity" />
           <Setter Property="MaxHeight" Value="Infinity" />
         </Style>
-        <Style Selector="^:pinned /template/ Border#PART_Ground">
+        <Style Selector="^:pinned /template/ :is(Border)#PART_Ground">
           <Setter Property="IsVisible" Value="False" />
         </Style>
         <!-- In its own window the OS draws the title and the edges -->
@@ -169,10 +169,10 @@
           <Setter Property="BorderThickness" Value="0" />
           <Setter Property="MaxHeight" Value="Infinity" />
         </Style>
-        <Style Selector="^:window /template/ Border#PART_Ground">
+        <Style Selector="^:window /template/ :is(Border)#PART_Ground">
           <Setter Property="IsVisible" Value="False" />
         </Style>
-        <Style Selector="^:window /template/ Border#PART_Head">
+        <Style Selector="^:window /template/ :is(Border)#PART_Head">
           <Setter Property="IsVisible" Value="False" />
         </Style>
       </ControlTheme>

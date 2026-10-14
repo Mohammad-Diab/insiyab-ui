@@ -29,7 +29,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+            <ins:TemplateBorder Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
               <Path Name="PART_Glyph"
                     Data="{TemplateBinding Content}"
                     Stroke="{TemplateBinding Foreground}"
@@ -40,7 +40,7 @@
                     FlowDirection="LeftToRight"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center" />
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover">
@@ -70,7 +70,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <!-- One island like the top bar's others: its height, rim and shadow, the round buttons 4px inside it -->
-            <Border Name="PART_Island"
+            <ins:TemplateBorder Name="PART_Island"
                     Height="{DynamicResource InsAppbarH}"
                     Padding="4"
                     CornerRadius="{DynamicResource InsRPill}"
@@ -85,7 +85,7 @@
                 <Button Name="PART_Close" Theme="{StaticResource InsCaptionCloseButton}" Content="{StaticResource InsCaptionGlyphClose}"
                         ToolTip.Tip="{TemplateBinding CloseText}" AutomationProperties.Name="{TemplateBinding CloseText}" />
               </StackPanel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:shown">
@@ -97,10 +97,5 @@
       </ControlTheme>
     </ResourceDictionary>
   </Styles.Resources>
-
-  <!-- Inside a drag area, anything that takes focus stays a normal control -->
-  <Style Selector=":is(Control)[(ins|TitleBar.IsDragArea)=True] :is(InputElement)[Focusable=True]">
-    <Setter Property="(chrome:WindowDecorationProperties.ElementRole)" Value="User" />
-  </Style>
 
 </Styles>

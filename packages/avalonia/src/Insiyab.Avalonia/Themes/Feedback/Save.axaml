@@ -36,7 +36,7 @@
                 <ctl:LoadingSpinner x:Name="PART_Spinner" Theme="{StaticResource InsSaveSpinner}" Opacity="0" />
                 <ctl:Icon x:Name="PART_Glyph" Size="14" StrokeThickness="3" IsVisible="False" />
               </Panel>
-              <TextBlock x:Name="PART_Text" Text="{TemplateBinding DisplayText}" VerticalAlignment="Center" LineHeight="20" />
+              <ctl:TemplateText x:Name="PART_Text" Text="{TemplateBinding DisplayText}" VerticalAlignment="Center" LineHeight="20" />
             </StackPanel>
           </ControlTemplate>
         </Setter>

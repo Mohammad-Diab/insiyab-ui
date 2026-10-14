@@ -33,14 +33,14 @@
         <Setter Property="Template">
           <ControlTemplate TargetType="ins:TocLink">
             <Panel>
-              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}">
-                <Border.Transitions>
+              <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}">
+                <ins:TemplateBorder.Transitions>
                   <Transitions>
                     <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                   </Transitions>
-                </Border.Transitions>
-              </Border>
-              <Border x:Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}"
+                </ins:TemplateBorder.Transitions>
+              </ins:TemplateBorder>
+              <ins:TemplateBorder x:Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}"
                       BorderBrush="Transparent" BorderThickness="0,1,0,0">
                 <ContentPresenter x:Name="PART_ContentPresenter"
                                   Content="{TemplateBinding Content}"
@@ -49,7 +49,7 @@
                                   HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                   Margin="0,-1,0,0" />
-              </Border>
+              </ins:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
@@ -75,14 +75,14 @@
           <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
           <Setter Property="FontWeight" Value="Bold" />
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{StaticResource InsTocActiveShadow}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Face">
+          <Style Selector="^ /template/ :is(Border)#PART_Face">
             <Setter Property="BorderBrush" Value="{DynamicResource InsRimTop}" />
           </Style>
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_Shadow">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Shadow">
           <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
         </Style>
       </ControlTheme>
@@ -103,34 +103,34 @@
         <Setter Property="Template">
           <ControlTemplate TargetType="ins:Toc">
             <Panel>
-              <Border CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShBubble}" />
-              <Border Background="{TemplateBinding Background}"
+              <ins:TemplateBorder CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShBubble}" />
+              <ins:TemplateBorder Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
                       CornerRadius="{TemplateBinding CornerRadius}"
                       BoxShadow="{DynamicResource InsBevel}" />
               <!-- The rim's brighter top edge. -->
-              <Border BorderBrush="{DynamicResource InsRimTop}" BorderThickness="0,1,0,0" CornerRadius="{TemplateBinding CornerRadius}" IsHitTestVisible="False" />
+              <ins:TemplateBorder BorderBrush="{DynamicResource InsRimTop}" BorderThickness="0,1,0,0" CornerRadius="{TemplateBinding CornerRadius}" IsHitTestVisible="False" />
               <DockPanel Margin="{TemplateBinding Padding}">
-                <TextBlock x:Name="PART_Title" DockPanel.Dock="Top" Text="{TemplateBinding Title}" Padding="10,4,10,6" FontSize="11" LineHeight="18.7" FontWeight="Bold"
+                <ins:TemplateText x:Name="PART_Title" DockPanel.Dock="Top" Text="{TemplateBinding Title}" Padding="10,4,10,6" FontSize="11" LineHeight="18.7" FontWeight="Bold"
                            Foreground="{DynamicResource InsText3}" IsVisible="{TemplateBinding Title, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                 <Panel>
                   <ItemsPresenter x:Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
-                  <Border x:Name="PART_Marker" Width="3" Height="0" CornerRadius="999" Background="{DynamicResource InsPrimaryMid}"
+                  <ins:TemplateBorder x:Name="PART_Marker" Width="3" Height="0" CornerRadius="999" Background="{DynamicResource InsPrimaryMid}"
                           HorizontalAlignment="Left" VerticalAlignment="Top" IsHitTestVisible="False" Opacity="0" RenderTransformOrigin="50%,50%">
-                    <Border.Transitions>
+                    <ins:TemplateBorder.Transitions>
                       <Transitions>
                         <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                         <DoubleTransition Property="Height" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                       </Transitions>
-                    </Border.Transitions>
-                  </Border>
+                    </ins:TemplateBorder.Transitions>
+                  </ins:TemplateBorder>
                 </Panel>
               </DockPanel>
             </Panel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^[FlowDirection=LeftToRight] /template/ TextBlock#PART_Title">
+        <Style Selector="^[FlowDirection=LeftToRight] /template/ :is(TextBlock)#PART_Title">
           <Setter Property="LetterSpacing" Value="0.44" />
           <Setter Property="LineHeight" Value="17.6" />
         </Style>

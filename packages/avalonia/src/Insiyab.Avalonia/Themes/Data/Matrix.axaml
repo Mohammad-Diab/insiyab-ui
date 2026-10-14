@@ -36,11 +36,11 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border x:Name="PART_Focus" Margin="-4" BorderThickness="2" CornerRadius="14" Opacity="0"
+              <ins:TemplateBorder x:Name="PART_Focus" Margin="-4" BorderThickness="2" CornerRadius="14" Opacity="0"
                       BorderBrush="{DynamicResource InsToneBrandSoft}" />
-              <Border x:Name="PART_Back" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+              <ins:TemplateBorder x:Name="PART_Back" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" />
-              <Border x:Name="PART_Ring" BorderThickness="2" CornerRadius="{TemplateBinding CornerRadius}" Opacity="0"
+              <ins:TemplateBorder x:Name="PART_Ring" BorderThickness="2" CornerRadius="{TemplateBinding CornerRadius}" Opacity="0"
                       BorderBrush="{DynamicResource InsToneBrandSoft}" />
               <ContentPresenter x:Name="PART_ContentPresenter" Padding="{TemplateBinding Padding}"
                                 Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
@@ -49,7 +49,7 @@
             </Panel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^ /template/ Border#PART_Back">
+        <Style Selector="^ /template/ :is(Border)#PART_Back">
           <Setter Property="Transitions">
             <Transitions>
               <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -64,11 +64,11 @@
           <Setter Property="BorderBrush" Value="{DynamicResource InsPrimaryMid}" />
           <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
           <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-          <Style Selector="^ /template/ Border#PART_Ring">
+          <Style Selector="^ /template/ :is(Border)#PART_Ring">
             <Setter Property="Opacity" Value="1" />
           </Style>
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_Focus">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Focus">
           <Setter Property="Opacity" Value="1" />
         </Style>
       </ControlTheme>
@@ -96,7 +96,7 @@
     <Setter Property="TextElement.FontWeight" Value="Bold" />
     <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
   </Style>
-  <Style Selector="ins|ChoiceMatrix Border.matrix-th > TextBlock[FlowDirection=RightToLeft]">
+  <Style Selector="ins|ChoiceMatrix Border.matrix-th > TextBlock[FlowDirection=RightToLeft], ins|ChoiceMatrix Border.matrix-th > ins|TemplateText[FlowDirection=RightToLeft]">
     <Setter Property="LineHeight" Value="22.1" />
   </Style>
   <Style Selector="ins|ChoiceMatrix Border.matrix-cell">

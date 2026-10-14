@@ -1,0 +1,178 @@
+using System.Runtime.CompilerServices;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Headless;
+using Avalonia.Headless.XUnit;
+using Avalonia.Input;
+using Avalonia.Layout;
+using Avalonia.Media;
+using Avalonia.VisualTree;
+using Insiyab.Avalonia.Controls;
+using WindowDecorationProperties = Avalonia.Controls.Chrome.WindowDecorationProperties;
+
+using static Insiyab.Avalonia.Tests.Ui;
+
+namespace Insiyab.Avalonia.Tests;
+
+// What the performance pass fixed: big tables, controls kept alive after their page left, and per-control style costs.
+public class PerfTests
+{
+    private static Table BigTable(int count)
+    {
+        var table = new Table { Classes = { "sticky" }, MaxHeight = 400 };
+        table.Columns.Add(new TableColumn { Header = "الرقم", CellText = o => o?.ToString() });
+        table.Columns.Add(new TableColumn { Header = "الحالة", CellText = o => (int)o! % 2 == 0 ? "مكتمل" : "جديد" });
+        table.ItemsSource = Enumerable.Range(1, count).ToList();
+        return table;
+    }
+
+    [AvaloniaFact]
+    public void Table_of_thousands_of_rows_puts_only_a_screenful_in_the_tree()
+    {
+        var table = BigTable(5000);
+        Show(table, width: 600, height: 500);
+        Settle(200);
+        var rows = table.GetVisualDescendants().OfType<TableRow>().Count();
+        Assert.InRange(rows, 1, 60);
+        Assert.Equal(5000, table.DisplayedRows.Count);
+    }
+
+    [AvaloniaFact]
+    public void Table_scrolled_to_its_end_brings_the_last_rows_and_drops_the_first()
+    {
+        var table = BigTable(2000);
+        var window = Show(table, width: 600, height: 500);
+        table.Focus();
+        Settle(200);
+        window.KeyPress(Key.End, RawInputModifiers.None, PhysicalKey.End, null);
+        window.KeyRelease(Key.End, RawInputModifiers.None, PhysicalKey.End, null);
+        Settle(300);
+        var last = table.DisplayedRows[^1];
+        Assert.Same(last, table.CurrentRow);
+        Assert.True(last.IsAttachedToVisualTree());
+        Assert.False(table.DisplayedRows[0].IsAttachedToVisualTree());
+        var scroll = Part<ScrollViewer>(table, "PART_Scroll");
+        var bottom = last.TranslatePoint(new Point(0, last.Bounds.Height), scroll)!.Value.Y;
+        Assert.True(bottom <= scroll.Viewport.Height + 1, $"last row ends at {bottom}, view is {scroll.Viewport.Height}");
+    }
+
+    [AvaloniaFact]
+    public void Table_rows_out_of_the_tree_keep_their_stripes_by_place()
+    {
+        var table = BigTable(300);
+        Show(table, width: 600, height: 500);
+        var scroll = Part<ScrollViewer>(table, "PART_Scroll");
+        scroll.Offset = new Vector(0, 3000);
+        Settle(300);
+        var shown = table.GetVisualDescendants().OfType<TableRow>().ToList();
+        Assert.NotEmpty(shown);
+        var all = table.DisplayedRows.ToList();
+        Assert.DoesNotContain(all[0], shown);
+        foreach (var row in shown)
+            Assert.Equal(all.IndexOf(row) % 2 == 1, Part<Border>(row, "PART_Tint").Background is not null);
+    }
+
+    [AvaloniaFact]
+    public void Table_cell_text_is_template_text()
+    {
+        var table = BigTable(3);
+        Show(table);
+        var cell = table.DisplayedRows[0].Cells[0];
+        Assert.IsType<TemplateText>(cell.GetVisualDescendants().OfType<TextBlock>().Single());
+        Assert.Equal("1", cell.Text);
+    }
+
+    [AvaloniaFact]
+    public void Template_parts_are_template_borders_and_app_borders_keep_their_classes()
+    {
+        var button = new Button { Content = "حفظ" };
+        var card = new Border { Classes = { "card" }, Child = button };
+        Show(card);
+        Assert.DoesNotContain(button.GetVisualDescendants(), v => v.GetType() == typeof(Border));
+        Assert.NotEqual(default, card.CornerRadius);
+    }
+
+    // The control is made in here, so a debug build's caller holds no hidden reference to it.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static WeakReference Shown(Panel host, Func<Control> make)
+    {
+        var control = make();
+        host.Children.Add(control);
+        Settle(300);
+        host.Children.Remove(control);
+        return new WeakReference(control);
+    }
+
+    private static bool Gone(WeakReference weak)
+    {
+        Settle(500);
+        for (var i = 0; i < 3; i++)
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+        return !weak.IsAlive;
+    }
+
+    [AvaloniaFact]
+    public void Spinner_skeleton_and_progress_bar_are_let_go_once_removed()
+    {
+        var host = new StackPanel();
+        Show(host);
+        Assert.True(Gone(Shown(host, () => new LoadingSpinner())), "spinner");
+        Assert.True(Gone(Shown(host, () => new Skeleton { Height = 12 })), "skeleton");
+        Assert.True(Gone(Shown(host, () => new ProgressBar { Value = 40 })), "progress bar");
+        Assert.True(Gone(Shown(host, () => new ProgressBar { IsIndeterminate = true })), "indeterminate bar");
+    }
+
+    [AvaloniaFact]
+    public void Determinate_bar_runs_no_hidden_sweep()
+    {
+        var bar = new ProgressBar { Value = 40, Width = 200 };
+        Show(bar);
+        var sweep = Part<Shimmer>(bar, "IndeterminateRoot");
+        Settle(400);
+        Assert.False(sweep.IsVisible);
+        Assert.Equal(0, sweep.Phase);
+        bar.IsIndeterminate = true;
+        Settle(400);
+        Assert.True(sweep.Phase > 0);
+    }
+
+    [AvaloniaFact]
+    public void Viewbox_in_a_shell_is_let_go_once_removed()
+    {
+        var host = new StackPanel();
+        Show(new SplitView { IsPaneOpen = true, Content = new Border { Classes = { "topbar" }, Child = host } });
+        var weak = Shown(host, () => new Viewbox { Width = 16, Height = 16, Child = new TextBlock { Text = "x" } });
+        Assert.True(Gone(weak));
+    }
+
+    [AvaloniaFact]
+    public void Control_added_later_inside_a_drag_area_stays_clickable()
+    {
+        var bar = new StackPanel();
+        TitleBar.SetIsDragArea(bar, true);
+        Show(bar);
+        var button = new Button { Content = "x" };
+        var text = new TextBlock { Text = "y" };
+        bar.Children.Add(button);
+        bar.Children.Add(text);
+        Settle(200);
+        Assert.Equal(WindowDecorationsElementRole.User, WindowDecorationProperties.GetElementRole(button));
+        Assert.Equal(WindowDecorationsElementRole.None, WindowDecorationProperties.GetElementRole(text));
+    }
+
+    [AvaloniaFact]
+    public void Month_calendar_taken_out_of_a_right_to_left_page_does_not_throw()
+    {
+        var host = new ContentControl { Content = new MonthCalendar { Month = new DateTime(2026, 9, 1) } };
+        var window = Show(host, FlowDirection.RightToLeft);
+        host.Content = null;
+        Settle(100);
+        host.Content = new MonthCalendar { Month = new DateTime(2026, 9, 1), View = MonthCalendarView.Week };
+        Settle(200);
+        Assert.NotEmpty(((MonthCalendar)host.Content).GetVisualDescendants());
+        window.Close();
+    }
+}

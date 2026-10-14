@@ -25,8 +25,8 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Name="PART_Room" Padding="8">
-              <Border Name="PART_LayoutRoot"
+            <ins:TemplateBorder Name="PART_Room" Padding="8">
+              <ins:TemplateBorder Name="PART_LayoutRoot"
                       Background="{TemplateBinding Background}"
                       Padding="{TemplateBinding Padding}"
                       CornerRadius="{TemplateBinding CornerRadius}"
@@ -36,8 +36,8 @@
                                   ContentTemplate="{TemplateBinding ContentTemplate}"
                                   TextBlock.LineHeight="18"
                                   TextBlock.TextWrapping="Wrap" />
-              </Border>
-            </Border>
+              </ins:TemplateBorder>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:open">

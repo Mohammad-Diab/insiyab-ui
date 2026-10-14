@@ -38,7 +38,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate TargetType="Button">
-            <Border x:Name="PART_Face"
+            <ins:TemplateBorder x:Name="PART_Face"
                     Background="{TemplateBinding Background}"
                     CornerRadius="{TemplateBinding CornerRadius}">
               <Viewbox Width="10" Height="10" FlowDirection="LeftToRight">
@@ -48,14 +48,14 @@
                       StrokeThickness="3.5"
                       StrokeLineCap="Round" />
               </Viewbox>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover">
           <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
           <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_Face">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Face">
           <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
         </Style>
       </ControlTheme>
@@ -77,7 +77,7 @@
         <Setter Property="RenderTransformOrigin" Value="50%,50%" />
         <Setter Property="Template">
           <ControlTemplate TargetType="ins:Chip">
-            <Border x:Name="PART_Face"
+            <ins:TemplateBorder x:Name="PART_Face"
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
@@ -94,7 +94,7 @@
                         Theme="{StaticResource InsChipRemove}"
                         IsVisible="{TemplateBinding IsRemovable}" />
               </StackPanel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:removable">
@@ -129,8 +129,8 @@
         <Setter Property="Template">
           <ControlTemplate TargetType="Button">
             <Panel>
-              <Border x:Name="PART_Ring" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" IsVisible="False" />
-              <Border x:Name="PART_Face"
+              <ins:TemplateBorder x:Name="PART_Ring" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" IsVisible="False" />
+              <ins:TemplateBorder x:Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -159,7 +159,7 @@
                                     RecognizesAccessKey="True"
                                     TextBlock.LineHeight="18" />
                 </StackPanel>
-              </Border>
+              </ins:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
@@ -172,7 +172,7 @@
           <Setter Property="Width" Value="0" />
           <Setter Property="Margin" Value="0" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_Ring">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Ring">
           <Setter Property="IsVisible" Value="True" />
         </Style>
         <Style Selector="^:checked, ^.active">

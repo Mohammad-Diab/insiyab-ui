@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
 
   <Styles.Resources>
     <ResourceDictionary>
@@ -30,8 +31,8 @@
               <ReversibleStackPanel.DataTemplates>
                 <DataTemplate x:DataType="INotification">
                   <StackPanel Spacing="2">
-                    <TextBlock FontWeight="Bold" Text="{Binding Title}" TextWrapping="Wrap" />
-                    <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+                    <ins:TemplateText FontWeight="Bold" Text="{Binding Title}" TextWrapping="Wrap" />
+                    <ins:TemplateText Text="{Binding Message}" TextWrapping="Wrap" />
                   </StackPanel>
                 </DataTemplate>
               </ReversibleStackPanel.DataTemplates>
@@ -94,13 +95,13 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border Name="PART_FocusRing"
+              <ins:TemplateBorder Name="PART_FocusRing"
                       CornerRadius="{TemplateBinding CornerRadius}"
                       BoxShadow="{DynamicResource InsFocusRing}"
                       Opacity="0"
                       IsHitTestVisible="False" />
-              <Border Name="PART_Ground" CornerRadius="{TemplateBinding CornerRadius}" Background="{DynamicResource InsWash1}" IsHitTestVisible="False" />
-              <Border Name="PART_Card"
+              <ins:TemplateBorder Name="PART_Ground" CornerRadius="{TemplateBinding CornerRadius}" Background="{DynamicResource InsWash1}" IsHitTestVisible="False" />
+              <ins:TemplateBorder Name="PART_Card"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -108,7 +109,7 @@
                       Padding="{TemplateBinding Padding}"
                       BoxShadow="{DynamicResource InsShLg}">
                 <DockPanel>
-                  <TextBlock Name="PART_Glyph"
+                  <ins:TemplateText Name="PART_Glyph"
                              DockPanel.Dock="Left"
                              Margin="0,0,10,0"
                              FontSize="16"
@@ -132,7 +133,7 @@
                                     TextWrapping="Wrap"
                                     LineHeight="21" />
                 </DockPanel>
-              </Border>
+              </ins:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
@@ -174,7 +175,7 @@
           </Style.Animations>
         </Style>
 
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
         </Style>
         <Style Selector="^.persist /template/ Button#PART_Close">
@@ -185,7 +186,7 @@
           <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsToastOkBd}" />
           <Setter Property="Foreground" Value="{DynamicResource InsToneOk}" />
-          <Style Selector="^ /template/ TextBlock#PART_Glyph">
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Glyph">
             <Setter Property="Text" Value="✓" />
             <Setter Property="Foreground" Value="{DynamicResource InsToastOkGlyph}" />
           </Style>
@@ -194,7 +195,7 @@
           <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsToastBadBd}" />
           <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
-          <Style Selector="^ /template/ TextBlock#PART_Glyph">
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Glyph">
             <Setter Property="Text" Value="✕" />
             <Setter Property="Foreground" Value="{DynamicResource InsToastBadGlyph}" />
           </Style>
@@ -203,7 +204,7 @@
           <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsToastWarnBd}" />
           <Setter Property="Foreground" Value="{DynamicResource InsToneWarn}" />
-          <Style Selector="^ /template/ TextBlock#PART_Glyph">
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Glyph">
             <Setter Property="Text" Value="!" />
             <Setter Property="Foreground" Value="{DynamicResource InsToastWarnGlyph}" />
           </Style>

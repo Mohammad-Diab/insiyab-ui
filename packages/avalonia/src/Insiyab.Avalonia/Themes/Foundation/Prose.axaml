@@ -13,11 +13,11 @@
     <Setter Property="Template">
       <ControlTemplate>
         <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="12">
-          <Border Name="PART_Start" Grid.Column="0" Height="1" VerticalAlignment="Center" Background="{TemplateBinding BorderBrush}" />
+          <ctl:TemplateBorder Name="PART_Start" Grid.Column="0" Height="1" VerticalAlignment="Center" Background="{TemplateBinding BorderBrush}" />
           <ContentPresenter Name="PART_ContentPresenter" Grid.Column="1"
                             Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
                             VerticalAlignment="Center" />
-          <Border Name="PART_End" Grid.Column="2" Height="1" VerticalAlignment="Center" Background="{TemplateBinding BorderBrush}" />
+          <ctl:TemplateBorder Name="PART_End" Grid.Column="2" Height="1" VerticalAlignment="Center" Background="{TemplateBinding BorderBrush}" />
         </Grid>
       </ControlTemplate>
     </Setter>
@@ -29,7 +29,7 @@
           <ContentPresenter Name="PART_ContentPresenter" DockPanel.Dock="Left" Margin="0,0,12,0"
                             Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
                             VerticalAlignment="Center" />
-          <Border Name="PART_End" Height="1" VerticalAlignment="Center" Background="{TemplateBinding BorderBrush}" />
+          <ctl:TemplateBorder Name="PART_End" Height="1" VerticalAlignment="Center" Background="{TemplateBinding BorderBrush}" />
         </DockPanel>
       </ControlTemplate>
     </Setter>
@@ -37,7 +37,7 @@
   <Style Selector="ctl|Divider:empty">
     <Setter Property="Template">
       <ControlTemplate>
-        <Border Name="PART_End" Height="1" VerticalAlignment="Center" Background="{TemplateBinding BorderBrush}" />
+        <ctl:TemplateBorder Name="PART_End" Height="1" VerticalAlignment="Center" Background="{TemplateBinding BorderBrush}" />
       </ControlTemplate>
     </Setter>
   </Style>
@@ -47,11 +47,11 @@
     <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
     <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
   </Style>
-  <Style Selector="ctl|Prose TextBlock">
+  <Style Selector="ctl|Prose TextBlock, ctl|Prose ctl|TemplateText">
     <Setter Property="LineHeight" Value="28.8" />
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
-  <Style Selector="ctl|Prose[FlowDirection=LeftToRight] TextBlock">
+  <Style Selector="ctl|Prose[FlowDirection=LeftToRight] TextBlock, ctl|Prose[FlowDirection=LeftToRight] ctl|TemplateText">
     <Setter Property="LineHeight" Value="26.4" />
   </Style>
   <!-- Prose spaces a rule itself, 2em each side -->
@@ -107,7 +107,7 @@
     <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontMono}" />
     <Setter Property="TextElement.FontSize" Value="14" />
   </Style>
-  <Style Selector="Border.code > TextBlock">
+  <Style Selector="Border.code > TextBlock, Border.code > ctl|TemplateText">
     <Setter Property="LineHeight" Value="NaN" />
   </Style>
 
@@ -122,7 +122,7 @@
     <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontMono}" />
     <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsSm}" />
   </Style>
-  <Style Selector="Border.pre TextBlock">
+  <Style Selector="Border.pre TextBlock, Border.pre ctl|TemplateText">
     <Setter Property="LineHeight" Value="20.8" />
     <Setter Property="TextWrapping" Value="NoWrap" />
     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -158,10 +158,10 @@
     <Setter Property="TextElement.FontWeight" Value="Bold" />
     <Setter Property="TextElement.Foreground" Value="{DynamicResource InsLabel}" />
   </Style>
-  <Style Selector="Grid.table TextBlock">
+  <Style Selector="Grid.table TextBlock, Grid.table ctl|TemplateText">
     <Setter Property="LineHeight" Value="25.2" />
   </Style>
-  <Style Selector="ctl|Prose[FlowDirection=LeftToRight] Grid.table TextBlock">
+  <Style Selector="ctl|Prose[FlowDirection=LeftToRight] Grid.table TextBlock, ctl|Prose[FlowDirection=LeftToRight] Grid.table ctl|TemplateText">
     <Setter Property="LineHeight" Value="23.1" />
   </Style>
 

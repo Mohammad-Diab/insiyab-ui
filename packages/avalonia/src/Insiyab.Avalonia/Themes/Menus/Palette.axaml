@@ -31,8 +31,8 @@
         <Setter Property="Template">
           <ControlTemplate TargetType="TextBox">
             <Panel>
-              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShSubtle}" />
-              <Border x:Name="PART_BorderElement"
+              <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShSubtle}" />
+              <ins:TemplateBorder x:Name="PART_BorderElement"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -51,17 +51,17 @@
                             VerticalScrollBarVisibility="Disabled"
                             VerticalAlignment="Center">
                 <Panel>
-                  <TextBlock x:Name="PART_Placeholder"
+                  <ins:TemplateText x:Name="PART_Placeholder"
                              Foreground="{TemplateBinding PlaceholderForeground}"
                              Text="{TemplateBinding PlaceholderText}"
                              VerticalAlignment="Center">
-                    <TextBlock.IsVisible>
+                    <ins:TemplateText.IsVisible>
                       <MultiBinding Converter="{x:Static BoolConverters.And}">
                         <Binding ElementName="PART_TextPresenter" Path="PreeditText" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
                         <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Text" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
                       </MultiBinding>
-                    </TextBlock.IsVisible>
-                  </TextBlock>
+                    </ins:TemplateText.IsVisible>
+                  </ins:TemplateText>
                   <TextPresenter x:Name="PART_TextPresenter"
                                  Text="{TemplateBinding Text, Mode=TwoWay}"
                                  CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
@@ -79,7 +79,7 @@
             </Panel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^:pointerover:not(:focus) /template/ Border#PART_BorderElement">
+        <Style Selector="^:pointerover:not(:focus) /template/ :is(Border)#PART_BorderElement">
           <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
         </Style>
         <Style Selector="^ /template/ ins|Icon#PART_SearchIcon">
@@ -96,11 +96,11 @@
             <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
             <Setter Property="RenderTransform" Value="scale(1.12)" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_BorderElement">
+          <Style Selector="^ /template/ :is(Border)#PART_BorderElement">
             <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsPaletteFocusBorder}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
           </Style>
         </Style>
@@ -113,7 +113,7 @@
         <Setter Property="Template">
           <ControlTemplate TargetType="ins:CommandPalette">
             <Panel>
-              <Border x:Name="PART_Backdrop" Background="{DynamicResource InsPaletteBackdrop}" />
+              <ins:TemplateBorder x:Name="PART_Backdrop" Background="{DynamicResource InsPaletteBackdrop}" />
               <!-- High on the window rather than centred: the list grows downward as the person types, and a centred box would move its own field under them. -->
               <Panel x:Name="PART_Dialog"
                      HorizontalAlignment="Stretch"
@@ -122,40 +122,40 @@
                      MaxHeight="544"
                      Margin="16,96,16,16"
                      KeyboardNavigation.TabNavigation="Cycle">
-                <Border CornerRadius="{DynamicResource InsRXl}" BoxShadow="{DynamicResource InsShLg}" />
-                <Border FlowDirection="LeftToRight" CornerRadius="{DynamicResource InsRXl}" Background="{DynamicResource InsWash1}" />
-                <Border FlowDirection="LeftToRight"
+                <ins:TemplateBorder CornerRadius="{DynamicResource InsRXl}" BoxShadow="{DynamicResource InsShLg}" />
+                <ins:TemplateBorder FlowDirection="LeftToRight" CornerRadius="{DynamicResource InsRXl}" Background="{DynamicResource InsWash1}" />
+                <ins:TemplateBorder FlowDirection="LeftToRight"
                         CornerRadius="{DynamicResource InsRXl}"
                         BorderBrush="{DynamicResource InsRim}"
                         BorderThickness="1">
-                  <Border.Background>
+                  <ins:TemplateBorder.Background>
                     <LinearGradientBrush StartPoint="20%,0%" EndPoint="80%,100%">
                       <GradientStop Offset="0" Color="{DynamicResource InsGlassStrongColor}" />
                       <GradientStop Offset="1" Color="{DynamicResource InsGlassHoverColor}" />
                     </LinearGradientBrush>
-                  </Border.Background>
-                </Border>
-                <Border CornerRadius="{DynamicResource InsRXl}" ClipToBounds="True" Margin="1">
+                  </ins:TemplateBorder.Background>
+                </ins:TemplateBorder>
+                <ins:TemplateBorder CornerRadius="{DynamicResource InsRXl}" ClipToBounds="True" Margin="1">
                   <DockPanel>
-                    <Border DockPanel.Dock="Top" Padding="13,13,13,8">
+                    <ins:TemplateBorder DockPanel.Dock="Top" Padding="13,13,13,8">
                       <TextBox x:Name="PART_Input"
                                Theme="{StaticResource InsPaletteBox}"
                                PlaceholderText="{TemplateBinding PlaceholderText}" />
-                    </Border>
+                    </ins:TemplateBorder>
                     <Border DockPanel.Dock="Bottom" Classes="palette-foot">
                       <WrapPanel ItemSpacing="20" LineSpacing="6">
                         <StackPanel Orientation="Horizontal" Spacing="4">
                           <Border Classes="kbd"><TextBlock Classes="arrow" Text="↑" /></Border>
                           <Border Classes="kbd"><TextBlock Classes="arrow" Text="↓" /></Border>
-                          <TextBlock Text="{TemplateBinding MoveText}" />
+                          <ins:TemplateText Text="{TemplateBinding MoveText}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="4">
-                          <Border Classes="kbd"><TextBlock Text="Enter" /></Border>
-                          <TextBlock Text="{TemplateBinding ChooseText}" />
+                          <Border Classes="kbd"><ins:TemplateText Text="Enter" /></Border>
+                          <ins:TemplateText Text="{TemplateBinding ChooseText}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="4">
-                          <Border Classes="kbd"><TextBlock Text="Esc" /></Border>
-                          <TextBlock Text="{TemplateBinding CloseText}" />
+                          <Border Classes="kbd"><ins:TemplateText Text="Esc" /></Border>
+                          <ins:TemplateText Text="{TemplateBinding CloseText}" />
                         </StackPanel>
                       </WrapPanel>
                     </Border>
@@ -166,7 +166,7 @@
                       </ScrollViewer>
                     </Panel>
                   </DockPanel>
-                </Border>
+                </ins:TemplateBorder>
               </Panel>
             </Panel>
           </ControlTemplate>
@@ -244,7 +244,7 @@
     <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
     <Setter Property="BorderThickness" Value="0,1,0,0" />
   </Style>
-  <Style Selector="ins|CommandPalette Border.palette-foot TextBlock">
+  <Style Selector="ins|CommandPalette Border.palette-foot TextBlock, ins|CommandPalette Border.palette-foot ins|TemplateText">
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
     <Setter Property="VerticalAlignment" Value="Center" />
@@ -253,7 +253,7 @@
   <Style Selector="ins|CommandPalette Border.palette-foot TextBlock.arrow">
     <Setter Property="FontFamily" Value="Segoe UI Symbol, Segoe UI, Arial" />
   </Style>
-  <Style Selector="ins|CommandPalette Border.palette-foot Border.kbd > TextBlock">
+  <Style Selector="ins|CommandPalette Border.palette-foot Border.kbd > TextBlock, ins|CommandPalette Border.palette-foot Border.kbd > ins|TemplateText">
     <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
   </Style>
 

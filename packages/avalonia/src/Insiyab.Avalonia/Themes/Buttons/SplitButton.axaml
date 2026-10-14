@@ -27,12 +27,12 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel x:Name="PART_Root" RenderTransformOrigin="50%,50%" RenderTransform="none">
-              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
-              <Border x:Name="PART_FocusRing"
+              <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
+              <ins:TemplateBorder x:Name="PART_FocusRing"
                       CornerRadius="{TemplateBinding CornerRadius}"
                       BoxShadow="{DynamicResource InsFocusRing}"
                       Opacity="0" />
-              <Border x:Name="PART_Fill" FlowDirection="LeftToRight" CornerRadius="{TemplateBinding CornerRadius}" />
+              <ins:TemplateBorder x:Name="PART_Fill" FlowDirection="LeftToRight" CornerRadius="{TemplateBinding CornerRadius}" />
               <Grid ColumnDefinitions="*,Auto">
                 <Button x:Name="PART_PrimaryButton"
                         Classes="split-half"
@@ -67,7 +67,7 @@
                           StrokeJoin="Round" />
                   </Viewbox>
                 </Button>
-                <Border x:Name="PART_Divider"
+                <ins:TemplateBorder x:Name="PART_Divider"
                         Grid.Column="1"
                         Width="1"
                         ZIndex="3"
@@ -81,7 +81,7 @@
           </ControlTemplate>
         </Setter>
 
-        <Style Selector="^ /template/ Border#PART_Divider">
+        <Style Selector="^ /template/ :is(Border)#PART_Divider">
           <Setter Property="Margin" Value="0,8" />
         </Style>
         <Style Selector="^ /template/ Viewbox#PART_Chevron">
@@ -107,7 +107,7 @@
         <Style Selector="^:pressed /template/ Panel#PART_Root">
           <Setter Property="RenderTransform" Value="scale(0.97)" />
         </Style>
-        <Style Selector="^ /template/ Border#PART_Shadow">
+        <Style Selector="^ /template/ :is(Border)#PART_Shadow">
           <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />
           <Setter Property="Transitions">
             <Transitions>
@@ -115,14 +115,14 @@
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^ /template/ Border#PART_FocusRing">
+        <Style Selector="^ /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Transitions">
             <Transitions>
               <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
         </Style>
         <Style Selector="^:disabled">
@@ -138,7 +138,7 @@
             <Setter Property="Height" Value="10" />
             <Setter Property="Margin" Value="8,0" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Divider">
+          <Style Selector="^ /template/ :is(Border)#PART_Divider">
             <Setter Property="Margin" Value="0,6" />
           </Style>
         </Style>
@@ -156,63 +156,63 @@
 
         <!-- The filled tones: one gradient and one coloured drop under both halves, a faint rule between them. The tone is the one SplitFace worked out, so an unchecked toggle split stays neutral. -->
         <Style Selector="^[(ins|SplitFace.Tone)=primary], ^[(ins|SplitFace.Tone)=success], ^[(ins|SplitFace.Tone)=danger], ^[(ins|SplitFace.Tone)=warning], ^[(ins|SplitFace.Tone)=info]">
-          <Style Selector="^ /template/ Border#PART_Divider">
+          <Style Selector="^ /template/ :is(Border)#PART_Divider">
             <Setter Property="IsVisible" Value="True" />
           </Style>
         </Style>
         <Style Selector="^[(ins|SplitFace.Tone)=primary]">
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="Background" Value="{DynamicResource InsButtonPrimaryFill}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandMd}" />
           </Style>
-          <Style Selector="^:pointerover:not(:disabled) /template/ Border#PART_Shadow, ^:focus-visible /template/ Border#PART_Shadow">
+          <Style Selector="^:pointerover:not(:disabled) /template/ :is(Border)#PART_Shadow, ^:focus-visible /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandLg}" />
           </Style>
         </Style>
         <Style Selector="^[(ins|SplitFace.Tone)=success]">
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="Background" Value="{DynamicResource InsButtonSuccessFill}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="0 8 24 0 #4722C55E" />
           </Style>
         </Style>
         <Style Selector="^[(ins|SplitFace.Tone)=danger]">
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="Background" Value="{DynamicResource InsButtonDangerFill}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="0 8 24 0 #42EF4444" />
           </Style>
         </Style>
         <Style Selector="^[(ins|SplitFace.Tone)=warning]">
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="Background" Value="{DynamicResource InsButtonWarningFill}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="0 8 24 0 #42F59E0B" />
           </Style>
         </Style>
         <Style Selector="^[(ins|SplitFace.Tone)=info]">
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="Background" Value="{DynamicResource InsButtonInfoFill}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="0 8 24 0 #423B82F6" />
           </Style>
         </Style>
         <Style Selector="^.bare">
           <Setter Property="Padding" Value="0" />
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="none" />
           </Style>
           <Style Selector="^ /template/ Viewbox#PART_Chevron">
             <Setter Property="Margin" Value="6,0,0,0" />
           </Style>
         </Style>
-        <Style Selector="^[(ins|SplitFace.Tone)=bare] /template/ Border#PART_Shadow, ^[(ins|SplitFace.Tone)=on] /template/ Border#PART_Shadow">
+        <Style Selector="^[(ins|SplitFace.Tone)=bare] /template/ :is(Border)#PART_Shadow, ^[(ins|SplitFace.Tone)=on] /template/ :is(Border)#PART_Shadow">
           <Setter Property="BoxShadow" Value="none" />
         </Style>
       </ControlTheme>
@@ -221,7 +221,7 @@
   </Styles.Resources>
 
   <!-- The halves give their own drop, press and fill to the split button: the face stays one piece. -->
-  <Style Selector="Button.split-half /template/ Border#PART_Shadow">
+  <Style Selector="Button.split-half /template/ :is(Border)#PART_Shadow">
     <Setter Property="IsVisible" Value="False" />
   </Style>
   <Style Selector="Button.split-half /template/ Panel#PART_Press">
@@ -230,10 +230,10 @@
   <Style Selector="Button.split-half:pressed /template/ Panel#PART_Root">
     <Setter Property="RenderTransform" Value="none" />
   </Style>
-  <Style Selector="Button.split-half:pressed:not(.bare) /template/ Border#PART_Fill">
+  <Style Selector="Button.split-half:pressed:not(.bare) /template/ :is(Border)#PART_Fill">
     <Setter Property="BoxShadow" Value="{StaticResource InsSplitPressed}" />
   </Style>
-  <Style Selector="Button.split-half:focus-visible /template/ Border#PART_FocusRing">
+  <Style Selector="Button.split-half:focus-visible /template/ :is(Border)#PART_FocusRing">
     <Setter Property="Opacity" Value="0" />
   </Style>
   <Style Selector="Button.split-half.primary, Button.split-half.success, Button.split-half.danger, Button.split-half.warning, Button.split-half.info">
@@ -258,7 +258,7 @@
     <Setter Property="BorderBrush" Value="{DynamicResource InsButtonToggleOnBorder}" />
     <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
   </Style>
-  <Style Selector="Button.split-half.on /template/ Border#PART_Fill">
+  <Style Selector="Button.split-half.on /template/ :is(Border)#PART_Fill">
     <Setter Property="BoxShadow" Value="{StaticResource InsSplitPressed}" />
   </Style>
 

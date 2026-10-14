@@ -35,8 +35,8 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel x:Name="PART_Press">
-              <Border x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
-              <Border x:Name="PART_Face"
+              <ins:TemplateBorder x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <ins:TemplateBorder x:Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -47,14 +47,14 @@
                                   Padding="{TemplateBinding Padding}"
                                   HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                   VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-              </Border>
+              </ins:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
         <Style Selector="^ /template/ Panel#PART_Press">
           <Setter Property="ins:PressDip.Depth" Value="0.94" />
         </Style>
-        <Style Selector="^ /template/ Border#PART_FocusRing">
+        <Style Selector="^ /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Transitions">
             <Transitions>
               <DoubleTransition Property="Opacity" Duration="0:0:0.2" Easing="0.22,1,0.36,1" />
@@ -74,7 +74,7 @@
           <Setter Property="Background" Value="{DynamicResource InsToolbarOn}" />
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
         </Style>
         <Style Selector="^:disabled">
@@ -101,7 +101,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <ins:TemplateBorder x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
               <StackPanel Orientation="Horizontal">
                 <Button x:Name="PART_PrimaryButton"
                         Theme="{StaticResource InsToolbarFace}"
@@ -118,14 +118,14 @@
                   <ins:Icon Classes="toolbar-chevron" />
                 </Button>
               </StackPanel>
-              <Border x:Name="PART_Rim" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="1" BorderBrush="Transparent" IsHitTestVisible="False" />
+              <ins:TemplateBorder x:Name="PART_Rim" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="1" BorderBrush="Transparent" IsHitTestVisible="False" />
             </Panel>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:labelled /template/ Button#PART_PrimaryButton">
           <Setter Property="Padding" Value="10,0" />
         </Style>
-        <Style Selector="^:pointerover /template/ Border#PART_Rim">
+        <Style Selector="^:pointerover /template/ :is(Border)#PART_Rim">
           <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
         </Style>
         <Style Selector="^:flyout-open /template/ Button#PART_SecondaryButton">
@@ -135,7 +135,7 @@
           <Setter Property="Background" Value="{DynamicResource InsToolbarOn}" />
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
         </Style>
         <Style Selector="^:disabled">
@@ -157,7 +157,7 @@
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border x:Name="PART_Face"
+            <ins:TemplateBorder x:Name="PART_Face"
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
@@ -169,10 +169,10 @@
                                    Icon="{StaticResource InsToolbarMoreIcon}"
                                    Label="{TemplateBinding MoreText}" />
               </ins:ToolbarPanel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^ /template/ Border#PART_Face">
+        <Style Selector="^ /template/ :is(Border)#PART_Face">
           <Setter Property="BoxShadow" Value="{DynamicResource InsIslandShadow}" />
         </Style>
         <Style Selector="^.plain">
@@ -182,7 +182,7 @@
           <Setter Property="CornerRadius" Value="0" />
           <Setter Property="Padding" Value="4" />
         </Style>
-        <Style Selector="^.plain /template/ Border#PART_Face">
+        <Style Selector="^.plain /template/ :is(Border)#PART_Face">
           <Setter Property="BoxShadow" Value="none" />
         </Style>
       </ControlTheme>

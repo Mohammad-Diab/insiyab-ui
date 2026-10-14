@@ -25,7 +25,7 @@
         <Setter Property="Padding" Value="10,8,8,8" />
         <Setter Property="Template">
           <ControlTemplate TargetType="ins:FileItem" x:DataType="ins:FileItem">
-            <Border x:Name="PART_Row"
+            <ins:TemplateBorder x:Name="PART_Row"
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
@@ -34,29 +34,30 @@
                     RenderTransform="none">
               <DockPanel>
                 <Panel DockPanel.Dock="Left" Width="40" Height="40" Margin="0,0,12,0" VerticalAlignment="Center">
-                  <Border x:Name="PART_Type" CornerRadius="{DynamicResource InsRXs}" Background="{DynamicResource InsPluginsTint}">
-                    <TextBlock Text="{Binding Extension, RelativeSource={RelativeSource TemplatedParent}}" FontFamily="{DynamicResource InsFontBodyEn}" FontSize="10" FontWeight="ExtraBold" LetterSpacing="0.3"
+                  <ins:TemplateBorder x:Name="PART_Type" CornerRadius="{DynamicResource InsRXs}" Background="{DynamicResource InsPluginsTint}">
+                    <ins:TemplateText Text="{Binding Extension, RelativeSource={RelativeSource TemplatedParent}}" FontFamily="{DynamicResource InsFontBodyEn}" FontSize="10" FontWeight="ExtraBold" LetterSpacing="0.3"
                                Foreground="{DynamicResource InsPrimaryDarker}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                  </Border>
-                  <Border x:Name="PART_Thumb" CornerRadius="{DynamicResource InsRXs}" ClipToBounds="True" IsVisible="False">
+                  </ins:TemplateBorder>
+                  <ins:TemplateBorder x:Name="PART_Thumb" CornerRadius="{DynamicResource InsRXs}" ClipToBounds="True" IsVisible="False">
                     <Image Source="{Binding Thumbnail, RelativeSource={RelativeSource TemplatedParent}}" Stretch="UniformToFill" />
-                  </Border>
+                  </ins:TemplateBorder>
                 </Panel>
                 <Button x:Name="PART_Remove" Classes="close sm" DockPanel.Dock="Right" Margin="12,0,0,0" VerticalAlignment="Center"
                         AutomationProperties.Name="{TemplateBinding RemoveLabel}" />
                 <StackPanel Spacing="3" VerticalAlignment="Center">
-                  <TextBlock Text="{Binding FileName, RelativeSource={RelativeSource TemplatedParent}}" FontWeight="SemiBold" FontSize="{DynamicResource InsFsMd}" LineHeight="20.8"
+                  <ins:TemplateText Text="{Binding FileName, RelativeSource={RelativeSource TemplatedParent}}" FontWeight="SemiBold" FontSize="{DynamicResource InsFsMd}" LineHeight="20.8"
                              Foreground="{DynamicResource InsText1}" TextTrimming="CharacterEllipsis" />
-                  <TextBlock Text="{TemplateBinding SizeText}" FontSize="{DynamicResource InsFsXs}" LineHeight="19.2" Foreground="{DynamicResource InsText3}" />
+                  <ins:TemplateText Text="{TemplateBinding SizeText}" FontSize="{DynamicResource InsFsXs}" LineHeight="19.2" Foreground="{DynamicResource InsText3}" />
                   <ProgressBar x:Name="PART_Progress" Height="5" Margin="0,2,0,0" Minimum="0" Maximum="1" Value="{TemplateBinding Fraction}"
                                IsIndeterminate="{TemplateBinding IsIndeterminate}" IsVisible="False" />
-                  <TextBlock x:Name="PART_Status" Text="{TemplateBinding StatusText}" FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsToneBad}" IsVisible="False" TextWrapping="Wrap" />
+                  <ins:TemplateText x:Name="PART_Status" Text="{TemplateBinding StatusText}" FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsToneBad}" IsVisible="False" TextWrapping="Wrap" />
                 </StackPanel>
               </DockPanel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^ /template/ Border#PART_Row">
+        <!-- Conditioned on IsVisible, so each row has its own instance and Avalonia lets the row go -->
+        <Style Selector="^ /template/ :is(Border)#PART_Row[IsVisible=True]">
           <Style.Animations>
             <Animation Duration="0:0:0.22" Easing="0.22,1,0.36,1">
               <KeyFrame Cue="0%">
@@ -70,10 +71,10 @@
             </Animation>
           </Style.Animations>
         </Style>
-        <Style Selector="^:image /template/ Border#PART_Thumb">
+        <Style Selector="^:image /template/ :is(Border)#PART_Thumb">
           <Setter Property="IsVisible" Value="True" />
         </Style>
-        <Style Selector="^:image /template/ Border#PART_Type">
+        <Style Selector="^:image /template/ :is(Border)#PART_Type">
           <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:sending /template/ ProgressBar#PART_Progress">
@@ -82,7 +83,7 @@
         <Style Selector="^:failed">
           <Setter Property="Background" Value="{DynamicResource InsFileBadFill}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
-          <Style Selector="^ /template/ TextBlock#PART_Status">
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Status">
             <Setter Property="IsVisible" Value="True" />
           </Style>
         </Style>
@@ -106,19 +107,19 @@
                     <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                   </Transitions>
                 </Panel.Transitions>
-                <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}">
-                  <Border.Transitions>
+                <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}">
+                  <ins:TemplateBorder.Transitions>
                     <Transitions>
                       <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                     </Transitions>
-                  </Border.Transitions>
-                </Border>
-                <Border x:Name="PART_Zone" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Cursor="Hand" Padding="17.5,25.5">
-                  <Border.Transitions>
+                  </ins:TemplateBorder.Transitions>
+                </ins:TemplateBorder>
+                <ins:TemplateBorder x:Name="PART_Zone" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Cursor="Hand" Padding="17.5,25.5">
+                  <ins:TemplateBorder.Transitions>
                     <Transitions>
                       <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                     </Transitions>
-                  </Border.Transitions>
+                  </ins:TemplateBorder.Transitions>
                   <StackPanel x:Name="PART_ZoneContent" Spacing="6" HorizontalAlignment="Center">
                     <ins:Icon x:Name="PART_Icon" Data="{StaticResource InsFileUploadIcon}" Size="28" Foreground="{DynamicResource InsToneBrandSoft}" HorizontalAlignment="Center" RenderTransform="none">
                       <ins:Icon.Transitions>
@@ -129,16 +130,16 @@
                     </ins:Icon>
                     <!-- The pick words get their own underline: a run has none, and the bold face of the font draws none. -->
                     <WrapPanel x:Name="PART_Lead" HorizontalAlignment="Center">
-                      <TextBlock x:Name="PART_Drag" Text="{TemplateBinding DragText}" LineHeight="22.4" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Top" />
-                      <Border x:Name="PART_Pick" Margin="5,0,0,0" VerticalAlignment="Top" BorderBrush="{DynamicResource InsToneBrandSoft}" BorderThickness="0,0,0,1">
-                        <TextBlock Text="{TemplateBinding PickText}" LineHeight="22.4" Margin="0,0,0,-3" FontWeight="Bold" Foreground="{DynamicResource InsToneBrandSoft}" />
-                      </Border>
+                      <ins:TemplateText x:Name="PART_Drag" Text="{TemplateBinding DragText}" LineHeight="22.4" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Top" />
+                      <ins:TemplateBorder x:Name="PART_Pick" Margin="5,0,0,0" VerticalAlignment="Top" BorderBrush="{DynamicResource InsToneBrandSoft}" BorderThickness="0,0,0,1">
+                        <ins:TemplateText Text="{TemplateBinding PickText}" LineHeight="22.4" Margin="0,0,0,-3" FontWeight="Bold" Foreground="{DynamicResource InsToneBrandSoft}" />
+                      </ins:TemplateBorder>
                     </WrapPanel>
-                    <TextBlock x:Name="PART_CompactPick" Text="{TemplateBinding PickText}" FontWeight="Bold" Foreground="{DynamicResource InsText1}" VerticalAlignment="Center" IsVisible="False" />
-                    <TextBlock x:Name="PART_Note" Text="{TemplateBinding NoteText}" LineHeight="19.2" TextAlignment="Center" TextWrapping="Wrap" FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsText3}"
+                    <ins:TemplateText x:Name="PART_CompactPick" Text="{TemplateBinding PickText}" FontWeight="Bold" Foreground="{DynamicResource InsText1}" VerticalAlignment="Center" IsVisible="False" />
+                    <ins:TemplateText x:Name="PART_Note" Text="{TemplateBinding NoteText}" LineHeight="19.2" TextAlignment="Center" TextWrapping="Wrap" FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsText3}"
                                IsVisible="{TemplateBinding NoteText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                   </StackPanel>
-                </Border>
+                </ins:TemplateBorder>
                 <!-- The dashed rim: the one mark that says "drop here" in every design language. -->
                 <Rectangle x:Name="PART_Rim" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1.5" StrokeDashArray="3,2.5" RadiusX="22" RadiusY="22" IsHitTestVisible="False">
                   <Rectangle.Transitions>
@@ -154,7 +155,7 @@
           </ControlTemplate>
         </Setter>
 
-        <Style Selector="^ /template/ Panel#PART_ZoneBox:pointerover > Border#PART_Zone, ^:over /template/ Border#PART_Zone">
+        <Style Selector="^ /template/ Panel#PART_ZoneBox:pointerover > :is(Border)#PART_Zone, ^:over /template/ :is(Border)#PART_Zone">
           <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
         </Style>
         <Style Selector="^ /template/ Panel#PART_ZoneBox:pointerover > Rectangle#PART_Rim, ^:over /template/ Rectangle#PART_Rim">
@@ -171,14 +172,14 @@
           <Style Selector="^ /template/ Rectangle#PART_Rim">
             <Setter Property="Stroke" Value="{DynamicResource InsPluginsFocusBorder}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
           </Style>
           <Style Selector="^ /template/ Panel#PART_ZoneBox">
             <Setter Property="RenderTransform" Value="translateY(-1px)" />
           </Style>
         </Style>
-        <Style Selector="^:invalid /template/ Border#PART_Zone">
+        <Style Selector="^:invalid /template/ :is(Border)#PART_Zone">
           <Setter Property="Background" Value="{DynamicResource InsFileBadFill}" />
         </Style>
         <Style Selector="^:invalid /template/ Rectangle#PART_Rim">
@@ -187,7 +188,7 @@
         <Style Selector="^:disabled /template/ Panel#PART_ZoneBox">
           <Setter Property="Opacity" Value="0.55" />
         </Style>
-        <Style Selector="^:disabled /template/ Border#PART_Zone">
+        <Style Selector="^:disabled /template/ :is(Border)#PART_Zone">
           <Setter Property="Cursor" Value="No" />
         </Style>
 
@@ -196,12 +197,12 @@
           <Style Selector="^ /template/ Panel#PART_ZoneBox">
             <Setter Property="HorizontalAlignment" Value="Left" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Zone">
+          <Style Selector="^ /template/ :is(Border)#PART_Zone">
             <Setter Property="Padding" Value="14,6" />
             <Setter Property="MinHeight" Value="{DynamicResource InsFieldH}" />
             <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />
           </Style>
           <Style Selector="^ /template/ StackPanel#PART_ZoneContent">
@@ -219,13 +220,13 @@
             <Setter Property="RadiusX" Value="14" />
             <Setter Property="RadiusY" Value="14" />
           </Style>
-          <Style Selector="^ /template/ TextBlock#PART_Note">
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Note">
             <Setter Property="IsVisible" Value="False" />
           </Style>
           <Style Selector="^ /template/ WrapPanel#PART_Lead">
             <Setter Property="IsVisible" Value="False" />
           </Style>
-          <Style Selector="^ /template/ TextBlock#PART_CompactPick">
+          <Style Selector="^ /template/ :is(TextBlock)#PART_CompactPick">
             <Setter Property="IsVisible" Value="True" />
           </Style>
         </Style>

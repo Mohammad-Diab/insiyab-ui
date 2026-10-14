@@ -30,13 +30,13 @@
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Template">
           <ControlTemplate TargetType="Button">
-            <Border x:Name="PART_Face" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+            <ins:TemplateBorder x:Name="PART_Face" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
-              <Border.Transitions>
+              <ins:TemplateBorder.Transitions>
                 <Transitions>
                   <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                 </Transitions>
-              </Border.Transitions>
+              </ins:TemplateBorder.Transitions>
               <StackPanel Orientation="Horizontal" Spacing="8">
                 <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}" VerticalAlignment="Center" />
                 <Path x:Name="PART_Chevron" Data="{StaticResource InsPhoneChevron}" Width="10" Height="6" Stretch="None"
@@ -49,7 +49,7 @@
                   </Path.Transitions>
                 </Path>
               </StackPanel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover, ^.open">
@@ -58,7 +58,7 @@
         <Style Selector="^.open /template/ Path#PART_Chevron">
           <Setter Property="RenderTransform" Value="rotate(180deg)" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_Face">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Face">
           <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
         </Style>
         <Style Selector="^:disabled">
@@ -80,13 +80,13 @@
                 <TextBox.InnerLeftContent>
                   <Button x:Name="PART_Country" Theme="{StaticResource InsPhoneCountryButton}">
                     <StackPanel Orientation="Horizontal" Spacing="6">
-                      <Border Theme="{StaticResource InsPhoneIso}">
-                        <TextBlock Text="{Binding $parent[ins:PhoneBox].Country}" FontFamily="{DynamicResource InsFontBodyEn}" FontSize="11" FontWeight="Bold"
+                      <ins:TemplateBorder Theme="{StaticResource InsPhoneIso}">
+                        <ins:TemplateText Text="{Binding $parent[ins:PhoneBox].Country}" FontFamily="{DynamicResource InsFontBodyEn}" FontSize="11" FontWeight="Bold"
                                    LetterSpacing="0.44" Foreground="{DynamicResource InsPrimaryDarker}" HorizontalAlignment="Center" />
-                      </Border>
+                      </ins:TemplateBorder>
                       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="+" FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="SemiBold" Foreground="{DynamicResource InsLabel}" />
-                        <TextBlock Text="{Binding $parent[ins:PhoneBox].DialCode}" FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="SemiBold" Foreground="{DynamicResource InsLabel}" />
+                        <ins:TemplateText Text="+" FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="SemiBold" Foreground="{DynamicResource InsLabel}" />
+                        <ins:TemplateText Text="{Binding $parent[ins:PhoneBox].DialCode}" FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="SemiBold" Foreground="{DynamicResource InsLabel}" />
                       </StackPanel>
                     </StackPanel>
                   </Button>
@@ -104,20 +104,20 @@
                         <DataTemplate x:DataType="ins:PhoneCountryRow">
                           <Grid RowDefinitions="*,Auto">
                             <DockPanel>
-                              <Border Theme="{StaticResource InsPhoneIso}" DockPanel.Dock="Left" Margin="0,0,10,0">
-                                <TextBlock Text="{Binding Iso}" FontFamily="{DynamicResource InsFontBodyEn}" FontSize="11" FontWeight="Bold" LetterSpacing="0.44"
+                              <ins:TemplateBorder Theme="{StaticResource InsPhoneIso}" DockPanel.Dock="Left" Margin="0,0,10,0">
+                                <ins:TemplateText Text="{Binding Iso}" FontFamily="{DynamicResource InsFontBodyEn}" FontSize="11" FontWeight="Bold" LetterSpacing="0.44"
                                            Foreground="{DynamicResource InsPrimaryDarker}" HorizontalAlignment="Center" />
-                              </Border>
-                              <TextBlock DockPanel.Dock="Right" Margin="10,0,0,0" FlowDirection="LeftToRight" VerticalAlignment="Center" Text="{Binding Dial}"
+                              </ins:TemplateBorder>
+                              <ins:TemplateText DockPanel.Dock="Right" Margin="10,0,0,0" FlowDirection="LeftToRight" VerticalAlignment="Center" Text="{Binding Dial}"
                                          FontFamily="{DynamicResource InsFontBodyEn}" FontSize="{DynamicResource InsFsSm}" FontWeight="SemiBold" Foreground="{DynamicResource InsLabel}" />
-                              <TextBlock Text="{Binding Name}" FontWeight="{Binding Weight}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                              <ins:TemplateText Text="{Binding Name}" FontWeight="{Binding Weight}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
                             </DockPanel>
-                            <Border Grid.Row="1" Height="1" Margin="-2,12,-2,-6" Background="{DynamicResource InsLine}" IsVisible="{Binding EndsPreferred}" />
+                            <ins:TemplateBorder Grid.Row="1" Height="1" Margin="-2,12,-2,-6" Background="{DynamicResource InsLine}" IsVisible="{Binding EndsPreferred}" />
                           </Grid>
                         </DataTemplate>
                       </ListBox.ItemTemplate>
                     </ListBox>
-                    <TextBlock x:Name="PART_None" IsVisible="False" Padding="10,14" FontSize="{DynamicResource InsFsSm}" Foreground="{DynamicResource InsLabel}" TextAlignment="Center" />
+                    <ins:TemplateText x:Name="PART_None" IsVisible="False" Padding="10,14" FontSize="{DynamicResource InsFsSm}" Foreground="{DynamicResource InsLabel}" TextAlignment="Center" />
                   </StackPanel>
                 </FlyoutPresenter>
               </Popup>

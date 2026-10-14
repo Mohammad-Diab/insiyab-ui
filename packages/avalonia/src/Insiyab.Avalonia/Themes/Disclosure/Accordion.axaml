@@ -25,7 +25,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border Name="PART_Face"
+              <ins:TemplateBorder Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       CornerRadius="{TemplateBinding CornerRadius}"
                       Padding="{TemplateBinding Padding}">
@@ -45,14 +45,14 @@
                         RenderTransformOrigin="50%,50%"
                         RenderTransform="translateY(-1px)" />
                 </Grid>
-              </Border>
-              <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2"
+              </ins:TemplateBorder>
+              <ins:TemplateBorder Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2"
                       BorderBrush="{DynamicResource InsToneBrandSoft}" IsVisible="False" IsHitTestVisible="False" />
             </Panel>
           </ControlTemplate>
         </Setter>
 
-        <Style Selector="^ /template/ Border#PART_Face">
+        <Style Selector="^ /template/ :is(Border)#PART_Face">
           <Setter Property="Transitions">
             <Transitions>
               <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -66,7 +66,7 @@
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^:pointerover /template/ Border#PART_Face">
+        <Style Selector="^:pointerover /template/ :is(Border)#PART_Face">
           <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
         </Style>
         <Style Selector="^:checked">
@@ -76,7 +76,7 @@
             <Setter Property="RenderTransform" Value="translateY(1px) rotate(180deg)" />
           </Style>
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="IsVisible" Value="True" />
         </Style>
         <Style Selector="^:disabled">
@@ -98,7 +98,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Name="PART_Root"
+            <ins:TemplateBorder Name="PART_Root"
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}">
@@ -116,16 +116,16 @@
                                      OpenDuration="{DynamicResource InsTEnter}"
                                      CloseDuration="{DynamicResource InsTExit}"
                                      Easing="{DynamicResource InsEase}">
-                  <Border Name="ExpanderContent" Padding="{TemplateBinding Padding}">
+                  <ins:TemplateBorder Name="ExpanderContent" Padding="{TemplateBinding Padding}">
                     <ContentPresenter Name="PART_ContentPresenter"
                                       Content="{TemplateBinding Content}"
                                       ContentTemplate="{TemplateBinding ContentTemplate}"
                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                  </Border>
+                  </ins:TemplateBorder>
                 </ins:ExpandPresenter>
               </DockPanel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
       </ControlTheme>
@@ -137,7 +137,7 @@
   <Style Selector="ToggleButton#ExpanderHeader > :is(TextBlock)[FlowDirection=RightToLeft]">
     <Setter Property="LineHeight" Value="23.8" />
   </Style>
-  <Style Selector="Expander > TextBlock">
+  <Style Selector="Expander > TextBlock, Expander > ins|TemplateText">
     <Setter Property="LineHeight" Value="25.2" />
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>

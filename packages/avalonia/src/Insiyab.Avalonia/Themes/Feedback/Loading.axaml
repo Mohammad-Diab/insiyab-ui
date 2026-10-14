@@ -19,7 +19,8 @@
         <Setter Property="Highlight" Value="{DynamicResource InsSkelHi}" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Style Selector="^">
+        <!-- Running only while shown: a style with no condition shares one instance between controls, and Avalonia then holds every control it animated -->
+        <Style Selector="^[IsVisible=True]">
           <Style.Animations>
             <Animation Duration="0:0:1.8" IterationCount="Infinite" Easing="0.25,0.1,0.25,1">
               <KeyFrame Cue="0%">
@@ -35,8 +36,8 @@
           <Setter Property="Height" Value="12" />
           <Setter Property="Margin" Value="0,6" />
         </Style>
-        <!-- A paragraph's last line is short, or the lines read as a table of bars -->
-        <Style Selector="^.text:nth-last-child(1):not(:nth-child(1))">
+        <!-- A paragraph's last line is short, or the lines read as a table of bars; the skeleton marks itself :last-line -->
+        <Style Selector="^.text:last-line">
           <Setter Property="FillWidth" Value="0.6" />
         </Style>
         <Style Selector="^.title">
@@ -64,7 +65,8 @@
         <Setter Property="Track" Value="{DynamicResource InsSpinnerTrack}" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Style Selector="^">
+        <!-- Running only while shown: a style with no condition shares one instance between controls, and Avalonia then holds every control it animated -->
+        <Style Selector="^[IsVisible=True]">
           <Style.Animations>
             <Animation Duration="0:0:0.7" IterationCount="Infinite">
               <KeyFrame Cue="0%">
@@ -105,7 +107,7 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template">
           <ControlTemplate>
-            <TextBlock x:Name="PART_Label" Text="{TemplateBinding Label}" HorizontalAlignment="Center" VerticalAlignment="Center"
+            <ctl:TemplateText x:Name="PART_Label" Text="{TemplateBinding Label}" HorizontalAlignment="Center" VerticalAlignment="Center"
                        FontFamily="{DynamicResource InsFontBodyEn}" FontFeatures="+tnum" />
           </ControlTemplate>
         </Setter>

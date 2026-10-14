@@ -36,8 +36,8 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
-              <Border x:Name="PART_Face"
+              <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
+              <ins:TemplateBorder x:Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -49,7 +49,7 @@
                                 Foreground="{TemplateBinding Foreground}"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center" />
-              <Border x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2" BorderBrush="{DynamicResource InsToneBrand}" IsVisible="False" IsHitTestVisible="False" />
+              <ins:TemplateBorder x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2" BorderBrush="{DynamicResource InsToneBrand}" IsVisible="False" IsHitTestVisible="False" />
             </Panel>
           </ControlTemplate>
         </Setter>
@@ -70,14 +70,14 @@
           <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
           <Setter Property="FontWeight" Value="Bold" />
           <Setter Property="BorderThickness" Value="0" />
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandSm}" />
           </Style>
         </Style>
         <Style Selector="^:blackout, ^:disabled">
           <Setter Property="Opacity" Value="0.3" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing, ^:dayfocused:focus-within /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing, ^:dayfocused:focus-within /template/ :is(Border)#PART_FocusRing">
           <Setter Property="IsVisible" Value="True" />
         </Style>
       </ControlTheme>
@@ -109,8 +109,8 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
-              <Border x:Name="PART_Face"
+              <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
+              <ins:TemplateBorder x:Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -122,7 +122,7 @@
                                 Foreground="{TemplateBinding Foreground}"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center" />
-              <Border x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2" BorderBrush="{DynamicResource InsToneBrand}" IsVisible="False" IsHitTestVisible="False" />
+              <ins:TemplateBorder x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2" BorderBrush="{DynamicResource InsToneBrand}" IsVisible="False" IsHitTestVisible="False" />
             </Panel>
           </ControlTemplate>
         </Setter>
@@ -137,14 +137,14 @@
           <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
           <Setter Property="FontWeight" Value="Bold" />
           <Setter Property="BorderThickness" Value="0" />
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandSm}" />
           </Style>
         </Style>
         <Style Selector="^:blackout, ^:disabled">
           <Setter Property="Opacity" Value="0.3" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="IsVisible" Value="True" />
         </Style>
       </ControlTheme>
@@ -170,14 +170,14 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+            <ins:TemplateBorder Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
               <ContentPresenter x:Name="PART_ContentPresenter"
                                 Content="{TemplateBinding Content}"
                                 ContentTemplate="{TemplateBinding ContentTemplate}"
                                 Foreground="{TemplateBinding Foreground}"
                                 HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover">
@@ -202,7 +202,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}"
+            <ins:TemplateBorder Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="{TemplateBinding CornerRadius}"
@@ -220,7 +220,7 @@
                       RowDefinitions="*,*,*"
                       ColumnDefinitions="*,*,*,*" />
               </Grid>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
       </ControlTheme>
@@ -233,7 +233,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel ClipToBounds="False">
-              <Border CornerRadius="{DynamicResource InsRLg}" Background="{DynamicResource InsWash1}" BoxShadow="{DynamicResource InsShLg}" FlowDirection="LeftToRight" />
+              <ins:TemplateBorder CornerRadius="{DynamicResource InsRLg}" Background="{DynamicResource InsWash1}" BoxShadow="{DynamicResource InsShLg}" FlowDirection="LeftToRight" />
               <Border Classes="picker-glass" />
               <Panel x:Name="PART_Root" ClipToBounds="False">
                 <CalendarItem x:Name="PART_CalendarItem"
@@ -269,7 +269,7 @@
                          IsLightDismissEnabled="True"
                          WindowManagerAddShadowHint="False"
                          ShouldUseOverlayLayer="True">
-                    <Border Padding="40,16,40,64">
+                    <ins:TemplateBorder Padding="40,16,40,64">
                       <Calendar x:Name="PART_Calendar"
                                 FirstDayOfWeek="{TemplateBinding FirstDayOfWeek}"
                                 IsTodayHighlighted="{TemplateBinding IsTodayHighlighted}"
@@ -277,7 +277,7 @@
                                 DisplayDate="{TemplateBinding DisplayDate}"
                                 DisplayDateStart="{TemplateBinding DisplayDateStart}"
                                 DisplayDateEnd="{TemplateBinding DisplayDateEnd}" />
-                    </Border>
+                    </ins:TemplateBorder>
                   </Popup>
                 </Grid>
               </Panel>
@@ -345,9 +345,9 @@
         <Setter Property="IsVisible" Value="False" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}">
+            <ins:TemplateBorder Background="{TemplateBinding Background}">
               <ins:Icon Data="{StaticResource InsPickerChevronDown}" Size="14" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover">
@@ -381,13 +381,13 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+            <ins:TemplateBorder Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
               <ContentPresenter x:Name="PART_ContentPresenter"
                                 Content="{TemplateBinding Content}"
                                 Foreground="{TemplateBinding Foreground}"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center" />
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover">
@@ -418,34 +418,34 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShSubtle}" />
-              <Border x:Name="PART_Face"
+              <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShSubtle}" />
+              <ins:TemplateBorder x:Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
                       CornerRadius="{TemplateBinding CornerRadius}"
                       BoxShadow="{DynamicResource InsBevelDim}">
-                <Border.Transitions>
+                <ins:TemplateBorder.Transitions>
                   <Transitions>
                     <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                     <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                   </Transitions>
-                </Border.Transitions>
+                </ins:TemplateBorder.Transitions>
                 <ContentPresenter x:Name="PART_ContentPresenter"
                                   Content="{TemplateBinding Content}"
                                   ContentTemplate="{TemplateBinding ContentTemplate}"
                                   Foreground="{TemplateBinding Foreground}"
                                   HorizontalContentAlignment="Stretch"
                                   VerticalContentAlignment="Stretch" />
-              </Border>
+              </ins:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^:pointerover /template/ Border#PART_Face">
+        <Style Selector="^:pointerover /template/ :is(Border)#PART_Face">
           <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsPickerHoverBorder}" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_Shadow">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Shadow">
           <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
         </Style>
         <Style Selector="^:disabled">
@@ -482,9 +482,9 @@
                         VerticalAlignment="Stretch"
                         TemplatedControl.IsTemplateFocusTarget="True">
                   <Grid x:Name="PART_ButtonContentGrid" ColumnDefinitions="78*,Auto,132*,Auto,78*">
-                    <TextBlock x:Name="PART_DayTextBlock" Text="{DynamicResource StringDatePickerDayText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
-                    <TextBlock x:Name="PART_MonthTextBlock" Text="{DynamicResource StringDatePickerMonthText}" TextAlignment="Left" Padding="12,0" VerticalAlignment="Center" />
-                    <TextBlock x:Name="PART_YearTextBlock" Text="{DynamicResource StringDatePickerYearText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
+                    <ins:TemplateText x:Name="PART_DayTextBlock" Text="{DynamicResource StringDatePickerDayText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
+                    <ins:TemplateText x:Name="PART_MonthTextBlock" Text="{DynamicResource StringDatePickerMonthText}" TextAlignment="Left" Padding="12,0" VerticalAlignment="Center" />
+                    <ins:TemplateText x:Name="PART_YearTextBlock" Text="{DynamicResource StringDatePickerYearText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
                     <Rectangle x:Name="PART_FirstSpacer" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="1" />
                     <Rectangle x:Name="PART_SecondSpacer" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="3" />
                   </Grid>
@@ -496,10 +496,10 @@
             </DataValidationErrors>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^ /template/ Button#PART_FlyoutButton TextBlock">
+        <Style Selector="^ /template/ Button#PART_FlyoutButton TextBlock, ^ /template/ Button#PART_FlyoutButton ins|TemplateText">
           <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
-        <Style Selector="^:hasnodate /template/ Button#PART_FlyoutButton TextBlock">
+        <Style Selector="^:hasnodate /template/ Button#PART_FlyoutButton TextBlock, ^:hasnodate /template/ Button#PART_FlyoutButton ins|TemplateText">
           <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
         </Style>
         <Style Selector="^:error /template/ Button#PART_FlyoutButton">
@@ -535,21 +535,21 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
                   <Grid x:Name="PART_FlyoutButtonContentGrid">
-                    <Border x:Name="PART_FirstPickerHost" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                      <TextBlock x:Name="PART_HourTextBlock" Text="{DynamicResource StringTimePickerHourText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
-                    </Border>
+                    <ins:TemplateBorder x:Name="PART_FirstPickerHost" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                      <ins:TemplateText x:Name="PART_HourTextBlock" Text="{DynamicResource StringTimePickerHourText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
+                    </ins:TemplateBorder>
                     <Rectangle x:Name="PART_FirstColumnDivider" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="1" />
-                    <Border x:Name="PART_SecondPickerHost" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                      <TextBlock x:Name="PART_MinuteTextBlock" Text="{DynamicResource StringTimePickerMinuteText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
-                    </Border>
+                    <ins:TemplateBorder x:Name="PART_SecondPickerHost" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                      <ins:TemplateText x:Name="PART_MinuteTextBlock" Text="{DynamicResource StringTimePickerMinuteText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
+                    </ins:TemplateBorder>
                     <Rectangle x:Name="PART_SecondColumnDivider" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="3" />
-                    <Border x:Name="PART_ThirdPickerHost" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                      <TextBlock x:Name="PART_SecondTextBlock" Text="{DynamicResource StringTimePickerSecondText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
-                    </Border>
+                    <ins:TemplateBorder x:Name="PART_ThirdPickerHost" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                      <ins:TemplateText x:Name="PART_SecondTextBlock" Text="{DynamicResource StringTimePickerSecondText}" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
+                    </ins:TemplateBorder>
                     <Rectangle x:Name="PART_ThirdColumnDivider" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="5" />
-                    <Border x:Name="PART_FourthPickerHost" Grid.Column="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                      <TextBlock x:Name="PART_PeriodTextBlock" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
-                    </Border>
+                    <ins:TemplateBorder x:Name="PART_FourthPickerHost" Grid.Column="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                      <ins:TemplateText x:Name="PART_PeriodTextBlock" HorizontalAlignment="Center" Padding="12,0" VerticalAlignment="Center" />
+                    </ins:TemplateBorder>
                   </Grid>
                 </Button>
                 <Popup x:Name="PART_Popup" WindowManagerAddShadowHint="False" IsLightDismissEnabled="True" PlacementTarget="{TemplateBinding}" Placement="Bottom">
@@ -559,10 +559,10 @@
             </DataValidationErrors>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^ /template/ Button#PART_FlyoutButton TextBlock">
+        <Style Selector="^ /template/ Button#PART_FlyoutButton TextBlock, ^ /template/ Button#PART_FlyoutButton ins|TemplateText">
           <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
-        <Style Selector="^:hasnotime /template/ Button#PART_FlyoutButton TextBlock">
+        <Style Selector="^:hasnotime /template/ Button#PART_FlyoutButton TextBlock, ^:hasnotime /template/ Button#PART_FlyoutButton ins|TemplateText">
           <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
         </Style>
         <Style Selector="^:error /template/ Button#PART_FlyoutButton">
@@ -578,7 +578,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border CornerRadius="{DynamicResource InsRLg}" Background="{DynamicResource InsWash1}" BorderBrush="{DynamicResource InsRim}" BorderThickness="1" FlowDirection="LeftToRight" />
+              <ins:TemplateBorder CornerRadius="{DynamicResource InsRLg}" Background="{DynamicResource InsWash1}" BorderBrush="{DynamicResource InsRim}" BorderThickness="1" FlowDirection="LeftToRight" />
               <Border Classes="picker-glass" />
               <Grid x:Name="ContentRoot" RowDefinitions="*,Auto" Margin="8">
                 <Grid x:Name="PART_PickerContainer">
@@ -608,7 +608,7 @@
                     <RepeatButton x:Name="PART_YearUpButton" Classes="up" Theme="{StaticResource InsDrumStep}" />
                     <RepeatButton x:Name="PART_YearDownButton" Classes="down" Theme="{StaticResource InsDrumStep}" />
                   </Panel>
-                  <Border x:Name="HighlightRect"
+                  <ins:TemplateBorder x:Name="HighlightRect"
                           Height="36"
                           VerticalAlignment="Center"
                           CornerRadius="{DynamicResource InsRSm}"
@@ -624,7 +624,7 @@
                   <Rectangle x:Name="PART_SecondSpacer" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="3" />
                 </Grid>
                 <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
-                  <Border Height="1" Background="{DynamicResource InsLine}" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,-8,0,0" />
+                  <ins:TemplateBorder Height="1" Background="{DynamicResource InsLine}" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,-8,0,0" />
                   <Button x:Name="PART_DismissButton" Grid.Column="0" Theme="{StaticResource InsDrumFootBtn}">
                     <ins:Icon Data="{StaticResource InsPickerCross}" Size="18" />
                   </Button>
@@ -649,7 +649,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border CornerRadius="{DynamicResource InsRLg}" Background="{DynamicResource InsWash1}" BorderBrush="{DynamicResource InsRim}" BorderThickness="1" FlowDirection="LeftToRight" />
+              <ins:TemplateBorder CornerRadius="{DynamicResource InsRLg}" Background="{DynamicResource InsWash1}" BorderBrush="{DynamicResource InsRim}" BorderThickness="1" FlowDirection="LeftToRight" />
               <Border Classes="picker-glass" />
               <Grid x:Name="ContentRoot" RowDefinitions="*,Auto" Margin="8">
                 <Grid x:Name="PART_PickerContainer">
@@ -686,7 +686,7 @@
                     <RepeatButton x:Name="PART_PeriodUpButton" Classes="up" Theme="{StaticResource InsDrumStep}" />
                     <RepeatButton x:Name="PART_PeriodDownButton" Classes="down" Theme="{StaticResource InsDrumStep}" />
                   </Panel>
-                  <Border x:Name="HighlightRect"
+                  <ins:TemplateBorder x:Name="HighlightRect"
                           Height="36"
                           VerticalAlignment="Center"
                           CornerRadius="{DynamicResource InsRSm}"
@@ -703,7 +703,7 @@
                   <Rectangle x:Name="PART_ThirdSpacer" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="5" />
                 </Grid>
                 <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
-                  <Border Height="1" Background="{DynamicResource InsLine}" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,-8,0,0" />
+                  <ins:TemplateBorder Height="1" Background="{DynamicResource InsLine}" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,-8,0,0" />
                   <Button x:Name="PART_DismissButton" Grid.Column="0" Theme="{StaticResource InsDrumFootBtn}">
                     <ins:Icon Data="{StaticResource InsPickerCross}" Size="18" />
                   </Button>

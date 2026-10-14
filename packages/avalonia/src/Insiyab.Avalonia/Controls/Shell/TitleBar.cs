@@ -2,7 +2,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Chrome;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
@@ -26,6 +28,10 @@ public static class TitleBar
         AvaloniaProperty.RegisterAttached<Control, bool>("IsSystemMenuArea", typeof(TitleBar));
 
     internal const double BandHeight = 40;
+
+    // Set on a focusable control the library marked as a normal control inside a drag area.
+    private static readonly AttachedProperty<bool> KeptProperty =
+        AvaloniaProperty.RegisterAttached<Control, bool>("Kept", typeof(TitleBar));
 
     private static readonly AttachedProperty<MenuHook?> HookProperty =
         AvaloniaProperty.RegisterAttached<Window, MenuHook?>("Hook", typeof(TitleBar));
@@ -56,7 +62,12 @@ public static class TitleBar
     {
         ExtendsProperty.Changed.AddClassHandler<Window>((window, e) => Apply(window, e.GetNewValue<bool>()));
         IsDragAreaProperty.Changed.AddClassHandler<Control>((control, e) =>
-            WindowDecorationProperties.SetElementRole(control, e.GetNewValue<bool>() ? WindowDecorationsElementRole.TitleBar : WindowDecorationsElementRole.None));
+        {
+            WindowDecorationProperties.SetElementRole(control, e.GetNewValue<bool>() ? WindowDecorationsElementRole.TitleBar : WindowDecorationsElementRole.None);
+            foreach (var inner in control.GetLogicalDescendants().OfType<Control>()) Keep(inner);
+        });
+        Control.LoadedEvent.AddClassHandler<Control>((control, _) => Keep(control));
+        InputElement.FocusableProperty.Changed.AddClassHandler<Control>((control, _) => Keep(control));
         IsSystemMenuAreaProperty.Changed.AddClassHandler<Control>((control, e) =>
         {
             var on = e.GetNewValue<bool>();
@@ -64,6 +75,30 @@ public static class TitleBar
             control.PointerReleased -= OnIconReleased;
             if (on) control.PointerReleased += OnIconReleased;
         });
+    }
+
+    // Inside a drag area, anything that takes focus stays a normal control. Done here rather than by a descendant style, which put a watcher on every ancestor of every control in the app.
+    private static void Keep(Control control)
+    {
+        var inside = control.Focusable && InDragArea(control);
+        if (inside == control.GetValue(KeptProperty)) return;
+        if (inside)
+        {
+            control.SetValue(KeptProperty, true);
+            control.SetValue(WindowDecorationProperties.ElementRoleProperty, WindowDecorationsElementRole.User, BindingPriority.Style);
+        }
+        else
+        {
+            control.ClearValue(KeptProperty);
+            control.SetValue(WindowDecorationProperties.ElementRoleProperty, AvaloniaProperty.UnsetValue, BindingPriority.Style);
+        }
+    }
+
+    private static bool InDragArea(Control control)
+    {
+        for (var p = control.GetLogicalParent(); p is not null; p = p.GetLogicalParent())
+            if (p is Control c && GetIsDragArea(c)) return true;
+        return false;
     }
 
     private static void Apply(Window window, bool on)

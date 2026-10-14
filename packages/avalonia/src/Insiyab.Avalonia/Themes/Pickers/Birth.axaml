@@ -36,7 +36,7 @@
         <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
         <Setter Property="Template">
           <ControlTemplate TargetType="TextBox">
-            <Border Background="Transparent">
+            <ins:TemplateBorder Background="Transparent">
               <TextPresenter x:Name="PART_TextPresenter"
                              Text="{TemplateBinding Text, Mode=TwoWay}"
                              CaretIndex="{TemplateBinding CaretIndex}"
@@ -48,7 +48,7 @@
                              SelectionBrush="Transparent"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Center" />
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
       </ControlTheme>
@@ -72,9 +72,9 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+            <ins:TemplateBorder Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
               <ins:Icon Data="{StaticResource InsBirthBtnIcon}" Size="18" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover, ^.open">

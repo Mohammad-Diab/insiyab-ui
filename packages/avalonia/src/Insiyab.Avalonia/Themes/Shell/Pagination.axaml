@@ -30,8 +30,8 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
-              <Border Name="PART_Face"
+              <ins:TemplateBorder Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <ins:TemplateBorder Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       CornerRadius="{TemplateBinding CornerRadius}"
                       Padding="{TemplateBinding Padding}">
@@ -49,11 +49,11 @@
                   <Path Name="PART_NextArrow" Width="7" Height="10" VerticalAlignment="Center" IsVisible="False"
                         Data="M1.5,1 L5.5,5 L1.5,9" Stroke="{TemplateBinding Foreground}" StrokeThickness="2" />
                 </StackPanel>
-              </Border>
+              </ins:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^ /template/ Border#PART_Face">
+        <Style Selector="^ /template/ :is(Border)#PART_Face">
           <Setter Property="Transitions">
             <Transitions>
               <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -65,14 +65,14 @@
           <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
           <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
         </Style>
         <Style Selector="^.current">
           <Setter Property="Background" Value="{DynamicResource InsSegOnBg}" />
           <Setter Property="Foreground" Value="{DynamicResource InsSegOnFg}" />
           <Setter Property="Cursor" Value="Arrow" />
-          <Style Selector="^ /template/ Border#PART_Face">
+          <Style Selector="^ /template/ :is(Border)#PART_Face">
             <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
           </Style>
         </Style>
@@ -97,14 +97,14 @@
         <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Name="PART_Track"
+            <ins:TemplateBorder Name="PART_Track"
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="{TemplateBinding CornerRadius}"
                     Padding="{TemplateBinding Padding}">
               <WrapPanel Name="PART_Items" ItemSpacing="3" LineSpacing="3" />
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
       </ControlTheme>

@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
+using Avalonia.Controls.Metadata;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 
@@ -69,8 +71,34 @@ public class Shimmer : Control
 }
 
 /// <summary>The shape of content that has not arrived, the web's <c>.ins-skel</c>. Shape classes <c>text title circle block</c>; a circle's diameter is its <c>Width</c>.</summary>
+[PseudoClasses(":last-line")]
 public class Skeleton : Shimmer
 {
+    private IChildIndexProvider? _siblings;
+
+    // The last of two or more lines is a paragraph's short last line (:last-line), watched here: an :nth-child rule in the theme held a removed skeleton through its parent.
+    protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToLogicalTree(e);
+        _siblings = ((ILogical)this).LogicalParent as IChildIndexProvider;
+        if (_siblings is not null) _siblings.ChildIndexChanged += OnSiblings;
+        Place();
+    }
+
+    protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromLogicalTree(e);
+        if (_siblings is not null) _siblings.ChildIndexChanged -= OnSiblings;
+        _siblings = null;
+    }
+
+    private void OnSiblings(object? sender, ChildIndexChangedEventArgs e) => Place();
+
+    private void Place()
+    {
+        var i = _siblings?.GetChildIndex(this) ?? -1;
+        PseudoClasses.Set(":last-line", i > 0 && _siblings!.TryGetTotalCount(out var count) && i == count - 1);
+    }
 }
 
 /// <summary>A ring with one quadrant in the brand colour, turning: the web's <c>.ins-spinner</c> (named apart from Avalonia's own <c>Spinner</c>). Class <c>sm</c>. Inside a button it takes the button's text colour. Clocks do not mirror, so neither does it.</summary>

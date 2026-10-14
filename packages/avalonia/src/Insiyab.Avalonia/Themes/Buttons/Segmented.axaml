@@ -17,14 +17,14 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}"
+            <ins:TemplateBorder Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="{TemplateBinding CornerRadius}"
                     Padding="{TemplateBinding Padding}">
               <Panel>
                 <Canvas IsHitTestVisible="False">
-                  <Border x:Name="PART_Flight"
+                  <ins:TemplateBorder x:Name="PART_Flight"
                           CornerRadius="{DynamicResource InsRSm}"
                           Background="{DynamicResource InsSegOnBg}"
                           BoxShadow="{DynamicResource InsSegOnShadow}"
@@ -32,7 +32,7 @@
                 </Canvas>
                 <ItemsPresenter x:Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
               </Panel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
       </ControlTheme>
@@ -60,7 +60,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border x:Name="PART_Outline"
+              <ins:TemplateBorder x:Name="PART_Outline"
                       Margin="-4"
                       BorderThickness="2"
                       CornerRadius="14"
@@ -96,7 +96,7 @@
             <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
           </Style>
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_Outline">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Outline">
           <Setter Property="IsVisible" Value="True" />
         </Style>
         <Style Selector="^:disabled">

@@ -111,28 +111,28 @@
             <!-- The press, lift and turn move PART_Root, not the button (a transform set in the template survives styles that animate every panel child); PART_Press carries only the quick-click dip, so the two add up. -->
             <Panel x:Name="PART_Press">
               <Panel x:Name="PART_Root" RenderTransformOrigin="50%,50%" RenderTransform="none">
-                <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
-                <Border x:Name="PART_FocusRing"
+                <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
+                <ins:TemplateBorder x:Name="PART_FocusRing"
                         CornerRadius="{TemplateBinding CornerRadius}"
                         BoxShadow="{DynamicResource InsFocusRing}"
                         Opacity="0" />
-                <Border x:Name="PART_Outline"
+                <ins:TemplateBorder x:Name="PART_Outline"
                         Margin="-4"
                         BorderThickness="2"
                         BorderBrush="{DynamicResource InsToneBrandSoft}"
                         CornerRadius="14"
                         IsVisible="False" />
-                <Border x:Name="PART_Face" CornerRadius="{TemplateBinding CornerRadius}" ClipToBounds="True">
+                <ins:TemplateBorder x:Name="PART_Face" CornerRadius="{TemplateBinding CornerRadius}" ClipToBounds="True">
                   <Panel>
                     <!-- Gradients are physical on the web, so only the fill stays LTR; the corners, the sweep and the content follow the button. -->
-                    <Border x:Name="PART_Fill" FlowDirection="LeftToRight" Background="{TemplateBinding Background}" />
-                    <Border x:Name="PART_Sweep" IsHitTestVisible="False" Background="{DynamicResource InsButtonSweepRest}" />
+                    <ins:TemplateBorder x:Name="PART_Fill" FlowDirection="LeftToRight" Background="{TemplateBinding Background}" />
+                    <ins:TemplateBorder x:Name="PART_Sweep" IsHitTestVisible="False" Background="{DynamicResource InsButtonSweepRest}" />
                     <Panel x:Name="PART_CrossHost" IsVisible="False" IsHitTestVisible="False">
                       <Grid x:Name="PART_Cross"
                             ColumnDefinitions="28*,44*,28*"
                             IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNull}}">
-                        <Border Grid.Column="1" Height="2" CornerRadius="2" Background="{TemplateBinding Foreground}" RenderTransform="rotate(45deg)" />
-                        <Border Grid.Column="1" Height="2" CornerRadius="2" Background="{TemplateBinding Foreground}" RenderTransform="rotate(-45deg)" />
+                        <ins:TemplateBorder Grid.Column="1" Height="2" CornerRadius="2" Background="{TemplateBinding Foreground}" RenderTransform="rotate(45deg)" />
+                        <ins:TemplateBorder Grid.Column="1" Height="2" CornerRadius="2" Background="{TemplateBinding Foreground}" RenderTransform="rotate(-45deg)" />
                       </Grid>
                     </Panel>
                     <ContentPresenter x:Name="PART_ContentPresenter"
@@ -145,8 +145,8 @@
                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
                   </Panel>
-                </Border>
-                <Border x:Name="PART_Border"
+                </ins:TemplateBorder>
+                <ins:TemplateBorder x:Name="PART_Border"
                         IsHitTestVisible="False"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -179,21 +179,21 @@
         <Style Selector="^.icon:pointerover:not(:disabled) /template/ ContentPresenter#PART_ContentPresenter">
           <Setter Property="RenderTransform" Value="scale(1.15)" />
         </Style>
-        <Style Selector="^ /template/ Border#PART_Shadow">
+        <Style Selector="^ /template/ :is(Border)#PART_Shadow">
           <Setter Property="Transitions">
             <Transitions>
               <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^ /template/ Border#PART_FocusRing">
+        <Style Selector="^ /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Transitions">
             <Transitions>
               <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^ /template/ Border#PART_Sweep">
+        <Style Selector="^ /template/ :is(Border)#PART_Sweep">
           <Setter Property="Transitions">
             <Transitions>
               <BrushTransition Property="Background" Duration="0:0:0.6" Easing="0.22,1,0.36,1" />
@@ -201,11 +201,11 @@
           </Setter>
         </Style>
 
-        <Style Selector="^:pointerover /template/ Border#PART_Sweep">
+        <Style Selector="^:pointerover /template/ :is(Border)#PART_Sweep">
           <Setter Property="Background" Value="{DynamicResource InsButtonSweepHover}" />
         </Style>
 
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
         </Style>
 
@@ -218,7 +218,7 @@
         <Style Selector="^:disabled">
           <Setter Property="Opacity" Value="0.5" />
           <Setter Property="Cursor" Value="No" />
-          <Style Selector="^ /template/ Border#PART_Sweep">
+          <Style Selector="^ /template/ :is(Border)#PART_Sweep">
             <Setter Property="IsVisible" Value="False" />
           </Style>
         </Style>
@@ -260,13 +260,13 @@
         <Style Selector="^.primary">
           <Setter Property="Background" Value="{DynamicResource InsButtonPrimaryFill}" />
           <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandMd}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
           </Style>
-          <Style Selector="^:pointerover:not(:disabled) /template/ Border#PART_Shadow, ^:focus-visible /template/ Border#PART_Shadow">
+          <Style Selector="^:pointerover:not(:disabled) /template/ :is(Border)#PART_Shadow, ^:focus-visible /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandLg}" />
           </Style>
         </Style>
@@ -274,31 +274,31 @@
         <!-- filled tones: the ink never changes, only the face -->
         <Style Selector="^.success, ^.danger, ^.warning, ^.info">
           <Setter Property="Foreground" Value="#FFFFFF" />
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
           </Style>
         </Style>
         <Style Selector="^.success">
           <Setter Property="Background" Value="{DynamicResource InsButtonSuccessFill}" />
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="0 8 24 0 #4722C55E" />
           </Style>
         </Style>
         <Style Selector="^.danger">
           <Setter Property="Background" Value="{DynamicResource InsButtonDangerFill}" />
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="0 8 24 0 #42EF4444" />
           </Style>
         </Style>
         <Style Selector="^.warning">
           <Setter Property="Background" Value="{DynamicResource InsButtonWarningFill}" />
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="0 8 24 0 #42F59E0B" />
           </Style>
         </Style>
         <Style Selector="^.info">
           <Setter Property="Background" Value="{DynamicResource InsButtonInfoFill}" />
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="0 8 24 0 #423B82F6" />
           </Style>
         </Style>
@@ -306,16 +306,16 @@
         <!-- the neutral and ghost sets share the control fill, the subtle drop and the dark sweep; a button with no variant class looks like secondary -->
         <Style Selector="^.secondary, ^.ghost, ^.ghost-danger, ^.ghost-success, ^.ghost-warning, ^.ghost-info, ^:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.close)">
           <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Sweep">
+          <Style Selector="^ /template/ :is(Border)#PART_Sweep">
             <Setter Property="Background" Value="{DynamicResource InsButtonSweepDarkRest}" />
           </Style>
-          <Style Selector="^:pointerover /template/ Border#PART_Sweep">
+          <Style Selector="^:pointerover /template/ :is(Border)#PART_Sweep">
             <Setter Property="Background" Value="{DynamicResource InsButtonSweepDarkHover}" />
           </Style>
         </Style>
@@ -393,7 +393,7 @@
           <Setter Property="FontWeight" Value="Bold" />
           <Setter Property="Padding" Value="0" />
           <Setter Property="MinHeight" Value="0" />
-          <Style Selector="^ /template/ Border#PART_Sweep">
+          <Style Selector="^ /template/ :is(Border)#PART_Sweep">
             <Setter Property="IsVisible" Value="False" />
           </Style>
           <Style Selector="^:pointerover:not(:disabled), ^:focus-visible">
@@ -433,13 +433,13 @@
               </Transitions>
             </Setter>
           </Style>
-          <Style Selector="^ /template/ Border#PART_Sweep">
+          <Style Selector="^ /template/ :is(Border)#PART_Sweep">
             <Setter Property="IsVisible" Value="False" />
           </Style>
-          <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+          <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
             <Setter Property="Opacity" Value="0" />
           </Style>
-          <Style Selector="^:focus-visible /template/ Border#PART_Outline">
+          <Style Selector="^:focus-visible /template/ :is(Border)#PART_Outline">
             <Setter Property="IsVisible" Value="True" />
           </Style>
           <Style Selector="^:pressed">
@@ -484,16 +484,16 @@
           <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
           <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Sweep">
+          <Style Selector="^ /template/ :is(Border)#PART_Sweep">
             <Setter Property="Background" Value="{DynamicResource InsButtonSweepDarkRest}" />
           </Style>
-          <Style Selector="^:pointerover /template/ Border#PART_Sweep">
+          <Style Selector="^:pointerover /template/ :is(Border)#PART_Sweep">
             <Setter Property="Background" Value="{DynamicResource InsButtonSweepDarkHover}" />
           </Style>
           <Style Selector="^:pointerover:not(:disabled), ^:focus-visible">
@@ -511,10 +511,10 @@
           <Setter Property="Background" Value="{DynamicResource InsButtonToggleOn}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsButtonToggleOnBorder}" />
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="none" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="BoxShadow" Value="{StaticResource InsButtonToggleOnShadow}" />
           </Style>
         </Style>
@@ -531,15 +531,15 @@
           <ControlTemplate>
             <Panel x:Name="PART_Press">
               <Panel x:Name="PART_Root" RenderTransformOrigin="50%,50%" RenderTransform="none">
-                <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
-                <Border x:Name="PART_FocusRing"
+                <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
+                <ins:TemplateBorder x:Name="PART_FocusRing"
                         CornerRadius="{TemplateBinding CornerRadius}"
                         BoxShadow="{DynamicResource InsFocusRing}"
                         Opacity="0" />
-                <Border x:Name="PART_Face" CornerRadius="{TemplateBinding CornerRadius}" ClipToBounds="True">
+                <ins:TemplateBorder x:Name="PART_Face" CornerRadius="{TemplateBinding CornerRadius}" ClipToBounds="True">
                   <Panel>
-                    <Border x:Name="PART_Fill" FlowDirection="LeftToRight" Background="{TemplateBinding Background}" />
-                    <Border x:Name="PART_Sweep" IsHitTestVisible="False" Background="{DynamicResource InsButtonSweepRest}" />
+                    <ins:TemplateBorder x:Name="PART_Fill" FlowDirection="LeftToRight" Background="{TemplateBinding Background}" />
+                    <ins:TemplateBorder x:Name="PART_Sweep" IsHitTestVisible="False" Background="{DynamicResource InsButtonSweepRest}" />
                     <DockPanel Margin="{TemplateBinding Padding}">
                       <Viewbox x:Name="PART_Chevron" DockPanel.Dock="Right" VerticalAlignment="Center" RenderTransform="none">
                         <Viewbox.Transitions>
@@ -564,8 +564,8 @@
                                         VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
                     </DockPanel>
                   </Panel>
-                </Border>
-                <Border x:Name="PART_Border"
+                </ins:TemplateBorder>
+                <ins:TemplateBorder x:Name="PART_Border"
                         IsHitTestVisible="False"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"

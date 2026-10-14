@@ -26,7 +26,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Name="PART_Face"
+            <ctl:TemplateBorder Name="PART_Face"
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
@@ -34,15 +34,15 @@
                     Padding="{TemplateBinding Padding}">
               <StackPanel Name="PART_Row" Orientation="Horizontal" Spacing="6">
                 <ctl:Icon Name="PART_Icon" Data="{StaticResource InsCountdownIcon}" StrokeThickness="2.2" VerticalAlignment="Center" />
-                <TextBlock Name="PART_Days" Text="{TemplateBinding DaysText}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,2,0,0" IsVisible="False" />
+                <ctl:TemplateText Name="PART_Days" Text="{TemplateBinding DaysText}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,2,0,0" IsVisible="False" />
                 <!-- The clock is its own left-to-right run, so 09:59 is never mirrored -->
-                <TextBlock Name="PART_Clock" Text="{TemplateBinding ClockText}" FlowDirection="LeftToRight" VerticalAlignment="Center"
+                <ctl:TemplateText Name="PART_Clock" Text="{TemplateBinding ClockText}" FlowDirection="LeftToRight" VerticalAlignment="Center"
                            FontFamily="{DynamicResource InsFontBodyEn}" FontFeatures="+tnum" />
               </StackPanel>
-            </Border>
+            </ctl:TemplateBorder>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^:days /template/ TextBlock#PART_Days"><Setter Property="IsVisible" Value="True" /></Style>
+        <Style Selector="^:days /template/ :is(TextBlock)#PART_Days"><Setter Property="IsVisible" Value="True" /></Style>
         <Style Selector="^:warn">
           <Setter Property="BorderBrush" Value="{DynamicResource InsToneWarnBd}" />
           <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />

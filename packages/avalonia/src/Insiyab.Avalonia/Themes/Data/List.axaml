@@ -16,7 +16,7 @@
         <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border x:Name="border"
+            <ins:TemplateBorder x:Name="border"
                     ClipToBounds="{TemplateBinding ClipToBounds}"
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
@@ -31,7 +31,7 @@
                                 ItemsPanel="{TemplateBinding ItemsPanel}"
                                 Margin="{TemplateBinding Padding}" />
               </ScrollViewer>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
       </ControlTheme>
@@ -51,12 +51,12 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border x:Name="PART_Back"
+              <ins:TemplateBorder x:Name="PART_Back"
                       Background="{TemplateBinding Background}"
                       CornerRadius="{TemplateBinding CornerRadius}"
                       Padding="{TemplateBinding Padding}">
                 <DockPanel HorizontalSpacing="12">
-                  <Border x:Name="PART_Chevron" DockPanel.Dock="Right" Width="9" Height="9" VerticalAlignment="Center"
+                  <ins:TemplateBorder x:Name="PART_Chevron" DockPanel.Dock="Right" Width="9" Height="9" VerticalAlignment="Center"
                           BorderThickness="0,2,2,0" BorderBrush="{DynamicResource InsText3}"
                           RenderTransform="rotate(45deg)" />
                   <ContentPresenter x:Name="PART_ContentPresenter"
@@ -65,42 +65,42 @@
                                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
                 </DockPanel>
-              </Border>
-              <Border x:Name="PART_Divider" Height="1" VerticalAlignment="Top" Background="{DynamicResource InsLine}" />
+              </ins:TemplateBorder>
+              <ins:TemplateBorder x:Name="PART_Divider" Height="1" VerticalAlignment="Top" Background="{DynamicResource InsLine}" />
             </Panel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^ /template/ Border#PART_Back">
+        <Style Selector="^ /template/ :is(Border)#PART_Back">
           <Setter Property="Transitions">
             <Transitions>
               <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^ /template/ Border#PART_Chevron">
+        <Style Selector="^ /template/ :is(Border)#PART_Chevron">
           <Setter Property="Transitions">
             <Transitions>
               <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^:nth-child(1) /template/ Border#PART_Divider">
+        <Style Selector="^:nth-child(1) /template/ :is(Border)#PART_Divider">
           <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:pointerover, ^:selected">
           <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
-          <Style Selector="^ /template/ Border#PART_Divider">
+          <Style Selector="^ /template/ :is(Border)#PART_Divider">
             <Setter Property="Opacity" Value="0" />
           </Style>
         </Style>
-        <Style Selector="^.after-hot /template/ Border#PART_Divider">
+        <Style Selector="^.after-hot /template/ :is(Border)#PART_Divider">
           <Setter Property="Opacity" Value="0" />
         </Style>
         <!-- The chevron nudges toward where it points -->
-        <Style Selector="^:pointerover /template/ Border#PART_Chevron">
+        <Style Selector="^:pointerover /template/ :is(Border)#PART_Chevron">
           <Setter Property="RenderTransform" Value="translateX(2px) rotate(45deg)" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_Back">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Back">
           <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
         </Style>
         <Style Selector="^:disabled">
@@ -130,10 +130,10 @@
     <Setter Property="Focusable" Value="False" />
     <Setter Property="Background" Value="Transparent" />
   </Style>
-  <Style Selector="ListBox.static ListBoxItem /template/ Border#PART_Chevron">
+  <Style Selector="ListBox.static ListBoxItem /template/ :is(Border)#PART_Chevron">
     <Setter Property="IsVisible" Value="False" />
   </Style>
-  <Style Selector="ListBox.static ListBoxItem /template/ Border#PART_Divider">
+  <Style Selector="ListBox.static ListBoxItem /template/ :is(Border)#PART_Divider">
     <Setter Property="Opacity" Value="1" />
   </Style>
 
