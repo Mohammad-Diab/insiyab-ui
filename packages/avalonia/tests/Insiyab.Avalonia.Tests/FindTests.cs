@@ -66,7 +66,8 @@ public class FindTests
         Assert.True(bar.IsVisible);
         Assert.Equal(3, bar.MatchCount);
         Assert.Equal(1, bar.CurrentMatch);
-        var count = Part<TextBlock>(bar, "PART_Count");
+        // The bar's own count, not the counter of the text box inside it, which shares the part name.
+        var count = bar.GetVisualDescendants().OfType<TextBlock>().First(t => t.Name == "PART_Count" && t.TemplatedParent == bar);
         Assert.Equal("1 من 3", count.Text);
         bar.Step(1);
         Assert.Equal(2, bar.CurrentMatch);

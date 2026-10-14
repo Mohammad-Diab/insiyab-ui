@@ -53,9 +53,10 @@ public class DocumentTabs : TabControl
     public DocumentTabs()
     {
         AddHandler(KeyDownEvent, OnKeys);
+        AddHandler(KeyDownEvent, OnMoveKeys, RoutingStrategies.Tunnel);
         SelectionChanged += (_, e) =>
         {
-            if (e.Source == this) Dispatcher.UIThread.Post(() => ContainerFromIndex(SelectedIndex)?.BringIntoView(), DispatcherPriority.Loaded);
+            if (e.Source == this) Dispatcher.UIThread.Post(Reveal, DispatcherPriority.Loaded);
         };
     }
 
@@ -108,6 +109,15 @@ public class DocumentTabs : TabControl
         if (_forward is not null) _forward.IsEnabled = _scroll.Offset.X < room - 0.5;
     }
 
+    // The selected tab scrolled into view; the first and the last take the strip to its end, so no arrow is left with a few pixels to go.
+    private void Reveal()
+    {
+        if (SelectedIndex < 0) return;
+        if (_scroll is not null && (SelectedIndex == 0 || SelectedIndex == ItemCount - 1))
+            _scroll.Offset = _scroll.Offset.WithX(SelectedIndex == 0 ? 0 : Math.Max(0, _scroll.Extent.Width - _scroll.Viewport.Width));
+        else ContainerFromIndex(SelectedIndex)?.BringIntoView();
+    }
+
     private void OnBack(object? sender, RoutedEventArgs e) => ScrollBy(-1);
 
     private void OnForward(object? sender, RoutedEventArgs e) => ScrollBy(1);
@@ -137,15 +147,18 @@ public class DocumentTabs : TabControl
             e.Handled = true;
             Close(IndexFromContainer(tab));
         }
-        else if (e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift) && e.Key is Key.PageUp or Key.PageDown && SelectedIndex >= 0)
-        {
-            e.Handled = true;
-            var to = SelectedIndex + (e.Key == Key.PageDown ? 1 : -1);
-            if (to < 0 || to >= ItemCount) return;
-            var focused = IsKeyboardFocusWithin;
-            Move(SelectedIndex, to);
-            if (focused) ContainerFromIndex(SelectedIndex)?.Focus(NavigationMethod.Tab);
-        }
+    }
+
+    // Ctrl+Shift+PageUp/PageDown moves the selected tab; it is taken on the way down, before the strip's scroller reads PageDown as a page of scrolling.
+    private void OnMoveKeys(object? sender, KeyEventArgs e)
+    {
+        if (e.Handled || e.KeyModifiers != (KeyModifiers.Control | KeyModifiers.Shift) || e.Key is not (Key.PageUp or Key.PageDown) || SelectedIndex < 0) return;
+        e.Handled = true;
+        var to = SelectedIndex + (e.Key == Key.PageDown ? 1 : -1);
+        if (to < 0 || to >= ItemCount) return;
+        var focused = IsKeyboardFocusWithin;
+        Move(SelectedIndex, to);
+        if (focused) ContainerFromIndex(SelectedIndex)?.Focus(NavigationMethod.Tab);
     }
 
     /// <summary>Asks to close the tab at <paramref name="index"/>, as its close button does.</summary>
