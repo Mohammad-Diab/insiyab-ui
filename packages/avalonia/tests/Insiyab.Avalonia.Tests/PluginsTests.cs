@@ -92,6 +92,162 @@ public class PluginsTests
         Assert.Equal(["123456"], done);
     }
 
+    private static OtpCell CellOf(OtpBox otp, int i) => otp.GetVisualDescendants().OfType<OtpCell>().ElementAt(i);
+
+    private static (int Start, int End) Selected(OtpBox otp) => (Math.Min(otp.SelectionStart, otp.SelectionEnd), Math.Max(otp.SelectionStart, otp.SelectionEnd));
+
+    private static (OtpBox Otp, Window Window) FilledOtp(string code)
+    {
+        var otp = new OtpBox();
+        var window = Show(Page(otp), FlowDirection.RightToLeft);
+        otp.SetCode(code);
+        otp.Focus();
+        Settle(150);
+        return (otp, window);
+    }
+
+    [AvaloniaFact]
+    public void Otp_clicking_a_filled_cell_selects_that_one_character()
+    {
+        var (otp, window) = FilledOtp("1234");
+        Click(CellOf(otp, 2), window);
+        Assert.Equal((2, 3), Selected(otp));
+        Assert.Contains(":active", CellOf(otp, 2).Classes);
+        Assert.DoesNotContain(":active", CellOf(otp, 3).Classes);
+        Click(CellOf(otp, 0), window);
+        Assert.Equal((0, 1), Selected(otp));
+        Assert.Contains(":active", CellOf(otp, 0).Classes);
+        Assert.DoesNotContain(":active", CellOf(otp, 2).Classes);
+    }
+
+    [AvaloniaFact]
+    public void Otp_clicking_an_empty_cell_puts_the_caret_at_the_end_with_no_gap()
+    {
+        var (otp, window) = FilledOtp("12");
+        Click(CellOf(otp, 1), window);
+        Assert.Equal((1, 2), Selected(otp));
+        Click(CellOf(otp, 4), window);
+        Assert.Equal((2, 2), Selected(otp));
+        Assert.Equal(2, otp.CaretIndex);
+        Type(window, "7");
+        Assert.Equal("127", otp.Text);
+    }
+
+    [AvaloniaFact]
+    public void Otp_typing_over_a_cell_replaces_it_and_moves_to_the_next_one()
+    {
+        var (otp, window) = FilledOtp("123456");
+        Click(CellOf(otp, 2), window);
+        Type(window, "9");
+        Assert.Equal("129456", otp.Text);
+        Assert.Equal((3, 4), Selected(otp));
+        Type(window, "8");
+        Assert.Equal("129856", otp.Text);
+        Assert.Equal((4, 5), Selected(otp));
+        Click(CellOf(otp, 5), window);
+        Type(window, "0");
+        Assert.Equal("129850", otp.Text);
+        Assert.Equal((6, 6), Selected(otp));
+        Type(window, "x");
+        Assert.Equal("129850", otp.Text);
+        Click(CellOf(otp, 1), window);
+        Type(window, "x");
+        Assert.Equal("129850", otp.Text);
+        Assert.Equal((1, 2), Selected(otp));
+    }
+
+    [AvaloniaFact]
+    public void Otp_replacing_a_digit_in_a_full_code_completes_it_again()
+    {
+        var otp = new OtpBox();
+        var done = new List<string>();
+        otp.Completed += (_, e) => done.Add(e.Value);
+        var window = Show(Page(otp), FlowDirection.RightToLeft);
+        otp.Focus();
+        Settle(150);
+        foreach (var d in "123456") Type(window, d.ToString());
+        Assert.Equal(["123456"], done);
+        Click(CellOf(otp, 1), window);
+        Type(window, "9");
+        Assert.Equal("193456", otp.Text);
+        Assert.Equal(["123456", "193456"], done);
+        Assert.True(otp.IsComplete);
+        Assert.Equal((2, 3), Selected(otp));
+    }
+
+    [AvaloniaFact]
+    public void Otp_backspace_removes_the_selected_character_and_shifts_the_rest_back()
+    {
+        var (otp, window) = FilledOtp("123456");
+        Click(CellOf(otp, 2), window);
+        Press(window, Key.Back);
+        Assert.Equal("12456", otp.Text);
+        Assert.Equal((2, 3), Selected(otp));
+        Press(window, Key.Back);
+        Assert.Equal("1256", otp.Text);
+        Assert.Equal((2, 3), Selected(otp));
+        Press(window, Key.Right);
+        Press(window, Key.Back);
+        Assert.Equal("125", otp.Text);
+        Assert.Equal((3, 3), Selected(otp));
+        Press(window, Key.Back);
+        Assert.Equal("12", otp.Text);
+        Assert.Equal((2, 2), Selected(otp));
+    }
+
+    [AvaloniaFact]
+    public void Otp_delete_removes_the_selected_character()
+    {
+        var (otp, window) = FilledOtp("123456");
+        Click(CellOf(otp, 1), window);
+        Press(window, Key.Delete);
+        Assert.Equal("13456", otp.Text);
+        Assert.Equal((1, 2), Selected(otp));
+    }
+
+    [AvaloniaFact]
+    public void Otp_arrows_home_and_end_move_between_cells()
+    {
+        var (otp, window) = FilledOtp("1234");
+        Click(CellOf(otp, 1), window);
+        Press(window, Key.Left);
+        Assert.Equal((0, 1), Selected(otp));
+        Press(window, Key.Left);
+        Assert.Equal((0, 1), Selected(otp));
+        Press(window, Key.Right);
+        Assert.Equal((1, 2), Selected(otp));
+        Press(window, Key.Down);
+        Press(window, Key.PageUp);
+        Assert.Equal((1, 2), Selected(otp));
+        Press(window, Key.Right);
+        Press(window, Key.Right);
+        Assert.Equal((3, 4), Selected(otp));
+        Press(window, Key.Right);
+        Assert.Equal((4, 4), Selected(otp));
+        Press(window, Key.Right);
+        Assert.Equal((4, 4), Selected(otp));
+        Press(window, Key.Left);
+        Assert.Equal((3, 4), Selected(otp));
+        Press(window, Key.Home);
+        Assert.Equal((0, 1), Selected(otp));
+        Press(window, Key.End);
+        Assert.Equal((4, 4), Selected(otp));
+        Press(window, Key.Left, RawInputModifiers.Shift);
+        Assert.Equal((3, 4), Selected(otp));
+        Assert.Equal("1234", otp.Text);
+    }
+
+    [AvaloniaFact]
+    public void Otp_select_all_lets_typing_replace_the_whole_code()
+    {
+        var (otp, window) = FilledOtp("1234");
+        Press(window, Key.A, RawInputModifiers.Control);
+        Assert.Equal((0, 4), Selected(otp));
+        Type(window, "9");
+        Assert.Equal("9", otp.Text);
+        Assert.Equal((1, 1), Selected(otp));
+    }
+
     [AvaloniaFact]
     public void Otp_short_paste_is_added_at_the_end()
     {
