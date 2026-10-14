@@ -31,6 +31,8 @@ public class TableCell : ContentControl
     static TableCell()
     {
         FocusableProperty.OverrideDefaultValue<TableCell>(false);
+        // A cell's text is a TemplateText, not a TextBlock: a big table has thousands of them, and each TextBlock would carry every app-wide TextBlock style.
+        ContentTemplateProperty.OverrideDefaultValue<TableCell>(TemplateText.Content);
     }
 
     /// <summary>What the column sorts this cell by, when its text is not its value (a date in words): the web's <c>data-sort-value</c>.</summary>

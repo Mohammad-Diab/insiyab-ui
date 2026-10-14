@@ -9,7 +9,7 @@ namespace Insiyab.Avalonia.Controls;
 
 /// <summary>One row of a <see cref="Table"/>: the web's <c>&lt;tr&gt;</c>. <see cref="IsSelected"/> is its <c>aria-selected</c>, <c>aria-current</c> and <c>.is-selected</c>.</summary>
 [TemplatePart("PART_Cells", typeof(ColumnsPanel))]
-[PseudoClasses(":selected", ":in-panel", ":current")]
+[PseudoClasses(":selected", ":in-panel", ":current", ":first", ":last", ":stripe")]
 public class TableRow : TemplatedControl
 {
     public static readonly StyledProperty<bool> IsSelectedProperty =
@@ -55,6 +55,14 @@ public class TableRow : TemplatedControl
     internal void SetInPanel(bool on) => PseudoClasses.Set(":in-panel", on);
 
     internal void SetCurrent(bool on) => PseudoClasses.Set(":current", on);
+
+    // The row's place among those shown: the table sets it, as :nth-child in a control theme would hold a row through its parent long after the row has gone.
+    internal void SetPlace(int index, int count)
+    {
+        PseudoClasses.Set(":first", index == 0);
+        PseudoClasses.Set(":last", index == count - 1);
+        PseudoClasses.Set(":stripe", index % 2 == 1);
+    }
 
     internal void Fill()
     {

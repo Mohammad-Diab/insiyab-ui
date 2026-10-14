@@ -44,21 +44,21 @@
                           VerticalScrollBarVisibility="Disabled">
               <Panel>
               <DockPanel MinWidth="{TemplateBinding TableMinWidth}">
-                <Border x:Name="PART_Head" DockPanel.Dock="Top" Margin="0,0,0,8" ZIndex="2" CornerRadius="18">
-                  <Border x:Name="PART_Bar" CornerRadius="18" BorderThickness="1" MinHeight="38"
+                <ins:TemplateBorder x:Name="PART_Head" DockPanel.Dock="Top" Margin="0,0,0,8" ZIndex="2" CornerRadius="18">
+                  <ins:TemplateBorder x:Name="PART_Bar" CornerRadius="18" BorderThickness="1" MinHeight="38"
                           BorderBrush="{DynamicResource InsTableRule}">
-                    <Border.Background>
+                    <ins:TemplateBorder.Background>
                       <MultiBinding Converter="{x:Static ins:DataBrushes.Vertical}" ConverterParameter="0.20 0.12">
                         <DynamicResource ResourceKey="InsPrimaryRgbColor" />
                       </MultiBinding>
-                    </Border.Background>
+                    </ins:TemplateBorder.Background>
                     <ins:ColumnsPanel x:Name="PART_HeadCells" />
-                  </Border>
-                </Border>
-                <Border x:Name="PART_Card" CornerRadius="{DynamicResource InsRLg}" BorderThickness="1"
+                  </ins:TemplateBorder>
+                </ins:TemplateBorder>
+                <ins:TemplateBorder x:Name="PART_Card" CornerRadius="{DynamicResource InsRLg}" BorderThickness="1"
                         BorderBrush="{DynamicResource InsRim}" ClipToBounds="True">
                   <Panel>
-                    <StackPanel x:Name="PART_Rows" />
+                    <ins:TableRowsPanel x:Name="PART_Rows" />
                     <!-- The selected row's marker in flight between rows -->
                     <Canvas x:Name="PART_MarkerLayer" IsHitTestVisible="False" />
                     <ContentPresenter x:Name="PART_Empty" IsVisible="False" Padding="24,44"
@@ -66,10 +66,10 @@
                                       HorizontalContentAlignment="Center"
                                       Content="{TemplateBinding Empty}" />
                   </Panel>
-                </Border>
+                </ins:TemplateBorder>
               </DockPanel>
               <!-- The line that follows a column edge while it is dragged -->
-              <Border x:Name="PART_Guide" Width="2" CornerRadius="1" HorizontalAlignment="Left" ZIndex="3"
+              <ins:TemplateBorder x:Name="PART_Guide" Width="2" CornerRadius="1" HorizontalAlignment="Left" ZIndex="3"
                       IsVisible="False" IsHitTestVisible="False" Background="{DynamicResource InsPrimary}" Opacity="0.7" />
               </Panel>
             </ScrollViewer>
@@ -77,7 +77,7 @@
         </Setter>
 
         <Style Selector="^:empty">
-          <Style Selector="^ /template/ Border#PART_Head">
+          <Style Selector="^ /template/ :is(Border)#PART_Head">
             <Setter Property="IsVisible" Value="False" />
           </Style>
           <Style Selector="^ /template/ ContentPresenter#PART_Empty">
@@ -86,17 +86,17 @@
         </Style>
 
         <!-- In a panel the panel is the card: the rows lose their rim -->
-        <Style Selector="^:in-panel /template/ Border#PART_Card">
+        <Style Selector="^:in-panel /template/ :is(Border)#PART_Card">
           <Setter Property="BorderThickness" Value="0" />
         </Style>
         <Style Selector="^:in-panel /template/ ContentPresenter#PART_Empty">
           <Setter Property="Background" Value="{DynamicResource InsRowInner}" />
         </Style>
         <!-- In a flush panel body the corners are the panel's less the 10px inset and its rim -->
-        <Style Selector="^:flush /template/ Border#PART_Card">
+        <Style Selector="^:flush /template/ :is(Border)#PART_Card">
           <Setter Property="CornerRadius" Value="11" />
         </Style>
-        <Style Selector="^:flush /template/ Border#PART_Head, ^:flush /template/ Border#PART_Bar">
+        <Style Selector="^:flush /template/ :is(Border)#PART_Head, ^:flush /template/ :is(Border)#PART_Bar">
           <Setter Property="CornerRadius" Value="11" />
         </Style>
 
@@ -107,7 +107,7 @@
             <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
           </Style>
         </Style>
-        <Style Selector="^.sticky /template/ Border#PART_Head, ^.pin /template/ Border#PART_Head">
+        <Style Selector="^.sticky /template/ :is(Border)#PART_Head, ^.pin /template/ :is(Border)#PART_Head">
           <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
         </Style>
       </ControlTheme>
@@ -123,29 +123,29 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border x:Name="PART_Shade" Width="10" Margin="0,0,-10,0" HorizontalAlignment="Right" IsHitTestVisible="False"
+              <ins:TemplateBorder x:Name="PART_Shade" Width="10" Margin="0,0,-10,0" HorizontalAlignment="Right" IsHitTestVisible="False"
                       Background="{DynamicResource InsTableFrozenShade}" IsVisible="False" />
               <Panel x:Name="PART_Clip" ClipToBounds="True">
-                <Border x:Name="PART_Fill" CornerRadius="17,0,0,17" Background="{TemplateBinding Background}" />
-                <Border x:Name="PART_Back" CornerRadius="17,0,0,17" />
+                <ins:TemplateBorder x:Name="PART_Fill" CornerRadius="17,0,0,17" Background="{TemplateBinding Background}" />
+                <ins:TemplateBorder x:Name="PART_Back" CornerRadius="17,0,0,17" />
                 <ContentPresenter x:Name="PART_ContentPresenter"
                                   Padding="{TemplateBinding Padding}" TextBlock.TextTrimming="CharacterEllipsis"
                                   Content="{TemplateBinding Content}"
                                   ContentTemplate="{TemplateBinding ContentTemplate}"
                                   HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                   VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                <Border x:Name="PART_Grip" Width="10" HorizontalAlignment="Right" Background="Transparent" Cursor="SizeWestEast" IsVisible="False">
-                  <Border x:Name="PART_GripLine" Width="1" Height="18" CornerRadius="1.5" HorizontalAlignment="Right" VerticalAlignment="Center"
+                <ins:TemplateBorder x:Name="PART_Grip" Width="10" HorizontalAlignment="Right" Background="Transparent" Cursor="SizeWestEast" IsVisible="False">
+                  <ins:TemplateBorder x:Name="PART_GripLine" Width="1" Height="18" CornerRadius="1.5" HorizontalAlignment="Right" VerticalAlignment="Center"
                           Background="{DynamicResource InsTableGrip}">
-                    <Border.Transitions>
+                    <ins:TemplateBorder.Transitions>
                       <Transitions>
                         <DoubleTransition Property="Width" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
                         <DoubleTransition Property="Height" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
                         <BrushTransition Property="Background" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
                       </Transitions>
-                    </Border.Transitions>
-                  </Border>
-                </Border>
+                    </ins:TemplateBorder.Transitions>
+                  </ins:TemplateBorder>
+                </ins:TemplateBorder>
               </Panel>
             </Panel>
           </ControlTemplate>
@@ -160,35 +160,35 @@
           <Setter Property="FontWeight" Value="SemiBold" />
           <Setter Property="TextElement.FontFeatures" Value="+tnum" />
         </Style>
-        <Style Selector="^:resizable /template/ Border#PART_Grip">
+        <Style Selector="^:resizable /template/ :is(Border)#PART_Grip">
           <Setter Property="IsVisible" Value="True" />
         </Style>
         <!-- Every resizable edge shows a divider at rest; under the pointer or while dragged it becomes a brand bar -->
-        <Style Selector="^ /template/ Border#PART_Grip:pointerover > Border#PART_GripLine, ^:resizing /template/ Border#PART_GripLine">
+        <Style Selector="^ /template/ :is(Border)#PART_Grip:pointerover > :is(Border)#PART_GripLine, ^:resizing /template/ :is(Border)#PART_GripLine">
           <Setter Property="Width" Value="3" />
           <Setter Property="Height" Value="24" />
           <Setter Property="Background" Value="{DynamicResource InsPrimary}" />
         </Style>
-        <Style Selector="^:grip-flip /template/ Border#PART_Grip">
+        <Style Selector="^:grip-flip /template/ :is(Border)#PART_Grip">
           <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
-        <Style Selector="^:grip-flip /template/ Border#PART_GripLine">
+        <Style Selector="^:grip-flip /template/ :is(Border)#PART_GripLine">
           <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
         <!-- The last frozen heading casts its shade over the headings scrolling under it -->
         <Style Selector="^:pin-edge">
           <Setter Property="ClipToBounds" Value="False" />
-          <Style Selector="^ /template/ Border#PART_Shade">
+          <Style Selector="^ /template/ :is(Border)#PART_Shade">
             <Setter Property="IsVisible" Value="True" />
           </Style>
         </Style>
-        <Style Selector="^:pin-edge:pin-flip /template/ Border#PART_Shade">
+        <Style Selector="^:pin-edge:pin-flip /template/ :is(Border)#PART_Shade">
           <Setter Property="HorizontalAlignment" Value="Left" />
           <Setter Property="Margin" Value="-10,0,0,0" />
           <Setter Property="RenderTransform" Value="scaleX(-1)" />
         </Style>
         <!-- The pinned heading keeps the bar's tint over an opaque fill, so the headings sliding under it do not show -->
-        <Style Selector="^:pinned /template/ Border#PART_Back">
+        <Style Selector="^:pinned /template/ :is(Border)#PART_Back">
           <Setter Property="Background">
             <MultiBinding Converter="{x:Static ins:DataBrushes.Vertical}" ConverterParameter="0.20 0.12">
               <DynamicResource ResourceKey="InsPrimaryRgbColor" />
@@ -212,14 +212,14 @@
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border x:Name="PART_Back" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}"
+            <ins:TemplateBorder x:Name="PART_Back" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}"
                     Padding="{TemplateBinding Padding}">
               <StackPanel Orientation="Horizontal" Spacing="6">
                 <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}" VerticalAlignment="Center" />
                 <ins:Icon x:Name="PART_Arrow" Size="14" StrokeThickness="2.5" Opacity="0.4" VerticalAlignment="Center"
                           Data="{StaticResource InsTableSortBoth}" />
               </StackPanel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Setter Property="Transitions">
@@ -230,7 +230,7 @@
         <Style Selector="^:pointerover">
           <Setter Property="Background" Value="{DynamicResource InsTableSortHover}" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_Back">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Back">
           <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
         </Style>
         <Style Selector="^:ascending /template/ ins|Icon#PART_Arrow">
@@ -249,27 +249,27 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border x:Name="PART_Fill" Background="{TemplateBinding Background}" />
-              <Border x:Name="PART_Tint" />
+              <ins:TemplateBorder x:Name="PART_Fill" Background="{TemplateBinding Background}" />
+              <ins:TemplateBorder x:Name="PART_Tint" />
               <DockPanel>
-                <Border x:Name="PART_Line" DockPanel.Dock="Bottom" Height="1" Background="{DynamicResource InsLineGlass}" />
+                <ins:TemplateBorder x:Name="PART_Line" DockPanel.Dock="Bottom" Height="1" Background="{DynamicResource InsLineGlass}" />
                 <ins:ColumnsPanel x:Name="PART_Cells" />
               </DockPanel>
-              <Border x:Name="PART_Ring" BorderThickness="2" BorderBrush="{DynamicResource InsTableEditRing}" Opacity="0" IsHitTestVisible="False" />
-              <Border x:Name="PART_Marker" Width="3" HorizontalAlignment="Left" Margin="0,8"
+              <ins:TemplateBorder x:Name="PART_Ring" BorderThickness="2" BorderBrush="{DynamicResource InsTableEditRing}" Opacity="0" IsHitTestVisible="False" />
+              <ins:TemplateBorder x:Name="PART_Marker" Width="3" HorizontalAlignment="Left" Margin="0,8"
                       CornerRadius="{DynamicResource InsRPill}" Background="{DynamicResource InsPrimaryMid}"
                       RenderTransform="scaleY(0)" />
             </Panel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^ /template/ Border#PART_Fill">
+        <Style Selector="^ /template/ :is(Border)#PART_Fill">
           <Setter Property="Transitions">
             <Transitions>
               <BrushTransition Property="Background" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^ /template/ Border#PART_Marker">
+        <Style Selector="^ /template/ :is(Border)#PART_Marker">
           <Setter Property="Transitions">
             <Transitions>
               <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -279,51 +279,51 @@
         <Style Selector="^:in-panel">
           <Setter Property="Background" Value="{DynamicResource InsRowInner}" />
         </Style>
-        <Style Selector="^:nth-child(2n) /template/ Border#PART_Tint">
+        <Style Selector="^:stripe /template/ :is(Border)#PART_Tint">
           <Setter Property="Background" Value="{DynamicResource InsZebra}" />
         </Style>
-        <Style Selector="^:nth-last-child(1) /template/ Border#PART_Line">
+        <Style Selector="^:last /template/ :is(Border)#PART_Line">
           <Setter Property="IsVisible" Value="False" />
         </Style>
         <!-- The keyboard ring follows the card's rounded corners on the first and last rows: the card's 22px less its 1px rim -->
-        <Style Selector="^:nth-child(1) /template/ Border#PART_Ring">
+        <Style Selector="^:first /template/ :is(Border)#PART_Ring">
           <Setter Property="CornerRadius" Value="21,21,0,0" />
         </Style>
-        <Style Selector="^:nth-last-child(1) /template/ Border#PART_Ring">
+        <Style Selector="^:last /template/ :is(Border)#PART_Ring">
           <Setter Property="CornerRadius" Value="0,0,21,21" />
         </Style>
-        <Style Selector="^:nth-child(1):nth-last-child(1) /template/ Border#PART_Ring">
+        <Style Selector="^:first:last /template/ :is(Border)#PART_Ring">
           <Setter Property="CornerRadius" Value="21" />
         </Style>
-        <Style Selector="^:in-panel:nth-child(1) /template/ Border#PART_Ring">
+        <Style Selector="^:in-panel:first /template/ :is(Border)#PART_Ring">
           <Setter Property="CornerRadius" Value="22,22,0,0" />
         </Style>
-        <Style Selector="^:in-panel:nth-last-child(1) /template/ Border#PART_Ring">
+        <Style Selector="^:in-panel:last /template/ :is(Border)#PART_Ring">
           <Setter Property="CornerRadius" Value="0,0,22,22" />
         </Style>
-        <Style Selector="^:in-panel:nth-child(1):nth-last-child(1) /template/ Border#PART_Ring">
+        <Style Selector="^:in-panel:first:last /template/ :is(Border)#PART_Ring">
           <Setter Property="CornerRadius" Value="22" />
         </Style>
-        <Style Selector="^:in-panel:nth-last-child(1) /template/ Border#PART_Line">
+        <Style Selector="^:in-panel:last /template/ :is(Border)#PART_Line">
           <Setter Property="IsVisible" Value="False" />
         </Style>
         <!-- Hover is a state and outranks the stripe -->
         <Style Selector="^:pointerover">
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Tint">
+          <Style Selector="^ /template/ :is(Border)#PART_Tint">
             <Setter Property="Background" Value="Transparent" />
           </Style>
         </Style>
         <Style Selector="^:selected">
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="Background" Value="{DynamicResource InsSurface}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Tint">
+          <Style Selector="^ /template/ :is(Border)#PART_Tint">
             <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Marker">
+          <Style Selector="^ /template/ :is(Border)#PART_Marker">
             <Setter Property="RenderTransform" Value="scaleY(1)" />
           </Style>
         </Style>
@@ -339,11 +339,11 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border x:Name="PART_Shade" Width="10" Margin="0,0,-10,0" HorizontalAlignment="Right" IsHitTestVisible="False"
+              <ins:TemplateBorder x:Name="PART_Shade" Width="10" Margin="0,0,-10,0" HorizontalAlignment="Right" IsHitTestVisible="False"
                       Background="{DynamicResource InsTableFrozenShade}" IsVisible="False" />
               <Panel x:Name="PART_Clip" ClipToBounds="True">
-                <Border x:Name="PART_Back" Background="{TemplateBinding Background}" />
-                <Border x:Name="PART_Focus" BorderThickness="2" BorderBrush="{DynamicResource InsTableEditRing}" Opacity="0" />
+                <ins:TemplateBorder x:Name="PART_Back" Background="{TemplateBinding Background}" />
+                <ins:TemplateBorder x:Name="PART_Focus" BorderThickness="2" BorderBrush="{DynamicResource InsTableEditRing}" Opacity="0" />
                 <DockPanel x:Name="PART_Show" LastChildFill="True"
                            Margin="{TemplateBinding Padding}"
                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -386,21 +386,21 @@
         <Style Selector="^:editing /template/ DockPanel#PART_Show">
           <Setter Property="Opacity" Value="0" />
         </Style>
-        <Style Selector="^:editing /template/ Border#PART_Focus">
+        <Style Selector="^:editing /template/ :is(Border)#PART_Focus">
           <Setter Property="Opacity" Value="0" />
         </Style>
         <!-- The pinned column is opaque enough that the cells sliding under it do not show through -->
-        <Style Selector="^:pinned /template/ Border#PART_Back">
+        <Style Selector="^:pinned /template/ :is(Border)#PART_Back">
           <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
         </Style>
         <!-- The last frozen cell casts its shade over the cells scrolling under it -->
         <Style Selector="^:pin-edge">
           <Setter Property="ClipToBounds" Value="False" />
-          <Style Selector="^ /template/ Border#PART_Shade">
+          <Style Selector="^ /template/ :is(Border)#PART_Shade">
             <Setter Property="IsVisible" Value="True" />
           </Style>
         </Style>
-        <Style Selector="^:pin-edge:pin-flip /template/ Border#PART_Shade">
+        <Style Selector="^:pin-edge:pin-flip /template/ :is(Border)#PART_Shade">
           <Setter Property="HorizontalAlignment" Value="Left" />
           <Setter Property="Margin" Value="-10,0,0,0" />
           <Setter Property="RenderTransform" Value="scaleX(-1)" />
@@ -419,23 +419,23 @@
         <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border x:Name="PART_Back" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+            <ins:TemplateBorder x:Name="PART_Back" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}"
                     Padding="{TemplateBinding Padding}">
-              <Border.BoxShadow>
+              <ins:TemplateBorder.BoxShadow>
                 <MultiBinding Converter="{x:Static ins:PanelShadows.Join}">
                   <DynamicResource ResourceKey="InsShLg" />
                   <DynamicResource ResourceKey="InsBevel" />
                 </MultiBinding>
-              </Border.BoxShadow>
+              </ins:TemplateBorder.BoxShadow>
               <DockPanel>
-                <TextBlock x:Name="PART_Count" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0,0,8,0"
+                <ins:TemplateText x:Name="PART_Count" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0,0,8,0"
                            FontSize="{DynamicResource InsFsMd}" FontWeight="Bold" Foreground="{DynamicResource InsBulkbarInk}"
                            Text="{TemplateBinding CountText}" />
                 <ContentPresenter x:Name="PART_ContentPresenter" HorizontalAlignment="Right" VerticalAlignment="Center"
                                   Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
               </DockPanel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
       </ControlTheme>
@@ -453,24 +453,24 @@
     <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
     <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />
   </Style>
-  <Style Selector="ins|Table.moving ins|TableRow /template/ Border#PART_Marker">
+  <Style Selector="ins|Table.moving ins|TableRow /template/ :is(Border)#PART_Marker">
     <Setter Property="Opacity" Value="0" />
   </Style>
 
   <!-- The keyboard's place: the ring on the current row once the keyboard moves it (a click shows the tint and the marker only), or on the current cell when cells can be edited -->
-  <Style Selector="ins|Table:focus:keyboard:not(:cell-cursor) ins|TableRow:current /template/ Border#PART_Ring">
+  <Style Selector="ins|Table:focus:keyboard:not(:cell-cursor) ins|TableRow:current /template/ :is(Border)#PART_Ring">
     <Setter Property="Opacity" Value="1" />
   </Style>
-  <Style Selector="ins|Table:flush ins|TableRow:nth-child(1) /template/ Border#PART_Ring">
+  <Style Selector="ins|Table:flush ins|TableRow:first /template/ :is(Border)#PART_Ring">
     <Setter Property="CornerRadius" Value="11,11,0,0" />
   </Style>
-  <Style Selector="ins|Table:flush ins|TableRow:nth-last-child(1) /template/ Border#PART_Ring">
+  <Style Selector="ins|Table:flush ins|TableRow:last /template/ :is(Border)#PART_Ring">
     <Setter Property="CornerRadius" Value="0,0,11,11" />
   </Style>
-  <Style Selector="ins|Table:flush ins|TableRow:nth-child(1):nth-last-child(1) /template/ Border#PART_Ring">
+  <Style Selector="ins|Table:flush ins|TableRow:first:last /template/ :is(Border)#PART_Ring">
     <Setter Property="CornerRadius" Value="11" />
   </Style>
-  <Style Selector="ins|Table:focus ins|TableCell:current /template/ Border#PART_Focus">
+  <Style Selector="ins|Table:focus ins|TableCell:current /template/ :is(Border)#PART_Focus">
     <Setter Property="Opacity" Value="1" />
   </Style>
   <Style Selector="ins|Table:focus ins|TableCell:current:editable /template/ ins|Icon#PART_Pencil">

@@ -85,6 +85,7 @@ public partial class Table : TemplatedControl
     private bool _shift;
     private bool _inPanel;
     private int _pinned;
+    private double _pinX = double.NaN;
 
     static Table()
     {
@@ -93,7 +94,7 @@ public partial class Table : TemplatedControl
 
     public Table()
     {
-        ColumnWidths = new ColumnLayout { IsFit = IsFitColumn };
+        ColumnWidths = new ColumnLayout { IsFit = IsFitColumn, KeepsDetached = true };
         Columns.CollectionChanged += (_, _) =>
         {
             ColumnWidths.ClearWidths();
@@ -209,6 +210,7 @@ public partial class Table : TemplatedControl
     {
         base.OnApplyTemplate(e);
         if (_scroll is not null) _scroll.ScrollChanged -= OnScroll;
+        if (_rows is TableRowsPanel oldRows) oldRows.Realized -= OnRealized;
         _scroll = e.NameScope.Find<ScrollViewer>("PART_Scroll");
         _head = e.NameScope.Find<Control>("PART_Head");
         _guide = e.NameScope.Find<Control>("PART_Guide");
@@ -216,6 +218,7 @@ public partial class Table : TemplatedControl
         _headCells = e.NameScope.Find<ColumnsPanel>("PART_HeadCells");
         _rows = e.NameScope.Find<Panel>("PART_Rows");
         if (_scroll is not null) _scroll.ScrollChanged += OnScroll;
+        if (_rows is TableRowsPanel rowsPanel) rowsPanel.Realized += OnRealized;
         if (_headCells is not null) _headCells.Layout = ColumnWidths;
         Rebuild();
     }
@@ -283,7 +286,7 @@ public partial class Table : TemplatedControl
         var shown = _display.Select(KeyOf).ToHashSet();
         foreach (var old in _display) old.Attach(null);
         _display.Clear();
-        _rows.Children.Clear();
+        if (_rows is not TableRowsPanel) _rows.Children.Clear();
         _headCells.Children.Clear();
         _all = null;
         PseudoClasses.Set(":selectable", IsSelectable);
@@ -328,9 +331,13 @@ public partial class Table : TemplatedControl
             row.Attach(this);
             row.SetInPanel(_inPanel);
             _display.Add(row);
-            _rows.Children.Add(row);
+            if (_rows is not TableRowsPanel) _rows.Children.Add(row);
         }
+        if (_rows is TableRowsPanel panel) panel.SetRows(_display);
+        ColumnWidths.Keep(_display.Select(r => r.CellsPanel));
+        _pinX = double.NaN;
 
+        Place();
         Arrive(shown);
         PseudoClasses.Set(":empty", _display.Count == 0 && Empty is not null);
         PseudoClasses.Set(":cell-cursor", CellCursor);
@@ -348,6 +355,11 @@ public partial class Table : TemplatedControl
         Dispatcher.UIThread.Post(UpdateSticky, DispatcherPriority.Render);
     }
 
+    private void Place()
+    {
+        for (var i = 0; i < _display.Count; i++) _display[i].SetPlace(i, _display.Count);
+    }
+
     private static object KeyOf(TableRow row) => row.Item ?? row;
 
     // Rows new to the table rise in, the first six 40ms apart, as the web's do; a fresh table's later rows simply appear, and a sort only moves rows, so it never replays this.
@@ -363,7 +375,7 @@ public partial class Table : TemplatedControl
         }
     }
 
-    // A row added while the template is still being built is not in the tree yet, and an entrance needs its frames, so it starts when the row arrives there.
+    // A row added while the template is still being built is not in the tree yet, and an entrance needs its frames, so it starts when the row arrives there; a row out of view that arrives later, scrolled to, simply appears.
     private static void Rise(TableRow row, double delay)
     {
         if (row.IsAttachedToVisualTree())
@@ -371,10 +383,11 @@ public partial class Table : TemplatedControl
             Entrance.Play(row, EntranceEffect.Rise, delay);
             return;
         }
+        var asked = Environment.TickCount64;
         void Attached(object? sender, VisualTreeAttachmentEventArgs e)
         {
             row.AttachedToVisualTree -= Attached;
-            Entrance.Play(row, EntranceEffect.Rise, delay);
+            if (Environment.TickCount64 - asked < 1000) Entrance.Play(row, EntranceEffect.Rise, delay);
         }
         row.AttachedToVisualTree += Attached;
     }
@@ -521,10 +534,17 @@ public partial class Table : TemplatedControl
         }
         SetAndRaise(CurrentRowProperty, ref _current, row);
         SetAndRaise(CurrentColumnProperty, ref _currentColumn, row is not null && CellCursor ? Math.Clamp(column, 0, Columns.Count - 1) : -1);
+        (_rows as TableRowsPanel)?.Keep(_current);
         if (_current is null) return;
         _current.SetCurrent(true);
         CurrentCell?.SetCurrent(true);
         ScrollIntoView(_current);
+        // A row brought into the tree just now is placed by the next layout, so it is checked again once that has run.
+        if (_rows is TableRowsPanel && !_current.IsAttachedToVisualTree())
+        {
+            var pending = _current;
+            Dispatcher.UIThread.Post(() => { if (_current == pending) ScrollIntoView(pending); }, DispatcherPriority.Loaded);
+        }
         if (CurrentCell is { } cell) ScrollIntoView(cell);
     }
 
@@ -547,11 +567,23 @@ public partial class Table : TemplatedControl
     {
         var sticky = Classes.Contains("sticky");
         var viewer = sticky ? _scroll : this.FindAncestorOfType<ScrollViewer>();
-        if (viewer is null || row.Bounds.Height <= 0) return;
-        var top = row.TranslatePoint(default, viewer)?.Y;
-        if (top is not { } y) return;
+        if (viewer is null) return;
+        double? top;
+        double height;
+        // A row out of view may not be in the tree, so its place comes from the rows panel.
+        if (_rows is TableRowsPanel panel && panel.Rows.Count > 0)
+        {
+            top = panel.TranslatePoint(new Point(0, panel.OffsetOf(row)), viewer)?.Y;
+            height = panel.HeightOf(row);
+        }
+        else
+        {
+            top = row.TranslatePoint(default, viewer)?.Y;
+            height = row.Bounds.Height;
+        }
+        if (height <= 0 || top is not { } y) return;
         var head = sticky && _head is not null ? _head.Bounds.Height + 8 : 0;
-        var dy = y < head ? y - head : y + row.Bounds.Height > viewer.Viewport.Height ? y + row.Bounds.Height - viewer.Viewport.Height : 0;
+        var dy = y < head ? y - head : y + height > viewer.Viewport.Height ? y + height - viewer.Viewport.Height : 0;
         if (dy != 0) viewer.Offset = new Vector(viewer.Offset.X, Math.Max(0, viewer.Offset.Y + dy));
     }
 
@@ -559,7 +591,7 @@ public partial class Table : TemplatedControl
     {
         var sticky = Classes.Contains("sticky");
         var viewer = sticky ? _scroll : this.FindAncestorOfType<ScrollViewer>();
-        var rowHeight = _display.Count > 0 ? _display[0].Bounds.Height : 0;
+        var rowHeight = _rows is TableRowsPanel panel && panel.Rows.Count > 0 ? panel.RowHeight : _display.Count > 0 ? _display[0].Bounds.Height : 0;
         var head = _head is not null ? _head.Bounds.Height + 8 : 0;
         if (viewer is null || viewer.Viewport.Height <= 0 || rowHeight <= 0) return 10;
         return Math.Max(1, (int)Math.Floor((viewer.Viewport.Height - head) / rowHeight) - 1);
@@ -898,12 +930,18 @@ public partial class Table : TemplatedControl
             return c != 0 ? c * sign : a - b;
         });
 
-        var before = _display.ToDictionary(r => r, r => r.Bounds.Y);
+        var rowsPanel = _rows as TableRowsPanel;
+        var before = _display.ToDictionary(r => r, r => rowsPanel?.OffsetOf(r) ?? r.Bounds.Y);
         var sorted = order.Select(i => _display[i]).ToList();
         _display.Clear();
         _display.AddRange(sorted);
-        _rows.Children.Clear();
-        foreach (var row in sorted) _rows.Children.Add(row);
+        if (rowsPanel is not null) rowsPanel.SetRows(sorted);
+        else
+        {
+            _rows.Children.Clear();
+            foreach (var row in sorted) _rows.Children.Add(row);
+        }
+        Place();
         Slide(before);
         return direction;
     }
@@ -913,11 +951,13 @@ public partial class Table : TemplatedControl
         var y = 0.0;
         var duration = this.TryFindResource("InsTEnter", ActualThemeVariant, out var d) && d is TimeSpan t ? t : TimeSpan.FromSeconds(0.28);
         var easing = this.TryFindResource("InsEase", ActualThemeVariant, out var es) && es is Easing ease ? ease : new SplineEasing(0.2, 0.7, 0.2, 1);
+        var rowsPanel = _rows as TableRowsPanel;
         foreach (var row in _display)
         {
             var dy = before[row] - y;
-            y += row.Bounds.Height;
-            if (Math.Abs(dy) < 1) continue;
+            y += rowsPanel?.HeightOf(row) ?? row.Bounds.Height;
+            // Only the rows in the tree move; the rest are out of view.
+            if (Math.Abs(dy) < 1 || (rowsPanel is not null && !row.IsAttachedToVisualTree())) continue;
             row.Transitions = null;
             row.RenderTransform = TransformOperations.Parse($"translateY({dy.ToString(CultureInfo.InvariantCulture)}px)");
             Dispatcher.UIThread.Post(() =>
@@ -967,9 +1007,18 @@ public partial class Table : TemplatedControl
             _head.RenderTransform = sticky && offset.Y > 0 ? new TranslateTransform(0, offset.Y) : null;
         var n = PinnedCells;
         var x = n > 0 ? offset.X : 0;
+        // A scroll straight down moves no frozen cell, so the rows are left alone.
+        if (n == _pinned && x == _pinX) return;
         Pin(_headCells.Children, n, x);
-        foreach (var row in _display) Pin(row.Cells, n, x);
+        // Rows out of the tree are pinned when they come back.
+        foreach (var row in _rows is TableRowsPanel panel ? panel.Children.OfType<TableRow>() : _display) Pin(row.Cells, n, x);
         _pinned = n;
+        _pinX = x;
+    }
+
+    private void OnRealized(TableRow row)
+    {
+        if (!double.IsNaN(_pinX)) Pin(row.Cells, _pinned, _pinX);
     }
 
     // The frozen cells ride along with the scroll, and the last of them casts a shade on the cells passing under it.
