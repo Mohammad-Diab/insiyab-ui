@@ -136,9 +136,9 @@
         </Style>
       </ControlTheme>
 
-      <!-- An hr: one hairline in the line colour, 1rem above and below; Separator.v stands between items in a row -->
+      <!-- An hr: one hairline in the rule colour, 1rem above and below; Separator.v stands between items in a row -->
       <ControlTheme x:Key="{x:Type Separator}" TargetType="Separator">
-        <Setter Property="Background" Value="{DynamicResource InsLine}" />
+        <Setter Property="Background" Value="{DynamicResource InsHr}" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Height" Value="1" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />

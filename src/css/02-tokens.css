@@ -153,6 +153,7 @@
   --ins-tone-brand-soft: var(--ins-primary);
 
   --ins-line: rgba(15, 23, 42, .08);
+  --ins-hr: rgba(15, 23, 42, .18);
   --ins-line-glass: rgba(255, 255, 255, .40);
   /* Controls, as distinct from panels. `--ins-rim` is the near-white edge that
      makes a glass panel read as raised against the tinted page mesh, and it was
