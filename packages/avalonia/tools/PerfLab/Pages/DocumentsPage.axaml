@@ -1,0 +1,10 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="PerfLab.Pages.DocumentsPage">
+  <StackPanel Spacing="16">
+    <ins:PageHead Title="المستندات" Subtitle="العقود والملاحظات المفتوحة" />
+    <ins:FindBar />
+    <ins:DocumentTabs x:Name="Tabs" ShowNewButton="True" AutomationProperties.Name="المستندات المفتوحة" ins:Find.IsSearchable="True" />
+  </StackPanel>
+</UserControl>

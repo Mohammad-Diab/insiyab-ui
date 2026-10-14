@@ -1,0 +1,10 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="PerfLab.Pages.CalendarPage">
+  <StackPanel Spacing="16">
+    <ins:PageHead Title="التقويم" Subtitle="مواعيد التسليم والاجتماعات" />
+    <ins:MonthCalendar x:Name="Calendar" Month="2026-09-01" Date="2026-09-21" HasViewSwitch="True"
+                       DayStartHour="0" DayEndHour="24" />
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="PerfLab.Pages.TablePage">
+  <StackPanel Spacing="16">
+    <ins:PageHead x:Name="Head" Subtitle="كل الطلبات، ورتبها بأي عمود">
+      <ins:PageHead.Breadcrumb>
+        <ins:Breadcrumb>
+          <x:String>الرئيسية</x:String>
+          <x:String>العمل</x:String>
+        </ins:Breadcrumb>
+      </ins:PageHead.Breadcrumb>
+      <ins:PageHead.Actions>
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button Classes="secondary" Content="تصدير" />
+          <Button Classes="primary" Content="طلب جديد" />
+        </StackPanel>
+      </ins:PageHead.Actions>
+    </ins:PageHead>
+    <StackPanel Orientation="Horizontal" Spacing="12">
+      <TextBox PlaceholderText="ابحث في الطلبات" Width="280" />
+      <ComboBox SelectedIndex="0" Width="180">
+        <ComboBoxItem Content="كل الحالات" />
+        <ComboBoxItem Content="جديد" />
+        <ComboBoxItem Content="مكتمل" />
+      </ComboBox>
+    </StackPanel>
+    <ins:Table x:Name="Grid" Classes="sticky" MaxHeight="560" TableMinWidth="1180"
+               IsSelectable="True" IsCellNavigation="True" FrozenColumns="1">
+      <ins:Table.Columns>
+        <ins:TableColumn Header="الرقم" Sort="Number" Classes="num" IsFit="True" />
+        <ins:TableColumn Header="العميل" Sort="Text" />
+        <ins:TableColumn Header="المدينة" Sort="Text" />
+        <ins:TableColumn Header="التاريخ" Sort="Auto" />
+        <ins:TableColumn Header="المبلغ" Sort="Number" Classes="num" />
+        <ins:TableColumn Header="القطع" Sort="Number" Classes="num" />
+        <ins:TableColumn Header="الحالة" Sort="Text" />
+        <ins:TableColumn Header="القناة" Sort="Text" />
+        <ins:TableColumn Header="الموظف" Sort="Text" />
+        <ins:TableColumn Header="ملاحظة" />
+      </ins:Table.Columns>
+      <ins:Table.RowContextMenu>
+        <ContextMenu>
+          <MenuItem Header="فتح" />
+          <MenuItem Header="تعديل" />
+          <Separator />
+          <MenuItem Header="حذف" Classes="bad" />
+        </ContextMenu>
+      </ins:Table.RowContextMenu>
+    </ins:Table>
+    <ins:BulkBar Table="{Binding #Grid}" Text="الطلبات المحددة: {n}">
+      <StackPanel>
+        <Button Classes="secondary sm" Content="تصدير" />
+        <Button Classes="danger sm" Content="حذف" />
+        <Button Classes="bare sm" Content="إلغاء" ins:BulkBar.ClearsSelection="True" />
+      </StackPanel>
+    </ins:BulkBar>
+    <ins:Pagination PageCount="12" CurrentPage="1" HorizontalAlignment="Center" />
+  </StackPanel>
+</UserControl>

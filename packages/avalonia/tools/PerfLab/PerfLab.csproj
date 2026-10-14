@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>PerfLab</RootNamespace>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Insiyab.Avalonia\Insiyab.Avalonia.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaXaml Include="..\..\gallery\Insiyab.Avalonia.Gallery\Icons.axaml" Link="Icons.axaml" />
+  </ItemGroup>
+
+</Project>

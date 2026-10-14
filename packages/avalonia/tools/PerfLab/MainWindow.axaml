@@ -1,0 +1,122 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls"
+        xmlns:local="using:PerfLab"
+        x:Class="PerfLab.MainWindow"
+        ins:TitleBar.Extends="True"
+        Title="PerfLab"
+        Width="1280" Height="820"
+        MinWidth="480" MinHeight="480"
+        FlowDirection="RightToLeft">
+  <Panel>
+    <DockPanel>
+      <ins:StatusBar DockPanel.Dock="Bottom">
+        <ins:StatusItem Icon="{StaticResource IconCheck}" Content="جاهز" />
+        <Separator />
+        <ins:StatusItem x:Name="PageStatus" Content="الرئيسية" />
+        <ins:StatusBar.End>
+          <ins:SaveStatus State="Saved" />
+          <Separator />
+          <ins:StatusButton x:Name="ReadoutButton" Icon="{StaticResource IconGauge}" Content="الأداء" ToolTip.Tip="قراءة الأداء (F12)" />
+          <ins:StatusButton Icon="{StaticResource IconBell}" Content="3" ToolTip.Tip="الإشعارات" />
+        </ins:StatusBar.End>
+      </ins:StatusBar>
+      <SplitView x:Name="ShellView" IsPaneOpen="True">
+        <SplitView.Pane>
+          <DockPanel>
+            <Border Classes="shell-brand" DockPanel.Dock="Top" ins:TitleBar.IsDragArea="True" Background="Transparent">
+              <StackPanel>
+                <Border Classes="shell-mark" ins:TitleBar.IsSystemMenuArea="True"><TextBlock Text="م" /></Border>
+                <StackPanel>
+                  <TextBlock Classes="shell-brand-name" Text="مختبر الأداء" />
+                  <TextBlock Classes="shell-brand-role" Text="الطلبات والمستندات" />
+                </StackPanel>
+              </StackPanel>
+            </Border>
+            <ListBox x:Name="Nav" Classes="shell-nav" AutomationProperties.Name="الصفحات"
+                     ins:Shell.HasFilter="True" ins:Shell.FilterPlaceholder="ابحث في الصفحات" />
+          </DockPanel>
+        </SplitView.Pane>
+        <Panel>
+          <ScrollViewer x:Name="Scroller" ins:Shell.FrostsTopbar="True">
+            <Border Classes="shell-content" Margin="0,72,0,0">
+              <DockPanel>
+                <ins:Toolbar DockPanel.Dock="Top" Margin="0,0,0,16">
+                  <ins:ToolbarButton Icon="{StaticResource IconPlus}" Label="طلب جديد" ShowLabel="True" Shortcut="Ctrl+N" />
+                  <ins:ToolbarButton Icon="{StaticResource IconFolder}" Label="فتح" Shortcut="Ctrl+O" />
+                  <ins:ToolbarButton Icon="{StaticResource IconDownload}" Label="تنزيل" />
+                  <Separator />
+                  <ins:ToolbarToggleButton Icon="{StaticResource IconStar}" Label="مميّز" />
+                  <ins:ToolbarButton Icon="{StaticResource IconShare}" Label="مشاركة">
+                    <ins:ToolbarButton.Flyout>
+                      <ins:PopMenu>
+                        <MenuItem Header="بالبريد" />
+                        <MenuItem Header="نسخ الرابط" />
+                      </ins:PopMenu>
+                    </ins:ToolbarButton.Flyout>
+                  </ins:ToolbarButton>
+                  <ins:ToolbarSplitButton Icon="{StaticResource IconUpload}" Label="تصدير" ShowLabel="True">
+                    <ins:ToolbarSplitButton.Flyout>
+                      <ins:PopMenu>
+                        <MenuItem Header="ملف PDF" />
+                        <MenuItem Header="جدول Excel" />
+                      </ins:PopMenu>
+                    </ins:ToolbarSplitButton.Flyout>
+                  </ins:ToolbarSplitButton>
+                  <Separator />
+                  <ins:ToolbarButton Icon="{StaticResource IconTrash}" Label="حذف" Shortcut="Delete" />
+                </ins:Toolbar>
+                <ContentControl x:Name="Host" />
+              </DockPanel>
+            </Border>
+          </ScrollViewer>
+          <Border Classes="topbar" VerticalAlignment="Top" ins:TitleBar.IsDragArea="True">
+            <Grid ColumnDefinitions="*,Auto,*,Auto">
+              <StackPanel Classes="zone start">
+                <Button Classes="island icon" ins:Shell.TogglesSidebar="True" ToolTip.Tip="القائمة" AutomationProperties.Name="القائمة">
+                  <ins:Icon Data="{StaticResource IconMenu}" />
+                </Button>
+                <Border Classes="island brand">
+                  <StackPanel>
+                    <Border Classes="shell-mark"><TextBlock Text="م" /></Border>
+                    <TextBlock Text="مختبر الأداء" />
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+              <StackPanel Grid.Column="1" Classes="zone center">
+                <Border Classes="island title">
+                  <StackPanel Classes="shell-head">
+                    <TextBlock x:Name="PageTitle" Classes="shell-title" />
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+              <StackPanel Grid.Column="2" Classes="zone end">
+                <ins:DayNight x:Name="DayNightToggle" ToolTip.Tip="الوضع الداكن" AutomationProperties.Name="الوضع الداكن" />
+                <Button x:Name="AppearanceButton" Classes="island" Content="المظهر">
+                  <Button.Flyout>
+                    <ins:PopCard IsEnd="True">
+                      <StackPanel Spacing="8">
+                        <TextBlock Classes="pop-label" Text="لون الهوية" />
+                        <WrapPanel x:Name="Swatches" ItemSpacing="8" LineSpacing="8" Margin="4" />
+                        <TextBlock Classes="pop-label" Text="اتجاه الصفحة" />
+                        <ins:Segmented x:Name="DirectionSeg" SelectedIndex="0">
+                          <ins:SegmentedItem Content="من اليمين · RTL" />
+                          <ins:SegmentedItem Content="من اليسار · LTR" />
+                        </ins:Segmented>
+                        <Separator />
+                        <Button x:Name="EffectsButton" Classes="pop-item" Content="تخفيف المؤثرات" />
+                        <Button Classes="pop-item" ins:ThemeToggle.Mode="system" Content="اتبع وضع النظام" />
+                      </StackPanel>
+                    </ins:PopCard>
+                  </Button.Flyout>
+                </Button>
+              </StackPanel>
+              <ins:CaptionButtons Grid.Column="3" />
+            </Grid>
+          </Border>
+        </Panel>
+      </SplitView>
+    </DockPanel>
+    <local:PerfReadout x:Name="Readout" />
+  </Panel>
+</Window>

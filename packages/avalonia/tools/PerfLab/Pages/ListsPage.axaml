@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:p="using:PerfLab.Pages"
+             x:Class="PerfLab.Pages.ListsPage">
+  <StackPanel Spacing="16">
+    <ins:PageHead Title="المهام" Subtitle="الطلبات المسندة إليك وملفاتها" />
+    <Grid ColumnDefinitions="3*,2*" ColumnSpacing="16">
+      <Border Classes="panel">
+        <DockPanel>
+          <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="الطلبات المسندة" /></Border>
+          <ListBox x:Name="Orders" Height="560" SelectedIndex="0">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="p:Order">
+                <DockPanel>
+                  <Border Classes="panel-ico" DockPanel.Dock="Left"><ins:Icon Data="{StaticResource IconFile}" /></Border>
+                  <ins:Pill DockPanel.Dock="Right" Classes="dot" Content="{Binding Status}" />
+                  <StackPanel Classes="list-text">
+                    <TextBlock Classes="list-title" Text="{Binding Customer}" />
+                    <TextBlock Classes="list-desc" Text="{Binding Note}" />
+                  </StackPanel>
+                </DockPanel>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+      </Border>
+      <StackPanel Grid.Column="1" Spacing="16">
+        <Border Classes="panel">
+          <DockPanel>
+            <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="الملفات" /></Border>
+            <Border Classes="panel-body">
+              <TreeView x:Name="Files" AutomationProperties.Name="الملفات" />
+            </Border>
+          </DockPanel>
+        </Border>
+        <Border Classes="panel">
+          <DockPanel>
+            <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="آخر النشاط" /></Border>
+            <Border Classes="panel-body">
+              <ins:Timeline>
+                <ins:TimelineDay Content="24 سبتمبر" />
+                <ins:TimelineItem Classes="ok" Header="استُلم الطلب 10431" Time="8:02 ص" />
+                <ins:TimelineItem Classes="ok" Header="دُفعت الفاتورة 10432" Time="8:05 ص" Content="بتحويل بنكي." />
+                <ins:TimelineItem Header="قيد التجهيز" IsCurrent="True" />
+                <ins:TimelineItem Header="التسليم" IsPending="True" />
+              </ins:Timeline>
+            </Border>
+          </DockPanel>
+        </Border>
+      </StackPanel>
+    </Grid>
+  </StackPanel>
+</UserControl>
