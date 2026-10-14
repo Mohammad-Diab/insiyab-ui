@@ -13,12 +13,13 @@ internal sealed class MarkerFlight
 
     private static readonly SplineEasing Out = new(0.9, 0.1, 1, 0.2);
     private static readonly SplineEasing In = new(0.1, 0.9, 0.2, 1);
+    private static readonly Stopwatch Clock = Stopwatch.StartNew();
 
     private readonly (double Start, double Length) _a;
     private readonly (double Start, double Length) _b;
     private readonly Action<double, double> _place;
     private readonly Action? _landed;
-    private readonly Stopwatch _clock = Stopwatch.StartNew();
+    private readonly double _start = Now();
 
     private MarkerFlight((double, double) a, (double, double) b, Action<double, double> place, Action? landed)
     {
@@ -27,6 +28,9 @@ internal sealed class MarkerFlight
         _place = place;
         _landed = landed;
     }
+
+    // For tests: the milliseconds every flight is timed by, which a test can hold and step.
+    internal static Func<double> Now { get; set; } = () => Clock.Elapsed.TotalMilliseconds;
 
     public bool IsDone { get; private set; }
 
@@ -56,15 +60,21 @@ internal sealed class MarkerFlight
         var flight = new MarkerFlight(a, b, place, landed);
         flight.Set(0);
         // Frames stop arriving when the window is hidden, so the flight also lands on a timer.
-        DispatcherTimer.RunOnce(flight.Land, TimeSpan.FromMilliseconds(Duration + 150));
+        DispatcherTimer.RunOnce(flight.LandIfDue, TimeSpan.FromMilliseconds(Duration + 150));
         top.RequestAnimationFrame(_ => flight.Frame(top));
         return flight;
+    }
+
+    // The timer lands a flight only once its time is up, so a held clock is not cut short by it.
+    private void LandIfDue()
+    {
+        if (Now() - _start >= Duration) Land();
     }
 
     private void Frame(TopLevel top)
     {
         if (IsDone) return;
-        var t = Math.Clamp(_clock.Elapsed.TotalMilliseconds / Duration, 0, 1);
+        var t = Math.Clamp((Now() - _start) / Duration, 0, 1);
         Set(t);
         if (t >= 1) Land();
         else top.RequestAnimationFrame(_ => Frame(top));
