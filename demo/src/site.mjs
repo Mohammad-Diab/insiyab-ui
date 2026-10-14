@@ -235,7 +235,7 @@ const SiteCode = vm.runInNewContext(`${readFileSync(join(DIR, 'assets', 'site-co
 const forListing = SiteCode.forListing;
 
 function listing(src, lang) {
-  return `<div class="dx-code" data-lang="${lang}"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code>${SiteCode.highlight(dedent(src), lang)}</code></pre></div>`;
+  return `<div class="dx-code" data-lang="${lang}"><div class="dx-tools"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><button class="dx-wrap" type="button" aria-pressed="false" aria-label="التفاف الأسطر الطويلة" data-ins-tip>التفاف</button></div><pre dir="ltr"><code>${SiteCode.highlight(dedent(src), lang)}</code></pre></div>`;
 }
 
 /* --------------------------------------------------------------------------

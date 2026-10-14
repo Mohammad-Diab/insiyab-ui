@@ -300,8 +300,8 @@
 
 <h2 id="set">ضبط اللون</h2>
 <p>ضع السمة على <code>&lt;html&gt;</code>، أو استدع الدالة أثناء التشغيل، وكلاهما يشتق من اللون بقية ألوانه ويطبقها.</p>
-<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;html</span> <span class="hl-a">lang</span>=<span class="hl-s">"ar"</span> <span class="hl-a">dir</span>=<span class="hl-s">"rtl"</span> <span class="hl-a">data-ins-primary</span>=<span class="hl-s">"#0F766E"</span><span class="hl-t">&gt;</span></code></pre></div>
-<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.brand(<span class="hl-s">'#0F766E'</span>);   <span class="hl-c">// يطبق</span>
+<div class="dx-code" data-lang="html"><div class="dx-tools"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><button class="dx-wrap" type="button" aria-pressed="false" aria-label="التفاف الأسطر الطويلة" data-ins-tip>التفاف</button></div><pre dir="ltr"><code><span class="hl-t">&lt;html</span> <span class="hl-a">lang</span>=<span class="hl-s">"ar"</span> <span class="hl-a">dir</span>=<span class="hl-s">"rtl"</span> <span class="hl-a">data-ins-primary</span>=<span class="hl-s">"#0F766E"</span><span class="hl-t">&gt;</span></code></pre></div>
+<div class="dx-code" data-lang="js"><div class="dx-tools"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><button class="dx-wrap" type="button" aria-pressed="false" aria-label="التفاف الأسطر الطويلة" data-ins-tip>التفاف</button></div><pre dir="ltr"><code><span class="hl-t">Insiyab</span>.brand(<span class="hl-s">'#0F766E'</span>);   <span class="hl-c">// يطبق</span>
 <span class="hl-t">Insiyab</span>.brand();            <span class="hl-c">// يعيد اللون الحالي</span></code></pre></div>
 
 <div class="site-adv"><h2 id="measured">لون النص فوق لون الهوية</h2>
@@ -312,7 +312,7 @@
 
 <div class="site-adv"><h2 id="server">من الخادم</h2>
 <p>إذا كان لكل عميل في تطبيقك لون هويته، فالطريق يسير: يعيد الخادم اللون مع بيانات الجلسة، وتطبقه الصفحة.</p>
-<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-k">const</span> res = <span class="hl-k">await</span> fetch(<span class="hl-s">'/api/session'</span>);
+<div class="dx-code" data-lang="js"><div class="dx-tools"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><button class="dx-wrap" type="button" aria-pressed="false" aria-label="التفاف الأسطر الطويلة" data-ins-tip>التفاف</button></div><pre dir="ltr"><code><span class="hl-k">const</span> res = <span class="hl-k">await</span> fetch(<span class="hl-s">'/api/session'</span>);
 <span class="hl-k">const</span> { branding } = <span class="hl-k">await</span> res.json();     <span class="hl-c">// { primary: '#1D4ED8', … }</span>
 <span class="hl-t">Insiyab</span>.brand(branding.primary);</code></pre></div></div>
 
@@ -321,7 +321,7 @@
   إذا اكتفيت بملف الأنماط فاضبط اللون ومشتقاته بنفسك. وهذه قيم <code>#0F766E</code> في الوضع الفاتح،
   أما قيم الداكن فتأخذها من <code>Insiyab.color.derive(hex, 'dark')</code>.
 </p>
-<div class="dx-code" data-lang="css"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code>:root {
+<div class="dx-code" data-lang="css"><div class="dx-tools"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><button class="dx-wrap" type="button" aria-pressed="false" aria-label="التفاف الأسطر الطويلة" data-ins-tip>التفاف</button></div><pre dir="ltr"><code>:root {
   <span class="hl-a">--ins-primary</span>: <span class="hl-n">#0F766E</span>;
   <span class="hl-a">--ins-primary-rgb</span>: <span class="hl-n">15</span>, <span class="hl-n">118</span>, <span class="hl-n">110</span>;
   <span class="hl-a">--ins-primary-dark</span>: <span class="hl-n">#0a504b</span>;     <span class="hl-c">/* نهاية التدرج */</span>
@@ -348,7 +348,7 @@
     <div class="tone-chip"><i style="background:var(--ins-tone-brand-bg);border-color:var(--ins-tone-brand-bd)"></i><span style="color:var(--ins-tone-brand)">brand · الهوية</span></div>
   </div>
 </div></figure>
-<div class="dx-code" data-lang="css"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code>.my-badge {
+<div class="dx-code" data-lang="css"><div class="dx-tools"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><button class="dx-wrap" type="button" aria-pressed="false" aria-label="التفاف الأسطر الطويلة" data-ins-tip>التفاف</button></div><pre dir="ltr"><code>.my-badge {
   <span class="hl-t">color</span>: var(<span class="hl-a">--ins-tone-warn</span>);
   <span class="hl-t">background</span>: var(<span class="hl-a">--ins-tone-warn-bg</span>);
   <span class="hl-t">border</span>: <span class="hl-n">1px</span> solid var(<span class="hl-a">--ins-tone-warn-bd</span>);

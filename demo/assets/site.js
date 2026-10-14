@@ -254,7 +254,10 @@
     p.view.innerHTML = markup;
     if (window.Insiyab && Insiyab.init) Insiyab.init(p.view);
     if (def.stage) def.stage(p.view, s);
-    box.querySelector('.dx-code code').innerHTML = SiteCode.highlight(SiteCode.forListing(markup), 'html');
+    var listing = box.querySelector('.dx-code'), code = listing.querySelector('code');
+    code.__dxHtml = code.__dxRaw = null;
+    code.innerHTML = SiteCode.highlight(SiteCode.forListing(markup), 'html');
+    if (listing.classList.contains('is-wrap')) wrapCode(listing, true);
     p.notes.innerHTML = (def.notes ? def.notes(s) : []).map(function (n) { return '<p class="site-play-note">' + SiteCode.prose(n) + '</p>'; }).join('');
     fitPlay(p);
     fitSoon(p);
@@ -343,6 +346,60 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
   }
 
+  // A listing's text as written: the original survives wrapping, so copying never picks up the line blocks.
+  function rawCode(code) {
+    return code.__dxRaw != null ? code.__dxRaw : code.textContent.replace(/\n$/, '');
+  }
+
+  // «التفاف»: each line becomes a block hanging from its own leading spaces, so a long line wraps under its indentation; off puts the original back.
+  function wrapCode(listing, on) {
+    var code = listing.querySelector('pre code'), btn = listing.querySelector('.dx-wrap');
+    if (on && code.__dxHtml == null) {
+      var lines = codeLines(code);
+      code.__dxHtml = code.innerHTML;
+      code.__dxRaw = code.textContent.replace(/\n$/, '');
+      code.textContent = '';
+      lines.forEach(function (line) { code.appendChild(line); });
+    } else if (!on && code.__dxHtml != null) {
+      code.innerHTML = code.__dxHtml;
+      code.__dxHtml = code.__dxRaw = null;
+    }
+    listing.classList.toggle('is-wrap', on);
+    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+
+  // The highlighted code cut at its line breaks, each piece keeping the colour spans around it, each line's indentation counted in characters.
+  function codeLines(code) {
+    var lines = [[]];
+    (function walk(node, shells) {
+      Array.prototype.forEach.call(node.childNodes, function (child) {
+        if (child.nodeType === 3) {
+          child.nodeValue.split('\n').forEach(function (piece, k) {
+            if (k) lines.push([]);
+            if (piece) lines[lines.length - 1].push({ text: piece, shells: shells });
+          });
+        } else if (child.nodeType === 1) walk(child, shells.concat(child));
+      });
+    })(code, []);
+    if (lines.length > 1 && !lines[lines.length - 1].length) lines.pop();
+    return lines.map(function (parts) {
+      var line = document.createElement('span');
+      var lead = /^[ \t]*/.exec(parts.map(function (p) { return p.text; }).join(''))[0];
+      line.className = 'dx-ln';
+      line.style.setProperty('--dx-ind', lead.replace(/\t/g, '  ').length);
+      parts.forEach(function (p) {
+        var node = document.createTextNode(p.text);
+        for (var i = p.shells.length - 1; i >= 0; i--) {
+          var shell = p.shells[i].cloneNode(false);
+          shell.appendChild(node);
+          node = shell;
+        }
+        line.appendChild(node);
+      });
+      return line;
+    });
+  }
+
   function copy(text) {
     if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
     return new Promise(function (resolve, reject) {
@@ -424,10 +481,17 @@
         return;
       }
 
+      var wrapBtn = e.target.closest('.dx-wrap');
+      if (wrapBtn) {
+        var listing = wrapBtn.closest('.dx-code');
+        wrapCode(listing, !listing.classList.contains('is-wrap'));
+        return;
+      }
+
       var btn = e.target.closest('.dx-copy');
       if (btn) {
-        var code = btn.parentNode.querySelector('pre');
-        copy(code.innerText.replace(/\n$/, '')).then(function () {
+        var code = btn.closest('.dx-code').querySelector('pre code');
+        copy(rawCode(code)).then(function () {
           btn.textContent = 'نُسخ';
           btn.classList.add('is-done');
           setTimeout(function () { btn.textContent = 'نسخ'; btn.classList.remove('is-done'); }, 1400);

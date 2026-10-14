@@ -281,7 +281,7 @@
   تجد المكتبة كلها في مجلد <code>dist/</code>، فانسخ ما فيه إلى مجلد <code>insiyab/</code> تفرده لها في مشروعك،
   حتى تبقى ملفاتها معًا بمعزل عن ملفاتك. واترك الخطوط بجوار ملف الأنماط، لأنه يطلبها بمسار نسبي.
 </p>
-<div class="dx-code" data-lang="sh"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code>your-project/
+<div class="dx-code" data-lang="sh"><div class="dx-tools"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><button class="dx-wrap" type="button" aria-pressed="false" aria-label="التفاف الأسطر الطويلة" data-ins-tip>التفاف</button></div><pre dir="ltr"><code>your-project/
 └── insiyab/
     ├── insiyab.css        ← أو insiyab.min.css
     ├── insiyab-boot.js    ← في head، قبل أن تظهر الصفحة
@@ -291,7 +291,7 @@
 
 <h2 id="template">قالب البداية</h2>
 <p>صفحة كاملة تعمل كما هي، دون استدعاء للتهيئة ولا وسم يجلب خطوطًا من الخارج.</p>
-<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code>&lt;!doctype html&gt;
+<div class="dx-code" data-lang="html"><div class="dx-tools"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><button class="dx-wrap" type="button" aria-pressed="false" aria-label="التفاف الأسطر الطويلة" data-ins-tip>التفاف</button></div><pre dir="ltr"><code>&lt;!doctype html&gt;
 <span class="hl-t">&lt;html</span> <span class="hl-a">lang</span>=<span class="hl-s">"ar"</span> <span class="hl-a">dir</span>=<span class="hl-s">"rtl"</span><span class="hl-t">&gt;</span>
 <span class="hl-t">&lt;head</span><span class="hl-t">&gt;</span>
   <span class="hl-t">&lt;meta</span> <span class="hl-a">charset</span>=<span class="hl-s">"utf-8"</span><span class="hl-t">&gt;</span>
@@ -322,7 +322,7 @@
   أو ضعه داخل <code>DOMContentLoaded</code>. ولا يزال الوسم القديم يعمل كما كان: <code>insiyab.js</code>
   وحده في <code>&lt;head&gt;</code> بلا <code>defer</code>.
 </p>
-<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;script</span><span class="hl-t">&gt;</span>
+<div class="dx-code" data-lang="html"><div class="dx-tools"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><button class="dx-wrap" type="button" aria-pressed="false" aria-label="التفاف الأسطر الطويلة" data-ins-tip>التفاف</button></div><pre dir="ltr"><code><span class="hl-t">&lt;script</span><span class="hl-t">&gt;</span>
   document.addEventListener('DOMContentLoaded', function () {
     Insiyab.toast('جاهز', 'ok');
   });
@@ -334,7 +334,7 @@
   أضفته لاحقًا. ولا تلزمك <code>Insiyab.init()</code> إلا مع المكونات التي تبني عناصرها بنفسها، كحقل التاريخ،
   إذا أضفتها من جافاسكربت.
 </p>
-<div class="dx-code" data-lang="js"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-k">const</span> row = <span class="hl-t">document</span>.createElement(<span class="hl-s">'div'</span>);
+<div class="dx-code" data-lang="js"><div class="dx-tools"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><button class="dx-wrap" type="button" aria-pressed="false" aria-label="التفاف الأسطر الطويلة" data-ins-tip>التفاف</button></div><pre dir="ltr"><code><span class="hl-k">const</span> row = <span class="hl-t">document</span>.createElement(<span class="hl-s">'div'</span>);
 row.innerHTML = <span class="hl-s">'&lt;input class="ins-input" type="date" data-ins-date&gt;'</span>;
 list.append(row);
 
@@ -358,7 +358,7 @@ list.append(row);
 
 <h2 id="brand">لون مشروعك</h2>
 <p>تكفيك سمة واحدة على <code>&lt;html&gt;</code>، وتجد تفصيلها في صفحة <a href="color.html">اللون والهوية</a>.</p>
-<div class="dx-code" data-lang="html"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><pre dir="ltr"><code><span class="hl-t">&lt;html</span> <span class="hl-a">lang</span>=<span class="hl-s">"ar"</span> <span class="hl-a">dir</span>=<span class="hl-s">"rtl"</span> <span class="hl-a">data-ins-primary</span>=<span class="hl-s">"#0F766E"</span><span class="hl-t">&gt;</span></code></pre></div>
+<div class="dx-code" data-lang="html"><div class="dx-tools"><button class="dx-copy" type="button" aria-label="نسخ الشيفرة" data-ins-tip>نسخ</button><button class="dx-wrap" type="button" aria-pressed="false" aria-label="التفاف الأسطر الطويلة" data-ins-tip>التفاف</button></div><pre dir="ltr"><code><span class="hl-t">&lt;html</span> <span class="hl-a">lang</span>=<span class="hl-s">"ar"</span> <span class="hl-a">dir</span>=<span class="hl-s">"rtl"</span> <span class="hl-a">data-ins-primary</span>=<span class="hl-s">"#0F766E"</span><span class="hl-t">&gt;</span></code></pre></div>
 
 <div class="site-adv"><h2 id="browsers">المتصفحات</h2>
 <p>
