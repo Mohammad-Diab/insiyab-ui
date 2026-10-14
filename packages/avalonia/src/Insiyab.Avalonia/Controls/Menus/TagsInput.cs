@@ -3,7 +3,9 @@ using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -45,7 +47,7 @@ public class TagsChangedEventArgs(RoutedEvent routedEvent, IReadOnlyList<string>
 [TemplatePart("PART_Panel", typeof(Panel))]
 [TemplatePart("PART_Input", typeof(TextBox))]
 [TemplatePart("PART_Popup", typeof(Popup))]
-[TemplatePart("PART_List", typeof(Panel))]
+[TemplatePart("PART_List", typeof(ItemsControl))]
 [TemplatePart("PART_Empty", typeof(Control))]
 [PseudoClasses(":open", ":focus-within-box")]
 public class TagsInput : TemplatedControl
@@ -74,13 +76,14 @@ public class TagsInput : TemplatedControl
     private Panel? _panel;
     private TextBox? _input;
     private Popup? _popup;
-    private Panel? _list;
+    private ItemsControl? _list;
     private Control? _empty;
     private Border? _field;
     private bool _open;
     private int _active = -1;
     private bool _syncing;
-    private readonly List<(TagsOption option, Border row)> _rows = [];
+    private readonly Dictionary<TagsOption, Border> _rows = [];
+    private List<TagsOption> _visible = [];
 
     public TagsInput()
     {
@@ -145,11 +148,12 @@ public class TagsInput : TemplatedControl
             _input.GotFocus -= OnInputGotFocus;
             _input.LostFocus -= OnInputLostFocus;
         }
+        if (_list is not null) _list.ContainerClearing -= OnContainerClearing;
         _field = e.NameScope.Find<Border>("PART_Field");
         _panel = e.NameScope.Find<Panel>("PART_Panel");
         _input = e.NameScope.Find<TextBox>("PART_Input");
         _popup = e.NameScope.Find<Popup>("PART_Popup");
-        _list = e.NameScope.Find<Panel>("PART_List");
+        _list = e.NameScope.Find<ItemsControl>("PART_List");
         _empty = e.NameScope.Find<Control>("PART_Empty");
 
         if (_input is not null)
@@ -169,8 +173,18 @@ public class TagsInput : TemplatedControl
                 else _panel.Children.Insert(at++, MakeChip(v));
             }
         }
+        if (_list is not null)
+        {
+            _list.ItemTemplate = new FuncDataTemplate<TagsOption>((option, _) => option is null ? null : BuildRow(option), supportsRecycling: false);
+            _list.ContainerClearing += OnContainerClearing;
+        }
         BuildRows();
         UpdatePlaceholder();
+    }
+
+    private void OnContainerClearing(object? sender, ContainerClearingEventArgs e)
+    {
+        if (e.Container is ContentPresenter { Child: Border { Tag: TagsOption option } row } && _rows.TryGetValue(option, out var kept) && kept == row) _rows.Remove(option);
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
@@ -245,59 +259,39 @@ public class TagsInput : TemplatedControl
         if (_input is not null) _input.PlaceholderText = Values.Count > 0 ? null : PlaceholderText;
     }
 
-    private void BuildRows()
+    private void BuildRows() => Refilter();
+
+    private Border BuildRow(TagsOption option)
     {
-        if (_list is null) return;
-        foreach (var (_, row) in _rows) _list.Children.Remove(row);
-        _rows.Clear();
-        var i = 0;
-        foreach (var option in Options)
-        {
-            var row = new Border
-            {
-                Classes = { "tags-option" },
-                Child = new TextBlock { Text = option.Text },
-                Focusable = false,
-            };
-            var index = i++;
-            row.PointerEntered += (_, _) => Activate(VisibleIndex(row));
-            row.PointerPressed += (_, e) => { e.Handled = true; };
-            row.PointerReleased += (_, e) => { e.Handled = true; Choose(option); };
-            _rows.Add((option, row));
-            _list.Children.Insert(Math.Min(index, _list.Children.Count), row);
-        }
-        Refilter();
+        var row = new Border { Classes = { "tags-option" }, Child = new TextBlock { Text = option.Text }, Focusable = false, Tag = option };
+        if (_active >= 0 && _active < _visible.Count && _visible[_active] == option) row.Classes.Add("active");
+        row.PointerEntered += (_, _) => Activate(_visible.IndexOf(option));
+        row.PointerPressed += (_, e) => { e.Handled = true; };
+        row.PointerReleased += (_, e) => { e.Handled = true; Choose(option); };
+        _rows[option] = row;
+        return row;
     }
-
-    private List<(TagsOption option, Border row)> VisibleRows() => _rows.Where(r => r.row.IsVisible).ToList();
-
-    private int VisibleIndex(Border row) => VisibleRows().FindIndex(r => r.row == row);
 
     private void Refilter()
     {
         if (_list is null) return;
         var q = _input?.Text;
-        var any = false;
-        foreach (var (option, row) in _rows)
-        {
-            var hit = !Values.Contains(option.Value) && ArabicSearch.Matches(q, option.Text, option.Value);
-            row.IsVisible = hit;
-            any |= hit;
-        }
-        if (_empty is not null) _empty.IsVisible = !any;
-        Activate(_active >= VisibleRows().Count ? -1 : _active);
+        _rows.Clear();
+        _visible = Options.Where(o => !Values.Contains(o.Value) && ArabicSearch.Matches(q, o.Text, o.Value)).ToList();
+        _list.ItemsSource = _visible;
+        if (_empty is not null) _empty.IsVisible = _visible.Count == 0;
+        Activate(_active >= _visible.Count ? -1 : _active);
     }
 
-    private void Activate(int index)
+    private void Activate(int index, bool scroll = false)
     {
-        var rows = VisibleRows();
-        _active = index >= 0 && index < rows.Count ? index : -1;
-        foreach (var (_, row) in _rows) row.Classes.Remove("active");
-        if (_active >= 0)
-        {
-            rows[_active].row.Classes.Add("active");
-            rows[_active].row.BringIntoView();
-        }
+        foreach (var row in _rows.Values) row.Classes.Remove("active");
+        _active = index >= 0 && index < _visible.Count ? index : -1;
+        if (_active < 0) return;
+        if (_rows.TryGetValue(_visible[_active], out var current)) current.Classes.Add("active");
+        if (!scroll || _list is null) return;
+        _list.ScrollIntoView(_active);
+        if (_rows.TryGetValue(_visible[_active], out current)) current.Classes.Add("active");
     }
 
     private void Choose(TagsOption option)
@@ -374,7 +368,6 @@ public class TagsInput : TemplatedControl
     private void OnInputKeyDown(object? sender, KeyEventArgs e)
     {
         if (_input is null) return;
-        var rows = VisibleRows();
         switch (e.Key)
         {
             case Key.Down:
@@ -382,14 +375,14 @@ public class TagsInput : TemplatedControl
                 if (Options.Count == 0) return;
                 e.Handled = true;
                 if (!IsDropDownOpen) SetOpen(true);
-                if (rows.Count == 0) return;
-                Activate(e.Key == Key.Down ? (_active + 1) % rows.Count : (_active <= 0 ? rows.Count - 1 : _active - 1));
+                if (_visible.Count == 0) return;
+                Activate(e.Key == Key.Down ? (_active + 1) % _visible.Count : (_active <= 0 ? _visible.Count - 1 : _active - 1), true);
                 return;
             case Key.Enter:
-                if (IsDropDownOpen && _active >= 0 && _active < rows.Count)
+                if (IsDropDownOpen && _active >= 0 && _active < _visible.Count)
                 {
                     e.Handled = true;
-                    Choose(rows[_active].option);
+                    Choose(_visible[_active]);
                     return;
                 }
                 var text = _input.Text ?? string.Empty;

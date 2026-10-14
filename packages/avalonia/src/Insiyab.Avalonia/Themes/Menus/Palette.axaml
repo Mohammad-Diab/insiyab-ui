@@ -162,7 +162,13 @@
                     <Panel>
                       <TextBlock x:Name="PART_Empty" Classes="palette-empty" Text="{TemplateBinding EmptyText}" IsVisible="False" />
                       <ScrollViewer x:Name="PART_Scroll" HorizontalScrollBarVisibility="Disabled" Padding="8,4,8,8">
-                        <StackPanel x:Name="PART_List" />
+                        <ItemsControl x:Name="PART_List">
+                          <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                              <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                          </ItemsControl.ItemsPanel>
+                        </ItemsControl>
                       </ScrollViewer>
                     </Panel>
                   </DockPanel>
