@@ -1,0 +1,149 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="PerfLab.Pages.DashboardPage">
+  <StackPanel Spacing="16">
+    <ins:PageHead Title="لوحة المتابعة" Subtitle="طلبات اليوم وما يحتاج متابعة">
+      <ins:PageHead.Actions>
+        <ins:Segmented SelectedIndex="1" AutomationProperties.Name="الفترة">
+          <ins:SegmentedItem Content="اليوم" />
+          <ins:SegmentedItem Content="الأسبوع" />
+          <ins:SegmentedItem Content="الشهر" />
+        </ins:Segmented>
+      </ins:PageHead.Actions>
+    </ins:PageHead>
+
+    <UniformGrid Columns="4" ColumnSpacing="12" RowSpacing="12">
+      <Border Classes="stat glass">
+        <DockPanel>
+          <Border Classes="stat-ico"><ins:Icon Data="{StaticResource IconCart}" /></Border>
+          <StackPanel Classes="stat-body">
+            <TextBlock Classes="stat-label" Text="الطلبات" />
+            <TextBlock Classes="stat-value" Text="1,284" />
+            <ins:Delta Classes="up" Content="12%" />
+          </StackPanel>
+        </DockPanel>
+      </Border>
+      <Border Classes="stat glass ok">
+        <DockPanel>
+          <Border Classes="stat-ico"><ins:Icon Data="{StaticResource IconCheck}" /></Border>
+          <StackPanel Classes="stat-body">
+            <TextBlock Classes="stat-label" Text="مكتملة" />
+            <TextBlock Classes="stat-value" Text="1,102" />
+            <ins:Delta Classes="up" Content="8%" />
+          </StackPanel>
+        </DockPanel>
+      </Border>
+      <Border Classes="stat glass warn">
+        <DockPanel>
+          <Border Classes="stat-ico"><ins:Icon Data="{StaticResource IconClock}" /></Border>
+          <StackPanel Classes="stat-body">
+            <TextBlock Classes="stat-label" Text="معلقة" />
+            <TextBlock Classes="stat-value" Text="146" />
+            <ins:Delta Classes="down" Content="3%" />
+          </StackPanel>
+        </DockPanel>
+      </Border>
+      <Border Classes="stat glass bad">
+        <DockPanel>
+          <Border Classes="stat-ico"><ins:Icon Data="{StaticResource IconWarn}" /></Border>
+          <StackPanel Classes="stat-body">
+            <TextBlock Classes="stat-label" Text="ملغاة" />
+            <TextBlock Classes="stat-value" Text="36" />
+            <ins:Delta Classes="flat" Content="0%" />
+          </StackPanel>
+        </DockPanel>
+      </Border>
+    </UniformGrid>
+
+    <Grid ColumnDefinitions="2*,*" ColumnSpacing="16">
+      <Border Classes="panel">
+        <DockPanel>
+          <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="الطلبات شهريًا" /></Border>
+          <Border Classes="panel-body">
+            <ins:Chart Type="Bar" Height="260" Labels="يناير,فبراير,مارس,أبريل,مايو,يونيو,يوليو,أغسطس,سبتمبر">
+              <ins:ChartSeries Name="الطلبات" Values="120,150,98,174,160,210,190,230,205" />
+              <ins:ChartSeries Name="المرتجعات" Values="14,9,12,18,11,15,13,19,16" />
+            </ins:Chart>
+          </Border>
+        </DockPanel>
+      </Border>
+      <Border Grid.Column="1" Classes="panel">
+        <DockPanel>
+          <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="القنوات" /></Border>
+          <Border Classes="panel-body">
+            <ins:Chart Type="Donut" Height="260" CenterLabel="طلب" Labels="المتجر,الهاتف,التطبيق,البريد" Values="540,210,420,114" SeriesName="القنوات" />
+          </Border>
+        </DockPanel>
+      </Border>
+    </Grid>
+
+    <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+      <Border Classes="panel">
+        <DockPanel>
+          <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="المبيعات" /></Border>
+          <Border Classes="panel-body">
+            <ins:Chart Type="Line" Height="220" Labels="س,ح,ن,ث,ر,خ,ج">
+              <ins:ChartSeries Name="هذا الأسبوع" Values="32,41,38,52,47,61,58" />
+              <ins:ChartSeries Name="الأسبوع الماضي" Values="28,35,40,44,39,50,49" />
+            </ins:Chart>
+          </Border>
+        </DockPanel>
+      </Border>
+      <Border Classes="panel">
+        <DockPanel>
+          <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="التجهيز" /></Border>
+          <Border Classes="panel-body">
+            <StackPanel Spacing="14">
+              <StackPanel Orientation="Horizontal" Spacing="16">
+                <ins:ProgressRing Value="72" AutomationProperties.Name="التجهيز" />
+                <ins:ProgressRing Value="45" Classes="lg" AutomationProperties.Name="الشحن" />
+                <ins:ProgressRing Value="90" AutomationProperties.Name="الدفع" />
+              </StackPanel>
+              <TextBlock Classes="label" Text="المخزن الرئيسي" />
+              <ProgressBar Value="64" AutomationProperties.Name="المخزن الرئيسي" />
+              <TextBlock Classes="label" Text="الفرع الشمالي" />
+              <ProgressBar Classes="ok" Value="100" AutomationProperties.Name="الفرع الشمالي" />
+              <TextBlock Classes="label" Text="الفرع الجنوبي" />
+              <ProgressBar Classes="warn" Value="88" AutomationProperties.Name="الفرع الجنوبي" />
+            </StackPanel>
+          </Border>
+        </DockPanel>
+      </Border>
+    </Grid>
+
+    <Grid ColumnDefinitions="2*,*" ColumnSpacing="16">
+      <Border Classes="panel">
+        <DockPanel>
+          <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="أحدث الطلبات" /></Border>
+          <Border Classes="panel-body flush">
+            <ins:Table>
+              <ins:Table.Columns>
+                <ins:TableColumn Header="الرقم" Classes="num" />
+                <ins:TableColumn Header="العميل" />
+                <ins:TableColumn Header="المبلغ" Classes="num" />
+                <ins:TableColumn Header="الحالة" />
+              </ins:Table.Columns>
+              <ins:TableRow><ins:TableCell>10431</ins:TableCell><ins:TableCell>ليلى حداد</ins:TableCell><ins:TableCell>249.00</ins:TableCell><ins:TableCell><ins:Pill Classes="ok dot" Content="مكتمل" /></ins:TableCell></ins:TableRow>
+              <ins:TableRow><ins:TableCell>10432</ins:TableCell><ins:TableCell>عمر الخطيب</ins:TableCell><ins:TableCell>1,180.00</ins:TableCell><ins:TableCell><ins:Pill Classes="info dot" Content="جارٍ" /></ins:TableCell></ins:TableRow>
+              <ins:TableRow><ins:TableCell>10433</ins:TableCell><ins:TableCell>سارة منصور</ins:TableCell><ins:TableCell>89.50</ins:TableCell><ins:TableCell><ins:Pill Classes="warn dot" Content="معلق" /></ins:TableCell></ins:TableRow>
+              <ins:TableRow><ins:TableCell>10434</ins:TableCell><ins:TableCell>كريم يوسف</ins:TableCell><ins:TableCell>412.75</ins:TableCell><ins:TableCell><ins:Pill Classes="bad dot" Content="ملغى" /></ins:TableCell></ins:TableRow>
+              <ins:TableRow><ins:TableCell>10435</ins:TableCell><ins:TableCell>نور سليمان</ins:TableCell><ins:TableCell>2,040.00</ins:TableCell><ins:TableCell><ins:Pill Classes="ok dot" Content="مكتمل" /></ins:TableCell></ins:TableRow>
+            </ins:Table>
+          </Border>
+        </DockPanel>
+      </Border>
+      <StackPanel Grid.Column="1" Spacing="12">
+        <ins:Alert Classes="warn" Content="خمسة طلبات تنتظر الدفع منذ يومين." />
+        <ins:Alert Classes="info" Content="تحديث الأسعار يبدأ الليلة." />
+        <Border Classes="card">
+          <StackPanel Spacing="8">
+            <TextBlock Classes="h4" Text="المزامنة" />
+            <TextBlock Classes="muted" Text="جارٍ رفع الطلبات إلى المخزن." TextWrapping="Wrap" />
+            <ProgressBar IsIndeterminate="True" AutomationProperties.Name="جارٍ المزامنة" />
+          </StackPanel>
+        </Border>
+      </StackPanel>
+    </Grid>
+  </StackPanel>
+</UserControl>

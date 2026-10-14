@@ -1,0 +1,110 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="PerfLab.Pages.OverlaysPage">
+  <StackPanel Spacing="16">
+    <ins:PageHead Title="النوافذ المنبثقة" Subtitle="حوارات وأدراج وتنبيهات وقوائم" />
+
+    <Border Classes="panel">
+      <DockPanel>
+        <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="الحوارات والأدراج" /></Border>
+        <Border Classes="panel-body">
+          <WrapPanel ItemSpacing="10" LineSpacing="10">
+            <Button x:Name="DialogButton" Classes="primary" Content="تأكيد الطلب">
+              <ins:Dialog.Opens>
+                <ins:Dialog Title="تأكيد الطلب 10431">
+                  <StackPanel Spacing="12">
+                    <TextBlock Text="سيُرسل الطلب إلى المخزن للتجهيز، ولن تستطيع تعديله بعد ذلك." TextWrapping="Wrap" />
+                    <StackPanel Classes="field"><TextBlock Classes="label" Text="ملاحظة للمخزن" /><TextBox /></StackPanel>
+                  </StackPanel>
+                  <ins:Dialog.Foot>
+                    <ins:DialogFoot>
+                      <Button Classes="bare" Content="إلغاء" ins:Dialog.Result="cancel" />
+                      <Button Classes="primary" Content="تأكيد" ins:Dialog.Result="ok" />
+                    </ins:DialogFoot>
+                  </ins:Dialog.Foot>
+                </ins:Dialog>
+              </ins:Dialog.Opens>
+            </Button>
+            <Button x:Name="DrawerButton" Classes="secondary" Content="تفاصيل الطلب">
+              <ins:Dialog.Opens>
+                <ins:Dialog Classes="drawer end" Title="الطلب 10431">
+                  <StackPanel Spacing="10">
+                    <TextBlock Text="العميل: ليلى حداد" />
+                    <TextBlock Text="المدينة: الرياض" />
+                    <TextBlock Text="المبلغ: 249.00" />
+                    <ProgressBar Value="64" AutomationProperties.Name="التجهيز" />
+                  </StackPanel>
+                </ins:Dialog>
+              </ins:Dialog.Opens>
+            </Button>
+            <Button x:Name="SheetButton" Classes="secondary" Content="لوح سفلي">
+              <ins:Dialog.Opens>
+                <ins:Dialog Classes="drawer bottom" Title="خيارات الشحن">
+                  <TextBlock Text="اختر طريقة الشحن من القائمة." TextWrapping="Wrap" />
+                </ins:Dialog>
+              </ins:Dialog.Opens>
+            </Button>
+            <Button x:Name="ConfirmButton" Classes="danger" Content="حذف الطلب" />
+          </WrapPanel>
+        </Border>
+      </DockPanel>
+    </Border>
+
+    <Border Classes="panel">
+      <DockPanel>
+        <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="التنبيهات والقوائم" /></Border>
+        <Border Classes="panel-body">
+          <WrapPanel ItemSpacing="10" LineSpacing="10">
+            <Button x:Name="ToastButton" Classes="secondary" Content="حفظ" ins:Toast.Text="تم حفظ الطلب" ins:Toast.Tone="Ok" />
+            <Button Classes="secondary" Content="خطأ" ins:Toast.Text="تعذر الاتصال بالمخزن" ins:Toast.Tone="Bad" />
+            <Button x:Name="MenuButton" Classes="secondary" Content="إجراءات">
+              <Button.Flyout>
+                <ins:PopMenu>
+                  <MenuItem Classes="label" Header="الطلب" />
+                  <MenuItem Header="تعديل" InputGesture="E">
+                    <MenuItem.Icon><ins:Icon Data="{StaticResource IconEdit}" /></MenuItem.Icon>
+                  </MenuItem>
+                  <MenuItem Header="نسخ" />
+                  <MenuItem Header="نقل إلى">
+                    <MenuItem Header="الأرشيف" />
+                    <MenuItem Header="المسودات" />
+                  </MenuItem>
+                  <Separator />
+                  <MenuItem Classes="bad" Header="حذف" />
+                </ins:PopMenu>
+              </Button.Flyout>
+            </Button>
+            <Button x:Name="NotifyButton" Classes="secondary" Content="الإشعارات">
+              <Button.Flyout>
+                <Flyout>
+                  <ins:Notify>
+                    <ins:NotifyItem Icon="{StaticResource IconDownload}" Title="اكتمل التصدير" Description="الملف جاهز للتنزيل." End="الآن" IsUnread="True" />
+                    <ins:NotifyItem Icon="{StaticResource IconMessage}" Title="تعليق جديد على المستند" Description="على الفقرة الثانية." End="قبل ساعة" IsUnread="True" />
+                    <ins:NotifyItem Icon="{StaticResource IconCheck}" Title="تم حفظ التغييرات" Description="حُفظت نسخة جديدة من الملف." End="أمس" />
+                  </ins:Notify>
+                </Flyout>
+              </Button.Flyout>
+            </Button>
+            <Button Classes="secondary" Content="تلميح" ToolTip.Tip="يظهر هذا التلميح عند المرور" />
+          </WrapPanel>
+        </Border>
+      </DockPanel>
+    </Border>
+
+    <Border x:Name="Card" Classes="card">
+      <Border.ContextMenu>
+        <ContextMenu>
+          <MenuItem Header="فتح" />
+          <MenuItem Header="مشاركة" />
+          <Separator />
+          <MenuItem Header="حذف" Classes="bad" />
+        </ContextMenu>
+      </Border.ContextMenu>
+      <StackPanel Spacing="6">
+        <TextBlock Classes="h4" Text="بطاقة الطلب 10431" />
+        <TextBlock Classes="muted" Text="انقر هنا بالزر الأيمن لفتح قائمتها." />
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

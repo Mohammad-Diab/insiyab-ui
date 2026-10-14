@@ -1,0 +1,140 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             x:Class="PerfLab.Pages.FormPage">
+  <StackPanel Spacing="16" MaxWidth="980">
+    <ins:PageHead Title="طلب جديد" Subtitle="أدخل بيانات الطلب ثم احفظه">
+      <ins:PageHead.Actions>
+        <ins:SaveStatus State="Saved" />
+      </ins:PageHead.Actions>
+    </ins:PageHead>
+    <ins:Steps>
+      <ins:StepsItem Content="العميل" IsDone="True" />
+      <ins:StepsItem Content="الطلب" IsCurrent="True" />
+      <ins:StepsItem Content="الشحن" />
+      <ins:StepsItem Content="الدفع" />
+    </ins:Steps>
+
+    <Border Classes="panel">
+      <DockPanel>
+        <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="بيانات العميل" /></Border>
+        <Border Classes="panel-body">
+          <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnSpacing="16" RowSpacing="14">
+            <StackPanel Classes="field"><TextBlock Classes="label" Text="الاسم" /><TextBox Text="ليلى حداد" /></StackPanel>
+            <StackPanel Grid.Column="1" Classes="field"><TextBlock Classes="label" Text="اسم الشركة" /><TextBox PlaceholderText="اختياري" /><TextBlock Classes="hint" Text="يظهر في الفاتورة." /></StackPanel>
+            <StackPanel Grid.Row="1" Classes="field"><TextBlock Classes="label" Text="البريد" /><TextBox FlowDirection="LeftToRight" PlaceholderText="name@example.com" /></StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1" Classes="field"><TextBlock Classes="label" Text="الهاتف" /><ins:PhoneBox Value="+966501234567" /></StackPanel>
+            <StackPanel Grid.Row="2" Classes="field"><TextBlock Classes="label" Text="المدينة" />
+              <ComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
+                <ComboBoxItem Content="الرياض" /><ComboBoxItem Content="عمّان" /><ComboBoxItem Content="القاهرة" /><ComboBoxItem Content="دبي" /><ComboBoxItem Content="الدوحة" />
+              </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="1" Classes="field"><TextBlock Classes="label" Text="الرمز البريدي" /><MaskedTextBox Mask="00000" FlowDirection="LeftToRight" /></StackPanel>
+            <StackPanel Grid.Row="3" Classes="field"><TextBlock Classes="label" Text="تاريخ الميلاد" /><ins:BirthDateField SelectedDate="1993-01-22" /></StackPanel>
+            <StackPanel Grid.Row="3" Grid.Column="1" Classes="field"><TextBlock Classes="label" Text="نوع العميل" />
+              <ins:Segmented SelectedIndex="0" AutomationProperties.Name="نوع العميل">
+                <ins:SegmentedItem Content="فرد" /><ins:SegmentedItem Content="شركة" /><ins:SegmentedItem Content="جهة" />
+              </ins:Segmented>
+            </StackPanel>
+            <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Classes="field"><TextBlock Classes="label" Text="العنوان" /><TextBox AcceptsReturn="True" TextWrapping="Wrap" MinHeight="96" Text="الحي الأول، الشارع العاشر، المبنى 12" /></StackPanel>
+          </Grid>
+        </Border>
+      </DockPanel>
+    </Border>
+
+    <Border Classes="panel">
+      <DockPanel>
+        <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="الطلب" /></Border>
+        <Border Classes="panel-body">
+          <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnSpacing="16" RowSpacing="14">
+            <StackPanel Classes="field"><TextBlock Classes="label" Text="تاريخ الطلب" /><ins:DateField SelectedDate="2026-09-30" /></StackPanel>
+            <StackPanel Grid.Column="1" Classes="field"><TextBlock Classes="label" Text="وقت التسليم" /><ins:TimeField SelectedTime="09:30" /></StackPanel>
+            <StackPanel Grid.Row="1" Classes="field"><TextBlock Classes="label" Text="فترة الخصم" /><ins:DateField Mode="Range" SelectedDate="2026-09-16" EndDate="2026-09-23" /></StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1" Classes="field"><TextBlock Classes="label" Text="الكمية" /><NumericUpDown Value="3" Minimum="1" Maximum="99" /></StackPanel>
+            <StackPanel Grid.Row="2" Classes="field"><TextBlock Classes="label" Text="الأصناف" />
+              <ins:TagsInput>
+                <ins:TagsInput.Values>
+                  <x:String>ورق</x:String>
+                  <x:String>أقلام</x:String>
+                  <x:String>ملفات</x:String>
+                </ins:TagsInput.Values>
+              </ins:TagsInput>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="1" Classes="field"><TextBlock Classes="label" Text="الأولوية" />
+              <ComboBox SelectedIndex="1" HorizontalAlignment="Stretch">
+                <ComboBoxItem Content="منخفضة" /><ComboBoxItem Content="عادية" /><ComboBoxItem Content="عاجلة" />
+              </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Row="3" Classes="field"><TextBlock Classes="label" Text="الخصم" /><Slider Minimum="0" Maximum="50" Value="15" /></StackPanel>
+            <StackPanel Grid.Row="3" Grid.Column="1" Classes="field"><TextBlock Classes="label" Text="لون الغلاف" /><ins:ColorField Value="#4c1d95" /></StackPanel>
+            <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Classes="field"><TextBlock Classes="label" Text="ملاحظات" /><TextBox AcceptsReturn="True" TextWrapping="Wrap" MinHeight="96" /></StackPanel>
+          </Grid>
+        </Border>
+      </DockPanel>
+    </Border>
+
+    <Border Classes="panel">
+      <DockPanel>
+        <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="الشحن والدفع" /></Border>
+        <Border Classes="panel-body">
+          <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="16" RowSpacing="14">
+            <StackPanel Classes="field"><TextBlock Classes="label" Text="طريقة الشحن" />
+              <StackPanel Spacing="6">
+                <RadioButton GroupName="ship" Content="توصيل عادي" IsChecked="True" />
+                <RadioButton GroupName="ship" Content="توصيل سريع" />
+                <RadioButton GroupName="ship" Content="استلام من الفرع" />
+              </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Classes="field"><TextBlock Classes="label" Text="طريقة الدفع" />
+              <ComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
+                <ComboBoxItem Content="بطاقة" /><ComboBoxItem Content="تحويل" /><ComboBoxItem Content="عند الاستلام" />
+              </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Classes="field"><TextBlock Classes="label" Text="رقم المرجع" /><TextBox FlowDirection="LeftToRight" Text="REF-2026-0042" /></StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1" Classes="field"><TextBlock Classes="label" Text="رمز التحقق" /><ins:OtpBox Length="6" AutomationProperties.Name="رمز التحقق" /></StackPanel>
+            <StackPanel Grid.Row="2" Classes="field"><TextBlock Classes="label" Text="المبلغ" /><TextBox Classes="num" FlowDirection="LeftToRight" Text="1,180.00" /></StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="1" Classes="field"><TextBlock Classes="label" Text="الضريبة" /><TextBox Classes="num" FlowDirection="LeftToRight" Text="177.00" /></StackPanel>
+            <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Classes="field"><TextBlock Classes="label" Text="عنوان الفاتورة" /><TextBox Text="مثل عنوان الشحن" /></StackPanel>
+          </Grid>
+        </Border>
+      </DockPanel>
+    </Border>
+
+    <Border Classes="panel">
+      <DockPanel>
+        <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="التفضيلات" /></Border>
+        <Border Classes="panel-body">
+          <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+            <StackPanel Spacing="12">
+              <ToggleSwitch Content="إشعار بالبريد" IsChecked="True" />
+              <ToggleSwitch Content="إشعار برسالة" />
+              <ToggleSwitch Content="تغليف هدية" />
+              <ToggleSwitch Content="فاتورة ورقية" IsChecked="True" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Spacing="12">
+              <CheckBox Content="احفظ العنوان لمرات قادمة" IsChecked="True" />
+              <CheckBox Content="أوافق على شروط البيع" />
+              <CheckBox Content="أرسل نسخة إلى المحاسبة" />
+              <CheckBox Content="اتصل قبل التسليم" IsChecked="True" />
+            </StackPanel>
+          </Grid>
+        </Border>
+      </DockPanel>
+    </Border>
+
+    <Border Classes="panel">
+      <DockPanel>
+        <Border Classes="panel-head" DockPanel.Dock="Top"><TextBlock Classes="panel-title" Text="المرفقات" /></Border>
+        <Border Classes="panel-body">
+          <ins:FileUpload />
+        </Border>
+      </DockPanel>
+    </Border>
+
+    <ins:DialogFoot>
+      <Button Classes="bare" Content="إلغاء" />
+      <Button Classes="secondary" Content="حفظ مسودة" />
+      <Button Classes="primary" Content="حفظ الطلب" />
+    </ins:DialogFoot>
+  </StackPanel>
+</UserControl>
