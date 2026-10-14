@@ -5,7 +5,7 @@ using Avalonia.Interactivity;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>What the web's tooltip does for the keyboard and Avalonia's does not: a control reached by Tab or the arrow keys shows its tip at once, losing focus hides it, and Escape hides it. Registered once, by the ToolTip theme.</summary>
+/// <summary>What the web's tooltip does for the keyboard and Avalonia's does not: a control reached by Tab or the arrow keys shows its tip at once, losing focus hides it, and Escape hides it. Registered once, when the theme loads, so the very first tip already answers the keyboard.</summary>
 public static class TipKeyboard
 {
     /// <summary>Set by the ToolTip theme; reading it is what registers the handlers.</summary>
@@ -21,6 +21,9 @@ public static class TipKeyboard
         InputElement.LostFocusEvent.AddClassHandler<Control>(OnLostFocus);
         InputElement.KeyDownEvent.AddClassHandler<Control>(OnKeyDown, RoutingStrategies.Tunnel);
     }
+
+    // Touching the class runs its static constructor, which adds the handlers.
+    internal static void Register() { }
 
     private static void OnGotFocus(Control c, FocusChangedEventArgs e)
     {
