@@ -74,6 +74,7 @@
               </ctl:TemplateBorder>
               <Popup Name="PART_Popup"
                      PlacementTarget="{Binding #PART_Bell}"
+                     PlacementConstraintAdjustment="FlipY"
                      OverlayInputPassThroughElement="{Binding #PART_Bell}"
                      IsOpen="{TemplateBinding IsOpen, Mode=TwoWay}"
                      IsLightDismissEnabled="True"
@@ -140,6 +141,7 @@
       <!-- One row, .ins-notify-list .ins-list-item: a notification, not a destination, so no chevron; read rows keep an ordinary title -->
       <ControlTheme x:Key="{x:Type ctl:NotifyItem}" TargetType="ctl:NotifyItem">
         <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
@@ -196,6 +198,12 @@
                        VerticalAlignment="Center"
                        Fill="{DynamicResource InsPrimaryMid}"
                        IsVisible="False" />
+              <ctl:TemplateBorder Name="PART_Focus"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BorderThickness="2"
+                      BorderBrush="{DynamicResource InsToneBrandSoft}"
+                      IsHitTestVisible="False"
+                      IsVisible="False" />
             </Panel>
           </ControlTemplate>
         </Setter>
@@ -221,8 +229,9 @@
         <Style Selector="^:pointerover">
           <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
         </Style>
-        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Row">
-          <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
+        <!-- The ring is drawn inside the row, so the list's scroll clip and the panel's edge never cut it -->
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Focus">
+          <Setter Property="IsVisible" Value="True" />
         </Style>
         <Style Selector="^:avatar">
           <Style Selector="^ /template/ :is(Border)#PART_Ico">

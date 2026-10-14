@@ -199,6 +199,18 @@ public class Notify : ItemsControl
         _popup.VerticalOffset = Pop.Gap - Pop.Room.Top;
     }
 
+    // Short of room, the panel slides by the shortfall alone, to the top bar's own inset from the window edge (8px outside a bar); its shadow room may pass the edge.
+    private void Fit(double width)
+    {
+        if (_popup is null || _bell is null || OverlayHost.Top(_bell) is not { } top) return;
+        if (_bell.TranslatePoint(default, top) is not { } a || _bell.TranslatePoint(new Point(_bell.Bounds.Width, 0), top) is not { } b) return;
+        var inset = _bell.GetVisualAncestors().OfType<Border>().FirstOrDefault(x => x.Classes.Contains("topbar"))?.Padding ?? new Thickness(8);
+        var fromRight = FlowDirection == FlowDirection.RightToLeft ^ IsEnd;
+        var from = fromRight ? Math.Max(a.X, b.X) - width : Math.Min(a.X, b.X);
+        var to = Math.Max(inset.Left, Math.Min(from, OverlayHost.Width(top) - inset.Right - width));
+        _popup.HorizontalOffset = (fromRight ? Pop.Room.Right : -Pop.Room.Left) + to - from;
+    }
+
     private IEnumerable<NotifyItem> Rows()
     {
         foreach (var item in Items)
@@ -283,6 +295,7 @@ public class Notify : ItemsControl
             {
                 root.Width = Math.Max(240, Math.Min(352, OverlayHost.Width(this) - 16));
                 root.MaxHeight = Math.Max(200, Math.Min(480, OverlayHost.Height(this) - 32));
+                Fit(root.Width);
             }
         }
         Dispatcher.UIThread.Post(() => (Rows().FirstOrDefault(r => r.IsEffectivelyVisible) as Control ?? _foot)?.Focus(NavigationMethod.Directional), DispatcherPriority.Loaded);
