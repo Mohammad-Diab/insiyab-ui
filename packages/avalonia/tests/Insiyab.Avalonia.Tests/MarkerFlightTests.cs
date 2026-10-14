@@ -30,6 +30,37 @@ public class MarkerFlightTests
         return samples;
     }
 
+    // Flights run on a clock this holds and steps, so a slow run sees the same frames as a fast one.
+    private sealed class HeldClock : IDisposable
+    {
+        private readonly Func<double> _real = MarkerFlight.Now;
+        private readonly double _from;
+        private double _at;
+
+        public HeldClock()
+        {
+            _from = _at = _real();
+            MarkerFlight.Now = () => _at;
+        }
+
+        public List<(int Ms, T Value)> Step<T>(Window window, int milliseconds, int every, Func<T> read)
+        {
+            var samples = new List<(int, T)>();
+            for (var ms = 0; ms <= milliseconds; ms += every)
+            {
+                _at = _from + ms;
+                window.InvalidateVisual();
+                Dispatcher.UIThread.RunJobs();
+                AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+                Dispatcher.UIThread.RunJobs();
+                samples.Add((ms, read()));
+            }
+            return samples;
+        }
+
+        public void Dispose() => MarkerFlight.Now = _real;
+    }
+
     [Fact]
     public void The_far_edge_arrives_first_then_the_near_edge_follows()
     {
@@ -81,10 +112,11 @@ public class MarkerFlightTests
         var toAt = rows[3].TranslatePoint(new Point(0, 8), layer)!.Value;
 
         var p = Center(rows[3].Cells[0], window);
+        using var clock = new HeldClock();
         window.MouseMove(p);
         window.MouseDown(p, MouseButton.Left);
         window.MouseUp(p, MouseButton.Left);
-        var samples = Sample(window, 800, () => Bar(table) is { } b ? (Top: Canvas.GetTop(b), Bottom: Canvas.GetTop(b) + b.Height, Left: Canvas.GetLeft(b), Moving: table.Classes.Contains("moving")) : (Top: double.NaN, Bottom: double.NaN, Left: double.NaN, Moving: table.Classes.Contains("moving")));
+        var samples = clock.Step(window, 700, 5, () => Bar(table) is { } b ? (Top: Canvas.GetTop(b), Bottom: Canvas.GetTop(b) + b.Height, Left: Canvas.GetLeft(b), Moving: table.Classes.Contains("moving")) : (Top: double.NaN, Bottom: double.NaN, Left: double.NaN, Moving: table.Classes.Contains("moving")));
         var flying = samples.Where(s => !double.IsNaN(s.Value.Top)).ToList();
         Assert.NotEmpty(flying);
         Assert.All(flying, s => Assert.True(s.Value.Moving));
