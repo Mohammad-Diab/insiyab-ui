@@ -40,7 +40,7 @@
                 </Grid.ColumnDefinitions>
                 <Panel Name="PART_PaneRoot" HorizontalAlignment="Left" ClipToBounds="True" ZIndex="100">
                   <!-- Fixed at the open width inside a pane that narrows, so collapsing clips the sidebar rather than re-flowing it -->
-                  <Border Name="PART_PaneChrome"
+                  <ins:TemplateBorder Name="PART_PaneChrome"
                           Width="{TemplateBinding OpenPaneLength}"
                           HorizontalAlignment="Left"
                           Background="{TemplateBinding PaneBackground}"
@@ -52,7 +52,7 @@
                                         Content="{TemplateBinding Pane}"
                                         ContentTemplate="{TemplateBinding PaneTemplate}" />
                     </ScrollViewer>
-                  </Border>
+                  </ins:TemplateBorder>
                 </Panel>
                 <Panel Name="ContentRoot" Grid.Column="1">
                   <ContentPresenter x:Name="PART_ContentPresenter"
@@ -73,7 +73,7 @@
                   <ColumnDefinition Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.PaneColumnGridLength}" />
                 </Grid.ColumnDefinitions>
                 <Panel Name="PART_PaneRoot" Grid.Column="1" HorizontalAlignment="Right" ClipToBounds="True" ZIndex="100">
-                  <Border Name="PART_PaneChrome"
+                  <ins:TemplateBorder Name="PART_PaneChrome"
                           Width="{TemplateBinding OpenPaneLength}"
                           HorizontalAlignment="Right"
                           Background="{TemplateBinding PaneBackground}"
@@ -85,7 +85,7 @@
                                         Content="{TemplateBinding Pane}"
                                         ContentTemplate="{TemplateBinding PaneTemplate}" />
                     </ScrollViewer>
-                  </Border>
+                  </ins:TemplateBorder>
                 </Panel>
                 <Panel Name="ContentRoot">
                   <ContentPresenter x:Name="PART_ContentPresenter"
@@ -106,7 +106,7 @@
                   <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Panel Name="PART_PaneRoot" VerticalAlignment="Top" ClipToBounds="True" ZIndex="100">
-                  <Border Name="PART_PaneChrome"
+                  <ins:TemplateBorder Name="PART_PaneChrome"
                           Background="{TemplateBinding PaneBackground}"
                           BorderBrush="{DynamicResource InsRim}"
                           BorderThickness="0,0,0,1">
@@ -114,7 +114,7 @@
                                       Padding="12"
                                       Content="{TemplateBinding Pane}"
                                       ContentTemplate="{TemplateBinding PaneTemplate}" />
-                  </Border>
+                  </ins:TemplateBorder>
                 </Panel>
                 <Panel Name="ContentRoot" Grid.Row="1">
                   <ContentPresenter x:Name="PART_ContentPresenter"
@@ -135,7 +135,7 @@
                   <RowDefinition Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.PaneRowGridLength}" />
                 </Grid.RowDefinitions>
                 <Panel Name="PART_PaneRoot" Grid.Row="1" VerticalAlignment="Bottom" ClipToBounds="True" ZIndex="100">
-                  <Border Name="PART_PaneChrome"
+                  <ins:TemplateBorder Name="PART_PaneChrome"
                           Background="{TemplateBinding PaneBackground}"
                           BorderBrush="{DynamicResource InsRim}"
                           BorderThickness="0,1,0,0">
@@ -143,7 +143,7 @@
                                       Padding="12"
                                       Content="{TemplateBinding Pane}"
                                       ContentTemplate="{TemplateBinding PaneTemplate}" />
-                  </Border>
+                  </ins:TemplateBorder>
                 </Panel>
                 <Panel Name="ContentRoot">
                   <ContentPresenter x:Name="PART_ContentPresenter"
@@ -169,7 +169,7 @@
               </Transitions>
             </Setter>
           </Style>
-          <Style Selector="^ /template/ Border#PART_PaneChrome">
+          <Style Selector="^ /template/ :is(Border)#PART_PaneChrome">
             <Setter Property="Transitions">
               <Transitions>
                 <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
@@ -197,7 +197,7 @@
             <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.ClosedPaneHeight}" />
           </Style>
         </Style>
-        <Style Selector="^:inline:closed /template/ Border#PART_PaneChrome">
+        <Style Selector="^:inline:closed /template/ :is(Border)#PART_PaneChrome">
           <Setter Property="Opacity" Value="0" />
           <Setter Property="IsHitTestVisible" Value="False" />
         </Style>
@@ -230,7 +230,7 @@
               </Transitions>
             </Setter>
           </Style>
-          <Style Selector="^ /template/ Border#PART_PaneChrome">
+          <Style Selector="^ /template/ :is(Border)#PART_PaneChrome">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShLg}" />
             <Setter Property="BorderThickness" Value="0" />
           </Style>
@@ -314,12 +314,12 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
-              <Border Name="PART_Face"
+              <ins:TemplateBorder Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <ins:TemplateBorder Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       CornerRadius="{TemplateBinding CornerRadius}">
                 <!-- The rounded clip sits inside the face, so the face's own shadow is not cut with it -->
-                <Border CornerRadius="{TemplateBinding CornerRadius}" ClipToBounds="True">
+                <ins:TemplateBorder CornerRadius="{TemplateBinding CornerRadius}" ClipToBounds="True">
                   <Panel>
                     <ContentPresenter Name="PART_ContentPresenter"
                                       Content="{TemplateBinding Content}"
@@ -328,7 +328,7 @@
                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
                     <!-- The marker sits inside the item's own box, so the item's rounded clip shapes it -->
-                    <Border Name="PART_Marker"
+                    <ins:TemplateBorder Name="PART_Marker"
                             Width="3"
                             Margin="0,8"
                             HorizontalAlignment="Left"
@@ -337,13 +337,13 @@
                             RenderTransformOrigin="50%,50%"
                             RenderTransform="scaleY(0)" />
                   </Panel>
-                </Border>
-              </Border>
+                </ins:TemplateBorder>
+              </ins:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
 
-        <Style Selector="^ /template/ Border#PART_Face">
+        <Style Selector="^ /template/ :is(Border)#PART_Face">
           <Setter Property="Transitions">
             <Transitions>
               <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -351,7 +351,7 @@
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^ /template/ Border#PART_Marker">
+        <Style Selector="^ /template/ :is(Border)#PART_Marker">
           <Setter Property="Transitions">
             <Transitions>
               <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -365,7 +365,7 @@
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
           <Setter Property="RenderTransform" Value="translateX(2px)" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
         </Style>
       </ControlTheme>
@@ -374,10 +374,10 @@
         <Style Selector="^:selected">
           <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
           <Setter Property="Foreground" Value="{DynamicResource InsShellInk}" />
-          <Style Selector="^ /template/ Border#PART_Face">
+          <Style Selector="^ /template/ :is(Border)#PART_Face">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShellLinkActiveShadow}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Marker">
+          <Style Selector="^ /template/ :is(Border)#PART_Marker">
             <Setter Property="RenderTransform" Value="scaleY(1)" />
           </Style>
 
@@ -391,7 +391,7 @@
           <Setter Property="Padding" Value="10,14,10,6" />
           <Setter Property="FontSize" Value="11" />
           <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
-          <Style Selector="^ /template/ Border#PART_Marker">
+          <Style Selector="^ /template/ :is(Border)#PART_Marker">
             <Setter Property="IsVisible" Value="False" />
           </Style>
         </Style>
@@ -421,8 +421,8 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border Name="PART_FocusRing" CornerRadius="{DynamicResource InsRSm}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
-              <Border Name="PART_Face"
+              <ins:TemplateBorder Name="PART_FocusRing" CornerRadius="{DynamicResource InsRSm}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <ins:TemplateBorder Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -431,11 +431,11 @@
                                   Content="{TemplateBinding Content}"
                                   ContentTemplate="{TemplateBinding ContentTemplate}"
                                   HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" />
-              </Border>
+              </ins:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
         </Style>
       </ControlTheme>
@@ -455,7 +455,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}"
+            <ins:TemplateBorder Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="{TemplateBinding CornerRadius}">
@@ -479,7 +479,7 @@
                   </Panel>
                 </ScrollViewer>
               </DockPanel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
       </ControlTheme>
@@ -542,7 +542,7 @@
     <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
   </Style>
   <!-- While the marker flies, the real markers hide, or the new one would be waiting before the bar arrived -->
-  <Style Selector="ListBox.moving ListBoxItem /template/ Border#PART_Marker">
+  <Style Selector="ListBox.moving ListBoxItem /template/ :is(Border)#PART_Marker">
     <Setter Property="Opacity" Value="0" />
     <Setter Property="Transitions" Value="{x:Null}" />
   </Style>
@@ -584,7 +584,7 @@
       </Transitions>
     </Setter>
   </Style>
-  <Style Selector="Border.shell-mark > TextBlock">
+  <Style Selector="Border.shell-mark > TextBlock, Border.shell-mark > ins|TemplateText">
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
@@ -626,7 +626,7 @@
     <Setter Property="TextElement.FontSize" Value="11" />
     <Setter Property="TextElement.FontWeight" Value="Bold" />
   </Style>
-  <Style Selector="Border.shell-link-badge > TextBlock">
+  <Style Selector="Border.shell-link-badge > TextBlock, Border.shell-link-badge > ins|TemplateText">
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="LineHeight" Value="18" />
   </Style>

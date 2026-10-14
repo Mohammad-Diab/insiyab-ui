@@ -35,7 +35,7 @@
     <Setter Property="Background" Value="{DynamicResource InsWash1}" />
     <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
   </Style>
-  <Style Selector="FlyoutPresenter.picker /template/ Border#LayoutRoot">
+  <Style Selector="FlyoutPresenter.picker /template/ :is(Border)#LayoutRoot">
     <Setter Property="MinWidth" Value="0" />
     <Setter Property="MaxHeight" Value="Infinity" />
   </Style>

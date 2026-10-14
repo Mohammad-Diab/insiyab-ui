@@ -40,19 +40,19 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel x:Name="PART_Press">
-              <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+              <ins:TemplateBorder Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
                 <Panel Width="12" Height="12">
-                  <Border Width="12" Height="2" CornerRadius="1" Background="{TemplateBinding Foreground}" />
-                  <Border x:Name="PART_Upright" Width="2" Height="12" CornerRadius="1" Background="{TemplateBinding Foreground}" IsVisible="False" />
+                  <ins:TemplateBorder Width="12" Height="2" CornerRadius="1" Background="{TemplateBinding Foreground}" />
+                  <ins:TemplateBorder x:Name="PART_Upright" Width="2" Height="12" CornerRadius="1" Background="{TemplateBinding Foreground}" IsVisible="False" />
                 </Panel>
-              </Border>
+              </ins:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
         <Style Selector="^ /template/ Panel#PART_Press">
           <Setter Property="ins:PressDip.Depth" Value="0.92" />
         </Style>
-        <Style Selector="^.up /template/ Border#PART_Upright">
+        <Style Selector="^.up /template/ :is(Border)#PART_Upright">
           <Setter Property="IsVisible" Value="True" />
         </Style>
         <Style Selector="^:pointerover">
@@ -118,37 +118,37 @@
                     <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                   </Transitions>
                 </Panel.Transitions>
-                <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShSubtle}">
-                  <Border.Transitions>
+                <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsShSubtle}">
+                  <ins:TemplateBorder.Transitions>
                     <Transitions>
                       <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                     </Transitions>
-                  </Border.Transitions>
-                </Border>
-                <Border x:Name="PART_Halo"
+                  </ins:TemplateBorder.Transitions>
+                </ins:TemplateBorder>
+                <ins:TemplateBorder x:Name="PART_Halo"
                         CornerRadius="{TemplateBinding CornerRadius}"
                         Tag="{DynamicResource InsPrimaryColor}"
                         BoxShadow="{Binding $self.Tag, Converter={x:Static ins:InputHalo.Instance}}"
                         Opacity="0">
-                  <Border.Transitions>
+                  <ins:TemplateBorder.Transitions>
                     <Transitions>
                       <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                     </Transitions>
-                  </Border.Transitions>
-                </Border>
-                <Border x:Name="PART_BorderElement"
+                  </ins:TemplateBorder.Transitions>
+                </ins:TemplateBorder>
+                <ins:TemplateBorder x:Name="PART_BorderElement"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="{TemplateBinding CornerRadius}"
                         BoxShadow="{DynamicResource InsBevelDim}">
-                  <Border.Transitions>
+                  <ins:TemplateBorder.Transitions>
                     <Transitions>
                       <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                       <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                     </Transitions>
-                  </Border.Transitions>
-                </Border>
+                  </ins:TemplateBorder.Transitions>
+                </ins:TemplateBorder>
                 <ButtonSpinner Name="PART_Spinner"
                                Theme="{StaticResource InsStepper}"
                                IsTabStop="False"
@@ -177,9 +177,9 @@
                              InnerRightContent="{Binding InnerRightContent, RelativeSource={RelativeSource TemplatedParent}}" />
                   <!-- The odometer layer: NumberRoll plays a step on it while the text under it is hidden. -->
                   <Panel x:Name="PART_Roll" IsVisible="False" IsHitTestVisible="False" ClipToBounds="True" Margin="{TemplateBinding Padding}">
-                    <TextBlock x:Name="PART_RollOut" TextAlignment="{TemplateBinding TextAlignment}" VerticalAlignment="Center" RenderTransformOrigin="50%,50%"
+                    <ins:TemplateText x:Name="PART_RollOut" TextAlignment="{TemplateBinding TextAlignment}" VerticalAlignment="Center" RenderTransformOrigin="50%,50%"
                                Foreground="{TemplateBinding Foreground}" FontSize="{Binding #PART_TextBox.FontSize}" FontWeight="{Binding #PART_TextBox.FontWeight}" FontFamily="{Binding #PART_TextBox.FontFamily}" />
-                    <TextBlock x:Name="PART_RollIn" TextAlignment="{TemplateBinding TextAlignment}" VerticalAlignment="Center" RenderTransformOrigin="50%,50%"
+                    <ins:TemplateText x:Name="PART_RollIn" TextAlignment="{TemplateBinding TextAlignment}" VerticalAlignment="Center" RenderTransformOrigin="50%,50%"
                                Foreground="{TemplateBinding Foreground}" FontSize="{Binding #PART_TextBox.FontSize}" FontWeight="{Binding #PART_TextBox.FontWeight}" FontFamily="{Binding #PART_TextBox.FontFamily}" />
                   </Panel>
                   </Panel>
@@ -192,7 +192,7 @@
         <Style Selector="^:rolling /template/ TextBox#PART_TextBox">
           <Setter Property="Opacity" Value="0" />
         </Style>
-        <Style Selector="^:pointerover:not(:focus-within) /template/ Border#PART_BorderElement">
+        <Style Selector="^:pointerover:not(:focus-within) /template/ :is(Border)#PART_BorderElement">
           <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsSpinHoverBorder}" />
         </Style>
@@ -200,42 +200,42 @@
           <Style Selector="^ /template/ Panel#PART_Field">
             <Setter Property="RenderTransform" Value="translateY(-1px)" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_BorderElement">
+          <Style Selector="^ /template/ :is(Border)#PART_BorderElement">
             <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsSpinFocusBorder}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Halo">
+          <Style Selector="^ /template/ :is(Border)#PART_Halo">
             <Setter Property="Opacity" Value="1" />
           </Style>
         </Style>
         <Style Selector="^.ok">
-          <Style Selector="^ /template/ Border#PART_BorderElement, ^:pointerover:not(:focus-within) /template/ Border#PART_BorderElement">
+          <Style Selector="^ /template/ :is(Border)#PART_BorderElement, ^:pointerover:not(:focus-within) /template/ :is(Border)#PART_BorderElement">
             <Setter Property="BorderBrush" Value="{DynamicResource InsSpinOkBorder}" />
           </Style>
-          <Style Selector="^:focus-within /template/ Border#PART_BorderElement">
+          <Style Selector="^:focus-within /template/ :is(Border)#PART_BorderElement">
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneOk}" />
           </Style>
-          <Style Selector="^:focus-within /template/ Border#PART_Shadow">
+          <Style Selector="^:focus-within /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsSpinGlowOk}" />
           </Style>
-          <Style Selector="^:focus-within /template/ Border#PART_Halo">
+          <Style Selector="^:focus-within /template/ :is(Border)#PART_Halo">
             <Setter Property="Opacity" Value="0" />
           </Style>
         </Style>
         <Style Selector="^:error, ^.bad">
-          <Style Selector="^ /template/ Border#PART_BorderElement, ^:pointerover:not(:focus-within) /template/ Border#PART_BorderElement">
+          <Style Selector="^ /template/ :is(Border)#PART_BorderElement, ^:pointerover:not(:focus-within) /template/ :is(Border)#PART_BorderElement">
             <Setter Property="BorderBrush" Value="{DynamicResource InsSpinBadBorder}" />
           </Style>
-          <Style Selector="^:focus-within /template/ Border#PART_BorderElement">
+          <Style Selector="^:focus-within /template/ :is(Border)#PART_BorderElement">
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
           </Style>
-          <Style Selector="^:focus-within /template/ Border#PART_Shadow">
+          <Style Selector="^:focus-within /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsGlowBad}" />
           </Style>
-          <Style Selector="^:focus-within /template/ Border#PART_Halo">
+          <Style Selector="^:focus-within /template/ :is(Border)#PART_Halo">
             <Setter Property="Opacity" Value="0" />
           </Style>
         </Style>

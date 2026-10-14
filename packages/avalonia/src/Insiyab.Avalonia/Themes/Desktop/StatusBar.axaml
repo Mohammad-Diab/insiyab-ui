@@ -28,7 +28,7 @@
         <Setter Property="VerticalAlignment" Value="Bottom" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}"
+            <ins:TemplateBorder Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     Padding="{TemplateBinding Padding}">
@@ -36,7 +36,7 @@
                 <ins:StatusBarZone x:Name="PART_Start" Orientation="Horizontal" Spacing="2" CutsOverflow="True" VerticalAlignment="Center" />
                 <ins:StatusBarZone x:Name="PART_End" Grid.Column="1" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center" />
               </Grid>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
       </ControlTheme>
@@ -48,7 +48,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" CornerRadius="6">
+            <ins:TemplateBorder Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" CornerRadius="6">
               <StackPanel Orientation="Horizontal" Spacing="6">
                 <Panel x:Name="PART_Glyph" Width="13" Height="13" VerticalAlignment="Center" IsVisible="False">
                   <ins:Icon x:Name="PART_Icon" Data="{TemplateBinding Icon}" Size="13" />
@@ -59,7 +59,7 @@
                                   ContentTemplate="{TemplateBinding ContentTemplate}"
                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
               </StackPanel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:icon /template/ Panel#PART_Glyph, ^:busy /template/ Panel#PART_Glyph">
@@ -102,8 +102,8 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
-              <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" CornerRadius="{TemplateBinding CornerRadius}">
+              <ins:TemplateBorder x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <ins:TemplateBorder Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" CornerRadius="{TemplateBinding CornerRadius}">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                   <ins:Icon x:Name="PART_Icon" Data="{TemplateBinding Icon}" Size="13" VerticalAlignment="Center" IsVisible="False" />
                   <ContentPresenter x:Name="PART_ContentPresenter"
@@ -111,7 +111,7 @@
                                     ContentTemplate="{TemplateBinding ContentTemplate}"
                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                 </StackPanel>
-              </Border>
+              </ins:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
@@ -125,7 +125,7 @@
         <Style Selector="^:pressed">
           <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
         </Style>
         <Style Selector="^:disabled">

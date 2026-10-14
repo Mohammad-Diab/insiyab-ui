@@ -37,10 +37,10 @@
         <Setter Property="ins:PopMotion.Stagger" Value="True" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Name="PART_Room">
+            <ins:TemplateBorder Name="PART_Room">
               <Panel>
-                <Border Name="PART_Ground" Background="{DynamicResource InsWash1}" CornerRadius="{TemplateBinding CornerRadius}" />
-                <Border Name="LayoutRoot"
+                <ins:TemplateBorder Name="PART_Ground" Background="{DynamicResource InsWash1}" CornerRadius="{TemplateBinding CornerRadius}" />
+                <ins:TemplateBorder Name="LayoutRoot"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -55,13 +55,13 @@
                                     Margin="{TemplateBinding Padding}"
                                     KeyboardNavigation.TabNavigation="Continue" />
                   </ScrollViewer>
-                </Border>
+                </ins:TemplateBorder>
               </Panel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <!-- A popup clips to its own box, so a pop body keeps clear room for its shadow, and the PopMenu offsets take it back out. -->
-        <Style Selector="^.pop /template/ Border#PART_Room">
+        <Style Selector="^.pop /template/ :is(Border)#PART_Room">
           <Setter Property="Padding" Value="40,16,40,64" />
         </Style>
       </ControlTheme>
@@ -83,10 +83,10 @@
         <Setter Property="ins:PopMotion.Stagger" Value="True" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Name="PART_Room" Padding="40,16,40,64">
+            <ins:TemplateBorder Name="PART_Room" Padding="40,16,40,64">
               <Panel>
-                <Border Name="PART_Ground" Background="{DynamicResource InsWash1}" CornerRadius="{TemplateBinding CornerRadius}" />
-                <Border Name="LayoutRoot"
+                <ins:TemplateBorder Name="PART_Ground" Background="{DynamicResource InsWash1}" CornerRadius="{TemplateBinding CornerRadius}" />
+                <ins:TemplateBorder Name="LayoutRoot"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -100,9 +100,9 @@
                                     Margin="{TemplateBinding Padding}"
                                     KeyboardNavigation.TabNavigation="Continue" />
                   </ScrollViewer>
-                </Border>
+                </ins:TemplateBorder>
               </Panel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <!-- Avalonia mirrors the pointer placement on a right-to-left page but not the offset, so the room on the card's right is taken back the other way -->
@@ -127,10 +127,10 @@
         <Setter Property="ins:PopMotion.Enabled" Value="True" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Name="PART_Room">
+            <ins:TemplateBorder Name="PART_Room">
               <Panel>
-                <Border Name="PART_Ground" Background="{DynamicResource InsWash1}" CornerRadius="{TemplateBinding CornerRadius}" />
-                <Border Name="LayoutRoot"
+                <ins:TemplateBorder Name="PART_Ground" Background="{DynamicResource InsWash1}" CornerRadius="{TemplateBinding CornerRadius}" />
+                <ins:TemplateBorder Name="LayoutRoot"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -149,19 +149,19 @@
                                       HorizontalContentAlignment="Stretch"
                                       VerticalContentAlignment="Stretch" />
                   </ScrollViewer>
-                </Border>
+                </ins:TemplateBorder>
               </Panel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <!-- A popup clips to its own box, so a pop body keeps clear room for its shadow, and the PopMenu offsets take it back out. -->
-        <Style Selector="^.pop /template/ Border#PART_Room">
+        <Style Selector="^.pop /template/ :is(Border)#PART_Room">
           <Setter Property="Padding" Value="40,16,40,64" />
         </Style>
         <Style Selector="^.card">
           <Setter Property="Padding" Value="16" />
         </Style>
-        <Style Selector="^.card /template/ Border#LayoutRoot">
+        <Style Selector="^.card /template/ :is(Border)#LayoutRoot">
           <Setter Property="Width" Value="320" />
         </Style>
       </ControlTheme>
@@ -186,7 +186,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border Name="PART_LayoutRoot"
+              <ins:TemplateBorder Name="PART_LayoutRoot"
                       Padding="{TemplateBinding Padding}"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
@@ -230,7 +230,7 @@
                           Classes="kbd"
                           Margin="8,0,0,0"
                           IsVisible="{TemplateBinding InputGesture, Converter={x:Static ObjectConverters.IsNotNull}}">
-                    <TextBlock x:Name="PART_InputGestureText"
+                    <ins:TemplateText x:Name="PART_InputGestureText"
                                Text="{TemplateBinding InputGesture, Converter={StaticResource InsPopGestureText}}" />
                   </Border>
                   <Viewbox x:Name="PART_ChevronPath" Grid.Column="4" Width="14" Height="14" Margin="8,0,0,0">
@@ -242,7 +242,7 @@
                           StrokeJoin="Round" />
                   </Viewbox>
                 </Grid>
-              </Border>
+              </ins:TemplateBorder>
               <!-- The submenu card 4px past the item, its top on the item's: the popup's box holds room for the shadow and the offsets take it back out -->
               <Popup Name="PART_Popup"
                      WindowManagerAddShadowHint="False"
@@ -252,8 +252,8 @@
                      VerticalOffset="-16"
                      IsLightDismissEnabled="False"
                      IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
-                <Border Name="PART_Room" Padding="40,16,40,64">
-                  <Border Name="PART_SubCard"
+                <ins:TemplateBorder Name="PART_Room" Padding="40,16,40,64">
+                  <ins:TemplateBorder Name="PART_SubCard"
                           Background="{DynamicResource InsGlassStrongGround}"
                           BorderBrush="{DynamicResource InsRim}"
                           BorderThickness="1"
@@ -266,8 +266,8 @@
                                       ItemsPanel="{TemplateBinding ItemsPanel}"
                                       Margin="6" />
                     </ScrollViewer>
-                  </Border>
-                </Border>
+                  </ins:TemplateBorder>
+                </ins:TemplateBorder>
               </Popup>
             </Panel>
           </ControlTemplate>
@@ -365,7 +365,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Name="PART_Face"
+            <ins:TemplateBorder Name="PART_Face"
                     Background="{TemplateBinding Background}"
                     CornerRadius="{TemplateBinding CornerRadius}"
                     Padding="{TemplateBinding Padding}">
@@ -374,7 +374,7 @@
                                 ContentTemplate="{TemplateBinding ContentTemplate}"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover, ^:focus-visible">
@@ -419,7 +419,7 @@
         <Setter Property="ItemContainerTheme" Value="{StaticResource InsMenuBarItem}" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}"
+            <ins:TemplateBorder Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="{TemplateBinding CornerRadius}"
@@ -428,7 +428,7 @@
                               ItemsPanel="{TemplateBinding ItemsPanel}"
                               VerticalAlignment="Stretch"
                               KeyboardNavigation.TabNavigation="Continue" />
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
       </ControlTheme>
@@ -445,7 +445,7 @@
     <Setter Property="HorizontalAlignment" Value="Stretch" />
     <Setter Property="Template">
       <ControlTemplate>
-        <Border Background="{TemplateBinding Background}" />
+        <ins:TemplateBorder Background="{TemplateBinding Background}" />
       </ControlTemplate>
     </Setter>
   </Style>

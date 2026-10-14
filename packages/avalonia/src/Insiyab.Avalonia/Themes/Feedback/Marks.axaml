@@ -49,7 +49,7 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border x:Name="PART_Face"
+            <ctl:TemplateBorder x:Name="PART_Face"
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
@@ -62,7 +62,7 @@
                                   ContentTemplate="{TemplateBinding ContentTemplate}"
                                   VerticalAlignment="Center" LineHeight="18" />
               </StackPanel>
-            </Border>
+            </ctl:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^.dot /template/ Ellipse#PART_Dot">
@@ -94,17 +94,17 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel x:Name="PART_Press">
-              <Border x:Name="PART_Face"
+              <ctl:TemplateBorder x:Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
                       CornerRadius="{TemplateBinding CornerRadius}"
                       Padding="{TemplateBinding Padding}">
-                <Border.Transitions>
+                <ctl:TemplateBorder.Transitions>
                   <Transitions>
                     <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                   </Transitions>
-                </Border.Transitions>
+                </ctl:TemplateBorder.Transitions>
                 <StackPanel Orientation="Horizontal" Spacing="5">
                   <Ellipse x:Name="PART_Dot" Width="7" Height="7" VerticalAlignment="Center" IsVisible="False"
                            Fill="{TemplateBinding Foreground}" RenderTransformOrigin="50%,50%" RenderTransform="none">
@@ -118,7 +118,7 @@
                                     ContentTemplate="{TemplateBinding ContentTemplate}"
                                     VerticalAlignment="Center" LineHeight="18" RecognizesAccessKey="True" />
                 </StackPanel>
-              </Border>
+              </ctl:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
@@ -131,7 +131,7 @@
         <Style Selector="^:pointerover">
           <Setter Property="RenderTransform" Value="translateY(-1px)" />
         </Style>
-        <Style Selector="^:pointerover /template/ Border#PART_Face">
+        <Style Selector="^:pointerover /template/ :is(Border)#PART_Face">
           <Setter Property="BoxShadow" Value="{DynamicResource InsShSm}" />
         </Style>
         <Style Selector="^:pointerover /template/ Ellipse#PART_Dot">
@@ -140,7 +140,7 @@
         <Style Selector="^:pressed">
           <Setter Property="RenderTransform" Value="scale(0.96)" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_Face">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Face">
           <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
         </Style>
       </ControlTheme>
@@ -160,12 +160,12 @@
         <Setter Property="RenderTransformOrigin" Value="50%,50%" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+            <ctl:TemplateBorder Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
               <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
                                 ContentTemplate="{TemplateBinding ContentTemplate}"
                                 HorizontalAlignment="Center" VerticalAlignment="Center"
                                 FontFamily="{DynamicResource InsFontBodyEn}" LineHeight="15.4" />
-            </Border>
+            </ctl:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^.ok">
@@ -202,13 +202,13 @@
           <ControlTemplate>
             <Panel>
               <Ellipse x:Name="PART_Ring" Margin="-2" Fill="{DynamicResource InsGlassStrong}" IsVisible="False" />
-              <Border x:Name="PART_Face" FlowDirection="LeftToRight" Background="{TemplateBinding Background}" CornerRadius="999" />
-              <Border CornerRadius="999" ClipToBounds="True">
+              <ctl:TemplateBorder x:Name="PART_Face" FlowDirection="LeftToRight" Background="{TemplateBinding Background}" CornerRadius="999" />
+              <ctl:TemplateBorder CornerRadius="999" ClipToBounds="True">
                 <ContentPresenter x:Name="PART_ContentPresenter"
                                   Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
                                   HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                   VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-              </Border>
+              </ctl:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
@@ -250,22 +250,22 @@
         <Setter Property="Template">
           <ControlTemplate>
             <StackPanel Orientation="Horizontal">
-              <TextBlock x:Name="PART_Value" Text="{TemplateBinding Value}" FlowDirection="LeftToRight"
+              <ctl:TemplateText x:Name="PART_Value" Text="{TemplateBinding Value}" FlowDirection="LeftToRight"
                          FontFamily="{DynamicResource InsFontBodyEn}" FontWeight="SemiBold" FontFeatures="+tnum"
                          VerticalAlignment="Bottom" />
-              <TextBlock x:Name="PART_Currency" Text="{TemplateBinding Currency}"
+              <ctl:TemplateText x:Name="PART_Currency" Text="{TemplateBinding Currency}"
                          FontSize="{TemplateBinding CurrencyFontSize}" FontWeight="Medium"
                          Foreground="{DynamicResource InsText2}" VerticalAlignment="Bottom" />
             </StackPanel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^ /template/ TextBlock#PART_Currency">
+        <Style Selector="^ /template/ :is(TextBlock)#PART_Currency">
           <Setter Property="Margin" Value="4,0,0,1" />
         </Style>
-        <Style Selector="^.pos /template/ TextBlock#PART_Value">
+        <Style Selector="^.pos /template/ :is(TextBlock)#PART_Value">
           <Setter Property="Foreground" Value="{DynamicResource InsToneOk}" />
         </Style>
-        <Style Selector="^.neg /template/ TextBlock#PART_Value">
+        <Style Selector="^.neg /template/ :is(TextBlock)#PART_Value">
           <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
         </Style>
       </ControlTheme>
@@ -280,10 +280,10 @@
               <ctl:Icon x:Name="PART_Icon" Data="{TemplateBinding Icon}" Size="32" Opacity="0.35"
                         Foreground="{DynamicResource InsText3}" HorizontalAlignment="Center"
                         IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
-              <TextBlock x:Name="PART_Title" Text="{TemplateBinding Title}" FontSize="15" FontWeight="Bold" LineHeight="25.5"
+              <ctl:TemplateText x:Name="PART_Title" Text="{TemplateBinding Title}" FontSize="15" FontWeight="Bold" LineHeight="25.5"
                          Foreground="{DynamicResource InsText1}" TextAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"
                          IsVisible="{TemplateBinding Title, Converter={x:Static ObjectConverters.IsNotNull}}" />
-              <TextBlock x:Name="PART_Hint" Text="{TemplateBinding Hint}" FontSize="{DynamicResource InsFsSm}" LineHeight="22.1"
+              <ctl:TemplateText x:Name="PART_Hint" Text="{TemplateBinding Hint}" FontSize="{DynamicResource InsFsSm}" LineHeight="22.1"
                          MaxWidth="240" Foreground="{DynamicResource InsText2}" TextAlignment="Center" TextWrapping="Wrap"
                          HorizontalAlignment="Center"
                          IsVisible="{TemplateBinding Hint, Converter={x:Static ObjectConverters.IsNotNull}}" />
@@ -327,7 +327,7 @@
     <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandBd}" />
   </Style>
 
-  <Style Selector="ctl|Avatar.more TextBlock">
+  <Style Selector="ctl|Avatar.more TextBlock, ctl|Avatar.more ctl|TemplateText">
     <Setter Property="FlowDirection" Value="LeftToRight" />
   </Style>
 

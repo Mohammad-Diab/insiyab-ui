@@ -34,23 +34,23 @@
               <Panel>
                 <ctl:ChartPlot Name="PART_Plot" FlowDirection="LeftToRight" />
                 <Canvas FlowDirection="LeftToRight" IsHitTestVisible="False">
-                  <Border Name="PART_Tip" IsVisible="False" ZIndex="5" AutomationProperties.LiveSetting="Polite"
+                  <ctl:TemplateBorder Name="PART_Tip" IsVisible="False" ZIndex="5" AutomationProperties.LiveSetting="Polite"
                           FlowDirection="{TemplateBinding FlowDirection}"
                           Padding="10,6" CornerRadius="{DynamicResource InsRSm}" BorderThickness="1"
                           BorderBrush="{DynamicResource InsRim}" Background="{DynamicResource InsGlassStrongGround}"
                           BoxShadow="{DynamicResource InsShMd}">
                     <StackPanel Spacing="2">
-                      <TextBlock Name="PART_TipLabel" FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsText2}" />
-                      <TextBlock Name="PART_TipValue" FontSize="{DynamicResource InsFsMd}" FontWeight="Bold"
+                      <ctl:TemplateText Name="PART_TipLabel" FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsText2}" />
+                      <ctl:TemplateText Name="PART_TipValue" FontSize="{DynamicResource InsFsMd}" FontWeight="Bold"
                                  FontFamily="{DynamicResource InsFontBodyEn}" Foreground="{DynamicResource InsText1}" />
                       <StackPanel Name="PART_TipRows" Spacing="3" Margin="0,2,0,0" IsVisible="False" />
                     </StackPanel>
-                  </Border>
+                  </ctl:TemplateBorder>
                 </Canvas>
               </Panel>
               <WrapPanel Name="PART_Legend" Margin="0,12,0,0" ItemSpacing="16" LineSpacing="6"
                          TextElement.FontSize="{DynamicResource InsFsXs}" TextElement.Foreground="{DynamicResource InsText2}" />
-              <TextBlock Name="PART_Caption" Text="{TemplateBinding Caption}" Margin="0,8,0,0" TextWrapping="Wrap"
+              <ctl:TemplateText Name="PART_Caption" Text="{TemplateBinding Caption}" Margin="0,8,0,0" TextWrapping="Wrap"
                          FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsText3}"
                          IsVisible="{TemplateBinding Caption, Converter={x:Static ObjectConverters.IsNotNull}}" />
             </StackPanel>

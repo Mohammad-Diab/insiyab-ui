@@ -25,7 +25,7 @@
     <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
     <Setter Property="Template">
       <ControlTemplate>
-        <Border Background="Transparent"
+        <ins:TemplateBorder Background="Transparent"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
                 Padding="{TemplateBinding Padding}">
@@ -33,7 +33,7 @@
                             ContentTemplate="{TemplateBinding ContentTemplate}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-        </Border>
+        </ins:TemplateBorder>
       </ControlTemplate>
     </Setter>
   </Style>

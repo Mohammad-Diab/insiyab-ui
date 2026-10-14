@@ -48,23 +48,23 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto,*">
-              <Border Name="PART_LineStart" Grid.Column="0" Height="2" Margin="0,0,6,0" CornerRadius="0,1,1,0"
+              <ins:TemplateBorder Name="PART_LineStart" Grid.Column="0" Height="2" Margin="0,0,6,0" CornerRadius="0,1,1,0"
                       VerticalAlignment="Center" Background="{DynamicResource InsLine}" />
-              <Border Name="PART_LineEnd" Grid.Column="2" Height="2" Margin="6,0,0,0" CornerRadius="1,0,0,1"
+              <ins:TemplateBorder Name="PART_LineEnd" Grid.Column="2" Height="2" Margin="6,0,0,0" CornerRadius="1,0,0,1"
                       VerticalAlignment="Center" Background="{DynamicResource InsLine}" />
               <Panel Name="PART_Dot" Grid.Column="1" Width="32" Height="32" RenderTransformOrigin="50%,50%">
-                <Border Name="PART_Circle" CornerRadius="16" BorderThickness="1"
+                <ins:TemplateBorder Name="PART_Circle" CornerRadius="16" BorderThickness="1"
                         BorderBrush="{DynamicResource InsCtlBd}"
                         Background="{DynamicResource InsSurface}"
                         BoxShadow="{DynamicResource InsBevelDim}" />
-                <Border Name="PART_Fill" CornerRadius="16" FlowDirection="LeftToRight" Opacity="0"
+                <ins:TemplateBorder Name="PART_Fill" CornerRadius="16" FlowDirection="LeftToRight" Opacity="0"
                         Background="{DynamicResource InsStepsDoneFill}" />
-                <TextBlock Name="PART_Number" Text="{TemplateBinding Number}"
+                <ins:TemplateText Name="PART_Number" Text="{TemplateBinding Number}"
                            FontFamily="{DynamicResource InsFontBodyEn}" FontSize="{DynamicResource InsFsSm}"
                            HorizontalAlignment="Center" VerticalAlignment="Center"
                            Foreground="{DynamicResource InsLabel}" />
-                <Border Name="PART_FocusRing" CornerRadius="16" BoxShadow="{DynamicResource InsFocusRing}" IsVisible="False" />
-                <Border Name="PART_Flag" Width="14" Height="14" CornerRadius="7" BorderThickness="2"
+                <ins:TemplateBorder Name="PART_FocusRing" CornerRadius="16" BoxShadow="{DynamicResource InsFocusRing}" IsVisible="False" />
+                <ins:TemplateBorder Name="PART_Flag" Width="14" Height="14" CornerRadius="7" BorderThickness="2"
                         BorderBrush="{DynamicResource InsGlassStrong}" Background="{DynamicResource InsToneWarn}"
                         HorizontalAlignment="Left" VerticalAlignment="Top" Margin="22,-4,-4,0" IsVisible="False" />
               </Panel>
@@ -76,7 +76,7 @@
           </ControlTemplate>
         </Setter>
 
-        <Style Selector="^ /template/ Border#PART_Circle">
+        <Style Selector="^ /template/ :is(Border)#PART_Circle">
           <Setter Property="Transitions">
             <Transitions>
               <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
@@ -84,7 +84,7 @@
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^ /template/ Border#PART_Fill">
+        <Style Selector="^ /template/ :is(Border)#PART_Fill">
           <Setter Property="Transitions">
             <Transitions>
               <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
@@ -99,52 +99,52 @@
           </Setter>
         </Style>
 
-        <Style Selector="^:first /template/ Border#PART_LineStart">
+        <Style Selector="^:first /template/ :is(Border)#PART_LineStart">
           <Setter Property="IsVisible" Value="False" />
         </Style>
-        <Style Selector="^:last /template/ Border#PART_LineEnd">
+        <Style Selector="^:last /template/ :is(Border)#PART_LineEnd">
           <Setter Property="IsVisible" Value="False" />
         </Style>
-        <Style Selector="^:after-done /template/ Border#PART_LineStart">
+        <Style Selector="^:after-done /template/ :is(Border)#PART_LineStart">
           <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />
         </Style>
         <Style Selector="^:done">
-          <Style Selector="^ /template/ Border#PART_LineEnd">
+          <Style Selector="^ /template/ :is(Border)#PART_LineEnd">
             <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Circle">
+          <Style Selector="^ /template/ :is(Border)#PART_Circle">
             <Setter Property="BorderBrush" Value="Transparent" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="Opacity" Value="1" />
           </Style>
-          <Style Selector="^ /template/ TextBlock#PART_Number">
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Number">
             <Setter Property="Foreground" Value="{DynamicResource InsOnPrimaryMid}" />
           </Style>
         </Style>
         <Style Selector="^:current">
           <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
-          <Style Selector="^ /template/ Border#PART_Circle">
+          <Style Selector="^ /template/ :is(Border)#PART_Circle">
             <Setter Property="BorderBrush" Value="{DynamicResource InsPrimaryMid}" />
             <Setter Property="BoxShadow" Value="{DynamicResource InsGlowRing}" />
           </Style>
-          <Style Selector="^ /template/ TextBlock#PART_Number">
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Number">
             <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
           </Style>
         </Style>
         <Style Selector="^:error">
-          <Style Selector="^ /template/ Border#PART_Circle">
+          <Style Selector="^ /template/ :is(Border)#PART_Circle">
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
             <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Fill">
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
             <Setter Property="Opacity" Value="0" />
           </Style>
-          <Style Selector="^ /template/ TextBlock#PART_Number">
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Number">
             <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
           </Style>
         </Style>
-        <Style Selector="^:flagged /template/ Border#PART_Flag">
+        <Style Selector="^:flagged /template/ :is(Border)#PART_Flag">
           <Setter Property="IsVisible" Value="True" />
         </Style>
       </ControlTheme>
@@ -152,7 +152,7 @@
     </ResourceDictionary>
   </Styles.Resources>
 
-  <Style Selector="ins|StepsItem > TextBlock">
+  <Style Selector="ins|StepsItem > TextBlock, ins|StepsItem > ins|TemplateText">
     <Setter Property="TextAlignment" Value="Center" />
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
@@ -160,20 +160,20 @@
   <!-- dots: one small dot per step, done and current in the brand, current larger; names kept for screen readers only -->
   <Style Selector="ins|Steps.dots ins|StepsItem">
     <Setter Property="Width" Value="8" />
-    <Style Selector="^ /template/ Border#PART_LineStart, ^ /template/ Border#PART_LineEnd, ^ /template/ TextBlock#PART_Number, ^ /template/ ContentPresenter#PART_ContentPresenter, ^ /template/ Border#PART_Flag, ^ /template/ Border#PART_Fill">
+    <Style Selector="^ /template/ :is(Border)#PART_LineStart, ^ /template/ :is(Border)#PART_LineEnd, ^ /template/ :is(TextBlock)#PART_Number, ^ /template/ ContentPresenter#PART_ContentPresenter, ^ /template/ :is(Border)#PART_Flag, ^ /template/ :is(Border)#PART_Fill">
       <Setter Property="IsVisible" Value="False" />
     </Style>
     <Style Selector="^ /template/ Panel#PART_Dot">
       <Setter Property="Width" Value="8" />
       <Setter Property="Height" Value="8" />
     </Style>
-    <Style Selector="^ /template/ Border#PART_Circle">
+    <Style Selector="^ /template/ :is(Border)#PART_Circle">
       <Setter Property="CornerRadius" Value="4" />
       <Setter Property="BorderThickness" Value="0" />
       <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
       <Setter Property="BoxShadow" Value="none" />
     </Style>
-    <Style Selector="^:done /template/ Border#PART_Circle, ^:current /template/ Border#PART_Circle">
+    <Style Selector="^:done /template/ :is(Border)#PART_Circle, ^:current /template/ :is(Border)#PART_Circle">
       <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />
       <Setter Property="BoxShadow" Value="none" />
     </Style>
@@ -186,16 +186,16 @@
   <Style Selector="ins|Steps.grid ins|StepsItem">
     <Setter Property="Focusable" Value="True" />
     <Setter Property="Cursor" Value="Hand" />
-    <Style Selector="^ /template/ Border#PART_LineStart, ^ /template/ Border#PART_LineEnd, ^ /template/ ContentPresenter#PART_ContentPresenter">
+    <Style Selector="^ /template/ :is(Border)#PART_LineStart, ^ /template/ :is(Border)#PART_LineEnd, ^ /template/ ContentPresenter#PART_ContentPresenter">
       <Setter Property="IsVisible" Value="False" />
     </Style>
-    <Style Selector="^ /template/ Border#PART_Flag">
+    <Style Selector="^ /template/ :is(Border)#PART_Flag">
       <Setter Property="Margin" Value="23,-5,-5,0" />
     </Style>
-    <Style Selector="^:not(:current):pointerover /template/ Border#PART_Circle">
+    <Style Selector="^:not(:current):pointerover /template/ :is(Border)#PART_Circle">
       <Setter Property="BorderBrush" Value="{DynamicResource InsPrimaryMid}" />
     </Style>
-    <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+    <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
       <Setter Property="IsVisible" Value="True" />
     </Style>
   </Style>

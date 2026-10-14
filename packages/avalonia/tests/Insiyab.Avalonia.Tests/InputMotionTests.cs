@@ -241,7 +241,7 @@ public class InputMotionTests
         Named<TextBox>(auto, "PART_TextBox").Focus();
         Settle(100);
         var popup = auto.GetVisualDescendants().OfType<Popup>().First();
-        var border = Assert.IsType<Border>(popup.Child);
+        var border = Assert.IsAssignableFrom<Border>(popup.Child);
         window.KeyTextInput("الر");
         Settle(300);
         auto.IsDropDownOpen = false;

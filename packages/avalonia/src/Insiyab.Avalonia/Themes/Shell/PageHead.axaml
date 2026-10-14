@@ -60,7 +60,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Name="PART_Track"
+            <ins:TemplateBorder Name="PART_Track"
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
@@ -68,7 +68,7 @@
                     Padding="{TemplateBinding Padding}"
                     BoxShadow="{DynamicResource InsIslandShadow}">
               <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
       </ControlTheme>
@@ -102,8 +102,8 @@
                     StrokeThickness="1.5"
                     StrokeLineCap="Square" />
               <Panel>
-                <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
-                <Border Name="PART_Pill"
+                <ins:TemplateBorder Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+                <ins:TemplateBorder Name="PART_Pill"
                         MaxWidth="114"
                         Background="{TemplateBinding Background}"
                         CornerRadius="{TemplateBinding CornerRadius}"
@@ -114,12 +114,12 @@
                                     LineHeight="22.1"
                                     TextTrimming="CharacterEllipsis"
                                     TextWrapping="NoWrap" />
-                </Border>
+                </ins:TemplateBorder>
               </Panel>
             </StackPanel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^ /template/ Border#PART_Pill">
+        <Style Selector="^ /template/ :is(Border)#PART_Pill">
           <Setter Property="Transitions">
             <Transitions>
               <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -133,7 +133,7 @@
           <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
         </Style>
         <Style Selector="^:current">
@@ -142,7 +142,7 @@
           <Setter Property="Cursor" Value="Arrow" />
           <Setter Property="Focusable" Value="False" />
           <Setter Property="IsHitTestVisible" Value="False" />
-          <Style Selector="^ /template/ Border#PART_Pill">
+          <Style Selector="^ /template/ :is(Border)#PART_Pill">
             <Setter Property="MaxWidth" Value="172" />
             <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
           </Style>

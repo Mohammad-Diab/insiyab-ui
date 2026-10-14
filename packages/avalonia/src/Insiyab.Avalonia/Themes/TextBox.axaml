@@ -48,7 +48,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate TargetType="ToggleButton">
-            <Border x:Name="PART_Face"
+            <ins:TemplateBorder x:Name="PART_Face"
                     Background="{TemplateBinding Background}"
                     CornerRadius="{TemplateBinding CornerRadius}">
               <Viewbox Width="18" Height="18" FlowDirection="LeftToRight">
@@ -68,7 +68,7 @@
                         IsVisible="False" />
                 </Panel>
               </Viewbox>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover">
@@ -123,7 +123,7 @@
                     <Viewbox DockPanel.Dock="Left" Width="15" Height="15" Margin="0,2,6,0" VerticalAlignment="Top" FlowDirection="LeftToRight">
                       <Path Width="24" Height="24" Data="{StaticResource InsTextBoxErrorMark}" Stroke="{DynamicResource InsToneBad}" StrokeThickness="2.2" StrokeLineCap="Round" />
                     </Viewbox>
-                    <TextBlock Text="{Binding Message}" TextWrapping="Wrap" LineHeight="19" />
+                    <ins:TemplateText Text="{Binding Message}" TextWrapping="Wrap" LineHeight="19" />
                   </DockPanel>
                 </DataTemplate>
                 <DataTemplate x:DataType="x:Object">
@@ -131,7 +131,7 @@
                     <Viewbox DockPanel.Dock="Left" Width="15" Height="15" Margin="0,2,6,0" VerticalAlignment="Top" FlowDirection="LeftToRight">
                       <Path Width="24" Height="24" Data="{StaticResource InsTextBoxErrorMark}" Stroke="{DynamicResource InsToneBad}" StrokeThickness="2.2" StrokeLineCap="Round" />
                     </Viewbox>
-                    <TextBlock Text="{Binding}" TextWrapping="Wrap" LineHeight="19" />
+                    <ins:TemplateText Text="{Binding}" TextWrapping="Wrap" LineHeight="19" />
                   </DockPanel>
                 </DataTemplate>
               </ItemsControl.DataTemplates>
@@ -169,17 +169,17 @@
                        Margin="0,6,0,0"
                        FlowDirection="{Binding $parent[TextBox].((Visual)Parent).FlowDirection, FallbackValue={x:Static FlowDirection.RightToLeft}}"
                        IsVisible="{TemplateBinding (ins:InputCount.Text), Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-                  <TextBlock x:Name="PART_Count"
+                  <ins:TemplateText x:Name="PART_Count"
                              HorizontalAlignment="Right"
                              FontSize="11"
                              Foreground="{DynamicResource InsText3}"
                              Text="{TemplateBinding (ins:InputCount.Text)}">
-                    <TextBlock.Transitions>
+                    <ins:TemplateText.Transitions>
                       <Transitions>
                         <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                       </Transitions>
-                    </TextBlock.Transitions>
-                  </TextBlock>
+                    </ins:TemplateText.Transitions>
+                  </ins:TemplateText>
                 </Panel>
                 <Panel x:Name="PART_Field" MinHeight="{TemplateBinding MinHeight}" RenderTransform="none">
                   <Panel.Transitions>
@@ -187,42 +187,42 @@
                       <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                     </Transitions>
                   </Panel.Transitions>
-                  <Border x:Name="PART_Shadow"
+                  <ins:TemplateBorder x:Name="PART_Shadow"
                           CornerRadius="{TemplateBinding CornerRadius}"
                           BoxShadow="{DynamicResource InsShSubtle}">
-                    <Border.Transitions>
+                    <ins:TemplateBorder.Transitions>
                       <Transitions>
                         <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                       </Transitions>
-                    </Border.Transitions>
-                  </Border>
-                  <Border x:Name="PART_Halo"
+                    </ins:TemplateBorder.Transitions>
+                  </ins:TemplateBorder>
+                  <ins:TemplateBorder x:Name="PART_Halo"
                           CornerRadius="{TemplateBinding CornerRadius}"
                           Tag="{DynamicResource InsPrimaryColor}"
                           BoxShadow="{Binding $self.Tag, Converter={x:Static ins:InputHalo.Instance}}"
                           Opacity="0">
-                    <Border.Transitions>
+                    <ins:TemplateBorder.Transitions>
                       <Transitions>
                         <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                       </Transitions>
-                    </Border.Transitions>
-                  </Border>
-                  <Border x:Name="PART_BorderElement"
+                    </ins:TemplateBorder.Transitions>
+                  </ins:TemplateBorder>
+                  <ins:TemplateBorder x:Name="PART_BorderElement"
                           Background="{TemplateBinding Background}"
                           BorderBrush="{TemplateBinding BorderBrush}"
                           BorderThickness="{TemplateBinding BorderThickness}"
                           CornerRadius="{TemplateBinding CornerRadius}"
                           BoxShadow="{DynamicResource InsBevelDim}"
                           MinWidth="{TemplateBinding MinWidth}">
-                    <Border.Transitions>
+                    <ins:TemplateBorder.Transitions>
                       <Transitions>
                         <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                         <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                       </Transitions>
-                    </Border.Transitions>
-                  </Border>
+                    </ins:TemplateBorder.Transitions>
+                  </ins:TemplateBorder>
 
-                  <Border x:Name="PART_Inner" Margin="{TemplateBinding BorderThickness}">
+                  <ins:TemplateBorder x:Name="PART_Inner" Margin="{TemplateBinding BorderThickness}">
                     <Grid ColumnDefinitions="Auto,*,Auto">
                       <ContentPresenter x:Name="PART_InnerLeft"
                                         Grid.Column="0"
@@ -234,7 +234,7 @@
                       <DockPanel x:Name="PART_InnerDockPanel"
                                  Grid.Column="1"
                                  Margin="{TemplateBinding Padding}">
-                        <TextBlock x:Name="PART_FloatingPlaceholder"
+                        <ins:TemplateText x:Name="PART_FloatingPlaceholder"
                                    Foreground="{TemplateBinding PlaceholderForeground}"
                                    FontSize="{DynamicResource InsFsXs}"
                                    IsVisible="False"
@@ -247,20 +247,20 @@
                                       AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
                                       BringIntoViewOnFocusChange="{TemplateBinding (ScrollViewer.BringIntoViewOnFocusChange)}">
                           <Panel x:Name="PART_TextLayer" Classes.masked="{Binding $parent[TextBox], Converter={x:Static ins:MaskInk.IsMasked}}">
-                            <TextBlock x:Name="PART_Placeholder"
+                            <ins:TemplateText x:Name="PART_Placeholder"
                                        Foreground="{TemplateBinding PlaceholderForeground}"
                                        Text="{TemplateBinding PlaceholderText}"
                                        TextAlignment="{TemplateBinding TextAlignment}"
                                        TextWrapping="{TemplateBinding TextWrapping}"
                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                              <TextBlock.IsVisible>
+                              <ins:TemplateText.IsVisible>
                                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                                   <Binding ElementName="PART_TextPresenter" Path="PreeditText" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
                                   <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Text" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
                                 </MultiBinding>
-                              </TextBlock.IsVisible>
-                            </TextBlock>
+                              </ins:TemplateText.IsVisible>
+                            </ins:TemplateText>
                             <!-- A MaskedTextBox's text, drawn again with the mask's empty places muted; its presenter above keeps the caret and the selection but no ink. -->
                             <TextBlock x:Name="PART_MaskInk"
                                        Classes="mask-ink"
@@ -305,7 +305,7 @@
                                         Content="{TemplateBinding InnerRightContent}"
                                         IsVisible="{TemplateBinding InnerRightContent, Converter={x:Static ObjectConverters.IsNotNull}}" />
                     </Grid>
-                  </Border>
+                  </ins:TemplateBorder>
                 </Panel>
               </DockPanel>
             </DataValidationErrors>
@@ -316,15 +316,15 @@
           <Setter Property="ContextFlyout" Value="{DynamicResource HorizontalTextBoxContextFlyout}" />
         </Style>
 
-        <Style Selector="^ /template/ TextBlock#PART_FloatingPlaceholder">
+        <Style Selector="^ /template/ :is(TextBlock)#PART_FloatingPlaceholder">
           <Setter Property="Cursor" Value="IBeam" />
         </Style>
-        <Style Selector="^[UseFloatingPlaceholder=true]:not(:empty) /template/ TextBlock#PART_FloatingPlaceholder">
+        <Style Selector="^[UseFloatingPlaceholder=true]:not(:empty) /template/ :is(TextBlock)#PART_FloatingPlaceholder">
           <Setter Property="IsVisible" Value="True" />
         </Style>
 
         <!-- The pointer deepens the fill and brightens the hairline; only focus lifts. -->
-        <Style Selector="^:pointerover:not(:focus-within) /template/ Border#PART_BorderElement">
+        <Style Selector="^:pointerover:not(:focus-within) /template/ :is(Border)#PART_BorderElement">
           <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsTextBoxHoverBorder}" />
         </Style>
@@ -333,45 +333,45 @@
           <Style Selector="^ /template/ Panel#PART_Field">
             <Setter Property="RenderTransform" Value="translateY(-1px)" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_BorderElement">
+          <Style Selector="^ /template/ :is(Border)#PART_BorderElement">
             <Setter Property="Background" Value="{DynamicResource InsTextBoxFocusBg}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsTextBoxFocusBorder}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsGlow}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Halo">
+          <Style Selector="^ /template/ :is(Border)#PART_Halo">
             <Setter Property="Opacity" Value="1" />
           </Style>
         </Style>
 
         <!-- Valid, for a value worth confirming, as the web marks it with its ok modifier. -->
         <Style Selector="^.ok">
-          <Style Selector="^ /template/ Border#PART_BorderElement, ^:pointerover:not(:focus-within) /template/ Border#PART_BorderElement">
+          <Style Selector="^ /template/ :is(Border)#PART_BorderElement, ^:pointerover:not(:focus-within) /template/ :is(Border)#PART_BorderElement">
             <Setter Property="BorderBrush" Value="{DynamicResource InsTextBoxOkBorder}" />
           </Style>
-          <Style Selector="^:focus-within /template/ Border#PART_BorderElement">
+          <Style Selector="^:focus-within /template/ :is(Border)#PART_BorderElement">
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneOk}" />
           </Style>
-          <Style Selector="^:focus-within /template/ Border#PART_Shadow">
+          <Style Selector="^:focus-within /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsTextBoxGlowOk}" />
           </Style>
-          <Style Selector="^:focus-within /template/ Border#PART_Halo">
+          <Style Selector="^:focus-within /template/ :is(Border)#PART_Halo">
             <Setter Property="Opacity" Value="0" />
           </Style>
         </Style>
 
         <Style Selector="^:error, ^.bad">
-          <Style Selector="^ /template/ Border#PART_BorderElement, ^:pointerover:not(:focus-within) /template/ Border#PART_BorderElement">
+          <Style Selector="^ /template/ :is(Border)#PART_BorderElement, ^:pointerover:not(:focus-within) /template/ :is(Border)#PART_BorderElement">
             <Setter Property="BorderBrush" Value="{DynamicResource InsTextBoxBadBorder}" />
           </Style>
-          <Style Selector="^:focus-within /template/ Border#PART_BorderElement">
+          <Style Selector="^:focus-within /template/ :is(Border)#PART_BorderElement">
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
           </Style>
-          <Style Selector="^:focus-within /template/ Border#PART_Shadow">
+          <Style Selector="^:focus-within /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsGlowBad}" />
           </Style>
-          <Style Selector="^:focus-within /template/ Border#PART_Halo">
+          <Style Selector="^:focus-within /template/ :is(Border)#PART_Halo">
             <Setter Property="Opacity" Value="0" />
           </Style>
         </Style>
@@ -386,7 +386,7 @@
           <Setter Property="TextElement.FontFeatures" Value="+tnum,+lnum" />
           <Setter Property="TextElement.FontWeight" Value="SemiBold" />
         </Style>
-        <Style Selector="^ /template/ Panel#PART_TextLayer.masked > TextBlock#PART_MaskInk">
+        <Style Selector="^ /template/ Panel#PART_TextLayer.masked > :is(TextBlock)#PART_MaskInk">
           <Setter Property="IsVisible" Value="True" />
         </Style>
         <Style Selector="^ /template/ Panel#PART_TextLayer.masked > TextPresenter#PART_TextPresenter">
@@ -412,10 +412,10 @@
         </Style>
 
         <!-- The counter under the field, as the web's .ins-count. -->
-        <Style Selector="^[(ins|InputCount.State)=Near] /template/ TextBlock#PART_Count">
+        <Style Selector="^[(ins|InputCount.State)=Near] /template/ :is(TextBlock)#PART_Count">
           <Setter Property="Foreground" Value="{DynamicResource InsToneWarn}" />
         </Style>
-        <Style Selector="^[(ins|InputCount.State)=Over] /template/ TextBlock#PART_Count">
+        <Style Selector="^[(ins|InputCount.State)=Over] /template/ :is(TextBlock)#PART_Count">
           <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
           <Setter Property="FontWeight" Value="Bold" />
         </Style>
@@ -423,10 +423,10 @@
         <!-- One control holding its addons, buttons or eye: the group draws the box, the text gives up its side padding. -->
         <Style Selector="^.input-group, ^.revealPasswordButton[AcceptsReturn=False][IsReadOnly=False]">
           <Setter Property="Padding" Value="8,8" />
-          <Style Selector="^ /template/ Border#PART_Inner">
+          <Style Selector="^ /template/ :is(Border)#PART_Inner">
             <Setter Property="Padding" Value="6,0" />
           </Style>
-          <Style Selector="^:focus-within /template/ Border#PART_BorderElement">
+          <Style Selector="^:focus-within /template/ :is(Border)#PART_BorderElement">
             <Setter Property="Background" Value="{DynamicResource InsGlassStrong}" />
           </Style>
         </Style>
@@ -478,7 +478,7 @@
         <!-- No box of its own, for a field inside another control's box (an editable select, a stepper). -->
         <Style Selector="^.bare">
           <Setter Property="MinHeight" Value="0" />
-          <Style Selector="^ /template/ Border#PART_Shadow, ^ /template/ Border#PART_Halo, ^ /template/ Border#PART_BorderElement">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow, ^ /template/ :is(Border)#PART_Halo, ^ /template/ :is(Border)#PART_BorderElement">
             <Setter Property="IsVisible" Value="False" />
           </Style>
           <Style Selector="^:focus-within /template/ Panel#PART_Field">

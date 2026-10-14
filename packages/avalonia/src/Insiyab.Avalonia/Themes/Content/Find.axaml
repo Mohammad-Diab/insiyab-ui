@@ -29,13 +29,13 @@
         <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border x:Name="PART_Card" Padding="{TemplateBinding Padding}"
+            <ins:TemplateBorder x:Name="PART_Card" Padding="{TemplateBinding Padding}"
                     Background="{DynamicResource InsGlassStrong}" BorderBrush="{DynamicResource InsRim}" BorderThickness="1"
                     CornerRadius="{DynamicResource InsRMd}" BoxShadow="{DynamicResource InsShMd}">
               <StackPanel Orientation="Horizontal" Spacing="4">
                 <TextBox x:Name="PART_Field" Classes="sm" Width="220" VerticalAlignment="Center"
                          Text="{TemplateBinding Text, Mode=TwoWay}" />
-                <TextBlock x:Name="PART_Count" MinWidth="64" Margin="6,0" VerticalAlignment="Center" TextAlignment="Center"
+                <ins:TemplateText x:Name="PART_Count" MinWidth="64" Margin="6,0" VerticalAlignment="Center" TextAlignment="Center"
                            FontSize="12" Foreground="{DynamicResource InsText2}" />
                 <Button x:Name="PART_Prev" Classes="bare icon sm" Focusable="False">
                   <ins:Icon Data="{StaticResource InsFindUp}" Size="16" />
@@ -47,13 +47,13 @@
                   <ins:Icon Data="{StaticResource InsFindClose}" Size="16" />
                 </Button>
               </StackPanel>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:open">
           <Setter Property="IsVisible" Value="True" />
         </Style>
-        <Style Selector="^:none /template/ TextBlock#PART_Count">
+        <Style Selector="^:none /template/ :is(TextBlock)#PART_Count">
           <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
         </Style>
       </ControlTheme>

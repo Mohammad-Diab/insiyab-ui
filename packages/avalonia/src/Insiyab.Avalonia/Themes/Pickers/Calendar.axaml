@@ -40,11 +40,11 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+            <ins:TemplateBorder Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
               <Path x:Name="PART_Chevron" Width="10" Height="10" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Data="M6.5,1.5 L3,5 L6.5,8.5"
                     Stroke="{TemplateBinding Foreground}" StrokeThickness="2" StrokeLineCap="Square" />
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover">
@@ -79,8 +79,8 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
-              <Border x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
-              <Border x:Name="PART_Face"
+              <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
+              <ins:TemplateBorder x:Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -90,14 +90,14 @@
                                 Foreground="{TemplateBinding Foreground}"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center" />
-              <Border x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2" BorderBrush="{DynamicResource InsToneBrand}" IsVisible="False" />
+              <ins:TemplateBorder x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2" BorderBrush="{DynamicResource InsToneBrand}" IsVisible="False" />
             </Panel>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover:not(.blocked)">
           <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="IsVisible" Value="True" />
         </Style>
         <Style Selector="^.outside">
@@ -114,10 +114,10 @@
           <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
           <Setter Property="BorderThickness" Value="0" />
           <Setter Property="FontWeight" Value="Bold" />
-          <Style Selector="^ /template/ Border#PART_Shadow">
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandSm}" />
           </Style>
-          <Style Selector="^ /template/ Border#PART_Face">
+          <Style Selector="^ /template/ :is(Border)#PART_Face">
             <Setter Property="FlowDirection" Value="LeftToRight" />
           </Style>
         </Style>
@@ -143,14 +143,14 @@
           <ControlTemplate>
             <!-- Its own ring, the same rounded box as the face, in place of the window's focus adorner -->
             <Panel>
-              <Border x:Name="PART_Ring" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" IsVisible="False" />
-              <Border x:Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+              <ins:TemplateBorder x:Name="PART_Ring" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" IsVisible="False" />
+              <ins:TemplateBorder x:Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
                 <ContentPresenter Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-              </Border>
+              </ins:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^:focus-visible /template/ Border#PART_Ring">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Ring">
           <Setter Property="IsVisible" Value="True" />
         </Style>
         <Style Selector="^:pointerover">
@@ -160,7 +160,7 @@
         <Style Selector="^.active, ^.active:pointerover">
           <Setter Property="Background" Value="{DynamicResource InsSegOnBg}" />
           <Setter Property="Foreground" Value="{DynamicResource InsSegOnFg}" />
-          <Style Selector="^ /template/ Border#PART_Face">
+          <Style Selector="^ /template/ :is(Border)#PART_Face">
             <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
           </Style>
         </Style>
@@ -254,7 +254,7 @@
   </Style>
   <Style Selector="ins|DateCalendar Border.cal-switch.moving Button.cal-switch-option.active">
     <Setter Property="Background" Value="Transparent" />
-    <Style Selector="^ /template/ Border#PART_Face">
+    <Style Selector="^ /template/ :is(Border)#PART_Face">
       <Setter Property="BoxShadow" Value="none" />
     </Style>
   </Style>

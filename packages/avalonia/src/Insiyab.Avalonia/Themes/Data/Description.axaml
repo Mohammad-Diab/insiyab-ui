@@ -18,7 +18,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+            <ins:TemplateBorder BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
                     Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
               <Grid ColumnDefinitions="208,*" RowDefinitions="Auto,Auto" ColumnSpacing="16">
                 <ContentPresenter x:Name="PART_Term" Content="{TemplateBinding Term}" Margin="0,1,0,0"
@@ -27,7 +27,7 @@
                 <ContentPresenter x:Name="PART_Value" Grid.Column="1" VerticalAlignment="Top" TextBlock.TextWrapping="Wrap"
                                   Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
               </Grid>
-            </Border>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:nth-child(1)">

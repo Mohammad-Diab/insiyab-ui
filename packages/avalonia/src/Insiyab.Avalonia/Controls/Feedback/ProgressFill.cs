@@ -10,7 +10,7 @@ public class ProgressFill : Border
 {
     private bool _armed;
 
-    protected override Type StyleKeyOverride => typeof(Border);
+    protected override Type StyleKeyOverride => typeof(TemplateBorder);
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {

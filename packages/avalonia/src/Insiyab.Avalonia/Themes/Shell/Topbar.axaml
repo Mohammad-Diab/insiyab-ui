@@ -41,8 +41,8 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel x:Name="PART_Press">
-              <Border Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
-              <Border Name="PART_Face"
+              <ins:TemplateBorder Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <ins:TemplateBorder Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -54,11 +54,11 @@
                                   Padding="{TemplateBinding Padding}"
                                   HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                   VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-              </Border>
+              </ins:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^ /template/ Border#PART_Face">
+        <Style Selector="^ /template/ :is(Border)#PART_Face">
           <Setter Property="Transitions">
             <Transitions>
               <BrushTransition Property="Background" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
@@ -66,7 +66,7 @@
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
         </Style>
       </ControlTheme>
@@ -80,7 +80,7 @@
         <Style Selector="^:pointerover">
           <Setter Property="Background" Value="{DynamicResource InsGlassHover}" />
           <Setter Property="RenderTransform" Value="translateY(-1px)" />
-          <Style Selector="^ /template/ Border#PART_Face">
+          <Style Selector="^ /template/ :is(Border)#PART_Face">
             <Setter Property="BoxShadow" Value="{DynamicResource InsIslandShadowHover}" />
           </Style>
         </Style>
@@ -142,7 +142,7 @@
     <Setter Property="FontSize" Value="12" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
-  <Style Selector="StackPanel.zone > ins|Pill /template/ Border#PART_Face">
+  <Style Selector="StackPanel.zone > ins|Pill /template/ :is(Border)#PART_Face">
     <Setter Property="BoxShadow" Value="{DynamicResource InsZonePillShadow}" />
   </Style>
 
@@ -169,7 +169,7 @@
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <!-- A row beside a taller mark or dot would stretch its label to the row and draw it high -->
-  <Style Selector=":is(Control).island StackPanel[Orientation=Horizontal] > :is(Control)">
+  <Style Selector=":is(ContentControl).island StackPanel[Orientation=Horizontal] > :is(Control), Border.island StackPanel[Orientation=Horizontal] > :is(Control)">
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
 
@@ -189,11 +189,11 @@
     <Setter Property="Padding" Value="20,0" />
     <Setter Property="MaxWidth" Value="416" />
   </Style>
-  <Style Selector=":is(Control).island.title">
+  <Style Selector=":is(ContentControl).island.title, Border.island.title">
     <Setter Property="ins:Shell.Enters" Value="True" />
   </Style>
-  <!-- Brand: only while the sidebar is collapsed or a drawer, since an open sidebar already shows it -->
-  <Style Selector=":is(Control).island.brand">
+  <!-- Brand: only while the sidebar is collapsed or a drawer, since an open sidebar already shows it. Islands are buttons, content controls and borders; naming them keeps these rules off every other control, and off the visual-only parts Avalonia never takes out of the tree -->
+  <Style Selector=":is(ContentControl).island.brand, Border.island.brand">
     <Setter Property="IsVisible" Value="False" />
   </Style>
   <Style Selector="Border.island.brand">
@@ -202,14 +202,14 @@
   <Style Selector="Button.island.brand">
     <Setter Property="Padding" Value="16,0" />
   </Style>
-  <Style Selector="SplitView:closed :is(Control).island.brand, SplitView:overlay :is(Control).island.brand">
+  <Style Selector="SplitView:closed :is(ContentControl).island.brand, SplitView:closed Border.island.brand, SplitView:overlay :is(ContentControl).island.brand, SplitView:overlay Border.island.brand">
     <Setter Property="IsVisible" Value="True" />
   </Style>
-  <Style Selector=":is(Control).island.brand StackPanel">
+  <Style Selector=":is(ContentControl).island.brand StackPanel, Border.island.brand StackPanel">
     <Setter Property="Orientation" Value="Horizontal" />
     <Setter Property="Spacing" Value="8" />
   </Style>
-  <Style Selector=":is(Control).island.brand Border.shell-mark">
+  <Style Selector=":is(ContentControl).island.brand Border.shell-mark, Border.island.brand Border.shell-mark">
     <Setter Property="Width" Value="28" />
     <Setter Property="Height" Value="28" />
     <Setter Property="TextElement.FontSize" Value="13" />
@@ -237,7 +237,7 @@
   </Style>
 
   <!-- At phone width the brand goes, the bar tightens and the title island loses its cap -->
-  <Style Selector="SplitView.narrow :is(Control).island.brand">
+  <Style Selector="SplitView.narrow :is(ContentControl).island.brand, SplitView.narrow Border.island.brand">
     <Setter Property="IsVisible" Value="False" />
   </Style>
   <Style Selector="SplitView.narrow Border.topbar">

@@ -1,6 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:ins="using:Insiyab.Avalonia">
+        xmlns:ins="using:Insiyab.Avalonia"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
 
   <Styles.Resources>
     <ResourceDictionary>
@@ -25,7 +26,7 @@
     <Setter Property="Template">
       <ControlTemplate>
         <Panel>
-          <Border Name="PART_TransparencyFallback" IsHitTestVisible="False" />
+          <ctl:TemplateBorder Name="PART_TransparencyFallback" IsHitTestVisible="False" />
           <ins:FrostGround Name="PART_InsGround"
                            IsHitTestVisible="False"
                            Wash1="{DynamicResource InsWash1}"
@@ -34,7 +35,7 @@
                            Orb2="{DynamicResource InsOrb2}"
                            VeilColor="{DynamicResource InsFrostVeilColor}"
                            VeilOpacity="{DynamicResource InsFrostVeilOpacity}" />
-          <Border Background="{TemplateBinding Background}" IsHitTestVisible="False" />
+          <ctl:TemplateBorder Background="{TemplateBinding Background}" IsHitTestVisible="False" />
           <Panel Background="Transparent" Margin="{TemplateBinding WindowDecorationMargin}" />
           <VisualLayerManager Name="PART_VisualLayerManager">
             <ContentPresenter Name="PART_ContentPresenter"

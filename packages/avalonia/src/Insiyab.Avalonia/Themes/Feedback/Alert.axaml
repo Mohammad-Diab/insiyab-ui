@@ -52,16 +52,16 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Border x:Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+            <ctl:TemplateBorder x:Name="PART_Face" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
               <ctl:Icon Data="{StaticResource InsCloseCross}" Size="24" StrokeThickness="2" />
-            </Border>
+            </ctl:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover">
           <Setter Property="Opacity" Value="1" />
           <Setter Property="RenderTransform" Value="rotate(90deg)" />
         </Style>
-        <Style Selector="^:focus-visible /template/ Border#PART_Face">
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Face">
           <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
         </Style>
       </ControlTheme>
@@ -82,7 +82,7 @@
           <ControlTemplate>
             <Panel>
               <!-- The message starts under the circle's centre and clears the bite with half the circle plus .9rem -->
-              <Border x:Name="PART_Message"
+              <ctl:TemplateBorder x:Name="PART_Message"
                       Margin="22,0,0,0"
                       Padding="36.4,10,16,10"
                       MinHeight="44"
@@ -104,8 +104,8 @@
                                     TextWrapping="Wrap"
                                     LineHeight="21" />
                 </DockPanel>
-              </Border>
-              <Border x:Name="PART_Icon"
+              </ctl:TemplateBorder>
+              <ctl:TemplateBorder x:Name="PART_Icon"
                       Width="44" Height="44"
                       CornerRadius="22"
                       HorizontalAlignment="Left"
@@ -115,7 +115,7 @@
                       BorderThickness="1">
                 <ctl:Icon Data="{TemplateBinding Icon}" Size="16" Foreground="{TemplateBinding IconForeground}"
                           HorizontalAlignment="Center" VerticalAlignment="Center" />
-              </Border>
+              </ctl:TemplateBorder>
             </Panel>
           </ControlTemplate>
         </Setter>

@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
 
   <!-- .ins-kbd: a key cap, a Border around a TextBlock. Key names are words, so Inter, left to right; the heavier bottom edge is the key. -->
   <Style Selector="Border.kbd">
@@ -13,7 +14,7 @@
     <Setter Property="HorizontalAlignment" Value="Left" />
     <Setter Property="FlowDirection" Value="LeftToRight" />
   </Style>
-  <Style Selector="Border.kbd > TextBlock">
+  <Style Selector="Border.kbd > TextBlock, Border.kbd > ins|TemplateText">
     <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
     <Setter Property="FontWeight" Value="Medium" />
