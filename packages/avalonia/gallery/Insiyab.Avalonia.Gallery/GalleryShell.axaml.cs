@@ -1,9 +1,12 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Automation;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using Insiyab.Avalonia.Controls;
 
 namespace Insiyab.Avalonia.Gallery;
@@ -18,9 +21,15 @@ public partial class GalleryShell : UserControl
         ("#9B2C5E", "عنابي"), ("#B45309", "كهرماني"), ("#C9A063", "ذهبي فاتح"),
     ];
 
+    // True from a page's opening until the person first touches it: what the page scrolls into view on its own must not move the page off its top.
+    private bool _opening;
+
     public GalleryShell()
     {
         InitializeComponent();
+        Host.AddHandler(RequestBringIntoViewEvent, (_, e) => { if (_opening) e.Handled = true; });
+        Host.AddHandler(PointerPressedEvent, (_, _) => _opening = false, RoutingStrategies.Tunnel, true);
+        Host.AddHandler(KeyDownEvent, (_, _) => _opening = false, RoutingStrategies.Tunnel, true);
         VersionText.Text = typeof(InsiyabTheme).Assembly.GetName().Version?.ToString(3);
         DirectionSeg.SelectionChanged += (_, _) => DirectionFlip.Run(this, ApplyDirection);
         ResetButton.Click += (_, _) => Reset();
@@ -96,8 +105,10 @@ public partial class GalleryShell : UserControl
 
     private void Open(GalleryPage page)
     {
+        _opening = true;
         Host.Content = page.Create();
         Scroller.Offset = default;
+        Dispatcher.UIThread.Post(() => { if (_opening) Scroller.Offset = default; }, DispatcherPriority.Loaded);
         ShowTitle(page);
         if (Shell.IsDrawer(ShellView) && ShellView.IsPaneOpen) Shell.Sidebar(ShellView, "closed");
     }
