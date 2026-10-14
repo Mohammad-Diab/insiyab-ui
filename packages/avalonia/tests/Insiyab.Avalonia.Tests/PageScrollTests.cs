@@ -12,7 +12,7 @@ namespace Insiyab.Avalonia.Tests;
 // A page opened from the sidebar starts at its top, whatever the page before it was scrolled to.
 public class PageScrollTests
 {
-    private static void LoadIcons()
+    internal static void LoadIcons()
     {
         var app = Application.Current!;
         if (app.TryGetResource("IconCheck", null, out _)) return;

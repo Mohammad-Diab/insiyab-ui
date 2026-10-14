@@ -3,9 +3,9 @@
              xmlns:ins="using:Insiyab.Avalonia.Controls"
              x:Class="Insiyab.Avalonia.Gallery.GalleryShell">
   <UserControl.Resources>
-    <!-- The docs site's brand swatch: a 30px disc in a 2px surface rim, ringed in its own colour while chosen -->
-    <!-- The chosen swatch's mark: four arcs of its own colour on the diagonals, 2px clear of the swatch -->
-    <StreamGeometry x:Key="SiteSwatchArcs">M37.387,24.659 A18,18 0 0 1 24.659,37.387 M15.341,37.387 A18,18 0 0 1 2.613,24.659 M2.613,15.341 A18,18 0 0 1 15.341,2.613 M24.659,2.613 A18,18 0 0 1 37.387,15.341</StreamGeometry>
+    <!-- The docs site's brand swatch: a 30px disc in a 2px surface rim; the chosen one is marked by SwatchMark, a ring that moves along the row -->
+    <!-- The mark's four arcs on the diagonals, 2px clear of the coloured disc, in a 36px box centred on the swatch -->
+    <StreamGeometry x:Key="SiteSwatchArcs">M33.455,22.141 A16,16 0 0 1 22.141,33.455 M13.859,33.455 A16,16 0 0 1 2.545,22.141 M2.545,13.859 A16,16 0 0 1 13.859,2.545 M22.141,2.545 A16,16 0 0 1 33.455,13.859</StreamGeometry>
     <ControlTheme x:Key="SiteSwatch" TargetType="Button">
       <Setter Property="ClipToBounds" Value="False" />
       <Setter Property="Width" Value="30" />
@@ -22,8 +22,6 @@
       <Setter Property="Template">
         <ControlTemplate>
           <Panel>
-            <Path Name="PART_Ring" Width="40" Height="40" Margin="-5" Stretch="None" Data="{StaticResource SiteSwatchArcs}"
-                  Stroke="{TemplateBinding Background}" StrokeThickness="2" StrokeLineCap="Round" Opacity="0" />
             <Border Name="PART_Face"
                     CornerRadius="15"
                     Background="{TemplateBinding Background}"
@@ -36,9 +34,6 @@
       </Setter>
       <Style Selector="^:pointerover">
         <Setter Property="RenderTransform" Value="scale(1.12)" />
-      </Style>
-      <Style Selector="^.on /template/ Path#PART_Ring">
-        <Setter Property="Opacity" Value="1" />
       </Style>
       <Style Selector="^:focus-visible /template/ Border#PART_Focus">
         <Setter Property="Opacity" Value="1" />
@@ -85,10 +80,14 @@
     <Style Selector="SplitView.xnarrow TextBlock.site-custom-text">
       <Setter Property="IsVisible" Value="False" />
     </Style>
-    <Style Selector="WrapPanel.site-swatches">
+    <Style Selector="Panel.site-swatches">
+      <Setter Property="Margin" Value="4,4,4,12" />
+      <Setter Property="ClipToBounds" Value="False" />
+    </Style>
+    <Style Selector="Panel.site-swatches > WrapPanel">
       <Setter Property="ItemSpacing" Value="8" />
       <Setter Property="LineSpacing" Value="8" />
-      <Setter Property="Margin" Value="4,4,4,12" />
+      <Setter Property="ClipToBounds" Value="False" />
     </Style>
     <Style Selector="ins|Segmented.site-dir">
       <Setter Property="Margin" Value="4,0,4,8" />
@@ -146,9 +145,19 @@
                 <TextBlock x:Name="PageTitle" Classes="shell-title" />
               </StackPanel>
             </Border>
+            <Button x:Name="SearchButton" Classes="island icon" ToolTip.Tip="بحث (Ctrl+K)" AutomationProperties.Name="بحث">
+              <ins:Icon Data="{StaticResource IconSearch}" />
+            </Button>
           </StackPanel>
           <StackPanel Classes="zone end">
             <ins:DayNight x:Name="DayNightToggle" ToolTip.Tip="الوضع الداكن" AutomationProperties.Name="الوضع الداكن" />
+            <ins:Notify x:Name="NotifyBell">
+              <ins:NotifyItem Icon="{StaticResource IconDownload}" Title="اكتمل التصدير" Description="الملف جاهز للتنزيل." End="الآن" IsUnread="True" />
+              <ins:NotifyItem Icon="{StaticResource IconMessage}" Title="تعليق جديد على المستند" Description="على الفقرة الثانية." End="قبل ساعة" IsUnread="True" />
+              <ins:NotifyItem Icon="{StaticResource IconUser}" Title="عضو جديد في الفريق" Description="انضمت سلمى إلى مساحة العمل." End="قبل ساعتين" IsUnread="True" />
+              <ins:NotifyItem Icon="{StaticResource IconCheck}" Title="تم حفظ التغييرات" Description="حُفظت نسخة جديدة من الملف." End="أمس" />
+              <ins:NotifyItem Icon="{StaticResource IconShare}" Title="شورك معك ملف" Description="ملف الميزانية من أحمد." End="أمس" />
+            </ins:Notify>
             <Button x:Name="AppearanceButton" Classes="island site-custom" AutomationProperties.Name="تخصيص المظهر">
               <StackPanel Orientation="Horizontal" Spacing="8">
                 <Border x:Name="BrandDot" Classes="site-custom-dot"><Border /></Border>
@@ -159,7 +168,13 @@
                 <ins:PopCard IsEnd="True">
                   <StackPanel>
                     <TextBlock Classes="pop-label" Text="لون الهوية" />
-                    <WrapPanel x:Name="Swatches" Classes="site-swatches" />
+                    <Panel Classes="site-swatches">
+                      <WrapPanel x:Name="Swatches" />
+                      <Canvas IsHitTestVisible="False" ClipToBounds="False">
+                        <Path x:Name="SwatchMark" Width="36" Height="36" Stretch="None" Data="{StaticResource SiteSwatchArcs}"
+                              StrokeThickness="2" StrokeLineCap="Round" Opacity="0" RenderTransformOrigin="50%,50%" />
+                      </Canvas>
+                    </Panel>
                     <TextBlock Classes="pop-label" Text="اتجاه الصفحة" />
                     <ins:Segmented x:Name="DirectionSeg" Classes="site-dir" SelectedIndex="0">
                       <ins:SegmentedItem Content="من اليمين · RTL" />

@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Insiyab.Avalonia.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Insiyab.Avalonia\Insiyab.Avalonia.csproj" />
   </ItemGroup>
 

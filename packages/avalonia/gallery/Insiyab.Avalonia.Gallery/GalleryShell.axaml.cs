@@ -24,9 +24,14 @@ public partial class GalleryShell : UserControl
     // True from a page's opening until the person first touches it: what the page scrolls into view on its own must not move the page off its top.
     private bool _opening;
 
+    private readonly SwatchRing _ring;
+    private readonly CommandPalette _palette = new() { SlashOpens = false };
+    private IDisposable? _paletteKeys;
+
     public GalleryShell()
     {
         InitializeComponent();
+        _ring = new SwatchRing(SwatchMark);
         Host.AddHandler(RequestBringIntoViewEvent, (_, e) => { if (_opening) e.Handled = true; });
         Host.AddHandler(PointerPressedEvent, (_, _) => _opening = false, RoutingStrategies.Tunnel, true);
         Host.AddHandler(KeyDownEvent, (_, _) => _opening = false, RoutingStrategies.Tunnel, true);
@@ -48,6 +53,7 @@ public partial class GalleryShell : UserControl
                 InsiyabTheme.SetPrimary((Color)swatch.Tag!);
                 SyncBrand();
             };
+            _ring.Watch(swatch);
             Swatches.Children.Add(swatch);
         }
         SyncBrand();
@@ -62,6 +68,17 @@ public partial class GalleryShell : UserControl
             }
             Nav.Items.Add(Link(page));
         }
+        foreach (var page in GalleryPages.All)
+            _palette.Items.Add(new PaletteItem
+            {
+                Label = page.Title,
+                Group = page.Group,
+                Keywords = page.En,
+                Icon = Application.Current!.TryFindResource(page.Icon, out var icon) ? icon as Geometry : null,
+                Key = page.Slug,
+                Run = () => Select(page.Slug),
+            });
+        SearchButton.Click += (_, _) => _palette.Open(SearchButton);
         Nav.SelectionChanged += (_, _) =>
         {
             if (Nav.SelectedItem is ListBoxItem { Tag: GalleryPage page }) Open(page);
@@ -84,6 +101,16 @@ public partial class GalleryShell : UserControl
         ApplyDirection();
         PaintDot();
         if (Nav.SelectedItem is ListBoxItem { Tag: GalleryPage page }) ShowTitle(page);
+        _paletteKeys?.Dispose();
+        _paletteKeys = TopLevel.GetTopLevel(this) is { } top ? _palette.AttachTo(top) : null;
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _paletteKeys?.Dispose();
+        _paletteKeys = null;
+        _palette.Close();
     }
 
     private ListBoxItem Link(GalleryPage page)
@@ -106,6 +133,7 @@ public partial class GalleryShell : UserControl
     private void Open(GalleryPage page)
     {
         _opening = true;
+        foreach (var item in _palette.Items) item.IsCurrent = item.Key == page.Slug;
         Host.Content = page.Create();
         Scroller.Offset = default;
         Dispatcher.UIThread.Post(() => { if (_opening) Scroller.Offset = default; }, DispatcherPriority.Loaded);
@@ -139,8 +167,7 @@ public partial class GalleryShell : UserControl
 
     private void SyncBrand()
     {
-        foreach (var swatch in Swatches.Children.OfType<Button>())
-            swatch.Classes.Set("on", swatch.Tag is Color c && c == InsiyabTheme.Primary);
+        _ring.Mark(Swatches.Children.OfType<Button>().FirstOrDefault(s => s.Tag is Color c && c == InsiyabTheme.Primary));
         PaintDot();
     }
 
