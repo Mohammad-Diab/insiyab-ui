@@ -43,7 +43,7 @@
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="ItemsPanel">
           <ItemsPanelTemplate>
-            <ins:TimelinePanel />
+            <VirtualizingStackPanel />
           </ItemsPanelTemplate>
         </Setter>
         <Setter Property="Template">
