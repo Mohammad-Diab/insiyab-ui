@@ -116,8 +116,15 @@
                           Classes="combo-list"
                           ins:PopMotion.Enabled="True">
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled">
-                      <StackPanel x:Name="PART_List" Margin="6">
+                      <StackPanel Margin="6">
                         <TextBlock x:Name="PART_Empty" Classes="combo-empty" Text="{TemplateBinding EmptyText}" />
+                        <ItemsControl x:Name="PART_List">
+                          <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                              <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                          </ItemsControl.ItemsPanel>
+                        </ItemsControl>
                       </StackPanel>
                     </ScrollViewer>
                   </Border>

@@ -426,21 +426,21 @@ public class MenusTests
         var w = Show(new StackPanel { Children = { tags } });
         tags.InputBox!.Focus();
         Settle();
-        var rows = w.GetVisualDescendants().OfType<Border>().Where(b => b.Classes.Contains("tags-option")).ToList();
-        Assert.Equal(5, rows.Count);
-        Assert.False(rows[0].IsVisible);
-        Assert.Equal(4, rows.Count(r => r.IsVisible));
+        List<Border> Rows() => w.GetVisualDescendants().OfType<Border>().Where(b => b.Classes.Contains("tags-option")).ToList();
+        Assert.Equal(4, Rows().Count);
+        Assert.DoesNotContain(Rows(), r => ((TextBlock)r.Child!).Text == "الأول");
 
         Type(w, "ثالث");
-        Assert.Equal(1, rows.Count(r => r.IsVisible));
+        Assert.Single(Rows());
         Press(w, Key.Down);
-        Assert.Contains("active", rows[2].Classes);
+        Assert.Contains("active", Rows().Single().Classes);
+        Assert.Equal("الثالث", ((TextBlock)Rows().Single().Child!).Text);
         Press(w, Key.Enter);
         Assert.Equal(["a", "c"], tags.Values);
         Assert.Equal("c", changes.Last().Added);
         Assert.True(tags.IsDropDownOpen);
         Assert.Equal(string.Empty, tags.InputBox.Text);
-        Assert.Equal(3, rows.Count(r => r.IsVisible));
+        Assert.Equal(3, Rows().Count);
 
         Type(w, "زز");
         var empty = w.GetVisualDescendants().OfType<TextBlock>().Single(t => t.Classes.Contains("combo-empty"));

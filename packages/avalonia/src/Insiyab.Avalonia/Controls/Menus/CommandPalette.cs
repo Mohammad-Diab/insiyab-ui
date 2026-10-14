@@ -3,7 +3,9 @@ using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -59,7 +61,7 @@ public class PaletteChoosingEventArgs(RoutedEvent routedEvent, PaletteItem item)
 [TemplatePart("PART_Backdrop", typeof(Control))]
 [TemplatePart("PART_Dialog", typeof(Control))]
 [TemplatePart("PART_Input", typeof(TextBox))]
-[TemplatePart("PART_List", typeof(Panel))]
+[TemplatePart("PART_List", typeof(ItemsControl))]
 [TemplatePart("PART_Scroll", typeof(ScrollViewer))]
 [TemplatePart("PART_Empty", typeof(Control))]
 [PseudoClasses(":searching")]
@@ -93,7 +95,7 @@ public class CommandPalette : TemplatedControl
         RoutedEvent.Register<CommandPalette, PaletteChoosingEventArgs>(nameof(Choosing), RoutingStrategies.Bubble);
 
     private TextBox? _input;
-    private Panel? _list;
+    private ItemsControl? _list;
     private ScrollViewer? _scroll;
     private Control? _empty;
     private Control? _backdrop;
@@ -104,6 +106,7 @@ public class CommandPalette : TemplatedControl
     private int _order;
     private readonly Dictionary<PaletteItem, Border> _rows = [];
     private readonly List<PaletteItem> _shown = [];
+    private List<object> _display = [];
     private PaletteItem? _active;
 
     public CommandPalette()
@@ -112,8 +115,6 @@ public class CommandPalette : TemplatedControl
         {
             if (e.NewItems is not null)
                 foreach (PaletteItem item in e.NewItems) item.Order = ++_order;
-            if (e.OldItems is not null)
-                foreach (PaletteItem item in e.OldItems) _rows.Remove(item);
             if (IsOpen) Render();
         };
     }
@@ -262,8 +263,9 @@ public class CommandPalette : TemplatedControl
             _input.TextChanged -= OnInputTextChanged;
         }
         if (_backdrop is not null) _backdrop.PointerPressed -= OnBackdropPressed;
+        if (_list is not null) _list.ContainerClearing -= OnContainerClearing;
         _input = e.NameScope.Find<TextBox>("PART_Input");
-        _list = e.NameScope.Find<Panel>("PART_List");
+        _list = e.NameScope.Find<ItemsControl>("PART_List");
         _scroll = e.NameScope.Find<ScrollViewer>("PART_Scroll");
         _empty = e.NameScope.Find<Control>("PART_Empty");
         _backdrop = e.NameScope.Find<Control>("PART_Backdrop");
@@ -274,8 +276,18 @@ public class CommandPalette : TemplatedControl
             _input.TextChanged += OnInputTextChanged;
         }
         if (_backdrop is not null) _backdrop.PointerPressed += OnBackdropPressed;
+        if (_list is not null)
+        {
+            _list.ItemTemplate = new FuncDataTemplate<object>((entry, _) => entry switch { PaletteItem item => BuildRow(item), Head head => new TextBlock { Text = head.Name, Classes = { "palette-head" } }, _ => null }, supportsRecycling: false);
+            _list.ContainerClearing += OnContainerClearing;
+        }
         _rows.Clear();
         Render();
+    }
+
+    private void OnContainerClearing(object? sender, ContainerClearingEventArgs e)
+    {
+        if (e.Container is ContentPresenter { Child: Border { Tag: PaletteItem item } row } && _rows.TryGetValue(item, out var kept) && kept == row) _rows.Remove(item);
     }
 
     private void OnBackdropPressed(object? sender, PointerPressedEventArgs e)
@@ -330,9 +342,8 @@ public class CommandPalette : TemplatedControl
         while (RecentKeys.Count > RecentLimit) RecentKeys.RemoveAt(RecentKeys.Count - 1);
     }
 
-    private Border RowOf(PaletteItem item)
+    private Border BuildRow(PaletteItem item)
     {
-        if (_rows.TryGetValue(item, out var row)) return row;
         var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto,Auto") };
         if (item.Icon is not null)
             grid.Children.Add(new Icon { Data = item.Icon, Size = 18, Margin = new Thickness(0, 0, 10, 0), Classes = { "palette-ico" } });
@@ -352,7 +363,8 @@ public class CommandPalette : TemplatedControl
             Grid.SetColumn(where, 3);
             grid.Children.Add(where);
         }
-        row = new Border { Classes = { "palette-item" }, Child = grid, Focusable = false };
+        var row = new Border { Classes = { "palette-item" }, Child = grid, Focusable = false, Tag = item };
+        if (_active == item) row.Classes.Add("active");
         row.PointerMoved += (_, _) => { if (_active != item) Activate(item, false); };
         row.PointerPressed += (_, e) => e.Handled = true;
         row.PointerReleased += (_, e) =>
@@ -367,8 +379,9 @@ public class CommandPalette : TemplatedControl
     private void Render()
     {
         if (_list is null) return;
-        _list.Children.Clear();
         _shown.Clear();
+        _rows.Clear();
+        var display = new List<object>();
         var terms = ArabicSearch.Terms(_input?.Text);
         var ordered = Items.OrderBy(i => i.Order).ToList();
         PseudoClasses.Set(":searching", terms.Length > 0);
@@ -382,7 +395,7 @@ public class CommandPalette : TemplatedControl
             foreach (var (item, _, _) in hits)
             {
                 _shown.Add(item);
-                _list.Children.Add(RowOf(item));
+                display.Add(item);
             }
         }
         else
@@ -409,14 +422,16 @@ public class CommandPalette : TemplatedControl
             }
             foreach (var (name, items) in groups)
             {
-                if (name.Length > 0) _list.Children.Add(new TextBlock { Text = name, Classes = { "palette-head" } });
+                if (name.Length > 0) display.Add(new Head(name));
                 foreach (var item in items)
                 {
                     _shown.Add(item);
-                    _list.Children.Add(RowOf(item));
+                    display.Add(item);
                 }
             }
         }
+        _display = display;
+        _list.ItemsSource = display;
         if (_empty is not null) _empty.IsVisible = _shown.Count == 0;
         _scroll?.ScrollToHome();
         Activate(_shown.Count > 0 ? _shown[0] : null, false);
@@ -426,10 +441,12 @@ public class CommandPalette : TemplatedControl
     {
         if (_active is not null && _rows.TryGetValue(_active, out var prev)) prev.Classes.Remove("active");
         _active = item;
-        if (item is not null && _rows.TryGetValue(item, out var row))
-        {
-            row.Classes.Add("active");
-            if (scroll) row.BringIntoView();
-        }
+        if (item is null) return;
+        if (_rows.TryGetValue(item, out var row)) row.Classes.Add("active");
+        if (!scroll || _list is null) return;
+        _list.ScrollIntoView(_display.IndexOf(item));
+        if (_rows.TryGetValue(item, out row)) row.Classes.Add("active");
     }
+
+    private sealed record Head(string Name);
 }
