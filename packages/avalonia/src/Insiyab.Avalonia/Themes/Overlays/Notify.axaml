@@ -8,14 +8,7 @@
       <SolidColorBrush x:Key="InsNotifyCountBg" Color="#DC2626" />
       <SolidColorBrush x:Key="InsNotifyIcoBg" Color="{DynamicResource InsPrimaryColor}" Opacity="0.1" />
       <SolidColorBrush x:Key="InsNotifyFootHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.06" />
-      <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Light">
-          <SolidColorBrush x:Key="InsNotifyUnreadBg" Color="{DynamicResource InsPrimaryColor}" Opacity="0.05" />
-        </ResourceDictionary>
-        <ResourceDictionary x:Key="Dark">
-          <SolidColorBrush x:Key="InsNotifyUnreadBg" Color="{DynamicResource InsPrimaryColor}" Opacity="0.12" />
-        </ResourceDictionary>
-      </ResourceDictionary.ThemeDictionaries>
+      <SolidColorBrush x:Key="InsNotifyUnreadBd" Color="{DynamicResource InsPrimaryColor}" Opacity="0.35" />
 
       <!-- The foot link, .ins-notify-foot: centred brand text under the list -->
       <ControlTheme x:Key="InsNotifyFoot" TargetType="Button">
@@ -164,8 +157,8 @@
                       MinHeight="{TemplateBinding MinHeight}">
                 <DockPanel>
                   <Panel DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Center">
-                    <ctl:TemplateBorder Name="PART_Ico" Width="36" Height="36" CornerRadius="{DynamicResource InsRMd}" Background="{DynamicResource InsNotifyIcoBg}">
-                      <ctl:Icon Data="{TemplateBinding Icon}" Size="15" Foreground="{DynamicResource InsToneBrandSoft}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <ctl:TemplateBorder Name="PART_Ico" Width="36" Height="36" CornerRadius="{DynamicResource InsRMd}" Background="{DynamicResource InsCtlBg}">
+                      <ctl:Icon Name="PART_Icon" Classes="notify-icon" Data="{TemplateBinding Icon}" Size="15" Foreground="{DynamicResource InsText3}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </ctl:TemplateBorder>
                     <ctl:Avatar Name="PART_Avatar" Classes="sm" Content="{TemplateBinding Avatar}" IsVisible="False" />
                   </Panel>
@@ -190,14 +183,12 @@
                   </StackPanel>
                 </DockPanel>
               </ctl:TemplateBorder>
-              <Ellipse Name="PART_Dot"
-                       Width="7"
-                       Height="7"
-                       Margin="4,0,0,0"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
-                       Fill="{DynamicResource InsPrimaryMid}"
-                       IsVisible="False" />
+              <ctl:TemplateBorder Name="PART_Mark"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BorderThickness="1"
+                      BorderBrush="{DynamicResource InsNotifyUnreadBd}"
+                      IsHitTestVisible="False"
+                      IsVisible="False" />
               <ctl:TemplateBorder Name="PART_Focus"
                       CornerRadius="{TemplateBinding CornerRadius}"
                       BorderThickness="2"
@@ -210,19 +201,26 @@
         <Style Selector="^ /template/ :is(Border)#PART_Row">
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ctl:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^:nth-child(n+2)">
+        <Style Selector="^:divided">
           <Setter Property="BorderThickness" Value="0,1,0,0" />
         </Style>
+        <!-- Unread: the title, the icon and a hairline rim in the brand; read rows stay quiet -->
         <Style Selector="^:unread">
-          <Setter Property="Background" Value="{DynamicResource InsNotifyUnreadBg}" />
           <Style Selector="^ /template/ :is(TextBlock)#PART_Title">
             <Setter Property="FontWeight" Value="ExtraBold" />
+            <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
           </Style>
-          <Style Selector="^ /template/ Ellipse#PART_Dot">
+          <Style Selector="^ /template/ :is(Border)#PART_Ico">
+            <Setter Property="Background" Value="{DynamicResource InsNotifyIcoBg}" />
+          </Style>
+          <Style Selector="^ /template/ ctl|Icon#PART_Icon">
+            <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Mark">
             <Setter Property="IsVisible" Value="True" />
           </Style>
         </Style>

@@ -71,17 +71,8 @@
 .ins-notify-list .ins-list-item::after { content: none; }
 .ins-notify-list .ins-list-title { font-weight: 600; }
 
-/* Unread: a brand dot at the start edge, a faint tint and a bolder title. */
-.ins-notify-list [data-ins-unread] { background: rgba(var(--ins-primary-rgb), .05); }
-.ins-notify-list [data-ins-unread] .ins-list-title { font-weight: 800; }
-.ins-notify-list [data-ins-unread]::before {
-  content: "";
-  position: absolute;
-  inset-inline-start: .25rem;
-  inset-block-start: calc(50% - .21875rem);
-  inline-size: .4375rem;
-  block-size: .4375rem;
-  border-radius: 50%;
-  background: var(--ins-primary-mid);
-}
-:root[data-ins-theme="dark"] .ins-notify-list [data-ins-unread] { background: rgba(var(--ins-primary-rgb), .12); }
+/* Read rows stay quiet; an unread one shows it in the brand: its title, its icon and a hairline rim. */
+.ins-notify-list .ins-panel-ico { background: var(--ins-ctl-bg); color: var(--ins-text-3); }
+.ins-notify-list [data-ins-unread] { box-shadow: inset 0 0 0 1px rgba(var(--ins-primary-rgb), .35); }
+.ins-notify-list [data-ins-unread] .ins-list-title { font-weight: 800; color: var(--ins-tone-brand); }
+.ins-notify-list [data-ins-unread] .ins-panel-ico { background: rgba(var(--ins-primary-rgb), .1); color: var(--ins-tone-brand-soft); }

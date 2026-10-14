@@ -23,7 +23,7 @@ SitePlay.define({
     { key: 'unread', label: 'غير المقروءة', type: 'seg', value: '3', choices: [
       { value: '0', label: 'لا شيء' },
       { value: '1', label: 'واحد' },
-      { value: '3', label: 'ثلاثة', name: 'data-ins-unread', desc: 'على صف لم يُقرأ: نقطة بلون الهوية في أوله، وخلفية خفيفة، وعنوان أثقل، ويعده الجرس. وتزول حين يُنقر الصف.' },
+      { value: '3', label: 'ثلاثة', name: 'data-ins-unread', desc: 'على صف لم يُقرأ: عنوانه وأيقونته بلون الهوية، وحوله إطار رفيع بلونها، ويعده الجرس. ويعود الصف عاديًا حين يُنقر.' },
       { value: 'many', label: 'أكثر من 99' }
     ] },
     { key: 'style', label: 'أول الصف', type: 'seg', value: 'ico', choices: [

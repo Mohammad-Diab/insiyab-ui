@@ -6,6 +6,7 @@ using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -23,7 +24,7 @@ public sealed class NotifyReadEventArgs(RoutedEvent routedEvent, NotifyItem? ite
     public bool All { get; } = all;
 }
 
-/// <summary>The notification centre plugin (<c>details.ins-notify</c>): a bell with the unread count on its corner, opening a panel with a head, the list and a foot link. Its items are <see cref="NotifyItem"/>s; clicking one marks it read, and the head's button marks them all. A count that grows rings the bell once. The panel is a popup in the window's overlay layer, with the look of a <see cref="PopCard"/>; the arrows, Home and End walk the rows and Escape closes it.</summary>
+/// <summary>The notification centre plugin (<c>details.ins-notify</c>): a bell with the unread count on its corner, opening a panel with a head, the list and a foot link. Its items are <see cref="NotifyItem"/>s; clicking one marks it read, and the head's button marks them all. A count that grows rings the bell once. The panel is a popup in the window's overlay layer, with the look of a <see cref="PopCard"/>; the arrows, Home and End walk the rows and Escape closes it. The list builds only the rows in view, so the count and the keys go by item, not by built row.</summary>
 [TemplatePart("PART_Bell", typeof(Button))]
 [TemplatePart("PART_Popup", typeof(Popup))]
 [TemplatePart("PART_ReadAll", typeof(Button))]
@@ -68,7 +69,12 @@ public class Notify : ItemsControl
     public static readonly RoutedEvent<RoutedEventArgs> FootClickEvent =
         RoutedEvent.Register<Notify, RoutedEventArgs>(nameof(FootClick), RoutingStrategies.Bubble);
 
+    private static readonly FuncTemplate<Panel?> DefaultPanel = new(() => new VirtualizingStackPanel());
+
+    private readonly HashSet<NotifyItem> _watched = [];
     private int _unread;
+    private int _held = -1;
+    private bool _quiet;
     private string _countText = "0";
     private bool _ready;
     private Button? _bell;
@@ -79,12 +85,12 @@ public class Notify : ItemsControl
     static Notify()
     {
         TransformOperationsAnimator.Ensure();
+        ItemsPanelProperty.OverrideDefaultValue<Notify>(DefaultPanel);
     }
 
     public Notify()
     {
         Items.CollectionChanged += OnItemsChanged;
-        AddHandler(NotifyItem.UnreadChangedEvent, (_, _) => Sync());
         AddHandler(Button.ClickEvent, OnItemClick, RoutingStrategies.Bubble);
     }
 
@@ -136,7 +142,15 @@ public class Notify : ItemsControl
     /// <summary>Marks every item read, quietly, as <c>Insiyab.notify(box, 'all')</c>.</summary>
     public int MarkAllRead()
     {
-        foreach (var item in Rows()) item.IsUnread = false;
+        _quiet = true;
+        try
+        {
+            foreach (var row in Rows()) row.IsUnread = false;
+        }
+        finally
+        {
+            _quiet = false;
+        }
         return Sync();
     }
 
@@ -156,6 +170,8 @@ public class Notify : ItemsControl
             _popup.Opened -= OnPopupOpened;
             _popup.Closed -= OnPopupClosed;
             _popup.RemoveHandler(KeyDownEvent, OnPopupKey);
+            _popup.RemoveHandler(GotFocusEvent, OnPopupFocus);
+            _popup.RemoveHandler(ScrollViewer.ScrollChangedEvent, OnPopupScrolled);
         }
         _bell = e.NameScope.Find<Button>("PART_Bell");
         _popup = e.NameScope.Find<Popup>("PART_Popup");
@@ -170,6 +186,8 @@ public class Notify : ItemsControl
             _popup.Opened += OnPopupOpened;
             _popup.Closed += OnPopupClosed;
             _popup.AddHandler(KeyDownEvent, OnPopupKey, RoutingStrategies.Bubble);
+            _popup.AddHandler(GotFocusEvent, OnPopupFocus, RoutingStrategies.Bubble);
+            _popup.AddHandler(ScrollViewer.ScrollChangedEvent, OnPopupScrolled, RoutingStrategies.Bubble);
         }
         PlacePopup();
         Sync();
@@ -211,16 +229,49 @@ public class Notify : ItemsControl
         _popup.HorizontalOffset = (fromRight ? Pop.Room.Right : -Pop.Room.Left) + to - from;
     }
 
-    private IEnumerable<NotifyItem> Rows()
+    private IEnumerable<NotifyItem> Rows() => Items.OfType<NotifyItem>();
+
+    private void OnItemsChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        foreach (var item in Items)
+        if (e.Action == NotifyCollectionChangedAction.Reset)
         {
-            if (item is NotifyItem row) yield return row;
-            else if (ContainerFromItem(item!) is NotifyItem container) yield return container;
+            foreach (var row in _watched) row.PropertyChanged -= OnRowChanged;
+            _watched.Clear();
+            foreach (var row in Rows()) Watch(row);
         }
+        else
+        {
+            if (e.OldItems is not null) foreach (var old in e.OldItems) if (old is NotifyItem row) { Unwatch(row); row.SetDivided(false); }
+            if (e.NewItems is not null) foreach (var added in e.NewItems) if (added is NotifyItem row) Watch(row);
+        }
+        Divide(e.Action == NotifyCollectionChangedAction.Reset ? 0 : Math.Min(Place(e.NewStartingIndex), Place(e.OldStartingIndex)));
+        Sync();
     }
 
-    private void OnItemsChanged(object? sender, NotifyCollectionChangedEventArgs e) => Sync();
+    // The divider is a state of the row's place in the list, set from the items so a row that is not built keeps it right; the theme's nth-child rule held removed rows alive.
+    private void Divide(int from)
+    {
+        for (var i = from == int.MaxValue ? 0 : from; i < Items.Count; i++)
+            if (Items[i] is NotifyItem row) row.SetDivided(i > 0);
+    }
+
+    private static int Place(int index) => index < 0 ? int.MaxValue : index;
+
+    // The unread state lives on the items, built or not, so the count listens to every item rather than to the rows in view.
+    private void Watch(NotifyItem row)
+    {
+        if (_watched.Add(row)) row.PropertyChanged += OnRowChanged;
+    }
+
+    private void Unwatch(NotifyItem row)
+    {
+        if (_watched.Remove(row)) row.PropertyChanged -= OnRowChanged;
+    }
+
+    private void OnRowChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == NotifyItem.IsUnreadProperty && !_quiet) Sync();
+    }
 
     private int Sync()
     {
@@ -258,7 +309,6 @@ public class Notify : ItemsControl
         if (item.IsUnread)
         {
             item.IsUnread = false;
-            Sync();
             RaiseEvent(new NotifyReadEventArgs(ReadEvent, item, false));
         }
         if (!CloseOnItemClick) return;
@@ -298,7 +348,13 @@ public class Notify : ItemsControl
                 Fit(root.Width);
             }
         }
-        Dispatcher.UIThread.Post(() => (Rows().FirstOrDefault(r => r.IsEffectivelyVisible) as Control ?? _foot)?.Focus(NavigationMethod.Directional), DispatcherPriority.Loaded);
+        Dispatcher.UIThread.Post(FocusFirst, DispatcherPriority.Loaded);
+    }
+
+    private void FocusFirst()
+    {
+        if (Items.Count > 0) FocusRow(0);
+        else _foot?.Focus(NavigationMethod.Directional);
     }
 
     private void OnPopupKey(object? sender, KeyEventArgs e)
@@ -310,23 +366,47 @@ public class Notify : ItemsControl
             _bell?.Focus();
             return;
         }
-        var rows = Rows().Where(r => r.IsEffectivelyVisible).ToList();
-        var at = rows.FindIndex(r => r.IsFocused);
-        Control? to = e.Key switch
+        if (Items.Count == 0) return;
+        var last = Items.Count - 1;
+        var at = e.Source is NotifyItem row ? IndexFromContainer(row) : -1;
+        var to = e.Key switch
         {
-            Key.Down => rows.Count == 0 ? null : rows[at < 0 ? 0 : Math.Min(at + 1, rows.Count - 1)],
-            Key.Up => rows.Count == 0 ? null : rows[at <= 0 ? 0 : at - 1],
-            Key.Home => rows.FirstOrDefault(),
-            Key.End => rows.LastOrDefault(),
-            _ => null,
+            Key.Down => at < 0 ? 0 : Math.Min(at + 1, last),
+            Key.Up => Math.Max(at - 1, 0),
+            Key.Home => 0,
+            Key.End => last,
+            _ => -1,
         };
-        if (to is null) return;
-        to.Focus(NavigationMethod.Directional);
+        if (to < 0) return;
+        FocusRow(to);
         e.Handled = true;
+    }
+
+    // A row far out of view is not built yet, so scrolling to its place builds it before it takes the focus.
+    private void FocusRow(int index)
+    {
+        ScrollIntoView(index);
+        ContainerFromIndex(index)?.Focus(NavigationMethod.Directional);
+    }
+
+    private void OnPopupFocus(object? sender, FocusChangedEventArgs e) => _held = e.Source is NotifyItem row ? IndexFromContainer(row) : -1;
+
+    // A row scrolled out of view is unbuilt and drops the focus, which would leave the arrows and Escape with nothing to hear them; the nearest row in view takes it.
+    private void OnPopupScrolled(object? sender, ScrollChangedEventArgs e)
+    {
+        if (_held >= 0) Dispatcher.UIThread.Post(KeepFocus, DispatcherPriority.Loaded);
+    }
+
+    private void KeepFocus()
+    {
+        if (!IsOpen || _held < 0 || Presenter?.Panel is not VirtualizingStackPanel { FirstRealizedIndex: >= 0 } panel) return;
+        if (TopLevel.GetTopLevel(this)?.FocusManager?.GetFocusedElement() is not null) return;
+        ContainerFromIndex(Math.Clamp(_held, panel.FirstRealizedIndex, panel.LastRealizedIndex))?.Focus(NavigationMethod.Pointer);
     }
 
     private void OnPopupClosed(object? sender, EventArgs e)
     {
+        _held = -1;
         if (IsOpen) IsOpen = false;
         var focused = TopLevel.GetTopLevel(this)?.FocusManager?.GetFocusedElement() as Visual;
         var inside = focused is not null && _popup?.Child is Visual child && (focused == child || child.IsVisualAncestorOf(focused));
