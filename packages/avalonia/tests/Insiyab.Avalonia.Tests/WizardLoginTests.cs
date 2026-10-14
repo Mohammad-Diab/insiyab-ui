@@ -212,7 +212,7 @@ public class WizardLoginTests
         DataValidationErrors.SetErrors(otp, ["الرمز غير صحيح."]);
         Settle();
         Assert.Contains(":invalid", otp.Classes);
-        AssertBrush(otp, "InsToneBadBd", () => block.BorderBrush);
+        AssertBrush(otp, "InsTextBoxBadBorder", () => block.BorderBrush);
         var message = MessageUnder(otp, "الرمز غير صحيح.");
         Assert.NotNull(message);
         Assert.True(message!.TranslatePoint(default, w)!.Value.Y >= block.TranslatePoint(new Point(0, block.Bounds.Height), w)!.Value.Y);
