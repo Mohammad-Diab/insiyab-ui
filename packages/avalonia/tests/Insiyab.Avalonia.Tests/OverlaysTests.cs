@@ -1057,6 +1057,60 @@ public class OverlaysTests
     }
 
     [AvaloniaFact]
+    public void The_focus_ring_of_a_notification_stays_inside_the_scrolled_list()
+    {
+        var notify = new Notify();
+        for (var i = 0; i < 14; i++) notify.Items.Add(new NotifyItem { Title = "إشعار " + i, Description = "وصف", End = "الآن" });
+        var window = Show(new StackPanel { Margin = new Thickness(40), Children = { notify } }, FlowDirection.LeftToRight, null, 900, 600);
+        Click(Part<Button>(notify, "PART_Bell"), window);
+        Settle();
+        var presenter = Assert.IsType<FlyoutPresenter>(Part<Popup>(notify, "PART_Popup").Child);
+        var scroll = presenter.GetVisualDescendants().OfType<ScrollViewer>().First(s => s.Name == "PART_Scroll");
+        Assert.True(scroll.Extent.Height > scroll.Viewport.Height + 100);
+
+        void Check(string step)
+        {
+            var port = BoundsIn(scroll, window);
+            var item = Assert.IsType<NotifyItem>(window.FocusManager!.GetFocusedElement());
+            var ring = BoundsIn(Part<Border>(item, "PART_Row"), window).Inflate(3);
+            Assert.True(ring.Top >= port.Top - 0.5 && ring.Bottom <= port.Bottom + 0.5, $"{step}: ring {ring.Top}-{ring.Bottom} outside list {port.Top}-{port.Bottom}");        }
+
+        void Step(Key key, string step)
+        {
+            window.KeyPress(key, RawInputModifiers.None, PhysicalKey.None, null);
+            window.KeyRelease(key, RawInputModifiers.None, PhysicalKey.None, null);
+            Settle(60);
+            Check(step);
+        }
+
+        Check("open");
+        for (var i = 1; i < 14; i++) Step(Key.Down, "down " + i);
+        for (var i = 1; i < 14; i++) Step(Key.Up, "up " + i);
+    }
+
+    [AvaloniaFact]
+    public void The_last_notification_shows_its_whole_focus_ring_with_no_foot_under_it()
+    {
+        var notify = new Notify { FootText = null };
+        for (var i = 0; i < 3; i++) notify.Items.Add(new NotifyItem { Title = "إشعار " + i, Description = "وصف", End = "الآن" });
+        var window = Show(new StackPanel { Margin = new Thickness(40), Children = { notify } }, FlowDirection.RightToLeft, null, 900, 600);
+        Click(Part<Button>(notify, "PART_Bell"), window);
+        Settle();
+        var last = (NotifyItem)notify.Items[2]!;
+        last.Focus(NavigationMethod.Directional);
+        Settle(60);
+        Assert.DoesNotContain(window.GetVisualDescendants().OfType<FocusRing>(), r => r.IsEffectivelyVisible);
+        var row = BoundsIn(Part<Border>(last, "PART_Row"), window);
+        var frame =Assert.IsType<global::Avalonia.Media.Imaging.WriteableBitmap>(window.CaptureRenderedFrame());
+        using var buffer = frame.Lock();
+        var bytes = new byte[buffer.RowBytes * buffer.Size.Height];
+        System.Runtime.InteropServices.Marshal.Copy(buffer.Address, bytes, 0, bytes.Length);
+        int Green(double x, double y) => bytes[(int)y * buffer.RowBytes + (int)x * 4 + 1];
+        foreach (var (x, y, side) in new[] { (row.Center.X, row.Bottom - 1.5, "bottom"), (row.Center.X, row.Top + 1.5, "top"), (row.Left + 1.5, row.Center.Y, "left"), (row.Right - 1.5, row.Center.Y, "right") })
+            Assert.True(Green(x, y) < 200, $"no ring ink on the row's {side} edge at {x},{y} (green {Green(x, y)})");
+    }
+
+    [AvaloniaFact]
     public void Arrows_move_through_the_notifications()
     {
         var notify = MakeNotify();

@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 
@@ -28,6 +29,8 @@ public class NotifyItem : Button
     public static readonly StyledProperty<bool> IsUnreadProperty =
         AvaloniaProperty.Register<NotifyItem, bool>(nameof(IsUnread));
 
+    private const double RingRoom = 6;
+
     internal static readonly RoutedEvent<RoutedEventArgs> UnreadChangedEvent =
         RoutedEvent.Register<NotifyItem, RoutedEventArgs>("UnreadChanged", RoutingStrategies.Bubble);
 
@@ -45,6 +48,14 @@ public class NotifyItem : Button
     public string? End { get => GetValue(EndProperty); set => SetValue(EndProperty, value); }
 
     public bool IsUnread { get => GetValue(IsUnreadProperty); set => SetValue(IsUnreadProperty, value); }
+
+    // The focus ring is drawn outside the row, so a row reached by keyboard is scrolled in with room for it.
+    protected override void OnGotFocus(FocusChangedEventArgs e)
+    {
+        base.OnGotFocus(e);
+        if (e.NavigationMethod is NavigationMethod.Tab or NavigationMethod.Directional)
+            this.BringIntoView(new Rect(Bounds.Size).Inflate(RingRoom));
+    }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
