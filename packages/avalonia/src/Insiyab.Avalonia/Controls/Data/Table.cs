@@ -23,9 +23,11 @@ namespace Insiyab.Avalonia.Controls;
 /// <summary>A data table, the web's <c>.ins-table</c> in its <c>.ins-table-wrap</c>: a header bar over a card of rows; classes <c>sticky</c> (header kept in view inside MaxHeight, 32rem unless set) and <c>pin</c> (first column kept in view, as <see cref="FrozenColumns"/> 1).</summary>
 [TemplatePart("PART_Scroll", typeof(ScrollViewer))]
 [TemplatePart("PART_Head", typeof(Control))]
+[TemplatePart("PART_Guide", typeof(Control))]
+[TemplatePart("PART_MarkerLayer", typeof(Canvas))]
 [TemplatePart("PART_HeadCells", typeof(ColumnsPanel))]
 [TemplatePart("PART_Rows", typeof(Panel))]
-[PseudoClasses(":empty", ":selectable", ":in-panel", ":flush", ":cell-cursor")]
+[PseudoClasses(":empty", ":selectable", ":in-panel", ":flush", ":cell-cursor", ":keyboard")]
 public partial class Table : TemplatedControl
 {
     public static readonly StyledProperty<IEnumerable?> ItemsSourceProperty =
@@ -68,6 +70,10 @@ public partial class Table : TemplatedControl
     private readonly List<TableRow> _generated = [];
     private ScrollViewer? _scroll;
     private Control? _head;
+    private Control? _guide;
+    private Canvas? _markerLayer;
+    private TableRow? _marked;
+    private MarkerFlight? _markerFlight;
     private ColumnsPanel? _headCells;
     private Panel? _rows;
     private CheckBox? _all;
@@ -186,12 +192,27 @@ public partial class Table : TemplatedControl
 
     internal void RaiseCellEditing(TableEditEventArgs args) => CellEditing?.Invoke(this, args);
 
+    internal Control? Guide => _guide;
+
+    // While a column is dragged wider, a line runs down the table at the edge being moved; null hides it.
+    internal void ShowGuide(TableHeader? header)
+    {
+        if (_guide is null) return;
+        _guide.IsVisible = header is not null;
+        if (header is null || _guide.GetVisualParent() is not Visual box) return;
+        header.UpdateLayout();
+        var edge = header.IsGripFlipped ? 0 : header.Bounds.Width;
+        if (header.TranslatePoint(new Point(edge, 0), box) is { } at) _guide.RenderTransform = new TranslateTransform(Math.Round(at.X - _guide.Bounds.Width / 2), 0);
+    }
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
         if (_scroll is not null) _scroll.ScrollChanged -= OnScroll;
         _scroll = e.NameScope.Find<ScrollViewer>("PART_Scroll");
         _head = e.NameScope.Find<Control>("PART_Head");
+        _guide = e.NameScope.Find<Control>("PART_Guide");
+        _markerLayer = e.NameScope.Find<Canvas>("PART_MarkerLayer");
         _headCells = e.NameScope.Find<ColumnsPanel>("PART_HeadCells");
         _rows = e.NameScope.Find<Panel>("PART_Rows");
         if (_scroll is not null) _scroll.ScrollChanged += OnScroll;
@@ -441,10 +462,54 @@ public partial class Table : TemplatedControl
 
     private void SyncSelection(bool quiet)
     {
+        FollowMarker();
         var count = _display.Count(r => r.IsSelected);
         if (_all is not null)
             _all.IsChecked = count == 0 ? false : count == _display.Count ? true : null;
         if (!quiet || count > 0) SelectionChanged?.Invoke(this, new TableSelectionEventArgs(SelectedRows));
+    }
+
+    // When the one selected row changes, its marker flies to the new row as the sidebar's does, instead of one shrinking while the other grows.
+    private void FollowMarker()
+    {
+        var selected = _display.Where(r => r.IsSelected).Take(2).ToList();
+        var only = selected.Count == 1 ? selected[0] : null;
+        var from = _marked;
+        _marked = only;
+        if (only is null || from is null || from == only || from.IsSelected || !_display.Contains(from) || _markerLayer is null) return;
+        if (MarkerSpan(from) is not { } a || MarkerSpan(only) is not { } b) return;
+        var start = (a.Y, a.Height);
+        if (_markerFlight is { IsDone: false } previous)
+        {
+            start = (previous.Start, previous.Length);
+            previous.Land();
+        }
+        var bar = new Border { Classes = { "table-marker-flight" } };
+        Canvas.SetLeft(bar, b.X);
+        var layer = _markerLayer;
+        MarkerFlight? run = null;
+        run = MarkerFlight.Run(this, start, (b.Y, b.Height), (y, h) =>
+        {
+            Canvas.SetTop(bar, y);
+            bar.Height = h;
+        }, () =>
+        {
+            layer.Children.Remove(bar);
+            if (_markerFlight != run) return;
+            _markerFlight = null;
+            Classes.Remove("moving");
+        });
+        if (run is null) return;
+        layer.Children.Add(bar);
+        _markerFlight = run;
+        Classes.Add("moving");
+    }
+
+    // A row's marker in the flight layer: 3px on its leading edge, inset 8px top and bottom.
+    private Rect? MarkerSpan(TableRow row)
+    {
+        if (_markerLayer is null || row.Bounds.Height <= 16 || row.TranslatePoint(new Point(0, 8), _markerLayer) is not { } p) return null;
+        return new Rect(p.X, p.Y, 3, row.Bounds.Height - 16);
     }
 
     internal void SetCurrent(TableRow? row, int column)
@@ -564,6 +629,7 @@ public partial class Table : TemplatedControl
         var editable = cell?.Column is { Edit: not TableEdit.None };
         var wasCurrent = cell is not null && cell == CurrentCell;
         e.Handled = true;
+        PseudoClasses.Set(":keyboard", false);
         Focus(NavigationMethod.Pointer);
         if (e.ClickCount >= 2)
         {
@@ -611,6 +677,7 @@ public partial class Table : TemplatedControl
     protected override void OnGotFocus(FocusChangedEventArgs e)
     {
         base.OnGotFocus(e);
+        if (ReferenceEquals(e.Source, this) && e.NavigationMethod is NavigationMethod.Tab or NavigationMethod.Directional) PseudoClasses.Set(":keyboard", true);
         if (ReferenceEquals(e.Source, this) && _current is null && _display.Count > 0)
             SetCurrent(_display.FirstOrDefault(r => r.IsSelected) ?? _display[0], FirstEditable);
     }
@@ -619,6 +686,7 @@ public partial class Table : TemplatedControl
     {
         base.OnKeyDown(e);
         if (e.Handled || !ReferenceEquals(e.Source, this) || _display.Count == 0) return;
+        PseudoClasses.Set(":keyboard", true);
         var i = _current is null ? -1 : _display.IndexOf(_current);
         var ctrl = e.KeyModifiers.HasFlag(KeyModifiers.Control) || e.KeyModifiers.HasFlag(KeyModifiers.Meta);
         var rtl = FlowDirection == FlowDirection.RightToLeft;

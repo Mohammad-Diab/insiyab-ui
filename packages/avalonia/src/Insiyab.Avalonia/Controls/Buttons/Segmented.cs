@@ -64,46 +64,26 @@ public class Segmented : SelectingItemsControl
 
     private void Fly(int from, int to)
     {
-        if (_flight?.Parent is not Visual layer || from < 0 || to < 0 || from == to || !IsEffectivelyVisible || Motion.IsStill(this)) return;
+        if (_flight?.Parent is not Visual layer || from < 0 || to < 0 || from == to || !IsEffectivelyVisible) return;
         if (ContainerFromIndex(from) is not Control a || ContainerFromIndex(to) is not Control b) return;
         if (a.TranslatePoint(default, layer) is not Point pa || b.TranslatePoint(default, layer) is not Point pb || b.Bounds.Width <= 0) return;
-
-        double ax = pa.X, aw = a.Bounds.Width;
-        if (_run is not null && _flight.IsVisible)
+        var start = (pa.X, a.Bounds.Width);
+        if (_run is { IsDone: false } previous)
         {
-            ax = Canvas.GetLeft(_flight);
-            aw = _flight.Bounds.Width > 0 ? _flight.Bounds.Width : aw;
+            start = (previous.Start, previous.Length);
+            previous.Land();
         }
-        double bx = pb.X, bw = b.Bounds.Width;
-        double left = Math.Min(ax, bx), right = Math.Max(ax + aw, bx + bw);
-
+        MarkerFlight? run = null;
+        run = MarkerFlight.Run(this, start, (pb.X, b.Bounds.Width), Place, () => Land(run));
+        if (run is null) return;
+        _run = run;
         Canvas.SetTop(_flight, pb.Y);
         _flight.Height = b.Bounds.Height;
-        Place(ax, aw);
         _flight.IsVisible = true;
         Classes.Add("moving");
-
-        var run = _run = new object();
-        var clock = System.Diagnostics.Stopwatch.StartNew();
-        var top = TopLevel.GetTopLevel(this);
-        if (top is null) { Land(run); return; }
-        // Frames stop arriving when the window is hidden, so the face also lands on a timer.
-        DispatcherTimer.RunOnce(() => Land(run), TimeSpan.FromMilliseconds(Duration + 150));
-        void Frame(TimeSpan _)
-        {
-            if (_run != run) return;
-            var t = Math.Clamp(clock.Elapsed.TotalMilliseconds / Duration, 0, 1);
-            if (t < 1d / 3) { var k = EaseOut.Ease(t * 3); Place(ax + (left - ax) * k, aw + (right - left - aw) * k); }
-            else { var k = EaseIn.Ease((t - 1d / 3) * 1.5); Place(left + (bx - left) * k, right - left + (bw - (right - left)) * k); }
-            if (t >= 1) Land(run); else top.RequestAnimationFrame(Frame);
-        }
-        top.RequestAnimationFrame(Frame);
     }
 
-    private const double Duration = 600;
-    private static readonly SplineEasing EaseOut = new(0.9, 0.1, 1, 0.2);
-    private static readonly SplineEasing EaseIn = new(0.1, 0.9, 0.2, 1);
-    private object? _run;
+    private MarkerFlight? _run;
 
     private void Place(double x, double width)
     {
@@ -111,9 +91,9 @@ public class Segmented : SelectingItemsControl
         _flight!.Width = Math.Max(0, width);
     }
 
-    private void Land(object run)
+    private void Land(MarkerFlight? run)
     {
-        if (_run != run) return;
+        if (run is null || _run != run) return;
         _run = null;
         _flight!.IsVisible = false;
         Classes.Remove("moving");

@@ -8,7 +8,7 @@ namespace Insiyab.Avalonia.Controls;
 
 /// <summary>A column heading in a <see cref="Table"/>'s header bar: the web's <c>&lt;th&gt;</c>. The table makes these from its columns.</summary>
 [TemplatePart("PART_Grip", typeof(Border))]
-[PseudoClasses(":pinned", ":pin-edge", ":pin-flip", ":check", ":resizable", ":grip-flip")]
+[PseudoClasses(":pinned", ":pin-edge", ":pin-flip", ":check", ":resizable", ":grip-flip", ":resizing")]
 public class TableHeader : ContentControl
 {
     private Border? _grip;
@@ -65,7 +65,16 @@ public class TableHeader : ContentControl
     }
 
     // A heading that reads the other way from its table (a figures column) keeps its grip on the table's trailing edge.
-    private void Align() => PseudoClasses.Set(":grip-flip", Parent is Visual p && p.FlowDirection != FlowDirection);
+    private void Align() => PseudoClasses.Set(":grip-flip", IsGripFlipped);
+
+    internal bool IsGripFlipped => Parent is Visual p && p.FlowDirection != FlowDirection;
+
+    private void Drag(bool on)
+    {
+        _drag = on;
+        PseudoClasses.Set(":resizing", on);
+        Owner?.ShowGuide(on ? this : null);
+    }
 
     private void OnGripPressed(object? sender, PointerPressedEventArgs e)
     {
@@ -76,26 +85,27 @@ public class TableHeader : ContentControl
             Owner.ColumnWidths.Fit(Index, Column?.MinWidth ?? 0);
             return;
         }
-        _drag = true;
         _startX = e.GetPosition(Parent as Visual).X;
         _startWidth = Bounds.Width;
         e.Pointer.Capture(_grip);
+        Drag(true);
     }
 
     private void OnGripMoved(object? sender, PointerEventArgs e)
     {
         if (!_drag || Owner is null) return;
         Owner.ColumnWidths.SetWidth(Index, Math.Max(Column?.MinWidth ?? 0, _startWidth + e.GetPosition(Parent as Visual).X - _startX));
+        Owner.ShowGuide(this);
         e.Handled = true;
     }
 
     private void OnGripReleased(object? sender, PointerReleasedEventArgs e)
     {
-        _drag = false;
         e.Pointer.Capture(null);
+        Drag(false);
     }
 
-    private void OnGripCaptureLost(object? sender, PointerCaptureLostEventArgs e) => _drag = false;
+    private void OnGripCaptureLost(object? sender, PointerCaptureLostEventArgs e) { if (_drag) Drag(false); }
 }
 
 /// <summary>The button a sortable heading becomes: the web's <c>.ins-sort</c>. Its arrow follows <see cref="Direction"/>.</summary>

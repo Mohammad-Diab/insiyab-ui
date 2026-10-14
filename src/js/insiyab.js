@@ -479,61 +479,46 @@
     };
   }
 
-  /* The marker's flight from one item to another, shared by the sidebar and any list
-     that marks its current item the same way, with a `::before` bar (the scrollspy
-     plugin's contents list). A stand-in bar, `opts.bar`, is laid over the old marker,
-     stretches to reach the new one and then lets go of the old end, while `opts.moving`
-     on the box hides the real markers. The box has to be positioned: the stand-in is
-     placed in its coordinates.
-
-     One flight per box. A move that starts before the last one has landed carries on
-     from wherever the bar is, rather than jumping back to an item, which is what a
-     contents list does while the page is scrolled past several sections.
-
-     Returns whether it flew; `opts.done` runs once a flight lands or is cut short. */
-  function flyMarker(box, from, to, opts) {
-    if (!box) return false;
-    opts = opts || {};
-    var barClass = opts.bar || 'ins-marker-flight', moving = opts.moving || 'ins-marker-moving';
-    /* Not a move, or not one anybody should see: whatever is flying keeps flying. */
-    if (!from || !to || from === to || !box.contains(from) || !to.animate || motionless()) return false;
-    if (window.getComputedStyle(box).position === 'static') return false;
-    var s = box.getBoundingClientRect();
-    /* A collapsed column or a closed drawer: nobody is looking. */
-    if (s.width < 8 || s.right <= 0 || s.left >= window.innerWidth) return false;
-    var a = navMarker(box, s, from), b = navMarker(box, s, to);
-    if (a.h <= 0 || b.h <= 0) return false;
+  /* The one marker flight every moving marker shares (sidebar, contents list, tabs and segments, a table's selected row): a stand-in bar stretches along opts.axis until its far edge reaches the new marker, then lets go of the old end; a move in flight carries on from where the bar is. */
+  function flyBar(box, a, b, opts) {
+    var x = opts.axis === 'x', pos = x ? 'left' : 'top', len = x ? 'width' : 'height';
+    var a0 = x ? a.x : a.y, al = x ? a.w : a.h, b0 = x ? b.x : b.y, bl = x ? b.w : b.h;
+    if (al <= 0 || bl <= 0 || motionless()) return false;
     /* A real move: it replaces the flight in progress, starting where that bar is. */
     var prev = box.__insFlight;
     if (prev) {
       if (prev.bar.parentNode) {
         var pcs = window.getComputedStyle(prev.bar);
-        var py = parseFloat(pcs.top), ph = parseFloat(pcs.height);
-        if (!isNaN(py) && ph > 0) { a.y = py; a.h = ph; }
+        var p0 = parseFloat(pcs[pos]), pl = parseFloat(pcs[len]);
+        if (!isNaN(p0) && pl > 0) { a0 = p0; al = pl; }
       }
       prev.halt();
     }
 
-    var bar = el('span', barClass);
+    var bar = el('span', opts.bar);
     bar.setAttribute('aria-hidden', 'true');
-    bar.style.left = b.x + 'px';
-    bar.style.width = b.w + 'px';
+    if (!bar.animate) return false;
+    if (x) {
+      bar.style.top = b.y + 'px';
+      if (b.h != null) bar.style.height = b.h + 'px';
+    } else {
+      bar.style.left = b.x + 'px';
+      bar.style.width = b.w + 'px';
+    }
     box.appendChild(bar);
-    box.classList.add(moving);
+    box.classList.add(opts.moving);
 
-    var down = b.y > a.y;
-    var span = down ? { top: a.y, height: b.y + b.h - a.y }
-                    : { top: b.y, height: a.y + a.h - b.y };
+    var lo = Math.min(a0, b0), hi = Math.max(a0 + al, b0 + bl);
     var run = null;
     var flight = {
       bar: bar,
-      /* Ends this flight: removes its bar, and hands the box back unless a newer
-         flight already owns it. Safe to call more than once. */
+      /* Ends this flight: removes its bar and hands the box back unless a newer flight owns it; safe to call twice. */
       land: function () {
         if (bar.parentNode) bar.parentNode.removeChild(bar);
         if (box.__insFlight !== flight) return;
         box.__insFlight = null;
-        box.classList.remove(moving);
+        if (opts.landing) opts.landing();
+        box.classList.remove(opts.moving);
         if (opts.done) opts.done();
       },
       halt: function () {
@@ -542,11 +527,18 @@
       }
     };
     box.__insFlight = flight;
+    var frame = function (p, l, extra) {
+      var f = {};
+      f[pos] = p + 'px';
+      f[len] = l + 'px';
+      for (var k in extra) f[k] = extra[k];
+      return f;
+    };
     try {
       run = bar.animate([
-        { top: a.y + 'px', height: a.h + 'px', easing: NAV_EASE_OUT },
-        { top: span.top + 'px', height: span.height + 'px', offset: 1 / 3, easing: NAV_EASE_IN },
-        { top: b.y + 'px', height: b.h + 'px' }
+        frame(a0, al, { easing: NAV_EASE_OUT }),
+        frame(lo, hi - lo, { offset: 1 / 3, easing: NAV_EASE_IN }),
+        frame(b0, bl, {})
       ], { duration: 600, fill: 'both' });
     } catch (e) {
       flight.land();
@@ -555,6 +547,20 @@
     run.onfinish = flight.land;
     run.oncancel = flight.land;
     return true;
+  }
+
+  /* A list's marker flight, from one item's ::before bar to another's: the sidebar and the scrollspy plugin's contents list. Returns whether it flew. */
+  function flyMarker(box, from, to, opts) {
+    if (!box) return false;
+    opts = opts || {};
+    /* Not a move, or not one anybody should see: whatever is flying keeps flying. */
+    if (!from || !to || from === to || !box.contains(from) || !to.animate || motionless()) return false;
+    if (window.getComputedStyle(box).position === 'static') return false;
+    var s = box.getBoundingClientRect();
+    /* A collapsed column or a closed drawer: nobody is looking. */
+    if (s.width < 8 || s.right <= 0 || s.left >= window.innerWidth) return false;
+    var a = navMarker(box, s, from), b = navMarker(box, s, to);
+    return flyBar(box, a, b, { bar: opts.bar || 'ins-marker-flight', moving: opts.moving || 'ins-marker-moving', done: opts.done });
   }
 
   /* The sidebar's flight. Once it lands, the markers the arrival hid before first
@@ -4700,56 +4706,19 @@
 
   /* The selected face travels like the sidebar marker: the far edge reaches the new segment, then the near edge follows. */
   function segFly(seg, from, to) {
-    if (!from || !to || from === to || motionless() || !to.animate || !seg.offsetWidth) return;
+    if (!from || !to || from === to || !seg.offsetWidth) return;
     var line = seg.classList.contains('ins-tablist--line');
     var inset = line ? parseFloat(window.getComputedStyle(to, '::after').left) || 10 : 0;
-    var a = { x: from.offsetLeft + inset, w: from.offsetWidth - 2 * inset }, b = { x: to.offsetLeft + inset, w: to.offsetWidth - 2 * inset };
-    var prev = seg.__insSeg;
-    if (prev) {
-      if (prev.face.parentNode) {
-        var pcs = window.getComputedStyle(prev.face);
-        var px = parseFloat(pcs.left), pw = parseFloat(pcs.width);
-        if (!isNaN(px) && pw > 0) { a.x = px; a.w = pw; }
-      }
-      prev.halt();
-    }
-    var face = el('span', line ? 'ins-tab-flight' : 'ins-seg-flight');
-    face.setAttribute('aria-hidden', 'true');
-    face.style.top = (line ? to.offsetTop + to.offsetHeight - 2 : to.offsetTop) + 'px';
-    if (!line) face.style.height = to.offsetHeight + 'px';
-    seg.appendChild(face);
-    seg.classList.add('ins-seg-moving');
-    var left = Math.min(a.x, b.x), right = Math.max(a.x + a.w, b.x + b.w);
-    var run = null;
-    var flight = {
-      face: face,
-      land: function () {
-        if (face.parentNode) face.parentNode.removeChild(face);
-        if (seg.__insSeg !== flight) return;
-        seg.__insSeg = null;
-        var on = seg.querySelector(':scope > .is-active');
-        if (on) on.style.transition = 'none';
-        seg.classList.remove('ins-seg-moving');
-        if (on) { void on.offsetWidth; on.style.transition = ''; }
-      },
-      halt: function () {
-        if (run) { run.onfinish = run.oncancel = null; try { run.cancel(); } catch (e) {} }
-        flight.land();
-      }
-    };
-    seg.__insSeg = flight;
-    try {
-      run = face.animate([
-        { left: a.x + 'px', width: a.w + 'px', easing: NAV_EASE_OUT },
-        { left: left + 'px', width: (right - left) + 'px', offset: 1 / 3, easing: NAV_EASE_IN },
-        { left: b.x + 'px', width: b.w + 'px' }
-      ], { duration: 600, fill: 'both' });
-    } catch (e) {
-      flight.land();
-      return;
-    }
-    run.onfinish = flight.land;
-    run.oncancel = flight.land;
+    var on = null;
+    flyBar(seg,
+      { x: from.offsetLeft + inset, w: from.offsetWidth - 2 * inset },
+      { x: to.offsetLeft + inset, w: to.offsetWidth - 2 * inset, y: line ? to.offsetTop + to.offsetHeight - 2 : to.offsetTop, h: line ? null : to.offsetHeight },
+      {
+        axis: 'x', bar: line ? 'ins-tab-flight' : 'ins-seg-flight', moving: 'ins-seg-moving',
+        /* The face the flight hands over to appears at once, not through its own transition. */
+        landing: function () { on = seg.querySelector(':scope > .is-active'); if (on) on.style.transition = 'none'; },
+        done: function () { if (on) { void on.offsetWidth; on.style.transition = ''; } }
+      });
   }
 
   /* Watches the segments' classes, since several paths change the selection. */
@@ -4772,6 +4741,46 @@
           if (from && to) segFly(seg, from, to);
         }).observe(seg, { attributes: true, attributeFilter: ['class'], attributeOldValue: true, subtree: true });
       }(segs[i]));
+    }
+  });
+
+  /* A table row is marked when it is selected, current or .is-selected, as the stylesheet draws it. */
+  function rowMarked(tr) {
+    var current = tr.getAttribute('aria-current');
+    return tr.getAttribute('aria-selected') === 'true' || (current !== null && current !== 'false') || tr.classList.contains('is-selected');
+  }
+
+  /* Where a row's marker is (the first cell's ::before, on the page's start edge), in the table wrapper's coordinates. */
+  function rowMarker(wrap, s, tr) {
+    var td = tr.cells[0], r = td.getBoundingClientRect(), cs = window.getComputedStyle(td, '::before');
+    var top = parseFloat(cs.top) || 0, bottom = parseFloat(cs.bottom) || 0, w = parseFloat(cs.width) || 3;
+    var rtl = root.getAttribute('dir') === 'rtl';
+    return {
+      x: (rtl ? r.right - w : r.left) - s.left - wrap.clientLeft + wrap.scrollLeft,
+      y: r.top + top - s.top - wrap.clientTop + wrap.scrollTop,
+      w: w,
+      h: r.height - top - bottom
+    };
+  }
+
+  /* When the one marked row of a table changes, its marker flies to the new row as the sidebar's does, rather than one shrinking while the other grows. */
+  define('table-marker', function (scope) {
+    if (!window.MutationObserver) return;
+    var bodies = scope.querySelectorAll('.ins-table-wrap > .ins-table > tbody');
+    for (var i = 0; i < bodies.length; i++) {
+      if (bodies[i].__insRowWatch) continue;
+      bodies[i].__insRowWatch = true;
+      (function (body) {
+        var marked = function () { var rows = [].filter.call(body.rows, rowMarked); return rows.length === 1 ? rows[0] : null; };
+        body.__insMarked = marked();
+        new MutationObserver(function () {
+          var now = marked(), was = body.__insMarked;
+          body.__insMarked = now;
+          if (!now || !was || was === now || rowMarked(was) || !body.contains(was) || !was.cells.length || !now.cells.length) return;
+          var wrap = body.parentNode.parentNode, s = wrap.getBoundingClientRect();
+          flyBar(wrap, rowMarker(wrap, s, was), rowMarker(wrap, s, now), { bar: 'ins-table-flight', moving: 'ins-table-moving' });
+        }).observe(body, { attributes: true, attributeFilter: ['class', 'aria-selected', 'aria-current'], subtree: true });
+      }(bodies[i]));
     }
   });
 

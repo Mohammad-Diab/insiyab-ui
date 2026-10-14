@@ -239,44 +239,26 @@ public class Toc : ItemsControl
     private static ITransform Shift(double y, double scale) =>
         TransformOperations.Parse(FormattableString.Invariant($"translateY({y}px) scaleY({scale})"));
 
-    private static readonly global::Avalonia.Animation.Easings.SplineEasing FlyOut = new(0.9, 0.1, 1, 0.2);
-    private static readonly global::Avalonia.Animation.Easings.SplineEasing FlyIn = new(0.1, 0.9, 0.2, 1);
-    private const double FlightMs = 600;
-    private object? _flight;
+    private MarkerFlight? _flight;
     private Transitions? _resting;
     private double _flightY, _flightHeight;
 
-    // Stretches from the old entry to cover the new one, then lets go of the old end: 600ms, two splines, as Shell's marker flies.
+    // Stretches from the old entry to cover the new one, then lets go of the old end: the marker flight every marker shares.
     private void Fly(TopLevel level, double y0, double h0, double y1, double h1)
     {
         var marker = _marker!;
-        var run = new object();
+        _flight?.Land();
         _resting ??= marker.Transitions;
         marker.Transitions = null;
-        var down = y1 > y0;
-        var spanTop = down ? y0 : y1;
-        var span = down ? y1 + h1 - y0 : y0 + h0 - y1;
-        var clock = System.Diagnostics.Stopwatch.StartNew();
-        _flight = run;
-        Set(y0, h0);
-        DispatcherTimer.RunOnce(() => Land(run), TimeSpan.FromMilliseconds(FlightMs + 150));
-        void Frame(TimeSpan _)
+        MarkerFlight? run = null;
+        run = MarkerFlight.Run(this, (y0, h0), (y1, h1), Set, () => Land(run));
+        if (run is not null) _flight = run;
+        else
         {
-            if (_flight != run) return;
-            var t = Math.Clamp(clock.Elapsed.TotalMilliseconds / FlightMs, 0, 1);
-            if (t < 1d / 3)
-            {
-                var k = FlyOut.Ease(t * 3);
-                Set(y0 + (spanTop - y0) * k, h0 + (span - h0) * k);
-            }
-            else
-            {
-                var k = FlyIn.Ease((t - 1d / 3) * 1.5);
-                Set(spanTop + (y1 - spanTop) * k, span + (h1 - span) * k);
-            }
-            if (t >= 1) Land(run); else level.RequestAnimationFrame(Frame);
+            Set(y1, h1);
+            marker.Transitions = _resting;
+            _resting = null;
         }
-        level.RequestAnimationFrame(Frame);
     }
 
     private void Set(double y, double h)
@@ -287,9 +269,9 @@ public class Toc : ItemsControl
         _marker.RenderTransform = Shift(y, 1);
     }
 
-    private void Land(object run)
+    private void Land(MarkerFlight? run)
     {
-        if (_flight != run || _marker is null) return;
+        if (run is null || _flight != run || _marker is null) return;
         _flight = null;
         _marker.Tag = null;
         PlaceMarker(true);

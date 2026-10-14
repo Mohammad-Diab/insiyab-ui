@@ -262,6 +262,9 @@ html .ins-panel .ins-table tbody td:is(:first-child, :last-child) { border-left:
   transform: scaleY(0);
   transition: transform var(--ins-t-pop) var(--ins-ease);
 }
+/* The selected row's marker in flight to a newly selected row (insiyab.js); meanwhile the rows' own markers hide. */
+.ins-table-flight { position: absolute; z-index: 2; border-radius: var(--ins-r-pill); background: var(--ins-primary-mid); pointer-events: none; }
+.ins-table-moving > .ins-table tbody td:first-child::before { visibility: hidden; }
 /* The marker's edge, on the page's direction: a figures cell is `direction: ltr`. */
 html[dir="rtl"] .ins-table tbody td:first-child::before { right: 0; }
 html[dir="ltr"] .ins-table tbody td:first-child::before { left: 0; }
