@@ -22,7 +22,6 @@
         <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
         <Setter Property="CaretBrush" Value="{DynamicResource InsText1}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource InsPaletteSelection}" />
-        <Setter Property="SelectionForegroundBrush" Value="{DynamicResource InsText1}" />
         <Setter Property="PlaceholderForeground" Value="{DynamicResource InsText3}" />
         <Setter Property="MinHeight" Value="52" />
         <Setter Property="Padding" Value="38,0,16,0" />

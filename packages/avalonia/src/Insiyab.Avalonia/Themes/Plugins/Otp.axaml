@@ -129,7 +129,6 @@
                                Foreground="Transparent"
                                CaretBrush="Transparent"
                                SelectionBrush="Transparent"
-                               SelectionForegroundBrush="Transparent"
                                Text="{TemplateBinding Text, Mode=TwoWay}"
                                CaretIndex="{TemplateBinding CaretIndex}"
                                SelectionStart="{TemplateBinding SelectionStart}"

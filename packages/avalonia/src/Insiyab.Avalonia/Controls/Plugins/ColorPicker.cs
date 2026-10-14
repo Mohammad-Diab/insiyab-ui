@@ -19,8 +19,7 @@ internal static class ColorMath
     {
         var s = (value ?? string.Empty).Trim().TrimStart('#').ToLowerInvariant();
         if (s.Length == 3 && s.All(Uri.IsHexDigit)) s = new string([s[0], s[0], s[1], s[1], s[2], s[2]]);
-        if (s.Length != 6 || !s.All(Uri.IsHexDigit)) return null;
-        var n = int.Parse(s, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+        if (s.Length != 6 || !int.TryParse(s, NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture, out var n)) return null;
         return Color.FromRgb((byte)(n >> 16), (byte)(n >> 8), (byte)n);
     }
 

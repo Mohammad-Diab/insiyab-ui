@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Automation;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
@@ -75,6 +76,7 @@ public class DateField : TextBox
     private string _value = string.Empty;
     private string _endValue = string.Empty;
     private bool _syncing;
+    private TextPresenter? _presenter;
 
     public DateField()
     {
@@ -97,6 +99,7 @@ public class DateField : TextBox
             if (_calendar.IsKeyboardFocusWithin || FocusedElement() is null) Focus(NavigationMethod.Tab);
         };
         InnerRightContent = _button;
+        MaxLength = 80;
         Classes.Add("date-field");
     }
 
@@ -163,11 +166,19 @@ public class DateField : TextBox
         UpdateValue();
     }
 
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        _presenter = e.NameScope.Find<TextPresenter>("PART_TextPresenter");
+        TextDirection.FollowTyped(this, _presenter);
+    }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (_syncing) return;
         var p = change.Property;
+        if (p == TextProperty || p == FlowDirectionProperty || p == TextAlignmentProperty) TextDirection.FollowTyped(this, _presenter);
+        if (_syncing) return;
         if (p == SelectedDateProperty || p == EndDateProperty || p == SelectedTimeProperty || p == ModeProperty || p == CalendarKindProperty ||
             p == ShowGregorianProperty || p == LocaleProperty || p == FlowDirectionProperty)
         {
@@ -254,8 +265,14 @@ public class DateField : TextBox
             DateChanged?.Invoke(this, new DateChangedEventArgs(SelectedDate, Mode == DatePickMode.Range ? EndDate : null, Mode == DatePickMode.DateTime ? SelectedTime : null, Value));
     }
 
-    // commitTyped: what was typed, read when the person leaves the field or presses Enter.
+    // commitTyped: what was typed, read when the person leaves the field or presses Enter; text that cannot be read is a bad date, never a crash.
     internal void CommitTyped()
+    {
+        try { ReadTyped(); }
+        catch (Exception x) when (InputGuard.Caught(this, x)) { Check(null, true); }
+    }
+
+    private void ReadTyped()
     {
         var text = (Text ?? string.Empty).Trim();
         if (SelectedDate is not null && text == Format().Trim()) return;
@@ -426,6 +443,13 @@ public class DateField : TextBox
             if (_flyout.IsOpen) Close(false);
         }
         base.OnKeyDown(e);
+    }
+
+    // A date never holds a number longer than a year, so a fifth digit in a row is refused.
+    protected override void OnTextInput(TextInputEventArgs e)
+    {
+        if (PickerParse.Overlong(this, e.Text)) { e.Handled = true; return; }
+        base.OnTextInput(e);
     }
 
     protected override void OnLostFocus(FocusChangedEventArgs e)

@@ -130,8 +130,8 @@ internal abstract class PickerCalendar
             if (n.Count != 3) return null;
             handled = true;
             int y, m, d;
-            if (n[0].Length == 4) { y = int.Parse(n[0], CultureInfo.InvariantCulture); m = int.Parse(n[1], CultureInfo.InvariantCulture); d = int.Parse(n[2], CultureInfo.InvariantCulture); }
-            else { d = int.Parse(n[0], CultureInfo.InvariantCulture); m = int.Parse(n[1], CultureInfo.InvariantCulture); y = int.Parse(n[2], CultureInfo.InvariantCulture); }
+            if (n[0].Length == 4) { y = PickerParse.Int(n[0]); m = PickerParse.Int(n[1]); d = PickerParse.Int(n[2]); }
+            else { d = PickerParse.Int(n[0]); m = PickerParse.Int(n[1]); y = PickerParse.Int(n[2]); }
             if (m < 1 || m > 12 || d < 1) return null;
             if (y > 1700) return PickerParse.RealGregorian(y, m, d);
             if (y < 100) y += 1400;

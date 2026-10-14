@@ -196,9 +196,8 @@ internal sealed partial class BirthEngine
         for (var i = 0; i < 3; i++)
         {
             var s = Str(Order[i]);
-            if (s.Length == Len[i])
+            if (s.Length == Len[i] && int.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out var v))
             {
-                var v = int.Parse(s, CultureInfo.InvariantCulture);
                 if (!_set[i] || _val[i] != v)
                 {
                     _val[i] = v;
@@ -393,7 +392,7 @@ internal sealed partial class BirthEngine
         catch (ArgumentException) { return 1448; }
     }
 
-    private static int Num(string s) => s.Length > 9 ? int.MaxValue : int.Parse(s, CultureInfo.InvariantCulture);
+    private static int Num(string s) => s.Length <= 9 && int.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out var n) ? n : int.MaxValue;
 
     [GeneratedRegex("[\u064B-\u0652\u0640]")]
     private static partial Regex Marks();

@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Automation;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
@@ -39,6 +40,7 @@ public class TimeField : TextBox
     private readonly Button _button;
     private string _value = string.Empty;
     private bool _syncing;
+    private TextPresenter? _presenter;
 
     public TimeField()
     {
@@ -62,6 +64,7 @@ public class TimeField : TextBox
             else Open(true);
         };
         InnerRightContent = _button;
+        MaxLength = 24;
         Classes.Add("time-field");
     }
 
@@ -102,11 +105,19 @@ public class TimeField : TextBox
         Write();
     }
 
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        _presenter = e.NameScope.Find<TextPresenter>("PART_TextPresenter");
+        TextDirection.FollowTyped(this, _presenter);
+    }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (_syncing) return;
         var p = change.Property;
+        if (p == TextProperty || p == FlowDirectionProperty || p == TextAlignmentProperty) TextDirection.FollowTyped(this, _presenter);
+        if (_syncing) return;
         if (p == SelectedTimeProperty || p == LocaleProperty || p == FlowDirectionProperty)
         {
             Write();
@@ -146,8 +157,14 @@ public class TimeField : TextBox
         return true;
     }
 
-    // commitTime: what was typed, read as the person leaves the field.
+    // commitTime: what was typed, read as the person leaves the field; text that cannot be read is a bad time, never a crash.
     internal void CommitTyped()
+    {
+        try { ReadTyped(); }
+        catch (Exception x) when (InputGuard.Caught(this, x)) { DataValidationErrors.SetError(this, new DataValidationException(Words.BadTime)); }
+    }
+
+    private void ReadTyped()
     {
         var text = (Text ?? string.Empty).Trim();
         if (SelectedTime is { } cur && text == Words.FormatTime(cur)) return;
@@ -236,6 +253,13 @@ public class TimeField : TextBox
     {
         var m = (((int)t.TotalMinutes + minutes) % 1440 + 1440) % 1440;
         return new TimeSpan(m / 60, m % 60, 0);
+    }
+
+    // A time never holds a number longer than "1430", so a fifth digit in a row is refused.
+    protected override void OnTextInput(TextInputEventArgs e)
+    {
+        if (PickerParse.Overlong(this, e.Text)) { e.Handled = true; return; }
+        base.OnTextInput(e);
     }
 
     protected override void OnLostFocus(FocusChangedEventArgs e)
