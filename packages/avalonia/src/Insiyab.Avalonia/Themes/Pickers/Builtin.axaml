@@ -454,6 +454,7 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type DatePicker}" TargetType="DatePicker">
+        <Setter Property="ins:DrumPopover.IsEnabled" Value="True" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
         <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
@@ -489,7 +490,9 @@
                     <Rectangle x:Name="PART_SecondSpacer" Fill="{DynamicResource InsLine}" HorizontalAlignment="Center" Width="1" Grid.Column="3" />
                   </Grid>
                 </Button>
-                <Popup x:Name="PART_Popup" WindowManagerAddShadowHint="False" IsLightDismissEnabled="True" PlacementTarget="{TemplateBinding}" Placement="Bottom">
+                <!-- The drum's anchor: the field with the 6px gap the ComboBox's list keeps, above and below. -->
+                <Border x:Name="DrumAnchor" Margin="0,-6" IsHitTestVisible="False" />
+                <Popup x:Name="PART_Popup" WindowManagerAddShadowHint="False" IsLightDismissEnabled="True" PlacementTarget="{Binding #DrumAnchor}" Placement="Bottom">
                   <DatePickerPresenter x:Name="PART_PickerPresenter" />
                 </Popup>
               </Grid>
@@ -508,6 +511,7 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type TimePicker}" TargetType="TimePicker">
+        <Setter Property="ins:DrumPopover.IsEnabled" Value="True" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
         <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
@@ -552,7 +556,9 @@
                     </ins:TemplateBorder>
                   </Grid>
                 </Button>
-                <Popup x:Name="PART_Popup" WindowManagerAddShadowHint="False" IsLightDismissEnabled="True" PlacementTarget="{TemplateBinding}" Placement="Bottom">
+                <!-- The drum's anchor: the field with the 6px gap the ComboBox's list keeps, above and below. -->
+                <Border x:Name="DrumAnchor" Margin="0,-6" IsHitTestVisible="False" />
+                <Popup x:Name="PART_Popup" WindowManagerAddShadowHint="False" IsLightDismissEnabled="True" PlacementTarget="{Binding #DrumAnchor}" Placement="Bottom">
                   <TimePickerPresenter x:Name="PART_PickerPresenter" />
                 </Popup>
               </Grid>
