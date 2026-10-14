@@ -49,7 +49,7 @@ public static class NotifyPlay
             Seg("unread", "غير المقروءة", "3",
                 Choice("0", "لا شيء"),
                 Choice("1", "واحد"),
-                Choice("3", "ثلاثة", "IsUnread=\"True\"", "على صف لم يُقرأ: نقطة بلون الهوية في أوله، وخلفية خفيفة، وعنوان أثقل، ويعده الجرس. وتزول حين يُنقر الصف.", OptionKind.Property),
+                Choice("3", "ثلاثة", "IsUnread=\"True\"", "على صف لم يُقرأ: عنوانه وأيقونته بلون الهوية، وحوله إطار رفيع بلونها، ويعده الجرس. ويعود الصف عاديًا حين يُنقر.", OptionKind.Property),
                 Choice("many", "120")),
             Seg("style", "أول الصف", "ico",
                 Choice("ico", "أيقونة", "Icon", "رقاقة أيقونة تبدأ بها الإشعارات، لما يأتي من النظام.", OptionKind.Property),

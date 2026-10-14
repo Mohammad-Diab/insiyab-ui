@@ -1089,6 +1089,26 @@ public class OverlaysTests
     }
 
     [AvaloniaFact]
+    public void An_unread_notification_shows_it_in_its_title_icon_and_rim_not_a_dot_or_tint()
+    {
+        var notify = new Notify();
+        var unread = new NotifyItem { Title = "جديد", Description = "وصف", End = "الآن", IsUnread = true, Icon = Geometry.Parse("M5 12h14") };
+        var read = new NotifyItem { Title = "قديم", Description = "وصف", End = "أمس", Icon = Geometry.Parse("M5 12h14") };
+        notify.Items.Add(unread);
+        notify.Items.Add(read);
+        var window = Show(new StackPanel { Margin = new Thickness(40), Children = { notify } }, FlowDirection.RightToLeft, null, 900, 600);
+        Click(Part<Button>(notify, "PART_Bell"), window);
+        Settle(300);
+        Assert.Empty(unread.GetVisualDescendants().OfType<global::Avalonia.Controls.Shapes.Ellipse>());
+        Assert.Equal(Brushes.Transparent, Part<Border>(unread, "PART_Row").Background);
+        Assert.True(Part<Border>(unread, "PART_Mark").IsVisible);
+        Assert.False(Part<Border>(read, "PART_Mark").IsVisible);
+        AssertBrush(unread, "InsToneBrand", () => Part<TextBlock>(unread, "PART_Title").Foreground);
+        AssertBrush(unread, "InsToneBrandSoft", () => Part<Icon>(unread, "PART_Icon").Foreground);
+        AssertBrush(read, "InsText3", () => Part<Icon>(read, "PART_Icon").Foreground);
+    }
+
+    [AvaloniaFact]
     public void The_last_notification_shows_its_whole_focus_ring_with_no_foot_under_it()
     {
         var notify = new Notify { FootText = null };
