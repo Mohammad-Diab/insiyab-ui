@@ -154,7 +154,7 @@ html[dir="ltr"] .ins-prose { line-height: 1.65; }
 .ins-prose hr {
   border: 0;
   block-size: 1px;
-  background: var(--ins-line);
+  background: var(--ins-hr);
   margin-block: 2em;
 }
 
@@ -279,7 +279,7 @@ html[dir="ltr"] .ins-prose { line-height: 1.65; }
 .ins-divider::after {
   content: "";
   flex: 1 1 0;
-  border-block-start: 1px solid var(--ins-line);
+  border-block-start: 1px solid var(--ins-hr);
 }
 .ins-divider:empty { gap: 0; }
 /* The label at the leading edge: a section title that runs into its rule. */
@@ -295,7 +295,7 @@ html[dir="ltr"] .ins-prose { line-height: 1.65; }
   min-block-size: 1em;
   margin-block: 0;
   margin-inline: var(--ins-sp-1);
-  background: var(--ins-line);
+  background: var(--ins-hr);
 }
 .ins-divider--v::before,
 .ins-divider--v::after { content: none; }

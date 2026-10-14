@@ -80,6 +80,8 @@
       <SolidColorBrush x:Key="InsToneMuteBd" Color="#2664748B" />
       <Color x:Key="InsLineColor">#140F172A</Color>
       <SolidColorBrush x:Key="InsLine" Color="#140F172A" />
+      <Color x:Key="InsHrColor">#2E0F172A</Color>
+      <SolidColorBrush x:Key="InsHr" Color="#2E0F172A" />
       <Color x:Key="InsLineGlassColor">#66FFFFFF</Color>
       <SolidColorBrush x:Key="InsLineGlass" Color="#66FFFFFF" />
       <Color x:Key="InsCtlBdColor">#240F172A</Color>
@@ -180,6 +182,8 @@
       <SolidColorBrush x:Key="InsToneMuteBd" Color="#3894A3B8" />
       <Color x:Key="InsLineColor">#14FFFFFF</Color>
       <SolidColorBrush x:Key="InsLine" Color="#14FFFFFF" />
+      <Color x:Key="InsHrColor">#29FFFFFF</Color>
+      <SolidColorBrush x:Key="InsHr" Color="#29FFFFFF" />
       <Color x:Key="InsLineGlassColor">#1AFFFFFF</Color>
       <SolidColorBrush x:Key="InsLineGlass" Color="#1AFFFFFF" />
       <Color x:Key="InsCtlBdColor">#29FFFFFF</Color>

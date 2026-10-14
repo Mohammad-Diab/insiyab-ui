@@ -411,7 +411,7 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="6,0,6,16" />
         <Setter Property="Margin" Value="0,0,0,6" />
-        <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsHr}" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
         <Setter Property="CornerRadius" Value="0" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -555,7 +555,7 @@
   <Style Selector="Border.shell-brand">
     <Setter Property="Padding" Value="6,0,6,16" />
     <Setter Property="Margin" Value="0,0,0,6" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsHr}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
   </Style>
   <Style Selector="Border.shell-brand > StackPanel, Button.shell-brand > StackPanel">
@@ -635,7 +635,7 @@
   <Style Selector="Border.shell-bottom">
     <Setter Property="Padding" Value="0,8,0,0" />
     <Setter Property="Margin" Value="0,0,0,18" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsHr}" />
     <Setter Property="BorderThickness" Value="0,1,0,0" />
   </Style>
 

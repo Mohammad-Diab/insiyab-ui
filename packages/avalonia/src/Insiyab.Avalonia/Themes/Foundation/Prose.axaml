@@ -9,7 +9,7 @@
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
     <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsHr}" />
     <Setter Property="Template">
       <ControlTemplate>
         <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="12">

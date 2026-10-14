@@ -145,7 +145,7 @@ public class FoundationTests
         var b = Part<Border>(labelled, "PART_End");
         Assert.Equal(1, a.Bounds.Height);
         Assert.Equal(a.Bounds.Width, b.Bounds.Width, 1);
-        AssertBrush(labelled, "InsLine", () => a.Background);
+        AssertBrush(labelled, "InsHr", () => a.Background);
         Assert.DoesNotContain(start.GetVisualDescendants().OfType<Border>(), x => x.Name == "PART_Start");
         var word = start.GetVisualDescendants().OfType<TextBlock>().First();
         var line = Part<Border>(start, "PART_End");
@@ -159,19 +159,22 @@ public class FoundationTests
         Assert.Single(empty.GetVisualDescendants().OfType<Border>(), x => x.Height == 1);
     }
 
-    [AvaloniaFact]
-    public void Separator_is_the_web_rule_and_v_stands_in_a_row()
+    [AvaloniaTheory]
+    [InlineData("Light")]
+    [InlineData("Dark")]
+    public void Separator_is_the_web_rule_and_v_stands_in_a_row(string theme)
     {
         var rule = new Separator();
         var v = new Separator { Classes = { "v" } };
         var row = new StackPanel { Orientation = Orientation.Horizontal, Children = { new TextBlock { Text = "ملف" }, v, new TextBlock { Text = "تعديل" } } };
-        Show(new StackPanel { Width = 400, Children = { rule, row } });
+        Show(new StackPanel { Width = 400, Children = { rule, row } }, theme: Theme(theme));
 
         Assert.Equal(1, rule.Bounds.Height);
         Assert.Equal(400, rule.Bounds.Width);
         Assert.Equal(new Thickness(0, 16, 0, 16), rule.Margin);
-        AssertBrush(rule, "InsLine", () => rule.Background);
+        AssertBrush(rule, "InsHr", () => rule.Background);
         Assert.Equal(1, v.Bounds.Width);
+        AssertBrush(v, "InsHr", () => v.Background);
         Assert.Equal(row.Bounds.Height, v.Bounds.Height, 1);
         Assert.Equal(new Thickness(4, 0, 4, 0), v.Margin);
     }

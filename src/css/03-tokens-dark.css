@@ -88,6 +88,7 @@
   --ins-tone-brand-soft: var(--ins-primary-darker);
 
   --ins-line: rgba(255, 255, 255, .08);
+  --ins-hr: rgba(255, 255, 255, .16);
   --ins-line-glass: rgba(255, 255, 255, .10);
   --ins-ctl-bd: rgba(255, 255, 255, .16);
   --ins-ctl-bg: rgba(255, 255, 255, .06);
