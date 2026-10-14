@@ -11,6 +11,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
@@ -102,6 +103,7 @@ public class MonthCalendar : TemplatedControl
     private Control? _now;
     private DateTime _drawnToday;
     private DispatcherTimer? _clock;
+    private bool _stale;
 
     public MonthCalendar()
     {
@@ -173,6 +175,7 @@ public class MonthCalendar : TemplatedControl
         base.OnAttachedToVisualTree(e);
         _clock ??= new DispatcherTimer(TimeSpan.FromSeconds(30), DispatcherPriority.Background, (_, _) => Tick());
         _clock.Start();
+        if (_stale) Draw();
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
@@ -292,6 +295,9 @@ public class MonthCalendar : TemplatedControl
     private void Draw()
     {
         if (_host is null) return;
+        // Out of the tree (a page taken down) it draws when it comes back, as its resources are out of reach meanwhile.
+        _stale = !this.IsAttachedToVisualTree();
+        if (_stale) return;
         _cells.Clear();
         _chips.Clear();
         _now = null;
@@ -381,7 +387,7 @@ public class MonthCalendar : TemplatedControl
 
     private Button Arrow(bool next, Action go)
     {
-        var path = new global::Avalonia.Controls.Shapes.Path { Data = (Geometry?)this.FindResource(next ? "InsMonthArrowIcon" : "InsMonthArrowBackIcon"), Classes = { "month-arrow" } };
+        var path = new global::Avalonia.Controls.Shapes.Path { Data = this.FindResource(next ? "InsMonthArrowIcon" : "InsMonthArrowBackIcon") as Geometry, Classes = { "month-arrow" } };
         var b = new Button { Content = new Viewbox { Width = 16, Height = 16, Child = new Canvas { Width = 24, Height = 24, Children = { path } } }, Classes = { "bare", "icon", "sm", "month-go", next ? "next" : "prev" }, Tag = next ? "next" : "prev" };
         b.Click += (_, _) => go();
         return b;
