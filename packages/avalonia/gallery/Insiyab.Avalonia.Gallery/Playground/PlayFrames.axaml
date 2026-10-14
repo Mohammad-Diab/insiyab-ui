@@ -139,37 +139,56 @@
   <Style Selector="TextBlock.play-code">
     <Setter Property="FlowDirection" Value="LeftToRight" />
     <Setter Property="HorizontalAlignment" Value="Left" />
-    <Setter Property="Margin" Value="20,16,72,16" />
+    <Setter Property="Margin" Value="20,16,148,16" />
     <Setter Property="FontFamily" Value="{DynamicResource InsFontMono}" />
     <Setter Property="FontSize" Value="13" />
     <Setter Property="LineHeight" Value="22.1" />
     <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
     <Setter Property="TextWrapping" Value="NoWrap" />
   </Style>
-  <Style Selector="TextBlock.play-code Run.hl-t">
+  <!-- Wrapped, a listing is one row per line: the line's indentation, then its text wrapping under that indentation -->
+  <Style Selector="StackPanel.play-lines">
+    <Setter Property="Margin" Value="20,16,148,16" />
+  </Style>
+  <Style Selector="TextBlock.play-line">
+    <Setter Property="FlowDirection" Value="LeftToRight" />
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontMono}" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="LineHeight" Value="22.1" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+  <Style Selector="TextBlock.play-code Run.hl-t, TextBlock.play-line Run.hl-t">
     <Setter Property="Foreground" Value="{DynamicResource PlayHlT}" />
   </Style>
-  <Style Selector="TextBlock.play-code Run.hl-a">
+  <Style Selector="TextBlock.play-code Run.hl-a, TextBlock.play-line Run.hl-a">
     <Setter Property="Foreground" Value="{DynamicResource PlayHlA}" />
   </Style>
-  <Style Selector="TextBlock.play-code Run.hl-s">
+  <Style Selector="TextBlock.play-code Run.hl-s, TextBlock.play-line Run.hl-s">
     <Setter Property="Foreground" Value="{DynamicResource PlayHlS}" />
   </Style>
-  <Style Selector="TextBlock.play-code Run.hl-c">
+  <Style Selector="TextBlock.play-code Run.hl-c, TextBlock.play-line Run.hl-c">
     <Setter Property="Foreground" Value="{DynamicResource PlayHlC}" />
   </Style>
-  <Style Selector="TextBlock.play-code Run.ar">
+  <Style Selector="TextBlock.play-code Run.ar, TextBlock.play-line Run.ar">
     <Setter Property="FontFamily" Value="{DynamicResource InsFontArabic}" />
     <Setter Property="FontSize" Value="14" />
   </Style>
-  <Style Selector="Button.play-copy">
+  <!-- The listing's buttons in its top corner, wrap then copy, fixed while the code scrolls under them -->
+  <Style Selector="StackPanel.play-tools">
     <Setter Property="HorizontalAlignment" Value="Right" />
     <Setter Property="VerticalAlignment" Value="Top" />
     <Setter Property="Margin" Value="8" />
+    <Setter Property="Spacing" Value="4" />
+  </Style>
+  <Style Selector="Button.play-copy">
     <Setter Property="MinHeight" Value="0" />
     <Setter Property="Padding" Value="10,4" />
     <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
     <Setter Property="FontSize" Value="11" />
+  </Style>
+  <Style Selector="Button.play-wrap.on">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
   </Style>
   <Style Selector="Button.play-copy.done">
     <Setter Property="Foreground" Value="{DynamicResource InsToneOk}" />

@@ -206,11 +206,16 @@
   color: var(--ins-text-1);
 }
 .dx-code code { font: inherit; background: none; border: 0; padding: 0; white-space: pre; }
-.dx-copy {
+/* The listing's buttons, copy in the corner and the wrap toggle beside it, fixed while the code scrolls under them. */
+.dx-tools {
   position: absolute;
   inset-block-start: .5rem;
   inset-inline-start: .5rem;
   z-index: 1;
+  display: flex;
+  gap: .25rem;
+}
+.dx-copy, .dx-wrap {
   padding: .25rem .625rem;
   border-radius: var(--ins-r-pill);
   border: 1px solid var(--code-bd);
@@ -221,11 +226,16 @@
   opacity: 0;
   transition: opacity var(--ins-t-pop) var(--ins-ease), background var(--ins-t-pop) var(--ins-ease);
 }
-.dx-code:hover .dx-copy,
-.dx-copy:focus-visible { opacity: 1; }
-.dx-copy:hover { background: var(--ins-surface-hover); color: var(--ins-text-1); }
+.dx-code:hover :is(.dx-copy, .dx-wrap),
+:is(.dx-copy, .dx-wrap):focus-visible { opacity: 1; }
+:is(.dx-copy, .dx-wrap):hover { background: var(--ins-surface-hover); color: var(--ins-text-1); }
 .dx-copy.is-done { color: var(--ins-tone-ok); opacity: 1; }
-@media (hover: none) { .dx-copy { opacity: 1; } }
+.dx-wrap[aria-pressed="true"] { opacity: 1; color: var(--ins-tone-brand); background: var(--ins-tone-brand-bg); }
+@media (hover: none) { :is(.dx-copy, .dx-wrap) { opacity: 1; } }
+/* Wrapped, each line is a block hanging from its own indentation, so a long line continues under where it began. */
+.dx-code.is-wrap code { white-space: pre-wrap; overflow-wrap: anywhere; }
+.dx-ln { display: block; padding-inline-start: calc(var(--dx-ind, 0) * 1ch); text-indent: calc(var(--dx-ind, 0) * -1ch); }
+.dx-ln:empty::after { content: "\200b"; }
 
 .hl-t { color: var(--hl-t); }
 .hl-a { color: var(--hl-a); }
