@@ -72,33 +72,43 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
         <Setter Property="Padding" Value="6" />
-        <Setter Property="MinWidth" Value="192" />
-        <Setter Property="MaxHeight" Value="384" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="FontFamily" Value="{DynamicResource InsFontBody}" />
         <Setter Property="Focusable" Value="True" />
         <Setter Property="WindowManagerAddShadowHint" Value="False" />
+        <!-- The card keeps clear room for its shadow inside the popup's box, and the offsets take the room back out so the card still opens at the pointer -->
+        <Setter Property="HorizontalOffset" Value="-40" />
+        <Setter Property="VerticalOffset" Value="-16" />
         <Setter Property="ins:PopMotion.Enabled" Value="True" />
         <Setter Property="ins:PopMotion.Stagger" Value="True" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Panel>
-              <Border Name="PART_Ground" Background="{DynamicResource InsWash1}" CornerRadius="{TemplateBinding CornerRadius}" />
-              <Border Background="{TemplateBinding Background}"
-                      BorderBrush="{TemplateBinding BorderBrush}"
-                      BorderThickness="{TemplateBinding BorderThickness}"
-                      CornerRadius="{TemplateBinding CornerRadius}"
-                      BoxShadow="{DynamicResource InsShLg}">
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled">
-                  <ItemsPresenter Name="PART_ItemsPresenter"
-                                  ItemsPanel="{TemplateBinding ItemsPanel}"
-                                  Margin="{TemplateBinding Padding}"
-                                  KeyboardNavigation.TabNavigation="Continue" />
-                </ScrollViewer>
-              </Border>
-            </Panel>
+            <Border Name="PART_Room" Padding="40,16,40,64">
+              <Panel>
+                <Border Name="PART_Ground" Background="{DynamicResource InsWash1}" CornerRadius="{TemplateBinding CornerRadius}" />
+                <Border Name="LayoutRoot"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        BoxShadow="{DynamicResource InsShLg}"
+                        MinWidth="192"
+                        MaxHeight="384">
+                  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                    <ItemsPresenter Name="PART_ItemsPresenter"
+                                    ItemsPanel="{TemplateBinding ItemsPanel}"
+                                    Margin="{TemplateBinding Padding}"
+                                    KeyboardNavigation.TabNavigation="Continue" />
+                  </ScrollViewer>
+                </Border>
+              </Panel>
+            </Border>
           </ControlTemplate>
         </Setter>
+        <!-- Avalonia mirrors the pointer placement on a right-to-left page but not the offset, so the room on the card's right is taken back the other way -->
+        <Style Selector="^[FlowDirection=RightToLeft]">
+          <Setter Property="HorizontalOffset" Value="40" />
+        </Style>
       </ControlTheme>
 
       <!-- A Flyout's presenter: the same card, holding free content. `card` is the card variant of .ins-pop-body. -->
@@ -233,25 +243,30 @@
                   </Viewbox>
                 </Grid>
               </Border>
+              <!-- The submenu card 4px past the item, its top on the item's: the popup's box holds room for the shadow and the offsets take it back out -->
               <Popup Name="PART_Popup"
                      WindowManagerAddShadowHint="False"
                      ShouldUseOverlayLayer="True"
                      Placement="RightEdgeAlignedTop"
-                     HorizontalOffset="4"
+                     HorizontalOffset="{TemplateBinding FlowDirection, Converter={x:Static ins:SubmenuOffset.Instance}}"
+                     VerticalOffset="-16"
                      IsLightDismissEnabled="False"
                      IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
-                <Border Background="{DynamicResource InsGlassStrongGround}"
-                        BorderBrush="{DynamicResource InsRim}"
-                        BorderThickness="1"
-                        CornerRadius="{DynamicResource InsRMd}"
-                        BoxShadow="{DynamicResource InsShLg}"
-                        MinWidth="192"
-                        MaxHeight="384">
-                  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
-                    <ItemsPresenter Name="PART_ItemsPresenter"
-                                    ItemsPanel="{TemplateBinding ItemsPanel}"
-                                    Margin="6" />
-                  </ScrollViewer>
+                <Border Name="PART_Room" Padding="40,16,40,64">
+                  <Border Name="PART_SubCard"
+                          Background="{DynamicResource InsGlassStrongGround}"
+                          BorderBrush="{DynamicResource InsRim}"
+                          BorderThickness="1"
+                          CornerRadius="{DynamicResource InsRMd}"
+                          BoxShadow="{DynamicResource InsShLg}"
+                          MinWidth="192"
+                          MaxHeight="384">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                      <ItemsPresenter Name="PART_ItemsPresenter"
+                                      ItemsPanel="{TemplateBinding ItemsPanel}"
+                                      Margin="6" />
+                    </ScrollViewer>
+                  </Border>
                 </Border>
               </Popup>
             </Panel>
@@ -386,11 +401,15 @@
         <Style Selector="^ /template/ Viewbox#PART_ChevronPath">
           <Setter Property="IsVisible" Value="False" />
         </Style>
-        <Style Selector="^ /template/ Popup#PART_Popup">
+        <!-- Values set in a template outrank a plain style, so the bar's placement is a style with a condition, which outranks them -->
+        <Style Selector="^:not(.ins-never) /template/ Popup#PART_Popup">
           <Setter Property="Placement" Value="BottomEdgeAlignedLeft" />
-          <Setter Property="HorizontalOffset" Value="0" />
-          <Setter Property="VerticalOffset" Value="6" />
+          <Setter Property="HorizontalOffset" Value="-40" />
+          <Setter Property="VerticalOffset" Value="-10" />
           <Setter Property="IsLightDismissEnabled" Value="True" />
+        </Style>
+        <Style Selector="^[FlowDirection=RightToLeft] /template/ Popup#PART_Popup">
+          <Setter Property="HorizontalOffset" Value="40" />
         </Style>
       </ControlTheme>
 
