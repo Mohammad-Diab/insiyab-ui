@@ -340,6 +340,25 @@ public class ToolbarTests
         Assert.Equal(Colors.Transparent, ColorOf(bar.Background));
         Assert.Equal(new Thickness(0, 0, 0, 1), bar.BorderThickness);
     }
+
+    [AvaloniaTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void A_hovered_toolbar_button_keeps_its_icon_still(bool label)
+    {
+        var b = new ToolbarButton { Icon = Glyph, Label = "فتح", ShowLabel = label };
+        var bar = new Toolbar { HorizontalAlignment = HorizontalAlignment.Left };
+        bar.Items.Add(b);
+        bar.Items.Add(new ToolbarButton { Icon = Glyph, Label = "حفظ" });
+        var window = Show(new StackPanel { Children = { bar } }, FlowDirection.RightToLeft);
+        Settle();
+        window.MouseMove(Center(b, window));
+        Settle(400);
+        var icon = Assert.Single(b.GetVisualDescendants().OfType<Icon>(), i => i.IsEffectivelyVisible);
+        Assert.Equal(default, icon.Margin);
+        Assert.Equal(1.08, icon.RenderTransform!.Value.M11, 2);
+        Assert.All(b.GetVisualDescendants().OfType<TextBlock>(), t => Assert.True(t.RenderTransform is null || t.RenderTransform.Value.IsIdentity));
+    }
 }
 
 public class StatusBarTests

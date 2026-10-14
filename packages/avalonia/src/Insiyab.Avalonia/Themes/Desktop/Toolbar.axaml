@@ -28,7 +28,7 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Background" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Background" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
             <BrushTransition Property="Foreground" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
@@ -51,9 +51,6 @@
             </Panel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^ /template/ Panel#PART_Press">
-          <Setter Property="ins:PressDip.Depth" Value="0.94" />
-        </Style>
         <Style Selector="^ /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Transitions">
             <Transitions>
@@ -201,9 +198,22 @@
     <Setter Property="Background" Value="{DynamicResource InsLine}" />
   </Style>
 
+  <!-- Only the icon moves, and from its centre: it grows a little under the pointer and dips on the press, so a row of buttons never sways sideways -->
   <Style Selector="ins|Icon.toolbar-icon">
     <Setter Property="Size" Value="16" />
     <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="RenderTransform" Value="none" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector=":is(Button):pointerover:not(:disabled) ins|Icon.toolbar-icon">
+    <Setter Property="RenderTransform" Value="scale(1.08)" />
+  </Style>
+  <Style Selector=":is(Button):pressed:not(:disabled) ins|Icon.toolbar-icon">
+    <Setter Property="RenderTransform" Value="scale(0.9)" />
   </Style>
   <Style Selector="ins|Icon.toolbar-chevron">
     <Setter Property="Size" Value="12" />
