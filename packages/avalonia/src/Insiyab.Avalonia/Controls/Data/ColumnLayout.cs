@@ -10,36 +10,62 @@ public sealed class ColumnLayout
     /// <summary>The narrowest a column can be dragged to.</summary>
     public const double MinWidth = 48;
 
-    private readonly List<ColumnsPanel> _panels = [];
+    private readonly HashSet<ColumnsPanel> _panels = [];
     private readonly Dictionary<int, double> _fixed = [];
+    private double[] _max = [];
+    private bool _stale;
     private bool _pending;
 
     /// <summary>Columns that keep their natural width and take none of the spare room: the web's <c>inline-size: 1%</c> column.</summary>
     public Func<int, bool>? IsFit { get; set; }
+
+    /// <summary>Whether a panel taken out of the tree still counts towards the widths, as a table's rows scrolled out of view do, until <see cref="Keep"/> drops it.</summary>
+    public bool KeepsDetached { get; set; }
 
     /// <summary>Widths the user set by dragging, by column.</summary>
     public IReadOnlyDictionary<int, double> FixedWidths => _fixed;
 
     internal void Add(ColumnsPanel panel)
     {
-        if (!_panels.Contains(panel)) _panels.Add(panel);
-        Changed(panel);
+        if (!_panels.Add(panel)) return;
+        Grow(panel.Natural, panel);
     }
 
     internal void Remove(ColumnsPanel panel)
     {
-        if (_panels.Remove(panel)) Changed(panel);
+        if (!_panels.Remove(panel)) return;
+        _stale = true;
+        Changed(panel);
+    }
+
+    internal void Detach(ColumnsPanel panel)
+    {
+        if (!KeepsDetached) Remove(panel);
+    }
+
+    /// <summary>Drops every panel but these from the widths: the rows a table no longer has.</summary>
+    public void Keep(IEnumerable<ColumnsPanel?> panels)
+    {
+        var keep = panels.OfType<ColumnsPanel>().ToHashSet();
+        if (_panels.RemoveWhere(p => !keep.Contains(p) && !p.IsAttachedToTree) == 0) return;
+        _stale = true;
+        Invalidate();
     }
 
     /// <summary>The widest cell of each column, over every panel.</summary>
     public double[] Natural()
     {
-        var count = 0;
-        foreach (var p in _panels) count = Math.Max(count, p.Natural.Length);
-        var widths = new double[count];
-        foreach (var p in _panels)
-            for (var i = 0; i < p.Natural.Length; i++)
-                widths[i] = Math.Max(widths[i], p.Natural[i]);
+        if (_stale)
+        {
+            _stale = false;
+            var count = 0;
+            foreach (var p in _panels) count = Math.Max(count, p.Natural.Length);
+            _max = new double[count];
+            foreach (var p in _panels)
+                for (var i = 0; i < p.Natural.Length; i++)
+                    _max[i] = Math.Max(_max[i], p.Natural[i]);
+        }
+        var widths = (double[])_max.Clone();
         foreach (var (i, w) in _fixed) if (i < widths.Length) widths[i] = w;
         return widths;
     }
@@ -98,16 +124,55 @@ public sealed class ColumnLayout
         foreach (var p in _panels) p.InvalidateMeasure();
     }
 
-    internal void Changed(ColumnsPanel source)
+    // A panel's cells changed width: only when that moves a column's widest cell do the other panels lay out again.
+    internal void Measured(ColumnsPanel source, double[] old)
+    {
+        if (!_panels.Contains(source)) return;
+        var now = source.Natural;
+        var shrank = false;
+        for (var i = 0; i < old.Length && !shrank; i++)
+            shrank = i < _max.Length && old[i] >= _max[i] && (i >= now.Length || now[i] < old[i]);
+        if (shrank)
+        {
+            _stale = true;
+            Changed(source);
+        }
+        else Grow(now, source);
+    }
+
+    private void Grow(double[] natural, ColumnsPanel source)
+    {
+        if (_stale)
+        {
+            Changed(source);
+            return;
+        }
+        var grew = false;
+        if (natural.Length > _max.Length)
+        {
+            Array.Resize(ref _max, natural.Length);
+            grew = true;
+        }
+        for (var i = 0; i < natural.Length; i++)
+            if (natural[i] > _max[i])
+            {
+                _max[i] = natural[i];
+                grew = true;
+            }
+        if (grew) Changed(source);
+    }
+
+    private void Changed(ColumnsPanel source)
     {
         foreach (var p in _panels)
-            if (p != source) p.InvalidateArrange();
+            if (p != source && p.IsAttachedToTree) p.InvalidateArrange();
         if (_pending) return;
         _pending = true;
         Dispatcher.UIThread.Post(() =>
         {
             _pending = false;
-            foreach (var p in _panels) p.InvalidateMeasure();
+            foreach (var p in _panels)
+                if (p.IsAttachedToTree) p.InvalidateMeasure();
         }, DispatcherPriority.Render);
     }
 }
@@ -120,6 +185,8 @@ public class ColumnsPanel : Panel
 
     internal double[] Natural { get; private set; } = [];
 
+    internal bool IsAttachedToTree => _attached;
+
     /// <summary>The widths this row shares with the table's other rows.</summary>
     public ColumnLayout? Layout
     {
@@ -127,7 +194,7 @@ public class ColumnsPanel : Panel
         set
         {
             if (_layout == value) return;
-            if (_attached) _layout?.Remove(this);
+            _layout?.Remove(this);
             _layout = value;
             if (_attached) _layout?.Add(this);
             InvalidateMeasure();
@@ -145,7 +212,7 @@ public class ColumnsPanel : Panel
     {
         base.OnDetachedFromVisualTree(e);
         _attached = false;
-        _layout?.Remove(this);
+        _layout?.Detach(this);
     }
 
     protected override Size MeasureOverride(Size availableSize)
@@ -159,9 +226,12 @@ public class ColumnsPanel : Panel
             natural[i] = child.IsVisible ? child.DesiredSize.Width : 0;
             height = Math.Max(height, child.DesiredSize.Height);
         }
-        var moved = !natural.AsSpan().SequenceEqual(Natural);
-        Natural = natural;
-        if (moved) _layout?.Changed(this);
+        if (!natural.AsSpan().SequenceEqual(Natural))
+        {
+            var old = Natural;
+            Natural = natural;
+            _layout?.Measured(this, old);
+        }
         var widths = _layout?.Natural() ?? natural;
         var total = 0.0;
         foreach (var w in widths) total += w;
