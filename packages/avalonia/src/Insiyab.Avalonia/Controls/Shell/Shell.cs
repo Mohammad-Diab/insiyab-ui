@@ -86,8 +86,8 @@ public static class Shell
     private static readonly AttachedProperty<bool> WideOpenProperty =
         AvaloniaProperty.RegisterAttached<SplitView, bool>("WideOpen", typeof(Shell), true);
 
-    private static readonly AttachedProperty<Flight?> FlightProperty =
-        AvaloniaProperty.RegisterAttached<ListBox, Flight?>("Flight", typeof(Shell));
+    private static readonly AttachedProperty<MarkerFlight?> FlightProperty =
+        AvaloniaProperty.RegisterAttached<ListBox, MarkerFlight?>("Flight", typeof(Shell));
 
     /// <summary>Turns a SplitView's OpenPaneLength into the drawer's closed offset, a little past its own width.</summary>
     public static IValueConverter DrawerOffset { get; } = new FuncValueConverter<double, ITransform>(len =>
@@ -274,9 +274,6 @@ public static class Shell
         return null;
     }
 
-    private static readonly KeySpline EaseOut = new(0.9, 0.1, 1, 0.2);
-    private static readonly KeySpline EaseIn = new(0.1, 0.9, 0.2, 1);
-
     private static void OnNavSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (sender is not ListBox list || e.RemovedItems.Count == 0 || e.AddedItems.Count == 0) return;
@@ -302,59 +299,32 @@ public static class Shell
         var b = MarkerRect(to, layer);
         if (a.Height <= 0 || b.Height <= 0) return false;
 
-        var prev = list.GetValue(FlightProperty);
-        if (prev is not null)
+        var start = (a.Y, a.Height);
+        if (list.GetValue(FlightProperty) is { IsDone: false } previous)
         {
-            if (prev.Bar.Parent is not null && prev.Bar.Height > 0) a = new Rect(a.X, Canvas.GetTop(prev.Bar), 3, prev.Bar.Height);
-            prev.Land();
+            start = (previous.Start, previous.Length);
+            previous.Land();
         }
 
-        var bar = new Border { Classes = { "shell-indicator" }, Width = b.Width, Height = a.Height, IsHitTestVisible = false };
+        var bar = new Border { Classes = { "shell-indicator" }, Width = b.Width, IsHitTestVisible = false };
         Canvas.SetLeft(bar, b.X);
-        Canvas.SetTop(bar, a.Y);
-        layer.Children.Add(bar);
-        list.Classes.Add("moving");
-
-        var down = b.Y > a.Y;
-        var spanTop = down ? a.Y : b.Y;
-        var spanHeight = down ? b.Bottom - a.Y : a.Bottom - b.Y;
-        var flight = new Flight(list, layer, bar);
-        list.SetValue(FlightProperty, flight);
-        var animation = new Animation
+        MarkerFlight? run = null;
+        run = MarkerFlight.Run(list, start, (b.Y, b.Height), (y, h) =>
         {
-            Duration = TimeSpan.FromMilliseconds(600),
-            FillMode = FillMode.Both,
-            Children =
-            {
-                new KeyFrame { Cue = new Cue(0), Setters = { new Setter(Canvas.TopProperty, a.Y), new Setter(Layoutable.HeightProperty, a.Height) } },
-                new KeyFrame { Cue = new Cue(1d / 3), KeySpline = EaseOut, Setters = { new Setter(Canvas.TopProperty, spanTop), new Setter(Layoutable.HeightProperty, spanHeight) } },
-                new KeyFrame { Cue = new Cue(1), KeySpline = EaseIn, Setters = { new Setter(Canvas.TopProperty, b.Y), new Setter(Layoutable.HeightProperty, b.Height) } },
-            },
-        };
-        _ = RunFlight(animation, flight);
-        return true;
-    }
-
-    private static async Task RunFlight(Animation animation, Flight flight)
-    {
-        try { await animation.RunAsync(flight.Bar, flight.Cancel.Token); }
-        catch (OperationCanceledException) { }
-        flight.Land();
-    }
-
-    private sealed class Flight(ListBox list, Canvas layer, Border bar)
-    {
-        public Border Bar { get; } = bar;
-        public CancellationTokenSource Cancel { get; } = new();
-
-        public void Land()
+            Canvas.SetTop(bar, y);
+            bar.Height = h;
+        }, () =>
         {
-            if (!Cancel.IsCancellationRequested) Cancel.Cancel();
-            layer.Children.Remove(Bar);
-            if (list.GetValue(FlightProperty) != this) return;
-            list.SetValue(FlightProperty, null);
+            layer.Children.Remove(bar);
+            if (list.GetValue(FlightProperty) != run) return;
+            list.ClearValue(FlightProperty);
             list.Classes.Remove("moving");
-        }
+        });
+        if (run is null) return false;
+        layer.Children.Add(bar);
+        list.SetValue(FlightProperty, run);
+        list.Classes.Add("moving");
+        return true;
     }
 
     /// <summary>Filters a shell-nav ListBox the way its field does: every word must occur in a link's text, its <see cref="KeywordsProperty"/> or its heading. Returns how many links show.</summary>

@@ -20,11 +20,8 @@ public static class Tabs
     public static readonly AttachedProperty<bool> FlyProperty =
         AvaloniaProperty.RegisterAttached<SelectingItemsControl, bool>("Fly", typeof(Tabs));
 
-    private static readonly SplineEasing EaseOut = new(0.9, 0.1, 1, 0.2);
-    private static readonly SplineEasing EaseIn = new(0.1, 0.9, 0.2, 1);
-    private static readonly TimeSpan FlightTime = TimeSpan.FromMilliseconds(600);
-    private static readonly AttachedProperty<Flight?> FlightProperty =
-        AvaloniaProperty.RegisterAttached<SelectingItemsControl, Flight?>("Flight", typeof(Tabs));
+    private static readonly AttachedProperty<MarkerFlight?> FlightProperty =
+        AvaloniaProperty.RegisterAttached<SelectingItemsControl, MarkerFlight?>("Flight", typeof(Tabs));
 
     // Set while a strip reshuffles its own items (DocumentTabs moving a tab), so the selection it restores does not fly.
     private static readonly AttachedProperty<bool> HushProperty =
@@ -134,7 +131,7 @@ public static class Tabs
 
     private static void Fly(SelectingItemsControl strip, Control from, Control to)
     {
-        if (TopLevel.GetTopLevel(strip) is not { } top || strip.Bounds.Width <= 0) return;
+        if (strip.Bounds.Width <= 0) return;
         var layer = strip.GetVisualDescendants().OfType<Canvas>().FirstOrDefault(c => c.Name == "PART_FlightLayer");
         var face = layer?.Children.OfType<Border>().FirstOrDefault(c => c.Name == "PART_Flight");
         if (layer is null || face is null) return;
@@ -142,77 +139,36 @@ public static class Tabs
         var inset = line ? 10 : 0;
         var a = Span(from, layer, inset);
         var b = Span(to, layer, inset);
-        if (a is null || b is null) return;
-        var previous = strip.GetValue(FlightProperty);
-        if (previous is not null)
+        if (a is null || b is null || to.TranslatePoint(default, layer) is not { } origin) return;
+        var start = a.Value;
+        if (strip.GetValue(FlightProperty) is { IsDone: false } previous)
         {
-            a = (Canvas.GetLeft(face), face.Width);
-            previous.Halt();
+            start = (previous.Start, previous.Length);
+            previous.Land();
         }
-        var flight = new Flight(strip, face, a.Value, b.Value, to, layer, line);
-        strip.SetValue(FlightProperty, flight);
-        flight.Start(top);
+        MarkerFlight? run = null;
+        run = MarkerFlight.Run(strip, start, b.Value, (x, w) =>
+        {
+            Canvas.SetLeft(face, x);
+            face.Width = w;
+        }, () =>
+        {
+            if (strip.GetValue(FlightProperty) != run) return;
+            face.IsVisible = false;
+            strip.ClearValue(FlightProperty);
+            strip.Classes.Set("moving", false);
+        });
+        if (run is null) return;
+        Canvas.SetTop(face, line ? origin.Y + to.Bounds.Height - 2 : origin.Y);
+        if (!line) face.Height = to.Bounds.Height;
+        face.IsVisible = true;
+        strip.SetValue(FlightProperty, run);
+        strip.Classes.Set("moving", true);
     }
 
     private static (double X, double W)? Span(Control tab, Visual layer, double inset)
     {
         if (tab.TranslatePoint(default, layer) is not { } p) return null;
         return (p.X + inset, tab.Bounds.Width - 2 * inset);
-    }
-
-    private sealed class Flight(SelectingItemsControl strip, Border face, (double X, double W) a, (double X, double W) b, Control to, Visual layer, bool line)
-    {
-        private TimeSpan? _start;
-        private bool _done;
-
-        public void Start(TopLevel top)
-        {
-            var origin = to.TranslatePoint(default, layer) ?? default;
-            Canvas.SetTop(face, line ? origin.Y + to.Bounds.Height - 2 : origin.Y);
-            if (!line) face.Height = to.Bounds.Height;
-            Place(a.X, a.W);
-            face.IsVisible = true;
-            strip.Classes.Set("moving", true);
-            top.RequestAnimationFrame(t => Tick(top, t));
-        }
-
-        private void Tick(TopLevel top, TimeSpan now)
-        {
-            if (_done) return;
-            _start ??= now;
-            var t = Math.Clamp((now - _start.Value).TotalMilliseconds / FlightTime.TotalMilliseconds, 0, 1);
-            var left = Math.Min(a.X, b.X);
-            var right = Math.Max(a.X + a.W, b.X + b.W);
-            if (t < 1d / 3)
-            {
-                var k = EaseOut.Ease(t * 3);
-                Place(a.X + (left - a.X) * k, a.W + (right - left - a.W) * k);
-            }
-            else
-            {
-                var k = EaseIn.Ease((t - 1d / 3) * 1.5);
-                Place(left + (b.X - left) * k, right - left + (b.W - (right - left)) * k);
-            }
-            if (t >= 1) Halt();
-            else top.RequestAnimationFrame(next => Tick(top, next));
-        }
-
-        private void Place(double x, double w)
-        {
-            Canvas.SetLeft(face, x);
-            face.Width = Math.Max(0, w);
-        }
-
-        public void Halt()
-        {
-            if (_done) return;
-            _done = true;
-            face.IsVisible = false;
-            if (strip.GetValue(FlightProperty) == this)
-            {
-                strip.ClearValue(FlightProperty);
-                strip.Classes.Set("moving", false);
-            }
-        }
     }
 }

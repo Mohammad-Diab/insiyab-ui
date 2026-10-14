@@ -18,8 +18,6 @@ internal sealed class CalendarTurn
     private static readonly SplineEasing Ease = new(0.22, 1, 0.36, 1);
     private static readonly SplineEasing FoldIn = new(0.5, 0, 0.75, 0);
     private static readonly SplineEasing FoldOut = new(0.25, 1, 0.5, 1);
-    private static readonly SplineEasing FaceOut = new(0.9, 0.1, 1, 0.2);
-    private static readonly SplineEasing FaceIn = new(0.1, 0.9, 0.2, 1);
 
     /// <summary>A day as it stood before the switch: its box in the turn layer, its column, its number and its classes.</summary>
     internal readonly record struct Was(Rect At, int Column, string Label, string[] Classes);
@@ -287,18 +285,8 @@ internal sealed class CalendarTurn
         public override bool Step(double now)
         {
             var t = Progress(now, 0, FaceLength);
-            var left = Math.Min(ax, bx);
-            var right = Math.Max(ax + aw, bx + bw);
-            if (t < 1d / 3)
-            {
-                var k = FaceOut.Ease(t * 3);
-                Put(ax + (left - ax) * k, aw + (right - left - aw) * k);
-            }
-            else
-            {
-                var k = FaceIn.Ease((t - 1d / 3) * 1.5);
-                Put(left + (bx - left) * k, right - left + (bw - (right - left)) * k);
-            }
+            var (x, w) = MarkerFlight.At(t, (ax, aw), (bx, bw));
+            Put(x, w);
             if (t < 1) return true;
             Stop();
             return false;
