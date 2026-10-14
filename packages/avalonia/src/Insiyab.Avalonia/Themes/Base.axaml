@@ -220,4 +220,9 @@
     </Setter>
   </Style>
 
+  <!-- Text never cuts its own ink at the line box: Tajawal's Arabic letters hang below the line (ع ح ر ي م و), as the web lets them. -->
+  <Style Selector=":is(TextBlock)">
+    <Setter Property="ClipToBounds" Value="False" />
+  </Style>
+
 </Styles>
