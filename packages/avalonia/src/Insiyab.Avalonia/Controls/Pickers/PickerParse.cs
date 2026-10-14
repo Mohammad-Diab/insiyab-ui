@@ -52,7 +52,7 @@ internal static partial class PickerParse
         else if (locale.MonthFirst) { m = I(parts[0]); d = I(parts[1]); y = I(parts[2]); }
         else { d = I(parts[0]); m = I(parts[1]); y = I(parts[2]); }
         if (cal.IsGregorian && y < 100) y += 2000;
-        if (m < 1 || m > 12 || d < 1) return null;
+        if (m < 1 || m > 12 || d < 1 || d > 31) return null;
         if (cal.IsGregorian) return RealGregorian(y, m, d);
         var outDate = cal.FromParts(y, m - 1, d);
         var back = cal.Parts(outDate);
@@ -94,7 +94,23 @@ internal static partial class PickerParse
         return (ParseDate(rest, cal, locale), at);
     }
 
-    private static int I(string s) => int.Parse(s, NumberStyles.None, CultureInfo.InvariantCulture);
+    private static int I(string s) => Int(s);
+
+    private static int Longest(string s) => Digits().Matches(s).Select(m => m.Length).DefaultIfEmpty(0).Max();
+
+    // A typed number; one too long for an int, or in digits int cannot read, comes back as int.MaxValue, which every range check refuses.
+    internal static int Int(string s) => s.Length <= 9 && int.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out var n) ? n : int.MaxValue;
+
+    // Whether typing <paramref name="input"/> over the box's selection would make a run of digits longer than four, or than the longest already there.
+    public static bool Overlong(global::Avalonia.Controls.TextBox box, string? input)
+    {
+        if (string.IsNullOrEmpty(input)) return false;
+        var text = box.Text ?? string.Empty;
+        var a = Math.Clamp(Math.Min(box.SelectionStart, box.SelectionEnd), 0, text.Length);
+        var b = Math.Clamp(Math.Max(box.SelectionStart, box.SelectionEnd), 0, text.Length);
+        if (a == b) a = b = Math.Clamp(box.CaretIndex, 0, text.Length);
+        return Longest(text[..a] + input + text[b..]) > Math.Max(4, Longest(text));
+    }
 
     [GeneratedRegex(@"\d+")]
     private static partial Regex Digits();

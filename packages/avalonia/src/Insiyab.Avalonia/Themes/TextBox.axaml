@@ -148,7 +148,7 @@
         <Setter Property="CaretBrush" Value="{DynamicResource InsText1}" />
         <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource InsTextBoxSelection}" />
-        <Setter Property="SelectionForegroundBrush" Value="{DynamicResource InsText1}" />
+        <!-- No SelectionForegroundBrush: it splits the line into runs at the selection, and Avalonia 12.1 throws hit-testing a one-letter run in mixed Arabic text. -->
         <Setter Property="PlaceholderForeground" Value="{DynamicResource InsText3}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />

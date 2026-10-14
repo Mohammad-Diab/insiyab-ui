@@ -15,7 +15,6 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="CaretBrush" Value="{DynamicResource InsText1}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource InsTagsSelection}" />
-        <Setter Property="SelectionForegroundBrush" Value="{DynamicResource InsText1}" />
         <Setter Property="PlaceholderForeground" Value="{DynamicResource InsText3}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="MinHeight" Value="28" />

@@ -26,7 +26,6 @@
         <Setter Property="Foreground" Value="Transparent" />
         <Setter Property="CaretBrush" Value="Transparent" />
         <Setter Property="SelectionBrush" Value="Transparent" />
-        <Setter Property="SelectionForegroundBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="MinHeight" Value="0" />
@@ -47,7 +46,6 @@
                              Foreground="Transparent"
                              CaretBrush="Transparent"
                              SelectionBrush="Transparent"
-                             SelectionForegroundBrush="Transparent"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Center" />
             </Border>

@@ -16,8 +16,8 @@ public sealed class DataBrushes : IMultiValueConverter
     {
         if (values.Count == 0 || values[0] is not Color color) return null;
         var parts = (parameter as string ?? "1 1").Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        var top = double.Parse(parts[0], CultureInfo.InvariantCulture);
-        var bottom = parts.Length > 1 ? double.Parse(parts[1], CultureInfo.InvariantCulture) : top;
+        var top = Alpha(parts.Length > 0 ? parts[0] : null);
+        var bottom = parts.Length > 1 ? Alpha(parts[1]) : top;
         return new LinearGradientBrush
         {
             StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
@@ -29,4 +29,8 @@ public sealed class DataBrushes : IMultiValueConverter
             },
         };
     }
+
+    // An alpha that cannot be read is taken as fully opaque rather than thrown from a binding.
+    private static double Alpha(string? s) =>
+        double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out var a) && double.IsFinite(a) ? Math.Clamp(a, 0, 1) : 1;
 }

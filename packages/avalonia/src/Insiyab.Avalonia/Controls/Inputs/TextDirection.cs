@@ -1,11 +1,14 @@
 using System.Globalization;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The web's <c>dir="auto"</c>: a text takes the direction of its first letter, right to left for Arabic or Hebrew, left to right for any other, and the direction around it when it has none.</summary>
+/// <summary>The web's <c>dir="auto"</c>: a text takes the direction of its first letter (digits are not letters), right to left for Arabic or Hebrew, left to right for any other, and the direction around it when it has none.</summary>
 public sealed class TextDirection : IValueConverter
 {
     /// <summary>The shared instance, for <c>{x:Static}</c>.</summary>
@@ -17,10 +20,31 @@ public sealed class TextDirection : IValueConverter
         if (string.IsNullOrEmpty(text)) return null;
         foreach (var c in text)
         {
+            if (char.IsDigit(c) || c is '٫' or '٬') continue;
             if (IsRightToLeft(c)) return FlowDirection.RightToLeft;
             if (char.IsLetter(c)) return FlowDirection.LeftToRight;
         }
         return null;
+    }
+
+    // A date or time field: digits and separators read left to right, so a line with no letters is laid out left to right, held at the field's own start edge.
+    internal static void FollowTyped(TextBox box, TextPresenter? presenter)
+    {
+        if (presenter is null) return;
+        var own = box.FlowDirection;
+        if ((Of(box.Text) ?? FlowDirection.LeftToRight) == own)
+        {
+            presenter.ClearValue(Visual.FlowDirectionProperty);
+            presenter.ClearValue(TextPresenter.TextAlignmentProperty);
+            return;
+        }
+        presenter.FlowDirection = own == FlowDirection.LeftToRight ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+        presenter.TextAlignment = box.TextAlignment switch
+        {
+            TextAlignment.Start or TextAlignment.Justify or TextAlignment.DetectFromContent => TextAlignment.End,
+            TextAlignment.End => TextAlignment.Start,
+            var a => a,
+        };
     }
 
     /// <inheritdoc />
