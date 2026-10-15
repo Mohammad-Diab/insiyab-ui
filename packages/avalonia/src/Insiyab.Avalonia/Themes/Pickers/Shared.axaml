@@ -16,10 +16,21 @@
       <SolidColorBrush x:Key="InsPickerOptionHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
       <SolidColorBrush x:Key="InsPickerFocusOutline" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
 
-      <LinearGradientBrush x:Key="InsPickerGlassFill" StartPoint="0%,0%" EndPoint="70%,100%">
-        <GradientStop Offset="0" Color="{DynamicResource InsGlassStrongColor}" />
-        <GradientStop Offset="1" Color="{DynamicResource InsGlassHoverColor}" />
-      </LinearGradientBrush>
+      <!-- One copy per theme, so a dark window inside a light app gets the dark glass. -->
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <LinearGradientBrush x:Key="InsPickerGlassFill" StartPoint="0%,0%" EndPoint="70%,100%">
+            <GradientStop Offset="0" Color="{DynamicResource InsGlassStrongColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsGlassHoverColor}" />
+          </LinearGradientBrush>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <LinearGradientBrush x:Key="InsPickerGlassFill" StartPoint="0%,0%" EndPoint="70%,100%">
+            <GradientStop Offset="0" Color="{DynamicResource InsGlassStrongColor}" />
+            <GradientStop Offset="1" Color="{DynamicResource InsGlassHoverColor}" />
+          </LinearGradientBrush>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
       <LinearGradientBrush x:Key="InsPickerBrandFill" StartPoint="0%,0%" EndPoint="100%,100%">
         <GradientStop Offset="0" Color="{DynamicResource InsPrimaryColor}" />
         <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
@@ -43,7 +54,7 @@
   <!-- The pop body's glass: the 145 degree glass gradient over the presenter's wash, drawn left to right whatever the page direction. -->
   <Style Selector="Border.picker-glass">
     <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-    <Setter Property="Background" Value="{StaticResource InsPickerGlassFill}" />
+    <Setter Property="Background" Value="{DynamicResource InsPickerGlassFill}" />
     <Setter Property="FlowDirection" Value="LeftToRight" />
     <Setter Property="IsHitTestVisible" Value="False" />
   </Style>

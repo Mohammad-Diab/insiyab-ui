@@ -189,6 +189,7 @@ public class PhoneBox : TemplatedControl
         {
             _list.Tapped -= OnListTapped;
             _list.PointerMoved -= OnListPointerMoved;
+            _list.LayoutUpdated -= OnListLaidOut;
         }
         if (_popup is not null) _popup.Closed -= OnPopupClosed;
 
@@ -466,6 +467,8 @@ public class PhoneBox : TemplatedControl
         if (_none is not null) _none.Text = Arabic ? "لا دولة بهذا الاسم" : "No country by that name";
         Filter();
         _popup.IsOpen = true;
+        _list.LayoutUpdated -= OnListLaidOut;
+        _list.LayoutUpdated += OnListLaidOut;
         PseudoClasses.Set(":open", true);
         _button?.Classes.Set("open", true);
         Dispatcher.UIThread.Post(() => _search?.Focus());
@@ -473,6 +476,7 @@ public class PhoneBox : TemplatedControl
 
     private void Close(bool refocus)
     {
+        if (_list is not null) _list.LayoutUpdated -= OnListLaidOut;
         if (_popup is { IsOpen: true }) _popup.IsOpen = false;
         PseudoClasses.Set(":open", false);
         _button?.Classes.Set("open", false);
@@ -524,6 +528,23 @@ public class PhoneBox : TemplatedControl
         _list.ItemsSource = _shown;
         if (_none is not null) _none.IsVisible = _shown.Count == 0;
         Activate(q.Length > 0 ? _shown.FirstOrDefault() : _shown.FirstOrDefault(r => r.Country == _country) ?? _shown.FirstOrDefault());
+    }
+
+    // The list opens with the current country in its middle; the arrows and the search scroll only as far as they must.
+    private void OnListLaidOut(object? sender, EventArgs e)
+    {
+        if (_list is not { Scroll: ScrollViewer { Viewport.Height: > 0 } }) return;
+        _list.LayoutUpdated -= OnListLaidOut;
+        CentreActive();
+    }
+
+    private void CentreActive()
+    {
+        if (_list is not { SelectedItem: { } row, Scroll: ScrollViewer scroll }) return;
+        _list.ScrollIntoView(row);
+        if (_list.ContainerFromItem(row) is not Control item || item.TranslatePoint(default, scroll) is not { } at) return;
+        var y = scroll.Offset.Y + at.Y + item.Bounds.Height / 2 - scroll.Viewport.Height / 2;
+        scroll.Offset = new Vector(scroll.Offset.X, Math.Clamp(y, 0, Math.Max(0, scroll.Extent.Height - scroll.Viewport.Height)));
     }
 
     private void Activate(PhoneCountryRow? row)

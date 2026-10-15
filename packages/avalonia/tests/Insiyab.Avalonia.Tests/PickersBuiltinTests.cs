@@ -34,6 +34,15 @@ public class PickersBuiltinTests
 
     private static FlowDirection Dir(string dir) => dir == "rtl" ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
 
+    // The words must come from the direction, never the machine: an English culture under RTL, a Hijri-first Arabic one under LTR.
+    private static void WithCulture(string dir, Action body)
+    {
+        var was = System.Globalization.CultureInfo.CurrentCulture;
+        System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo(dir == "rtl" ? "en-US" : "ar-SA");
+        try { body(); }
+        finally { System.Globalization.CultureInfo.CurrentCulture = was; }
+    }
+
     // A control's box in window pixels, whichever way the window flows.
     private static Rect Physical(Control c, Visual to)
     {
@@ -134,4 +143,109 @@ public class PickersBuiltinTests
         AssertBrush(picker, "InsToneBrand", () => chosen.Foreground);
         AssertBrush(picker, "InsToneBrandBg", () => Part<Border>(presenter, "HighlightRect").Background);
     }
+
+    [AvaloniaFact]
+    public void Builtin_picker_glass_follows_a_dark_window()
+    {
+        var calendar = new Calendar { DisplayDate = new DateTime(2026, 9, 15) };
+        Show(Page(calendar), theme: ThemeVariant.Dark);
+
+        Assert.Equal(ThemeVariant.Light, Application.Current!.ActualThemeVariant);
+        var glass = calendar.GetVisualDescendants().OfType<Border>().First(b => b.Classes.Contains("picker-glass"));
+        var fill = Assert.IsType<LinearGradientBrush>(glass.Background);
+        Assert.Equal((Color)Res(calendar, "InsGlassStrongColor"), fill.GradientStops[0].Color);
+        Assert.Equal((Color)Res(calendar, "InsGlassHoverColor"), fill.GradientStops[1].Color);
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void Builtin_Calendar_names_follow_the_direction(string dir) => WithCulture(dir, () =>
+    {
+        var ar = dir == "rtl";
+        var calendar = new Calendar { DisplayDate = new DateTime(2026, 9, 15), FirstDayOfWeek = DayOfWeek.Saturday };
+        Show(Page(calendar), Dir(dir), height: 700);
+
+        var header = Part<Button>(calendar, "PART_HeaderButton");
+        Assert.Equal(ar ? "سبتمبر 2026" : "September 2026", header.Content);
+        var titles = Part<Grid>(calendar, "PART_MonthView").Children.Take(7).Select(c => ((TextBlock)c).Text).ToArray();
+        Assert.Equal(ar ? ["س", "ح", "ن", "ث", "ر", "خ", "ج"] : ["S", "S", "M", "T", "W", "T", "F"], titles);
+
+        calendar.DisplayDate = new DateTime(2026, 10, 3);
+        Settle(150);
+        Assert.Equal(ar ? "أكتوبر 2026" : "October 2026", header.Content);
+
+        calendar.DisplayMode = CalendarMode.Year;
+        Settle(150);
+        var months = Part<Grid>(calendar, "PART_YearView").Children.OfType<CalendarButton>().Select(b => b.Content).ToArray();
+        Assert.Equal(ar ? "يناير" : "Jan", months[0]);
+        Assert.Equal(ar ? "ديسمبر" : "Dec", months[11]);
+    });
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void Builtin_CalendarDatePicker_text_follows_the_direction(string dir) => WithCulture(dir, () =>
+    {
+        var ar = dir == "rtl";
+        var picker = new CalendarDatePicker { SelectedDate = new DateTime(2026, 9, 15), SelectedDateFormat = CalendarDatePickerFormat.Long, Width = 300 };
+        var empty = new CalendarDatePicker { Width = 300 };
+        Show(Page(picker, empty), Dir(dir), height: 700);
+
+        var box = Part<TextBox>(picker, "PART_TextBox");
+        Assert.Equal(ar ? "الثلاثاء، 15 سبتمبر 2026" : "Tuesday, September 15, 2026", box.Text);
+        Assert.Equal(ar ? "<d/M/yyyy>" : "<M/d/yyyy>", Part<TextBox>(empty, "PART_TextBox").PlaceholderText);
+
+        picker.SelectedDateFormat = CalendarDatePickerFormat.Short;
+        Settle(150);
+        Assert.Equal(ar ? "15/9/2026" : "9/15/2026", box.Text);
+
+        picker.Text = "4/3/2026";
+        Settle(150);
+        Assert.Equal(ar ? new DateTime(2026, 3, 4) : new DateTime(2026, 4, 3), picker.SelectedDate);
+
+        picker.IsDropDownOpen = true;
+        Settle();
+        var inner = Part<Calendar>((Visual)Part<Popup>(picker, "PART_Popup").Child!, "PART_Calendar");
+        Assert.Equal(ar ? "مارس 2026" : "April 2026", Part<Button>(inner, "PART_HeaderButton").Content);
+        picker.IsDropDownOpen = false;
+    });
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void Builtin_DatePicker_and_TimePicker_words_follow_the_direction(string dir) => WithCulture(dir, () =>
+    {
+        var ar = dir == "rtl";
+        var date = new DatePicker { SelectedDate = new DateTimeOffset(new DateTime(2026, 9, 15)) };
+        var blank = new DatePicker();
+        var time = new TimePicker { SelectedTime = new TimeSpan(15, 30, 0), ClockIdentifier = "12HourClock" };
+        var w = Show(Page(date, blank, time), Dir(dir), height: 700);
+
+        Assert.Equal("15", Part<TextBlock>(date, "PART_DayTextBlock").Text);
+        Assert.Equal(ar ? "سبتمبر" : "September", Part<TextBlock>(date, "PART_MonthTextBlock").Text);
+        Assert.Equal("2026", Part<TextBlock>(date, "PART_YearTextBlock").Text);
+        Assert.Equal(ar ? "اليوم" : "Day", Part<TextBlock>(blank, "PART_DayTextBlock").Text);
+        Assert.Equal(ar ? "الشهر" : "Month", Part<TextBlock>(blank, "PART_MonthTextBlock").Text);
+        Assert.Equal(ar ? "السنة" : "Year", Part<TextBlock>(blank, "PART_YearTextBlock").Text);
+        Assert.Equal(ar ? "م" : "PM", Part<TextBlock>(time, "PART_PeriodTextBlock").Text);
+
+        Click(Part<Button>(date, "PART_FlyoutButton"), w);
+        var pop = Part<Popup>(date, "PART_Popup");
+        Assert.True(pop.IsOpen);
+        var drum = (Visual)pop.Child!;
+        ListBoxItem Item(string wheel, int value) => Part<DateTimePickerPanel>(drum, wheel).Children.OfType<ListBoxItem>().First(i => (int)i.Tag! == value);
+        Assert.Equal(ar ? "سبتمبر" : "September", Item("PART_MonthSelector", 9).Content);
+        Assert.Equal(ar ? "يناير" : "January", Item("PART_MonthSelector", 1).Content);
+        Assert.Equal("15", Item("PART_DaySelector", 15).Content);
+        Assert.Equal("2026", Item("PART_YearSelector", 2026).Content);
+        pop.IsOpen = false;
+        Settle(150);
+
+        Click(Part<Button>(time, "PART_FlyoutButton"), w);
+        var timePop = Part<Popup>(time, "PART_Popup");
+        var periods = Part<DateTimePickerPanel>((Visual)timePop.Child!, "PART_PeriodSelector").Children.OfType<ListBoxItem>().Select(i => i.Content).ToArray();
+        Assert.Equal(ar ? ["ص", "م"] : ["AM", "PM"], periods);
+        timePop.IsOpen = false;
+    });
 }
