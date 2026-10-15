@@ -1,0 +1,46 @@
+<!doctype html>
+<!-- Fixtures for month.test.mjs: the week and day views and the work hours. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Insiyab month fixtures</title>
+  <link rel="stylesheet" href="../../dist/insiyab.css">
+  <link rel="stylesheet" href="../../dist/plugins/insiyab-month.css">
+  <script src="../../dist/insiyab.js"></script>
+  <script src="../../dist/plugins/insiyab-month.js"></script>
+</head>
+<body>
+<main class="ins-container ins-stack" style="padding-block: 2rem; max-inline-size: 70rem">
+  <div class="ins-month" id="m-day" data-ins-view="day" data-ins-date="2026-09-21">
+    <ul class="ins-month-events">
+      <li data-date="2026-09-21" data-time="04:00">رحلة الصباح</li>
+      <li data-date="2026-09-21" data-time="05:00">تجهيز القاعة</li>
+      <li data-date="2026-09-21" data-time="05:30" data-duration="120">استقبال الوفد</li>
+      <li data-date="2026-09-21" data-time="17:00" data-duration="180">ورشة عمل</li>
+      <li data-date="2026-09-21" data-time="19:00">عشاء العمل</li>
+    </ul>
+  </div>
+
+  <div class="ins-month" id="m-week" data-ins-view="week" data-ins-date="2026-09-21" data-ins-work-hours="off">
+    <ul class="ins-month-events">
+      <li data-date="2026-09-21" data-time="09:00"><a href="#call">مكالمة العميل</a></li>
+      <li data-date="2026-09-22" data-time="10:00" data-duration="90" data-tone="info">مراجعة العقد</li>
+      <li data-date="2026-09-23">إجازة</li>
+    </ul>
+  </div>
+
+  <div class="ins-month" id="m-range" data-ins-view="day" data-ins-day-hours="20-18">
+    <ul class="ins-month-events"></ul>
+  </div>
+
+  <div class="ins-month" id="m-week-en" lang="en" dir="ltr" data-ins-view="week" data-ins-date="2026-09-21" data-ins-work-hours="off">
+    <ul class="ins-month-events">
+      <li data-date="2026-09-21" data-time="09:00"><a href="#call">Client call</a></li>
+      <li data-date="2026-09-22" data-time="10:00" data-duration="90" data-tone="info">Contract review</li>
+      <li data-date="2026-09-23">Holiday</li>
+    </ul>
+  </div>
+</main>
+</body>
+</html>

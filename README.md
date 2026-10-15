@@ -1049,6 +1049,18 @@ a page can load that month's events and call `Insiyab.month(el, { events: [{ dat
 title, href, tone, time }] })`. A click on a day, not on an event, is
 `ins:month-day` ({ el, date }).
 
+`data-ins-view="week"` or `"day"` draws that view by the hour for the day in
+`data-ins-date`, each event as tall as its `data-duration` (minutes); a switch in the
+header moves between the month, week and day (`data-ins-view-switch="off"` hides it).
+Only the work hours show, 6 to 18 or `data-ins-day-hours="8-17"`: an event wholly
+outside them is counted in a band above or below, which opens the whole day at it
+when pressed, and one across their edge is cut there with square corners. A
+work-hours toggle in the header, or `data-ins-work-hours="off"`, shows the whole day
+in a scroll box as tall as the work hours (`data-ins-hours-switch="off"` hides the
+toggle). Moving the week or day is `ins:month-date` ({ el, date }), switching the
+view is `ins:month-view` ({ el, view }), and a press on the hours says
+`ins:month-day` with its `time`; events take a `duration` too.
+
 ## React
 
 `@insiyab/react`, in [packages/react](packages/react/README.md), is a set of React

@@ -28,7 +28,9 @@
 <h2 id="month">شهر بمواعيده</h2>
 <p>
   ضع <code>.ins-month</code> مع <code>data-ins-month="2026-09"</code>، وفيه قائمة <code>.ins-month-events</code> لكل موعد
-  فيها عنصر بيومه. ومنها يرسم الشهر جدول أسابيع يميز اليوم الحالي، وعلى الهاتف تصير المواعيد نقاطًا.
+  فيها عنصر بيومه. ومنها يرسم الشهر جدول أسابيع يميز اليوم الحالي، وعلى الهاتف تصير المواعيد نقاطًا. ومن مبدّل العرض في
+  رأسه تنتقل إلى الأسبوع أو اليوم بالساعات، فيقع كل موعد في ساعته بطول مدته. ويعرضان ساعات الدوام وحدها، من 6:00 ص إلى
+  6:00 م، ومن زر «ساعات الدوام» في الرأس ترى اليوم كله.
 </p>
 <demo-play of="month"></demo-play>
 
@@ -36,14 +38,19 @@
 <p>
   إذا انتقلت إلى شهر آخر أُطلق حدث <code>ins:month</code> ومعه الشهر الجديد، فتضع الصفحة مواعيده في القائمة ثم
   تستدعي <code>Insiyab.month(el)</code>، أو تمررها إليها مباشرة. وإذا نقرت على يوم في موضع خال من مواعيده أُطلق
-  <code>ins:month-day</code> ومعه تاريخه.
+  <code>ins:month-day</code> ومعه تاريخه، وفي الأسبوع واليوم ساعته أيضًا. وإذا انتقلت في الأسبوع أو اليوم أُطلق
+  <code>ins:month-date</code> ومعه اليوم الجديد، وإذا بدّلت العرض أُطلق <code>ins:month-view</code>.
 </p>
 <demo-code lang="js">
 document.addEventListener('ins:month', async (e) => {
   const events = await load(e.detail.month);          // [{ date, title, href, tone, time }]
   Insiyab.month(e.detail.el, { events });
 });
-document.addEventListener('ins:month-day', (e) => openNew(e.detail.date));
+document.addEventListener('ins:month-date', async (e) => {
+  const events = await loadWeek(e.detail.date);       // [{ date, title, href, tone, time, duration }]
+  Insiyab.month(e.detail.el, { events });
+});
+document.addEventListener('ins:month-day', (e) => openNew(e.detail.date, e.detail.time));
 </demo-code>
 
 <h2 id="options">الخيارات</h2>
