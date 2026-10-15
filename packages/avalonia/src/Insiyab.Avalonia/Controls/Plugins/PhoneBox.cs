@@ -520,7 +520,7 @@ public class PhoneBox : TemplatedControl
         if (_list is null) return;
         var arabic = Arabic;
         var raw = PluginText.Latin(_search?.Text).Trim();
-        var q = ArabicMatch.Normalize(raw);
+        var q = ArabicSearch.Normalize(raw);
         var isDial = raw.Length > 0 && raw.TrimStart('+').Length > 0 && raw.TrimStart('+').All(char.IsAsciiDigit) && raw.LastIndexOf('+') <= 0;
         var digits = isDial ? raw.Replace("+", string.Empty) : string.Empty;
         _shown = q.Length == 0

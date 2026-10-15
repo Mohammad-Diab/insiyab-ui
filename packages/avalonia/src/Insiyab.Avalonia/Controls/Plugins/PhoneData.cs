@@ -234,5 +234,5 @@ internal static partial class PhoneData
 
     // Folded once per country: the list is rebuilt on every open.
     public static string SearchKey(PhoneCountry c) =>
-        SearchKeys.GetOrAdd(c.Iso, _ => ArabicMatch.Normalize(string.Join(' ', c.ArabicName, c.EnglishName, c.Iso, Alias.GetValueOrDefault(c.Iso, string.Empty))));
+        SearchKeys.GetOrAdd(c.Iso, _ => ArabicSearch.Normalize(string.Join(' ', c.ArabicName, c.EnglishName, c.Iso, Alias.GetValueOrDefault(c.Iso, string.Empty))));
 }
