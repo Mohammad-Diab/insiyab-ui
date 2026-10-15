@@ -12,7 +12,7 @@
     <pg:PlayExample Layout="Stack" Code="{x:Static pg:MonthPlay.Example}" Stage="{x:Static pg:MonthPlay.ExampleStage}" />
 
     <TextBlock Classes="section" Text="شهر بمواعيده" />
-    <pg:PlayText Classes="p" Markup="اجعل في `ins:MonthCalendar` الشهر `Month`، ومواعيده في `Events`، لكل موعد يومه. ومنها يرسم الشهر جدول أسابيع يميز اليوم الحالي، وعلى الهاتف تصير المواعيد نقاطًا. ومن مبدّل العرض في رأسه تنتقل إلى الأسبوع أو اليوم، فيقع كل موعد في ساعته بطول مدته. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
+    <pg:PlayText Classes="p" Markup="اجعل في `ins:MonthCalendar` الشهر `Month`، ومواعيده في `Events`، لكل موعد يومه. ومنها يرسم الشهر جدول أسابيع يميز اليوم الحالي، وعلى الهاتف تصير المواعيد نقاطًا. ومن مبدّل العرض في رأسه تنتقل إلى الأسبوع أو اليوم، فيقع كل موعد في ساعته بطول مدته. ويعرض الأسبوع واليوم ساعات الدوام وحدها، من 6:00 ص إلى 6:00 م، ومن زر «ساعات الدوام» في رأسه ترى اليوم كله. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
     <pg:Playground Def="{x:Static pg:MonthPlay.Month}" />
 
     <TextBlock Classes="section" Text="الأحداث" />
