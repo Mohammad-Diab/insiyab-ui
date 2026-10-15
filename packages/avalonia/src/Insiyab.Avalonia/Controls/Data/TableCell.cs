@@ -159,6 +159,8 @@ public class TableCell : ContentControl
     {
         if (sender is ComboBox { IsDropDownOpen: true }) return;
         if (sender is Control c && c.IsKeyboardFocusWithin) return;
+        // Another window took the keyboard: the editor stays open and gets it back with this window.
+        if (WindowActivity.GetIsInactive(this)) return;
         EndEdit(true);
     }
 

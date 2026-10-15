@@ -231,7 +231,11 @@ public class ColorField : TemplatedControl
         if (e.Key == Key.Enter) CommitTyped();
     }
 
-    private void OnInputLeave(object? sender, RoutedEventArgs e) => CommitTyped();
+    // Another window taking the keyboard is not leaving the field.
+    private void OnInputLeave(object? sender, RoutedEventArgs e)
+    {
+        if (!WindowActivity.GetIsInactive(this)) CommitTyped();
+    }
 
     // #abc, abc and aabbcc are taken and written out in full; anything else is refused with a message.
     private void CommitTyped()

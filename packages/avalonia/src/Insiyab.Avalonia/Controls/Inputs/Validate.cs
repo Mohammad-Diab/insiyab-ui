@@ -137,9 +137,10 @@ public sealed class Validate : AvaloniaObject
         if (box.GetValue(ReportedProperty)) SetOwnError(box, Problem(box));
     }
 
+    // Another window taking the keyboard is not leaving the field: the field gets it back with that window.
     private static void OnLeave(TextBox box)
     {
-        if (!HasRules(box) || !box.GetValue(DirtyProperty)) return;
+        if (!HasRules(box) || !box.GetValue(DirtyProperty) || WindowActivity.GetIsInactive(box)) return;
         box.SetValue(ReportedProperty, true);
         SetOwnError(box, Problem(box));
     }

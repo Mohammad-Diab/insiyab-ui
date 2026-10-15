@@ -103,7 +103,11 @@ internal sealed class ToastStrip
         Manager = new WindowNotificationManager(top) { Position = NotificationPosition.BottomRight, MaxItems = Toast.MaxItems, ZIndex = 1 };
         Manager.ApplyTemplate();
         top.AddHandler(InputElement.KeyDownEvent, OnTopKey, RoutingStrategies.Bubble);
-        top.PropertyChanged += (_, e) => { if (e.Property == Visual.BoundsProperty) Fit(); };
+        top.PropertyChanged += (_, e) =>
+        {
+            if (e.Property == Visual.BoundsProperty) Fit();
+            else if (e.Property == WindowActivity.IsInactiveProperty && e.NewValue is false) ResumeSoon();
+        };
         Fit();
     }
 
@@ -164,7 +168,8 @@ internal sealed class ToastStrip
             _hover = false;
             ResumeSoon();
         };
-        card.LostFocus += (_, _) => ResumeSoon();
+        // Focus that leaves with the window is not the reader leaving the toast: its clock waits for the window to come back.
+        card.LostFocus += (_, _) => { if (!WindowActivity.GetIsInactive(card)) ResumeSoon(); };
         card.GotFocus += (_, _) => PauseAll();
         card.AddHandler(InputElement.KeyDownEvent, OnCardKey, RoutingStrategies.Bubble);
         card.DetachedFromVisualTree += (_, _) => Forget(card);

@@ -401,7 +401,11 @@ public class PhoneBox : TemplatedControl
         Commit(false);
     }
 
-    private void OnInputLeave(object? sender, RoutedEventArgs e) => Leave();
+    // Another window taking the keyboard is not leaving the field.
+    private void OnInputLeave(object? sender, RoutedEventArgs e)
+    {
+        if (!WindowActivity.GetIsInactive(this)) Leave();
+    }
 
     private void Leave()
     {
