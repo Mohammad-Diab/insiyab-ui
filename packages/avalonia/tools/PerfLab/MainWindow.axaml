@@ -5,6 +5,7 @@
         x:Class="PerfLab.MainWindow"
         ins:TitleBar.Extends="True"
         Title="PerfLab"
+        Icon="avares://PerfLab/Assets/perflab.ico"
         Width="1280" Height="820"
         MinWidth="480" MinHeight="480"
         FlowDirection="RightToLeft">
@@ -26,7 +27,7 @@
           <DockPanel>
             <Border Classes="shell-brand" DockPanel.Dock="Top" ins:TitleBar.IsDragArea="True" Background="Transparent">
               <StackPanel>
-                <Border Classes="shell-mark" ins:TitleBar.IsSystemMenuArea="True"><TextBlock Text="م" /></Border>
+                <Border Classes="shell-mark" Background="Transparent" ins:TitleBar.IsSystemMenuArea="True"><TemplatedControl Template="{StaticResource BrandMarkGauge}" /></Border>
                 <StackPanel>
                   <TextBlock Classes="shell-brand-name" Text="مختبر الأداء" />
                   <TextBlock Classes="shell-brand-role" Text="الطلبات والمستندات" />
@@ -78,7 +79,7 @@
                 </Button>
                 <Border Classes="island brand">
                   <StackPanel>
-                    <Border Classes="shell-mark"><TextBlock Text="م" /></Border>
+                    <Border Classes="shell-mark" Background="Transparent"><TemplatedControl Template="{StaticResource BrandMarkGauge}" /></Border>
                     <TextBlock Text="مختبر الأداء" />
                   </StackPanel>
                 </Border>

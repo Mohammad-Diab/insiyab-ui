@@ -8,6 +8,7 @@
     <Description>Insiyab for Avalonia: the glass, RTL-first design system as Avalonia themes.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>mark-128.png</PackageIcon>
     <IsAotCompatible>true</IsAotCompatible>
     <IsTrimmable>true</IsTrimmable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -26,6 +27,7 @@
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\..\..\brand\mark-128.png" Pack="true" PackagePath="\" Visible="false" />
     <None Include="Assets\Fonts\OFL-*.txt" Pack="true" PackagePath="fonts\" />
   </ItemGroup>
 

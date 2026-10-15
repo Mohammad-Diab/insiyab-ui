@@ -510,6 +510,9 @@
   font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
   line-height: 1.2;
   font-weight: 800;
+/* The library's logo in a brand mark: the svg is the whole tile, so the mark's own fill steps aside. */
+.ins-shell-mark.site-mark { background: none; }
+.site-logo { display: block; inline-size: 100%; block-size: 100%; }
   color: var(--ins-text-1);
 }
 .site-hero h1 span { color: var(--ins-primary-darker); }

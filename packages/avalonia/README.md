@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/Mohammad-Diab/insiyab-ui/main/brand/mark-256.png" width="88" height="88" alt="Insiyab logo">
+
 # Insiyab.Avalonia
 
 Insiyab for Avalonia 12: the same glass, RTL-first look as the web library, as Avalonia themes. App code stays plain Avalonia: `<Button Classes="primary">`.
@@ -78,6 +80,6 @@ Brand tokens (any token that depends on the primary colour, directly or through 
 | `gallery` | every component in light/dark and RTL/LTR |
 | `tests` | headless tests |
 | `aot-check` | a Native AOT consumer: publishing it must give zero warnings |
-| `tools` | generators: `gen-tokens.mjs` (tokens), `brand-fixture.mjs` (the brand parity cases from insiyab.js), `fonts/build-fonts.mjs` (the embedded fonts); the first two take `--check` |
+| `tools` | generators: `gen-tokens.mjs` (tokens), `brand-fixture.mjs` (the brand parity cases from insiyab.js), `fonts/build-fonts.mjs` (the embedded fonts); the first two take `--check`; `BrandGen` (the logo files in `/brand`, the gallery and PerfLab icons, and the gallery's `BrandMark.axaml`: `dotnet run --project tools/BrandGen -- ../..`) |
 
 `node test/run.mjs avalonia` from the repository root checks that the generated files are current and runs the headless tests.

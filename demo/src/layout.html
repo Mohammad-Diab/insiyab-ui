@@ -6,6 +6,10 @@
   <title>{{DOC_TITLE}}</title>
   <meta name="description" content="{{DESCRIPTION}}">
 
+  <!-- The library's logo as the tab icon: the svg where browsers take it, the ico elsewhere. -->
+  <link rel="icon" href="../brand/favicon.ico" sizes="32x32">
+  <link rel="icon" href="../brand/mark-32px.svg" type="image/svg+xml">
+
   <!-- The library: the boot script before first paint, everything else deferred. -->
   <link rel="stylesheet" href="../dist/insiyab.css">
   <script src="assets/site.js"></script>{{PLAY_SCRIPT}}
@@ -107,7 +111,7 @@
   <!-- ============================================================ sidebar -->
   <aside class="ins-shell-side" id="nav" aria-label="أقسام التوثيق" data-ins-filter="ابحث في الصفحات">
     <a class="ins-shell-brand" href="index.html">
-      <span class="ins-shell-mark">ان</span>
+      <span class="ins-shell-mark site-mark">{{LOGO_SIDE}}</span>
       <span class="ins-shell-brand-text">
         <span class="ins-shell-brand-name">انسياب</span>
         <span class="ins-shell-brand-role">التوثيق · <span class="ins-num">{{VERSION}}</span></span>
@@ -136,7 +140,7 @@
           <svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg>
         </button>
         <a class="ins-island ins-island--brand" href="index.html">
-          <span class="ins-shell-mark">ان</span>
+          <span class="ins-shell-mark site-mark">{{LOGO_TOP}}</span>
           <b>انسياب</b>
         </a>
         <span class="ins-island site-version ins-hide-below-md">الإصدار <span class="ins-num">{{VERSION}}</span></span>

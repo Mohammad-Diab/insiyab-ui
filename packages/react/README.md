@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/Mohammad-Diab/insiyab-ui/main/brand/mark-256.png" width="88" height="88" alt="Insiyab logo">
+
 # @insiyab/react
 
 React components for [Insiyab](https://github.com/Mohammad-Diab/insiyab-ui#readme). They are thin covers over the

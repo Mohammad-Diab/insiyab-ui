@@ -4,7 +4,12 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Insiyab.Avalonia.Gallery</RootNamespace>
     <IsPackable>false</IsPackable>
+    <ApplicationIcon>Assets\gallery.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\gallery.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
