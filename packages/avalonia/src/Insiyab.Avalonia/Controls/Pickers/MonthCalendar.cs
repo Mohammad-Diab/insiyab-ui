@@ -7,6 +7,7 @@ using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Metadata;
@@ -52,7 +53,7 @@ public sealed class MonthEvent
     public string? Href { get; set; }
 }
 
-/// <summary>The month calendar plugin (the web's <c>.ins-month</c>): a month as a table of weeks starting on the locale's first day, today marked, each day showing three events and a "+n" for the rest, dots instead of names when narrow, and a header that moves a month back, on, or to today. The desktop adds a week and a day view by the hour, with a switch between the three.</summary>
+/// <summary>The month calendar plugin (the web's <c>.ins-month</c>): a month as a table of weeks starting on the locale's first day, today marked, each day showing three events and a "+n" for the rest, dots instead of names when narrow, and a header that moves a month back, on, or to today. The desktop adds a week and a day view by the hour, the work hours only unless asked, with a switch between the three.</summary>
 [TemplatePart("PART_Host", typeof(Decorator))]
 [PseudoClasses(":narrow", ":month", ":week", ":day")]
 public class MonthCalendar : TemplatedControl
@@ -76,10 +77,16 @@ public class MonthCalendar : TemplatedControl
         AvaloniaProperty.Register<MonthCalendar, bool>(nameof(HasViewSwitch), true);
 
     public static readonly StyledProperty<int> DayStartHourProperty =
-        AvaloniaProperty.Register<MonthCalendar, int>(nameof(DayStartHour), 8);
+        AvaloniaProperty.Register<MonthCalendar, int>(nameof(DayStartHour), 6);
 
     public static readonly StyledProperty<int> DayEndHourProperty =
-        AvaloniaProperty.Register<MonthCalendar, int>(nameof(DayEndHour), 20);
+        AvaloniaProperty.Register<MonthCalendar, int>(nameof(DayEndHour), 18);
+
+    public static readonly StyledProperty<bool> WorkHoursOnlyProperty =
+        AvaloniaProperty.Register<MonthCalendar, bool>(nameof(WorkHoursOnly), true);
+
+    public static readonly StyledProperty<bool> HasHoursSwitchProperty =
+        AvaloniaProperty.Register<MonthCalendar, bool>(nameof(HasHoursSwitch), true);
 
     public static readonly StyledProperty<double> HourHeightProperty =
         AvaloniaProperty.Register<MonthCalendar, double>(nameof(HourHeight), 48);
@@ -104,10 +111,18 @@ public class MonthCalendar : TemplatedControl
     private DateTime _drawnToday;
     private DispatcherTimer? _clock;
     private bool _stale;
+    private ToggleButton? _hours;
+    private ScrollViewer? _scroll;
+    private (DateTime First, MonthCalendarView View)? _scrollKey;
+    private double _scrollAt;
+    private double? _scrollTo;
+    private bool _scrollReady;
+    private readonly Dictionary<(DateTime Day, bool After), Border> _bands = [];
 
     public MonthCalendar()
     {
         Events = new AvaloniaList<MonthEvent>();
+        AddHandler(KeyDownEvent, OnTurnKey, RoutingStrategies.Tunnel);
     }
 
     /// <summary>Raised when the header moves to another month (the web's <c>ins:month</c>), with its first day.</summary>
@@ -144,11 +159,17 @@ public class MonthCalendar : TemplatedControl
     /// <summary>The month, week and day switch in the header.</summary>
     public bool HasViewSwitch { get => GetValue(HasViewSwitchProperty); set => SetValue(HasViewSwitchProperty, value); }
 
-    /// <summary>The first hour the week and day views show, 8 unless set.</summary>
+    /// <summary>The hour the work hours start at, 6 unless set; kept within 0 to 23.</summary>
     public int DayStartHour { get => GetValue(DayStartHourProperty); set => SetValue(DayStartHourProperty, value); }
 
-    /// <summary>The hour the week and day views end at, 20 unless set; 24 is midnight.</summary>
+    /// <summary>The hour the work hours end at, 18 unless set; 24 is midnight, and it stays after the start.</summary>
     public int DayEndHour { get => GetValue(DayEndHourProperty); set => SetValue(DayEndHourProperty, value); }
+
+    /// <summary>The week and day views show only the work hours (the default), and count the events outside them at the edges; false shows the whole day, scrolled to the work start.</summary>
+    public bool WorkHoursOnly { get => GetValue(WorkHoursOnlyProperty); set => SetValue(WorkHoursOnlyProperty, value); }
+
+    /// <summary>The work-hours toggle in the header of the week and day views.</summary>
+    public bool HasHoursSwitch { get => GetValue(HasHoursSwitchProperty); set => SetValue(HasHoursSwitchProperty, value); }
 
     /// <summary>How tall an hour is in the week and day views.</summary>
     public double HourHeight { get => GetValue(HourHeightProperty); set => SetValue(HourHeightProperty, value); }
@@ -158,6 +179,10 @@ public class MonthCalendar : TemplatedControl
     internal IReadOnlyDictionary<MonthEvent, Border> Chips => _chips;
 
     internal Control? NowLine => _now;
+
+    internal IReadOnlyDictionary<(DateTime Day, bool After), Border> Bands => _bands;
+
+    internal ScrollViewer? HoursScroller => _scroll;
 
     internal static Func<DateTime> Now { get; set; } = () => DateTime.Now;
 
@@ -199,7 +224,8 @@ public class MonthCalendar : TemplatedControl
             Hold(() => SetCurrentValue(MonthProperty, First(Date)));
         if (change.Property == MonthProperty || change.Property == DateProperty || change.Property == EventsProperty || change.Property == LocaleProperty
             || change.Property == FlowDirectionProperty || change.Property == ViewProperty || change.Property == HasViewSwitchProperty
-            || change.Property == DayStartHourProperty || change.Property == DayEndHourProperty || change.Property == HourHeightProperty)
+            || change.Property == DayStartHourProperty || change.Property == DayEndHourProperty || change.Property == HourHeightProperty
+            || change.Property == WorkHoursOnlyProperty || change.Property == HasHoursSwitchProperty)
             Draw();
         else if (change.Property == BoundsProperty)
         {
@@ -231,15 +257,16 @@ public class MonthCalendar : TemplatedControl
 
     private void OnEventsChanged(object? sender, NotifyCollectionChangedEventArgs e) => Draw();
 
-    // PageUp and PageDown anywhere inside it turn the month (or the week, or the day); the header's button that held focus gets it back.
-    protected override void OnKeyDown(KeyEventArgs e)
+    // PageUp and PageDown anywhere inside it, the hours' scroll box included, turn the month (or the week, or the day); the header's button that held focus gets it back, and focus on a chip or a day that the turn threw away goes to the matching arrow.
+    private void OnTurnKey(object? sender, KeyEventArgs e)
     {
-        base.OnKeyDown(e);
         if (e.Handled || e.KeyModifiers != KeyModifiers.None || e.Key is not (Key.PageUp or Key.PageDown)) return;
         e.Handled = true;
-        var held = (TopLevel.GetTopLevel(this)?.FocusManager?.GetFocusedElement() as Button)?.Tag as string;
+        var focused = TopLevel.GetTopLevel(this)?.FocusManager?.GetFocusedElement() as Visual;
+        var held = (focused as Button)?.Tag as string;
         Go(e.Key == Key.PageUp ? -1 : 1);
         if (held is not null) _host?.GetLogicalDescendantsOfButtons().FirstOrDefault(b => b.Tag as string == held)?.Focus(NavigationMethod.Directional);
+        else if (focused is not null && !focused.IsAttachedToVisualTree()) (e.Key == Key.PageUp ? _prev : _next)?.Focus(NavigationMethod.Directional);
     }
 
     /// <summary>Moves back (-1), on (1), or to today (0) by the view's step: a month, a week or a day. A month says so with <see cref="MonthChanged"/>, a week or a day with <see cref="DateChanged"/>.</summary>
@@ -299,6 +326,8 @@ public class MonthCalendar : TemplatedControl
         _stale = !this.IsAttachedToVisualTree();
         if (_stale) return;
         _cells.Clear();
+        _bands.Clear();
+        _scroll = null;
         _chips.Clear();
         _now = null;
         _nowPanel = null;
@@ -349,6 +378,9 @@ public class MonthCalendar : TemplatedControl
                 var to = (MonthCalendarView)_switch.SelectedIndex;
                 if (to != View) Dispatcher.UIThread.Post(() => SwitchTo(to));
             };
+            _hours = new ToggleButton { Content = words.IsArabic ? "ساعات الدوام" : "Work hours", Classes = { "secondary", "sm", "month-hours" }, Tag = "hours" };
+            _hours.Click += (_, _) => SetHours(_hours.IsChecked == true, null);
+            nav.Children.Add(_hours);
             nav.Children.Add(_switch);
             _prev = Arrow(false, () => Go(-1));
             nav.Children.Add(_prev);
@@ -379,10 +411,31 @@ public class MonthCalendar : TemplatedControl
         AutomationProperties.SetName(_prev!, back);
         AutomationProperties.SetName(_next!, on);
         _switch!.IsVisible = HasViewSwitch;
+        var (ws, we) = WorkHours();
+        _hours!.IsVisible = view != MonthCalendarView.Month && HasHoursSwitch && Trims;
+        _hours.IsChecked = WorkHoursOnly;
+        var from = words.FormatTime(TimeSpan.FromHours(ws));
+        var to = words.FormatTime(TimeSpan.FromHours(we));
+        ToolTip.SetTip(_hours, ar ? $"اعرض ساعات الدوام وحدها، من {from} إلى {to}" : $"Show only the work hours, {from} to {to}");
+        AutomationProperties.SetName(_hours, words.IsArabic ? "ساعات الدوام" : "Work hours");
         _syncSwitch = true;
         _switch.SelectedIndex = (int)view;
         _syncSwitch = false;
         return _head;
+    }
+
+    private void SetHours(bool workOnly, double? scrollTo)
+    {
+        Hold(() => SetCurrentValue(WorkHoursOnlyProperty, workOnly));
+        _scrollTo = scrollTo;
+        Draw();
+    }
+
+    private static string Count(bool ar, int n)
+    {
+        if (!ar) return n == 1 ? "1 event" : $"{PickerLocale.N(n)} events";
+        var r = n % 100;
+        return n == 1 ? "موعد واحد" : n == 2 ? "موعدان" : PickerLocale.N(n) + (r is >= 3 and <= 10 ? " مواعيد" : r >= 11 ? " موعدًا" : " موعد");
     }
 
     private Button Arrow(bool next, Action go)
@@ -464,23 +517,36 @@ public class MonthCalendar : TemplatedControl
     private static string DayName(PickerLocale words, DateTime day) =>
         words.IsArabic ? $"{PickerLocale.N(day.Day)} {words.MonthName(PickerCalendar.Gregorian, day.Month - 1)}" : $"{words.MonthName(PickerCalendar.Gregorian, day.Month - 1)} {PickerLocale.N(day.Day)}";
 
-    // The week and day views: day headings, an all-day row, then the hours with each day's events placed by their time and length, side by side where they overlap.
+    // The week and day views: day headings, an all-day row, then the hours (the work hours, or the whole day in a scroll box) with each day's events placed by their time and length, side by side where they overlap; events wholly outside the hours are counted in a band above or below.
     private Border TimeGrid(PickerLocale words, MonthCalendarView view, Dictionary<DateTime, List<MonthEvent>> byDay)
     {
         var (first, days) = Span(words);
-        var startH = Math.Clamp(DayStartHour, 0, 23);
-        var endH = Math.Clamp(DayEndHour, startH + 1, 24);
+        var (ws, we) = WorkHours();
+        var (startH, endH) = ShownHours();
+        var scrolls = (startH, endH) != (ws, we);
         var hourH = Math.Max(16, HourHeight);
         var today = DateCalendar.Today();
-        var grid = new Grid { RowDefinitions = new RowDefinitions("Auto,Auto,Auto"), Classes = { "week-grid" } };
-        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-        for (var d = 0; d < days; d++) grid.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
+        var top = new Grid { RowDefinitions = new RowDefinitions("Auto,Auto"), Classes = { "week-top" } };
+        var body = new Grid { RowDefinitions = new RowDefinitions("Auto,Auto,Auto"), Classes = { "week-body" } };
+        foreach (var g in new[] { top, body })
+        {
+            g.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto) { SharedSizeGroup = "WeekHours" });
+            for (var d = 0; d < days; d++) g.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
+        }
+        if (scrolls)
+        {
+            top.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            var gap = new Border { Classes = { "week-bar-gap" } };
+            Grid.SetColumn(gap, days + 1);
+            Grid.SetRowSpan(gap, 2);
+            top.Children.Add(gap);
+        }
 
         var corner = new Border { Classes = { "week-corner" } };
-        grid.Children.Add(corner);
+        top.Children.Add(corner);
         var allLabel = new TextBlock { Text = words.IsArabic ? "طوال اليوم" : "All day", Classes = { "week-allday-label" } };
         Grid.SetRow(allLabel, 1);
-        grid.Children.Add(allLabel);
+        top.Children.Add(allLabel);
 
         var gutter = new StackPanel { Classes = { "week-hours" } };
         var lines = new StackPanel { IsHitTestVisible = false, Classes = { "week-lines" } };
@@ -489,12 +555,19 @@ public class MonthCalendar : TemplatedControl
             gutter.Children.Add(new Border { Height = hourH, Classes = { "week-hour-cell" }, Child = new TextBlock { Text = words.FormatTime(new TimeSpan(h, 0, 0)), Classes = { "week-hour" } } });
             lines.Children.Add(new Border { Height = hourH, Classes = { "week-line" } });
         }
-        Grid.SetRow(gutter, 2);
-        grid.Children.Add(gutter);
-        Grid.SetRow(lines, 2);
+        Grid.SetRow(gutter, 1);
+        body.Children.Add(gutter);
+        Grid.SetRow(lines, 1);
         Grid.SetColumn(lines, 1);
         Grid.SetColumnSpan(lines, days);
-        grid.Children.Add(lines);
+        body.Children.Add(lines);
+
+        static double StartOf(MonthEvent e) => e.Time!.Value.TotalMinutes;
+        static double EndOf(MonthEvent e) => StartOf(e) + Length(e).TotalMinutes;
+        var from = startH * 60.0;
+        var to = endH * 60.0;
+        var hiddenBefore = new List<MonthEvent>[days];
+        var hiddenAfter = new List<MonthEvent>[days];
 
         for (var d = 0; d < days; d++)
         {
@@ -518,7 +591,7 @@ public class MonthCalendar : TemplatedControl
                 };
             }
             Grid.SetColumn(head, d + 1);
-            grid.Children.Add(head);
+            top.Children.Add(head);
 
             var allDay = new StackPanel { Spacing = 2, Classes = { "week-allday" } };
             foreach (var ev in list.Where(e => e.Time is null))
@@ -530,17 +603,24 @@ public class MonthCalendar : TemplatedControl
             var allCell = new Border { Child = allDay, Classes = { "week-allday-cell" } };
             Grid.SetRow(allCell, 1);
             Grid.SetColumn(allCell, d + 1);
-            grid.Children.Add(allCell);
+            top.Children.Add(allCell);
 
             var lane = new DayTimeline { HourHeight = hourH, From = startH * 60, To = endH * 60 };
             var timed = list.Where(e => e.Time is not null).ToList();
-            var spans = timed.Select(e => Visible(e, lane, hourH)).ToList();
+            var before = timed.Where(e => EndOf(e) <= from).ToList();
+            var after = timed.Where(e => StartOf(e) >= to).ToList();
+            var inside = timed.Where(e => !before.Contains(e) && !after.Contains(e)).ToList();
+            hiddenBefore[d] = before;
+            hiddenAfter[d] = after;
+            var spans = inside.Select(e => Visible(e, lane, hourH)).ToList();
             var lanes = Lanes(spans);
-            for (var i = 0; i < timed.Count; i++)
+            for (var i = 0; i < inside.Count; i++)
             {
-                var chip = TimedChip(words, timed[i]);
+                var chip = TimedChip(words, inside[i]);
+                if (StartOf(inside[i]) < from) chip.Classes.Add("cut-start");
+                if (EndOf(inside[i]) > to) chip.Classes.Add("cut-end");
                 lane.Add(chip, spans[i].Start, spans[i].End, lanes[i].Lane, lanes[i].Lanes);
-                _chips[timed[i]] = chip;
+                _chips[inside[i]] = chip;
             }
             if (isToday && LineAt(lane) is { } at)
             {
@@ -556,11 +636,99 @@ public class MonthCalendar : TemplatedControl
                 var minutes = lane.From + Math.Floor(e.GetPosition(lane).Y / hourH * 2) * 30;
                 DayInvoked?.Invoke(this, day.AddMinutes(Math.Clamp(minutes, lane.From, lane.To - 30)));
             };
-            Grid.SetRow(column, 2);
+            Grid.SetRow(column, 1);
             Grid.SetColumn(column, d + 1);
-            grid.Children.Add(column);
+            body.Children.Add(column);
         }
-        return new Border { Child = grid, Classes = { "week-frame" } };
+        if (hiddenBefore.Any(l => l.Count > 0)) AddBands(words, body, first, false, startH, hiddenBefore);
+        if (hiddenAfter.Any(l => l.Count > 0)) AddBands(words, body, first, true, endH, hiddenAfter);
+
+        Control hours = body;
+        if (scrolls)
+        {
+            var key = (first, view);
+            var y = _scrollTo is { } want ? Math.Max(0, want / 60 * hourH - hourH / 2) : _scrollKey == key ? _scrollAt : ws * hourH;
+            _scrollTo = null;
+            _scrollKey = key;
+            _scrollAt = y;
+            _scrollReady = false;
+            var scroll = new ScrollViewer { Content = body, Height = Math.Clamp(we - ws, 4, 24) * hourH, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, VerticalScrollBarVisibility = ScrollBarVisibility.Visible, Classes = { "week-scroll" } };
+            scroll.ScrollChanged += (_, _) => { if (_scrollReady && scroll == _scroll) _scrollAt = scroll.Offset.Y; };
+            void Place(object? s, EventArgs e)
+            {
+                if (scroll.Extent.Height <= 0) return;
+                scroll.LayoutUpdated -= Place;
+                scroll.Offset = new Vector(0, y);
+                _scrollAt = scroll.Offset.Y;
+                _scrollReady = true;
+            }
+            scroll.LayoutUpdated += Place;
+            _scroll = scroll;
+            hours = scroll;
+        }
+        else
+        {
+            _scrollKey = null;
+            _scrollTo = null;
+        }
+        Grid.SetRow(hours, 1);
+        var outer = new Grid { RowDefinitions = new RowDefinitions("Auto,Auto") };
+        Grid.SetIsSharedSizeScope(outer, true);
+        outer.Children.Add(top);
+        outer.Children.Add(hours);
+        return new Border { Child = outer, Classes = { "week-frame" } };
+    }
+
+    // The row above (row 0) or below (row 2) the hours: a label in the gutter and, in each day with hidden events, a pill counting them.
+    private void AddBands(PickerLocale words, Grid body, DateTime first, bool after, int hour, List<MonthEvent>[] lists)
+    {
+        var ar = words.IsArabic;
+        var row = after ? 2 : 0;
+        var kind = after ? "after" : "before";
+        var at = words.FormatTime(TimeSpan.FromHours(hour));
+        var label = ar ? $"{(after ? "بعد" : "قبل")} {at}" : $"{(after ? "After" : "Before")} {at}";
+        var gutter = new Border { Classes = { "week-band-gutter", kind }, Child = new TextBlock { Text = label, Classes = { "week-band-label" } } };
+        Grid.SetRow(gutter, row);
+        body.Children.Add(gutter);
+        for (var d = 0; d < lists.Length; d++)
+        {
+            var cell = new Border { Classes = { "week-band-cell", kind } };
+            if (lists[d].Count > 0) cell.Child = Band(words, first.AddDays(d), lists[d], after, hour);
+            Grid.SetRow(cell, row);
+            Grid.SetColumn(cell, d + 1);
+            body.Children.Add(cell);
+        }
+    }
+
+    private Border Band(PickerLocale words, DateTime day, List<MonthEvent> hidden, bool after, int hour)
+    {
+        var ar = words.IsArabic;
+        var at = words.FormatTime(TimeSpan.FromHours(hour));
+        var band = new Border { Child = new TextBlock { Text = "+" + PickerLocale.N(hidden.Count), Classes = { "week-band-count" } }, Classes = { "week-band", after ? "after" : "before" }, Focusable = true, Tag = day };
+        AutomationProperties.SetName(band, ar ? $"{Count(true, hidden.Count)} {(after ? "بعد" : "قبل")} {at}" : $"{Count(false, hidden.Count)} {(after ? "after" : "before")} {at}");
+        ToolTip.SetTip(band, string.Join(ar ? "، " : ", ", hidden.Select(e => $"{words.FormatTime(e.Time!.Value)} {e.Title}")));
+        var first = hidden.Min(e => e.Time!.Value.TotalMinutes);
+        void Open(bool keyboard)
+        {
+            SetHours(false, first);
+            if (!keyboard) return;
+            if (_hours is { IsVisible: true }) _hours.Focus(NavigationMethod.Tab);
+            else _host?.GetLogicalDescendantsOfButtons().FirstOrDefault(b => b.Tag as string == "today")?.Focus(NavigationMethod.Tab);
+        }
+        band.PointerReleased += (_, e) =>
+        {
+            if (e.InitialPressMouseButton != MouseButton.Left) return;
+            e.Handled = true;
+            Open(false);
+        };
+        band.KeyDown += (_, e) =>
+        {
+            if (e.Key is not (Key.Enter or Key.Space)) return;
+            e.Handled = true;
+            Open(true);
+        };
+        _bands[(day, after)] = band;
+        return band;
     }
 
     private static TimeSpan Length(MonthEvent ev) => ev.Duration is { } d && d > TimeSpan.Zero ? d : TimeSpan.FromHours(1);
@@ -637,10 +805,20 @@ public class MonthCalendar : TemplatedControl
     private bool WantsLine()
     {
         var at = Now().TimeOfDay.TotalMinutes;
-        var startH = Math.Clamp(DayStartHour, 0, 23);
-        var endH = Math.Clamp(DayEndHour, startH + 1, 24);
-        return at >= startH * 60 && at <= endH * 60;
+        var (s, e) = ShownHours();
+        return at >= s * 60 && at <= e * 60;
     }
+
+    // The work hours as set, kept in range: the start within 0 to 23, the end after it up to 24.
+    private (int Start, int End) WorkHours()
+    {
+        var start = Math.Clamp(DayStartHour, 0, 23);
+        return (start, Math.Clamp(DayEndHour, start + 1, 24));
+    }
+
+    private bool Trims => WorkHours() is var (s, e) && (s > 0 || e < 24);
+
+    private (int Start, int End) ShownHours() => WorkHoursOnly && Trims ? WorkHours() : (0, 24);
 
     private static string ToneClass(MonthEventTone tone) => tone switch
     {

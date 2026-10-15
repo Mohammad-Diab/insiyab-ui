@@ -42,10 +42,12 @@ public static class MonthPlay
         Event(21, new TimeSpan(13, 0, 0), "تدريب", minutes: 120),
         Event(21, new TimeSpan(16, 0, 0), "موعد نهائي", MonthEventTone.Bad, minutes: 30),
         Event(26, null, "جرد المخزون", MonthEventTone.Info),
+        Event(22, new TimeSpan(5, 30, 0), "رحلة مبكرة", minutes: 60),
+        Event(22, new TimeSpan(19, 0, 0), "عشاء العمل", minutes: 90),
     ];
 
     private static readonly (int Day, int Hour, int Minute, int Word, int Length)[] Rows =
-        [(3, -1, 0, 0, 0), (8, 10, 0, 1, 90), (8, 14, 30, 2, 0), (15, -1, 0, 3, 0), (21, 9, 0, 4, 90)];
+        [(3, -1, 0, 0, 0), (8, 10, 0, 1, 90), (8, 14, 30, 2, 0), (15, -1, 0, 3, 0), (21, 9, 0, 4, 90), (22, 5, 30, 9, 60), (22, 19, 0, 10, 90)];
 
     private static readonly (int Day, int Hour, int Minute, int Word, int Length)[] More =
         [(21, 10, 0, 5, 0), (21, 13, 0, 6, 120), (21, 16, 0, 7, 30)];
@@ -54,8 +56,8 @@ public static class MonthPlay
         Rows.Concat(s.On("more") ? More : []).Append((26, -1, 0, 8, 0));
 
     private static string[] Words(PlayState s) => s.On("en")
-        ? ["Delivery", "Meeting", "Review", "Workshop", "Call", "Training", "Visit", "Deadline", "Holiday"]
-        : ["تسليم", "اجتماع", "مراجعة", "ورشة عمل", "مكالمة", "تدريب", "زيارة", "موعد نهائي", "إجازة"];
+        ? ["Delivery", "Meeting", "Review", "Workshop", "Call", "Training", "Visit", "Deadline", "Holiday", "Early flight", "Team dinner"]
+        : ["تسليم", "اجتماع", "مراجعة", "ورشة عمل", "مكالمة", "تدريب", "زيارة", "موعد نهائي", "إجازة", "رحلة مبكرة", "عشاء العمل"];
 
     public static PlayDef Month { get; } = new()
     {
@@ -77,7 +79,9 @@ public static class MonthPlay
             Switch("time", "بوقته", "Time", "وقت الموعد، مثل `14:30`، يُكتب قبل عنوانه وتُرتب به مواعيد اليوم. والموعد بلا وقت يأخذ اليوم كله، فيقع في الأسبوع واليوم في صف «طوال اليوم».", OptionKind.Property, "الموعد", on: true),
             Switch("link", "رابط", "Href", "يصير الموعد رابطًا يُنقر، فيمتلئ بلونه تحت المؤشر ويُطلق `EventInvoked`.", OptionKind.Property, "الموعد"),
             Switch("more", "أكثر من ثلاثة في يوم"),
-            Switch("hours", "ساعات الدوام", "DayStartHour", "أول ساعة يعرضها الأسبوع واليوم، وهي 8 إن لم تذكرها، ومعها `DayEndHour` الساعة التي ينتهيان عندها، وهي 20.", OptionKind.Property, "الأسبوع واليوم"),
+            Switch("allhours", "اليوم كله", "WorkHoursOnly", "يعرض الأسبوع واليوم ساعات الدوام وحدها، وهذا هو الأصل. والموعد الذي يقع كله خارجها لا يختفي، بل يُعد في شريط فوق الساعات أو تحتها، مثل «+2»، فإن نقرته ظهر اليوم كله عند أول تلك المواعيد. والموعد الذي يتجاوز طرف الدوام يُقص عنده بزاوية مستقيمة. واكتب `WorkHoursOnly=\"False\"` ليبدأ باليوم كله في صندوق بارتفاع الدوام، تمر بساعاته بالتمرير ويبدأ عند أول الدوام.", OptionKind.Property, "الأسبوع واليوم"),
+            Switch("hours", "دوام من 8 إلى 17", "DayStartHour", "أول ساعة في الدوام، وهي 6 إن لم تذكرها، ومعها `DayEndHour` الساعة التي ينتهي عندها، وهي 18. وتكون الساعة بين 0 و24، والنهاية بعد البداية.", OptionKind.Property, "الأسبوع واليوم"),
+            Switch("nohours", "بلا زر الساعات", "HasHoursSwitch", "اكتب `HasHoursSwitch=\"False\"` ليختفي زر «ساعات الدوام» من الرأس، ويبقى ما في `WorkHoursOnly`.", OptionKind.Property, "الأسبوع واليوم"),
             Switch("noswitch", "بلا مبدّل العرض", "HasViewSwitch", "اكتب `HasViewSwitch=\"False\"` ليختفي مبدّل الشهر والأسبوع واليوم من الرأس، ويبقى العرض الذي في `View`.", OptionKind.Property),
             Switch("en", "بالإنجليزية", "Locale=\"en\"", "لغة الشهر، ومنها أسماء الأيام والشهر وأول أيام الأسبوع. وإن تركتها فالعربية في الواجهة العربية والإنجليزية في غيرها.", OptionKind.Property),
         ],
@@ -94,7 +98,7 @@ public static class MonthPlay
             Row("الأحداث", "ViewChanged", "يُطلق إذا بدّل المستخدم العرض، أو نقر اسم يوم في الأسبوع ففتح يومه.", OptionKind.Event),
             Row("الأحداث", "DayInvoked", "يُطلق إذا نُقر يوم في موضع خال من مواعيده، ومعه تاريخه، وفي الأسبوع واليوم ساعته أيضًا.", OptionKind.Event),
         ],
-        Disable = s => s["view"] == "Month" ? ["hours"] : [],
+        Disable = s => s["view"] == "Month" ? ["allhours", "hours", "nohours"] : [],
         Axaml = s =>
         {
             var words = Words(s);
@@ -102,7 +106,8 @@ public static class MonthPlay
             var lines = List(s).Select((e, i) =>
                 $"  new() {{ Date = new(2026, 9, {e.Day}){(s.On("time") && e.Hour >= 0 ? $", Time = new({e.Hour}, {e.Minute}, 0)" : "")}{(s.On("time") && e.Hour >= 0 && e.Length > 0 ? $", Duration = TimeSpan.FromMinutes({e.Length})" : "")}, Title = \"{words[e.Word]}\"{tone}{(s.On("link") && i == 0 ? ", Href = \"/events/1\"" : "")} }},");
             var view = s["view"] == "Month" ? "" : $" View=\"{s["view"]}\" Date=\"2026-09-21\"";
-            var hours = s["view"] != "Month" && s.On("hours") ? " DayStartHour=\"9\" DayEndHour=\"17\"" : "";
+            var week = s["view"] != "Month";
+            var hours = (week && s.On("allhours") ? " WorkHoursOnly=\"False\"" : "") + (week && s.On("hours") ? " DayStartHour=\"8\" DayEndHour=\"17\"" : "") + (week && s.On("nohours") ? " HasHoursSwitch=\"False\"" : "");
             var sw = s.On("noswitch") ? " HasViewSwitch=\"False\"" : "";
             return $"<ins:MonthCalendar x:Name=\"Calendar\" Month=\"2026-09-01\"{view}{hours}{sw}{(s.On("en") ? " Locale=\"en\" FlowDirection=\"LeftToRight\"" : "")} />\n" +
                 "<!-- المواعيد من الشيفرة:\nCalendar.Events =\n[\n" + string.Join("\n", lines) + "\n];\n-->";
@@ -113,6 +118,7 @@ public static class MonthPlay
             if (s["view"] != "Month")
             {
                 notes.Add("يقع كل موعد في ساعته بطول مدته، وإذا تداخل موعدان صارا جنبًا إلى جنب، والمواعيد بلا وقت في صف «طوال اليوم». ويمر خط أحمر على الساعة الحالية في اليوم الحالي.");
+                notes.Add(s.On("allhours") ? "يعرض اليوم كله في صندوق بارتفاع الدوام، ويبدأ عند أول الدوام، فمرر لترى ما قبله وما بعده." : $"يعرض ساعات الدوام وحدها، {(s.On("hours") ? "من 8:00 ص إلى 5:00 م" : "من 6:00 ص إلى 6:00 م")}. وفي يوم 22 موعد قبلها وآخر بعدها، فتجد عدد كل منهما في شريط فوق الساعات أو تحتها، انقره ليظهر اليوم كله عند موعده. وزر «ساعات الدوام» في الرأس يبدّل بين الحالين.");
                 if (s["view"] == "Week") notes.Add("انقر اسم يوم في رأس الأسبوع فيفتح يومه.");
                 if (!s.On("more")) notes.Add("شغّل «أكثر من ثلاثة في يوم» لترى موعدين متداخلين يوم 21.");
             }

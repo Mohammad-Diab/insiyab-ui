@@ -270,6 +270,70 @@
     <Setter Property="Background" Value="{DynamicResource InsZebra}" />
   </Style>
 
+  <!-- The work-hours toggle sits before the view switch, a step away from it. -->
+  <Style Selector="ins|MonthCalendar ToggleButton.month-hours">
+    <Setter Property="Margin" Value="0,0,8,0" />
+  </Style>
+  <!-- With the whole day shown, the days above leave room for the hours' scroll bar so they stay in line. -->
+  <Style Selector="ins|MonthCalendar Border.week-bar-gap">
+    <Setter Property="Width" Value="{DynamicResource InsScrollbarSize}" />
+  </Style>
+  <!-- The bands above and below the work hours, counting the events outside them. -->
+  <Style Selector="ins|MonthCalendar Border.week-band-gutter.before, ins|MonthCalendar Border.week-band-cell.before">
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-band-gutter.after, ins|MonthCalendar Border.week-band-cell.after">
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-band-cell.before">
+    <Setter Property="BorderThickness" Value="1,0,0,1" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-band-cell.after">
+    <Setter Property="BorderThickness" Value="1,1,0,0" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-band-cell">
+    <Setter Property="MinHeight" Value="24" />
+    <Setter Property="Padding" Value="2" />
+  </Style>
+  <Style Selector="ins|MonthCalendar TextBlock.week-band-label">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Margin" Value="8,3" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-band">
+    <Setter Property="Padding" Value="6,1" />
+    <Setter Property="CornerRadius" Value="5" />
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-band:pointerover">
+    <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.week-band:focus-visible">
+    <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
+  </Style>
+  <!-- Read left to right, as the month's "+n" is. -->
+  <Style Selector="ins|MonthCalendar TextBlock.week-band-count">
+    <Setter Property="FlowDirection" Value="LeftToRight" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+  </Style>
+  <!-- An event cut at the edge of the shown hours has square corners there: it goes on past it. -->
+  <Style Selector="ins|MonthCalendar Border.month-event.timed.cut-start">
+    <Setter Property="CornerRadius" Value="0,0,5,5" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-event.timed.cut-end">
+    <Setter Property="CornerRadius" Value="5,5,0,0" />
+  </Style>
+  <Style Selector="ins|MonthCalendar Border.month-event.timed.cut-start.cut-end">
+    <Setter Property="CornerRadius" Value="0" />
+  </Style>
+
   <!-- An event by the hour: its title wraps as far as its length allows, its times under it. -->
   <Style Selector="ins|MonthCalendar Border.month-event.timed">
     <Setter Property="Padding" Value="6,3" />

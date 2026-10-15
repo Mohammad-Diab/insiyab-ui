@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Headless;
@@ -618,6 +619,24 @@ public class PickersTests : IDisposable
         new() { Date = new DateTime(2026, 9, 26), Title = "جرد المخزون", Tone = MonthEventTone.Info },
     ];
 
+    private static ToggleButton HoursToggle(MonthCalendar month) =>
+        month.GetVisualDescendants().OfType<ToggleButton>().Single(b => b.Tag as string == "hours");
+
+    private static List<Border> HourCells(MonthCalendar month) =>
+        month.GetVisualDescendants().OfType<Border>().Where(b => b.Classes.Contains("week-hour-cell")).ToList();
+
+    private static readonly DateTime OutsideDay = new(2026, 9, 21);
+
+    // 4:00 and 5:00 to 6:00 wholly before 6:00, 5:30 to 7:30 across the start, 17:00 to 20:00 across the end, 19:00 wholly after 18:00.
+    private static MonthEvent[] Outside() =>
+    [
+        new() { Date = OutsideDay, Time = new TimeSpan(4, 0, 0), Title = "رحلة الصباح" },
+        new() { Date = OutsideDay, Time = new TimeSpan(5, 0, 0), Title = "تجهيز القاعة" },
+        new() { Date = OutsideDay, Time = new TimeSpan(5, 30, 0), Duration = TimeSpan.FromHours(2), Title = "استقبال الوفد" },
+        new() { Date = OutsideDay, Time = new TimeSpan(17, 0, 0), Duration = TimeSpan.FromHours(3), Title = "ورشة عمل" },
+        new() { Date = OutsideDay, Time = new TimeSpan(19, 0, 0), Title = "عشاء العمل" },
+    ];
+
     [AvaloniaFact]
     public void MonthCalendar_shows_events_and_moves()
     {
@@ -803,7 +822,7 @@ public class PickersTests : IDisposable
             var line = Assert.IsAssignableFrom<Control>(month.NowLine);
             var column = month.GetVisualDescendants().OfType<Border>().Single(b => b.Classes.Contains("week-day") && b.Classes.Contains("today"));
             Assert.Same(column.Child, line.GetVisualParent());
-            Assert.Equal(2.5 * 48 - 5, line.Bounds.Y, 1);
+            Assert.Equal(4.5 * 48 - 5, line.Bounds.Y, 1);
             Assert.Equal(column.Bounds.Width - column.BorderThickness.Left, line.Bounds.Width, 1);
 
             month.Date = new DateTime(2026, 9, 25);
@@ -817,16 +836,224 @@ public class PickersTests : IDisposable
     }
 
     [AvaloniaFact]
-    public void MonthCalendar_events_outside_the_hours_stay_at_the_edges()
+    public void MonthCalendar_work_hours_are_on_from_6_to_18_by_default()
     {
-        var early = new MonthEvent { Date = new DateTime(2026, 9, 21), Time = new TimeSpan(6, 0, 0), Title = "باكر" };
-        var late = new MonthEvent { Date = new DateTime(2026, 9, 21), Time = new TimeSpan(19, 30, 0), Duration = TimeSpan.FromHours(3), Title = "متأخر" };
-        var month = new MonthCalendar { View = MonthCalendarView.Day, Date = new DateTime(2026, 9, 21), DayStartHour = 9, DayEndHour = 20, Width = 600, Events = [early, late] };
+        var month = new MonthCalendar { View = MonthCalendarView.Week, Date = new DateTime(2026, 9, 21), Width = 760 };
+        Assert.True(month.WorkHoursOnly);
+        Assert.Equal(6, month.DayStartHour);
+        Assert.Equal(18, month.DayEndHour);
+        Assert.True(month.HasHoursSwitch);
+        Show(Spread(month), FlowDirection.RightToLeft, width: 820, height: 900);
+        Settle(200);
+
+        var cells = HourCells(month);
+        Assert.Equal(12, cells.Count);
+        Assert.Equal("6:00 ص", ((TextBlock)cells[0].Child!).Text);
+        Assert.Null(month.HoursScroller);
+        Assert.Empty(month.Bands);
+
+        var toggle = HoursToggle(month);
+        Assert.True(toggle.IsVisible);
+        Assert.True(toggle.IsChecked);
+        Assert.Equal("ساعات الدوام", toggle.Content);
+        Assert.Equal("اعرض ساعات الدوام وحدها، من 6:00 ص إلى 6:00 م", ToolTip.GetTip(toggle));
+
+        month.View = MonthCalendarView.Month;
+        Settle(100);
+        Assert.False(toggle.IsVisible);
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void MonthCalendar_all_hours_scroll_from_the_work_start_with_the_days_in_line(string dir)
+    {
+        var month = new MonthCalendar { View = MonthCalendarView.Week, Date = new DateTime(2026, 9, 21), Width = 760, WorkHoursOnly = false };
+        if (dir == "ltr") month.Locale = "en";
+        var w = Show(Spread(month), Dir(dir), width: 820, height: 900);
+        Settle(300);
+
+        Assert.Equal(24, HourCells(month).Count);
+        var scroll = Assert.IsType<ScrollViewer>(month.HoursScroller);
+        Assert.Equal(12 * 48, scroll.Bounds.Height, 1);
+        Assert.Equal(6 * 48, scroll.Offset.Y, 1);
+
+        var heads = month.GetVisualDescendants().OfType<Border>().Where(b => b.Classes.Contains("week-head")).ToList();
+        var cols = month.GetVisualDescendants().OfType<Border>().Where(b => b.Classes.Contains("week-day")).ToList();
+        Assert.Equal(7, heads.Count);
+        Assert.Equal(7, cols.Count);
+        for (var i = 0; i < 7; i++)
+        {
+            Assert.Equal(Box(cols[i], w).Left, Box(heads[i], w).Left, 1);
+            Assert.Equal(Box(cols[i], w).Right, Box(heads[i], w).Right, 1);
+        }
+        Assert.Empty(month.Bands);
+        Assert.False(HoursToggle(month).IsChecked);
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_hours_toggle_switches_and_keeps_the_scroll()
+    {
+        var month = new MonthCalendar { View = MonthCalendarView.Week, Date = new DateTime(2026, 9, 21), Width = 760 };
+        var w = Show(Spread(month), FlowDirection.RightToLeft, width: 820, height: 900);
+        Settle(200);
+
+        Click(HoursToggle(month), w);
+        Assert.False(month.WorkHoursOnly);
+        Assert.False(HoursToggle(month).IsChecked);
+        Assert.Equal(6 * 48, month.HoursScroller!.Offset.Y, 1);
+
+        var first = month.HoursScroller!;
+        first.Offset = new Vector(0, 96);
+        Settle(100);
+        month.Events!.Add(new MonthEvent { Date = new DateTime(2026, 9, 22), Time = new TimeSpan(3, 0, 0), Title = "مناوبة" });
+        Settle(200);
+        Assert.NotSame(first, month.HoursScroller);
+        Assert.Equal(96, month.HoursScroller!.Offset.Y, 1);
+
+        month.Go(1);
+        Settle(200);
+        Assert.Equal(6 * 48, month.HoursScroller!.Offset.Y, 1);
+
+        HoursToggle(month).Focus();
+        Press(w, Key.Space, RawInputModifiers.None, 250);
+        Assert.True(month.WorkHoursOnly);
+        Assert.Null(month.HoursScroller);
+        Assert.True(HoursToggle(month).IsFocused);
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_events_outside_the_work_hours_are_counted_at_the_edges()
+    {
+        var ev = Outside();
+        var month = new MonthCalendar { View = MonthCalendarView.Day, Date = OutsideDay, Width = 600, Events = ev };
+        var w = Show(Spread(month), FlowDirection.RightToLeft, width: 700, height: 900);
+        Settle(200);
+
+        Assert.Equal(12, HourCells(month).Count);
+        Assert.DoesNotContain(ev[0], month.Chips.Keys);
+        Assert.DoesNotContain(ev[1], month.Chips.Keys);
+        Assert.DoesNotContain(ev[4], month.Chips.Keys);
+        Assert.Equal(1, month.Chips[ev[2]].Bounds.Y, 1);
+        Assert.Contains("cut-start", month.Chips[ev[2]].Classes);
+        Assert.DoesNotContain("cut-end", month.Chips[ev[2]].Classes);
+        var lane = month.Chips[ev[3]].GetVisualParent<Control>()!;
+        Assert.Equal(lane.Bounds.Height - 1, month.Chips[ev[3]].Bounds.Bottom, 1);
+        Assert.Contains("cut-end", month.Chips[ev[3]].Classes);
+
+        var before = month.Bands[(OutsideDay, false)];
+        var after = month.Bands[(OutsideDay, true)];
+        Assert.Equal("+2", before.GetVisualDescendants().OfType<TextBlock>().Single().Text);
+        Assert.Equal("+1", after.GetVisualDescendants().OfType<TextBlock>().Single().Text);
+        Assert.Equal("موعدان قبل 6:00 ص", AutomationProperties.GetName(before));
+        Assert.Equal("موعد واحد بعد 6:00 م", AutomationProperties.GetName(after));
+        Assert.Equal("4:00 ص رحلة الصباح، 5:00 ص تجهيز القاعة", ToolTip.GetTip(before));
+        var labels = month.GetVisualDescendants().OfType<TextBlock>().Where(t => t.Classes.Contains("week-band-label")).Select(t => t.Text).ToList();
+        Assert.Equal(["قبل 6:00 ص", "بعد 6:00 م"], labels);
+        Assert.True(Box(before, w).Bottom <= Box(lane, w).Top + 1);
+        Assert.True(Box(after, w).Top >= Box(lane, w).Bottom - 1);
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_pressing_a_band_shows_all_hours_at_its_events()
+    {
+        var ev = Outside();
+        var month = new MonthCalendar { View = MonthCalendarView.Day, Date = OutsideDay, Width = 600, Events = ev };
+        var w = Show(Spread(month), FlowDirection.RightToLeft, width: 700, height: 900);
+        Settle(200);
+        var invoked = new List<DateTime>();
+        month.DayInvoked += (_, d) => invoked.Add(d);
+
+        Click(month.Bands[(OutsideDay, false)], w);
+        Assert.False(month.WorkHoursOnly);
+        Assert.Empty(invoked);
+        Assert.Equal(4 * 48 - 24, month.HoursScroller!.Offset.Y, 1);
+        Assert.Contains(ev[0], month.Chips.Keys);
+
+        Click(HoursToggle(month), w);
+        Assert.True(month.WorkHoursOnly);
+        var band = month.Bands[(OutsideDay, true)];
+        band.Focus();
+        Press(w, Key.Enter, RawInputModifiers.None, 250);
+        Assert.False(month.WorkHoursOnly);
+        Assert.Equal(12 * 48, month.HoursScroller!.Offset.Y, 1);
+        Assert.True(HoursToggle(month).IsFocused);
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_work_hours_stay_in_range()
+    {
+        var month = new MonthCalendar { View = MonthCalendarView.Day, Date = OutsideDay, Width = 600, DayStartHour = 20, DayEndHour = 18 };
         Show(Spread(month), FlowDirection.RightToLeft, width: 700, height: 900);
         Settle(200);
-        Assert.Equal(11, month.GetVisualDescendants().OfType<Border>().Count(b => b.Classes.Contains("week-hour-cell")));
-        Assert.Equal(1, month.Chips[early].Bounds.Y, 1);
-        var lane = month.Chips[late].GetVisualParent<Control>()!;
-        Assert.Equal(lane.Bounds.Height - 1, month.Chips[late].Bounds.Bottom, 1);
+        var cells = HourCells(month);
+        Assert.Single(cells);
+        Assert.Equal("8:00 م", ((TextBlock)cells[0].Child!).Text);
+
+        month.DayStartHour = -3;
+        month.DayEndHour = 30;
+        Settle(100);
+        Assert.Equal(24, HourCells(month).Count);
+        Assert.False(HoursToggle(month).IsVisible);
+
+        month.WorkHoursOnly = false;
+        Settle(100);
+        Assert.Null(month.HoursScroller);
+        Assert.Equal(24, HourCells(month).Count);
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_page_keys_turn_the_week_from_inside_the_hours()
+    {
+        var call = new MonthEvent { Date = new DateTime(2026, 9, 21), Time = new TimeSpan(9, 0, 0), Title = "مكالمة العميل", Href = "#call" };
+        var month = new MonthCalendar { View = MonthCalendarView.Week, Date = new DateTime(2026, 9, 21), Width = 760, WorkHoursOnly = false, Events = [call] };
+        var w = Show(Spread(month), FlowDirection.RightToLeft, width: 820, height: 900);
+        Settle(300);
+
+        month.Chips[call].Focus();
+        Press(w, Key.PageDown, RawInputModifiers.None, 250);
+        Assert.Equal(new DateTime(2026, 9, 28), month.Date);
+        Assert.True(month.GetVisualDescendants().OfType<Button>().Single(b => b.Tag as string == "next").IsFocused);
+        Press(w, Key.PageUp, RawInputModifiers.None, 250);
+        Assert.Equal(new DateTime(2026, 9, 21), month.Date);
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_hours_switch_can_be_hidden()
+    {
+        var ev = Outside();
+        var month = new MonthCalendar { View = MonthCalendarView.Day, Date = OutsideDay, Width = 600, HasHoursSwitch = false, Events = ev };
+        var w = Show(Spread(month), FlowDirection.RightToLeft, width: 700, height: 900);
+        Settle(200);
+        Assert.False(HoursToggle(month).IsVisible);
+        Assert.Contains((OutsideDay, true), month.Bands.Keys);
+
+        month.Bands[(OutsideDay, true)].Focus();
+        Press(w, Key.Enter, RawInputModifiers.None, 250);
+        Assert.False(month.WorkHoursOnly);
+        Assert.True(month.GetVisualDescendants().OfType<Button>().Single(b => b.Tag as string == "today").IsFocused);
+    }
+
+    [AvaloniaFact]
+    public void MonthCalendar_now_line_follows_the_shown_hours()
+    {
+        var before = MonthCalendar.Now;
+        MonthCalendar.Now = () => new DateTime(2026, 9, 15, 3, 0, 0);
+        try
+        {
+            var month = new MonthCalendar { View = MonthCalendarView.Week, Date = new DateTime(2026, 9, 15), Width = 760 };
+            Show(Spread(month), FlowDirection.RightToLeft, width: 820, height: 900);
+            Settle(200);
+            Assert.Null(month.NowLine);
+
+            month.WorkHoursOnly = false;
+            Settle(200);
+            var line = Assert.IsAssignableFrom<Control>(month.NowLine);
+            Assert.Equal(3 * 48 - 5, line.Bounds.Y, 1);
+        }
+        finally
+        {
+            MonthCalendar.Now = before;
+        }
     }
 }
