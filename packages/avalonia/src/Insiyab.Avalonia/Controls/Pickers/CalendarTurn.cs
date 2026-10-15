@@ -117,7 +117,7 @@ internal sealed class CalendarTurn
             var from = options.FirstOrDefault(o => o != to);
             if (to is not null && from is not null && from.TranslatePoint(default, flight) is { } pa && to.TranslatePoint(default, flight) is { } pb && to.Bounds.Width > 0)
             {
-                var face = new Border { Classes = { "cal-switch-face" }, Height = to.Bounds.Height, IsHitTestVisible = false };
+                var face = new CalendarBorder { Classes = { "cal-switch-face" }, Height = to.Bounds.Height, IsHitTestVisible = false };
                 Canvas.SetTop(face, pb.Y);
                 flight.Children.Add(face);
                 track.Classes.Add("moving");

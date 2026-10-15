@@ -121,9 +121,9 @@ public class ChoiceMatrix : TemplatedControl
         var radius = this.TryFindResource("InsRSm", out var r) && r is CornerRadius cr ? cr.TopLeft : 10;
 
         var head = new ColumnsPanel { Layout = _layout, Classes = { "matrix-head" } };
-        head.Children.Add(new TextBlock());
+        head.Children.Add(new MatrixText());
         foreach (var column in Columns)
-            head.Children.Add(new TextBlock { Text = column.Header, Classes = { "matrix-col" } });
+            head.Children.Add(new MatrixText { Text = column.Header, Classes = { "matrix-col" } });
         _host.Children.Add(head);
 
         for (var ri = 0; ri < Rows.Count; ri++)
@@ -131,11 +131,11 @@ public class ChoiceMatrix : TemplatedControl
             var row = Rows[ri];
             var panel = new ColumnsPanel { Layout = _layout };
             KeyboardNavigation.SetTabNavigation(panel, KeyboardNavigationMode.Once);
-            var th = new Border
+            var th = new MatrixBorder
             {
                 Classes = { "matrix-th" },
                 CornerRadius = cards ? new CornerRadius(radius) : new CornerRadius(radius, 0, 0, radius),
-                Child = new TextBlock { Text = row.Header, VerticalAlignment = VerticalAlignment.Center },
+                Child = new MatrixText { Text = row.Header, VerticalAlignment = VerticalAlignment.Center },
             };
             panel.Children.Add(th);
             var radios = new List<RadioButton>();
@@ -153,8 +153,8 @@ public class ChoiceMatrix : TemplatedControl
                     if (this.TryFindResource("InsMatrixCard", out var theme) && theme is ControlTheme t) radio.Theme = t;
                     var body = new StackPanel { Spacing = 6 };
                     if (column.Points is { } points)
-                        body.Children.Add(new Border { Classes = { "matrix-points" }, Child = new TextBlock { Text = points } });
-                    body.Children.Add(new TextBlock { Text = column.Description, Classes = { "matrix-desc" } });
+                        body.Children.Add(new MatrixBorder { Classes = { "matrix-points" }, Child = new MatrixText { Text = points } });
+                    body.Children.Add(new MatrixText { Text = column.Description, Classes = { "matrix-desc" } });
                     radio.Content = body;
                 }
                 else
@@ -167,7 +167,7 @@ public class ChoiceMatrix : TemplatedControl
                 radio.AddHandler(KeyDownEvent, (_, e) => _press = e.Key == Key.Space ? (radio, radio.IsChecked == true) : null, RoutingStrategies.Tunnel);
                 radio.Click += (_, _) => OnClick(radio);
                 radio.IsCheckedChanged += (_, _) => OnChecked(rowIndex, colIndex, radio);
-                var cell = new Border { Classes = { "matrix-cell" }, Child = radio };
+                var cell = new MatrixBorder { Classes = { "matrix-cell" }, Child = radio };
                 if (!cards && ci == Columns.Count - 1) cell.CornerRadius = new CornerRadius(0, radius, radius, 0);
                 if (radio.IsChecked == true) cell.Classes.Add("checked");
                 radios.Add(radio);
@@ -177,7 +177,7 @@ public class ChoiceMatrix : TemplatedControl
             panel.AddHandler(KeyDownEvent, (_, e) => OnRowKey(thisRow, e), RoutingStrategies.Tunnel);
             _radios.Add(radios);
             _cells.Add(cells);
-            _host.Children.Add(new Border { Classes = { "matrix-row" }, Child = panel });
+            _host.Children.Add(new MatrixBorder { Classes = { "matrix-row" }, Child = panel });
         }
         _building = false;
         Update();

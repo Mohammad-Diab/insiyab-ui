@@ -269,13 +269,13 @@ public class Chart : TemplatedControl
         for (var i = 0; i < items.Count; i++)
         {
             var row = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6 };
-            row.Children.Add(new Border { Width = 10, Height = 10, CornerRadius = new CornerRadius(3), Background = BrushAt(i), VerticalAlignment = VerticalAlignment.Center, Classes = { "chart-key" } });
-            row.Children.Add(new TextBlock { Text = items[i], VerticalAlignment = VerticalAlignment.Center });
+            row.Children.Add(new TemplateBorder { Width = 10, Height = 10, CornerRadius = new CornerRadius(3), Background = BrushAt(i), VerticalAlignment = VerticalAlignment.Center, Classes = { "chart-key" } });
+            row.Children.Add(new TemplateText { Text = items[i], VerticalAlignment = VerticalAlignment.Center });
             if (donut && DataSeries.Count > 0)
             {
                 var data = DataSeries[0].Data;
                 var v = i < data.Count ? data[i] : double.NaN;
-                row.Children.Add(new TextBlock
+                row.Children.Add(new TemplateText
                 {
                     Text = double.IsNaN(v) ? "" : Format(v, false),
                     FontFamily = NumberFontFamily,
@@ -321,11 +321,11 @@ public class Chart : TemplatedControl
             var data = DataSeries[k].Data;
             if (index >= data.Count || double.IsNaN(data[index])) continue;
             var row = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto"), ColumnSpacing = 8 };
-            row.Children.Add(new Border { Width = 8, Height = 8, CornerRadius = new CornerRadius(2), Background = BrushAt(k), VerticalAlignment = VerticalAlignment.Center });
-            var name = new TextBlock { Text = DataSeries[k].Name, FontSize = 12, Foreground = _tipLabel.Foreground, VerticalAlignment = VerticalAlignment.Center };
+            row.Children.Add(new TemplateBorder { Width = 8, Height = 8, CornerRadius = new CornerRadius(2), Background = BrushAt(k), VerticalAlignment = VerticalAlignment.Center });
+            var name = new TemplateText { Text = DataSeries[k].Name, FontSize = 12, Foreground = _tipLabel.Foreground, VerticalAlignment = VerticalAlignment.Center };
             Grid.SetColumn(name, 1);
             row.Children.Add(name);
-            var value = new TextBlock { Text = Format(data[index], false), FontFamily = NumberFontFamily, FontWeight = FontWeight.Bold, FontSize = 13, Foreground = _tipValue.Foreground, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) };
+            var value = new TemplateText { Text = Format(data[index], false), FontFamily = NumberFontFamily, FontWeight = FontWeight.Bold, FontSize = 13, Foreground = _tipValue.Foreground, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) };
             Grid.SetColumn(value, 2);
             row.Children.Add(value);
             _tipRows.Children.Add(row);

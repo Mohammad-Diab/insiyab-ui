@@ -188,57 +188,57 @@
   <Style Selector="ins|DateCalendar Grid.cal-head">
     <Setter Property="Margin" Value="0,0,0,8" />
   </Style>
-  <Style Selector="ins|DateCalendar TextBlock.cal-title-next">
+  <Style Selector="ins|DateCalendar ins|CalendarText.cal-title-next">
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
     <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
   </Style>
-  <Style Selector="ins|DateCalendar TextBlock.cal-wd">
+  <Style Selector="ins|DateCalendar ins|CalendarText.cal-wd">
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="Margin" Value="0,4,0,6" />
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
     <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
   </Style>
-  <Style Selector="ins|DateCalendar Border.cal-cell.band">
+  <Style Selector="ins|DateCalendar ins|CalendarBorder.cal-cell.band">
     <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
   </Style>
-  <Style Selector="ins|DateCalendar Border.cal-time">
+  <Style Selector="ins|DateCalendar ins|CalendarBorder.cal-time">
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="Padding" Value="12,0,0,0" />
     <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
     <Setter Property="BorderThickness" Value="1,0,0,0" />
   </Style>
-  <Style Selector="ins|DateCalendar:stacked Border.cal-time">
+  <Style Selector="ins|DateCalendar:stacked ins|CalendarBorder.cal-time">
     <Setter Property="Padding" Value="0,12,0,0" />
     <Setter Property="BorderThickness" Value="0,1,0,0" />
     <Setter Property="HorizontalAlignment" Value="Center" />
   </Style>
 
   <!-- .ins-cal-foot: Today at the start, Clear and Done together at the end, the calendar switch between. -->
-  <Style Selector="ins|DateCalendar Border.cal-foot">
+  <Style Selector="ins|DateCalendar ins|CalendarBorder.cal-foot">
     <Setter Property="Margin" Value="0,8,0,0" />
     <Setter Property="Padding" Value="4,8,4,0" />
     <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
     <Setter Property="BorderThickness" Value="0,1,0,0" />
   </Style>
-  <Style Selector="ins|DateCalendar Border.cal-foot Grid > Button">
+  <Style Selector="ins|DateCalendar ins|CalendarBorder.cal-foot Grid > Button">
     <Setter Property="MinWidth" Value="{DynamicResource InsFootMinSm}" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
-  <Style Selector="ins|DateCalendar Border.cal-foot Grid > Button.bare.sm">
+  <Style Selector="ins|DateCalendar ins|CalendarBorder.cal-foot Grid > Button.bare.sm">
     <Setter Property="Padding" Value="10,4" />
     <Setter Property="MinHeight" Value="{DynamicResource InsCtlSmH}" />
   </Style>
-  <Style Selector="ins|DateCalendar TextBlock.cal-hint">
+  <Style Selector="ins|DateCalendar ins|CalendarText.cal-hint">
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
     <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
   </Style>
-  <Style Selector="ins|DateCalendar Border.cal-switch">
+  <Style Selector="ins|DateCalendar ins|CalendarBorder.cal-switch">
     <Setter Property="Padding" Value="3" />
     <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
     <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
@@ -247,12 +247,12 @@
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <!-- The face that flies across the switch, then the chosen side draws none of its own until it lands -->
-  <Style Selector="ins|DateCalendar Border.cal-switch-face">
+  <Style Selector="ins|DateCalendar ins|CalendarBorder.cal-switch-face">
     <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
     <Setter Property="Background" Value="{DynamicResource InsSegOnBg}" />
     <Setter Property="BoxShadow" Value="{DynamicResource InsSegOnShadow}" />
   </Style>
-  <Style Selector="ins|DateCalendar Border.cal-switch.moving Button.cal-switch-option.active">
+  <Style Selector="ins|DateCalendar ins|CalendarBorder.cal-switch.moving Button.cal-switch-option.active">
     <Setter Property="Background" Value="Transparent" />
     <Style Selector="^ /template/ :is(Border)#PART_Face">
       <Setter Property="BoxShadow" Value="none" />

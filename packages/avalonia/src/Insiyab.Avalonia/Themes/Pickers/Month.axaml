@@ -18,7 +18,7 @@
   <Style Selector="ins|MonthCalendar Grid.month-head">
     <Setter Property="Margin" Value="0,0,0,12" />
   </Style>
-  <Style Selector="ins|MonthCalendar TextBlock.month-title">
+  <Style Selector="ins|MonthCalendar ins|MonthText.month-title">
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
     <Setter Property="FontWeight" Value="ExtraBold" />
@@ -34,7 +34,7 @@
     <Setter Property="StrokeJoin" Value="Round" />
   </Style>
 
-  <Style Selector="ins|MonthCalendar TextBlock.month-wd">
+  <Style Selector="ins|MonthCalendar ins|MonthText.month-wd">
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="Margin" Value="0,4,0,6" />
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
@@ -43,7 +43,7 @@
   </Style>
 
   <!-- .ins-month-day: a quiet glass cell, today's number in the brand gradient, the other months' days left bare. -->
-  <Style Selector="ins|MonthCalendar Border.month-day">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-day">
     <Setter Property="Height" Value="100" />
     <Setter Property="Padding" Value="6" />
     <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
@@ -54,19 +54,19 @@
       </Transitions>
     </Setter>
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-day:pointerover">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-day:pointerover">
     <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-day.other, ins|MonthCalendar Border.month-day.other:pointerover">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-day.other, ins|MonthCalendar ins|MonthBorder.month-day.other:pointerover">
     <Setter Property="Background" Value="Transparent" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-num">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-num">
     <Setter Property="HorizontalAlignment" Value="Left" />
     <Setter Property="MinWidth" Value="26" />
     <Setter Property="Height" Value="26" />
     <Setter Property="CornerRadius" Value="13" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-num > TextBlock, ins|MonthCalendar Border.month-num > ins|TemplateText">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-num > ins|MonthText">
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
@@ -74,21 +74,21 @@
     <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-day.other Border.month-num > TextBlock, ins|MonthCalendar Border.month-day.other Border.month-num > ins|TemplateText">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-day.other ins|MonthBorder.month-num > ins|MonthText">
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
     <Setter Property="Opacity" Value="0.6" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-day.today Border.month-num">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-day.today ins|MonthBorder.month-num">
     <Setter Property="Background" Value="{StaticResource InsPickerBrandFill}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-day.today Border.month-num > TextBlock, ins|MonthCalendar Border.month-day.today Border.month-num > ins|TemplateText">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-day.today ins|MonthBorder.month-num > ins|MonthText">
     <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
   </Style>
 
   <Style Selector="ins|MonthCalendar StackPanel.month-events">
     <Setter Property="Margin" Value="0,4,0,0" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-event">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event">
     <Setter Property="Padding" Value="6,1" />
     <Setter Property="CornerRadius" Value="5" />
     <Setter Property="BorderThickness" Value="3,0,0,0" />
@@ -97,49 +97,49 @@
     <Setter Property="TextElement.FontSize" Value="11" />
     <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-event.ok">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.ok">
     <Setter Property="BorderBrush" Value="{DynamicResource InsToneOk}" />
     <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-event.warn">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.warn">
     <Setter Property="BorderBrush" Value="{DynamicResource InsToneWarn}" />
     <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-event.bad">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.bad">
     <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
     <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-event.info">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.info">
     <Setter Property="BorderBrush" Value="{DynamicResource InsToneInfo}" />
     <Setter Property="Background" Value="{DynamicResource InsToneInfoBg}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-event.link">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.link">
     <Setter Property="Cursor" Value="Hand" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-event.link:pointerover">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.link:pointerover">
     <Setter Property="Background" Value="{Binding $self.BorderBrush}" />
     <Setter Property="TextElement.Foreground" Value="{DynamicResource InsOnPrimary}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-event.link:pointerover TextBlock.month-time">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.link:pointerover ins|MonthText.month-time">
     <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-event.link:focus-visible">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.link:focus-visible">
     <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
   </Style>
-  <Style Selector="ins|MonthCalendar TextBlock.month-time">
+  <Style Selector="ins|MonthCalendar ins|MonthText.month-time">
     <Setter Property="Margin" Value="0,0,4,0" />
     <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
     <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
     <Setter Property="LineHeight" Value="17.6" />
   </Style>
-  <Style Selector="ins|MonthCalendar TextBlock.month-event-title">
+  <Style Selector="ins|MonthCalendar ins|MonthText.month-event-title">
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     <Setter Property="TextWrapping" Value="NoWrap" />
     <Setter Property="LineHeight" Value="17.6" />
   </Style>
   <!-- Read left to right and set at the left, on either page. -->
-  <Style Selector="ins|MonthCalendar TextBlock.month-more">
+  <Style Selector="ins|MonthCalendar ins|MonthText.month-more">
     <Setter Property="FlowDirection" Value="LeftToRight" />
     <Setter Property="HorizontalAlignment" Value="Left" />
     <Setter Property="Margin" Value="6,0" />
@@ -171,11 +171,11 @@
   <Style Selector="ins|MonthCalendar Ellipse.month-dot.info">
     <Setter Property="Fill" Value="{DynamicResource InsToneInfo}" />
   </Style>
-  <Style Selector="ins|MonthCalendar:narrow Border.month-day">
+  <Style Selector="ins|MonthCalendar:narrow ins|MonthBorder.month-day">
     <Setter Property="Height" Value="52" />
     <Setter Property="Padding" Value="4" />
   </Style>
-  <Style Selector="ins|MonthCalendar:narrow Border.month-num">
+  <Style Selector="ins|MonthCalendar:narrow ins|MonthBorder.month-num">
     <Setter Property="HorizontalAlignment" Value="Center" />
   </Style>
   <Style Selector="ins|MonthCalendar:narrow StackPanel.month-events">
@@ -192,81 +192,81 @@
   </Style>
 
   <!-- The week and day views: a quiet glass card, the hours down its start edge, a hairline under every hour and between the days. -->
-  <Style Selector="ins|MonthCalendar Border.week-frame">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-frame">
     <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
     <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
     <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="ClipToBounds" Value="True" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-head">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-head">
     <Setter Property="Padding" Value="4,8" />
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
     <Setter Property="BorderThickness" Value="1,0,0,1" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-head.link">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-head.link">
     <Setter Property="Cursor" Value="Hand" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-head.link:pointerover">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-head.link:pointerover">
     <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-head > StackPanel">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-head > StackPanel">
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="Spacing" Value="2" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-head Border.month-num">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-head ins|MonthBorder.month-num">
     <Setter Property="HorizontalAlignment" Value="Center" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-head.today Border.month-num">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-head.today ins|MonthBorder.month-num">
     <Setter Property="Background" Value="{StaticResource InsPickerBrandFill}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-head.today Border.month-num > TextBlock, ins|MonthCalendar Border.week-head.today Border.month-num > ins|TemplateText">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-head.today ins|MonthBorder.month-num > ins|MonthText">
     <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
   </Style>
-  <Style Selector="ins|MonthCalendar TextBlock.week-wd">
+  <Style Selector="ins|MonthCalendar ins|MonthText.week-wd">
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
     <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-corner">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-corner">
     <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
   </Style>
-  <Style Selector="ins|MonthCalendar TextBlock.week-allday-label">
+  <Style Selector="ins|MonthCalendar ins|MonthText.week-allday-label">
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="Margin" Value="8,6" />
     <Setter Property="FontSize" Value="11" />
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-allday-cell">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-allday-cell">
     <Setter Property="MinHeight" Value="30" />
     <Setter Property="Padding" Value="2,3" />
     <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
     <Setter Property="BorderThickness" Value="1,0,0,1" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-hour-cell">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-hour-cell">
     <Setter Property="MinWidth" Value="64" />
     <Setter Property="Padding" Value="8,2" />
   </Style>
-  <Style Selector="ins|MonthCalendar TextBlock.week-hour">
+  <Style Selector="ins|MonthCalendar ins|MonthText.week-hour">
     <Setter Property="HorizontalAlignment" Value="Right" />
     <Setter Property="VerticalAlignment" Value="Top" />
     <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
     <Setter Property="FontSize" Value="11" />
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-line">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-line">
     <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-day">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-day">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
     <Setter Property="BorderThickness" Value="1,0,0,0" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-day.today">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-day.today">
     <Setter Property="Background" Value="{DynamicResource InsZebra}" />
   </Style>
 
@@ -275,48 +275,48 @@
     <Setter Property="Margin" Value="0,0,8,0" />
   </Style>
   <!-- With the whole day shown, the days above leave room for the hours' scroll bar so they stay in line. -->
-  <Style Selector="ins|MonthCalendar Border.week-bar-gap">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-bar-gap">
     <Setter Property="Width" Value="{DynamicResource InsScrollbarSize}" />
   </Style>
   <!-- The bands above and below the work hours, counting the events outside them. -->
-  <Style Selector="ins|MonthCalendar Border.week-band-gutter.before, ins|MonthCalendar Border.week-band-cell.before">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-band-gutter.before, ins|MonthCalendar ins|MonthBorder.week-band-cell.before">
     <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-band-gutter.after, ins|MonthCalendar Border.week-band-cell.after">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-band-gutter.after, ins|MonthCalendar ins|MonthBorder.week-band-cell.after">
     <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
     <Setter Property="BorderThickness" Value="0,1,0,0" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-band-cell.before">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-band-cell.before">
     <Setter Property="BorderThickness" Value="1,0,0,1" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-band-cell.after">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-band-cell.after">
     <Setter Property="BorderThickness" Value="1,1,0,0" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-band-cell">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-band-cell">
     <Setter Property="MinHeight" Value="24" />
     <Setter Property="Padding" Value="2" />
   </Style>
-  <Style Selector="ins|MonthCalendar TextBlock.week-band-label">
+  <Style Selector="ins|MonthCalendar ins|MonthText.week-band-label">
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="Margin" Value="8,3" />
     <Setter Property="FontSize" Value="11" />
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-band">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-band">
     <Setter Property="Padding" Value="6,1" />
     <Setter Property="CornerRadius" Value="5" />
     <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
     <Setter Property="Cursor" Value="Hand" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-band:pointerover">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-band:pointerover">
     <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.week-band:focus-visible">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-band:focus-visible">
     <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
   </Style>
   <!-- Read left to right, as the month's "+n" is. -->
-  <Style Selector="ins|MonthCalendar TextBlock.week-band-count">
+  <Style Selector="ins|MonthCalendar ins|MonthText.week-band-count">
     <Setter Property="FlowDirection" Value="LeftToRight" />
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="FontSize" Value="11" />
@@ -324,39 +324,39 @@
     <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
   </Style>
   <!-- An event cut at the edge of the shown hours has square corners there: it goes on past it. -->
-  <Style Selector="ins|MonthCalendar Border.month-event.timed.cut-start">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.timed.cut-start">
     <Setter Property="CornerRadius" Value="0,0,5,5" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-event.timed.cut-end">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.timed.cut-end">
     <Setter Property="CornerRadius" Value="5,5,0,0" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-event.timed.cut-start.cut-end">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.timed.cut-start.cut-end">
     <Setter Property="CornerRadius" Value="0" />
   </Style>
 
   <!-- An event by the hour: its title wraps as far as its length allows, its times under it. -->
-  <Style Selector="ins|MonthCalendar Border.month-event.timed">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.timed">
     <Setter Property="Padding" Value="6,3" />
   </Style>
   <!-- Its text is cut inside the event, so a focus ring around it is not -->
-  <Style Selector="ins|MonthCalendar Border.month-event.timed > :is(Control)">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.timed > :is(Control)">
     <Setter Property="ClipToBounds" Value="True" />
   </Style>
-  <Style Selector="ins|MonthCalendar TextBlock.week-event-title">
+  <Style Selector="ins|MonthCalendar ins|MonthText.week-event-title">
     <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
-  <Style Selector="ins|MonthCalendar TextBlock.week-event-time">
+  <Style Selector="ins|MonthCalendar ins|MonthText.week-event-time">
     <Setter Property="FontSize" Value="10" />
     <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
   </Style>
-  <Style Selector="ins|MonthCalendar Border.month-event.link:pointerover TextBlock.week-event-time">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.link:pointerover ins|MonthText.week-event-time">
     <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
   </Style>
 
   <!-- The now line across today, with a dot at its start. -->
-  <Style Selector="ins|MonthCalendar Border.week-now-line">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-now-line">
     <Setter Property="Height" Value="2" />
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="Background" Value="{DynamicResource InsToneBad}" />
