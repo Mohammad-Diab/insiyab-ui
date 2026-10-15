@@ -5,6 +5,7 @@
         x:Class="Insiyab.Avalonia.Gallery.MainWindow"
         ins:TitleBar.Extends="True"
         Title="انسياب"
+        Icon="avares://Insiyab.Avalonia.Gallery/Assets/gallery.ico"
         Width="1440" Height="900"
         MinWidth="480" MinHeight="480"
         FlowDirection="RightToLeft">

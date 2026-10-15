@@ -1,5 +1,7 @@
 <div dir="rtl">
 
+<img src="brand/mark-256.png" width="88" height="88" alt="شعار انسياب">
+
 # انسياب · Insiyab UI
 
 **مكتبة واجهات تليق بالعربية، يصفو زجاجها وينساب خطها.**
@@ -1098,6 +1100,7 @@ demo/src/site.mjs         the page list — sidebar order, titles, search terms
 demo/src/layout.html      the shell every page is poured into
 demo/src/pages/<slug>.html one fragment per page, content only
 demo/assets/              the docs site's own CSS and JS — not part of the library
+brand/                    the logo: svg, png and ico, written by packages/avalonia/tools/BrandGen
 ```
 
 In a fragment, `<demo-example>…</demo-example>` renders its markup live and prints

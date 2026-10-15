@@ -29,6 +29,7 @@ const TYPES = {
   '.woff': 'font/woff',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
+  '.ico': 'image/x-icon',
   '.md': 'text/markdown; charset=utf-8'
 };
 

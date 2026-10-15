@@ -3,42 +3,47 @@
              xmlns:ins="using:Insiyab.Avalonia.Controls"
              x:Class="Insiyab.Avalonia.Gallery.GalleryShell">
   <UserControl.Resources>
-    <!-- The docs site's brand swatch: a 30px disc in a 2px surface rim; the chosen one is marked by SwatchMark, a ring that moves along the row -->
-    <!-- The mark's four arcs on the diagonals, 2px clear of the coloured disc, in a 36px box centred on the swatch -->
-    <StreamGeometry x:Key="SiteSwatchArcs">M33.455,22.141 A16,16 0 0 1 22.141,33.455 M13.859,33.455 A16,16 0 0 1 2.545,22.141 M2.545,13.859 A16,16 0 0 1 13.859,2.545 M22.141,2.545 A16,16 0 0 1 33.455,13.859</StreamGeometry>
-    <ControlTheme x:Key="SiteSwatch" TargetType="Button">
-      <Setter Property="ClipToBounds" Value="False" />
-      <Setter Property="Width" Value="30" />
-      <Setter Property="Height" Value="30" />
-      <Setter Property="Cursor" Value="Hand" />
-      <Setter Property="FocusAdorner" Value="{x:Null}" />
-      <Setter Property="RenderTransformOrigin" Value="50%,50%" />
-      <Setter Property="RenderTransform" Value="none" />
-      <Setter Property="Transitions">
-        <Transitions>
-          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
-        </Transitions>
-      </Setter>
-      <Setter Property="Template">
-        <ControlTemplate>
-          <Panel>
-            <Border Name="PART_Face"
-                    CornerRadius="15"
-                    Background="{TemplateBinding Background}"
-                    BorderBrush="{DynamicResource InsSurface}"
-                    BorderThickness="2"
-                    BoxShadow="{DynamicResource InsShSm}" />
-            <Border Name="PART_Focus" CornerRadius="15" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
-          </Panel>
-        </ControlTemplate>
-      </Setter>
-      <Style Selector="^:pointerover">
-        <Setter Property="RenderTransform" Value="scale(1.12)" />
-      </Style>
-      <Style Selector="^:focus-visible /template/ Border#PART_Focus">
-        <Setter Property="Opacity" Value="1" />
-      </Style>
-    </ControlTheme>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://Insiyab.Avalonia.Gallery/BrandMark.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <!-- The docs site's brand swatch: a 30px disc in a 2px surface rim; the chosen one is marked by SwatchMark, a ring that moves along the row -->
+      <!-- The mark's four arcs on the diagonals, 2px clear of the coloured disc, in a 36px box centred on the swatch -->
+      <StreamGeometry x:Key="SiteSwatchArcs">M33.455,22.141 A16,16 0 0 1 22.141,33.455 M13.859,33.455 A16,16 0 0 1 2.545,22.141 M2.545,13.859 A16,16 0 0 1 13.859,2.545 M22.141,2.545 A16,16 0 0 1 33.455,13.859</StreamGeometry>
+      <ControlTheme x:Key="SiteSwatch" TargetType="Button">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Width" Value="30" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <Border Name="PART_Face"
+                      CornerRadius="15"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{DynamicResource InsSurface}"
+                      BorderThickness="2"
+                      BoxShadow="{DynamicResource InsShSm}" />
+              <Border Name="PART_Focus" CornerRadius="15" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="RenderTransform" Value="scale(1.12)" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#PART_Focus">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
   </UserControl.Resources>
   <UserControl.Styles>
     <Style Selector="Border.island.site-version">
@@ -108,7 +113,7 @@
       <DockPanel>
         <Border Classes="shell-brand" DockPanel.Dock="Top" ins:TitleBar.IsDragArea="True" Background="Transparent">
           <StackPanel>
-            <Border Classes="shell-mark" ins:TitleBar.IsSystemMenuArea="True"><TextBlock Text="ان" /></Border>
+            <Border Classes="shell-mark" Background="Transparent" ins:TitleBar.IsSystemMenuArea="True"><TemplatedControl Template="{StaticResource BrandMark}" /></Border>
             <StackPanel>
               <TextBlock Classes="shell-brand-name" Text="انسياب" />
               <TextBlock Classes="shell-brand-role" Text="المعرض · Avalonia" />
@@ -128,7 +133,7 @@
             </Button>
             <Border Classes="island brand">
               <StackPanel>
-                <Border Classes="shell-mark" ins:TitleBar.IsSystemMenuArea="True"><TextBlock Text="ان" /></Border>
+                <Border Classes="shell-mark" Background="Transparent" ins:TitleBar.IsSystemMenuArea="True"><TemplatedControl Template="{StaticResource BrandMark}" /></Border>
                 <TextBlock Text="انسياب" />
               </StackPanel>
             </Border>
