@@ -285,7 +285,7 @@ internal sealed class Bench(MainWindow window, string dir)
 
     private static string Describe(Control c) => c is ContentControl { Content: string s } ? s : c is TextBlock t ? t.Text ?? "" : string.Join(".", c.Classes);
 
-    // --only idle,pages,scroll,popups,theme,brand,direction,memory,still runs just those groups.
+    // --only idle,pages,scroll,popups,theme,brand,direction,memory,inactive,still runs just those groups.
     private static bool On(string group) => Program.Option("--only") is not { Length: > 0 } only || only.Split(',').Contains(group);
 
     private async Task Suite(string tag)
@@ -303,6 +303,7 @@ internal sealed class Bench(MainWindow window, string dir)
         if (On("brand")) await Brand(tag);
         if (On("direction")) await Direction(tag);
         if (On("memory")) await Memory(tag);
+        if (On("inactive")) await Inactive(tag);
     }
 
     private Link First(string kind) => MainWindow.Links.First(l => l.Kind == kind);
@@ -562,6 +563,33 @@ internal sealed class Bench(MainWindow window, string dir)
             await Wait(400);
             Add(section, kind, "to LTR shown ms", ltr.Shown);
             Add(section, kind, "to RTL shown ms", rtl.Shown);
+        }
+    }
+
+    // Leaving the window and coming back through the platform's own callbacks, as a bench window never takes the OS focus: the selection's grey and the focus ring.
+    private async Task Inactive(string tag)
+    {
+        var section = "inactive" + tag;
+        var impl = window.PlatformImpl!;
+        void Call(string callback) => ((Action?)impl.GetType().GetProperty(callback)!.GetValue(impl))?.Invoke();
+        foreach (var kind in new[] { "dashboard", "table", "lists" })
+        {
+            Watchdog.Step(section + " " + kind);
+            window.Select(First(kind));
+            await Wait(1000);
+            Call("Activated");
+            await Wait(300);
+            var away = new List<double>();
+            var back = new List<double>();
+            for (var round = 0; round < 3; round++)
+            {
+                away.Add((await Time(() => { Call("Deactivated"); Call("LostFocus"); })).Shown);
+                await Wait(300);
+                back.Add((await Time(() => Call("Activated"))).Shown);
+                await Wait(300);
+            }
+            Add(section, kind, "to inactive shown ms (median)", FrameStats.Pct(away, 0.5));
+            Add(section, kind, "to active shown ms (median)", FrameStats.Pct(back, 0.5));
         }
     }
 

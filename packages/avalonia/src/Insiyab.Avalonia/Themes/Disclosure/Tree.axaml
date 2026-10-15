@@ -131,6 +131,16 @@
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
           <Setter Property="FontWeight" Value="Bold" />
         </Style>
+        <!-- In a window that is not the active one the selection turns grey at once and keeps its weight -->
+        <Style Selector="^:selected[(ins|WindowActivity.IsInactive)=True]">
+          <Style Selector="^ /template/ :is(Border)#PART_LayoutRoot">
+            <Setter Property="Transitions" Value="{x:Null}" />
+            <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
+          </Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_HeaderPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          </Style>
+        </Style>
         <Style Selector="^:empty /template/ ToggleButton#PART_ExpandCollapseChevron">
           <Setter Property="IsVisible" Value="False" />
         </Style>
