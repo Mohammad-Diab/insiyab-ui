@@ -7,6 +7,7 @@ using Avalonia.Automation;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Threading;
+using Insiyab.Avalonia.Brand;
 using Insiyab.Avalonia.Controls;
 
 namespace Insiyab.Avalonia.Gallery;
@@ -42,7 +43,11 @@ public partial class GalleryShell : UserControl
         {
             if (TopLevel.GetTopLevel(this) is { } top) Motion.SetStill(top, !Motion.GetStill(top));
         };
-        ActualThemeVariantChanged += (_, _) => PaintDot();
+        ActualThemeVariantChanged += (_, _) =>
+        {
+            PaintSwatches();
+            SyncBrand();
+        };
         foreach (var (hex, name) in Brands)
         {
             var swatch = new Button { Theme = (ControlTheme)Resources["SiteSwatch"]!, Background = new SolidColorBrush(Color.Parse(hex)), Tag = Color.Parse(hex) };
@@ -56,6 +61,7 @@ public partial class GalleryShell : UserControl
             _ring.Watch(swatch);
             Swatches.Children.Add(swatch);
         }
+        PaintSwatches();
         SyncBrand();
 
         string? group = null;
@@ -169,6 +175,14 @@ public partial class GalleryShell : UserControl
     {
         _ring.Mark(Swatches.Children.OfType<Button>().FirstOrDefault(s => s.Tag is Color c && c == InsiyabTheme.Primary));
         PaintDot();
+    }
+
+    // On dark the brand reads as its lighter middle shade, so each swatch shows the colour it gives there.
+    private void PaintSwatches()
+    {
+        var dark = ActualThemeVariant == ThemeVariant.Dark;
+        foreach (var swatch in Swatches.Children.OfType<Button>())
+            if (swatch.Tag is Color c) swatch.Background = new SolidColorBrush(dark ? BrandDerivation.Derive(c, true).PrimaryMid : c);
     }
 
     // The dot's soft shadow is the brand at 45%, which no token carries, so it is drawn here when the brand or the theme moves.

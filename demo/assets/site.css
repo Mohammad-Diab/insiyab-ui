@@ -405,14 +405,19 @@
   block-size: 1.875rem;
   border-radius: 50%;
   border: 2px solid var(--ins-surface);
-  background: var(--c);
+  background: var(--shown, var(--c));
   box-shadow: var(--ins-sh-sm);
   cursor: pointer;
   transition: transform var(--ins-t-pop) var(--ins-ease-spring);
 }
 .site-swatch:hover { transform: scale(1.12); }
 .site-swatch:focus-visible { outline: none; box-shadow: var(--ins-focus-ring); }
-.site-swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--c), var(--ins-sh-sm); }
+.site-swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--shown, var(--c)), var(--ins-sh-sm); }
+/* On dark the brand reads as its lighter middle shade, so each swatch shows the colour it gives there. */
+:root[data-ins-theme="dark"] .site-swatch { --shown: color-mix(in srgb, var(--c) 55%, #fff); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ins-theme="light"]) .site-swatch { --shown: color-mix(in srgb, var(--c) 55%, #fff); }
+}
 .site-dir { inline-size: 100%; margin: 0 .25rem .5rem; inline-size: calc(100% - .5rem); }
 .site-dir > button { flex: 1; justify-content: center; }
 
@@ -505,14 +510,14 @@
   border-radius: var(--ins-r-md);
   margin-block-end: 1.25rem;
 }
+/* The library's logo in a brand mark: the svg is the whole tile, so the mark's own fill steps aside. */
+.ins-shell-mark.site-mark { background: none; }
+.site-logo { display: block; inline-size: 100%; block-size: 100%; }
 .site-hero h1 {
   margin: 0 0 .75rem;
   font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
   line-height: 1.2;
   font-weight: 800;
-/* The library's logo in a brand mark: the svg is the whole tile, so the mark's own fill steps aside. */
-.ins-shell-mark.site-mark { background: none; }
-.site-logo { display: block; inline-size: 100%; block-size: 100%; }
   color: var(--ins-text-1);
 }
 .site-hero h1 span { color: var(--ins-primary-darker); }

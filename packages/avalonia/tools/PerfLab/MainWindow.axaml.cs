@@ -9,6 +9,7 @@ using Avalonia.Media;
 using Avalonia.Rendering;
 using Avalonia.Threading;
 using Insiyab.Avalonia;
+using Insiyab.Avalonia.Brand;
 using Insiyab.Avalonia.Controls;
 using PerfLab.Pages;
 
@@ -89,6 +90,8 @@ public partial class MainWindow : Window
             swatch.Click += (_, _) => InsiyabTheme.SetPrimary((Color)swatch.Tag!);
             Swatches.Children.Add(swatch);
         }
+        PaintSwatches();
+        ActualThemeVariantChanged += (_, _) => PaintSwatches();
         DirectionSeg.SelectionChanged += (_, _) => FlowDirection = DirectionSeg.SelectedIndex == 1 ? FlowDirection.LeftToRight : FlowDirection.RightToLeft;
         EffectsButton.Click += (_, _) => Motion.SetStill(this, !Motion.GetStill(this));
         ReadoutButton.Click += (_, _) => Readout.Toggle();
@@ -113,6 +116,14 @@ public partial class MainWindow : Window
 
         if (Program.Option("--bench") is { } dir) Opened += (_, _) => _ = new Bench(this, dir.Length > 0 ? dir : Path.Combine(AppContext.BaseDirectory, "bench")).RunAsync();
         else if (Program.Option("--startup") is { } file) Opened += (_, _) => Bench.ReportStartup(this, file);
+    }
+
+    // On dark the brand reads as its lighter middle shade, so each swatch shows the colour it gives there.
+    private void PaintSwatches()
+    {
+        var dark = ActualThemeVariant == Avalonia.Styling.ThemeVariant.Dark;
+        foreach (var swatch in Swatches.Children.OfType<Button>())
+            if (swatch.Tag is Color c) swatch.Background = new SolidColorBrush(dark ? BrandDerivation.Derive(c, true).PrimaryMid : c);
     }
 
     private void OnKey(object? sender, KeyEventArgs e)
