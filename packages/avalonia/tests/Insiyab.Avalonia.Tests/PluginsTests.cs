@@ -120,6 +120,18 @@ public class PluginsTests
         Assert.DoesNotContain(":active", CellOf(otp, 2).Classes);
     }
 
+    [AvaloniaTheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    public void Otp_dragging_across_cells_selects_only_the_pressed_one(int from)
+    {
+        var (otp, window) = FilledOtp("1234");
+        Click(CellOf(otp, from), window);
+        otp.SelectionEnd = 4;
+        Settle();
+        Assert.Equal((from, from + 1), Selected(otp));
+    }
+
     [AvaloniaFact]
     public void Otp_clicking_an_empty_cell_puts_the_caret_at_the_end_with_no_gap()
     {
@@ -462,6 +474,26 @@ public class PluginsTests
         Assert.Equal(card.Bounds.Height - card.BorderThickness.Bottom, r.Bottom, 0.5);
         var row = list.GetVisualDescendants().OfType<ListBoxItem>().First(i => !i.IsSelected && !i.IsPointerOver);
         Assert.Equal(17, row.TranslatePoint(new Point(0, 0), card)!.Value.X, 0.5);
+    }
+
+    [AvaloniaFact]
+    public void Phone_list_opens_with_the_country_in_the_middle()
+    {
+        var phone = new PhoneBox();
+        Show(Page(phone), FlowDirection.RightToLeft, height: 700);
+        for (var round = 0; round < 2; round++)
+        {
+            phone.IsDropDownOpen = true;
+            Settle(250);
+            var list = InPopup<ListBox>(phone, "PART_List");
+            var scroll = Assert.IsType<ScrollViewer>(list.Scroll);
+            Assert.Equal("SA", Assert.IsType<PhoneCountryRow>(list.SelectedItem).Iso);
+            var row = Assert.IsAssignableFrom<Control>(list.ContainerFromItem(list.SelectedItem!));
+            var top = row.TranslatePoint(default, scroll)!.Value.Y;
+            Assert.Equal(scroll.Viewport.Height / 2, top + row.Bounds.Height / 2, 1.0);
+            phone.IsDropDownOpen = false;
+            Settle(150);
+        }
     }
 
     [AvaloniaFact]

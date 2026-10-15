@@ -192,6 +192,7 @@ public class OtpBox : TextBox
     }
 
     private bool _attached;
+    private bool _all;
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
@@ -219,6 +220,7 @@ public class OtpBox : TextBox
             Move(e.Key);
             return;
         }
+        _all = e.Key == Key.A && (e.KeyModifiers & (KeyModifiers.Control | KeyModifiers.Meta)) != 0;
         _user = true;
         try { base.OnKeyDown(e); }
         finally { _user = false; }
@@ -253,6 +255,17 @@ public class OtpBox : TextBox
         Pick(CellAt(e.GetPosition(_host).X));
     }
 
+    // Dragging selects nothing: a code is fixed one cell at a time, so the pressed cell stays the one picked.
+    protected override void OnPointerMoved(PointerEventArgs e)
+    {
+        if (_host is not null && e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+        {
+            e.Handled = true;
+            return;
+        }
+        base.OnPointerMoved(e);
+    }
+
     protected override void OnGotFocus(FocusChangedEventArgs e)
     {
         base.OnGotFocus(e);
@@ -274,6 +287,7 @@ public class OtpBox : TextBox
     {
         var len = (Text ?? string.Empty).Length;
         var (start, end) = i >= len ? (len, len) : (i, i + 1);
+        _all = false;
         _picking = true;
         try
         {
@@ -294,10 +308,10 @@ public class OtpBox : TextBox
     private bool IsWholeSelected()
     {
         var (start, end) = Picked();
-        return end - start > 1 && start == 0 && end == (Text ?? string.Empty).Length;
+        return _all && end - start > 1 && start == 0 && end == (Text ?? string.Empty).Length;
     }
 
-    // One cell, the whole code (Ctrl+A) or the caret at the end: anything else collapses to a cell or the end.
+    // One cell, the whole code after Ctrl+A, or the caret at the end: anything else, a drag included, collapses to a cell or the end.
     private bool IsTidy()
     {
         var len = (Text ?? string.Empty).Length;

@@ -11,6 +11,7 @@ internal sealed class PickerLocale
 
     private static readonly string[] GregorianAr = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
     private static readonly string[] GregorianEn = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    private static readonly string[] ShortGregorianEn = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     private static readonly string[] HijriAr = ["محرم", "صفر", "ربيع الأول", "ربيع الآخر", "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة"];
     private static readonly string[] HijriEn = ["Muharram", "Safar", "Rabiʻ I", "Rabiʻ II", "Jumada I", "Jumada II", "Rajab", "Shaʻban", "Ramadan", "Shawwal", "Dhuʻl-Qiʻdah", "Dhuʻl-Hijjah"];
     private static readonly string[] NarrowAr = ["ح", "ن", "ث", "ر", "خ", "ج", "س"];
@@ -38,8 +39,10 @@ internal sealed class PickerLocale
         NextMonth = ar ? "الشهر التالي" : "Next month";
         Month = ar ? "الشهر" : "Month";
         Year = ar ? "السنة" : "Year";
+        Day = ar ? "اليوم" : "Day";
         Hour = ar ? "الساعة" : "Hour";
         Minute = ar ? "الدقيقة" : "Minute";
+        Second = ar ? "الثانية" : "Second";
         Period = ar ? "الفترة" : "AM/PM";
         Gregorian = ar ? "ميلادي" : "Gregorian";
         HijriLabel = ar ? "هجري" : "Hijri";
@@ -64,8 +67,10 @@ internal sealed class PickerLocale
     public string NextMonth { get; }
     public string Month { get; }
     public string Year { get; }
+    public string Day { get; }
     public string Hour { get; }
     public string Minute { get; }
+    public string Second { get; }
     public string Period { get; }
     public string Gregorian { get; }
     public string HijriLabel { get; }
@@ -126,6 +131,36 @@ internal sealed class PickerLocale
 
     public string MonthName(PickerCalendar cal, int m) =>
         (cal.IsGregorian ? IsArabic ? GregorianAr : GregorianEn : IsArabic ? HijriAr : HijriEn)[((m % 12) + 12) % 12];
+
+    /// <summary>A Gregorian month as Intl's short month gives it: Jan in English, the whole name in Arabic.</summary>
+    public string ShortMonth(int m) => (IsArabic ? GregorianAr : ShortGregorianEn)[((m % 12) + 12) % 12];
+
+    private DateTimeFormatInfo? _format;
+
+    /// <summary>These words as .NET date formatting, Gregorian with Latin digits, for Avalonia's own pickers.</summary>
+    public DateTimeFormatInfo Format => _format ??= BuildFormat(IsArabic);
+
+    private static DateTimeFormatInfo BuildFormat(bool ar)
+    {
+        var f = (DateTimeFormatInfo)CultureInfo.InvariantCulture.DateTimeFormat.Clone();
+        string[] months = [.. (ar ? GregorianAr : GregorianEn), ""];
+        string[] shortMonths = [.. (ar ? GregorianAr : ShortGregorianEn), ""];
+        f.MonthNames = months;
+        f.MonthGenitiveNames = months;
+        f.AbbreviatedMonthNames = shortMonths;
+        f.AbbreviatedMonthGenitiveNames = shortMonths;
+        f.DayNames = ar ? LongAr : LongEn;
+        f.AbbreviatedDayNames = ar ? LongAr : ShortEn;
+        f.ShortestDayNames = ar ? NarrowAr : NarrowEn;
+        f.AMDesignator = ar ? "ص" : "AM";
+        f.PMDesignator = ar ? "م" : "PM";
+        f.ShortDatePattern = ar ? "d/M/yyyy" : "M/d/yyyy";
+        f.LongDatePattern = ar ? "dddd، d MMMM yyyy" : "dddd, MMMM d, yyyy";
+        f.YearMonthPattern = "MMMM yyyy";
+        f.MonthDayPattern = ar ? "d MMMM" : "MMMM d";
+        f.FirstDayOfWeek = ar ? DayOfWeek.Saturday : DayOfWeek.Sunday;
+        return DateTimeFormatInfo.ReadOnly(f);
+    }
 
     public string YearText(PickerCalendar cal, int y) =>
         cal.IsGregorian ? N(y) : IsArabic ? $"{N(y)} هـ" : $"{N(y)} AH";

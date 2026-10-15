@@ -97,7 +97,8 @@ await E(`document.getElementById('otp').setAttribute('aria-invalid', 'true'); 0`
 await b.sleep(400);                                 /* the border eases over */
 ok('aria-invalid turns the field red', (await red()) !== before, `${before} → ${await red()}`);
 // Like a field in error: the normal fill, the border at 55% of the bad colour, and the full colour with the glow on focus.
-const cells = (sel) => E(`(() => { const s = getComputedStyle(document.querySelector(${JSON.stringify(sel)})); return { bg: s.backgroundColor, bd: s.borderTopColor, sh: s.boxShadow }; })()`);
+// The colours are read settled: a transition still running under load would give a colour on the way.
+const cells = (sel) => E(`(() => { const e = document.querySelector(${JSON.stringify(sel)}); e.getAnimations().forEach((a) => a.finish()); const s = getComputedStyle(e); return { bg: s.backgroundColor, bd: s.borderTopColor, sh: s.boxShadow }; })()`);
 const tone = (css) => E(`(() => { const p = document.createElement('div'); p.style.cssText = 'border:1px solid ' + ${JSON.stringify(css)}; document.body.appendChild(p); const c = getComputedStyle(p).borderTopColor; p.remove(); return c; })()`);
 const bad = await cells('#otp ~ .ins-otp-cells'), calm = await cells('#otp-en ~ .ins-otp-cells');
 ok('in error the strip keeps its normal fill', bad.bg === calm.bg, `${bad.bg} vs ${calm.bg}`);
