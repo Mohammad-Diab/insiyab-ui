@@ -269,14 +269,15 @@ public class OtpBox : TextBox
     protected override void OnGotFocus(FocusChangedEventArgs e)
     {
         base.OnGotFocus(e);
-        if (e.NavigationMethod != NavigationMethod.Pointer) Dispatcher.UIThread.Post(ToEnd);
+        // The window coming back hands the keyboard back with the caret where it was.
+        if (e.NavigationMethod != NavigationMethod.Pointer && !WindowActivity.GetIsInactive(this)) Dispatcher.UIThread.Post(ToEnd);
         Render();
     }
 
     protected override void OnLostFocus(FocusChangedEventArgs e)
     {
         base.OnLostFocus(e);
-        if (_edited) _left = true;
+        if (_edited && !WindowActivity.GetIsInactive(this)) _left = true;
         Render();
     }
 

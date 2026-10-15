@@ -405,7 +405,8 @@ public class Chart : TemplatedControl
     protected override void OnLostFocus(FocusChangedEventArgs e)
     {
         base.OnLostFocus(e);
-        ClearHighlight();
+        // The keyboard's point stays while another window has the keyboard, so the arrows go on from it.
+        if (!WindowActivity.GetIsInactive(this)) ClearHighlight();
     }
 
     internal void ClearHighlight()

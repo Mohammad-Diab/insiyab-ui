@@ -455,7 +455,8 @@ public class DateField : TextBox
     protected override void OnLostFocus(FocusChangedEventArgs e)
     {
         base.OnLostFocus(e);
-        CommitTyped();
+        // Another window taking the keyboard is not leaving the field: the typed text waits for the window to come back.
+        if (!WindowActivity.GetIsInactive(this)) CommitTyped();
         Dispatcher.UIThread.Post(() => { if (_flyout.IsOpen && !IsKeyboardFocusWithin && !_calendar.IsKeyboardFocusWithin) Close(false); }, DispatcherPriority.Input);
     }
 }
