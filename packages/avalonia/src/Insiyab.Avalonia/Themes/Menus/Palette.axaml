@@ -185,18 +185,18 @@
     </ResourceDictionary>
   </Styles.Resources>
 
-  <Style Selector="ins|CommandPalette TextBlock.palette-head">
+  <Style Selector="ins|CommandPalette ins|PaletteText.palette-head">
     <Setter Property="Padding" Value="12,12,12,6" />
     <Setter Property="FontSize" Value="11" />
     <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
   </Style>
-  <Style Selector="ins|CommandPalette[FlowDirection=LeftToRight] TextBlock.palette-head">
+  <Style Selector="ins|CommandPalette[FlowDirection=LeftToRight] ins|PaletteText.palette-head">
     <Setter Property="LetterSpacing" Value="0.44" />
   </Style>
 
   <!-- .ins-palette-item: one highlight, moved by the arrows and the pointer alike; the focus stays in the field. -->
-  <Style Selector="ins|CommandPalette Border.palette-item">
+  <Style Selector="ins|CommandPalette ins|PaletteBorder.palette-item">
     <Setter Property="MinHeight" Value="44" />
     <Setter Property="Padding" Value="12,8" />
     <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
@@ -211,12 +211,12 @@
       </Transitions>
     </Setter>
   </Style>
-  <Style Selector="ins|CommandPalette Border.palette-item.active">
+  <Style Selector="ins|CommandPalette ins|PaletteBorder.palette-item.active">
     <Setter Property="Background" Value="{DynamicResource InsPopItemHover}" />
     <Setter Property="TextElement.Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
     <Setter Property="RenderTransform" Value="translateX(3px)" />
   </Style>
-  <Style Selector="ins|CommandPalette TextBlock.palette-label">
+  <Style Selector="ins|CommandPalette ins|PaletteText.palette-label">
     <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
     <Setter Property="FontWeight" Value="SemiBold" />
   </Style>
@@ -224,17 +224,17 @@
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
-  <Style Selector="ins|CommandPalette Border.palette-item.active ins|Icon.palette-ico">
+  <Style Selector="ins|CommandPalette ins|PaletteBorder.palette-item.active ins|Icon.palette-ico">
     <Setter Property="Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
   </Style>
-  <Style Selector="ins|CommandPalette TextBlock.palette-where">
+  <Style Selector="ins|CommandPalette ins|PaletteText.palette-where">
     <Setter Property="IsVisible" Value="False" />
     <Setter Property="Margin" Value="8,0,0,0" />
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
     <Setter Property="FontWeight" Value="Medium" />
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
   </Style>
-  <Style Selector="ins|CommandPalette:searching TextBlock.palette-where">
+  <Style Selector="ins|CommandPalette:searching ins|PaletteText.palette-where">
     <Setter Property="IsVisible" Value="True" />
   </Style>
 

@@ -20,7 +20,7 @@
   </Style>
 
   <!-- The palette's highlighted row, the one Enter would choose, and its icon -->
-  <Style Selector="Border.palette-item.active[(ins|WindowActivity.IsInactive)=True]">
+  <Style Selector="ins|PaletteBorder.palette-item.active[(ins|WindowActivity.IsInactive)=True]">
     <Setter Property="Transitions">
       <Transitions>
         <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />

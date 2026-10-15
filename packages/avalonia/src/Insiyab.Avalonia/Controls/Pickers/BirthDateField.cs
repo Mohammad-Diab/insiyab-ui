@@ -248,7 +248,7 @@ public class BirthDateField : TemplatedControl
         var inline = Layout == BirthLayout.Inline;
         AutomationProperties.SetName(this, words.BirthGroup);
         _root = new StackPanel { Classes = { "birth-root", inline ? "inline" : "field" } };
-        _line = new TextBlock { Classes = { "birth-line" } };
+        _line = new BirthText { Classes = { "birth-line" } };
         _popLine = null;
         _flyout = null;
         _btn = null;
@@ -272,7 +272,7 @@ public class BirthDateField : TemplatedControl
             var parts = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 2, VerticalAlignment = VerticalAlignment.Center };
             for (var i = 0; i < 3; i++)
             {
-                if (i > 0) parts.Children.Add(new TextBlock { Classes = { "birth-sep" }, Text = "/", VerticalAlignment = VerticalAlignment.Center });
+                if (i > 0) parts.Children.Add(new BirthText { Classes = { "birth-sep" }, Text = "/", VerticalAlignment = VerticalAlignment.Center });
                 parts.Children.Add(segs[i]);
             }
             _btn = new Button { Classes = { "birth-btn" }, Focusable = false };
@@ -282,9 +282,9 @@ public class BirthDateField : TemplatedControl
             var dock = new DockPanel();
             dock.Children.Add(_btn);
             dock.Children.Add(parts);
-            _control = new Border { Classes = { "birth-control" }, Child = dock };
+            _control = new BirthBorder { Classes = { "birth-control" }, Child = dock };
             _wrap = new Panel { Classes = { "birth-wrap" } };
-            _wrap.Children.Add(new Border { Classes = { "birth-shadow" } });
+            _wrap.Children.Add(new BirthBorder { Classes = { "birth-shadow" } });
             _wrap.Children.Add(_control);
             _root.Children.Add(_wrap);
             _root.Children.Add(_line);
@@ -302,8 +302,8 @@ public class BirthDateField : TemplatedControl
     private Control MakeSeg(char k, PickerLocale words, bool inline)
     {
         var i = Order.IndexOf(k);
-        var val = new TextBlock { Classes = { "birth-val" }, FlowDirection = FlowDirection.LeftToRight, IsVisible = false };
-        var ph = new TextBlock { Classes = { "birth-ph" }, Text = words.BirthWord(k) };
+        var val = new BirthText { Classes = { "birth-val" }, FlowDirection = FlowDirection.LeftToRight, IsVisible = false };
+        var ph = new BirthText { Classes = { "birth-ph" }, Text = words.BirthWord(k) };
         var face = new Panel();
         face.Children.Add(ph);
         face.Children.Add(val);
@@ -314,7 +314,7 @@ public class BirthDateField : TemplatedControl
             face.Children.Add(dots);
             _dots[i] = dots;
         }
-        var box = new Border { Classes = { "birth-box" }, Child = face };
+        var box = new BirthBorder { Classes = { "birth-box" }, Child = face };
         var tb = new TextBox { Classes = { "birth-in" }, MaxLength = 4, FlowDirection = FlowDirection.LeftToRight };
         AutomationProperties.SetName(tb, words.BirthCap(k));
         tb.AddHandler(TextInputEvent, OnText, RoutingStrategies.Tunnel);
@@ -328,7 +328,7 @@ public class BirthDateField : TemplatedControl
         seg.Children.Add(stage);
         if (inline)
         {
-            var cap = new TextBlock { Classes = { "birth-cap" }, Text = words.BirthCap(k) };
+            var cap = new BirthText { Classes = { "birth-cap" }, Text = words.BirthCap(k) };
             seg.Children.Add(cap);
             _caps[i] = cap;
         }
@@ -373,7 +373,7 @@ public class BirthDateField : TemplatedControl
 
     private void BuildPop(PickerLocale words)
     {
-        _popLine = new TextBlock { Classes = { "birth-line", "pop" } };
+        _popLine = new BirthText { Classes = { "birth-line", "pop" } };
         var cancel = new Button { Classes = { "bare", "sm" }, Content = words.Cancel };
         cancel.Click += (_, _) => Cancel();
         var done = new Button { Classes = { "primary", "sm" }, Content = words.Done };
@@ -381,7 +381,7 @@ public class BirthDateField : TemplatedControl
         var buttons = new StackPanel { Classes = { "birth-foot-row" }, Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right };
         buttons.Children.Add(cancel);
         buttons.Children.Add(done);
-        var foot = new Border { Classes = { "birth-foot" }, Child = buttons };
+        var foot = new BirthBorder { Classes = { "birth-foot" }, Child = buttons };
         var body = new StackPanel { Margin = new Thickness(12), Spacing = 8 };
         body.Children.Add(_popLine);
         body.Children.Add(MakeDrum(true));
@@ -389,7 +389,7 @@ public class BirthDateField : TemplatedControl
         var inner = new Panel();
         inner.Children.Add(new Border { Classes = { "picker-glass" } });
         inner.Children.Add(body);
-        var pop = new Border { Classes = { "birth-pop" }, Child = inner };
+        var pop = new BirthBorder { Classes = { "birth-pop" }, Child = inner };
         pop.AddHandler(KeyDownEvent, OnPopKey);
         _flyout = new PickerFlyout { Content = pop };
         _flyout.Closed += (_, _) =>

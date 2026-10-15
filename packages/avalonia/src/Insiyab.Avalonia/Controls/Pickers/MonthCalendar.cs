@@ -364,7 +364,7 @@ public class MonthCalendar : TemplatedControl
             if (_head?.Parent is Panel p) p.Children.Remove(_head);
             _headWords = words;
             _head = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), Classes = { "month-head" } };
-            _title = new TextBlock { Classes = { "month-title" } };
+            _title = new MonthText { Classes = { "month-title" } };
             _head.Children.Add(_title);
             var nav = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 4, Classes = { "month-nav" } };
             _switch = new Segmented { Classes = { "month-views" } };
@@ -455,7 +455,7 @@ public class MonthCalendar : TemplatedControl
         for (var d = 0; d < 7; d++)
         {
             var wd = (DayOfWeek)((start + d) % 7);
-            var th = new TextBlock { Text = words.ShortDay(wd), Classes = { "month-wd" } };
+            var th = new MonthText { Text = words.ShortDay(wd), Classes = { "month-wd" } };
             AutomationProperties.SetName(th, words.LongDay(wd));
             Grid.SetColumn(th, d);
             grid.Children.Add(th);
@@ -485,7 +485,7 @@ public class MonthCalendar : TemplatedControl
     private Border BuildDay(PickerLocale words, DateTime day, List<MonthEvent> list, bool other, bool isToday)
     {
         var stack = new StackPanel();
-        var num = new Border { Child = new TextBlock { Text = PickerLocale.N(day.Day) }, Classes = { "month-num" } };
+        var num = new MonthBorder { Child = new MonthText { Text = PickerLocale.N(day.Day) }, Classes = { "month-num" } };
         AutomationProperties.SetName(num, DayName(words, day));
         stack.Children.Add(num);
         if (list.Count > 0)
@@ -494,7 +494,7 @@ public class MonthCalendar : TemplatedControl
             foreach (var ev in list.Take(list.Count > Shown ? Shown - 1 : Shown)) events.Children.Add(Chip(words, ev));
             if (list.Count > Shown)
             {
-                var more = new TextBlock { Text = "+" + PickerLocale.N(list.Count - Shown + 1), Classes = { "month-more" } };
+                var more = new MonthText { Text = "+" + PickerLocale.N(list.Count - Shown + 1), Classes = { "month-more" } };
                 ToolTip.SetTip(more, string.Join("، ", list.Skip(Shown - 1).Select(e => e.Title)));
                 events.Children.Add(more);
             }
@@ -503,7 +503,7 @@ public class MonthCalendar : TemplatedControl
             foreach (var ev in list.Take(4)) dots.Children.Add(new Ellipse { Classes = { "month-dot", ToneClass(ev.Tone) } });
             stack.Children.Add(dots);
         }
-        var cell = new Border { Child = stack, Classes = { "month-day" }, Tag = day };
+        var cell = new MonthBorder { Child = stack, Classes = { "month-day" }, Tag = day };
         if (other) cell.Classes.Add("other");
         if (isToday) cell.Classes.Add("today");
         cell.PointerReleased += (_, e) =>
@@ -536,15 +536,15 @@ public class MonthCalendar : TemplatedControl
         if (scrolls)
         {
             top.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-            var gap = new Border { Classes = { "week-bar-gap" } };
+            var gap = new MonthBorder { Classes = { "week-bar-gap" } };
             Grid.SetColumn(gap, days + 1);
             Grid.SetRowSpan(gap, 2);
             top.Children.Add(gap);
         }
 
-        var corner = new Border { Classes = { "week-corner" } };
+        var corner = new MonthBorder { Classes = { "week-corner" } };
         top.Children.Add(corner);
-        var allLabel = new TextBlock { Text = words.IsArabic ? "طوال اليوم" : "All day", Classes = { "week-allday-label" } };
+        var allLabel = new MonthText { Text = words.IsArabic ? "طوال اليوم" : "All day", Classes = { "week-allday-label" } };
         Grid.SetRow(allLabel, 1);
         top.Children.Add(allLabel);
 
@@ -552,8 +552,8 @@ public class MonthCalendar : TemplatedControl
         var lines = new StackPanel { IsHitTestVisible = false, Classes = { "week-lines" } };
         for (var h = startH; h < endH; h++)
         {
-            gutter.Children.Add(new Border { Height = hourH, Classes = { "week-hour-cell" }, Child = new TextBlock { Text = words.FormatTime(new TimeSpan(h, 0, 0)), Classes = { "week-hour" } } });
-            lines.Children.Add(new Border { Height = hourH, Classes = { "week-line" } });
+            gutter.Children.Add(new MonthBorder { Height = hourH, Classes = { "week-hour-cell" }, Child = new MonthText { Text = words.FormatTime(new TimeSpan(h, 0, 0)), Classes = { "week-hour" } } });
+            lines.Children.Add(new MonthBorder { Height = hourH, Classes = { "week-line" } });
         }
         Grid.SetRow(gutter, 1);
         body.Children.Add(gutter);
@@ -575,9 +575,9 @@ public class MonthCalendar : TemplatedControl
             var list = byDay.TryGetValue(day, out var l) ? l : [];
             var isToday = day == today;
 
-            var name = new TextBlock { Text = words.ShortDay(day.DayOfWeek), Classes = { "week-wd" } };
-            var num = new Border { Child = new TextBlock { Text = PickerLocale.N(day.Day) }, Classes = { "month-num" } };
-            var head = new Border { Child = new StackPanel { Children = { name, num } }, Classes = { "week-head" }, Tag = day };
+            var name = new MonthText { Text = words.ShortDay(day.DayOfWeek), Classes = { "week-wd" } };
+            var num = new MonthBorder { Child = new MonthText { Text = PickerLocale.N(day.Day) }, Classes = { "month-num" } };
+            var head = new MonthBorder { Child = new StackPanel { Children = { name, num } }, Classes = { "week-head" }, Tag = day };
             AutomationProperties.SetName(head, words.FullDay(PickerCalendar.Gregorian, day));
             if (isToday) head.Classes.Add("today");
             if (view == MonthCalendarView.Week)
@@ -600,7 +600,7 @@ public class MonthCalendar : TemplatedControl
                 allDay.Children.Add(chip);
                 if (chip is Border b) _chips[ev] = b;
             }
-            var allCell = new Border { Child = allDay, Classes = { "week-allday-cell" } };
+            var allCell = new MonthBorder { Child = allDay, Classes = { "week-allday-cell" } };
             Grid.SetRow(allCell, 1);
             Grid.SetColumn(allCell, d + 1);
             top.Children.Add(allCell);
@@ -624,11 +624,11 @@ public class MonthCalendar : TemplatedControl
             }
             if (isToday && LineAt(lane) is { } at)
             {
-                _now = new Panel { Classes = { "week-now" }, IsHitTestVisible = false, ZIndex = 2, Children = { new Border { Classes = { "week-now-line" } }, new Ellipse { Classes = { "week-now-dot" } } } };
+                _now = new Panel { Classes = { "week-now" }, IsHitTestVisible = false, ZIndex = 2, Children = { new MonthBorder { Classes = { "week-now-line" } }, new Ellipse { Classes = { "week-now-dot" } } } };
                 _nowPanel = lane;
                 lane.SetLine(_now, at);
             }
-            var column = new Border { Child = lane, Classes = { "week-day" } };
+            var column = new MonthBorder { Child = lane, Classes = { "week-day" } };
             if (isToday) column.Classes.Add("today");
             column.PointerReleased += (_, e) =>
             {
@@ -676,7 +676,7 @@ public class MonthCalendar : TemplatedControl
         Grid.SetIsSharedSizeScope(outer, true);
         outer.Children.Add(top);
         outer.Children.Add(hours);
-        return new Border { Child = outer, Classes = { "week-frame" } };
+        return new MonthBorder { Child = outer, Classes = { "week-frame" } };
     }
 
     // The row above (row 0) or below (row 2) the hours: a label in the gutter and, in each day with hidden events, a pill counting them.
@@ -687,12 +687,12 @@ public class MonthCalendar : TemplatedControl
         var kind = after ? "after" : "before";
         var at = words.FormatTime(TimeSpan.FromHours(hour));
         var label = ar ? $"{(after ? "بعد" : "قبل")} {at}" : $"{(after ? "After" : "Before")} {at}";
-        var gutter = new Border { Classes = { "week-band-gutter", kind }, Child = new TextBlock { Text = label, Classes = { "week-band-label" } } };
+        var gutter = new MonthBorder { Classes = { "week-band-gutter", kind }, Child = new MonthText { Text = label, Classes = { "week-band-label" } } };
         Grid.SetRow(gutter, row);
         body.Children.Add(gutter);
         for (var d = 0; d < lists.Length; d++)
         {
-            var cell = new Border { Classes = { "week-band-cell", kind } };
+            var cell = new MonthBorder { Classes = { "week-band-cell", kind } };
             if (lists[d].Count > 0) cell.Child = Band(words, first.AddDays(d), lists[d], after, hour);
             Grid.SetRow(cell, row);
             Grid.SetColumn(cell, d + 1);
@@ -704,7 +704,7 @@ public class MonthCalendar : TemplatedControl
     {
         var ar = words.IsArabic;
         var at = words.FormatTime(TimeSpan.FromHours(hour));
-        var band = new Border { Child = new TextBlock { Text = "+" + PickerLocale.N(hidden.Count), Classes = { "week-band-count" } }, Classes = { "week-band", after ? "after" : "before" }, Focusable = true, Tag = day };
+        var band = new MonthBorder { Child = new MonthText { Text = "+" + PickerLocale.N(hidden.Count), Classes = { "week-band-count" } }, Classes = { "week-band", after ? "after" : "before" }, Focusable = true, Tag = day };
         AutomationProperties.SetName(band, ar ? $"{Count(true, hidden.Count)} {(after ? "بعد" : "قبل")} {at}" : $"{Count(false, hidden.Count)} {(after ? "after" : "before")} {at}");
         ToolTip.SetTip(band, string.Join(ar ? "، " : ", ", hidden.Select(e => $"{words.FormatTime(e.Time!.Value)} {e.Title}")));
         var first = hidden.Min(e => e.Time!.Value.TotalMinutes);
@@ -834,12 +834,12 @@ public class MonthCalendar : TemplatedControl
         var row = new DockPanel();
         if (ev.Time is { } t)
         {
-            var time = new TextBlock { Text = words.FormatTime(t), Classes = { "month-time" } };
+            var time = new MonthText { Text = words.FormatTime(t), Classes = { "month-time" } };
             DockPanel.SetDock(time, Dock.Left);
             row.Children.Add(time);
         }
-        row.Children.Add(new TextBlock { Text = ev.Title, Classes = { "month-event-title" } });
-        var chip = new Border { Child = row, Classes = { "month-event", ToneClass(ev.Tone) } };
+        row.Children.Add(new MonthText { Text = ev.Title, Classes = { "month-event-title" } });
+        var chip = new MonthBorder { Child = row, Classes = { "month-event", ToneClass(ev.Tone) } };
         Interact(chip, ev);
         return chip;
     }
@@ -852,11 +852,11 @@ public class MonthCalendar : TemplatedControl
         {
             Children =
             {
-                new TextBlock { Text = ev.Title, Classes = { "month-event-title", "week-event-title" } },
-                new TextBlock { Text = $"{words.FormatTime(start)} – {words.FormatTime(end)}", Classes = { "week-event-time" } },
+                new MonthText { Text = ev.Title, Classes = { "month-event-title", "week-event-title" } },
+                new MonthText { Text = $"{words.FormatTime(start)} – {words.FormatTime(end)}", Classes = { "week-event-time" } },
             },
         };
-        var chip = new Border { Child = stack, Classes = { "month-event", "timed", ToneClass(ev.Tone) } };
+        var chip = new MonthBorder { Child = stack, Classes = { "month-event", "timed", ToneClass(ev.Tone) } };
         Interact(chip, ev);
         return chip;
     }

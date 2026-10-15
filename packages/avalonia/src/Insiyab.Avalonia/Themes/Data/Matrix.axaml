@@ -75,7 +75,7 @@
     </ResourceDictionary>
   </Styles.Resources>
 
-  <Style Selector="ins|ChoiceMatrix TextBlock.matrix-col">
+  <Style Selector="ins|ChoiceMatrix ins|MatrixText.matrix-col">
     <Setter Property="Margin" Value="8,4,8,8" />
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
     <Setter Property="FontWeight" Value="ExtraBold" />
@@ -83,7 +83,7 @@
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="VerticalAlignment" Value="Bottom" />
   </Style>
-  <Style Selector="ins|ChoiceMatrix Border.matrix-th, ins|ChoiceMatrix Border.matrix-cell">
+  <Style Selector="ins|ChoiceMatrix ins|MatrixBorder.matrix-th, ins|ChoiceMatrix ins|MatrixBorder.matrix-cell">
     <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
     <Setter Property="Transitions">
       <Transitions>
@@ -91,21 +91,21 @@
       </Transitions>
     </Setter>
   </Style>
-  <Style Selector="ins|ChoiceMatrix Border.matrix-th">
+  <Style Selector="ins|ChoiceMatrix ins|MatrixBorder.matrix-th">
     <Setter Property="Padding" Value="12,10,16,10" />
     <Setter Property="TextElement.FontWeight" Value="Bold" />
     <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
   </Style>
-  <Style Selector="ins|ChoiceMatrix Border.matrix-th > TextBlock[FlowDirection=RightToLeft], ins|ChoiceMatrix Border.matrix-th > ins|TemplateText[FlowDirection=RightToLeft]">
+  <Style Selector="ins|ChoiceMatrix ins|MatrixBorder.matrix-th > ins|MatrixText[FlowDirection=RightToLeft]">
     <Setter Property="LineHeight" Value="22.1" />
   </Style>
-  <Style Selector="ins|ChoiceMatrix Border.matrix-cell">
+  <Style Selector="ins|ChoiceMatrix ins|MatrixBorder.matrix-cell">
     <Setter Property="Padding" Value="6" />
   </Style>
-  <Style Selector="ins|ChoiceMatrix Border.matrix-row:pointerover Border.matrix-th, ins|ChoiceMatrix Border.matrix-row:pointerover Border.matrix-cell">
+  <Style Selector="ins|ChoiceMatrix ins|MatrixBorder.matrix-row:pointerover ins|MatrixBorder.matrix-th, ins|ChoiceMatrix ins|MatrixBorder.matrix-row:pointerover ins|MatrixBorder.matrix-cell">
     <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
   </Style>
-  <Style Selector="ins|ChoiceMatrix Border.matrix-cell.checked">
+  <Style Selector="ins|ChoiceMatrix ins|MatrixBorder.matrix-cell.checked">
     <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
   </Style>
   <Style Selector="ins|ChoiceMatrix RadioButton.matrix-radio">
@@ -116,17 +116,17 @@
   </Style>
 
   <!-- The cards: the cells drop their fill and each card fills its cell -->
-  <Style Selector="ins|ChoiceMatrix.cards Border.matrix-cell, ins|ChoiceMatrix.cards Border.matrix-row:pointerover Border.matrix-cell, ins|ChoiceMatrix.cards Border.matrix-cell.checked">
+  <Style Selector="ins|ChoiceMatrix.cards ins|MatrixBorder.matrix-cell, ins|ChoiceMatrix.cards ins|MatrixBorder.matrix-row:pointerover ins|MatrixBorder.matrix-cell, ins|ChoiceMatrix.cards ins|MatrixBorder.matrix-cell.checked">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="Padding" Value="4" />
   </Style>
-  <Style Selector="ins|ChoiceMatrix TextBlock.matrix-desc">
+  <Style Selector="ins|ChoiceMatrix ins|MatrixText.matrix-desc">
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
-  <Style Selector="ins|ChoiceMatrix TextBlock.matrix-desc[FlowDirection=RightToLeft]">
+  <Style Selector="ins|ChoiceMatrix ins|MatrixText.matrix-desc[FlowDirection=RightToLeft]">
     <Setter Property="LineHeight" Value="20.4" />
   </Style>
-  <Style Selector="ins|ChoiceMatrix Border.matrix-points">
+  <Style Selector="ins|ChoiceMatrix ins|MatrixBorder.matrix-points">
     <Setter Property="HorizontalAlignment" Value="Left" />
     <Setter Property="Padding" Value="8,1" />
     <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
@@ -135,7 +135,7 @@
     <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontBodyEn}" />
     <Setter Property="TextElement.FontWeight" Value="Bold" />
   </Style>
-  <Style Selector="ins|ChoiceMatrix RadioButton:checked Border.matrix-points">
+  <Style Selector="ins|ChoiceMatrix RadioButton:checked ins|MatrixBorder.matrix-points">
     <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />
     <Setter Property="TextElement.Foreground" Value="{DynamicResource InsOnPrimaryMid}" />
   </Style>

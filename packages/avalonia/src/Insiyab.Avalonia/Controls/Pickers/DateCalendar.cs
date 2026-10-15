@@ -287,7 +287,7 @@ public class DateCalendar : TemplatedControl
         {
             _drum = new TimeDrum { Locale = Locale, MinuteStep = MinuteStep, Time = Time };
             _drum.TimePicked += (_, t) => TimeInvoked?.Invoke(this, t);
-            side = new Border { Child = _drum, Classes = { "cal-time" } };
+            side = new CalendarBorder { Child = _drum, Classes = { "cal-time" } };
         }
 
         var foot = BuildFoot(words, sys);
@@ -350,7 +350,7 @@ public class DateCalendar : TemplatedControl
         if (_dual)
         {
             var after = sys.AddMonths(sys.FromParts(vp.Y, vp.M, 1), 1);
-            var t2 = new TextBlock { Text = words.MonthYear(sys, after), Classes = { "cal-title-next" } };
+            var t2 = new CalendarText { Text = words.MonthYear(sys, after), Classes = { "cal-title-next" } };
             Grid.SetColumn(t2, 2);
             head.Children.Add(t2);
         }
@@ -381,7 +381,7 @@ public class DateCalendar : TemplatedControl
         for (var c = 0; c < 7; c++)
         {
             var wd = (DayOfWeek)((fd + c) % 7);
-            var th = new TextBlock { Text = words.Narrow(wd), Classes = { "cal-wd" } };
+            var th = new CalendarText { Text = words.Narrow(wd), Classes = { "cal-wd" } };
             AutomationProperties.SetName(th, words.LongDay(wd));
             Grid.SetColumn(th, c);
             grid.Children.Add(th);
@@ -409,7 +409,7 @@ public class DateCalendar : TemplatedControl
                 btn.AddHandler(PointerPressedEvent, (_, pe) => _shift = pe.KeyModifiers.HasFlag(KeyModifiers.Shift), RoutingStrategies.Tunnel);
                 btn.Click += OnDayClick;
                 btn.PointerEntered += (_, _) => { if (!btn.Classes.Contains("blocked")) Preview(day); };
-                var holder = new Border { Child = btn, Classes = { "cal-cell" }, Tag = r * 7 + k };
+                var holder = new CalendarBorder { Child = btn, Classes = { "cal-cell" }, Tag = r * 7 + k };
                 Grid.SetRow(holder, r + 1);
                 Grid.SetColumn(holder, k);
                 grid.Children.Add(holder);
@@ -428,7 +428,7 @@ public class DateCalendar : TemplatedControl
         var today = new Button { Content = words.Today, Classes = { "bare", "sm", "cal-today" } };
         today.Click += (_, _) => TodayInvoked?.Invoke(this, EventArgs.Empty);
         parts.Add(today);
-        if (Mode == DatePickMode.Range) parts.Add(new TextBlock { Text = IsPickingEnd ? words.PickEnd : words.PickStart, Classes = { "cal-hint" } });
+        if (Mode == DatePickMode.Range) parts.Add(new CalendarText { Text = IsPickingEnd ? words.PickEnd : words.PickStart, Classes = { "cal-hint" } });
         Control? clear = null;
         Control? done = null;
         if (!IsRequired)
@@ -467,7 +467,7 @@ public class DateCalendar : TemplatedControl
             foot.Children.Add(parts[i]);
         }
         if (!stretch.Any()) foot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-        return new Border { Child = foot, Classes = { "cal-foot" } };
+        return new CalendarBorder { Child = foot, Classes = { "cal-foot" } };
     }
 
     private Border BuildSwitch(PickerLocale words)
@@ -481,7 +481,7 @@ public class DateCalendar : TemplatedControl
         greg.Click += (s, _) => Flip(true, s as Button);
         row.Children.Add(home);
         row.Children.Add(greg);
-        var track = new Border { Child = new Panel { Children = { flight, row } }, Classes = { "cal-switch" } };
+        var track = new CalendarBorder { Child = new Panel { Children = { flight, row } }, Classes = { "cal-switch" } };
         AutomationProperties.SetName(track, words.CalendarSystem);
         return track;
     }

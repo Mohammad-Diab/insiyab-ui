@@ -278,7 +278,7 @@ public class CommandPalette : TemplatedControl
         if (_backdrop is not null) _backdrop.PointerPressed += OnBackdropPressed;
         if (_list is not null)
         {
-            _list.ItemTemplate = new FuncDataTemplate<object>((entry, _) => entry switch { PaletteItem item => BuildRow(item), Head head => new TextBlock { Text = head.Name, Classes = { "palette-head" } }, _ => null }, supportsRecycling: false);
+            _list.ItemTemplate = new FuncDataTemplate<object>((entry, _) => entry switch { PaletteItem item => BuildRow(item), Head head => new PaletteText { Text = head.Name, Classes = { "palette-head" } }, _ => null }, supportsRecycling: false);
             _list.ContainerClearing += OnContainerClearing;
         }
         _rows.Clear();
@@ -347,7 +347,7 @@ public class CommandPalette : TemplatedControl
         var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto,Auto") };
         if (item.Icon is not null)
             grid.Children.Add(new Icon { Data = item.Icon, Size = 18, Margin = new Thickness(0, 0, 10, 0), Classes = { "palette-ico" } });
-        var label = new TextBlock { Text = item.Label, Classes = { "palette-label" }, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
+        var label = new PaletteText { Text = item.Label, Classes = { "palette-label" }, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
         if (item.IsCurrent) label.FontWeight = FontWeight.ExtraBold;
         Grid.SetColumn(label, 1);
         grid.Children.Add(label);
@@ -359,11 +359,11 @@ public class CommandPalette : TemplatedControl
         }
         if (!string.IsNullOrEmpty(item.Group))
         {
-            var where = new TextBlock { Text = item.Group, Classes = { "palette-where" }, VerticalAlignment = VerticalAlignment.Center };
+            var where = new PaletteText { Text = item.Group, Classes = { "palette-where" }, VerticalAlignment = VerticalAlignment.Center };
             Grid.SetColumn(where, 3);
             grid.Children.Add(where);
         }
-        var row = new Border { Classes = { "palette-item" }, Child = grid, Focusable = false, Tag = item };
+        var row = new PaletteBorder { Classes = { "palette-item" }, Child = grid, Focusable = false, Tag = item };
         if (_active == item) row.Classes.Add("active");
         row.PointerMoved += (_, _) => { if (_active != item) Activate(item, false); };
         row.PointerPressed += (_, e) => e.Handled = true;

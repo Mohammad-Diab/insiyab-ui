@@ -1,5 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 
@@ -15,11 +18,38 @@ public static class TipKeyboard
     public static bool GetRegistered(ToolTip t) => t.GetValue(RegisteredProperty);
     public static void SetRegistered(ToolTip t, bool value) => t.SetValue(RegisteredProperty, value);
 
+    // Avalonia's own direct children of Control and the library's: every control below them takes the tip defaults from them.
+    private static readonly Type[] Bases =
+    [
+        typeof(TemplatedControl), typeof(Panel), typeof(Decorator), typeof(TextBlock), typeof(Shape), typeof(Image), typeof(Viewbox),
+        typeof(ContentPresenter), typeof(ItemsPresenter), typeof(TextPresenter), typeof(Popup), typeof(Track), typeof(TickBar), typeof(NativeControlHost),
+        typeof(Icon), typeof(ChartPlot), typeof(DrumColumn), typeof(Shimmer), typeof(LoadingSpinner), typeof(ColorArea), typeof(ColorHueSlider), typeof(FrostGround),
+    ];
+
     static TipKeyboard()
     {
         InputElement.GotFocusEvent.AddClassHandler<Control>(OnGotFocus);
         InputElement.LostFocusEvent.AddClassHandler<Control>(OnLostFocus);
         InputElement.KeyDownEvent.AddClassHandler<Control>(OnKeyDown, RoutingStrategies.Tunnel);
+        foreach (var type in Bases) Defaults(type);
+        ToolTip.TipProperty.Changed.AddClassHandler<Control>((c, _) => Defaults(c.GetType()));
+    }
+
+    // Above the control and centred, not at the pointer; 400ms on hover, at once from one tip to the next; in the window's own layer, so its shadow is never cut. Defaults, not a style that every control would carry.
+    private static void Defaults(Type type)
+    {
+        Default(ToolTip.PlacementProperty, type, PlacementMode.Top);
+        Default(ToolTip.VerticalOffsetProperty, type, 0d);
+        Default(ToolTip.ShowDelayProperty, type, 400);
+        Default(ToolTip.BetweenShowDelayProperty, type, 0);
+        Default(ToolTip.ShouldUseOverlayLayerProperty, type, true);
+    }
+
+    // Only a type that still reads Avalonia's default, kept on Control itself (which cannot take a second one); a type with a default of its own keeps it.
+    private static void Default<T>(StyledProperty<T> property, Type type, T value)
+    {
+        if (type != typeof(Control) && ReferenceEquals(property.GetMetadata(type), property.GetMetadata(typeof(Control))))
+            property.OverrideDefaultValue(type, value);
     }
 
     // Touching the class runs its static constructor, which adds the handlers.
