@@ -1,20 +1,30 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The rows of a <see cref="Table"/>, one under another. Only the rows in or near view are in the tree, so a table of thousands of rows costs what a few screenfuls do; the rest keep their place and height.</summary>
+/// <summary>The rows of a <see cref="Table"/>, one under another. Only the rows in or near view are in the tree, so a table of thousands of rows costs what a few screenfuls do; the rest keep their place and height. Rows just scrolled past wait hidden until the scroll rests, so scrolling back finds them styled.</summary>
 public class TableRowsPanel : Panel, IChildIndexProvider
 {
     // Rows past the view on each side, as a share of the view's height, that stay in the tree so a scroll finds them ready.
     private const double Ahead = 0.25;
 
+    // Hidden rows kept for a scroll back: at least this many, or two windows' worth, and let go once the viewport has rested this long.
+    private const int PoolFloor = 32;
+    private const int RestMs = 500;
+    private const int TrimBatch = 8;
+
     private List<TableRow> _rows = [];
     private readonly Dictionary<TableRow, int> _index = [];
     private readonly Dictionary<TableRow, double> _heights = [];
     private readonly HashSet<TableRow> _realized = [];
+    private readonly LinkedList<TableRow> _pool = [];
+    private readonly Dictionary<TableRow, LinkedListNode<TableRow>> _pooled = [];
+    private DispatcherTimer? _rest;
+    private int _trim;
     private double[] _tops = [0];
     private bool _dirty = true;
     private double _estimate = 40;
@@ -31,12 +41,13 @@ public class TableRowsPanel : Panel, IChildIndexProvider
         {
             _viewport = e.EffectiveViewport;
             _hasViewport = true;
+            Rest();
             var (from, to) = Range();
             if (from < _from || to > _to || from > _from + 1 || to < _to - 1) InvalidateMeasure();
         };
     }
 
-    /// <summary>Raised when a row comes into the tree.</summary>
+    /// <summary>Raised when a row comes into the tree, or back from waiting hidden.</summary>
     internal event Action<TableRow>? Realized;
 
     /// <summary>The rows in the order they are shown.</summary>
@@ -53,6 +64,7 @@ public class TableRowsPanel : Panel, IChildIndexProvider
         foreach (var gone in _heights.Keys.Where(r => !_index.ContainsKey(r)).ToList()) _heights.Remove(gone);
         if (_kept is not null && !_index.ContainsKey(_kept)) _kept = null;
         foreach (var row in _realized.Where(r => !_index.ContainsKey(r)).ToList()) Drop(row);
+        foreach (var row in _pool.Where(r => !_index.ContainsKey(r)).ToList()) DropPooled(row);
         _dirty = true;
         _indexChanged?.Invoke(this, ChildIndexChangedEventArgs.ChildIndexesReset);
         InvalidateMeasure();
@@ -72,6 +84,12 @@ public class TableRowsPanel : Panel, IChildIndexProvider
         if (_dirty) Offsets();
         return _index.TryGetValue(row, out var i) ? _tops[i] : 0;
     }
+
+    /// <summary>Whether the row is in the tree and shown: not out of the table, and not waiting hidden for a scroll back.</summary>
+    internal bool InView(TableRow row) => _realized.Contains(row) && row.IsAttachedToVisualTree();
+
+    /// <summary>Whether the row is in the tree but hidden, kept for a scroll back.</summary>
+    internal bool Waiting(TableRow row) => _pooled.ContainsKey(row);
 
     internal double HeightOf(TableRow row) => _heights.TryGetValue(row, out var h) ? h : _estimate;
 
@@ -142,6 +160,7 @@ public class TableRowsPanel : Panel, IChildIndexProvider
         if (_rows.Count == 0)
         {
             foreach (var row in _realized.ToList()) Drop(row);
+            foreach (var row in _pool.ToList()) DropPooled(row);
             return default;
         }
         var width = 0.0;
@@ -157,12 +176,14 @@ public class TableRowsPanel : Panel, IChildIndexProvider
             _estimate = _heights.Count > 0 ? _heights.Values.Average() : _estimate;
         }
         Offsets();
+        var pooled = false;
         foreach (var row in _realized.ToList())
         {
             var i = _index[row];
             if (i >= _from && i < _to || row == _kept || Busy(row)) width = Math.Max(width, row.DesiredSize.Width);
-            else Drop(row);
+            else pooled |= Pool(row);
         }
+        if (pooled) Rest();
         foreach (var row in fresh) Realized?.Invoke(row);
         return new Size(width, _tops[_rows.Count]);
     }
@@ -172,7 +193,12 @@ public class TableRowsPanel : Panel, IChildIndexProvider
     {
         if (_realized.Add(row))
         {
-            Children.Add(row);
+            if (_pooled.Remove(row, out var node))
+            {
+                _pool.Remove(node);
+                row.IsVisible = true;
+            }
+            else Children.Add(row);
             fresh.Add(row);
         }
         row.Measure(new Size(available.Width, double.PositiveInfinity));
@@ -191,6 +217,74 @@ public class TableRowsPanel : Panel, IChildIndexProvider
     {
         _realized.Remove(row);
         Children.Remove(row);
+    }
+
+    // A row that left the range stays in the tree, hidden, so it comes back without being styled again, and the oldest past the cap go the old way; true when it was kept. A row its owner hid goes the old way too.
+    private bool Pool(TableRow row)
+    {
+        if (!row.IsVisible)
+        {
+            Drop(row);
+            return false;
+        }
+        _realized.Remove(row);
+        row.IsVisible = false;
+        _pooled[row] = _pool.AddLast(row);
+        var cap = Math.Max(PoolFloor, 2 * (_to - _from));
+        while (_pool.Count > cap && _pool.First is { } oldest) DropPooled(oldest.Value);
+        return true;
+    }
+
+    private void DropPooled(TableRow row)
+    {
+        if (!_pooled.Remove(row, out var node)) return;
+        _pool.Remove(node);
+        Children.Remove(row);
+        row.IsVisible = true;
+    }
+
+    // Starts the wait for the viewport to rest; every move of it starts the wait again and stops a trim under way.
+    private void Rest()
+    {
+        _trim++;
+        if (_pool.Count == 0)
+        {
+            _rest?.Stop();
+            return;
+        }
+        if (_rest is null)
+        {
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(RestMs) };
+            timer.Tick += (_, _) =>
+            {
+                timer.Stop();
+                Trim(_trim);
+            };
+            _rest = timer;
+        }
+        _rest.Stop();
+        _rest.Start();
+    }
+
+    // Lets the waiting rows go a few at a time, in the background, until the pool is empty or the viewport moves.
+    private void Trim(int token)
+    {
+        if (token != _trim) return;
+        for (var i = 0; i < TrimBatch && _pool.First is { } oldest; i++) DropPooled(oldest.Value);
+        if (_pool.Count > 0) Dispatcher.UIThread.Post(() => Trim(token), DispatcherPriority.Background);
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        if (_pool.Count > 0) Rest();
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _trim++;
+        _rest?.Stop();
     }
 
     protected override Size ArrangeOverride(Size finalSize)

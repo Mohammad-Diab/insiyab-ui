@@ -43,7 +43,7 @@ internal sealed class CalendarTurn
     /// <summary>Where every day is now, or null when the calendar cannot turn (no layer, or motion is still).</summary>
     internal static Dictionary<DateTime, Was>? Snap(DateCalendar cal, CalendarTurn? running)
     {
-        if (cal.TurnLayer is not { } layer || Motion.IsStill(cal)) return null;
+        if (cal.TurnLayer is not { } layer || Motion.IsStill(cal) || !Seen.Now(cal)) return null;
         var map = new Dictionary<DateTime, Was>();
         foreach (var (day, btn) in cal.DayButtons)
         {

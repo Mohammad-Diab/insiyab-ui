@@ -169,8 +169,9 @@ public class MarkerFlightTests
         var third = (TabItem)tabs.ContainerFromIndex(2)!;
         var start = first.Bounds.Width;
         var span = third.Bounds.Right - first.Bounds.Left;
+        using var clock = new HeldClock();
         tabs.SelectedIndex = 2;
-        var samples = Sample(window, 800, () => face.IsVisible ? face.Width : double.NaN);
+        var samples = clock.Step(window, 800, 5, () => face.IsVisible ? face.Width : double.NaN);
         var widest = samples.Where(s => !double.IsNaN(s.Value)).MaxBy(s => s.Value);
         Assert.InRange(widest.Ms, 120, 380);
         Assert.InRange(widest.Value, start + 0.6 * (span - start), span + 0.5);

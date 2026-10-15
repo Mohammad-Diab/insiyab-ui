@@ -95,7 +95,7 @@ public class Alert : ContentControl
         var height = Bounds.Height;
         var exit = this.TryFindResource("InsTExit", ActualThemeVariant, out var t) && t is TimeSpan span ? span : TimeSpan.FromMilliseconds(180);
         var ease = this.TryFindResource("InsEase", ActualThemeVariant, out var e) && e is Easing found ? found : new SplineEasing(0.22, 1, 0.36, 1);
-        if (height > 0 && IsEffectivelyVisible)
+        if (height > 0 && IsEffectivelyVisible && Seen.Now(this))
         {
             var animation = new Animation
             {

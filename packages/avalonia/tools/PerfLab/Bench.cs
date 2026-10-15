@@ -374,6 +374,28 @@ internal sealed class Bench(MainWindow window, string dir)
         Add(section, name, "scroll range px", max);
     }
 
+    // Scrolls down unrecorded, then records only the way back up over rows that were just passed.
+    private async Task Revisit(string section, string name, ScrollViewer viewer, double speed, double distance)
+    {
+        Watchdog.Step(section + " " + name);
+        viewer.Offset = default;
+        await Wait(300);
+        var max = Math.Min(distance, Math.Max(0, viewer.Extent.Height - viewer.Viewport.Height));
+        var y = 0.0;
+        await new Recorder(window, _ =>
+        {
+            y = Math.Min(max, y + speed);
+            viewer.Offset = new Vector(viewer.Offset.X, y);
+        }).Run(8000, _ => y >= max);
+        var rec = new Recorder(window, _ =>
+        {
+            y = Math.Max(0, y - speed);
+            viewer.Offset = new Vector(viewer.Offset.X, y);
+        });
+        await rec.Run(8000, _ => y <= 0);
+        AddFrames(section, name, rec.Stats());
+    }
+
     private async Task Scrolls(string tag)
     {
         var section = "scroll" + tag;
@@ -394,6 +416,7 @@ internal sealed class Bench(MainWindow window, string dir)
         var table = window.PageContent!.GetVisualDescendants().OfType<Table>().First();
         var inner = table.GetVisualDescendants().OfType<ScrollViewer>().First();
         await Scroll(section, "table 1200 rows (inner)", inner, 40);
+        await Revisit(section, "table 1200 rows back up (revisit)", inner, 40, 2400);
 
         inner.Offset = default;
         await Wait(200);
@@ -475,12 +498,36 @@ internal sealed class Bench(MainWindow window, string dir)
         await Wait(1000);
         foreach (var to in new[] { "dark", "light", "dark", "light" })
         {
+            var apply = Stopwatch.StartNew();
+            ThemeToggle.Apply(to);
+            Add(section, "apply to " + to, "apply alone ms", apply.Elapsed.TotalMilliseconds);
+            await Frame(window);
+            await Wait(600);
+        }
+        foreach (var to in new[] { "dark", "light", "dark", "light" })
+        {
             var rec = new Recorder(window);
+            var applied = new TaskCompletionSource();
             var clock = Stopwatch.StartNew();
-            ThemeSweep.Run(window.DayNightToggle, () => ThemeToggle.Apply(to));
+            var appliedAt = 0.0;
+            ThemeSweep.Run(window.DayNightToggle, () =>
+            {
+                ThemeToggle.Apply(to);
+                appliedAt = clock.Elapsed.TotalMilliseconds;
+                applied.TrySetResult();
+            });
             var sync = clock.Elapsed.TotalMilliseconds;
+            async Task<double> Painted()
+            {
+                await applied.Task;
+                await Shown(window);
+                return clock.Elapsed.TotalMilliseconds;
+            }
+            var painted = Painted();
             await rec.Run(750);
             Add(section, "sweep to " + to, "click to first paint (sync) ms", sync);
+            Add(section, "sweep to " + to, "click to theme applied ms", appliedAt);
+            Add(section, "sweep to " + to, "click to first paint ms", await painted);
             AddFrames(section, "sweep to " + to, rec.Stats());
             await Wait(500);
         }

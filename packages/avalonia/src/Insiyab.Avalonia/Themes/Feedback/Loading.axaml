@@ -19,8 +19,8 @@
         <Setter Property="Highlight" Value="{DynamicResource InsSkelHi}" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <!-- Running only while shown: a style with no condition shares one instance between controls, and Avalonia then holds every control it animated -->
-        <Style Selector="^[IsVisible=True]">
+        <!-- Running only while someone can see it: a style with a condition also keeps one instance per control -->
+        <Style Selector="^:ins-seen">
           <Style.Animations>
             <Animation Duration="0:0:1.8" IterationCount="Infinite" Easing="0.25,0.1,0.25,1">
               <KeyFrame Cue="0%">
@@ -65,8 +65,8 @@
         <Setter Property="Track" Value="{DynamicResource InsSpinnerTrack}" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <!-- Running only while shown: a style with no condition shares one instance between controls, and Avalonia then holds every control it animated -->
-        <Style Selector="^[IsVisible=True]">
+        <!-- Running only while someone can see it: a style with a condition also keeps one instance per control -->
+        <Style Selector="^:ins-seen">
           <Style.Animations>
             <Animation Duration="0:0:0.7" IterationCount="Infinite">
               <KeyFrame Cue="0%">

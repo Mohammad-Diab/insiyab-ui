@@ -97,7 +97,12 @@ public class ChartPlot : Control
         ClipToBounds = false;
     }
 
-    internal void Replay()
+    // Draws in when first seen; out of sight the clock stays stopped and the plot shows its end state.
+    internal void Replay() => Seen.WhenSeen(this, ReplayNow);
+
+    internal bool IsDrawing => _clock.IsRunning;
+
+    private void ReplayNow()
     {
         _fades.Clear();
         _clock.Restart();

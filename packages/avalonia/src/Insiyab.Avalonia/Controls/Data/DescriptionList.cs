@@ -2,6 +2,7 @@ using System.Collections.Specialized;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
+using Avalonia.LogicalTree;
 
 namespace Insiyab.Avalonia.Controls;
 
@@ -84,11 +85,13 @@ public class DescriptionList : Panel
 }
 
 /// <summary>One label and its value in a <see cref="DescriptionList"/>: the web's <c>&lt;div&gt;&lt;dt&gt;&lt;dd&gt;</c>. Class <c>num</c> keeps a figure in its own direction, starting where the other values start.</summary>
-[PseudoClasses(":stacked", ":grid")]
+[PseudoClasses(":stacked", ":grid", ":first", ":last")]
 public class DescriptionItem : ContentControl
 {
     public static readonly StyledProperty<object?> TermProperty =
         AvaloniaProperty.Register<DescriptionItem, object?>(nameof(Term));
+
+    private IChildIndexProvider? _siblings;
 
     /// <summary>The label: the web's <c>&lt;dt&gt;</c>.</summary>
     public object? Term { get => GetValue(TermProperty); set => SetValue(TermProperty, value); }
@@ -97,5 +100,30 @@ public class DescriptionItem : ContentControl
     {
         PseudoClasses.Set(":stacked", stacked);
         PseudoClasses.Set(":grid", grid);
+    }
+
+    // The first and last pair (:first, :last) are watched here: an :nth-child rule in the theme held a removed item through its parent.
+    protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToLogicalTree(e);
+        _siblings = ((ILogical)this).LogicalParent as IChildIndexProvider;
+        if (_siblings is not null) _siblings.ChildIndexChanged += OnSiblings;
+        Place();
+    }
+
+    protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromLogicalTree(e);
+        if (_siblings is not null) _siblings.ChildIndexChanged -= OnSiblings;
+        _siblings = null;
+    }
+
+    private void OnSiblings(object? sender, ChildIndexChangedEventArgs e) => Place();
+
+    private void Place()
+    {
+        var i = _siblings?.GetChildIndex(this) ?? -1;
+        PseudoClasses.Set(":first", i == 0);
+        PseudoClasses.Set(":last", i >= 0 && _siblings!.TryGetTotalCount(out var count) && i == count - 1);
     }
 }

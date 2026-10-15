@@ -9,6 +9,7 @@ using Avalonia.Media.Immutable;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>A highlight sweeping across a fill in the reading direction, the skeleton's and the indeterminate bar's <c>ins-skel</c> keyframes. <see cref="Phase"/> runs 0 to 1, animated by the theme every 1.8s: one of the two loops the library allows, as both mean waiting.</summary>
+[PseudoClasses(Seen.PseudoClass)]
 public class Shimmer : Control
 {
     public static readonly StyledProperty<IBrush?> BaseProperty =
@@ -29,7 +30,22 @@ public class Shimmer : Control
     public static readonly StyledProperty<double> FillWidthProperty =
         AvaloniaProperty.Register<Shimmer, double>(nameof(FillWidth), 1);
 
+    private IDisposable? _seen;
+
     static Shimmer() => AffectsRender<Shimmer>(BaseProperty, HighlightProperty, InsetProperty, PhaseProperty, CornerRadiusProperty, FillWidthProperty);
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        _seen ??= Seen.Track(this);
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _seen?.Dispose();
+        _seen = null;
+    }
 
     public IBrush? Base { get => GetValue(BaseProperty); set => SetValue(BaseProperty, value); }
 
@@ -102,6 +118,7 @@ public class Skeleton : Shimmer
 }
 
 /// <summary>A ring with one quadrant in the brand colour, turning: the web's <c>.ins-spinner</c> (named apart from Avalonia's own <c>Spinner</c>). Class <c>sm</c>. Inside a button it takes the button's text colour. Clocks do not mirror, so neither does it.</summary>
+[PseudoClasses(Seen.PseudoClass)]
 public class LoadingSpinner : Control
 {
     public static readonly StyledProperty<double> AngleProperty =
@@ -127,7 +144,22 @@ public class LoadingSpinner : Control
 
     static LoadingSpinner() => AffectsRender<LoadingSpinner>(AngleProperty, ThicknessProperty, ArcLengthProperty, ArcProperty, TrackProperty, TrackOpacityProperty, ForegroundProperty);
 
+    private IDisposable? _seen;
+
     public LoadingSpinner() => SetCurrentValue(FlowDirectionProperty, FlowDirection.LeftToRight);
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        _seen ??= Seen.Track(this);
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _seen?.Dispose();
+        _seen = null;
+    }
 
     /// <summary>The turn, in degrees; the theme spins it.</summary>
     public double Angle { get => GetValue(AngleProperty); set => SetValue(AngleProperty, value); }

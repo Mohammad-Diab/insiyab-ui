@@ -21,6 +21,14 @@ public class ThemeSweepTests
     private static Image? Picture(Window window) =>
         window.GetVisualDescendants().OfType<Image>().FirstOrDefault(i => i.Name == "PART_ThemeSweep");
 
+    // The picture is drawn on the render thread, so the theme changes a frame or two after the click.
+    private static void WaitFor(Func<bool> condition, int milliseconds = 4000)
+    {
+        var clock = System.Diagnostics.Stopwatch.StartNew();
+        while (!condition() && clock.ElapsedMilliseconds < milliseconds) Settle(40);
+        Settle(40);
+    }
+
     private static (Window, Button) Rig(FlowDirection dir = FlowDirection.LeftToRight)
     {
         var origin = new Button { Content = "الوضع", HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(0, 20, 20, 0) };
@@ -31,7 +39,7 @@ public class ThemeSweepTests
         return (window, origin);
     }
 
-    // Held, at half way: switching to light the new palette has opened around the origin; switching to dark the old picture is a circle closing onto it.
+    // Held, at half way, once the picture has arrived and the theme is applied: switching to light the new palette has opened around the origin; switching to dark the old picture is a circle closing onto it.
     [AvaloniaTheory]
     [InlineData("Light")]
     [InlineData("Dark")]
@@ -45,6 +53,7 @@ public class ThemeSweepTests
             var applied = false;
             ThemeSweep.Held = true;
             ThemeSweep.Run(origin, () => { applied = true; Application.Current!.RequestedThemeVariant = to == "Dark" ? ThemeVariant.Dark : ThemeVariant.Light; });
+            WaitFor(() => applied);
             Assert.True(applied);
             var picture = Picture(window);
             Assert.NotNull(picture);
@@ -70,10 +79,14 @@ public class ThemeSweepTests
     [AvaloniaTheory]
     [InlineData("Light", "rtl", 1.0)]
     [InlineData("Light", "ltr", 1.0)]
+    [InlineData("Light", "rtl", 1.25)]
+    [InlineData("Light", "ltr", 1.25)]
     [InlineData("Light", "rtl", 1.5)]
     [InlineData("Light", "ltr", 1.5)]
     [InlineData("Dark", "rtl", 1.0)]
     [InlineData("Dark", "ltr", 1.0)]
+    [InlineData("Dark", "rtl", 1.25)]
+    [InlineData("Dark", "ltr", 1.25)]
     [InlineData("Dark", "rtl", 1.5)]
     [InlineData("Dark", "ltr", 1.5)]
     public void Mid_sweep_the_screen_shows_each_frame_on_its_side_of_the_circle(string to, string dir, double scale)
@@ -112,6 +125,7 @@ public class ThemeSweepTests
                 marker.Background = Brushes.Blue;
                 near.Background = Brushes.Blue;
             });
+            WaitFor(() => Picture(window) is not null);
             Settle(30);
             using var frame = window.CaptureRenderedFrame()!;
             if (to == "Light")
@@ -191,8 +205,34 @@ public class ThemeSweepTests
         try
         {
             var (window, origin) = Rig();
-            ThemeSweep.Run(origin, () => Application.Current!.RequestedThemeVariant = ThemeVariant.Dark);
-            ThemeSweep.Run(origin, () => Application.Current!.RequestedThemeVariant = ThemeVariant.Light);
+            var applies = new List<string>();
+            ThemeSweep.Run(origin, () => { applies.Add("dark"); Application.Current!.RequestedThemeVariant = ThemeVariant.Dark; });
+            WaitFor(() => Picture(window) is not null);
+            ThemeSweep.Run(origin, () => { applies.Add("light"); Application.Current!.RequestedThemeVariant = ThemeVariant.Light; });
+            WaitFor(() => applies.Count == 2);
+            WaitFor(() => Picture(window) is not null);
+            Assert.Equal(["dark", "light"], applies);
+            Assert.Single(window.GetVisualDescendants().OfType<Image>(), i => i.Name == "PART_ThemeSweep");
+            Settle(900);
+            Assert.Null(Picture(window));
+        }
+        finally { Application.Current!.RequestedThemeVariant = ThemeVariant.Light; }
+    }
+
+    [AvaloniaFact]
+    public void A_second_click_while_the_picture_is_pending_applies_the_first_theme_at_once()
+    {
+        try
+        {
+            var (window, origin) = Rig();
+            var applies = new List<string>();
+            ThemeSweep.Run(origin, () => { applies.Add("dark"); Application.Current!.RequestedThemeVariant = ThemeVariant.Dark; });
+            Assert.Empty(applies);
+            ThemeSweep.Run(origin, () => { applies.Add("light"); Application.Current!.RequestedThemeVariant = ThemeVariant.Light; });
+            Assert.Equal(["dark"], applies);
+            WaitFor(() => applies.Count == 2);
+            Assert.Equal(["dark", "light"], applies);
+            WaitFor(() => Picture(window) is not null);
             Assert.Single(window.GetVisualDescendants().OfType<Image>(), i => i.Name == "PART_ThemeSweep");
             Settle(900);
             Assert.Null(Picture(window));

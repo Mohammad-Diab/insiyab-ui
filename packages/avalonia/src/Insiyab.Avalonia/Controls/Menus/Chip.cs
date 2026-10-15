@@ -126,7 +126,7 @@ public class Chip : ContentControl
     private void Leave()
     {
         if (Parent is not Panel panel) return;
-        if (!this.IsAttachedToVisualTree() || Motion.IsStill(this) || Bounds.Width <= 0)
+        if (!this.IsAttachedToVisualTree() || Motion.IsStill(this) || !Seen.Now(this) || Bounds.Width <= 0)
         {
             panel.Children.Remove(this);
             return;
@@ -183,7 +183,7 @@ public class Chip : ContentControl
     /// <summary>The arrival a chip makes when it is added: it drops in, grows and straightens.</summary>
     public void PlayEnter()
     {
-        if (Motion.IsStill(this)) return;
+        if (Motion.IsStill(this) || !Seen.Now(this)) return;
         TransformOperationsAnimator.Ensure();
         var turn = FlowDirection == FlowDirection.RightToLeft ? 8 : -8;
         var enter = new Animation
@@ -216,7 +216,7 @@ public class Chip : ContentControl
     /// <summary>Puts <paramref name="chip"/> into <paramref name="panel"/> at <paramref name="index"/> as the web's chipEnter does: its neighbours glide aside and it drops in.</summary>
     internal static void Arrive(Panel panel, int index, Chip chip)
     {
-        var moving = panel.IsAttachedToVisualTree() && !Motion.IsStill(panel);
+        var moving = panel.IsAttachedToVisualTree() && !Motion.IsStill(panel) && Seen.Now(panel);
         var places = moving ? Places(panel, null) : [];
         panel.Children.Insert(Math.Clamp(index, 0, panel.Children.Count), chip);
         if (!moving) return;

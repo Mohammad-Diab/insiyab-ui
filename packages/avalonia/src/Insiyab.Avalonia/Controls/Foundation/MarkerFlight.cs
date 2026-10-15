@@ -53,10 +53,10 @@ internal sealed class MarkerFlight
         return (lo + (b.Start - lo) * q, hi - lo + (b.Length - (hi - lo)) * q);
     }
 
-    // Starts a flight where the owner is shown, placing the bar every frame; null when motion is still there or there is nothing to fly.
+    // Starts a flight where the owner is seen, placing the bar every frame; null when motion is still there, nobody can see the owner or there is nothing to fly.
     public static MarkerFlight? Run(Visual owner, (double Start, double Length) a, (double Start, double Length) b, Action<double, double> place, Action? landed = null)
     {
-        if (Motion.IsStill(owner) || TopLevel.GetTopLevel(owner) is not { } top || a.Length <= 0 || b.Length <= 0) return null;
+        if (Motion.IsStill(owner) || !Seen.Now(owner) || TopLevel.GetTopLevel(owner) is not { } top || a.Length <= 0 || b.Length <= 0) return null;
         var flight = new MarkerFlight(a, b, place, landed);
         flight.Set(0);
         // Frames stop arriving when the window is hidden, so the flight also lands on a timer.
