@@ -43,14 +43,24 @@ internal sealed class SwatchRing
         ring.DetachedFromVisualTree += (_, _) => Land();
     }
 
-    /// <summary>Follows a swatch's place in the row, so the ring stays on it when the row is laid out or resized.</summary>
+    /// <summary>Follows a swatch's place in the row, so the ring stays on it when the row is laid out or resized, and grows with it while it is hovered.</summary>
     public void Watch(Control swatch) =>
         swatch.PropertyChanged += (_, e) =>
         {
-            if (e.Property != Visual.BoundsProperty || swatch != _swatch || Target(swatch) is not { } to) return;
+            if (swatch != _swatch) return;
+            if (e.Property == Visual.RenderTransformProperty && !_flying && _ring.Opacity > 0)
+            {
+                _scale = Scale(swatch);
+                _ring.RenderTransform = Transform(_at, _turn, _scale);
+                return;
+            }
+            if (e.Property != Visual.BoundsProperty || Target(swatch) is not { } to) return;
             Stop();
             Place(to, _turn);
         };
+
+    // The swatch's own size against its rest, which grows on hover.
+    private static double Scale(Control? swatch) => swatch?.RenderTransform?.Value.M11 ?? 1;
 
     /// <summary>Marks this swatch, or none: the ring flies there from the swatch it marked, unless it is shown for the first time or motion is still.</summary>
     public void Mark(Control? swatch)
@@ -81,8 +91,8 @@ internal sealed class SwatchRing
     {
         _at = at;
         _turn = Math.Round(turn / 90) * 90 % 360;
-        _scale = 1;
-        _ring.RenderTransform = Transform(at, _turn, 1);
+        _scale = Scale(_swatch);
+        _ring.RenderTransform = Transform(at, _turn, _scale);
         _ring.Opacity = 1;
     }
 
@@ -128,7 +138,7 @@ internal sealed class SwatchRing
             var k = Spring.Ease(Math.Clamp(ms / Flight, 0, 1));
             _at = new Point(from.X + dx * k, from.Y + dy * k);
             _turn = turn0 + (turn1 - turn0) * k;
-            _scale = ms < Flight ? scale0 + (1.12 - scale0) * k : 1.12 - 0.12 * Out.Ease((ms - Flight) / Settle);
+            _scale = ms < Flight ? scale0 + (1.12 - scale0) * k : 1.12 - (1.12 - Scale(swatch)) * Out.Ease((ms - Flight) / Settle);
             _ring.RenderTransform = Transform(_at, _turn, _scale);
             if (face is not null) face.RenderTransform = Pop(ms - PopFrom) is var p && p != 1 ? Transform(default, 0, p) : null;
             top.RequestAnimationFrame(Frame);

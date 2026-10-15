@@ -4,9 +4,11 @@ using Avalonia.Headless;
 using Avalonia.Headless.XUnit;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Media.Transformation;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using Insiyab.Avalonia.Brand;
 using Insiyab.Avalonia.Controls;
 using Insiyab.Avalonia.Gallery;
 using ShapePath = Avalonia.Controls.Shapes.Path;
@@ -255,5 +257,36 @@ public class SwatchMarkTests
             SwatchRing.Now = real;
             InsiyabTheme.SetPrimary(InsiyabTheme.DefaultPrimary);
         }
+    }
+
+    [AvaloniaFact]
+    public void The_ring_grows_with_its_swatch_while_it_is_hovered()
+    {
+        try
+        {
+            var (w, swatches, ring) = OpenCard(FlowDirection.RightToLeft, ThemeVariant.Light);
+            var chosen = swatches[0];
+            chosen.RenderTransform = TransformOperations.Parse("scale(1.12)");
+            Settle(400);
+            Assert.Equal(1.12, ScaleOf(chosen), 2);
+            Assert.Equal(ScaleOf(chosen), ScaleOf(ring), 3);
+            chosen.ClearValue(Visual.RenderTransformProperty);
+            Settle(400);
+            Assert.Equal(1, ScaleOf(ring), 3);
+        }
+        finally { InsiyabTheme.SetPrimary(InsiyabTheme.DefaultPrimary); }
+    }
+
+    [AvaloniaFact]
+    public void On_dark_the_swatches_show_the_shade_the_brand_takes_there()
+    {
+        try
+        {
+            var (_, swatches, ring) = OpenCard(FlowDirection.RightToLeft, ThemeVariant.Dark);
+            foreach (var swatch in swatches)
+                Assert.Equal(BrandDerivation.Derive((Color)swatch.Tag!, true).PrimaryMid, ((SolidColorBrush)swatch.Background!).Color);
+            Assert.Equal(((SolidColorBrush)swatches[0].Background!).Color, ColorOf(ring.Stroke));
+        }
+        finally { InsiyabTheme.SetPrimary(InsiyabTheme.DefaultPrimary); }
     }
 }
