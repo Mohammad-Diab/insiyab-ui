@@ -1,4 +1,6 @@
+using System.Collections.Specialized;
 using Avalonia;
+using Avalonia.Automation.Peers;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Threading;
@@ -6,7 +8,7 @@ using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The rows of a <see cref="Table"/>, one under another. Only the rows in or near view are in the tree, so a table of thousands of rows costs what a few screenfuls do; the rest keep their place and height. Rows just scrolled past wait hidden until the scroll rests, so scrolling back finds them styled.</summary>
+/// <summary>The rows of a <see cref="Table"/>, one under another. Only the rows in or near view are in the tree, so a table of thousands of rows costs what a few screenfuls do; the rest keep their place and height. Rows just scrolled past wait hidden until the scroll rests, so scrolling back finds them styled; the rows sit in small blocks, so a row coming or going costs a frame only its block's rows.</summary>
 public class TableRowsPanel : Panel, IChildIndexProvider
 {
     // Rows past the view on each side, as a share of the view's height, that stay in the tree so a scroll finds them ready.
@@ -16,6 +18,9 @@ public class TableRowsPanel : Panel, IChildIndexProvider
     private const int PoolFloor = 32;
     private const int RestMs = 500;
     private const int TrimBatch = 8;
+
+    // A row added to or taken from a visual's children makes Avalonia relink all its siblings on the next frame, so the rows sit in blocks of this many and only one block is relinked.
+    private const int BlockSize = 8;
 
     private List<TableRow> _rows = [];
     private readonly Dictionary<TableRow, int> _index = [];
@@ -33,6 +38,10 @@ public class TableRowsPanel : Panel, IChildIndexProvider
     private int _from;
     private int _to;
     private TableRow? _kept;
+    private readonly Dictionary<int, Block> _blocks = [];
+    private readonly Dictionary<Control, Block> _home = [];
+    private readonly Stack<Block> _spare = [];
+    private bool _sizing;
     private EventHandler<ChildIndexChangedEventArgs>? _indexChanged;
 
     public TableRowsPanel()
@@ -184,6 +193,9 @@ public class TableRowsPanel : Panel, IChildIndexProvider
             else pooled |= Pool(row);
         }
         if (pooled) Rest();
+        _sizing = true;
+        foreach (var block in _blocks.Values) block.Measure(availableSize);
+        _sizing = false;
         foreach (var row in fresh) Realized?.Invoke(row);
         return new Size(width, _tops[_rows.Count]);
     }
@@ -287,13 +299,84 @@ public class TableRowsPanel : Panel, IChildIndexProvider
         _rest?.Stop();
     }
 
+    // The rows are the panel's logical children, so they keep their styles, but their visual parents are the blocks.
+    protected override void ChildrenChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Move) LogicalChildren.MoveRange(e.OldStartingIndex, e.OldItems!.Count, e.NewStartingIndex);
+        else
+        {
+            if (e.OldItems?.OfType<Control>().ToList() is { } gone)
+            {
+                LogicalChildren.RemoveAll(gone);
+                foreach (var child in gone) Unplace(child);
+            }
+            if (e.NewItems?.OfType<Control>().ToList() is { } added)
+            {
+                LogicalChildren.InsertRange(e.NewStartingIndex, added);
+                foreach (var child in added) Place(child);
+            }
+        }
+        InvalidateMeasure();
+    }
+
+    // A row goes to the block of its place in the table, or to a spare one; blocks are never taken out, so the panel's own children stay put while rows come and go.
+    private void Place(Control child)
+    {
+        var key = child is TableRow row && _index.TryGetValue(row, out var i) ? i / BlockSize : -1;
+        if (!_blocks.TryGetValue(key, out var block))
+        {
+            if (!_spare.TryPop(out block))
+            {
+                block = new Block(this);
+                ((ISetInheritanceParent)block).SetParent(this);
+                VisualChildren.Add(block);
+            }
+            block.Key = key;
+            _blocks[key] = block;
+        }
+        block.Hold(child);
+        _home[child] = block;
+    }
+
+    private void Unplace(Control child)
+    {
+        if (!_home.Remove(child, out var block)) return;
+        block.Let(child);
+        if (block.Count > 0) return;
+        _blocks.Remove(block.Key);
+        _spare.Push(block);
+    }
+
     protected override Size ArrangeOverride(Size finalSize)
     {
+        foreach (var block in _blocks.Values) block.Arrange(new Rect(finalSize));
         foreach (var row in _realized)
         {
             var i = _index[row];
             row.Arrange(new Rect(0, _tops[i], finalSize.Width, HeightOf(row)));
         }
         return finalSize;
+    }
+
+    // A few rows' visual parent, over the whole panel; the panel measures and places the rows itself, and hears from a block only when a row changed size outside its layout.
+    private sealed class Block(TableRowsPanel owner) : Control
+    {
+        public int Key;
+
+        public int Count => VisualChildren.Count;
+
+        public void Hold(Control child) => VisualChildren.Add(child);
+
+        public void Let(Control child) => VisualChildren.Remove(child);
+
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            if (!owner._sizing) owner.InvalidateMeasure();
+            return default;
+        }
+
+        protected override Size ArrangeOverride(Size finalSize) => finalSize;
+
+        protected override AutomationPeer OnCreateAutomationPeer() => new NoneAutomationPeer(this);
     }
 }

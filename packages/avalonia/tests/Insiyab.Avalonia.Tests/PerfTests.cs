@@ -95,6 +95,25 @@ public class PerfTests
     }
 
     [AvaloniaFact]
+    public void A_row_coming_or_going_relinks_at_most_a_block_of_eight_rows()
+    {
+        var table = BigTable(300);
+        Show(table, width: 600, height: 500);
+        Settle(200);
+        var scroll = Part<ScrollViewer>(table, "PART_Scroll");
+        var panel = Part<TableRowsPanel>(table, "PART_Rows");
+        for (var i = 1; i <= 4; i++)
+        {
+            scroll.Offset = new Vector(0, i * scroll.Viewport.Height / 2);
+            Settle(50);
+            var rows = panel.Children.OfType<TableRow>().ToList();
+            Assert.Contains(rows, r => !r.IsVisible);
+            Assert.Equal(rows.Count, table.GetVisualDescendants().OfType<TableRow>().Count());
+            Assert.All(rows, r => Assert.InRange(r.GetVisualParent()!.GetVisualChildren().Count(), 1, 8));
+        }
+    }
+
+    [AvaloniaFact]
     public void Hidden_rows_leave_the_tree_once_the_scroll_rests()
     {
         var table = BigTable(300);
