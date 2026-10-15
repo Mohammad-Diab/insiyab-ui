@@ -1,0 +1,44 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <!-- A window that is not the active one: the parts inside rows and the title bar; the rows themselves are in their own themes. Transitions come first, so the switch never fades -->
+
+  <!-- A list row's title: the selected row's brand goes back to the text colour -->
+  <Style Selector="TextBlock.list-title[(ins|WindowActivity.IsInactive)=True]">
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+
+  <!-- The current sidebar link's icon; the hover spring keeps its ease -->
+  <Style Selector="ListBox.shell-nav ListBoxItem:selected ins|Icon[(ins|WindowActivity.IsInactive)=True]">
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+      </Transitions>
+    </Setter>
+    <Setter Property="Foreground" Value="{DynamicResource InsToneMute}" />
+  </Style>
+
+  <!-- The palette's highlighted row, the one Enter would choose, and its icon -->
+  <Style Selector="Border.palette-item.active[(ins|WindowActivity.IsInactive)=True]">
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
+    <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+  <Style Selector="ins|Icon.palette-ico[(ins|WindowActivity.IsInactive)=True]">
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+  </Style>
+
+  <!-- The title bar's text dims: the page title and the app's name; the brand mark keeps its own colours -->
+  <Style Selector="TextBlock.shell-title[(ins|WindowActivity.IsInactive)=True]">
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+  </Style>
+  <Style Selector="Border.island.brand[(ins|WindowActivity.IsInactive)=True], :is(ContentControl).island.brand[(ins|WindowActivity.IsInactive)=True]">
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText3}" />
+  </Style>
+
+</Styles>

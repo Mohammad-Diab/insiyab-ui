@@ -327,6 +327,15 @@
             <Setter Property="RenderTransform" Value="scaleY(1)" />
           </Style>
         </Style>
+        <!-- In a window that is not the active one the selection turns grey, as desktop lists do -->
+        <Style Selector="^:selected[(ins|WindowActivity.IsInactive)=True]">
+          <Style Selector="^ /template/ :is(Border)#PART_Tint">
+            <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Marker">
+            <Setter Property="Background" Value="{DynamicResource InsToneMute}" />
+          </Style>
+        </Style>
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type ins:TableCell}" TargetType="ins:TableCell">

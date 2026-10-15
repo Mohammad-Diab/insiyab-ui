@@ -13,6 +13,7 @@ public partial class InsiyabTheme : Styles
         OnLoadedBrand();
         OnLoadedFrost();
         Controls.Motion.Register();
+        Controls.WindowActivity.Register();
         Controls.TipKeyboard.Register();
     }
 

@@ -382,6 +382,18 @@
           </Style>
 
         </Style>
+        <!-- In a window that is not the active one the current link loses the brand at once; the hover nudge keeps its ease -->
+        <Style Selector="^:selected[(ins|WindowActivity.IsInactive)=True]">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          <Style Selector="^ /template/ :is(Border)#PART_Marker">
+            <Setter Property="Background" Value="{DynamicResource InsToneMute}" />
+          </Style>
+        </Style>
         <!-- A group heading inside the list: not a link, never selected -->
         <Style Selector="^.shell-group">
           <Setter Property="IsEnabled" Value="False" />

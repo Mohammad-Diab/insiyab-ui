@@ -532,6 +532,8 @@ public static class Tree
         {
             if (TopLevel.GetTopLevel(tree)?.FocusManager?.GetFocusedElement() is not null) return;
             if (!tree.IsEffectivelyVisible || tree.GetValue(CurrentProperty) is null) return;
+            // The window lost the keyboard to another window, not a recycled row: activation gives the row its focus back.
+            if (WindowActivity.GetIsInactive(tree)) return;
             tree.SetValue(ParkedProperty, true);
             if (!tree.Focusable)
             {
