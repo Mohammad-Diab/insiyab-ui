@@ -292,7 +292,7 @@ public class Notify : ItemsControl
     // One short shake of the bell for a notification that has just arrived.
     private void Ring()
     {
-        if (_bell?.Content is not Control bell) return;
+        if (_bell?.Content is not Control bell || Motion.IsStill(bell) || !Seen.Now(bell)) return;
         var keys = new[] { 0.0, 14, -12, 8, -4, 0 };
         var animation = new Animation { Duration = TimeSpan.FromMilliseconds(650), Easing = new SineEaseInOut() };
         for (var i = 0; i < keys.Length; i++)

@@ -70,6 +70,8 @@
         </Style>
         <Style Selector="^:busy /template/ ins|LoadingSpinner#PART_Spinner">
           <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:busy /template/ ins|LoadingSpinner#PART_Spinner:ins-seen">
           <Style.Animations>
             <Animation Duration="0:0:0.7" IterationCount="Infinite">
               <KeyFrame Cue="0%">

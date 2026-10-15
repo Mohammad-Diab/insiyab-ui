@@ -50,7 +50,8 @@ public class PerfTests
         var last = table.DisplayedRows[^1];
         Assert.Same(last, table.CurrentRow);
         Assert.True(last.IsAttachedToVisualTree());
-        Assert.False(table.DisplayedRows[0].IsAttachedToVisualTree());
+        var first = table.DisplayedRows[0];
+        Assert.False(first.IsAttachedToVisualTree() && first.IsVisible);
         var scroll = Part<ScrollViewer>(table, "PART_Scroll");
         var bottom = last.TranslatePoint(new Point(0, last.Bounds.Height), scroll)!.Value.Y;
         Assert.True(bottom <= scroll.Viewport.Height + 1, $"last row ends at {bottom}, view is {scroll.Viewport.Height}");
@@ -64,12 +65,117 @@ public class PerfTests
         var scroll = Part<ScrollViewer>(table, "PART_Scroll");
         scroll.Offset = new Vector(0, 3000);
         Settle(300);
-        var shown = table.GetVisualDescendants().OfType<TableRow>().ToList();
+        var shown = table.GetVisualDescendants().OfType<TableRow>().Where(r => r.IsVisible).ToList();
         Assert.NotEmpty(shown);
         var all = table.DisplayedRows.ToList();
         Assert.DoesNotContain(all[0], shown);
         foreach (var row in shown)
             Assert.Equal(all.IndexOf(row) % 2 == 1, Part<Border>(row, "PART_Tint").Background is not null);
+    }
+
+    private static int Hidden(Table table) => Part<TableRowsPanel>(table, "PART_Rows").Children.OfType<TableRow>().Count(r => !r.IsVisible);
+
+    [AvaloniaFact]
+    public void Rows_scrolled_past_come_back_without_leaving_the_tree()
+    {
+        var table = BigTable(300);
+        Show(table, width: 600, height: 500);
+        Settle(200);
+        var scroll = Part<ScrollViewer>(table, "PART_Scroll");
+        var detached = 0;
+        foreach (var row in table.DisplayedRows) row.DetachedFromVisualTree += (_, _) => detached++;
+        scroll.Offset = new Vector(0, scroll.Viewport.Height);
+        Settle(100);
+        Assert.True(Hidden(table) > 0, "rows scrolled past wait hidden");
+        scroll.Offset = default;
+        Settle(100);
+        Assert.Equal(0, detached);
+        Assert.Contains(table.DisplayedRows[0], Part<TableRowsPanel>(table, "PART_Rows").Children);
+        Assert.True(table.DisplayedRows[0].IsVisible);
+    }
+
+    [AvaloniaFact]
+    public void Hidden_rows_leave_the_tree_once_the_scroll_rests()
+    {
+        var table = BigTable(300);
+        Show(table, width: 600, height: 500);
+        Settle(200);
+        var scroll = Part<ScrollViewer>(table, "PART_Scroll");
+        var first = table.DisplayedRows[0];
+        scroll.Offset = new Vector(0, scroll.Viewport.Height * 2);
+        Settle(100);
+        Assert.True(Hidden(table) > 0);
+        Assert.True(first.IsAttachedToVisualTree());
+        Settle(900);
+        Assert.Equal(0, Hidden(table));
+        Assert.False(first.IsAttachedToVisualTree());
+        Assert.True(first.IsVisible);
+        Assert.Equal(Part<TableRowsPanel>(table, "PART_Rows").Children.Count, table.GetVisualDescendants().OfType<TableRow>().Count());
+        scroll.Offset = default;
+        Settle(200);
+        Assert.True(first.IsAttachedToVisualTree());
+        Assert.True(first.Bounds.Height > 10, $"row came back {first.Bounds.Height} high");
+    }
+
+    [AvaloniaFact]
+    public void The_waiting_rows_never_pass_their_cap()
+    {
+        var table = BigTable(2000);
+        Show(table, width: 600, height: 500);
+        Settle(200);
+        var scroll = Part<ScrollViewer>(table, "PART_Scroll");
+        var panel = Part<TableRowsPanel>(table, "PART_Rows");
+        var most = 0;
+        for (var i = 1; i <= 60; i++)
+        {
+            scroll.Offset = new Vector(0, i * 90);
+            Settle(20);
+            var rows = panel.Children.OfType<TableRow>().ToList();
+            var hidden = rows.Count(r => !r.IsVisible);
+            most = Math.Max(most, hidden);
+            Assert.True(hidden <= Math.Max(32, 2 * (rows.Count - hidden)), $"{hidden} waiting beside {rows.Count - hidden} shown");
+        }
+        Assert.True(most > 8, $"at most {most} rows waited");
+    }
+
+    [AvaloniaFact]
+    public void A_sort_moves_only_rows_in_view()
+    {
+        var table = BigTable(300);
+        Show(table, width: 600, height: 500);
+        Settle(200);
+        var scroll = Part<ScrollViewer>(table, "PART_Scroll");
+        scroll.Offset = new Vector(0, scroll.Viewport.Height);
+        Settle(100);
+        var panel = Part<TableRowsPanel>(table, "PART_Rows");
+        var waiting = panel.Children.OfType<TableRow>().Where(r => !r.IsVisible).ToList();
+        Assert.NotEmpty(waiting);
+        table.Sort(table.Columns[0], SortDirection.Descending);
+        static bool Moved(Control r) => r.RenderTransform is { } t && !t.Value.IsIdentity;
+        Assert.All(waiting, r => Assert.False(Moved(r), "a hidden row was moved"));
+        Assert.Contains(panel.Children.OfType<TableRow>(), r => r.IsVisible && Moved(r));
+    }
+
+    [AvaloniaFact]
+    public void A_row_back_from_waiting_is_pinned_with_the_frozen_columns()
+    {
+        var table = BigTable(300);
+        table.FrozenColumns = 1;
+        table.TableMinWidth = 1000;
+        Show(table, width: 600, height: 500);
+        Settle(200);
+        var scroll = Part<ScrollViewer>(table, "PART_Scroll");
+        var first = table.DisplayedRows[0];
+        scroll.Offset = new Vector(0, scroll.Viewport.Height);
+        Settle(100);
+        Assert.False(first.IsVisible, "the first row waits hidden");
+        scroll.Offset = new Vector(150, scroll.Offset.Y);
+        Settle(100);
+        scroll.Offset = new Vector(150, 0);
+        Settle(100);
+        Assert.True(first.IsVisible);
+        Assert.Equal(150, Assert.IsType<TranslateTransform>(first.Cells[0].RenderTransform).X, 0);
+        Assert.Null(first.Cells[1].RenderTransform);
     }
 
     [AvaloniaFact]

@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
@@ -45,16 +46,23 @@ public static class Entrance
     private static readonly Stopwatch s_clock = Stopwatch.StartNew();
     private static readonly HashSet<TopLevel> s_frames = [];
 
+    // For tests: the milliseconds every entrance is timed by, which a test can hold and step.
+    internal static Func<double> Now { get; set; } = () => s_clock.Elapsed.TotalMilliseconds;
+
     // One element's entrance: from-values that ease to rest (opacity 1, no offset, scale 1) after a delay.
-    private sealed class Arrival(Control target, double start, double delay, double duration, Easing easing, double opacity, double x, double y, double scale)
+    private sealed class Arrival(Control target, double delay, double duration, Easing easing, double opacity, double x, double y, double scale)
     {
         public readonly Control Target = target;
         private IDisposable? _opacity;
         private IDisposable? _transform;
 
-        public bool Step(double now)
+        // Timed from its first frame, as a CSS animation is, so a slow first layout or render never eats the motion.
+        private double _start = double.NaN;
+
+        public bool Step(double now, bool frame = true)
         {
-            var t = now - start - delay;
+            if (frame && double.IsNaN(_start)) _start = now;
+            var t = double.IsNaN(_start) ? -delay : now - _start - delay;
             var p = t <= 0 ? 0 : t >= duration ? 1 : easing.Ease(t / duration);
             if (t >= duration)
             {
@@ -124,11 +132,21 @@ public static class Entrance
         if (sender is Control c) Run(c);
     }
 
-    /// <summary>Runs one entrance on <paramref name="c"/> now, whatever its <c>Effect</c>.</summary>
-    public static void Play(Control c, EntranceEffect effect) => Play(c, effect, 0);
+    /// <summary>Runs one entrance on <paramref name="c"/> now, whatever its <c>Effect</c>; out of sight it waits and runs when the element is first seen.</summary>
+    public static void Play(Control c, EntranceEffect effect)
+    {
+        if (Motion.IsStill(c)) PlayNow(c, effect, 0);
+        else Seen.WhenSeen(c, () => PlayNow(c, effect, 0));
+    }
 
-    // The same, starting after delay ms: the table's rows arrive one after another.
+    // The same, starting after delay ms: the table's rows arrive one after another, and a row out of view simply appears.
     internal static void Play(Control c, EntranceEffect effect, double delay)
+    {
+        if (c.IsAttachedToVisualTree() && Seen.Arranged(c) && !Seen.Now(c)) return;
+        PlayNow(c, effect, delay);
+    }
+
+    private static void PlayNow(Control c, EntranceEffect effect, double delay)
     {
         switch (effect)
         {
@@ -146,6 +164,13 @@ public static class Entrance
 
     private static void Run(Control c)
     {
+        if (!GetReveal(c) && GetEffect(c) == EntranceEffect.None) return;
+        if (Motion.IsStill(c)) RunNow(c);
+        else Seen.WhenSeen(c, () => RunNow(c));
+    }
+
+    private static void RunNow(Control c)
+    {
         if (GetReveal(c))
         {
             Play(c, 0, 400, s_ease, opacity: 0);
@@ -155,7 +180,7 @@ public static class Entrance
                 for (var i = 0; i < panel.Children.Count; i++)
                     Play(panel.Children[i], i < count ? i * step : 0, 400, s_ease, y: 12);
         }
-        Play(c, GetEffect(c));
+        PlayNow(c, GetEffect(c), 0);
     }
 
     // RTL mirrors the layout, so a negative x is the leading edge in both directions.
@@ -168,10 +193,10 @@ public static class Entrance
             s_running.Remove(c);
         }
         if (Motion.IsStill(c)) return;
-        var motion = new Arrival(c, s_clock.Elapsed.TotalMilliseconds, delay, duration, easing, opacity, x, y, scale);
+        var motion = new Arrival(c, delay, duration, easing, opacity, x, y, scale);
         s_running.AddOrUpdate(c, motion);
         s_active.Add(motion);
-        motion.Step(s_clock.Elapsed.TotalMilliseconds);
+        motion.Step(Now(), frame: false);
         RequestFrame(c);
     }
 
@@ -188,7 +213,7 @@ public static class Entrance
 
     private static void Tick()
     {
-        var now = s_clock.Elapsed.TotalMilliseconds;
+        var now = Now();
         for (var i = s_active.Count - 1; i >= 0; i--)
         {
             var motion = s_active[i];

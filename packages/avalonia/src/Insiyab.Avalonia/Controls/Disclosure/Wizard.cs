@@ -387,7 +387,7 @@ public class Wizard : ItemsControl
         PseudoClasses.Set(":last", to == panels.Count - 1);
         if (_body is not null) _body.Height = double.NaN;
 
-        var moves = animate && leaving != arrived && _body is not null && TopLevel.GetTopLevel(this) is not null && before > 0;
+        var moves = animate && leaving != arrived && _body is not null && TopLevel.GetTopLevel(this) is not null && before > 0 && Seen.Now(_body);
         if (_body is not null) _body.ClipToBounds = moves;
         var focus = _focusOnArrival;
         _focusOnArrival = false;

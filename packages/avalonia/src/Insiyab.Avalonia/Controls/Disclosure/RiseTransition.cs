@@ -3,6 +3,7 @@ using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Media.Transformation;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
@@ -20,7 +21,7 @@ public class RiseTransition : IPageTransition
         if (from is not null) from.IsVisible = false;
         if (to is null) return;
         to.IsVisible = true;
-        if (Motion.IsStill(to)) return;
+        if (Motion.IsStill(to) || (to.GetVisualParent() is { } host && !Seen.Now(host))) return;
         TransformOperationsAnimator.Ensure();
         var animation = new Animation
         {

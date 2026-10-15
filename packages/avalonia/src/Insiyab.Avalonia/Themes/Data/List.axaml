@@ -84,7 +84,7 @@
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^:nth-child(1) /template/ :is(Border)#PART_Divider">
+        <Style Selector="^:first /template/ :is(Border)#PART_Divider">
           <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:pointerover, ^:selected">

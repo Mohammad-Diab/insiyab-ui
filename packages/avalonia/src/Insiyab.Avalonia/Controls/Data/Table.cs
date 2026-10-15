@@ -376,9 +376,9 @@ public partial class Table : TemplatedControl
     }
 
     // A row added while the template is still being built is not in the tree yet, and an entrance needs its frames, so it starts when the row arrives there; a row out of view that arrives later, scrolled to, simply appears.
-    private static void Rise(TableRow row, double delay)
+    private void Rise(TableRow row, double delay)
     {
-        if (row.IsAttachedToVisualTree())
+        if (InView(row))
         {
             Entrance.Play(row, EntranceEffect.Rise, delay);
             return;
@@ -391,6 +391,9 @@ public partial class Table : TemplatedControl
         }
         row.AttachedToVisualTree += Attached;
     }
+
+    // Whether the row is in the tree and shown; the rows panel keeps rows it has just scrolled past in the tree, hidden.
+    private bool InView(TableRow row) => _rows is TableRowsPanel panel ? panel.InView(row) : row.IsAttachedToVisualTree();
 
     private string Word(string key)
     {
@@ -521,7 +524,7 @@ public partial class Table : TemplatedControl
     // A row's marker in the flight layer: 3px on its leading edge, inset 8px top and bottom.
     private Rect? MarkerSpan(TableRow row)
     {
-        if (_markerLayer is null || row.Bounds.Height <= 16 || row.TranslatePoint(new Point(0, 8), _markerLayer) is not { } p) return null;
+        if (_markerLayer is null || !InView(row) || row.Bounds.Height <= 16 || row.TranslatePoint(new Point(0, 8), _markerLayer) is not { } p) return null;
         return new Rect(p.X, p.Y, 3, row.Bounds.Height - 16);
     }
 
@@ -540,7 +543,7 @@ public partial class Table : TemplatedControl
         CurrentCell?.SetCurrent(true);
         ScrollIntoView(_current);
         // A row brought into the tree just now is placed by the next layout, so it is checked again once that has run.
-        if (_rows is TableRowsPanel && !_current.IsAttachedToVisualTree())
+        if (_rows is TableRowsPanel && !InView(_current))
         {
             var pending = _current;
             Dispatcher.UIThread.Post(() => { if (_current == pending) ScrollIntoView(pending); }, DispatcherPriority.Loaded);
@@ -957,7 +960,7 @@ public partial class Table : TemplatedControl
             var dy = before[row] - y;
             y += rowsPanel?.HeightOf(row) ?? row.Bounds.Height;
             // Only the rows in the tree move; the rest are out of view.
-            if (Math.Abs(dy) < 1 || (rowsPanel is not null && !row.IsAttachedToVisualTree())) continue;
+            if (Math.Abs(dy) < 1 || (rowsPanel is not null && !rowsPanel.InView(row))) continue;
             row.Transitions = null;
             row.RenderTransform = TransformOperations.Parse($"translateY({dy.ToString(CultureInfo.InvariantCulture)}px)");
             Dispatcher.UIThread.Post(() =>
@@ -1010,8 +1013,8 @@ public partial class Table : TemplatedControl
         // A scroll straight down moves no frozen cell, so the rows are left alone.
         if (n == _pinned && x == _pinX) return;
         Pin(_headCells.Children, n, x);
-        // Rows out of the tree are pinned when they come back.
-        foreach (var row in _rows is TableRowsPanel panel ? panel.Children.OfType<TableRow>() : _display) Pin(row.Cells, n, x);
+        // Rows out of the tree, or waiting hidden, are pinned when they come back.
+        foreach (var row in _rows is TableRowsPanel panel ? panel.Children.OfType<TableRow>().Where(r => !panel.Waiting(r)) : _display) Pin(row.Cells, n, x);
         _pinned = n;
         _pinX = x;
     }

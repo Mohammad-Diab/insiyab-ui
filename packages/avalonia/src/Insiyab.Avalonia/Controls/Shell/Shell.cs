@@ -220,13 +220,13 @@ public static class Shell
 
     private static void OnEnterAttached(object? sender, VisualTreeAttachmentEventArgs e)
     {
-        if (sender is Control c) Enter(c);
+        if (sender is Control c) Seen.WhenSeen(c, () => Enter(c));
     }
 
-    // A new page title while the island is on screen plays its entrance again.
+    // A new page title while the island is seen plays its entrance again.
     private static void Replay(Control island)
     {
-        if (TopLevel.GetTopLevel(island) is not null) Enter(island);
+        if (Seen.Now(island)) Enter(island);
     }
 
     private static void Enter(Control c)

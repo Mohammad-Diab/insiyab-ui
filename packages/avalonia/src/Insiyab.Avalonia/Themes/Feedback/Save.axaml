@@ -46,6 +46,8 @@
         </Style>
         <Style Selector="^:saving /template/ ctl|LoadingSpinner#PART_Spinner">
           <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:saving /template/ ctl|LoadingSpinner#PART_Spinner:ins-seen">
           <Style.Animations>
             <Animation Duration="0:0:0.7" IterationCount="Infinite">
               <KeyFrame Cue="0%">

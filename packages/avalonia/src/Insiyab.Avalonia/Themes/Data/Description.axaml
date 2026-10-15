@@ -30,14 +30,14 @@
             </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^:nth-child(1)">
+        <Style Selector="^:first">
           <Setter Property="Padding" Value="0,0,0,12" />
         </Style>
-        <Style Selector="^:nth-last-child(1)">
+        <Style Selector="^:last">
           <Setter Property="Padding" Value="0,12,0,0" />
           <Setter Property="BorderThickness" Value="0" />
         </Style>
-        <Style Selector="^:nth-child(1):nth-last-child(1)">
+        <Style Selector="^:first:last">
           <Setter Property="Padding" Value="0" />
         </Style>
         <Style Selector="^:stacked">

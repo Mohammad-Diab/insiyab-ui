@@ -160,6 +160,12 @@ internal sealed class DialogStack : Panel
     {
         var blur = _blur;
         if (blur is null) return;
+        if (!Seen.WindowShown(_top))
+        {
+            blur.Radius = to;
+            done?.Invoke();
+            return;
+        }
         var run = ++_blurRun;
         var easing = Motion.Ease(this);
         TimeSpan? start = null;
