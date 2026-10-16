@@ -6,6 +6,7 @@
     <RootNamespace>PerfLab</RootNamespace>
     <TrimmerSingleWarn>false</TrimmerSingleWarn>
     <ApplicationIcon>Assets\perflab.ico</ApplicationIcon>
+    <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,10 +16,13 @@
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Headless" Version="$(AvaloniaVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Insiyab.Avalonia\Insiyab.Avalonia.csproj" />
+    <ProjectReference Include="..\..\gallery\Insiyab.Avalonia.Gallery\Insiyab.Avalonia.Gallery.csproj" />
+    <TrimmerRootAssembly Include="Insiyab.Avalonia.Gallery" />
   </ItemGroup>
 
   <ItemGroup>

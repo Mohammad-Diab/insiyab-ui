@@ -4,13 +4,14 @@ namespace PerfLab;
 
 internal static class Program
 {
-    /// <summary>The command line: <c>--bench [report-dir]</c> runs the scenarios and exits; <c>--startup [file]</c> exits at the first frame and appends its time.</summary>
+    /// <summary>The command line: <c>--bench [report-dir]</c> runs the scenarios and exits; <c>--startup [file]</c> exits at the first frame and appends its time; <c>--headless [report-dir]</c> times page builds without a window (PageTimer).</summary>
     public static string[] Args { get; private set; } = [];
 
     [STAThread]
     public static int Main(string[] args)
     {
         Args = args;
+        if (Option("--headless") is { } headless) return PageTimer.Run(headless.Length > 0 ? headless : Path.Combine(AppContext.BaseDirectory, "headless"));
         var builder = AppBuilder.Configure<App>().UsePlatformDetect();
         // Diagnostics: --comp WinUIComposition|DirectComposition|LowLatencyDxgiSwapChain|RedirectionSurface and --render AngleEgl|Wgl|Software try the window's other drawing paths.
         if (Option("--comp") is { Length: > 0 } || Option("--render") is { Length: > 0 })

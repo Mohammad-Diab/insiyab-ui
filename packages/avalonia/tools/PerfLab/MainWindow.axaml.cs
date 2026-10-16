@@ -25,7 +25,7 @@ public partial class MainWindow : Window
         ("#4C1D95", "بنفسجي"), ("#0F766E", "أخضر مزرق"), ("#1D4ED8", "أزرق"), ("#9B2C5E", "عنابي"), ("#B45309", "كهرماني"),
     ];
 
-    public static readonly Link[] Links =
+    private static readonly Link[] BaseLinks =
     [
         new("العمل", "الرئيسية", "IconHome", "dashboard home", () => new DashboardPage(), "dashboard"),
         new("العمل", "الطلبات", "IconCart", "orders table", () => new TablePage("الطلبات", 1200), "table"),
@@ -59,6 +59,17 @@ public partial class MainWindow : Window
         new("الإعدادات", "المساعدة", "IconHelp", "help", () => new DocumentsPage(), "documents"),
     ];
 
+    /// <summary>The sidebar's links, plus a gallery page for each <c>g:slug</c> named by <c>--kinds</c> or <c>--pages</c>.</summary>
+    public static readonly Link[] Links = [.. BaseLinks, .. GalleryLinks()];
+
+    private static IEnumerable<Link> GalleryLinks()
+    {
+        var named = $"{Program.Option("--kinds")},{Program.Option("--pages")}".Split(',', StringSplitOptions.RemoveEmptyEntries);
+        foreach (var kind in named.Where(k => k.StartsWith("g:")).Distinct())
+            if (Insiyab.Avalonia.Gallery.GalleryPages.Find(kind[2..]) is { } page)
+                yield return new Link("المعرض", page.Title, page.Icon, page.Slug, page.Create, kind);
+    }
+
     /// <summary>The last page switch: from the click to the first frame with the new page, in ms.</summary>
     public double LastSwitchMs { get; private set; }
 
@@ -68,6 +79,8 @@ public partial class MainWindow : Window
     public long LayoutPasses { get; private set; }
 
     public ScrollViewer PageScroller => Scroller;
+
+    public ContentControl PageHost => Host;
 
     public Control? PageContent => Host.Content as Control;
 

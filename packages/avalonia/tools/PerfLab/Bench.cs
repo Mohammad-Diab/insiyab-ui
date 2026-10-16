@@ -322,15 +322,22 @@ internal sealed class Bench(MainWindow window, string dir)
 
     private static readonly string[] Kinds = ["dashboard", "form", "table", "calendar", "documents", "lists", "overlays"];
 
+    // --kinds dashboard,g:month switches to just those pages (g:<slug> is a gallery page); --rounds n visits each n times (default 4).
+    private static readonly string[] PageKinds = Program.Option("--kinds") is { Length: > 0 } k ? k.Split(',') : Kinds;
+    private static readonly int Rounds = int.TryParse(Program.Option("--rounds"), out var n) && n > 1 ? n : 4;
+
+    // --scrolls form,table,revisit,sideways,calendar runs just those scroll rows.
+    private static bool Scrolled(string row) => Program.Option("--scrolls") is not { Length: > 0 } only || only.Split(',').Contains(row);
+
     private async Task Pages(string tag)
     {
-        foreach (var kind in Kinds)
+        foreach (var kind in PageKinds)
         {
             Watchdog.Step("page switch " + kind + tag);
             var link = First(kind);
             var warm = new List<double>();
             var warmShown = new List<double>();
-            for (var round = 0; round < 4; round++)
+            for (var round = 0; round < Rounds; round++)
             {
                 window.Select(MainWindow.Links.First(l => l.Kind != kind));
                 await Wait(400);
@@ -410,19 +417,24 @@ internal sealed class Bench(MainWindow window, string dir)
             await Scroll(section, "long form (page)", window.PageScroller, 40);
             return;
         }
-        await Scroll(section, "long form (page)", window.PageScroller, 40);
+        if (Scrolled("form")) await Scroll(section, "long form (page)", window.PageScroller, 40);
+        if (Scrolled("table") || Scrolled("revisit") || Scrolled("sideways")) await TableScrolls(section);
+        if (Scrolled("calendar")) await CalendarScrolls(section, tag);
+    }
 
+    private async Task TableScrolls(string section)
+    {
         window.Select(First("table"));
         await Wait(1200);
         var table = window.PageContent!.GetVisualDescendants().OfType<Table>().First();
         var inner = table.GetVisualDescendants().OfType<ScrollViewer>().First();
-        await Scroll(section, "table 1200 rows (inner)", inner, 40);
-        await Revisit(section, "table 1200 rows back up (revisit)", inner, 40, 2400);
+        if (Scrolled("table")) await Scroll(section, "table 1200 rows (inner)", inner, 40);
+        if (Scrolled("revisit")) await Revisit(section, "table 1200 rows back up (revisit)", inner, 40, 2400);
 
         inner.Offset = default;
         await Wait(200);
         var maxX = Math.Max(0, inner.Extent.Width - inner.Viewport.Width);
-        if (maxX > 1)
+        if (maxX > 1 && Scrolled("sideways"))
         {
             var x = 0.0;
             var rec = new Recorder(window, _ =>
@@ -433,6 +445,10 @@ internal sealed class Bench(MainWindow window, string dir)
             await rec.Run(3000, _ => x >= maxX);
             AddFrames(section, "table sideways (frozen column)", rec.Stats());
         }
+    }
+
+    private async Task CalendarScrolls(string section, string tag)
+    {
 
         window.Select(First("calendar"));
         await Wait(800);
