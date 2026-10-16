@@ -29,6 +29,7 @@
         <Setter Property="PaneBackground" Value="{DynamicResource InsGlass}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="ins:Shell.DrawerWidth" Value="900" />
+        <Setter Property="ins:ShellLook.InSplitView" Value="True" />
 
         <Style Selector="^:left">
           <Setter Property="Template">
@@ -287,6 +288,20 @@
         <Style Selector="^:compactoverlay:open /template/ Rectangle#LightDismissLayer">
           <Setter Property="IsVisible" Value="True" />
         </Style>
+
+        <!-- The split view's states, handed down to the shell's parts -->
+        <Style Selector="^:closed">
+          <Setter Property="ins:ShellLook.Closed" Value="True" />
+        </Style>
+        <Style Selector="^:overlay">
+          <Setter Property="ins:ShellLook.Overlay" Value="True" />
+        </Style>
+        <Style Selector="^.narrow">
+          <Setter Property="ins:ShellLook.Narrow" Value="True" />
+        </Style>
+        <Style Selector="^.xnarrow">
+          <Setter Property="ins:ShellLook.XNarrow" Value="True" />
+        </Style>
       </ControlTheme>
 
       <!-- A sidebar link: the shared face of a nav item and a link button -->
@@ -418,6 +433,15 @@
 
       <ControlTheme x:Key="InsShellLinkButton" TargetType="Button" BasedOn="{StaticResource InsShellLinkBase}" />
 
+      <!-- The row of a brand block: the mark beside the name, the parts on the middle line -->
+      <ControlTheme x:Key="InsShellBrandRow" TargetType="StackPanel">
+        <Style Selector="^[(ins|ClassTheme.Relayed)=True]">
+          <Setter Property="Orientation" Value="Horizontal" />
+          <Setter Property="Spacing" Value="10" />
+          <Setter Property="ins:ClassTheme.ChildVerticalAlignment" Value="Center" />
+        </Style>
+      </ControlTheme>
+
       <!-- The brand block as a link home: the same block, with a mark that tilts under the pointer -->
       <ControlTheme x:Key="InsShellBrandButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
@@ -430,6 +454,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="ins:ClassTheme.ChildTheme" Value="{StaticResource InsShellBrandRow}" />
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
@@ -449,6 +474,10 @@
         </Setter>
         <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
+        </Style>
+        <!-- Only a brand that is a link tilts its mark: a label must not promise a click -->
+        <Style Selector="^:pointerover">
+          <Setter Property="ins:ShellLook.Hot" Value="True" />
         </Style>
       </ControlTheme>
 
@@ -496,6 +525,156 @@
         </Setter>
       </ControlTheme>
 
+      <!-- The text inside a mark and inside a link's badge, given by them: centred, and the badge's line is its own height -->
+      <ControlTheme x:Key="InsShellMarkText" TargetType="TextBlock">
+        <Style Selector="^[(ins|ClassTheme.Relayed)=True]">
+          <Setter Property="HorizontalAlignment" Value="Center" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsShellBadgeText" TargetType="TextBlock">
+        <Style Selector="^[(ins|ClassTheme.Relayed)=True]">
+          <Setter Property="HorizontalAlignment" Value="Center" />
+          <Setter Property="LineHeight" Value="18" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookShellFilterEmpty" TargetType="TextBlock" ins:ClassTheme.For="shell-filter-empty">
+        <Style Selector="^.shell-filter-empty">
+          <Setter Property="Margin" Value="14,8" />
+          <Setter Property="FontSize" Value="13" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+          <Style Selector="^[(ins|ShellLook.InSplitView)=True]">
+            <Setter Property="Margin" Value="26,8" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookShellIndicator" TargetType="Border" ins:ClassTheme.For="shell-indicator">
+        <Style Selector="^.shell-indicator">
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+          <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- Brand block -->
+      <ControlTheme x:Key="InsLookShellBrand" TargetType="Border" ins:ClassTheme.For="shell-brand">
+        <Style Selector="^.shell-brand">
+          <Setter Property="Padding" Value="6,0,6,16" />
+          <Setter Property="Margin" Value="0,0,0,6" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsHr}" />
+          <Setter Property="BorderThickness" Value="0,0,0,1" />
+          <Setter Property="ins:ClassTheme.ChildTheme" Value="{StaticResource InsShellBrandRow}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The mark: 34 in the sidebar, 28 in the bar's brand island, 60 on a screen; a brand link tilts it -->
+      <ControlTheme x:Key="InsLookShellMark" TargetType="Border" ins:ClassTheme.For="shell-mark">
+        <Style Selector="^.shell-mark">
+          <Setter Property="FlowDirection" Value="LeftToRight" />
+          <Setter Property="Width" Value="34" />
+          <Setter Property="Height" Value="34" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+          <Setter Property="Background" Value="{DynamicResource InsShellMarkFill}" />
+          <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandSm}" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsOnPrimary}" />
+          <Setter Property="TextElement.FontWeight" Value="Bold" />
+          <Setter Property="TextElement.FontSize" Value="14.4" />
+          <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+          <Setter Property="RenderTransform" Value="none" />
+          <Setter Property="ins:ClassTheme.ChildTheme" Value="{StaticResource InsShellMarkText}" />
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+              <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+          <Style Selector="^[(ins|ShellLook.InBrand)=True]">
+            <Setter Property="Width" Value="28" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="TextElement.FontSize" Value="13" />
+          </Style>
+          <Style Selector="^[(ins|ShellLook.InScreenBrand)=True]">
+            <Setter Property="Width" Value="60" />
+            <Setter Property="Height" Value="60" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+            <Setter Property="TextElement.FontSize" Value="26" />
+            <Setter Property="TextElement.FontWeight" Value="ExtraBold" />
+          </Style>
+          <Style Selector="^[(ins|ShellLook.Hot)=True]">
+            <Setter Property="RenderTransform" Value="scale(1.06) rotate(-4deg)" />
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandMd}" />
+            <Style Selector="^[(ins|ClassTheme.Still)=True]">
+              <Setter Property="RenderTransform" Value="none" />
+            </Style>
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookShellBrandName" TargetType="TextBlock" ins:ClassTheme.For="shell-brand-name">
+        <Style Selector="^.shell-brand-name">
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="FontSize" Value="15" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookShellBrandRole" TargetType="TextBlock" ins:ClassTheme.For="shell-brand-role">
+        <Style Selector="^.shell-brand-role">
+          <Setter Property="FontSize" Value="11" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookShellGroup" TargetType="TextBlock" ins:ClassTheme.For="shell-group">
+        <Style Selector="^.shell-group">
+          <Setter Property="Padding" Value="10,14,10,6" />
+          <Setter Property="FontSize" Value="11" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+          <Style Selector="^[FlowDirection=LeftToRight]">
+            <Setter Property="LetterSpacing" Value="0.44" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookShellLinkBadge" TargetType="Border" ins:ClassTheme.For="shell-link-badge">
+        <Style Selector="^.shell-link-badge">
+          <Setter Property="MinWidth" Value="20" />
+          <Setter Property="Margin" Value="10,0,0,0" />
+          <Setter Property="Padding" Value="6,0" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+          <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneWarn}" />
+          <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+          <Setter Property="TextElement.FontSize" Value="11" />
+          <Setter Property="TextElement.FontWeight" Value="Bold" />
+          <Setter Property="ins:ClassTheme.ChildTheme" Value="{StaticResource InsShellBadgeText}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- What is not a destination, sign-out, set apart at the foot of the sidebar -->
+      <ControlTheme x:Key="InsLookShellBottom" TargetType="Border" ins:ClassTheme.For="shell-bottom">
+        <Style Selector="^.shell-bottom">
+          <Setter Property="Padding" Value="0,8,0,0" />
+          <Setter Property="Margin" Value="0,0,0,18" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsHr}" />
+          <Setter Property="BorderThickness" Value="0,1,0,0" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookShellContent" TargetType="Border" ins:ClassTheme.For="shell-content">
+        <Style Selector="^.shell-content">
+          <Setter Property="Padding" Value="28,8,28,32" />
+          <Style Selector="^[(ins|ShellLook.Overlay)=True]">
+            <Setter Property="Padding" Value="16,8,16,24" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -512,14 +691,6 @@
   </Style>
   <Style Selector="SplitView ListBox.shell-nav /template/ Panel#PART_FilterBox">
     <Setter Property="Margin" Value="16,0,16,4" />
-  </Style>
-  <Style Selector="TextBlock.shell-filter-empty">
-    <Setter Property="Margin" Value="14,8" />
-    <Setter Property="FontSize" Value="13" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
-  </Style>
-  <Style Selector="SplitView TextBlock.shell-filter-empty">
-    <Setter Property="Margin" Value="26,8" />
   </Style>
   <!-- An icon-only rail has no room for the field -->
   <Style Selector="SplitView:compactinline:closed ListBox.shell-nav /template/ Panel#PART_FilterBox, SplitView:compactoverlay:closed ListBox.shell-nav /template/ Panel#PART_FilterBox">
@@ -558,107 +729,9 @@
     <Setter Property="Opacity" Value="0" />
     <Setter Property="Transitions" Value="{x:Null}" />
   </Style>
-  <Style Selector="Border.shell-indicator">
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
-    <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />
-  </Style>
 
-  <!-- Brand block -->
-  <Style Selector="Border.shell-brand">
-    <Setter Property="Padding" Value="6,0,6,16" />
-    <Setter Property="Margin" Value="0,0,0,6" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsHr}" />
-    <Setter Property="BorderThickness" Value="0,0,0,1" />
-  </Style>
-  <Style Selector="Border.shell-brand > StackPanel, Button.shell-brand > StackPanel">
-    <Setter Property="Orientation" Value="Horizontal" />
-    <Setter Property="Spacing" Value="10" />
-  </Style>
-  <Style Selector="Border.shell-brand > StackPanel > :is(Control), Button.shell-brand > StackPanel > :is(Control)">
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="Border.shell-mark">
-    <Setter Property="FlowDirection" Value="LeftToRight" />
-    <Setter Property="Width" Value="34" />
-    <Setter Property="Height" Value="34" />
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
-    <Setter Property="Background" Value="{DynamicResource InsShellMarkFill}" />
-    <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandSm}" />
-    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsOnPrimary}" />
-    <Setter Property="TextElement.FontWeight" Value="Bold" />
-    <Setter Property="TextElement.FontSize" Value="14.4" />
-    <Setter Property="RenderTransformOrigin" Value="50%,50%" />
-    <Setter Property="RenderTransform" Value="none" />
-    <Setter Property="Transitions">
-      <Transitions>
-        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
-        <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-      </Transitions>
-    </Setter>
-  </Style>
-  <Style Selector="Border.shell-mark > TextBlock, Border.shell-mark > ins|TemplateText">
-    <Setter Property="HorizontalAlignment" Value="Center" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <!-- Only a brand that is a link tilts its mark: a label must not promise a click -->
-  <Style Selector="Button.shell-brand:pointerover Border.shell-mark">
-    <Setter Property="RenderTransform" Value="scale(1.06) rotate(-4deg)" />
-    <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandMd}" />
-  </Style>
-  <Style Selector="TextBlock.shell-brand-name">
-    <Setter Property="FontWeight" Value="Bold" />
-    <Setter Property="FontSize" Value="15" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-  </Style>
-  <Style Selector="TextBlock.shell-brand-role">
-    <Setter Property="FontSize" Value="11" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-  </Style>
-
-  <Style Selector="TextBlock.shell-group">
-    <Setter Property="Padding" Value="10,14,10,6" />
-    <Setter Property="FontSize" Value="11" />
-    <Setter Property="FontWeight" Value="Bold" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
-  </Style>
-  <Style Selector="TextBlock.shell-group[FlowDirection=LeftToRight]">
-    <Setter Property="LetterSpacing" Value="0.44" />
-  </Style>
-
-  <Style Selector="Border.shell-link-badge">
-    <Setter Property="MinWidth" Value="20" />
-    <Setter Property="Margin" Value="10,0,0,0" />
-    <Setter Property="Padding" Value="6,0" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
-    <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
-    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneWarn}" />
-    <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontBodyEn}" />
-    <Setter Property="TextElement.FontSize" Value="11" />
-    <Setter Property="TextElement.FontWeight" Value="Bold" />
-  </Style>
-  <Style Selector="Border.shell-link-badge > TextBlock, Border.shell-link-badge > ins|TemplateText">
-    <Setter Property="HorizontalAlignment" Value="Center" />
-    <Setter Property="LineHeight" Value="18" />
-  </Style>
-
-  <!-- What is not a destination, sign-out, set apart at the foot of the sidebar -->
-  <Style Selector="Border.shell-bottom">
-    <Setter Property="Padding" Value="0,8,0,0" />
-    <Setter Property="Margin" Value="0,0,0,18" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsHr}" />
-    <Setter Property="BorderThickness" Value="0,1,0,0" />
-  </Style>
-
-  <Style Selector="Border.shell-content">
-    <Setter Property="Padding" Value="28,8,28,32" />
-  </Style>
   <Style Selector="ScrollViewer.shell-content">
     <Setter Property="Padding" Value="28,8,28,32" />
-  </Style>
-  <Style Selector="SplitView:overlay Border.shell-content">
-    <Setter Property="Padding" Value="16,8,16,24" />
   </Style>
   <Style Selector="SplitView:overlay ScrollViewer.shell-content">
     <Setter Property="Padding" Value="16,8,16,24" />

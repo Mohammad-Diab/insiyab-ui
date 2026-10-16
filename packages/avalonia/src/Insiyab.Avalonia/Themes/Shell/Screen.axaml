@@ -1,48 +1,57 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
 
-  <!-- .ins-screen: one card in the middle of the page, at most 448 wide and 32 clear of the edges -->
-  <Style Selector="Panel.screen > :is(Control)">
-    <Setter Property="MaxWidth" Value="448" />
-    <Setter Property="Margin" Value="32" />
-    <Setter Property="HorizontalAlignment" Value="Stretch" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
+  <Styles.Resources>
+    <ResourceDictionary>
 
-  <!-- .ins-brand: the mark, the name and one line under them, centred at the top of a card -->
-  <Style Selector="StackPanel.brand">
-    <Setter Property="Spacing" Value="6" />
-    <Setter Property="Margin" Value="0,0,0,24" />
-  </Style>
-  <Style Selector="StackPanel.brand > :is(Control)">
-    <Setter Property="HorizontalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="StackPanel.brand > Border.shell-mark">
-    <Setter Property="Width" Value="60" />
-    <Setter Property="Height" Value="60" />
-    <Setter Property="Margin" Value="0,0,0,8" />
-    <Setter Property="TextElement.FontSize" Value="26" />
-    <Setter Property="TextElement.FontWeight" Value="ExtraBold" />
-  </Style>
-  <Style Selector="TextBlock.brand-name">
-    <Setter Property="FontSize" Value="24" />
-    <Setter Property="LineHeight" Value="40.8" />
-    <Setter Property="FontWeight" Value="ExtraBold" />
-    <Setter Property="Foreground" Value="{DynamicResource InsShellInk}" />
-    <Setter Property="TextAlignment" Value="Center" />
-    <Setter Property="TextWrapping" Value="Wrap" />
-  </Style>
-  <!-- The display face and the tracking are LTR only, as on the headings -->
-  <Style Selector="TextBlock.brand-name[FlowDirection=LeftToRight]">
-    <Setter Property="FontFamily" Value="{DynamicResource InsFontHeadingEn}" />
-    <Setter Property="LetterSpacing" Value="-0.48" />
-  </Style>
-  <Style Selector="TextBlock.brand-sub">
-    <Setter Property="FontSize" Value="15" />
-    <Setter Property="LineHeight" Value="25.5" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-    <Setter Property="TextAlignment" Value="Center" />
-    <Setter Property="TextWrapping" Value="Wrap" />
-  </Style>
+      <!-- .ins-screen: one card in the middle of the page, at most 448 wide and 32 clear of the edges -->
+      <ControlTheme x:Key="InsLookScreen" TargetType="Panel" ins:ClassTheme.For="screen">
+        <Style Selector="^.screen">
+          <Setter Property="ins:ClassTheme.ChildMaxWidth" Value="448" />
+          <Setter Property="ins:ClassTheme.ChildMargin" Value="32" />
+          <Setter Property="ins:ClassTheme.ChildHorizontalAlignment" Value="Stretch" />
+          <Setter Property="ins:ClassTheme.ChildVerticalAlignment" Value="Center" />
+        </Style>
+      </ControlTheme>
+
+      <!-- .ins-brand: the mark, the name and one line under them, centred at the top of a card; the mark in it is the large one -->
+      <ControlTheme x:Key="InsLookBrand" TargetType="StackPanel" ins:ClassTheme.For="brand">
+        <Style Selector="^.brand">
+          <Setter Property="Spacing" Value="6" />
+          <Setter Property="Margin" Value="0,0,0,24" />
+          <Setter Property="ins:ClassTheme.ChildHorizontalAlignment" Value="Center" />
+          <Setter Property="ins:ShellLook.InScreenBrand" Value="True" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookBrandName" TargetType="TextBlock" ins:ClassTheme.For="brand-name">
+        <Style Selector="^.brand-name">
+          <Setter Property="FontSize" Value="24" />
+          <Setter Property="LineHeight" Value="40.8" />
+          <Setter Property="FontWeight" Value="ExtraBold" />
+          <Setter Property="Foreground" Value="{DynamicResource InsShellInk}" />
+          <Setter Property="TextAlignment" Value="Center" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+          <!-- The display face and the tracking are LTR only, as on the headings -->
+          <Style Selector="^[FlowDirection=LeftToRight]">
+            <Setter Property="FontFamily" Value="{DynamicResource InsFontHeadingEn}" />
+            <Setter Property="LetterSpacing" Value="-0.48" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookBrandSub" TargetType="TextBlock" ins:ClassTheme.For="brand-sub">
+        <Style Selector="^.brand-sub">
+          <Setter Property="FontSize" Value="15" />
+          <Setter Property="LineHeight" Value="25.5" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+          <Setter Property="TextAlignment" Value="Center" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
 
 </Styles>

@@ -15,6 +15,29 @@
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
+      <!-- Three columns, 1fr auto 1fr, so the centre zone is centred on the bar and not on what the start zone leaves -->
+      <ControlTheme x:Key="InsTopbarGrid" TargetType="Grid">
+        <Style Selector="^[(ins|ClassTheme.Relayed)=True]">
+          <Setter Property="ColumnSpacing" Value="10" />
+          <Style Selector="^[(ins|ShellLook.Narrow)=True]">
+            <Setter Property="ColumnSpacing" Value="6" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <!-- The row inside an island: a row beside a taller mark or dot would stretch its label to the row and draw it high -->
+      <ControlTheme x:Key="InsIslandRow" TargetType="StackPanel">
+        <Style Selector="^[(ins|ClassTheme.Relayed)=True]">
+          <Style Selector="^[(ins|ShellLook.InBrand)=True]">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Spacing" Value="8" />
+          </Style>
+          <Style Selector="^[Orientation=Horizontal]">
+            <Setter Property="ins:ClassTheme.ChildVerticalAlignment" Value="Center" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
       <!-- The island: every object in the bar is one, so they share a height, a rim and a shadow -->
       <ControlTheme x:Key="InsIsland" TargetType="ContentControl">
         <Setter Property="ClipToBounds" Value="False" />
@@ -33,6 +56,7 @@
         <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="RenderTransformOrigin" Value="50%,50%" />
         <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="ins:ClassTheme.ChildTheme" Value="{StaticResource InsIslandRow}" />
         <Setter Property="Transitions">
           <Transitions>
             <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -69,6 +93,9 @@
         <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
         </Style>
+        <Style Selector="^.island.brand">
+          <Setter Property="ins:ShellLook.InBrand" Value="True" />
+        </Style>
       </ControlTheme>
 
       <!-- A clickable island rises rather than filling: the shadow lengthens and the pill lifts a pixel -->
@@ -88,46 +115,136 @@
           <Setter Property="RenderTransform" Value="scale(0.97)" />
         </Style>
       </ControlTheme>
+
+      <!-- The bar is transparent; scrolled under, it frosts (Shell.FrostsTopbar on the scroller adds .scrolled) -->
+      <ControlTheme x:Key="InsLookTopbar" TargetType="Border" ins:ClassTheme.For="topbar">
+        <Style Selector="^.topbar">
+          <Setter Property="Padding" Value="16,12" />
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
+          <Setter Property="ins:ClassTheme.ChildTheme" Value="{StaticResource InsTopbarGrid}" />
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.25" />
+              <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" />
+            </Transitions>
+          </Setter>
+          <Style Selector="^.scrolled">
+            <Setter Property="Background" Value="{DynamicResource InsGlassGround}" />
+            <Setter Property="BoxShadow" Value="{DynamicResource InsTopbarFrostShadow}" />
+          </Style>
+          <!-- At phone width the bar tightens -->
+          <Style Selector="^[(ins|ShellLook.Narrow)=True]">
+            <Setter Property="Padding" Value="12,10" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookZone" TargetType="StackPanel" ins:ClassTheme.For="zone">
+        <Style Selector="^.zone">
+          <Setter Property="Orientation" Value="Horizontal" />
+          <Setter Property="Spacing" Value="8" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Style Selector="^.start">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+          </Style>
+          <Style Selector="^.center">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Grid.Column" Value="1" />
+          </Style>
+          <Style Selector="^.end">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Grid.Column" Value="2" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <!-- An island on a Border: the same face as the button and content-control ones; its content is centred on the island -->
+      <ControlTheme x:Key="InsLookIsland" TargetType="Border" ins:ClassTheme.For="island">
+        <Style Selector="^.island">
+          <Setter Property="Height" Value="{DynamicResource InsAppbarH}" />
+          <Setter Property="Padding" Value="14,0" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
+          <Setter Property="Background" Value="{DynamicResource InsGlass}" />
+          <Setter Property="BoxShadow" Value="{DynamicResource InsIslandShadow}" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
+          <Setter Property="TextElement.FontSize" Value="14" />
+          <Setter Property="TextElement.FontWeight" Value="Bold" />
+          <Setter Property="ins:ClassTheme.ChildVerticalAlignment" Value="Center" />
+          <Setter Property="ins:ClassTheme.ChildTheme" Value="{StaticResource InsIslandRow}" />
+          <!-- Centre: the page's name, capped and ellipsised so the bar never grows a second line -->
+          <Style Selector="^.title">
+            <Setter Property="Padding" Value="20,0" />
+            <Setter Property="MaxWidth" Value="416" />
+            <Setter Property="ins:Shell.Enters" Value="True" />
+            <Style Selector="^[(ins|ShellLook.Narrow)=True]">
+              <Setter Property="MaxWidth" Value="Infinity" />
+              <Setter Property="Padding" Value="14,0" />
+            </Style>
+          </Style>
+          <!-- Brand: only while the sidebar is collapsed or a drawer, since an open sidebar already shows it -->
+          <Style Selector="^.brand">
+            <Setter Property="IsVisible" Value="False" />
+            <Setter Property="Padding" Value="16,0" />
+            <Setter Property="ins:ShellLook.InBrand" Value="True" />
+            <Style Selector="^[(ins|ShellLook.Closed)=True]">
+              <Setter Property="IsVisible" Value="True" />
+            </Style>
+            <Style Selector="^[(ins|ShellLook.Overlay)=True]">
+              <Setter Property="IsVisible" Value="True" />
+            </Style>
+            <Style Selector="^[(ins|ShellLook.Narrow)=True]">
+              <Setter Property="IsVisible" Value="False" />
+            </Style>
+            <!-- A window that is not the active one: the brand's text dims, the mark keeps its colours -->
+            <Style Selector="^[(ins|WindowActivity.IsInactive)=True]">
+              <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText3}" />
+            </Style>
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookShellHead" TargetType="StackPanel" ins:ClassTheme.For="shell-head">
+        <Style Selector="^.shell-head">
+          <Setter Property="HorizontalAlignment" Value="Center" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookShellTitle" TargetType="TextBlock" ins:ClassTheme.For="shell-title">
+        <Style Selector="^.shell-title">
+          <Setter Property="FontSize" Value="15" />
+          <Setter Property="FontWeight" Value="ExtraBold" />
+          <Setter Property="LineHeight" Value="24" />
+          <Setter Property="Foreground" Value="{DynamicResource InsShellInk}" />
+          <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+          <Setter Property="HorizontalAlignment" Value="Center" />
+          <!-- A window that is not the active one: the title dims -->
+          <Style Selector="^[(ins|WindowActivity.IsInactive)=True]">
+            <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookShellSub" TargetType="TextBlock" ins:ClassTheme.For="shell-sub">
+        <Style Selector="^.shell-sub">
+          <Setter Property="FontSize" Value="11" />
+          <Setter Property="FontWeight" Value="SemiBold" />
+          <Setter Property="LineHeight" Value="16.5" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+          <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+          <Setter Property="HorizontalAlignment" Value="Center" />
+          <Style Selector="^[(ins|ShellLook.XNarrow)=True]">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+        </Style>
+      </ControlTheme>
     </ResourceDictionary>
   </Styles.Resources>
 
-  <!-- The bar is transparent; scrolled under, it frosts (Shell.FrostsTopbar on the scroller adds .scrolled) -->
-  <Style Selector="Border.topbar">
-    <Setter Property="Padding" Value="16,12" />
-    <Setter Property="Background" Value="Transparent" />
-    <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
-    <Setter Property="Transitions">
-      <Transitions>
-        <BrushTransition Property="Background" Duration="0:0:0.25" />
-        <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" />
-      </Transitions>
-    </Setter>
-  </Style>
-  <Style Selector="Border.topbar.scrolled">
-    <Setter Property="Background" Value="{DynamicResource InsGlassGround}" />
-    <Setter Property="BoxShadow" Value="{DynamicResource InsTopbarFrostShadow}" />
-  </Style>
-  <!-- Three columns, 1fr auto 1fr, so the centre zone is centred on the bar and not on what the start zone leaves -->
-  <Style Selector="Border.topbar > Grid">
-    <Setter Property="ColumnSpacing" Value="10" />
-  </Style>
-
-  <Style Selector="StackPanel.zone">
-    <Setter Property="Orientation" Value="Horizontal" />
-    <Setter Property="Spacing" Value="8" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="StackPanel.zone.start">
-    <Setter Property="HorizontalAlignment" Value="Left" />
-  </Style>
-  <Style Selector="StackPanel.zone.center">
-    <Setter Property="HorizontalAlignment" Value="Center" />
-    <Setter Property="Grid.Column" Value="1" />
-  </Style>
-  <Style Selector="StackPanel.zone.end">
-    <Setter Property="HorizontalAlignment" Value="Right" />
-    <Setter Property="Grid.Column" Value="2" />
-  </Style>
   <!-- A real button in a zone keeps the island height, so the row stays one row -->
   <Style Selector="StackPanel.zone > Button:not(.island)">
     <Setter Property="MinHeight" Value="{DynamicResource InsAppbarH}" />
@@ -152,26 +269,6 @@
   <Style Selector="ContentControl.island">
     <Setter Property="Theme" Value="{StaticResource InsIsland}" />
   </Style>
-  <Style Selector="Border.island">
-    <Setter Property="Height" Value="{DynamicResource InsAppbarH}" />
-    <Setter Property="Padding" Value="14,0" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
-    <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
-    <Setter Property="Background" Value="{DynamicResource InsGlass}" />
-    <Setter Property="BoxShadow" Value="{DynamicResource InsIslandShadow}" />
-    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
-    <Setter Property="TextElement.FontSize" Value="14" />
-    <Setter Property="TextElement.FontWeight" Value="Bold" />
-  </Style>
-  <Style Selector="Border.island > :is(Control)">
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <!-- A row beside a taller mark or dot would stretch its label to the row and draw it high -->
-  <Style Selector=":is(ContentControl).island StackPanel[Orientation=Horizontal] > :is(Control), Border.island StackPanel[Orientation=Horizontal] > :is(Control)">
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
 
   <!-- Square: one icon, no label -->
   <Style Selector="Button.island.icon, ContentControl.island.icon">
@@ -185,80 +282,30 @@
     <Setter Property="Padding" Value="20,0" />
     <Setter Property="MaxWidth" Value="416" />
   </Style>
-  <Style Selector="Border.island.title">
-    <Setter Property="Padding" Value="20,0" />
-    <Setter Property="MaxWidth" Value="416" />
-  </Style>
-  <Style Selector=":is(ContentControl).island.title, Border.island.title">
+  <Style Selector=":is(ContentControl).island.title">
     <Setter Property="ins:Shell.Enters" Value="True" />
   </Style>
   <!-- Brand: only while the sidebar is collapsed or a drawer, since an open sidebar already shows it. Islands are buttons, content controls and borders; naming them keeps these rules off every other control, and off the visual-only parts Avalonia never takes out of the tree -->
-  <Style Selector=":is(ContentControl).island.brand, Border.island.brand">
+  <Style Selector=":is(ContentControl).island.brand">
     <Setter Property="IsVisible" Value="False" />
-  </Style>
-  <Style Selector="Border.island.brand">
-    <Setter Property="Padding" Value="16,0" />
   </Style>
   <Style Selector="Button.island.brand">
     <Setter Property="Padding" Value="16,0" />
   </Style>
-  <Style Selector="SplitView:closed :is(ContentControl).island.brand, SplitView:closed Border.island.brand, SplitView:overlay :is(ContentControl).island.brand, SplitView:overlay Border.island.brand">
+  <Style Selector="SplitView:closed :is(ContentControl).island.brand, SplitView:overlay :is(ContentControl).island.brand">
     <Setter Property="IsVisible" Value="True" />
   </Style>
-  <Style Selector=":is(ContentControl).island.brand StackPanel, Border.island.brand StackPanel">
-    <Setter Property="Orientation" Value="Horizontal" />
-    <Setter Property="Spacing" Value="8" />
-  </Style>
-  <Style Selector=":is(ContentControl).island.brand Border.shell-mark, Border.island.brand Border.shell-mark">
-    <Setter Property="Width" Value="28" />
-    <Setter Property="Height" Value="28" />
-    <Setter Property="TextElement.FontSize" Value="13" />
-  </Style>
 
-  <Style Selector="StackPanel.shell-head">
-    <Setter Property="HorizontalAlignment" Value="Center" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="TextBlock.shell-title">
-    <Setter Property="FontSize" Value="15" />
-    <Setter Property="FontWeight" Value="ExtraBold" />
-    <Setter Property="LineHeight" Value="24" />
-    <Setter Property="Foreground" Value="{DynamicResource InsShellInk}" />
-    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-    <Setter Property="HorizontalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="TextBlock.shell-sub">
-    <Setter Property="FontSize" Value="11" />
-    <Setter Property="FontWeight" Value="SemiBold" />
-    <Setter Property="LineHeight" Value="16.5" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
-    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-    <Setter Property="HorizontalAlignment" Value="Center" />
-  </Style>
-
-  <!-- At phone width the brand goes, the bar tightens and the title island loses its cap -->
-  <Style Selector="SplitView.narrow :is(ContentControl).island.brand, SplitView.narrow Border.island.brand">
+  <!-- At phone width the brand goes and the title island loses its cap -->
+  <Style Selector="SplitView.narrow :is(ContentControl).island.brand">
     <Setter Property="IsVisible" Value="False" />
-  </Style>
-  <Style Selector="SplitView.narrow Border.topbar">
-    <Setter Property="Padding" Value="12,10" />
-  </Style>
-  <Style Selector="SplitView.narrow Border.topbar > Grid">
-    <Setter Property="ColumnSpacing" Value="6" />
   </Style>
   <Style Selector="SplitView.narrow Button.island.title, SplitView.narrow ContentControl.island.title">
     <Setter Property="MaxWidth" Value="Infinity" />
     <Setter Property="Padding" Value="14,0" />
   </Style>
-  <Style Selector="SplitView.narrow Border.island.title">
-    <Setter Property="MaxWidth" Value="Infinity" />
-    <Setter Property="Padding" Value="14,0" />
-  </Style>
   <Style Selector="SplitView.narrow StackPanel.zone > ins|Pill">
     <Setter Property="Padding" Value="12,0" />
-  </Style>
-  <Style Selector="SplitView.xnarrow TextBlock.shell-sub">
-    <Setter Property="IsVisible" Value="False" />
   </Style>
 
 </Styles>
