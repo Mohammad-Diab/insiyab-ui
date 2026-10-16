@@ -48,7 +48,13 @@ public static class Motion
         Control.LoadedEvent.AddClassHandler<TopLevel>((top, _) => Update(top));
     }
 
-    internal static void Update(TopLevel top) => ((IPseudoClasses)top.Classes).Set(StillPseudoClass, IsStill(top));
+    internal static void Update(TopLevel top)
+    {
+        var still = IsStill(top);
+        ((IPseudoClasses)top.Classes).Set(StillPseudoClass, still);
+        if (still) top.SetValue(ClassTheme.StillProperty, true);
+        else top.ClearValue(ClassTheme.StillProperty);
+    }
 
     // The motion tokens, read where the control is so a theme can retime them.
     internal static TimeSpan Enter(Control at) => Time(at, "InsTEnter", 280);

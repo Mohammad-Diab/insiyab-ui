@@ -21,7 +21,7 @@
   <Style Selector=":is(TopLevel):ins-still :is(Button):pointerover ins|Icon.toolbar-icon, :is(TopLevel):ins-still :is(Button):pressed ins|Icon.toolbar-icon">
     <Setter Property="RenderTransform" Value="none" />
   </Style>
-  <Style Selector=":is(TopLevel):ins-still Border.hoverable:pointerover, :is(TopLevel):ins-still Border.stat.hoverable:pointerover Border.stat-ico, :is(TopLevel):ins-still Button.stat-link:pointerover Border.stat-ico">
+  <Style Selector=":is(TopLevel):ins-still Border.hoverable:pointerover">
     <Setter Property="RenderTransform" Value="none" />
   </Style>
   <Style Selector=":is(TopLevel):ins-still TextBox:focus-within /template/ Panel#PART_Field, :is(TopLevel):ins-still ComboBox:focus-within /template/ Panel#PART_Field, :is(TopLevel):ins-still ComboBox:dropdownopen /template/ Panel#PART_Field, :is(TopLevel):ins-still NumericUpDown:focus-within /template/ Panel#PART_Field, :is(TopLevel):ins-still ins|DateTimeGroup:focus-within">
