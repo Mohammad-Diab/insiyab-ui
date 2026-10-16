@@ -24,7 +24,7 @@
     <Setter Property="FontWeight" Value="ExtraBold" />
     <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
   </Style>
-  <Style Selector="ins|MonthCalendar StackPanel.month-nav">
+  <Style Selector="ins|MonthCalendar ins|MonthStack.month-nav">
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <Style Selector="ins|MonthCalendar Path.month-arrow">
@@ -85,7 +85,7 @@
     <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
   </Style>
 
-  <Style Selector="ins|MonthCalendar StackPanel.month-events">
+  <Style Selector="ins|MonthCalendar ins|MonthStack.month-events">
     <Setter Property="Margin" Value="0,4,0,0" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event">
@@ -149,7 +149,7 @@
   </Style>
 
   <!-- Narrower than 34rem, a day shows dots for its events instead of their names. -->
-  <Style Selector="ins|MonthCalendar StackPanel.month-dots">
+  <Style Selector="ins|MonthCalendar ins|MonthStack.month-dots">
     <Setter Property="IsVisible" Value="False" />
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="Margin" Value="0,4,0,0" />
@@ -178,10 +178,10 @@
   <Style Selector="ins|MonthCalendar:narrow ins|MonthBorder.month-num">
     <Setter Property="HorizontalAlignment" Value="Center" />
   </Style>
-  <Style Selector="ins|MonthCalendar:narrow StackPanel.month-events">
+  <Style Selector="ins|MonthCalendar:narrow ins|MonthStack.month-events">
     <Setter Property="IsVisible" Value="False" />
   </Style>
-  <Style Selector="ins|MonthCalendar:narrow StackPanel.month-dots">
+  <Style Selector="ins|MonthCalendar:narrow ins|MonthStack.month-dots">
     <Setter Property="IsVisible" Value="True" />
   </Style>
 
@@ -211,7 +211,7 @@
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-head.link:pointerover">
     <Setter Property="Background" Value="{DynamicResource InsSurfaceHover}" />
   </Style>
-  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-head > StackPanel">
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-head > ins|MonthStack">
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="Spacing" Value="2" />
   </Style>

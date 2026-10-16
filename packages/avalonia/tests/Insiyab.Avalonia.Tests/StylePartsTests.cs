@@ -462,21 +462,35 @@ public class StylePartsTests : IDisposable
         Assert.All(texts, t => Assert.Equal(text, t.GetType()));
     }
 
+    // Every StackPanel carrying one of the control's own classes is the control's typed stack.
+    private static void AssertTypedStacks(Visual root, Type stack, params string[] prefixes)
+    {
+        var stacks = root.GetSelfAndVisualDescendants().OfType<StackPanel>().Where(s => s.Classes.Any(c => prefixes.Any(p => c.StartsWith(p, StringComparison.Ordinal)))).ToList();
+        Assert.NotEmpty(stacks);
+        Assert.All(stacks, s => Assert.Equal(stack, s.GetType()));
+    }
+
     [AvaloniaFact]
     public void Code_built_parts_are_typed()
     {
         var month = new MonthCalendar { Month = new DateTime(2026, 9, 1), Date = Sep15, Events = Events(), Width = 760 };
         Show(Spread(month), FlowDirection.RightToLeft, null, 820, 900);
         AssertTyped(month, typeof(MonthBorder), typeof(MonthText), "month-", "week-");
+        AssertTypedStacks(month, typeof(MonthStack), "month-", "week-");
         month.View = MonthCalendarView.Week;
         Settle(200);
         Assert.NotEmpty(month.Bands);
         Assert.NotNull(month.NowLine);
         AssertTyped(month, typeof(MonthBorder), typeof(MonthText), "month-", "week-");
+        AssertTypedStacks(month, typeof(MonthStack), "month-", "week-");
+        var heads = month.GetVisualDescendants().OfType<Border>().Where(b => b.Classes.Contains("week-head")).ToList();
+        Assert.NotEmpty(heads);
+        Assert.All(heads, h => Assert.IsType<MonthStack>(h.Child));
         month.View = MonthCalendarView.Day;
         month.WorkHoursOnly = false;
         Settle(200);
         AssertTyped(month, typeof(MonthBorder), typeof(MonthText), "month-", "week-");
+        AssertTypedStacks(month, typeof(MonthStack), "month-", "week-");
 
         var range = new DateCalendar { Mode = DatePickMode.Range, CalendarKind = CalendarKind.Hijri, IsDual = true, SelectedDate = new DateTime(2026, 9, 10), EndDate = new DateTime(2026, 9, 18) };
         var time = new DateCalendar { Mode = DatePickMode.DateTime, SelectedDate = Sep15 };
@@ -512,9 +526,12 @@ public class StylePartsTests : IDisposable
         Settle(200);
         AssertTyped(inline, typeof(BirthBorder), typeof(BirthText), "birth-");
         AssertTyped(field, typeof(BirthBorder), typeof(BirthText), "birth-");
+        AssertTypedStacks(inline, typeof(BirthStack), "birth-");
+        AssertTypedStacks(field, typeof(BirthStack), "birth-");
         Click(field.PickButton!, bw);
         var pop = (Control)field.Flyout!.Content!;
         AssertTyped(pop, typeof(BirthBorder), typeof(BirthText), "birth-");
+        AssertTypedStacks(pop, typeof(BirthStack), "birth-");
         var shared = inline.GetVisualDescendants().Concat(pop.GetVisualDescendants()).OfType<Border>().Where(b => b.Classes.Contains("drum-lens") || b.Classes.Contains("picker-glass")).ToList();
         Assert.NotEmpty(shared);
         Assert.All(shared, b => Assert.Equal(typeof(Border), b.GetType()));

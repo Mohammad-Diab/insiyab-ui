@@ -247,7 +247,7 @@ public class BirthDateField : TemplatedControl
         var words = Words;
         var inline = Layout == BirthLayout.Inline;
         AutomationProperties.SetName(this, words.BirthGroup);
-        _root = new StackPanel { Classes = { "birth-root", inline ? "inline" : "field" } };
+        _root = new BirthStack { Classes = { "birth-root", inline ? "inline" : "field" } };
         _line = new BirthText { Classes = { "birth-line" } };
         _popLine = null;
         _flyout = null;
@@ -309,7 +309,7 @@ public class BirthDateField : TemplatedControl
         face.Children.Add(val);
         if (inline)
         {
-            var dots = new StackPanel { Classes = { "birth-dots" }, Orientation = Orientation.Horizontal };
+            var dots = new BirthStack { Classes = { "birth-dots" }, Orientation = Orientation.Horizontal };
             for (var n = 0; n < (k == 'y' ? 4 : 2); n++) dots.Children.Add(new Ellipse { Classes = { "birth-dot" } });
             face.Children.Add(dots);
             _dots[i] = dots;
@@ -324,7 +324,7 @@ public class BirthDateField : TemplatedControl
         var stage = new Panel();
         stage.Children.Add(box);
         stage.Children.Add(tb);
-        var seg = new StackPanel { Classes = { "birth-seg", k.ToString() } };
+        var seg = new BirthStack { Classes = { "birth-seg", k.ToString() } };
         seg.Children.Add(stage);
         if (inline)
         {
@@ -343,7 +343,7 @@ public class BirthDateField : TemplatedControl
 
     private Control MakeDrum(bool pop)
     {
-        var row = new StackPanel { Classes = { "birth-drum" }, Orientation = Orientation.Horizontal, Spacing = pop ? 6 : 12, HorizontalAlignment = HorizontalAlignment.Center };
+        var row = new BirthStack { Classes = { "birth-drum" }, Orientation = Orientation.Horizontal, Spacing = pop ? 6 : 12, HorizontalAlignment = HorizontalAlignment.Center };
         for (var i = 0; i < 3; i++)
         {
             var k = Order[i];
@@ -378,7 +378,7 @@ public class BirthDateField : TemplatedControl
         cancel.Click += (_, _) => Cancel();
         var done = new Button { Classes = { "primary", "sm" }, Content = words.Done };
         done.Click += (_, _) => { Close(); FocusPart(FirstOpen()); };
-        var buttons = new StackPanel { Classes = { "birth-foot-row" }, Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right };
+        var buttons = new BirthStack { Classes = { "birth-foot-row" }, Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right };
         buttons.Children.Add(cancel);
         buttons.Children.Add(done);
         var foot = new BirthBorder { Classes = { "birth-foot" }, Child = buttons };

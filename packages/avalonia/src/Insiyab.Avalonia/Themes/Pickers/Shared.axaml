@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
 
   <Styles.Resources>
     <ResourceDictionary>
@@ -36,6 +37,16 @@
         <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
       </LinearGradientBrush>
 
+      <!-- The pop body's glass: the 145 degree glass gradient over the presenter's wash, drawn left to right whatever the page direction. -->
+      <ControlTheme x:Key="InsLookPickerGlass" TargetType="Border" ins:ClassTheme.For="picker-glass">
+        <Style Selector="^.picker-glass">
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+          <Setter Property="Background" Value="{DynamicResource InsPickerGlassFill}" />
+          <Setter Property="FlowDirection" Value="LeftToRight" />
+          <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -49,14 +60,6 @@
   <Style Selector="FlyoutPresenter.picker /template/ :is(Border)#LayoutRoot">
     <Setter Property="MinWidth" Value="0" />
     <Setter Property="MaxHeight" Value="Infinity" />
-  </Style>
-
-  <!-- The pop body's glass: the 145 degree glass gradient over the presenter's wash, drawn left to right whatever the page direction. -->
-  <Style Selector="Border.picker-glass">
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-    <Setter Property="Background" Value="{DynamicResource InsPickerGlassFill}" />
-    <Setter Property="FlowDirection" Value="LeftToRight" />
-    <Setter Property="IsHitTestVisible" Value="False" />
   </Style>
 
 </Styles>

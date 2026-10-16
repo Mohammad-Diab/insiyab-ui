@@ -2,7 +2,7 @@ using Avalonia.Controls;
 
 namespace Insiyab.Avalonia.Controls;
 
-// The Borders and TextBlocks the library builds in code: as with TemplateBorder, the app's Border.* and TextBlock.* styles never reach them, and each control's pair carries only that control's own styles.
+// The Borders, TextBlocks and StackPanels the library builds in code: as with TemplateBorder, the app's Border.*, TextBlock.* and StackPanel.* styles and looks never reach them, and each control's parts carry only that control's own styles.
 
 /// <summary>A Border that <see cref="MonthCalendar"/> builds; its styles name it <c>ins|MonthBorder</c>.</summary>
 internal sealed class MonthBorder : Border
@@ -16,6 +16,12 @@ internal sealed class MonthText : TextBlock
     protected override Type StyleKeyOverride => typeof(MonthText);
 }
 
+/// <summary>A StackPanel that <see cref="MonthCalendar"/> builds; its styles name it <c>ins|MonthStack</c>.</summary>
+internal sealed class MonthStack : StackPanel
+{
+    protected override Type StyleKeyOverride => typeof(MonthStack);
+}
+
 /// <summary>A Border that <see cref="BirthDateField"/> builds; its styles name it <c>ins|BirthBorder</c>.</summary>
 internal sealed class BirthBorder : Border
 {
@@ -26,6 +32,12 @@ internal sealed class BirthBorder : Border
 internal sealed class BirthText : TextBlock
 {
     protected override Type StyleKeyOverride => typeof(BirthText);
+}
+
+/// <summary>A StackPanel that <see cref="BirthDateField"/> builds; its styles name it <c>ins|BirthStack</c>.</summary>
+internal sealed class BirthStack : StackPanel
+{
+    protected override Type StyleKeyOverride => typeof(BirthStack);
 }
 
 /// <summary>A Border that <see cref="DateCalendar"/> and its switch turn build; its styles name it <c>ins|CalendarBorder</c>.</summary>

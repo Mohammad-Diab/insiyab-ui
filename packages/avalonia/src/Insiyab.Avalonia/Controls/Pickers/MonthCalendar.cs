@@ -366,7 +366,7 @@ public class MonthCalendar : TemplatedControl
             _head = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), Classes = { "month-head" } };
             _title = new MonthText { Classes = { "month-title" } };
             _head.Children.Add(_title);
-            var nav = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 4, Classes = { "month-nav" } };
+            var nav = new MonthStack { Orientation = Orientation.Horizontal, Spacing = 4, Classes = { "month-nav" } };
             _switch = new Segmented { Classes = { "month-views" } };
             _syncSwitch = true;
             _switch.ItemsSource = words.IsArabic ? new[] { "شهر", "أسبوع", "يوم" } : new[] { "Month", "Week", "Day" };
@@ -490,7 +490,7 @@ public class MonthCalendar : TemplatedControl
         stack.Children.Add(num);
         if (list.Count > 0)
         {
-            var events = new StackPanel { Spacing = 2, Classes = { "month-events" } };
+            var events = new MonthStack { Spacing = 2, Classes = { "month-events" } };
             foreach (var ev in list.Take(list.Count > Shown ? Shown - 1 : Shown)) events.Children.Add(Chip(words, ev));
             if (list.Count > Shown)
             {
@@ -499,7 +499,7 @@ public class MonthCalendar : TemplatedControl
                 events.Children.Add(more);
             }
             stack.Children.Add(events);
-            var dots = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 3, Classes = { "month-dots" } };
+            var dots = new MonthStack { Orientation = Orientation.Horizontal, Spacing = 3, Classes = { "month-dots" } };
             foreach (var ev in list.Take(4)) dots.Children.Add(new Ellipse { Classes = { "month-dot", ToneClass(ev.Tone) } });
             stack.Children.Add(dots);
         }
@@ -548,8 +548,8 @@ public class MonthCalendar : TemplatedControl
         Grid.SetRow(allLabel, 1);
         top.Children.Add(allLabel);
 
-        var gutter = new StackPanel { Classes = { "week-hours" } };
-        var lines = new StackPanel { IsHitTestVisible = false, Classes = { "week-lines" } };
+        var gutter = new MonthStack { Classes = { "week-hours" } };
+        var lines = new MonthStack { IsHitTestVisible = false, Classes = { "week-lines" } };
         for (var h = startH; h < endH; h++)
         {
             gutter.Children.Add(new MonthBorder { Height = hourH, Classes = { "week-hour-cell" }, Child = new MonthText { Text = words.FormatTime(new TimeSpan(h, 0, 0)), Classes = { "week-hour" } } });
@@ -577,7 +577,7 @@ public class MonthCalendar : TemplatedControl
 
             var name = new MonthText { Text = words.ShortDay(day.DayOfWeek), Classes = { "week-wd" } };
             var num = new MonthBorder { Child = new MonthText { Text = PickerLocale.N(day.Day) }, Classes = { "month-num" } };
-            var head = new MonthBorder { Child = new StackPanel { Children = { name, num } }, Classes = { "week-head" }, Tag = day };
+            var head = new MonthBorder { Child = new MonthStack { Children = { name, num } }, Classes = { "week-head" }, Tag = day };
             AutomationProperties.SetName(head, words.FullDay(PickerCalendar.Gregorian, day));
             if (isToday) head.Classes.Add("today");
             if (view == MonthCalendarView.Week)
@@ -593,7 +593,7 @@ public class MonthCalendar : TemplatedControl
             Grid.SetColumn(head, d + 1);
             top.Children.Add(head);
 
-            var allDay = new StackPanel { Spacing = 2, Classes = { "week-allday" } };
+            var allDay = new MonthStack { Spacing = 2, Classes = { "week-allday" } };
             foreach (var ev in list.Where(e => e.Time is null))
             {
                 var chip = Chip(words, ev);

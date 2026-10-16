@@ -22,6 +22,27 @@
           </ControlTemplate>
         </Setter>
       </ControlTheme>
+
+      <ControlTheme x:Key="InsLookDrumLens" TargetType="Border" ins:ClassTheme.For="drum-lens">
+        <Style Selector="^.drum-lens">
+          <Setter Property="Height" Value="36" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+          <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandBd}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
+          <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookDrumSep" TargetType="TextBlock" ins:ClassTheme.For="drum-sep">
+        <Style Selector="^.drum-sep">
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Setter Property="FontWeight" Value="ExtraBold" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+        </Style>
+      </ControlTheme>
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -44,22 +65,6 @@
   <Style Selector="ins|DrumColumn.period.ar">
     <Setter Property="FontFamily" Value="{DynamicResource InsFontArabic}" />
     <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
-  </Style>
-
-  <Style Selector="Border.drum-lens">
-    <Setter Property="Height" Value="36" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
-    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandBd}" />
-    <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
-    <Setter Property="IsHitTestVisible" Value="False" />
-  </Style>
-  <Style Selector="TextBlock.drum-sep">
-    <Setter Property="VerticalAlignment" Value="Center" />
-    <Setter Property="FontWeight" Value="ExtraBold" />
-    <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
   </Style>
 
 </Styles>
