@@ -108,6 +108,64 @@
         </Style>
       </ControlTheme>
 
+      <!-- The slots of a row: a leading chip or avatar, the text, and the trailing end -->
+      <ControlTheme x:Key="InsLookListText" TargetType="StackPanel" ins:ClassTheme.For="list-text">
+        <Style Selector="^.list-text">
+          <Setter Property="Spacing" Value="2" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookListTitle" TargetType="TextBlock" ins:ClassTheme.For="list-title">
+        <Style Selector="^.list-title">
+          <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          <!-- Arabic takes the web's 1.7 line height; Latin keeps the font's own, as the browser's normal does -->
+          <Style Selector="^[FlowDirection=RightToLeft]">
+            <Setter Property="LineHeight" Value="23.8" />
+          </Style>
+          <Style Selector="^[(ins|ListLook.Selected)=True]">
+            <Style Selector="^[(ins|ListLook.Static)=False]">
+              <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+            </Style>
+          </Style>
+          <!-- A window that is not the active one: the selected row's brand goes back to the text colour -->
+          <Style Selector="^[(ins|WindowActivity.IsInactive)=True]">
+            <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookListDesc" TargetType="TextBlock" ins:ClassTheme.For="list-desc">
+        <Style Selector="^.list-desc">
+          <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+          <Style Selector="^[FlowDirection=RightToLeft]">
+            <Setter Property="LineHeight" Value="20.4" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookListEndText" TargetType="TextBlock" ins:ClassTheme.For="list-end">
+        <Style Selector="^.list-end">
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsXs}" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsLabel}" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookListEnd" TargetType="StackPanel" ins:ClassTheme.For="list-end">
+        <Style Selector="^.list-end">
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsXs}" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsLabel}" />
+          <Setter Property="Orientation" Value="Horizontal" />
+          <Setter Property="Spacing" Value="8" />
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -119,9 +177,15 @@
     <Setter Property="CornerRadius" Value="7" />
   </Style>
 
-  <!-- A display-only list is not a tab stop -->
+  <!-- A display-only list is not a tab stop, and tells its rows' parts -->
   <Style Selector="ListBox.static">
     <Setter Property="Focusable" Value="False" />
+    <Setter Property="ins:ListLook.Static" Value="True" />
+  </Style>
+
+  <!-- A selected row tells its parts, so its title takes the brand colour -->
+  <Style Selector="ListBoxItem:selected">
+    <Setter Property="ins:ListLook.Selected" Value="True" />
   </Style>
 
   <!-- Rows that go nowhere: the web's plain <li> rows -->
@@ -137,46 +201,9 @@
     <Setter Property="Opacity" Value="1" />
   </Style>
 
-  <!-- The slots of a row: a leading chip or avatar, the text, and the trailing end -->
+  <!-- The row's slots sit apart by the same gap everywhere but the sidebar -->
   <Style Selector="ListBox:not(.shell-nav) ListBoxItem > DockPanel">
     <Setter Property="HorizontalSpacing" Value="12" />
-  </Style>
-  <Style Selector="StackPanel.list-text">
-    <Setter Property="Spacing" Value="2" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="TextBlock.list-title">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
-    <Setter Property="FontWeight" Value="Bold" />
-    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-  </Style>
-  <Style Selector="ListBox:not(.static) ListBoxItem:selected TextBlock.list-title">
-    <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
-  </Style>
-  <!-- Arabic takes the web's 1.7 line height; Latin keeps the font's own, as the browser's normal does -->
-  <Style Selector="TextBlock.list-title[FlowDirection=RightToLeft]">
-    <Setter Property="LineHeight" Value="23.8" />
-  </Style>
-  <Style Selector="TextBlock.list-desc[FlowDirection=RightToLeft]">
-    <Setter Property="LineHeight" Value="20.4" />
-  </Style>
-  <Style Selector="ListBoxItem Border.panel-ico > :is(Control)">
-    <Setter Property="HorizontalAlignment" Value="Center" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="TextBlock.list-desc">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
-  </Style>
-  <Style Selector="TextBlock.list-end, StackPanel.list-end">
-    <Setter Property="VerticalAlignment" Value="Center" />
-    <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsXs}" />
-    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsLabel}" />
-  </Style>
-  <Style Selector="StackPanel.list-end">
-    <Setter Property="Orientation" Value="Horizontal" />
-    <Setter Property="Spacing" Value="8" />
   </Style>
 
 </Styles>

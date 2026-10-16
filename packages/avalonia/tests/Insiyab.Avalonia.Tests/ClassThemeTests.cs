@@ -84,7 +84,7 @@ public class ClassThemeTests
     public void A_look_that_nests_marks_itself_inside_the_same_look()
     {
         var theme = ClassTheme.All().First(l => l.Type == typeof(Border) && l.Class == "stat").Theme;
-        ClassTheme.SetNests(theme, true);
+        ClassTheme.SetNestOn(theme, "stat");
         try
         {
             var inner = new Border { Classes = { "stat" }, Child = new DockPanel() };
@@ -97,7 +97,34 @@ public class ClassThemeTests
         }
         finally
         {
-            ClassTheme.SetNests(theme, false);
+            ClassTheme.SetNestOn(theme, null);
         }
+    }
+
+    [AvaloniaFact]
+    public void Only_a_nest_class_on_both_marks_nesting_and_it_follows_the_ancestor()
+    {
+        var glassInCard = new Border { Classes = { "glass", "hoverable" } };
+        var cardInCard = new Border { Classes = { "card", "hoverable" } };
+        var card = new Border { Classes = { "card", "hoverable" }, Child = new StackPanel { Children = { glassInCard, cardInCard } } };
+        var glassInGlass = new Border { Classes = { "glass" } };
+        var glass = new Border { Classes = { "glass" }, Child = new StackPanel { Children = { new Border { Child = glassInGlass } } } };
+        Show(new StackPanel { Children = { card, glass } }, FlowDirection.RightToLeft);
+        Assert.DoesNotContain(ClassTheme.NestedPseudoClass, glassInCard.Classes);
+        Assert.DoesNotContain(ClassTheme.NestedPseudoClass, cardInCard.Classes);
+        Assert.DoesNotContain(ClassTheme.NestedPseudoClass, card.Classes);
+        Assert.DoesNotContain(ClassTheme.NestedPseudoClass, glass.Classes);
+        Assert.Contains(ClassTheme.NestedPseudoClass, glassInGlass.Classes);
+        card.Classes.Add("glass");
+        Assert.Contains(ClassTheme.NestedPseudoClass, glassInCard.Classes);
+        Assert.DoesNotContain(ClassTheme.NestedPseudoClass, cardInCard.Classes);
+        card.Classes.Remove("glass");
+        glass.Classes.Remove("glass");
+        Assert.DoesNotContain(ClassTheme.NestedPseudoClass, glassInCard.Classes);
+        Assert.DoesNotContain(ClassTheme.NestedPseudoClass, glassInGlass.Classes);
+        cardInCard.Classes.Add("glass");
+        Assert.DoesNotContain(ClassTheme.NestedPseudoClass, cardInCard.Classes);
+        card.Classes.Add("glass");
+        Assert.Contains(ClassTheme.NestedPseudoClass, cardInCard.Classes);
     }
 }

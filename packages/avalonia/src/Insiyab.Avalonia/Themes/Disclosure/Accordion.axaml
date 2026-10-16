@@ -130,6 +130,12 @@
         </Setter>
       </ControlTheme>
 
+      <ControlTheme x:Key="InsLookAccordion" TargetType="StackPanel" ins:ClassTheme.For="accordion">
+        <Style Selector="^.accordion">
+          <Setter Property="ins:Collapse.Keys" Value="True" />
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -140,9 +146,6 @@
   <Style Selector="Expander > TextBlock, Expander > ins|TemplateText">
     <Setter Property="LineHeight" Value="25.2" />
     <Setter Property="TextWrapping" Value="Wrap" />
-  </Style>
-  <Style Selector="StackPanel.accordion">
-    <Setter Property="ins:Collapse.Keys" Value="True" />
   </Style>
 
   <!-- .ins-accordion: only the dividers between sections; in a panel the rows go square and only the panel's corners stay round -->

@@ -18,9 +18,9 @@ internal static class ClassTheme
     public static readonly AttachedProperty<string?> ForProperty =
         AvaloniaProperty.RegisterAttached<ControlTheme, string?>("For", typeof(ClassTheme));
 
-    /// <summary>On a look theme: its elements carry <c>:ins-nested</c> while an ancestor carries one of their look classes.</summary>
-    public static readonly AttachedProperty<bool> NestsProperty =
-        AvaloniaProperty.RegisterAttached<ControlTheme, bool>("Nests", typeof(ClassTheme));
+    /// <summary>On a look theme: classes, separated by spaces, that give its element <c>:ins-nested</c> while the element and a logical ancestor of its type both carry one.</summary>
+    public static readonly AttachedProperty<string?> NestOnProperty =
+        AvaloniaProperty.RegisterAttached<ControlTheme, string?>("NestOn", typeof(ClassTheme));
 
     /// <summary>The window's stillness (<see cref="Motion"/>), passed down so a theme can drop its movement.</summary>
     public static readonly AttachedProperty<bool> StillProperty =
@@ -62,6 +62,8 @@ internal static class ClassTheme
     private static readonly ConditionalWeakTable<StyledElement, Watch> s_watched = new();
     private static readonly ConditionalWeakTable<StyledElement, List<IDisposable>> s_relayed = new();
     private static readonly ConditionalWeakTable<StyledElement, Parent> s_parents = new();
+    private static readonly HashSet<string>[] s_nestOn = [new(StringComparer.Ordinal), new(StringComparer.Ordinal), new(StringComparer.Ordinal), new(StringComparer.Ordinal)];
+    private static readonly Dictionary<string, string[]> s_split = new(StringComparer.Ordinal);
     private static Styles? s_root;
     private static bool s_indexed;
     private static bool _registered;
@@ -71,8 +73,8 @@ internal static class ClassTheme
 
     public static string? GetFor(ControlTheme theme) => theme.GetValue(ForProperty);
     public static void SetFor(ControlTheme theme, string? value) => theme.SetValue(ForProperty, value);
-    public static bool GetNests(ControlTheme theme) => theme.GetValue(NestsProperty);
-    public static void SetNests(ControlTheme theme, bool value) => theme.SetValue(NestsProperty, value);
+    public static string? GetNestOn(ControlTheme theme) => theme.GetValue(NestOnProperty);
+    public static void SetNestOn(ControlTheme theme, string? value) => theme.SetValue(NestOnProperty, value);
     public static bool GetStill(StyledElement element) => element.GetValue(StillProperty);
     public static void SetStill(StyledElement element, bool value) => element.SetValue(StillProperty, value);
     public static ControlTheme? GetChildTheme(StyledElement element) => element.GetValue(ChildThemeProperty);
@@ -212,15 +214,32 @@ internal static class ClassTheme
         if (ReferenceEquals(now, want) || (now is not null && !s_ours.Contains(now))) return;
         if (want is null) element.ClearValue(StyledElement.ThemeProperty);
         else element.Theme = want;
-        if (want is not null && Nests(want) && s_watched.TryGetValue(element, out var watch)) watch.FollowNesting();
+        var on = NestClasses(want);
+        if ((on.Length > 0 || NestClasses(now).Length > 0) && s_watched.TryGetValue(element, out var watch)) watch.FollowNesting(on);
         if (((ILogical)element).IsAttachedToLogicalTree) element.ApplyStyling();
     }
 
-    private static bool Nests(ControlTheme theme)
+    // The nest classes of a look and of the looks it is based on.
+    private static string[] NestClasses(ControlTheme? theme)
     {
+        string[] found = [];
         for (var t = theme; t is not null; t = t.BasedOn)
-            if (t.GetValue(NestsProperty)) return true;
-        return false;
+        {
+            if (t.GetValue(NestOnProperty) is not { } on) continue;
+            if (!s_split.TryGetValue(on, out var classes)) s_split[on] = classes = on.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            found = found.Length == 0 ? classes : [.. found, .. classes];
+        }
+        return found;
+    }
+
+    // An ancestor gained or lost a nest class: its descendants that follow nesting look again.
+    private static void RenestBelow(ILogical parent)
+    {
+        foreach (var child in parent.LogicalChildren)
+        {
+            if (child is StyledElement element && s_watched.TryGetValue(element, out var watch)) watch.Renest();
+            RenestBelow(child);
+        }
     }
 
     // The theme the parent's look gives this element, if it is of that theme's exact type.
@@ -275,35 +294,54 @@ internal static class ClassTheme
     private sealed class Watch(StyledElement owner)
     {
         private bool _nesting;
+        private string[] _on = [];
 
         public void Changed(object? sender, NotifyCollectionChangedEventArgs args)
         {
-            if (args.Action == NotifyCollectionChangedAction.Reset || Named(args.NewItems) || Named(args.OldItems)) Apply(owner);
+            var reset = args.Action == NotifyCollectionChangedAction.Reset;
+            if (!reset && !Named(args.NewItems) && !Named(args.OldItems)) return;
+            Apply(owner);
+            if (_on.Length > 0) Renest();
+            var nests = s_nestOn[HostIndex(owner.StyleKey)];
+            if (nests.Count > 0 && (reset || Nests(args.NewItems, nests) || Nests(args.OldItems, nests)) && ((ILogical)owner).IsAttachedToLogicalTree) RenestBelow(owner);
         }
 
-        public void FollowNesting()
+        public void FollowNesting(string[] on)
         {
-            if (!_nesting)
+            if (on.Length == 0 && _on.Length == 0) return;
+            _on = on;
+            if (on.Length > 0) s_nestOn[HostIndex(owner.StyleKey)].UnionWith(on);
+            if (!_nesting && on.Length > 0)
             {
                 _nesting = true;
-                owner.AttachedToLogicalTree += (_, _) => Nest();
+                owner.AttachedToLogicalTree += (_, _) => Renest();
             }
-            if (((ILogical)owner).IsAttachedToLogicalTree) Nest();
+            if (on.Length == 0) ((IPseudoClasses)owner.Classes).Set(NestedPseudoClass, false);
+            else if (((ILogical)owner).IsAttachedToLogicalTree) Renest();
         }
 
-        // Nested while a logical ancestor of the same type carries one of this element's look classes.
-        private void Nest()
+        // Nested while this element and a logical ancestor of its type both carry one of the look's nest classes.
+        public void Renest()
         {
+            if (_on.Length == 0) return;
             var host = HostIndex(owner.StyleKey);
-            var map = s_index[host];
             var nested = false;
-            for (var up = owner.Parent; up is not null && !nested; up = up.Parent)
+            foreach (var cls in _on)
             {
-                if (HostIndex(up.StyleKey) != host) continue;
-                foreach (var cls in owner.Classes)
-                    if (cls.Length > 0 && cls[0] != ':' && map.ContainsKey(cls) && up.Classes.Contains(cls)) { nested = true; break; }
+                if (!owner.Classes.Contains(cls)) continue;
+                for (var up = owner.Parent; up is not null && !nested; up = up.Parent)
+                    nested = HostIndex(up.StyleKey) == host && up.Classes.Contains(cls);
+                if (nested) break;
             }
             ((IPseudoClasses)owner.Classes).Set(NestedPseudoClass, nested);
+        }
+
+        private static bool Nests(IList? items, HashSet<string> nests)
+        {
+            if (items is null) return false;
+            foreach (var item in items)
+                if (item is string name && nests.Contains(name)) return true;
+            return false;
         }
 
         private static bool Named(IList? items)

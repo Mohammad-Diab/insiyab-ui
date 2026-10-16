@@ -132,143 +132,168 @@
           <Setter Property="RenderTransform" Value="scale(0.995)" />
         </Style>
       </ControlTheme>
+
+      <!-- The glass surfaces: card, glass and panel share the rim and the shadow with its bevel -->
+      <ControlTheme x:Key="InsLookSurface" TargetType="Border" ctl:ClassTheme.For="card glass panel glass-inner hoverable" ctl:ClassTheme.NestOn="glass">
+        <Style Selector="^.card, ^.glass, ^.panel">
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsGlassRim}" />
+          <Setter Property="BoxShadow">
+            <MultiBinding Converter="{x:Static ctl:PanelShadows.Join}">
+              <DynamicResource ResourceKey="InsShGlass" />
+              <DynamicResource ResourceKey="InsBevel" />
+            </MultiBinding>
+          </Setter>
+        </Style>
+        <Style Selector="^.card">
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Setter Property="Background" Value="{DynamicResource InsGlassFill}" />
+        </Style>
+        <Style Selector="^.glass">
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Setter Property="Background" Value="{DynamicResource InsGlassSheenFill}" />
+        </Style>
+        <Style Selector="^.panel">
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+          <Setter Property="Background" Value="{DynamicResource InsGlassFill}" />
+        </Style>
+        <!-- RTL mirrors the drawing, so these brushes are mirrored back: the light stays at the top left, as on the web -->
+        <Style Selector="^.card[FlowDirection=RightToLeft], ^.panel[FlowDirection=RightToLeft]">
+          <Setter Property="Background" Value="{DynamicResource InsGlassFillRtl}" />
+        </Style>
+        <Style Selector="^.glass[FlowDirection=RightToLeft]">
+          <Setter Property="Background" Value="{DynamicResource InsGlassSheenFillRtl}" />
+        </Style>
+        <!-- Glass inside glass strips to a flat fill: a second frost is what turns the effect to mush -->
+        <Style Selector="^.glass:ins-nested">
+          <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
+          <Setter Property="BorderBrush" Value="Transparent" />
+          <Setter Property="BoxShadow" Value="none" />
+        </Style>
+        <Style Selector="^.glass-inner">
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+          <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
+        </Style>
+        <!-- A panel whose contents are the problem tells its parts, and the tint is on the head only -->
+        <Style Selector="^.panel.alert">
+          <Setter Property="ctl:PanelLook.Alert" Value="True" />
+        </Style>
+        <!-- Only a surface that opted in moves under the pointer -->
+        <Style Selector="^.hoverable">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^.hoverable:pointerover">
+          <Setter Property="RenderTransform" Value="translateY(-2px)" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsRimTop}" />
+          <Setter Property="BoxShadow">
+            <MultiBinding Converter="{x:Static ctl:PanelShadows.Join}">
+              <DynamicResource ResourceKey="InsShLg" />
+              <DynamicResource ResourceKey="InsBevel" />
+            </MultiBinding>
+          </Setter>
+          <!-- Two attached-property tests in one selector do not parse, so stillness is a style inside the hover one -->
+          <Style Selector="^[(ctl|ClassTheme.Still)=True]">
+            <Setter Property="RenderTransform" Value="none" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <!-- The panel's parts, as children of a Border.panel (usually in a DockPanel); an alert panel tints its head and tells the parts -->
+      <ControlTheme x:Key="InsLookPanelHead" TargetType="Border" ctl:ClassTheme.For="panel-head">
+        <Style Selector="^.panel-head">
+          <Setter Property="Padding" Value="20,14" />
+          <Setter Property="BorderThickness" Value="0,0,0,1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+          <!-- No clip on the panel, since Avalonia's clip would cut its shadow, so the tinted head rounds itself inside the 1px rim -->
+          <Style Selector="^[(ctl|PanelLook.Alert)=True]">
+            <Setter Property="CornerRadius" Value="21,21,0,0" />
+            <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookPanelTitle" TargetType="TextBlock" ctl:ClassTheme.For="panel-title">
+        <Style Selector="^.panel-title">
+          <Setter Property="FontSize" Value="17" />
+          <Setter Property="FontWeight" Value="ExtraBold" />
+          <Setter Property="Foreground" Value="{DynamicResource InsPanelTitleBrush}" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Style Selector="^[(ctl|PanelLook.Alert)=True]">
+            <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookPanelIco" TargetType="Border" ctl:ClassTheme.For="panel-ico">
+        <Style Selector="^.panel-ico">
+          <Setter Property="Width" Value="36" />
+          <Setter Property="Height" Value="36" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Setter Property="Background" Value="{DynamicResource InsPanelIcoBrush}" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+          <Setter Property="TextElement.FontSize" Value="15" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Setter Property="ctl:ClassTheme.ChildHorizontalAlignment" Value="Center" />
+          <Setter Property="ctl:ClassTheme.ChildVerticalAlignment" Value="Center" />
+          <Style Selector="^[(ctl|PanelLook.Alert)=True]">
+            <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneBad}" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <!-- Right is the end edge: an RTL parent mirrors it -->
+      <ControlTheme x:Key="InsLookPanelActions" TargetType="StackPanel" ctl:ClassTheme.For="panel-actions">
+        <Style Selector="^.panel-actions">
+          <Setter Property="Orientation" Value="Horizontal" />
+          <Setter Property="Spacing" Value="8" />
+          <Setter Property="HorizontalAlignment" Value="Right" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+      </ControlTheme>
+
+      <!-- Inside a flush body the note drops its rule and keeps a smaller inset of its own -->
+      <ControlTheme x:Key="InsLookPanelNote" TargetType="Border" ctl:ClassTheme.For="panel-note">
+        <Style Selector="^.panel-note">
+          <Setter Property="Padding" Value="18,10" />
+          <Setter Property="BorderThickness" Value="0,0,0,1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+          <Setter Property="TextElement.FontSize" Value="13" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText2}" />
+          <Style Selector="^[(ctl|PanelLook.Flush)=True]">
+            <Setter Property="Padding" Value="10,6,10,12" />
+            <Setter Property="BorderThickness" Value="0" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookPanelBody" TargetType="Border" ctl:ClassTheme.For="panel-body">
+        <Style Selector="^.panel-body">
+          <Setter Property="Padding" Value="20" />
+          <Style Selector="^.flush">
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="ctl:PanelLook.Flush" Value="True" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookPanelFoot" TargetType="Border" ctl:ClassTheme.For="panel-foot">
+        <Style Selector="^.panel-foot">
+          <Setter Property="Padding" Value="18,12" />
+          <Setter Property="BorderThickness" Value="0,1,0,0" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+        </Style>
+      </ControlTheme>
     </ResourceDictionary>
   </Styles.Resources>
-
-  <!-- The glass surfaces: card, glass and panel share the rim and the shadow with its bevel -->
-  <Style Selector="Border.card, Border.glass, Border.panel">
-    <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsGlassRim}" />
-    <Setter Property="BoxShadow">
-      <MultiBinding Converter="{x:Static ctl:PanelShadows.Join}">
-        <DynamicResource ResourceKey="InsShGlass" />
-        <DynamicResource ResourceKey="InsBevel" />
-      </MultiBinding>
-    </Setter>
-  </Style>
-  <Style Selector="Border.card">
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
-    <Setter Property="Background" Value="{DynamicResource InsGlassFill}" />
-  </Style>
-  <Style Selector="Border.glass">
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
-    <Setter Property="Background" Value="{DynamicResource InsGlassSheenFill}" />
-  </Style>
-  <Style Selector="Border.panel">
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
-    <Setter Property="Background" Value="{DynamicResource InsGlassFill}" />
-  </Style>
-  <!-- RTL mirrors the drawing, so these brushes are mirrored back: the light stays at the top left, as on the web -->
-  <Style Selector="Border.card[FlowDirection=RightToLeft], Border.panel[FlowDirection=RightToLeft]">
-    <Setter Property="Background" Value="{DynamicResource InsGlassFillRtl}" />
-  </Style>
-  <Style Selector="Border.glass[FlowDirection=RightToLeft]">
-    <Setter Property="Background" Value="{DynamicResource InsGlassSheenFillRtl}" />
-  </Style>
-
-  <!-- Glass inside glass strips to a flat fill: a second frost is what turns the effect to mush -->
-  <Style Selector="Border.glass Border.glass">
-    <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
-    <Setter Property="BorderBrush" Value="Transparent" />
-    <Setter Property="BoxShadow" Value="none" />
-  </Style>
-  <Style Selector="Border.glass-inner">
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
-    <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
-    <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
-  </Style>
-
-  <!-- The panel's parts, as children of a Border.panel (usually in a DockPanel) -->
-  <Style Selector="Border.panel-head">
-    <Setter Property="Padding" Value="20,14" />
-    <Setter Property="BorderThickness" Value="0,0,0,1" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
-  </Style>
-  <Style Selector="TextBlock.panel-title">
-    <Setter Property="FontSize" Value="17" />
-    <Setter Property="FontWeight" Value="ExtraBold" />
-    <Setter Property="Foreground" Value="{DynamicResource InsPanelTitleBrush}" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="Border.panel-ico">
-    <Setter Property="Width" Value="36" />
-    <Setter Property="Height" Value="36" />
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
-    <Setter Property="Background" Value="{DynamicResource InsPanelIcoBrush}" />
-    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneBrandSoft}" />
-    <Setter Property="TextElement.FontSize" Value="15" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="Border.panel-ico > :is(Control)">
-    <Setter Property="HorizontalAlignment" Value="Center" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <!-- Right is the end edge: an RTL parent mirrors it -->
-  <Style Selector="StackPanel.panel-actions">
-    <Setter Property="Orientation" Value="Horizontal" />
-    <Setter Property="Spacing" Value="8" />
-    <Setter Property="HorizontalAlignment" Value="Right" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="Border.panel-note">
-    <Setter Property="Padding" Value="18,10" />
-    <Setter Property="BorderThickness" Value="0,0,0,1" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
-    <Setter Property="TextElement.FontSize" Value="13" />
-    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText2}" />
-  </Style>
-  <Style Selector="Border.panel-body">
-    <Setter Property="Padding" Value="20" />
-  </Style>
-  <Style Selector="Border.panel-body.flush">
-    <Setter Property="Padding" Value="10" />
-  </Style>
-  <!-- Inside a flush body the note drops its rule and keeps a smaller inset of its own -->
-  <Style Selector="Border.panel-body.flush Border.panel-note">
-    <Setter Property="Padding" Value="10,6,10,12" />
-    <Setter Property="BorderThickness" Value="0" />
-  </Style>
-  <Style Selector="Border.panel-foot">
-    <Setter Property="Padding" Value="18,12" />
-    <Setter Property="BorderThickness" Value="0,1,0,0" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
-  </Style>
-
-  <!-- A panel whose contents are the problem: the tint is on the head only -->
-  <!-- No clip on the panel, since Avalonia's clip would cut its shadow, so the tinted head rounds itself inside the 1px rim -->
-  <Style Selector="Border.panel.alert Border.panel-head">
-    <Setter Property="CornerRadius" Value="21,21,0,0" />
-    <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
-  </Style>
-  <Style Selector="Border.panel.alert TextBlock.panel-title">
-    <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
-  </Style>
-  <Style Selector="Border.panel.alert Border.panel-ico">
-    <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
-    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneBad}" />
-  </Style>
-
-  <!-- Only a surface that opted in moves under the pointer -->
-  <Style Selector="Border.hoverable">
-    <Setter Property="Transitions">
-      <Transitions>
-        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-        <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-        <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-      </Transitions>
-    </Setter>
-  </Style>
-  <Style Selector="Border.hoverable:pointerover">
-    <Setter Property="RenderTransform" Value="translateY(-2px)" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsRimTop}" />
-    <Setter Property="BoxShadow">
-      <MultiBinding Converter="{x:Static ctl:PanelShadows.Join}">
-        <DynamicResource ResourceKey="InsShLg" />
-        <DynamicResource ResourceKey="InsBevel" />
-      </MultiBinding>
-    </Setter>
-  </Style>
 
 </Styles>

@@ -99,7 +99,7 @@
       </ControlTheme>
 
       <!-- The stat tile: each part takes its look by class, and the tile hands its tone, size and hover down to the parts -->
-      <ControlTheme x:Key="InsLookStat" TargetType="Border" ins:ClassTheme.For="stat">
+      <ControlTheme x:Key="InsLookStat" TargetType="Border" BasedOn="{StaticResource InsLookSurface}" ins:ClassTheme.For="stat">
         <Style Selector="^.stat">
           <Setter Property="Padding" Value="16,12" />
           <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
