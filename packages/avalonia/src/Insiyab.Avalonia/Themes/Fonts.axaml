@@ -21,12 +21,4 @@
     <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
   </Style>
 
-  <!-- The display face is LTR-only and only on display and h1-h3, as in 08-type.css; h4 keeps the body face -->
-  <Style Selector=":is(TextBlock).display[FlowDirection=RightToLeft], :is(TextBlock).h1[FlowDirection=RightToLeft], :is(TextBlock).h2[FlowDirection=RightToLeft], :is(TextBlock).h3[FlowDirection=RightToLeft]">
-    <Setter Property="FontFamily" Value="{DynamicResource InsFontArabic}" />
-  </Style>
-  <Style Selector=":is(TextBlock).display[FlowDirection=LeftToRight], :is(TextBlock).h1[FlowDirection=LeftToRight], :is(TextBlock).h2[FlowDirection=LeftToRight], :is(TextBlock).h3[FlowDirection=LeftToRight]">
-    <Setter Property="FontFamily" Value="{DynamicResource InsFontHeadingEn}" />
-  </Style>
-
 </Styles>

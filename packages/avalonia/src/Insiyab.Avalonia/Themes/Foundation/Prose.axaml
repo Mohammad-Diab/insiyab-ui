@@ -2,6 +2,84 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ctl="using:Insiyab.Avalonia.Controls">
 
+  <Styles.Resources>
+    <ResourceDictionary>
+      <!-- The text a pre block gives its own child: pinned to the left in either direction -->
+      <ControlTheme x:Key="InsProsePreText" TargetType="TextBlock">
+        <Style Selector="^[(ctl|ClassTheme.Relayed)=True]">
+          <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The boxed chip for code outside running text -->
+      <ControlTheme x:Key="InsLookProseCode" TargetType="Border" ctl:ClassTheme.For="code">
+        <Style Selector="^.code">
+          <Setter Property="FlowDirection" Value="LeftToRight" />
+          <Setter Property="Padding" Value="5.25,1.75" />
+          <Setter Property="CornerRadius" Value="5" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+          <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+          <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontMono}" />
+          <Setter Property="TextElement.FontSize" Value="14" />
+          <Setter Property="TextBlock.LineHeight" Value="NaN" />
+        </Style>
+      </ControlTheme>
+
+      <!-- A code block starts at the left in either direction -->
+      <ControlTheme x:Key="InsLookProsePre" TargetType="Border" ctl:ClassTheme.For="pre">
+        <Style Selector="^.pre">
+          <Setter Property="FlowDirection" Value="LeftToRight" />
+          <Setter Property="Padding" Value="16.25,13" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+          <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+          <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontMono}" />
+          <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsSm}" />
+          <Setter Property="TextBlock.LineHeight" Value="20.8" />
+          <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
+          <Setter Property="ctl:ClassTheme.ChildTheme" Value="{StaticResource InsProsePreText}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The quote's bar is on the start edge and its rounding on the end edge, both mirroring with the page -->
+      <ControlTheme x:Key="InsLookProseQuote" TargetType="Border" ctl:ClassTheme.For="blockquote">
+        <Style Selector="^.blockquote">
+          <Setter Property="Padding" Value="20,12" />
+          <Setter Property="BorderThickness" Value="3,0,0,0" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsPrimaryMid}" />
+          <Setter Property="CornerRadius" Value="0,10,10,0" />
+          <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The cells of a plain table in an article -->
+      <ControlTheme x:Key="InsLookProseCell" TargetType="Border" ctl:ClassTheme.For="th td">
+        <Style Selector="^.th, ^.td">
+          <Setter Property="Padding" Value="10.5,7" />
+          <Setter Property="BorderThickness" Value="0,0,0,1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+        </Style>
+        <Style Selector="^.th">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+          <Setter Property="TextElement.FontWeight" Value="Bold" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsLabel}" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookProseTerm" TargetType="TextBlock" ctl:ClassTheme.For="dt dd">
+        <Style Selector="^.dt">
+          <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style Selector="^.dd">
+          <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+          <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
   <!-- The labelled divider: the word between two hairlines, or after one with .start -->
   <Style Selector="ctl|Divider">
     <Setter Property="Focusable" Value="False" />
@@ -97,44 +175,14 @@
     <Setter Property="FontSize" Value="14" />
     <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
   </Style>
-  <Style Selector="Border.code">
-    <Setter Property="FlowDirection" Value="LeftToRight" />
-    <Setter Property="Padding" Value="5.25,1.75" />
-    <Setter Property="CornerRadius" Value="5" />
-    <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
-    <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
-    <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontMono}" />
-    <Setter Property="TextElement.FontSize" Value="14" />
-  </Style>
-  <Style Selector="Border.code > TextBlock, Border.code > ctl|TemplateText">
+  <!-- Inside prose the generic text rules outrank a block's inherited values, so the block's text rules are repeated under it -->
+  <Style Selector="ctl|Prose Border.code > TextBlock, ctl|Prose Border.code > ctl|TemplateText">
     <Setter Property="LineHeight" Value="NaN" />
   </Style>
-
-  <!-- A code block starts at the left in either direction -->
-  <Style Selector="Border.pre">
-    <Setter Property="FlowDirection" Value="LeftToRight" />
-    <Setter Property="Padding" Value="16.25,13" />
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
-    <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
-    <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
-    <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontMono}" />
-    <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsSm}" />
-  </Style>
-  <Style Selector="Border.pre TextBlock, Border.pre ctl|TemplateText">
+  <Style Selector="ctl|Prose Border.pre TextBlock, ctl|Prose Border.pre ctl|TemplateText">
     <Setter Property="LineHeight" Value="20.8" />
     <Setter Property="TextWrapping" Value="NoWrap" />
     <Setter Property="HorizontalAlignment" Value="Left" />
-  </Style>
-
-  <!-- The quote's bar is on the start edge and its rounding on the end edge, both mirroring with the page -->
-  <Style Selector="Border.blockquote">
-    <Setter Property="Padding" Value="20,12" />
-    <Setter Property="BorderThickness" Value="3,0,0,0" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsPrimaryMid}" />
-    <Setter Property="CornerRadius" Value="0,10,10,0" />
-    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
   </Style>
 
   <Style Selector="ctl|ProseList">
@@ -148,29 +196,11 @@
   <Style Selector="Grid.table">
     <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsMd}" />
   </Style>
-  <Style Selector="Grid.table > Border.th, Grid.table > Border.td">
-    <Setter Property="Padding" Value="10.5,7" />
-    <Setter Property="BorderThickness" Value="0,0,0,1" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
-  </Style>
-  <Style Selector="Grid.table > Border.th">
-    <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
-    <Setter Property="TextElement.FontWeight" Value="Bold" />
-    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsLabel}" />
-  </Style>
   <Style Selector="Grid.table TextBlock, Grid.table ctl|TemplateText">
     <Setter Property="LineHeight" Value="25.2" />
   </Style>
   <Style Selector="ctl|Prose[FlowDirection=LeftToRight] Grid.table TextBlock, ctl|Prose[FlowDirection=LeftToRight] Grid.table ctl|TemplateText">
     <Setter Property="LineHeight" Value="23.1" />
-  </Style>
-
-  <Style Selector="TextBlock.dt">
-    <Setter Property="FontWeight" Value="Bold" />
-  </Style>
-  <Style Selector="TextBlock.dd">
-    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
-    <Setter Property="Margin" Value="0,0,0,8" />
   </Style>
 
 </Styles>

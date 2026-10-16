@@ -499,28 +499,31 @@
         </Style>
       </ControlTheme>
 
+      <!-- The field's label and hint, as .ins-label and .ins-hint -->
+      <ControlTheme x:Key="InsLookFieldText" TargetType="TextBlock" ins:ClassTheme.For="label hint">
+        <Style Selector="^.label">
+          <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+        </Style>
+        <Style Selector="^.label[FlowDirection=LeftToRight]">
+          <Setter Property="LetterSpacing" Value="0.13" />
+        </Style>
+        <Style Selector="^.hint">
+          <Setter Property="FontSize" Value="11" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+      </ControlTheme>
     </ResourceDictionary>
   </Styles.Resources>
 
-  <!-- The field's label and hint, as .ins-label and .ins-hint; the required mark as .ins-req. -->
-  <Style Selector="TextBlock.label">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
-    <Setter Property="FontWeight" Value="Bold" />
-    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
-  </Style>
-  <Style Selector="TextBlock.label[FlowDirection=LeftToRight]">
-    <Setter Property="LetterSpacing" Value="0.13" />
-  </Style>
   <!-- The empty places of a MaskedTextBox's mask. -->
   <Style Selector="TextBlock.mask-ink Run.prompt">
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
   </Style>
+  <!-- The required mark, as .ins-req. -->
   <Style Selector="Run.req">
     <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
-  </Style>
-  <Style Selector="TextBlock.hint">
-    <Setter Property="FontSize" Value="11" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
-    <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
 </Styles>

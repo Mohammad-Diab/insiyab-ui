@@ -75,86 +75,89 @@
           <StaticResource x:Key="NotificationCardForegroundBrush" ResourceKey="SystemControlForegroundBaseHighBrush" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
+
+      <!-- Avalonia's LineHeight is in pixels, so each one below is the CSS ratio times its size token -->
+      <ControlTheme x:Key="InsLookType" TargetType="TextBlock" ctl:ClassTheme.For="display h1 h2 h3 h4 lead prose eyebrow muted num">
+        <!-- The display face is LTR-only and only on display and h1-h3, as in 08-type.css; h4 keeps the body face -->
+        <Style Selector="^.display[FlowDirection=RightToLeft], ^.h1[FlowDirection=RightToLeft], ^.h2[FlowDirection=RightToLeft], ^.h3[FlowDirection=RightToLeft]">
+          <Setter Property="FontFamily" Value="{DynamicResource InsFontArabic}" />
+        </Style>
+        <Style Selector="^.display[FlowDirection=LeftToRight], ^.h1[FlowDirection=LeftToRight], ^.h2[FlowDirection=LeftToRight], ^.h3[FlowDirection=LeftToRight]">
+          <Setter Property="FontFamily" Value="{DynamicResource InsFontHeadingEn}" />
+        </Style>
+        <Style Selector="^.display, ^.h1, ^.h2, ^.h3, ^.h4">
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style Selector="^.display">
+          <Setter Property="FontSize" Value="{DynamicResource InsFsDisplay}" />
+          <Setter Property="LineHeight" Value="57.6" />
+        </Style>
+        <Style Selector="^.h1">
+          <Setter Property="FontSize" Value="{DynamicResource InsFsH1}" />
+          <Setter Property="LineHeight" Value="36.4" />
+        </Style>
+        <Style Selector="^.h2">
+          <Setter Property="FontSize" Value="{DynamicResource InsFsH2}" />
+          <Setter Property="LineHeight" Value="28.6" />
+        </Style>
+        <Style Selector="^.h3">
+          <Setter Property="FontSize" Value="{DynamicResource InsFsH3}" />
+          <Setter Property="LineHeight" Value="23.4" />
+        </Style>
+        <Style Selector="^.h4">
+          <Setter Property="FontSize" Value="{DynamicResource InsFsH4}" />
+          <Setter Property="LineHeight" Value="20.8" />
+        </Style>
+        <!-- Tracking is LTR only: on Arabic it pulls the joins apart -->
+        <Style Selector="^.display[FlowDirection=LeftToRight]">
+          <Setter Property="LetterSpacing" Value="-0.96" />
+        </Style>
+        <Style Selector="^.h1[FlowDirection=LeftToRight]">
+          <Setter Property="LetterSpacing" Value="-0.56" />
+        </Style>
+        <Style Selector="^.h2[FlowDirection=LeftToRight]">
+          <Setter Property="LetterSpacing" Value="-0.44" />
+        </Style>
+        <Style Selector="^.h3[FlowDirection=LeftToRight]">
+          <Setter Property="LetterSpacing" Value="-0.36" />
+        </Style>
+        <Style Selector="^.lead">
+          <Setter Property="FontSize" Value="18" />
+          <Setter Property="LineHeight" Value="32.4" />
+          <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style Selector="^.prose">
+          <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
+          <Setter Property="LineHeight" Value="28.8" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style Selector="^.prose[FlowDirection=LeftToRight]">
+          <Setter Property="LineHeight" Value="26.4" />
+        </Style>
+        <Style Selector="^.eyebrow">
+          <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+        </Style>
+        <Style Selector="^.eyebrow[FlowDirection=LeftToRight]">
+          <Setter Property="LetterSpacing" Value="0.96" />
+        </Style>
+        <Style Selector="^.muted">
+          <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+        </Style>
+        <!-- An LTR island so a sign stays on its figure; Left is the start edge, since an RTL parent mirrors it -->
+        <Style Selector="^.num">
+          <Setter Property="FlowDirection" Value="LeftToRight" />
+          <Setter Property="HorizontalAlignment" Value="Left" />
+          <Setter Property="FontFeatures" Value="+tnum,+lnum" />
+        </Style>
+      </ControlTheme>
     </ResourceDictionary>
   </Styles.Resources>
-
-  <!-- Avalonia's LineHeight is in pixels, so each one below is the CSS ratio times its size token -->
-  <Style Selector="TextBlock.display, TextBlock.h1, TextBlock.h2, TextBlock.h3, TextBlock.h4">
-    <Setter Property="FontWeight" Value="Bold" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-    <Setter Property="TextWrapping" Value="Wrap" />
-  </Style>
-  <Style Selector="TextBlock.display">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsDisplay}" />
-    <Setter Property="LineHeight" Value="57.6" />
-  </Style>
-  <Style Selector="TextBlock.h1">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsH1}" />
-    <Setter Property="LineHeight" Value="36.4" />
-  </Style>
-  <Style Selector="TextBlock.h2">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsH2}" />
-    <Setter Property="LineHeight" Value="28.6" />
-  </Style>
-  <Style Selector="TextBlock.h3">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsH3}" />
-    <Setter Property="LineHeight" Value="23.4" />
-  </Style>
-  <Style Selector="TextBlock.h4">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsH4}" />
-    <Setter Property="LineHeight" Value="20.8" />
-  </Style>
-
-  <!-- Tracking is LTR only: on Arabic it pulls the joins apart -->
-  <Style Selector="TextBlock.display[FlowDirection=LeftToRight]">
-    <Setter Property="LetterSpacing" Value="-0.96" />
-  </Style>
-  <Style Selector="TextBlock.h1[FlowDirection=LeftToRight]">
-    <Setter Property="LetterSpacing" Value="-0.56" />
-  </Style>
-  <Style Selector="TextBlock.h2[FlowDirection=LeftToRight]">
-    <Setter Property="LetterSpacing" Value="-0.44" />
-  </Style>
-  <Style Selector="TextBlock.h3[FlowDirection=LeftToRight]">
-    <Setter Property="LetterSpacing" Value="-0.36" />
-  </Style>
-
-  <Style Selector="TextBlock.lead">
-    <Setter Property="FontSize" Value="18" />
-    <Setter Property="LineHeight" Value="32.4" />
-    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
-    <Setter Property="TextWrapping" Value="Wrap" />
-  </Style>
-
-  <Style Selector="TextBlock.prose">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
-    <Setter Property="LineHeight" Value="28.8" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-    <Setter Property="TextWrapping" Value="Wrap" />
-  </Style>
-  <Style Selector="TextBlock.prose[FlowDirection=LeftToRight]">
-    <Setter Property="LineHeight" Value="26.4" />
-  </Style>
-
-  <Style Selector="TextBlock.eyebrow">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-    <Setter Property="FontWeight" Value="Bold" />
-    <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
-  </Style>
-  <Style Selector="TextBlock.eyebrow[FlowDirection=LeftToRight]">
-    <Setter Property="LetterSpacing" Value="0.96" />
-  </Style>
-
-  <Style Selector="TextBlock.muted">
-    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
-  </Style>
-
-  <!-- An LTR island so a sign stays on its figure; Left is the start edge, since an RTL parent mirrors it -->
-  <Style Selector="TextBlock.num">
-    <Setter Property="FlowDirection" Value="LeftToRight" />
-    <Setter Property="HorizontalAlignment" Value="Left" />
-    <Setter Property="FontFeatures" Value="+tnum,+lnum" />
-  </Style>
 
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Foundation/Prose.axaml" />
 
