@@ -154,6 +154,10 @@
           <Setter Property="BorderThickness" Value="0,1,0,0" />
           <Setter Property="CornerRadius" Value="32,32,0,0" />
         </Style>
+        <!-- Over a desktop window the drawer's corners meet the window's own -->
+        <Style Selector="^.drawer:edge">
+          <Setter Property="CornerRadius" Value="{Binding $self.EdgeCorners}" />
+        </Style>
         <!-- Pinned beside the content: square, no shadow, the column decides the size -->
         <Style Selector="^.drawer:pinned">
           <Setter Property="CornerRadius" Value="0" />

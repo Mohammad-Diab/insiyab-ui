@@ -132,4 +132,14 @@ public class ListingTests
         Settle(300);
         Assert.Equal(Indented, w.Clipboard!.TryGetTextAsync().GetAwaiter().GetResult());
     }
+    // The gallery has one component for code samples, so no page draws its own plain `pre` box.
+    [AvaloniaFact]
+    public void Gallery_pages_show_code_only_through_the_listing()
+    {
+        var pages = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(ThisFile())!, "../../gallery/Insiyab.Avalonia.Gallery/Pages"));
+        var offenders = Directory.EnumerateFiles(pages, "*.axaml").Where(f => File.ReadAllText(f).Contains("Classes=\"pre\"")).Select(Path.GetFileName).ToList();
+        Assert.True(offenders.Count == 0, "pages with a plain pre box: " + string.Join(", ", offenders));
+    }
+
+    private static string ThisFile([System.Runtime.CompilerServices.CallerFilePath] string file = "") => file;
 }

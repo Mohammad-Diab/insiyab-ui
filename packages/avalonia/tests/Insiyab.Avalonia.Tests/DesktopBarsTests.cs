@@ -51,6 +51,39 @@ public class ToolbarTests
 
     private static string Label(Control c) => c is ToolbarButton b ? b.Label! : c is ToolbarToggleButton t ? t.Label! : c.GetType().Name;
 
+    // The playground's toolbar with the delete command kept in the menu: the others stay in the row, and the menu holds it.
+    [AvaloniaTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void A_command_kept_in_the_menu_leaves_the_others_in_the_row(bool disabled)
+    {
+        var bar = new Toolbar { HorizontalAlignment = HorizontalAlignment.Stretch, VerticalAlignment = VerticalAlignment.Center };
+        var plus = new ToolbarButton { Icon = Glyph, Label = "طلب جديد", ShowLabel = true, Shortcut = "Ctrl+N" };
+        var folder = new ToolbarButton { Icon = Glyph, Label = "فتح", Shortcut = "Ctrl+O" };
+        var copy = new ToolbarButton { Icon = Glyph, Label = "نسخ" };
+        var star = new ToolbarToggleButton { Icon = Glyph, Label = "مميّز" };
+        var share = new ToolbarButton { Icon = Glyph, Label = "مشاركة", Flyout = new PopMenu { Items = { new MenuItem { Header = "بالبريد" }, new MenuItem { Header = "نسخ الرابط" } } } };
+        var delete = new ToolbarButton { Icon = Glyph, Label = "حذف", Shortcut = "Delete", IsEnabled = !disabled };
+        Toolbar.SetOverflow(delete, ToolbarOverflow.Always);
+        foreach (var c in new Control[] { plus, folder, copy, new Separator(), star, share, new Separator(), delete }) bar.Items.Add(c);
+        Show(new Border { Padding = new Thickness(24, 64), Child = bar }, FlowDirection.RightToLeft, width: 900, height: 400);
+        AssertRowKeepsItsCommands(bar, new Control[] { plus, folder, copy, star, share }, delete, disabled);
+    }
+
+    internal static void AssertRowKeepsItsCommands(Toolbar bar, Control[] row, Control delete, bool disabled)
+    {
+        Assert.All(row, c =>
+        {
+            Assert.True(c.IsEffectivelyVisible, $"{Label(c)} is not shown");
+            Assert.True(c.Bounds.Width > 0, $"{Label(c)} has no width");
+        });
+        Assert.False(delete.IsVisible);
+        Assert.Contains(delete, bar.OverflowItems);
+        Assert.True(bar.MoreButton!.IsVisible);
+        var item = Assert.Single(bar.MenuEntries().OfType<MenuItem>(), i => (string?)i.Header == "حذف");
+        Assert.Equal(!disabled, item.IsEnabled);
+    }
+
     [AvaloniaFact]
     public void Everything_fits_in_a_wide_bar()
     {

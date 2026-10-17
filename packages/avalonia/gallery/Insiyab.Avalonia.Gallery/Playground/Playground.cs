@@ -29,6 +29,7 @@ public class Playground : Border
     private readonly List<Action> _resets = [];
     private TextBlock? _event;
     private bool _quiet;
+    private double _pad = 64;
 
     protected override Type StyleKeyOverride => typeof(Border);
 
@@ -73,6 +74,8 @@ public class Playground : Border
         _values.Clear();
         _boxes.Clear();
         _resets.Clear();
+        _pad = 64;
+        _view.Padding = new Thickness(24, 64);
         if (Def is not { } def) return;
         foreach (var c in def.Controls)
         {
@@ -209,11 +212,11 @@ public class Playground : Border
         else PlayText.Fill(_event, markup);
     }
 
-    // The notes sit at the foot of the preview, so the preview keeps as much room above and below its component as they take.
+    // The notes sit at the foot of the preview, so the preview keeps as much room above and below its component as they take; within one playground it only grows, so a note that comes and goes never moves it.
     private void FitNotes()
     {
         var room = _notes.Children.Count == 0 ? 0 : _notes.Bounds.Height + 24;
-        var pad = Math.Max(64, room);
-        if (_view.Padding.Top != pad) _view.Padding = new Thickness(24, pad);
+        _pad = Math.Max(_pad, room);
+        if (_view.Padding.Top != _pad) _view.Padding = new Thickness(24, _pad);
     }
 }

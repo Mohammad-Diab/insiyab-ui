@@ -1,8 +1,10 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.TitleBarPage">
   <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
     <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/FoundationFrames.axaml" />
     <Style Selector="TextBlock.p">
       <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
@@ -10,9 +12,6 @@
       <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
       <Setter Property="TextWrapping" Value="Wrap" />
       <Setter Property="Margin" Value="0,0,0,12" />
-    </Style>
-    <Style Selector="Border.pre">
-      <Setter Property="Margin" Value="0,0,0,16" />
     </Style>
     <Style Selector="Border.frame">
       <Setter Property="Padding" Value="0" />
@@ -83,15 +82,11 @@
     <TextBlock Classes="p">
       <Run Text="فعّل " /><Run Classes="code" Text="&#x2066;&#x202F;TitleBar.Extends&#x202F;&#x2069;" /><Run Text=" على النافذة، فيأخذ التطبيق مكان شريط العنوان:" />
     </TextBlock>
-    <Border Classes="pre">
-      <TextBlock Text="&lt;Window xmlns:ins=&quot;using:Insiyab.Avalonia.Controls&quot;&#10;        ins:TitleBar.Extends=&quot;True&quot;&gt;" />
-    </Border>
+    <pg:PlayListing Code="&lt;Window xmlns:ins=&quot;using:Insiyab.Avalonia.Controls&quot;&#10;        ins:TitleBar.Extends=&quot;True&quot;&gt;" Margin="0,0,0,24" />
     <TextBlock Classes="p">
       <Run Text="ثم ضع " /><Run Classes="code" Text="&#x2066;&#x202F;CaptionButtons&#x202F;&#x2069;" /><Run Text=" في آخر الشريط العلوي، في عمود رابع بعد المناطق الثلاث:" />
     </TextBlock>
-    <Border Classes="pre">
-      <TextBlock Text="&lt;Border Classes=&quot;topbar&quot; ins:TitleBar.IsDragArea=&quot;True&quot;&gt;&#10;  &lt;Grid ColumnDefinitions=&quot;*,Auto,*,Auto&quot;&gt;&#10;    &lt;StackPanel Classes=&quot;zone start&quot;&gt;&#10;      &lt;Border Classes=&quot;island brand&quot;&gt;&#10;        &lt;StackPanel&gt;&#10;          &lt;Border Classes=&quot;shell-mark&quot; ins:TitleBar.IsSystemMenuArea=&quot;True&quot;&gt;…&lt;/Border&gt;&#10;          …&#10;        &lt;/StackPanel&gt;&#10;      &lt;/Border&gt;&#10;    &lt;/StackPanel&gt;&#10;    &lt;StackPanel Classes=&quot;zone center&quot;&gt;…&lt;/StackPanel&gt;&#10;    &lt;StackPanel Classes=&quot;zone end&quot;&gt;…&lt;/StackPanel&gt;&#10;    &lt;ins:CaptionButtons Grid.Column=&quot;3&quot; /&gt;&#10;  &lt;/Grid&gt;&#10;&lt;/Border&gt;" />
-    </Border>
+    <pg:PlayListing Code="&lt;Border Classes=&quot;topbar&quot; ins:TitleBar.IsDragArea=&quot;True&quot;&gt;&#10;  &lt;Grid ColumnDefinitions=&quot;*,Auto,*,Auto&quot;&gt;&#10;    &lt;StackPanel Classes=&quot;zone start&quot;&gt;&#10;      &lt;Border Classes=&quot;island brand&quot;&gt;&#10;        &lt;StackPanel&gt;&#10;          &lt;Border Classes=&quot;shell-mark&quot; ins:TitleBar.IsSystemMenuArea=&quot;True&quot;&gt;…&lt;/Border&gt;&#10;          …&#10;        &lt;/StackPanel&gt;&#10;      &lt;/Border&gt;&#10;    &lt;/StackPanel&gt;&#10;    &lt;StackPanel Classes=&quot;zone center&quot;&gt;…&lt;/StackPanel&gt;&#10;    &lt;StackPanel Classes=&quot;zone end&quot;&gt;…&lt;/StackPanel&gt;&#10;    &lt;ins:CaptionButtons Grid.Column=&quot;3&quot; /&gt;&#10;  &lt;/Grid&gt;&#10;&lt;/Border&gt;" Margin="0,0,0,24" />
     <TextBlock Classes="p">
       <Run Classes="code" Text="&#x2066;&#x202F;IsDragArea&#x202F;&#x2069;" /><Run Text=" تجعل العنصر مقبضًا للنافذة: تسحبها منه، وتكبّرها أو تستعيدها بنقرة مزدوجة عليه. وما يأخذ التركيز داخله، كالأزرار والحقول، يبقى قابلًا للنقر كما هو." />
     </TextBlock>
@@ -101,9 +96,7 @@
     <TextBlock Classes="p">
       <Run Text="ولعرض الأزرار خارج شريط العنوان، كما في هذه الصفحة، أعطها " /><Run Classes="code" Text="&#x2066;&#x202F;Preview&#x202F;&#x2069;" /><Run Text=" بإحدى الحالات الثلاث، فتظهر بها ولا تمسّ النافذة:" />
     </TextBlock>
-    <Border Classes="pre">
-      <TextBlock Text="&lt;ins:CaptionButtons Preview=&quot;Maximized&quot; /&gt;" />
-    </Border>
+    <pg:PlayListing Code="&lt;ins:CaptionButtons Preview=&quot;Maximized&quot; /&gt;" Margin="0,0,0,24" />
 
     <TextBlock Classes="section" Text="ملاحظات" />
     <ins:ProseList>

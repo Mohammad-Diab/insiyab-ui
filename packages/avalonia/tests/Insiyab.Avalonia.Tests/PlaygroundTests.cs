@@ -3,6 +3,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Headless.XUnit;
 using Avalonia.Markup.Xaml;
+using Avalonia.VisualTree;
+using Insiyab.Avalonia.Controls;
 using Insiyab.Avalonia.Gallery.Playground;
 
 namespace Insiyab.Avalonia.Tests;
@@ -200,5 +202,62 @@ public class PlaygroundTests
         example.Code = "<CheckBox />";
         Assert.Equal(2, seen.Count);
         Assert.IsType<CheckBox>(((Panel)seen[1]).Children.Single());
+    }
+    // The toolbar playground with «الحذف في القائمة وحدها» on, drawn the way the stage draws it: the others stay in the row.
+    [AvaloniaTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void The_toolbar_play_keeps_its_row_with_delete_in_the_menu(bool disabled)
+    {
+        LoadIcons();
+        var def = ToolbarPlay.Toolbar;
+        var raw = def.Controls.ToDictionary(c => c.Key, c => c.Value);
+        raw["always"] = "true";
+        if (disabled) raw["disabled"] = "true";
+        var preview = PlayCode.Render(def.Axaml(def.State(raw)));
+        preview.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch;
+        preview.VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Center;
+        var page = new Border { Padding = new Thickness(24, 64), Child = preview };
+        Ui.Show(page, global::Avalonia.Media.FlowDirection.RightToLeft, width: 900, height: 400);
+        var bar = preview.GetVisualDescendants().OfType<Insiyab.Avalonia.Controls.Toolbar>().Single();
+        var commands = bar.Items.Where(c => c is not Separator).ToList();
+        var delete = commands.OfType<ToolbarButton>().Single(b => b.Label == "حذف");
+        ToolbarTests.AssertRowKeepsItsCommands(bar, commands.Where(c => c != delete).ToArray(), delete, disabled);
+    }
+
+    // The preview holds still while a note comes and goes: its share changes, a note is raised, and the split stays where it was.
+    [AvaloniaFact]
+    public void The_split_play_holds_still_while_its_share_changes()
+    {
+        LoadIcons();
+        var page = Insiyab.Avalonia.Gallery.GalleryPages.Find("split")!.Create();
+        var window = Ui.Show(new ScrollViewer { Content = page }, global::Avalonia.Media.FlowDirection.RightToLeft, width: 1100, height: 900);
+        Ui.Settle(1000);
+        var play = page.GetVisualDescendants().OfType<Insiyab.Avalonia.Gallery.Playground.Playground>().First(p => p.Def == SplitPlay.Split);
+        var vertical = play.GetVisualDescendants().OfType<ToggleSwitch>().First(t => (string?)t.Content == "لوح فوق لوح");
+        vertical.IsChecked = true;
+        Ui.Settle(300);
+        var shares = play.GetVisualDescendants().OfType<Insiyab.Avalonia.Controls.Segmented>().First(s => s.Items.OfType<Insiyab.Avalonia.Controls.SegmentedItem>().Any(i => (string?)i.Content == "70%"));
+        double? first = null;
+        for (var i = 0; i < 3; i++)
+        {
+            shares.SelectedIndex = i;
+            Ui.Settle(300);
+            var split = play.GetVisualDescendants().OfType<Insiyab.Avalonia.Controls.Split>().Single();
+            var share = new[] { 30.0, 50.0, 70.0 }[i];
+            Assert.Equal(share, split.Share, 0);
+            if (first is { } held)
+            {
+                var before = split.TranslatePoint(new Point(0, 0), window)!.Value.Y;
+                Assert.True(Math.Abs(before - held) <= 0.5, $"the split moved to {before} when its share became {share}, it was at {held}");
+            }
+            split.RaiseEvent(new Insiyab.Avalonia.Controls.SplitShareEventArgs(Insiyab.Avalonia.Controls.Split.ShareCommittedEvent, split, split.Share));
+            Ui.Settle(300);
+            var y = split.TranslatePoint(new Point(0, 0), window)!.Value.Y;
+            first ??= y;
+            Assert.True(Math.Abs(y - first.Value) <= 0.5, $"the split is at {y} with share {share}, it was at {first}");
+            foreach (var scroll in split.GetVisualDescendants().OfType<ScrollViewer>())
+                Assert.True(scroll.Extent.Height <= scroll.Viewport.Height + 0.5, $"a pane scrolls at share {share}: {scroll.Extent.Height} in {scroll.Viewport.Height}");
+        }
     }
 }

@@ -47,7 +47,7 @@ public static class SplitPlay
         ],
         Axaml = s =>
         {
-            var attrs = (s.On("v") ? " Height=\"240\" Orientation=\"Vertical\"" : " Height=\"192\" StackWidth=\"0\"") +
+            var attrs = (s.On("v") ? " Height=\"320\" Orientation=\"Vertical\"" : " Height=\"192\" StackWidth=\"0\"") +
                 (s.Has("start") ? $" Share=\"{s["start"]}\" DefaultShare=\"{s["start"]}\"" : "") +
                 (s.On("limits") ? " Min=\"60\" Max=\"75\"" : "");
             return $"<ins:Split{attrs}>\n" +

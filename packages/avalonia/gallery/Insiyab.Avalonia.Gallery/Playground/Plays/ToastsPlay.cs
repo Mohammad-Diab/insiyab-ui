@@ -37,13 +37,17 @@ public static class ToastsPlay
         Controls =
         [
             Seg("how", "تظهر", "attr",
-                Choice("attr", "بخاصية على الزر", "ins:Toast.Text", "ضعها على زر فتظهر الرسالة حين يُضغط، وقيمتها نص الرسالة. ومن الشيفرة تستدعي `Toast.Show(this, text, tone)`. تطل الرسالة من الزاوية السفلى في جهة النهاية، وتغيب وحدها بعد خمس ثوانٍ أو حين تُنقر.", OptionKind.Property),
+                Choice("attr", "بخاصية على الزر", "ins:Toast.Text", "ضعها على زر فتظهر الرسالة حين يُضغط، وقيمتها نص الرسالة. ومن الشيفرة تستدعي `Toast.Show(this, text, tone)`. تطل الرسالة من الزاوية السفلى في جهة النهاية، وتغيب وحدها بعد خمس ثوانٍ.", OptionKind.Property),
                 Choice("code", "من الشيفرة")),
             Select("tone", "النبرة", "Ok",
                 Choice("Ok", "نجاح", "ins:Toast.Tone=\"Ok\"", "لما تم للتو بفعل المستخدم: حُفظ، أُرسل، نُسخ.", OptionKind.Property),
                 Choice("Info", "معلومة", "ins:Toast.Tone=\"Info\"", "لمعلومة عابرة، وهي النبرة إن لم تذكر غيرها.", OptionKind.Property),
                 Choice("Warn", "تحذير", "ins:Toast.Tone=\"Warn\"", "لما يستحق الانتباه ولا يوقف العمل.", OptionKind.Property),
                 Choice("Bad", "خطأ", "ins:Toast.Tone=\"Bad\"", "لعملية تعذرت، وتبقى رسالتها حتى تُغلق.", OptionKind.Property)),
+            Seg("close", "الإغلاق", "",
+                Choice("", "حسب النبرة"),
+                Choice("Timer", "وحدها", "ins:Toast.Close=\"Timer\"", "تغيب الرسالة وحدها بعد `Toast.Duration`، ولا زر إغلاق فيها حتى لو كانت خطأ. وبدون هذه الخاصية يبقى الخطأ حتى يُغلق وتغيب الرسائل الأخرى وحدها.", OptionKind.Property),
+                Choice("Button", "بزر الإغلاق", "ins:Toast.Close=\"Button\"", "تبقى الرسالة حتى يُضغط زر إغلاقها أو تغلقها لوحة المفاتيح، حتى لو كانت معلومة.", OptionKind.Property)),
             Text("text", "النص", "تم الحفظ"),
         ],
         Extra =
@@ -53,17 +57,18 @@ public static class ToastsPlay
         ],
         Axaml = s => s["how"] == "code"
             ? "<Button x:Name=\"Show\" Classes=\"secondary\" Content=\"اعرض الرسالة\" />"
-            : $"<Button Classes=\"secondary\" Content=\"اعرض الرسالة\" ins:Toast.Text=\"{s["text"]}\" ins:Toast.Tone=\"{s["tone"]}\" />",
+            : $"<Button Classes=\"secondary\" Content=\"اعرض الرسالة\" ins:Toast.Text=\"{s["text"]}\" ins:Toast.Tone=\"{s["tone"]}\"{(s.Has("close") ? $" ins:Toast.Close=\"{s["close"]}\"" : "")} />",
         Notes = s => s["how"] == "code"
-            ? [$"اضغط الزر لترى الرسالة بخياراتك. ويعرضها في الشيفرة `Toast.Show(this, \"{s["text"]}\", ToastTone.{s["tone"]})`."]
+            ? [$"اضغط الزر لترى الرسالة بخياراتك. ويعرضها في الشيفرة `Toast.Show(this, \"{s["text"]}\", ToastTone.{s["tone"]}{(s.Has("close") ? $", null, ToastClose.{s["close"]}" : "")})`."]
             : ["اضغط الزر لترى الرسالة بخياراتك."],
         Stage = (view, s, _) =>
         {
             if (s["how"] != "code") return;
             var text = s["text"].Replace("&quot;", "\"").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;", "&");
             var tone = Enum.Parse<ToastTone>(Tones.Contains(s["tone"]) ? s["tone"] : "Info");
+            ToastClose? close = s.Has("close") && Enum.TryParse<ToastClose>(s["close"], out var how) ? how : null;
             foreach (var b in view.GetLogicalDescendants().OfType<Button>())
-                b.Click += (_, _) => Insiyab.Avalonia.Controls.Toast.Show(b, text, tone);
+                b.Click += (_, _) => Insiyab.Avalonia.Controls.Toast.Show(b, text, tone, null, close);
         },
     };
 

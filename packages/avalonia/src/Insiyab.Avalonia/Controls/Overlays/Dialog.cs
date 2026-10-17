@@ -28,7 +28,7 @@ public sealed class DialogClosedEventArgs(object? result) : EventArgs
 
 /// <summary>The web's <c>dialog.ins-dialog</c> and <c>dialog.ins-drawer</c>: a modal panel over a dimmed window, with a head, a scrolling body and a foot. Classes: <c>sm</c>, <c>lg</c>; <c>drawer</c>, <c>drawer end</c>, <c>drawer bottom</c>. Declare it in <c>Resources</c> (or build it in code) and open it with <see cref="OpensProperty"/> on a button, <see cref="Open"/>, <see cref="ShowAsync(Control)"/> or <see cref="ShowAsWindowAsync"/>.</summary>
 [TemplatePart("PART_Close", typeof(Button))]
-[PseudoClasses(":open", ":titled", ":footed", ":pinned", ":window")]
+[PseudoClasses(":open", ":titled", ":footed", ":pinned", ":window", ":edge")]
 public class Dialog : ContentControl
 {
     public static readonly StyledProperty<object?> TitleProperty =
@@ -45,6 +45,10 @@ public class Dialog : ContentControl
 
     public static readonly StyledProperty<string> CloseLabelProperty =
         AvaloniaProperty.Register<Dialog, string>(nameof(CloseLabel), "إغلاق");
+
+    /// <summary>The corners a drawer takes over a desktop window: the window's own radius on its open side, square along the edge; set by the dialog.</summary>
+    public static readonly StyledProperty<CornerRadius> EdgeCornersProperty =
+        AvaloniaProperty.Register<Dialog, CornerRadius>(nameof(EdgeCorners));
 
     public static readonly DirectProperty<Dialog, bool> IsOpenProperty =
         AvaloniaProperty.RegisterDirect<Dialog, bool>(nameof(IsOpen), d => d.IsOpen);
@@ -77,6 +81,7 @@ public class Dialog : ContentControl
     private Button? _close;
     private DrawerHost? _host;
     private DialogWindow? _window;
+    private Window? _edgeWindow;
 
     static Dialog()
     {
@@ -100,6 +105,8 @@ public class Dialog : ContentControl
 
     /// <summary>The cross's accessible name.</summary>
     public string CloseLabel { get => GetValue(CloseLabelProperty); set => SetValue(CloseLabelProperty, value); }
+
+    public CornerRadius EdgeCorners { get => GetValue(EdgeCornersProperty); private set => SetValue(EdgeCornersProperty, value); }
 
     public bool IsOpen { get => _isOpen; private set => SetAndRaise(IsOpenProperty, ref _isOpen, value); }
 
@@ -255,6 +262,35 @@ public class Dialog : ContentControl
     {
         base.OnAttachedToVisualTree(e);
         if (!Classes.Contains("drawer") && !Classes.Contains("dialog")) Classes.Add("dialog");
+        FollowWindow(TopLevel.GetTopLevel(this) as Window);
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        FollowWindow(null);
+    }
+
+    // A drawer over a desktop window follows the window's state, so its open side meets the window's own corner.
+    private void FollowWindow(Window? window)
+    {
+        if (_edgeWindow is not null) _edgeWindow.PropertyChanged -= OnWindowChanged;
+        _edgeWindow = IsDrawer && !IsPinned && _window is null ? window : null;
+        if (_edgeWindow is not null) _edgeWindow.PropertyChanged += OnWindowChanged;
+        UpdateEdge();
+    }
+
+    private void OnWindowChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == Window.WindowStateProperty) UpdateEdge();
+    }
+
+    private void UpdateEdge()
+    {
+        var r = WindowCorner.Of(_edgeWindow);
+        PseudoClasses.Set(":edge", !double.IsNaN(r));
+        if (double.IsNaN(r)) return;
+        EdgeCorners = Classes.Contains("bottom") ? new CornerRadius(r, r, 0, 0) : Classes.Contains("end") ? new CornerRadius(r, 0, 0, r) : new CornerRadius(0, r, r, 0);
     }
 
     protected override void OnKeyDown(KeyEventArgs e)

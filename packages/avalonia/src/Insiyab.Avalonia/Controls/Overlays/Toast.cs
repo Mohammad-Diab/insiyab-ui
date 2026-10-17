@@ -22,7 +22,16 @@ public enum ToastTone
     Bad,
 }
 
-/// <summary>The web's <c>Insiyab.toast(text, tone)</c>: a short message in the bottom corner on the end side of the window, newest nearest the edge, that leaves on its own after five seconds, or when clicked. An error stays until it is closed. Hovering or focusing a toast holds the timer; <see cref="FocusGesture"/> (F8) moves focus to the toasts and back, the arrows walk them, and Enter, Space, Delete or Escape dismisses one. At a phone's width the strip spans the bottom. It is Avalonia's own <see cref="WindowNotificationManager"/> and <see cref="NotificationCard"/>, themed, one manager per window, above any open dialog. On a button, <see cref="TextProperty"/> and <see cref="ToneProperty"/> show one on each click, as <c>data-ins-toast</c>.</summary>
+/// <summary>How a toast closes: on its own clock, or only by its close button.</summary>
+public enum ToastClose
+{
+    /// <summary>Leaves on its own after its duration; no close button.</summary>
+    Timer,
+    /// <summary>Stays until its close button or a key closes it.</summary>
+    Button,
+}
+
+/// <summary>The web's <c>Insiyab.toast(text, tone)</c>: a short message in the bottom corner on the end side of the window, newest nearest the edge, that leaves on its own after five seconds, or, with <see cref="CloseProperty"/> set to <see cref="ToastClose.Button"/> (an error's default), stays until its × is pressed; a click on its body does nothing. Hovering or focusing a toast holds the timer; <see cref="FocusGesture"/> (F8) moves focus to the toasts and back, the arrows walk them, and Enter, Space, Delete or Escape dismisses one. At a phone's width the strip spans the bottom. It is Avalonia's own <see cref="WindowNotificationManager"/> and <see cref="NotificationCard"/>, themed, one manager per window, above any open dialog. On a button, <see cref="TextProperty"/> and <see cref="ToneProperty"/> show one on each click, as <c>data-ins-toast</c>.</summary>
 public sealed class Toast
 {
     public static readonly AttachedProperty<string?> TextProperty =
@@ -30,6 +39,10 @@ public sealed class Toast
 
     public static readonly AttachedProperty<ToastTone> ToneProperty =
         AvaloniaProperty.RegisterAttached<Toast, Button, ToastTone>("Tone");
+
+    /// <summary>On a button: how its toast closes, <see cref="ToastClose.Timer"/> or <see cref="ToastClose.Button"/>; unset, an error with no duration waits for its close button and the others leave on their own.</summary>
+    public static readonly AttachedProperty<ToastClose?> CloseProperty =
+        AvaloniaProperty.RegisterAttached<Toast, Button, ToastClose?>("Close");
 
     /// <summary>How long a toast stays: the web's 5s hold. An error with no duration of its own stays until closed.</summary>
     public static TimeSpan Duration { get; set; } = TimeSpan.FromSeconds(5);
@@ -54,15 +67,20 @@ public sealed class Toast
     public static void SetText(Button button, string? value) => button.SetValue(TextProperty, value);
     public static ToastTone GetTone(Button button) => button.GetValue(ToneProperty);
     public static void SetTone(Button button, ToastTone value) => button.SetValue(ToneProperty, value);
+    public static ToastClose? GetClose(Button button) => button.GetValue(CloseProperty);
+    public static void SetClose(Button button, ToastClose? value) => button.SetValue(CloseProperty, value);
 
     /// <summary>Shows <paramref name="text"/> in the window <paramref name="anchor"/> is in; the text is shown as is, never parsed.</summary>
     public static void Show(Visual anchor, string text, ToastTone tone = ToastTone.Info) => Show(anchor, text, tone, null);
 
     /// <summary>As above, staying <paramref name="duration"/>; null is <see cref="Duration"/>, or until closed for an error.</summary>
-    public static void Show(Visual anchor, string text, ToastTone tone, TimeSpan? duration)
+    public static void Show(Visual anchor, string text, ToastTone tone, TimeSpan? duration) => Show(anchor, text, tone, duration, null);
+
+    /// <summary>As above, closing as <paramref name="close"/> says; null keeps the default: the close button for an error with no duration, the clock for the rest.</summary>
+    public static void Show(Visual anchor, string text, ToastTone tone, TimeSpan? duration, ToastClose? close)
     {
         TransformOperationsAnimator.Ensure();
-        ToastStrip.For(anchor)?.Show(text, tone, duration, anchor.FlowDirection);
+        ToastStrip.For(anchor)?.Show(text, tone, duration, close, anchor.FlowDirection);
     }
 
     /// <summary>The window's toast strip, made the first time it is needed.</summary>
@@ -82,7 +100,7 @@ public sealed class Toast
     private static void OnAnyClick(object? sender, RoutedEventArgs e)
     {
         if (sender is not Button button || e.Source != button || e.Handled) return;
-        if (GetText(button) is { } text) Show(button, text, GetTone(button));
+        if (GetText(button) is { } text) Show(button, text, GetTone(button), null, GetClose(button));
     }
 }
 
@@ -149,15 +167,16 @@ internal sealed class ToastStrip
         return room;
     }
 
-    public void Show(string text, ToastTone tone, TimeSpan? duration, FlowDirection direction)
+    public void Show(string text, ToastTone tone, TimeSpan? duration, ToastClose? close, FlowDirection direction)
     {
         Manager.FlowDirection = direction;
         Fit();
         Manager.MaxItems = Toast.MaxItems;
-        var persist = duration is null && tone == ToastTone.Bad;
+        var persist = (close ?? (duration is null && tone == ToastTone.Bad ? ToastClose.Button : ToastClose.Timer)) == ToastClose.Button;
         Manager.Show(text, Toast.TypeOf(tone), TimeSpan.Zero, null, null, persist ? ["persist"] : null);
         if (Items()?.Children.OfType<NotificationCard>().LastOrDefault() is not { } card) return;
         AutomationProperties.SetLiveSetting(card, tone == ToastTone.Bad ? AutomationLiveSetting.Assertive : AutomationLiveSetting.Polite);
+        card.AddHandler(InputElement.PointerPressedEvent, OnCardPressed, RoutingStrategies.Tunnel);
         card.PointerEntered += (_, _) =>
         {
             _hover = true;
@@ -178,6 +197,13 @@ internal sealed class ToastStrip
         var clock = new ToastClock(card, duration ?? Toast.Duration);
         _clocks.Add(clock);
         if (!Paused) clock.Start();
+    }
+
+    // A press on a toast's body does nothing: only its close button, the keys and its clock dismiss it.
+    private static void OnCardPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is Visual card && e.Source is Visual source && source.FindAncestorOfType<Button>(true) is { } button && card.IsVisualAncestorOf(button)) return;
+        e.Handled = true;
     }
 
     private Panel? Items() => Manager.GetVisualDescendants().OfType<Panel>().FirstOrDefault(p => p.Name == "PART_Items");

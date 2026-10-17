@@ -306,14 +306,75 @@ public class OverlaysTests
     [AvaloniaFact]
     public void The_bottom_sheet_spans_the_width_at_the_bottom()
     {
-        var dialog = MakeDialog("drawer bottom", foot: false);
-        var (window, opener) = Host(dialog);
-        Click(opener, window);
-        var box = BoundsIn(dialog, window);
-        Assert.Equal(900, box.Width, 1);
-        Assert.Equal(700, box.Bottom, 1);
-        Assert.True(box.Height < 300);
-        Assert.Equal(new CornerRadius(32, 32, 0, 0), Part<Border>(dialog, "PART_Fill").CornerRadius);
+        var was = WindowCorner.Os;
+        try
+        {
+            WindowCorner.Os = 8;
+            var dialog = MakeDialog("drawer bottom", foot: false);
+            var (window, opener) = Host(dialog);
+            Click(opener, window);
+            var box = BoundsIn(dialog, window);
+            Assert.Equal(900, box.Width, 1);
+            Assert.Equal(700, box.Bottom, 1);
+            Assert.True(box.Height < 300);
+            Assert.Equal(new CornerRadius(8, 8, 0, 0), Part<Border>(dialog, "PART_Fill").CornerRadius);
+        }
+        finally
+        {
+            WindowCorner.Os = was;
+        }
+    }
+
+    [AvaloniaTheory]
+    [InlineData("drawer", 8.0)]
+    [InlineData("drawer end", 8.0)]
+    [InlineData("drawer bottom", 8.0)]
+    [InlineData("drawer", 0.0)]
+    public void Drawer_corners_follow_the_window(string classes, double r)
+    {
+        var was = WindowCorner.Os;
+        try
+        {
+            WindowCorner.Os = r;
+            var dialog = MakeDialog(classes, foot: false);
+            var (window, opener) = Host(dialog);
+            Click(opener, window);
+            var fill = Part<Border>(dialog, "PART_Fill");
+            var want = classes.Contains("bottom") ? new CornerRadius(r, r, 0, 0) : classes.Contains("end") ? new CornerRadius(r, 0, 0, r) : new CornerRadius(0, r, r, 0);
+            Assert.Equal(want, fill.CornerRadius);
+            window.WindowState = WindowState.Maximized;
+            Settle(100);
+            Assert.Equal(new CornerRadius(0), fill.CornerRadius);
+            window.WindowState = WindowState.Normal;
+            Settle(100);
+            Assert.Equal(want, fill.CornerRadius);
+        }
+        finally
+        {
+            WindowCorner.Os = was;
+        }
+    }
+
+    [AvaloniaFact]
+    public void A_drawer_in_a_single_view_keeps_its_large_corners()
+    {
+        var was = WindowCorner.Os;
+        var dialog = MakeDialog("drawer", foot: false);
+        var opener = new Button { Content = "فتح الحوار" };
+        var root = SingleView(new StackPanel { Margin = new Thickness(16), Children = { opener } });
+        try
+        {
+            WindowCorner.Os = 8;
+            dialog.Open(opener);
+            Pump(root);
+            Assert.True(dialog.IsOpen);
+            Assert.Equal(new CornerRadius(0, 32, 32, 0), Part<Border>(dialog, "PART_Fill").CornerRadius);
+        }
+        finally
+        {
+            WindowCorner.Os = was;
+            root.StopRendering();
+        }
     }
 
     [AvaloniaFact]
@@ -444,7 +505,100 @@ public class OverlaysTests
         Assert.Equal(8, newest.Y - BoundsIn(ok, window).Bottom, 1);
 
         Click(ok, window);
-        Assert.Single(manager.GetVisualDescendants().OfType<NotificationCard>());
+        Tick(100);
+        Assert.Equal(2, manager.GetVisualDescendants().OfType<NotificationCard>().Count(c => !c.IsClosing));
+        Click(Part<Button>(cards[1], "PART_Close"), window);
+        Tick(100);
+        Assert.Same(cards[0], Assert.Single(manager.GetVisualDescendants().OfType<NotificationCard>(), c => !c.IsClosing));
+    }
+
+    [AvaloniaFact]
+    public void A_press_on_a_toast_body_leaves_it_open()
+    {
+        var button = new Button { Content = "معلومة" };
+        var window = Show(new StackPanel { Children = { button } }, FlowDirection.RightToLeft, width: 900, height: 600);
+        Toast.Show(button, "للعلم", ToastTone.Info);
+        Settle(100);
+        var card = Toast.ManagerFor(button)!.GetVisualDescendants().OfType<NotificationCard>().Single();
+        var message = card.GetVisualDescendants().OfType<TextBlock>().First(t => t.Text == "للعلم");
+        Click(message, window);
+        Tick(100);
+        Assert.False(card.IsClosing);
+        Assert.False(card.IsClosed);
+    }
+
+    [AvaloniaFact]
+    public void The_close_button_still_closes_an_error_toast()
+    {
+        var button = new Button { Content = "خطأ" };
+        var window = Show(new StackPanel { Children = { button } }, FlowDirection.RightToLeft, width: 900, height: 600);
+        Toast.Show(button, "حدث خطأ", ToastTone.Bad);
+        Settle(100);
+        var card = Toast.ManagerFor(button)!.GetVisualDescendants().OfType<NotificationCard>().Single();
+        Click(Part<Button>(card, "PART_Close"), window);
+        Tick(100);
+        Assert.True(card.IsClosing || card.IsClosed, "the close button did not close the toast");
+    }
+
+    [AvaloniaFact]
+    public void A_toast_set_to_close_by_button_stays_and_shows_its_close()
+    {
+        var button = new Button { Content = "معلومة" };
+        var window = Show(new StackPanel { Children = { button } }, FlowDirection.RightToLeft, width: 900, height: 600);
+        var hold = Toast.Duration;
+        Toast.Duration = TimeSpan.FromMilliseconds(300);
+        try
+        {
+            Toast.Show(button, "للعلم", ToastTone.Info, null, ToastClose.Button);
+            Settle(100);
+            var card = Toast.ManagerFor(button)!.GetVisualDescendants().OfType<NotificationCard>().Single();
+            var close = Part<Button>(card, "PART_Close");
+            Assert.True(close.IsVisible);
+            Tick(1500);
+            Assert.False(card.IsClosing);
+            Click(close, window);
+            Tick(100);
+            Assert.True(card.IsClosing || card.IsClosed, "the close button did not close the toast");
+        }
+        finally
+        {
+            Toast.Duration = hold;
+        }
+    }
+
+    [AvaloniaFact]
+    public void An_error_set_to_close_by_timer_leaves_on_its_own()
+    {
+        var button = new Button { Content = "خطأ" };
+        Show(new StackPanel { Children = { button } }, FlowDirection.RightToLeft, width: 900, height: 600);
+        var hold = Toast.Duration;
+        Toast.Duration = TimeSpan.FromMilliseconds(300);
+        try
+        {
+            Toast.Show(button, "حدث خطأ", ToastTone.Bad, null, ToastClose.Timer);
+            Settle(100);
+            var card = Toast.ManagerFor(button)!.GetVisualDescendants().OfType<NotificationCard>().Single();
+            Assert.False(Part<Button>(card, "PART_Close").IsVisible);
+            Tick(600);
+            Assert.True(card.IsClosing || card.IsClosed, "the error did not leave on its own");
+        }
+        finally
+        {
+            Toast.Duration = hold;
+        }
+    }
+
+    [AvaloniaFact]
+    public void The_close_attribute_on_a_button_reaches_its_toast()
+    {
+        var button = new Button { Content = "إظهار" };
+        Toast.SetText(button, "للعلم");
+        Toast.SetTone(button, ToastTone.Info);
+        Toast.SetClose(button, ToastClose.Button);
+        var window = Show(new StackPanel { Margin = new Thickness(24), Children = { button } }, FlowDirection.RightToLeft, width: 900, height: 600);
+        Click(button, window);
+        var card = Toast.ManagerFor(button)!.GetVisualDescendants().OfType<NotificationCard>().Single();
+        Assert.Contains("persist", card.Classes);
     }
 
     [AvaloniaFact]
