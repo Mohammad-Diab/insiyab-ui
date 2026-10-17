@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
 
   <Styles.Resources>
     <ResourceDictionary>
@@ -8,16 +9,19 @@
       <CornerRadius x:Key="InsBtnGroupEnd">0,14,14,0</CornerRadius>
       <CornerRadius x:Key="InsBtnGroupSmStart">10,0,0,10</CornerRadius>
       <CornerRadius x:Key="InsBtnGroupSmEnd">0,10,10,0</CornerRadius>
+
+      <!-- btn-group: buttons joined into one object; the facing corners are squared and the borders overlap by a pixel. -->
+      <ControlTheme x:Key="InsLookBtnGroup" TargetType="StackPanel" ins:ClassTheme.For="btn-group">
+        <Style Selector="^.btn-group">
+          <Setter Property="Orientation" Value="Horizontal" />
+          <Setter Property="Spacing" Value="-1" />
+          <Setter Property="HorizontalAlignment" Value="Left" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+      </ControlTheme>
     </ResourceDictionary>
   </Styles.Resources>
 
-  <!-- btn-group: buttons joined into one object; the facing corners are squared and the borders overlap by a pixel. -->
-  <Style Selector="StackPanel.btn-group">
-    <Setter Property="Orientation" Value="Horizontal" />
-    <Setter Property="Spacing" Value="-1" />
-    <Setter Property="HorizontalAlignment" Value="Left" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
   <Style Selector="StackPanel.btn-group > :is(Button)">
     <Setter Property="CornerRadius" Value="0" />
     <Setter Property="VerticalAlignment" Value="Stretch" />

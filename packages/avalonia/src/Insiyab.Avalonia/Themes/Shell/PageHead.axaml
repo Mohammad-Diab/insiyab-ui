@@ -149,32 +149,40 @@
         </Style>
       </ControlTheme>
 
+      <!-- For a header put together by hand: the same text styles PageHead uses -->
+      <ControlTheme x:Key="InsLookPageTitle" TargetType="TextBlock" ins:ClassTheme.For="page-title">
+        <Style Selector="^.page-title">
+          <Setter Property="FontSize" Value="{DynamicResource InsFsH1}" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="LineHeight" Value="36.4" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+          <Style Selector="^[FlowDirection=LeftToRight]">
+            <Setter Property="FontFamily" Value="{DynamicResource InsFontHeadingEn}" />
+            <Setter Property="LetterSpacing" Value="-0.56" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookPageSub" TargetType="TextBlock" ins:ClassTheme.For="page-sub">
+        <Style Selector="^.page-sub">
+          <Setter Property="Margin" Value="0,6,0,0" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+          <Setter Property="LineHeight" Value="23.8" />
+          <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookPageActions" TargetType="StackPanel" ins:ClassTheme.For="page-actions">
+        <Style Selector="^.page-actions">
+          <Setter Property="Orientation" Value="Horizontal" />
+          <Setter Property="Spacing" Value="8" />
+          <Setter Property="VerticalAlignment" Value="Bottom" />
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
-
-  <!-- For a header put together by hand: the same text styles PageHead uses -->
-  <Style Selector="TextBlock.page-title">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsH1}" />
-    <Setter Property="FontWeight" Value="Bold" />
-    <Setter Property="LineHeight" Value="36.4" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-    <Setter Property="TextWrapping" Value="Wrap" />
-  </Style>
-  <Style Selector="TextBlock.page-title[FlowDirection=LeftToRight]">
-    <Setter Property="FontFamily" Value="{DynamicResource InsFontHeadingEn}" />
-    <Setter Property="LetterSpacing" Value="-0.56" />
-  </Style>
-  <Style Selector="TextBlock.page-sub">
-    <Setter Property="Margin" Value="0,6,0,0" />
-    <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
-    <Setter Property="LineHeight" Value="23.8" />
-    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
-    <Setter Property="TextWrapping" Value="Wrap" />
-  </Style>
-  <Style Selector="StackPanel.page-actions">
-    <Setter Property="Orientation" Value="Horizontal" />
-    <Setter Property="Spacing" Value="8" />
-    <Setter Property="VerticalAlignment" Value="Bottom" />
-  </Style>
 
 </Styles>

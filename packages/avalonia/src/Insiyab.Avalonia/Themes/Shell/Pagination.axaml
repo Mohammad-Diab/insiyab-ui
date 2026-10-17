@@ -109,6 +109,38 @@
         </Setter>
       </ControlTheme>
 
+      <!-- The row a hand-made pagination track gives its stack of pages -->
+      <ControlTheme x:Key="InsPaginationRow" TargetType="StackPanel">
+        <Style Selector="^[(ins|ClassTheme.Relayed)=True]">
+          <Setter Property="Orientation" Value="Horizontal" />
+          <Setter Property="Spacing" Value="3" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The same track for a pagination put together by hand -->
+      <ControlTheme x:Key="InsLookPagination" TargetType="Border" ins:ClassTheme.For="pagination">
+        <Style Selector="^.pagination">
+          <Setter Property="HorizontalAlignment" Value="Left" />
+          <Setter Property="Padding" Value="4" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="ins:ClassTheme.ChildTheme" Value="{StaticResource InsPaginationRow}" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookPageGap" TargetType="TextBlock" ins:ClassTheme.For="page-gap">
+        <Style Selector="^.page-gap">
+          <Setter Property="MinWidth" Value="24" />
+          <Setter Property="TextAlignment" Value="Center" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -119,27 +151,6 @@
   <Style Selector="Button.page:not(.prev):not(.next)">
     <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
     <Setter Property="FontFeatures" Value="+tnum" />
-  </Style>
-  <Style Selector="TextBlock.page-gap">
-    <Setter Property="MinWidth" Value="24" />
-    <Setter Property="TextAlignment" Value="Center" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
-    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
-  </Style>
-  <!-- The same track for a pagination put together by hand -->
-  <Style Selector="Border.pagination">
-    <Setter Property="HorizontalAlignment" Value="Left" />
-    <Setter Property="Padding" Value="4" />
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
-    <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
-    <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
-  </Style>
-  <Style Selector="Border.pagination > StackPanel">
-    <Setter Property="Orientation" Value="Horizontal" />
-    <Setter Property="Spacing" Value="3" />
   </Style>
 
 </Styles>

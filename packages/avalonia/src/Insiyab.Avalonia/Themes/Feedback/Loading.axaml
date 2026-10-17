@@ -117,6 +117,15 @@
           <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
         </Style>
       </ControlTheme>
+
+      <!-- .ins-loading: a waiting area that keeps a sensible height, its spinner in the middle -->
+      <ControlTheme x:Key="InsLookLoading" TargetType="Border" ctl:ClassTheme.For="loading">
+        <Style Selector="^.loading">
+          <Setter Property="MinHeight" Value="200" />
+          <Setter Property="ctl:ClassTheme.ChildHorizontalAlignment" Value="Center" />
+          <Setter Property="ctl:ClassTheme.ChildVerticalAlignment" Value="Center" />
+        </Style>
+      </ControlTheme>
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -124,15 +133,6 @@
   <Style Selector="Button ctl|LoadingSpinner">
     <Setter Property="Arc" Value="{x:Null}" />
     <Setter Property="Track" Value="{x:Null}" />
-  </Style>
-
-  <!-- .ins-loading: a waiting area that keeps a sensible height, its spinner in the middle -->
-  <Style Selector="Border.loading">
-    <Setter Property="MinHeight" Value="200" />
-  </Style>
-  <Style Selector="Border.loading > :is(Control)">
-    <Setter Property="HorizontalAlignment" Value="Center" />
-    <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
 
 </Styles>

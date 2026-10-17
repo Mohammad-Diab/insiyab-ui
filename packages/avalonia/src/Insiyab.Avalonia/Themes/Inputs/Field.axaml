@@ -2,15 +2,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ins="using:Insiyab.Avalonia.Controls">
 
-  <!-- A field's column (.ins-field) and a form's commit line (.ins-form-commit). -->
-  <Style Selector="StackPanel.field">
-    <Setter Property="Spacing" Value="6" />
-  </Style>
-  <Style Selector="StackPanel.form-commit">
-    <Setter Property="Orientation" Value="Horizontal" />
-    <Setter Property="Spacing" Value="8" />
-    <Setter Property="Margin" Value="0,16,0,0" />
-  </Style>
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <!-- A field's column (.ins-field): its label, box and hint, 6px apart. -->
+      <ControlTheme x:Key="InsLookField" TargetType="StackPanel" ins:ClassTheme.For="field">
+        <Style Selector="^.field">
+          <Setter Property="Spacing" Value="6" />
+        </Style>
+      </ControlTheme>
+
+      <!-- A form's commit line (.ins-form-commit). -->
+      <ControlTheme x:Key="InsLookFormCommit" TargetType="StackPanel" ins:ClassTheme.For="form-commit">
+        <Style Selector="^.form-commit">
+          <Setter Property="Orientation" Value="Horizontal" />
+          <Setter Property="Spacing" Value="8" />
+          <Setter Property="Margin" Value="0,16,0,0" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
 
   <!-- Text, a symbol or an icon attached to a field (.ins-addon), with a hairline on the side facing the text. -->
   <Style Selector="ContentControl.addon">

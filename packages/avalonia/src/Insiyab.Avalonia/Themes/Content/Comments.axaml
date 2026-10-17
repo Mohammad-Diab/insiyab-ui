@@ -67,13 +67,15 @@
           </Style>
         </Style>
       </ControlTheme>
+
+      <!-- thread: comments stacked, 1.25rem apart -->
+      <ControlTheme x:Key="InsLookThread" TargetType="StackPanel" ctl:ClassTheme.For="thread">
+        <Style Selector="^.thread">
+          <Setter Property="Spacing" Value="20" />
+        </Style>
+      </ControlTheme>
     </ResourceDictionary>
   </Styles.Resources>
-
-  <!-- thread: comments stacked, 1.25rem apart -->
-  <Style Selector="StackPanel.thread">
-    <Setter Property="Spacing" Value="20" />
-  </Style>
 
   <!-- comment-actions: bare buttons stay quiet until hovered -->
   <Style Selector="ctl|Comment Button.bare">

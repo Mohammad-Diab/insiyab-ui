@@ -163,6 +163,22 @@
         </Style>
       </ControlTheme>
 
+      <!-- The row's label: an icon, then the text -->
+      <ControlTheme x:Key="InsLookTreeLabel" TargetType="StackPanel" ins:ClassTheme.For="tree-label">
+        <Style Selector="^.tree-label">
+          <Setter Property="Orientation" Value="Horizontal" />
+          <Setter Property="Spacing" Value="8" />
+        </Style>
+      </ControlTheme>
+
+      <!-- A count or badge text at the end of a label, never cut -->
+      <ControlTheme x:Key="InsLookTreeEnd" TargetType="TextBlock" ins:ClassTheme.For="tree-end">
+        <Style Selector="^.tree-end">
+          <Setter Property="Margin" Value="8,0,0,0" />
+          <Setter Property="TextTrimming" Value="None" />
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -172,20 +188,12 @@
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
-  <Style Selector="TreeViewItem StackPanel.tree-label">
-    <Setter Property="Orientation" Value="Horizontal" />
-    <Setter Property="Spacing" Value="8" />
-  </Style>
   <Style Selector="TreeViewItem TextBlock, TreeViewItem ins|TemplateText">
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <Style Selector="TreeViewItem CheckBox">
     <Setter Property="Focusable" Value="False" />
-  </Style>
-  <Style Selector="TreeViewItem TextBlock.tree-end">
-    <Setter Property="Margin" Value="8,0,0,0" />
-    <Setter Property="TextTrimming" Value="None" />
   </Style>
 
 </Styles>
