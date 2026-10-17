@@ -12,16 +12,13 @@
   <Style Selector=":is(TopLevel):ins-still :is(Button).icon:pointerover /template/ ContentPresenter#PART_ContentPresenter, :is(TopLevel):ins-still :is(Button):pointerover /template/ Ellipse#PART_Dot">
     <Setter Property="RenderTransform" Value="none" />
   </Style>
-  <Style Selector=":is(TopLevel):ins-still ListBoxItem:pointerover, :is(TopLevel):ins-still ListBoxItem:selected, :is(TopLevel):ins-still MenuItem:selected, :is(TopLevel):ins-still ComboBoxItem:pointerover, :is(TopLevel):ins-still ComboBoxItem:focus-visible, :is(TopLevel):ins-still :is(Button).pop-item:focus-visible, :is(TopLevel):ins-still Border.tags-option.active, :is(TopLevel):ins-still ins|PaletteBorder.palette-item.active">
+  <Style Selector=":is(TopLevel):ins-still ListBoxItem:pointerover, :is(TopLevel):ins-still ListBoxItem:selected, :is(TopLevel):ins-still MenuItem:selected, :is(TopLevel):ins-still ComboBoxItem:pointerover, :is(TopLevel):ins-still ComboBoxItem:focus-visible, :is(TopLevel):ins-still :is(Button).pop-item:focus-visible, :is(TopLevel):ins-still ins|PaletteBorder.palette-item.active">
     <Setter Property="RenderTransform" Value="none" />
   </Style>
-  <Style Selector=":is(TopLevel):ins-still ListBox.shell-nav ListBoxItem:pointerover ins|Icon, :is(TopLevel):ins-still Button.shell-link:pointerover ins|Icon, :is(TopLevel):ins-still Button.shell-brand:pointerover Border.shell-mark">
+  <Style Selector=":is(TopLevel):ins-still ListBox.shell-nav ListBoxItem:pointerover ins|Icon, :is(TopLevel):ins-still Button.shell-link:pointerover ins|Icon">
     <Setter Property="RenderTransform" Value="none" />
   </Style>
   <Style Selector=":is(TopLevel):ins-still :is(Button):pointerover ins|Icon.toolbar-icon, :is(TopLevel):ins-still :is(Button):pressed ins|Icon.toolbar-icon">
-    <Setter Property="RenderTransform" Value="none" />
-  </Style>
-  <Style Selector=":is(TopLevel):ins-still Border.hoverable:pointerover">
     <Setter Property="RenderTransform" Value="none" />
   </Style>
   <Style Selector=":is(TopLevel):ins-still TextBox:focus-within /template/ Panel#PART_Field, :is(TopLevel):ins-still ComboBox:focus-within /template/ Panel#PART_Field, :is(TopLevel):ins-still ComboBox:dropdownopen /template/ Panel#PART_Field, :is(TopLevel):ins-still NumericUpDown:focus-within /template/ Panel#PART_Field, :is(TopLevel):ins-still ins|DateTimeGroup:focus-within">

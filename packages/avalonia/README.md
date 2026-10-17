@@ -14,6 +14,8 @@ Set `FlowDirection="RightToLeft"` on the window for an Arabic UI; a Latin field 
 
 ## Usage
 
+Look classes on a plain `Border`, `TextBlock`, `StackPanel` or `Panel` (`card`, `h1`, `zone`…) become that element's `Theme`: app styles and local values still win, a `Theme` the app sets replaces the look, and looks from two different families on one element do not combine (the later one wins), so nest elements instead.
+
 | What | How |
 |---|---|
 | Brand colour | `InsiyabTheme.SetPrimary(Color.Parse("#0F766E"))` re-derives every tinted token, light and dark at once. `InsiyabTheme.Primary` reads it back. Big fills (primary buttons) take the primary; small accents (checks, switches, progress, sliders, markers, dots) take the middle shade `InsPrimaryMid` with its label `InsOnPrimaryMid`, the primary moved toward white by `BrandDerivation.MidShiftLight` (20%) or `MidShiftDark` (45%). |

@@ -17,8 +17,8 @@ public class ClassThemeTests
 {
     private static readonly Assembly Gallery = typeof(PlayDef).Assembly;
 
-    // The still and inactive rules keep their look-class lines until the last rollout step moves them into the themes.
-    private static readonly string[] Pending = ["ins-still", "IsInactive"];
+    // Nothing is pending: the still and inactive states of every look class live in its look.
+    private static readonly string[] Pending = [];
 
     private static void LoadIcons()
     {
