@@ -7,15 +7,16 @@
       <!-- The zone in error and a failed file: the light red wash in light; on the dark ground that wash reads as a maroon slab, so dark takes 8% of its own light red. -->
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsFileOverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
           <SolidColorBrush x:Key="InsFileBadFill" Color="#1AEF4444" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsFileOverBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
           <SolidColorBrush x:Key="InsFileBadFill" Color="#14FCA5A5" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
       <StreamGeometry x:Key="InsFileUploadIcon">M12 16V4m0 0-4.5 4.5M12 4l4.5 4.5 M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3</StreamGeometry>
-      <SolidColorBrush x:Key="InsFileOverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
 
       <ControlTheme x:Key="{x:Type ins:FileItem}" TargetType="ins:FileItem">
         <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />

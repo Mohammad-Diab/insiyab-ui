@@ -7,22 +7,24 @@
     <ResourceDictionary>
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsTextBoxHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
+          <SolidColorBrush x:Key="InsTextBoxFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
+          <SolidColorBrush x:Key="InsTextBoxSelection" Color="{DynamicResource InsPrimaryColor}" Opacity="0.22" />
           <SolidColorBrush x:Key="InsTextBoxOkBorder" Color="{DynamicResource InsToneOkColor}" Opacity="0.55" />
           <SolidColorBrush x:Key="InsTextBoxBadBorder" Color="{DynamicResource InsToneBadColor}" Opacity="0.55" />
           <SolidColorBrush x:Key="InsTextBoxFocusBg" Color="{DynamicResource InsGlassStrongColor}" />
           <BoxShadows x:Key="InsTextBoxGlowOk">0 0 0 4 #1F22C55E</BoxShadows>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsTextBoxHoverBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.30" />
+          <SolidColorBrush x:Key="InsTextBoxFocusBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.55" />
+          <SolidColorBrush x:Key="InsTextBoxSelection" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.22" />
           <SolidColorBrush x:Key="InsTextBoxOkBorder" Color="{DynamicResource InsToneOkColor}" Opacity="0.55" />
           <SolidColorBrush x:Key="InsTextBoxBadBorder" Color="{DynamicResource InsToneBadColor}" Opacity="0.55" />
           <SolidColorBrush x:Key="InsTextBoxFocusBg" Color="#17FFFFFF" />
           <BoxShadows x:Key="InsTextBoxGlowOk">0 0 0 4 #2E22C55E</BoxShadows>
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
-
-      <SolidColorBrush x:Key="InsTextBoxHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
-      <SolidColorBrush x:Key="InsTextBoxFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
-      <SolidColorBrush x:Key="InsTextBoxSelection" Color="{DynamicResource InsPrimaryColor}" Opacity="0.22" />
 
       <StreamGeometry x:Key="InsTextBoxEye">M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z M15 12a3 3 0 1 1-6 0a3 3 0 1 1 6 0Z</StreamGeometry>
       <StreamGeometry x:Key="InsTextBoxEyeOff">M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z M15 12a3 3 0 1 1-6 0a3 3 0 1 1 6 0Z M4 4l16 16</StreamGeometry>
@@ -198,7 +200,7 @@
                   </ins:TemplateBorder>
                   <ins:TemplateBorder x:Name="PART_Halo"
                           CornerRadius="{TemplateBinding CornerRadius}"
-                          Tag="{DynamicResource InsPrimaryColor}"
+                          Tag="{DynamicResource InsBrandTint}"
                           BoxShadow="{Binding $self.Tag, Converter={x:Static ins:InputHalo.Instance}}"
                           Opacity="0">
                     <ins:TemplateBorder.Transitions>

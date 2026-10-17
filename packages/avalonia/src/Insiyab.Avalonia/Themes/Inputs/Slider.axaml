@@ -4,7 +4,14 @@
 
   <Styles.Resources>
     <ResourceDictionary>
-      <SolidColorBrush x:Key="InsRangeThumbRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsRangeThumbRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsRangeThumbRing" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.30" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
 
       <ControlTheme x:Key="InsRangeTrackPart" TargetType="RepeatButton">
 
@@ -80,7 +87,7 @@
           <Setter Property="MinHeight" Value="24" />
           <Setter Property="Template">
             <ControlTemplate>
-              <DataValidationErrors>
+              <DataValidationErrors ClipToBounds="False">
                 <Track Name="PART_Track"
                        Minimum="{TemplateBinding Minimum}"
                        Maximum="{TemplateBinding Maximum}"
@@ -110,7 +117,7 @@
           <Setter Property="MinWidth" Value="24" />
           <Setter Property="Template">
             <ControlTemplate>
-              <DataValidationErrors>
+              <DataValidationErrors ClipToBounds="False">
                 <Track Name="PART_Track"
                        Minimum="{TemplateBinding Minimum}"
                        Maximum="{TemplateBinding Maximum}"

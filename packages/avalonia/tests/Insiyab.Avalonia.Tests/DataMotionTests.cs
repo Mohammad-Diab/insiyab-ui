@@ -54,23 +54,92 @@ public class DataMotionTests
         return table;
     }
 
-    [AvaloniaFact]
-    public void The_first_six_rows_rise_in_40ms_apart_and_the_rest_appear()
+    // Entrances run on a clock this holds and steps, so a slow run sees the same frames as a fast one.
+    private sealed class HeldEntrance : IDisposable
     {
-        var table = Cities(8);
-        var window = Open(table);
-        window.Show();
+        private readonly Func<double> _real = Entrance.Now;
+        private double _at = 1000;
+
+        public HeldEntrance() => Entrance.Now = () => _at;
+
+        public void To(Window window, double milliseconds)
+        {
+            _at = 1000 + milliseconds;
+            for (var i = 0; i < 2; i++)
+            {
+                window.InvalidateVisual();
+                Dispatcher.UIThread.RunJobs();
+                AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+                Dispatcher.UIThread.RunJobs();
+            }
+        }
+
+        public void Dispose() => Entrance.Now = _real;
+    }
+
+    private static int InView(Window window, IReadOnlyList<TableRow> rows) =>
+        rows.Count(r => r.IsEffectivelyVisible && r.TranslatePoint(new Point(0, 0), window) is { } p && p.Y < window.Bounds.Height);
+
+    [AvaloniaFact]
+    public void Every_row_in_view_rises_and_the_last_starts_by_320ms()
+    {
+        using var held = new HeldEntrance();
+        var table = Cities(30);
+        var window = Show(table, FlowDirection.RightToLeft, width: 700, height: 900);
         var rows = table.DisplayedRows;
-        var samples = Sample(window, 120, () => rows.Select(Y).ToArray());
-        var early = samples.First(s => s.Value[0] > 0).Value;
-        Assert.InRange(early[0], 0.01, 6);
-        Assert.True(early[1] >= early[0] - 0.01, $"row 1 at {early[1]}, row 0 at {early[0]}");
-        Assert.True(rows[5].Opacity < 1 || Y(rows[5]) > 0, "the sixth row rises too");
-        Assert.All(samples, s => Assert.Equal(0, s.Value[6], 3));
-        Assert.Equal(1, rows[7].Opacity);
-        Settle(600);
-        Assert.All(rows, r => Assert.Equal(0, Y(r), 3));
-        Assert.All(rows, r => Assert.Equal(1, r.Opacity));
+        var n = InView(window, rows);
+        Assert.True(n >= 12 && n < rows.Count, $"{n} rows in view");
+        var step = Math.Min(40, 320.0 / (n - 1));
+        var times = new SortedSet<double>();
+        for (var t = 0; t <= 900; t += 5) times.Add(t);
+        for (var k = 1; k < n; k++)
+        {
+            times.Add(k * step - 5);
+            times.Add(k * step + 140);
+        }
+        times.Add(350);
+        var seen = new Dictionary<double, double[]>();
+        var moved = new Dictionary<double, double[]>();
+        foreach (var t in times)
+        {
+            held.To(window, t);
+            seen[t] = rows.Select(r => r.Opacity).ToArray();
+            moved[t] = rows.Select(Y).ToArray();
+        }
+        for (var k = 1; k < n; k++)
+        {
+            Assert.Equal(0, seen[k * step - 5][k], 3);
+            var during = seen[k * step + 140][k];
+            Assert.True(during > 0 && during < 1, $"row {k} at {k * step + 140}ms has opacity {during}");
+        }
+        Assert.True(seen[350][n - 1] > 0, $"the last row in view has opacity {seen[350][n - 1]} at 350ms");
+        foreach (var t in times)
+            for (var k = n; k < rows.Count; k++)
+            {
+                Assert.Equal(1, seen[t][k], 3);
+                Assert.Equal(0, moved[t][k], 3);
+            }
+        Assert.All(seen[900], o => Assert.Equal(1, o, 3));
+        Assert.All(moved[900], y => Assert.Equal(0, y, 3));
+    }
+
+    [AvaloniaFact]
+    public void Eight_rows_in_view_rise_40ms_apart()
+    {
+        using var held = new HeldEntrance();
+        var table = Cities(8);
+        var window = Show(table, FlowDirection.RightToLeft, width: 700, height: 900);
+        var rows = table.DisplayedRows;
+        Assert.Equal(8, InView(window, rows));
+        double? start = null;
+        for (var t = 0; t <= 600; t += 5)
+        {
+            held.To(window, t);
+            if (start is null && rows[7].Opacity > 0) start = t;
+        }
+        Assert.NotNull(start);
+        Assert.InRange(start!.Value, 270, 290);
+        Assert.All(rows, r => Assert.Equal(1, r.Opacity, 3));
     }
 
     [AvaloniaFact]

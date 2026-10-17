@@ -236,7 +236,7 @@ public class FoundationTests
         Assert.Equal(5, bar.Bounds.Width);
         var thumb = bar.GetVisualDescendants().OfType<Thumb>().Single();
         var brush = Assert.IsAssignableFrom<ISolidColorBrush>(thumb.Background);
-        Assert.Equal(0.28, brush.Opacity, 3);
+        Assert.Equal(theme == "Dark" ? 0.45 : 0.28, brush.Opacity, 3);
         Assert.Equal(new CornerRadius(4), thumb.CornerRadius);
         Assert.DoesNotContain(bar.GetVisualDescendants().OfType<RepeatButton>(), r => r.Name == "PART_LineUpButton");
         var presenter = Part<ScrollContentPresenter>(scroller, "PART_ContentPresenter");

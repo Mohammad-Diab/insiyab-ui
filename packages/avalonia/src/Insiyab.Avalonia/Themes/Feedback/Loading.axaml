@@ -9,7 +9,7 @@
           <SolidColorBrush x:Key="InsSpinnerTrack" Color="{DynamicResource InsPrimaryColor}" Opacity="0.18" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
-          <SolidColorBrush x:Key="InsSpinnerTrack" Color="{DynamicResource InsPrimaryColor}" Opacity="0.18" />
+          <SolidColorBrush x:Key="InsSpinnerTrack" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.18" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 

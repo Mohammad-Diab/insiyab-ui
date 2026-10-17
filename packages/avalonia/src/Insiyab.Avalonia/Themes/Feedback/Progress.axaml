@@ -11,7 +11,7 @@
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
           <SolidColorBrush x:Key="InsProgressFill" Color="{DynamicResource InsPrimaryMidColor}" />
-          <SolidColorBrush x:Key="InsProgressSweep" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
+          <SolidColorBrush x:Key="InsProgressSweep" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.55" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 

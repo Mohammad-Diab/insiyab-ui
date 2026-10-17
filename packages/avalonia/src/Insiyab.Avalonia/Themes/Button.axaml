@@ -9,11 +9,6 @@
         <GradientStop Offset="0" Color="{DynamicResource InsPrimaryColor}" />
         <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
       </LinearGradientBrush>
-      <SolidColorBrush x:Key="InsButtonGhostBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
-      <SolidColorBrush x:Key="InsButtonGhostHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.12" />
-      <SolidColorBrush x:Key="InsButtonGhostPressed" Color="{DynamicResource InsPrimaryColor}" Opacity="0.22" />
-      <SolidColorBrush x:Key="InsButtonToggleOn" Color="{DynamicResource InsPrimaryColor}" Opacity="0.14" />
-      <SolidColorBrush x:Key="InsButtonToggleOnBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.40" />
       <BoxShadows x:Key="InsButtonToggleOnShadow">inset 0 1 3 0 #1F0F172A</BoxShadows>
 
       <LinearGradientBrush x:Key="InsButtonSuccessFill" StartPoint="0%,0%" EndPoint="100%,100%">
@@ -36,6 +31,11 @@
       <!-- The sweep: the shimmer and shimmer-dark tokens, parked off the trailing edge (Rest) or past the leading one (Hover). -->
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsButtonGhostBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+          <SolidColorBrush x:Key="InsButtonGhostHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.12" />
+          <SolidColorBrush x:Key="InsButtonGhostPressed" Color="{DynamicResource InsPrimaryColor}" Opacity="0.22" />
+          <SolidColorBrush x:Key="InsButtonToggleOn" Color="{DynamicResource InsPrimaryColor}" Opacity="0.14" />
+          <SolidColorBrush x:Key="InsButtonToggleOnBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.40" />
           <LinearGradientBrush x:Key="InsButtonSweepRest" StartPoint="110%,50%" EndPoint="210%,50%">
             <GradientStop Offset="0" Color="#00FFFFFF" />
             <GradientStop Offset="0.5" Color="#4DFFFFFF" />
@@ -58,6 +58,11 @@
           </LinearGradientBrush>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsButtonGhostBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
+          <SolidColorBrush x:Key="InsButtonGhostHover" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.12" />
+          <SolidColorBrush x:Key="InsButtonGhostPressed" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.22" />
+          <SolidColorBrush x:Key="InsButtonToggleOn" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.14" />
+          <SolidColorBrush x:Key="InsButtonToggleOnBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.40" />
           <LinearGradientBrush x:Key="InsButtonSweepRest" StartPoint="110%,50%" EndPoint="210%,50%">
             <GradientStop Offset="0" Color="#00FFFFFF" />
             <GradientStop Offset="0.5" Color="#24FFFFFF" />

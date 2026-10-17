@@ -480,6 +480,29 @@ public class DataTests
         window.Close();
     }
 
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void Table_sticky_rows_show_from_below_the_kept_bar_with_rounded_corners(string dir)
+    {
+        var table = People();
+        for (var i = 0; i < 27; i++) table.Rows.Add(Row("كريم", "دبي", i.ToString()));
+        table.Classes.Add("sticky");
+        table.MaxHeight = 300;
+        var window = Show(table, Dir(dir), width: 600, height: 400);
+        var card = Part<Border>(table, "PART_Card");
+        Assert.Null(card.Clip);
+        Part<ScrollViewer>(table, "PART_Scroll").Offset = new Vector(0, 200);
+        Settle(100);
+        var clip = Assert.IsType<RectangleGeometry>(card.Clip);
+        Assert.Equal(200, clip.Rect.Y, 0.5);
+        Assert.Equal(card.CornerRadius.TopLeft, clip.RadiusX);
+        Part<ScrollViewer>(table, "PART_Scroll").Offset = new Vector(0, 0);
+        Settle(100);
+        Assert.Null(card.Clip);
+        window.Close();
+    }
+
     [AvaloniaFact]
     public void Table_builds_rows_from_items()
     {

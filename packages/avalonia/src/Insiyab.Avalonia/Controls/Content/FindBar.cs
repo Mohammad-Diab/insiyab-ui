@@ -356,6 +356,7 @@ internal sealed class FindHighlights : Control
         _bar = bar;
         IsHitTestVisible = false;
         LayoutUpdated += (_, _) => InvalidateVisual();
+        ActualThemeVariantChanged += (_, _) => InvalidateVisual();
     }
 
     public override void Render(DrawingContext context)

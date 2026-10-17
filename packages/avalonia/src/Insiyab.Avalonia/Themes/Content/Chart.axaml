@@ -4,7 +4,16 @@
 
   <Styles.Resources>
     <ResourceDictionary>
-      <!-- The six series colours: the brand first, then the tones, as the web chart-1 to chart-6 -->
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsChart1" Color="{DynamicResource InsPrimaryColor}" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsChart1" Color="{DynamicResource InsPrimaryMidColor}" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- The six series colours: the brand first (its middle shade on dark), then the tones, as the web chart-1 to chart-6 -->
       <SolidColorBrush x:Key="InsChart2" Color="#3B82F6" />
       <SolidColorBrush x:Key="InsChart3" Color="#22C55E" />
       <SolidColorBrush x:Key="InsChart4" Color="#F59E0B" />
@@ -13,7 +22,7 @@
 
       <ControlTheme x:Key="{x:Type ctl:Chart}" TargetType="ctl:Chart">
         <Setter Property="ClipToBounds" Value="False" />
-        <Setter Property="Brush1" Value="{DynamicResource InsPrimary}" />
+        <Setter Property="Brush1" Value="{DynamicResource InsChart1}" />
         <Setter Property="Brush2" Value="{DynamicResource InsChart2}" />
         <Setter Property="Brush3" Value="{DynamicResource InsChart3}" />
         <Setter Property="Brush4" Value="{DynamicResource InsChart4}" />

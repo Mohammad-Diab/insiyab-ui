@@ -12,20 +12,23 @@
       <StreamGeometry x:Key="InsMonthArrowBackIcon">M15 6l-6 6 6 6</StreamGeometry>
       <StreamGeometry x:Key="InsPickerChevronDown">M6 9l6 6 6-6</StreamGeometry>
 
-      <SolidColorBrush x:Key="InsPickerHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
-      <SolidColorBrush x:Key="InsPickerFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
-      <SolidColorBrush x:Key="InsPickerOptionHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
-      <SolidColorBrush x:Key="InsPickerFocusOutline" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
-
       <!-- One copy per theme, so a dark window inside a light app gets the dark glass. -->
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsPickerHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
+          <SolidColorBrush x:Key="InsPickerFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
+          <SolidColorBrush x:Key="InsPickerOptionHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
+          <SolidColorBrush x:Key="InsPickerFocusOutline" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
           <LinearGradientBrush x:Key="InsPickerGlassFill" StartPoint="0%,0%" EndPoint="70%,100%">
             <GradientStop Offset="0" Color="{DynamicResource InsGlassStrongColor}" />
             <GradientStop Offset="1" Color="{DynamicResource InsGlassHoverColor}" />
           </LinearGradientBrush>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsPickerHoverBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.30" />
+          <SolidColorBrush x:Key="InsPickerFocusBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.55" />
+          <SolidColorBrush x:Key="InsPickerOptionHover" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.10" />
+          <SolidColorBrush x:Key="InsPickerFocusOutline" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
           <LinearGradientBrush x:Key="InsPickerGlassFill" StartPoint="0%,0%" EndPoint="70%,100%">
             <GradientStop Offset="0" Color="{DynamicResource InsGlassStrongColor}" />
             <GradientStop Offset="1" Color="{DynamicResource InsGlassHoverColor}" />

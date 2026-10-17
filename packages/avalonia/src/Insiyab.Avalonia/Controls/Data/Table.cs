@@ -70,6 +70,7 @@ public partial class Table : TemplatedControl
     private readonly List<TableRow> _generated = [];
     private ScrollViewer? _scroll;
     private Control? _head;
+    private Border? _card;
     private Control? _guide;
     private Canvas? _markerLayer;
     private TableRow? _marked;
@@ -210,9 +211,12 @@ public partial class Table : TemplatedControl
     {
         base.OnApplyTemplate(e);
         if (_scroll is not null) _scroll.ScrollChanged -= OnScroll;
+        if (_card is not null) _card.SizeChanged -= OnCardSized;
         if (_rows is TableRowsPanel oldRows) oldRows.Realized -= OnRealized;
         _scroll = e.NameScope.Find<ScrollViewer>("PART_Scroll");
         _head = e.NameScope.Find<Control>("PART_Head");
+        _card = e.NameScope.Find<Border>("PART_Card");
+        if (_card is not null) _card.SizeChanged += OnCardSized;
         _guide = e.NameScope.Find<Control>("PART_Guide");
         _markerLayer = e.NameScope.Find<Canvas>("PART_MarkerLayer");
         _headCells = e.NameScope.Find<ColumnsPanel>("PART_HeadCells");
@@ -362,17 +366,30 @@ public partial class Table : TemplatedControl
 
     private static object KeyOf(TableRow row) => row.Item ?? row;
 
-    // Rows new to the table rise in, the first six 40ms apart, as the web's do; a fresh table's later rows simply appear, and a sort only moves rows, so it never replays this.
+    // Rows new to the table rise in: on a fresh table every row in view, the step shrinking from 40ms so the last starts by 320ms, rows out of view simply appear; a sort never replays this.
     private void Arrive(HashSet<object> shown)
     {
         if (Motion.IsStill(this)) return;
-        var fresh = _display.Count(r => !shown.Contains(KeyOf(r)));
+        var fresh = _display.Where(r => !shown.Contains(KeyOf(r))).ToList();
+        if (fresh.Count == 0) return;
+        if (fresh.Count == _display.Count) { StaggerInView(fresh); return; }
         for (var i = 0; i < _display.Count; i++)
+            if (!shown.Contains(KeyOf(_display[i]))) Rise(_display[i], i < 6 ? i * 40 : 0);
+    }
+
+    // Waits for the first layout that places the rows, then staggers the ones in view.
+    private void StaggerInView(List<TableRow> rows)
+    {
+        var asked = Environment.TickCount64;
+        void Placed(object? sender, EventArgs e)
         {
-            if (shown.Contains(KeyOf(_display[i]))) continue;
-            if (i < 6) Rise(_display[i], i * 40);
-            else if (fresh < _display.Count) Rise(_display[i], 0);
+            var seen = rows.Where(r => InView(r) && Seen.Now(r)).ToList();
+            if (seen.Count == 0 && Environment.TickCount64 - asked < 1000) return;
+            LayoutUpdated -= Placed;
+            var step = seen.Count > 1 ? Math.Min(40, 320.0 / (seen.Count - 1)) : 0;
+            for (var k = 0; k < seen.Count; k++) Entrance.Play(seen[k], EntranceEffect.Rise, k * step);
         }
+        LayoutUpdated += Placed;
     }
 
     // A row added while the template is still being built is not in the tree yet, and an entrance needs its frames, so it starts when the row arrives there; a row out of view that arrives later, scrolled to, simply appears.
@@ -521,11 +538,13 @@ public partial class Table : TemplatedControl
         Classes.Add("moving");
     }
 
-    // A row's marker in the flight layer: 3px on its leading edge, inset 8px top and bottom.
+    // A row's marker in the flight layer: 3px on its leading edge, inset as the row's own marker is.
     private Rect? MarkerSpan(TableRow row)
     {
-        if (_markerLayer is null || !InView(row) || row.Bounds.Height <= 16 || row.TranslatePoint(new Point(0, 8), _markerLayer) is not { } p) return null;
-        return new Rect(p.X, p.Y, 3, row.Bounds.Height - 16);
+        var m = row.MarkerMargin;
+        var height = row.Bounds.Height - m.Top - m.Bottom;
+        if (_markerLayer is null || !InView(row) || height <= 0 || row.TranslatePoint(new Point(0, m.Top), _markerLayer) is not { } p) return null;
+        return new Rect(p.X, p.Y, 3, height);
     }
 
     internal void SetCurrent(TableRow? row, int column)
@@ -1001,6 +1020,18 @@ public partial class Table : TemplatedControl
 
     private void OnScroll(object? sender, ScrollChangedEventArgs e) => UpdateSticky();
 
+    private void OnCardSized(object? sender, SizeChangedEventArgs e) => ClipRows();
+
+    // Under a kept header the rows show from 8px below the bar, the card's corners rounding their top, so nothing square pokes out beside the bar's ends.
+    private void ClipRows()
+    {
+        if (_card is null || _scroll is null) return;
+        var y = Classes.Contains("sticky") ? _scroll.Offset.Y : 0;
+        if (y <= 0) { _card.Clip = null; return; }
+        var r = _card.CornerRadius.TopLeft;
+        _card.Clip = new RectangleGeometry(new Rect(0, y, _card.Bounds.Width, Math.Max(0, _card.Bounds.Height - y))) { RadiusX = r, RadiusY = r };
+    }
+
     private void UpdateSticky()
     {
         if (_scroll is null || _headCells is null) return;
@@ -1008,6 +1039,7 @@ public partial class Table : TemplatedControl
         var offset = _scroll.Offset;
         if (_head is not null)
             _head.RenderTransform = sticky && offset.Y > 0 ? new TranslateTransform(0, offset.Y) : null;
+        ClipRows();
         var n = PinnedCells;
         var x = n > 0 ? offset.X : 0;
         // A scroll straight down moves no frozen cell, so the rows are left alone.

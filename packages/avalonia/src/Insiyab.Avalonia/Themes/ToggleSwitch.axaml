@@ -4,10 +4,18 @@
 
   <Styles.Resources>
     <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsSwitchHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.40" />
+          <SolidColorBrush x:Key="InsSwitchRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsSwitchHoverBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.40" />
+          <SolidColorBrush x:Key="InsSwitchRing" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
 
       <SolidColorBrush x:Key="InsSwitchFill" Color="{DynamicResource InsPrimaryMidColor}" />
-      <SolidColorBrush x:Key="InsSwitchHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.40" />
-      <SolidColorBrush x:Key="InsSwitchRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
 
       <ControlTheme x:Key="{x:Type ToggleSwitch}" TargetType="ToggleSwitch">
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />

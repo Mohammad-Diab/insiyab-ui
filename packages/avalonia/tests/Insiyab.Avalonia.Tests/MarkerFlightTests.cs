@@ -107,7 +107,7 @@ public class MarkerFlightTests
         Assert.Null(Bar(table));
         // Measured from the rows: a resting marker is scaled to nothing, which would move a point taken through it.
         var layer = Part<Canvas>(table, "PART_MarkerLayer");
-        var from = rows[0].TranslatePoint(new Point(0, 8), layer)!.Value;
+        var from = rows[0].TranslatePoint(new Point(0, rows[0].MarkerMargin.Top), layer)!.Value;
         var to = Part<Border>(rows[3], "PART_Marker");
         var toAt = rows[3].TranslatePoint(new Point(0, 8), layer)!.Value;
 
@@ -136,6 +136,31 @@ public class MarkerFlightTests
     }
 
     [AvaloniaFact]
+    public void The_marker_lands_clear_of_the_corner_on_the_last_row()
+    {
+        var table = People();
+        var window = Show(table, FlowDirection.RightToLeft, width: 700, height: 500);
+        var rows = table.DisplayedRows;
+        Click(rows[1].Cells[0], window);
+        var layer = Part<Canvas>(table, "PART_MarkerLayer");
+        var last = rows[^1];
+        var span = (Top: last.TranslatePoint(new Point(0, 8), layer)!.Value.Y, Height: last.Bounds.Height - 8 - 21);
+
+        var p = Center(last.Cells[0], window);
+        using var clock = new HeldClock();
+        window.MouseMove(p);
+        window.MouseDown(p, MouseButton.Left);
+        window.MouseUp(p, MouseButton.Left);
+        var samples = clock.Step(window, 700, 5, () => Bar(table) is { } b ? (Top: Canvas.GetTop(b), Height: b.Height) : (Top: double.NaN, Height: double.NaN));
+        var flying = samples.Where(s => !double.IsNaN(s.Value.Top)).ToList();
+        Assert.NotEmpty(flying);
+        var landing = flying[^1].Value;
+        Assert.Equal(span.Top, landing.Top, 0.5);
+        Assert.Equal(span.Height, landing.Height, 0.5);
+        Assert.True(flying.Max(s => s.Value.Top + s.Value.Height) <= span.Top + span.Height + 0.5);
+    }
+
+    [AvaloniaFact]
     public void No_marker_flies_in_a_still_window()
     {
         var table = People();
@@ -157,6 +182,37 @@ public class MarkerFlightTests
         Assert.Null(Bar(table));
         foreach (var c in new Control[] { table, tabs, seg, nav }) Assert.DoesNotContain("moving", c.Classes);
         Assert.False(Part<Border>(tabs, "PART_Flight").IsVisible);
+    }
+
+    [AvaloniaTheory]
+    [InlineData("tabs")]
+    [InlineData("documents")]
+    public void A_tab_wears_its_raised_face_the_frame_its_flight_lands(string kind)
+    {
+        TabControl tabs = kind == "tabs"
+            ? new TabControl { Items = { new TabItem { Header = "الأول", Content = "أ" }, new TabItem { Header = "الثاني", Content = "ب" }, new TabItem { Header = "الثالث", Content = "ج" } } }
+            : new DocumentTabs { Items = { new DocumentTab { Header = "الأول", Content = "أ" }, new DocumentTab { Header = "الثاني", Content = "ب" }, new DocumentTab { Header = "الثالث", Content = "ج" } } };
+        var window = Show(new StackPanel { Margin = new Thickness(20), Children = { tabs } }, FlowDirection.RightToLeft, width: 700, height: 400);
+        var flight = Part<Border>(tabs, "PART_Flight");
+        var third = (TabItem)tabs.ContainerFromIndex(2)!;
+        var root = Part<Border>(third, "PART_LayoutRoot");
+        using var clock = new HeldClock();
+        tabs.SelectedIndex = 2;
+        var flew = false;
+        var checkedFace = false;
+        clock.Step(window, 800, 10, () =>
+        {
+            if (flight.IsVisible) flew = true;
+            else if (flew && !checkedFace)
+            {
+                checkedFace = true;
+                AssertBrush(third, "InsSegOnBg", root.Background);
+                Assert.Equal(Res(third, "InsSegOnShadow"), root.BoxShadow);
+            }
+            return 0;
+        });
+        Assert.True(flew, "the flight never showed");
+        Assert.True(checkedFace, "the flight never landed");
     }
 
     [AvaloniaFact]

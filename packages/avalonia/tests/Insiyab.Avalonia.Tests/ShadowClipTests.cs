@@ -88,6 +88,29 @@ public class ShadowClipTests
         }
     }
 
+    // A slider at either end keeps the whole thumb, its ring and its shadow: nothing in the template clips them.
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void A_slider_at_either_end_keeps_its_thumb_whole(string dir)
+    {
+        var slider = new Slider { Width = 200, Minimum = 0, Maximum = 50, Value = 0 };
+        var page = new StackPanel { Margin = new Thickness(40), Children = { slider } };
+        var window = Show(page, dir == "rtl" ? FlowDirection.RightToLeft : FlowDirection.LeftToRight, null, 700, 300);
+        var thumb = Part<Thumb>(slider, "thumb");
+        foreach (var value in new[] { 0.0, 50.0 })
+        {
+            slider.Value = value;
+            Settle();
+            AssertFree(Part<Border>(thumb, "PART_Face"), page);
+            var at = thumb.TranslatePoint(new Point(0, 0), window)!.Value;
+            var box = slider.TranslatePoint(new Point(0, 0), window)!.Value;
+            var left = Math.Min(at.X, thumb.TranslatePoint(new Point(thumb.Bounds.Width, 0), window)!.Value.X);
+            var edge = Math.Min(box.X, slider.TranslatePoint(new Point(slider.Bounds.Width, 0), window)!.Value.X);
+            Assert.True(left >= edge - 0.5, $"the thumb at {value} starts at {left}, the slider at {edge}");
+        }
+    }
+
     // The faces whose shadow or ring reaches past their own box: none of them clips it.
     [AvaloniaFact]
     public void Shadowed_faces_do_not_clip_themselves()

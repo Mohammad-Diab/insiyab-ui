@@ -4,10 +4,17 @@
 
   <Styles.Resources>
     <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsTabLineGlow" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsTabLineGlow" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
 
       <!-- The line look's underline, a small brand accent in the middle shade, as the web's -->
       <SolidColorBrush x:Key="InsTabLineFill" Color="{DynamicResource InsPrimaryMidColor}" />
-      <SolidColorBrush x:Key="InsTabLineGlow" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
 
       <ControlTheme x:Key="InsTabFace" TargetType="ContentControl">
         <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
@@ -454,6 +461,7 @@
   <Style Selector="TabControl.moving > TabItem:selected /template/ :is(Border)#PART_LayoutRoot, TabStrip.moving > TabStripItem:selected /template/ :is(Border)#PART_LayoutRoot">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BoxShadow" Value="none" />
+    <Setter Property="Transitions" Value="{x:Null}" />
   </Style>
 
   <!-- line: a row of sections over a hairline, the underline travelling to the selected one (the line modifier of .ins-tablist) -->
@@ -517,6 +525,7 @@
   <Style Selector="ins|DocumentTabs.moving > ins|DocumentTab:selected /template/ :is(Border)#PART_LayoutRoot">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BoxShadow" Value="none" />
+    <Setter Property="Transitions" Value="{x:Null}" />
   </Style>
 
 </Styles>

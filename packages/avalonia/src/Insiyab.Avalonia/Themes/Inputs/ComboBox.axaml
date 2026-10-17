@@ -6,6 +6,8 @@
     <ResourceDictionary>
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsSelectHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
+          <SolidColorBrush x:Key="InsSelectFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
           <SolidColorBrush x:Key="InsSelectOkBorder" Color="{DynamicResource InsToneOkColor}" Opacity="0.55" />
           <SolidColorBrush x:Key="InsSelectBadBorder" Color="{DynamicResource InsToneBadColor}" Opacity="0.55" />
           <SolidColorBrush x:Key="InsSelectChevron" Color="#6B7280" />
@@ -14,6 +16,8 @@
           <BoxShadows x:Key="InsSelectGlowOk">0 0 0 4 #1F22C55E</BoxShadows>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsSelectHoverBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.30" />
+          <SolidColorBrush x:Key="InsSelectFocusBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.55" />
           <SolidColorBrush x:Key="InsSelectOkBorder" Color="{DynamicResource InsToneOkColor}" Opacity="0.55" />
           <SolidColorBrush x:Key="InsSelectBadBorder" Color="{DynamicResource InsToneBadColor}" Opacity="0.55" />
           <SolidColorBrush x:Key="InsSelectChevron" Color="#94A3B8" />
@@ -23,8 +27,6 @@
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
-      <SolidColorBrush x:Key="InsSelectHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.30" />
-      <SolidColorBrush x:Key="InsSelectFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
       <StreamGeometry x:Key="InsSelectChevronData">M6 9 l6 6 6-6</StreamGeometry>
       <StreamGeometry x:Key="InsSelectCheckData">M5 13 l4 4L19 7</StreamGeometry>
 
@@ -65,7 +67,7 @@
                 </ins:TemplateBorder>
                 <ins:TemplateBorder x:Name="PART_Halo"
                         CornerRadius="{TemplateBinding CornerRadius}"
-                        Tag="{DynamicResource InsPrimaryColor}"
+                        Tag="{DynamicResource InsBrandTint}"
                         BoxShadow="{Binding $self.Tag, Converter={x:Static ins:InputHalo.Instance}}"
                         Opacity="0">
                   <ins:TemplateBorder.Transitions>

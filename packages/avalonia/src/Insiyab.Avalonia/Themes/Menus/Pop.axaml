@@ -7,17 +7,19 @@
     <ResourceDictionary>
 
       <conv:PlatformKeyGestureConverter x:Key="InsPopGestureText" />
-      <SolidColorBrush x:Key="InsPopItemHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
-      <!-- An item at rest wears the hover's own colour unseen, so the fade only changes how much shows and never passes through white. -->
-      <SolidColorBrush x:Key="InsPopItemRest" Color="{DynamicResource InsPrimaryColor}" Opacity="0" />
       <StreamGeometry x:Key="InsPopCheck">M5 12.5 l4.5 4.5 L19 7.5</StreamGeometry>
       <StreamGeometry x:Key="InsPopChevron">M9 6 l6 6 -6 6</StreamGeometry>
 
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsPopItemHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.10" />
+          <!-- An item at rest wears the hover's own colour unseen, so the fade only changes how much shows and never passes through white. -->
+          <SolidColorBrush x:Key="InsPopItemRest" Color="{DynamicResource InsPrimaryColor}" Opacity="0" />
           <SolidColorBrush x:Key="InsPopItemHoverFg" Color="{DynamicResource InsPrimaryDarkerColor}" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsPopItemHover" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.10" />
+          <SolidColorBrush x:Key="InsPopItemRest" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0" />
           <SolidColorBrush x:Key="InsPopItemHoverFg" Color="{DynamicResource InsText1Color}" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>

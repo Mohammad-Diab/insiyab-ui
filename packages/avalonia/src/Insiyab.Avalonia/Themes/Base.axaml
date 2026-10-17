@@ -8,16 +8,25 @@
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
           <SolidColorBrush x:Key="InsLinkHover" Color="{DynamicResource InsToneBrandSoftColor}" />
+          <!-- The brand as a tint takes it: the primary on light, its middle shade on dark -->
+          <SolidColorBrush x:Key="InsBrandTint" Color="{DynamicResource InsPrimaryColor}" />
+          <SolidColorBrush x:Key="InsSelection" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.22" />
+          <SolidColorBrush x:Key="InsScrollbarThumb" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.28" />
+          <SolidColorBrush x:Key="InsScrollbarThumbHover" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.40" />
+          <SolidColorBrush x:Key="InsScrollbarThumbPressed" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.50" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
           <SolidColorBrush x:Key="InsLinkHover" Color="{DynamicResource InsText1Color}" />
+          <SolidColorBrush x:Key="InsBrandTint" Color="{DynamicResource InsPrimaryMidColor}" />
+          <SolidColorBrush x:Key="InsSelection" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.22" />
+          <SolidColorBrush x:Key="InsScrollbarThumb" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
+          <SolidColorBrush x:Key="InsScrollbarThumbHover" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.65" />
+          <SolidColorBrush x:Key="InsScrollbarThumbPressed" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.80" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
       <!-- The web's scrollbar: 5px, no arrows, a brand-tinted thumb, the track stopping 10px short of each end -->
       <x:Double x:Key="InsScrollbarSize">5</x:Double>
-      <SolidColorBrush x:Key="InsScrollbarThumb" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.28" />
-      <SolidColorBrush x:Key="InsSelection" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.22" />
 
       <ControlTheme x:Key="InsScrollbarThumbTheme" TargetType="Thumb">
         <Setter Property="Background" Value="{DynamicResource InsScrollbarThumb}" />
@@ -27,6 +36,12 @@
             <ctl:TemplateBorder Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" />
           </ControlTemplate>
         </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsScrollbarThumbHover}" />
+        </Style>
+        <Style Selector="^:pressed">
+          <Setter Property="Background" Value="{DynamicResource InsScrollbarThumbPressed}" />
+        </Style>
       </ControlTheme>
 
       <ControlTheme x:Key="InsScrollbarPageTheme" TargetType="RepeatButton">

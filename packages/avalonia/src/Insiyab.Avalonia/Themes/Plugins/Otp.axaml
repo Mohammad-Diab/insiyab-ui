@@ -114,7 +114,7 @@
                     </Transitions>
                   </ins:TemplateBorder.Transitions>
                 </ins:TemplateBorder>
-                <ins:TemplateBorder x:Name="PART_Halo" CornerRadius="{TemplateBinding CornerRadius}" Tag="{DynamicResource InsPrimaryColor}"
+                <ins:TemplateBorder x:Name="PART_Halo" CornerRadius="{TemplateBinding CornerRadius}" Tag="{DynamicResource InsBrandTint}"
                         BoxShadow="{Binding $self.Tag, Converter={x:Static ins:InputHalo.Instance}}" Opacity="0">
                   <ins:TemplateBorder.Transitions>
                     <Transitions>

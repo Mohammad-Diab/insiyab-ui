@@ -4,7 +4,15 @@
 
   <Styles.Resources>
     <ResourceDictionary>
-      <SolidColorBrush x:Key="InsStatBrandBg" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.12" />
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsStatBrandBg" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.12" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsStatBrandBg" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.12" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
       <StreamGeometry x:Key="InsDeltaUp">M12 19V5M5 12l7-7 7 7</StreamGeometry>
       <StreamGeometry x:Key="InsDeltaDown">M12 5v14M19 12l-7 7-7-7</StreamGeometry>
       <StreamGeometry x:Key="InsDeltaFlat">M5 12h14</StreamGeometry>

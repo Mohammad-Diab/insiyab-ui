@@ -11,12 +11,13 @@
       <SolidColorBrush x:Key="InsToastOkBd" Color="#7322C55E" />
       <SolidColorBrush x:Key="InsToastBadBd" Color="#73EF4444" />
       <SolidColorBrush x:Key="InsToastWarnBd" Color="#73F59E0B" />
-      <SolidColorBrush x:Key="InsToastInfoBd" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsToastInfoBd" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
           <SolidColorBrush x:Key="InsToastInfoText" Color="{DynamicResource InsPrimaryDarkerColor}" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsToastInfoBd" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
           <SolidColorBrush x:Key="InsToastInfoText" Color="{DynamicResource InsText1Color}" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
@@ -115,7 +116,7 @@
                              FontSize="16"
                              LineHeight="24"
                              VerticalAlignment="Center"
-                             Foreground="{DynamicResource InsPrimary}"
+                             Foreground="{DynamicResource InsBrandTint}"
                              Text="i" />
                   <Button Name="PART_Close"
                           DockPanel.Dock="Right"

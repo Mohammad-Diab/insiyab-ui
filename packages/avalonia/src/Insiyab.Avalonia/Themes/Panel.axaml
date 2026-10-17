@@ -62,7 +62,7 @@
             <GradientStop Offset="1" Color="{DynamicResource InsRimColor}" />
           </LinearGradientBrush>
           <SolidColorBrush x:Key="InsPanelTitleBrush" Color="{DynamicResource InsText1Color}" />
-          <SolidColorBrush x:Key="InsPanelIcoBrush" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.1" />
+          <SolidColorBrush x:Key="InsPanelIcoBrush" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.1" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 

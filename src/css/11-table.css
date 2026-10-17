@@ -278,16 +278,26 @@ html[dir="ltr"] .ins-table tbody td:first-child::before { left: 0; }
   transform: scaleY(1);
 }
 
-/* Rows arrive staggered, and the delay list is short on purpose: a table can hold
-   two hundred rows, and staggering all of them would take eight seconds to finish
-   drawing. Six rows of entrance reads as "the table is arriving"; the rest simply
-   appear, which is what a reader past the fold wanted anyway. */
-.ins-table tbody tr { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease) backwards; }
-.ins-table tbody tr:nth-child(2) { animation-delay: .04s; }
-.ins-table tbody tr:nth-child(3) { animation-delay: .08s; }
-.ins-table tbody tr:nth-child(4) { animation-delay: .12s; }
-.ins-table tbody tr:nth-child(5) { animation-delay: .16s; }
-.ins-table tbody tr:nth-child(6) { animation-delay: .20s; }
+/* Rows arrive one after another, the step shrinking from 40ms so the fourteenth starts by .32s; later rows rise with the first. */
+.ins-table tbody tr { animation: ins-rise-sm var(--ins-t-enter) var(--ins-ease) backwards; animation-delay: calc(var(--ins-row-i, 0) * var(--ins-row-step, 40ms)); }
+.ins-table tbody tr:nth-child(2) { --ins-row-i: 1; }
+.ins-table tbody tr:nth-child(3) { --ins-row-i: 2; }
+.ins-table tbody tr:nth-child(4) { --ins-row-i: 3; }
+.ins-table tbody tr:nth-child(5) { --ins-row-i: 4; }
+.ins-table tbody tr:nth-child(6) { --ins-row-i: 5; }
+.ins-table tbody tr:nth-child(7) { --ins-row-i: 6; }
+.ins-table tbody tr:nth-child(8) { --ins-row-i: 7; }
+.ins-table tbody tr:nth-child(9) { --ins-row-i: 8; }
+.ins-table tbody tr:nth-child(10) { --ins-row-i: 9; }
+.ins-table tbody tr:nth-child(11) { --ins-row-i: 10; }
+.ins-table tbody tr:nth-child(12) { --ins-row-i: 11; }
+.ins-table tbody tr:nth-child(13) { --ins-row-i: 12; }
+.ins-table tbody tr:nth-child(14) { --ins-row-i: 13; }
+.ins-table tbody:has(> tr:nth-child(10)) { --ins-row-step: 35.5ms; }
+.ins-table tbody:has(> tr:nth-child(11)) { --ins-row-step: 32ms; }
+.ins-table tbody:has(> tr:nth-child(12)) { --ins-row-step: 29ms; }
+.ins-table tbody:has(> tr:nth-child(13)) { --ins-row-step: 26.5ms; }
+.ins-table tbody:has(> tr:nth-child(14)) { --ins-row-step: 24.5ms; }
 table.is-sorted > tbody > tr { animation: none; }
 
 /* --------------------------------------------------------------- sorting */

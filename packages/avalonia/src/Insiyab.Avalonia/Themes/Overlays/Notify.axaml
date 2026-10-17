@@ -4,11 +4,21 @@
 
   <Styles.Resources>
     <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsNotifyIcoBg" Color="{DynamicResource InsPrimaryColor}" Opacity="0.1" />
+          <SolidColorBrush x:Key="InsNotifyFootHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.06" />
+          <SolidColorBrush x:Key="InsNotifyUnreadBd" Color="{DynamicResource InsPrimaryColor}" Opacity="0.35" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsNotifyIcoBg" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.1" />
+          <SolidColorBrush x:Key="InsNotifyFootHover" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.06" />
+          <SolidColorBrush x:Key="InsNotifyUnreadBd" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.35" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
       <StreamGeometry x:Key="InsNotifyBellIcon">M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.9 1.9 0 0 0 3.4 0</StreamGeometry>
       <SolidColorBrush x:Key="InsNotifyCountBg" Color="#DC2626" />
-      <SolidColorBrush x:Key="InsNotifyIcoBg" Color="{DynamicResource InsPrimaryColor}" Opacity="0.1" />
-      <SolidColorBrush x:Key="InsNotifyFootHover" Color="{DynamicResource InsPrimaryColor}" Opacity="0.06" />
-      <SolidColorBrush x:Key="InsNotifyUnreadBd" Color="{DynamicResource InsPrimaryColor}" Opacity="0.35" />
 
       <!-- The foot link, .ins-notify-foot: centred brand text under the list -->
       <ControlTheme x:Key="InsNotifyFoot" TargetType="Button">

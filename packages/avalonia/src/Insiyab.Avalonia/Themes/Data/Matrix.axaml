@@ -4,7 +4,14 @@
 
   <Styles.Resources>
     <ResourceDictionary>
-      <SolidColorBrush x:Key="InsMatrixCardHover" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.35" />
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsMatrixCardHover" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.35" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsMatrixCardHover" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.35" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
 
       <ControlTheme x:Key="{x:Type ins:ChoiceMatrix}" TargetType="ins:ChoiceMatrix">
         <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />

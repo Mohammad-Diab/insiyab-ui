@@ -4,12 +4,21 @@
 
   <Styles.Resources>
     <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsCheckBoxHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+          <SolidColorBrush x:Key="InsCheckBoxRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+          <SolidColorBrush x:Key="InsTileHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.35" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsCheckBoxHoverBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
+          <SolidColorBrush x:Key="InsCheckBoxRing" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
+          <SolidColorBrush x:Key="InsTileHoverBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.35" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
 
       <!-- A small brand accent, so the middle shade, with the label it needs. -->
       <SolidColorBrush x:Key="InsCheckBoxFill" Color="{DynamicResource InsPrimaryMidColor}" />
-      <SolidColorBrush x:Key="InsCheckBoxHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
-      <SolidColorBrush x:Key="InsCheckBoxRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
-      <SolidColorBrush x:Key="InsTileHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.35" />
 
       <!-- The tile: a choice that deserves more than a line; the mark sits at the leading top corner. -->
       <ControlTemplate x:Key="InsTileTemplate" TargetType="ToggleButton">

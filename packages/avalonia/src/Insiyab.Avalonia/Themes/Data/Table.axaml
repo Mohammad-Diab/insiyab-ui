@@ -6,6 +6,10 @@
     <ResourceDictionary>
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsTableRule" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.24" />
+          <SolidColorBrush x:Key="InsTableGrip" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.45" />
+          <SolidColorBrush x:Key="InsTableSortHover" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.10" />
+          <SolidColorBrush x:Key="InsTableEditRing" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.45" />
           <SolidColorBrush x:Key="InsTableHeadInk" Color="{DynamicResource InsPrimaryDarkerColor}" />
           <SolidColorBrush x:Key="InsBulkbarInk" Color="{DynamicResource InsToneBrandColor}" />
           <LinearGradientBrush x:Key="InsTableFrozenShade" StartPoint="0%,50%" EndPoint="100%,50%">
@@ -14,6 +18,10 @@
           </LinearGradientBrush>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsTableRule" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.24" />
+          <SolidColorBrush x:Key="InsTableGrip" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
+          <SolidColorBrush x:Key="InsTableSortHover" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.10" />
+          <SolidColorBrush x:Key="InsTableEditRing" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
           <SolidColorBrush x:Key="InsTableHeadInk" Color="{DynamicResource InsText1Color}" />
           <SolidColorBrush x:Key="InsBulkbarInk" Color="{DynamicResource InsText1Color}" />
           <LinearGradientBrush x:Key="InsTableFrozenShade" StartPoint="0%,50%" EndPoint="100%,50%">
@@ -23,10 +31,6 @@
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
-      <SolidColorBrush x:Key="InsTableRule" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.24" />
-      <SolidColorBrush x:Key="InsTableGrip" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.45" />
-      <SolidColorBrush x:Key="InsTableSortHover" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.10" />
-      <SolidColorBrush x:Key="InsTableEditRing" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.45" />
       <StreamGeometry x:Key="InsTableSortBoth">M8 9l4-4 4 4M8 15l4 4 4-4</StreamGeometry>
       <StreamGeometry x:Key="InsTableSortUp">M12 19V5M6 11l6-6 6 6</StreamGeometry>
       <StreamGeometry x:Key="InsTableSortDown">M12 5v14M6 13l6 6 6-6</StreamGeometry>
@@ -49,7 +53,7 @@
                           BorderBrush="{DynamicResource InsTableRule}">
                     <ins:TemplateBorder.Background>
                       <MultiBinding Converter="{x:Static ins:DataBrushes.Vertical}" ConverterParameter="0.20 0.12">
-                        <DynamicResource ResourceKey="InsPrimaryRgbColor" />
+                        <DynamicResource ResourceKey="InsBrandTint" />
                       </MultiBinding>
                     </ins:TemplateBorder.Background>
                     <ins:ColumnsPanel x:Name="PART_HeadCells" />
@@ -70,7 +74,7 @@
               </DockPanel>
               <!-- The line that follows a column edge while it is dragged -->
               <ins:TemplateBorder x:Name="PART_Guide" Width="2" CornerRadius="1" HorizontalAlignment="Left" ZIndex="3"
-                      IsVisible="False" IsHitTestVisible="False" Background="{DynamicResource InsPrimary}" Opacity="0.7" />
+                      IsVisible="False" IsHitTestVisible="False" Background="{DynamicResource InsBrandTint}" Opacity="0.7" />
               </Panel>
             </ScrollViewer>
           </ControlTemplate>
@@ -167,7 +171,7 @@
         <Style Selector="^ /template/ :is(Border)#PART_Grip:pointerover > :is(Border)#PART_GripLine, ^:resizing /template/ :is(Border)#PART_GripLine">
           <Setter Property="Width" Value="3" />
           <Setter Property="Height" Value="24" />
-          <Setter Property="Background" Value="{DynamicResource InsPrimary}" />
+          <Setter Property="Background" Value="{DynamicResource InsBrandTint}" />
         </Style>
         <Style Selector="^:grip-flip /template/ :is(Border)#PART_Grip">
           <Setter Property="HorizontalAlignment" Value="Left" />
@@ -191,7 +195,7 @@
         <Style Selector="^:pinned /template/ :is(Border)#PART_Back">
           <Setter Property="Background">
             <MultiBinding Converter="{x:Static ins:DataBrushes.Vertical}" ConverterParameter="0.20 0.12">
-              <DynamicResource ResourceKey="InsPrimaryRgbColor" />
+              <DynamicResource ResourceKey="InsBrandTint" />
             </MultiBinding>
           </Setter>
         </Style>
@@ -306,6 +310,25 @@
         </Style>
         <Style Selector="^:in-panel:last /template/ :is(Border)#PART_Line">
           <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <!-- On the first and last rows the marker keeps clear of the card's rounded corner -->
+        <Style Selector="^:first /template/ :is(Border)#PART_Marker">
+          <Setter Property="Margin" Value="0,21,0,8" />
+        </Style>
+        <Style Selector="^:last /template/ :is(Border)#PART_Marker">
+          <Setter Property="Margin" Value="0,8,0,21" />
+        </Style>
+        <Style Selector="^:first:last /template/ :is(Border)#PART_Marker">
+          <Setter Property="Margin" Value="0,21" />
+        </Style>
+        <Style Selector="^:in-panel:first /template/ :is(Border)#PART_Marker">
+          <Setter Property="Margin" Value="0,22,0,8" />
+        </Style>
+        <Style Selector="^:in-panel:last /template/ :is(Border)#PART_Marker">
+          <Setter Property="Margin" Value="0,8,0,22" />
+        </Style>
+        <Style Selector="^:in-panel:first:last /template/ :is(Border)#PART_Marker">
+          <Setter Property="Margin" Value="0,22" />
         </Style>
         <!-- Hover is a state and outranks the stripe -->
         <Style Selector="^:pointerover">
@@ -500,6 +523,15 @@
   </Style>
   <Style Selector="ins|Table:flush ins|TableRow:first:last /template/ :is(Border)#PART_Ring">
     <Setter Property="CornerRadius" Value="11" />
+  </Style>
+  <Style Selector="ins|Table:flush ins|TableRow:first /template/ :is(Border)#PART_Marker">
+    <Setter Property="Margin" Value="0,11,0,8" />
+  </Style>
+  <Style Selector="ins|Table:flush ins|TableRow:last /template/ :is(Border)#PART_Marker">
+    <Setter Property="Margin" Value="0,8,0,11" />
+  </Style>
+  <Style Selector="ins|Table:flush ins|TableRow:first:last /template/ :is(Border)#PART_Marker">
+    <Setter Property="Margin" Value="0,11" />
   </Style>
   <Style Selector="ins|Table:focus ins|TableCell:current /template/ :is(Border)#PART_Focus">
     <Setter Property="Opacity" Value="1" />

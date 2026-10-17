@@ -4,9 +4,17 @@
 
   <Styles.Resources>
     <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsToolbarOn" Color="{DynamicResource InsPrimaryColor}" Opacity="0.14" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsToolbarOn" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.14" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
       <StreamGeometry x:Key="InsToolbarMoreIcon">M3.6,12 A1.4,1.4 0 1 0 6.4,12 A1.4,1.4 0 1 0 3.6,12 Z M10.6,12 A1.4,1.4 0 1 0 13.4,12 A1.4,1.4 0 1 0 10.6,12 Z M17.6,12 A1.4,1.4 0 1 0 20.4,12 A1.4,1.4 0 1 0 17.6,12 Z</StreamGeometry>
       <StreamGeometry x:Key="InsToolbarChevron">M6 9 l6 6 6-6</StreamGeometry>
-      <SolidColorBrush x:Key="InsToolbarOn" Color="{DynamicResource InsPrimaryColor}" Opacity="0.14" />
 
       <!-- One command's face: quiet until the pointer is on it, a soft fill under the pointer, the brand tint while a toggle is on -->
       <ControlTheme x:Key="InsToolbarFace" TargetType="Button">

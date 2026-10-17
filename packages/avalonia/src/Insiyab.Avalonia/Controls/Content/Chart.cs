@@ -14,7 +14,7 @@ using Avalonia.Metadata;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>A small chart in the library's colours, the web's chart plugin (<c>.ins-chart</c>): <see cref="Type"/> picks bars, a line, a donut, a distribution or a spark. Data comes from <see cref="Series"/> and <see cref="Labels"/>, or one series from <see cref="Values"/>, or <see cref="SetData"/> from code. Categories run the way the control reads (from the right in RTL); pointing at a mark shows its value. Series colours are <see cref="Brush1"/> to <see cref="Brush6"/>: the brand first, then the tones.</summary>
+/// <summary>A small chart in the library's colours, the web's chart plugin (<c>.ins-chart</c>): <see cref="Type"/> picks bars, a line, a donut, a distribution or a spark. Data comes from <see cref="Series"/> and <see cref="Labels"/>, or one series from <see cref="Values"/>, or <see cref="SetData"/> from code. Categories run the way the control reads (from the right in RTL); pointing at a mark shows its value. Series colours are <see cref="Brush1"/> to <see cref="Brush6"/>: the brand first (its middle shade on dark), then the tones.</summary>
 [TemplatePart("PART_Plot", typeof(ChartPlot))]
 [TemplatePart("PART_Tip", typeof(Border))]
 [TemplatePart("PART_TipRows", typeof(StackPanel))]
@@ -74,7 +74,10 @@ public class Chart : TemplatedControl
     private MenuItem? _copyValue, _copyData;
     private string? _menuValue;
     private WrapPanel? _legend;
+    private Control? _caption;
     private (IReadOnlyList<string> Labels, IReadOnlyList<ChartSeries> Series)? _code;
+
+    static Chart() => AffectsMeasure<Chart>(PlotHeightProperty, TypeProperty);
 
     public Chart()
     {
@@ -109,7 +112,7 @@ public class Chart : TemplatedControl
     /// <summary>A short title under the chart, the web's <c>figcaption</c>.</summary>
     public string? Caption { get => GetValue(CaptionProperty); set => SetValue(CaptionProperty, value); }
 
-    /// <summary>The plot's height, the web's <c>data-ins-height</c>; unset, 16rem (2rem for a spark).</summary>
+    /// <summary>The plot's height, the web's <c>data-ins-height</c>; unset, 16rem (2rem for a spark), or in a chart given a Height or MaxHeight, what its legend and caption leave.</summary>
     public double PlotHeight { get => GetValue(PlotHeightProperty); set => SetValue(PlotHeightProperty, value); }
 
     public IBrush? Brush1 { get => GetValue(Brush1Property); set => SetValue(Brush1Property, value); }
@@ -213,7 +216,6 @@ public class Chart : TemplatedControl
         BuildLegend();
         if (_plot is not null)
         {
-            _plot.Height = ActualPlotHeight;
             if (data) _plot.Replay();
             _plot.ResetPens();
             _plot.InvalidateVisual();
@@ -222,6 +224,29 @@ public class Chart : TemplatedControl
     }
 
     internal double ActualPlotHeight => !double.IsNaN(PlotHeight) ? PlotHeight : Type == ChartType.Spark ? 32 : 256;
+
+    // The plot is PlotHeight tall; unset, 16rem, or in a chart given a Height or MaxHeight, what the legend and the caption leave of it.
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        if (_plot is not null) _plot.Height = PlotLength(availableSize);
+        return base.MeasureOverride(availableSize);
+    }
+
+    private double PlotLength(Size available)
+    {
+        var boxed = !double.IsNaN(Height) || !double.IsPositiveInfinity(MaxHeight);
+        if (!double.IsNaN(PlotHeight) || Type == ChartType.Spark || !boxed || !double.IsFinite(available.Height)) return ActualPlotHeight;
+        var room = available.Height - Below(_legend, available.Width) - Below(_caption, available.Width);
+        var fitted = Math.Max(64, room);
+        return double.IsNaN(Height) ? Math.Min(ActualPlotHeight, fitted) : fitted;
+    }
+
+    private static double Below(Control? part, double width)
+    {
+        if (part is not { IsVisible: true }) return 0;
+        part.Measure(new Size(width, double.PositiveInfinity));
+        return part.DesiredSize.Height;
+    }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -233,6 +258,7 @@ public class Chart : TemplatedControl
         _tipValue = e.NameScope.Find<TextBlock>("PART_TipValue");
         _tipRows = e.NameScope.Find<StackPanel>("PART_TipRows");
         _legend = e.NameScope.Find<WrapPanel>("PART_Legend");
+        _caption = e.NameScope.Find<Control>("PART_Caption");
         if (_plot is not null) _plot.Owner = this;
         Changed(true);
     }

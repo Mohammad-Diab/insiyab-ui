@@ -37,6 +37,22 @@ await E(`document.querySelectorAll('.ins-table tbody tr')[2].classList.add('is-s
 await b.sleep(400);
 ok('.is-selected row: marker shown', (await row(2)).marker !== NONE);
 
+// Rows arrive one after another, the step shrinking so the fourteenth starts by .32s; later rows rise with the first.
+const delays = await E(`(() => {
+  const out = {};
+  for (const n of [8, 14, 20]) {
+    const t = document.createElement('table'); t.className = 'ins-table';
+    t.innerHTML = '<tbody>' + '<tr><td>x</td></tr>'.repeat(n) + '</tbody>';
+    document.body.appendChild(t);
+    out[n] = [...t.querySelectorAll('tbody tr')].map((tr) => parseFloat(getComputedStyle(tr).animationDelay));
+    t.remove();
+  }
+  return out;
+})()`);
+ok('8 rows: the last starts at .28s', Math.abs(delays[8][7] - 0.28) < 0.0005, delays[8][7]);
+ok('14 rows: the last starts between .30s and .32s', delays[14][13] >= 0.30 && delays[14][13] <= 0.32, delays[14][13]);
+ok('20 rows: the sixteenth rises with the first', delays[20][15] === 0, delays[20][15]);
+
 ok('no console errors or exceptions', b.logs.length === 0, b.logs.join(' | '));
 await b.close();
 end();

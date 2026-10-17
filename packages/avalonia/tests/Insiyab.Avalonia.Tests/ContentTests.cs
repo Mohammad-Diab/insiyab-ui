@@ -569,7 +569,7 @@ public class ContentTests
         var chart = Bars();
         ShowIn(chart);
 
-        AssertBrush(chart, "InsPrimary", () => chart.Brush1);
+        AssertBrush(chart, "InsChart1", () => chart.Brush1);
         AssertBrush(chart, "InsChart2", () => chart.Brush2);
         AssertBrush(chart, "InsChart3", () => chart.Brush3);
         AssertBrush(chart, "InsChart4", () => chart.Brush4);
@@ -826,5 +826,58 @@ public class ContentTests
         Assert.Equal(5, legend.Children.Count);
         var value = ((StackPanel)legend.Children[0]).Children.OfType<TextBlock>().First(t => t.Classes.Contains("chart-key-value"));
         Assert.Equal("120", value.Text);
+    }
+
+    private static Chart Sized(string kind, double height) => kind == "donut"
+        ? new Chart { Type = ChartType.Donut, Labels = "أ,ب,ج,د", Values = "120,80,60,40", SeriesName = "العدد", Width = 500, Height = height }
+        : new Chart { Type = kind == "line" ? ChartType.Line : ChartType.Bar, Labels = string.Join(",", Months), Width = 500, Height = height, Series = { new ChartSeries("هذا العام", 120, 150, 98, 174, 160), new ChartSeries("العام الماضي", 90, 130, 9, 140, 150) } };
+
+    private static double PlotOf(Chart chart) => chart.GetVisualDescendants().OfType<ChartPlot>().Single().Bounds.Height;
+
+    [AvaloniaTheory]
+    [InlineData("bar", 260.0)]
+    [InlineData("donut", 260.0)]
+    [InlineData("line", 220.0)]
+    public void A_chart_with_a_height_keeps_its_legend_inside(string kind, double height)
+    {
+        var chart = Sized(kind, height);
+        ShowIn(chart);
+        var legend = Part<WrapPanel>(chart, "PART_Legend");
+        Assert.True(legend.IsVisible);
+        var bottom = legend.TranslatePoint(new Point(0, legend.Bounds.Height), chart)!.Value.Y;
+        Assert.True(bottom <= chart.Bounds.Height + 0.5, $"the legend ends at {bottom} in a chart {chart.Bounds.Height} tall");
+        Assert.Equal(height, chart.Bounds.Height, 1);
+        Assert.Equal(chart.Bounds.Height - (legend.Bounds.Height + 12), PlotOf(chart), 1);
+        var plot = chart.GetVisualDescendants().OfType<ChartPlot>().Single();
+        Settle(300);
+        Assert.NotEmpty(plot.Hits);
+        Assert.All(plot.Hits, h => Assert.True(new Rect(plot.Bounds.Size).Inflate(1).Contains(h.Box), $"a hit box {h.Box} lies outside the plot {plot.Bounds.Size}"));
+    }
+
+    [AvaloniaFact]
+    public void A_chart_without_a_height_keeps_its_16rem_plot()
+    {
+        var plain = Bars();
+        ShowIn(plain);
+        Assert.Equal(256, PlotOf(plain), 1);
+        var set = Bars();
+        set.Height = 400;
+        set.PlotHeight = 120;
+        ShowIn(set);
+        Assert.Equal(120, PlotOf(set), 1);
+    }
+
+    [AvaloniaFact]
+    public void A_chart_with_a_max_height_shrinks_its_plot_but_never_grows_it()
+    {
+        var capped = Bars();
+        capped.MaxHeight = 200;
+        ShowIn(capped);
+        var legend = Part<WrapPanel>(capped, "PART_Legend");
+        Assert.Equal(200 - (legend.Bounds.Height + 12), PlotOf(capped), 1);
+        var roomy = Bars();
+        roomy.MaxHeight = 600;
+        ShowIn(roomy);
+        Assert.Equal(256, PlotOf(roomy), 1);
     }
 }

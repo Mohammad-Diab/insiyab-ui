@@ -27,7 +27,7 @@
         <ResourceDictionary x:Key="Dark">
           <SolidColorBrush x:Key="InsAlertOn" Color="#0B1220" />
           <SolidColorBrush x:Key="InsAlertInfoText" Color="{DynamicResource InsText1Color}" />
-          <SolidColorBrush x:Key="InsAlertInfoBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+          <SolidColorBrush x:Key="InsAlertInfoBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 

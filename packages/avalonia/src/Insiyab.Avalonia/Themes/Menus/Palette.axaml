@@ -4,13 +4,19 @@
 
   <Styles.Resources>
     <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsPaletteFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
+          <SolidColorBrush x:Key="InsPaletteSelection" Color="{DynamicResource InsPrimaryColor}" Opacity="0.22" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsPaletteFocusBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.55" />
+          <SolidColorBrush x:Key="InsPaletteSelection" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.22" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
 
       <SolidColorBrush x:Key="InsPaletteBackdrop" Color="#0F172A" Opacity="0.38" />
       <StreamGeometry x:Key="InsPaletteSearch">M4,11 A7,7 0 1 0 18,11 A7,7 0 1 0 4,11 Z M20 20 l-3.5 -3.5</StreamGeometry>
-
-
-      <SolidColorBrush x:Key="InsPaletteFocusBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.55" />
-      <SolidColorBrush x:Key="InsPaletteSelection" Color="{DynamicResource InsPrimaryColor}" Opacity="0.22" />
 
       <!-- The search field: the large input with the search glyph at its start, drawn here so the palette does not hang on the text box theme. -->
       <ControlTheme x:Key="InsPaletteBox" TargetType="TextBox">

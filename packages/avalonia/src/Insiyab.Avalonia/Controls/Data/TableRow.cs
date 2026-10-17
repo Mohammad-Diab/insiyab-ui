@@ -16,6 +16,7 @@ public class TableRow : TemplatedControl
         AvaloniaProperty.Register<TableRow, bool>(nameof(IsSelected));
 
     private ColumnsPanel? _panel;
+    private Control? _marker;
 
     public TableRow()
     {
@@ -37,11 +38,14 @@ public class TableRow : TemplatedControl
 
     internal ColumnsPanel? CellsPanel => _panel;
 
+    internal Thickness MarkerMargin => _marker?.Margin ?? new Thickness(0, 8);
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
         _panel?.Children.Clear();
         _panel = e.NameScope.Find<ColumnsPanel>("PART_Cells");
+        _marker = e.NameScope.Find<Control>("PART_Marker");
         if (_panel is not null) _panel.Layout = Owner?.ColumnWidths;
         Fill();
     }
