@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Automation;
 using Avalonia.Automation.Peers;
 using Avalonia.Automation.Provider;
+using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
@@ -43,10 +44,13 @@ public class Toolbar : TemplatedControl
 
     private ToolbarPanel? _panel;
     private ToolbarButton? _more;
-    private readonly PopMenu _menu = new() { IsEnd = true };
+    private readonly PopMenu _menu;
+    private readonly AvaloniaList<Control> _entries = new() { ResetBehavior = ResetBehavior.Remove };
 
     public Toolbar()
     {
+        // The presenter is made on the first open, before Opening, and keeps the list it found: a list of our own lets it see the entries filled then.
+        _menu = new PopMenu { IsEnd = true, ItemsSource = _entries };
         Items.CollectionChanged += (_, e) =>
         {
             Hosted.Adopt(LogicalChildren, e);
@@ -99,8 +103,8 @@ public class Toolbar : TemplatedControl
 
     private void FillMenu()
     {
-        _menu.Items.Clear();
-        foreach (var entry in MenuEntries()) _menu.Items.Add(entry);
+        _entries.Clear();
+        _entries.AddRange(MenuEntries());
     }
 
     /// <summary>The «⋯» menu's entries for what has moved: labels shown, a toggle as a check item, a dropdown or split button as a submenu.</summary>

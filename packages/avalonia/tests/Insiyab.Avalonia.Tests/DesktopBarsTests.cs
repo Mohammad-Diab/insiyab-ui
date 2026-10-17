@@ -180,6 +180,20 @@ public class ToolbarTests
         Assert.IsType<Icon>(items[0].Icon);
     }
 
+    // Opening «⋯» shows its entries, not an empty strip.
+    [AvaloniaFact]
+    public void The_open_menu_shows_what_moved()
+    {
+        var bar = Shown(out var window, 150);
+        var moved = bar.OverflowItems.Where(c => c is not Separator).Select(Label).ToList();
+        Assert.NotEmpty(moved);
+        Click(bar.MoreButton!, window);
+        Settle(300);
+        var presenter = window.GetVisualDescendants().OfType<MenuFlyoutPresenter>().Single();
+        var shown = presenter.GetVisualDescendants().OfType<MenuItem>().Where(i => i.IsEffectivelyVisible && i.Bounds.Height > 0).Select(i => (string?)i.Header).ToList();
+        Assert.Equal(moved, shown);
+    }
+
     [AvaloniaFact]
     public void Choosing_from_the_menu_clicks_the_command()
     {

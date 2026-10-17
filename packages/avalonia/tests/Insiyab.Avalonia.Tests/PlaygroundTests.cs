@@ -225,6 +225,33 @@ public class PlaygroundTests
         ToolbarTests.AssertRowKeepsItsCommands(bar, commands.Where(c => c != delete).ToArray(), delete, disabled);
     }
 
+    // The real toolbar page, its switch turned on by hand: the others stay in the row and «⋯» opens with the delete command.
+    [AvaloniaFact]
+    public void The_toolbar_page_keeps_its_row_when_delete_moves_to_the_menu()
+    {
+        LoadIcons();
+        var page = Insiyab.Avalonia.Gallery.GalleryPages.Find("toolbar")!.Create();
+        var window = Ui.Show(new ScrollViewer { Content = page }, global::Avalonia.Media.FlowDirection.RightToLeft, width: 1100, height: 900);
+        Ui.Settle(1000);
+        var play = page.GetVisualDescendants().OfType<Insiyab.Avalonia.Gallery.Playground.Playground>().First(p => p.Def == ToolbarPlay.Toolbar);
+        var always = play.GetVisualDescendants().OfType<ToggleSwitch>().First(t => (string?)t.Content == "الحذف في القائمة وحدها");
+        always.IsChecked = true;
+        Ui.Settle(500);
+        var bar = play.GetVisualDescendants().OfType<Insiyab.Avalonia.Controls.Toolbar>().Single();
+        var commands = bar.Items.Where(c => c is not Separator).ToList();
+        var delete = commands.OfType<ToolbarButton>().Single(b => b.Label == "حذف");
+        ToolbarTests.AssertRowKeepsItsCommands(bar, commands.Where(c => c != delete).ToArray(), delete, false);
+        bar.MoreButton!.BringIntoView();
+        Ui.Settle(300);
+        Ui.Click(bar.MoreButton, window);
+        Ui.Settle(500);
+        var menu = Assert.IsType<PopMenu>(bar.MoreButton.Flyout);
+        var item = Assert.Single(menu.Items.OfType<MenuItem>(), i => (string?)i.Header == "حذف");
+        Assert.True(item.IsEffectivelyVisible, "the delete entry is hidden in the open menu");
+        Assert.True(item.Bounds.Height > 0, "the delete entry has no height in the open menu");
+        ToolbarTests.AssertRowKeepsItsCommands(bar, commands.Where(c => c != delete).ToArray(), delete, false);
+    }
+
     // The preview holds still while a note comes and goes: its share changes, a note is raised, and the split stays where it was.
     [AvaloniaFact]
     public void The_split_play_holds_still_while_its_share_changes()

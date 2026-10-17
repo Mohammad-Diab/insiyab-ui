@@ -141,20 +141,27 @@ public static class TablesPlay
         {
             string[][] rows =
             [
-                ["ليلى", "الرياض", "layla@example.com", "+966 50 000 0001", "نشط"],
-                ["عمر", "عمّان", "omar@example.com", "+962 79 000 0002", "نشط"],
-                ["سارة", "القاهرة", "sara@example.com", "+20 10 0000 0003", "موقوف"],
-                ["كريم", "دبي", "karim@example.com", "+971 50 000 0004", "نشط"],
-                ["نور", "الدوحة", "nour@example.com", "+974 5000 0005", "نشط"],
+                ["ليلى", "الرياض", "layla@example.com", "+966 50 000 0001", "نشط", "المبيعات", "2024-03-12", "18", "4,250", "تفضّل البريد"],
+                ["عمر", "عمّان", "omar@example.com", "+962 79 000 0002", "نشط", "الدعم", "2023-11-05", "7", "1,120", "اتصال صباحًا"],
+                ["سارة", "القاهرة", "sara@example.com", "+20 10 0000 0003", "موقوف", "التسويق", "2022-08-21", "0", "0", "موقوف حتى السداد"],
+                ["كريم", "دبي", "karim@example.com", "+971 50 000 0004", "نشط", "المالية", "2024-01-30", "25", "9,800", "عميل دائم"],
+                ["نور", "الدوحة", "nour@example.com", "+974 5000 0005", "نشط", "الدعم", "2023-06-14", "12", "2,640", "ينتظر ردًا"],
+                ["يوسف", "جدة", "yousef@example.com", "+966 50 000 0006", "نشط", "المبيعات", "2024-05-02", "9", "3,175", "طلب فاتورة جديدة"],
+                ["هدى", "بيروت", "huda@example.com", "+961 70 000 007", "نشط", "التسويق", "2023-02-18", "15", "5,430", "تفضّل الهاتف"],
+                ["خالد", "الكويت", "khaled@example.com", "+965 5000 0008", "موقوف", "المالية", "2022-12-09", "3", "760", "موقوف بطلبه"],
+                ["مريم", "مسقط", "maryam@example.com", "+968 9000 0009", "نشط", "المبيعات", "2024-07-23", "21", "6,915", "عميلة دائمة"],
+                ["سامي", "المنامة", "sami@example.com", "+973 3600 0010", "نشط", "الدعم", "2023-09-11", "6", "1,380", "يحتاج متابعة"],
             ];
+            int[] ltr = [2, 3, 6];
             var cls = Classes(s.On("sticky") ? "sticky" : null, s.On("pin") && !s.Has("frozen") ? "pin" : null);
             var frozen = s.Has("frozen") ? $" FrozenColumns=\"{s["frozen"]}\"" : "";
-            return $"<ins:Table{cls}{frozen} TableMinWidth=\"768\"{(s.On("sticky") ? " MaxHeight=\"256\"" : "")}>\n" +
+            return $"<ins:Table{cls}{frozen} TableMinWidth=\"1400\"{(s.On("sticky") ? " MaxHeight=\"256\"" : "")}>\n" +
                 "  <ins:Table.Columns>\n" +
                 "    <ins:TableColumn Header=\"الاسم\" /><ins:TableColumn Header=\"المدينة\" /><ins:TableColumn Header=\"البريد\" /><ins:TableColumn Header=\"الهاتف\" /><ins:TableColumn Header=\"الحالة\" />\n" +
+                "    <ins:TableColumn Header=\"القسم\" /><ins:TableColumn Header=\"تاريخ الانضمام\" /><ins:TableColumn Header=\"الطلبات\" Classes=\"num\" /><ins:TableColumn Header=\"المبلغ\" Classes=\"num\" /><ins:TableColumn Header=\"ملاحظات\" />\n" +
                 "  </ins:Table.Columns>\n" +
                 string.Concat(rows.Select(r =>
-                    $"  <ins:TableRow><ins:TableCell>{r[0]}</ins:TableCell><ins:TableCell>{r[1]}</ins:TableCell><ins:TableCell FlowDirection=\"LeftToRight\">{r[2]}</ins:TableCell><ins:TableCell FlowDirection=\"LeftToRight\">{r[3]}</ins:TableCell><ins:TableCell>{r[4]}</ins:TableCell></ins:TableRow>\n")) +
+                    "  <ins:TableRow>" + string.Concat(r.Select((v, i) => ltr.Contains(i) ? $"<ins:TableCell FlowDirection=\"LeftToRight\">{v}</ins:TableCell>" : $"<ins:TableCell>{v}</ins:TableCell>")) + "</ins:TableRow>\n")) +
                 "</ins:Table>";
         },
         Notes = s =>
