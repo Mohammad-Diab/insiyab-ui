@@ -99,7 +99,7 @@ public static class InputsPlay
             {
                 if (el == "textarea") attrs += " AcceptsReturn=\"True\" TextWrapping=\"Wrap\" MinHeight=\"96\"";
                 if (ltr) attrs += " FlowDirection=\"LeftToRight\"";
-                if (type == "password") attrs += " PasswordChar=\"•\"";
+                if (type == "password") attrs += " FlowDirection=\"LeftToRight\" PasswordChar=\"•\"";
                 if (ltr && value.Length == 0) attrs += $" PlaceholderText=\"{(type == "email" ? "name@example.com" : "+966 50 000 0000")}\"";
                 if (value.Length > 0) attrs += $" Text=\"{value}\"";
                 control = $"  <TextBox{attrs} />\n";

@@ -107,12 +107,12 @@ public static class InputGroupPlay
             if (!s.Has("target"))
                 return "<StackPanel Classes=\"field\">\n" +
                     "  <TextBlock Classes=\"label\" Text=\"كلمة المرور\" />\n" +
-                    "  <TextBox Classes=\"revealPasswordButton\" PasswordChar=\"•\" Text=\"secret\" />\n" +
+                    "  <TextBox Classes=\"revealPasswordButton\" PasswordChar=\"•\" FlowDirection=\"LeftToRight\" Text=\"secret\" />\n" +
                     "</StackPanel>";
             return "<StackPanel Spacing=\"6\">\n" +
                 "  <StackPanel Classes=\"field\">\n" +
                 "    <TextBlock Classes=\"label\" Text=\"كلمة المرور\" />\n" +
-                "    <TextBox x:Name=\"Password\" PasswordChar=\"•\" Text=\"secret\" />\n" +
+                "    <TextBox x:Name=\"Password\" PasswordChar=\"•\" FlowDirection=\"LeftToRight\" Text=\"secret\" />\n" +
                 "  </StackPanel>\n" +
                 "  <ToggleButton Theme=\"{DynamicResource InsTextBoxRevealButton}\" HorizontalAlignment=\"Left\"\n" +
                 "                AutomationProperties.Name=\"إظهار كلمة المرور\"\n" +

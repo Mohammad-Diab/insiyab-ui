@@ -18,7 +18,7 @@
           </StackPanel>
           <StackPanel Classes="field">
             <TextBlock Classes="label" Text="كلمة المرور" />
-            <TextBox x:Name="Password" Classes="revealPasswordButton lg" PasswordChar="•" ins:Validate.Required="True" />
+            <TextBox x:Name="Password" Classes="revealPasswordButton lg" PasswordChar="•" FlowDirection="LeftToRight" ins:Validate.Required="True" />
           </StackPanel>
           <Grid ColumnDefinitions="*,Auto">
             <CheckBox Content="تذكرني" VerticalAlignment="Center" />

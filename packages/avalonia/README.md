@@ -10,7 +10,7 @@ Insiyab for Avalonia 12: the same glass, RTL-first look as the web library, as A
 </Application.Styles>
 ```
 
-Set `FlowDirection="RightToLeft"` on the window for an Arabic UI; a Latin field inside it (a username, a password) takes `FlowDirection="LeftToRight"` on its own. Avalonia's own `Calendar`, `CalendarDatePicker`, `DatePicker` and `TimePicker` follow the direction too: Arabic month, day and AM/PM words in RTL, English in LTR, Gregorian dates in Latin digits whatever the machine's culture.
+Set `FlowDirection="RightToLeft"` on the window for an Arabic UI; a Latin field inside it (a username, a password) takes `FlowDirection="LeftToRight"` on its own. Text typed the other way (Latin in an Arabic field) is laid out in its own direction from the field's start edge, so the caret stays at its end. Avalonia's own `Calendar`, `CalendarDatePicker`, `DatePicker` and `TimePicker` follow the direction too: Arabic month, day and AM/PM words in RTL, English in LTR, Gregorian dates in Latin digits whatever the machine's culture.
 
 ## Usage
 

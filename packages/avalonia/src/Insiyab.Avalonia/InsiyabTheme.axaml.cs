@@ -15,6 +15,7 @@ public partial class InsiyabTheme : Styles
         Controls.Motion.Register();
         Controls.WindowActivity.Register();
         Controls.TipKeyboard.Register();
+        Controls.TextDirection.Register();
         Controls.ClassTheme.Register(this);
     }
 

@@ -226,6 +226,71 @@ public class InputsTests
         Assert.False(box.RevealPassword);
     }
 
+    // The extent of the text's lines inside the presenter: where the leftmost and the rightmost of it are.
+    private static (double Left, double Right) Extent(TextPresenter presenter) =>
+        (presenter.TextLayout.TextLines.Min(l => l.Start), presenter.TextLayout.TextLines.Max(l => l.Start + l.Width));
+
+    private static TextBox Typed(string kind, FlowDirection dir, string text, out Window window)
+    {
+        var box = kind == "password"
+            ? new TextBox { Width = 300, PasswordChar = '•', RevealPassword = true, Classes = { "revealPasswordButton" } }
+            : new TextBox { Width = 300 };
+        window = Show(Page(box), dir);
+        Type(window, box, text);
+        return box;
+    }
+
+    // The text's own edge and the caret, both on the screen's x axis from the presenter's.
+    private static double OnScreen(Control c, Window w, double x) => c.TranslatePoint(new Point(x, 0), w)!.Value.X;
+
+    [AvaloniaTheory]
+    [InlineData("plain")]
+    [InlineData("password")]
+    public void Latin_typed_in_an_rtl_field_starts_at_its_edge_with_the_caret_at_its_end(string kind)
+    {
+        var box = Typed(kind, FlowDirection.RightToLeft, "cvDherherherhersf", out var window);
+        var presenter = Part<TextPresenter>(box, "PART_TextPresenter");
+        Assert.Equal(FlowDirection.LeftToRight, presenter.FlowDirection);
+        var (_, right) = Extent(presenter);
+        Assert.Equal(right, presenter.TextLayout.HitTestTextPosition(box.CaretIndex).X, 1);
+        var slotRight = Math.Max(OnScreen(presenter, window, 0), OnScreen(presenter, window, presenter.Bounds.Width));
+        Assert.Equal(slotRight, OnScreen(presenter, window, right), 1);
+    }
+
+    [AvaloniaFact]
+    public void Arabic_or_figures_keep_an_rtl_field_in_its_own_direction()
+    {
+        foreach (var text in new[] { "مرحبا", "12345" })
+        {
+            var box = Typed("plain", FlowDirection.RightToLeft, text, out _);
+            var presenter = Part<TextPresenter>(box, "PART_TextPresenter");
+            Assert.Equal(FlowDirection.RightToLeft, presenter.FlowDirection);
+            Assert.Equal(box.TextAlignment, presenter.TextAlignment);
+        }
+    }
+
+    [AvaloniaFact]
+    public void A_multiline_field_keeps_its_direction()
+    {
+        var box = new TextBox { Width = 300, Height = 120, AcceptsReturn = true };
+        var window = Show(Page(box), FlowDirection.RightToLeft);
+        Type(window, box, "cvDherherherhersf");
+        var presenter = Part<TextPresenter>(box, "PART_TextPresenter");
+        Assert.Equal(FlowDirection.RightToLeft, presenter.FlowDirection);
+    }
+
+    [AvaloniaFact]
+    public void Arabic_typed_in_an_ltr_field_starts_at_its_edge()
+    {
+        var box = Typed("plain", FlowDirection.LeftToRight, "مرحبا بكم في المكتبة", out var window);
+        var presenter = Part<TextPresenter>(box, "PART_TextPresenter");
+        Assert.Equal(FlowDirection.RightToLeft, presenter.FlowDirection);
+        var (left, _) = Extent(presenter);
+        Assert.Equal(left, presenter.TextLayout.HitTestTextPosition(box.CaretIndex).X, 1);
+        var slotLeft = Math.Min(OnScreen(presenter, window, 0), OnScreen(presenter, window, presenter.Bounds.Width));
+        Assert.Equal(slotLeft, OnScreen(presenter, window, left), 1);
+    }
+
     [AvaloniaTheory]
     [InlineData(FlowDirection.LeftToRight, FlowDirection.LeftToRight, true)]
     [InlineData(FlowDirection.RightToLeft, FlowDirection.LeftToRight, true)]
@@ -544,6 +609,66 @@ public class InputsTests
         Assert.Single(items);
         Assert.Equal("أسامة", items[0].Content);
         Assert.Equal(Res(box, "InsRXs"), items[0].CornerRadius);
+    }
+
+    private static List<ListBoxItem> Suggestions(AutoCompleteBox box)
+    {
+        Assert.True(box.IsDropDownOpen);
+        var list = (ListBox)((Border)Part<Popup>(box, "PART_Popup").Child!).Child!;
+        return list.GetRealizedContainers().OfType<ListBoxItem>().ToList();
+    }
+
+    [AvaloniaFact]
+    public void AutoComplete_with_its_own_filter_set_in_code_types_without_throwing()
+    {
+        var box = new AutoCompleteBox { ItemsSource = new[] { "أسامة", "سارة", "مريم" }, MinimumPopulateDelay = TimeSpan.Zero, TextFilter = ArabicMatch.Contains };
+        var window = Show(Page(box));
+        Part<TextBox>(box, "PART_TextBox").Focus();
+        window.KeyTextInput("اسا");
+        Settle();
+        Assert.Equal("أسامة", Assert.Single(Suggestions(box)).Content);
+    }
+
+    [AvaloniaFact]
+    public void AutoComplete_with_its_own_filter_set_in_markup_types_without_throwing()
+    {
+        var box = global::Avalonia.Markup.Xaml.AvaloniaRuntimeXamlLoader.Parse<AutoCompleteBox>(
+            """
+            <AutoCompleteBox xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ins="using:Insiyab.Avalonia.Controls" MinimumPopulateDelay="0:0:0" TextFilter="{x:Static ins:ArabicMatch.Contains}" />
+            """, typeof(ArabicMatch).Assembly);
+        box.ItemsSource = new[] { "أسامة", "سارة", "مريم" };
+        var window = Show(Page(box));
+        Part<TextBox>(box, "PART_TextBox").Focus();
+        window.KeyTextInput("اسا");
+        Settle();
+        Assert.Equal("أسامة", Assert.Single(Suggestions(box)).Content);
+    }
+
+    [AvaloniaFact]
+    public void AutoComplete_keeps_arabic_matching_across_a_theme_change()
+    {
+        var box = new AutoCompleteBox { ItemsSource = new[] { "أسامة", "سارة", "مريم" }, MinimumPopulateDelay = TimeSpan.Zero };
+        var window = Show(Page(box));
+        window.RequestedThemeVariant = ThemeVariant.Dark;
+        Settle(100);
+        window.RequestedThemeVariant = ThemeVariant.Light;
+        Settle(100);
+        Part<TextBox>(box, "PART_TextBox").Focus();
+        window.KeyTextInput("اسا");
+        Settle();
+        Assert.Equal("أسامة", Assert.Single(Suggestions(box)).Content);
+    }
+
+    [AvaloniaFact]
+    public void AutoComplete_uses_an_item_filter_set_at_run_time()
+    {
+        var box = new AutoCompleteBox { ItemsSource = new[] { "أسامة", "سارة", "مريم" }, MinimumPopulateDelay = TimeSpan.Zero };
+        var window = Show(Page(box));
+        box.ItemFilter = (text, item) => (string)item! == "مريم";
+        Part<TextBox>(box, "PART_TextBox").Focus();
+        window.KeyTextInput("ا");
+        Settle();
+        Assert.Equal("مريم", Assert.Single(Suggestions(box)).Content);
     }
 
     // ---------------------------------------------------------------- select

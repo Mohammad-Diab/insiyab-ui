@@ -28,7 +28,7 @@
               <TextBlock x:Name="PhoneEcho" Classes="muted" FlowDirection="LeftToRight" HorizontalAlignment="Center" />
               <StackPanel Classes="field">
                 <TextBlock Classes="label" Text="كلمة المرور" />
-                <TextBox x:Name="Password" Classes="lg revealPasswordButton" PasswordChar="•"
+                <TextBox x:Name="Password" Classes="lg revealPasswordButton" PasswordChar="•" FlowDirection="LeftToRight"
                          ins:Validate.Required="True" ins:Wizard.AutoFocus="True" />
               </StackPanel>
               <Button Classes="primary lg full" Content="متابعة" ins:Wizard.Action="Next" />

@@ -18,7 +18,7 @@ public static class ValidationPlay
             </StackPanel>
             <StackPanel Classes="field">
               <TextBlock Classes="label" Text="كلمة المرور" />
-              <TextBox PasswordChar="•" ins:Validate.Required="True" ins:Validate.MinLength="8" ins:Validate.Message="كلمة المرور قصيرة." />
+              <TextBox PasswordChar="•" FlowDirection="LeftToRight" ins:Validate.Required="True" ins:Validate.MinLength="8" ins:Validate.Message="كلمة المرور قصيرة." />
               <TextBlock Classes="hint" Text="ثمانية أحرف على الأقل." />
             </StackPanel>
           </StackPanel>
@@ -58,7 +58,7 @@ public static class ValidationPlay
             var (label, attrs, own, hint) = s["rule"] switch
             {
                 "email" => ("البريد", " FlowDirection=\"LeftToRight\" ins:Validate.Required=\"True\" ins:Validate.Email=\"True\"", "اكتب بريدًا صحيحًا.", "تلميح قصير."),
-                "minlength" => ("كلمة المرور", " PasswordChar=\"•\" ins:Validate.Required=\"True\" ins:Validate.MinLength=\"8\"", "كلمة المرور قصيرة.", "ثمانية أحرف على الأقل."),
+                "minlength" => ("كلمة المرور", " PasswordChar=\"•\" FlowDirection=\"LeftToRight\" ins:Validate.Required=\"True\" ins:Validate.MinLength=\"8\"", "كلمة المرور قصيرة.", "ثمانية أحرف على الأقل."),
                 "pattern" => ("الرمز", " ins:Validate.Required=\"True\" ins:Validate.Pattern=\"[0-9]+\"", "اكتب أرقامًا فقط.", "تلميح قصير."),
                 _ => ("الاسم", " ins:Validate.Required=\"True\"", "اكتب الاسم.", "تلميح قصير."),
             };

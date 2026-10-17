@@ -1,7 +1,9 @@
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
@@ -27,12 +29,44 @@ public sealed class TextDirection : IValueConverter
         return null;
     }
 
+    private static readonly ConditionalWeakTable<TextBox, TextPresenter> s_presenters = new();
+    private static bool s_registered;
+
+    // Every one-line field lays typed text out in its own direction at the field's start edge, so the caret meets the end of Latin text in an Arabic field.
+    internal static void Register()
+    {
+        if (s_registered) return;
+        s_registered = true;
+        TemplatedControl.TemplateAppliedEvent.AddClassHandler<TextBox>((box, e) =>
+        {
+            if (e is TemplateAppliedEventArgs applied && applied.NameScope.Find<TextPresenter>("PART_TextPresenter") is { } presenter) s_presenters.AddOrUpdate(box, presenter);
+            Follow(box);
+        });
+        TextBox.TextProperty.Changed.AddClassHandler<TextBox>((box, _) => Follow(box));
+        Visual.FlowDirectionProperty.Changed.AddClassHandler<TextBox>((box, _) => Follow(box));
+        TextBox.TextAlignmentProperty.Changed.AddClassHandler<TextBox>((box, _) => Follow(box));
+        TextBox.AcceptsReturnProperty.Changed.AddClassHandler<TextBox>((box, _) => Follow(box));
+    }
+
+    private static void Follow(TextBox box)
+    {
+        if (box is DateField or TimeField or MaskedTextBox || !s_presenters.TryGetValue(box, out var presenter)) return;
+        if (box.AcceptsReturn)
+        {
+            presenter.ClearValue(Visual.FlowDirectionProperty);
+            presenter.ClearValue(TextPresenter.TextAlignmentProperty);
+            return;
+        }
+        FollowTyped(box, presenter, digitsLtr: false);
+    }
+
     // A date or time field: digits and separators read left to right, so a line with no letters is laid out left to right, held at the field's own start edge.
-    internal static void FollowTyped(TextBox box, TextPresenter? presenter)
+    internal static void FollowTyped(TextBox box, TextPresenter? presenter, bool digitsLtr = true)
     {
         if (presenter is null) return;
         var own = box.FlowDirection;
-        if ((Of(box.Text) ?? FlowDirection.LeftToRight) == own)
+        var typed = Of(box.Text) ?? (digitsLtr ? FlowDirection.LeftToRight : own);
+        if (typed == own)
         {
             presenter.ClearValue(Visual.FlowDirectionProperty);
             presenter.ClearValue(TextPresenter.TextAlignmentProperty);
