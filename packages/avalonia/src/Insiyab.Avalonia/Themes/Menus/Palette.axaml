@@ -142,11 +142,11 @@
                                Theme="{StaticResource InsPaletteBox}"
                                PlaceholderText="{TemplateBinding PlaceholderText}" />
                     </ins:TemplateBorder>
-                    <Border DockPanel.Dock="Bottom" Classes="palette-foot">
+                    <ins:PaletteBorder DockPanel.Dock="Bottom" Classes="palette-foot">
                       <WrapPanel ItemSpacing="20" LineSpacing="6">
                         <StackPanel Orientation="Horizontal" Spacing="4">
-                          <Border Classes="kbd"><TextBlock Classes="arrow" Text="↑" /></Border>
-                          <Border Classes="kbd"><TextBlock Classes="arrow" Text="↓" /></Border>
+                          <Border Classes="kbd"><ins:PaletteText Classes="arrow" Text="↑" /></Border>
+                          <Border Classes="kbd"><ins:PaletteText Classes="arrow" Text="↓" /></Border>
                           <ins:TemplateText Text="{TemplateBinding MoveText}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="4">
@@ -158,9 +158,9 @@
                           <ins:TemplateText Text="{TemplateBinding CloseText}" />
                         </StackPanel>
                       </WrapPanel>
-                    </Border>
+                    </ins:PaletteBorder>
                     <Panel>
-                      <TextBlock x:Name="PART_Empty" Classes="palette-empty" Text="{TemplateBinding EmptyText}" IsVisible="False" />
+                      <ins:PaletteText x:Name="PART_Empty" Classes="palette-empty" Text="{TemplateBinding EmptyText}" IsVisible="False" />
                       <ScrollViewer x:Name="PART_Scroll" HorizontalScrollBarVisibility="Disabled" Padding="8,4,8,8">
                         <ItemsControl x:Name="PART_List">
                           <ItemsControl.ItemsPanel>
@@ -238,28 +238,38 @@
     <Setter Property="IsVisible" Value="True" />
   </Style>
 
-  <Style Selector="ins|CommandPalette TextBlock.palette-empty">
+  <Style Selector="ins|CommandPalette ins|PaletteText.palette-empty">
     <Setter Property="Padding" Value="16,28,16,32" />
     <Setter Property="TextAlignment" Value="Center" />
     <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
     <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
   </Style>
 
-  <Style Selector="ins|CommandPalette Border.palette-foot">
+  <Style Selector="ins|CommandPalette ins|PaletteBorder.palette-foot">
     <Setter Property="Padding" Value="16,10" />
     <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
     <Setter Property="BorderThickness" Value="0,1,0,0" />
   </Style>
-  <Style Selector="ins|CommandPalette Border.palette-foot TextBlock, ins|CommandPalette Border.palette-foot ins|TemplateText">
+  <Style Selector="ins|CommandPalette ins|PaletteBorder.palette-foot ins|PaletteText, ins|CommandPalette ins|PaletteBorder.palette-foot ins|TemplateText">
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
+  <!-- A key cap's text in the foot is a PaletteText, so the cap's own text look is written out for it here. -->
+  <Style Selector="ins|CommandPalette ins|PaletteBorder.palette-foot Border.kbd > ins|PaletteText">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="LineHeight" Value="19.2" />
+    <Setter Property="TextAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
   <!-- Inter has no arrows, and the system fallback can be a colour emoji; a symbol face keeps them ink. -->
-  <Style Selector="ins|CommandPalette Border.palette-foot TextBlock.arrow">
+  <Style Selector="ins|CommandPalette ins|PaletteBorder.palette-foot ins|PaletteText.arrow">
     <Setter Property="FontFamily" Value="Segoe UI Symbol, Segoe UI, Arial" />
   </Style>
-  <Style Selector="ins|CommandPalette Border.palette-foot Border.kbd > TextBlock, ins|CommandPalette Border.palette-foot Border.kbd > ins|TemplateText">
+  <Style Selector="ins|CommandPalette ins|PaletteBorder.palette-foot Border.kbd > ins|TemplateText">
     <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
   </Style>
 

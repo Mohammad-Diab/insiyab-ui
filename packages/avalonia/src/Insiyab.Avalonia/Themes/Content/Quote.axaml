@@ -164,6 +164,21 @@
           </Style>
         </Style>
       </ControlTheme>
+      <!-- quote: a passage from elsewhere, a brand bar at its start edge and a quiet fill; its text takes the size, leading and colour through inheritance -->
+      <ControlTheme x:Key="InsLookQuote" TargetType="Border" ctl:ClassTheme.For="quote">
+        <Style Selector="^.quote">
+          <Setter Property="Padding" Value="18,14,16,14" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Setter Property="BorderThickness" Value="3,1,1,1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsQuoteBorder}" />
+          <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
+          <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsMd}" />
+          <Setter Property="TextBlock.LineHeight" Value="26.6" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
+          <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -198,19 +213,10 @@
   <Style Selector="ctl|Mark.info:lit"><Setter Property="Background" Value="{DynamicResource InsToneInfoBd}" /></Style>
   <Style Selector="ctl|Mark.brand:lit"><Setter Property="Background" Value="{DynamicResource InsToneBrandBd}" /></Style>
 
-  <!-- quote: a passage from elsewhere, a brand bar at its start edge and a quiet fill -->
-  <Style Selector="Border.quote">
-    <Setter Property="Padding" Value="18,14,16,14" />
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
-    <Setter Property="BorderThickness" Value="3,1,1,1" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsQuoteBorder}" />
-    <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
-  </Style>
-  <Style Selector="Border.quote TextBlock, Border.quote ctl|TemplateText">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
-    <Setter Property="LineHeight" Value="26.6" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-    <Setter Property="TextWrapping" Value="Wrap" />
+  <!-- A button's or link's label is an AccessText, which the old quote text rule never reached, so it keeps its own leading and no wrapping -->
+  <Style Selector="Border.quote AccessText">
+    <Setter Property="LineHeight" Value="NaN" />
+    <Setter Property="TextWrapping" Value="NoWrap" />
   </Style>
 
   <!-- quote-source: where it came from, smaller, behind a document mark; a HyperlinkButton in it is the link -->

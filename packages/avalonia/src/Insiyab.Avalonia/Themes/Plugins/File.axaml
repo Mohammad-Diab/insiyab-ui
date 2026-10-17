@@ -232,12 +232,14 @@
         </Style>
       </ControlTheme>
 
+      <ControlTheme x:Key="InsLookFileIssue" TargetType="TextBlock" ins:ClassTheme.For="file-issue">
+        <Style Selector="^.file-issue">
+          <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
-
-  <Style Selector="TextBlock.file-issue">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
-    <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
-  </Style>
 
 </Styles>

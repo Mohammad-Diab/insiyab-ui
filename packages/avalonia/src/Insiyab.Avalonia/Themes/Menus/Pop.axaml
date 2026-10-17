@@ -433,6 +433,37 @@
         </Setter>
       </ControlTheme>
 
+      <!-- .ins-pop-label in a card: a heading over a run of items, never chosen. -->
+      <ControlTheme x:Key="InsLookPopLabel" TargetType="TextBlock" ins:ClassTheme.For="pop-label">
+        <Style Selector="^.pop-label">
+          <Setter Property="Padding" Value="12,8,12,4" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- .ins-pop-title, in a card. -->
+      <ControlTheme x:Key="InsLookPopTitle" TargetType="TextBlock" ins:ClassTheme.For="pop-title">
+        <Style Selector="^.pop-title">
+          <Setter Property="Margin" Value="0,0,0,4" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+      </ControlTheme>
+
+      <!-- .ins-pop-text, in a card. -->
+      <ControlTheme x:Key="InsLookPopText" TargetType="TextBlock" ins:ClassTheme.For="pop-text">
+        <Style Selector="^.pop-text">
+          <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+          <Setter Property="LineHeight" Value="22" />
+          <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -452,28 +483,6 @@
 
   <Style Selector="Button.pop-item">
     <Setter Property="Theme" Value="{StaticResource InsPopItemButton}" />
-  </Style>
-  <!-- .ins-pop-label in a card: a heading over a run of items, never chosen. -->
-  <Style Selector="TextBlock.pop-label">
-    <Setter Property="Padding" Value="12,8,12,4" />
-    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
-    <Setter Property="FontWeight" Value="Bold" />
-    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
-  </Style>
-
-  <!-- .ins-pop-title and .ins-pop-text, in a card. -->
-  <Style Selector="TextBlock.pop-title">
-    <Setter Property="Margin" Value="0,0,0,4" />
-    <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
-    <Setter Property="FontWeight" Value="Bold" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-    <Setter Property="TextWrapping" Value="Wrap" />
-  </Style>
-  <Style Selector="TextBlock.pop-text">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
-    <Setter Property="LineHeight" Value="22" />
-    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
-    <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
 
 </Styles>

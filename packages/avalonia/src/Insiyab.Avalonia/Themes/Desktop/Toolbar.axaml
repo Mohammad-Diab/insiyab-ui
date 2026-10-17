@@ -183,6 +183,19 @@
           <Setter Property="BoxShadow" Value="none" />
         </Style>
       </ControlTheme>
+      <!-- The command's name beside its icon, and the shortcut in its tip -->
+      <ControlTheme x:Key="InsLookToolbarLabel" TargetType="TextBlock" ins:ClassTheme.For="toolbar-label">
+        <Style Selector="^.toolbar-label">
+          <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+      </ControlTheme>
+      <ControlTheme x:Key="InsLookToolbarKey" TargetType="TextBlock" ins:ClassTheme.For="toolbar-key">
+        <Style Selector="^.toolbar-key">
+          <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+          <Setter Property="Opacity" Value="0.7" />
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -221,13 +234,6 @@
     <Setter Property="Data" Value="{StaticResource InsToolbarChevron}" />
     <Setter Property="Opacity" Value="0.7" />
     <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="TextBlock.toolbar-label">
-    <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="TextBlock.toolbar-key">
-    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
-    <Setter Property="Opacity" Value="0.7" />
   </Style>
 
 </Styles>

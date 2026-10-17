@@ -448,6 +448,34 @@
           </ControlTemplate>
         </Setter>
       </ControlTheme>
+      <!-- The selected row's marker on its way to the newly selected row; meanwhile the rows' own markers hide -->
+      <ControlTheme x:Key="InsLookTableMarkerFlight" TargetType="Border" ins:ClassTheme.For="table-marker-flight">
+        <Style Selector="^.table-marker-flight">
+          <Setter Property="Width" Value="3" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+          <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The empty state's title and hint, in a table or anywhere else -->
+      <ControlTheme x:Key="InsLookTableEmptyTitle" TargetType="TextBlock" ins:ClassTheme.For="empty-title">
+        <Style Selector="^.empty-title">
+          <Setter Property="FontSize" Value="15" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+      </ControlTheme>
+      <ControlTheme x:Key="InsLookTableEmptyHint" TargetType="TextBlock" ins:ClassTheme.For="empty-hint">
+        <Style Selector="^.empty-hint">
+          <Setter Property="FontSize" Value="13" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+          <Setter Property="HorizontalAlignment" Value="Center" />
+          <Setter Property="TextAlignment" Value="Center" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
 
@@ -456,12 +484,6 @@
     <Setter Property="Spacing" Value="8" />
   </Style>
 
-  <!-- The selected row's marker on its way to the newly selected row; meanwhile the rows' own markers hide -->
-  <Style Selector="Border.table-marker-flight">
-    <Setter Property="Width" Value="3" />
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
-    <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />
-  </Style>
   <Style Selector="ins|Table.moving ins|TableRow /template/ :is(Border)#PART_Marker">
     <Setter Property="Opacity" Value="0" />
   </Style>
@@ -493,24 +515,11 @@
     <Setter Property="MinHeight" Value="0" />
   </Style>
 
-  <!-- The selection column's boxes and the empty state inside a table -->
+  <!-- The selection column's boxes inside a table -->
   <Style Selector="ins|Table CheckBox.table-check">
     <Setter Property="MinWidth" Value="0" />
     <Setter Property="Padding" Value="0" />
     <Setter Property="VerticalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="ins|Table TextBlock.empty-title">
-    <Setter Property="FontSize" Value="15" />
-    <Setter Property="FontWeight" Value="Bold" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-    <Setter Property="HorizontalAlignment" Value="Center" />
-  </Style>
-  <Style Selector="ins|Table TextBlock.empty-hint">
-    <Setter Property="FontSize" Value="13" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
-    <Setter Property="HorizontalAlignment" Value="Center" />
-    <Setter Property="TextAlignment" Value="Center" />
-    <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
 
 </Styles>

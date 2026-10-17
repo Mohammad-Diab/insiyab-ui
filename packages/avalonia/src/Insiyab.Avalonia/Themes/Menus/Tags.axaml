@@ -152,51 +152,59 @@
         </Style>
       </ControlTheme>
 
+      <!-- .ins-combo-list, .ins-combo-option and .ins-combo-empty, as the tags field's list draws them. -->
+      <ControlTheme x:Key="InsLookTagsList" TargetType="Border" ins:ClassTheme.For="combo-list">
+        <Style Selector="^.combo-list">
+          <Setter Property="Background" Value="{DynamicResource InsGlassStrongGround}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Setter Property="BoxShadow" Value="{DynamicResource InsShLg}" />
+          <Setter Property="MaxHeight" Value="288" />
+        </Style>
+      </ControlTheme>
+
+      <!-- An option row; its text takes the size and colour through inheritance, and the active row's still style cancels the nudge. -->
+      <ControlTheme x:Key="InsLookTagsOption" TargetType="Border" ins:ClassTheme.For="tags-option">
+        <Style Selector="^.tags-option">
+          <Setter Property="Padding" Value="12,8" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
+          <Setter Property="Background" Value="{DynamicResource InsPopItemRest}" />
+          <Setter Property="Cursor" Value="Hand" />
+          <Setter Property="RenderTransform" Value="none" />
+          <Setter Property="Transitions">
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+          <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsMd}" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
+          <Style Selector="^.active">
+            <Setter Property="Background" Value="{DynamicResource InsPopItemHover}" />
+            <Setter Property="RenderTransform" Value="translateX(3px)" />
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
+            <Style Selector="^[(ins|ClassTheme.Still)=True]">
+              <Setter Property="RenderTransform" Value="none" />
+            </Style>
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="InsLookTagsEmpty" TargetType="TextBlock" ins:ClassTheme.For="combo-empty">
+        <Style Selector="^.combo-empty">
+          <Setter Property="Padding" Value="12,8" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
+        </Style>
+      </ControlTheme>
+
     </ResourceDictionary>
   </Styles.Resources>
 
   <Style Selector="ins|TagsInput ins|Chip">
     <Setter Property="MinHeight" Value="28" />
     <Setter Property="Cursor" Value="Arrow" />
-  </Style>
-
-  <!-- .ins-combo-list, .ins-combo-option and .ins-combo-empty, as the tags field's list draws them. -->
-  <Style Selector="Border.combo-list">
-    <Setter Property="Background" Value="{DynamicResource InsGlassStrongGround}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
-    <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
-    <Setter Property="BoxShadow" Value="{DynamicResource InsShLg}" />
-    <Setter Property="MaxHeight" Value="288" />
-  </Style>
-  <Style Selector="Border.tags-option">
-    <Setter Property="Padding" Value="12,8" />
-    <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
-    <Setter Property="Background" Value="{DynamicResource InsPopItemRest}" />
-    <Setter Property="Cursor" Value="Hand" />
-    <Setter Property="RenderTransform" Value="none" />
-    <Setter Property="Transitions">
-      <Transitions>
-        <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-      </Transitions>
-    </Setter>
-  </Style>
-  <Style Selector="Border.tags-option > TextBlock, Border.tags-option > ins|TemplateText">
-    <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
-    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-  </Style>
-  <Style Selector="Border.tags-option.active">
-    <Setter Property="Background" Value="{DynamicResource InsPopItemHover}" />
-    <Setter Property="RenderTransform" Value="translateX(3px)" />
-  </Style>
-  <Style Selector="Border.tags-option.active > TextBlock, Border.tags-option.active > ins|TemplateText">
-    <Setter Property="Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
-  </Style>
-  <Style Selector="TextBlock.combo-empty">
-    <Setter Property="Padding" Value="12,8" />
-    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
-    <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
   </Style>
 
 </Styles>

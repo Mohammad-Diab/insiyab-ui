@@ -2,19 +2,43 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ins="using:Insiyab.Avalonia.Controls">
 
-  <!-- .ins-kbd: a key cap, a Border around a TextBlock. Key names are words, so Inter, left to right; the heavier bottom edge is the key. -->
-  <Style Selector="Border.kbd">
-    <Setter Property="MinWidth" Value="21" />
-    <Setter Property="Padding" Value="5.4,0.6" />
-    <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
-    <Setter Property="BorderThickness" Value="1,1,1,2" />
-    <Setter Property="CornerRadius" Value="5" />
-    <Setter Property="VerticalAlignment" Value="Center" />
-    <Setter Property="HorizontalAlignment" Value="Left" />
-    <Setter Property="FlowDirection" Value="LeftToRight" />
-  </Style>
-  <Style Selector="Border.kbd > TextBlock, Border.kbd > ins|TemplateText">
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <!-- The text a key cap gives its own child: Inter, left to right -->
+      <ControlTheme x:Key="InsKbdText" TargetType="TextBlock">
+        <Style Selector="^[(ins|ClassTheme.Relayed)=True]">
+          <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+          <Setter Property="FontWeight" Value="Medium" />
+          <Setter Property="LineHeight" Value="19.2" />
+          <Setter Property="TextAlignment" Value="Center" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          <Setter Property="RenderTransform" Value="none" />
+        </Style>
+      </ControlTheme>
+
+      <!-- .ins-kbd: a key cap, a Border around a TextBlock. Key names are words, so Inter, left to right; the heavier bottom edge is the key. -->
+      <ControlTheme x:Key="InsLookKbd" TargetType="Border" ins:ClassTheme.For="kbd">
+        <Style Selector="^.kbd">
+          <Setter Property="MinWidth" Value="21" />
+          <Setter Property="Padding" Value="5.4,0.6" />
+          <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+          <Setter Property="BorderThickness" Value="1,1,1,2" />
+          <Setter Property="CornerRadius" Value="5" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Setter Property="HorizontalAlignment" Value="Left" />
+          <Setter Property="FlowDirection" Value="LeftToRight" />
+          <Setter Property="ins:ClassTheme.ChildTheme" Value="{StaticResource InsKbdText}" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- A TemplateText straight under a plain key cap is rare, so its rule stays global -->
+  <Style Selector="Border.kbd > ins|TemplateText">
     <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
     <Setter Property="FontWeight" Value="Medium" />
