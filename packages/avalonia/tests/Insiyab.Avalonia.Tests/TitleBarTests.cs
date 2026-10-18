@@ -104,6 +104,26 @@ public class TitleBarTests
     }
 
     [AvaloniaFact]
+    public void A_control_that_leaves_the_drag_area_gets_its_role_back()
+    {
+        var button = new Button { Content = "دخول" };
+        var border = new Border { Background = Brushes.Transparent, Child = new StackPanel { Children = { button } } };
+        TitleBar.SetIsDragArea(border, true);
+        Show(border);
+        Assert.Equal(WindowDecorationsElementRole.User, WindowDecorationProperties.GetElementRole(button));
+
+        TitleBar.SetIsDragArea(border, false);
+        Assert.Equal(WindowDecorationsElementRole.None, WindowDecorationProperties.GetElementRole(button));
+
+        TitleBar.SetIsDragArea(border, true);
+        Assert.Equal(WindowDecorationsElementRole.User, WindowDecorationProperties.GetElementRole(button));
+        button.Focusable = false;
+        Assert.Equal(WindowDecorationsElementRole.None, WindowDecorationProperties.GetElementRole(button));
+        button.Focusable = true;
+        Assert.Equal(WindowDecorationsElementRole.User, WindowDecorationProperties.GetElementRole(button));
+    }
+
+    [AvaloniaFact]
     public void App_icon_is_a_menu_target_not_a_drag_handle()
     {
         var iconText = new TextBlock { Text = "ان" };

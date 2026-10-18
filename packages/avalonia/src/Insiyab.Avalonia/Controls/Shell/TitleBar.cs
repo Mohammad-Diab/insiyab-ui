@@ -29,9 +29,9 @@ public static class TitleBar
 
     internal const double BandHeight = 40;
 
-    // Set on a focusable control the library marked as a normal control inside a drag area.
-    private static readonly AttachedProperty<bool> KeptProperty =
-        AvaloniaProperty.RegisterAttached<Control, bool>("Kept", typeof(TitleBar));
+    // Holds the role entry the library put on a focusable control inside a drag area; disposing it gives the control its own role back.
+    private static readonly AttachedProperty<IDisposable?> KeptProperty =
+        AvaloniaProperty.RegisterAttached<Control, IDisposable?>("Kept", typeof(TitleBar));
 
     private static readonly AttachedProperty<MenuHook?> HookProperty =
         AvaloniaProperty.RegisterAttached<Window, MenuHook?>("Hook", typeof(TitleBar));
@@ -81,16 +81,14 @@ public static class TitleBar
     private static void Keep(Control control)
     {
         var inside = control.Focusable && InDragArea(control);
-        if (inside == control.GetValue(KeptProperty)) return;
+        var kept = control.GetValue(KeptProperty);
+        if (inside == (kept is not null)) return;
         if (inside)
-        {
-            control.SetValue(KeptProperty, true);
-            control.SetValue(WindowDecorationProperties.ElementRoleProperty, WindowDecorationsElementRole.User, BindingPriority.Style);
-        }
+            control.SetValue(KeptProperty, control.SetValue(WindowDecorationProperties.ElementRoleProperty, WindowDecorationsElementRole.User, BindingPriority.Style));
         else
         {
             control.ClearValue(KeptProperty);
-            control.SetValue(WindowDecorationProperties.ElementRoleProperty, AvaloniaProperty.UnsetValue, BindingPriority.Style);
+            kept?.Dispose();
         }
     }
 
