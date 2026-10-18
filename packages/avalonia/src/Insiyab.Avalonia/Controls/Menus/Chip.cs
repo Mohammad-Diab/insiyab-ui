@@ -121,6 +121,10 @@ public class Chip : ContentControl
 
     private static readonly Easing Ease = new SplineEasing(0.22, 1, 0.36, 1);
     private static readonly Easing Spring = new SplineEasing(0.34, 1.56, 0.64, 1);
+    private static readonly System.Diagnostics.Stopwatch Clock = System.Diagnostics.Stopwatch.StartNew();
+
+    /// <summary>For tests: the milliseconds the neighbours' glides are timed by, which a test can hold and step.</summary>
+    internal static Func<double> Now { get; set; } = () => Clock.Elapsed.TotalMilliseconds;
 
     // The chip leaves the flow at once and a picture of it plays the exit where it stood, so its neighbours glide into the room at the same time, as the web's chipLeave does.
     private void Leave()
@@ -255,7 +259,6 @@ public class Chip : ContentControl
     private sealed class Slide
     {
         private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<Control, Slide> Running = new();
-        private static readonly System.Diagnostics.Stopwatch Clock = System.Diagnostics.Stopwatch.StartNew();
         private readonly Control _child;
         private readonly double _dx, _dy, _start;
         private IDisposable? _value;
@@ -266,7 +269,7 @@ public class Chip : ContentControl
             _child = child;
             _dx = dx;
             _dy = dy;
-            _start = Clock.Elapsed.TotalMilliseconds;
+            _start = Now();
         }
 
         public static void Start(Control child, double dx, double dy)
@@ -280,7 +283,7 @@ public class Chip : ContentControl
         private void Step()
         {
             if (_done) return;
-            var t = Math.Clamp((Clock.Elapsed.TotalMilliseconds - _start) / 360, 0, 1);
+            var t = Math.Clamp((Now() - _start) / 360, 0, 1);
             if (t >= 1 || TopLevel.GetTopLevel(_child) is not { } top)
             {
                 Stop();

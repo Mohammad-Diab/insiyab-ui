@@ -37,6 +37,40 @@ public class ButtonMotionTests
         return samples;
     }
 
+    // A motion's clock held still and stepped by the test, a frame each step, so load cannot change what a reading sees.
+    private sealed class HeldClock : IDisposable
+    {
+        private readonly Func<double> _real;
+        private readonly Action<Func<double>> _set;
+        private readonly double _from;
+        private double _at;
+
+        public HeldClock(Func<double> real, Action<Func<double>> set)
+        {
+            _real = real;
+            _set = set;
+            _from = _at = real();
+            set(() => _at);
+        }
+
+        public List<(int Ms, T Value)> Step<T>(Window window, int milliseconds, int every, Func<T> read)
+        {
+            var samples = new List<(int, T)>();
+            for (var ms = 0; ms <= milliseconds; ms += every)
+            {
+                _at = _from + ms;
+                window.InvalidateVisual();
+                Dispatcher.UIThread.RunJobs();
+                AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+                Dispatcher.UIThread.RunJobs();
+                samples.Add((ms, read()));
+            }
+            return samples;
+        }
+
+        public void Dispose() => _set(_real);
+    }
+
     private static double ScaleOf(Control part) => part.RenderTransform?.Value.M11 ?? 1;
 
     private static ControlTheme Theme(string key)
@@ -96,12 +130,38 @@ public class ButtonMotionTests
         var p = Center(button, window);
         window.MouseMove(p);
         Settle(300);
-        window.MouseDown(p, MouseButton.Left);
-        window.MouseUp(p, MouseButton.Left);
-        var samples = Sample(window, 400, () => ScaleOf(part));
+        // The clock stands still, so the click counts as a tap however slow the run, and the dip is read at exact times on its own curve rather than from frames that load can skip.
+        var real = PressDip.Now;
+        var at = real();
+        PressDip.Now = () => at;
+        Animation? run = null;
+        PressDip.Started = (c, a) => { if (c == part) run = a; };
+        try
+        {
+            window.MouseDown(p, MouseButton.Left);
+            window.MouseUp(p, MouseButton.Left);
+        }
+        finally
+        {
+            PressDip.Now = real;
+            PressDip.Started = null;
+        }
+        Assert.NotNull(run);
+        var samples = Enumerable.Range(0, 401).Select(ms => (Ms: ms, Value: DipAt(run, ms))).ToList();
         var bottom = samples.First(s => s.Value == samples.Min(m => m.Value));
         Assert.InRange(bottom.Ms, 10, 110);
         Assert.All(samples.Where(s => s.Ms > 300), s => Assert.Equal(1, s.Value, 3));
+        Assert.Equal(1, Sample(window, 400, () => ScaleOf(part))[^1].Value, 3);
+    }
+
+    // The dip's scale ms into its run as the animation plays it: its easing over the whole run, then a straight line between the keyframes either side.
+    private static double DipAt(Animation run, double ms)
+    {
+        var p = run.Easing.Ease(Math.Clamp((ms - run.Delay.TotalMilliseconds) / run.Duration.TotalMilliseconds, 0, 1));
+        var keys = run.Children.Select(k => (Cue: k.Cue.CueValue, Scale: ((TransformOperations)k.Setters.OfType<Setter>().Single(s => s.Property == Visual.RenderTransformProperty).Value!).Value.M11)).OrderBy(k => k.Cue).ToList();
+        for (var i = 1; i < keys.Count; i++)
+            if (p <= keys[i].Cue) return keys[i - 1].Scale + (keys[i].Scale - keys[i - 1].Scale) * (p - keys[i - 1].Cue) / (keys[i].Cue - keys[i - 1].Cue);
+        return keys[^1].Scale;
     }
 
     [AvaloniaFact]
@@ -238,10 +298,11 @@ public class ButtonMotionTests
         var rest = marker.Height;
         var target = x.Links[2];
         var p = Center(target, window);
+        using var clock = new HeldClock(MarkerFlight.Now, f => MarkerFlight.Now = f);
         window.MouseMove(p);
         window.MouseDown(p, MouseButton.Left);
         window.MouseUp(p, MouseButton.Left);
-        var samples = Sample(window, 800, () => marker.Height);
+        var samples = clock.Step(window, 800, 5, () => marker.Height);
         var span = x.Links[2].Bounds.Bottom - 7 - (x.Links[0].Bounds.Top + 7);
         Assert.All(samples.Where(s => s.Ms <= 80), s => Assert.True(s.Value - rest < 0.3 * (span - rest), $"at {s.Ms}ms the marker is {s.Value} tall already"));
         var tallest = samples.MaxBy(s => s.Value);

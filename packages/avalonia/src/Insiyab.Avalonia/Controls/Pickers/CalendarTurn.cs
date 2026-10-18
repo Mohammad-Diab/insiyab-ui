@@ -18,13 +18,14 @@ internal sealed class CalendarTurn
     private static readonly SplineEasing Ease = new(0.22, 1, 0.36, 1);
     private static readonly SplineEasing FoldIn = new(0.5, 0, 0.75, 0);
     private static readonly SplineEasing FoldOut = new(0.25, 1, 0.5, 1);
+    private static readonly Stopwatch Clock = Stopwatch.StartNew();
 
     /// <summary>A day as it stood before the switch: its box in the turn layer, its column, its number and its classes.</summary>
     internal readonly record struct Was(Rect At, int Column, string Label, string[] Classes);
 
     private readonly DateCalendar _cal;
     private readonly Canvas _layer;
-    private Stopwatch? _clock;
+    private double? _start;
     private readonly List<Mark> _marks = [];
     private bool _done;
 
@@ -39,6 +40,9 @@ internal sealed class CalendarTurn
 
     /// <summary>For tests: while set, a turn that starts keeps its first frame, so where it starts from can be read.</summary>
     internal static bool Held { get; set; }
+
+    /// <summary>For tests: the milliseconds every turn is timed by, which a test can hold and step.</summary>
+    internal static Func<double> Now { get; set; } = () => Clock.Elapsed.TotalMilliseconds;
 
     /// <summary>Where every day is now, or null when the calendar cannot turn (no layer, or motion is still).</summary>
     internal static Dictionary<DateTime, Was>? Snap(DateCalendar cal, CalendarTurn? running)
@@ -128,8 +132,17 @@ internal sealed class CalendarTurn
         Step(0);
         var longest = Math.Max(Math.Max(Length + 6 * Wave, TitleLength), FaceLength);
         // Frames stop when the window hides, so the turn also lands on a timer.
-        DispatcherTimer.RunOnce(Stop, TimeSpan.FromMilliseconds(longest + 150));
+        DispatcherTimer.RunOnce(() => StopIfDue(longest), TimeSpan.FromMilliseconds(longest + 150));
         Frame();
+    }
+
+    // The timer stops a turn only once its time is up, so a held clock is not cut short by it; a turn with time left looks again when it should be over.
+    private void StopIfDue(double longest)
+    {
+        if (_done) return;
+        var left = _start is { } start ? longest - (Now() - start) : 0;
+        if (left <= 0) Stop();
+        else DispatcherTimer.RunOnce(() => StopIfDue(longest), TimeSpan.FromMilliseconds(left + 150));
     }
 
     private string? RealLabel(Button btn) => _done ? null : _marks.OfType<Glide>().FirstOrDefault(g => g.Day == btn)?.Real;
@@ -141,8 +154,8 @@ internal sealed class CalendarTurn
         top.RequestAnimationFrame(_ =>
         {
             // The clock starts with the first frame, so a slow first layout does not eat the start of the turn.
-            if (!Held) _clock ??= Stopwatch.StartNew();
-            if (Step(_clock?.Elapsed.TotalMilliseconds ?? 0)) Frame();
+            if (!Held) _start ??= Now();
+            if (Step(_start is { } start ? Now() - start : 0)) Frame();
         });
     }
 

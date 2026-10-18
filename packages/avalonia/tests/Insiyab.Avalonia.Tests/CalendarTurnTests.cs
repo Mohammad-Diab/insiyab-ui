@@ -82,6 +82,40 @@ public class CalendarTurnTests : IDisposable
         }
     }
 
+    // A motion's clock held still and stepped by the test, a frame each step, so load cannot change what a reading sees.
+    private sealed class HeldClock : IDisposable
+    {
+        private readonly Func<double> _real;
+        private readonly Action<Func<double>> _set;
+        private readonly double _from;
+        private double _at;
+
+        public HeldClock(Func<double> real, Action<Func<double>> set)
+        {
+            _real = real;
+            _set = set;
+            _from = _at = real();
+            set(() => _at);
+        }
+
+        public List<(int Ms, T Value)> Step<T>(Window window, int milliseconds, int every, Func<T> read)
+        {
+            var samples = new List<(int, T)>();
+            for (var ms = 0; ms <= milliseconds; ms += every)
+            {
+                _at = _from + ms;
+                window.InvalidateVisual();
+                Dispatcher.UIThread.RunJobs();
+                AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+                Dispatcher.UIThread.RunJobs();
+                samples.Add((ms, read()));
+            }
+            return samples;
+        }
+
+        public void Dispose() => _set(_real);
+    }
+
     private static Point Mid(Control c, Visual to) => c.TranslatePoint(new Point(c.Bounds.Width / 2, c.Bounds.Height / 2), to)!.Value;
 
     private static bool AtRest(Visual v) => v.Opacity == 1 && (v.RenderTransform is null || v.RenderTransform.Value.IsIdentity);
@@ -94,6 +128,7 @@ public class CalendarTurnTests : IDisposable
         var (cal, w) = Hijri(dir);
         var before = Mid(cal.DayButtons[Sep24], cal);
         var hijriLabel = (string)cal.DayButtons[Sep24].Content!;
+        using var clock = new HeldClock(CalendarTurn.Now, f => CalendarTurn.Now = f);
 
         TapHeld(Option(cal, "gregory"), w, () =>
         {
@@ -105,10 +140,10 @@ public class CalendarTurnTests : IDisposable
 
         var thinnest = 1.0;
         var labels = new HashSet<string>();
-        Pump(w, 700, _ =>
+        clock.Step(w, 700, 5, () =>
         {
             thinnest = Math.Min(thinnest, day.RenderTransform?.Value.M22 ?? 1);
-            labels.Add((string)day.Content!);
+            return labels.Add((string)day.Content!);
         });
         Assert.True(thinnest < 0.6, $"thinnest fold {thinnest}");
         Assert.Contains(hijriLabel, labels);
@@ -147,14 +182,14 @@ public class CalendarTurnTests : IDisposable
     public void Switch_face_stretches_across_then_lands_on_the_new_side()
     {
         var (cal, w) = Hijri();
+        using var clock = new HeldClock(CalendarTurn.Now, f => CalendarTurn.Now = f);
         Tap(Option(cal, "gregory"), w);
         var track = cal.GetVisualDescendants().OfType<Border>().First(b => b.Classes.Contains("cal-switch"));
         Assert.Contains("moving", track.Classes);
         var face = track.GetVisualDescendants().OfType<Border>().First(b => b.Classes.Contains("cal-switch-face"));
         var home = Option(cal, "home");
         var gregory = Option(cal, "gregory");
-        var widest = 0.0;
-        Pump(w, 300, _ => widest = Math.Max(widest, face.Bounds.Width));
+        var widest = clock.Step(w, 800, 5, () => face.Bounds.Width).Where(s => s.Ms <= 300).Max(s => s.Value);
         Assert.True(widest > Math.Max(home.Bounds.Width, gregory.Bounds.Width) + 10, $"widest {widest}");
 
         Settle();

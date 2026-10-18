@@ -5,17 +5,30 @@ const { ok, end } = suite();
 const b = await launch();
 const E = (js) => b.evaluate(js);
 
-// A recorder on every document: each frame for 1.2s after DOMContentLoaded, where the
-// flying bar is (in sidebar coordinates) and whether the real markers are hidden.
+// A recorder on every document: a flight starting by 1.2s after DOMContentLoaded is paused and read every 10ms of its own time (bar in sidebar coordinates, markers hidden or not), then lands; frames until then log the bar once gone.
 await b.send('Page.addScriptToEvaluateOnNewDocument', { source: `
   window.__rec = [];
+  let t0 = null;
+  const moving = () => { const side = document.querySelector('.ins-shell-side'); return !!(side && side.classList.contains('ins-shell-moving')); };
+  const animate = Element.prototype.animate;
+  Element.prototype.animate = function (...args) {
+    const run = animate.apply(this, args);
+    if (this.classList.contains('ins-shell-indicator') && (t0 === null || performance.now() - t0 < 1200)) {
+      run.pause();
+      const end = run.effect.getComputedTiming().endTime;
+      for (let t = 0; t <= end; t += 10) {
+        run.currentTime = t;
+        const cs = getComputedStyle(this);
+        window.__rec.push({ t, bar: { top: parseFloat(cs.top), h: parseFloat(cs.height) }, moving: moving() });
+      }
+      setTimeout(() => run.finish());
+    }
+    return run;
+  };
   document.addEventListener('DOMContentLoaded', () => {
-    const t0 = performance.now();
+    t0 = performance.now();
     const tick = () => {
-      const bar = document.querySelector('.ins-shell-indicator');
-      const side = document.querySelector('.ins-shell-side');
-      window.__rec.push({ t: Math.round(performance.now() - t0), bar: bar ? { top: parseFloat(getComputedStyle(bar).top), h: parseFloat(getComputedStyle(bar).height) } : null,
-                          moving: !!(side && side.classList.contains('ins-shell-moving')) });
+      if (!document.querySelector('.ins-shell-indicator')) window.__rec.push({ t: Math.round(performance.now() - t0), bar: null, moving: moving() });
       if (performance.now() - t0 < 1200) requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);

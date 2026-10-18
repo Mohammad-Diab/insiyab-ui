@@ -37,6 +37,40 @@ public class ChipMotionTests
         return samples;
     }
 
+    // A motion's clock held still and stepped by the test, a frame each step, so load cannot change what a reading sees.
+    private sealed class HeldClock : IDisposable
+    {
+        private readonly Func<double> _real;
+        private readonly Action<Func<double>> _set;
+        private readonly double _from;
+        private double _at;
+
+        public HeldClock(Func<double> real, Action<Func<double>> set)
+        {
+            _real = real;
+            _set = set;
+            _from = _at = real();
+            set(() => _at);
+        }
+
+        public List<(int Ms, T Value)> Step<T>(Window window, int milliseconds, int every, Func<T> read)
+        {
+            var samples = new List<(int, T)>();
+            for (var ms = 0; ms <= milliseconds; ms += every)
+            {
+                _at = _from + ms;
+                window.InvalidateVisual();
+                Dispatcher.UIThread.RunJobs();
+                AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+                Dispatcher.UIThread.RunJobs();
+                samples.Add((ms, read()));
+            }
+            return samples;
+        }
+
+        public void Dispose() => _set(_real);
+    }
+
     // One frame: layout runs, then whatever starts after layout is in place before the picture.
     private static void Frame(Window window)
     {
@@ -182,11 +216,15 @@ public class ChipMotionTests
         var window = Show(new StackPanel { Margin = new Thickness(20), Children = { tags } }, FlowDirection.RightToLeft);
         var box = tags.InputBox!;
         var before = Drawn(box, window);
+        using var clock = new HeldClock(Chip.Now, f => Chip.Now = f);
         tags.Values.Add("ثان");
         var chip = tags.GetVisualDescendants().OfType<Chip>().Last();
         window.UpdateLayout();
         Assert.Equal(before.X, Drawn(box, window).X, 0);
-        var samples = Sample(window, 600, () => (Box: Drawn(box, window).X, O: chip.Opacity));
+        var samples = clock.Step(window, 600, 5, () => (Box: Drawn(box, window).X, O: chip.Opacity));
+        // The fade in runs on the window's own clock: frames go on until its time is surely over.
+        Settle();
+        samples.Add((601, (Drawn(box, window).X, chip.Opacity)));
         Assert.Contains(samples, s => s.Value.O < 0.9);
         Assert.All(samples, s => Assert.InRange(s.Value.O, 0, 1));
         Assert.Equal(1, samples[^1].Value.O, 3);
