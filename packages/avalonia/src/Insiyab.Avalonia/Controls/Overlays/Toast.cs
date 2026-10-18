@@ -32,17 +32,17 @@ public enum ToastClose
 }
 
 /// <summary>The web's <c>Insiyab.toast(text, tone)</c>: a short message in the bottom corner on the end side of the window, newest nearest the edge, that leaves on its own after five seconds, or, with <see cref="CloseProperty"/> set to <see cref="ToastClose.Button"/> (an error's default), stays until its × is pressed; a click on its body does nothing. Hovering or focusing a toast holds the timer; <see cref="FocusGesture"/> (F8) moves focus to the toasts and back, the arrows walk them, and Enter, Space, Delete or Escape dismisses one. At a phone's width the strip spans the bottom. It is Avalonia's own <see cref="WindowNotificationManager"/> and <see cref="NotificationCard"/>, themed, one manager per window, above any open dialog. On a button, <see cref="TextProperty"/> and <see cref="ToneProperty"/> show one on each click, as <c>data-ins-toast</c>.</summary>
-public sealed class Toast
+public static class Toast
 {
     public static readonly AttachedProperty<string?> TextProperty =
-        AvaloniaProperty.RegisterAttached<Toast, Button, string?>("Text");
+        AvaloniaProperty.RegisterAttached<Button, string?>("Text", typeof(Toast));
 
     public static readonly AttachedProperty<ToastTone> ToneProperty =
-        AvaloniaProperty.RegisterAttached<Toast, Button, ToastTone>("Tone");
+        AvaloniaProperty.RegisterAttached<Button, ToastTone>("Tone", typeof(Toast));
 
     /// <summary>On a button: how its toast closes, <see cref="ToastClose.Timer"/> or <see cref="ToastClose.Button"/>; unset, an error with no duration waits for its close button and the others leave on their own.</summary>
     public static readonly AttachedProperty<ToastClose?> CloseProperty =
-        AvaloniaProperty.RegisterAttached<Toast, Button, ToastClose?>("Close");
+        AvaloniaProperty.RegisterAttached<Button, ToastClose?>("Close", typeof(Toast));
 
     /// <summary>How long a toast stays: the web's 5s hold. An error with no duration of its own stays until closed.</summary>
     public static TimeSpan Duration { get; set; } = TimeSpan.FromSeconds(5);
@@ -57,10 +57,6 @@ public sealed class Toast
     {
         TransformOperationsAnimator.Ensure();
         Button.ClickEvent.AddClassHandler(typeof(Button), OnAnyClick, RoutingStrategies.Bubble);
-    }
-
-    private Toast()
-    {
     }
 
     public static string? GetText(Button button) => button.GetValue(TextProperty);
@@ -84,12 +80,12 @@ public sealed class Toast
     }
 
     /// <summary>The window's toast strip, made the first time it is needed.</summary>
-    public static WindowNotificationManager? ManagerFor(Visual anchor) => ToastStrip.For(anchor)?.Manager;
+    internal static WindowNotificationManager? ManagerFor(Visual anchor) => ToastStrip.For(anchor)?.Manager;
 
     /// <summary>The keyboard route: moves focus to the newest toast; false when there are none.</summary>
     public static bool FocusToasts(Visual anchor) => ToastStrip.For(anchor)?.Focus() ?? false;
 
-    public static NotificationType TypeOf(ToastTone tone) => tone switch
+    internal static NotificationType TypeOf(ToastTone tone) => tone switch
     {
         ToastTone.Ok => NotificationType.Success,
         ToastTone.Warn => NotificationType.Warning,

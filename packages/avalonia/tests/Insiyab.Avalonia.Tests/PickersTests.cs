@@ -793,7 +793,7 @@ public class PickersTests : IDisposable
         Assert.Equal(new DateTime(2026, 9, 14), month.Date);
         Assert.Equal("الاثنين، 14 سبتمبر 2026", month.GetVisualDescendants().OfType<TextBlock>().First(t => t.Classes.Contains("month-title")).Text);
 
-        month.HasViewSwitch = false;
+        month.ShowViewSwitch = false;
         Settle(100);
         Assert.False(seg.IsVisible);
     }
@@ -842,7 +842,7 @@ public class PickersTests : IDisposable
         Assert.True(month.WorkHoursOnly);
         Assert.Equal(6, month.DayStartHour);
         Assert.Equal(18, month.DayEndHour);
-        Assert.True(month.HasHoursSwitch);
+        Assert.True(month.ShowHoursSwitch);
         Show(Spread(month), FlowDirection.RightToLeft, width: 820, height: 900);
         Settle(200);
 
@@ -1022,7 +1022,7 @@ public class PickersTests : IDisposable
     public void MonthCalendar_hours_switch_can_be_hidden()
     {
         var ev = Outside();
-        var month = new MonthCalendar { View = MonthCalendarView.Day, Date = OutsideDay, Width = 600, HasHoursSwitch = false, Events = ev };
+        var month = new MonthCalendar { View = MonthCalendarView.Day, Date = OutsideDay, Width = 600, ShowHoursSwitch = false, Events = ev };
         var w = Show(Spread(month), FlowDirection.RightToLeft, width: 700, height: 900);
         Settle(200);
         Assert.False(HoursToggle(month).IsVisible);

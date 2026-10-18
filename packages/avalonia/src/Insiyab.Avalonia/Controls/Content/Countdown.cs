@@ -20,12 +20,18 @@ public enum CountdownState
 }
 
 /// <summary>The data of <see cref="Countdown.StateChangedEvent"/>, the web's <c>ins:countdown</c>.</summary>
-public sealed class CountdownEventArgs(RoutedEvent routedEvent, CountdownState state, int left) : RoutedEventArgs(routedEvent)
+public sealed class CountdownEventArgs : RoutedEventArgs
 {
-    public CountdownState State { get; } = state;
+    internal CountdownEventArgs(RoutedEvent routedEvent, CountdownState state, int left) : base(routedEvent)
+    {
+        State = state;
+        Left = left;
+    }
+
+    public CountdownState State { get; }
 
     /// <summary>The seconds left when it fired.</summary>
-    public int Left { get; } = left;
+    public int Left { get; }
 }
 
 /// <summary>Time left until something ends, counting down each second: the web's <c>.ins-countdown</c>. Give it <see cref="Seconds"/> (from when it appears) or <see cref="Until"/> (a moment). It turns amber (<c>:warn</c>) at <see cref="Warn"/> seconds left and red (<c>:done</c>) at zero, raising <see cref="StateChanged"/> at both. Class <c>lg</c> is the large size. Drive it with <see cref="Start"/>, <see cref="Stop"/>, <see cref="Restart()"/> or the matching commands.</summary>

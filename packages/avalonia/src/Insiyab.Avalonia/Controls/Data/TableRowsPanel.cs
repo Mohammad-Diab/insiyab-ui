@@ -9,7 +9,7 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The rows of a <see cref="Table"/>, one under another. Only the rows in or near view are in the tree, so a table of thousands of rows costs what a few screenfuls do; the rest keep their place and height. Rows just scrolled past wait hidden until the scroll rests, so scrolling back finds them styled; the rows sit in small blocks, so a row coming or going costs a frame only its block's rows.</summary>
-public class TableRowsPanel : Panel, IChildIndexProvider
+internal class TableRowsPanel : Panel, IChildIndexProvider
 {
     // Rows past the view on each side, as a share of the view's height, that stay in the tree so a scroll finds them ready.
     private const double Ahead = 0.25;

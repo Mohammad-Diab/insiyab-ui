@@ -402,19 +402,32 @@ public class DocumentTab : TabItem
 }
 
 /// <summary>The tab a <see cref="DocumentTabs"/> event is about: its item and its place.</summary>
-public class DocumentTabEventArgs(RoutedEvent routedEvent, object? item, int index) : RoutedEventArgs(routedEvent)
+public class DocumentTabEventArgs : RoutedEventArgs
 {
-    public object? Item { get; } = item;
+    internal DocumentTabEventArgs(RoutedEvent routedEvent, object? item, int index) : base(routedEvent)
+    {
+        Item = item;
+        Index = index;
+    }
 
-    public int Index { get; } = index;
+    public object? Item { get; }
+
+    public int Index { get; }
 }
 
 /// <summary>A tab dropped at a new place: its item, where it was and where it goes.</summary>
-public class DocumentTabMoveEventArgs(RoutedEvent routedEvent, object? item, int from, int to) : RoutedEventArgs(routedEvent)
+public class DocumentTabMoveEventArgs : RoutedEventArgs
 {
-    public object? Item { get; } = item;
+    internal DocumentTabMoveEventArgs(RoutedEvent routedEvent, object? item, int from, int to) : base(routedEvent)
+    {
+        Item = item;
+        From = from;
+        To = to;
+    }
 
-    public int From { get; } = from;
+    public object? Item { get; }
 
-    public int To { get; } = to;
+    public int From { get; }
+
+    public int To { get; }
 }

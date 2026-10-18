@@ -194,7 +194,7 @@ public static class ShellPlay
             Switch("group", "عنوان مجموعة", "shell-group", "على `ListBoxItem`: عنوان مجموعة من الروابط، لا يُختار.", on: true),
             Switch("badge", "عداد في الرابط", "shell-link-badge", "على `Border` في آخر الرابط: عداد صغير.", on: true),
             Switch("bottom", "أسفل الشريط", "shell-bottom", "على `Border` في `DockPanel.Dock=\"Bottom\"`: يعزل ما لا يقود إلى شاشة، كالخروج، عن بقية الروابط.", on: true),
-            Switch("filter", "حقل تصفية", "ins:Shell.HasFilter", "على `ListBox.shell-nav`: حقل فوق الروابط يخفي منها ما لا يطابق ما تكتبه، ومعها عنوان كل مجموعة لم يبقَ فيها رابط. ولا يفرق بين أشكال الهمزة ولا يلتفت إلى الحركات، ويُنتقل إليه بمفتاح «/».", OptionKind.Property),
+            Switch("filter", "حقل تصفية", "ins:Shell.ShowFilter", "على `ListBox.shell-nav`: حقل فوق الروابط يخفي منها ما لا يطابق ما تكتبه، ومعها عنوان كل مجموعة لم يبقَ فيها رابط. ولا يفرق بين أشكال الهمزة ولا يلتفت إلى الحركات، ويُنتقل إليه بمفتاح «/».", OptionKind.Property),
             Switch("scrolls", "الرأس يتمرر", "ins:Shell.HeadScrolls", "على `SplitView`: يتمرر رأس الشريط مع روابطه كما في الويب، بدل أن يبقى ثابتًا وتتمرر الروابط وحدها.", OptionKind.Property),
         ],
         Extra =
@@ -205,12 +205,12 @@ public static class ShellPlay
             Row("الشريط الجانبي", "shell-brand", "على `Border` في أعلى الشريط: الهوية، وفيها `Border.shell-mark` واسم التطبيق `TextBlock.shell-brand-name`.", OptionKind.Class),
             Row("الشريط الجانبي", "shell-nav", "على `ListBox`: روابط الشريط، كل رابط `ListBoxItem` تسبقه أيقونة، ويطير المؤشر من المختار إلى ما تختاره.", OptionKind.Class),
             Row("الشريط الجانبي", "shell-link", "على `Button`: رابط في الشريط خارج القائمة، كالخروج.", OptionKind.Class),
-            Row("التصفية", "ins:Shell.FilterPlaceholder", "النص الباهت في حقل التصفية، وهو «بحث» إن لم تذكره.", OptionKind.Property),
+            Row("التصفية", "ins:Shell.FilterPlaceholderText", "النص الباهت في حقل التصفية، وهو «بحث» إن لم تذكره.", OptionKind.Property),
             Row("التصفية", "ins:Shell.Keywords", "على `ListBoxItem`: كلمات أخرى يُعثر على الرابط بها، كاسمه بالإنجليزية.", OptionKind.Property),
             Row("التصفية", "ins:Shell.FilterEmptyText", "ما يظهر حين لا يبقى رابط، وهو «لا نتائج» إن لم تذكره.", OptionKind.Property),
-            Row("الطي والدرج", "ins:Shell.TogglesSidebar", "على زر يطوي الشريط على الحاسوب، ويفتحه درجًا على الشاشة الضيقة. ومعه `ins:Shell.SidebarAction` بالقيمة `toggle` أو `open` أو `collapsed` أو `closed`.", OptionKind.Property),
+            Row("الطي والدرج", "ins:Shell.TogglesSidebar", "على زر يطوي الشريط على الحاسوب، ويفتحه درجًا على الشاشة الضيقة. ومعه `ins:Shell.SidebarAction` بالقيمة `Open` أو `Collapsed` أو `Closed`، وبدونها تبدّل النقرة بين الفتح والطي.", OptionKind.Property),
             Row("الطي والدرج", "ins:Shell.DrawerWidth", "على `SplitView`: إذا ضاق عن هذا العرض صار الشريط درجًا، وهو 900 إن لم تذكره، و`0` يلغيه.", OptionKind.Property),
-            Row("الطي والدرج", "ins:Shell.SidebarChanged", "يُطلق على الهيكل كلما طُوي الشريط أو فُتح. و`Shell.Sidebar(view, \"collapsed\")` تطويه من الشيفرة.", OptionKind.Event),
+            Row("الطي والدرج", "ins:Shell.SidebarChanged", "يُطلق على الهيكل كلما طُوي الشريط أو فُتح. و`Shell.Sidebar(view, SidebarState.Collapsed)` تطويه من الشيفرة.", OptionKind.Event),
         ],
         Axaml = s =>
         {
@@ -238,7 +238,7 @@ public static class ShellPlay
                     "        </Button>",
                     "      </Border>",
                 ]);
-            lines.Add($"      <ListBox Classes=\"shell-nav\" SelectedIndex=\"{(s.On("group") ? 1 : 0)}\"{(s.On("filter") ? " ins:Shell.HasFilter=\"True\" ins:Shell.FilterPlaceholder=\"ابحث في الشاشات\"" : "")}>");
+            lines.Add($"      <ListBox Classes=\"shell-nav\" SelectedIndex=\"{(s.On("group") ? 1 : 0)}\"{(s.On("filter") ? " ins:Shell.ShowFilter=\"True\" ins:Shell.FilterPlaceholderText=\"ابحث في الشاشات\"" : "")}>");
             if (s.On("group")) lines.Add("        <ListBoxItem Classes=\"shell-group\" Content=\"القسم\" />");
             lines.AddRange([
                 "        <ListBoxItem>",

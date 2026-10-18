@@ -73,7 +73,7 @@ public class Split : TemplatedControl
         remove => RemoveHandler(ShareCommittedEvent, value);
     }
 
-    public bool IsStacked => PseudoClasses.Contains(":stacked");
+    internal bool IsStacked => PseudoClasses.Contains(":stacked");
 
     static Split()
     {
@@ -280,7 +280,12 @@ public class Split : TemplatedControl
     }
 }
 
-public sealed class SplitShareEventArgs(RoutedEvent routedEvent, object source, double share) : RoutedEventArgs(routedEvent, source)
+public sealed class SplitShareEventArgs : RoutedEventArgs
 {
-    public double Share { get; } = share;
+    internal SplitShareEventArgs(RoutedEvent routedEvent, object source, double share) : base(routedEvent, source)
+    {
+        Share = share;
+    }
+
+    public double Share { get; }
 }

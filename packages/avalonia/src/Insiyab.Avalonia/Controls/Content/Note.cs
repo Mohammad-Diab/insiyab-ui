@@ -13,7 +13,7 @@ public class Note : ContentControl, INoteLit
     private readonly List<StyledElement> _pointers = [];
 
     /// <summary>The marks and references that point at this note.</summary>
-    public IReadOnlyList<StyledElement> Pointers => _pointers;
+    internal IReadOnlyList<StyledElement> Pointers => _pointers;
 
     internal void Attach(StyledElement pointer)
     {

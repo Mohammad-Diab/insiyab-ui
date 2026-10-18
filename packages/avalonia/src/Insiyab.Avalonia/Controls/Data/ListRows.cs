@@ -7,7 +7,7 @@ using Avalonia.LogicalTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>Marks the row after a hovered or selected list row with the <c>after-hot</c> class, so its divider can step aside as the web's <c>.ins-list-item:hover + .ins-list-item</c> does, and the first row with <c>:first</c>, so it has no divider above it.</summary>
-public static class ListRows
+internal static class ListRows
 {
     private static readonly ConditionalWeakTable<ListBoxItem, Follow> s_following = new();
 

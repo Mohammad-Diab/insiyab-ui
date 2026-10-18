@@ -200,7 +200,7 @@ public class ShellLookTests
         nav.Items.Add(new ListBoxItem { Content = new StackPanel { Orientation = Orientation.Horizontal, Children = { new Icon { Data = Glyph }, Text("الرئيسية") } } });
         nav.Items.Add(new ListBoxItem { Content = new DockPanel { Children = { new Icon { Data = Glyph }, badge, Text("الطلبات") } } });
         nav.SelectedIndex = 2;
-        Shell.SetHasFilter(nav, true);
+        Shell.SetShowFilter(nav, true);
         var bottom = Cls(new Border { Child = Cls(new Button { Content = new StackPanel { Orientation = Orientation.Horizontal, Children = { new Icon { Data = Glyph }, Text("خروج") } } }, "shell-link") }, "shell-bottom");
         DockPanel.SetDock(bottom, Dock.Bottom);
         var pane = new DockPanel { Children = { label, link, bottom, nav } };

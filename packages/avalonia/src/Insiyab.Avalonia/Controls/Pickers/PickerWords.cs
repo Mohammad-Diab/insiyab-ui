@@ -9,7 +9,7 @@ using Avalonia.Data.Converters;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>Gives Avalonia's Calendar, CalendarDatePicker, DatePicker and TimePicker the library's words and Gregorian dates: Arabic when the control flows right to left, English otherwise, whatever the machine's culture.</summary>
-public static class PickerWords
+internal static class PickerWords
 {
     public static readonly AttachedProperty<bool> IsEnabledProperty =
         AvaloniaProperty.RegisterAttached<TemplatedControl, bool>("IsEnabled", typeof(PickerWords));

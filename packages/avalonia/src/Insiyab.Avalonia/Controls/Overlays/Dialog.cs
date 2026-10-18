@@ -21,9 +21,14 @@ public enum DialogClosedBy
 }
 
 /// <summary>Carries the value a dialog closed with: the <see cref="Dialog.ResultProperty"/> of the button that closed it, or null for Escape, the cross and an outside press.</summary>
-public sealed class DialogClosedEventArgs(object? result) : EventArgs
+public sealed class DialogClosedEventArgs : EventArgs
 {
-    public object? Result { get; } = result;
+    internal DialogClosedEventArgs(object? result)
+    {
+        Result = result;
+    }
+
+    public object? Result { get; }
 }
 
 /// <summary>The web's <c>dialog.ins-dialog</c> and <c>dialog.ins-drawer</c>: a modal panel over a dimmed window, with a head, a scrolling body and a foot. Classes: <c>sm</c>, <c>lg</c>; <c>drawer</c>, <c>drawer end</c>, <c>drawer bottom</c>. Declare it in <c>Resources</c> (or build it in code) and open it with <see cref="OpensProperty"/> on a button, <see cref="Open"/>, <see cref="ShowAsync(Control)"/> or <see cref="ShowAsWindowAsync"/>.</summary>
@@ -69,9 +74,9 @@ public class Dialog : ContentControl
     public static readonly AttachedProperty<string?> ConfirmOkProperty =
         AvaloniaProperty.RegisterAttached<Dialog, Button, string?>("ConfirmOk");
 
-    /// <summary><c>danger</c> makes the confirm button red, as <c>data-ins-confirm-tone</c>; a danger button gets it on its own.</summary>
-    public static readonly AttachedProperty<string?> ConfirmToneProperty =
-        AvaloniaProperty.RegisterAttached<Dialog, Button, string?>("ConfirmTone");
+    /// <summary>True makes the confirm button red, as <c>data-ins-confirm-tone="danger"</c>; a danger button gets it on its own.</summary>
+    public static readonly AttachedProperty<bool> ConfirmDangerProperty =
+        AvaloniaProperty.RegisterAttached<Dialog, Button, bool>("ConfirmDanger");
 
     private static readonly AttachedProperty<bool> ConfirmedProperty =
         AvaloniaProperty.RegisterAttached<Dialog, Button, bool>("Confirmed");
@@ -111,10 +116,10 @@ public class Dialog : ContentControl
     public bool IsOpen { get => _isOpen; private set => SetAndRaise(IsOpenProperty, ref _isOpen, value); }
 
     /// <summary>A drawer: the <c>drawer</c> class.</summary>
-    public bool IsDrawer => Classes.Contains("drawer");
+    internal bool IsDrawer => Classes.Contains("drawer");
 
     /// <summary>What actually closes it, with <see cref="DialogClosedBy.Auto"/> resolved.</summary>
-    public DialogClosedBy EffectiveClosedBy => ClosedBy != DialogClosedBy.Auto ? ClosedBy : IsDrawer ? DialogClosedBy.Any : DialogClosedBy.CloseRequest;
+    internal DialogClosedBy EffectiveClosedBy => ClosedBy != DialogClosedBy.Auto ? ClosedBy : IsDrawer ? DialogClosedBy.Any : DialogClosedBy.CloseRequest;
 
     public event EventHandler? Opened;
     public event EventHandler<DialogClosedEventArgs>? Closed;
@@ -127,8 +132,8 @@ public class Dialog : ContentControl
     public static void SetConfirm(Button button, string? value) => button.SetValue(ConfirmProperty, value);
     public static string? GetConfirmOk(Button button) => button.GetValue(ConfirmOkProperty);
     public static void SetConfirmOk(Button button, string? value) => button.SetValue(ConfirmOkProperty, value);
-    public static string? GetConfirmTone(Button button) => button.GetValue(ConfirmToneProperty);
-    public static void SetConfirmTone(Button button, string? value) => button.SetValue(ConfirmToneProperty, value);
+    public static bool GetConfirmDanger(Button button) => button.GetValue(ConfirmDangerProperty);
+    public static void SetConfirmDanger(Button button, bool value) => button.SetValue(ConfirmDangerProperty, value);
 
     internal bool IsPinned => _host is not null;
 
@@ -412,7 +417,7 @@ public class Dialog : ContentControl
     // The click is held back, the question asked, and on a yes the same click is replayed, so Click handlers and the Command still run.
     private static async void AskThenReplay(Button button, string question)
     {
-        var danger = button.Classes.Contains("danger") || button.Classes.Contains("ghost-danger") || GetConfirmTone(button) == "danger";
+        var danger = button.Classes.Contains("danger") || button.Classes.Contains("ghost-danger") || GetConfirmDanger(button);
         var yes = await ConfirmAsync(button, null, question, danger, GetConfirmOk(button));
         if (!yes) return;
         button.SetValue(ConfirmedProperty, true);

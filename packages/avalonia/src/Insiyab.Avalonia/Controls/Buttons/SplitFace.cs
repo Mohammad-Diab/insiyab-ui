@@ -5,7 +5,7 @@ using Avalonia.Controls;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>Carries a <see cref="SplitButton"/>'s look classes (<c>primary</c>, <c>ghost</c>, <c>sm</c>…) onto the two buttons inside its template, so each half wears the library's button look; an unchecked <see cref="ToggleSplitButton"/> passes on its size only, so it stays the neutral button until it is checked.</summary>
-public static class SplitFace
+internal static class SplitFace
 {
     /// <summary>Set by the split button's theme on its template's buttons.</summary>
     public static readonly AttachedProperty<bool> MirrorProperty =

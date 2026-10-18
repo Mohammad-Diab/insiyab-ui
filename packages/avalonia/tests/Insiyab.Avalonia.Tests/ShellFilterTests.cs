@@ -50,7 +50,7 @@ public class ShellFilterTests
             SelectedIndex = 1,
         };
         for (var i = 0; i < 20; i++) nav.Items.Add(Link($"صفحة {i}", $"page {i}"));
-        Shell.SetHasFilter(nav, filter);
+        Shell.SetShowFilter(nav, filter);
         var head = new Border { Classes = { "shell-brand" }, Child = new TextBlock { Classes = { "shell-brand-name" }, Text = "تطبيقي" } };
         DockPanel.SetDock(head, Dock.Top);
         var shell = new SplitView { IsPaneOpen = true, Pane = new DockPanel { Children = { head, nav } }, Content = new Panel() };
@@ -104,7 +104,7 @@ public class ShellFilterTests
         Settle(100);
         Assert.Equal(fieldAt, InWindow(field, w));
 
-        Shell.SetFilterPlaceholder(nav, "ابحث في الصفحات");
+        Shell.SetFilterPlaceholderText(nav, "ابحث في الصفحات");
         Assert.Equal("ابحث في الصفحات", field.PlaceholderText);
     }
 

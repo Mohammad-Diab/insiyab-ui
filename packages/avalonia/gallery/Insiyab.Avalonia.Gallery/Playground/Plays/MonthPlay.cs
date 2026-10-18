@@ -81,8 +81,8 @@ public static class MonthPlay
             Switch("more", "أكثر من ثلاثة في يوم"),
             Switch("allhours", "اليوم كله", "WorkHoursOnly", "يعرض الأسبوع واليوم ساعات الدوام وحدها، وهذا هو الأصل. والموعد الذي يقع كله خارجها لا يختفي، بل يُعد في شريط فوق الساعات أو تحتها، مثل «+2»، فإن نقرته ظهر اليوم كله عند أول تلك المواعيد. والموعد الذي يتجاوز طرف الدوام يُقص عنده بزاوية مستقيمة. واكتب `WorkHoursOnly=\"False\"` ليبدأ باليوم كله في صندوق بارتفاع الدوام، تمر بساعاته بالتمرير ويبدأ عند أول الدوام.", OptionKind.Property, "الأسبوع واليوم"),
             Switch("hours", "دوام من 8 إلى 17", "DayStartHour", "أول ساعة في الدوام، وهي 6 إن لم تذكرها، ومعها `DayEndHour` الساعة التي ينتهي عندها، وهي 18. وتكون الساعة بين 0 و24، والنهاية بعد البداية.", OptionKind.Property, "الأسبوع واليوم"),
-            Switch("nohours", "بلا زر الساعات", "HasHoursSwitch", "اكتب `HasHoursSwitch=\"False\"` ليختفي زر «ساعات الدوام» من الرأس، ويبقى ما في `WorkHoursOnly`.", OptionKind.Property, "الأسبوع واليوم"),
-            Switch("noswitch", "بلا مبدّل العرض", "HasViewSwitch", "اكتب `HasViewSwitch=\"False\"` ليختفي مبدّل الشهر والأسبوع واليوم من الرأس، ويبقى العرض الذي في `View`.", OptionKind.Property),
+            Switch("nohours", "بلا زر الساعات", "ShowHoursSwitch", "اكتب `ShowHoursSwitch=\"False\"` ليختفي زر «ساعات الدوام» من الرأس، ويبقى ما في `WorkHoursOnly`.", OptionKind.Property, "الأسبوع واليوم"),
+            Switch("noswitch", "بلا مبدّل العرض", "ShowViewSwitch", "اكتب `ShowViewSwitch=\"False\"` ليختفي مبدّل الشهر والأسبوع واليوم من الرأس، ويبقى العرض الذي في `View`.", OptionKind.Property),
             Switch("en", "بالإنجليزية", "Locale=\"en\"", "لغة الشهر، ومنها أسماء الأيام والشهر وأول أيام الأسبوع. وإن تركتها فالعربية في الواجهة العربية والإنجليزية في غيرها.", OptionKind.Property),
         ],
         Extra =
@@ -107,8 +107,8 @@ public static class MonthPlay
                 $"  new() {{ Date = new(2026, 9, {e.Day}){(s.On("time") && e.Hour >= 0 ? $", Time = new({e.Hour}, {e.Minute}, 0)" : "")}{(s.On("time") && e.Hour >= 0 && e.Length > 0 ? $", Duration = TimeSpan.FromMinutes({e.Length})" : "")}, Title = \"{words[e.Word]}\"{tone}{(s.On("link") && i == 0 ? ", Href = \"/events/1\"" : "")} }},");
             var view = s["view"] == "Month" ? "" : $" View=\"{s["view"]}\" Date=\"2026-09-21\"";
             var week = s["view"] != "Month";
-            var hours = (week && s.On("allhours") ? " WorkHoursOnly=\"False\"" : "") + (week && s.On("hours") ? " DayStartHour=\"8\" DayEndHour=\"17\"" : "") + (week && s.On("nohours") ? " HasHoursSwitch=\"False\"" : "");
-            var sw = s.On("noswitch") ? " HasViewSwitch=\"False\"" : "";
+            var hours = (week && s.On("allhours") ? " WorkHoursOnly=\"False\"" : "") + (week && s.On("hours") ? " DayStartHour=\"8\" DayEndHour=\"17\"" : "") + (week && s.On("nohours") ? " ShowHoursSwitch=\"False\"" : "");
+            var sw = s.On("noswitch") ? " ShowViewSwitch=\"False\"" : "";
             return $"<ins:MonthCalendar x:Name=\"Calendar\" Month=\"2026-09-01\"{view}{hours}{sw}{(s.On("en") ? " Locale=\"en\" FlowDirection=\"LeftToRight\"" : "")} />\n" +
                 "<!-- المواعيد من الشيفرة:\nCalendar.Events =\n[\n" + string.Join("\n", lines) + "\n];\n-->";
         },

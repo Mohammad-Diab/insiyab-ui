@@ -12,9 +12,14 @@ using Avalonia.Threading;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The colour a <see cref="ColorField"/> settled on: the web's <c>ins:color</c>.</summary>
-public class ColorCommittedEventArgs(RoutedEvent routedEvent, Color value) : RoutedEventArgs(routedEvent)
+public class ColorCommittedEventArgs : RoutedEventArgs
 {
-    public Color Value { get; } = value;
+    internal ColorCommittedEventArgs(RoutedEvent routedEvent, Color value) : base(routedEvent)
+    {
+        Value = value;
+    }
+
+    public Color Value { get; }
     public string Hex => ColorMath.Hex(Value);
 }
 

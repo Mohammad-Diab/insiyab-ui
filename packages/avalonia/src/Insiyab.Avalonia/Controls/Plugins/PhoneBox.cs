@@ -15,11 +15,18 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The phone number as it stands: the E.164 value, the country and whether the number is valid.</summary>
-public class PhoneChangedEventArgs(RoutedEvent routedEvent, string value, string country, bool isValid) : RoutedEventArgs(routedEvent)
+public class PhoneChangedEventArgs : RoutedEventArgs
 {
-    public string Value { get; } = value;
-    public string Country { get; } = country;
-    public bool IsValid { get; } = isValid;
+    internal PhoneChangedEventArgs(RoutedEvent routedEvent, string value, string country, bool isValid) : base(routedEvent)
+    {
+        Value = value;
+        Country = country;
+        IsValid = isValid;
+    }
+
+    public string Value { get; }
+    public string Country { get; }
+    public bool IsValid { get; }
 }
 
 /// <summary>The phone field, the web's <c>data-ins-phone</c>: a country button at the start of an input group and the number written the way it is at home (050 123 4567), while <see cref="Value"/> holds the E.164 number (+966501234567). Countries are raw ISO codes only.</summary>
@@ -136,7 +143,7 @@ public class PhoneBox : TemplatedControl
     }
 
     /// <summary>The countries offered, in no particular order.</summary>
-    public IReadOnlyList<PhoneCountry> AllowedCountries => Allowed();
+    internal IReadOnlyList<PhoneCountry> AllowedCountries => Allowed();
 
     internal IReadOnlyList<PhoneCountryRow> VisibleRows => _shown;
 
@@ -633,7 +640,7 @@ public class PhoneBox : TemplatedControl
 }
 
 /// <summary>A row of the phone field's country list: the code pill, the name and the dial code.</summary>
-public sealed class PhoneCountryRow
+internal sealed class PhoneCountryRow
 {
     internal PhoneCountryRow(PhoneCountry country, bool arabic, bool current, bool endsPreferred)
     {

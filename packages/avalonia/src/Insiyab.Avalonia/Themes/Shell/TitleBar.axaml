@@ -80,10 +80,10 @@
                     BoxShadow="{DynamicResource InsIslandShadow}">
               <StackPanel Orientation="Horizontal" Spacing="2">
                 <Button Name="PART_Minimize" Theme="{StaticResource InsCaptionButton}" Content="{StaticResource InsCaptionGlyphMinimize}"
-                        ToolTip.Tip="{TemplateBinding MinimizeText}" AutomationProperties.Name="{TemplateBinding MinimizeText}" />
+                        ToolTip.Tip="{TemplateBinding MinimizeLabel}" AutomationProperties.Name="{TemplateBinding MinimizeLabel}" />
                 <Button Name="PART_Maximize" Theme="{StaticResource InsCaptionButton}" Content="{StaticResource InsCaptionGlyphMaximize}" />
                 <Button Name="PART_Close" Theme="{StaticResource InsCaptionCloseButton}" Content="{StaticResource InsCaptionGlyphClose}"
-                        ToolTip.Tip="{TemplateBinding CloseText}" AutomationProperties.Name="{TemplateBinding CloseText}" />
+                        ToolTip.Tip="{TemplateBinding CloseLabel}" AutomationProperties.Name="{TemplateBinding CloseLabel}" />
               </StackPanel>
             </ins:TemplateBorder>
           </ControlTemplate>

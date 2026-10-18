@@ -10,7 +10,7 @@ namespace Insiyab.Avalonia.Controls;
 public class DescriptionList : Panel
 {
     /// <summary>Narrower than this, a label goes above its value (26rem).</summary>
-    public const double StackBelow = 416;
+    internal const double StackBelow = 416;
 
     private const double GridColumn = 192;
     private const double GridGapX = 24;

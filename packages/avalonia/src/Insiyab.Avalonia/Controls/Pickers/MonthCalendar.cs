@@ -73,8 +73,8 @@ public class MonthCalendar : TemplatedControl
     public static readonly StyledProperty<MonthCalendarView> ViewProperty =
         AvaloniaProperty.Register<MonthCalendar, MonthCalendarView>(nameof(View));
 
-    public static readonly StyledProperty<bool> HasViewSwitchProperty =
-        AvaloniaProperty.Register<MonthCalendar, bool>(nameof(HasViewSwitch), true);
+    public static readonly StyledProperty<bool> ShowViewSwitchProperty =
+        AvaloniaProperty.Register<MonthCalendar, bool>(nameof(ShowViewSwitch), true);
 
     public static readonly StyledProperty<int> DayStartHourProperty =
         AvaloniaProperty.Register<MonthCalendar, int>(nameof(DayStartHour), 6);
@@ -85,8 +85,8 @@ public class MonthCalendar : TemplatedControl
     public static readonly StyledProperty<bool> WorkHoursOnlyProperty =
         AvaloniaProperty.Register<MonthCalendar, bool>(nameof(WorkHoursOnly), true);
 
-    public static readonly StyledProperty<bool> HasHoursSwitchProperty =
-        AvaloniaProperty.Register<MonthCalendar, bool>(nameof(HasHoursSwitch), true);
+    public static readonly StyledProperty<bool> ShowHoursSwitchProperty =
+        AvaloniaProperty.Register<MonthCalendar, bool>(nameof(ShowHoursSwitch), true);
 
     public static readonly StyledProperty<double> HourHeightProperty =
         AvaloniaProperty.Register<MonthCalendar, double>(nameof(HourHeight), 48);
@@ -157,7 +157,7 @@ public class MonthCalendar : TemplatedControl
     public MonthCalendarView View { get => GetValue(ViewProperty); set => SetValue(ViewProperty, value); }
 
     /// <summary>The month, week and day switch in the header.</summary>
-    public bool HasViewSwitch { get => GetValue(HasViewSwitchProperty); set => SetValue(HasViewSwitchProperty, value); }
+    public bool ShowViewSwitch { get => GetValue(ShowViewSwitchProperty); set => SetValue(ShowViewSwitchProperty, value); }
 
     /// <summary>The hour the work hours start at, 6 unless set; kept within 0 to 23.</summary>
     public int DayStartHour { get => GetValue(DayStartHourProperty); set => SetValue(DayStartHourProperty, value); }
@@ -169,7 +169,7 @@ public class MonthCalendar : TemplatedControl
     public bool WorkHoursOnly { get => GetValue(WorkHoursOnlyProperty); set => SetValue(WorkHoursOnlyProperty, value); }
 
     /// <summary>The work-hours toggle in the header of the week and day views.</summary>
-    public bool HasHoursSwitch { get => GetValue(HasHoursSwitchProperty); set => SetValue(HasHoursSwitchProperty, value); }
+    public bool ShowHoursSwitch { get => GetValue(ShowHoursSwitchProperty); set => SetValue(ShowHoursSwitchProperty, value); }
 
     /// <summary>How tall an hour is in the week and day views.</summary>
     public double HourHeight { get => GetValue(HourHeightProperty); set => SetValue(HourHeightProperty, value); }
@@ -223,9 +223,9 @@ public class MonthCalendar : TemplatedControl
         else if (change.Property == DateProperty && !SameMonth(Date, Month))
             Hold(() => SetCurrentValue(MonthProperty, First(Date)));
         if (change.Property == MonthProperty || change.Property == DateProperty || change.Property == EventsProperty || change.Property == LocaleProperty
-            || change.Property == FlowDirectionProperty || change.Property == ViewProperty || change.Property == HasViewSwitchProperty
+            || change.Property == FlowDirectionProperty || change.Property == ViewProperty || change.Property == ShowViewSwitchProperty
             || change.Property == DayStartHourProperty || change.Property == DayEndHourProperty || change.Property == HourHeightProperty
-            || change.Property == WorkHoursOnlyProperty || change.Property == HasHoursSwitchProperty)
+            || change.Property == WorkHoursOnlyProperty || change.Property == ShowHoursSwitchProperty)
             Draw();
         else if (change.Property == BoundsProperty)
         {
@@ -410,9 +410,9 @@ public class MonthCalendar : TemplatedControl
         };
         AutomationProperties.SetName(_prev!, back);
         AutomationProperties.SetName(_next!, on);
-        _switch!.IsVisible = HasViewSwitch;
+        _switch!.IsVisible = ShowViewSwitch;
         var (ws, we) = WorkHours();
-        _hours!.IsVisible = view != MonthCalendarView.Month && HasHoursSwitch && Trims;
+        _hours!.IsVisible = view != MonthCalendarView.Month && ShowHoursSwitch && Trims;
         _hours.IsChecked = WorkHoursOnly;
         var from = words.FormatTime(TimeSpan.FromHours(ws));
         var to = words.FormatTime(TimeSpan.FromHours(we));

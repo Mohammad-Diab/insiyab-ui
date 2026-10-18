@@ -233,7 +233,7 @@ public class TimelineItem : HeaderedContentControl
     private string? _timeText;
 
     /// <summary>Overrides the clock relative times are measured from; for tests and screenshots.</summary>
-    public static Func<DateTime> Now { get; set; } = () => DateTime.Now;
+    internal static Func<DateTime> Now { get; set; } = () => DateTime.Now;
 
     static TimelineItem()
     {
@@ -277,7 +277,7 @@ public class TimelineItem : HeaderedContentControl
     }
 
     /// <summary>Writes the relative times again: every minute on its own, or at once after the clock changed.</summary>
-    public static void RefreshAll()
+    internal static void RefreshAll()
     {
         foreach (var weak in Live.ToList())
             if (weak.TryGetTarget(out var item)) item.Refresh();
@@ -314,7 +314,7 @@ public class TimelineItem : HeaderedContentControl
 }
 
 /// <summary>The timeline's column: one event under another, or, in a <c>split</c> timeline at least 640px wide, the events taking turns on either side of a centre rule.</summary>
-public class TimelinePanel : Panel
+internal class TimelinePanel : Panel
 {
     public const double SplitWidth = 640;
 

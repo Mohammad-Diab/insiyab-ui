@@ -6,7 +6,7 @@ namespace Insiyab.Avalonia.Controls;
 public static class ArabicMatch
 {
     /// <summary>For <c>AutoCompleteBox.TextFilter</c>: true when the item contains the search text once both are normalised by <see cref="ArabicSearch.Normalize"/>.</summary>
-    public static readonly global::Avalonia.Controls.AutoCompleteFilterPredicate<string?> Contains = (search, item) =>
+    public static global::Avalonia.Controls.AutoCompleteFilterPredicate<string?> Contains { get; } = (search, item) =>
     {
         var q = ArabicSearch.Normalize(search);
         return q.Length == 0 || ArabicSearch.Normalize(item).Contains(q, StringComparison.Ordinal);

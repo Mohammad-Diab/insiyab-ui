@@ -1,5 +1,10 @@
 using Avalonia.Markup.Xaml;
+using Avalonia.Metadata;
 using Avalonia.Styling;
+
+[assembly: XmlnsDefinition("https://github.com/Mohammad-Diab/insiyab-ui", "Insiyab.Avalonia")]
+[assembly: XmlnsDefinition("https://github.com/Mohammad-Diab/insiyab-ui", "Insiyab.Avalonia.Controls")]
+[assembly: XmlnsPrefix("https://github.com/Mohammad-Diab/insiyab-ui", "ins")]
 
 namespace Insiyab.Avalonia;
 

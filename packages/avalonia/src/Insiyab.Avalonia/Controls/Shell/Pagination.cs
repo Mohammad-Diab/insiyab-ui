@@ -73,7 +73,7 @@ public class Pagination : TemplatedControl
     }
 
     /// <summary>The pages shown, 0 for a gap: the first and last, and three around the current one, with a lone hidden page shown rather than a gap.</summary>
-    public static IReadOnlyList<int> Window(int current, int count)
+    internal static IReadOnlyList<int> Window(int current, int count)
     {
         if (count <= 7) return Enumerable.Range(1, count).ToList();
         var start = Math.Clamp(current - 1, 1, count - 2);

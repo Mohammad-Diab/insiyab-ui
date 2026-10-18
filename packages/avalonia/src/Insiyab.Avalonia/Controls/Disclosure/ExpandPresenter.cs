@@ -6,7 +6,7 @@ using Avalonia.Controls;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>Shows its child at a height that grows from nothing when <see cref="IsOpen"/> turns on and shrinks back when it turns off: the web's <c>::details-content</c> block-size transition.</summary>
-public class ExpandPresenter : Decorator
+internal class ExpandPresenter : Decorator
 {
     public static readonly StyledProperty<bool> IsOpenProperty =
         AvaloniaProperty.Register<ExpandPresenter, bool>(nameof(IsOpen));

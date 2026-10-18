@@ -73,7 +73,7 @@ internal static class ColorPens
 }
 
 /// <summary>The picker's square: saturation across, brightness down, over the hue. A slider for the keyboard too.</summary>
-public class ColorArea : Control
+internal class ColorArea : Control
 {
     public static readonly StyledProperty<double> HueProperty = AvaloniaProperty.Register<ColorArea, double>(nameof(Hue));
     public static readonly StyledProperty<double> SaturationProperty = AvaloniaProperty.Register<ColorArea, double>(nameof(Saturation));
@@ -215,7 +215,7 @@ public class ColorArea : Control
 }
 
 /// <summary>The hue strip: a rainbow pill with a ring for a thumb, dragged or moved with the keyboard as a range input is.</summary>
-public class ColorHueSlider : Control
+internal class ColorHueSlider : Control
 {
     public static readonly StyledProperty<double> HueProperty = AvaloniaProperty.Register<ColorHueSlider, double>(nameof(Hue));
     public static readonly StyledProperty<IBrush?> RingProperty = AvaloniaProperty.Register<ColorHueSlider, IBrush?>(nameof(Ring));
@@ -320,7 +320,7 @@ public class ColorHueSlider : Control
 }
 
 /// <summary>A preset in the picker: a square chip of its colour.</summary>
-public class ColorPreset : Button
+internal class ColorPreset : Button
 {
     public static readonly StyledProperty<Color> ColorProperty = AvaloniaProperty.Register<ColorPreset, Color>(nameof(Color));
 
@@ -352,7 +352,7 @@ public class ColorPreset : Button
 
 /// <summary>One line of the picker's readout: the colour as text on white or on black, the ratio, and whether it carries body text.</summary>
 [PseudoClasses(":pass", ":fail")]
-public class ColorContrastLine : TemplatedControl
+internal class ColorContrastLine : TemplatedControl
 {
     public static readonly StyledProperty<IBrush?> SampleBackgroundProperty = AvaloniaProperty.Register<ColorContrastLine, IBrush?>(nameof(SampleBackground));
     public static readonly StyledProperty<IBrush?> SampleForegroundProperty = AvaloniaProperty.Register<ColorContrastLine, IBrush?>(nameof(SampleForeground));
@@ -386,7 +386,7 @@ public class ColorContrastLine : TemplatedControl
 [TemplatePart("PART_Swatches", typeof(Panel))]
 [TemplatePart("PART_OnWhite", typeof(ColorContrastLine))]
 [TemplatePart("PART_OnBlack", typeof(ColorContrastLine))]
-public class ColorPickerPanel : TemplatedControl
+internal class ColorPickerPanel : TemplatedControl
 {
     public static readonly StyledProperty<Color?> ValueProperty =
         AvaloniaProperty.Register<ColorPickerPanel, Color?>(nameof(Value));

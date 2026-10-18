@@ -234,7 +234,7 @@ public static class TablesPlay
         Wide = _ => true,
         Controls =
         [
-            Switch("all", "مربع للكل", "HasSelectAll", "مربع في رأس الجدول يحدد الصفوف كلها أو يلغي تحديدها، ويصير محددًا كله أو جزئيًا بحسبها. وهو ظاهر إن لم تذكره، فاكتب `HasSelectAll=\"False\"` لتخفيه.", OptionKind.Property, on: true),
+            Switch("all", "مربع للكل", "ShowSelectAll", "مربع في رأس الجدول يحدد الصفوف كلها أو يلغي تحديدها، ويصير محددًا كله أو جزئيًا بحسبها. وهو ظاهر إن لم تذكره، فاكتب `ShowSelectAll=\"False\"` لتخفيه.", OptionKind.Property, on: true),
             Switch("checked", "صف محدد من البداية", "IsSelected=\"True\"", "على صف أرسله الخادم محددًا، فيتلون ويُعلَّم مربعه ويظهر الشريط من البداية.", OptionKind.Property, on: true),
             Switch("bulk", "شريط الإجراءات", "ins:BulkBar", "شريط يظهر ما دام في الجدول صف محدد، فيه عدد المحدد والإجراءات المتاحة له.", OptionKind.Element, "شريط الإجراءات", on: true),
             Switch("text", "صيغة العدد", "Text", "صيغة للعدد غير الافتراضية، و`{n}` مكان العدد.", OptionKind.Property, "شريط الإجراءات"),
@@ -250,7 +250,7 @@ public static class TablesPlay
         Disable = s => s.On("bulk") ? [] : ["text"],
         Axaml = s =>
         {
-            var table = $"<ins:Table x:Name=\"People\" IsSelectable=\"True\"{(s.On("all") ? "" : " HasSelectAll=\"False\"")}>\n" +
+            var table = $"<ins:Table x:Name=\"People\" IsSelectable=\"True\"{(s.On("all") ? "" : " ShowSelectAll=\"False\"")}>\n" +
                 "  <ins:Table.Columns>\n" +
                 "    <ins:TableColumn Header=\"الاسم\" />\n" +
                 "    <ins:TableColumn Header=\"المدينة\" />\n" +

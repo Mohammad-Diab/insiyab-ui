@@ -516,7 +516,7 @@ internal sealed class Bench(MainWindow window, string dir)
         foreach (var to in new[] { "dark", "light", "dark", "light" })
         {
             var apply = Stopwatch.StartNew();
-            ThemeToggle.Apply(to);
+            ThemeToggle.Apply(to == "dark" ? ThemeMode.Dark : ThemeMode.Light);
             Add(section, "apply to " + to, "apply alone ms", apply.Elapsed.TotalMilliseconds);
             await Frame(window);
             await Wait(600);
@@ -529,7 +529,7 @@ internal sealed class Bench(MainWindow window, string dir)
             var appliedAt = 0.0;
             ThemeSweep.Run(window.DayNightToggle, () =>
             {
-                ThemeToggle.Apply(to);
+                ThemeToggle.Apply(to == "dark" ? ThemeMode.Dark : ThemeMode.Light);
                 appliedAt = clock.Elapsed.TotalMilliseconds;
                 applied.TrySetResult();
             });

@@ -54,7 +54,7 @@ public class Chip : ContentControl
     public event EventHandler<RoutedEventArgs>? Removed { add => AddHandler(RemovedEvent, value); remove => RemoveHandler(RemovedEvent, value); }
 
     /// <summary>Whether the chip has been removed; its exit may still be playing where it was.</summary>
-    public bool IsLeaving { get; private set; }
+    internal bool IsLeaving { get; private set; }
 
     internal Button? RemoveButton => _remove;
 
@@ -181,7 +181,7 @@ public class Chip : ContentControl
     }
 
     /// <summary>The arrival a chip makes when it is added: it drops in, grows and straightens.</summary>
-    public void PlayEnter()
+    internal void PlayEnter()
     {
         if (Motion.IsStill(this) || !Seen.Now(this)) return;
         TransformOperationsAnimator.Ensure();

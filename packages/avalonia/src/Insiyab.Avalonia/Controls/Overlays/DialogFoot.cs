@@ -27,7 +27,7 @@ public class DialogFoot : Panel
     /// <summary>The window width at or under which the actions share the line: the web's <c>max-width: 34rem</c>.</summary>
     public double PhoneWidth { get => GetValue(PhoneWidthProperty); set => SetValue(PhoneWidthProperty, value); }
 
-    public bool IsPhone { get; private set; }
+    internal bool IsPhone { get; private set; }
 
     private static bool Shares(Control c) => !c.Classes.Contains("icon");
 

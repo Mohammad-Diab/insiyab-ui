@@ -9,7 +9,7 @@ using Avalonia.Interactivity;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>What the web's tooltip does for the keyboard and Avalonia's does not: a control reached by Tab or the arrow keys shows its tip at once, losing focus hides it, and Escape hides it. Registered once, when the theme loads, so the very first tip already answers the keyboard.</summary>
-public static class TipKeyboard
+internal static class TipKeyboard
 {
     /// <summary>Set by the ToolTip theme; reading it is what registers the handlers.</summary>
     public static readonly AttachedProperty<bool> RegisteredProperty =

@@ -10,7 +10,7 @@ namespace Insiyab.Avalonia;
 public partial class InsiyabTheme
 {
     /// <summary>The primary colour every theme starts with, as on the web.</summary>
-    public static readonly Color DefaultPrimary = Color.FromRgb(0x4C, 0x1D, 0x95);
+    public static Color DefaultPrimary { get; } = Color.FromRgb(0x4C, 0x1D, 0x95);
 
     private static readonly List<WeakReference<InsiyabTheme>> s_live = [];
     private static Color s_primary = DefaultPrimary;

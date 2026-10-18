@@ -105,7 +105,7 @@ public static class DialogPlay
                 Choice("ghost-danger", "خطر")),
             Text("text", "السؤال", "أرشفة الملف؟"),
             Text("ok", "زر التأكيد", "أرشفة"),
-            Switch("tone", "تأكيد بلون الخطر", "ins:Dialog.ConfirmTone=\"danger\"", "يجعل زر التأكيد أحمر وإن لم يكن الزر نفسه من أزرار الخطر.", OptionKind.Property),
+            Switch("tone", "تأكيد بلون الخطر", "ins:Dialog.ConfirmDanger=\"True\"", "يجعل زر التأكيد أحمر وإن لم يكن الزر نفسه من أزرار الخطر.", OptionKind.Property),
         ],
         Extra =
         [
@@ -116,7 +116,7 @@ public static class DialogPlay
         Disable = s => s["look"] == "ghost-danger" ? ["tone"] : [],
         Axaml = s =>
         {
-            var tone = s.On("tone") && s["look"] != "ghost-danger" ? " ins:Dialog.ConfirmTone=\"danger\"" : "";
+            var tone = s.On("tone") && s["look"] != "ghost-danger" ? " ins:Dialog.ConfirmDanger=\"True\"" : "";
             var ok = s["ok"].Length > 0 ? $" ins:Dialog.ConfirmOk=\"{s["ok"]}\"" : "";
             var text = s["ok"].Length > 0 ? s["ok"] : "متابعة";
             return $"<Button Classes=\"{s["look"]}\" Content=\"{text}\" ins:Dialog.Confirm=\"{s["text"]}\"{ok}{tone} />";

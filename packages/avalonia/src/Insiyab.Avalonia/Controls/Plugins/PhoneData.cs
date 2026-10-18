@@ -3,7 +3,7 @@ using System.Text;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>A country the phone field knows: its two-letter code, its dial code, and its names.</summary>
-public sealed class PhoneCountry
+internal sealed class PhoneCountry
 {
     internal PhoneCountry(string iso, string dial, string[]? lead, string arabic, string english)
     {

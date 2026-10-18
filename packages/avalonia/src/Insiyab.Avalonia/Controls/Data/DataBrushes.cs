@@ -6,7 +6,7 @@ using Avalonia.Media;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>A top-to-bottom ramp of one colour (or a solid brush's colour) between two alphas, as CSS writes <c>linear-gradient(to bottom, rgba(c, a), rgba(c, b))</c>; the parameter is "a b".</summary>
-public sealed class DataBrushes : IMultiValueConverter
+internal sealed class DataBrushes : IMultiValueConverter
 {
     /// <summary>The shared instance, for <c>{x:Static}</c>.</summary>
     public static readonly DataBrushes Vertical = new();

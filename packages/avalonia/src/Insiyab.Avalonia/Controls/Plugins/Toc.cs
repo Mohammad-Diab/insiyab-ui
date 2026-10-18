@@ -13,10 +13,16 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The current link of a <see cref="Toc"/> changed: the web's <c>ins:scrollspy</c>.</summary>
-public class ScrollspyEventArgs(RoutedEvent routedEvent, TocLink? link, Control? section) : RoutedEventArgs(routedEvent)
+public class ScrollspyEventArgs : RoutedEventArgs
 {
-    public TocLink? Link { get; } = link;
-    public Control? Section { get; } = section;
+    internal ScrollspyEventArgs(RoutedEvent routedEvent, TocLink? link, Control? section) : base(routedEvent)
+    {
+        Link = link;
+        Section = section;
+    }
+
+    public TocLink? Link { get; }
+    public Control? Section { get; }
 }
 
 /// <summary>An entry of a <see cref="Toc"/>: a link to a section; <c>Classes="sub"</c> for a deeper heading, a step in.</summary>

@@ -25,16 +25,16 @@ public enum CaptionPreview
 [PseudoClasses(":shown", ":maximized", ":inactive")]
 public class CaptionButtons : TemplatedControl
 {
-    public static readonly StyledProperty<string> MinimizeTextProperty = AvaloniaProperty.Register<CaptionButtons, string>(nameof(MinimizeText), "تصغير");
-    public static readonly StyledProperty<string> MaximizeTextProperty = AvaloniaProperty.Register<CaptionButtons, string>(nameof(MaximizeText), "تكبير");
-    public static readonly StyledProperty<string> RestoreTextProperty = AvaloniaProperty.Register<CaptionButtons, string>(nameof(RestoreText), "استعادة");
-    public static readonly StyledProperty<string> CloseTextProperty = AvaloniaProperty.Register<CaptionButtons, string>(nameof(CloseText), "إغلاق");
+    public static readonly StyledProperty<string> MinimizeLabelProperty = AvaloniaProperty.Register<CaptionButtons, string>(nameof(MinimizeLabel), "تصغير");
+    public static readonly StyledProperty<string> MaximizeLabelProperty = AvaloniaProperty.Register<CaptionButtons, string>(nameof(MaximizeLabel), "تكبير");
+    public static readonly StyledProperty<string> RestoreLabelProperty = AvaloniaProperty.Register<CaptionButtons, string>(nameof(RestoreLabel), "استعادة");
+    public static readonly StyledProperty<string> CloseLabelProperty = AvaloniaProperty.Register<CaptionButtons, string>(nameof(CloseLabel), "إغلاق");
     public static readonly StyledProperty<CaptionPreview> PreviewProperty = AvaloniaProperty.Register<CaptionButtons, CaptionPreview>(nameof(Preview));
 
-    public string MinimizeText { get => GetValue(MinimizeTextProperty); set => SetValue(MinimizeTextProperty, value); }
-    public string MaximizeText { get => GetValue(MaximizeTextProperty); set => SetValue(MaximizeTextProperty, value); }
-    public string RestoreText { get => GetValue(RestoreTextProperty); set => SetValue(RestoreTextProperty, value); }
-    public string CloseText { get => GetValue(CloseTextProperty); set => SetValue(CloseTextProperty, value); }
+    public string MinimizeLabel { get => GetValue(MinimizeLabelProperty); set => SetValue(MinimizeLabelProperty, value); }
+    public string MaximizeLabel { get => GetValue(MaximizeLabelProperty); set => SetValue(MaximizeLabelProperty, value); }
+    public string RestoreLabel { get => GetValue(RestoreLabelProperty); set => SetValue(RestoreLabelProperty, value); }
+    public string CloseLabel { get => GetValue(CloseLabelProperty); set => SetValue(CloseLabelProperty, value); }
     /// <summary>Shows the buttons as a sample in this state; a sample never acts on the window or tells Windows where its buttons are.</summary>
     public CaptionPreview Preview { get => GetValue(PreviewProperty); set => SetValue(PreviewProperty, value); }
 
@@ -98,7 +98,7 @@ public class CaptionButtons : TemplatedControl
             else if (_window is not null && _window.GetValue(TitleBar.CaptionsProperty) == this) _window.ClearValue(TitleBar.CaptionsProperty);
             SetRoles();
         }
-        if (change.Property == MaximizeTextProperty || change.Property == RestoreTextProperty || change.Property == PreviewProperty) Refresh();
+        if (change.Property == MaximizeLabelProperty || change.Property == RestoreLabelProperty || change.Property == PreviewProperty) Refresh();
     }
 
     private void OnWindowChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
@@ -132,7 +132,7 @@ public class CaptionButtons : TemplatedControl
         if (_maximize is not null)
         {
             _maximize.IsVisible = w is null || (w.CanMaximize && w.CanResize);
-            var text = maximized ? RestoreText : MaximizeText;
+            var text = maximized ? RestoreLabel : MaximizeLabel;
             ToolTip.SetTip(_maximize, text);
             AutomationProperties.SetName(_maximize, text);
         }

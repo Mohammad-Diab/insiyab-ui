@@ -9,7 +9,7 @@ namespace Insiyab.Avalonia.Controls;
 [TemplatePart("PART_Hour", typeof(DrumColumn))]
 [TemplatePart("PART_Minute", typeof(DrumColumn))]
 [TemplatePart("PART_Period", typeof(DrumColumn))]
-public class TimeDrum : TemplatedControl
+internal class TimeDrum : TemplatedControl
 {
     public static readonly StyledProperty<TimeSpan?> TimeProperty =
         AvaloniaProperty.Register<TimeDrum, TimeSpan?>(nameof(Time));

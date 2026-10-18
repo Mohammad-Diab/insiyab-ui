@@ -5,7 +5,7 @@ using Avalonia.Media.Immutable;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>A brush transition that fades as the web does: solid colours meet in premultiplied colour, so a tint given as a colour's alpha and one given as a brush's Opacity never darken halfway. For solid brushes only; any other brush switches halfway.</summary>
-public class BrushFade : InterpolatingTransitionBase<IBrush?>
+internal class BrushFade : InterpolatingTransitionBase<IBrush?>
 {
     protected override IBrush? Interpolate(double progress, IBrush? from, IBrush? to)
     {

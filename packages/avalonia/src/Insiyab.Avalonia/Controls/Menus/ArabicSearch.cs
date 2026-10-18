@@ -3,7 +3,7 @@ using System.Text;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The web library's Arabic-aware matching (<c>Insiyab.norm</c>) and the command palette's ranking.</summary>
-public static class ArabicSearch
+internal static class ArabicSearch
 {
     /// <summary>Lower case, no diacritics or tatweel, ة as ه, ى as ي, Arabic-Indic and Persian digits as Latin ones; the hamza forms of alef fold to ا through the decomposition.</summary>
     public static string Normalize(string? text)

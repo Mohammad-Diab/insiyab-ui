@@ -70,7 +70,7 @@ public class Toolbar : TemplatedControl
     public static void SetOverflow(Control control, ToolbarOverflow value) => control.SetValue(OverflowProperty, value);
 
     /// <summary>The commands that are in the «⋯» menu now.</summary>
-    public IEnumerable<Control> OverflowItems => Items.Where(c => c.Classes.Contains(Overflowed));
+    internal IEnumerable<Control> OverflowItems => Items.Where(c => c.Classes.Contains(Overflowed));
 
     internal ToolbarButton? MoreButton => _more;
 
@@ -272,7 +272,7 @@ public class Toolbar : TemplatedControl
 }
 
 /// <summary>The toolbar's row: the commands from the start, «⋯» at the end, and what does not fit moved into «⋯» from the end. Part of the Toolbar template.</summary>
-public class ToolbarPanel : Panel
+internal class ToolbarPanel : Panel
 {
     public static readonly StyledProperty<double> SpacingProperty =
         AvaloniaProperty.Register<ToolbarPanel, double>(nameof(Spacing), 2);

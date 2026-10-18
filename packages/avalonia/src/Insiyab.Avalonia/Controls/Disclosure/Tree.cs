@@ -14,13 +14,9 @@ using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>What a desktop file tree adds to a TreeView of TreeViewItems: selection that follows the arrow keys, inward and outward arrows that follow the direction, numpad + - *, type-ahead, double-click to open, a context menu on the row, cascading check boxes, a tree that only navigates, and a level of 50 items or more builds only the rows in or near view. The TreeView theme switches <see cref="NavigationProperty"/> on.</summary>
+/// <summary>What a desktop file tree adds to a TreeView of TreeViewItems: selection that follows the arrow keys, inward and outward arrows that follow the direction, numpad + - *, type-ahead, double-click to open, a context menu on the row, cascading check boxes, a tree that only navigates, and a level of 50 items or more builds only the rows in or near view. The TreeView theme switches the desktop behaviour on.</summary>
 public static class Tree
 {
-    /// <summary>Up and Down move to the next row showing and select it (with Ctrl they only move), the inward arrow opens a branch then steps into it, the outward one closes it or steps out, Home and End, numpad + and - open and close, * opens everything under the row, typed letters jump to the next row starting with them, Enter opens a branch or activates a leaf, Space selects or ticks. A click selects, a double-click opens a branch or activates a leaf, a right-click or the menu key opens the tree's menu on the row.</summary>
-    public static readonly AttachedProperty<bool> NavigationProperty =
-        AvaloniaProperty.RegisterAttached<TreeView, bool>("Navigation", typeof(Tree));
-
     /// <summary>The web's <c>data-ins-tree-checks</c>: a CheckBox as each item's header; ticking a branch ticks everything in it, and a branch partly ticked shows as mixed. Rows are not selected.</summary>
     public static readonly AttachedProperty<bool> ChecksProperty =
         AvaloniaProperty.RegisterAttached<TreeView, bool>("Checks", typeof(Tree));
@@ -81,25 +77,6 @@ public static class Tree
     static Tree()
     {
         TransformOperationsAnimator.Ensure();
-        NavigationProperty.Changed.AddClassHandler<TreeView>((tree, e) =>
-        {
-            tree.RemoveHandler(InputElement.KeyDownEvent, OnKeyDown);
-            tree.RemoveHandler(InputElement.PointerPressedEvent, OnPointerPressed);
-            tree.RemoveHandler(Control.ContextRequestedEvent, OnContextRequested);
-            tree.RemoveHandler(InputElement.GotFocusEvent, OnGotFocus);
-            tree.RemoveHandler(InputElement.LostFocusEvent, OnLostFocus);
-            if (!e.GetNewValue<bool>())
-            {
-                Refit(tree);
-                return;
-            }
-            tree.AddHandler(InputElement.KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
-            tree.AddHandler(InputElement.PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
-            tree.AddHandler(Control.ContextRequestedEvent, OnContextRequested, RoutingStrategies.Tunnel);
-            tree.AddHandler(InputElement.GotFocusEvent, OnGotFocus, RoutingStrategies.Bubble, handledEventsToo: true);
-            tree.AddHandler(InputElement.LostFocusEvent, OnLostFocus, RoutingStrategies.Bubble, handledEventsToo: true);
-            Refit(tree);
-        });
         ChecksProperty.Changed.AddClassHandler<TreeView>((tree, e) =>
         {
             tree.RemoveHandler(ToggleButton.IsCheckedChangedEvent, OnCheckedChanged);
@@ -121,9 +98,25 @@ public static class Tree
         });
     }
 
-    public static bool GetNavigation(TreeView element) => element.GetValue(NavigationProperty);
-
-    public static void SetNavigation(TreeView element, bool value) => element.SetValue(NavigationProperty, value);
+    internal static void NavigationChanged(TreeView tree, AvaloniaPropertyChangedEventArgs e)
+    {
+        tree.RemoveHandler(InputElement.KeyDownEvent, OnKeyDown);
+        tree.RemoveHandler(InputElement.PointerPressedEvent, OnPointerPressed);
+        tree.RemoveHandler(Control.ContextRequestedEvent, OnContextRequested);
+        tree.RemoveHandler(InputElement.GotFocusEvent, OnGotFocus);
+        tree.RemoveHandler(InputElement.LostFocusEvent, OnLostFocus);
+        if (!e.GetNewValue<bool>())
+        {
+            Refit(tree);
+            return;
+        }
+        tree.AddHandler(InputElement.KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
+        tree.AddHandler(InputElement.PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
+        tree.AddHandler(Control.ContextRequestedEvent, OnContextRequested, RoutingStrategies.Tunnel);
+        tree.AddHandler(InputElement.GotFocusEvent, OnGotFocus, RoutingStrategies.Bubble, handledEventsToo: true);
+        tree.AddHandler(InputElement.LostFocusEvent, OnLostFocus, RoutingStrategies.Bubble, handledEventsToo: true);
+        Refit(tree);
+    }
 
     public static bool GetChecks(TreeView element) => element.GetValue(ChecksProperty);
 
@@ -146,7 +139,7 @@ public static class Tree
     private static void Fit(ItemsControl level)
     {
         if (TreeOf(level) is not { } tree) return;
-        var nav = GetNavigation(tree);
+        var nav = TreeLook.GetNavigation(tree);
         if (nav && !level.GetValue(HookedProperty))
         {
             level.SetValue(HookedProperty, true);
@@ -210,7 +203,7 @@ public static class Tree
     private static void Hold(TreeViewItem row)
     {
         if (_preparing > 0 || row.GetValue(RecycledProperty) || row.Bounds.Height <= 0) return;
-        if (row.FindLogicalAncestorOfType<TreeView>() is not { } tree || !GetNavigation(tree) || !InVirtual(row)) return;
+        if (row.FindLogicalAncestorOfType<TreeView>() is not { } tree || !TreeLook.GetNavigation(tree) || !InVirtual(row)) return;
         if (row.FindAncestorOfType<ScrollViewer>() is not { } view || view.GetValue(AnchorProperty) is not null) return;
         if (row.TranslatePoint(default, view) is not { } at || at.Y + row.Bounds.Height < 0 || at.Y > view.Viewport.Height) return;
         view.SetValue(AnchorProperty, new Anchor(tree, PathOf(row), at.Y, row.IsKeyboardFocusWithin, tree.GetValue(MethodProperty)));
@@ -337,7 +330,7 @@ public static class Tree
     }
 
     /// <summary>The rows showing, in order: every item whose ancestors are all open; a bound row out of view has no TreeViewItem and is left out.</summary>
-    public static List<TreeViewItem> VisibleRows(TreeView tree) =>
+    internal static List<TreeViewItem> VisibleRows(TreeView tree) =>
         Rows(tree).Select(r => r.Container ?? r.Item as TreeViewItem).OfType<TreeViewItem>().ToList();
 
     /// <summary>An item's label as text: its header string, else the first text shown in its header, else the header's ToString.</summary>
@@ -713,4 +706,18 @@ public static class Tree
             tree.SetValue(SettlingProperty, false);
         }
     }
+}
+
+/// <summary>Set by the TreeView theme: the desktop keys, mouse and menu of a file tree.</summary>
+internal static class TreeLook
+{
+    /// <summary>Up and Down move to the next row showing and select it (with Ctrl they only move), the inward arrow opens a branch then steps into it, the outward one closes it or steps out, Home and End, numpad + and - open and close, * opens everything under the row, typed letters jump to the next row starting with them, Enter opens a branch or activates a leaf, Space selects or ticks. A click selects, a double-click opens a branch or activates a leaf, a right-click or the menu key opens the tree's menu on the row.</summary>
+    public static readonly AttachedProperty<bool> NavigationProperty =
+        AvaloniaProperty.RegisterAttached<TreeView, bool>("Navigation", typeof(TreeLook));
+
+    static TreeLook() => NavigationProperty.Changed.AddClassHandler<TreeView>(Tree.NavigationChanged);
+
+    public static bool GetNavigation(TreeView element) => element.GetValue(NavigationProperty);
+
+    public static void SetNavigation(TreeView element, bool value) => element.SetValue(NavigationProperty, value);
 }

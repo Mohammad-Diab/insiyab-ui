@@ -63,13 +63,20 @@ public class WizardPanel : HeaderedContentControl
 }
 
 /// <summary>Raised before "next" leaves a step. Call <see cref="Wait"/> to hold the wizard busy (a step that has to reach a server), then <see cref="Wizard.Proceed"/> or <see cref="Wizard.Stay"/>.</summary>
-public class WizardLeavingEventArgs(RoutedEvent routedEvent, int step, int to, WizardPanel panel) : RoutedEventArgs(routedEvent)
+public class WizardLeavingEventArgs : RoutedEventArgs
 {
-    public int Step { get; } = step;
+    internal WizardLeavingEventArgs(RoutedEvent routedEvent, int step, int to, WizardPanel panel) : base(routedEvent)
+    {
+        Step = step;
+        To = to;
+        Panel = panel;
+    }
 
-    public int To { get; } = to;
+    public int Step { get; }
 
-    public WizardPanel Panel { get; } = panel;
+    public int To { get; }
+
+    public WizardPanel Panel { get; }
 
     public bool IsWaiting { get; private set; }
 
@@ -77,19 +84,29 @@ public class WizardLeavingEventArgs(RoutedEvent routedEvent, int step, int to, W
 }
 
 /// <summary>Raised when the finish button finds every step valid. Call <see cref="Wait"/> to hold the wizard busy while the answer is sent, then <see cref="Wizard.Stay"/> or <see cref="Wizard.Restart"/>.</summary>
-public class WizardFinishedEventArgs(RoutedEvent routedEvent) : RoutedEventArgs(routedEvent)
+public class WizardFinishedEventArgs : RoutedEventArgs
 {
+    internal WizardFinishedEventArgs(RoutedEvent routedEvent) : base(routedEvent)
+    {
+    }
+
     public bool IsWaiting { get; private set; }
 
     public void Wait() => IsWaiting = true;
 }
 
 /// <summary>Raised after every move: the step number among the steps showing, and its panel.</summary>
-public class WizardMovedEventArgs(RoutedEvent routedEvent, int step, WizardPanel panel) : RoutedEventArgs(routedEvent)
+public class WizardMovedEventArgs : RoutedEventArgs
 {
-    public int Step { get; } = step;
+    internal WizardMovedEventArgs(RoutedEvent routedEvent, int step, WizardPanel panel) : base(routedEvent)
+    {
+        Step = step;
+        Panel = panel;
+    }
 
-    public WizardPanel Panel { get; } = panel;
+    public int Step { get; }
+
+    public WizardPanel Panel { get; }
 }
 
 /// <summary>A form in steps, the web's <c>.ins-wizard</c>: the steps on top, one <see cref="WizardPanel"/> at a time, and back, next and finish below. "Next" (and Enter in a field) checks the step's fields first: their <see cref="Validate"/> rules, <see cref="RequiredProperty"/> ones that are empty, and any field already showing an error. Enter is next (finish on the last step), Alt and the arrow pointing back or forward and the mouse's back and forward buttons move between steps.</summary>

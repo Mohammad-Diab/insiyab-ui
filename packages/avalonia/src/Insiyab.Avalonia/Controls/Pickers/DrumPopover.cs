@@ -9,7 +9,7 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>Makes Avalonia's DatePicker and TimePicker drums close like every popover: it opens below the field, so a second click on the field closes it, and Escape closes it.</summary>
-public static class DrumPopover
+internal static class DrumPopover
 {
     public static readonly AttachedProperty<bool> IsEnabledProperty =
         AvaloniaProperty.RegisterAttached<TemplatedControl, bool>("IsEnabled", typeof(DrumPopover));

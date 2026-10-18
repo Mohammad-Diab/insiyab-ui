@@ -100,7 +100,7 @@ public class TokenTests
     public void Brand_tokens_take_the_theme_alpha()
     {
         var primaryRgb = Color.FromRgb(15, 118, 110);
-        var brand = new BrandSet(primaryRgb, Colors.Black, Colors.Black, primaryRgb, Colors.Black, Colors.Black, Colors.White, Colors.White, Colors.White, Colors.White, Colors.Black);
+        var brand = new BrandSet { Primary = primaryRgb, PrimaryDark = Colors.Black, PrimaryDarker = Colors.Black, PrimaryRgb = primaryRgb, GradRgb = Colors.Black, AccentRgb = Colors.Black, OnPrimary = Colors.White, Wash1 = Colors.White, Wash2 = Colors.White, PrimaryMid = Colors.White, OnPrimaryMid = Colors.Black };
 
         var light = new ResourceDictionary();
         BrandTokens.Apply(light, brand, dark: false);

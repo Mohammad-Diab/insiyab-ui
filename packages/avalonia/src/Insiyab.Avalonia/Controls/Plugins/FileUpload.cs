@@ -12,12 +12,18 @@ using Avalonia.Platform.Storage;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>A file was added to a <see cref="FileUpload"/>: the web's <c>ins:file</c>.</summary>
-public class FileAddedEventArgs(RoutedEvent routedEvent, FileEntry entry, bool upload) : RoutedEventArgs(routedEvent)
+public class FileAddedEventArgs : RoutedEventArgs
 {
-    public FileEntry Entry { get; } = entry;
+    internal FileAddedEventArgs(RoutedEvent routedEvent, FileEntry entry, bool upload) : base(routedEvent)
+    {
+        Entry = entry;
+        Upload = upload;
+    }
+
+    public FileEntry Entry { get; }
 
     /// <summary>True when the page is to upload it now and report through Progress, Done and Fail.</summary>
-    public bool Upload { get; } = upload;
+    public bool Upload { get; }
 }
 
 /// <summary>The file field, the web's <c>data-ins-file</c>: a zone to drop, paste or pick files into and the list of those chosen, within <see cref="Accept"/>, <see cref="MaxSize"/> and <see cref="MaxCount"/>. <c>Classes="compact"</c> is a button and the list.</summary>
@@ -401,7 +407,7 @@ public class FileUpload : TemplatedControl
 /// <summary>A row of a <see cref="FileUpload"/>'s list: a picture or the type, the name and size, the upload's state, and the remove button.</summary>
 [TemplatePart("PART_Remove", typeof(Button))]
 [PseudoClasses(":sending", ":done", ":failed", ":image")]
-public class FileItem : TemplatedControl
+internal class FileItem : TemplatedControl
 {
     public static readonly StyledProperty<string?> SizeTextProperty =
         AvaloniaProperty.Register<FileItem, string?>(nameof(SizeText));

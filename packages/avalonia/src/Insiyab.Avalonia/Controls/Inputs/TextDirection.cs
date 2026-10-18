@@ -11,7 +11,7 @@ using Avalonia.Media;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The web's <c>dir="auto"</c>: a text takes the direction of its first letter (digits are not letters), right to left for Arabic or Hebrew, left to right for any other, and the direction around it when it has none.</summary>
-public sealed class TextDirection : IValueConverter
+internal sealed class TextDirection : IValueConverter
 {
     /// <summary>The shared instance, for <c>{x:Static}</c>.</summary>
     public static readonly TextDirection Auto = new();

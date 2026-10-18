@@ -11,45 +11,45 @@ namespace Insiyab.Avalonia.Controls;
 /// <summary>
 /// The web's <c>data-ins-validate</c>: rules on a <see cref="TextBox"/> (<c>Required</c>, <c>Email</c>, <c>MinLength</c>, <c>Pattern</c>), checked once the person leaves a field they changed or presses a <c>Submit</c> button in the <c>Form</c>, with the message written under the field.
 /// </summary>
-public sealed class Validate : AvaloniaObject
+public static class Validate
 {
     /// <summary>Marks a container as the form whose fields a <see cref="SubmitProperty"/> button checks.</summary>
     public static readonly AttachedProperty<bool> FormProperty =
-        AvaloniaProperty.RegisterAttached<Validate, Control, bool>("Form");
+        AvaloniaProperty.RegisterAttached<Control, bool>("Form", typeof(Validate));
 
     /// <summary>On a <see cref="Button"/>: checks the form first, and stops the click (and its command) while any field is invalid.</summary>
     public static readonly AttachedProperty<bool> SubmitProperty =
-        AvaloniaProperty.RegisterAttached<Validate, Button, bool>("Submit");
+        AvaloniaProperty.RegisterAttached<Button, bool>("Submit", typeof(Validate));
 
     public static readonly AttachedProperty<bool> RequiredProperty =
-        AvaloniaProperty.RegisterAttached<Validate, TextBox, bool>("Required");
+        AvaloniaProperty.RegisterAttached<TextBox, bool>("Required", typeof(Validate));
 
     public static readonly AttachedProperty<bool> EmailProperty =
-        AvaloniaProperty.RegisterAttached<Validate, TextBox, bool>("Email");
+        AvaloniaProperty.RegisterAttached<TextBox, bool>("Email", typeof(Validate));
 
     public static readonly AttachedProperty<int> MinLengthProperty =
-        AvaloniaProperty.RegisterAttached<Validate, TextBox, int>("MinLength");
+        AvaloniaProperty.RegisterAttached<TextBox, int>("MinLength", typeof(Validate));
 
     /// <summary>A regular expression the whole value must match, as HTML's <c>pattern</c>.</summary>
     public static readonly AttachedProperty<string?> PatternProperty =
-        AvaloniaProperty.RegisterAttached<Validate, TextBox, string?>("Pattern");
+        AvaloniaProperty.RegisterAttached<TextBox, string?>("Pattern", typeof(Validate));
 
     /// <summary>Your own message, shown in place of the library's for any rule the field breaks.</summary>
     public static readonly AttachedProperty<string?> MessageProperty =
-        AvaloniaProperty.RegisterAttached<Validate, TextBox, string?>("Message");
+        AvaloniaProperty.RegisterAttached<TextBox, string?>("Message", typeof(Validate));
 
     /// <summary>Raised on the form when a submit button finds every field valid.</summary>
     public static readonly RoutedEvent<RoutedEventArgs> SubmittedEvent =
-        RoutedEvent.Register<Validate, RoutedEventArgs>("Submitted", RoutingStrategies.Bubble);
+        RoutedEvent.Register<RoutedEventArgs>("Submitted", RoutingStrategies.Bubble, typeof(Validate));
 
     private static readonly AttachedProperty<bool> DirtyProperty =
-        AvaloniaProperty.RegisterAttached<Validate, TextBox, bool>("Dirty");
+        AvaloniaProperty.RegisterAttached<TextBox, bool>("Dirty", typeof(Validate));
 
     private static readonly AttachedProperty<bool> ReportedProperty =
-        AvaloniaProperty.RegisterAttached<Validate, TextBox, bool>("Reported");
+        AvaloniaProperty.RegisterAttached<TextBox, bool>("Reported", typeof(Validate));
 
     private static readonly AttachedProperty<string?> OwnErrorProperty =
-        AvaloniaProperty.RegisterAttached<Validate, TextBox, string?>("OwnError");
+        AvaloniaProperty.RegisterAttached<TextBox, string?>("OwnError", typeof(Validate));
 
     private static readonly Regex EmailShape = new(@"^[^@\s]+@[^@\s]+$", RegexOptions.CultureInvariant);
 
@@ -59,8 +59,6 @@ public sealed class Validate : AvaloniaObject
         InputElement.LostFocusEvent.AddClassHandler<TextBox>((box, _) => OnLeave(box));
         Button.ClickEvent.AddClassHandler<Button>(OnClick);
     }
-
-    private Validate() { }
 
     public static bool GetForm(Control c) => c.GetValue(FormProperty);
     public static void SetForm(Control c, bool v) => c.SetValue(FormProperty, v);

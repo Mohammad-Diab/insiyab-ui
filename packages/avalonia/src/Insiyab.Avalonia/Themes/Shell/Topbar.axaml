@@ -179,7 +179,7 @@
           <Style Selector="^.title">
             <Setter Property="Padding" Value="20,0" />
             <Setter Property="MaxWidth" Value="416" />
-            <Setter Property="ins:Shell.Enters" Value="True" />
+            <Setter Property="ins:ShellLook.Enters" Value="True" />
             <Style Selector="^[(ins|ShellLook.Narrow)=True]">
               <Setter Property="MaxWidth" Value="Infinity" />
               <Setter Property="Padding" Value="14,0" />
@@ -283,7 +283,7 @@
     <Setter Property="MaxWidth" Value="416" />
   </Style>
   <Style Selector=":is(ContentControl).island.title">
-    <Setter Property="ins:Shell.Enters" Value="True" />
+    <Setter Property="ins:ShellLook.Enters" Value="True" />
   </Style>
   <!-- Brand: only while the sidebar is collapsed or a drawer, since an open sidebar already shows it. Islands are buttons, content controls and borders; naming them keeps these rules off every other control, and off the visual-only parts Avalonia never takes out of the tree -->
   <Style Selector=":is(ContentControl).island.brand">

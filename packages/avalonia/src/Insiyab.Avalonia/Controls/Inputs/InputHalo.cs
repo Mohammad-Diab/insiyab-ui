@@ -5,7 +5,7 @@ using Avalonia.Media;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>Turns the brand colour into the soft brand shadow a focused field wears under its ring: CSS's <c>0 4px 16px rgba(var(--ins-primary-rgb), .10)</c>.</summary>
-public sealed class InputHalo : IValueConverter
+internal sealed class InputHalo : IValueConverter
 {
     /// <summary>The shared instance, for <c>{x:Static}</c>.</summary>
     public static readonly InputHalo Instance = new();

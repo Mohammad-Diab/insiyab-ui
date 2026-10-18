@@ -26,12 +26,18 @@ public enum BirthLayout
 }
 
 /// <summary>Sent when the birth date changes (the web's <c>ins:birth</c>).</summary>
-public sealed class BirthChangedEventArgs(string value, DateTime? date) : EventArgs
+public sealed class BirthChangedEventArgs : EventArgs
 {
-    /// <summary>What the form would send: <c>1993-01-22</c>, or empty when there is no complete, allowed date.</summary>
-    public string Value { get; } = value;
+    internal BirthChangedEventArgs(string value, DateTime? date)
+    {
+        Value = value;
+        Date = date;
+    }
 
-    public DateTime? Date { get; } = date;
+    /// <summary>What the form would send: <c>1993-01-22</c>, or empty when there is no complete, allowed date.</summary>
+    public string Value { get; }
+
+    public DateTime? Date { get; }
 }
 
 /// <summary>The birth date plugin (the web's <c>input[data-ins-birth]</c>): day, month and year typed in place or chosen from three columns, with the web's typing rules (a part moves on by itself, a lone digit takes its zero, a digit that cannot be part of an allowed date is refused). Always holds a Gregorian date.</summary>
@@ -65,8 +71,8 @@ public class BirthDateField : TemplatedControl
     public static readonly DirectProperty<BirthDateField, string> ValueProperty =
         AvaloniaProperty.RegisterDirect<BirthDateField, string>(nameof(Value), o => o.Value);
 
-    public static readonly DirectProperty<BirthDateField, string> MessageProperty =
-        AvaloniaProperty.RegisterDirect<BirthDateField, string>(nameof(Message), o => o.Message);
+    public static readonly DirectProperty<BirthDateField, string> ValidationMessageProperty =
+        AvaloniaProperty.RegisterDirect<BirthDateField, string>(nameof(ValidationMessage), o => o.ValidationMessage);
 
     private const string Order = "dmy";
     private static readonly double[] InlineWidths = [76, 96, 156];
@@ -131,7 +137,7 @@ public class BirthDateField : TemplatedControl
     public string Value { get => _value; private set => SetAndRaise(ValueProperty, ref _value, value); }
 
     /// <summary>What is wrong with the date as it stands (too young, too far back, unfinished, missing), or empty.</summary>
-    public string Message { get => _message; private set => SetAndRaise(MessageProperty, ref _message, value); }
+    public string ValidationMessage { get => _message; private set => SetAndRaise(ValidationMessageProperty, ref _message, value); }
 
     internal BirthEngine Engine => _engine;
 
@@ -506,7 +512,7 @@ public class BirthDateField : TemplatedControl
         var msg = eng.Message(IsRequired, words);
         var date = eng.Date;
         var value = date is { } d ? PickerParse.IsoOf(d) : string.Empty;
-        Message = msg;
+        ValidationMessage = msg;
         if (msg.Length > 0 && (eng.Any || IsRequired)) DataValidationErrors.SetError(this, new DataValidationException(msg));
         else DataValidationErrors.ClearErrors(this);
         if (SelectedDate != date)

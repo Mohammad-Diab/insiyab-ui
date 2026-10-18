@@ -4,7 +4,7 @@ using Avalonia.Controls;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>A wrapping row whose last child grows into what is left of its line, and drops to a line of its own below <see cref="LastMinWidth"/>: the chips, then the box, of <c>.ins-tags</c>.</summary>
-public class TagsPanel : Panel
+internal class TagsPanel : Panel
 {
     public static readonly StyledProperty<double> SpacingProperty =
         AvaloniaProperty.Register<TagsPanel, double>(nameof(Spacing), 5);

@@ -5,7 +5,7 @@ using Avalonia.Media;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>Joins several <see cref="BoxShadows"/> into one, so a surface can wear a token shadow and the bevel together, as CSS lists them.</summary>
-public sealed class PanelShadows : IMultiValueConverter
+internal sealed class PanelShadows : IMultiValueConverter
 {
     /// <summary>The shared instance, for <c>{x:Static}</c>.</summary>
     public static readonly PanelShadows Join = new();

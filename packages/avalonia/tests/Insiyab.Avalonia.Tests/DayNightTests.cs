@@ -34,11 +34,11 @@ public class DayNightTests
         try
         {
             var toggle = new Button { Content = "تبديل الوضع" };
-            ThemeToggle.SetMode(toggle, "toggle");
+            ThemeToggle.SetMode(toggle, ThemeMode.Toggle);
             var system = new Button { Content = "اتبع النظام" };
-            ThemeToggle.SetMode(system, "system");
+            ThemeToggle.SetMode(system, ThemeMode.System);
             var dark = new Button { Content = "داكن" };
-            ThemeToggle.SetMode(dark, "dark");
+            ThemeToggle.SetMode(dark, ThemeMode.Dark);
             var window = Following(new StackPanel { Children = { toggle, system, dark } });
 
             Click(toggle, window);
@@ -51,8 +51,8 @@ public class DayNightTests
             Assert.Equal(ThemeVariant.Dark, Application.Current.RequestedThemeVariant);
             Click(system, window);
             Assert.Equal(ThemeVariant.Default, Application.Current.RequestedThemeVariant);
-            Assert.Equal("light", ThemeToggle.Apply("dusk"));
-            Assert.Equal("dark", ThemeToggle.Apply("dark"));
+            Assert.Equal(ThemeVariant.Light, ThemeToggle.Apply((ThemeMode)99));
+            Assert.Equal(ThemeVariant.Dark, ThemeToggle.Apply(ThemeMode.Dark));
         }
         finally { Reset(); }
     }
@@ -122,7 +122,7 @@ public class DayNightTests
         {
             var dn = new DayNight();
             var window = Following(dn);
-            ThemeToggle.Apply("dark");
+            ThemeToggle.Apply(ThemeMode.Dark);
             Settle(40);
             Assert.InRange(X(Part<Panel>(dn, "PART_Orb")), 0.5, 35);
             Assert.True(Part<Ellipse>(dn, "PART_Star1").Opacity > 0);
@@ -139,12 +139,12 @@ public class DayNightTests
         Reset();
         try
         {
-            ThemeToggle.Apply("dark");
+            ThemeToggle.Apply(ThemeMode.Dark);
             var dn = new DayNight();
             Following(dn);
             Assert.True(dn.IsChecked);
             Assert.Equal(36, X(Part<Panel>(dn, "PART_Orb")), 1);
-            ThemeToggle.Apply("light");
+            ThemeToggle.Apply(ThemeMode.Light);
             Settle();
             Assert.False(dn.IsChecked);
         }
@@ -181,7 +181,7 @@ public class DayNightTests
         Reset();
         try
         {
-            ThemeToggle.Apply(theme == "Dark" ? "dark" : "light");
+            ThemeToggle.Apply(theme == "Dark" ? ThemeMode.Dark : ThemeMode.Light);
             var dn = new DayNight();
             var big = new LayoutTransformControl { LayoutTransform = new ScaleTransform(4, 4), Child = dn };
             var window = Following(big, dir == "rtl" ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);

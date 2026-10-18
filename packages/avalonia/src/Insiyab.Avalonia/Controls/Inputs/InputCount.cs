@@ -26,26 +26,26 @@ public enum InputCountState
 }
 
 /// <summary>The web's <c>data-ins-count</c>: a counter under a <see cref="TextBox"/> of what has been written, amber near the limit and red past it; past a word limit the field is in error.</summary>
-public sealed class InputCount : AvaloniaObject
+public static class InputCount
 {
     public static readonly AttachedProperty<InputCountMode> ModeProperty =
-        AvaloniaProperty.RegisterAttached<InputCount, TextBox, InputCountMode>("Mode");
+        AvaloniaProperty.RegisterAttached<TextBox, InputCountMode>("Mode", typeof(InputCount));
 
     public static readonly AttachedProperty<int> MaxProperty =
-        AvaloniaProperty.RegisterAttached<InputCount, TextBox, int>("Max");
+        AvaloniaProperty.RegisterAttached<TextBox, int>("Max", typeof(InputCount));
 
     /// <summary>Your own wording, with <c>{n}</c> and <c>{max}</c>, as the web's <c>data-ins-text</c>.</summary>
     public static readonly AttachedProperty<string?> FormatProperty =
-        AvaloniaProperty.RegisterAttached<InputCount, TextBox, string?>("Format");
+        AvaloniaProperty.RegisterAttached<TextBox, string?>("Format", typeof(InputCount));
 
     public static readonly AttachedProperty<string?> TextProperty =
-        AvaloniaProperty.RegisterAttached<InputCount, TextBox, string?>("Text");
+        AvaloniaProperty.RegisterAttached<TextBox, string?>("Text", typeof(InputCount));
 
     public static readonly AttachedProperty<InputCountState> StateProperty =
-        AvaloniaProperty.RegisterAttached<InputCount, TextBox, InputCountState>("State");
+        AvaloniaProperty.RegisterAttached<TextBox, InputCountState>("State", typeof(InputCount));
 
     private static readonly AttachedProperty<string?> OwnErrorProperty =
-        AvaloniaProperty.RegisterAttached<InputCount, TextBox, string?>("OwnError");
+        AvaloniaProperty.RegisterAttached<TextBox, string?>("OwnError", typeof(InputCount));
 
     static InputCount()
     {
@@ -55,8 +55,6 @@ public sealed class InputCount : AvaloniaObject
         TextBox.TextProperty.Changed.AddClassHandler<TextBox>((box, _) => { if (GetMode(box) != InputCountMode.None) Sync(box); });
         TextBox.MaxLengthProperty.Changed.AddClassHandler<TextBox>((box, _) => { if (GetMode(box) != InputCountMode.None) Sync(box); });
     }
-
-    private InputCount() { }
 
     public static InputCountMode GetMode(TextBox box) => box.GetValue(ModeProperty);
     public static void SetMode(TextBox box, InputCountMode value) => box.SetValue(ModeProperty, value);
@@ -68,7 +66,7 @@ public sealed class InputCount : AvaloniaObject
     public static InputCountState GetState(TextBox box) => box.GetValue(StateProperty);
 
     /// <summary>How many characters or words <paramref name="text"/> holds, as the counter counts them.</summary>
-    public static int Measure(string? text, InputCountMode mode)
+    internal static int Measure(string? text, InputCountMode mode)
     {
         var v = text ?? "";
         if (mode != InputCountMode.Words) return v.Length;

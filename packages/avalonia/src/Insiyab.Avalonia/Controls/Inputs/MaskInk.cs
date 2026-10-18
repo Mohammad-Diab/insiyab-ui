@@ -6,7 +6,7 @@ using Avalonia.Data.Converters;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>Draws a <see cref="MaskedTextBox"/>'s text with the mask's empty places (its <see cref="MaskedTextBox.PromptChar"/>) in the muted colour: the TextBox theme lays this ink over a see-through text presenter, in tabular figures, as the OTP and birth-date boxes do.</summary>
-public static class MaskInk
+internal static class MaskInk
 {
     /// <summary>True for a <see cref="MaskedTextBox"/>: the TextBox template turns its ink on with it.</summary>
     public static readonly IValueConverter IsMasked = new FuncValueConverter<object?, bool>(o => o is MaskedTextBox);

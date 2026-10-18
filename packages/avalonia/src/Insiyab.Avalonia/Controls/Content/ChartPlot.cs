@@ -10,7 +10,7 @@ using Avalonia.Media.Immutable;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The drawing of a <see cref="Chart"/>. Positions are physical, worked out for either direction as the web plugin does, so this part stays left to right.</summary>
-public class ChartPlot : Control
+internal class ChartPlot : Control
 {
     private const double BarGrow = 280, LineDraw = 800, SliceFade = 280, LitFade = 220;
 

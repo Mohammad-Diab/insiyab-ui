@@ -48,10 +48,10 @@ public class ProseList : Panel
     public double FontSize { get => GetValue(FontSizeProperty); set => SetValue(FontSizeProperty, value); }
 
     /// <summary>How many lists this one sits in: 0 for a top list, which takes a disc; a nested one takes a ring.</summary>
-    public int Depth => this.GetVisualAncestors().OfType<ProseList>().Count();
+    internal int Depth => this.GetVisualAncestors().OfType<ProseList>().Count();
 
     /// <summary>The markers drawn beside the items, in item order.</summary>
-    public IReadOnlyList<Control> Markers => _markers;
+    internal IReadOnlyList<Control> Markers => _markers;
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {

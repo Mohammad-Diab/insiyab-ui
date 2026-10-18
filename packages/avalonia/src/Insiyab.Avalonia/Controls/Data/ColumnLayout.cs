@@ -5,7 +5,7 @@ using Avalonia.Threading;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The column widths several <see cref="ColumnsPanel"/>s share, sized the way an HTML table with <c>inline-size: 100%</c> sizes its auto columns.</summary>
-public sealed class ColumnLayout
+internal sealed class ColumnLayout
 {
     /// <summary>The narrowest a column can be dragged to.</summary>
     public const double MinWidth = 48;
@@ -178,7 +178,7 @@ public sealed class ColumnLayout
 }
 
 /// <summary>Lays its children out side by side, child <c>i</c> in column <c>i</c> of a shared <see cref="ColumnLayout"/>: one row of a table.</summary>
-public class ColumnsPanel : Panel
+internal class ColumnsPanel : Panel
 {
     private ColumnLayout? _layout;
     private bool _attached;

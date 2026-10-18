@@ -8,7 +8,7 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>A page transition for a newly shown panel: the old one is gone at once and the new one rises a few pixels as it fades in, the web's <c>ins-rise-sm</c> on <c>.ins-tabpanel.is-active</c>.</summary>
-public class RiseTransition : IPageTransition
+internal class RiseTransition : IPageTransition
 {
     public TimeSpan Duration { get; set; } = TimeSpan.FromMilliseconds(280);
 

@@ -11,7 +11,7 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The row of a <c>Carousel</c> in the Insiyab theme: slides side by side with a gap, one, two or three at a time as the carousel's own width allows (<c>Classes="two"</c>, <c>"three"</c>), or with the next one peeking (<c>"peek"</c>).</summary>
-public class CarouselTrack : Panel
+internal class CarouselTrack : Panel
 {
     /// <summary>How many slides at a time where there is room: 2 from 576px wide (36rem), 3 from 896px (56rem).</summary>
     public static readonly AttachedProperty<int> PerViewProperty =
@@ -362,10 +362,6 @@ internal sealed class CarouselNav
 /// <summary>The Insiyab carousel's options as attached properties: its language for the button and dot names, and whether it shows dots.</summary>
 public static class CarouselOptions
 {
-    /// <summary>Set by the Carousel theme: hooks up the buttons, dots and keys.</summary>
-    public static readonly AttachedProperty<bool> IsEnabledProperty =
-        AvaloniaProperty.RegisterAttached<Carousel, bool>("IsEnabled", typeof(CarouselOptions));
-
     public static readonly AttachedProperty<string?> LocaleProperty =
         AvaloniaProperty.RegisterAttached<Carousel, string?>("Locale", typeof(CarouselOptions));
 
@@ -373,13 +369,6 @@ public static class CarouselOptions
     public static readonly AttachedProperty<bool> HideDotsProperty =
         AvaloniaProperty.RegisterAttached<Carousel, bool>("HideDots", typeof(CarouselOptions));
 
-    static CarouselOptions()
-    {
-        IsEnabledProperty.Changed.AddClassHandler<Carousel>((c, e) => { if (e.NewValue is true) CarouselNav.For(c); });
-    }
-
-    public static bool GetIsEnabled(Carousel c) => c.GetValue(IsEnabledProperty);
-    public static void SetIsEnabled(Carousel c, bool value) => c.SetValue(IsEnabledProperty, value);
     public static string? GetLocale(Carousel c) => c.GetValue(LocaleProperty);
     public static void SetLocale(Carousel c, string? value) => c.SetValue(LocaleProperty, value);
     public static bool GetHideDots(Carousel c) => c.GetValue(HideDotsProperty);
@@ -397,4 +386,16 @@ public static class CarouselOptions
     // Where a touch drag of dx ends: the next stop (dx negative) or the previous, once past 15% of the width, else back where it began.
     internal static int SwipeTarget(int stop, double dx, double width, int count) =>
         Math.Clamp(Math.Abs(dx) > width * 0.15 ? stop + (dx < 0 ? 1 : -1) : stop, 0, Math.Max(0, count - 1));
+}
+
+/// <summary>Set by the Carousel theme: hooks up the buttons, dots and keys.</summary>
+internal static class CarouselLook
+{
+    public static readonly AttachedProperty<bool> IsEnabledProperty =
+        AvaloniaProperty.RegisterAttached<Carousel, bool>("IsEnabled", typeof(CarouselLook));
+
+    static CarouselLook() => IsEnabledProperty.Changed.AddClassHandler<Carousel>((c, e) => { if (e.NewValue is true) CarouselNav.For(c); });
+
+    public static bool GetIsEnabled(Carousel c) => c.GetValue(IsEnabledProperty);
+    public static void SetIsEnabled(Carousel c, bool value) => c.SetValue(IsEnabledProperty, value);
 }

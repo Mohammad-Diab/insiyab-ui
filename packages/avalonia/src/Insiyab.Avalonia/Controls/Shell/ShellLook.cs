@@ -1,8 +1,13 @@
+using System.Globalization;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data.Converters;
+using Avalonia.Media;
+using Avalonia.Media.Transformation;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>What the shell's containers hand down to its parts: the split view's states, the brand island and the screen's brand block, and whether the brand link is under the pointer.</summary>
+/// <summary>What the shell's containers hand down to its parts: the split view's states, the brand island and the screen's brand block, whether the brand link is under the pointer, and what its themes switch on.</summary>
 internal static class ShellLook
 {
     /// <summary>Set by a split view: its content and pane parts take their split-view insets.</summary>
@@ -37,6 +42,28 @@ internal static class ShellLook
     public static readonly AttachedProperty<bool> HotProperty =
         AvaloniaProperty.RegisterAttached<StyledElement, bool>("Hot", typeof(ShellLook), inherits: true);
 
+    /// <summary>On a ListBox whose template has a <c>Canvas#PART_Flight</c>: a change of selection flies the marker from the old item to the new one. Set by the <c>shell-nav</c> theme.</summary>
+    public static readonly AttachedProperty<bool> FlyMarkerProperty =
+        AvaloniaProperty.RegisterAttached<ListBox, bool>("FlyMarker", typeof(ShellLook));
+
+    /// <summary>On a title island: it fades and settles in when it arrives and again each time its <c>TextBlock.shell-title</c> or its content changes (the web's <c>ins-island-in</c> on every page). Set by the topbar theme.</summary>
+    public static readonly AttachedProperty<bool> EntersProperty =
+        AvaloniaProperty.RegisterAttached<Control, bool>("Enters", typeof(ShellLook));
+
+    /// <summary>Turns a SplitView's OpenPaneLength into the drawer's closed offset, a little past its own width.</summary>
+    public static IValueConverter DrawerOffset { get; } = new FuncValueConverter<double, ITransform>(len =>
+        TransformOperations.Parse(string.Create(CultureInfo.InvariantCulture, $"translateX({-(len + 16)}px)")));
+
+    /// <summary>The same offset for a pane placed on the end side, which slides out the other way.</summary>
+    public static IValueConverter DrawerOffsetEnd { get; } = new FuncValueConverter<double, ITransform>(len =>
+        TransformOperations.Parse(string.Create(CultureInfo.InvariantCulture, $"translateX({len + 16}px)")));
+
+    static ShellLook()
+    {
+        FlyMarkerProperty.Changed.AddClassHandler<ListBox>(Shell.FlyMarkerChanged);
+        EntersProperty.Changed.AddClassHandler<Control>(Shell.EntersChanged);
+    }
+
     public static bool GetInSplitView(StyledElement element) => element.GetValue(InSplitViewProperty);
     public static void SetInSplitView(StyledElement element, bool value) => element.SetValue(InSplitViewProperty, value);
     public static bool GetClosed(StyledElement element) => element.GetValue(ClosedProperty);
@@ -53,4 +80,8 @@ internal static class ShellLook
     public static void SetInScreenBrand(StyledElement element, bool value) => element.SetValue(InScreenBrandProperty, value);
     public static bool GetHot(StyledElement element) => element.GetValue(HotProperty);
     public static void SetHot(StyledElement element, bool value) => element.SetValue(HotProperty, value);
+    public static bool GetFlyMarker(ListBox list) => list.GetValue(FlyMarkerProperty);
+    public static void SetFlyMarker(ListBox list, bool value) => list.SetValue(FlyMarkerProperty, value);
+    public static bool GetEnters(Control control) => control.GetValue(EntersProperty);
+    public static void SetEnters(Control control, bool value) => control.SetValue(EntersProperty, value);
 }

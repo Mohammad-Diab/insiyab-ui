@@ -205,13 +205,13 @@ public class ListLookTests
     {
         var stack = new StackPanel { Children = { new Expander { Header = "أ", Content = "ب" } } };
         Show(stack, FlowDirection.RightToLeft);
-        Assert.False(Collapse.GetKeys(stack));
+        Assert.False(CollapseLook.GetKeys(stack));
         stack.Classes.Add("accordion");
         Settle();
-        Assert.True(Collapse.GetKeys(stack));
+        Assert.True(CollapseLook.GetKeys(stack));
         stack.Classes.Remove("accordion");
         Settle();
-        Assert.False(Collapse.GetKeys(stack));
+        Assert.False(CollapseLook.GetKeys(stack));
     }
 
     [AvaloniaFact]

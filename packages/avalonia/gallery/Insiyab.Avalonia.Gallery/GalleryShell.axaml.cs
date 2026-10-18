@@ -144,7 +144,7 @@ public partial class GalleryShell : UserControl
         Scroller.Offset = default;
         Dispatcher.UIThread.Post(() => { if (_opening) Scroller.Offset = default; }, DispatcherPriority.Loaded);
         ShowTitle(page);
-        if (Shell.IsDrawer(ShellView) && ShellView.IsPaneOpen) Shell.Sidebar(ShellView, "closed");
+        if (Shell.IsDrawer(ShellView) && ShellView.IsPaneOpen) Shell.Sidebar(ShellView, SidebarState.Closed);
     }
 
     private void ShowTitle(GalleryPage page)
@@ -168,7 +168,7 @@ public partial class GalleryShell : UserControl
         SyncBrand();
         DirectionSeg.SelectedIndex = 0;
         if (TopLevel.GetTopLevel(this) is { } top) Motion.SetStill(top, false);
-        ThemeToggle.Apply("system");
+        ThemeToggle.Apply(ThemeMode.System);
     }
 
     private void SyncBrand()

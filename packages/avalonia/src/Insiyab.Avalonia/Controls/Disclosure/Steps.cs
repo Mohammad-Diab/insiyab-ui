@@ -204,7 +204,7 @@ public class StepsItem : ContentControl
 }
 
 /// <summary>The steps' row: every step showing gets the same width, as <c>flex: 1 1 0</c> does on the web.</summary>
-public class StepsPanel : Panel
+internal class StepsPanel : Panel
 {
     protected override Size MeasureOverride(Size availableSize)
     {

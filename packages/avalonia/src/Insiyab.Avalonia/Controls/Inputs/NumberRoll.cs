@@ -11,7 +11,7 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>A step of a <see cref="NumericUpDown"/> rolls the number like an odometer, the web's <c>.ins-spin-roll</c>; the theme turns it on and needs <c>PART_Roll</c>, <c>PART_RollOut</c> and <c>PART_RollIn</c> over the text.</summary>
-public static class NumberRoll
+internal static class NumberRoll
 {
     public static readonly AttachedProperty<bool> EnabledProperty =
         AvaloniaProperty.RegisterAttached<NumericUpDown, bool>("Enabled", typeof(NumberRoll));

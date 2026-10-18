@@ -49,9 +49,14 @@ public class PaletteItem
 }
 
 /// <summary>A choice in the palette, before the item runs; set <c>Cancel</c> to stop it (<c>ins:palette</c>).</summary>
-public class PaletteChoosingEventArgs(RoutedEvent routedEvent, PaletteItem item) : RoutedEventArgs(routedEvent)
+public class PaletteChoosingEventArgs : RoutedEventArgs
 {
-    public PaletteItem Item { get; } = item;
+    internal PaletteChoosingEventArgs(RoutedEvent routedEvent, PaletteItem item) : base(routedEvent)
+    {
+        Item = item;
+    }
+
+    public PaletteItem Item { get; }
     public string Label => Item.Label;
     public string Key => Item.RecentKey;
     public bool Cancel { get; set; }
@@ -146,13 +151,13 @@ public class CommandPalette : TemplatedControl
     public event EventHandler<PaletteChoosingEventArgs>? Choosing { add => AddHandler(ChoosingEvent, value); remove => RemoveHandler(ChoosingEvent, value); }
 
     /// <summary>The items listed now, in order: recent and grouped with nothing typed, best first while searching.</summary>
-    public IReadOnlyList<PaletteItem> Shown => _shown;
+    internal IReadOnlyList<PaletteItem> Shown => _shown;
 
     /// <summary>The highlighted item, the one Enter would choose.</summary>
-    public PaletteItem? Active => _active;
+    internal PaletteItem? Active => _active;
 
     /// <summary>The search box.</summary>
-    public TextBox? InputBox => _input;
+    internal TextBox? InputBox => _input;
 
     /// <summary>Adds items and returns them; remove one with <c>Items.Remove</c>.</summary>
     public IReadOnlyList<PaletteItem> Add(params PaletteItem[] items)

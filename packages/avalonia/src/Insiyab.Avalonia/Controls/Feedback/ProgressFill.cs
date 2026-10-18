@@ -6,7 +6,7 @@ using Avalonia.Controls;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The ProgressBar's fill. It takes its first width at once and glides to every later one, as the web's bar transitions its value but not its first paint.</summary>
-public class ProgressFill : Border
+internal class ProgressFill : Border
 {
     private readonly Transitions _glide = [new DoubleTransition { Property = WidthProperty, Duration = TimeSpan.FromMilliseconds(280), Easing = new SplineEasing(0.22, 1, 0.36, 1) }];
     private bool _armed;

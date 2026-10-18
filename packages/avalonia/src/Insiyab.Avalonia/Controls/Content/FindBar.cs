@@ -22,7 +22,7 @@ public static class Find
     public static void SetIsSearchable(Control control, bool value) => control.SetValue(IsSearchableProperty, value);
 
     /// <summary>Where <paramref name="query"/> occurs in <paramref name="text"/>, as start and length in the text itself, matched the Arabic-aware way of <see cref="ArabicSearch.Normalize"/>: diacritics, tatweel and hamza seats ignored, ة with ه, ى with ي, either set of digits.</summary>
-    public static IReadOnlyList<(int Start, int Length)> Matches(string? text, string? query)
+    internal static IReadOnlyList<(int Start, int Length)> Matches(string? text, string? query)
     {
         var q = ArabicSearch.Normalize(query);
         if (q.Length == 0 || string.IsNullOrEmpty(text)) return [];

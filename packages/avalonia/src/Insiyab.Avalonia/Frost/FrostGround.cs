@@ -6,7 +6,7 @@ using Avalonia.Styling;
 namespace Insiyab.Avalonia;
 
 /// <summary>The page ground of the web body: a 135deg wash, two brand radials and three soft orbs. With <see cref="Frosted"/> the wash becomes a translucent veil over the OS material.</summary>
-public class FrostGround : Control
+internal class FrostGround : Control
 {
     public static readonly StyledProperty<IBrush?> Wash1Property = AvaloniaProperty.Register<FrostGround, IBrush?>(nameof(Wash1));
     public static readonly StyledProperty<IBrush?> Wash2Property = AvaloniaProperty.Register<FrostGround, IBrush?>(nameof(Wash2));

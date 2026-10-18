@@ -11,7 +11,7 @@ namespace Insiyab.Avalonia.Controls;
 public class Divider : ContentControl
 {
     /// <summary>Set while the divider has nothing to show, so it closes to one line.</summary>
-    public const string EmptyPseudoClass = ":empty";
+    internal const string EmptyPseudoClass = ":empty";
 
     public Divider() => UpdateEmpty();
 

@@ -18,10 +18,16 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>Raised when the person marks a notification read: one <see cref="Item"/>, or <see cref="All"/>.</summary>
-public sealed class NotifyReadEventArgs(RoutedEvent routedEvent, NotifyItem? item, bool all) : RoutedEventArgs(routedEvent)
+public sealed class NotifyReadEventArgs : RoutedEventArgs
 {
-    public NotifyItem? Item { get; } = item;
-    public bool All { get; } = all;
+    internal NotifyReadEventArgs(RoutedEvent routedEvent, NotifyItem? item, bool all) : base(routedEvent)
+    {
+        Item = item;
+        All = all;
+    }
+
+    public NotifyItem? Item { get; }
+    public bool All { get; }
 }
 
 /// <summary>The notification centre plugin (<c>details.ins-notify</c>): a bell with the unread count on its corner, opening a panel with a head, the list and a foot link. Its items are <see cref="NotifyItem"/>s; clicking one marks it read, and the head's button marks them all. A count that grows rings the bell once. The panel is a popup in the window's overlay layer, with the look of a <see cref="PopCard"/>; the arrows, Home and End walk the rows and Escape closes it. The list builds only the rows in view, so the count and the keys go by item, not by built row.</summary>

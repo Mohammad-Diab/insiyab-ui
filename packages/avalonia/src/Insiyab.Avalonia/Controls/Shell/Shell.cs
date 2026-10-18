@@ -1,10 +1,8 @@
-using System.Globalization;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -16,6 +14,16 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
+
+/// <summary>Where a shell's sidebar stands, or is asked to go: showing, folded away on a wide window, or shut as a drawer.</summary>
+public enum SidebarState
+{
+    Open,
+    /// <summary>Folded away on a wide window.</summary>
+    Collapsed,
+    /// <summary>Shut, as a drawer is.</summary>
+    Closed,
+}
 
 /// <summary>The application shell's behaviour as attached properties on plain controls: a SplitView is the shell, a <c>Border.topbar</c> holds the islands, a <c>ListBox.shell-nav</c> holds the links.</summary>
 public static class Shell
@@ -32,27 +40,23 @@ public static class Shell
     public static readonly AttachedProperty<bool> TogglesSidebarProperty =
         AvaloniaProperty.RegisterAttached<Button, bool>("TogglesSidebar", typeof(Shell));
 
-    /// <summary>On a Button with <see cref="TogglesSidebarProperty"/>: what the click asks for, "toggle" (unset), "open", "collapsed" or "closed" (the value of the web's <c>data-ins-sidebar</c>).</summary>
-    public static readonly AttachedProperty<string?> SidebarActionProperty =
-        AvaloniaProperty.RegisterAttached<Button, string?>("SidebarAction", typeof(Shell));
+    /// <summary>On a Button with <see cref="TogglesSidebarProperty"/>: what the click asks for, a toggle when unset, or <see cref="SidebarState.Open"/>, <see cref="SidebarState.Collapsed"/> or <see cref="SidebarState.Closed"/> (the value of the web's <c>data-ins-sidebar</c>).</summary>
+    public static readonly AttachedProperty<SidebarState?> SidebarActionProperty =
+        AvaloniaProperty.RegisterAttached<Button, SidebarState?>("SidebarAction", typeof(Shell));
 
     /// <summary>On a ScrollViewer: past 8px of scroll the nearest <c>.topbar</c> beside it takes the <c>scrolled</c> class and frosts.</summary>
     public static readonly AttachedProperty<bool> FrostsTopbarProperty =
         AvaloniaProperty.RegisterAttached<ScrollViewer, bool>("FrostsTopbar", typeof(Shell));
 
-    /// <summary>On a ListBox whose template has a <c>Canvas#PART_Flight</c>: a change of selection flies the marker from the old item to the new one. Set by the <c>shell-nav</c> theme.</summary>
-    public static readonly AttachedProperty<bool> FlyMarkerProperty =
-        AvaloniaProperty.RegisterAttached<ListBox, bool>("FlyMarker", typeof(Shell));
-
     /// <summary>On a <c>ListBox.shell-nav</c>: a search field over the links that hides the ones not matching what is typed, and a heading left with none (the web's <c>data-ins-filter</c>). «/» outside a text field focuses it.</summary>
-    public static readonly AttachedProperty<bool> HasFilterProperty =
-        AvaloniaProperty.RegisterAttached<ListBox, bool>("HasFilter", typeof(Shell));
+    public static readonly AttachedProperty<bool> ShowFilterProperty =
+        AvaloniaProperty.RegisterAttached<ListBox, bool>("ShowFilter", typeof(Shell));
 
-    /// <summary>On a ListBox with <see cref="HasFilterProperty"/>: the field's placeholder, «بحث» unless set.</summary>
-    public static readonly AttachedProperty<string> FilterPlaceholderProperty =
-        AvaloniaProperty.RegisterAttached<ListBox, string>("FilterPlaceholder", typeof(Shell), "بحث");
+    /// <summary>On a ListBox with <see cref="ShowFilterProperty"/>: the field's placeholder, «بحث» unless set.</summary>
+    public static readonly AttachedProperty<string> FilterPlaceholderTextProperty =
+        AvaloniaProperty.RegisterAttached<ListBox, string>("FilterPlaceholderText", typeof(Shell), "بحث");
 
-    /// <summary>On a ListBox with <see cref="HasFilterProperty"/>: the line shown when nothing matches, «لا نتائج» unless set.</summary>
+    /// <summary>On a ListBox with <see cref="ShowFilterProperty"/>: the line shown when nothing matches, «لا نتائج» unless set.</summary>
     public static readonly AttachedProperty<string> FilterEmptyTextProperty =
         AvaloniaProperty.RegisterAttached<ListBox, string>("FilterEmptyText", typeof(Shell), "لا نتائج");
 
@@ -70,10 +74,6 @@ public static class Shell
     public static void AddSidebarChangedHandler(Interactive element, EventHandler<SidebarChangedEventArgs> handler) => element.AddHandler(SidebarChangedEvent, handler);
     public static void RemoveSidebarChangedHandler(Interactive element, EventHandler<SidebarChangedEventArgs> handler) => element.RemoveHandler(SidebarChangedEvent, handler);
 
-    /// <summary>On a title island: it fades and settles in when it arrives and again each time its <c>TextBlock.shell-title</c> or its content changes (the web's <c>ins-island-in</c> on every page). Set by the topbar theme.</summary>
-    public static readonly AttachedProperty<bool> EntersProperty =
-        AvaloniaProperty.RegisterAttached<Control, bool>("Enters", typeof(Shell));
-
     private static readonly AttachedProperty<CancellationTokenSource?> EntranceProperty =
         AvaloniaProperty.RegisterAttached<Control, CancellationTokenSource?>("Entrance", typeof(Shell));
 
@@ -89,14 +89,6 @@ public static class Shell
     private static readonly AttachedProperty<MarkerFlight?> FlightProperty =
         AvaloniaProperty.RegisterAttached<ListBox, MarkerFlight?>("Flight", typeof(Shell));
 
-    /// <summary>Turns a SplitView's OpenPaneLength into the drawer's closed offset, a little past its own width.</summary>
-    public static IValueConverter DrawerOffset { get; } = new FuncValueConverter<double, ITransform>(len =>
-        TransformOperations.Parse(string.Create(CultureInfo.InvariantCulture, $"translateX({-(len + 16)}px)")));
-
-    /// <summary>The same offset for a pane placed on the end side, which slides out the other way.</summary>
-    public static IValueConverter DrawerOffsetEnd { get; } = new FuncValueConverter<double, ITransform>(len =>
-        TransformOperations.Parse(string.Create(CultureInfo.InvariantCulture, $"translateX({len + 16}px)")));
-
     static Shell()
     {
         DrawerWidthProperty.Changed.AddClassHandler<SplitView>((view, _) => WatchWidth(view));
@@ -110,28 +102,18 @@ public static class Shell
             scroller.ScrollChanged -= OnScrollChanged;
             if (e.GetNewValue<bool>()) scroller.ScrollChanged += OnScrollChanged;
         });
-        FlyMarkerProperty.Changed.AddClassHandler<ListBox>((list, e) =>
-        {
-            list.SelectionChanged -= OnNavSelectionChanged;
-            if (e.GetNewValue<bool>()) list.SelectionChanged += OnNavSelectionChanged;
-        });
-        HasFilterProperty.Changed.AddClassHandler<ListBox>((list, e) =>
+        ShowFilterProperty.Changed.AddClassHandler<ListBox>((list, e) =>
         {
             list.GetValue(NavFilterProperty)?.Dispose();
             list.SetValue(NavFilterProperty, e.GetNewValue<bool>() ? new NavFilter(list) : null);
         });
-        EntersProperty.Changed.AddClassHandler<Control>((c, e) =>
-        {
-            c.AttachedToVisualTree -= OnEnterAttached;
-            if (e.GetNewValue<bool>()) c.AttachedToVisualTree += OnEnterAttached;
-        });
         TextBlock.TextProperty.Changed.AddClassHandler<TextBlock>((t, e) =>
         {
-            if (t.Classes.Contains("shell-title") && !Equals(e.OldValue, e.NewValue) && t.GetVisualAncestors().OfType<Control>().FirstOrDefault(GetEnters) is { } island) Replay(island);
+            if (t.Classes.Contains("shell-title") && !Equals(e.OldValue, e.NewValue) && t.GetVisualAncestors().OfType<Control>().FirstOrDefault(ShellLook.GetEnters) is { } island) Replay(island);
         });
         ContentControl.ContentProperty.Changed.AddClassHandler<ContentControl>((c, e) =>
         {
-            if (GetEnters(c) && !Equals(e.OldValue, e.NewValue)) Replay(c);
+            if (ShellLook.GetEnters(c) && !Equals(e.OldValue, e.NewValue)) Replay(c);
         });
     }
 
@@ -141,18 +123,14 @@ public static class Shell
     public static void SetHeadScrolls(SplitView view, bool value) => view.SetValue(HeadScrollsProperty, value);
     public static bool GetTogglesSidebar(Button button) => button.GetValue(TogglesSidebarProperty);
     public static void SetTogglesSidebar(Button button, bool value) => button.SetValue(TogglesSidebarProperty, value);
-    public static bool GetEnters(Control control) => control.GetValue(EntersProperty);
-    public static void SetEnters(Control control, bool value) => control.SetValue(EntersProperty, value);
-    public static string? GetSidebarAction(Button button) => button.GetValue(SidebarActionProperty);
-    public static void SetSidebarAction(Button button, string? value) => button.SetValue(SidebarActionProperty, value);
+    public static SidebarState? GetSidebarAction(Button button) => button.GetValue(SidebarActionProperty);
+    public static void SetSidebarAction(Button button, SidebarState? value) => button.SetValue(SidebarActionProperty, value);
     public static bool GetFrostsTopbar(ScrollViewer scroller) => scroller.GetValue(FrostsTopbarProperty);
     public static void SetFrostsTopbar(ScrollViewer scroller, bool value) => scroller.SetValue(FrostsTopbarProperty, value);
-    public static bool GetFlyMarker(ListBox list) => list.GetValue(FlyMarkerProperty);
-    public static void SetFlyMarker(ListBox list, bool value) => list.SetValue(FlyMarkerProperty, value);
-    public static bool GetHasFilter(ListBox list) => list.GetValue(HasFilterProperty);
-    public static void SetHasFilter(ListBox list, bool value) => list.SetValue(HasFilterProperty, value);
-    public static string GetFilterPlaceholder(ListBox list) => list.GetValue(FilterPlaceholderProperty);
-    public static void SetFilterPlaceholder(ListBox list, string value) => list.SetValue(FilterPlaceholderProperty, value);
+    public static bool GetShowFilter(ListBox list) => list.GetValue(ShowFilterProperty);
+    public static void SetShowFilter(ListBox list, bool value) => list.SetValue(ShowFilterProperty, value);
+    public static string GetFilterPlaceholderText(ListBox list) => list.GetValue(FilterPlaceholderTextProperty);
+    public static void SetFilterPlaceholderText(ListBox list, string value) => list.SetValue(FilterPlaceholderTextProperty, value);
     public static string GetFilterEmptyText(ListBox list) => list.GetValue(FilterEmptyTextProperty);
     public static void SetFilterEmptyText(ListBox list, string value) => list.SetValue(FilterEmptyTextProperty, value);
     public static string? GetKeywords(Control control) => control.GetValue(KeywordsProperty);
@@ -161,30 +139,42 @@ public static class Shell
     /// <summary>Whether the shell is in its drawer form right now.</summary>
     public static bool IsDrawer(SplitView view) => view.GetValue(IsDrawerModeProperty);
 
-    /// <summary>The web's <c>Insiyab.sidebar()</c>: "toggle", "open" or "collapsed" (a drawer takes "closed" too). Returns the new state.</summary>
-    public static string Sidebar(SplitView view, string next = "toggle")
+    /// <summary>The web's <c>Insiyab.sidebar()</c>: a toggle when <paramref name="next"/> is null, else opens, collapses or closes it (a drawer is closed, a column collapsed). Returns the new state.</summary>
+    public static SidebarState Sidebar(SplitView view, SidebarState? next = null)
     {
         var open = next switch
         {
-            "open" => true,
-            "collapsed" or "closed" => false,
+            SidebarState.Open => true,
+            SidebarState.Collapsed or SidebarState.Closed => false,
             _ => !view.IsPaneOpen,
         };
         view.SetCurrentValue(SplitView.IsPaneOpenProperty, open);
         if (!IsDrawer(view)) view.SetValue(WideOpenProperty, open);
-        var state = open ? "open" : IsDrawer(view) ? "closed" : "collapsed";
+        var state = open ? SidebarState.Open : IsDrawer(view) ? SidebarState.Closed : SidebarState.Collapsed;
         view.RaiseEvent(new SidebarChangedEventArgs(SidebarChangedEvent, state, IsDrawer(view)));
         return state;
     }
 
     /// <summary>The shell a control belongs to: the SplitView around it, or else the first one in its window.</summary>
-    public static SplitView? Find(Visual from) =>
+    internal static SplitView? Find(Visual from) =>
         from.FindAncestorOfType<SplitView>()
         ?? (TopLevel.GetTopLevel(from) as Visual)?.GetVisualDescendants().OfType<SplitView>().FirstOrDefault();
 
+    internal static void FlyMarkerChanged(ListBox list, AvaloniaPropertyChangedEventArgs e)
+    {
+        list.SelectionChanged -= OnNavSelectionChanged;
+        if (e.GetNewValue<bool>()) list.SelectionChanged += OnNavSelectionChanged;
+    }
+
+    internal static void EntersChanged(Control c, AvaloniaPropertyChangedEventArgs e)
+    {
+        c.AttachedToVisualTree -= OnEnterAttached;
+        if (e.GetNewValue<bool>()) c.AttachedToVisualTree += OnEnterAttached;
+    }
+
     private static void OnToggleClick(object? sender, RoutedEventArgs e)
     {
-        if (sender is Visual button && Find(button) is { } view) Sidebar(view, sender is Button b ? GetSidebarAction(b) ?? "toggle" : "toggle");
+        if (sender is Visual button && Find(button) is { } view) Sidebar(view, sender is Button b ? GetSidebarAction(b) : null);
     }
 
     private static void WatchWidth(SplitView view)
@@ -470,7 +460,7 @@ public static class Shell
             if (_top.FocusManager?.GetFocusedElement() is TextBox) return;
             if (_list.FindAncestorOfType<SplitView>() is { } view)
             {
-                if (IsDrawer(view)) { if (!view.IsPaneOpen) Sidebar(view, "open"); }
+                if (IsDrawer(view)) { if (!view.IsPaneOpen) Sidebar(view, SidebarState.Open); }
                 else if (!view.IsPaneOpen) return;
             }
             if (!_list.IsEffectivelyVisible) return;
@@ -492,9 +482,15 @@ public static class Shell
     }
 }
 
-/// <summary>The sidebar's new state, "open", "collapsed" or "closed", and whether the shell is a drawer.</summary>
-public sealed class SidebarChangedEventArgs(RoutedEvent routedEvent, string state, bool isDrawer) : RoutedEventArgs(routedEvent)
+/// <summary>The sidebar's new state and whether the shell is a drawer.</summary>
+public sealed class SidebarChangedEventArgs : RoutedEventArgs
 {
-    public string State { get; } = state;
-    public bool IsDrawer { get; } = isDrawer;
+    internal SidebarChangedEventArgs(RoutedEvent routedEvent, SidebarState state, bool isDrawer) : base(routedEvent)
+    {
+        State = state;
+        IsDrawer = isDrawer;
+    }
+
+    public SidebarState State { get; }
+    public bool IsDrawer { get; }
 }

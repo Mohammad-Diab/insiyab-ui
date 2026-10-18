@@ -16,7 +16,7 @@ public enum TimeMode
 }
 
 /// <summary>The timeline plugin's times, in Arabic or English, written the way Intl.RelativeTimeFormat (numeric: auto) and Intl.DateTimeFormat write them, in Latin digits and the Gregorian calendar.</summary>
-public static class RelativeTime
+internal static class RelativeTime
 {
     private static readonly string[] ArMonths = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
     private static readonly string[] ArDays = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];

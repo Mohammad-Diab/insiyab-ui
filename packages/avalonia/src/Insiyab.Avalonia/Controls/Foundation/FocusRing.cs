@@ -5,7 +5,7 @@ using Avalonia.Controls.Primitives;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The keyboard focus outline, the web's <c>:focus-visible</c> ring: a 2px line 2px outside the control, its corners following the control's radius as a CSS outline does.</summary>
-public class FocusRing : Border
+internal class FocusRing : Border
 {
     /// <summary>The gap between the control's edge and the ring.</summary>
     public static readonly StyledProperty<double> OffsetProperty =

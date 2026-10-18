@@ -31,7 +31,7 @@ public class Prose : Panel
     public FontFamily FontFamily { get => GetValue(FontFamilyProperty); set => SetValue(FontFamilyProperty, value); }
 
     /// <summary>The cap on the line in pixels, from the inherited font.</summary>
-    public double MaxLine
+    internal double MaxLine
     {
         get
         {

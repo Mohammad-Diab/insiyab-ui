@@ -55,7 +55,7 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type Carousel}" TargetType="Carousel">
-        <Setter Property="ins:CarouselOptions.IsEnabled" Value="True" />
+        <Setter Property="ins:CarouselLook.IsEnabled" Value="True" />
         <Setter Property="Focusable" Value="True" />
         <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="PageTransition">

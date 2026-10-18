@@ -132,7 +132,7 @@
 
       <ControlTheme x:Key="InsLookAccordion" TargetType="StackPanel" ins:ClassTheme.For="accordion">
         <Style Selector="^.accordion">
-          <Setter Property="ins:Collapse.Keys" Value="True" />
+          <Setter Property="ins:CollapseLook.Keys" Value="True" />
         </Style>
       </ControlTheme>
 

@@ -93,7 +93,7 @@ public class TableCell : ContentControl
     }
 
     /// <summary>What the column sorts this cell by: <see cref="SortValue"/>, then <see cref="Value"/>, then <see cref="Text"/>.</summary>
-    public string SortKey => (SortValue ?? Value ?? Text).Trim();
+    internal string SortKey => (SortValue ?? Value ?? Text).Trim();
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -202,13 +202,24 @@ public class TableCell : ContentControl
 }
 
 /// <summary>A cell edit about to be kept: set <see cref="System.ComponentModel.CancelEventArgs.Cancel"/> to refuse the value, or call <see cref="Revert"/> later if saving it fails.</summary>
-public sealed class TableEditEventArgs(TableCell cell, TableRow row, string value, string old, Action revert) : System.ComponentModel.CancelEventArgs
+public sealed class TableEditEventArgs : System.ComponentModel.CancelEventArgs
 {
-    public TableCell Cell { get; } = cell;
-    public TableRow Row { get; } = row;
-    public string Value { get; } = value;
-    public string Old { get; } = old;
+    private readonly Action _revert;
+
+    internal TableEditEventArgs(TableCell cell, TableRow row, string value, string old, Action revert)
+    {
+        Cell = cell;
+        Row = row;
+        Value = value;
+        Old = old;
+        _revert = revert;
+    }
+
+    public TableCell Cell { get; }
+    public TableRow Row { get; }
+    public string Value { get; }
+    public string Old { get; }
 
     /// <summary>Puts the old value back.</summary>
-    public void Revert() => revert();
+    public void Revert() => _revert();
 }

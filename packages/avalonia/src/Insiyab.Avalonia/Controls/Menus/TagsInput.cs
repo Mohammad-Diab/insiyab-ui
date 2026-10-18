@@ -35,11 +35,18 @@ public class TagsOption
 }
 
 /// <summary>What changed in a <see cref="TagsInput"/>: every value now, and the one added or removed (<c>ins:tags</c>).</summary>
-public class TagsChangedEventArgs(RoutedEvent routedEvent, IReadOnlyList<string> values, string? added, string? removed) : RoutedEventArgs(routedEvent)
+public class TagsChangedEventArgs : RoutedEventArgs
 {
-    public IReadOnlyList<string> Values { get; } = values;
-    public string? Added { get; } = added;
-    public string? Removed { get; } = removed;
+    internal TagsChangedEventArgs(RoutedEvent routedEvent, IReadOnlyList<string> values, string? added, string? removed) : base(routedEvent)
+    {
+        Values = values;
+        Added = added;
+        Removed = removed;
+    }
+
+    public IReadOnlyList<string> Values { get; }
+    public string? Added { get; }
+    public string? Removed { get; }
 }
 
 /// <summary>The web's <c>.ins-tags</c>: several values in one field, each a <see cref="Chip"/>, with the box after them. With <see cref="Options"/> it is a multi-select that matches as the autocomplete does and drops a chosen option from its list; without them, or with <see cref="IsFree"/>, what is typed becomes a tag on Enter or a comma. Backspace in the empty box takes the last one back.</summary>
@@ -117,7 +124,7 @@ public class TagsInput : TemplatedControl
     public event EventHandler<TagsChangedEventArgs>? TagsChanged { add => AddHandler(TagsChangedEvent, value); remove => RemoveHandler(TagsChangedEvent, value); }
 
     /// <summary>The text box after the chips.</summary>
-    public TextBox? InputBox => _input;
+    internal TextBox? InputBox => _input;
 
     private bool Free => IsFree || Options.Count == 0;
 

@@ -12,17 +12,25 @@ using Avalonia.Threading;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>Sent when a date field's value changes (the web's <c>ins:date</c>).</summary>
-public sealed class DateChangedEventArgs(DateTime? date, DateTime? end, TimeSpan? time, string value) : EventArgs
+public sealed class DateChangedEventArgs : EventArgs
 {
-    public DateTime? Date { get; } = date;
+    internal DateChangedEventArgs(DateTime? date, DateTime? end, TimeSpan? time, string value)
+    {
+        Date = date;
+        End = end;
+        Time = time;
+        Value = value;
+    }
+
+    public DateTime? Date { get; }
 
     /// <summary>The end of a range.</summary>
-    public DateTime? End { get; } = end;
+    public DateTime? End { get; }
 
-    public TimeSpan? Time { get; } = time;
+    public TimeSpan? Time { get; }
 
     /// <summary>What the web field sends: <c>2026-09-30</c>, or <c>2026-09-26T14:30</c> for a date and time.</summary>
-    public string Value { get; } = value;
+    public string Value { get; }
 }
 
 /// <summary>The date field (the web's <c>input[data-ins-date]</c> in an <c>.ins-input-group</c>): a text field showing the date in the page's language, a calendar button at its end, typing that is read on Enter or when focus leaves, and the calendar in a pop-up under it. Picks one day, a range or a day and a time, in Gregorian or Hijri, and always holds Gregorian dates.</summary>

@@ -469,6 +469,19 @@ public class OverlaysTests
         Assert.Contains("dialog-title", ((TextBlock)dialog.Content!).Classes);
     }
 
+    [AvaloniaFact]
+    public void Confirm_danger_on_a_plain_button_answers_in_red()
+    {
+        var button = new Button { Content = "نقل", Classes = { "secondary" } };
+        Dialog.SetConfirm(button, "نقل الملف؟");
+        Dialog.SetConfirmDanger(button, true);
+        var window = Show(new StackPanel { Margin = new Thickness(24), Children = { button } }, FlowDirection.LeftToRight, width: 900, height: 600);
+        Click(button, window);
+        var yes = (Button)((DialogFoot)DialogStack.Of(button)!.Layers.Single().Dialog.Foot!).Children[1];
+        Assert.Contains("danger", yes.Classes);
+        Assert.DoesNotContain("primary", yes.Classes);
+    }
+
     [AvaloniaTheory]
     [InlineData("rtl")]
     [InlineData("ltr")]

@@ -39,7 +39,7 @@ internal static class Hosted
 }
 
 /// <summary>One side of a status bar: a row that shows the bar's items. Part of the StatusBar template.</summary>
-public class StatusBarZone : StackPanel
+internal class StatusBarZone : StackPanel
 {
     private const double Room = 6;
 

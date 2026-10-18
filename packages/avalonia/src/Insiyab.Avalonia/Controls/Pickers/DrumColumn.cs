@@ -9,7 +9,7 @@ using Avalonia.Threading;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>One wheel of a drum (the web's <c>.ins-drum-col</c>): items under a lens, moved by dragging with a fling, the wheel, a click or the arrow keys, snapping to an item.</summary>
-public class DrumColumn : Control
+internal class DrumColumn : Control
 {
     public static readonly StyledProperty<double> RowHeightProperty =
         AvaloniaProperty.Register<DrumColumn, double>(nameof(RowHeight), 36);

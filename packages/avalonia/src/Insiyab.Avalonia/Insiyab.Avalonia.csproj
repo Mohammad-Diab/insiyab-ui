@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Insiyab.Avalonia.Tests" />
+    <InternalsVisibleTo Include="PerfLab" />
   </ItemGroup>
 
   <ItemGroup>

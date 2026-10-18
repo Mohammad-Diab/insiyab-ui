@@ -186,25 +186,25 @@ public class ShellTests
     public void Sidebar_action_and_event_follow_the_web()
     {
         var shell = NewShell(out _, out var menu, out _);
-        Shell.SetSidebarAction(menu, "collapsed");
+        Shell.SetSidebarAction(menu, SidebarState.Collapsed);
         var window = Show(shell, width: 1200, height: 600);
-        var seen = new List<(string State, bool IsDrawer)>();
+        var seen = new List<(SidebarState State, bool IsDrawer)>();
         Shell.AddSidebarChangedHandler(shell, (_, e) => seen.Add((e.State, e.IsDrawer)));
 
         Click(menu, window);
         Assert.False(shell.IsPaneOpen);
-        Assert.Equal(("collapsed", false), seen[^1]);
+        Assert.Equal((SidebarState.Collapsed, false), seen[^1]);
         Click(menu, window);
         Assert.False(shell.IsPaneOpen);
-        Assert.Equal("open", Shell.Sidebar(shell, "open"));
-        Assert.Equal(("open", false), seen[^1]);
+        Assert.Equal(SidebarState.Open, Shell.Sidebar(shell, SidebarState.Open));
+        Assert.Equal((SidebarState.Open, false), seen[^1]);
 
         window.Width = 800;
         Settle();
-        Assert.Equal("open", Shell.Sidebar(shell, "open"));
-        Assert.Equal(("open", true), seen[^1]);
-        Assert.Equal("closed", Shell.Sidebar(shell));
-        Assert.Equal(("closed", true), seen[^1]);
+        Assert.Equal(SidebarState.Open, Shell.Sidebar(shell, SidebarState.Open));
+        Assert.Equal((SidebarState.Open, true), seen[^1]);
+        Assert.Equal(SidebarState.Closed, Shell.Sidebar(shell));
+        Assert.Equal((SidebarState.Closed, true), seen[^1]);
     }
 
     [AvaloniaFact]
@@ -298,12 +298,12 @@ public class ShellTests
         var window = Show(shell, width: 1200, height: 600);
         Assert.True(InNav(TabFrom(window, menu, RawInputModifiers.Shift), nav));
 
-        Shell.Sidebar(shell, "collapsed");
+        Shell.Sidebar(shell, SidebarState.Collapsed);
         Settle();
         Assert.False(InNav(TabFrom(window, menu, RawInputModifiers.Shift), nav));
         Assert.False(InNav(TabFrom(window, menu), nav));
 
-        Shell.Sidebar(shell, "open");
+        Shell.Sidebar(shell, SidebarState.Open);
         Settle();
         Assert.True(InNav(TabFrom(window, menu, RawInputModifiers.Shift), nav));
 

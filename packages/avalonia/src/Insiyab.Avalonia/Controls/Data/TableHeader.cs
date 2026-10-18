@@ -9,7 +9,7 @@ namespace Insiyab.Avalonia.Controls;
 /// <summary>A column heading in a <see cref="Table"/>'s header bar: the web's <c>&lt;th&gt;</c>. The table makes these from its columns.</summary>
 [TemplatePart("PART_Grip", typeof(Border))]
 [PseudoClasses(":pinned", ":pin-edge", ":pin-flip", ":check", ":resizable", ":grip-flip", ":resizing")]
-public class TableHeader : ContentControl
+internal class TableHeader : ContentControl
 {
     private Border? _grip;
     private bool _drag;
@@ -110,7 +110,7 @@ public class TableHeader : ContentControl
 
 /// <summary>The button a sortable heading becomes: the web's <c>.ins-sort</c>. Its arrow follows <see cref="Direction"/>.</summary>
 [PseudoClasses(":ascending", ":descending")]
-public class TableSortButton : Button
+internal class TableSortButton : Button
 {
     public static readonly StyledProperty<SortDirection> DirectionProperty =
         AvaloniaProperty.Register<TableSortButton, SortDirection>(nameof(Direction));

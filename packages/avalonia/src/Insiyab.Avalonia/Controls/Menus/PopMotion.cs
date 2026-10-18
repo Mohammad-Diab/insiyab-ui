@@ -10,7 +10,7 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The menu's entrance, set from a theme: the body fades and settles from 6px above (or below, flipped), then its first items rise in one after another.</summary>
-public static class PopMotion
+internal static class PopMotion
 {
     /// <summary>Plays the entrance each time the element is shown.</summary>
     public static readonly AttachedProperty<bool> EnabledProperty =

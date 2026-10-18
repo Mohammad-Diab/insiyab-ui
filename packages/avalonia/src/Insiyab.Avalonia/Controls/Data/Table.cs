@@ -36,8 +36,8 @@ public partial class Table : TemplatedControl
     public static readonly StyledProperty<bool> IsSelectableProperty =
         AvaloniaProperty.Register<Table, bool>(nameof(IsSelectable));
 
-    public static readonly StyledProperty<bool> HasSelectAllProperty =
-        AvaloniaProperty.Register<Table, bool>(nameof(HasSelectAll), true);
+    public static readonly StyledProperty<bool> ShowSelectAllProperty =
+        AvaloniaProperty.Register<Table, bool>(nameof(ShowSelectAll), true);
 
     public static readonly StyledProperty<object?> EmptyProperty =
         AvaloniaProperty.Register<Table, object?>(nameof(Empty));
@@ -126,7 +126,7 @@ public partial class Table : TemplatedControl
     public bool IsSelectable { get => GetValue(IsSelectableProperty); set => SetValue(IsSelectableProperty, value); }
 
     /// <summary>A checkbox in the header that selects every row, checked, mixed or clear to match them: <c>data-ins-select="all"</c>.</summary>
-    public bool HasSelectAll { get => GetValue(HasSelectAllProperty); set => SetValue(HasSelectAllProperty, value); }
+    public bool ShowSelectAll { get => GetValue(ShowSelectAllProperty); set => SetValue(ShowSelectAllProperty, value); }
 
     /// <summary>What the table shows when it has no rows: an empty state, in place of the header and the rows.</summary>
     public object? Empty { get => GetValue(EmptyProperty); set => SetValue(EmptyProperty, value); }
@@ -156,7 +156,7 @@ public partial class Table : TemplatedControl
     public int CurrentColumn => _currentColumn;
 
     /// <summary>The widths the header and every row share.</summary>
-    public ColumnLayout ColumnWidths { get; }
+    internal ColumnLayout ColumnWidths { get; }
 
     /// <summary>The rows in the order they are shown, after any sort.</summary>
     public IReadOnlyList<TableRow> DisplayedRows => _display;
@@ -252,7 +252,7 @@ public partial class Table : TemplatedControl
             if (change.NewValue is INotifyCollectionChanged now) now.CollectionChanged += OnItemsChanged;
             Rebuild();
         }
-        else if (change.Property == IsSelectableProperty || change.Property == HasSelectAllProperty || change.Property == EmptyProperty
+        else if (change.Property == IsSelectableProperty || change.Property == ShowSelectAllProperty || change.Property == EmptyProperty
             || change.Property == CanResizeColumnsProperty || change.Property == SelectionModeProperty || change.Property == IsCellNavigationProperty)
         {
             Rebuild();
@@ -299,7 +299,7 @@ public partial class Table : TemplatedControl
         {
             var head = new TableHeader { Owner = this, Index = 0 };
             head.MarkCheck();
-            if (HasSelectAll)
+            if (ShowSelectAll)
             {
                 _all = new CheckBox { Classes = { "table-check" }, Focusable = false };
                 AutomationProperties.SetName(_all, Word("selectAll"));
@@ -1003,7 +1003,7 @@ public partial class Table : TemplatedControl
     }
 
     /// <summary>A figure as a number, in either set of digits, with its separators and any sign or unit around it; NaN when the text is not a figure.</summary>
-    public static double NumberOf(string text)
+    internal static double NumberOf(string text)
     {
         var chars = text.Select(c => c is >= '٠' and <= '٩' ? (char)('0' + c - '٠') : c is >= '۰' and <= '۹' ? (char)('0' + c - '۰') : c).ToArray();
         var t = new string(chars).Replace("٫", ".").Replace("−", "-");
@@ -1076,22 +1076,39 @@ public partial class Table : TemplatedControl
 }
 
 /// <summary>A sort about to happen: cancel it to sort elsewhere (on the server) and leave only the arrow moved.</summary>
-public sealed class TableSortingEventArgs(TableColumn column, int index, SortDirection direction) : System.ComponentModel.CancelEventArgs
+public sealed class TableSortingEventArgs : System.ComponentModel.CancelEventArgs
 {
-    public TableColumn Column { get; } = column;
-    public int ColumnIndex { get; } = index;
-    public SortDirection Direction { get; } = direction;
+    internal TableSortingEventArgs(TableColumn column, int index, SortDirection direction)
+    {
+        Column = column;
+        ColumnIndex = index;
+        Direction = direction;
+    }
+
+    public TableColumn Column { get; }
+    public int ColumnIndex { get; }
+    public SortDirection Direction { get; }
 }
 
 /// <summary>The selection after a change.</summary>
-public sealed class TableSelectionEventArgs(IReadOnlyList<TableRow> rows) : EventArgs
+public sealed class TableSelectionEventArgs : EventArgs
 {
-    public IReadOnlyList<TableRow> Rows { get; } = rows;
+    internal TableSelectionEventArgs(IReadOnlyList<TableRow> rows)
+    {
+        Rows = rows;
+    }
+
+    public IReadOnlyList<TableRow> Rows { get; }
     public int Count => Rows.Count;
 }
 
 /// <summary>The row an action is about.</summary>
-public sealed class TableRowEventArgs(TableRow row) : EventArgs
+public sealed class TableRowEventArgs : EventArgs
 {
-    public TableRow Row { get; } = row;
+    internal TableRowEventArgs(TableRow row)
+    {
+        Row = row;
+    }
+
+    public TableRow Row { get; }
 }

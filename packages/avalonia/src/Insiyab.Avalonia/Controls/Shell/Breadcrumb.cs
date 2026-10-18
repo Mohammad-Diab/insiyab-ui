@@ -85,8 +85,14 @@ public class BreadcrumbItem : Button
     }
 }
 
-public sealed class BreadcrumbClickEventArgs(RoutedEvent routedEvent, object source, object? item, int index) : RoutedEventArgs(routedEvent, source)
+public sealed class BreadcrumbClickEventArgs : RoutedEventArgs
 {
-    public object? Item { get; } = item;
-    public int Index { get; } = index;
+    internal BreadcrumbClickEventArgs(RoutedEvent routedEvent, object source, object? item, int index) : base(routedEvent, source)
+    {
+        Item = item;
+        Index = index;
+    }
+
+    public object? Item { get; }
+    public int Index { get; }
 }

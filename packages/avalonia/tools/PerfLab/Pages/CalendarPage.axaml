@@ -4,7 +4,7 @@
              x:Class="PerfLab.Pages.CalendarPage">
   <StackPanel Spacing="16">
     <ins:PageHead Title="التقويم" Subtitle="مواعيد التسليم والاجتماعات" />
-    <ins:MonthCalendar x:Name="Calendar" Month="2026-09-01" Date="2026-09-21" HasViewSwitch="True"
+    <ins:MonthCalendar x:Name="Calendar" Month="2026-09-01" Date="2026-09-21" ShowViewSwitch="True"
                        DayStartHour="0" DayEndHour="24" />
   </StackPanel>
 </UserControl>

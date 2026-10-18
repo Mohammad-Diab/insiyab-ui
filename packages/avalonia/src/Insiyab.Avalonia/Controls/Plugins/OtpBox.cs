@@ -15,9 +15,14 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>Carries the code an <see cref="OtpBox"/> just completed.</summary>
-public class OtpCompletedEventArgs(RoutedEvent routedEvent, string value) : RoutedEventArgs(routedEvent)
+public class OtpCompletedEventArgs : RoutedEventArgs
 {
-    public string Value { get; } = value;
+    internal OtpCompletedEventArgs(RoutedEvent routedEvent, string value) : base(routedEvent)
+    {
+        Value = value;
+    }
+
+    public string Value { get; }
 }
 
 /// <summary>The one-time code field, the web's <c>data-ins-otp</c>: one real text box drawn as a block with a dot per character. Paste, an OTP suggestion and a screen reader all meet one ordinary field; one cell is selected or the caret waits at the end, so the code never has a gap. Its errors show under the block, which turns red.</summary>
@@ -419,7 +424,7 @@ public class OtpBox : TextBox
 
 /// <summary>One drawn box of an <see cref="OtpBox"/>: the character, the dot under it, and a tint when selected or the caret when it is the next to type.</summary>
 [PseudoClasses(":filled", ":active", ":invalid")]
-public class OtpCell : TemplatedControl
+internal class OtpCell : TemplatedControl
 {
     public static readonly StyledProperty<string?> CharacterProperty =
         AvaloniaProperty.Register<OtpCell, string?>(nameof(Character));

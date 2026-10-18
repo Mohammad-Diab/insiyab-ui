@@ -13,28 +13,21 @@ public static class Collapse
     public static readonly AttachedProperty<string?> GroupProperty =
         AvaloniaProperty.RegisterAttached<Expander, string?>("Group", typeof(Collapse));
 
-    /// <summary>Up, Down, Home and End move the focus between the headers of the expanders in this panel, as a desktop list of sections does. The <c>StackPanel.accordion</c> style switches it on.</summary>
-    public static readonly AttachedProperty<bool> KeysProperty =
-        AvaloniaProperty.RegisterAttached<Panel, bool>("Keys", typeof(Collapse));
-
     static Collapse()
     {
         Expander.IsExpandedProperty.Changed.AddClassHandler<Expander>(OnExpandedChanged);
         GroupProperty.Changed.AddClassHandler<Expander>((e, _) => { if (e.IsExpanded) CloseOthers(e); });
-        KeysProperty.Changed.AddClassHandler<Panel>((p, e) =>
-        {
-            p.RemoveHandler(InputElement.KeyDownEvent, OnPanelKeyDown);
-            if (e.GetNewValue<bool>()) p.AddHandler(InputElement.KeyDownEvent, OnPanelKeyDown, RoutingStrategies.Bubble);
-        });
     }
 
     public static string? GetGroup(Expander element) => element.GetValue(GroupProperty);
 
     public static void SetGroup(Expander element, string? value) => element.SetValue(GroupProperty, value);
 
-    public static bool GetKeys(Panel element) => element.GetValue(KeysProperty);
-
-    public static void SetKeys(Panel element, bool value) => element.SetValue(KeysProperty, value);
+    internal static void KeysChanged(Panel panel, AvaloniaPropertyChangedEventArgs e)
+    {
+        panel.RemoveHandler(InputElement.KeyDownEvent, OnPanelKeyDown);
+        if (e.GetNewValue<bool>()) panel.AddHandler(InputElement.KeyDownEvent, OnPanelKeyDown, RoutingStrategies.Bubble);
+    }
 
     private static void OnPanelKeyDown(object? sender, KeyEventArgs e)
     {
@@ -70,4 +63,18 @@ public static class Collapse
             if (child is Expander other && other != expander && other.IsExpanded && GetGroup(other) == group)
                 other.SetCurrentValue(Expander.IsExpandedProperty, false);
     }
+}
+
+/// <summary>Set by the accordion theme: the arrow keys move between the headers of its expanders.</summary>
+internal static class CollapseLook
+{
+    /// <summary>Up, Down, Home and End move the focus between the headers of the expanders in this panel, as a desktop list of sections does. The <c>StackPanel.accordion</c> style switches it on.</summary>
+    public static readonly AttachedProperty<bool> KeysProperty =
+        AvaloniaProperty.RegisterAttached<Panel, bool>("Keys", typeof(CollapseLook));
+
+    static CollapseLook() => KeysProperty.Changed.AddClassHandler<Panel>(Collapse.KeysChanged);
+
+    public static bool GetKeys(Panel element) => element.GetValue(KeysProperty);
+
+    public static void SetKeys(Panel element, bool value) => element.SetValue(KeysProperty, value);
 }

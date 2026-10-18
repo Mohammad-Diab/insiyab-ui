@@ -11,7 +11,7 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>A click too quick to show the held press still dips once on release, as on the web; a theme sets <c>Depth</c> on the template part the dip scales.</summary>
-public static class PressDip
+internal static class PressDip
 {
     /// <summary>The scale at the bottom of the dip, on a button's template part; 0 turns the dip off.</summary>
     public static readonly AttachedProperty<double> DepthProperty =

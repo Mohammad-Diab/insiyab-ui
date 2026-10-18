@@ -121,7 +121,7 @@
           </StackPanel>
         </Border>
         <ListBox x:Name="Nav" Classes="shell-nav" AutomationProperties.Name="صفحات المعرض"
-                 ins:Shell.HasFilter="True" ins:Shell.FilterPlaceholder="ابحث في الصفحات" />
+                 ins:Shell.ShowFilter="True" ins:Shell.FilterPlaceholderText="ابحث في الصفحات" />
       </DockPanel>
     </SplitView.Pane>
     <Panel>
@@ -187,7 +187,7 @@
                     </ins:Segmented>
                     <Separator />
                     <Button x:Name="EffectsButton" Classes="pop-item" Content="تخفيف المؤثرات" />
-                    <Button Classes="pop-item" ins:ThemeToggle.Mode="system" Content="اتبع وضع النظام" />
+                    <Button Classes="pop-item" ins:ThemeToggle.Mode="System" Content="اتبع وضع النظام" />
                     <Button x:Name="ResetButton" Classes="pop-item" Content="إعادة الضبط" />
                   </StackPanel>
                 </ins:PopCard>

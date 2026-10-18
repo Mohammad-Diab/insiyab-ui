@@ -11,7 +11,7 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The web's theme sweep, over 600ms from the control that was pressed: switching to light, the new palette grows out of it in a circle to the window's furthest corner (the light switching on); switching to dark, the old light picture stays inside a circle that closes from the window's edges onto it (the light switching off). Skipped, and the theme simply applied, while <see cref="Motion.IsStill"/> or while the window is minimised or hidden.</summary>
-public static class ThemeSweep
+internal static class ThemeSweep
 {
     private const double Duration = 600;
     private static Sweep? s_current;

@@ -185,16 +185,16 @@ public class PickersBirthTests : IDisposable
     {
         var field = new BirthDateField { MinAge = 18, IsRequired = true };
         var w = Show(Page(field), FlowDirection.RightToLeft);
-        Assert.Equal(PickerLocale.Arabic.BirthRequired, field.Message);
+        Assert.Equal(PickerLocale.Arabic.BirthRequired, field.ValidationMessage);
         Assert.True(DataValidationErrors.GetHasErrors(field));
 
         field.DayBox.Focus();
         Typed(w, "1");
-        Assert.Equal(PickerLocale.Arabic.BirthIncomplete, field.Message);
+        Assert.Equal(PickerLocale.Arabic.BirthIncomplete, field.ValidationMessage);
         field.SetDate(new DateTime(2015, 1, 1));
         Settle(100);
         Assert.Equal(string.Empty, field.Value);
-        Assert.Equal("يجب أن يكون العمر 18 سنة على الأقل", field.Message);
+        Assert.Equal("يجب أن يكون العمر 18 سنة على الأقل", field.ValidationMessage);
         Assert.Equal("يجب أن يكون العمر 18 سنة على الأقل", TextOf(field.Line!));
     }
 

@@ -10,7 +10,7 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>What insiyab.js adds to a tab strip: the arrows follow the strip's direction (in RTL the left arrow is "next"), Home and End, wrap-around, and the selected face flying between tabs. The TabControl and TabStrip themes switch both on.</summary>
-public static class Tabs
+internal static class Tabs
 {
     /// <summary>Arrow, Home and End keys that select the tab they land on, and Ctrl+Tab, Ctrl+Shift+Tab, Ctrl+PageDown and Ctrl+PageUp from anywhere inside, skipping <see cref="TabLink"/>s and disabled tabs.</summary>
     public static readonly AttachedProperty<bool> KeysProperty =
