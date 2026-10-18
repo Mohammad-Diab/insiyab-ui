@@ -1,0 +1,37 @@
+# Packs Insiyab.Avalonia and pushes it to nuget.org when a tag like avalonia-v0.2.0 is pushed; tests run locally before commits.
+name: Publish Insiyab.Avalonia
+
+on:
+  push:
+    tags:
+      - "avalonia-v*"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Read the version from the tag
+        run: echo "VERSION=${GITHUB_REF_NAME#avalonia-v}" >> "$GITHUB_ENV"
+
+      - name: Pack
+        run: dotnet pack packages/avalonia/src/Insiyab.Avalonia -c Release -p:Version="$VERSION" -o out
+
+      # Trusted Publishing: nuget.org trusts this workflow and hands out a short-lived key.
+      - name: Log in to nuget.org
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Push
+        run: dotnet nuget push "out/*.nupkg" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json
