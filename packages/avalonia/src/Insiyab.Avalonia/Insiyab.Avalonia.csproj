@@ -4,8 +4,14 @@
     <RootNamespace>Insiyab.Avalonia</RootNamespace>
     <PackageId>Insiyab.Avalonia</PackageId>
     <Version>0.1.0</Version>
+    <Title>Insiyab for Avalonia</Title>
     <Authors>Mohammad Diab</Authors>
+    <Copyright>Copyright 2026 Mohammad Diab</Copyright>
     <Description>Insiyab for Avalonia: the glass, RTL-first design system as Avalonia themes.</Description>
+    <PackageTags>avalonia;theme;design-system;controls;rtl;arabic;ui</PackageTags>
+    <PackageProjectUrl>https://github.com/Mohammad-Diab/insiyab-ui/tree/main/packages/avalonia</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Mohammad-Diab/insiyab-ui</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>mark-128.png</PackageIcon>
@@ -30,6 +36,7 @@
     <AvaloniaResource Include="Assets\**" />
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     <None Include="..\..\..\..\brand\mark-128.png" Pack="true" PackagePath="\" Visible="false" />
+    <None Include="..\..\..\..\NOTICE" Pack="true" PackagePath="\" Visible="false" />
     <None Include="Assets\Fonts\OFL-*.txt" Pack="true" PackagePath="fonts\" />
   </ItemGroup>
 
