@@ -355,7 +355,7 @@ for (const file of files) {
 }
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-const banner = `/*! Insiyab UI v${pkg.version} · ${pkg.homepage || 'insiyab'} · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */\n`;
+const banner = `/*! Insiyab UI v${pkg.version} · ${pkg.homepage || 'insiyab'} · Apache-2.0 (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */\n`;
 
 const css = banner + parts.join('\n\n') + '\n';
 

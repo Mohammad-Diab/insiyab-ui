@@ -1357,9 +1357,9 @@ public class DataTests
     {
         var m = new ChoiceMatrix();
         if (cls is not null) foreach (var c in cls.Split(' ')) m.Classes.Add(c);
-        m.Columns.Add(new MatrixColumn { Header = "ضعيف", Value = "1", Description = "وصف قصير للمستوى.", Points = "1" });
-        m.Columns.Add(new MatrixColumn { Header = "جيد", Value = "3", Description = "وصف قصير للمستوى.", Points = "3" });
-        m.Columns.Add(new MatrixColumn { Header = "ممتاز", Value = "5", Description = "وصف قصير للمستوى.", Points = "5" });
+        m.Columns.Add(new MatrixColumn { Header = "غير راضٍ", Value = "1", Description = "وصف قصير للمستوى.", Points = "1" });
+        m.Columns.Add(new MatrixColumn { Header = "راضٍ", Value = "3", Description = "وصف قصير للمستوى.", Points = "3" });
+        m.Columns.Add(new MatrixColumn { Header = "راضٍ جدًا", Value = "5", Description = "وصف قصير للمستوى.", Points = "5" });
         m.Rows.Add(new MatrixRow { Header = "الأول", SelectedIndex = 1 });
         m.Rows.Add(new MatrixRow { Header = "الثاني" });
         return m;
@@ -1379,7 +1379,7 @@ public class DataTests
         Assert.True(radios[1].IsChecked);
         Assert.Equal(radios[0].GroupName, radios[2].GroupName);
         Assert.NotEqual(radios[0].GroupName, radios[3].GroupName);
-        Assert.Equal("الأول: جيد", global::Avalonia.Automation.AutomationProperties.GetName(radios[1]));
+        Assert.Equal("الأول: راضٍ", global::Avalonia.Automation.AutomationProperties.GetName(radios[1]));
         var cell = (Border)radios[1].Parent!;
         AssertBrush(m, "InsToneBrandBg", () => cell.Background);
         AssertBrush(m, "InsGlassInner", () => ((Border)radios[0].Parent!).Background);

@@ -1,0 +1,9 @@
+Insiyab UI
+Copyright 2026 Mohammad Diab
+
+The bundled typefaces (Tajawal, Inter and Cause) are not covered by the Apache
+License. Each is licensed under the SIL Open Font License, Version 1.1; their
+licenses ship alongside them (LICENSE-*.txt) and must travel with any copy of them.
+
+The icons in the documentation site derive from Lucide, licensed under the ISC
+License. See THIRD-PARTY-NOTICES in the source repository.

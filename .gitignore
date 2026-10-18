@@ -27,6 +27,13 @@ coverage/
 # library straight from a git tag before anything reaches npm -- both of which
 # matter for a library whose whole pitch is that no build step is needed.
 
+# Packaging output
+packages/jinja/dist/
+*.whl
+*.tar.gz
+*.nupkg
+*.snupkg
+
 # Python (the Jinja package and its tests)
 __pycache__/
 *.py[cod]
@@ -39,8 +46,13 @@ __pycache__/
 .env.*
 !.env.example
 
+# Local tooling and experiments
+.claude/
+demo/lab/
+
 # Editors and OS
 .idea/
+.vscode/
 .DS_Store
 Thumbs.db
 desktop.ini

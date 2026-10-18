@@ -13,7 +13,7 @@
     "components",
     "dark-mode"
   ],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "author": "Mohammad Diab",
   "homepage": "https://github.com/Mohammad-Diab/insiyab-ui#readme",
   "repository": {
@@ -41,9 +41,9 @@
     "dist",
     "src",
     "fonts",
-    "IDEA.md",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "NOTICE"
   ],
   "scripts": {
     "build": "node build.mjs",

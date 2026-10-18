@@ -1,4 +1,4 @@
-/*! Insiyab UI v0.6.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
+/*! Insiyab UI v0.6.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · Apache-2.0 (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
 /* Insiyab · Birth date plugin: three fields drawn as blocks, a status line and three columns. */
 .ins-birth { --ins-birth-d: 4.75rem; --ins-birth-m: 6rem; --ins-birth-y: 9.75rem; --ins-birth-gap: .75rem; display: grid; justify-items: center; gap: .375rem; }
 .ins-birth-segs { display: flex; justify-content: center; gap: var(--ins-birth-gap); }

@@ -10,10 +10,10 @@ public static class MatrixPlay
         """
         <ins:ChoiceMatrix>
           <ins:ChoiceMatrix.Columns>
-            <ins:MatrixColumn Header="ضعيف" Value="1" />
-            <ins:MatrixColumn Header="مقبول" Value="2" />
-            <ins:MatrixColumn Header="جيد" Value="3" />
-            <ins:MatrixColumn Header="ممتاز" Value="4" />
+            <ins:MatrixColumn Header="غير راضٍ" Value="1" />
+            <ins:MatrixColumn Header="محايد" Value="2" />
+            <ins:MatrixColumn Header="راضٍ" Value="3" />
+            <ins:MatrixColumn Header="راضٍ جدًا" Value="4" />
           </ins:ChoiceMatrix.Columns>
           <ins:MatrixRow Header="السعر" SelectedIndex="2" />
           <ins:MatrixRow Header="الجودة" />
@@ -44,7 +44,7 @@ public static class MatrixPlay
         Disable = s => s.On("cards") ? [] : ["points"],
         Axaml = s =>
         {
-            (string Value, string Header)[] cols = s.On("cards") ? [("1", "ضعيف"), ("3", "جيد"), ("5", "ممتاز")] : [("1", "ضعيف"), ("2", "مقبول"), ("3", "جيد"), ("4", "ممتاز")];
+            (string Value, string Header)[] cols = s.On("cards") ? [("1", "غير راضٍ"), ("3", "راضٍ"), ("5", "راضٍ جدًا")] : [("1", "غير راضٍ"), ("2", "محايد"), ("3", "راضٍ"), ("4", "راضٍ جدًا")];
             var cls = Classes(s.On("cards") ? "cards" : null, s.On("deselect") ? "deselect" : null);
             var matrix = $"<ins:ChoiceMatrix{(s.On("sum") ? " x:Name=\"Matrix\"" : "")}{cls}>\n" +
                 "  <ins:ChoiceMatrix.Columns>\n" +

@@ -11,7 +11,7 @@
     "components",
     "glassmorphism"
   ],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "author": "Mohammad Diab",
   "homepage": "https://github.com/Mohammad-Diab/insiyab-ui/tree/main/packages/react#readme",
   "repository": {
@@ -31,7 +31,9 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "NOTICE"
   ],
   "scripts": {
     "build": "node build.mjs",

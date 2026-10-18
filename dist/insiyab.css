@@ -1,4 +1,4 @@
-/*! Insiyab UI v0.6.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · MIT (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
+/*! Insiyab UI v0.6.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · Apache-2.0 (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
 /* ==========================================================================
    Insiyab · fonts
    ==========================================================================
@@ -4826,7 +4826,7 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
 
    Without the script that is the browser's own date field, which is a perfectly
    good fallback. With it, the field becomes a text field showing the date the way
-   the page's language writes it — "23 أيلول 2026" on a Syrian page, in the Latin
+   the page's language writes it — "23 أيلول 2026" on a Levantine page, in the Latin
    digits the library sets every figure in (`.ins-num`, `.ins-money`); give the page
    `lang="ar-u-nu-arab"` for Arabic-Indic ones — a hidden input carries the ISO value under the
    original `name`, so the server receives exactly what the native field would
@@ -4969,13 +4969,13 @@ form[data-ins-validate] .ins-field:not(:has(:user-invalid, [data-ins-reported]:i
    along a row and `required` on a row's radios asks for an answer to each.
 
      <table class="ins-matrix">
-       <thead><tr><th></th><th>ضعيف</th><th>جيّد</th>…</tr></thead>
+       <thead><tr><th></th><th>غير راضٍ</th><th>راضٍ</th>…</tr></thead>
        <tbody>
          <tr><th scope="row">السعر</th>
              <td><label class="ins-check"><input type="radio" name="price" value="1"></label></td> …
      </table>
 
-   insiyab.js names every radio after its row and column ("السعر: جيّد"), since the
+   insiyab.js names every radio after its row and column ("السعر: راضٍ"), since the
    box on its own says nothing. The chosen cell takes the brand tint.
 
    `.ins-matrix--cards` is the version with words in the cells: each cell a

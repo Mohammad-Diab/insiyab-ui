@@ -1164,5 +1164,6 @@ mode compared element by element with an explicit dark choice.
 
 ## License
 
-MIT for the code — see [LICENSE](LICENSE). The bundled fonts are SIL Open Font
-License 1.1, with their own licenses in [`fonts/`](fonts/).
+Apache-2.0 for the code — see [LICENSE](LICENSE) and [NOTICE](NOTICE). The bundled
+fonts are SIL Open Font License 1.1, with their own licenses in [`fonts/`](fonts/).
+The icons in the docs derive from Lucide, see [THIRD-PARTY-NOTICES](THIRD-PARTY-NOTICES).

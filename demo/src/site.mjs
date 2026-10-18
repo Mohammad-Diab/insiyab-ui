@@ -199,7 +199,7 @@ export const NAV = [
     { slug: 'tpl-settings', title: 'الإعدادات', en: 'Settings template', icon: 'cog', fresh: true,
       lead: 'إعدادات الحساب في علامات تبويب: ملف شخصي يحفظ نفسه، وإشعارات، وأمان.' },
     { slug: 'tpl-review', title: 'مراجعة بمعايير', en: 'Criteria review template', icon: 'file', fresh: true,
-      lead: 'مستند وتقييمه جنبًا إلى جنب: معايير بمستويات ودرجات، وتقييم مقترح بمصادره، ومراجع يعدله.' },
+      lead: 'مستند وتقييمه جنبًا إلى جنب: معايير بمستويات ودرجات، ومراجع يعدله.' },
     { slug: 'tpl-booking', title: 'نموذج بوقت محدود', en: 'Timed multi-step form template', icon: 'clock', fresh: true,
       lead: 'نموذج بخطوات محجوز لك وقتًا محدودًا، تؤجل من خطواته ما شئت للمراجعة، ويحفظ نفسه تلقائيًا.' },
     { slug: 'tpl-error', title: 'صفحة الخطأ', en: 'Error page template', icon: 'alert', fresh: true,

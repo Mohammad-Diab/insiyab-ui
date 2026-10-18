@@ -7,14 +7,14 @@ name = "insiyab"
 version = "0.6.0"
 description = "Jinja macros for Insiyab, the RTL-first UI library, with its stylesheet, script and fonts."
 readme = "README.md"
-license = { text = "MIT" }
+license = { text = "Apache-2.0" }
 authors = [{ name = "Mohammad Diab" }]
 requires-python = ">=3.8"
 dependencies = ["Jinja2>=3.0"]
 keywords = ["jinja", "flask", "ui", "rtl", "arabic", "components", "css"]
 classifiers = [
   "Framework :: Flask",
-  "License :: OSI Approved :: MIT License",
+  "License :: OSI Approved :: Apache Software License",
   "Natural Language :: Arabic",
   "Programming Language :: Python :: 3",
   "Topic :: Software Development :: User Interfaces",

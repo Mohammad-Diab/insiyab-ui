@@ -64,9 +64,9 @@ public class StylePartsTests : IDisposable
     {
         var m = new ChoiceMatrix();
         if (cls is not null) m.Classes.Add(cls);
-        m.Columns.Add(new MatrixColumn { Header = "ضعيف", Value = "1", Description = "وصف قصير للمستوى.", Points = "1" });
-        m.Columns.Add(new MatrixColumn { Header = "جيد", Value = "3", Description = "وصف قصير للمستوى.", Points = "3" });
-        m.Columns.Add(new MatrixColumn { Header = "ممتاز", Value = "5", Description = "وصف قصير للمستوى.", Points = "5" });
+        m.Columns.Add(new MatrixColumn { Header = "غير راضٍ", Value = "1", Description = "وصف قصير للمستوى.", Points = "1" });
+        m.Columns.Add(new MatrixColumn { Header = "راضٍ", Value = "3", Description = "وصف قصير للمستوى.", Points = "3" });
+        m.Columns.Add(new MatrixColumn { Header = "راضٍ جدًا", Value = "5", Description = "وصف قصير للمستوى.", Points = "5" });
         m.Rows.Add(new MatrixRow { Header = "الأول", SelectedIndex = 1 });
         m.Rows.Add(new MatrixRow { Header = "الثاني" });
         return m;
