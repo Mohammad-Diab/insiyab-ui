@@ -239,4 +239,48 @@ public class ThemeSweepTests
         }
         finally { Application.Current!.RequestedThemeVariant = ThemeVariant.Light; }
     }
+
+    // Read the moment the theme changes: a button on screen starts its fade from the old colour, while one below the fold or in a hidden panel already wears the new one.
+    [AvaloniaFact]
+    public void Only_what_is_on_screen_fades_into_the_new_theme()
+    {
+        try
+        {
+            var seen = new Button { Classes = { "secondary" }, Content = "ظاهر" };
+            var below = new Button { Classes = { "secondary" }, Content = "تحت" };
+            var hidden = new Button { Classes = { "secondary" }, Content = "مخفي" };
+            var page = new StackPanel { Margin = new Thickness(20), Children = { seen, new Border { Height = 2000 }, below, new Panel { IsVisible = false, Children = { hidden } } } };
+            var window = new Window { Width = 600, Height = 400, Content = new ScrollViewer { Content = page } };
+            window.Show();
+            Track(window);
+            Settle();
+            var old = ColorOf(seen.Foreground);
+            Color atSeen = default, atBelow = default, atHidden = default;
+            void Change()
+            {
+                ThemeToggle.Apply(ThemeMode.Dark);
+                atSeen = ColorOf(seen.Foreground);
+                atBelow = ColorOf(below.Foreground);
+                atHidden = ColorOf(hidden.Foreground);
+            }
+            ThemeSweep.Held = true;
+            ThemeSweep.Run(seen, Change);
+            WaitFor(() => atSeen != default);
+            var nextBelow = ColorOf(below.Foreground);
+            ThemeSweep.Held = false;
+            Settle(900);
+            var now = ColorOf(seen.Foreground);
+            Assert.NotEqual(old, now);
+            Assert.Equal(old, atSeen);
+            Assert.Equal(now, atBelow);
+            Assert.Equal(now, nextBelow);
+            Assert.Equal(now, atHidden);
+            Assert.Equal(now, ColorOf(below.Foreground));
+        }
+        finally
+        {
+            ThemeSweep.Held = false;
+            Application.Current!.RequestedThemeVariant = ThemeVariant.Light;
+        }
+    }
 }

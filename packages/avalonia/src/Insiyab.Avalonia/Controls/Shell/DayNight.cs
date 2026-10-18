@@ -52,7 +52,7 @@ public static class ThemeToggle
                 ThemeMode.Toggle => IsDark ? ThemeVariant.Light : ThemeVariant.Dark,
                 _ => null,
             };
-            if (variant is not null) app.RequestedThemeVariant = variant;
+            if (variant is not null) UnseenTransitions.During(null, () => app.RequestedThemeVariant = variant);
         }
         return IsDark ? ThemeVariant.Dark : ThemeVariant.Light;
     }

@@ -23,6 +23,8 @@ internal static class ThemeSweep
     /// <summary>Takes a picture of the window, runs <paramref name="apply"/> (the theme change) as soon as the picture is taken (a frame later, as the render thread draws it), then wipes the picture away from <paramref name="origin"/>, or closes it onto <paramref name="origin"/> when the window is now dark.</summary>
     public static void Run(Visual origin, Action apply)
     {
+        var change = apply;
+        apply = () => UnseenTransitions.During(origin, change);
         var top = OverlayHost.Top(origin);
         var layer = top is null ? null : OverlayHost.Layer(top);
         var size = top?.Bounds.Size ?? default;
