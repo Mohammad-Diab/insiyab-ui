@@ -87,7 +87,7 @@ public class OverlaysTests
         return new Rect(new Point(Math.Min(a.X, b.X), Math.Min(a.Y, b.Y)), new Point(Math.Max(a.X, b.X), Math.Max(a.Y, b.Y)));
     }
 
-    private static void Pump(TopLevel root, int milliseconds = 750)
+    internal static void Pump(TopLevel root, int milliseconds = 750)
     {
         var clock = System.Diagnostics.Stopwatch.StartNew();
         while (clock.ElapsedMilliseconds < milliseconds)
@@ -100,7 +100,7 @@ public class OverlaysTests
     }
 
     // A single-view TopLevel, as Android and iOS host an app: an EmbeddableControlRoot on a headless surface borrowed from a window that is never shown.
-    private static EmbeddableControlRoot SingleView(Control content, double width = 400, double height = 700, FlowDirection dir = FlowDirection.RightToLeft)
+    internal static EmbeddableControlRoot SingleView(Control content, double width = 400, double height = 700, FlowDirection dir = FlowDirection.RightToLeft)
     {
         var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         var donor = new Window();

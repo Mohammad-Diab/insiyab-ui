@@ -65,6 +65,7 @@ public static class NotifyPlay
             Row("الأساس", "IsEnd", "يعلق اللوحة من طرف الجرس الآخر، لجرس في آخر الشريط العلوي.", OptionKind.Property),
             Row("الأساس", "UnreadCount", "عدد غير المقروءة، تقرؤه ولا تكتبه. ويقرأ قارئ الشاشة مع اسم الجرس العدد كاملًا.", OptionKind.Property),
             Row("الأساس", "Read", "يُطلق حين يُعلم إشعار مقروءًا بنقرة، والصف في `Item`، و`All` إذا عُلمت كلها معًا.", OptionKind.Event),
+            Row("الأساس", "ShowTaskbarBadge", "يكتب عدد غير المقروءة على أيقونة التطبيق في شريط المهام (وفي Dock على ماك)، ويمحوه حين تُقرأ كلها.", OptionKind.Property),
         ],
         Disable = s => s.On("empty") ? ["unread", "style", "read"] : [],
         Axaml = s =>

@@ -62,6 +62,9 @@ public class Notify : ItemsControl
     public static readonly StyledProperty<bool> CloseOnItemClickProperty =
         AvaloniaProperty.Register<Notify, bool>(nameof(CloseOnItemClick));
 
+    public static readonly StyledProperty<bool> ShowTaskbarBadgeProperty =
+        AvaloniaProperty.Register<Notify, bool>(nameof(ShowTaskbarBadge));
+
     public static readonly DirectProperty<Notify, int> UnreadCountProperty =
         AvaloniaProperty.RegisterDirect<Notify, int>(nameof(UnreadCount), n => n.UnreadCount);
 
@@ -82,6 +85,10 @@ public class Notify : ItemsControl
     private int _held = -1;
     private bool _quiet;
     private string _countText = "0";
+    private string? _label;
+    private IDisposable? _badgeEntry;
+    private IDisposable? _labelEntry;
+    private (int Count, string Label)? _mirrored;
     private bool _ready;
     private Button? _bell;
     private Popup? _popup;
@@ -120,6 +127,9 @@ public class Notify : ItemsControl
 
     /// <summary>Closes the panel when a row is clicked.</summary>
     public bool CloseOnItemClick { get => GetValue(CloseOnItemClickProperty); set => SetValue(CloseOnItemClickProperty, value); }
+
+    /// <summary>Keeps the window's taskbar badge (the Dock on macOS) at the unread count, with the bell's spoken label.</summary>
+    public bool ShowTaskbarBadge { get => GetValue(ShowTaskbarBadgeProperty); set => SetValue(ShowTaskbarBadgeProperty, value); }
 
     public int UnreadCount { get => _unread; private set => SetAndRaise(UnreadCountProperty, ref _unread, value); }
 
@@ -205,12 +215,40 @@ public class Notify : ItemsControl
         base.OnPropertyChanged(change);
         if (change.Property == IsOpenProperty) PseudoClasses.Set(":open", change.GetNewValue<bool>());
         else if ((change.Property == FlowDirectionProperty || change.Property == IsEndProperty) && _popup is not null) PlacePopup();
+        else if (change.Property == ShowTaskbarBadgeProperty)
+        {
+            if (change.GetNewValue<bool>()) Mirror();
+            else Unmirror();
+        }
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
         PlacePopup();
+        Mirror();
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        Unmirror();
+    }
+
+    // The window's badge follows the unread count while this bell asks for it; the window's own value wins.
+    private void Mirror()
+    {
+        if (!ShowTaskbarBadge || TopLevel.GetTopLevel(this) is not { } top) return;
+        var now = (_unread, _label ?? Title);
+        if (_badgeEntry is not null && _mirrored == now) return;
+        _mirrored = now;
+        Taskbar.Mirror(top, now.Item1, now.Item2, ref _badgeEntry, ref _labelEntry);
+    }
+
+    private void Unmirror()
+    {
+        _mirrored = null;
+        Taskbar.Unmirror(ref _badgeEntry, ref _labelEntry);
     }
 
     // The panel hangs from the bell's leading edge, or the trailing one with IsEnd, and grows toward the other; Avalonia mirrors popup placement in RTL, so Left is the leading edge on either page.
@@ -287,10 +325,11 @@ public class Notify : ItemsControl
         CountText = n > 99 ? "99+" : n.ToString(System.Globalization.CultureInfo.InvariantCulture);
         PseudoClasses.Set(":unread", n > 0);
         PseudoClasses.Set(":empty", Items.Count == 0);
-        var label = n == 0 ? Title : FlowDirection == FlowDirection.RightToLeft
+        _label = n == 0 ? Title : FlowDirection == FlowDirection.RightToLeft
             ? Title + "، " + (n == 1 ? "إشعار واحد غير مقروء" : n == 2 ? "إشعاران غير مقروءين" : n + " غير مقروءة")
             : Title + ", " + n + " unread";
-        if (_bell is not null) AutomationProperties.SetName(_bell, label);
+        if (_bell is not null) AutomationProperties.SetName(_bell, _label);
+        Mirror();
         if (grew) Ring();
         return n;
     }

@@ -26,7 +26,7 @@ public static class GalleryPages
     public static readonly (string Group, string[] Slugs)[] Nav =
     [
         ("التخصيص", ["color", "tokens", "fonts", "window"]),
-        ("التخطيط", ["shell", "titlebar", "toolbar", "statusbar", "split"]),
+        ("التخطيط", ["shell", "titlebar", "toolbar", "statusbar", "taskbar", "split"]),
         ("المحتوى", ["typography", "surfaces", "tables", "description", "quote"]),
         ("النماذج", ["inputs", "checks", "input-group", "pickers", "chips", "matrix", "validation"]),
         ("المكونات", ["buttons", "accordion", "tabs", "stats", "loading", "progress", "countdown", "save", "tooltips", "alerts", "dialog", "drawer", "toasts", "notify", "badges", "list", "comments", "dropdown", "steps", "pagination", "page-head"]),
@@ -35,11 +35,11 @@ public static class GalleryPages
         ("الملحقات", ["carousel", "colorpicker", "reveal"]),
     ];
 
-    // Each link's icon, the web NAV's `icon`; tokens, fonts, window, titlebar, toolbar and statusbar are Avalonia's own and borrow one from the sprite.
+    // Each link's icon, the web NAV's `icon`; tokens, fonts, window, titlebar, toolbar, statusbar and taskbar are Avalonia's own and borrow one from the sprite.
     private static readonly Dictionary<string, string> Icons = new()
     {
         ["color"] = "IconPalette", ["tokens"] = "IconSliders", ["fonts"] = "IconType", ["window"] = "IconWindow",
-        ["shell"] = "IconLayout", ["titlebar"] = "IconWindow", ["toolbar"] = "IconWrench", ["statusbar"] = "IconInfo", ["split"] = "IconSidebar",
+        ["shell"] = "IconLayout", ["titlebar"] = "IconWindow", ["toolbar"] = "IconWrench", ["statusbar"] = "IconInfo", ["taskbar"] = "IconBell", ["split"] = "IconSidebar",
         ["typography"] = "IconType", ["surfaces"] = "IconLayers", ["tables"] = "IconTable", ["description"] = "IconList", ["quote"] = "IconMessage",
         ["inputs"] = "IconEdit", ["checks"] = "IconCheckSquare", ["input-group"] = "IconLink", ["pickers"] = "IconCalendar", ["chips"] = "IconTag", ["matrix"] = "IconGrid", ["validation"] = "IconShield",
         ["buttons"] = "IconPointer", ["accordion"] = "IconChevrons", ["tabs"] = "IconTabs", ["stats"] = "IconChart", ["loading"] = "IconLoader", ["progress"] = "IconGauge",
@@ -52,7 +52,7 @@ public static class GalleryPages
         ["carousel"] = "IconSlides", ["colorpicker"] = "IconDroplet", ["reveal"] = "IconSparkle",
     };
 
-    // Each page's English name, the web NAV's `en`; tokens, fonts, window, titlebar, toolbar and statusbar are Avalonia's own.
+    // Each page's English name, the web NAV's `en`; tokens, fonts, window, titlebar, toolbar, statusbar and taskbar are Avalonia's own.
     internal static readonly Dictionary<string, string> English = new()
     {
         ["index"] = "Introduction", ["start"] = "Quick start", ["javascript"] = "JavaScript", ["faq"] = "FAQ", ["color"] = "Color & branding", ["dark"] = "Dark mode",
@@ -70,13 +70,13 @@ public static class GalleryPages
         ["tpl-dashboard"] = "Dashboard template", ["tpl-tickets"] = "List page template", ["tpl-order"] = "Detail page template", ["tpl-settings"] = "Settings template",
         ["tpl-review"] = "Criteria review template", ["tpl-booking"] = "Timed multi-step form template", ["tpl-error"] = "Error page template", ["navbar"] = "Navbar",
         ["carousel"] = "Carousel", ["colorpicker"] = "Color picker", ["reveal"] = "Entrance motion & scroll reveal", ["tokens"] = "Design tokens", ["fonts"] = "Fonts",
-        ["window"] = "Window", ["titlebar"] = "Title bar", ["toolbar"] = "Toolbar", ["statusbar"] = "Status bar",
+        ["window"] = "Window", ["titlebar"] = "Title bar", ["toolbar"] = "Toolbar", ["statusbar"] = "Status bar", ["taskbar"] = "Taskbar badge",
     };
 
     // The pages the web NAV flags `fresh`.
     private static readonly HashSet<string> Fresh =
     [
-        "titlebar", "toolbar", "statusbar", "split", "tables", "description", "quote", "inputs", "pickers", "chips", "matrix", "stats", "countdown", "save", "notify", "badges", "comments", "steps",
+        "titlebar", "toolbar", "statusbar", "taskbar", "split", "tables", "description", "quote", "inputs", "pickers", "chips", "matrix", "stats", "countdown", "save", "notify", "badges", "comments", "steps",
         "birthdate", "charts", "month", "login-simple",
     ];
 

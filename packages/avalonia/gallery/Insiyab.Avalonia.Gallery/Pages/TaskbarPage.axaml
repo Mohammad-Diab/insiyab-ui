@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.TaskbarPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/FoundationFrames.axaml" />
+    <Style Selector="TextBlock.p">
+      <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+      <Setter Property="LineHeight" Value="25.9" />
+      <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+      <Setter Property="Margin" Value="0,0,0,12" />
+    </Style>
+  </UserControl.Styles>
+
+  <StackPanel>
+
+    <TextBlock Classes="p" Text="رقم صغير على أيقونة التطبيق في شريط المهام، كعدد الإشعارات التي لم تُقرأ، يراه المستخدم والنافذة في الخلفية أو مصغّرة." />
+
+    <TextBlock Classes="section" Text="جرّبها على هذه النافذة" />
+    <Border Classes="dx">
+      <StackPanel Spacing="16" HorizontalAlignment="Center">
+        <ins:Notify x:Name="Bell" ShowTaskbarBadge="True" HorizontalAlignment="Center">
+          <ins:NotifyItem Icon="{StaticResource IconDownload}" Title="اكتمل التصدير" Description="الملف جاهز للتنزيل." End="الآن" IsUnread="True" />
+          <ins:NotifyItem Icon="{StaticResource IconMessage}" Title="تعليق جديد على المستند" Description="على الفقرة الثانية." End="قبل ساعة" IsUnread="True" />
+          <ins:NotifyItem Icon="{StaticResource IconCheck}" Title="تم حفظ التغييرات" Description="حُفظت نسخة جديدة من الملف." End="أمس" IsUnread="True" />
+        </ins:Notify>
+        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+          <Button Classes="secondary sm" Content="إشعار جديد" Click="OnNew" />
+          <Button Classes="secondary sm" Content="مئة إشعار" Click="OnHundred" />
+        </StackPanel>
+      </StackPanel>
+    </Border>
+    <TextBlock Classes="p" Text="انظر إلى أيقونة المعرض في شريط المهام، وتُمحى الشارة حين تغادر الصفحة." />
+
+    <TextBlock Classes="section" Text="الاستخدام" />
+    <pg:PlayListing Code="&lt;Window ins:Taskbar.Badge=&quot;3&quot;&gt;" Margin="0,0,0,24" />
+    <pg:PlayListing Code="Taskbar.SetBadge(this, unread);" Margin="0,0,0,24" />
+    <pg:PlayListing Code="&lt;ins:Notify ShowTaskbarBadge=&quot;True&quot;&gt;" Margin="0,0,0,24" />
+
+    <TextBlock Classes="section" Text="ملاحظات" />
+    <ins:ProseList>
+      <pg:PlayText Classes="p" Margin="0" Markup="فوق 99 تكتب الشارة `99+`، والصفر يمحوها." />
+      <TextBlock Classes="p" Margin="0" Text="على ويندوز لكل نافذة شارتها على زرها، وإذا اجتمعت النوافذ في زر واحد ظهرت آخر شارة وُضعت. ولا تظهر إذا صغُرت أزرار شريط المهام أو أُطفئت الشارات من الإعدادات." />
+      <TextBlock Classes="p" Margin="0" Text="على ماك تظهر على أيقونة التطبيق في Dock، ولا تظهر على لينكس ولا في المتصفح ولا على الهاتف، ولا يتعطل شيء." />
+      <pg:PlayText Classes="p" Margin="0" Markup="يقرأ قارئ الشاشة العدد مع زر التطبيق، وتغيّر ما يقرؤه بـ `BadgeLabel`." />
+    </ins:ProseList>
+
+  </StackPanel>
+</UserControl>

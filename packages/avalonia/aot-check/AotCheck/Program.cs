@@ -47,6 +47,7 @@ internal sealed class App : Application
                 Content = new DockPanel { Children = { bar, new Border { Classes = { "panel" }, Margin = new Thickness(24), Child = form } } },
             };
             TitleBar.SetExtends(window, true);
+            Taskbar.SetBadge(window, 3);
             desktop.MainWindow = window;
             if (desktop.Args is { Length: > 0 } a && a[0] == "--smoke")
             {
