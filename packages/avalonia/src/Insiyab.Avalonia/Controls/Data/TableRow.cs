@@ -66,6 +66,28 @@ public class TableRow : TemplatedControl
         PseudoClasses.Set(":first", index == 0);
         PseudoClasses.Set(":last", index == count - 1);
         PseudoClasses.Set(":stripe", index % 2 == 1);
+        PlaceCells();
+    }
+
+    // The first and last cells shown, on the first and last rows the corners of the card.
+    internal void PlaceCells()
+    {
+        int first = -1, last = -1;
+        for (var i = 0; i < Cells.Count; i++)
+        {
+            if (!Cells[i].IsVisible) continue;
+            if (first < 0) first = i;
+            last = i;
+        }
+        bool top = Classes.Contains(":first"), bottom = Classes.Contains(":last");
+        for (var i = 0; i < Cells.Count; i++) Cells[i].SetPlace(top, bottom, i == first, i == last);
+    }
+
+    // The card's corner or the direction changed: the corner cells round again.
+    internal void RoundCells()
+    {
+        if (!Classes.Contains(":first") && !Classes.Contains(":last")) return;
+        foreach (var cell in Cells) cell.Round();
     }
 
     internal void Fill()
@@ -77,6 +99,7 @@ public class TableRow : TemplatedControl
             cell.Row = this;
             _panel.Children.Add(cell);
         }
+        PlaceCells();
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -86,6 +109,10 @@ public class TableRow : TemplatedControl
         {
             PseudoClasses.Set(":selected", IsSelected);
             Owner?.OnRowSelectionChanged(this);
+        }
+        else if (change.Property == FlowDirectionProperty)
+        {
+            RoundCells();
         }
     }
 }

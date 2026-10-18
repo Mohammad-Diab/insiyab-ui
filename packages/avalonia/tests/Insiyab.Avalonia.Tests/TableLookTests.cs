@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Headless.XUnit;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Insiyab.Avalonia.Controls;
@@ -42,6 +43,38 @@ public class TableLookTests
     }
 
     private static TableHeader Head(Table table, int i) => (TableHeader)Part<ColumnsPanel>(table, "PART_HeadCells").Children[i];
+
+    // The table on its own, in a panel, or in a flush panel body.
+    private static Control Framed(Table table, string where)
+    {
+        table.VerticalAlignment = VerticalAlignment.Top;
+        if (where == "bare") return table;
+        var body = new Border { Classes = { "panel-body" }, Child = table };
+        if (where == "flush") body.Classes.Add("flush");
+        return new Border { Classes = { "panel" }, Child = new DockPanel { Children = { body } } };
+    }
+
+    private static double CardCorner(string where) => where == "bare" ? 21 : where == "panel" ? 22 : 11;
+
+    // The cell's focus ring rounds one corner only, by r, and that corner sits in the card's corner on the given side of the screen.
+    private static void AssertCorner(TableCell cell, Table table, Window window, double r, bool top, bool left)
+    {
+        var focus = Part<Border>(cell, "PART_Focus");
+        var c = focus.CornerRadius;
+        double w = focus.Bounds.Width, h = focus.Bounds.Height;
+        var round = new[] { (c.TopLeft, new Point(0, 0)), (c.TopRight, new Point(w, 0)), (c.BottomRight, new Point(w, h)), (c.BottomLeft, new Point(0, h)) }
+            .Where(x => x.Item1 != 0).ToList();
+        Assert.True(round.Count == 1, $"{cell.Text}: corners {c}");
+        Assert.Equal(r, round[0].Item1);
+        var at = focus.TranslatePoint(round[0].Item2, window)!.Value;
+        var card = Part<Border>(table, "PART_Card");
+        var box = BoundsIn(card, window).Deflate(card.BorderThickness);
+        var want = new Point(left ? box.Left : box.Right, top ? box.Top : box.Bottom);
+        Assert.True(Math.Abs(at.X - want.X) <= 1 && Math.Abs(at.Y - want.Y) <= 1, $"{cell.Text}: the round corner is at {at}, the card's corner at {want}");
+    }
+
+    private static void AssertSquare(TableCell cell) =>
+        Assert.True(Part<Border>(cell, "PART_Focus").CornerRadius == new CornerRadius(0), $"{cell.Text}: corners {Part<Border>(cell, "PART_Focus").CornerRadius}");
 
     [AvaloniaTheory]
     [MemberData(nameof(Looks), MemberType = typeof(Ui))]
@@ -134,16 +167,9 @@ public class TableLookTests
     {
         var table = People();
         table.SelectionMode = TableSelectionMode.Single;
-        Control root = table;
-        if (where != "bare")
-        {
-            var body = new Border { Classes = { "panel-body" }, Child = table };
-            if (where == "flush") body.Classes.Add("flush");
-            root = new Border { Classes = { "panel" }, Child = new DockPanel { Children = { body } } };
-        }
-        var window = Show(root, Dir(dir), width: 760, height: 500);
+        var window = Show(Framed(table, where), Dir(dir), width: 760, height: 500);
         var card = Part<Border>(table, "PART_Card");
-        var r = where == "bare" ? 21 : where == "panel" ? 22 : 11;
+        var r = CardCorner(where);
         var rows = table.DisplayedRows;
         var box = BoundsIn(card, window);
 
@@ -165,5 +191,76 @@ public class TableLookTests
         Assert.True(bottom.Bottom <= box.Bottom - r + 0.5, $"the marker ends at {bottom.Bottom} in a card to {box.Bottom}");
         if (dir == "rtl") Assert.Equal(box.Right - card.BorderThickness.Right, bottom.Right, 1);
         else Assert.Equal(box.Left + card.BorderThickness.Left, bottom.Left, 1);
+    }
+
+    [AvaloniaTheory]
+    [InlineData("bare", "rtl")]
+    [InlineData("bare", "ltr")]
+    [InlineData("panel", "rtl")]
+    [InlineData("panel", "ltr")]
+    [InlineData("flush", "rtl")]
+    [InlineData("flush", "ltr")]
+    public void The_corner_cells_round_their_focus_ring_into_the_card_corners(string where, string dir)
+    {
+        var table = People();
+        table.Columns[2].Classes = "num";
+        var window = Show(Framed(table, where), Dir(dir), width: 760, height: 500);
+        var r = CardCorner(where);
+        var rows = table.DisplayedRows;
+        var rtl = dir == "rtl";
+
+        AssertCorner(rows[0].Cells[0], table, window, r, top: true, left: !rtl);
+        AssertCorner(rows[0].Cells[2], table, window, r, top: true, left: rtl);
+        AssertCorner(rows[2].Cells[0], table, window, r, top: false, left: !rtl);
+        AssertCorner(rows[2].Cells[2], table, window, r, top: false, left: rtl);
+        foreach (var cell in new[] { rows[0].Cells[1], rows[1].Cells[0], rows[1].Cells[1], rows[1].Cells[2], rows[2].Cells[1] }) AssertSquare(cell);
+
+        Assert.Contains(":first-row", rows[0].Cells[1].Classes);
+        Assert.Contains(":last-row", rows[2].Cells[1].Classes);
+        Assert.Contains(":first-column", rows[1].Cells[0].Classes);
+        Assert.Contains(":last-column", rows[1].Cells[2].Classes);
+        Assert.DoesNotContain(":first-row", rows[1].Cells[0].Classes);
+        Assert.DoesNotContain(":last-column", rows[1].Cells[1].Classes);
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void Hiding_the_last_column_or_sorting_moves_the_round_corners(string dir)
+    {
+        var table = People();
+        var window = Show(Framed(table, "bare"), Dir(dir), width: 760, height: 500);
+        var r = CardCorner("bare");
+        var rtl = dir == "rtl";
+        var laila = table.DisplayedRows[0];
+        var sara = table.DisplayedRows[2];
+
+        AssertCorner(laila.Cells[0], table, window, r, top: true, left: !rtl);
+        AssertCorner(sara.Cells[2], table, window, r, top: false, left: rtl);
+        table.Sort(table.Columns[0], SortDirection.Ascending);
+        Settle();
+        Assert.Same(sara, table.DisplayedRows[0]);
+        Assert.Same(laila, table.DisplayedRows[2]);
+        Assert.DoesNotContain(":last-row", sara.Cells[0].Classes);
+        AssertCorner(sara.Cells[0], table, window, r, top: true, left: !rtl);
+        AssertCorner(sara.Cells[2], table, window, r, top: true, left: rtl);
+        AssertCorner(laila.Cells[0], table, window, r, top: false, left: !rtl);
+        AssertSquare(table.DisplayedRows[1].Cells[0]);
+
+        foreach (var row in table.DisplayedRows) row.Cells[2].IsVisible = false;
+        Head(table, 2).IsVisible = false;
+        Settle();
+        var first = table.DisplayedRows[0];
+        AssertSquare(first.Cells[2]);
+        Assert.DoesNotContain(":last-column", first.Cells[2].Classes);
+        Assert.Contains(":last-column", first.Cells[1].Classes);
+        AssertCorner(first.Cells[1], table, window, r, top: true, left: rtl);
+        AssertCorner(laila.Cells[1], table, window, r, top: false, left: rtl);
+
+        foreach (var row in table.DisplayedRows) row.Cells[2].IsVisible = true;
+        Head(table, 2).IsVisible = true;
+        Settle();
+        AssertSquare(first.Cells[1]);
+        AssertCorner(first.Cells[2], table, window, r, top: true, left: rtl);
     }
 }

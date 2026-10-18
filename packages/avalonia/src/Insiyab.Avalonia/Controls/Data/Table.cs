@@ -196,6 +196,17 @@ public partial class Table : TemplatedControl
 
     internal Control? Guide => _guide;
 
+    /// <summary>The card's inner corner radius, which the corner cells' focus rings follow.</summary>
+    internal double CardCorner => _card is { } card ? Math.Max(0, card.CornerRadius.TopLeft - card.BorderThickness.Left) : 0;
+
+    // A panel or a flush body changes the card's corner: the corner cells follow it.
+    private void OnCardChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property != Border.CornerRadiusProperty && e.Property != Border.BorderThicknessProperty || _display.Count == 0) return;
+        _display[0].RoundCells();
+        _display[^1].RoundCells();
+    }
+
     // While a column is dragged wider, a line runs down the table at the edge being moved; null hides it.
     internal void ShowGuide(TableHeader? header)
     {
@@ -211,12 +222,20 @@ public partial class Table : TemplatedControl
     {
         base.OnApplyTemplate(e);
         if (_scroll is not null) _scroll.ScrollChanged -= OnScroll;
-        if (_card is not null) _card.SizeChanged -= OnCardSized;
+        if (_card is not null)
+        {
+            _card.SizeChanged -= OnCardSized;
+            _card.PropertyChanged -= OnCardChanged;
+        }
         if (_rows is TableRowsPanel oldRows) oldRows.Realized -= OnRealized;
         _scroll = e.NameScope.Find<ScrollViewer>("PART_Scroll");
         _head = e.NameScope.Find<Control>("PART_Head");
         _card = e.NameScope.Find<Border>("PART_Card");
-        if (_card is not null) _card.SizeChanged += OnCardSized;
+        if (_card is not null)
+        {
+            _card.SizeChanged += OnCardSized;
+            _card.PropertyChanged += OnCardChanged;
+        }
         _guide = e.NameScope.Find<Control>("PART_Guide");
         _markerLayer = e.NameScope.Find<Canvas>("PART_MarkerLayer");
         _headCells = e.NameScope.Find<ColumnsPanel>("PART_HeadCells");

@@ -8,12 +8,13 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>One cell of a <see cref="TableRow"/>: the web's <c>&lt;td&gt;</c>.</summary>
 [TemplatePart("PART_EditorHost", typeof(Panel))]
-[PseudoClasses(":editable", ":editing", ":pinned", ":pin-edge", ":pin-flip", ":check", ":current")]
+[PseudoClasses(":editable", ":editing", ":pinned", ":pin-edge", ":pin-flip", ":check", ":current", ":first-row", ":last-row", ":first-column", ":last-column")]
 public class TableCell : ContentControl
 {
     public static readonly StyledProperty<string?> SortValueProperty =
@@ -27,6 +28,7 @@ public class TableCell : ContentControl
     private object? _oldContent;
     private string? _oldValue;
     private TableColumn? _column;
+    private byte _corners;
 
     static TableCell()
     {
@@ -70,6 +72,41 @@ public class TableCell : ContentControl
 
     internal void SetCurrent(bool on) => PseudoClasses.Set(":current", on);
 
+    // The cell's place in the card: a corner cell rounds its focus ring's outer corner to the card's inner corner.
+    internal void SetPlace(bool firstRow, bool lastRow, bool firstColumn, bool lastColumn)
+    {
+        PseudoClasses.Set(":first-row", firstRow);
+        PseudoClasses.Set(":last-row", lastRow);
+        PseudoClasses.Set(":first-column", firstColumn);
+        PseudoClasses.Set(":last-column", lastColumn);
+        var corners = (byte)((firstRow && firstColumn ? 1 : 0) | (firstRow && lastColumn ? 2 : 0) | (lastRow && lastColumn ? 4 : 0) | (lastRow && firstColumn ? 8 : 0));
+        if (corners == _corners) return;
+        _corners = corners;
+        Round(FocusPart());
+    }
+
+    internal void Round()
+    {
+        if (_corners != 0) Round(FocusPart());
+    }
+
+    private Border? FocusPart() => this.GetVisualDescendants().OfType<Border>().FirstOrDefault(b => b.Name == "PART_Focus" && b.TemplatedParent == this);
+
+    // The corners go leading-top, trailing-top, trailing-bottom, leading-bottom; a cell drawn in the other direction from its row has its leading side on its right.
+    private void Round(Border? focus)
+    {
+        if (focus is null) return;
+        if (_corners == 0)
+        {
+            focus.ClearValue(Border.CornerRadiusProperty);
+            return;
+        }
+        var r = Row?.Owner?.CardCorner ?? 0;
+        double At(int bit) => (_corners & bit) != 0 ? r : 0;
+        var flip = Row is { } row && row.FlowDirection != FlowDirection;
+        focus.CornerRadius = flip ? new CornerRadius(At(2), At(1), At(8), At(4)) : new CornerRadius(At(1), At(2), At(4), At(8));
+    }
+
     internal void MarkCheck()
     {
         IsCheck = true;
@@ -99,6 +136,14 @@ public class TableCell : ContentControl
     {
         base.OnApplyTemplate(e);
         _editorHost = e.NameScope.Find<Panel>("PART_EditorHost");
+        if (_corners != 0) Round(e.NameScope.Find<Border>("PART_Focus"));
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == IsVisibleProperty) Row?.PlaceCells();
+        else if (change.Property == FlowDirectionProperty) Round();
     }
 
     /// <summary>Turns the cell into a field holding its value, or <paramref name="text"/> when given.</summary>
