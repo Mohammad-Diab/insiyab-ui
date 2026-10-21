@@ -13,6 +13,8 @@
 ولا قواعد تتجاوز `[dir=rtl]`. وخطوطها العربية واللاتينية مستضافة معها ومقسمة بـ
 `unicode-range`، فلا تحمل الصفحة العربية من الخط إلا حروفها.
 
+تجد كل مكوّناتها بأمثلتها في [صفحة العرض](https://mohammad-diab.github.io/insiyab-ui/demo/).
+
 أضف هذه الوسوم إلى صفحتك، دون أدوات بناء ولا إطار عمل:
 
 </div>
@@ -188,7 +190,8 @@ so does `Insiyab.theme()`, which has no switch for the circle to start from.
 
 ## What is in it
 
-Run `node serve.mjs` and open the demo — every component below has its own page
+The demo is online at <https://mohammad-diab.github.io/insiyab-ui/demo/> (or run
+`node serve.mjs` for a local copy) — every component below has its own page
 there, in Arabic, in both themes, with the markup of each example under it.
 
 | Group | Classes |
