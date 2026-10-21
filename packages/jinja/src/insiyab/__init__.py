@@ -17,7 +17,7 @@ import os
 import warnings
 from typing import Any, Optional
 
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 __all__ = ["register", "loader", "templates_dir", "static_dir", "init_app", "__version__"]
 
 _HERE = os.path.dirname(os.path.abspath(__file__))

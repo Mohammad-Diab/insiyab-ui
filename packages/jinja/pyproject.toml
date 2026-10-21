@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "insiyab"
-version = "0.6.0"
+version = "0.7.0"
 description = "Jinja macros for Insiyab, the RTL-first UI library, with its stylesheet, script and fonts."
 readme = "README.md"
 license = { text = "Apache-2.0" }

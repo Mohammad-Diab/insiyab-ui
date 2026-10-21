@@ -1,4 +1,4 @@
-/*! Insiyab UI v0.6.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · Apache-2.0 (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
+/*! Insiyab UI v0.7.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · Apache-2.0 (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
 /* ==========================================================================
    Insiyab · insiyab.js
    ==========================================================================
@@ -27,7 +27,7 @@
      written. It used to be typed here as well, and the two could drift; this file
      read on its own, unbuilt, reports 'dev'. */
   /* boot{ */
-  var VERSION = '0.6.0';
+  var VERSION = '0.7.0';
   var root = document.documentElement;
 
   var KEY_THEME = 'ins-theme';

@@ -31,7 +31,7 @@
 
 ---
 
-> **Status: 0.6.0.** The core is in place: the application shell, the layout,
+> **Status: 0.7.0.** The core is in place: the application shell, the layout,
 > type and utility layer, the components an application form or dashboard needs
 > (pickers, steps and confirmation included), and a motion layer across all of
 > them. The demo is a documentation site — one page per topic, in Arabic, inside
@@ -43,8 +43,8 @@
 > tree, the color picker, the carousel, charts and the month calendar.
 > Two wrappers cover the same classes: React components in
 > [packages/react](packages/react/README.md), and Jinja macros in
-> [packages/jinja](packages/jinja/README.md). See
-> [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
+> [packages/jinja](packages/jinja/README.md); they live in this repository and are
+> not published. See [IDEA.md](IDEA.md) for the plan and the reasoning behind every decision.
 >
 > This README is still English-first. The docs, demo and marketing lead in Arabic
 > by design — the demo site already does — and the rest is a writing job worth
@@ -52,7 +52,25 @@
 
 ## Getting started
 
-Copy what is in `dist/` into an `insiyab/` folder of its own, and reference the first two:
+The library is on npm as `insiyab`. Install it, or take the files from jsDelivr, or
+copy them by hand; the files are the same three either way.
+
+```sh
+npm install insiyab      # the files are in node_modules/insiyab/dist/
+```
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/insiyab@0.7.0/dist/insiyab.css">
+<script src="https://cdn.jsdelivr.net/npm/insiyab@0.7.0/dist/insiyab-boot.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/insiyab@0.7.0/dist/insiyab.js" defer></script>
+```
+
+From jsDelivr the fonts come along on their own: the stylesheet asks for `fonts/`
+beside it, and that is `dist/fonts/` in the same package. The plugins are under
+`dist/plugins/` at the same address.
+
+For a local copy, put what is in `dist/` into an `insiyab/` folder of its own, and
+reference the first two:
 
 ```
 your-project/
@@ -471,7 +489,7 @@ button. So a page whose script failed shows all of it rather than hiding it.
 The escape hatch, not the front door — prefer the attributes above.
 
 ```js
-Insiyab.version                       // '0.6.0', stamped from package.json by the build
+Insiyab.version                       // '0.7.0', stamped from package.json by the build
 Insiyab.theme(mode?)                  // 'dark' | 'light' | 'system'
 Insiyab.toggleTheme()
 Insiyab.brand(hex?)                   // derive and apply a brand color
@@ -1063,9 +1081,10 @@ view is `ins:month-view` ({ el, view }), and a press on the hours says
 
 ## React
 
-`@insiyab/react`, in [packages/react](packages/react/README.md), is a set of React
-components over the same classes and attributes: the CSS stays the source of truth,
-and the core script still does the behavior, loaded in `<head>` as on any page.
+`@insiyab/react`, in [packages/react](packages/react/README.md) and not published to
+npm, is a set of React components over the same classes and attributes: the CSS
+stays the source of truth, and the core script still does the behavior, loaded in
+`<head>` as on any page.
 
 ```jsx
 <Field label="التاريخ">
@@ -1081,9 +1100,9 @@ the result, once the core has built both, with the example itself.
 
 ## Jinja
 
-`insiyab` on PyPI, in [packages/jinja](packages/jinja/README.md), is a set of Jinja
-macros that write the markup this README shows, with the library's files in the
-package and one call to set it up: `insiyab.init_app(app)` for Flask, or
+The `insiyab` Python package, in [packages/jinja](packages/jinja/README.md) and not
+published to PyPI, is a set of Jinja macros that write the markup this README
+shows, with the library's files in the package and one call to set it up: `insiyab.init_app(app)` for Flask, or
 `insiyab.register(env)` for any Jinja2 environment.
 
 ```jinja

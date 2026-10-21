@@ -9,8 +9,12 @@ picker, the tabs' arrow keys, the menus, the dialogs, the plugins. A component
 renders the markup the docs show and keeps React's state in step with what the core
 does to it.
 
+The core is on npm; this package is not published. Build it in this folder (see
+[Building](#building)) and add it to your app by path:
+
 ```sh
-npm install insiyab @insiyab/react
+npm install insiyab
+npm install path/to/insiyab-ui/packages/react
 ```
 
 React 18 or later; the tests run on React 19. Written in TypeScript; the types ship

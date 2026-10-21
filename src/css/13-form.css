@@ -85,6 +85,10 @@
 }
 .ins-input::placeholder,
 .ins-textarea::placeholder { color: var(--ins-text-3); }
+/* A one-line field lays typed text out in its own direction from the page's start edge, so the caret meets the end of Latin text in an Arabic page. */
+:where(input.ins-input:is(:not([type]), [type="text"], [type="search"], [type="email"], [type="password"], [type="url"]):not([dir], [data-ins-date], [data-ins-time])) { unicode-bidi: plaintext; }
+:where(input.ins-input:is(:not([type]), [type="text"], [type="search"], [type="email"], [type="password"], [type="url"]):not([dir], [data-ins-date], [data-ins-time]):dir(rtl)) { text-align: right; }
+:where(input.ins-input:is(:not([type]), [type="text"], [type="search"], [type="email"], [type="password"], [type="url"]):not([dir], [data-ins-date], [data-ins-time]):dir(ltr)) { text-align: left; }
 
 .ins-input:focus,
 .ins-select:focus,

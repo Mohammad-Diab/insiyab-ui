@@ -1,4 +1,4 @@
-/*! Insiyab UI v0.6.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · Apache-2.0 (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
+/*! Insiyab UI v0.7.0 · https://github.com/Mohammad-Diab/insiyab-ui#readme · Apache-2.0 (fonts: OFL 1.1, see fonts/LICENSE-*.txt) */
 // Insiyab · Birth date plugin: day, month and year typed or picked from three columns; the form still sends an ISO date.
 (function (window, document) {
   'use strict';

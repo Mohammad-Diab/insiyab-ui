@@ -8,9 +8,12 @@ in the package. Each macro writes the markup the library's docs show, and
 `insiyab.js` does the behavior, so a server-rendered page is an Insiyab page like
 any other.
 
+It is not published to PyPI. Build the wheel from this repository (see
+[Building](#building)) and install that:
+
 ```sh
-pip install insiyab            # Jinja2 3.0 or later, Python 3.8 or later
-pip install "insiyab[flask]"   # and Flask
+pip install wheelhouse/insiyab-*.whl   # Jinja2 3.0 or later, Python 3.8 or later
+pip install "Flask>=2.2"               # for init_app()
 ```
 
 ## Setting it up

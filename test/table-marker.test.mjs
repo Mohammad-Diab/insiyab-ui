@@ -59,6 +59,33 @@ ok('the far edge reaches the new row first, near a third of the way', !!reached 
 ok('then the near edge follows to the new marker', flying.some((s) => Math.abs(s.top - r.z.top) < 2), JSON.stringify(flying[flying.length - 1]));
 ok('it lands and hands back the real marker', !r.left && !r.moving);
 
+// On the first and last rows the marker's outer end stays inside the card's rounded corner, bare and in a panel, in both directions.
+const corners = () => E(`(() => {
+  const rows = (sel) => [0, 1, 2].map((i) => '<tr' + (i === sel ? ' aria-selected="true"' : '') + '><td>اسم</td><td>دمشق</td></tr>').join('');
+  const table = (sel) => '<div class="ins-table-wrap"><table class="ins-table"><thead><tr><th>أ</th><th>ب</th></tr></thead><tbody>' + rows(sel) + '</tbody></table></div>';
+  const box = document.createElement('div');
+  box.innerHTML = table(0) + table(2) + '<div class="ins-panel"><div class="ins-panel-body">' + table(0) + table(2) + '</div></div>';
+  document.querySelector('.site-body').prepend(box);
+  const rtl = document.documentElement.getAttribute('dir') === 'rtl';
+  const out = [];
+  box.querySelectorAll('tr[aria-selected="true"]').forEach((tr) => {
+    const td = tr.cells[0], cs = getComputedStyle(td), m = getComputedStyle(td, '::before');
+    const first = tr === tr.parentNode.rows[0];
+    const r = parseFloat(cs[(first ? 'borderTop' : 'borderBottom') + (rtl ? 'Right' : 'Left') + 'Radius']);
+    const side = parseFloat(cs[rtl ? 'borderRightWidth' : 'borderLeftWidth']);
+    const end = parseFloat(first ? m.top : m.bottom);
+    const d = r - end, curve = d > 0 ? r - Math.sqrt(r * r - d * d) : 0;
+    out.push({ where: (td.closest('.ins-panel') ? 'panel' : 'bare') + ' ' + (first ? 'first' : 'last'), r, end, curve: +curve.toFixed(2), side });
+  });
+  box.remove();
+  return out;
+})()`);
+for (const dir of ['rtl', 'ltr']) {
+  await b.goto(`${BASE}/demo/tables.html?theme=light&dir=${dir}`);
+  await new Promise((r) => setTimeout(r, 600));
+  for (const c of await corners()) ok(`${dir} ${c.where} row: the marker's end clears the card's corner`, c.r > 0 && c.curve <= c.side + .5, JSON.stringify(c));
+}
+
 await b.goto(`${BASE}/demo/tables.html?theme=light&fx=off`);
 await new Promise((r) => setTimeout(r, 600));
 r = await fly();
