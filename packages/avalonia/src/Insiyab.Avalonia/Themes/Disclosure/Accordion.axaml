@@ -41,7 +41,7 @@
                         Width="13" Height="8"
                         Stroke="{DynamicResource InsText3}" StrokeThickness="2"
                         StrokeJoin="Miter"
-                        VerticalAlignment="Center"
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                         RenderTransformOrigin="50%,50%"
                         RenderTransform="translateY(-1px)" />
                 </Grid>
@@ -84,6 +84,21 @@
         </Style>
       </ControlTheme>
 
+      <!-- A flush head: no padding or hover face, the chevron on the first line, so a list row can be the head -->
+      <ControlTheme x:Key="InsCollapseSummaryFlush" TargetType="ToggleButton" BasedOn="{StaticResource InsCollapseSummary}">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+        <Style Selector="^ /template/ Path#PART_Chevron">
+          <Setter Property="Margin" Value="0,8,0,0" />
+        </Style>
+        <Style Selector="^:pointerover /template/ :is(Border)#PART_Face">
+          <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="^:checked">
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        </Style>
+      </ControlTheme>
+
       <ControlTheme x:Key="{x:Type Expander}" TargetType="Expander">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Background" Value="Transparent" />
@@ -111,11 +126,7 @@
                               Content="{TemplateBinding Header}"
                               ContentTemplate="{TemplateBinding HeaderTemplate}"
                               IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}" />
-                <ins:ExpandPresenter Name="PART_Expand"
-                                     IsOpen="{TemplateBinding IsExpanded}"
-                                     OpenDuration="{DynamicResource InsTEnter}"
-                                     CloseDuration="{DynamicResource InsTExit}"
-                                     Easing="{DynamicResource InsEase}">
+                <ins:Fold Name="PART_Expand" IsOpen="{TemplateBinding IsExpanded}">
                   <ins:TemplateBorder Name="ExpanderContent" Padding="{TemplateBinding Padding}">
                     <ContentPresenter Name="PART_ContentPresenter"
                                       Content="{TemplateBinding Content}"
@@ -123,11 +134,17 @@
                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
                   </ins:TemplateBorder>
-                </ins:ExpandPresenter>
+                </ins:Fold>
               </DockPanel>
             </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
+        <Style Selector="^.flush">
+          <Setter Property="Padding" Value="0" />
+          <Style Selector="^ /template/ ToggleButton#ExpanderHeader">
+            <Setter Property="Theme" Value="{StaticResource InsCollapseSummaryFlush}" />
+          </Style>
+        </Style>
       </ControlTheme>
 
       <ControlTheme x:Key="InsLookAccordion" TargetType="StackPanel" ins:ClassTheme.For="accordion">
@@ -135,6 +152,8 @@
           <Setter Property="ins:CollapseLook.Keys" Value="True" />
         </Style>
       </ControlTheme>
+
+      <StreamGeometry x:Key="InsFoldChevron">M6 9l6 6 6-6</StreamGeometry>
 
     </ResourceDictionary>
   </Styles.Resources>
@@ -166,6 +185,23 @@
   </Style>
   <Style Selector="Border.panel > StackPanel.accordion > Expander:nth-child(1):nth-last-child(1):not(:expanded), Border.panel > Expander:not(:expanded)">
     <Setter Property="CornerRadius" Value="21" />
+  </Style>
+
+  <!-- The fold chevron: points down, turns over while the icon also carries open; still windows turn it at once -->
+  <Style Selector="ins|Icon.fold">
+    <Setter Property="Data" Value="{StaticResource InsFoldChevron}" />
+    <Setter Property="RenderTransform" Value="none" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ins|Icon.fold.open">
+    <Setter Property="RenderTransform" Value="rotate(180deg)" />
+  </Style>
+  <Style Selector="ins|Icon.fold[(ins|ClassTheme.Still)=True]">
+    <Setter Property="Transitions" Value="{x:Null}" />
   </Style>
 
 </Styles>

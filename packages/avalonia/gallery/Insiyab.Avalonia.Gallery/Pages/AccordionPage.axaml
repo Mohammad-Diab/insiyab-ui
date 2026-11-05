@@ -18,6 +18,10 @@
     <pg:PlayText Classes="p" Markup="ويصلح `Expander` وحده أيضًا، خارج الأكورديون." />
     <pg:Playground Def="{x:Static pg:AccordionPlay.Collapse}" />
 
+    <TextBlock Classes="section" Text="الطي" />
+    <pg:PlayText Classes="p" Markup="يحمل `ins:Fold` أي محتوى، فيطول وينطوي بالحركة نفسها التي ينفتح بها `Expander`. واربط به سهمًا `ins:Icon` بالكلاس `fold` يدور معه." />
+    <pg:Playground Def="{x:Static pg:AccordionPlay.Fold}" />
+
     <TextBlock Classes="section" Text="الخيارات" />
     <pg:PlayText Classes="p" Markup="كل ما في الأكورديون من عناصر وكلاسات وخصائص، لكل مكون صندوق يفتح بالنقر." />
     <pg:OptionsList Defs="{x:Static pg:AccordionPlay.All}" />

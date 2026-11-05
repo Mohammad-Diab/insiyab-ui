@@ -417,7 +417,7 @@ public class DisclosureTests
         var (panel, _, sections) = Accordion();
         Show(panel);
         var section = sections[1];
-        var expand = Part<ExpandPresenter>(section, "PART_Expand");
+        var expand = Part<Fold>(section, "PART_Expand");
         var content = Part<Border>(section, "ExpanderContent");
         section.IsExpanded = true;
         Settle(60);

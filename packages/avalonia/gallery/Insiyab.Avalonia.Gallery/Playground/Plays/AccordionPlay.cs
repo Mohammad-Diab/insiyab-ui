@@ -54,6 +54,7 @@ public static class AccordionPlay
         [
             Text("title", "العنوان", "خيارات متقدمة"),
             Switch("open", "مفتوح", "IsExpanded=\"True\"", "يبدأ القسم مفتوحًا.", OptionKind.Property),
+            Switch("flush", "رأس بلا حشو", "flush", "على `Expander`: رأس بلا حشو ولا خلفية تحت المؤشر، وسهمه عند أول سطر منه، ومحتوى بلا حشو، فيصلح صف قائمة رأسًا له."),
         ],
         Extra =
         [
@@ -61,8 +62,40 @@ public static class AccordionPlay
             Row("الأساس", "Header", "عنوان القسم، وبالنقر عليه ينفتح وينغلق.", OptionKind.Property, true),
             Row("الأساس", "Content", "محتوى القسم، نصًا كان أو عنصرًا.", OptionKind.Property, true),
         ],
-        Axaml = s => $"<Expander Header=\"{s["title"]}\" Content=\"محتوى إضافي.\"{(s.On("open") ? " IsExpanded=\"True\"" : "")} />",
+        Axaml = s => $"<Expander{(s.On("flush") ? " Classes=\"flush\"" : "")} Header=\"{s["title"]}\" Content=\"محتوى إضافي.\"{(s.On("open") ? " IsExpanded=\"True\"" : "")} />",
     };
 
-    public static PlayDef[] All { get; } = [Accordion, Collapse];
+    public static PlayDef Fold { get; } = new()
+    {
+        Id = "fold",
+        Title = "الطي",
+        Wide = _ => true,
+        WideMax = 560,
+        Controls =
+        [
+            Switch("chevron", "سهم يدور", "fold", "على `ins:Icon`: سهم يشير إلى الأسفل ويدور إلى الأعلى إذا حمل الكلاس `open`، فاربط `Classes.open` بحالة الطي. ولا يدور بحركة إذا خُففت المؤثرات.", on: true),
+            Switch("still", "بلا تلاشٍ", "Fade=\"False\"", "يطول ويقصر دون أن يتلاشى ما فيه.", OptionKind.Property),
+        ],
+        Extra =
+        [
+            Row("الأساس", "ins:Fold", "يحمل عنصرًا واحدًا، يطول من لا شيء إذا صار `IsOpen` صحيحًا ويقصر حتى يختفي، فيتجاوزه تباعد اللوح الذي هو فيه. ولا يقص ما فيه إلا وهو يتحرك، ولا يتحرك قبل أول عرض ولا عند تبدل `DataContext` ولا إذا خُففت المؤثرات.", OptionKind.Element, true),
+            Row("الأساس", "IsOpen", "مفتوح أو مطوي.", OptionKind.Property, true),
+            Row("خيارات أخرى", "Bleed", "مسافة تبقى ظاهرة على الجانبين وفوق المحتوى وهو يتحرك، فلا تُقص ظلال ما فيه ولا حلقات التركيز، ويُقص أسفله وحده.", OptionKind.Property),
+            Row("خيارات أخرى", "EasesHeight", "إذا تغير طول ما فيه وهو مفتوح انساب إلى طوله الجديد.", OptionKind.Property),
+            Row("خيارات أخرى", "EaseNext()", "ينساب التغير التالي وحده في طول ما فيه.", OptionKind.Property),
+        ],
+        Axaml = s =>
+        {
+            var button = s.On("chevron")
+                ? "  <ToggleButton x:Name=\"more\">\n    <StackPanel Orientation=\"Horizontal\" Spacing=\"6\">\n      <TextBlock Text=\"التفاصيل\" />\n      <ins:Icon Classes=\"fold\" Classes.open=\"{Binding #more.IsChecked}\" />\n    </StackPanel>\n  </ToggleButton>"
+                : "  <ToggleButton x:Name=\"more\" Content=\"التفاصيل\" />";
+            return "<StackPanel Spacing=\"8\">\n" + button + "\n" +
+                "  <ins:Fold IsOpen=\"{Binding #more.IsChecked}\"" + (s.On("still") ? " Fade=\"False\"" : "") + ">\n" +
+                "    <TextBlock TextWrapping=\"Wrap\" Text=\"يظهر هذا النص وهو ينساب من تحت الزر، ويختفي حين تنقره ثانية.\" />\n" +
+                "  </ins:Fold>\n</StackPanel>";
+        },
+        Notes = _ => ["انقر الزر فينفتح ما تحته وينطوي."],
+    };
+
+    public static PlayDef[] All { get; } = [Accordion, Collapse, Fold];
 }
