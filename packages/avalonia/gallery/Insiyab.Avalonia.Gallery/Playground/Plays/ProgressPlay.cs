@@ -33,6 +33,7 @@ public static class ProgressPlay
             Switch("indet", "مدة غير معروفة", "IsIndeterminate=\"True\"", "لعمل جارٍ لا تُعرف نسبته: يسري في الشريط بريق بدل القيمة.", OptionKind.Property),
             Text("value", "القيمة", "64"),
             Switch("live", "تحديث القيمة"),
+            Switch("grow", "يمتلئ حين يظهر", "grow", "يبدأ الشريط فارغًا ثم ينساب إلى قيمته الأولى حين يظهر، لشريط في تفاصيل تنفتح أو في أسفل الصفحة. وفي نافذة بلا مؤثرات يظهر بقيمته مباشرة."),
         ],
         Extra =
         [
@@ -41,10 +42,10 @@ public static class ProgressPlay
             Row("الأساس", "Maximum", "القيمة عند الامتلاء، وهي `100` إن لم تذكرها.", OptionKind.Property),
             Row("الأساس", "AutomationProperties.Name", "اسم الشريط، يقرؤه قارئ الشاشة مع قيمته.", OptionKind.Property),
         ],
-        Disable = s => s.On("indet") ? ["value", "live"] : [],
+        Disable = s => s.On("indet") ? ["value", "live", "grow"] : [],
         Axaml = s =>
         {
-            var cls = Classes(s["tone"], s["size"]);
+            var cls = Classes(s["tone"], s["size"], s.On("grow") && !s.On("indet") ? "grow" : null);
             if (s.On("indet")) return $"<ProgressBar{cls} IsIndeterminate=\"True\" AutomationProperties.Name=\"جارٍ التحميل\" />";
             if (!s.On("live")) return $"<ProgressBar{cls} Value=\"{s["value"]}\" AutomationProperties.Name=\"التقدم\" />";
             return "<DockPanel>\n" +
@@ -55,7 +56,8 @@ public static class ProgressPlay
         Notes = s =>
         {
             if (s.On("indet")) return ["لا قيمة للشريط، فهو يدل على عمل جارٍ لا تُعرف نسبته."];
-            return s.On("live") ? ["اضغط الزر، فتزيد القيمة وينساب الشريط إليها. ويكفي لذلك في الشيفرة `UploadBar.Value += 10`."] : [];
+            if (s.On("live")) return ["اضغط الزر، فتزيد القيمة وينساب الشريط إليها. ويكفي لذلك في الشيفرة `UploadBar.Value += 10`."];
+            return s.On("grow") ? ["امتلأ الشريط من الصفر حين ظهر. غيّر أي خيار لتراه مرة أخرى."] : [];
         },
         Stage = (view, s, _) =>
         {
