@@ -1,3 +1,5 @@
+using Avalonia.Controls;
+using Avalonia.LogicalTree;
 using static Insiyab.Avalonia.Gallery.Playground.Play;
 
 namespace Insiyab.Avalonia.Gallery.Playground;
@@ -75,6 +77,9 @@ public static class TypographyPlay
             Switch("code", "شيفرة", "Border.pre", "كتلة شيفرة تبدأ من اليسار في الاتجاهين.", OptionKind.Element),
             Switch("table", "جدول", "Grid.table", "جدول بسيط بخطوط وحسب، للجدول الذي يأتي في وسط المقال، خلاياه `Border.th` و`Border.td`. أما جدول البيانات فهو `DataGrid`.", OptionKind.Element),
             Switch("dl", "قائمة وصف", "TextBlock.dt, TextBlock.dd", "تسمية عريضة وقيمتها تحتها بلون أهدأ."),
+            Switch("selectable", "نص يُحدَّد", "SelectableTextBlock", "فقرة يحددها القارئ وينسخها، بمظهر الفقرة نفسه.", OptionKind.Element),
+            Switch("turned", "فقرة إنجليزية", "FlowDirection=\"LeftToRight\"", "على الفقرة: تُقرأ باتجاهها، فتأخذ خط اتجاهها وتباعد سطورها، أيًّا كان اتجاه الصفحة.", OptionKind.Property),
+            Switch("markers", "علامات مكتوبة", "ins:ProseList.Marker", "على بند القائمة: علامته كما كُتبت، مثل «٣)» أو «(iv)»، بدل النقطة أو الرقم، وتتسع المسافة قبل البنود لأعرض علامة.", OptionKind.Property),
         ],
         Extra =
         [
@@ -87,22 +92,26 @@ public static class TypographyPlay
             Row("في النص", "Run.mark", "تظليل بلون الهوية الخفيف."),
             Row("في النص", "Run.code", "شيفرة قصيرة في السطر. اعزلها بين `U+2066` و`U+2069` فلا تنقلب في الجملة العربية."),
             Row("في النص", "Separator", "خط فاصل بين قسمين، وحوله مسافة أوسع.", OptionKind.Element),
+            Row("من البيانات", "ItemsControl.prose", "نص يأتي من البيانات: يضع مظهر النص الطويل على `ItemsControl` نفسه، ويرص عناصره في `ins:Prose`، فتأخذ فقراته مقاسه وتباعده وحد سطره.", OptionKind.Class),
         ],
+        Disable = s => s.On("list") ? [] : ["markers"],
         Axaml = s =>
         {
             var lines = new List<string>
             {
                 "<ins:Prose>",
                 "  <TextBlock Classes=\"h2\" Text=\"عنوان\" />",
-                "  <TextBlock>",
+                s.On("selectable") ? "  <SelectableTextBlock>" : "  <TextBlock>",
                 "    <Run Text=\"فقرة فيها \" /><Run Classes=\"strong\" Text=\"نص عريض\" /><Run Text=\" و\" /><Run Classes=\"em\" Text=\"توكيد\" /><Run Text=\" و\" /><Run Classes=\"mark\" Text=\"تظليل\" /><Run Text=\" و\" /><Run Classes=\"code\" Text=\"&#x2066;&#x202F;code&#x202F;&#x2069;\" /><Run Text=\" و\" /><Run Classes=\"a\" Text=\"رابط\" /><Run Text=\".\" />",
-                "  </TextBlock>",
+                s.On("selectable") ? "  </SelectableTextBlock>" : "  </TextBlock>",
             };
+            if (s.On("turned"))
+                lines.Add($"  <{(s.On("selectable") ? "SelectableTextBlock" : "TextBlock")} FlowDirection=\"LeftToRight\" Text=\"A paragraph in English reads in its own face and line height, whichever way the page runs.\" />");
             if (s.On("list"))
                 lines.AddRange([
                     "  <ins:ProseList IsOrdered=\"True\">",
-                    "    <TextBlock Text=\"البند الأول\" />",
-                    "    <StackPanel>",
+                    s.On("markers") ? "    <TextBlock ins:ProseList.Marker=\"٣)\" Text=\"البند الأول\" />" : "    <TextBlock Text=\"البند الأول\" />",
+                    s.On("markers") ? "    <StackPanel ins:ProseList.Marker=\"(iv)\">" : "    <StackPanel>",
                     "      <TextBlock Text=\"البند الثاني\" />",
                     "      <ins:ProseList>",
                     "        <TextBlock Text=\"بند متداخل\" />",
@@ -128,6 +137,45 @@ public static class TypographyPlay
             return string.Join("\n", lines);
         },
     };
+
+    public const string DataExample =
+        """
+        <ItemsControl Classes="prose" ItemsSource="{Binding}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <SelectableTextBlock Text="{Binding}" ins:TextDirection.IsAuto="True" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        """;
+
+    public static Action<Control> DataStage { get; } = view =>
+    {
+        var list = view.GetLogicalDescendants().OfType<ItemsControl>().First();
+        list.DataContext = new[]
+        {
+            "هذه فقرة جاءت من البيانات، فأخذت مقاس النص الطويل وتباعد سطوره من الكلاس على القائمة نفسها.",
+            "This one is English: it lays itself out left to right in its own face, though the page reads right to left.",
+            "وتعود الفقرة التالية إلى العربية، وكل فقرة يمكن تحديدها ونسخها.",
+        };
+    };
+
+    public const string TrailExample =
+        """
+        <Border Classes="tile" Padding="14,12" Width="320" HorizontalAlignment="Left">
+          <StackPanel Spacing="10">
+            <ins:TrailingRow>
+              <TextBlock FontWeight="Bold" Text="عنوان طويل جدًا لا يتسع له السطر كله" TextTrimming="CharacterEllipsis" MaxLines="1" VerticalAlignment="Center" />
+              <ins:Pill Classes="ok sm" Content="جديد" VerticalAlignment="Center" />
+            </ins:TrailingRow>
+            <ins:TrailingRow>
+              <TextBlock FontWeight="Bold" Text="عنوان قصير" TextTrimming="CharacterEllipsis" MaxLines="1" VerticalAlignment="Center" />
+              <ins:Pill Classes="ok sm" Content="جديد" VerticalAlignment="Center" />
+            </ins:TrailingRow>
+            <TextBlock Text="quarterly-report-final-version.pdf" ins:TextDirection.IsAuto="True" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis" MaxLines="1" />
+          </StackPanel>
+        </Border>
+        """;
 
     public static PlayDef Divider { get; } = new()
     {

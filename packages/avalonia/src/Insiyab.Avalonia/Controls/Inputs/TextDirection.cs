@@ -10,11 +10,51 @@ using Avalonia.Media;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The web's <c>dir="auto"</c>: a text takes the direction of its first letter (digits are not letters), right to left for Arabic or Hebrew, left to right for any other, and the direction around it when it has none.</summary>
-internal sealed class TextDirection : IValueConverter
+/// <summary>The web's <c>dir="auto"</c>: a text takes the direction of its first letter (digits are not letters), right to left for Arabic or Hebrew, left to right for any other, and the direction around it when it has none. Bind a FlowDirection to a text through <see cref="Auto"/>, or set <see cref="IsAutoProperty"/> on a TextBlock; give the block <c>HorizontalAlignment="Left"</c> so it stays at its row's start edge.</summary>
+public sealed class TextDirection : IValueConverter
 {
-    /// <summary>The shared instance, for <c>{x:Static}</c>.</summary>
-    public static readonly TextDirection Auto = new();
+    /// <summary>On a TextBlock (or SelectableTextBlock): its FlowDirection follows its own Text, so a cut text ends with «…» on its own end; a FlowDirection set on the block itself wins.</summary>
+    public static readonly AttachedProperty<bool> IsAutoProperty =
+        AvaloniaProperty.RegisterAttached<TextBlock, bool>("IsAuto", typeof(TextDirection));
+
+    private static readonly ConditionalWeakTable<TextBlock, IDisposable> s_followed = new();
+
+    static TextDirection()
+    {
+        IsAutoProperty.Changed.AddClassHandler<TextBlock>((block, e) =>
+        {
+            block.PropertyChanged -= OnBlockChanged;
+            if (e.GetNewValue<bool>()) block.PropertyChanged += OnBlockChanged;
+            FollowText(block);
+        });
+    }
+
+    private TextDirection()
+    {
+    }
+
+    /// <summary>The shared converter, for <c>{x:Static ins:TextDirection.Auto}</c>; a text with no letter leaves the direction as it was.</summary>
+    public static TextDirection Auto { get; } = new();
+
+    public static bool GetIsAuto(TextBlock block) => block.GetValue(IsAutoProperty);
+    public static void SetIsAuto(TextBlock block, bool value) => block.SetValue(IsAutoProperty, value);
+
+    private static void OnBlockChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == TextBlock.TextProperty && sender is TextBlock block) FollowText(block);
+    }
+
+    // Set below a local value, so the block's own FlowDirection wins, and taken back when the text has no letter.
+    private static void FollowText(TextBlock block)
+    {
+        if (s_followed.TryGetValue(block, out var held))
+        {
+            held.Dispose();
+            s_followed.Remove(block);
+        }
+        if (!GetIsAuto(block) || Of(block.Text) is not { } direction) return;
+        if (block.SetValue(Visual.FlowDirectionProperty, direction, BindingPriority.Style) is { } entry) s_followed.Add(block, entry);
+    }
 
     /// <summary>The direction of <paramref name="text"/>'s first letter, or null when it has none.</summary>
     public static FlowDirection? Of(string? text)

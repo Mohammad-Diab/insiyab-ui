@@ -125,11 +125,21 @@
     <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
     <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
   </Style>
-  <Style Selector="ctl|Prose TextBlock, ctl|Prose ctl|TemplateText">
+  <!-- Data-bound text: an ItemsControl's items have it, not its panel, as their parent, so the look sits on the ItemsControl, which stacks them in a Prose; the Prose gives each paragraph its line (Prose.cs) -->
+  <Style Selector="ItemsControl.prose">
+    <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsLg}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="ItemsPanel">
+      <ItemsPanelTemplate>
+        <ctl:Prose />
+      </ItemsPanelTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="ctl|Prose TextBlock, ctl|Prose SelectableTextBlock, ctl|Prose ctl|TemplateText">
     <Setter Property="LineHeight" Value="28.8" />
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
-  <Style Selector="ctl|Prose[FlowDirection=LeftToRight] TextBlock, ctl|Prose[FlowDirection=LeftToRight] ctl|TemplateText">
+  <Style Selector="ctl|Prose[FlowDirection=LeftToRight] TextBlock, ctl|Prose[FlowDirection=LeftToRight] SelectableTextBlock, ctl|Prose[FlowDirection=LeftToRight] ctl|TemplateText">
     <Setter Property="LineHeight" Value="26.4" />
   </Style>
   <!-- Prose spaces a rule itself, 2em each side -->

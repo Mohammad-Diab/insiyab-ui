@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Shapes;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -8,7 +9,7 @@ using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>A list in long-form text, the web's <c>ul</c> and <c>ol</c> inside <c>.ins-prose</c>: each child is one item, with a disc, a ring for a nested list, or its number, in <see cref="MarkerBrush"/>.</summary>
+/// <summary>A list in long-form text, the web's <c>ul</c> and <c>ol</c> inside <c>.ins-prose</c>: each child is one item, with a disc, a ring for a nested list, its number, or the text of its own <see cref="MarkerProperty"/>, in <see cref="MarkerBrush"/>. As an ItemsControl's panel, the marker is read from each item's template root.</summary>
 public class ProseList : Panel
 {
     /// <summary>True numbers the items (<c>ol</c>); false marks them with a disc (<c>ul</c>).</summary>
@@ -29,12 +30,26 @@ public class ProseList : Panel
     public static readonly StyledProperty<double> FontSizeProperty =
         TextElement.FontSizeProperty.AddOwner<ProseList>();
 
+    /// <summary>On an item: its marker as written, such as «٣)» or «(iv)», in place of the disc or the number; the inset widens to the widest marker.</summary>
+    public static readonly AttachedProperty<string?> MarkerProperty =
+        AvaloniaProperty.RegisterAttached<Control, string?>("Marker", typeof(ProseList));
+
+    public static string? GetMarker(Control item) => item.GetValue(MarkerProperty);
+    public static void SetMarker(Control item, string? value) => item.SetValue(MarkerProperty, value);
+
     private readonly List<Control> _markers = [];
+    private readonly List<string?> _keys = [];
+    private double _indent;
 
     static ProseList()
     {
         AffectsMeasure<ProseList>(IsOrderedProperty, IndentProperty, ItemSpacingProperty, FontSizeProperty);
         AffectsRender<ProseList>(MarkerBrushProperty);
+        MarkerProperty.Changed.AddClassHandler<Control>((item, _) =>
+        {
+            var up = item.GetVisualParent();
+            if ((up as ProseList ?? up?.GetVisualParent() as ProseList) is { } list) list.InvalidateMeasure();
+        });
     }
 
     public bool IsOrdered { get => GetValue(IsOrderedProperty); set => SetValue(IsOrderedProperty, value); }
@@ -71,13 +86,26 @@ public class ProseList : Panel
         foreach (var m in _markers)
             VisualChildren.Remove(m);
         _markers.Clear();
+        _keys.Clear();
         InvalidateMeasure();
     }
 
-    private Control Marker(int index)
+    // The item's own marker text, on it or on the root of its template.
+    private static string? Written(Control item)
     {
-        if (IsOrdered)
-            return new TextBlock { Text = (index + 1).ToString(System.Globalization.CultureInfo.InvariantCulture) + ".", Foreground = MarkerBrush, IsHitTestVisible = false };
+        var own = GetMarker(item);
+        if (string.IsNullOrEmpty(own) && item is ContentPresenter { Child: { } root }) own = GetMarker(root);
+        return string.IsNullOrEmpty(own) ? null : own;
+    }
+
+    // What the marker at a place says: the item's own text, its number, or null for a disc or a ring.
+    private string? Key(Control item, int index) =>
+        Written(item) ?? (IsOrdered ? (index + 1).ToString(System.Globalization.CultureInfo.InvariantCulture) + "." : null);
+
+    private Control Marker(string? key)
+    {
+        if (key is not null)
+            return new TextBlock { Text = key, Foreground = MarkerBrush, IsHitTestVisible = false };
         var ring = Depth > 0;
         return new Ellipse
         {
@@ -90,17 +118,29 @@ public class ProseList : Panel
         };
     }
 
-    private void SyncMarkers(int count)
+    private void SyncMarkers(List<Control> items)
     {
-        while (_markers.Count > count)
+        while (_markers.Count > items.Count)
         {
             VisualChildren.Remove(_markers[^1]);
             _markers.RemoveAt(_markers.Count - 1);
+            _keys.RemoveAt(_keys.Count - 1);
         }
-        while (_markers.Count < count)
+        for (var i = 0; i < items.Count; i++)
         {
-            var m = Marker(_markers.Count);
+            var key = Key(items[i], i);
+            if (i < _markers.Count)
+            {
+                if (_keys[i] == key) continue;
+                VisualChildren.Remove(_markers[i]);
+                _markers[i] = Marker(key);
+                _keys[i] = key;
+                VisualChildren.Add(_markers[i]);
+                continue;
+            }
+            var m = Marker(key);
             _markers.Add(m);
+            _keys.Add(key);
             VisualChildren.Add(m);
         }
     }
@@ -110,24 +150,40 @@ public class ProseList : Panel
     protected override Size MeasureOverride(Size availableSize)
     {
         var items = Items();
-        SyncMarkers(items.Count);
         var indent = Indent * FontSize;
         var inner = new Size(Math.Max(0, availableSize.Width - indent), double.PositiveInfinity);
-        double height = 0, widest = 0;
+        foreach (var item in items)
+            item.Measure(inner);
+        // The items are measured first, so a bound item's template, and the marker on it, exists.
+        SyncMarkers(items);
+        var widest = 0.0;
+        foreach (var m in _markers)
+        {
+            m.Measure(Size.Infinity);
+            if (m is TextBlock) widest = Math.Max(widest, m.DesiredSize.Width);
+        }
+        var wide = Math.Max(indent, widest + FontSize * .25);
+        if (wide > indent + 0.5)
+        {
+            indent = wide;
+            inner = new Size(Math.Max(0, availableSize.Width - indent), double.PositiveInfinity);
+            foreach (var item in items)
+                item.Measure(inner);
+        }
+        _indent = indent;
+        double height = 0, widestItem = 0;
         for (var i = 0; i < items.Count; i++)
         {
-            items[i].Measure(inner);
-            _markers[i].Measure(Size.Infinity);
             height += (i > 0 ? ItemSpacing * FontSize : 0) + items[i].DesiredSize.Height;
-            widest = Math.Max(widest, items[i].DesiredSize.Width);
+            widestItem = Math.Max(widestItem, items[i].DesiredSize.Width);
         }
-        return new Size(widest + indent, height);
+        return new Size(widestItem + indent, height);
     }
 
     protected override Size ArrangeOverride(Size finalSize)
     {
         var items = Items();
-        var indent = Indent * FontSize;
+        var indent = _indent > 0 ? _indent : Indent * FontSize;
         double y = 0;
         for (var i = 0; i < items.Count; i++)
         {
@@ -171,6 +227,7 @@ public class ProseList : Panel
         foreach (var m in _markers)
             VisualChildren.Remove(m);
         _markers.Clear();
+        _keys.Clear();
         base.ChildrenChanged(sender, e);
     }
 }

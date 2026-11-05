@@ -22,6 +22,14 @@
     <pg:PlayText Classes="p" Markup="ينسق `ins:Prose` ما في داخله من فقرات وقوائم واقتباسات وشيفرة وجداول، ولا يمس شيئًا خارجه. ولا يباعد بين الحروف العربية ولا يميلها، وإنما يكون التوكيد باللون." />
     <pg:Playground Def="{x:Static pg:TypographyPlay.Prose}" />
 
+    <TextBlock Classes="section" Text="النص الطويل من البيانات" />
+    <pg:PlayText Classes="p" Markup="ضع الكلاس `prose` على `ItemsControl` فتأخذ فقراته مظهر النص الطويل وتباعده، وكل فقرة باتجاه نصها بـ`ins:TextDirection.IsAuto`." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:TypographyPlay.DataExample}" Stage="{x:Static pg:TypographyPlay.DataStage}" />
+
+    <TextBlock Classes="section" Text="عنوان يُقص وما بعده" />
+    <pg:PlayText Classes="p" Markup="في `ins:TrailingRow` يُقص العنوان الطويل بعلامة «…» وتبقى الشارة بعده مباشرة، والعنوان القصير تلحقه الشارة ولا تبتعد إلى آخر السطر. واسم الملف الإنجليزي يُقرأ باتجاهه بـ`ins:TextDirection.IsAuto` فتقع «…» في آخره." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:TypographyPlay.TrailExample}" />
+
     <TextBlock Classes="section" Text="الفاصل" />
     <pg:PlayText Classes="p" Markup="يفصل `ins:Divider` بين قسمين بخطين بينهما كلمة، و`Separator` بخط وحسب، أو بين عناصر صف بخط عمودي." />
     <pg:Playground Def="{x:Static pg:TypographyPlay.Divider}" />
