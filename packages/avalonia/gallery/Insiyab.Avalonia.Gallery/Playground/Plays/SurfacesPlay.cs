@@ -73,6 +73,24 @@ public static class SurfacesPlay
         Notes = s => s.On("hover") || s.On("link") ? ["مرّر المؤشر على البطاقة."] : [],
     };
 
+    public static PlayDef Tile { get; } = new()
+    {
+        Id = "tile",
+        Title = "البطاقة على اللوح",
+        Wide = _ => true,
+        WideMax = 520,
+        Controls =
+        [
+            Switch("hover", "ترتفع تحت المؤشر", "hoverable", "مع `tile`: ترتفع بكسلًا واحدًا تحت المؤشر، ويأخذ حدها لون العلامة ويكبر ظلها قليلًا، ولا ترتفع إذا خُففت المؤثرات."),
+        ],
+        Extra =
+        [
+            Row("الأساس", "tile", "على `Border` داخل لوح: بطاقة مصمتة بحد رفيع وظل صغير، فلا يقع زجاج فوق زجاج.", OptionKind.Class, true),
+        ],
+        Axaml = s => "<Border Classes=\"panel\" Padding=\"20\">\n" + $"  <Border{Classes("tile", s.On("hover") ? "hoverable" : null)} Padding=\"16\"><TextBlock Text=\"بطاقة على لوح\" /></Border>\n" + "</Border>",
+        Notes = s => s.On("hover") ? ["مرّر المؤشر على البطاقة."] : [],
+    };
+
     public static PlayDef Panel { get; } = new()
     {
         Id = "panel",
@@ -85,9 +103,12 @@ public static class SurfacesPlay
             Switch("ico", "أيقونة في الرأس", "panel-ico", "أيقونة القسم على رقعة ملونة قبل العنوان.", on: true),
             Switch("actions", "إجراءات في الرأس", "panel-actions", "على `StackPanel` في آخر الرأس، فيه أزرار اللوح.", on: true),
             Switch("foot", "تذييل", "panel-foot", "سطر في أسفل اللوح لأزراره، في `DockPanel.Dock=\"Bottom\"`.", on: true),
-            Switch("alert", "يحتاج انتباهًا", "alert", "مع `panel`: يلون رأس اللوح وحده بلون الخطر، لا اللوح كله."),
+            Select("tone", "النبرة", "", Choice("", "بلا"), Choice("alert", "يحتاج انتباهًا", "alert", "مع `panel`: يلون رأس اللوح وحده بلون الخطر، لا اللوح كله."), Choice("ok", "نجاح", "ok", "مع `panel`: رأس بلون النجاح، لما تم."), Choice("warn", "تحذير", "warn", "مع `panel`: رأس بلون التحذير، لما ينتظر."), Choice("info", "معلومة", "info", "مع `panel`: رأس بلون المعلومة، لملخص يُقرأ أولًا."), Choice("brand", "مميز", "brand", "مع `panel`: رأس بلون العلامة، لبند واحد يستحق أن يبرز.")),
             Switch("flush", "جسم بلا فراغ داخلي", "flush", "مع `panel-body`: لجدول أو قائمة يمتدان إلى حواف اللوح."),
             Switch("note", "سطر شرح", "panel-note", "سطر شرح قصير تحت الرأس، أو في أعلى جسم بلا فراغ داخلي."),
+            Switch("band", "رأس بشريط", "band", "مع `panel-head`: خلفية خفيفة للرأس تستدير مع زاويتي اللوح العلويتين."),
+            Switch("low", "ظل أخف", "low", "مع `panel`: ظل أقصر وأخف للوح كبير يملأ الصفحة، من `InsShPanel`."),
+            Switch("dense", "مضغوط", "dense", "مع `panel`: حشو أصغر في الرأس والجسم والتذييل، وأيقونة أصغر."),
         ],
         Extra =
         [
@@ -95,13 +116,13 @@ public static class SurfacesPlay
             Row("الأساس", "panel-body", "جسم اللوح، آخر ما في `DockPanel` فيملأ ما بقي.", OptionKind.Class, true),
             Row("الأساس", "panel-title", "عنوان اللوح في رأسه.", OptionKind.Class, true),
         ],
-        Disable = s => s.On("head") ? [] : ["ico", "actions", "alert"],
+        Disable = s => s.On("head") ? [] : ["ico", "actions", "tone", "band"],
         Axaml = s =>
         {
-            var lines = new List<string> { $"<Border{Classes("panel", s.On("alert") && s.On("head") ? "alert" : null)}>", "  <DockPanel>" };
+            var lines = new List<string> { $"<Border{Classes("panel", s.On("head") && s.Has("tone") ? s["tone"] : null, s.On("low") ? "low" : null, s.On("dense") ? "dense" : null)}>", "  <DockPanel>" };
             if (s.On("head"))
             {
-                lines.Add("    <Border Classes=\"panel-head\" DockPanel.Dock=\"Top\">");
+                lines.Add($"    <Border{Classes("panel-head", s.On("band") ? "band" : null)} DockPanel.Dock=\"Top\">");
                 lines.Add("      <Grid ColumnDefinitions=\"Auto,*,Auto\" ColumnSpacing=\"12\">");
                 if (s.On("ico")) lines.Add("        <Border Classes=\"panel-ico\"><ins:Icon Data=\"{StaticResource IconUsers}\" /></Border>");
                 lines.Add("        <TextBlock Grid.Column=\"1\" Classes=\"panel-title\" Text=\"العنوان\" />");
@@ -131,5 +152,29 @@ public static class SurfacesPlay
         },
     };
 
-    public static PlayDef[] All { get; } = [Glass, Card, Panel];
+    public static PlayDef Sheet { get; } = new()
+    {
+        Id = "sheet",
+        Title = "الورقة",
+        Wide = _ => true,
+        WideMax = 560,
+        Controls =
+        [
+            Switch("desk", "على مكتب", "desk", "على `Border` حول الورقة: سطح خافت تحتها يفصلها عن الصفحة.", on: true),
+        ],
+        Extra =
+        [
+            Row("الأساس", "sheet", "على `Border`: ورقة لنص طويل يُقرأ، مصمتة بحد رفيع وظل صغير وحشو واسع.", OptionKind.Class, true),
+        ],
+        Axaml = s =>
+        {
+            var sheet = "<Border Classes=\"sheet\">\n  <StackPanel Spacing=\"8\">\n    <TextBlock Classes=\"h3\" Text=\"ملاحظات الاجتماع\" />\n" +
+                "    <TextBlock Classes=\"prose\" TextWrapping=\"Wrap\" Text=\"اتفقنا على موعد التسليم الجديد، وعلى أن يراجع كل فريق قائمته قبل نهاية الأسبوع.\" />\n  </StackPanel>\n</Border>";
+            return s.On("desk") ? "<Border Classes=\"desk\">\n" + Indent(sheet, "  ") + "\n</Border>" : sheet;
+        },
+    };
+
+    private static string Indent(string text, string pad) => string.Join("\n", text.Split('\n').Select(l => pad + l));
+
+    public static PlayDef[] All { get; } = [Glass, Card, Tile, Panel, Sheet];
 }

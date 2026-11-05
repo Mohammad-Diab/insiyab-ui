@@ -33,9 +33,17 @@
     <pg:PlayText Classes="p" Markup="الكلاس `card` زجاج بطبقاته نفسها، باسم يقول ما هو، ولا يرتفع تحت المؤشر إلا إذا كان يُنقر." />
     <pg:Playground Def="{x:Static pg:SurfacesPlay.Card}" />
 
+    <TextBlock Classes="section" Text="البطاقة على اللوح" />
+    <pg:PlayText Classes="p" Markup="الكلاس `tile` بطاقة مصمتة توضع داخل لوح، فلا يقع زجاج فوق زجاج، ومعها `hoverable` ترتفع بكسلًا واحدًا." />
+    <pg:Playground Def="{x:Static pg:SurfacesPlay.Tile}" />
+
     <TextBlock Classes="section" Text="اللوح" />
     <pg:PlayText Classes="p" Markup="الكلاس `panel` حاوية من ثلاثة أجزاء: رأس ثم جسم ثم تذييل، وهو السطح الذي تبنى منه أكثر الشاشات." />
     <pg:Playground Def="{x:Static pg:SurfacesPlay.Panel}" />
+
+    <TextBlock Classes="section" Text="الورقة" />
+    <pg:PlayText Classes="p" Markup="الكلاس `sheet` ورقة لنص طويل، وتحتها `desk`، سطح خافت يفصلها عن الصفحة." />
+    <pg:Playground Def="{x:Static pg:SurfacesPlay.Sheet}" />
 
     <TextBlock Classes="section" Text="انحناء الزوايا" />
     <pg:PlayText Classes="p" Markup="تمتد قيم انحناء الزوايا من `InsRXs` إلى `InsRPill`، وقيمها 7 و10 و14 و22 و32 و999، والافتراضي منها 14." />

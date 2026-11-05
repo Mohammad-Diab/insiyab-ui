@@ -137,8 +137,8 @@
         </Style>
       </ControlTheme>
 
-      <!-- The glass surfaces: card, glass and panel share the rim and the shadow with its bevel -->
-      <ControlTheme x:Key="InsLookSurface" TargetType="Border" ctl:ClassTheme.For="card glass panel glass-inner hoverable" ctl:ClassTheme.NestOn="glass">
+      <!-- The glass surfaces: card, glass and panel share the rim and the shadow with its bevel; tile, sheet and desk are the solid ones that sit on glass -->
+      <ControlTheme x:Key="InsLookSurface" TargetType="Border" ctl:ClassTheme.For="card glass panel glass-inner hoverable tile sheet desk" ctl:ClassTheme.NestOn="glass">
         <Style Selector="^.card, ^.glass, ^.panel">
           <Setter Property="BorderThickness" Value="1" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsGlassRim}" />
@@ -160,6 +160,22 @@
         <Style Selector="^.panel">
           <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
           <Setter Property="Background" Value="{DynamicResource InsGlassFill}" />
+          <!-- A panel that fills the page sits lower -->
+          <Style Selector="^.low">
+            <Setter Property="BoxShadow">
+              <MultiBinding Converter="{x:Static ctl:PanelShadows.Join}">
+                <DynamicResource ResourceKey="InsShPanel" />
+                <DynamicResource ResourceKey="InsBevel" />
+              </MultiBinding>
+            </Setter>
+          </Style>
+          <!-- A panel whose contents are the problem, or that is a highlight, tells its parts its tone; the tint is on the head only -->
+          <Style Selector="^.alert"><Setter Property="ctl:PanelLook.Tone" Value="Bad" /></Style>
+          <Style Selector="^.ok"><Setter Property="ctl:PanelLook.Tone" Value="Ok" /></Style>
+          <Style Selector="^.warn"><Setter Property="ctl:PanelLook.Tone" Value="Warn" /></Style>
+          <Style Selector="^.info"><Setter Property="ctl:PanelLook.Tone" Value="Info" /></Style>
+          <Style Selector="^.brand"><Setter Property="ctl:PanelLook.Tone" Value="Brand" /></Style>
+          <Style Selector="^.dense"><Setter Property="ctl:PanelLook.Dense" Value="True" /></Style>
         </Style>
         <!-- RTL mirrors the drawing, so these brushes are mirrored back: the light stays at the top left, as on the web -->
         <Style Selector="^.card[FlowDirection=RightToLeft], ^.panel[FlowDirection=RightToLeft]">
@@ -180,9 +196,21 @@
           <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
           <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
         </Style>
-        <!-- A panel whose contents are the problem tells its parts, and the tint is on the head only -->
-        <Style Selector="^.panel.alert">
-          <Setter Property="ctl:PanelLook.Alert" Value="True" />
+        <!-- Solid surfaces for use on glass: a card on a panel, a page for long reading, and the faint desk under it -->
+        <Style Selector="^.tile, ^.sheet">
+          <Setter Property="Background" Value="{DynamicResource InsSurface}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Setter Property="BoxShadow" Value="{DynamicResource InsShSm}" />
+        </Style>
+        <Style Selector="^.sheet">
+          <Setter Property="Padding" Value="24,20" />
+        </Style>
+        <Style Selector="^.desk">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+          <Setter Property="Padding" Value="16" />
         </Style>
         <!-- Only a surface that opted in moves under the pointer -->
         <Style Selector="^.hoverable">
@@ -192,6 +220,16 @@
               <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
               <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
               <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <!-- A tile's solid edge fades premultiplied, so it never darkens halfway -->
+        <Style Selector="^.tile.hoverable">
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ctl:BrushFade Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
@@ -209,6 +247,15 @@
             <Setter Property="RenderTransform" Value="none" />
           </Style>
         </Style>
+        <!-- A lifted tile rises a pixel, its edge takes the brand and its shadow grows a step -->
+        <Style Selector="^.tile.hoverable[(ctl|HoverLift.IsLifted)=True]">
+          <Setter Property="RenderTransform" Value="translateY(-1px)" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsTileHoverBorder}" />
+          <Setter Property="BoxShadow" Value="{DynamicResource InsShMd}" />
+          <Style Selector="^[(ctl|ClassTheme.Still)=True]">
+            <Setter Property="RenderTransform" Value="none" />
+          </Style>
+        </Style>
       </ControlTheme>
 
       <!-- The panel's parts, as children of a Border.panel (usually in a DockPanel); an alert panel tints its head and tells the parts -->
@@ -217,11 +264,39 @@
           <Setter Property="Padding" Value="20,14" />
           <Setter Property="BorderThickness" Value="0,0,0,1" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+          <!-- A band head: a faint fill that rounds with the panel inside its 1px rim -->
+          <Style Selector="^.band">
+            <Setter Property="CornerRadius" Value="21,21,0,0" />
+            <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
+          </Style>
+          <Style Selector="^[(ctl|PanelLook.Dense)=True]">
+            <Setter Property="Padding" Value="14,10" />
+          </Style>
           <!-- No clip on the panel, since Avalonia's clip would cut its shadow, so the tinted head rounds itself inside the 1px rim -->
-          <Style Selector="^[(ctl|PanelLook.Alert)=True]">
+          <Style Selector="^[(ctl|PanelLook.Tone)=Bad]">
             <Setter Property="CornerRadius" Value="21,21,0,0" />
             <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
             <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+          </Style>
+          <Style Selector="^[(ctl|PanelLook.Tone)=Ok]">
+            <Setter Property="CornerRadius" Value="21,21,0,0" />
+            <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsToneOkBd}" />
+          </Style>
+          <Style Selector="^[(ctl|PanelLook.Tone)=Warn]">
+            <Setter Property="CornerRadius" Value="21,21,0,0" />
+            <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsToneWarnBd}" />
+          </Style>
+          <Style Selector="^[(ctl|PanelLook.Tone)=Info]">
+            <Setter Property="CornerRadius" Value="21,21,0,0" />
+            <Setter Property="Background" Value="{DynamicResource InsToneInfoBg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsToneInfoBd}" />
+          </Style>
+          <Style Selector="^[(ctl|PanelLook.Tone)=Brand]">
+            <Setter Property="CornerRadius" Value="21,21,0,0" />
+            <Setter Property="Background" Value="{DynamicResource InsBrandTintBg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InsBrandTintBd}" />
           </Style>
         </Style>
       </ControlTheme>
@@ -232,8 +307,23 @@
           <Setter Property="FontWeight" Value="ExtraBold" />
           <Setter Property="Foreground" Value="{DynamicResource InsPanelTitleBrush}" />
           <Setter Property="VerticalAlignment" Value="Center" />
-          <Style Selector="^[(ctl|PanelLook.Alert)=True]">
+          <Style Selector="^[(ctl|PanelLook.Dense)=True]">
+            <Setter Property="FontSize" Value="15" />
+          </Style>
+          <Style Selector="^[(ctl|PanelLook.Tone)=Bad]">
             <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+          </Style>
+          <Style Selector="^[(ctl|PanelLook.Tone)=Ok]">
+            <Setter Property="Foreground" Value="{DynamicResource InsToneOk}" />
+          </Style>
+          <Style Selector="^[(ctl|PanelLook.Tone)=Warn]">
+            <Setter Property="Foreground" Value="{DynamicResource InsToneWarn}" />
+          </Style>
+          <Style Selector="^[(ctl|PanelLook.Tone)=Info]">
+            <Setter Property="Foreground" Value="{DynamicResource InsToneInfo}" />
+          </Style>
+          <Style Selector="^[(ctl|PanelLook.Tone)=Brand]">
+            <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
           </Style>
         </Style>
       </ControlTheme>
@@ -249,10 +339,29 @@
           <Setter Property="VerticalAlignment" Value="Center" />
           <Setter Property="ctl:ClassTheme.ChildHorizontalAlignment" Value="Center" />
           <Setter Property="ctl:ClassTheme.ChildVerticalAlignment" Value="Center" />
-          <Style Selector="^[(ctl|PanelLook.Alert)=True]">
+          <Style Selector="^[(ctl|PanelLook.Dense)=True]">
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+            <Setter Property="TextElement.FontSize" Value="14" />
+          </Style>
+          <Style Selector="^[(ctl|PanelLook.Tone)=Bad]">
             <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
             <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneBad}" />
           </Style>
+          <Style Selector="^[(ctl|PanelLook.Tone)=Ok]">
+            <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneOk}" />
+          </Style>
+          <Style Selector="^[(ctl|PanelLook.Tone)=Warn]">
+            <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneWarn}" />
+          </Style>
+          <Style Selector="^[(ctl|PanelLook.Tone)=Info]">
+            <Setter Property="Background" Value="{DynamicResource InsToneInfoBg}" />
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource InsToneInfo}" />
+          </Style>
+          <!-- Brand keeps the default brand chip -->
         </Style>
       </ControlTheme>
 
@@ -274,6 +383,9 @@
           <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
           <Setter Property="TextElement.FontSize" Value="13" />
           <Setter Property="TextElement.Foreground" Value="{DynamicResource InsText2}" />
+          <Style Selector="^[(ctl|PanelLook.Dense)=True]">
+            <Setter Property="Padding" Value="14,8" />
+          </Style>
           <Style Selector="^[(ctl|PanelLook.Flush)=True]">
             <Setter Property="Padding" Value="10,6,10,12" />
             <Setter Property="BorderThickness" Value="0" />
@@ -284,6 +396,9 @@
       <ControlTheme x:Key="InsLookPanelBody" TargetType="Border" ctl:ClassTheme.For="panel-body">
         <Style Selector="^.panel-body">
           <Setter Property="Padding" Value="20" />
+          <Style Selector="^[(ctl|PanelLook.Dense)=True]">
+            <Setter Property="Padding" Value="14,8" />
+          </Style>
           <Style Selector="^.flush">
             <Setter Property="Padding" Value="10" />
             <Setter Property="ctl:PanelLook.Flush" Value="True" />
@@ -296,6 +411,9 @@
           <Setter Property="Padding" Value="18,12" />
           <Setter Property="BorderThickness" Value="0,1,0,0" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+          <Style Selector="^[(ctl|PanelLook.Dense)=True]">
+            <Setter Property="Padding" Value="14,8" />
+          </Style>
         </Style>
       </ControlTheme>
     </ResourceDictionary>
