@@ -114,7 +114,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <!-- The press, lift and turn move PART_Root, not the button (a transform set in the template survives styles that animate every panel child); PART_Press carries only the quick-click dip, so the two add up. -->
-            <Panel x:Name="PART_Press">
+            <Panel x:Name="PART_Press" Background="Transparent">
               <Panel x:Name="PART_Root" RenderTransformOrigin="50%,50%" RenderTransform="none">
                 <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
                 <ins:TemplateBorder x:Name="PART_FocusRing"
@@ -164,7 +164,7 @@
         <Style Selector="^ /template/ Panel#PART_Press">
           <Setter Property="ins:PressDip.Depth" Value="0.97" />
         </Style>
-        <Style Selector="^.bare /template/ Panel#PART_Press, ^.close /template/ Panel#PART_Press">
+        <Style Selector="^.bare /template/ Panel#PART_Press, ^.link /template/ Panel#PART_Press, ^.close /template/ Panel#PART_Press">
           <Setter Property="ins:PressDip.Depth" Value="0" />
         </Style>
         <Style Selector="^ /template/ Panel#PART_Root">
@@ -309,7 +309,7 @@
         </Style>
 
         <!-- the neutral and ghost sets share the control fill, the subtle drop and the dark sweep; a button with no variant class looks like secondary -->
-        <Style Selector="^.secondary, ^.ghost, ^.ghost-danger, ^.ghost-success, ^.ghost-warning, ^.ghost-info, ^:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.close)">
+        <Style Selector="^.secondary, ^.ghost, ^.ghost-danger, ^.ghost-success, ^.ghost-warning, ^.ghost-info, ^:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.link):not(.close)">
           <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
           <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />
@@ -325,7 +325,7 @@
           </Style>
         </Style>
 
-        <Style Selector="^.secondary, ^:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.close)">
+        <Style Selector="^.secondary, ^:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.link):not(.close)">
           <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
           <Style Selector="^:pointerover:not(:disabled), ^:focus-visible">
             <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
@@ -398,11 +398,38 @@
           <Setter Property="FontWeight" Value="Bold" />
           <Setter Property="Padding" Value="0" />
           <Setter Property="MinHeight" Value="0" />
+          <Style Selector="^ /template/ :is(Border)#PART_Face">
+            <Setter Property="ClipToBounds" Value="False" />
+          </Style>
           <Style Selector="^ /template/ :is(Border)#PART_Sweep">
             <Setter Property="IsVisible" Value="False" />
           </Style>
           <Style Selector="^:pointerover:not(:disabled), ^:focus-visible">
             <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          </Style>
+          <Style Selector="^:pressed">
+            <Style Selector="^ /template/ Panel#PART_Root">
+              <Setter Property="RenderTransform" Value="none" />
+            </Style>
+          </Style>
+        </Style>
+
+        <!-- link: words that go somewhere, in the brand's readable tone, underlined under the pointer; no face, padding or press, the shared focus ring -->
+        <Style Selector="^.link">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+          <Setter Property="Padding" Value="0" />
+          <Setter Property="MinHeight" Value="0" />
+          <Style Selector="^ /template/ :is(Border)#PART_Face">
+            <Setter Property="ClipToBounds" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Sweep">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^:pointerover:not(:disabled)">
+            <Setter Property="Foreground" Value="{DynamicResource InsLinkHover}" />
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="Inline.TextDecorations" Value="{DynamicResource InsLinkUnderline}" />
+            </Style>
           </Style>
           <Style Selector="^:pressed">
             <Style Selector="^ /template/ Panel#PART_Root">
@@ -485,7 +512,7 @@
 
       <!-- Off, any toggle is the neutral grey button; on, it takes its own style's colour (the brand for secondary, plain and bare). -->
       <ControlTheme x:Key="{x:Type ToggleButton}" TargetType="ToggleButton" BasedOn="{StaticResource {x:Type Button}}">
-        <Style Selector="^:not(:checked):not(.bare):not(.close)">
+        <Style Selector="^:not(:checked):not(.bare):not(.link):not(.close)">
           <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
           <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
@@ -512,7 +539,7 @@
         <Style Selector="^:checked.bare">
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
         </Style>
-        <Style Selector="^:checked:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.close)">
+        <Style Selector="^:checked:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.link):not(.close)">
           <Setter Property="Background" Value="{DynamicResource InsButtonToggleOn}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsButtonToggleOnBorder}" />
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
@@ -534,7 +561,7 @@
       <ControlTheme x:Key="{x:Type DropDownButton}" TargetType="DropDownButton" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Template">
           <ControlTemplate>
-            <Panel x:Name="PART_Press">
+            <Panel x:Name="PART_Press" Background="Transparent">
               <Panel x:Name="PART_Root" RenderTransformOrigin="50%,50%" RenderTransform="none">
                 <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
                 <ins:TemplateBorder x:Name="PART_FocusRing"
@@ -610,7 +637,7 @@
     </ResourceDictionary>
   </Styles.Resources>
 
-  <!-- An icon beside a label nudges toward the trailing edge; a logical margin, so it mirrors with the page. A toolbar's icons and a notification's stay put: a row of them sliding as the pointer passes reads as a wave. -->
+  <!-- The leading icon beside a label nudges toward the trailing edge; a logical margin, so it mirrors with the page. A trailing icon (class trail), a card that is a button, a toolbar's icons and a notification's stay put. -->
   <Style Selector=":is(Button) ins|Icon">
     <Setter Property="Transitions">
       <Transitions>
@@ -618,7 +645,12 @@
       </Transitions>
     </Setter>
   </Style>
-  <Style Selector=":is(Button):pointerover:not(.icon):not(:disabled) ins|Icon:not(.toolbar-icon):not(.toolbar-chevron):not(.notify-icon)">
+  <Style Selector=":is(Button):pointerover:not(.icon):not(:disabled) ins|Icon[(ins|NudgeLook.IsOff)=False]:not(.toolbar-icon):not(.toolbar-chevron):not(.notify-icon):not(.trail)">
     <Setter Property="Margin" Value="2,0,-2,0" />
+  </Style>
+
+  <!-- An icon is physical; class dir makes it follow the page's direction, as an arrow along the line should -->
+  <Style Selector="ins|Icon.dir">
+    <Setter Property="FlowDirection" Value="{Binding $parent[Control].FlowDirection}" />
   </Style>
 </Styles>

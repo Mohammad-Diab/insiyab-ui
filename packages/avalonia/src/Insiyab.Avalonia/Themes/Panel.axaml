@@ -78,31 +78,35 @@
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="ctl:NudgeLook.IsOff" Value="True" />
         <Setter Property="Transitions">
           <Transitions>
-            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <ctl:TemplateBorder Name="PART_Face"
-                    Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="{TemplateBinding CornerRadius}">
-              <ctl:TemplateBorder.Transitions>
-                <Transitions>
-                  <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-                </Transitions>
-              </ctl:TemplateBorder.Transitions>
-              <ContentPresenter Name="PART_ContentPresenter"
-                                Content="{TemplateBinding Content}"
-                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                Padding="{TemplateBinding Padding}"
-                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-            </ctl:TemplateBorder>
+            <Panel Name="PART_Hit" Background="Transparent">
+              <ctl:TemplateBorder Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      RenderTransform="none">
+                <ctl:TemplateBorder.Transitions>
+                  <Transitions>
+                    <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                  </Transitions>
+                </ctl:TemplateBorder.Transitions>
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  Padding="{TemplateBinding Padding}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+              </ctl:TemplateBorder>
+            </Panel>
           </ControlTemplate>
         </Setter>
         <Style Selector="^ /template/ :is(Border)#PART_Face">
@@ -117,10 +121,10 @@
           <Setter Property="Background" Value="{DynamicResource InsGlassFillRtl}" />
         </Style>
         <Style Selector="^:pointerover">
-          <Setter Property="RenderTransform" Value="translateY(-2px)" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsRimTop}" />
         </Style>
         <Style Selector="^:pointerover /template/ :is(Border)#PART_Face">
+          <Setter Property="RenderTransform" Value="translateY(-2px)" />
           <Setter Property="BoxShadow">
             <MultiBinding Converter="{x:Static ctl:PanelShadows.Join}">
               <DynamicResource ResourceKey="InsShLg" />
@@ -128,7 +132,7 @@
             </MultiBinding>
           </Setter>
         </Style>
-        <Style Selector="^:pressed">
+        <Style Selector="^:pressed /template/ :is(Border)#PART_Face">
           <Setter Property="RenderTransform" Value="scale(0.995)" />
         </Style>
       </ControlTheme>
@@ -182,6 +186,7 @@
         </Style>
         <!-- Only a surface that opted in moves under the pointer -->
         <Style Selector="^.hoverable">
+          <Setter Property="ctl:HoverLift.IsEnabled" Value="True" />
           <Setter Property="Transitions">
             <Transitions>
               <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
@@ -190,7 +195,7 @@
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^.hoverable:pointerover">
+        <Style Selector="^.hoverable[(ctl|HoverLift.IsLifted)=True]">
           <Setter Property="RenderTransform" Value="translateY(-2px)" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsRimTop}" />
           <Setter Property="BoxShadow">

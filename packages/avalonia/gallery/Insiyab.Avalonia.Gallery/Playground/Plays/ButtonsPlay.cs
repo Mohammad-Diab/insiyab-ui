@@ -41,7 +41,8 @@ public static class ButtonsPlay
                 Choice("ghost-danger", "هادئ بنبرة الخطر", "ghost-danger", "هادئ بلون الخطر."),
                 Choice("ghost-warning", "هادئ بنبرة التحذير", "ghost-warning", "هادئ بلون التحذير."),
                 Choice("ghost-info", "هادئ بنبرة المعلومة", "ghost-info", "هادئ بلون المعلومة."),
-                Choice("bare", "بلا خلفية", "bare", "لإجراء يكاد يكون رابطًا، كالإلغاء.")),
+                Choice("bare", "بلا خلفية", "bare", "لإجراء يكاد يكون رابطًا، كالإلغاء."),
+                Choice("link", "رابط", "link", "كلمات بلون الهوية يظهر تحتها خط إذا مرّ عليها المؤشر، لإجراء يُقرأ رابطًا. وتصلح على `DropDownButton` أيضًا.")),
             Seg("size", "المقاس", "",
                 Choice("sm", "صغير", "sm", "زر أصغر، للجداول والأشرطة."),
                 Choice("", "عادي"),
@@ -49,6 +50,7 @@ public static class ButtonsPlay
             Seg("icon", "الأيقونة", "",
                 Choice("", "بلا"),
                 Choice("start", "قبل النص"),
+                Choice("end", "بعد النص", "trail", "أيقونة بعد النص كسهم الوجهة: `trail` يبقيها ساكنة تحت المؤشر، و`dir` يقلبها مع اتجاه الصفحة.", OptionKind.Class),
                 Choice("only", "وحدها", "icon", "زر مربع يسع أيقونة واحدة، ولا بد له عندئذ من `AutomationProperties.Name`.")),
             Text("text", "النص", "حفظ"),
             Switch("full", "بعرض الحاوية", "full", "يمد الزر على عرض حاويته كله."),
@@ -74,10 +76,12 @@ public static class ButtonsPlay
                 (s.On("disabled") ? " IsEnabled=\"False\"" : "") +
                 (s.On("toggle") && !s.On("link") ? " IsChecked=\"True\"" : "");
             const string icon = "<ins:Icon Data=\"{StaticResource IconCheck}\" />";
+            const string arrow = "<ins:Icon Classes=\"trail dir\" Data=\"{StaticResource IconArrow}\" />";
             return s["icon"] switch
             {
                 "only" => $"<{tag}{attrs} AutomationProperties.Name=\"{s["text"]}\">\n  {icon}\n</{tag}>",
                 "start" => $"<{tag}{attrs}>\n  <StackPanel Orientation=\"Horizontal\" Spacing=\"8\">\n    {icon}\n    <TextBlock Text=\"{s["text"]}\" />\n  </StackPanel>\n</{tag}>",
+                "end" => $"<{tag}{attrs}>\n  <StackPanel Orientation=\"Horizontal\" Spacing=\"8\">\n    <TextBlock Text=\"{s["text"]}\" />\n    {arrow}\n  </StackPanel>\n</{tag}>",
                 _ => $"<{tag}{attrs} Content=\"{s["text"]}\" />",
             };
         },

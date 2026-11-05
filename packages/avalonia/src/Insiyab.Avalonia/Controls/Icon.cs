@@ -29,7 +29,7 @@ public class Icon : Control
         AffectsMeasure<Icon>(SizeProperty, FontSizeProperty);
     }
 
-    // Icons are physical, as on the web; set FlowDirection="RightToLeft" on one (an arrow) to mirror it in an RTL page.
+    // Icons are physical, as on the web; class dir makes one follow the page, and FlowDirection="RightToLeft" mirrors one everywhere.
     public Icon() => SetCurrentValue(FlowDirectionProperty, FlowDirection.LeftToRight);
 
     public Geometry? Data { get => GetValue(DataProperty); set => SetValue(DataProperty, value); }

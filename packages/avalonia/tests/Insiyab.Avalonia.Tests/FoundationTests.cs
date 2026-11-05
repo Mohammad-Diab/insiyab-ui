@@ -325,11 +325,11 @@ public class FoundationTests
         w.MouseMove(Center(card, w));
         Settle(100);
         Assert.True(card.IsPointerOver);
-        Assert.Equal(-2, card.RenderTransform!.Value.M32, 3);
+        Assert.Equal(-2, face.RenderTransform!.Value.M32, 3);
         Assert.Equal(((BoxShadows)Res(card, "InsShLg"))[0], face.BoxShadow[0]);
         w.MouseDown(Center(card, w), MouseButton.Left);
         Settle(100);
-        Assert.Equal(0.995, card.RenderTransform!.Value.M11, 3);
+        Assert.Equal(0.995, face.RenderTransform!.Value.M11, 3);
         w.MouseUp(Center(card, w), MouseButton.Left);
     }
 

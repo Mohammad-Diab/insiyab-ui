@@ -25,6 +25,7 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
         <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="ins:NudgeLook.IsOff" Value="True" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="Template">
@@ -139,7 +140,7 @@
             <Setter Property="ins:StatLook.Size" Value="lg" />
           </Style>
           <!-- Only a tile that goes somewhere moves: its chip pops and the figure opens up a fraction -->
-          <Style Selector="^.hoverable:pointerover">
+          <Style Selector="^.hoverable[(ins|HoverLift.IsLifted)=True]">
             <Setter Property="ins:StatLook.Hot" Value="True" />
           </Style>
         </Style>
