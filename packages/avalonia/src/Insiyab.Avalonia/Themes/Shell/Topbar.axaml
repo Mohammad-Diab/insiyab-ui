@@ -15,10 +15,11 @@
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
-      <!-- Three columns, 1fr auto 1fr, so the centre zone is centred on the bar and not on what the start zone leaves -->
+      <!-- Three columns, 1fr auto 1fr: the centre zone is centred on the bar, and a side column is never narrower than its zone's content -->
       <ControlTheme x:Key="InsTopbarGrid" TargetType="Grid">
         <Style Selector="^[(ins|ClassTheme.Relayed)=True]">
           <Setter Property="ColumnSpacing" Value="10" />
+          <Setter Property="ins:TopbarColumns.IsOn" Value="True" />
           <Style Selector="^[(ins|ShellLook.Narrow)=True]">
             <Setter Property="ColumnSpacing" Value="6" />
           </Style>
