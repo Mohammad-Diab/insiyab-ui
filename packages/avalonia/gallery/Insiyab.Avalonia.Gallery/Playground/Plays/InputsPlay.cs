@@ -279,5 +279,54 @@ public static class InputsPlay
         },
     };
 
-    public static PlayDef[] All { get; } = [Field, Search, Form, Masked];
+    public sealed record FoodRow(string Name, string English, string Kind);
+
+    public sealed class FoodSample
+    {
+        public FoodRow[] Foods { get; } =
+        [
+            new("تفاح", "apple", "فواكه"), new("موز", "banana", "فواكه"), new("برتقال", "orange", "فواكه"), new("عنب", "grapes", "فواكه"),
+            new("رمان", "pomegranate", "فواكه"), new("مشمش", "apricot", "فواكه"), new("تين", "fig", "فواكه"),
+            new("خيار", "cucumber", "خضار"), new("جزر", "carrot", "خضار"), new("بطاطا حلوة", "sweet potato", "خضار"), new("كوسا", "zucchini", "خضار"),
+            new("باذنجان", "eggplant", "خضار"), new("فليفلة", "pepper", "خضار"), new("بندورة", "tomato", "خضار"),
+            new("عدس", "lentils", "بقول"), new("حمّص", "chickpeas", "بقول"), new("فول", "fava beans", "بقول"), new("فاصولياء", "beans", "بقول"),
+        ];
+    }
+
+    public static PlayDef Select { get; } = new()
+    {
+        Id = "select-search",
+        Title = "قائمة بالبحث",
+        Wide = _ => true,
+        WideMax = 512,
+        Controls =
+        [
+            Switch("group", "عناوين", "ins:ComboSearch.Group", "ربط عنوان كل عنصر بعضو منه، فتجتمع العناصر تحت عناوينها، ولا تظهر العناوين إلا إذا كان في القائمة أكثر من عنوان.", OptionKind.Property, on: true),
+            Switch("keywords", "كلمات أخرى", "ins:ComboSearch.Keywords", "كلمات أخرى يوجد بها العنصر، كاسمه بلغة أخرى أو رمزه، نصًا أو قائمة كلمات.", OptionKind.Property, on: true),
+        ],
+        Extra =
+        [
+            Row("الأساس", "searchable", "على `ComboBox`: إذا فُتحت القائمة ظهر فوقها حقل بحث تكون فيه لوحة المفاتيح، وتبقى العناصر التي فيها كل كلمة كتبتها في أي مكان من نصها، بلا فرق بين الهمزات والتاء المربوطة والهاء وما شابهها. وتحرك الأسهم التمييز دون أن تختار، ويختار `Enter` أو النقر، ويغلق `Esc` دون تغيير. ويبدأ البحث إذا كتبت حرفًا والقائمة مغلقة. وعرض القائمة من عرض الحقل، فلا يتغير وأنت تمررها.", OptionKind.Class, true),
+            Row("الأساس", "DisplayMemberBinding", "نص كل عنصر، وهو ما يُبحث فيه، إلا إذا ذكرت `TextSearch.TextBinding`.", OptionKind.Property, true),
+            Row("النصوص", "ins:ComboSearch.Placeholder", "النص الباهت في حقل البحث، وهو «ابحث» إن لم تذكره.", OptionKind.Property),
+            Row("النصوص", "ins:ComboSearch.EmptyText", "ما يظهر إذا لم يطابق البحث شيئًا، وهو «لا نتائج» إن لم تذكره.", OptionKind.Property),
+        ],
+        Axaml = s =>
+            "<ComboBox Classes=\"searchable\" PlaceholderText=\"اختر صنفًا\"\n" +
+            "          ItemsSource=\"{Binding Foods}\" DisplayMemberBinding=\"{Binding Name}\"" +
+            (s.On("keywords") ? "\n          ins:ComboSearch.Keywords=\"{Binding English}\"" : "") +
+            (s.On("group") ? "\n          ins:ComboSearch.Group=\"{Binding Kind}\"" : "") +
+            " />",
+        Notes = s => [s.On("keywords") ? "افتح القائمة واكتب «حلوه» أو «carrot»، ثم تنقل بالأسهم واختر بـ`Enter`." : "افتح القائمة واكتب «حلوه» أو «حمص»، ثم تنقل بالأسهم واختر بـ`Enter`."],
+        Stage = (view, _, say) =>
+        {
+            foreach (var combo in view.GetLogicalDescendants().OfType<ComboBox>())
+            {
+                combo.DataContext = new FoodSample();
+                combo.SelectionChanged += (_, _) => { if (combo.SelectedItem is FoodRow f) say($"اخترت «{f.Name}»"); };
+            }
+        },
+    };
+
+    public static PlayDef[] All { get; } = [Field, Search, Form, Masked, Select];
 }

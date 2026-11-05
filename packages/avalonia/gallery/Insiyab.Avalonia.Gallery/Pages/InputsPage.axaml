@@ -22,6 +22,10 @@
     <pg:PlayText Classes="p" Markup="يطوي `ArabicMatch.Normalize` النص للبحث: بلا تشكيل ولا تطويل، والهمزات ألفًا، والتاء المربوطة هاءً، والأرقام الهندية لاتينية. و`ArabicMatch.Matches(query, name, code)` يصدق إذا وُجدت كل كلمة كتبتها في أي مكان من الحقول. اكتب «احمد» أو «مؤسسه» أو «318»." />
     <pg:PlayExample Layout="Stack" Code="{x:Static pg:InputsPlay.MatchExample}" Stage="{x:Static pg:InputsPlay.MatchStage}" />
 
+    <TextBlock Classes="section" Text="قائمة بالبحث" />
+    <pg:PlayText Classes="p" Markup="للقائمة الطويلة: الكلاس `searchable` على `ComboBox` يضع حقل بحث فوق عناصرها إذا فُتحت، فتكتب كلمة أو أكثر من الاسم بأي ترتيب، وتمر بالأسهم على النتائج دون أن تختار حتى تضغط `Enter`." />
+    <pg:Playground Def="{x:Static pg:InputsPlay.Select}" />
+
     <TextBlock Classes="section" Text="النموذج" />
     <pg:PlayText Classes="p" Markup="ترتب لوحات Avalonia الحقول في عمود أو سطر أو شبكة، ويجمع الكلاس `form-commit` أزرار الحفظ في آخر النموذج. أما التحقق من الحقول وإظهار رسائلها تحتها ففي صفحة التحقق." />
     <pg:Playground Def="{x:Static pg:InputsPlay.Form}" />

@@ -250,6 +250,12 @@
           <Setter Property="IsTabStop" Value="False" />
           <Setter Property="KeyboardNavigation.TabNavigation" Value="Local" />
         </Style>
+
+        <!-- A searchable select: open, a search field over its list; the keys move a highlight, a pick sets the choice -->
+        <Style Selector="^.searchable">
+          <Setter Property="IsTextSearchEnabled" Value="False" />
+          <Setter Property="ins:ComboSearchLook.IsOn" Value="True" />
+        </Style>
       </ControlTheme>
 
 
@@ -301,10 +307,18 @@
           </ControlTemplate>
         </Setter>
 
-        <Style Selector="^:pointerover, ^:focus-visible">
+        <Style Selector="^:pointerover, ^:focus-visible, ^:ins-hot">
           <Setter Property="Background" Value="{DynamicResource InsPopItemHover}" />
           <Setter Property="Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
           <Setter Property="RenderTransform" Value="translateX(3px)" />
+        </Style>
+        <!-- In a searchable select only the highlighted row stands out: one the pointer rests on after the keys moved away goes back to rest -->
+        <Style Selector="^.search-row:pointerover:not(:ins-hot)">
+          <Setter Property="Background" Value="{DynamicResource InsPopItemRest}" />
+          <Setter Property="RenderTransform" Value="none" />
+        </Style>
+        <Style Selector="^.search-row:pointerover:not(:ins-hot):not(:selected)">
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         </Style>
         <Style Selector="^:selected">
           <Setter Property="Foreground" Value="{DynamicResource InsSelectOptionOn}" />
