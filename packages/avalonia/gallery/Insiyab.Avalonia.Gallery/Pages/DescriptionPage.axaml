@@ -14,6 +14,10 @@
     <pg:PlayText Classes="p" Markup="ضع `ins:DescriptionList` لتعرض تفاصيل سجل واحد، وفيه `ins:DescriptionItem` لكل زوج من تسمية وقيمة. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
     <pg:Playground Def="{x:Static pg:DescriptionPlay.List}" />
 
+    <TextBlock Classes="section" Text="من البيانات" />
+    <pg:PlayText Classes="p" Markup="اربط `ItemsSource` بقائمة، فيصير كل عنصر فيها زوجًا: تسميته من `TermBinding` وقيمته من `ValueBinding`. وما يُضاف بعد ظهور القائمة ينساب إلى مكانه، وما يُحذف ينطوي ثم يخرج، أما أول ملء فيظهر دفعة واحدة. جرّب الزرين." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:DescriptionPlay.DataExample}" Stage="{x:Static pg:DescriptionPlay.DataStage}" />
+
     <TextBlock Classes="section" Text="الخيارات" />
     <pg:PlayText Classes="p" Markup="كل ما في قائمة الوصف من عناصر وكلاسات." />
     <pg:OptionsList Defs="{x:Static pg:DescriptionPlay.All}" />
