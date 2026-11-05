@@ -272,6 +272,17 @@
     <Style Selector="^:last /template/ StackPanel#PART_Text">
       <Setter Property="Margin" Value="20,0,0,0" />
     </Style>
+    <Style Selector="^:icon">
+      <Style Selector="^ /template/ :is(Border)#PART_Rail">
+        <Setter Property="Margin" Value="15,40,0,0" />
+      </Style>
+      <Style Selector="^ /template/ StackPanel#PART_Text">
+        <Setter Property="Margin" Value="44,0,0,14" />
+      </Style>
+      <Style Selector="^:last /template/ StackPanel#PART_Text">
+        <Setter Property="Margin" Value="44,0,0,0" />
+      </Style>
+    </Style>
   </Style>
   <Style Selector="ins|Timeline.compact ins|TimelineDay">
     <Setter Property="Padding" Value="20,8,0,14" />
