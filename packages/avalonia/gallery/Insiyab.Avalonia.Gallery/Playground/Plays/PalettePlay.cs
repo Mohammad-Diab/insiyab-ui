@@ -59,6 +59,8 @@ public static class PalettePlay
         [
             Switch("groups", "في مجموعات", "Group", "اسم مجموعة العنصر، ويظهر عنوانًا لها. وفي أثناء البحث تجتمع النتائج في قائمة واحدة، ويحمل كل سطر اسم مجموعته.", OptionKind.Property, on: true),
             Switch("hint", "اختصار في السطر", "Hint", "اختصار يظهر في آخر سطر العنصر.", OptionKind.Property, on: true),
+            Switch("desc", "سطر وصف", "Description", "سطر ثانٍ هادئ تحت اسم العنصر، كمكانه أو حجم ملفه.", OptionKind.Property),
+            Switch("search", "أسئلة في البحث وحده", "IsSearchOnly", "عنصر لا يظهر إلا إذا كتبت شيئًا، كصفحات المساعدة الكثيرة التي تزحم القائمة قبل البحث. اكتب «كلمة» لتراها.", OptionKind.Property),
             Seg("keys", "اختصار اللوحة", "none",
                 Choice("none", "بلا"),
                 Choice("alt", "Alt+K", "HotKey", "على الزر الذي يفتح اللوحة: اختصار يضغطه. أما `AttachTo` فيفتحها بـ `Ctrl+K` و«/» في النافذة كلها، وتغيرها في `Gestures`.", OptionKind.Property)),
@@ -83,12 +85,18 @@ public static class PalettePlay
             var attrs = (s.Has("recent") ? $" RecentLimit=\"{s["recent"]}\"" : "") + (s.Has("place") ? $" PlaceholderText=\"{s["place"]}\"" : "");
             string Item(string label, string group, string words, string hint = "") =>
                 $"      <ins:PaletteItem Label=\"{label}\"{(s.On("groups") ? $" Group=\"{group}\"" : "")} Keywords=\"{words}\"{hint} />";
-            var items = new[]
+            var desc = s.On("desc");
+            var items = new List<string>
             {
-                Item("الملفات", "الصفحات", "files"), Item("الإعدادات", "الصفحات", "settings"),
-                Item("الرسائل", "الصفحات", "messages"), Item("التقارير", "الصفحات", "reports"),
+                Item("الملفات", "الصفحات", "files", desc ? " Description=\"كل ما رفعته\"" : ""), Item("الإعدادات", "الصفحات", "settings"),
+                Item("الرسائل", "الصفحات", "messages"), Item("التقارير", "الصفحات", "reports", desc ? " Description=\"آخر تحديث أمس\"" : ""),
                 Item("حفظ", "إجراءات", "save", s.On("hint") ? " Hint=\"Ctrl S\"" : ""),
             };
+            if (s.On("search"))
+            {
+                items.Add(Item("كيف أغير كلمة المرور؟", "الأسئلة", "password", " IsSearchOnly=\"True\"" + (desc ? " Description=\"الحساب والأمان\"" : "")));
+                items.Add(Item("كيف أستعيد كلمة المرور المنسية؟", "الأسئلة", "password reset", " IsSearchOnly=\"True\"" + (desc ? " Description=\"الحساب والأمان\"" : "")));
+            }
             return $"<Button Classes=\"secondary\" Content=\"فتح\"{(s["keys"] == "alt" ? " HotKey=\"Alt+K\"" : "")}>\n" +
                 "  <Button.Resources>\n" +
                 $"    <ins:CommandPalette x:Key=\"Palette\"{attrs}>\n" +
@@ -97,7 +105,9 @@ public static class PalettePlay
                 "  </Button.Resources>\n" +
                 "</Button>";
         },
-        Notes = s => [$"اضغط «فتح»{(s["keys"] == "alt" ? " أو Alt+K" : "")} لترى اللوحة بخياراتك، واختر منها عنصرًا ثم افتحها ثانية لترى «الأخيرة». ويفتحها الزر في الشيفرة بـ `Palette.Open(this)`."],
+        Notes = s => s.On("search")
+            ? [$"اضغط «فتح»{(s["keys"] == "alt" ? " أو Alt+K" : "")} ولا ترى الأسئلة، ثم اكتب «كلمة» فتظهر. وما تكتبه في `Text`، ويُطلق `TextChanged` قبل كل بحث."]
+            : [$"اضغط «فتح»{(s["keys"] == "alt" ? " أو Alt+K" : "")} لترى اللوحة بخياراتك، واختر منها عنصرًا ثم افتحها ثانية لترى «الأخيرة». ويفتحها الزر في الشيفرة بـ `Palette.Open(this)`."],
         Stage = (view, _, say) => Wire(view, say),
     };
 

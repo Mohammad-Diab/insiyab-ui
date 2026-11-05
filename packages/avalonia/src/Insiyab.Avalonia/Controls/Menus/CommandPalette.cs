@@ -29,6 +29,12 @@ public class PaletteItem
     /// <summary>A shortcut shown at the end of its row.</summary>
     public string? Hint { get; set; }
 
+    /// <summary>A second, muted line under the label, such as where it was found or a file's size.</summary>
+    public string? Description { get; set; }
+
+    /// <summary>Listed only while something is typed: a long tail of help topics, say, that would crowd the list at rest.</summary>
+    public bool IsSearchOnly { get; set; }
+
     /// <summary>A 24×24 line icon, drawn like the library's own.</summary>
     public Geometry? Icon { get; set; }
 
@@ -96,6 +102,14 @@ public class CommandPalette : TemplatedControl
     public static readonly DirectProperty<CommandPalette, bool> IsOpenProperty =
         AvaloniaProperty.RegisterDirect<CommandPalette, bool>(nameof(IsOpen), o => o.IsOpen);
 
+    /// <summary>What is typed in the search field; setting it searches, and opening empties it.</summary>
+    public static readonly StyledProperty<string> TextProperty =
+        AvaloniaProperty.Register<CommandPalette, string>(nameof(Text), string.Empty);
+
+    /// <summary>Raised when <see cref="Text"/> changes, before the list is searched again, so items added or removed in the handler show in that search.</summary>
+    public static readonly RoutedEvent<RoutedEventArgs> TextChangedEvent =
+        RoutedEvent.Register<CommandPalette, RoutedEventArgs>(nameof(TextChanged), RoutingStrategies.Bubble);
+
     public static readonly RoutedEvent<PaletteChoosingEventArgs> ChoosingEvent =
         RoutedEvent.Register<CommandPalette, PaletteChoosingEventArgs>(nameof(Choosing), RoutingStrategies.Bubble);
 
@@ -113,6 +127,8 @@ public class CommandPalette : TemplatedControl
     private readonly List<PaletteItem> _shown = [];
     private List<object> _display = [];
     private PaletteItem? _active;
+    private bool _texting;
+    private bool _syncing;
 
     public CommandPalette()
     {
@@ -120,7 +136,7 @@ public class CommandPalette : TemplatedControl
         {
             if (e.NewItems is not null)
                 foreach (PaletteItem item in e.NewItems) item.Order = ++_order;
-            if (IsOpen) Render();
+            if (!_texting && IsOpen) Render();
         };
     }
 
@@ -147,6 +163,10 @@ public class CommandPalette : TemplatedControl
     public int RecentLimit { get => GetValue(RecentLimitProperty); set => SetValue(RecentLimitProperty, value); }
 
     public bool IsOpen { get => _open; private set => SetAndRaise(IsOpenProperty, ref _open, value); }
+
+    public string Text { get => GetValue(TextProperty); set => SetValue(TextProperty, value); }
+
+    public event EventHandler<RoutedEventArgs>? TextChanged { add => AddHandler(TextChangedEvent, value); remove => RemoveHandler(TextChangedEvent, value); }
 
     public event EventHandler<PaletteChoosingEventArgs>? Choosing { add => AddHandler(ChoosingEvent, value); remove => RemoveHandler(ChoosingEvent, value); }
 
@@ -190,6 +210,7 @@ public class CommandPalette : TemplatedControl
         IsVisible = true;
         IsOpen = true;
         if (_input is not null) _input.Text = string.Empty;
+        if (Text.Length > 0) SetCurrentValue(TextProperty, string.Empty);
         Render();
         PlayEntrance();
         Dispatcher.UIThread.Post(() => _input?.Focus(), DispatcherPriority.Loaded);
@@ -265,7 +286,7 @@ public class CommandPalette : TemplatedControl
         if (_input is not null)
         {
             _input.RemoveHandler(KeyDownEvent, OnInputKeyDown);
-            _input.TextChanged -= OnInputTextChanged;
+            _input.PropertyChanged -= OnInputTextChanged;
         }
         if (_backdrop is not null) _backdrop.PointerPressed -= OnBackdropPressed;
         if (_list is not null) _list.ContainerClearing -= OnContainerClearing;
@@ -278,7 +299,7 @@ public class CommandPalette : TemplatedControl
         if (_input is not null)
         {
             _input.AddHandler(KeyDownEvent, OnInputKeyDown, RoutingStrategies.Tunnel);
-            _input.TextChanged += OnInputTextChanged;
+            _input.PropertyChanged += OnInputTextChanged;
         }
         if (_backdrop is not null) _backdrop.PointerPressed += OnBackdropPressed;
         if (_list is not null)
@@ -301,7 +322,35 @@ public class CommandPalette : TemplatedControl
         Close();
     }
 
-    private void OnInputTextChanged(object? sender, TextChangedEventArgs e) => Render();
+    private void OnInputTextChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (_syncing || e.Property != TextBox.TextProperty) return;
+        var typed = _input?.Text ?? string.Empty;
+        if (Text != typed) SetCurrentValue(TextProperty, typed);
+        else Render();
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property != TextProperty) return;
+        var text = change.GetNewValue<string>() ?? string.Empty;
+        if (_input is not null && (_input.Text ?? string.Empty) != text)
+        {
+            _syncing = true;
+            try
+            {
+                _input.Text = text;
+                _input.CaretIndex = text.Length;
+            }
+            finally { _syncing = false; }
+        }
+        // The page answers what is typed first: items it adds or removes now are searched with it.
+        _texting = true;
+        try { RaiseEvent(new RoutedEventArgs(TextChangedEvent)); }
+        finally { _texting = false; }
+        if (IsOpen) Render();
+    }
 
     private void OnInputKeyDown(object? sender, KeyEventArgs e)
     {
@@ -354,8 +403,18 @@ public class CommandPalette : TemplatedControl
             grid.Children.Add(new Icon { Data = item.Icon, Size = 18, Margin = new Thickness(0, 0, 10, 0), Classes = { "palette-ico" } });
         var label = new PaletteText { Text = item.Label, Classes = { "palette-label" }, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
         if (item.IsCurrent) label.FontWeight = FontWeight.ExtraBold;
-        Grid.SetColumn(label, 1);
-        grid.Children.Add(label);
+        if (string.IsNullOrEmpty(item.Description))
+        {
+            Grid.SetColumn(label, 1);
+            grid.Children.Add(label);
+        }
+        else
+        {
+            var desc = new PaletteText { Text = item.Description, Classes = { "palette-desc" }, TextTrimming = TextTrimming.CharacterEllipsis };
+            var lines = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Children = { label, desc } };
+            Grid.SetColumn(lines, 1);
+            grid.Children.Add(lines);
+        }
         if (!string.IsNullOrEmpty(item.Hint))
         {
             var kbd = new Border { Classes = { "kbd" }, Margin = new Thickness(10, 0, 0, 0), Child = new TextBlock { Text = item.Hint } };
@@ -387,8 +446,8 @@ public class CommandPalette : TemplatedControl
         _shown.Clear();
         _rows.Clear();
         var display = new List<object>();
-        var terms = ArabicSearch.Terms(_input?.Text);
-        var ordered = Items.OrderBy(i => i.Order).ToList();
+        var terms = ArabicSearch.Terms(_input?.Text ?? Text);
+        var ordered = Items.Where(i => terms.Length > 0 || !i.IsSearchOnly).OrderBy(i => i.Order).ToList();
         PseudoClasses.Set(":searching", terms.Length > 0);
 
         if (terms.Length > 0)

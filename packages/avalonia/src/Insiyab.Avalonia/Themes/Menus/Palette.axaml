@@ -226,6 +226,17 @@
     <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
     <Setter Property="FontWeight" Value="SemiBold" />
   </Style>
+  <!-- A second line under the label: where it was found, a file's size -->
+  <Style Selector="ins|CommandPalette ins|PaletteText.palette-desc">
+    <Setter Property="Margin" Value="0,1,0,0" />
+    <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+  </Style>
+  <Style Selector="ins|CommandPalette ins|PaletteBorder.palette-item.active ins|PaletteText.palette-desc">
+    <Setter Property="Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
+    <Setter Property="Opacity" Value="0.8" />
+  </Style>
   <Style Selector="ins|CommandPalette ins|Icon.palette-ico">
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
     <Setter Property="VerticalAlignment" Value="Center" />
