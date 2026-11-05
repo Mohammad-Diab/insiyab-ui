@@ -1,4 +1,9 @@
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using Avalonia.Controls;
+using Avalonia.LogicalTree;
 using static Insiyab.Avalonia.Gallery.Playground.Play;
+using AccordionControl = Insiyab.Avalonia.Controls.Accordion;
 
 namespace Insiyab.Avalonia.Gallery.Playground;
 
@@ -15,6 +20,54 @@ public static class AccordionPlay
         </Border>
         """;
 
+    public sealed class TopicRow(string question, string answer) : INotifyPropertyChanged
+    {
+        private bool _isOpen;
+        public string Question { get; } = question;
+        public string Answer { get; } = answer;
+        public bool IsOpen { get => _isOpen; set { if (_isOpen == value) return; _isOpen = value; PropertyChanged?.Invoke(this, new(nameof(IsOpen))); } }
+        public event PropertyChangedEventHandler? PropertyChanged;
+    }
+
+    public sealed class TopicSample
+    {
+        public ObservableCollection<TopicRow> Topics { get; } =
+        [
+            new("كيف أغير كلمة المرور؟", "من الإعدادات اختر «الحساب» ثم «كلمة المرور»، واكتب القديمة ثم الجديدة مرتين.") { IsOpen = true },
+            new("هل يمكنني إلغاء الطلب؟", "نعم، ما دام لم يُشحن بعد. افتح الطلب واختر «إلغاء»، ويعود المبلغ خلال أيام."),
+            new("متى يصل الطرد؟", "في يومين إلى خمسة أيام عمل، وتصلك رسالة برقم التتبع عند الشحن."),
+            new("كيف أتواصل مع الدعم؟", "بالرسائل من صفحة المساعدة، أو بالهاتف في ساعات العمل."),
+        ];
+    }
+
+    public const string DataExample =
+        """
+        <Border Classes="panel">
+          <ins:Accordion ItemsSource="{Binding Topics}"
+                         HeaderBinding="{Binding Question}"
+                         IsExpandedBinding="{Binding IsOpen}"
+                         IsSingle="True">
+            <ins:Accordion.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Answer}" TextWrapping="Wrap" />
+              </DataTemplate>
+            </ins:Accordion.ItemTemplate>
+          </ins:Accordion>
+        </Border>
+        <CheckBox x:Name="HideSecond" Content="أخفِ السؤال الثاني" />
+        """;
+
+    public static Action<Control> DataStage { get; } = view =>
+    {
+        var accordion = view.GetLogicalDescendants().OfType<AccordionControl>().First();
+        accordion.DataContext = new TopicSample();
+        var hide = view.GetLogicalDescendants().OfType<CheckBox>().First(c => c.Name == "HideSecond");
+        hide.IsCheckedChanged += (_, _) =>
+        {
+            if (accordion.ContainerFromIndex(1) is { } section) section.IsVisible = hide.IsChecked != true;
+        };
+    };
+
     public static PlayDef Accordion { get; } = new()
     {
         Id = "accordion",
@@ -30,6 +83,11 @@ public static class AccordionPlay
         Extra =
         [
             Row("الأساس", "accordion", "على `StackPanel` يضم أقسامًا من `Expander`، ويفصل بينها بخط رفيع، وتنقل الأسهم و`Home` و`End` التركيز بين عناوينها. ولا سطح له، فضعه في `Border.panel` فتستقيم زوايا أقسامه على زواياه.", OptionKind.Class, true),
+            Row("من البيانات", "ins:Accordion", "أكورديون من قائمة: قسم `Expander` لكل عنصر، بالفواصل نفسها وبزوايا `Border.panel` إذا كان فيه، ولا يحسب الأقسام المخفية، وتنقل الأسهم التركيز بين عناوينها.", OptionKind.Element),
+            Row("من البيانات", "HeaderBinding", "عنوان كل قسم من عضو في عنصره، أو من قالب `HeaderTemplate`.", OptionKind.Property),
+            Row("من البيانات", "ItemTemplate", "قالب محتوى كل قسم.", OptionKind.Property),
+            Row("من البيانات", "IsExpandedBinding", "ربط فتح كل قسم بعضو من عنصره في الاتجاهين: يتبعه القسم، ويكتب فيه ما يفتحه المستخدم ويغلقه.", OptionKind.Property),
+            Row("من البيانات", "IsSingle", "إذا فُتح قسم انغلق المفتوح قبله.", OptionKind.Property),
         ],
         Axaml = s =>
         {

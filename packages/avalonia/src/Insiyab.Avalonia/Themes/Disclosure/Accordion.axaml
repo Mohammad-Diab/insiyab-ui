@@ -153,6 +153,20 @@
         </Style>
       </ControlTheme>
 
+      <ControlTheme x:Key="{x:Type ins:Accordion}" TargetType="ins:Accordion">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="ItemsPanel">
+          <ItemsPanelTemplate>
+            <StackPanel />
+          </ItemsPanelTemplate>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
       <StreamGeometry x:Key="InsFoldChevron">M6 9l6 6 6-6</StreamGeometry>
 
     </ResourceDictionary>
@@ -184,6 +198,26 @@
     <Setter Property="CornerRadius" Value="0,0,21,21" />
   </Style>
   <Style Selector="Border.panel > StackPanel.accordion > Expander:nth-child(1):nth-last-child(1):not(:expanded), Border.panel > Expander:not(:expanded)">
+    <Setter Property="CornerRadius" Value="21" />
+  </Style>
+
+  <!-- ins:Accordion: the same dividers and corners, from the places the accordion gives its sections, counting only those shown -->
+  <Style Selector="Expander:ins-item">
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+  </Style>
+  <Style Selector="Expander:ins-item:not(:ins-first)">
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+  </Style>
+  <Style Selector="Expander:ins-item:ins-panel">
+    <Setter Property="CornerRadius" Value="0" />
+  </Style>
+  <Style Selector="Expander:ins-item:ins-panel:ins-first">
+    <Setter Property="CornerRadius" Value="21,21,0,0" />
+  </Style>
+  <Style Selector="Expander:ins-item:ins-panel:ins-last:not(:expanded)">
+    <Setter Property="CornerRadius" Value="0,0,21,21" />
+  </Style>
+  <Style Selector="Expander:ins-item:ins-panel:ins-first:ins-last:not(:expanded)">
     <Setter Property="CornerRadius" Value="21" />
   </Style>
 

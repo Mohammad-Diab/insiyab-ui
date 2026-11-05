@@ -14,6 +14,10 @@
     <pg:PlayText Classes="p" Markup="يجمع `StackPanel.accordion` أقسامًا من `Expander`، فتنفتح بالنقر وبلوحة المفاتيح، وتنساب وهي تنفتح. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
     <pg:Playground Def="{x:Static pg:AccordionPlay.Accordion}" />
 
+    <TextBlock Classes="section" Text="من البيانات" />
+    <pg:PlayText Classes="p" Markup="يملأ `ins:Accordion` أقسامه من `ItemsSource`: العنوان من `HeaderBinding` والمحتوى من `ItemTemplate`، ويبقى فتح كل قسم على عضو في عنصره بـ `IsExpandedBinding`. والفواصل والزوايا لا تحسب إلا الأقسام الظاهرة، فأخفِ السؤال الثاني وانظر." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:AccordionPlay.DataExample}" Stage="{x:Static pg:AccordionPlay.DataStage}" />
+
     <TextBlock Classes="section" Text="قسم منفرد" />
     <pg:PlayText Classes="p" Markup="ويصلح `Expander` وحده أيضًا، خارج الأكورديون." />
     <pg:Playground Def="{x:Static pg:AccordionPlay.Collapse}" />
