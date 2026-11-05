@@ -179,6 +179,10 @@
     </Setter>
   </Style>
 
+  <!-- A link in rich text under the pointer, as a hovered link reads -->
+  <Style Selector="Span.a.hot">
+    <Setter Property="Foreground" Value="{DynamicResource InsLinkHover}" />
+  </Style>
   <!-- Code in a sentence: a Run keeps the sentence's bidi order (wrap its text in U+2066 and U+2069 to isolate it); Border.code is the boxed chip for use outside running text -->
   <Style Selector="Run.code, Span.code">
     <Setter Property="FontFamily" Value="{DynamicResource InsFontMono}" />

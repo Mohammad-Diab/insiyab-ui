@@ -267,5 +267,51 @@ public static class TypographyPlay
         ],
     };
 
-    public static PlayDef[] All { get; } = [Heading, Prose, Divider, Kbd, Search];
+    public static PlayDef Rich { get; } = new()
+    {
+        Id = "rich",
+        Title = "نص يُحدَّد كله",
+        Wide = _ => true,
+        Controls =
+        [
+            Switch("plain", "من نص عادي", "Text", "نص عادي كامل: كل كتلة بين سطرين فارغين فقرة باتجاه نصها، وعناوين المواقع فيها روابط.", OptionKind.Property),
+            Switch("list", "قائمة", "ins:ProseList", "بنود القائمة تُنسخ بأرقامها أو علاماتها.", OptionKind.Element),
+            Switch("turned", "فقرة إنجليزية", "FlowDirection=\"LeftToRight\"", "فقرة باتجاهها وسط النص، والتحديد يمر بها كما يمر بغيرها.", OptionKind.Property),
+        ],
+        Extra =
+        [
+            Row("الأساس", "ins:RichText", "نص طويل بمظهر `ins:Prose` يُحدَّد كله كأنه نص واحد: بالسحب من فقرة إلى أخرى (وتتحرك الصفحة إن بلغ السحب حافتها)، وبـShift مع الأسهم وHome وEnd (ومعها Ctrl للكلمة أو لأول النص وآخره)، وCtrl+A للكل، وCtrl+C ينسخ الفقرات بترتيب قراءتها، كل فقرة في سطر.", OptionKind.Element, true),
+            Row("الأساس", "LinkClick", "يُرفع حين يُنقر رابط، دون سحب. لا يفتح شيئًا بنفسه: افتح الرابط أنت إن شئت، بـ`TopLevel.Launcher`.", OptionKind.Event),
+            Row("في النص", "ins:RichText.Link", "على `Span`: عنوان الرابط، فيأخذ مظهر الرابط ويد الفأرة فوقه.", OptionKind.Property),
+            Row("في النص", "ins:RichText.Links", "على فقرة: عناوين المواقع في نصها تصير روابط.", OptionKind.Property),
+            Row("من البيانات", "ins:RichText.Spans", "على فقرة: نصها قطعًا من `ins:RichSpan` (عريض، توكيد، تسطير، شطب، شيفرة، تظليل، لون من الألوان، رابط)، ولا يتغير المظهر في وسط كلمة عربية فتبقى حروفها متصلة.", OptionKind.Property),
+            Row("من البيانات", "ins:RichText.SelectsAcross", "على أي حاوية، مثل `ItemsControl.prose`: فقراتها تُحدَّد كلها معًا كما في `ins:RichText`.", OptionKind.Property),
+        ],
+        Disable = s => s.On("plain") ? ["list", "turned"] : [],
+        Axaml = s =>
+        {
+            if (s.On("plain"))
+                return "<ins:RichText Text=\"هذه فقرة من نص عادي، وفيها عنوان موقع يصير رابطًا: www.example.com&#10;&#10;This paragraph is English, so it reads left to right in its own face.&#10;&#10;وتعود هذه الفقرة إلى العربية. اسحب من أول فقرة إلى آخرها، أو اضغط Ctrl+A.\" />";
+            var lines = new List<string>
+            {
+                "<ins:RichText>",
+                "  <SelectableTextBlock><Run Text=\"فقرة فيها \" /><Run Classes=\"strong\" Text=\"نص عريض\" /><Run Text=\" و\" /><Span ins:RichText.Link=\"https://example.com\"><Run Text=\"رابط يُنقر\" /></Span><Run Text=\".\" /></SelectableTextBlock>",
+                "  <SelectableTextBlock Text=\"اسحب من الفقرة الأولى إلى هنا فيتحدد ما بينهما، أو اضغط Shift مع الأسهم.\" />",
+            };
+            if (s.On("turned")) lines.Add("  <SelectableTextBlock FlowDirection=\"LeftToRight\" Text=\"An English paragraph keeps its own direction inside the selection.\" />");
+            if (s.On("list"))
+                lines.AddRange([
+                    "  <ins:ProseList IsOrdered=\"True\">",
+                    "    <SelectableTextBlock Text=\"البند الأول\" />",
+                    "    <SelectableTextBlock Text=\"البند الثاني\" />",
+                    "  </ins:ProseList>",
+                ]);
+            lines.Add("  <SelectableTextBlock Text=\"وهذه الفقرة الأخيرة.\" />");
+            lines.Add("</ins:RichText>");
+            return string.Join("\n", lines);
+        },
+        Notes = _ => ["المعرض لا يفتح الروابط، فالنقر يرفع `LinkClick` والقرار لك."],
+    };
+
+    public static PlayDef[] All { get; } = [Heading, Prose, Rich, Divider, Kbd, Search];
 }

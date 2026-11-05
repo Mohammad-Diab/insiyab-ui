@@ -26,6 +26,10 @@
     <pg:PlayText Classes="p" Markup="ضع الكلاس `prose` على `ItemsControl` فتأخذ فقراته مظهر النص الطويل وتباعده، وكل فقرة باتجاه نصها بـ`ins:TextDirection.IsAuto`." />
     <pg:PlayExample Layout="Stack" Code="{x:Static pg:TypographyPlay.DataExample}" Stage="{x:Static pg:TypographyPlay.DataStage}" />
 
+    <TextBlock Classes="section" Text="نص يُحدَّد كله" />
+    <pg:PlayText Classes="p" Markup="في `ins:RichText` تُحدَّد الفقرات كلها كأنها نص واحد، بالسحب أو بلوحة المفاتيح، وتُنسخ بترتيب قراءتها. وفيها روابط تُنقر، ونص عريض وشيفرة وألوان، والحروف العربية متصلة." />
+    <pg:Playground Def="{x:Static pg:TypographyPlay.Rich}" />
+
     <TextBlock Classes="section" Text="عنوان يُقص وما بعده" />
     <pg:PlayText Classes="p" Markup="في `ins:TrailingRow` يُقص العنوان الطويل بعلامة «…» وتبقى الشارة بعده مباشرة، والعنوان القصير تلحقه الشارة ولا تبتعد إلى آخر السطر. واسم الملف الإنجليزي يُقرأ باتجاهه بـ`ins:TextDirection.IsAuto` فتقع «…» في آخره." />
     <pg:PlayExample Layout="Stack" Code="{x:Static pg:TypographyPlay.TrailExample}" />
