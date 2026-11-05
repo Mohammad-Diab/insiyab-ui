@@ -13,6 +13,8 @@ internal sealed class ColumnLayout
     private readonly HashSet<ColumnsPanel> _panels = [];
     private readonly Dictionary<int, double> _fixed = [];
     private double[] _max = [];
+    private GridLength[] _lengths = [];
+    private double[] _mins = [];
     private bool _stale;
     private bool _pending;
 
@@ -24,6 +26,26 @@ internal sealed class ColumnLayout
 
     /// <summary>Widths the user set by dragging, by column.</summary>
     public IReadOnlyDictionary<int, double> FixedWidths => _fixed;
+
+    /// <summary>The heading row, whose cells are the least a star column gets.</summary>
+    public ColumnsPanel? Head { get; set; }
+
+    /// <summary>Each column's width as written, Auto, pixels or a star share, and the narrowest a star column gets; true when they changed.</summary>
+    public bool SetLengths(GridLength[] lengths, double[] mins)
+    {
+        if (lengths.AsSpan().SequenceEqual(_lengths) && mins.AsSpan().SequenceEqual(_mins)) return false;
+        _lengths = lengths;
+        _mins = mins;
+        Invalidate();
+        return true;
+    }
+
+    private GridLength LengthOf(int i) => i < _lengths.Length ? _lengths[i] : GridLength.Auto;
+
+    // A star column starts at its heading's width, or its MinWidth, and takes its share of the room left.
+    private double StarBase(int i) => Math.Max(i < _mins.Length ? _mins[i] : MinWidth, Head is { } head && i < head.Natural.Length ? head.Natural[i] : 0);
+
+    private bool Shares(int i) => IsFit?.Invoke(i) != true && !_fixed.ContainsKey(i) && LengthOf(i).IsAuto;
 
     internal void Add(ColumnsPanel panel)
     {
@@ -66,6 +88,12 @@ internal sealed class ColumnLayout
                     _max[i] = Math.Max(_max[i], p.Natural[i]);
         }
         var widths = (double[])_max.Clone();
+        for (var i = 0; i < widths.Length && i < _lengths.Length; i++)
+        {
+            var length = _lengths[i];
+            if (length.IsAbsolute) widths[i] = Math.Max(0, length.Value);
+            else if (length.IsStar) widths[i] = StarBase(i);
+        }
         foreach (var (i, w) in _fixed) if (i < widths.Length) widths[i] = w;
         return widths;
     }
@@ -100,21 +128,32 @@ internal sealed class ColumnLayout
         Invalidate();
     }
 
-    /// <summary>The widths for a row <paramref name="available"/> wide: every column its natural width, and the room left over shared in proportion to them.</summary>
+    /// <summary>The widths for a row <paramref name="available"/> wide: every column its natural width, and the room left over going to the star columns by their shares, or, with none, to the Auto ones in proportion to their widths.</summary>
     public double[] Resolve(double available)
     {
         var widths = Natural();
         var total = 0.0;
         var share = 0.0;
+        var stars = 0.0;
         for (var i = 0; i < widths.Length; i++)
         {
             total += widths[i];
-            if (IsFit?.Invoke(i) != true && !_fixed.ContainsKey(i)) share += widths[i];
+            if (_fixed.ContainsKey(i)) continue;
+            var length = LengthOf(i);
+            if (length.IsStar) stars += length.Value;
+            else if (Shares(i)) share += widths[i];
         }
         var spare = available - total;
-        if (spare <= 0 || share <= 0) return widths;
+        if (spare <= 0) return widths;
+        if (stars > 0)
+        {
+            for (var i = 0; i < widths.Length; i++)
+                if (!_fixed.ContainsKey(i) && LengthOf(i) is { IsStar: true } star) widths[i] += spare * star.Value / stars;
+            return widths;
+        }
+        if (share <= 0) return widths;
         for (var i = 0; i < widths.Length; i++)
-            if (IsFit?.Invoke(i) != true && !_fixed.ContainsKey(i)) widths[i] += spare * widths[i] / share;
+            if (Shares(i)) widths[i] += spare * widths[i] / share;
         return widths;
     }
 

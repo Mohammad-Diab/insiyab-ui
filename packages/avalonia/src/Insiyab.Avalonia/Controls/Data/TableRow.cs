@@ -69,6 +69,13 @@ public class TableRow : TemplatedControl
         PlaceCells();
     }
 
+    // A row whose place did not change leaves its cells alone, so a row added or taken costs only the rows after it whose stripe moved.
+    internal void MovePlace(int index, int count)
+    {
+        if (Classes.Contains(":first") == (index == 0) && Classes.Contains(":last") == (index == count - 1) && Classes.Contains(":stripe") == (index % 2 == 1)) return;
+        SetPlace(index, count);
+    }
+
     // The first and last cells shown, on the first and last rows the corners of the card.
     internal void PlaceCells()
     {

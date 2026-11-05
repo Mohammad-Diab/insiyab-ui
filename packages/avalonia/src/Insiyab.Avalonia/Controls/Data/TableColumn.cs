@@ -1,5 +1,8 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
+using Avalonia.Metadata;
 
 namespace Insiyab.Avalonia.Controls;
 
@@ -67,6 +70,9 @@ public class TableColumn : AvaloniaObject
     public static readonly StyledProperty<IDataTemplate?> CellTemplateProperty =
         AvaloniaProperty.Register<TableColumn, IDataTemplate?>(nameof(CellTemplate));
 
+    public static readonly StyledProperty<GridLength> WidthProperty =
+        AvaloniaProperty.Register<TableColumn, GridLength>(nameof(Width), GridLength.Auto);
+
     /// <summary>The heading, text or a control.</summary>
     public object? Header { get => GetValue(HeaderProperty); set => SetValue(HeaderProperty, value); }
 
@@ -96,6 +102,13 @@ public class TableColumn : AvaloniaObject
 
     /// <summary>For rows made from <see cref="Table.ItemsSource"/>: the text of each cell, given the row's item. It is also what the column sorts by.</summary>
     public Func<object?, string?>? CellText { get; set; }
+
+    /// <summary>For rows made from <see cref="Table.ItemsSource"/>: each cell's value, bound to the row's item, so an item that changes in place updates its cells.</summary>
+    [AssignBinding]
+    public BindingBase? CellBinding { get; set; }
+
+    /// <summary>The column's width: Auto (its widest cell, sharing the spare room), pixels, or a share of the room the other columns leave (<c>*</c>, <c>2*</c>), never under its heading or <see cref="MinWidth"/>. A drag still sets it.</summary>
+    public GridLength Width { get => GetValue(WidthProperty); set => SetValue(WidthProperty, value); }
 
     internal IEnumerable<string> ClassList() =>
         (Classes ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);

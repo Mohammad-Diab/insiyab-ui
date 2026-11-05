@@ -87,6 +87,11 @@ public partial class Table : TemplatedControl
     private bool _inPanel;
     private int _pinned;
     private double _pinX = double.NaN;
+    private readonly HashSet<TableColumn> _watched = [];
+    private bool _freshRows;
+    private TableColumn? _sortColumn;
+    private SortDirection _sortDirection;
+    private bool _sortNumeric;
 
     static Table()
     {
@@ -98,10 +103,13 @@ public partial class Table : TemplatedControl
         ColumnWidths = new ColumnLayout { IsFit = IsFitColumn, KeepsDetached = true };
         Columns.CollectionChanged += (_, _) =>
         {
+            WatchColumns();
+            _freshRows = true;
+            if (_sortColumn is not null && !Columns.Contains(_sortColumn)) _sortColumn = null;
             ColumnWidths.ClearWidths();
             Rebuild();
         };
-        Rows.CollectionChanged += (_, _) => Rebuild();
+        Rows.CollectionChanged += OnRowsChanged;
         Classes.CollectionChanged += (_, e) =>
         {
             if (Touches(e, "sticky") || Touches(e, "pin")) Dispatcher.UIThread.Post(UpdateSticky, DispatcherPriority.Render);
@@ -111,6 +119,38 @@ public partial class Table : TemplatedControl
 
     private static bool Touches(NotifyCollectionChangedEventArgs e, string name) =>
         e.Action == NotifyCollectionChangedAction.Reset || (e.NewItems?.Contains(name) ?? false) || (e.OldItems?.Contains(name) ?? false);
+
+    // A column's width, its least width or its fit changes the shared widths, not the rows.
+    private void WatchColumns()
+    {
+        foreach (var gone in _watched.Where(c => !Columns.Contains(c)).ToList())
+        {
+            gone.PropertyChanged -= OnColumnChanged;
+            _watched.Remove(gone);
+        }
+        foreach (var column in Columns)
+            if (_watched.Add(column)) column.PropertyChanged += OnColumnChanged;
+    }
+
+    private void OnColumnChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == TableColumn.WidthProperty || e.Property == TableColumn.MinWidthProperty) Lengths();
+        else if (e.Property == TableColumn.IsFitProperty) ColumnWidths.Invalidate();
+    }
+
+    private void Lengths()
+    {
+        var count = Columns.Count + Offset;
+        var lengths = new GridLength[count];
+        var mins = new double[count];
+        for (var i = 0; i < count; i++)
+        {
+            var column = i - Offset >= 0 ? Columns[i - Offset] : null;
+            lengths[i] = column?.Width ?? GridLength.Auto;
+            mins[i] = Math.Max(ColumnLayout.MinWidth, column?.MinWidth ?? 0);
+        }
+        ColumnWidths.SetLengths(lengths, mins);
+    }
 
     /// <summary>The columns, in order.</summary>
     public AvaloniaList<TableColumn> Columns { get; } = [];
@@ -243,6 +283,7 @@ public partial class Table : TemplatedControl
         if (_scroll is not null) _scroll.ScrollChanged += OnScroll;
         if (_rows is TableRowsPanel rowsPanel) rowsPanel.Realized += OnRealized;
         if (_headCells is not null) _headCells.Layout = ColumnWidths;
+        ColumnWidths.Head = _headCells;
         Rebuild();
     }
 
@@ -282,21 +323,240 @@ public partial class Table : TemplatedControl
         }
     }
 
-    private void OnItemsChanged(object? sender, NotifyCollectionChangedEventArgs e) => Rebuild();
+    private void OnItemsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (!Step(e, true)) Rebuild();
+    }
 
+    private void OnRowsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (ItemsSource is null && !Step(e, false)) Rebuild();
+    }
+
+    // The rows from the items. A row whose item is still there is kept, with its selection and its place in the widths; only new items make rows.
     private void Generate()
     {
+        Dictionary<object, Queue<TableRow>>? kept = null;
+        if (!_freshRows)
+        {
+            foreach (var row in _generated)
+            {
+                if (row.Item is not { } key) continue;
+                kept ??= [];
+                if (!kept.TryGetValue(key, out var same)) kept[key] = same = new Queue<TableRow>();
+                same.Enqueue(row);
+            }
+        }
+        _freshRows = false;
         _generated.Clear();
         if (ItemsSource is null) return;
         foreach (var item in ItemsSource)
         {
-            var row = new TableRow { Item = item };
-            foreach (var column in Columns)
-                row.Cells.Add(column.CellTemplate is { } template
-                    ? new TableCell { Content = item, ContentTemplate = template }
-                    : new TableCell { Content = column.CellText?.Invoke(item) });
-            _generated.Add(row);
+            if (item is not null && kept is not null && kept.TryGetValue(item, out var same) && same.TryDequeue(out var row))
+            {
+                Refresh(row, item);
+                _generated.Add(row);
+            }
+            else _generated.Add(MakeRow(item));
         }
+    }
+
+    private TableRow MakeRow(object? item)
+    {
+        var row = new TableRow { Item = item };
+        foreach (var column in Columns)
+        {
+            TableCell cell;
+            if (column.CellTemplate is { } template) cell = new TableCell { Content = item, ContentTemplate = template };
+            else if (column.CellBinding is { } binding)
+            {
+                // The item is the cell's own data, so the binding has its value even for a row that never comes into view, as sorting needs.
+                cell = new TableCell { DataContext = item };
+                cell.Bind(ContentControl.ContentProperty, binding);
+            }
+            else cell = new TableCell { Content = column.CellText?.Invoke(item) };
+            row.Cells.Add(cell);
+        }
+        return row;
+    }
+
+    // The same row takes the new item: its cells are updated where they changed, so its selection, the keyboard and a press on it all stay.
+    private void Refresh(TableRow row, object? item)
+    {
+        row.Item = item;
+        var skip = row.Cells.Count > 0 && row.Cells[0].IsCheck ? 1 : 0;
+        for (var c = 0; c < Columns.Count && c + skip < row.Cells.Count; c++)
+        {
+            var cell = row.Cells[c + skip];
+            if (cell.IsEditing) continue;
+            var column = Columns[c];
+            if (column.CellTemplate is not null) cell.Content = item;
+            else if (column.CellBinding is not null) cell.DataContext = item;
+            else if (column.CellText?.Invoke(item) is var text && !Equals(cell.Content, text)) cell.Content = text;
+        }
+    }
+
+    // One change to the items, or to the rows written by hand, made in place: the other rows keep their state, and only the rows beside the change are placed again; false when only a rebuild will do.
+    private bool Step(NotifyCollectionChangedEventArgs e, bool items)
+    {
+        if (_headCells is null || _rows is null) return true;
+        var count = _generated.Count;
+        var low = int.MaxValue;
+        var fresh = new List<TableRow>();
+        var unselected = false;
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add when e.NewItems is { } added && e.NewStartingIndex >= 0 && e.NewStartingIndex <= count:
+                for (var k = 0; k < added.Count; k++)
+                {
+                    if ((items ? MakeRow(added[k]) : added[k] as TableRow) is not { } row || _generated.Contains(row) && !items) return false;
+                    low = Math.Min(low, Insert(e.NewStartingIndex + k, row));
+                    fresh.Add(row);
+                }
+                break;
+            case NotifyCollectionChangedAction.Remove when e.OldItems is { } removed && e.OldStartingIndex >= 0 && e.OldStartingIndex + removed.Count <= count:
+                for (var k = 0; k < removed.Count; k++) low = Math.Min(low, RemoveAt(e.OldStartingIndex, ref unselected));
+                break;
+            case NotifyCollectionChangedAction.Replace when e.NewItems is { } now && e.OldItems is { } was && now.Count == was.Count && e.NewStartingIndex >= 0 && e.NewStartingIndex + now.Count <= count:
+                for (var k = 0; k < now.Count; k++)
+                {
+                    var at = e.NewStartingIndex + k;
+                    if (items)
+                    {
+                        Refresh(_generated[at], now[k]);
+                        low = Math.Min(low, Resort(_generated[at]));
+                        continue;
+                    }
+                    if (now[k] is not TableRow row) return false;
+                    low = Math.Min(low, RemoveAt(at, ref unselected));
+                    low = Math.Min(low, Insert(at, row));
+                    fresh.Add(row);
+                }
+                break;
+            case NotifyCollectionChangedAction.Move when e.OldItems is { Count: 1 } && e.OldStartingIndex >= 0 && e.OldStartingIndex < count && e.NewStartingIndex >= 0 && e.NewStartingIndex < count:
+                low = Math.Min(low, MoveRow(e.OldStartingIndex, e.NewStartingIndex));
+                break;
+            default:
+                return false;
+        }
+        var expected = items ? (ItemsSource as ICollection)?.Count : Rows.Count;
+        if (expected is { } n && n != _generated.Count) return false;
+        if (low != int.MaxValue) PlaceFrom(Math.Max(0, low - 1));
+        PseudoClasses.Set(":empty", _display.Count == 0 && Empty is not null);
+        if (unselected) SyncSelection(false);
+        else CheckAll();
+        if (fresh.Count > 0) Arrive(fresh);
+        return true;
+    }
+
+    // Puts a new row at its place in the source, and on screen at the same place, or at its sorted place while a sort holds; returns where it is shown.
+    private int Insert(int index, TableRow row)
+    {
+        Prepare(row);
+        _generated.Insert(index, row);
+        var at = _sortColumn is not null ? SortedPlace(row) : Math.Min(index, _display.Count);
+        _display.Insert(at, row);
+        if (_rows is TableRowsPanel panel) panel.Insert(at, row);
+        else _rows?.Children.Insert(at, row);
+        return at;
+    }
+
+    private int RemoveAt(int index, ref bool unselected)
+    {
+        var row = _generated[index];
+        _generated.RemoveAt(index);
+        var at = _sortColumn is null && index < _display.Count && _display[index] == row ? index : _display.IndexOf(row);
+        if (at < 0) return int.MaxValue;
+        _display.RemoveAt(at);
+        if (_rows is TableRowsPanel panel) panel.Remove(row);
+        else _rows?.Children.Remove(row);
+        row.Attach(null);
+        if (row.CellsPanel is { } cells) ColumnWidths.Remove(cells);
+        if (row == _current) SetCurrent(null, -1);
+        if (row == _anchor) _anchor = null;
+        if (row == _marked) _marked = null;
+        unselected |= row.IsSelected;
+        return at;
+    }
+
+    private int MoveRow(int from, int to)
+    {
+        var row = _generated[from];
+        _generated.RemoveAt(from);
+        _generated.Insert(to, row);
+        if (_sortColumn is not null) return int.MaxValue;
+        _display.RemoveAt(from);
+        _display.Insert(to, row);
+        if (_rows is TableRowsPanel panel) panel.Move(from, to);
+        else _rows?.Children.Move(from, to);
+        return Math.Min(from, to);
+    }
+
+    // While a sort holds, a row whose item changed goes to its new sorted place.
+    private int Resort(TableRow row)
+    {
+        if (_sortColumn is null) return int.MaxValue;
+        var from = _display.IndexOf(row);
+        if (from < 0) return int.MaxValue;
+        _display.RemoveAt(from);
+        var to = SortedPlace(row);
+        _display.Insert(to, row);
+        if (from == to) return int.MaxValue;
+        if (_rows is TableRowsPanel panel) panel.Move(from, to);
+        else _rows?.Children.Move(from, to);
+        return Math.Min(from, to);
+    }
+
+    // After the last shown row that sorts before or with it, so rows that tie keep the order they came in.
+    private int SortedPlace(TableRow row)
+    {
+        var cellIndex = Columns.IndexOf(_sortColumn!) + Offset;
+        var key = SortKeyAt(row, cellIndex);
+        var number = _sortNumeric ? NumberOf(key) : double.NaN;
+        var sign = _sortDirection == SortDirection.Descending ? -1 : 1;
+        int lo = 0, hi = _display.Count;
+        while (lo < hi)
+        {
+            var mid = (lo + hi) / 2;
+            var other = SortKeyAt(_display[mid], cellIndex);
+            if (Compare(other, _sortNumeric ? NumberOf(other) : double.NaN, key, number, _sortNumeric, sign) <= 0) lo = mid + 1;
+            else hi = mid;
+        }
+        return lo;
+    }
+
+    private static string SortKeyAt(TableRow row, int cellIndex) => cellIndex >= 0 && cellIndex < row.Cells.Count ? row.Cells[cellIndex].SortKey : "";
+
+    // Rows with nothing to sort by go last whichever way; 0 for a tie.
+    private static int Compare(string a, double na, string b, double nb, bool numeric, int sign)
+    {
+        var ea = numeric ? double.IsNaN(na) : a.Length == 0;
+        var eb = numeric ? double.IsNaN(nb) : b.Length == 0;
+        if (ea || eb) return ea == eb ? 0 : ea ? 1 : -1;
+        return (numeric ? na.CompareTo(nb) : CompareText(a, b)) * sign;
+    }
+
+    private void PlaceFrom(int from)
+    {
+        for (var i = from; i < _display.Count; i++) _display[i].MovePlace(i, _display.Count);
+    }
+
+    // A row joining the table: the selection column when the table has one, and each cell its column and the column's classes.
+    private void Prepare(TableRow row)
+    {
+        if (IsSelectable && (row.Cells.Count == 0 || !row.Cells[0].IsCheck)) row.Cells.Insert(0, CheckCell(row));
+        if (!IsSelectable && row.Cells.Count > 0 && row.Cells[0].IsCheck) row.Cells.RemoveAt(0);
+        for (var i = 0; i < row.Cells.Count; i++)
+        {
+            var cell = row.Cells[i];
+            var column = i - Offset >= 0 && i - Offset < Columns.Count ? Columns[i - Offset] : null;
+            cell.Column = column;
+            if (column is not null)
+                foreach (var cls in column.ClassList())
+                    if (!cell.Classes.Contains(cls)) cell.Classes.Add(cls);
+        }
+        row.Attach(this);
+        row.SetInPanel(_inPanel);
     }
 
     /// <summary>Lays the header and the rows out again from <see cref="Columns"/> and <see cref="Rows"/> (or <see cref="ItemsSource"/>).</summary>
@@ -304,7 +564,12 @@ public partial class Table : TemplatedControl
     {
         if (_headCells is null || _rows is null) return;
         if (ItemsSource is not null) Generate();
-        var source = ItemsSource is not null ? _generated : (IList<TableRow>)Rows;
+        else
+        {
+            _generated.Clear();
+            _generated.AddRange(Rows);
+        }
+        var source = _generated;
 
         var shown = _display.Select(KeyOf).ToHashSet();
         foreach (var old in _display) old.Attach(null);
@@ -340,23 +605,18 @@ public partial class Table : TemplatedControl
 
         foreach (var row in source)
         {
-            if (IsSelectable && (row.Cells.Count == 0 || !row.Cells[0].IsCheck)) row.Cells.Insert(0, CheckCell(row));
-            if (!IsSelectable && row.Cells.Count > 0 && row.Cells[0].IsCheck) row.Cells.RemoveAt(0);
-            for (var i = 0; i < row.Cells.Count; i++)
-            {
-                var cell = row.Cells[i];
-                var column = i - Offset >= 0 && i - Offset < Columns.Count ? Columns[i - Offset] : null;
-                cell.Column = column;
-                if (column is not null)
-                    foreach (var cls in column.ClassList())
-                        if (!cell.Classes.Contains(cls)) cell.Classes.Add(cls);
-            }
-            row.Attach(this);
-            row.SetInPanel(_inPanel);
+            Prepare(row);
             _display.Add(row);
-            if (_rows is not TableRowsPanel) _rows.Children.Add(row);
+        }
+        // A sort still holds: the rows come back in its order, without the slide or a Sorting event.
+        if (_sortColumn is not null && Order(_sortColumn, _sortDirection) is { } sorted)
+        {
+            _display.Clear();
+            _display.AddRange(sorted);
         }
         if (_rows is TableRowsPanel panel) panel.SetRows(_display);
+        else foreach (var row in _display) _rows.Children.Add(row);
+        Lengths();
         ColumnWidths.Keep(_display.Select(r => r.CellsPanel));
         _pinX = double.NaN;
 
@@ -394,6 +654,14 @@ public partial class Table : TemplatedControl
         if (fresh.Count == _display.Count) { StaggerInView(fresh); return; }
         for (var i = 0; i < _display.Count; i++)
             if (!shown.Contains(KeyOf(_display[i]))) Rise(_display[i], i < 6 ? i * 40 : 0);
+    }
+
+    // Rows added one at a time rise in, the first few a step apart; rows added to an empty table stagger in as a fresh one does.
+    private void Arrive(List<TableRow> fresh)
+    {
+        if (Motion.IsStill(this)) return;
+        if (fresh.Count == _display.Count) { StaggerInView(fresh); return; }
+        for (var k = 0; k < fresh.Count; k++) Rise(fresh[k], k < 6 ? k * 40 : 0);
     }
 
     // Waits for the first layout that places the rows, then staggers the ones in view.
@@ -515,10 +783,17 @@ public partial class Table : TemplatedControl
     private void SyncSelection(bool quiet)
     {
         FollowMarker();
+        var count = CheckAll();
+        if (!quiet || count > 0) SelectionChanged?.Invoke(this, new TableSelectionEventArgs(SelectedRows));
+    }
+
+    // The header's checkbox follows the rows: checked, mixed or clear; returns how many are selected.
+    private int CheckAll()
+    {
         var count = _display.Count(r => r.IsSelected);
         if (_all is not null)
             _all.IsChecked = count == 0 ? false : count == _display.Count ? true : null;
-        if (!quiet || count > 0) SelectionChanged?.Invoke(this, new TableSelectionEventArgs(SelectedRows));
+        return count;
     }
 
     // When the one selected row changes, its marker flies to the new row as the sidebar's does, instead of one shrinking while the other grows.
@@ -954,26 +1229,12 @@ public partial class Table : TemplatedControl
         var index = Columns.IndexOf(column);
         var args = new TableSortingEventArgs(column, index, direction);
         Sorting?.Invoke(this, args);
+        _sortColumn = null;
         if (args.Cancel || index < 0 || _rows is null) return direction;
-
-        var cellIndex = index + Offset;
-        var keys = _display.Select(r => cellIndex < r.Cells.Count ? r.Cells[cellIndex].SortKey : "").ToArray();
-        var numeric = column.Sort == TableSort.Number || (column.Sort != TableSort.Text && keys.Any(k => k.Length > 0) && keys.All(k => k.Length == 0 || !double.IsNaN(NumberOf(k))));
-        var numbers = numeric ? keys.Select(NumberOf).ToArray() : [];
-        var sign = direction == SortDirection.Descending ? -1 : 1;
-        var order = Enumerable.Range(0, _display.Count).ToList();
-        order.Sort((a, b) =>
-        {
-            var ea = numeric ? double.IsNaN(numbers[a]) : keys[a].Length == 0;
-            var eb = numeric ? double.IsNaN(numbers[b]) : keys[b].Length == 0;
-            if (ea || eb) return ea == eb ? a - b : ea ? 1 : -1;
-            var c = numeric ? numbers[a].CompareTo(numbers[b]) : CompareText(keys[a], keys[b]);
-            return c != 0 ? c * sign : a - b;
-        });
+        if (Order(column, direction) is not { } sorted) return direction;
 
         var rowsPanel = _rows as TableRowsPanel;
         var before = _display.ToDictionary(r => r, r => rowsPanel?.OffsetOf(r) ?? r.Bounds.Y);
-        var sorted = order.Select(i => _display[i]).ToList();
         _display.Clear();
         _display.AddRange(sorted);
         if (rowsPanel is not null) rowsPanel.SetRows(sorted);
@@ -985,6 +1246,28 @@ public partial class Table : TemplatedControl
         Place();
         Slide(before);
         return direction;
+    }
+
+    // The shown rows in a column's order, which then holds for rows that arrive later.
+    private List<TableRow>? Order(TableColumn column, SortDirection direction)
+    {
+        var index = Columns.IndexOf(column);
+        if (index < 0) return null;
+        var cellIndex = index + Offset;
+        var keys = _display.Select(r => SortKeyAt(r, cellIndex)).ToArray();
+        var numeric = column.Sort == TableSort.Number || (column.Sort != TableSort.Text && keys.Any(k => k.Length > 0) && keys.All(k => k.Length == 0 || !double.IsNaN(NumberOf(k))));
+        var numbers = numeric ? keys.Select(NumberOf).ToArray() : [];
+        var sign = direction == SortDirection.Descending ? -1 : 1;
+        var order = Enumerable.Range(0, _display.Count).ToList();
+        order.Sort((a, b) =>
+        {
+            var c = Compare(keys[a], numeric ? numbers[a] : double.NaN, keys[b], numeric ? numbers[b] : double.NaN, numeric, sign);
+            return c != 0 ? c : a - b;
+        });
+        _sortColumn = column;
+        _sortDirection = direction;
+        _sortNumeric = numeric;
+        return order.Select(i => _display[i]).ToList();
     }
 
     private void Slide(Dictionary<TableRow, double> before)

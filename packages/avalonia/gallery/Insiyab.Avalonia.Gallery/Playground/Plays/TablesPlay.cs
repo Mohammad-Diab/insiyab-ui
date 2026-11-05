@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Insiyab.Avalonia.Controls;
@@ -351,5 +352,82 @@ public static class TablesPlay
         },
     };
 
-    public static PlayDef[] All { get; } = [Table, Wrap, Sort, Select, Edit, Sheet];
+    public sealed record OrderRow(int Id, string Customer, string Status);
+
+    public sealed class OrderSample
+    {
+        public ObservableCollection<OrderRow> Orders { get; } =
+            [new(1041, "ليلى حداد", "تم التسليم"), new(1042, "عمر سليمان", "في الطريق"), new(1043, "سارة خليل", "قيد التجهيز"), new(1044, "كريم ناصر", "جديد")];
+    }
+
+    private static readonly string[] Customers = ["نور الهدى", "يوسف عيسى", "هدى منصور", "خالد عوض", "مريم سعيد", "سامي فارس"];
+
+    private static readonly string[] States = ["جديد", "قيد التجهيز", "في الطريق", "تم التسليم"];
+
+    public static PlayDef Live { get; } = new()
+    {
+        Id = "live",
+        Title = "الصفوف واحدًا واحدًا",
+        Wide = _ => true,
+        Controls =
+        [
+            Switch("widths", "عرض الأعمدة", "Width", "على `ins:TableColumn`: رقم يثبت عرض العمود، و`*` يعطيه ما بقي من العرض، و`2*` ضعف نصيب غيره، ولا يضيق عن عنوانه ولا عن `MinWidth`. وإن تركته أخذ العمود عرض أعرض ما فيه.", OptionKind.Property, on: true),
+        ],
+        Extra =
+        [
+            Row("الأساس", "ItemsSource", "قائمة تُعلم بتغيرها، مثل `ObservableCollection`: يأخذ الجدول كل إضافة أو حذف أو تبديل أو نقل في مكانه دون أن يُبنى من جديد، فيبقى التحديد ولوحة المفاتيح والنقرة على الصف الذي تبدّل عنصره. وإذا كان الجدول مرتبًا دخل الصف الجديد في مكانه من الترتيب.", OptionKind.Property, true),
+            Row("الأساس", "CellBinding", "على `ins:TableColumn`: يربط قيمة كل خلية بعضو من عنصر صفها، فإذا تغير العضو تغيرت الخلية معه.", OptionKind.Property, true),
+        ],
+        Axaml = s =>
+        {
+            string W(string width) => s.On("widths") ? $" Width=\"{width}\"" : "";
+            return "<StackPanel Spacing=\"12\">\n" +
+                "  <ins:Table ItemsSource=\"{Binding Orders}\">\n" +
+                "    <ins:Table.Columns>\n" +
+                $"      <ins:TableColumn Header=\"الطلب\" Classes=\"num\"{W("88")} CellBinding=\"{{Binding Id}}\" Sort=\"Auto\" />\n" +
+                $"      <ins:TableColumn Header=\"العميل\"{W("*")} CellBinding=\"{{Binding Customer}}\" />\n" +
+                $"      <ins:TableColumn Header=\"الحالة\"{W("120")} CellBinding=\"{{Binding Status}}\" />\n" +
+                "    </ins:Table.Columns>\n" +
+                "  </ins:Table>\n" +
+                "  <StackPanel Orientation=\"Horizontal\" Spacing=\"8\">\n" +
+                "    <Button x:Name=\"AddOrder\" Classes=\"secondary sm\" Content=\"أضف طلبًا\" />\n" +
+                "    <Button x:Name=\"DropOrder\" Classes=\"secondary sm\" Content=\"احذف الأقدم\" />\n" +
+                "    <Button x:Name=\"NextState\" Classes=\"secondary sm\" Content=\"قدّم حالة المحدد\" />\n" +
+                "  </StackPanel>\n" +
+                "</StackPanel>";
+        },
+        Notes = _ => ["أضف طلبًا أو احذف الأقدم، ثم حدد صفًا وقدّم حالته: يتغير صف واحد في كل مرة، ويبقى التحديد في مكانه."],
+        Stage = (view, _, say) =>
+        {
+            var sample = new OrderSample();
+            if (view.GetLogicalDescendants().OfType<Table>().FirstOrDefault() is not { } table) return;
+            table.DataContext = sample;
+            var next = 1045;
+            foreach (var button in view.GetLogicalDescendants().OfType<Button>())
+            {
+                button.Click += (_, _) =>
+                {
+                    var orders = sample.Orders;
+                    switch (button.Name)
+                    {
+                        case "AddOrder":
+                            orders.Add(new OrderRow(next, Customers[next % Customers.Length], States[0]));
+                            next++;
+                            break;
+                        case "DropOrder" when orders.Count > 0:
+                            orders.Remove(orders.MinBy(o => o.Id)!);
+                            break;
+                        case "NextState" when table.SelectedRows.FirstOrDefault()?.Item is OrderRow picked:
+                            var at = orders.IndexOf(picked);
+                            var state = States[Math.Min(States.Length - 1, Array.IndexOf(States, picked.Status) + 1)];
+                            if (at >= 0) orders[at] = picked with { Status = state };
+                            say($"تبدّل عنصر الصف {picked.Id}، وبقي الصف محددًا");
+                            break;
+                    }
+                };
+            }
+        },
+    };
+
+    public static PlayDef[] All { get; } = [Table, Wrap, Sort, Select, Edit, Sheet, Live];
 }

@@ -36,6 +36,10 @@
     <pg:PlayText Classes="p" Markup="مع `IsCellNavigation` تقف لوحة المفاتيح على خلية لا على صف، وتتنقل بين الخلايا كما في جداول البيانات، ويبدأ التعديل بالكتابة على الخلية مباشرة." />
     <pg:Playground Def="{x:Static pg:TablesPlay.Sheet}" />
 
+    <TextBlock Classes="section" Text="الصفوف واحدًا واحدًا" />
+    <pg:PlayText Classes="p" Markup="إذا جاءت الصفوف من `ItemsSource` تُعلم بتغيرها، كـ`ObservableCollection`، أخذ الجدول كل تغيير في مكانه: يضيف الصف الجديد أو يحذفه أو يبدّل عنصره وحده، ويبقى ما سواه كما هو، ومعه التحديد ولوحة المفاتيح. ولكل عمود عرض من `Width`: ثابت أو نصيب مما بقي." />
+    <pg:Playground Def="{x:Static pg:TablesPlay.Live}" />
+
     <TextBlock Classes="section" Text="الخيارات" />
     <pg:PlayText Classes="p" Markup="كل ما في الجداول من عناصر وخصائص وأحداث، لكل مكون صندوق يفتح بالنقر." />
     <pg:OptionsList Defs="{x:Static pg:TablesPlay.All}" />

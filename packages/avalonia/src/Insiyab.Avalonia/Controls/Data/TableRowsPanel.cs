@@ -79,6 +79,51 @@ internal class TableRowsPanel : Panel, IChildIndexProvider
         InvalidateMeasure();
     }
 
+    /// <summary>A row new to the table, at its place: the rows after it move down a place, and none is laid out again.</summary>
+    internal void Insert(int index, TableRow row)
+    {
+        _rows.Insert(index, row);
+        Reindex(index);
+        Shifted(index);
+    }
+
+    /// <summary>A row gone from the table: out of the tree, its height forgotten, the rows after it up a place.</summary>
+    internal void Remove(TableRow row)
+    {
+        if (!_index.Remove(row, out var index)) return;
+        _rows.RemoveAt(index);
+        _heights.Remove(row);
+        if (_kept == row) _kept = null;
+        if (_realized.Contains(row)) Drop(row);
+        else DropPooled(row);
+        Reindex(index);
+        Shifted(index);
+    }
+
+    /// <summary>A row moved from one place to another.</summary>
+    internal void Move(int from, int to)
+    {
+        if (from == to) return;
+        var row = _rows[from];
+        _rows.RemoveAt(from);
+        _rows.Insert(to, row);
+        Reindex(Math.Min(from, to));
+        Shifted(Math.Min(from, to));
+    }
+
+    private void Reindex(int from)
+    {
+        for (var i = from; i < _rows.Count; i++) _index[_rows[i]] = i;
+    }
+
+    // Only an end row taking a new place leaves the others where they were.
+    private void Shifted(int from)
+    {
+        _dirty = true;
+        if (from < _rows.Count - 1) _indexChanged?.Invoke(this, ChildIndexChangedEventArgs.ChildIndexesReset);
+        InvalidateMeasure();
+    }
+
     /// <summary>Keeps this row in the tree wherever it is, as the row the keyboard is on.</summary>
     internal void Keep(TableRow? row)
     {
