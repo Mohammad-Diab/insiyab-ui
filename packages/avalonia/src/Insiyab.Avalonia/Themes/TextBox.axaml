@@ -408,6 +408,15 @@
           <Setter Property="VerticalContentAlignment" Value="Top" />
         </Style>
 
+        <!-- grow: a message box that starts one field tall, its line centred, and grows with the text up to four lines (MaxLines) before it scrolls -->
+        <Style Selector="^.grow">
+          <Setter Property="AcceptsReturn" Value="True" />
+          <Setter Property="TextWrapping" Value="Wrap" />
+          <Setter Property="MinHeight" Value="{DynamicResource InsFieldH}" />
+          <Setter Property="MaxLines" Value="4" />
+          <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+
         <Style Selector="^.sm">
           <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
           <Setter Property="Padding" Value="10,4" />

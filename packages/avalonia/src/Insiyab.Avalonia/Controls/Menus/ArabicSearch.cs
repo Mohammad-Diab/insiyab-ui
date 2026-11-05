@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 
 namespace Insiyab.Avalonia.Controls;
@@ -5,23 +6,57 @@ namespace Insiyab.Avalonia.Controls;
 /// <summary>The web library's Arabic-aware matching (<c>Insiyab.norm</c>) and the command palette's ranking.</summary>
 internal static class ArabicSearch
 {
-    /// <summary>Lower case, no diacritics or tatweel, ة as ه, ى as ي, Arabic-Indic and Persian digits as Latin ones; the hamza forms of alef fold to ا through the decomposition.</summary>
+    /// <summary>Compatibility forms unfolded, lower case, no marks (diacritics, the hamza forms of alef through the decomposition), no tatweel or invisible direction marks, ٱ as ا, ة as ه, ى and ی as ي, ک as ك, Arabic-Indic and Persian digits as Latin ones, and white space collapsed and trimmed.</summary>
     public static string Normalize(string? text)
     {
         if (string.IsNullOrEmpty(text)) return string.Empty;
-        var s = text.ToLowerInvariant().Normalize(NormalizationForm.FormD);
-        var sb = new StringBuilder(s.Length);
-        foreach (var c in s)
+        var sb = new StringBuilder(text.Length);
+        var space = false;
+        foreach (var c in Unfold(text))
         {
-            if (c is >= '̀' and <= 'ͯ' or >= 'ً' and <= 'ٟ' or 'ٰ' or 'ـ') continue;
-            if (c == 'ة') sb.Append('ه');
-            else if (c == 'ى') sb.Append('ي');
-            else if (c is >= '٠' and <= '٩') sb.Append((char)('0' + (c - '٠')));
-            else if (c is >= '۰' and <= '۹') sb.Append((char)('0' + (c - '۰')));
-            else sb.Append(c);
+            if (Dropped(c)) continue;
+            var m = Map(c);
+            if (char.IsWhiteSpace(m))
+            {
+                space = sb.Length > 0;
+                continue;
+            }
+            if (space) sb.Append(' ');
+            space = false;
+            sb.Append(m);
         }
-        return sb.ToString().Normalize(NormalizationForm.FormC).Trim();
+        return Composed(sb.ToString());
     }
+
+    /// <summary>A text in compatibility form, lower case and decomposed, or lower case as typed when it holds a lone surrogate.</summary>
+    internal static string Unfold(string text)
+    {
+        try { return text.Normalize(NormalizationForm.FormKC).ToLowerInvariant().Normalize(NormalizationForm.FormD); }
+        catch (ArgumentException) { return text.ToLowerInvariant(); }
+    }
+
+    private static string Composed(string text)
+    {
+        try { return text.Normalize(NormalizationForm.FormC); }
+        catch (ArgumentException) { return text; }
+    }
+
+    /// <summary>Whether the fold leaves the character out: a mark, tatweel, or an invisible direction or width character.</summary>
+    internal static bool Dropped(char c) =>
+        c is 'ـ' or (>= '\u200B' and <= '\u200F') or (>= '\u202A' and <= '\u202E') or (>= '\u2066' and <= '\u2069') or '\uFEFF'
+        || CharUnicodeInfo.GetUnicodeCategory(c) is UnicodeCategory.NonSpacingMark or UnicodeCategory.EnclosingMark;
+
+    /// <summary>The letter the fold writes for <paramref name="c"/>.</summary>
+    internal static char Map(char c) => c switch
+    {
+        'ٱ' => 'ا',
+        'ة' => 'ه',
+        'ى' or 'ی' => 'ي',
+        'ک' => 'ك',
+        >= '٠' and <= '٩' => (char)('0' + (c - '٠')),
+        >= '۰' and <= '۹' => (char)('0' + (c - '۰')),
+        _ => c,
+    };
 
     /// <summary>Whether <paramref name="query"/>, normalised, occurs in any of <paramref name="fields"/>.</summary>
     public static bool Matches(string? query, params string?[] fields)

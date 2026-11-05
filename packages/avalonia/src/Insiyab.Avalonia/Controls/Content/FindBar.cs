@@ -37,17 +37,16 @@ public static class Find
                 map.Add(i);
                 continue;
             }
-            foreach (var c in char.ToLowerInvariant(ch).ToString().Normalize(NormalizationForm.FormD))
+            foreach (var c in ArabicSearch.Unfold(ch.ToString()))
             {
-                if (c is >= '̀' and <= 'ͯ' or >= 'ً' and <= 'ٟ' or 'ٰ' or 'ـ') continue;
-                folded.Append(c switch
+                if (ArabicSearch.Dropped(c)) continue;
+                var m = ArabicSearch.Map(c);
+                if (char.IsWhiteSpace(m))
                 {
-                    'ة' => 'ه',
-                    'ى' => 'ي',
-                    >= '٠' and <= '٩' => (char)('0' + (c - '٠')),
-                    >= '۰' and <= '۹' => (char)('0' + (c - '۰')),
-                    _ => c,
-                });
+                    if (folded.Length > 0 && folded[^1] == ' ') continue;
+                    m = ' ';
+                }
+                folded.Append(m);
                 map.Add(i);
             }
         }

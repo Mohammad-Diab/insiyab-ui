@@ -26,7 +26,8 @@ public static class InputsPlay
             Seg("el", "العنصر", "input",
                 Choice("input", "حقل"),
                 Choice("select", "قائمة", "ComboBox", "قائمة تفتح بطاقة زجاجية كقوائم المكتبة.", OptionKind.Element),
-                Choice("textarea", "نص طويل", "AcceptsReturn=\"True\"", "على `TextBox`: مربع للنص الطويل، يطول مع ما يُكتب فيه حتى `MaxHeight`.", OptionKind.Property)),
+                Choice("textarea", "نص طويل", "AcceptsReturn=\"True\"", "على `TextBox`: مربع للنص الطويل، يطول مع ما يُكتب فيه حتى `MaxHeight`.", OptionKind.Property),
+                Choice("grow", "رسالة", "grow", "على `TextBox`: مربع رسالة يبدأ بارتفاع حقل واحد وسطره في وسطه، ويطول مع ما يُكتب حتى أربعة أسطر (`MaxLines`) ثم يُمرَّر.")),
             Select("type", "النوع", "text",
                 Choice("text", "نص"),
                 Choice("email", "بريد"),
@@ -73,7 +74,7 @@ public static class InputsPlay
             var el = s["el"];
             var type = el == "input" ? s["type"] : "text";
             var ltr = type is "email" or "tel";
-            var classes = Classes(el == "textarea" ? null : s["size"], s["state"] is "bad" or "ok" ? s["state"] : null, type == "password" ? "revealPasswordButton" : null);
+            var classes = Classes(el == "grow" ? "grow" : null, el == "textarea" ? null : s["size"], s["state"] is "bad" or "ok" ? s["state"] : null, type == "password" ? "revealPasswordButton" : null);
             var attrs = classes;
             if (s["state"] == "disabled") attrs += " IsEnabled=\"False\"";
             if (s["state"] == "readonly" && el != "select") attrs += " IsReadOnly=\"True\"";
@@ -98,6 +99,7 @@ public static class InputsPlay
             else
             {
                 if (el == "textarea") attrs += " AcceptsReturn=\"True\" TextWrapping=\"Wrap\" MinHeight=\"96\"";
+                if (el == "grow" && value.Length == 0) attrs += " PlaceholderText=\"اكتب رسالة…\"";
                 if (ltr) attrs += " FlowDirection=\"LeftToRight\"";
                 if (type == "password") attrs += " FlowDirection=\"LeftToRight\" PasswordChar=\"•\"";
                 if (ltr && value.Length == 0) attrs += $" PlaceholderText=\"{(type == "email" ? "name@example.com" : "+966 50 000 0000")}\"";
@@ -120,8 +122,32 @@ public static class InputsPlay
             if (s["el"] == "input" && s["type"] == "number") notes.Add("للأرقام التي تزيد وتنقص حقل العداد `NumericUpDown`، وتجده في صفحة أدوات الاختيار.");
             if (s["el"] == "select" && s["state"] == "readonly") notes.Add("القائمة لا تعرف القراءة فقط، فإما أن تبقى كما هي أو تُعطَّل.");
             if (s.Has("count") && s["el"] != "select") notes.Add("اكتب في الحقل، فيتغير العداد تحته.");
+            if (s["el"] == "grow") notes.Add("اكتب عدة أسطر، فيطول المربع حتى أربعة ثم يُمرَّر.");
             return notes;
         },
+    };
+
+    public const string MatchExample =
+        """
+        <StackPanel Spacing="8" Width="320" HorizontalAlignment="Left">
+          <TextBox Classes="search" PlaceholderText="ابحث بالاسم أو الرمز" />
+          <ListBox Classes="static">
+            <ListBoxItem Content="أحمد العلي · AH-201" />
+            <ListBoxItem Content="إيمان سالم · IM-318" />
+            <ListBoxItem Content="مؤسسة الرحمة · RH-044" />
+            <ListBoxItem Content="Sara Haddad · SH-902" />
+          </ListBox>
+        </StackPanel>
+        """;
+
+    public static Action<Control> MatchStage { get; } = view =>
+    {
+        var box = view.GetLogicalDescendants().OfType<TextBox>().First();
+        var rows = view.GetLogicalDescendants().OfType<ListBoxItem>().ToList();
+        box.TextChanged += (_, _) =>
+        {
+            foreach (var row in rows) row.IsVisible = Controls.ArabicMatch.Matches(box.Text, row.Content as string);
+        };
     };
 
     public static PlayDef Search { get; } = new()
