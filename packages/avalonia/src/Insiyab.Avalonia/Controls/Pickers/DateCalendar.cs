@@ -431,6 +431,7 @@ internal class DateCalendar : TemplatedControl
         if (Mode == DatePickMode.Range) parts.Add(new CalendarText { Text = IsPickingEnd ? words.PickEnd : words.PickStart, Classes = { "cal-hint" } });
         Control? clear = null;
         Control? done = null;
+        Control? kind = null;
         if (!IsRequired)
         {
             var b = new Button { Content = words.Clear, Classes = { "bare", "sm", "cal-clear" } };
@@ -446,27 +447,16 @@ internal class DateCalendar : TemplatedControl
         if (CalendarKind != CalendarKind.Gregorian)
         {
             stretch.Add(parts.Count);
-            parts.Add(BuildSwitch(words));
+            kind = BuildSwitch(words);
+            parts.Add(kind);
             if (clear is not null || done is not null) stretch.Add(parts.Count);
         }
         else if (clear is not null || done is not null) stretch.Add(parts.Count);
         if (clear is not null) parts.Add(clear);
         if (done is not null) parts.Add(done);
 
-        var foot = new Grid { ColumnSpacing = 12 };
-        var col = 0;
-        for (var i = 0; i < parts.Count; i++)
-        {
-            if (stretch.Contains(i))
-            {
-                foot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-                col++;
-            }
-            foot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-            Grid.SetColumn(parts[i], col++);
-            foot.Children.Add(parts[i]);
-        }
-        if (!stretch.Any()) foot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+        var foot = new CalendarFoot { Switch = kind };
+        for (var i = 0; i < parts.Count; i++) foot.Add(parts[i], i > 0 && stretch.Contains(i));
         return new CalendarBorder { Child = foot, Classes = { "cal-foot" } };
     }
 

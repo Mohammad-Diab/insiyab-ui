@@ -224,11 +224,11 @@
     <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
     <Setter Property="BorderThickness" Value="0,1,0,0" />
   </Style>
-  <Style Selector="ins|DateCalendar ins|CalendarBorder.cal-foot Grid > Button">
+  <Style Selector="ins|DateCalendar ins|CalendarFoot > Button">
     <Setter Property="MinWidth" Value="{DynamicResource InsFootMinSm}" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
-  <Style Selector="ins|DateCalendar ins|CalendarBorder.cal-foot Grid > Button.bare.sm">
+  <Style Selector="ins|DateCalendar ins|CalendarFoot > Button.bare.sm">
     <Setter Property="Padding" Value="10,4" />
     <Setter Property="MinHeight" Value="{DynamicResource InsCtlSmH}" />
   </Style>
