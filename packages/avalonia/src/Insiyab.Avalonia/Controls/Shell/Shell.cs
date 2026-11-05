@@ -106,6 +106,7 @@ public static class Shell
         {
             list.GetValue(NavFilterProperty)?.Dispose();
             list.SetValue(NavFilterProperty, e.GetNewValue<bool>() ? new NavFilter(list) : null);
+            RewordFilter(list);
         });
         TextBlock.TextProperty.Changed.AddClassHandler<TextBlock>((t, e) =>
         {
@@ -115,6 +116,15 @@ public static class Shell
         {
             if (ShellLook.GetEnters(c) && !Equals(e.OldValue, e.NewValue)) Replay(c);
         });
+    }
+
+    private static Words.Own[]? s_filterWords;
+
+    // A filtered list's own words, in the app's language unless the app gave them.
+    internal static void RewordFilter(ListBox list)
+    {
+        if (!GetShowFilter(list)) return;
+        Words.Refill(list, s_filterWords ??= [new(FilterPlaceholderTextProperty, "shell.filter"), new(FilterEmptyTextProperty, "shell.filterEmpty")]);
     }
 
     public static double GetDrawerWidth(SplitView view) => view.GetValue(DrawerWidthProperty);

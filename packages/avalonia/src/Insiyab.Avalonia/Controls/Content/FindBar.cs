@@ -69,8 +69,14 @@ public static class Find
 [TemplatePart("PART_Next", typeof(Button))]
 [TemplatePart("PART_Close", typeof(Button))]
 [PseudoClasses(":open", ":none")]
-public class FindBar : TemplatedControl
+public class FindBar : TemplatedControl, IWords
 {
+    void IWords.Reword()
+    {
+        Words();
+        ShowCount();
+    }
+
     public static readonly StyledProperty<bool> IsOpenProperty =
         AvaloniaProperty.Register<FindBar, bool>(nameof(IsOpen));
 
@@ -145,15 +151,15 @@ public class FindBar : TemplatedControl
 
     private void Words()
     {
-        var ar = Arabic;
+        var words = Controls.Words.Of(this);
         if (_field is not null)
         {
-            _field.PlaceholderText = ar ? "ابحث في الصفحة" : "Find in page";
-            AutomationProperties.SetName(_field, ar ? "البحث في الصفحة" : "Find in page");
+            _field.PlaceholderText = words["find.placeholder"];
+            AutomationProperties.SetName(_field, words["find.name"]);
         }
-        if (_prev is not null) AutomationProperties.SetName(_prev, ar ? "النتيجة السابقة" : "Previous match");
-        if (_next is not null) AutomationProperties.SetName(_next, ar ? "النتيجة التالية" : "Next match");
-        if (_close is not null) AutomationProperties.SetName(_close, ar ? "إغلاق البحث" : "Close find");
+        if (_prev is not null) AutomationProperties.SetName(_prev, words["find.previous"]);
+        if (_next is not null) AutomationProperties.SetName(_next, words["find.next"]);
+        if (_close is not null) AutomationProperties.SetName(_close, words["find.close"]);
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -303,9 +309,10 @@ public class FindBar : TemplatedControl
         if (_count is null) return;
         var none = Text is { Length: > 0 } && _matches.Count == 0;
         PseudoClasses.Set(":none", none);
+        var words = Controls.Words.Of(this);
         _count.Text = _matches.Count == 0
-            ? none ? Arabic ? "لا نتائج" : "No results" : ""
-            : Arabic ? $"{CurrentMatch} من {_matches.Count}" : $"{CurrentMatch} of {_matches.Count}";
+            ? none ? words["find.empty"] : ""
+            : words.Format("find.count", CurrentMatch, _matches.Count);
         if (_prev is not null) _prev.IsEnabled = _matches.Count > 0;
         if (_next is not null) _next.IsEnabled = _matches.Count > 0;
     }

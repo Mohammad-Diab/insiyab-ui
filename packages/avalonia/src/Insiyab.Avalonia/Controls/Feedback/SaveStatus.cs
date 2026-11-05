@@ -20,8 +20,14 @@ public enum SaveState
 
 /// <summary>Whether the last change has been kept: saving, then saved, or could not save. The web's <c>.ins-save</c>; with <see cref="SaveState.Idle"/> it holds its place empty so the line does not jump.</summary>
 [PseudoClasses(":saving", ":saved", ":error", ":idle")]
-public class SaveStatus : TemplatedControl
+public class SaveStatus : TemplatedControl, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(SavingTextProperty, "save.saving"), new(SavedTextProperty, "save.saved"), new(ErrorTextProperty, "save.error")];
+
+    void IWords.Reword() => Words.Refill(this, OwnWords);
+
     public static readonly StyledProperty<SaveState> StateProperty =
         AvaloniaProperty.Register<SaveStatus, SaveState>(nameof(State));
 
@@ -42,7 +48,11 @@ public class SaveStatus : TemplatedControl
 
     private string _displayText = "";
 
-    public SaveStatus() => Update();
+    public SaveStatus()
+    {
+        Words.Fill(this, OwnWords);
+        Update();
+    }
 
     public SaveState State { get => GetValue(StateProperty); set => SetValue(StateProperty, value); }
 

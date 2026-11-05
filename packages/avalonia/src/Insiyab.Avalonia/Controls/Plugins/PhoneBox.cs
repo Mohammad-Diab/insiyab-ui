@@ -37,8 +37,14 @@ public class PhoneChangedEventArgs : RoutedEventArgs
 [TemplatePart("PART_List", typeof(ListBox))]
 [TemplatePart("PART_None", typeof(TextBlock))]
 [PseudoClasses(":open", ":invalid")]
-public class PhoneBox : TemplatedControl
+public class PhoneBox : TemplatedControl, IWords
 {
+    void IWords.Reword()
+    {
+        Paint();
+        Check();
+    }
+
     public static readonly StyledProperty<string?> ValueProperty =
         AvaloniaProperty.Register<PhoneBox, string?>(nameof(Value), defaultBindingMode: BindingMode.TwoWay);
 
@@ -147,7 +153,9 @@ public class PhoneBox : TemplatedControl
 
     internal IReadOnlyList<PhoneCountryRow> VisibleRows => _shown;
 
-    private bool Arabic => PluginText.IsArabic(this, Locale);
+    private Speech Said => PluginText.Words(this, Locale);
+
+    private bool Arabic => Said.Arabic;
 
     private List<PhoneCountry> Allowed()
     {
@@ -275,7 +283,7 @@ public class PhoneBox : TemplatedControl
         DialCode = _country.Dial;
         ShownPlaceholder = PlaceholderText ?? PhoneData.Placeholder(_country);
         if (_button is not null)
-            AutomationPropertiesHelper.SetName(_button, (Arabic ? "الدولة" : "Country") + ": " + _country.Name(Arabic) + " +" + _country.Dial);
+            AutomationPropertiesHelper.SetName(_button, Said["phone.country"] + ": " + _country.Name(Arabic) + " +" + _country.Dial);
     }
 
     private void SetCountry(PhoneCountry c)
@@ -289,11 +297,11 @@ public class PhoneBox : TemplatedControl
     {
         string? msg = null;
         if (_elsewhere is not null)
-            msg = Arabic ? $"لا تُقبل هنا أرقام {_elsewhere.ArabicName}." : $"Numbers from {_elsewhere.EnglishName} are not accepted here.";
+            msg = Said.Format("phone.elsewhere", _elsewhere.Name(Arabic));
         else if (_partial)
-            msg = Arabic ? "اكتب رمز الدولة كاملًا بعد +." : "Enter the full country code after +.";
+            msg = Said["phone.partial"];
         else if (_nsn.Length > 0 && !PhoneData.Valid(_nsn, _country))
-            msg = Arabic ? $"اكتب رقم هاتف صحيحًا في {_country.ArabicName}." : $"Enter a valid phone number for {_country.EnglishName}.";
+            msg = Said.Format("phone.invalid", _country.Name(Arabic));
         ValidationMessage = msg;
         IsValid = msg is null && _nsn.Length > 0;
         var invalid = _left && msg is not null;
@@ -472,10 +480,10 @@ public class PhoneBox : TemplatedControl
         BuildList();
         if (_search is not null)
         {
-            _search.PlaceholderText = Arabic ? "ابحث عن دولة أو رمز" : "Search for a country or code";
+            _search.PlaceholderText = Said["phone.search"];
             _search.Text = string.Empty;
         }
-        if (_none is not null) _none.Text = Arabic ? "لا دولة بهذا الاسم" : "No country by that name";
+        if (_none is not null) _none.Text = Said["phone.empty"];
         Filter();
         _popup.IsOpen = true;
         _list.LayoutUpdated -= OnListLaidOut;

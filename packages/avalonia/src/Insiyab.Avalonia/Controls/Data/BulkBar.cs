@@ -9,8 +9,10 @@ namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The bar a table's selection brings up, the web's <c>.ins-bulkbar</c>: how many rows are selected, then the actions in <see cref="ContentControl.Content"/>. It shows only while a row of <see cref="Table"/> is selected.</summary>
 [TemplatePart("PART_Count", typeof(TextBlock))]
-public class BulkBar : ContentControl
+public class BulkBar : ContentControl, IWords
 {
+    void IWords.Reword() => Update();
+
     public static readonly StyledProperty<Table?> TableProperty =
         AvaloniaProperty.Register<BulkBar, Table?>(nameof(Table));
 
@@ -65,7 +67,7 @@ public class BulkBar : ContentControl
     private void Update()
     {
         var count = Table?.SelectedRows.Count ?? 0;
-        var format = Text ?? (FlowDirection == FlowDirection.RightToLeft ? "المحدد: {n}" : "{n} selected");
+        var format = Text ?? Words.Of(this)["bulk.selected"].Replace("{0}", "{n}");
         CountText = format.Replace("{n}", count.ToString(System.Globalization.CultureInfo.InvariantCulture));
         // It rises in each time a selection brings it up, as the web's does.
         if (count > 0 && !IsVisible && TopLevel.GetTopLevel(this) is not null) Entrance.Play(this, EntranceEffect.Rise);

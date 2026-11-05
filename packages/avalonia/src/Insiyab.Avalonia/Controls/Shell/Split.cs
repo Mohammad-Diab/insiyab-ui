@@ -14,8 +14,14 @@ namespace Insiyab.Avalonia.Controls;
 [TemplatePart("PART_Handle", typeof(Control))]
 [TemplatePart("PART_Second", typeof(Control))]
 [PseudoClasses(":vertical", ":stacked", ":dragging")]
-public class Split : TemplatedControl
+public class Split : TemplatedControl, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(ResizeLabelProperty, "split.resize")];
+
+    void IWords.Reword() => Words.Refill(this, OwnWords);
+
     public static readonly StyledProperty<object?> FirstProperty =
         AvaloniaProperty.Register<Split, object?>(nameof(First));
 
@@ -82,6 +88,7 @@ public class Split : TemplatedControl
 
     public Split()
     {
+        Words.Fill(this, OwnWords);
         UpdatePseudoClasses();
     }
 

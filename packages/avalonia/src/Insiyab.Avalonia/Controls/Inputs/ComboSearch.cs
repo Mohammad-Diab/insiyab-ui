@@ -28,11 +28,11 @@ public static class ComboSearch
     public static readonly AttachedProperty<BindingBase?> GroupProperty =
         AvaloniaProperty.RegisterAttached<ComboBox, BindingBase?>("Group", typeof(ComboSearch));
 
-    /// <summary>The search field's placeholder; «ابحث» or "Search" by the page's direction when unset.</summary>
+    /// <summary>The search field's placeholder; «ابحث» or "Search" in the app's language when unset.</summary>
     public static readonly AttachedProperty<string?> PlaceholderProperty =
         AvaloniaProperty.RegisterAttached<ComboBox, string?>("Placeholder", typeof(ComboSearch));
 
-    /// <summary>The line shown when nothing matches; «لا نتائج» or "No results" by the page's direction when unset.</summary>
+    /// <summary>The line shown when nothing matches; «لا نتائج» or "No results" in the app's language when unset.</summary>
     public static readonly AttachedProperty<string?> EmptyTextProperty =
         AvaloniaProperty.RegisterAttached<ComboBox, string?>("EmptyText", typeof(ComboSearch));
 
@@ -201,11 +201,11 @@ internal sealed class ComboSearcher
 
     private void Texts()
     {
-        var rtl = _combo.FlowDirection == FlowDirection.RightToLeft;
-        var placeholder = ComboSearch.GetPlaceholder(_combo) ?? (rtl ? "ابحث" : "Search");
+        var words = Controls.Words.Of(_combo);
+        var placeholder = ComboSearch.GetPlaceholder(_combo) ?? words["select.search"];
         _search.PlaceholderText = placeholder;
         AutomationProperties.SetName(_search, placeholder);
-        _empty.Text = ComboSearch.GetEmptyText(_combo) ?? (rtl ? "لا نتائج" : "No results");
+        _empty.Text = ComboSearch.GetEmptyText(_combo) ?? words["select.empty"];
     }
 
     private void OnComboChanged(object? sender, AvaloniaPropertyChangedEventArgs e)

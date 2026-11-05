@@ -76,8 +76,14 @@ public class PaletteChoosingEventArgs : RoutedEventArgs
 [TemplatePart("PART_Scroll", typeof(ScrollViewer))]
 [TemplatePart("PART_Empty", typeof(Control))]
 [PseudoClasses(":searching")]
-public class CommandPalette : TemplatedControl
+public class CommandPalette : TemplatedControl, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(PlaceholderTextProperty, "palette.placeholder"), new(EmptyTextProperty, "palette.empty"), new(RecentTextProperty, "palette.recent"), new(MoveTextProperty, "palette.move"), new(ChooseTextProperty, "palette.choose"), new(CloseTextProperty, "palette.close")];
+
+    void IWords.Reword() => Words.Refill(this, OwnWords);
+
     public static readonly StyledProperty<string> PlaceholderTextProperty =
         AvaloniaProperty.Register<CommandPalette, string>(nameof(PlaceholderText), "ابحث عن صفحة أو أمر…");
 
@@ -132,6 +138,7 @@ public class CommandPalette : TemplatedControl
 
     public CommandPalette()
     {
+        Words.Fill(this, OwnWords);
         Items.CollectionChanged += (_, e) =>
         {
             if (e.NewItems is not null)

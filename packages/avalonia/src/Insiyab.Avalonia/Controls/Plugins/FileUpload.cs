@@ -31,8 +31,14 @@ public class FileAddedEventArgs : RoutedEventArgs
 [TemplatePart("PART_Issues", typeof(Panel))]
 [TemplatePart("PART_List", typeof(Panel))]
 [PseudoClasses(":over", ":has-files", ":invalid")]
-public class FileUpload : TemplatedControl
+public class FileUpload : TemplatedControl, IWords
 {
+    void IWords.Reword()
+    {
+        UpdateTexts();
+        Render();
+    }
+
     public static readonly StyledProperty<bool> MultipleProperty =
         AvaloniaProperty.Register<FileUpload, bool>(nameof(Multiple));
 
@@ -146,7 +152,7 @@ public class FileUpload : TemplatedControl
         remove => RemoveHandler(FilesChangedEvent, value);
     }
 
-    private bool Arabic => PluginText.IsArabic(this, Locale);
+    private Speech Said => PluginText.Words(this, Locale);
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -187,29 +193,27 @@ public class FileUpload : TemplatedControl
 
     private void UpdateTexts()
     {
-        var ar = Arabic;
-        DragText = _touch ? string.Empty : Multiple ? (ar ? "اسحب الملفات إلى هنا أو" : "Drag files here or") : (ar ? "اسحب الملف إلى هنا أو" : "Drag a file here or");
-        PickText = Multiple ? (ar ? "اختر ملفات" : "choose files") : (ar ? "اختر ملفًا" : "choose a file");
+        var words = Said;
+        DragText = _touch ? string.Empty : words[Multiple ? "file.dragMany" : "file.dragOne"];
+        PickText = words[Multiple ? "file.pickMany" : "file.pickOne"];
         if (Note is { } own) { NoteText = own; return; }
         var parts = new List<string>();
         var max = FileTypes.Bytes(MaxSize);
-        if (max > 0) parts.Add(ar ? $"حتى {FileTypes.Size(max, true)} للملف الواحد" : $"up to {FileTypes.Size(max, false)} each");
-        if (Multiple && MaxCount > 0) parts.Add(ar ? ArFiles(MaxCount) + " على الأكثر" : EnFiles(MaxCount) + " at most");
-        NoteText = string.Join(ar ? "، " : ", ", parts);
+        if (max > 0) parts.Add(words.Format("file.maxSize", FileTypes.Size(max, words)));
+        if (Multiple && MaxCount > 0) parts.Add(words.Format("file.maxCount", FileCount(words, MaxCount)));
+        NoteText = string.Join(words.Arabic ? "، " : ", ", parts);
     }
 
-    private static string ArFiles(int n)
+    private static string FileCount(Speech words, int n) => words.Count("file.files", n, k =>
     {
-        var r = n % 100;
-        return n == 1 ? "ملف واحد" : n == 2 ? "ملفان" : n + (r >= 3 && r <= 10 ? " ملفات" : r >= 11 ? " ملفًا" : " ملف");
-    }
-
-    private static string EnFiles(int n) => n == 1 ? "1 file" : n + " files";
+        var r = k % 100;
+        return k == 1 ? "ملف واحد" : k == 2 ? "ملفان" : k + (r >= 3 && r <= 10 ? " ملفات" : r >= 11 ? " ملفًا" : " ملف");
+    });
 
     /// <summary>Adds what came in, from the picker, a drop or a paste, within the limits, and says what was left out.</summary>
     public void AddFiles(IEnumerable<FileEntry> incoming)
     {
-        var ar = Arabic;
+        var words = Said;
         var issues = new List<string>();
         var max = FileTypes.Bytes(MaxSize);
         var count = Multiple ? MaxCount : 1;
@@ -217,11 +221,11 @@ public class FileUpload : TemplatedControl
         var added = new List<FileEntry>();
         foreach (var f in incoming)
         {
-            if (!FileTypes.Accepts(Accept, f.Name)) { issues.Add(ar ? $"نوع «{f.Name}» غير مقبول." : $"“{f.Name}” is not a type this field accepts."); continue; }
-            if (max > 0 && f.Size > max) { issues.Add(ar ? $"«{f.Name}» أكبر من {FileTypes.Size(max, true)}." : $"“{f.Name}” is larger than {FileTypes.Size(max, false)}."); continue; }
+            if (!FileTypes.Accepts(Accept, f.Name)) { issues.Add(words.Format("file.badType", f.Name)); continue; }
+            if (max > 0 && f.Size > max) { issues.Add(words.Format("file.tooBig", f.Name, FileTypes.Size(max, words))); continue; }
             if (next.Any(x => x.Name == f.Name && x.Size == f.Size)) continue;
             if (!Multiple) { next = [f]; added = [f]; continue; }
-            if (count > 0 && next.Count >= count) { issues.Add(ar ? $"لم يُضف «{f.Name}»: {ArFiles(count)} على الأكثر." : $"“{f.Name}” was not added: {EnFiles(count)} at most."); continue; }
+            if (count > 0 && next.Count >= count) { issues.Add(words.Format("file.tooMany", f.Name, FileCount(words, count))); continue; }
             next.Add(f);
             added.Add(f);
         }
@@ -263,7 +267,7 @@ public class FileUpload : TemplatedControl
         if (!_files.Contains(entry)) return false;
         entry.Status = status;
         apply(entry);
-        if (_items.TryGetValue(entry, out var item)) item.Refresh(Arabic);
+        if (_items.TryGetValue(entry, out var item)) item.Refresh(Said);
         Check();
         return true;
     }
@@ -274,7 +278,7 @@ public class FileUpload : TemplatedControl
         {
             entry.Status = FileUploadStatus.Sending;
             entry.Progress = null;
-            if (_items.TryGetValue(entry, out var item)) item.Refresh(Arabic);
+            if (_items.TryGetValue(entry, out var item)) item.Refresh(Said);
         }
         RaiseEvent(new FileAddedEventArgs(FileAddedEvent, entry, Upload));
         Check();
@@ -290,7 +294,7 @@ public class FileUpload : TemplatedControl
             if (!ShowList) break;
             var item = new FileItem(f, IsEffectivelyEnabled);
             item.RemoveRequested += OnRemoveRequested;
-            item.Refresh(Arabic);
+            item.Refresh(Said);
             _items[f] = item;
             _list?.Children.Add(item);
         }
@@ -321,8 +325,8 @@ public class FileUpload : TemplatedControl
         {
             foreach (var f in _files)
             {
-                if (f.Status == FileUploadStatus.Failed) { msg = Arabic ? "أزِل الملفات التي تعذر رفعها أو أعد رفعها." : "Remove the files that failed to upload, or upload them again."; break; }
-                if (f.Status == FileUploadStatus.Sending) msg = Arabic ? "انتظر حتى يكتمل رفع الملفات." : "Wait for the files to finish uploading.";
+                if (f.Status == FileUploadStatus.Failed) { msg = Said["file.failedOnes"]; break; }
+                if (f.Status == FileUploadStatus.Sending) msg = Said["file.sending"];
             }
         }
         ValidationMessage = msg;
@@ -463,13 +467,13 @@ internal class FileItem : TemplatedControl
 
     public event EventHandler? RemoveRequested;
 
-    internal void Refresh(bool arabic)
+    internal void Refresh(Speech words)
     {
-        SizeText = FileTypes.Size(Entry.Size, arabic);
-        RemoveLabel = arabic ? $"إزالة {Entry.Name}" : $"Remove {Entry.Name}";
+        SizeText = FileTypes.Size(Entry.Size, words);
+        RemoveLabel = words.Format("file.remove", Entry.Name);
         Fraction = Entry.Progress ?? 0;
         IsIndeterminate = Entry.Status == FileUploadStatus.Sending && Entry.Progress is null;
-        StatusText = Entry.Status == FileUploadStatus.Failed ? (string.IsNullOrEmpty(Entry.Message) ? (arabic ? "تعذر الرفع." : "Upload failed.") : Entry.Message) : null;
+        StatusText = Entry.Status == FileUploadStatus.Failed ? (string.IsNullOrEmpty(Entry.Message) ? words["file.failed"] : Entry.Message) : null;
         PseudoClasses.Set(":sending", Entry.Status == FileUploadStatus.Sending);
         PseudoClasses.Set(":done", Entry.Status == FileUploadStatus.Done);
         PseudoClasses.Set(":failed", Entry.Status == FileUploadStatus.Failed);

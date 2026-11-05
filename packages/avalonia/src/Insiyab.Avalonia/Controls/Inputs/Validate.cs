@@ -82,14 +82,15 @@ public static class Validate
     {
         var v = box.Text ?? "";
         string? found = null;
-        if (GetRequired(box) && v.Trim().Length == 0) found = "املأ هذا الحقل.";
+        var words = Words.Fixed;
+        if (GetRequired(box) && v.Trim().Length == 0) found = words["check.required"];
         else if (v.Length == 0) return null;
         else if (box is OtpBox { ValidationMessage: { } partial }) found = partial;
-        else if (GetEmail(box) && !EmailShape.IsMatch(v)) found = "اكتب بريدًا إلكترونيًا صحيحًا.";
+        else if (GetEmail(box) && !EmailShape.IsMatch(v)) found = words["check.email"];
         else if (GetMinLength(box) is var min and > 0 && v.Length < min)
-            found = "اكتب " + InputCount.ArCount(min, ["حرفًا واحدًا", "حرفين", "أحرف", "حرفًا", "حرف"]) + " على الأقل.";
+            found = words.Count("check.minLength", min, k => "اكتب " + InputCount.ArCount(k, ["حرفًا واحدًا", "حرفين", "أحرف", "حرفًا", "حرف"]) + " على الأقل.");
         else if (GetPattern(box) is { Length: > 0 } pattern && !Regex.IsMatch(v, "^(?:" + pattern + ")$", RegexOptions.CultureInvariant))
-            found = "اكتب القيمة بالصيغة المطلوبة.";
+            found = words["check.pattern"];
         return found is null ? null : GetMessage(box) ?? found;
     }
 

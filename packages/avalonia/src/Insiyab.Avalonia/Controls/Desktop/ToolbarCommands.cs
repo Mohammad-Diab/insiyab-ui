@@ -109,8 +109,14 @@ public class ToolbarToggleButton : ToggleButton, IToolbarCommand
 
 /// <summary>A toolbar command with a main action and a chevron that opens more choices in its Flyout; in the «⋯» menu it is a submenu, the main action first.</summary>
 [PseudoClasses(":labelled")]
-public class ToolbarSplitButton : SplitButton, IToolbarCommand
+public class ToolbarSplitButton : SplitButton, IToolbarCommand, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(MoreTextProperty, "toolbar.moreOptions")];
+
+    void IWords.Reword() => Words.Refill(this, OwnWords);
+
     public static readonly StyledProperty<Geometry?> IconProperty = ToolbarButton.IconProperty.AddOwner<ToolbarSplitButton>();
     public static readonly StyledProperty<string?> LabelProperty = ToolbarButton.LabelProperty.AddOwner<ToolbarSplitButton>();
     public static readonly StyledProperty<string?> ShortcutProperty = ToolbarButton.ShortcutProperty.AddOwner<ToolbarSplitButton>();
@@ -124,6 +130,7 @@ public class ToolbarSplitButton : SplitButton, IToolbarCommand
 
     public ToolbarSplitButton()
     {
+        Words.Fill(this, OwnWords);
         _face = new ToolbarFace(this, this, hosted: false);
         Refresh();
     }

@@ -13,8 +13,16 @@ namespace Insiyab.Avalonia.Controls;
 /// <summary>The notched alert, the web's <c>.ins-alert</c>: a solid circle with the icon nested in a bite cut from the tinted message. Tone classes <c>ok info warn bad</c>.</summary>
 [TemplatePart("PART_Message", typeof(Border))]
 [TemplatePart("PART_Close", typeof(Button))]
-public class Alert : ContentControl
+public class Alert : ContentControl, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(CloseLabelProperty, "alert.close")];
+
+    void IWords.Reword() => Words.Refill(this, OwnWords);
+
+    public Alert() => Words.Fill(this, OwnWords);
+
     // The bite is 1.65rem, a little more than half the 2.75rem circle, which leaves the hairline gap.
     private const double Bite = 26.4;
 

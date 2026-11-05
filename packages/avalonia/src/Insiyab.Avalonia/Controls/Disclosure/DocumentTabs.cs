@@ -18,8 +18,14 @@ namespace Insiyab.Avalonia.Controls;
 [TemplatePart("PART_Forward", typeof(Button))]
 [TemplatePart("PART_New", typeof(Button))]
 [PseudoClasses(":overflow")]
-public class DocumentTabs : TabControl
+public class DocumentTabs : TabControl, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(CloseLabelProperty, "tabs.close"), new(NewLabelProperty, "tabs.new")];
+
+    void IWords.Reword() => Words.Refill(this, OwnWords);
+
     /// <summary>Shows the "+" button after the tabs; pressing it raises <see cref="NewTabRequested"/>.</summary>
     public static readonly StyledProperty<bool> ShowNewButtonProperty =
         AvaloniaProperty.Register<DocumentTabs, bool>(nameof(ShowNewButton));
@@ -52,6 +58,7 @@ public class DocumentTabs : TabControl
 
     public DocumentTabs()
     {
+        Words.Fill(this, OwnWords);
         AddHandler(KeyDownEvent, OnKeys);
         AddHandler(KeyDownEvent, OnMoveKeys, RoutingStrategies.Tunnel);
         SelectionChanged += (_, e) =>

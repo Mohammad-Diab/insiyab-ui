@@ -38,8 +38,18 @@ public sealed class NotifyReadEventArgs : RoutedEventArgs
 [TemplatePart("PART_HeadActions", typeof(ContentPresenter))]
 [TemplatePart("PART_Foot", typeof(Button))]
 [PseudoClasses(":open", ":empty", ":unread")]
-public class Notify : ItemsControl
+public class Notify : ItemsControl, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(TitleProperty, "notify.title"), new(ReadAllTextProperty, "notify.readAll"), new(EmptyTextProperty, "notify.empty")];
+
+    void IWords.Reword()
+    {
+        Words.Refill(this, OwnWords);
+        Sync();
+    }
+
     public static readonly StyledProperty<string> TitleProperty =
         AvaloniaProperty.Register<Notify, string>(nameof(Title), "الإشعارات");
 
@@ -109,6 +119,7 @@ public class Notify : ItemsControl
 
     public Notify()
     {
+        Words.Fill(this, OwnWords);
         Items.CollectionChanged += OnItemsChanged;
         AddHandler(Button.ClickEvent, OnItemClick, RoutingStrategies.Bubble);
     }
@@ -333,9 +344,8 @@ public class Notify : ItemsControl
         CountText = n > 99 ? "99+" : n.ToString(System.Globalization.CultureInfo.InvariantCulture);
         PseudoClasses.Set(":unread", n > 0);
         PseudoClasses.Set(":empty", Items.Count == 0);
-        _label = n == 0 ? Title : FlowDirection == FlowDirection.RightToLeft
-            ? Title + "، " + (n == 1 ? "إشعار واحد غير مقروء" : n == 2 ? "إشعاران غير مقروءين" : n + " غير مقروءة")
-            : Title + ", " + n + " unread";
+        var words = Words.Of(this);
+        _label = n == 0 ? Title : Title + (words.Arabic ? "، " : ", ") + words.Count("notify.unread", n, k => k == 1 ? "إشعار واحد غير مقروء" : k == 2 ? "إشعاران غير مقروءين" : k + " غير مقروءة");
         if (_bell is not null) AutomationProperties.SetName(_bell, _label);
         Mirror();
         if (grew) Ring();

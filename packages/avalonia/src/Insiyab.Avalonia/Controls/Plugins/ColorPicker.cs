@@ -366,7 +366,7 @@ internal class ColorContrastLine : TemplatedControl
     public string? Ratio { get => GetValue(RatioProperty); set => SetValue(RatioProperty, value); }
     public string? Verdict { get => GetValue(VerdictProperty); set => SetValue(VerdictProperty, value); }
 
-    internal void Set(Color color, Color against, string where, bool arabic)
+    internal void Set(Color color, Color against, string where, Speech words)
     {
         var ratio = BrandDerivation.Contrast(color, against);
         var ok = ratio >= 4.5;
@@ -374,7 +374,7 @@ internal class ColorContrastLine : TemplatedControl
         SampleForeground = new SolidColorBrush(color);
         Where = where;
         Ratio = (Math.Round(ratio * 10) / 10).ToString("0.0", CultureInfo.InvariantCulture) + ":1";
-        Verdict = ok ? (arabic ? "يصلح للنص" : "fine for text") : (arabic ? "لا يكفي للنص" : "too low for text");
+        Verdict = words[ok ? "color.fine" : "color.low"];
         PseudoClasses.Set(":pass", ok);
         PseudoClasses.Set(":fail", !ok);
     }
@@ -386,8 +386,10 @@ internal class ColorContrastLine : TemplatedControl
 [TemplatePart("PART_Swatches", typeof(Panel))]
 [TemplatePart("PART_OnWhite", typeof(ColorContrastLine))]
 [TemplatePart("PART_OnBlack", typeof(ColorContrastLine))]
-internal class ColorPickerPanel : TemplatedControl
+internal class ColorPickerPanel : TemplatedControl, IWords
 {
+    void IWords.Reword() => Sync(false);
+
     public static readonly StyledProperty<Color?> ValueProperty =
         AvaloniaProperty.Register<ColorPickerPanel, Color?>(nameof(Value));
 
@@ -428,7 +430,7 @@ internal class ColorPickerPanel : TemplatedControl
     /// <summary>The colour moved; committed is false while it is still being dragged (the web's input, then change).</summary>
     public event EventHandler<bool>? ColorPicked;
 
-    private bool Arabic => PluginText.IsArabic(this, Locale);
+    private Speech Said => PluginText.Words(this, Locale);
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -529,13 +531,13 @@ internal class ColorPickerPanel : TemplatedControl
             _area.ThumbColor = Value ?? Colors.Black;
         }
         if (_hue is not null) _hue.Hue = Math.Round(_h) % 360;
-        var ar = Arabic;
-        ContrastLabel = ar ? "التباين" : "Contrast";
+        var words = Said;
+        ContrastLabel = words["color.contrast"];
         if (Value is { } value)
         {
             HexText = ColorMath.Hex(value).ToUpperInvariant();
-            _white?.Set(value, Colors.White, ar ? "على الأبيض" : "on white", ar);
-            _black?.Set(value, Colors.Black, ar ? "على الأسود" : "on black", ar);
+            _white?.Set(value, Colors.White, words["color.onWhite"], words);
+            _black?.Set(value, Colors.Black, words["color.onBlack"], words);
         }
         else HexText = string.Empty;
     }

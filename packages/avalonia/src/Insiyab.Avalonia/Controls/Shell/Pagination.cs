@@ -8,8 +8,16 @@ namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The web's <c>.ins-pagination</c>, built from <see cref="PageCount"/> and <see cref="CurrentPage"/>: previous and next with their arrows, the first and last pages, the pages around the current one, and gaps between.</summary>
 [TemplatePart("PART_Items", typeof(Panel))]
-public class Pagination : TemplatedControl
+public class Pagination : TemplatedControl, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(PreviousTextProperty, "page.previous"), new(NextTextProperty, "page.next"), new(CompactFormatProperty, "page.compact")];
+
+    void IWords.Reword() => Words.Refill(this, OwnWords);
+
+    public Pagination() => Words.Fill(this, OwnWords);
+
     public static readonly StyledProperty<int> PageCountProperty =
         AvaloniaProperty.Register<Pagination, int>(nameof(PageCount), 1, coerce: (_, v) => Math.Max(1, v));
 

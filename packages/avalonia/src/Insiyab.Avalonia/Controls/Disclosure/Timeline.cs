@@ -13,8 +13,15 @@ using Avalonia.VisualTree;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>What happened, in order: the timeline plugin's <c>ol.ins-timeline</c>. Holds <see cref="TimelineItem"/>s and <see cref="TimelineDay"/> headings. Classes <c>compact</c> (smaller dots, tighter) and <c>split</c> (both sides of a centre rule once the list is 640px wide). From data: member bindings, and <see cref="DayOf"/> for day headings.</summary>
-public class Timeline : ItemsControl
+public class Timeline : ItemsControl, IWords
 {
+    void IWords.Reword()
+    {
+        foreach (var c in GetRealizedContainers())
+            if (c is TimelineDay day && ItemFromContainer(c) is TimelineDayMark mark && DayHeader is null)
+                day.Content = RelativeTime.DayHeading(mark.Day, TimelineItem.Now(), PickerLocale.For(null, FlowDirection));
+    }
+
     private readonly Dictionary<Control, Thickness> _margins = [];
     private readonly List<Control> _watched = [];
     private TimelineSlot?[]? _plan;
@@ -120,7 +127,7 @@ public class Timeline : ItemsControl
         if (item is TimelineDayMark mark && container is TimelineDay day)
         {
             var now = TimelineItem.Now();
-            day.Content = DayHeader?.Invoke(mark.Day) ?? RelativeTime.DayHeading(mark.Day, now, FlowDirection == FlowDirection.RightToLeft);
+            day.Content = DayHeader?.Invoke(mark.Day) ?? RelativeTime.DayHeading(mark.Day, now, PickerLocale.For(null, FlowDirection));
             day.SetToday(mark.Day.Date == now.Date);
             return;
         }
@@ -340,8 +347,10 @@ public class TimelineDay : ContentControl
 
 /// <summary>One event: a dot on the rule, a title (<c>Header</c>), a time and a body (<c>Content</c>, text or a panel). Classes <c>ok bad warn info</c> for its tone; <see cref="IsCurrent"/> wears a halo and <see cref="IsPending"/> is hollow on a dashed rule; an <see cref="Icon"/> replaces the dot with a chip; <see cref="IsUnread"/> puts a brand dot after the title.</summary>
 [PseudoClasses(":current", ":pending", ":next-pending", ":last", ":icon", ":split", ":split-start", ":has-time", ":has-body", ":unread")]
-public class TimelineItem : HeaderedContentControl
+public class TimelineItem : HeaderedContentControl, IWords
 {
+    void IWords.Reword() => Refresh();
+
     public static readonly StyledProperty<string?> TimeProperty =
         AvaloniaProperty.Register<TimelineItem, string?>(nameof(Time));
 
@@ -455,7 +464,7 @@ public class TimelineItem : HeaderedContentControl
 
     private void Refresh()
     {
-        var arabic = FlowDirection == FlowDirection.RightToLeft;
+        var arabic = PickerLocale.For(null, FlowDirection);
         var dayOnly = At is { } d && d.TimeOfDay == TimeSpan.Zero && TimeMode != TimeMode.Text;
         TimeText = TimeMode == TimeMode.Text || At is null
             ? Time

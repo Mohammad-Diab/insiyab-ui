@@ -38,8 +38,13 @@ public sealed class CountdownEventArgs : RoutedEventArgs
 [TemplatePart("PART_Days", typeof(TextBlock))]
 [TemplatePart("PART_Clock", typeof(TextBlock))]
 [PseudoClasses(":warn", ":done", ":paused", ":days")]
-public class Countdown : TemplatedControl
+public class Countdown : TemplatedControl, IWords
 {
+    void IWords.Reword()
+    {
+        if (_clockText.Length > 0) Paint(_end is not null ? LeftNow() : _pausedLeft ?? _left ?? 0);
+    }
+
     public static readonly StyledProperty<double> SecondsProperty =
         AvaloniaProperty.Register<Countdown, double>(nameof(Seconds), double.NaN);
 
@@ -230,13 +235,12 @@ public class Countdown : TemplatedControl
         PseudoClasses.Set(":days", d > 0);
     }
 
-    // The web says days in the page's language; here an RTL countdown speaks Arabic and an LTR one English.
-    private string SayDays(int d)
+    // The web says days in the page's language; here the app's language, else an RTL countdown speaks Arabic and an LTR one English.
+    private string SayDays(int d) => Words.Of(this).Count("countdown.days", d, n =>
     {
-        if (FlowDirection != global::Avalonia.Media.FlowDirection.RightToLeft) return d + "d";
-        var r = d % 100;
-        return d == 1 ? "يوم واحد" : d == 2 ? "يومان" : d + " " + (r is >= 3 and <= 10 ? "أيام" : r >= 11 ? "يومًا" : "يوم");
-    }
+        var r = n % 100;
+        return n == 1 ? "يوم واحد" : n == 2 ? "يومان" : n + " " + (r is >= 3 and <= 10 ? "أيام" : r >= 11 ? "يومًا" : "يوم");
+    });
 
     private void Finish(int left)
     {

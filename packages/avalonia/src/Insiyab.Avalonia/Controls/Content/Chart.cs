@@ -19,8 +19,10 @@ namespace Insiyab.Avalonia.Controls;
 [TemplatePart("PART_Tip", typeof(Border))]
 [TemplatePart("PART_TipRows", typeof(StackPanel))]
 [TemplatePart("PART_Legend", typeof(WrapPanel))]
-public class Chart : TemplatedControl
+public class Chart : TemplatedControl, IWords
 {
+    void IWords.Reword() => _plot?.InvalidateVisual();
+
     public static readonly StyledProperty<ChartType> TypeProperty =
         AvaloniaProperty.Register<Chart, ChartType>(nameof(Type));
 
@@ -462,10 +464,10 @@ public class Chart : TemplatedControl
             _copyData.Click += (_, _) => _ = CopyTextAsync(ToTabSeparated());
             _menu = new ContextMenu { Items = { _copyValue, _copyData } };
         }
-        var ar = IsRtl;
-        _copyValue!.Header = ar ? (many ? "نسخ القيم" : "نسخ القيمة") : (many ? "Copy values" : "Copy value");
+        var words = Words.Of(this);
+        _copyValue!.Header = words[many ? "chart.copyValues" : "chart.copyValue"];
         _copyValue.IsEnabled = _menuValue is not null;
-        _copyData!.Header = ar ? "نسخ البيانات" : "Copy data";
+        _copyData!.Header = words["chart.copyData"];
         _menu.FlowDirection = FlowDirection;
         _menu.Placement = e.TryGetPosition(this, out _) ? PlacementMode.Pointer : PlacementMode.Bottom;
         _menu.PlacementTarget = this;
@@ -494,9 +496,8 @@ public class Chart : TemplatedControl
     internal string Format(double v, bool compact)
     {
         if (!compact || Math.Abs(v) < 1000) return Math.Round(v, 2).ToString("#,##0.##", CultureInfo.InvariantCulture);
-        var ar = IsRtl;
-        var (div, en, word) = Math.Abs(v) >= 1e9 ? (1e9, "B", "مليار") : Math.Abs(v) >= 1e6 ? (1e6, "M", "مليون") : (1e3, "K", "ألف");
+        var (div, key) = Math.Abs(v) >= 1e9 ? (1e9, "chart.billion") : Math.Abs(v) >= 1e6 ? (1e6, "chart.million") : (1e3, "chart.thousand");
         var n = Math.Round(v / div, 1).ToString("0.#", CultureInfo.InvariantCulture);
-        return ar ? n + " " + word : n + en;
+        return Words.Of(this).Format(key, n);
     }
 }

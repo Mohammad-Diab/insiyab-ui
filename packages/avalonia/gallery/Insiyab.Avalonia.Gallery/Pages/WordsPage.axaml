@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="https://github.com/Mohammad-Diab/insiyab-ui"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
+             xmlns:local="using:Insiyab.Avalonia.Gallery.Pages"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.WordsPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
+  </UserControl.Styles>
+
+  <StackPanel>
+    <TextBlock Classes="intro" Text="كلمات المكتبة نفسها، مثل «التالي» و«نسخ» وأسماء الأشهر، بلغة تطبيقك، أو بكلمات تكتبها أنت." />
+
+    <TextBlock Classes="section" Text="لغة الكلمات" />
+    <pg:PlayText Classes="p" Markup="إن لم تذكر لغة كانت الكلمات عربية في الصفحة التي تُقرأ من اليمين، وإنجليزية في غيرها. ويضبطها `InsiyabTheme.SetLanguage` للتطبيق كله، فتتغير في النوافذ المفتوحة فورًا. جرب، ثم انقر بالزر الأيمن على الحقل." />
+    <ins:Segmented x:Name="Language" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,0,0,16">
+      <ins:SegmentedItem Content="حسب الاتجاه" />
+      <ins:SegmentedItem Content="العربية" />
+      <ins:SegmentedItem Content="English" />
+      <ins:SegmentedItem Content="Français" />
+    </ins:Segmented>
+    <Border Classes="card" Padding="20" HorizontalAlignment="Stretch">
+      <StackPanel Spacing="16">
+        <ins:Pagination PageCount="8" CurrentPage="3" HorizontalAlignment="Left" />
+        <ins:SaveStatus State="Saved" HorizontalAlignment="Left" />
+        <TextBox Text="انقر هنا بالزر الأيمن" Width="260" HorizontalAlignment="Left" />
+      </StackPanel>
+    </Border>
+
+    <TextBlock Classes="section" Text="كلماتك أنت" />
+    <pg:PlayText Classes="p" Markup="لكل كلمة مفتاح، فتعطي `SetLanguage` جدولًا بما تريد منها، وما لم تذكره يبقى بكلمة المكتبة: العربية إن كانت اللغة عربية، والإنجليزية في غيرها. والمفاتيح كلها في ملف README الخاص بالحزمة." />
+    <pg:PlayListing Code="{x:Static local:WordsPage.Code}" Margin="0,0,0,24" />
+  </StackPanel>
+</UserControl>

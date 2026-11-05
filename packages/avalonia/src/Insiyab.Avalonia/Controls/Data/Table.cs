@@ -28,7 +28,7 @@ namespace Insiyab.Avalonia.Controls;
 [TemplatePart("PART_HeadCells", typeof(ColumnsPanel))]
 [TemplatePart("PART_Rows", typeof(Panel))]
 [PseudoClasses(":empty", ":selectable", ":in-panel", ":flush", ":cell-cursor", ":keyboard")]
-public partial class Table : TemplatedControl
+public partial class Table : TemplatedControl, IWords
 {
     public static readonly StyledProperty<IEnumerable?> ItemsSourceProperty =
         AvaloniaProperty.Register<Table, IEnumerable?>(nameof(ItemsSource));
@@ -699,15 +699,12 @@ public partial class Table : TemplatedControl
     // Whether the row is in the tree and shown; the rows panel keeps rows it has just scrolled past in the tree, hidden.
     private bool InView(TableRow row) => _rows is TableRowsPanel panel ? panel.InView(row) : row.IsAttachedToVisualTree();
 
-    private string Word(string key)
+    private string Word(string key) => Words.Of(this)["table." + key];
+
+    void IWords.Reword()
     {
-        var rtl = FlowDirection == FlowDirection.RightToLeft;
-        return key switch
-        {
-            "selectAll" => rtl ? "تحديد الكل" : "Select all",
-            "selectRow" => rtl ? "تحديد الصف" : "Select row",
-            _ => key,
-        };
+        foreach (var box in this.GetVisualDescendants().OfType<CheckBox>())
+            if (box.Classes.Contains("table-check")) AutomationProperties.SetName(box, Word(box == _all ? "selectAll" : "selectRow"));
     }
 
     private TableSortButton SortButton(TableColumn column)

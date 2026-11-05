@@ -23,8 +23,16 @@ public enum CaptionPreview
 [TemplatePart("PART_Maximize", typeof(Button))]
 [TemplatePart("PART_Close", typeof(Button))]
 [PseudoClasses(":shown", ":maximized", ":inactive")]
-public class CaptionButtons : TemplatedControl
+public class CaptionButtons : TemplatedControl, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(MinimizeLabelProperty, "caption.minimize"), new(MaximizeLabelProperty, "caption.maximize"), new(RestoreLabelProperty, "caption.restore"), new(CloseLabelProperty, "caption.close")];
+
+    void IWords.Reword() => Words.Refill(this, OwnWords);
+
+    public CaptionButtons() => Words.Fill(this, OwnWords);
+
     public static readonly StyledProperty<string> MinimizeLabelProperty = AvaloniaProperty.Register<CaptionButtons, string>(nameof(MinimizeLabel), "تصغير");
     public static readonly StyledProperty<string> MaximizeLabelProperty = AvaloniaProperty.Register<CaptionButtons, string>(nameof(MaximizeLabel), "تكبير");
     public static readonly StyledProperty<string> RestoreLabelProperty = AvaloniaProperty.Register<CaptionButtons, string>(nameof(RestoreLabel), "استعادة");

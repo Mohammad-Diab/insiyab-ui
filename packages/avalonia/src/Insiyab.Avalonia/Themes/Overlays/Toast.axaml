@@ -125,8 +125,8 @@
                           VerticalAlignment="Center"
                           NotificationCard.CloseOnClick="True"
                           IsVisible="False"
-                          AutomationProperties.Name="إغلاق"
-                          ToolTip.Tip="إغلاق" />
+                          AutomationProperties.Name="{DynamicResource InsWordToastClose}"
+                          ToolTip.Tip="{DynamicResource InsWordToastClose}" />
                   <ContentPresenter Name="PART_ContentPresenter"
                                     Content="{TemplateBinding Content}"
                                     ContentTemplate="{TemplateBinding ContentTemplate}"

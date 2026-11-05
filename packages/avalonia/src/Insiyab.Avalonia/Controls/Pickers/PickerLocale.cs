@@ -3,52 +3,62 @@ using Avalonia.Media;
 
 namespace Insiyab.Avalonia.Controls;
 
-// The words and date formats of the pickers, written out as Intl gives them for "ar" and "en" with Latin digits, so they do not depend on the machine's culture data.
+// The words and date formats of the pickers, written out as Intl gives them for "ar" and "en" with Latin digits, so they do not depend on the machine's culture data; the app's language and words take their place when it sets them.
 internal sealed class PickerLocale
 {
-    public static readonly PickerLocale Arabic = new(true);
-    public static readonly PickerLocale English = new(false);
+    public static readonly PickerLocale Arabic = new(new Speech(true, false));
+    public static readonly PickerLocale English = new(new Speech(false, false));
 
-    private static readonly string[] GregorianAr = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-    private static readonly string[] GregorianEn = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    private static readonly string[] ShortGregorianEn = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    private static readonly string[] HijriAr = ["محرم", "صفر", "ربيع الأول", "ربيع الآخر", "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة"];
-    private static readonly string[] HijriEn = ["Muharram", "Safar", "Rabiʻ I", "Rabiʻ II", "Jumada I", "Jumada II", "Rajab", "Shaʻban", "Ramadan", "Shawwal", "Dhuʻl-Qiʻdah", "Dhuʻl-Hijjah"];
-    private static readonly string[] NarrowAr = ["ح", "ن", "ث", "ر", "خ", "ج", "س"];
-    private static readonly string[] NarrowEn = ["S", "M", "T", "W", "T", "F", "S"];
-    private static readonly string[] LongAr = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-    private static readonly string[] LongEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    private static readonly string[] ShortEn = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    // The app's words in Arabic and in English, made again after the app's language changes.
+    private static PickerLocale? s_appAr, s_appEn;
 
-    private PickerLocale(bool ar)
+    internal static void Forget() => s_appAr = s_appEn = null;
+
+    private readonly string[] _gregorian, _shortGregorian, _hijri, _narrow, _long, _short;
+
+    private PickerLocale(Speech words)
     {
-        IsArabic = ar;
-        Today = ar ? "اليوم" : "Today";
-        Clear = ar ? "مسح" : "Clear";
-        BadDate = ar ? "اكتب تاريخًا صحيحًا." : "Enter a valid date.";
-        BadTime = ar ? "اكتب وقتًا صحيحًا." : "Enter a valid time.";
-        PickStart = ar ? "اختر البداية" : "Choose the start";
-        PickEnd = ar ? "اختر النهاية" : "Choose the end";
-        Done = ar ? "تم" : "Done";
-        Cancel = ar ? "إلغاء" : "Cancel";
-        Choose = ar ? "اختر تاريخًا" : "Choose a date";
-        ChooseTime = ar ? "اختر وقتًا" : "Choose a time";
-        Calendar = ar ? "التقويم" : "Calendar";
-        CalendarSystem = ar ? "نظام التقويم" : "Calendar system";
-        PrevMonth = ar ? "الشهر السابق" : "Previous month";
-        NextMonth = ar ? "الشهر التالي" : "Next month";
-        Month = ar ? "الشهر" : "Month";
-        Year = ar ? "السنة" : "Year";
-        Day = ar ? "اليوم" : "Day";
-        Hour = ar ? "الساعة" : "Hour";
-        Minute = ar ? "الدقيقة" : "Minute";
-        Second = ar ? "الثانية" : "Second";
-        Period = ar ? "الفترة" : "AM/PM";
-        Gregorian = ar ? "ميلادي" : "Gregorian";
-        HijriLabel = ar ? "هجري" : "Hijri";
-        Am = ar ? "ص" : "AM";
-        Pm = ar ? "م" : "PM";
+        Words = words;
+        IsArabic = words.Arabic;
+        string[] Names(string key, int from, int count) => [.. Enumerable.Range(from, count).Select(i => words[key + i])];
+        _gregorian = Names("date.month.", 1, 12);
+        _shortGregorian = Names("date.monthShort.", 1, 12);
+        _hijri = Names("date.hijriMonth.", 1, 12);
+        _narrow = Names("date.weekdayNarrow.", 0, 7);
+        _long = Names("date.weekday.", 0, 7);
+        _short = Names("date.weekdayShort.", 0, 7);
+        Today = words["date.today"];
+        Clear = words["date.clear"];
+        BadDate = words["date.badDate"];
+        BadTime = words["date.badTime"];
+        PickStart = words["date.pickStart"];
+        PickEnd = words["date.pickEnd"];
+        Done = words["date.done"];
+        Cancel = words["date.cancel"];
+        Choose = words["date.choose"];
+        ChooseTime = words["date.chooseTime"];
+        Calendar = words["date.calendar"];
+        CalendarSystem = words["date.calendarSystem"];
+        PrevMonth = words["date.prevMonth"];
+        NextMonth = words["date.nextMonth"];
+        Month = words["date.month"];
+        Year = words["date.year"];
+        Day = words["date.day"];
+        Hour = words["date.hour"];
+        Minute = words["date.minute"];
+        Second = words["date.second"];
+        Period = words["date.period"];
+        Gregorian = words["date.gregorian"];
+        HijriLabel = words["date.hijri"];
+        Am = words["date.am"];
+        Pm = words["date.pm"];
     }
+
+    /// <summary>Every word these pickers say, by key.</summary>
+    public Speech Words { get; }
+
+    /// <summary>The locale a picker hands to the calendar or wheels it opens, so they speak as it does.</summary>
+    public string Code => Words.App && Controls.Words.Language is { } l ? l : IsArabic ? "ar" : "en";
 
     public bool IsArabic { get; }
     public string Today { get; }
@@ -77,29 +87,35 @@ internal sealed class PickerLocale
     public string Am { get; }
     public string Pm { get; }
 
-    public string BirthStart => IsArabic ? "اكتب التاريخ أو اسحب الأعمدة" : "Type the date or drag the columns";
+    public string BirthStart => Words["birth.start"];
 
-    public string BirthFar => IsArabic ? "هذا التاريخ أبعد من المسموح" : "This date is further back than allowed";
+    public string BirthFar => Words["birth.far"];
 
-    public string BirthIncomplete => IsArabic ? "أكمل تاريخ الميلاد" : "Finish the date of birth";
+    public string BirthIncomplete => Words["birth.incomplete"];
 
-    public string BirthRequired => IsArabic ? "اكتب تاريخ ميلادك" : "Enter your date of birth";
+    public string BirthRequired => Words["birth.required"];
 
-    public string BirthPick => IsArabic ? "اختر من الأعمدة" : "Pick from the columns";
+    public string BirthPick => Words["birth.pick"];
 
-    public string BirthGroup => IsArabic ? "تاريخ الميلاد" : "Date of birth";
+    public string BirthGroup => Words["birth.group"];
 
-    public string BirthLeft(IEnumerable<string> list) => IsArabic ? "بقي " + string.Join(" و", list) : "Still to choose: " + string.Join(" and ", list).ToLowerInvariant();
+    // English lowers the parts' captions inside its sentence; the app's own words stay as written.
+    public string BirthLeft(IEnumerable<string> list)
+    {
+        var joined = string.Join(Words["birth.and"], list);
+        var own = Words.App && Controls.Words.Given("birth.left", IsArabic) is not null;
+        return Words.Format("birth.left", IsArabic || own ? joined : joined.ToLowerInvariant());
+    }
 
-    public string BirthAge(int n) => IsArabic ? "العمر " + ArYears(n) : n == 1 ? "1 year old" : N(n) + " years old";
+    public string BirthAge(int n) => Words.Count("birth.age", n, k => "العمر " + ArYears(k));
 
-    public string BirthYoung(int n) => IsArabic ? "يجب أن يكون العمر " + ArYears(n) + " على الأقل" : "You must be at least " + N(n) + " years old";
+    public string BirthYoung(int n) => Words.Count("birth.young", n, k => "يجب أن يكون العمر " + ArYears(k) + " على الأقل");
 
     /// <summary>The placeholder of a part of the birth date: <paramref name="k"/> is d, m or y.</summary>
-    public string BirthWord(char k) => IsArabic ? k switch { 'd' => "يوم", 'm' => "شهر", _ => "سنة" } : k switch { 'd' => "Day", 'm' => "Month", _ => "Year" };
+    public string BirthWord(char k) => Words[k switch { 'd' => "birth.dayHint", 'm' => "birth.monthHint", _ => "birth.yearHint" }];
 
     /// <summary>The caption and the accessible name of a part of the birth date.</summary>
-    public string BirthCap(char k) => IsArabic ? k switch { 'd' => "اليوم", 'm' => "الشهر", _ => "السنة" } : k switch { 'd' => "Day", 'm' => "Month", _ => "Year" };
+    public string BirthCap(char k) => k switch { 'd' => Day, 'm' => Month, _ => Year };
 
     private static string ArYears(int n)
     {
@@ -107,15 +123,18 @@ internal sealed class PickerLocale
         return n == 0 ? "أقل من سنة" : n == 1 ? "سنة واحدة" : n == 2 ? "سنتان" : N(n) + (r >= 3 && r <= 10 ? " سنوات" : " سنة");
     }
 
-    public string Early(string date) => IsArabic ? $"اختر {date} أو ما بعده." : $"Choose {date} or later.";
+    public string Early(string date) => Words.Format("date.early", date);
 
-    public string Late(string date) => IsArabic ? $"اختر {date} أو ما قبله." : $"Choose {date} or earlier.";
+    public string Late(string date) => Words.Format("date.late", date);
 
-    // An explicit locale wins; otherwise the page's language follows its direction, as the docs' ?dir= switch does.
+    // An explicit locale wins; otherwise the app's language, else the page's language follows its direction, as the docs' ?dir= switch does.
     public static PickerLocale For(string? locale, FlowDirection direction)
     {
-        if (!string.IsNullOrEmpty(locale)) return locale.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? Arabic : English;
-        return direction == FlowDirection.RightToLeft ? Arabic : English;
+        var words = string.IsNullOrEmpty(locale)
+            ? new Speech(Controls.Words.Language is { } l ? Controls.Words.IsArabicCode(l) : direction == FlowDirection.RightToLeft, true)
+            : Controls.Words.Of(null, locale);
+        if (!words.App || Controls.Words.Version == 0) return words.Arabic ? Arabic : English;
+        return words.Arabic ? s_appAr ??= new PickerLocale(words) : s_appEn ??= new PickerLocale(words);
     }
 
     // Saturday for Arabic, Sunday for English, as Intl's week info answers.
@@ -123,37 +142,38 @@ internal sealed class PickerLocale
 
     public bool MonthFirst => !IsArabic;
 
-    public string Narrow(DayOfWeek d) => (IsArabic ? NarrowAr : NarrowEn)[(int)d];
+    public string Narrow(DayOfWeek d) => _narrow[(int)d];
 
-    public string LongDay(DayOfWeek d) => (IsArabic ? LongAr : LongEn)[(int)d];
+    public string LongDay(DayOfWeek d) => _long[(int)d];
 
-    public string ShortDay(DayOfWeek d) => (IsArabic ? LongAr : ShortEn)[(int)d];
+    public string ShortDay(DayOfWeek d) => _short[(int)d];
 
     public string MonthName(PickerCalendar cal, int m) =>
-        (cal.IsGregorian ? IsArabic ? GregorianAr : GregorianEn : IsArabic ? HijriAr : HijriEn)[((m % 12) + 12) % 12];
+        (cal.IsGregorian ? _gregorian : _hijri)[((m % 12) + 12) % 12];
 
     /// <summary>A Gregorian month as Intl's short month gives it: Jan in English, the whole name in Arabic.</summary>
-    public string ShortMonth(int m) => (IsArabic ? GregorianAr : ShortGregorianEn)[((m % 12) + 12) % 12];
+    public string ShortMonth(int m) => _shortGregorian[((m % 12) + 12) % 12];
 
     private DateTimeFormatInfo? _format;
 
     /// <summary>These words as .NET date formatting, Gregorian with Latin digits, for Avalonia's own pickers.</summary>
-    public DateTimeFormatInfo Format => _format ??= BuildFormat(IsArabic);
+    public DateTimeFormatInfo Format => _format ??= BuildFormat();
 
-    private static DateTimeFormatInfo BuildFormat(bool ar)
+    private DateTimeFormatInfo BuildFormat()
     {
+        var ar = IsArabic;
         var f = (DateTimeFormatInfo)CultureInfo.InvariantCulture.DateTimeFormat.Clone();
-        string[] months = [.. (ar ? GregorianAr : GregorianEn), ""];
-        string[] shortMonths = [.. (ar ? GregorianAr : ShortGregorianEn), ""];
+        string[] months = [.. _gregorian, ""];
+        string[] shortMonths = [.. _shortGregorian, ""];
         f.MonthNames = months;
         f.MonthGenitiveNames = months;
         f.AbbreviatedMonthNames = shortMonths;
         f.AbbreviatedMonthGenitiveNames = shortMonths;
-        f.DayNames = ar ? LongAr : LongEn;
-        f.AbbreviatedDayNames = ar ? LongAr : ShortEn;
-        f.ShortestDayNames = ar ? NarrowAr : NarrowEn;
-        f.AMDesignator = ar ? "ص" : "AM";
-        f.PMDesignator = ar ? "م" : "PM";
+        f.DayNames = _long;
+        f.AbbreviatedDayNames = _short;
+        f.ShortestDayNames = _narrow;
+        f.AMDesignator = Am;
+        f.PMDesignator = Pm;
         f.ShortDatePattern = ar ? "d/M/yyyy" : "M/d/yyyy";
         f.LongDatePattern = ar ? "dddd، d MMMM yyyy" : "dddd, MMMM d, yyyy";
         f.YearMonthPattern = "MMMM yyyy";
@@ -163,7 +183,7 @@ internal sealed class PickerLocale
     }
 
     public string YearText(PickerCalendar cal, int y) =>
-        cal.IsGregorian ? N(y) : IsArabic ? $"{N(y)} هـ" : $"{N(y)} AH";
+        cal.IsGregorian ? N(y) : Words.Format("date.hijriYear", N(y));
 
     public string MonthYear(PickerCalendar cal, DateTime d)
     {
@@ -201,7 +221,7 @@ internal sealed class PickerLocale
     private static readonly string ThinDash = (char)0x2009 + "–" + (char)0x2009;
 
     public string FormatDateTime(PickerCalendar cal, DateTime d, TimeSpan t) =>
-        IsArabic ? $"{FormatDay(cal, d)} في {FormatTime(t)}" : $"{FormatDay(cal, d)} at {FormatTime(t)}";
+        Words.Format("date.at", FormatDay(cal, d), FormatTime(t));
 
     public string FormatTime(TimeSpan t)
     {

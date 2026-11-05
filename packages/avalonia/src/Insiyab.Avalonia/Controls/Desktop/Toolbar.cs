@@ -30,8 +30,14 @@ public enum ToolbarOverflow
 /// <summary>A desktop command bar: a row of commands that moves what does not fit, from the end, into a «⋯» menu. One Tab stop; the arrows, Home and End move between its commands. Commands with <see cref="AtEndProperty"/> pack at the far end. With the class <c>chips</c> it is a row of filter chips that never wraps: the chips that do not fit go into a «+N» chip's menu, and a checked chip always stays in the row.</summary>
 [TemplatePart("PART_Panel", typeof(ToolbarPanel))]
 [TemplatePart("PART_More", typeof(ToolbarButton))]
-public class Toolbar : TemplatedControl
+public class Toolbar : TemplatedControl, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(MoreTextProperty, "toolbar.more")];
+
+    void IWords.Reword() => Words.Refill(this, OwnWords);
+
     /// <summary>On a command in a toolbar: whether it may move into the «⋯» menu. Only buttons, split buttons and separators move; anything else, such as a search field, stays in the row.</summary>
     public static readonly AttachedProperty<ToolbarOverflow> OverflowProperty =
         AvaloniaProperty.RegisterAttached<Control, ToolbarOverflow>("Overflow", typeof(Toolbar));
@@ -55,6 +61,7 @@ public class Toolbar : TemplatedControl
 
     public Toolbar()
     {
+        Words.Fill(this, OwnWords);
         // The presenter is made on the first open, before Opening, and keeps the list it found: a list of our own lets it see the entries filled then.
         _menu = new PopMenu { IsEnd = true, ItemsSource = _entries };
         Items.CollectionChanged += (_, e) =>

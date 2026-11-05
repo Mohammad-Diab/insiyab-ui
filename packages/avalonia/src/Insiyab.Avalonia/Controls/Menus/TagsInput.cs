@@ -57,8 +57,14 @@ public class TagsChangedEventArgs : RoutedEventArgs
 [TemplatePart("PART_List", typeof(ItemsControl))]
 [TemplatePart("PART_Empty", typeof(Control))]
 [PseudoClasses(":open", ":focus-within-box")]
-public class TagsInput : TemplatedControl
+public class TagsInput : TemplatedControl, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(EmptyTextProperty, "tags.empty"), new(RemoveLabelProperty, "tags.remove")];
+
+    void IWords.Reword() => Words.Refill(this, OwnWords);
+
     public static readonly StyledProperty<bool> IsFreeProperty =
         AvaloniaProperty.Register<TagsInput, bool>(nameof(IsFree));
 
@@ -94,6 +100,7 @@ public class TagsInput : TemplatedControl
 
     public TagsInput()
     {
+        Words.Fill(this, OwnWords);
         Values.CollectionChanged += OnValuesChanged;
         Options.CollectionChanged += (_, _) => BuildRows();
     }

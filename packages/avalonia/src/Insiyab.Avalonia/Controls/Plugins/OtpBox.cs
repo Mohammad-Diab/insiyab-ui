@@ -386,9 +386,7 @@ public class OtpBox : TextBox
     {
         var len = (Text ?? string.Empty).Length;
         if (len == 0 || len >= Length) { ValidationMessage = null; return; }
-        ValidationMessage = PluginText.IsArabic(this.GetVisualParent() as Control ?? this, Locale)
-            ? $"اكتب الرمز كاملًا: {Length}{(Alphanumeric ? " خانات." : " أرقام.")}"
-            : $"Enter all {Length}{(Alphanumeric ? " characters." : " digits.")}";
+        ValidationMessage = PluginText.Words(this.GetVisualParent() as Control ?? this, Locale).Format(Alphanumeric ? "otp.chars" : "otp.digits", Length);
     }
 
     private void BuildCells()

@@ -17,8 +17,16 @@ namespace Insiyab.Avalonia.Controls;
 /// <summary>The web's <c>.ins-chip</c>: a small value a person acts on. With <see cref="IsRemovable"/> it carries the × (<c>.ins-chip-x</c>), which raises the cancelable <see cref="RemovingEvent"/> and then takes the chip away. A filter chip is a <c>ToggleButton Classes="chip"</c>, a link chip a <c>Button Classes="chip"</c>.</summary>
 [TemplatePart("PART_Remove", typeof(Button))]
 [PseudoClasses(":removable")]
-public class Chip : ContentControl
+public class Chip : ContentControl, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(RemoveLabelProperty, "chip.remove")];
+
+    void IWords.Reword() => Words.Refill(this, OwnWords);
+
+    public Chip() => Words.Fill(this, OwnWords);
+
     public static readonly StyledProperty<bool> IsRemovableProperty =
         AvaloniaProperty.Register<Chip, bool>(nameof(IsRemovable));
 

@@ -22,8 +22,10 @@ public enum DatePickMode
 [TemplatePart("PART_Host", typeof(Decorator))]
 [TemplatePart("PART_Turn", typeof(Canvas))]
 [PseudoClasses(":dual", ":datetime", ":stacked")]
-internal class DateCalendar : TemplatedControl
+internal class DateCalendar : TemplatedControl, IWords
 {
+    void IWords.Reword() => Rebuild();
+
     public static readonly StyledProperty<DatePickMode> ModeProperty =
         AvaloniaProperty.Register<DateCalendar, DatePickMode>(nameof(Mode));
 

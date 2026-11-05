@@ -42,8 +42,10 @@ public sealed class BirthChangedEventArgs : EventArgs
 
 /// <summary>The birth date plugin (the web's <c>input[data-ins-birth]</c>): day, month and year typed in place or chosen from three columns, with the web's typing rules (a part moves on by itself, a lone digit takes its zero, a digit that cannot be part of an allowed date is refused). Always holds a Gregorian date.</summary>
 [TemplatePart("PART_Host", typeof(Decorator))]
-public class BirthDateField : TemplatedControl
+public class BirthDateField : TemplatedControl, IWords
 {
+    void IWords.Reword() => Build();
+
     public static readonly StyledProperty<DateTime?> SelectedDateProperty =
         AvaloniaProperty.Register<BirthDateField, DateTime?>(nameof(SelectedDate), defaultBindingMode: BindingMode.TwoWay);
 

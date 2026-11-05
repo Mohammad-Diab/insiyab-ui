@@ -34,8 +34,14 @@ public sealed class DialogClosedEventArgs : EventArgs
 /// <summary>The web's <c>dialog.ins-dialog</c> and <c>dialog.ins-drawer</c>: a modal panel over a dimmed window, with a head, a scrolling body and a foot. Classes: <c>sm</c>, <c>lg</c>; <c>drawer</c>, <c>drawer end</c>, <c>drawer bottom</c>. Declare it in <c>Resources</c> (or build it in code) and open it with <see cref="OpensProperty"/> on a button, <see cref="Open"/>, <see cref="ShowAsync(Control)"/> or <see cref="ShowAsWindowAsync"/>.</summary>
 [TemplatePart("PART_Close", typeof(Button))]
 [PseudoClasses(":open", ":titled", ":footed", ":pinned", ":window", ":edge")]
-public class Dialog : ContentControl
+public class Dialog : ContentControl, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(CloseLabelProperty, "dialog.close")];
+
+    void IWords.Reword() => Words.Refill(this, OwnWords);
+
     public static readonly StyledProperty<object?> TitleProperty =
         AvaloniaProperty.Register<Dialog, object?>(nameof(Title));
 
@@ -95,6 +101,7 @@ public class Dialog : ContentControl
 
     public Dialog()
     {
+        Words.Fill(this, OwnWords);
         AddHandler(Dismiss.DismissedEvent, OnDismissed);
     }
 
@@ -372,9 +379,9 @@ public class Dialog : ContentControl
     /// <summary>A small dialog with a question and two buttons, as <c>Insiyab.confirm()</c>: true on the confirm button, false on cancel, Escape or the cross. Focus starts on cancel.</summary>
     public static async Task<bool> ConfirmAsync(Control owner, string? title, string message, bool danger = false, string? confirm = null, string? cancel = null)
     {
-        var arabic = owner.FlowDirection == FlowDirection.RightToLeft;
-        var no = new Button { Content = cancel ?? (arabic ? "إلغاء" : "Cancel"), Classes = { "bare" } };
-        var yes = new Button { Content = confirm ?? (arabic ? "تأكيد" : "OK"), Classes = { danger ? "danger" : "primary" } };
+        var words = Words.Of(owner);
+        var no = new Button { Content = cancel ?? words["dialog.cancel"], Classes = { "bare" } };
+        var yes = new Button { Content = confirm ?? words["dialog.ok"], Classes = { danger ? "danger" : "primary" } };
         SetResult(no, "cancel");
         SetResult(yes, "ok");
         var question = new TextBlock { Text = message, TextWrapping = TextWrapping.Wrap };

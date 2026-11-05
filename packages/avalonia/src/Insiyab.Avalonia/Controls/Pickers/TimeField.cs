@@ -11,8 +11,15 @@ using Avalonia.Threading;
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The time field (the web's <c>input[data-ins-time]</c>): the time written as the page's language writes it, a clock at its end, typing such as "14:30" or "2:30 م", and hour, minute and period wheels in a pop-up under it.</summary>
-public class TimeField : TextBox
+public class TimeField : TextBox, IWords
 {
+    void IWords.Reword()
+    {
+        if (_syncing) return;
+        Write();
+        AutomationProperties.SetName(_button, Words.ChooseTime);
+    }
+
     public static readonly StyledProperty<TimeSpan?> SelectedTimeProperty =
         AvaloniaProperty.Register<TimeField, TimeSpan?>(nameof(SelectedTime), defaultBindingMode: BindingMode.TwoWay);
 
@@ -182,7 +189,7 @@ public class TimeField : TextBox
             if (focusDrum) _drum.FocusFirst();
             return;
         }
-        _drum.Locale = Locale ?? (Words.IsArabic ? "ar" : "en");
+        _drum.Locale = Locale ?? Words.Code;
         _drum.MinuteStep = MinuteStep;
         _drum.MinTime = MinTime;
         _drum.MaxTime = MaxTime;

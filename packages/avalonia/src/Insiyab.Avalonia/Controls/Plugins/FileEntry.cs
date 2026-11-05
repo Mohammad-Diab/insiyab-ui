@@ -160,11 +160,10 @@ internal static class FileTypes
     }
 
     // A size as the page's language writes it (Intl.NumberFormat's short units), in Latin digits.
-    public static string Size(long n, bool arabic)
+    public static string Size(long n, Speech words)
     {
         var (unit, v) = n >= 1048576 ? (2, n / 1048576d) : n >= 1024 ? (1, n / 1024d) : (0, (double)n);
         var num = PluginText.Num(v, v < 10 ? 1 : 0);
-        var name = arabic ? new[] { "بايت", "كيلوبايت", "م.ب" }[unit] : new[] { "byte", "kB", "MB" }[unit];
-        return num + " " + name;
+        return words.Format(unit switch { 2 => "file.mb", 1 => "file.kb", _ => "file.bytes" }, num);
     }
 }

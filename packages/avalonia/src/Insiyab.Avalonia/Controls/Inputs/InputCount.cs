@@ -113,9 +113,11 @@ public static class InputCount
         return n == 1 ? w[0] : n == 2 ? w[1] : n + " " + (r >= 3 && r <= 10 ? w[2] : r >= 11 ? w[3] : w[4]);
     }
 
-    private static string Words(int n, int max) => $"{n}/{max} " + (max % 100 >= 3 && max % 100 <= 10 ? "كلمات" : "كلمة");
+    // Words have always been counted in Arabic here; a language set for the app takes their place.
+    private static string Words(int n, int max) =>
+        Controls.Words.Fixed.Count("count.words", n, _ => $"{n}/{max} " + (max % 100 >= 3 && max % 100 <= 10 ? "كلمات" : "كلمة"), max);
 
-    private static string WordsFree(int n) => ArCount(n, ["كلمة واحدة", "كلمتان", "كلمات", "كلمة", "كلمة"]);
+    private static string WordsFree(int n) => Controls.Words.Fixed.Count("count.wordsFree", n, k => ArCount(k, ["كلمة واحدة", "كلمتان", "كلمات", "كلمة", "كلمة"]));
 
-    private static string TooManyWords(int max) => "لا تتجاوز " + ArCount(max, ["كلمة واحدة", "كلمتين", "كلمات", "كلمة", "كلمة"]) + ".";
+    private static string TooManyWords(int max) => Controls.Words.Fixed.Count("count.tooMany", max, k => "لا تتجاوز " + ArCount(k, ["كلمة واحدة", "كلمتين", "كلمات", "كلمة", "كلمة"]) + ".");
 }

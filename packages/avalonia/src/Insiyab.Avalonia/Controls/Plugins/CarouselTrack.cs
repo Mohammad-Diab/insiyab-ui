@@ -137,6 +137,9 @@ internal sealed class CarouselNav
     /// <summary>For tests: the milliseconds that tell one wheel gesture from the next.</summary>
     internal static Func<long> Now { get; set; } = () => Environment.TickCount64;
 
+    // A carousel's arrows and dots say their names again in the app's new language.
+    internal static void Reword(Carousel carousel) => carousel.GetValue(NavProperty)?.Paint();
+
     private CarouselNav(Carousel carousel)
     {
         _carousel = carousel;
@@ -167,7 +170,7 @@ internal sealed class CarouselNav
 
     public int StopCount => _track?.Stops.Count ?? 0;
 
-    private bool Arabic => PluginText.IsArabic(_carousel, CarouselOptions.GetLocale(_carousel));
+    private Speech Said => PluginText.Words(_carousel, CarouselOptions.GetLocale(_carousel));
 
     private void SetTrack(CarouselTrack track)
     {
@@ -313,18 +316,18 @@ internal sealed class CarouselNav
     private void Paint()
     {
         var count = StopCount;
-        var ar = Arabic;
+        var words = Said;
         if (_prev is not null)
         {
             _prev.IsEnabled = _stop > 0;
             _prev.IsVisible = count > 1;
-            Automation(_prev, ar ? "السابق" : "Previous");
+            Automation(_prev, words["carousel.previous"]);
         }
         if (_next is not null)
         {
             _next.IsEnabled = _stop < count - 1;
             _next.IsVisible = count > 1;
-            Automation(_next, ar ? "التالي" : "Next");
+            Automation(_next, words["carousel.next"]);
         }
         if (_dots is null) return;
         if (_dots.Children.Count != count)
@@ -342,13 +345,13 @@ internal sealed class CarouselNav
         {
             var dot = (Button)_dots.Children[i];
             dot.Classes.Set("current", i == _stop);
-            Automation(dot, ar ? $"الشريحة {i + 1}" : $"Slide {i + 1}");
+            Automation(dot, words.Format("carousel.slide", i + 1));
         }
         _dots.IsVisible = count > 1 && !CarouselOptions.GetHideDots(_carousel);
         var n = _carousel.ItemCount;
         for (var i = 0; i < n; i++)
             if (_carousel.ContainerFromIndex(i) is Control c && global::Avalonia.Automation.AutomationProperties.GetName(c) is null or "")
-                Automation(c, ar ? $"{i + 1} من {n}" : $"{i + 1} of {n}");
+                Automation(c, words.Format("carousel.of", i + 1, n));
     }
 
     private void OnDot(object? sender, RoutedEventArgs e)

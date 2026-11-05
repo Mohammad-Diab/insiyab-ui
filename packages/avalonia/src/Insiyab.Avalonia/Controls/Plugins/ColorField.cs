@@ -96,7 +96,7 @@ public class ColorField : TemplatedControl
         remove => RemoveHandler(ColorCommittedEvent, value);
     }
 
-    private bool Arabic => PluginText.IsArabic(this, Locale);
+    private Speech Said => PluginText.Words(this, Locale);
 
     /// <summary>Sets the colour quietly, with no <see cref="ColorCommitted"/>: <c>Insiyab.colorField(field, value)</c>.</summary>
     public void SetColor(Color? value)
@@ -254,7 +254,7 @@ public class ColorField : TemplatedControl
             return;
         }
         if (ColorMath.ParseHex(raw) is { } c) Set(c, false);
-        else SetMessage(Arabic ? "اكتب لونًا مثل #4C1D95." : "Enter a color like #4C1D95.");
+        else SetMessage(Said["color.bad"]);
     }
 
     private void OnSwatchClick(object? sender, RoutedEventArgs e) => SetCurrentValue(IsDropDownOpenProperty, !IsDropDownOpen);

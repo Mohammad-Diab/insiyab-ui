@@ -56,8 +56,10 @@ public sealed class MonthEvent
 /// <summary>The month calendar plugin (the web's <c>.ins-month</c>): a month as a table of weeks starting on the locale's first day, today marked, each day showing three events and a "+n" for the rest, dots instead of names when narrow, and a header that moves a month back, on, or to today. The desktop adds a week and a day view by the hour, the work hours only unless asked, with a switch between the three.</summary>
 [TemplatePart("PART_Host", typeof(Decorator))]
 [PseudoClasses(":narrow", ":month", ":week", ":day")]
-public class MonthCalendar : TemplatedControl
+public class MonthCalendar : TemplatedControl, IWords
 {
+    void IWords.Reword() => Draw();
+
     public static readonly StyledProperty<DateTime> MonthProperty =
         AvaloniaProperty.Register<MonthCalendar, DateTime>(nameof(Month), new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1));
 
@@ -369,16 +371,16 @@ public class MonthCalendar : TemplatedControl
             var nav = new MonthStack { Orientation = Orientation.Horizontal, Spacing = 4, Classes = { "month-nav" } };
             _switch = new Segmented { Classes = { "month-views" } };
             _syncSwitch = true;
-            _switch.ItemsSource = words.IsArabic ? new[] { "شهر", "أسبوع", "يوم" } : new[] { "Month", "Week", "Day" };
+            _switch.ItemsSource = new[] { words.Words["month.month"], words.Words["month.week"], words.Words["month.day"] };
             _syncSwitch = false;
-            AutomationProperties.SetName(_switch, words.IsArabic ? "طريقة العرض" : "View");
+            AutomationProperties.SetName(_switch, words.Words["month.view"]);
             _switch.SelectionChanged += (_, _) =>
             {
                 if (_syncSwitch || _switch.SelectedIndex < 0) return;
                 var to = (MonthCalendarView)_switch.SelectedIndex;
                 if (to != View) Dispatcher.UIThread.Post(() => SwitchTo(to));
             };
-            _hours = new ToggleButton { Content = words.IsArabic ? "ساعات الدوام" : "Work hours", Classes = { "secondary", "sm", "month-hours" }, Tag = "hours" };
+            _hours = new ToggleButton { Content = words.Words["month.workHours"], Classes = { "secondary", "sm", "month-hours" }, Tag = "hours" };
             _hours.Click += (_, _) => SetHours(_hours.IsChecked == true, null);
             nav.Children.Add(_hours);
             nav.Children.Add(_switch);
@@ -401,11 +403,11 @@ public class MonthCalendar : TemplatedControl
             MonthCalendarView.Day => words.FullDay(greg, first),
             _ => words.MonthYear(greg, First(Month)),
         };
-        var ar = words.IsArabic;
+        var say = words.Words;
         var (back, on) = view switch
         {
-            MonthCalendarView.Week => (ar ? "الأسبوع السابق" : "Previous week", ar ? "الأسبوع التالي" : "Next week"),
-            MonthCalendarView.Day => (ar ? "اليوم السابق" : "Previous day", ar ? "اليوم التالي" : "Next day"),
+            MonthCalendarView.Week => (say["month.prevWeek"], say["month.nextWeek"]),
+            MonthCalendarView.Day => (say["month.prevDay"], say["month.nextDay"]),
             _ => (words.PrevMonth, words.NextMonth),
         };
         AutomationProperties.SetName(_prev!, back);
@@ -416,8 +418,8 @@ public class MonthCalendar : TemplatedControl
         _hours.IsChecked = WorkHoursOnly;
         var from = words.FormatTime(TimeSpan.FromHours(ws));
         var to = words.FormatTime(TimeSpan.FromHours(we));
-        ToolTip.SetTip(_hours, ar ? $"اعرض ساعات الدوام وحدها، من {from} إلى {to}" : $"Show only the work hours, {from} to {to}");
-        AutomationProperties.SetName(_hours, words.IsArabic ? "ساعات الدوام" : "Work hours");
+        ToolTip.SetTip(_hours, say.Format("month.workHoursTip", from, to));
+        AutomationProperties.SetName(_hours, say["month.workHours"]);
         _syncSwitch = true;
         _switch.SelectedIndex = (int)view;
         _syncSwitch = false;
@@ -431,12 +433,11 @@ public class MonthCalendar : TemplatedControl
         Draw();
     }
 
-    private static string Count(bool ar, int n)
+    private static string Count(PickerLocale words, int n) => words.Words.Count("month.events", n, k =>
     {
-        if (!ar) return n == 1 ? "1 event" : $"{PickerLocale.N(n)} events";
-        var r = n % 100;
-        return n == 1 ? "موعد واحد" : n == 2 ? "موعدان" : PickerLocale.N(n) + (r is >= 3 and <= 10 ? " مواعيد" : r >= 11 ? " موعدًا" : " موعد");
-    }
+        var r = k % 100;
+        return k == 1 ? "موعد واحد" : k == 2 ? "موعدان" : PickerLocale.N(k) + (r is >= 3 and <= 10 ? " مواعيد" : r >= 11 ? " موعدًا" : " موعد");
+    });
 
     private Button Arrow(bool next, Action go)
     {
@@ -541,7 +542,7 @@ public class MonthCalendar : TemplatedControl
 
         var corner = new MonthBorder { Classes = { "week-corner" } };
         top.Children.Add(corner);
-        var allLabel = new MonthText { Text = words.IsArabic ? "طوال اليوم" : "All day", Classes = { "week-allday-label" } };
+        var allLabel = new MonthText { Text = words.Words["month.allDay"], Classes = { "week-allday-label" } };
         Grid.SetRow(allLabel, 1);
         top.Children.Add(allLabel);
 
@@ -678,11 +679,10 @@ public class MonthCalendar : TemplatedControl
     // The row above (row 0) or below (row 2) the hours: a label in the gutter and, in each day with hidden events, a pill counting them.
     private void AddBands(PickerLocale words, Grid body, DateTime first, bool after, int hour, List<Piece>[] lists)
     {
-        var ar = words.IsArabic;
         var row = after ? 2 : 0;
         var kind = after ? "after" : "before";
         var at = words.FormatTime(TimeSpan.FromHours(hour));
-        var label = ar ? $"{(after ? "بعد" : "قبل")} {at}" : $"{(after ? "After" : "Before")} {at}";
+        var label = words.Words.Format(after ? "month.after" : "month.before", at);
         var gutter = new MonthBorder { Classes = { "week-band-gutter", kind }, Child = new MonthText { Text = label, Classes = { "week-band-label" } } };
         Grid.SetRow(gutter, row);
         body.Children.Add(gutter);
@@ -701,7 +701,7 @@ public class MonthCalendar : TemplatedControl
         var ar = words.IsArabic;
         var at = words.FormatTime(TimeSpan.FromHours(hour));
         var band = new MonthBorder { Child = new MonthText { Text = "+" + PickerLocale.N(hidden.Count), Classes = { "week-band-count" } }, Classes = { "week-band", after ? "after" : "before" }, Focusable = true, Tag = day };
-        AutomationProperties.SetName(band, ar ? $"{Count(true, hidden.Count)} {(after ? "بعد" : "قبل")} {at}" : $"{Count(false, hidden.Count)} {(after ? "after" : "before")} {at}");
+        AutomationProperties.SetName(band, words.Words.Format(after ? "month.eventsAfter" : "month.eventsBefore", Count(words, hidden.Count), at));
         ToolTip.SetTip(band, string.Join(ar ? "، " : ", ", hidden.Select(p => $"{words.FormatTime(p.Event.Time!.Value)} {p.Event.Title}")));
         var first = hidden.Min(p => p.Start);
         void Open(bool keyboard)

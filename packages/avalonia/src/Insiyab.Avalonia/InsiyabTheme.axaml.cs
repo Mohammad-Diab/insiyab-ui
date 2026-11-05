@@ -17,10 +17,12 @@ public partial class InsiyabTheme : Styles
         AvaloniaXamlLoader.Load(serviceProvider, this);
         OnLoadedBrand();
         OnLoadedFrost();
+        Reword();
         Controls.Motion.Register();
         Controls.WindowActivity.Register();
         Controls.TipKeyboard.Register();
         Controls.TextDirection.Register();
+        Controls.Words.Register();
         Controls.ClassTheme.Register(this);
     }
 

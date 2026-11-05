@@ -118,8 +118,14 @@ public class WizardMovedEventArgs : RoutedEventArgs
 [TemplatePart("PART_Finish", typeof(Button))]
 [TemplatePart("PART_Cancel", typeof(Button))]
 [PseudoClasses(":first", ":last", ":busy", ":has-cancel")]
-public class Wizard : ItemsControl
+public class Wizard : ItemsControl, IWords
 {
+    private static Words.Own[]? s_words;
+
+    private static Words.Own[] OwnWords => s_words ??= [new(PreviousTextProperty, "wizard.previous"), new(NextTextProperty, "wizard.next"), new(FinishTextProperty, "wizard.finish")];
+
+    void IWords.Reword() => Words.Refill(this, OwnWords);
+
     public static readonly StyledProperty<int> CurrentIndexProperty =
         AvaloniaProperty.Register<Wizard, int>(nameof(CurrentIndex), defaultBindingMode: global::Avalonia.Data.BindingMode.TwoWay);
 
@@ -201,6 +207,7 @@ public class Wizard : ItemsControl
 
     public Wizard()
     {
+        Words.Fill(this, OwnWords);
         ItemsView.CollectionChanged += (_, _) => Rebuild();
         AddHandler(KeyDownEvent, OnFieldKey, RoutingStrategies.Bubble);
         AddHandler(PointerPressedEvent, OnPointerButton, RoutingStrategies.Tunnel);
@@ -550,7 +557,7 @@ public class Wizard : ItemsControl
         return first is null;
     }
 
-    private string RequiredMessage() => FlowDirection == FlowDirection.RightToLeft ? "هذا الحقل مطلوب." : "This field is required.";
+    private string RequiredMessage() => Words.Of(this)["wizard.required"];
 
     private string MessageFor(Control c) => c is OtpBox { ValidationMessage: { } partial } ? partial : RequiredMessage();
 

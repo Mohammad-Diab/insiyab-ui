@@ -8,11 +8,8 @@ namespace Insiyab.Avalonia.Controls;
 // The plugins' shared text helpers: the page language and Arabic-Indic digits.
 internal static class PluginText
 {
-    // The web reads <html lang>; here an explicit locale wins, else the control's direction decides (RTL is the Arabic page).
-    public static bool IsArabic(Control control, string? locale) =>
-        string.IsNullOrEmpty(locale)
-            ? control.FlowDirection == FlowDirection.RightToLeft
-            : locale.StartsWith("ar", StringComparison.OrdinalIgnoreCase);
+    // The web reads <html lang>; here an explicit locale wins, else the app's language, else the control's direction decides (RTL is the Arabic page).
+    public static Speech Words(Control control, string? locale) => Controls.Words.Of(control, locale);
 
     public static string Latin(string? s)
     {

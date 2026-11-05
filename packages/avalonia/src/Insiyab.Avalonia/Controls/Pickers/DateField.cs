@@ -34,8 +34,15 @@ public sealed class DateChangedEventArgs : EventArgs
 }
 
 /// <summary>The date field (the web's <c>input[data-ins-date]</c> in an <c>.ins-input-group</c>): a text field showing the date in the page's language, a calendar button at its end, typing that is read on Enter or when focus leaves, and the calendar in a pop-up under it. Picks one day, a range or a day and a time, in Gregorian or Hijri, and always holds Gregorian dates.</summary>
-public class DateField : TextBox
+public class DateField : TextBox, IWords
 {
+    void IWords.Reword()
+    {
+        if (_syncing) return;
+        WriteText();
+        AutomationProperties.SetName(_button, Words.Choose);
+    }
+
     public static readonly StyledProperty<DatePickMode> ModeProperty =
         DateCalendar.ModeProperty.AddOwner<DateField>();
 
@@ -327,7 +334,7 @@ public class DateField : TextBox
         _calendar.CalendarKind = CalendarKind;
         _calendar.ShowGregorian = ShowGregorian;
         _calendar.IsRequired = IsRequired;
-        _calendar.Locale = Locale ?? Words.IsArabic switch { true => "ar", false => "en" };
+        _calendar.Locale = Locale ?? Words.Code;
         _calendar.MinuteStep = MinuteStep;
         _calendar.Time = SelectedTime ?? DefaultTime();
         _calendar.FlowDirection = FlowDirection;
