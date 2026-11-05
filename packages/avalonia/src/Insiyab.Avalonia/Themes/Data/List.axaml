@@ -22,24 +22,54 @@
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="{TemplateBinding CornerRadius}">
-              <ScrollViewer x:Name="PART_ScrollViewer"
-                            HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
-                            VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
-                            IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
-                            AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
-                <ItemsPresenter x:Name="PART_ItemsPresenter"
-                                ItemsPanel="{TemplateBinding ItemsPanel}"
-                                Margin="{TemplateBinding Padding}" />
-              </ScrollViewer>
+              <Panel>
+                <ScrollViewer x:Name="PART_ScrollViewer"
+                              HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                              VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+                              IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+                              AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
+                  <Panel>
+                    <ItemsPresenter x:Name="PART_ItemsPresenter"
+                                    ItemsPanel="{TemplateBinding ItemsPanel}"
+                                    Margin="{TemplateBinding Padding}" />
+                    <Canvas x:Name="PART_Flight" IsHitTestVisible="False" />
+                  </Panel>
+                </ScrollViewer>
+                <ins:TemplateBorder x:Name="PART_Pin" VerticalAlignment="Top" IsVisible="False" IsHitTestVisible="False"
+                        Background="{DynamicResource InsGlassStrongGround}" BoxShadow="{DynamicResource InsShSm}">
+                  <ins:TemplateText x:Name="PART_PinText" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                             FontSize="{DynamicResource InsFsXs}" FontWeight="Bold" Foreground="{DynamicResource InsToneBrand}" />
+                </ins:TemplateBorder>
+              </Panel>
             </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
+        <!-- master: a list beside a detail pane; ruled: dividers that stay; compact: short rows; sticky-headings: the group's heading pins at the top -->
+        <Style Selector="^.master">
+          <Setter Property="ins:ListLook.Master" Value="True" />
+          <Setter Property="ins:ListFlight.IsOn" Value="True" />
+        </Style>
+        <Style Selector="^.ruled">
+          <Setter Property="ins:ListLook.Ruled" Value="True" />
+          <Setter Property="ins:ListLook.Styled" Value="True" />
+        </Style>
+        <Style Selector="^.compact">
+          <Setter Property="ins:ListLook.Compact" Value="True" />
+          <Setter Property="ins:ListLook.Styled" Value="True" />
+        </Style>
+        <Style Selector="^.sticky-headings">
+          <Setter Property="ins:ListPin.IsOn" Value="True" />
+        </Style>
+        <Style Selector="^[FlowDirection=LeftToRight] /template/ :is(TextBlock)#PART_PinText">
+          <Setter Property="LetterSpacing" Value="0.96" />
+        </Style>
       </ControlTheme>
 
       <!-- A row: a divider above it, the content, and the chevron of a destination toward the end of the line -->
       <ControlTheme x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="ins:ListRows.Track" Value="True" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="Padding" Value="12,10" />
@@ -50,8 +80,8 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Panel>
-              <ins:TemplateBorder x:Name="PART_Back"
+            <Panel Background="Transparent">
+              <ins:RowBack x:Name="PART_Back"
                       Background="{TemplateBinding Background}"
                       CornerRadius="{TemplateBinding CornerRadius}"
                       Padding="{TemplateBinding Padding}">
@@ -65,15 +95,15 @@
                                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
                 </DockPanel>
-              </ins:TemplateBorder>
+              </ins:RowBack>
               <ins:TemplateBorder x:Name="PART_Divider" Height="1" VerticalAlignment="Top" Background="{DynamicResource InsLine}" />
             </Panel>
           </ControlTemplate>
         </Setter>
-        <Style Selector="^ /template/ :is(Border)#PART_Back">
+        <Style Selector="^ /template/ ins|RowBack#PART_Back">
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
@@ -100,11 +130,85 @@
         <Style Selector="^:pointerover /template/ :is(Border)#PART_Chevron">
           <Setter Property="RenderTransform" Value="translateX(2px) rotate(45deg)" />
         </Style>
-        <Style Selector="^:focus-visible /template/ :is(Border)#PART_Back">
-          <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
+        <!-- The ring is drawn inside the row, so a scrolling list never cuts it -->
+        <Style Selector="^:focus-visible /template/ ins|RowBack#PART_Back">
+          <Setter Property="Ring" Value="{DynamicResource InsToneBrandSoft}" />
         </Style>
         <Style Selector="^:disabled">
           <Setter Property="Opacity" Value="0.55" />
+        </Style>
+        <!-- A master list: no chevron; the selection is a brand tint and a start mark, unlike the hover, and greys in an inactive window -->
+        <Style Selector="^[(ins|ListLook.Master)=True]">
+          <Style Selector="^ /template/ :is(Border)#PART_Chevron">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^:selected">
+            <Setter Property="Background" Value="{DynamicResource InsBrandTintBg}" />
+            <Style Selector="^ /template/ ins|RowBack#PART_Back">
+              <Setter Property="Mark" Value="{DynamicResource InsPrimaryMid}" />
+            </Style>
+            <Style Selector="^[(ins|WindowActivity.IsInactive)=True]">
+              <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+              <Style Selector="^ /template/ ins|RowBack#PART_Back">
+                <Setter Property="Transitions" Value="{x:Null}" />
+                <Setter Property="Mark" Value="{DynamicResource InsToneMute}" />
+              </Style>
+            </Style>
+          </Style>
+        </Style>
+        <!-- A ruled or compact list tells its rows, so the rows of a plain list skip these rules -->
+        <Style Selector="^[(ins|ListLook.Styled)=True]">
+          <!-- A compact list: short rows and no dividers -->
+          <Style Selector="^[(ins|ListLook.Compact)=True]">
+            <Setter Property="MinHeight" Value="36" />
+            <Setter Property="Padding" Value="12,6" />
+            <Style Selector="^ /template/ :is(Border)#PART_Divider">
+              <Setter Property="IsVisible" Value="False" />
+            </Style>
+          </Style>
+          <!-- A ruled list: the dividers stay through hover and selection, 3px clear of the fill -->
+          <Style Selector="^[(ins|ListLook.Ruled)=True]">
+            <Style Selector="^ /template/ ins|RowBack#PART_Back">
+              <Setter Property="Margin" Value="0,3" />
+            </Style>
+            <Style Selector="^ /template/ :is(Border)#PART_Divider">
+              <Setter Property="Opacity" Value="1" />
+            </Style>
+          </Style>
+        </Style>
+        <!-- A group heading: the eyebrow look, never chosen or reached by the keys, no divider around it -->
+        <Style Selector="^[(ins|ListRow.IsHeading)=True]">
+          <Setter Property="IsEnabled" Value="False" />
+          <Setter Property="Focusable" Value="False" />
+          <Setter Property="IsHitTestVisible" Value="False" />
+          <Setter Property="Opacity" Value="1" />
+          <Setter Property="Cursor" Value="Arrow" />
+          <Setter Property="MinHeight" Value="0" />
+          <Setter Property="Padding" Value="12,14,12,6" />
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+          <Style Selector="^ /template/ :is(Border)#PART_Chevron">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Divider">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^[FlowDirection=LeftToRight]">
+            <Setter Property="LetterSpacing" Value="0.96" />
+          </Style>
+        </Style>
+        <Style Selector="^:after-heading /template/ :is(Border)#PART_Divider">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <!-- A row's place in time: past rows are quieter, the current one wears the brand's start mark -->
+        <Style Selector="^[(ins|ListRow.State)=Past]">
+          <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+          <Setter Property="ins:ListLook.Past" Value="True" />
+        </Style>
+        <Style Selector="^[(ins|ListRow.State)=Current] /template/ ins|RowBack#PART_Back">
+          <Setter Property="Mark" Value="{DynamicResource InsPrimaryMid}" />
         </Style>
       </ControlTheme>
 
@@ -126,6 +230,7 @@
           <Style Selector="^[FlowDirection=RightToLeft]">
             <Setter Property="LineHeight" Value="23.8" />
           </Style>
+          <Style Selector="^[(ins|ListLook.Past)=True]"><Setter Property="Foreground" Value="{DynamicResource InsText2}" /></Style>
           <Style Selector="^[(ins|ListLook.Selected)=True]">
             <Style Selector="^[(ins|ListLook.Static)=False]">
               <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
@@ -145,6 +250,7 @@
           <Style Selector="^[FlowDirection=RightToLeft]">
             <Setter Property="LineHeight" Value="20.4" />
           </Style>
+          <Style Selector="^[(ins|ListLook.Past)=True]"><Setter Property="Foreground" Value="{DynamicResource InsText3}" /></Style>
         </Style>
       </ControlTheme>
 

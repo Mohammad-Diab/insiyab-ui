@@ -261,26 +261,25 @@ public class InactiveWindowTests
         var w = Show(new ListBox { Width = 300, Items = { first, second } });
         first.Focus(NavigationMethod.Tab);
         Settle(200);
-        var ring = Res(first, "InsFocusRing");
+        RowBack Back() => Part<RowBack>(first, "PART_Back");
         Assert.Contains(":focus-visible", first.Classes);
-        Assert.Equal(1, Rings(w));
-        Assert.Equal(ring, Part<Border>(first, "PART_Back").BoxShadow);
+        Assert.Equal(0, Rings(w));
+        Assert.NotNull(Back().Ring);
 
         Deactivate(w);
         Settle(100);
         Assert.False(first.IsFocused);
-        Assert.Equal(0, Rings(w));
-        Assert.NotEqual(ring, Part<Border>(first, "PART_Back").BoxShadow);
+        Assert.Null(Back().Ring);
 
         Activate(w);
         Settle(100);
         Assert.True(first.IsFocused);
         Assert.Contains(":focus-visible", first.Classes);
-        Assert.Equal(1, Rings(w));
-        Assert.Equal(ring, Part<Border>(first, "PART_Back").BoxShadow);
+        Assert.NotNull(Back().Ring);
 
         second.Focus(NavigationMethod.Pointer);
         Settle(100);
+        Assert.Null(Back().Ring);
         Assert.Equal(0, Rings(w));
         Assert.DoesNotContain(":focus-visible", first.Classes);
     }
