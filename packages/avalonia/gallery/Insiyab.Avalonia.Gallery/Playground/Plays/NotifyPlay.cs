@@ -55,6 +55,8 @@ public static class NotifyPlay
                 Choice("ico", "أيقونة", "Icon", "رقاقة أيقونة تبدأ بها الإشعارات، لما يأتي من النظام.", OptionKind.Property),
                 Choice("avatar", "صورة رمزية", "Avatar", "صورة صاحب الإشعار أو حرفه الأول، لما يأتي من شخص.", OptionKind.Property)),
             Switch("read", "زر تعليم الكل", "ReadAllText", "نص زر في رأس اللوحة يعلم الإشعارات كلها مقروءة، وهو «تعليم الكل مقروءًا». اجعله `{x:Null}` فيختفي الزر.", OptionKind.Property, on: true),
+            Switch("mute", "زر في الرأس", "HeadActions", "أزرار من صفحتك في رأس اللوحة قبل «تعليم الكل مقروءًا»، بترتيبها في Tab، كزر يكتم الإشعارات.", OptionKind.Property, "الرأس"),
+            Switch("stacked", "العنوان فوق الأزرار", "stacked", "يضع عنوان اللوحة في سطر وحده، وتحته سطر فيه أزرار الرأس في البداية و«تعليم الكل مقروءًا» في النهاية.", OptionKind.Class, "الرأس"),
             Switch("foot", "رابط عرض الكل", "FootText", "نص رابط في ذيل اللوحة إلى صفحة الإشعارات كلها، يبقى ثابتًا تحت القائمة، ويُطلق `FootClick` إذا نُقر.", OptionKind.Property, on: true),
         ],
         Extra =
@@ -70,12 +72,15 @@ public static class NotifyPlay
         Disable = s => s.On("empty") ? ["unread", "style", "read"] : [],
         Axaml = s =>
         {
-            var attrs = (s.On("read") && !s.On("empty") ? "" : " ReadAllText=\"{x:Null}\"") + (s.On("foot") ? " FootText=\"عرض الكل\"" : "");
-            if (s.On("empty")) return $"<ins:Notify{attrs} />";
+            var attrs = Classes(s.On("stacked") ? "stacked" : null) + (s.On("read") && !s.On("empty") ? "" : " ReadAllText=\"{x:Null}\"") + (s.On("foot") ? " FootText=\"عرض الكل\"" : "");
+            var head = s.On("mute")
+                ? "  <ins:Notify.HeadActions>\n    <Button Classes=\"ghost icon sm\" ToolTip.Tip=\"كتم الإشعارات\" AutomationProperties.Name=\"كتم الإشعارات\">\n      <ins:Icon Data=\"{StaticResource IconBell}\" />\n    </Button>\n  </ins:Notify.HeadActions>\n"
+                : "";
+            if (s.On("empty")) return head.Length == 0 ? $"<ins:Notify{attrs} />" : $"<ins:Notify{attrs}>\n{head}</ins:Notify>";
             var unread = s["unread"] == "many" ? 3 : int.Parse(s["unread"]);
             var rows = Rows.Select((r, i) => Line(r, i < unread, s["style"] == "avatar")).ToList();
             if (s["unread"] == "many") rows.Add("  <!-- … وغيرها حتى 120 إشعارًا لم يُقرأ -->");
-            return $"<ins:Notify{attrs}>\n{string.Join("\n", rows)}\n</ins:Notify>";
+            return $"<ins:Notify{attrs}>\n{head}{string.Join("\n", rows)}\n</ins:Notify>";
         },
         Notes = _ => ["اضغط الجرس لترى اللوحة بخياراتك، وانقر إشعارًا ليصير مقروءًا، أو أضف إشعارًا جديدًا يهتز له الجرس."],
         Stage = (view, s, say) =>
@@ -87,6 +92,7 @@ public static class NotifyPlay
                 for (var i = 0; i < 117; i++)
                     notify.Items.Add(new NotifyItem { Icon = avatar ? null : Icon("IconCheck"), Avatar = avatar ? "ل" : null, Title = Rows[2].Title, Description = Rows[2].Desc, End = Rows[2].End, IsUnread = true });
             notify.Read += (_, e) => say(e.All ? "حدث `Read`، و`All` هو `True`" : $"حدث `Read` على «{e.Item?.Title}»");
+            if (notify.HeadActions is Button mute) mute.Click += (_, _) => say("نقرت زر الرأس، وتبقى اللوحة مفتوحة");
             var add = new Button { Content = "إشعار جديد", HorizontalAlignment = HorizontalAlignment.Center };
             add.Classes.AddRange(["secondary", "sm"]);
             add.Click += (_, _) => notify.Items.Insert(0, new NotifyItem { Icon = avatar ? null : Icon("IconBell"), Avatar = avatar ? "ن" : null, Title = "إشعار جديد", Description = "وصل للتو.", End = "الآن", IsUnread = true });

@@ -5,6 +5,7 @@ using Avalonia.Animation.Easings;
 using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
@@ -34,6 +35,7 @@ public sealed class NotifyReadEventArgs : RoutedEventArgs
 [TemplatePart("PART_Bell", typeof(Button))]
 [TemplatePart("PART_Popup", typeof(Popup))]
 [TemplatePart("PART_ReadAll", typeof(Button))]
+[TemplatePart("PART_HeadActions", typeof(ContentPresenter))]
 [TemplatePart("PART_Foot", typeof(Button))]
 [PseudoClasses(":open", ":empty", ":unread")]
 public class Notify : ItemsControl
@@ -52,6 +54,10 @@ public class Notify : ItemsControl
 
     public static readonly StyledProperty<bool> IsOpenProperty =
         AvaloniaProperty.Register<Notify, bool>(nameof(IsOpen));
+
+    /// <summary>Controls of the page's own in the panel's head, before «mark all read» in visual and Tab order, such as a mute button; the class <c>stacked</c> puts the title on its own line over them.</summary>
+    public static readonly StyledProperty<object?> HeadActionsProperty =
+        AvaloniaProperty.Register<Notify, object?>(nameof(HeadActions));
 
     public static readonly StyledProperty<Geometry?> IconProperty =
         AvaloniaProperty.Register<Notify, Geometry?>(nameof(Icon));
@@ -118,6 +124,8 @@ public class Notify : ItemsControl
     public string EmptyText { get => GetValue(EmptyTextProperty); set => SetValue(EmptyTextProperty, value); }
 
     public bool IsOpen { get => GetValue(IsOpenProperty); set => SetValue(IsOpenProperty, value); }
+
+    public object? HeadActions { get => GetValue(HeadActionsProperty); set => SetValue(HeadActionsProperty, value); }
 
     /// <summary>The bell's geometry, a 24×24 stroked path; the theme gives the library's bell.</summary>
     public Geometry? Icon { get => GetValue(IconProperty); set => SetValue(IconProperty, value); }

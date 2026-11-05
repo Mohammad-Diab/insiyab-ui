@@ -87,20 +87,31 @@
                                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
                   <DockPanel>
                     <ctl:TemplateBorder Name="PART_Head" DockPanel.Dock="Top" Padding="16,10,12,10" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource InsLine}">
-                      <DockPanel>
-                        <Button Name="PART_ReadAll"
-                                DockPanel.Dock="Right"
-                                Classes="bare sm"
-                                Content="{TemplateBinding ReadAllText}"
-                                IsVisible="{TemplateBinding ReadAllText, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                        <ctl:TemplateText Text="{TemplateBinding Title}"
+                      <!-- The title, the page's own head actions, then mark all at the end: visual order is Tab order -->
+                      <Grid Name="PART_HeadRow" ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto">
+                        <ctl:TemplateText Name="PART_Title"
+                                   Text="{TemplateBinding Title}"
                                    FontSize="{DynamicResource InsFsMd}"
                                    FontWeight="ExtraBold"
                                    Foreground="{DynamicResource InsText1}"
                                    VerticalAlignment="Center"
+                                   TextTrimming="CharacterEllipsis"
                                    MinHeight="30"
                                    LineHeight="30" />
-                      </DockPanel>
+                        <ContentPresenter Name="PART_HeadActions"
+                                          Grid.Column="1"
+                                          Margin="8,0,0,0"
+                                          VerticalAlignment="Center"
+                                          Content="{TemplateBinding HeadActions}"
+                                          IsVisible="{TemplateBinding HeadActions, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                        <Button Name="PART_ReadAll"
+                                Grid.Column="2"
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Classes="bare sm"
+                                Content="{TemplateBinding ReadAllText}"
+                                IsVisible="{TemplateBinding ReadAllText, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                      </Grid>
                     </ctl:TemplateBorder>
                     <Button Name="PART_Foot"
                             DockPanel.Dock="Bottom"
@@ -138,6 +149,20 @@
         </Style>
         <Style Selector="^:empty /template/ Button#PART_ReadAll">
           <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <!-- stacked: the title on its own line, then a row of the head actions at the start and mark all at the end -->
+        <Style Selector="^.stacked /template/ :is(TextBlock)#PART_Title">
+          <Setter Property="Grid.ColumnSpan" Value="3" />
+        </Style>
+        <Style Selector="^.stacked /template/ ContentPresenter#PART_HeadActions">
+          <Setter Property="Grid.Row" Value="1" />
+          <Setter Property="Grid.Column" Value="0" />
+          <Setter Property="Margin" Value="0,4,0,0" />
+          <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style Selector="^.stacked /template/ Button#PART_ReadAll">
+          <Setter Property="Grid.Row" Value="1" />
+          <Setter Property="Margin" Value="8,4,0,0" />
         </Style>
       </ControlTheme>
 
