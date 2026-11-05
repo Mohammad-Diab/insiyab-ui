@@ -53,6 +53,7 @@ public static class ToolbarPlay
                 Choice("220", "أضيق")),
             Switch("labels", "الأسماء بجانب الرموز", "ShowLabel=\"True\"", "على الأمر: يظهر اسمه بجانب رمزه. وبدونه يكون الاسم في التلميح وحده. والأمر الذي لا رمز له يظهر اسمه دائمًا.", OptionKind.Property, "الأمر"),
             Switch("search", "حقل بحث", null, null),
+            Switch("end", "الإعدادات في الطرف", "ins:Toolbar.AtEnd=\"True\"", "على الأمر: يجتمع مع غيره ممن لها هذه الخاصية في الطرف الآخر من الشريط، وزر «المزيد» قبلها. وإذا ضاق الشريط انتقلت أوامر البداية أولًا.", OptionKind.Property, "الطرف الآخر"),
             Switch("always", "الحذف في القائمة وحدها", "ins:Toolbar.Overflow=\"Always\"", "على الأمر: لا يظهر في الصف أبدًا، بل في قائمة «المزيد» وحدها.", OptionKind.Property, "الانتقال إلى «المزيد»"),
             Switch("disabled", "تعطيل الحذف", "IsEnabled=\"False\"", "الأمر معطل: يبهت في الصف وفي القائمة، وتتخطاه الأسهم.", OptionKind.Property, "الأمر"),
         ],
@@ -95,11 +96,14 @@ public static class ToolbarPlay
                 $"<ins:ToolbarButton Icon=\"{{StaticResource IconTrash}}\" Label=\"حذف\"{labels} Shortcut=\"Delete\"{del} />",
             };
             if (s.On("search")) lines.Add("<TextBox Classes=\"sm\" Width=\"150\" PlaceholderText=\"ابحث في الطلبات\" />");
+            if (s.On("end")) lines.Add($"<ins:ToolbarButton Icon=\"{{StaticResource IconCog}}\" Label=\"الإعدادات\"{labels} ins:Toolbar.AtEnd=\"True\" />");
             return $"<ins:Toolbar{Classes(s["look"])}{width}>\n" + string.Join("\n", lines.Select(l => "  " + l)) + "\n</ins:Toolbar>";
         },
         Notes = s =>
         {
+            if (s.Has("width") && s.On("end")) return ["ضاق الشريط، فانتقلت أوامر البداية إلى «المزيد» قبل الإعدادات، وبقيت الإعدادات في الطرف."];
             if (s.Has("width")) return ["ضاق الشريط، فانتقل ما لا يتسع له إلى زر «المزيد» في آخره. افتحه لترى الأوامر بأسمائها."];
+            if (s.On("end")) return ["الإعدادات في الطرف الآخر من الشريط، والأوامر الأخرى من بدايته."];
             return s.On("always") ? ["الحذف في قائمة «المزيد» وحدها."] : [];
         },
         Stage = (view, _, say) =>

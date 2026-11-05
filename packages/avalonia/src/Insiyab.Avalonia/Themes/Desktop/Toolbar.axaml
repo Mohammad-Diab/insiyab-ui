@@ -190,6 +190,19 @@
         <Style Selector="^.plain /template/ :is(Border)#PART_Face">
           <Setter Property="BoxShadow" Value="none" />
         </Style>
+        <!-- chips: a row of filter chips with no bar of its own; the «⋯» button is a chip that counts what it holds -->
+        <Style Selector="^.chips">
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="BorderThickness" Value="0" />
+          <Setter Property="CornerRadius" Value="0" />
+          <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="^.chips /template/ :is(Border)#PART_Face">
+          <Setter Property="BoxShadow" Value="none" />
+        </Style>
+        <Style Selector="^.chips /template/ ins|ToolbarPanel#PART_Panel">
+          <Setter Property="Spacing" Value="6" />
+        </Style>
       </ControlTheme>
       <!-- The command's name beside its icon, and the shortcut in its tip -->
       <ControlTheme x:Key="InsLookToolbarLabel" TargetType="TextBlock" ins:ClassTheme.For="toolbar-label">

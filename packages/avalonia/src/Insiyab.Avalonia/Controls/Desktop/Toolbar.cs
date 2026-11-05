@@ -27,7 +27,7 @@ public enum ToolbarOverflow
     Always,
 }
 
-/// <summary>A desktop command bar: a row of commands that moves what does not fit, from the end, into a «⋯» menu. One Tab stop; the arrows, Home and End move between its commands.</summary>
+/// <summary>A desktop command bar: a row of commands that moves what does not fit, from the end, into a «⋯» menu. One Tab stop; the arrows, Home and End move between its commands. Commands with <see cref="AtEndProperty"/> pack at the far end. With the class <c>chips</c> it is a row of filter chips that never wraps: the chips that do not fit go into a «+N» chip's menu, and a checked chip always stays in the row.</summary>
 [TemplatePart("PART_Panel", typeof(ToolbarPanel))]
 [TemplatePart("PART_More", typeof(ToolbarButton))]
 public class Toolbar : TemplatedControl
@@ -35,6 +35,10 @@ public class Toolbar : TemplatedControl
     /// <summary>On a command in a toolbar: whether it may move into the «⋯» menu. Only buttons, split buttons and separators move; anything else, such as a search field, stays in the row.</summary>
     public static readonly AttachedProperty<ToolbarOverflow> OverflowProperty =
         AvaloniaProperty.RegisterAttached<Control, ToolbarOverflow>("Overflow", typeof(Toolbar));
+
+    /// <summary>On a command in a toolbar: packs it, with the others that have it, at the toolbar's far end; the «⋯» button sits just before them. The start commands move into «⋯» first.</summary>
+    public static readonly AttachedProperty<bool> AtEndProperty =
+        AvaloniaProperty.RegisterAttached<Control, bool>("AtEnd", typeof(Toolbar));
 
     /// <summary>The «⋯» button's name and tip, «المزيد» unless set.</summary>
     public static readonly StyledProperty<string> MoreTextProperty =
@@ -46,6 +50,8 @@ public class Toolbar : TemplatedControl
     private ToolbarButton? _more;
     private readonly PopMenu _menu;
     private readonly AvaloniaList<Control> _entries = new() { ResetBehavior = ResetBehavior.Remove };
+    private readonly TextBlock _count = new() { FlowDirection = FlowDirection.LeftToRight, VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Center };
+    private bool _chips;
 
     public Toolbar()
     {
@@ -58,6 +64,7 @@ public class Toolbar : TemplatedControl
         };
         _menu.Opening += (_, _) => FillMenu();
         AddHandler(GotFocusEvent, OnFocusIn);
+        Classes.CollectionChanged += (_, _) => SyncChips();
     }
 
     /// <summary>The commands, in order from the start.</summary>
@@ -68,6 +75,8 @@ public class Toolbar : TemplatedControl
 
     public static ToolbarOverflow GetOverflow(Control control) => control.GetValue(OverflowProperty);
     public static void SetOverflow(Control control, ToolbarOverflow value) => control.SetValue(OverflowProperty, value);
+    public static bool GetAtEnd(Control control) => control.GetValue(AtEndProperty);
+    public static void SetAtEnd(Control control, bool value) => control.SetValue(AtEndProperty, value);
 
     /// <summary>The commands that are in the «⋯» menu now.</summary>
     internal IEnumerable<Control> OverflowItems => Items.Where(c => c.Classes.Contains(Overflowed));
@@ -86,7 +95,27 @@ public class Toolbar : TemplatedControl
         _more = e.NameScope.Find<ToolbarButton>("PART_More");
         if (_more is not null) _more.Flyout = _menu;
         if (_panel is not null) _panel.More = _more;
+        _chips = !Classes.Contains("chips");
+        SyncChips();
         Fill();
+    }
+
+    // A chip row: the «⋯» button takes the chip's look and shows the count of the chips it holds, and a checked chip never moves.
+    private void SyncChips()
+    {
+        var on = Classes.Contains("chips");
+        if (on == _chips) return;
+        _chips = on;
+        if (_panel is not null)
+        {
+            _panel.Chips = on;
+            _panel.Count = on ? _count : null;
+            _panel.InvalidateMeasure();
+        }
+        if (_more is null) return;
+        _more.Classes.Set("chip", on);
+        if (on) _more.SetCurrentValue(ContentControl.ContentProperty, _count);
+        else if (ReferenceEquals(_more.Content, _count)) _more.SetCurrentValue(ContentControl.ContentProperty, null);
     }
 
     private void Fill()
@@ -230,9 +259,16 @@ public class Toolbar : TemplatedControl
         AutomationProperties.GetName(c) is { Length: > 0 } name ? name
         : (c as ContentControl)?.Content as string ?? ToolTip.GetTip(c) as string ?? "";
 
-    /// <summary>The commands the arrows move between: shown in the row, enabled and focusable, then «⋯» while it shows.</summary>
-    internal List<Control> Stops() =>
-        _panel is null ? [] : _panel.Children.Where(c => c.IsVisible && c.IsEffectivelyEnabled && c.Focusable && c is not Separator).ToList();
+    /// <summary>The commands the arrows move between, in the row's order: the start commands, «⋯» while it shows, then the end group; each shown, enabled and focusable.</summary>
+    internal List<Control> Stops()
+    {
+        if (_panel is null) return [];
+        static bool Stop(Control c) => c.IsVisible && c.IsEffectivelyEnabled && c.Focusable && c is not Separator;
+        var list = _panel.Children.Where(c => c != _more && !GetAtEnd(c) && Stop(c)).ToList();
+        if (_more is not null && Stop(_more)) list.Add(_more);
+        list.AddRange(_panel.Children.Where(c => c != _more && GetAtEnd(c) && Stop(c)));
+        return list;
+    }
 
     protected override void OnKeyDown(KeyEventArgs e)
     {
@@ -271,7 +307,7 @@ public class Toolbar : TemplatedControl
     }
 }
 
-/// <summary>The toolbar's row: the commands from the start, «⋯» at the end, and what does not fit moved into «⋯» from the end. Part of the Toolbar template.</summary>
+/// <summary>The toolbar's row: the commands from the start, the end group at the far end, «⋯» between them, and what does not fit moved into «⋯» from the end of the start commands, then of the end group. Part of the Toolbar template.</summary>
 internal class ToolbarPanel : Panel
 {
     public static readonly StyledProperty<double> SpacingProperty =
@@ -279,16 +315,26 @@ internal class ToolbarPanel : Panel
 
     private readonly Dictionary<Control, double> _widths = [];
     private double _moreWidth = 30;
+    private bool _again;
 
     static ToolbarPanel()
     {
         AffectsMeasure<ToolbarPanel>(SpacingProperty);
-        AffectsParentMeasure<ToolbarPanel>(Toolbar.OverflowProperty);
+        AffectsParentMeasure<ToolbarPanel>(Toolbar.OverflowProperty, Toolbar.AtEndProperty);
+        ToggleButton.IsCheckedProperty.Changed.AddClassHandler<ToggleButton>((t, _) =>
+        {
+            if (t.GetVisualParent() is ToolbarPanel { Chips: true } panel) panel.InvalidateMeasure();
+        });
     }
 
     public double Spacing { get => GetValue(SpacingProperty); set => SetValue(SpacingProperty, value); }
 
     internal Control? More { get; set; }
+
+    /// <summary>A chip row: a checked chip never moves, «⋯» follows the last chip shown, and <see cref="Count"/> says how many it holds.</summary>
+    internal bool Chips { get; set; }
+
+    internal TextBlock? Count { get; set; }
 
     protected override void ChildrenChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
@@ -296,11 +342,14 @@ internal class ToolbarPanel : Panel
         InvalidateMeasure();
     }
 
+    private bool Kept(Control c) => Chips && c is ToggleButton { IsChecked: true };
+
     protected override Size MeasureOverride(Size availableSize)
     {
         var free = new Size(double.PositiveInfinity, availableSize.Height);
         var gap = Spacing;
-        var row = new List<(Control C, double W, bool Movable)>();
+        var start = new List<(Control C, double W, bool Movable)>();
+        var end = new List<(Control C, double W, bool Movable)>();
         var moved = new HashSet<Control>();
         foreach (var c in Children)
         {
@@ -315,19 +364,21 @@ internal class ToolbarPanel : Panel
                 c.Measure(free);
                 _widths[c] = c.DesiredSize.Width;
             }
-            row.Add((c, _widths.GetValueOrDefault(c), movable && mode == ToolbarOverflow.Auto));
+            (Toolbar.GetAtEnd(c) ? end : start).Add((c, _widths.GetValueOrDefault(c), movable && mode == ToolbarOverflow.Auto && !Kept(c)));
         }
 
-        double Sum() => row.Sum(x => x.W) + gap * Math.Max(0, row.Count - 1);
+        double Sum() => start.Sum(x => x.W) + end.Sum(x => x.W) + gap * Math.Max(0, start.Count + end.Count - 1);
         if (Sum() > availableSize.Width || moved.Any(c => c is not Separator))
         {
             var room = availableSize.Width - _moreWidth - gap;
-            for (var i = row.Count - 1; i >= 0 && Sum() > room; i--)
-                if (row[i].Movable) { moved.Add(row[i].C); row.RemoveAt(i); }
+            foreach (var group in new[] { start, end })
+                for (var i = group.Count - 1; i >= 0 && Sum() > room; i--)
+                    if (group[i].Movable) { moved.Add(group[i].C); group.RemoveAt(i); }
         }
-        // A separator never starts or ends the row, nor follows another.
-        for (var i = row.Count - 1; i >= 0; i--)
-            if (row[i].C is Separator && (i == 0 || i == row.Count - 1 || row[i - 1].C is Separator)) { moved.Add(row[i].C); row.RemoveAt(i); }
+        // A separator never starts or ends a group, nor follows another.
+        foreach (var group in new[] { start, end })
+            for (var i = group.Count - 1; i >= 0; i--)
+                if (group[i].C is Separator && (i == 0 || i == group.Count - 1 || group[i - 1].C is Separator)) { moved.Add(group[i].C); group.RemoveAt(i); }
 
         foreach (var c in Children)
             if (c != More) c.Classes.Set(Toolbar.Overflowed, moved.Contains(c));
@@ -335,7 +386,7 @@ internal class ToolbarPanel : Panel
         var width = 0.0;
         var height = 0.0;
         var count = 0;
-        foreach (var (c, _, _) in row)
+        foreach (var (c, _, _) in start.Concat(end))
         {
             if (!c.IsVisible) continue;
             c.Measure(free);
@@ -346,12 +397,22 @@ internal class ToolbarPanel : Panel
         }
         if (More is not null)
         {
-            var shown = moved.Any(c => c is not Separator);
+            var held = moved.Count(c => c is not Separator);
+            var shown = held > 0;
             More.SetCurrentValue(IsVisibleProperty, shown);
+            if (Count is not null) Count.Text = "+" + held.ToString(System.Globalization.CultureInfo.InvariantCulture);
             if (shown)
             {
                 More.Measure(free);
+                var guessed = _moreWidth;
                 _moreWidth = More.DesiredSize.Width;
+                // The room was counted with the button's last width: once more with its width now.
+                if (!_again && Math.Abs(guessed - _moreWidth) > 0.5)
+                {
+                    _again = true;
+                    try { return MeasureOverride(availableSize); }
+                    finally { _again = false; }
+                }
                 width += _moreWidth;
                 height = Math.Max(height, More.DesiredSize.Height);
                 count++;
@@ -363,17 +424,36 @@ internal class ToolbarPanel : Panel
 
     protected override Size ArrangeOverride(Size finalSize)
     {
+        var gap = Spacing;
         var x = 0.0;
+        var tail = 0.0;
+        var tailCount = 0;
         foreach (var c in Children)
         {
             if (c == More || !c.IsVisible) continue;
+            if (Toolbar.GetAtEnd(c))
+            {
+                tail += c.DesiredSize.Width;
+                tailCount++;
+                continue;
+            }
             c.Arrange(new Rect(x, 0, c.DesiredSize.Width, finalSize.Height));
-            x += c.DesiredSize.Width + Spacing;
+            x += c.DesiredSize.Width + gap;
         }
+        tail += gap * Math.Max(0, tailCount - 1);
+        var from = Math.Max(x, finalSize.Width - tail);
         if (More is { IsVisible: true } more)
         {
             var w = more.DesiredSize.Width;
-            more.Arrange(new Rect(Math.Max(x, finalSize.Width - w), 0, w, finalSize.Height));
+            var at = Chips ? x : Math.Max(x, finalSize.Width - tail - (tailCount > 0 ? gap : 0) - w);
+            more.Arrange(new Rect(at, 0, w, finalSize.Height));
+            from = Math.Max(from, at + w + gap);
+        }
+        foreach (var c in Children)
+        {
+            if (c == More || !c.IsVisible || !Toolbar.GetAtEnd(c)) continue;
+            c.Arrange(new Rect(from, 0, c.DesiredSize.Width, finalSize.Height));
+            from += c.DesiredSize.Width + gap;
         }
         return finalSize;
     }

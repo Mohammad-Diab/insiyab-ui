@@ -14,6 +14,10 @@
     <pg:PlayText Classes="p" Markup="الرقاقة `ins:Chip` قيمة صغيرة يتصرف فيها المستخدم، أما الشارة فللقراءة وحدها. وقد تكون الرقاقة فلترًا تزيله، أو خيارًا تشغله وتطفئه، أو وسمًا. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
     <pg:Playground Def="{x:Static pg:ChipsPlay.Chip}" />
 
+    <TextBlock Classes="section" Text="صف الفلاتر" />
+    <pg:PlayText Classes="p" Markup="يجمع `ins:Toolbar` مع الكلاس `chips` فلاتر من `ToggleButton.chip` في سطر واحد لا يلتف. فإذا ضاق السطر انتقل ما لا يتسع له إلى رقاقة «+N» تفتح قائمة بالفلاتر المخفية، وبقيت الرقاقة المختارة في السطر أينما كانت." />
+    <pg:Playground Def="{x:Static pg:ChipsPlay.ChipRow}" />
+
     <TextBlock Classes="section" Text="الاختيار المتعدد" />
     <pg:PlayText Classes="p" Markup="يجمع `ins:TagsInput` قيمًا عدة في حقل واحد. فإذا وضعت فيه خيارات `ins:TagsOption` صار اختيارًا متعددًا يطابق كما يطابق الإكمال التلقائي، وكلما اخترت خيارًا صار رقاقة وخرج من القائمة. وتجد القيم كلها في `Values`." />
     <pg:Playground Def="{x:Static pg:ChipsPlay.Tags}" />

@@ -65,6 +65,53 @@ public static class ChipsPlay
         },
     };
 
+    public static PlayDef ChipRow { get; } = new()
+    {
+        Id = "chip-row",
+        Title = "صف الفلاتر",
+        Wide = _ => true,
+        Controls =
+        [
+            Seg("width", "العرض", "420",
+                Choice("", "كامل"),
+                Choice("420", "ضيق"),
+                Choice("280", "أضيق")),
+            Switch("last", "المختار آخرها", null, null),
+        ],
+        Extra =
+        [
+            Row("صف الفلاتر", "chips", "على `ins:Toolbar`: صف فلاتر من `ToggleButton.chip` لا يلتف ولا يُمرَّر، وليس تحته شريط. وما لا يتسع له ينتقل إلى رقاقة «+N» تعدّ ما فيها، وتعرض قائمتها الفلاتر المخفية بعلامة اختيار. والرقاقة المختارة تبقى في الصف دائمًا.", OptionKind.Class, true),
+            Row("صف الفلاتر", "MoreText", "اسم رقاقة «+N» لقارئ الشاشة وتلميحها، «المزيد» إن لم تضعه.", OptionKind.Property),
+        ],
+        Axaml = s =>
+        {
+            string[] items = ["الكل", "التصميم", "البرمجة", "الشبكات", "قواعد البيانات", "الأمن", "الرسوميات", "الصوتيات"];
+            var picked = s.On("last") ? items.Length - 1 : 0;
+            var width = s.Has("width") ? $" Width=\"{s["width"]}\"" : "";
+            var chips = items.Select((t, i) => $"  <ToggleButton Classes=\"chip\" Content=\"{t}\"{(i == picked ? " IsChecked=\"True\"" : "")} />");
+            return $"<ins:Toolbar Classes=\"chips\"{width}>\n" + string.Join("\n", chips) + "\n</ins:Toolbar>";
+        },
+        Notes = s => s.On("last")
+            ? ["الرقاقة المختارة في آخر الصف، فأخلت لها الرقاقات التي قبلها مكانها وانتقلت إلى «+N»."]
+            : s.Has("width") ? ["افتح «+N» لترى الفلاتر التي لم يتسع لها الصف، واختر واحدًا منها فيدخل الصف."] : [],
+        Stage = (view, _, say) =>
+        {
+            var chips = view.GetLogicalDescendants().OfType<ToggleButton>().Where(t => t.Classes.Contains("chip")).ToList();
+            foreach (var t in chips)
+                t.IsCheckedChanged += (_, _) =>
+                {
+                    if (t.IsChecked != true)
+                    {
+                        if (!chips.Any(c => c.IsChecked == true)) t.IsChecked = true;
+                        return;
+                    }
+                    foreach (var other in chips)
+                        if (other != t) other.IsChecked = false;
+                    say($"اخترت «{t.Content}»");
+                };
+        },
+    };
+
     public static PlayDef Tags { get; } = new()
     {
         Id = "tags",
@@ -122,5 +169,5 @@ public static class ChipsPlay
         },
     };
 
-    public static PlayDef[] All { get; } = [Chip, Tags];
+    public static PlayDef[] All { get; } = [Chip, ChipRow, Tags];
 }

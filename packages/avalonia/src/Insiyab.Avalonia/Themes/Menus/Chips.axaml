@@ -208,6 +208,10 @@
   <Style Selector="ToggleButton.chip">
     <Setter Property="Theme" Value="{StaticResource InsChipToggle}" />
   </Style>
+  <!-- The «+N» chip of a chip row (Toolbar.chips) -->
+  <Style Selector="ins|ToolbarButton.chip">
+    <Setter Property="Theme" Value="{StaticResource InsChipButton}" />
+  </Style>
 
   <!-- .ins-chips: chips in a row that wraps. -->
   <Style Selector="WrapPanel.chips">
