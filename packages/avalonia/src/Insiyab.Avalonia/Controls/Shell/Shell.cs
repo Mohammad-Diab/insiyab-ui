@@ -255,7 +255,7 @@ public static class Shell
         bar?.Classes.Set("scrolled", scroller.Offset.Y > 8);
     }
 
-    private static Control? FindTopbar(Control from)
+    internal static Control? FindTopbar(Control from)
     {
         for (var node = from.Parent; node is not null; node = node.Parent)
             if (node is Panel panel)

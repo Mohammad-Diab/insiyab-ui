@@ -46,7 +46,7 @@ public class TocLink : Button
     }
 }
 
-/// <summary>The contents list that follows the reader, the web's <c>.ins-toc</c> with <c>data-ins-scrollspy</c>: the link whose section is being read in a <see cref="ScrollViewer"/> is marked, and the brand marker flies to it.</summary>
+/// <summary>The contents list that follows the reader, the web's <c>.ins-toc</c> with <c>data-ins-scrollspy</c>: the link whose section is being read in a <see cref="ScrollViewer"/> is marked, and the brand marker flies to it. A click lands its section <see cref="ScrollMargin"/> below the top of the view; <see cref="IsSticky"/> keeps the list in view beside the sections.</summary>
 [TemplatePart("PART_Marker", typeof(Border))]
 [TemplatePart("PART_ItemsPresenter", typeof(ItemsPresenter))]
 public class Toc : ItemsControl
@@ -59,6 +59,14 @@ public class Toc : ItemsControl
 
     public static readonly StyledProperty<double> OffsetProperty =
         AvaloniaProperty.Register<Toc, double>(nameof(Offset), double.NaN);
+
+    /// <summary>How far below the top of the view a clicked section lands, and a sticky list stays, in px; NaN for clear of a frosted top bar (<c>Shell.FrostsTopbar</c> on the scroll viewer) and 16px more, or 0 with none.</summary>
+    public static readonly StyledProperty<double> ScrollMarginProperty =
+        AvaloniaProperty.Register<Toc, double>(nameof(ScrollMargin), double.NaN);
+
+    /// <summary>Keeps the list in view as the page scrolls, <see cref="ScrollMargin"/> (16px with none) below the top, inside its own parent: CSS <c>position: sticky</c>. A list taller than the view keeps its foot 24px above the view's bottom.</summary>
+    public static readonly StyledProperty<bool> IsStickyProperty =
+        AvaloniaProperty.Register<Toc, bool>(nameof(IsSticky));
 
     public static readonly DirectProperty<Toc, TocLink?> ActiveLinkProperty =
         AvaloniaProperty.RegisterDirect<Toc, TocLink?>(nameof(ActiveLink), o => o.ActiveLink);
@@ -73,6 +81,8 @@ public class Toc : ItemsControl
     private bool _held, _markerShown;
     private IDisposable? _release;
     private DispatcherTimer? _tween;
+    private readonly TranslateTransform _shift = new();
+    private bool _shifted;
 
     /// <summary>A small heading at the top of the list (<c>.ins-toc-title</c>).</summary>
     public string? Title { get => GetValue(TitleProperty); set => SetValue(TitleProperty, value); }
@@ -80,8 +90,12 @@ public class Toc : ItemsControl
     /// <summary>What scrolls the sections; unset, the nearest scroll viewer around the first section.</summary>
     public ScrollViewer? ScrollViewer { get => GetValue(ScrollViewerProperty); set => SetValue(ScrollViewerProperty, value); }
 
-    /// <summary>How far below the top of the view the current section's line is, in px (<c>data-ins-scrollspy-offset</c>); NaN for a third of the view.</summary>
+    /// <summary>How far below the scroll margin the current section's line is, in px (<c>data-ins-scrollspy-offset</c>); NaN for a third of the view, never above the margin.</summary>
     public double Offset { get => GetValue(OffsetProperty); set => SetValue(OffsetProperty, value); }
+
+    public double ScrollMargin { get => GetValue(ScrollMarginProperty); set => SetValue(ScrollMarginProperty, value); }
+
+    public bool IsSticky { get => GetValue(IsStickyProperty); set => SetValue(IsStickyProperty, value); }
 
     public TocLink? ActiveLink { get => _active; private set => SetAndRaise(ActiveLinkProperty, ref _active, value); }
 
@@ -127,13 +141,51 @@ public class Toc : ItemsControl
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == ScrollViewerProperty || change.Property == OffsetProperty) Refresh();
+        if (change.Property == ScrollViewerProperty || change.Property == OffsetProperty || change.Property == ScrollMarginProperty) Refresh();
+        else if (change.Property == IsStickyProperty) Stick();
     }
 
     private void OnLayoutUpdated(object? sender, EventArgs e)
     {
         if (_scroller is null) Refresh();
         PlaceMarker(false);
+        Stick();
+    }
+
+    // The margin a clicked section lands at: the one set, or clear of the frosted top bar that the page scrolls under.
+    internal double LandAt()
+    {
+        if (!double.IsNaN(ScrollMargin)) return Math.Max(0, ScrollMargin);
+        if (_scroller is null || !Shell.GetFrostsTopbar(_scroller) || Shell.FindTopbar(_scroller) is not { } bar) return 0;
+        return bar.TranslatePoint(new Point(0, bar.Bounds.Height), _scroller) is { } p ? Math.Max(0, p.Y) + 16 : 0;
+    }
+
+    // position: sticky, by a translation inside the parent, worked out again on every scroll step: a few numbers and one transform.
+    private void Stick()
+    {
+        if (!IsSticky || _scroller is null || Parent is not Control parent || parent.TranslatePoint(new Point(0, Bounds.Y), _scroller) is not { } top)
+        {
+            if (_shifted)
+            {
+                _shifted = false;
+                _shift.Y = 0;
+                ClearValue(RenderTransformProperty);
+            }
+            return;
+        }
+        if (!_shifted)
+        {
+            _shifted = true;
+            RenderTransform = _shift;
+        }
+        var margin = LandAt();
+        var stay = margin > 0 ? margin : 16;
+        var height = Bounds.Height;
+        var view = _scroller.Viewport.Height;
+        if (height > view - stay - 24) stay = view - 24 - height;
+        var room = Math.Max(0, parent.Bounds.Height - Bounds.Y - height);
+        var y = Math.Clamp(stay - top.Y, 0, room);
+        if (Math.Abs(_shift.Y - y) > 0.01) _shift.Y = y;
     }
 
     /// <summary>Measures again, after content above the sections grew, say, and returns the current link: <c>Insiyab.scrollspy(nav)</c>.</summary>
@@ -155,6 +207,7 @@ public class Toc : ItemsControl
 
     private void OnScroll(object? sender, ScrollChangedEventArgs e)
     {
+        Stick();
         if (_held)
         {
             _release?.Dispose();
@@ -176,7 +229,8 @@ public class Toc : ItemsControl
         var links = Links.ToList();
         if (_scroller is null || links.Count == 0) return -1;
         var viewport = _scroller.Viewport.Height;
-        var line = double.IsNaN(Offset) ? viewport / 3 : Offset;
+        var margin = LandAt();
+        var line = double.IsNaN(Offset) ? Math.Max(viewport / 3, margin) : margin + Offset;
         var end = Math.Ceiling(_scroller.Offset.Y + viewport) >= _scroller.Extent.Height - 2;
         var start = _scroller.Offset.Y <= 0;
         if (end && !start) return links.Count - 1;
@@ -305,7 +359,7 @@ public class Toc : ItemsControl
         if (_scroller is null || section?.TranslatePoint(default, _scroller) is not { } p) return;
         var from = _scroller.Offset.Y;
         var max = Math.Max(0, _scroller.Extent.Height - _scroller.Viewport.Height);
-        var to = Math.Clamp(from + p.Y, 0, max);
+        var to = Math.Clamp(from + p.Y - LandAt(), 0, max);
         _tween?.Stop();
         var start = DateTime.UtcNow;
         var duration = TimeSpan.FromMilliseconds(360);

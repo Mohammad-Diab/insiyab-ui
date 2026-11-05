@@ -26,6 +26,10 @@
     <TextBlock Classes="section" Text="التحكم من الشيفرة" />
     <pg:PlayListing Code="{x:Static pg:ScrollspyPlay.Code}" Margin="0,0,0,24" />
 
+    <TextBlock Classes="section" Text="قائمة ثابتة" />
+    <pg:PlayText Classes="p" Markup="مع `IsSticky` تبقى القائمة ظاهرة بجانب الأقسام وأنت تمرر، داخل حاويتها، فلا تحتاج أن تعود إلى الأعلى لتنتقل. مرر الصندوق وانظر." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:ScrollspyPlay.StickyExample}" />
+
     <TextBlock Classes="section" Text="الخيارات" />
     <pg:PlayText Classes="p" Markup="كل ما في قائمة المحتويات من كلاسات وخصائص وأحداث، في صندوق يفتح بالنقر." />
     <pg:OptionsList Defs="{x:Static pg:ScrollspyPlay.All}" />

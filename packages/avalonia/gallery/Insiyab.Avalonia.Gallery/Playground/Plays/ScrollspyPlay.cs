@@ -48,17 +48,19 @@ public static class ScrollspyPlay
             Switch("sub", "رابط إلى عنوان أعمق", "sub", "على `ins:TocLink` إلى عنوان أعمق، فيتأخر خطوة عن غيره.", on: true),
             Seg("offset", "خط القسم الحالي", "",
                 Choice("", "ثلث المنطقة"),
-                Choice("40", "40 بكسلًا", "Offset", "بُعد الخط الذي يُعرف به القسم الحالي عن أعلى منطقة التمرير، بالبكسل، بدل ثلثها. لصفحة شريطها العلوي الثابت طويل.", OptionKind.Property)),
+                Choice("40", "40 بكسلًا", "Offset", "بُعد الخط الذي يُعرف به القسم الحالي تحت هامش التمرير، بالبكسل، بدل ثلث المنطقة.", OptionKind.Property)),
+            Switch("margin", "يقف القسم تحت الأعلى", "ScrollMargin", "بُعد القسم الذي تنقر رابطه عن أعلى منطقة التمرير بعد أن تمرر إليه، بالبكسل. وإن تركته والصفحة تمر تحت شريط علوي مضبب (`Shell.FrostsTopbar`) وقف القسم تحت الشريط بـ16 بكسلًا.", OptionKind.Property),
         ],
         Extra =
         [
             Row("الأساس", "ins:Toc", "قائمة المحتويات: يتميز فيها رابط القسم الذي يُقرأ، وتنتقل إليه علامة من لون الهوية كما في الشريط الجانبي.", OptionKind.Element, true),
             Row("الأساس", "ins:TocLink", "رابط إلى قسم، والقسم في `Section`. والنقر عليه يمرر إلى قسمه ويجعله الحالي في الحال.", OptionKind.Element),
             Row("الأساس", "ScrollViewer", "منطقة التمرير، وإن تركتها فأقرب `ScrollViewer` حول القسم الأول.", OptionKind.Property),
+            Row("الأساس", "IsSticky", "تبقى القائمة ظاهرة بجانب الأقسام وأنت تمرر الصفحة، تحت هامش التمرير (أو 16 بكسلًا)، ولا تخرج من حاويتها. والقائمة الأطول من المنطقة تُبقي آخرها ظاهرًا.", OptionKind.Property),
             Row("الأساس", "ActiveChanged", "يُطلق كلما تغير الرابط الحالي، والرابط في `Link` وقسمه في `Section`.", OptionKind.Event),
         ],
-        Axaml = s => Box(s.On("title") ? " Title=\"المحتويات\"" : "", s.On("sub"), s.Has("offset") ? $" Offset=\"{s["offset"]}\"" : ""),
-        Notes = _ => ["الصندوق ممرر قليلًا، فغيّر الخط تنتقل العلامة."],
+        Axaml = s => Box(s.On("title") ? " Title=\"المحتويات\"" : "", s.On("sub"), (s.Has("offset") ? $" Offset=\"{s["offset"]}\"" : "") + (s.On("margin") ? " ScrollMargin=\"40\"" : "")),
+        Notes = s => s.On("margin") ? ["انقر رابطًا، فيقف قسمه على بعد 40 بكسلًا من أعلى الصندوق."] : ["الصندوق ممرر قليلًا، فغيّر الخط تنتقل العلامة."],
         Stage = (view, _, say) => Wire(view, say),
     };
 
@@ -74,6 +76,26 @@ public static class ScrollspyPlay
         foreach (var toc in root.GetLogicalDescendants().OfType<Insiyab.Avalonia.Controls.Toc>())
             toc.ActiveChanged += (_, e) => say($"حدث `ActiveChanged`، والرابط الحالي «{e.Link?.Content}»");
     }
+
+    public const string StickyExample =
+        """
+        <ScrollViewer Height="320">
+          <Grid ColumnDefinitions="*,20,176" Margin="0,0,0,120">
+            <StackPanel>
+              <Border x:Name="Part1" MinHeight="300"><TextBlock Text="البداية" FontSize="16" FontWeight="Bold" /></Border>
+              <Border x:Name="Part2" MinHeight="300"><TextBlock Text="الإعداد" FontSize="16" FontWeight="Bold" /></Border>
+              <Border x:Name="Part3" MinHeight="300"><TextBlock Text="الاستخدام" FontSize="16" FontWeight="Bold" /></Border>
+              <Border x:Name="Part4" MinHeight="300"><TextBlock Text="الأسئلة" FontSize="16" FontWeight="Bold" /></Border>
+            </StackPanel>
+            <ins:Toc Grid.Column="2" Title="في هذه الصفحة" IsSticky="True" VerticalAlignment="Top" AutomationProperties.Name="المحتويات">
+              <ins:TocLink Content="البداية" Section="{Binding #Part1}" />
+              <ins:TocLink Content="الإعداد" Section="{Binding #Part2}" />
+              <ins:TocLink Content="الاستخدام" Section="{Binding #Part3}" />
+              <ins:TocLink Content="الأسئلة" Section="{Binding #Part4}" />
+            </ins:Toc>
+          </Grid>
+        </ScrollViewer>
+        """;
 
     public static PlayDef[] All { get; } = [Toc];
 }
