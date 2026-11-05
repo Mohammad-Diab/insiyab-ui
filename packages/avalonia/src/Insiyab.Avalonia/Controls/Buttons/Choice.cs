@@ -9,7 +9,7 @@ namespace Insiyab.Avalonia.Controls;
 /// <summary>Options for checks, radios, switches and tiles: a description line under the label, and a radio a second click clears (the web's <c>data-ins-deselect</c>).</summary>
 public static class Choice
 {
-    /// <summary>A short line under the label of a <see cref="ToggleSwitch"/> or a tile (<c>Classes="tile"</c>): the web's <c>ins-switch-desc</c> and <c>ins-tile-desc</c>.</summary>
+    /// <summary>A short line under the label of a CheckBox, RadioButton, ToggleSwitch or tile (<c>Classes="tile"</c>): the web's <c>ins-switch-desc</c> and <c>ins-tile-desc</c>.</summary>
     public static readonly AttachedProperty<object?> DescriptionProperty =
         AvaloniaProperty.RegisterAttached<Control, object?>("Description", typeof(Choice));
 

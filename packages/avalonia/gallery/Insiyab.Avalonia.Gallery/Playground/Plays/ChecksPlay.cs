@@ -26,6 +26,7 @@ public static class ChecksPlay
             Text("text", "النص", "الأول"),
             Switch("checked", "محدد", on: true),
             Switch("disabled", "معطل", "IsEnabled=\"False\"", "يعطل الخيار ويبهت لونه، فلا يُنقر.", OptionKind.Property),
+            Switch("desc", "وصف", "ins:Choice.Description", "سطر وصف تحت التسمية، أصغر خطًا وأهدأ لونًا.", OptionKind.Property),
             Switch("deselect", "الإلغاء بنقرة ثانية", "ins:Choice.Deselect", "لأزرار الاختيار، على الزر أو أي عنصر يحويه، كالمجموعة أو النافذة كلها: إذا نقرت الزر المختار مرة ثانية أُلغي اختياره، وكذلك مفتاح المسافة.", OptionKind.Property),
             Switch("mixed", "بعضها محدد", "IsChecked=\"{x:Null}\"", "حالة «بعضها محدد» لمربع يحدد الكل. ومعها `IsThreeState=\"True\"` تصير حالة ثالثة يمر بها المربع إذا نُقر.", OptionKind.Property),
         ],
@@ -39,13 +40,14 @@ public static class ChecksPlay
         Axaml = s =>
         {
             var off = s.On("disabled") ? " IsEnabled=\"False\"" : "";
+            var desc = s.On("desc") ? " ins:Choice.Description=\"وصف قصير\"" : "";
             if (s["type"] == "checkbox")
             {
                 var state = s.On("mixed") ? " IsChecked=\"{x:Null}\"" : s.On("checked") ? " IsChecked=\"True\"" : "";
-                return $"<CheckBox Content=\"{s["text"]}\"{state}{off} />";
+                return $"<CheckBox Content=\"{s["text"]}\"{state}{off}{desc} />";
             }
             return $"<StackPanel Spacing=\"16\" AutomationProperties.Name=\"الخيارات\"{(s.On("deselect") ? " ins:Choice.Deselect=\"True\"" : "")}>\n" +
-                $"  <RadioButton GroupName=\"options\" Content=\"{s["text"]}\"{(s.On("checked") ? " IsChecked=\"True\"" : "")}{off} />\n" +
+                $"  <RadioButton GroupName=\"options\" Content=\"{s["text"]}\"{(s.On("checked") ? " IsChecked=\"True\"" : "")}{off}{desc} />\n" +
                 $"  <RadioButton GroupName=\"options\" Content=\"الثاني\"{off} />\n" +
                 "</StackPanel>";
         },

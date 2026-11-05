@@ -105,7 +105,7 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*" Background="{TemplateBinding Background}">
+            <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" Background="{TemplateBinding Background}">
               <Panel x:Name="BoxHost" Width="18" Height="18" VerticalAlignment="Center">
                 <ins:TemplateBorder x:Name="FocusRing"
                         Margin="-5"
@@ -162,6 +162,16 @@
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                 LineHeight="23.8"
+                                TextWrapping="Wrap" />
+              <ContentPresenter x:Name="PART_Desc"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="{TemplateBinding Padding}"
+                                Content="{TemplateBinding (ins:Choice.Description)}"
+                                IsVisible="{TemplateBinding (ins:Choice.Description), Converter={x:Static ObjectConverters.IsNotNull}}"
+                                FontSize="{DynamicResource InsFsXs}"
+                                Foreground="{DynamicResource InsText2}"
+                                LineHeight="20.4"
                                 TextWrapping="Wrap" />
             </Grid>
           </ControlTemplate>
@@ -261,7 +271,7 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*" Background="{TemplateBinding Background}">
+            <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" Background="{TemplateBinding Background}">
               <Panel x:Name="BoxHost" Width="18" Height="18" VerticalAlignment="Center">
                 <ins:TemplateBorder x:Name="FocusRing"
                         Margin="-5"
@@ -306,6 +316,16 @@
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                 LineHeight="23.8"
+                                TextWrapping="Wrap" />
+              <ContentPresenter x:Name="PART_Desc"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="{TemplateBinding Padding}"
+                                Content="{TemplateBinding (ins:Choice.Description)}"
+                                IsVisible="{TemplateBinding (ins:Choice.Description), Converter={x:Static ObjectConverters.IsNotNull}}"
+                                FontSize="{DynamicResource InsFsXs}"
+                                Foreground="{DynamicResource InsText2}"
+                                LineHeight="20.4"
                                 TextWrapping="Wrap" />
             </Grid>
           </ControlTemplate>
