@@ -15,6 +15,7 @@ public class ApiSurfaceTests
         "Controls.DateBadge", "Controls.Fold", "Controls.ListRow", "Controls.ListRowState", "Controls.Accordion",
         "Controls.TextDirection", "Controls.TrailingRow",
         "Controls.ComboSearch",
+        "Controls.RichLinkEventArgs", "Controls.RichSpan", "Controls.RichText",
     ];
 
     private static IEnumerable<Type> Exported() =>
