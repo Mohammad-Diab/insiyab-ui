@@ -1,15 +1,18 @@
+using System.Collections;
 using System.Collections.Specialized;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Media;
+using Avalonia.Metadata;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>What happened, in order: the timeline plugin's <c>ol.ins-timeline</c>. Holds <see cref="TimelineItem"/>s and <see cref="TimelineDay"/> headings. Classes <c>compact</c> (smaller dots, tighter) and <c>split</c> (both sides of a centre rule once the list is 640px wide).</summary>
+/// <summary>What happened, in order: the timeline plugin's <c>ol.ins-timeline</c>. Holds <see cref="TimelineItem"/>s and <see cref="TimelineDay"/> headings. Classes <c>compact</c> (smaller dots, tighter) and <c>split</c> (both sides of a centre rule once the list is 640px wide). From data: member bindings, and <see cref="DayOf"/> for day headings.</summary>
 public class Timeline : ItemsControl
 {
     private readonly Dictionary<Control, Thickness> _margins = [];
@@ -19,6 +22,82 @@ public class Timeline : ItemsControl
     private bool _stale;
     private bool _split;
     private double _splitWidth;
+
+    private Func<object?, DateTime?>? _dayOf;
+    private Func<DateTime, object?>? _dayHeader;
+
+    static Timeline()
+    {
+        ItemsSourceProperty.OverrideMetadata<Timeline>(new StyledPropertyMetadata<IEnumerable?>(
+            coerce: (o, v) => o is Timeline { DayOf: { } dayOf } && v is not null and not TimelineDays ? new TimelineDays(v, dayOf) : v));
+    }
+
+    /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: the date each happened on, so a heading goes before the first item of each day; while it is set, <c>ItemsSource</c> reads back as the list with its headings.</summary>
+    public Func<object?, DateTime?>? DayOf
+    {
+        get => _dayOf;
+        set
+        {
+            _dayOf = value;
+            CoerceValue(ItemsSourceProperty);
+        }
+    }
+
+    /// <summary>Writes a day's heading for <see cref="DayOf"/>; without it the heading is «اليوم», «أمس», «غدًا» or the date, in the page's language.</summary>
+    public Func<DateTime, object?>? DayHeader
+    {
+        get => _dayHeader;
+        set
+        {
+            _dayHeader = value;
+            CoerceValue(ItemsSourceProperty);
+        }
+    }
+
+    /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: each event's title.</summary>
+    [AssignBinding]
+    [InheritDataTypeFromItems(nameof(ItemsSource))]
+    public BindingBase? HeaderBinding { get; set; }
+
+    /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: each event's body; without it an event has none.</summary>
+    [AssignBinding]
+    [InheritDataTypeFromItems(nameof(ItemsSource))]
+    public BindingBase? ContentBinding { get; set; }
+
+    /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: each event's time as written.</summary>
+    [AssignBinding]
+    [InheritDataTypeFromItems(nameof(ItemsSource))]
+    public BindingBase? TimeBinding { get; set; }
+
+    /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: when each event happened, written as people say it.</summary>
+    [AssignBinding]
+    [InheritDataTypeFromItems(nameof(ItemsSource))]
+    public BindingBase? AtBinding { get; set; }
+
+    /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: each event's icon geometry.</summary>
+    [AssignBinding]
+    [InheritDataTypeFromItems(nameof(ItemsSource))]
+    public BindingBase? IconBinding { get; set; }
+
+    /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: each event's tone class (<c>ok bad warn info</c>), followed as it changes.</summary>
+    [AssignBinding]
+    [InheritDataTypeFromItems(nameof(ItemsSource))]
+    public BindingBase? ToneBinding { get; set; }
+
+    /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: whether each event is the current one.</summary>
+    [AssignBinding]
+    [InheritDataTypeFromItems(nameof(ItemsSource))]
+    public BindingBase? IsCurrentBinding { get; set; }
+
+    /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: whether each event is still to come.</summary>
+    [AssignBinding]
+    [InheritDataTypeFromItems(nameof(ItemsSource))]
+    public BindingBase? IsPendingBinding { get; set; }
+
+    /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: whether each event is new to the reader.</summary>
+    [AssignBinding]
+    [InheritDataTypeFromItems(nameof(ItemsSource))]
+    public BindingBase? IsUnreadBinding { get; set; }
 
     public Timeline()
     {
@@ -33,7 +112,48 @@ public class Timeline : ItemsControl
         return item is not (TimelineItem or TimelineDay);
     }
 
-    protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey) => new TimelineItem();
+    protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey) =>
+        item is TimelineDayMark ? new TimelineDay() : new TimelineItem();
+
+    protected override void PrepareContainerForItemOverride(Control container, object? item, int index)
+    {
+        if (item is TimelineDayMark mark && container is TimelineDay day)
+        {
+            var now = TimelineItem.Now();
+            day.Content = DayHeader?.Invoke(mark.Day) ?? RelativeTime.DayHeading(mark.Day, now, FlowDirection == FlowDirection.RightToLeft);
+            day.SetToday(mark.Day.Date == now.Date);
+            return;
+        }
+        base.PrepareContainerForItemOverride(container, item, index);
+        if (container is TimelineItem entry && !ReferenceEquals(container, item)) Apply(entry, item);
+    }
+
+    private void Apply(TimelineItem entry, object? item)
+    {
+        Bind(entry, HeaderedContentControl.HeaderProperty, HeaderBinding);
+        if (ContentBinding is { } body) entry.Bind(ContentControl.ContentProperty, body);
+        else if (ReferenceEquals(entry.Content, item)) entry.ClearValue(ContentControl.ContentProperty);
+        Bind(entry, TimelineItem.TimeProperty, TimeBinding);
+        Bind(entry, TimelineItem.AtProperty, AtBinding);
+        if (AtBinding is not null && entry.TimeMode == TimeMode.Text) entry.SetCurrentValue(TimelineItem.TimeModeProperty, TimeMode.Relative);
+        Bind(entry, TimelineItem.IconProperty, IconBinding);
+        Bind(entry, TimelineItem.ToneProperty, ToneBinding);
+        Bind(entry, TimelineItem.IsCurrentProperty, IsCurrentBinding);
+        Bind(entry, TimelineItem.IsPendingProperty, IsPendingBinding);
+        Bind(entry, TimelineItem.IsUnreadProperty, IsUnreadBinding);
+        // The event before a pending one learns of it once both are placed, in the arrange that follows.
+        if (entry.IsPending)
+        {
+            Forget();
+            _stale = true;
+            InvalidateArrange();
+        }
+    }
+
+    private static void Bind(AvaloniaObject target, AvaloniaProperty property, BindingBase? binding)
+    {
+        if (binding is not null) target.Bind(property, binding);
+    }
 
     protected override void ContainerForItemPreparedOverride(Control container, object? item, int index)
     {
@@ -66,9 +186,21 @@ public class Timeline : ItemsControl
         if (_stale)
         {
             _stale = false;
+            Forget();
             Reapply();
         }
         return base.MeasureOverride(availableSize);
+    }
+
+    protected override Size ArrangeOverride(Size finalSize)
+    {
+        if (_stale)
+        {
+            _stale = false;
+            Forget();
+            Reapply();
+        }
+        return base.ArrangeOverride(finalSize);
     }
 
     /// <summary>Works the places out again after an event was added, removed, shown, hidden or made pending.</summary>
@@ -121,7 +253,8 @@ public class Timeline : ItemsControl
                 _watched.Add(c);
                 if (!c.IsVisible) continue;
             }
-            shown.Add((item is TimelineDay ? TimelineKind.Day : TimelineKind.Event, item is TimelineItem { IsPending: true }));
+            var pending = item is TimelineItem { IsPending: true } || item is not Control && ContainerFromIndex(i) is TimelineItem { IsPending: true };
+            shown.Add((item is TimelineDay or TimelineDayMark ? TimelineKind.Day : TimelineKind.Event, pending));
             at.Add(i);
         }
         var slots = TimelinePlan.Of(shown);
@@ -192,10 +325,12 @@ internal static class TimelinePlan
     }
 }
 
-/// <summary>A date heading between events, the web's <c>.ins-timeline-day</c>.</summary>
-[PseudoClasses(":first", ":split")]
+/// <summary>A date heading between events, the web's <c>.ins-timeline-day</c>; <c>:today</c> on today's.</summary>
+[PseudoClasses(":first", ":split", ":today")]
 public class TimelineDay : ContentControl
 {
+    internal void SetToday(bool today) => PseudoClasses.Set(":today", today);
+
     internal void SetPlace(bool first, bool split)
     {
         PseudoClasses.Set(":first", first);
@@ -203,8 +338,8 @@ public class TimelineDay : ContentControl
     }
 }
 
-/// <summary>One event: a dot on the rule, a title (<c>Header</c>), a time and a body (<c>Content</c>, text or a panel). Classes <c>ok bad warn info</c> for its tone; <see cref="IsCurrent"/> wears a halo and <see cref="IsPending"/> is hollow on a dashed rule; an <see cref="Icon"/> replaces the dot with a chip.</summary>
-[PseudoClasses(":current", ":pending", ":next-pending", ":last", ":icon", ":split", ":split-start", ":has-time", ":has-body")]
+/// <summary>One event: a dot on the rule, a title (<c>Header</c>), a time and a body (<c>Content</c>, text or a panel). Classes <c>ok bad warn info</c> for its tone; <see cref="IsCurrent"/> wears a halo and <see cref="IsPending"/> is hollow on a dashed rule; an <see cref="Icon"/> replaces the dot with a chip; <see cref="IsUnread"/> puts a brand dot after the title.</summary>
+[PseudoClasses(":current", ":pending", ":next-pending", ":last", ":icon", ":split", ":split-start", ":has-time", ":has-body", ":unread")]
 public class TimelineItem : HeaderedContentControl
 {
     public static readonly StyledProperty<string?> TimeProperty =
@@ -228,6 +363,12 @@ public class TimelineItem : HeaderedContentControl
     public static readonly StyledProperty<bool> IsPendingProperty =
         AvaloniaProperty.Register<TimelineItem, bool>(nameof(IsPending));
 
+    public static readonly StyledProperty<bool> IsUnreadProperty =
+        AvaloniaProperty.Register<TimelineItem, bool>(nameof(IsUnread));
+
+    internal static readonly StyledProperty<string?> ToneProperty =
+        AvaloniaProperty.Register<TimelineItem, string?>("Tone");
+
     private static readonly List<WeakReference<TimelineItem>> Live = [];
     private static DispatcherTimer? _timer;
     private string? _timeText;
@@ -244,6 +385,8 @@ public class TimelineItem : HeaderedContentControl
             (ItemsControl.ItemsControlFromItemContainer(x) as Timeline)?.Invalidate();
         });
         IconProperty.Changed.AddClassHandler<TimelineItem>((x, e) => x.PseudoClasses.Set(":icon", e.GetNewValue<Geometry?>() is not null));
+        IsUnreadProperty.Changed.AddClassHandler<TimelineItem>((x, e) => x.PseudoClasses.Set(":unread", e.GetNewValue<bool>()));
+        ToneProperty.Changed.AddClassHandler<TimelineItem>((x, e) => x.SetTone(e.GetOldValue<string?>(), e.GetNewValue<string?>()));
         ContentProperty.Changed.AddClassHandler<TimelineItem>((x, e) => x.PseudoClasses.Set(":has-body", e.GetNewValue<object?>() is not null));
         TimeProperty.Changed.AddClassHandler<TimelineItem>((x, _) => x.Refresh());
         AtProperty.Changed.AddClassHandler<TimelineItem>((x, _) => x.Refresh());
@@ -267,6 +410,15 @@ public class TimelineItem : HeaderedContentControl
     public bool IsCurrent { get => GetValue(IsCurrentProperty); set => SetValue(IsCurrentProperty, value); }
 
     public bool IsPending { get => GetValue(IsPendingProperty); set => SetValue(IsPendingProperty, value); }
+
+    /// <summary>New to the reader: a small brand dot after the title.</summary>
+    public bool IsUnread { get => GetValue(IsUnreadProperty); set => SetValue(IsUnreadProperty, value); }
+
+    private void SetTone(string? old, string? now)
+    {
+        if (!string.IsNullOrWhiteSpace(old)) Classes.Remove(old.Trim());
+        if (!string.IsNullOrWhiteSpace(now)) Classes.Add(now.Trim());
+    }
 
     internal void SetPlace(bool last, bool nextPending, bool split, bool splitStart)
     {

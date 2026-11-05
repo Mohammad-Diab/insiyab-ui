@@ -53,6 +53,15 @@ internal static class RelativeTime
         return year ? $"{month} {at.Day}, {at.Year}" : $"{month} {at.Day}";
     }
 
+    /// <summary>A day's heading: «اليوم», «أمس» or «غدًا» (Today, Yesterday, Tomorrow), else the short date.</summary>
+    public static string DayHeading(DateTime day, DateTime now, bool arabic)
+    {
+        var n = (int)Math.Round((day.Date - now.Date).TotalDays);
+        if (n is < -1 or > 1) return ShortDate(day, now, arabic);
+        var said = Say(n, Unit.Day, arabic);
+        return arabic ? said : char.ToUpperInvariant(said[0]) + said[1..];
+    }
+
     /// <summary>The full date and time, for the tooltip: "الخميس، 24 سبتمبر 2026 في 8:05 ص".</summary>
     public static string FullDate(DateTime at, bool arabic, bool withTime = true)
     {

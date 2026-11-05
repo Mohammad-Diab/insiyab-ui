@@ -14,6 +14,11 @@
     <pg:PlayText Classes="p" Markup="الخط الزمني `ins:Timeline` لكل حدث فيه نقطة، ويفصل `ins:TimelineDay` بين الأيام بعنوان. ويأخذ الحدث الجاري `IsCurrent`، والذي لم يأت بعد `IsPending`. وتجد الخيارات كلها بشرحها في آخر الصفحة." />
     <pg:Playground Def="{x:Static pg:TimelinePlay.Timeline}" />
 
+    <TextBlock Classes="section" Text="من البيانات" />
+    <pg:PlayText Classes="p" Markup="اربط `ItemsSource` بقائمتك، فيأخذ كل حدث عنوانه ونصه ووقته وأيقونته ونبرته وحالته من أعضاء عنصره، وتأتي عناوين الأيام من `DayOf`. وهذا المثال داخل الصفحة وهي تتمرر، فتظهر أحداثه كلها من أول عرض. جرّب الزرين: تختفي نقاط الجديد، وتتغير نبرة المراجعة في مكانها." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:TimelinePlay.DataExample}" Stage="{x:Static pg:TimelinePlay.DataStage}" />
+    <pg:PlayListing Code="{x:Static pg:TimelinePlay.DataCode}" Margin="0,0,0,24" />
+
     <TextBlock Classes="section" Text="التحكم من الشيفرة" />
     <pg:PlayListing Code="{x:Static pg:TimelinePlay.Code}" Margin="0,0,0,24" />
 

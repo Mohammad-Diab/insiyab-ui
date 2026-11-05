@@ -1,7 +1,13 @@
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
+using Avalonia.Media;
 using Insiyab.Avalonia.Controls;
 using static Insiyab.Avalonia.Gallery.Playground.Play;
+using TimelineControl = Insiyab.Avalonia.Controls.Timeline;
 
 namespace Insiyab.Avalonia.Gallery.Playground;
 
@@ -36,6 +42,83 @@ public static class TimelinePlay
         ("الاعتماد", "IconCheck", "", "", 0, false, null),
     ];
 
+    public sealed class EventRow : INotifyPropertyChanged
+    {
+        private string? _tone;
+        private bool _isNow, _isAhead, _isNew;
+        public string Title { get; init; } = "";
+        public string? Body { get; init; }
+        public DateTime? At { get; init; }
+        public Geometry? Icon { get; init; }
+        public string? Tone { get => _tone; set => Set(ref _tone, value); }
+        public bool IsNow { get => _isNow; set => Set(ref _isNow, value); }
+        public bool IsAhead { get => _isAhead; set => Set(ref _isAhead, value); }
+        public bool IsNew { get => _isNew; set => Set(ref _isNew, value); }
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void Set<T>(ref T field, T value, [CallerMemberName] string? name = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return;
+            field = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+    }
+
+    public sealed class EventSample
+    {
+        public ObservableCollection<EventRow> Events { get; } = [];
+    }
+
+    public const string DataExample =
+        """
+        <ins:Timeline x:Name="Feed"
+                      ItemsSource="{Binding Events}"
+                      HeaderBinding="{Binding Title}"
+                      ContentBinding="{Binding Body}"
+                      AtBinding="{Binding At}"
+                      IconBinding="{Binding Icon}"
+                      ToneBinding="{Binding Tone}"
+                      IsCurrentBinding="{Binding IsNow}"
+                      IsPendingBinding="{Binding IsAhead}"
+                      IsUnreadBinding="{Binding IsNew}" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button x:Name="ReadAll" Classes="secondary sm" Content="علّم الكل مقروءًا" />
+          <Button x:Name="Approve" Classes="secondary sm" Content="اعتمد المراجعة" />
+        </StackPanel>
+        """;
+
+    public static string DataCode { get; } =
+        """
+        Feed.DayOf = item => ((EventRow)item!).At;    // عنوان قبل أول حدث من كل يوم
+        Feed.DayHeader = day => day.ToString("d/M");  // اختياري: نص العنوان بدل «اليوم» و«أمس»
+        """;
+
+    public static Action<Control> DataStage { get; } = view =>
+    {
+        Geometry? Icon(string key) => Application.Current!.TryFindResource(key, out var found) ? found as Geometry : null;
+        var now = DateTime.Now;
+        var day = DateTime.Today;
+        var sample = new EventSample();
+        sample.Events.Add(new EventRow { Title = "أُنشئ الملف", At = day.AddDays(-4).AddHours(9), Icon = Icon("IconFile"), Tone = "ok" });
+        sample.Events.Add(new EventRow { Title = "أُرفقت الصور", Body = "ثلاث صور من الموقع بدقتها الكاملة.", At = day.AddDays(-4).AddHours(11.5), Icon = Icon("IconUpload"), Tone = "ok" });
+        sample.Events.Add(new EventRow { Title = "عُدّلت التكلفة", Body = "تغيرت تكلفة البند الثاني بعد مراجعة العرض.", At = day.AddDays(-1).AddHours(10), Icon = Icon("IconEdit"), Tone = "info" });
+        sample.Events.Add(new EventRow { Title = "أُضيفت ملاحظة", Body = "يُرجى التأكد من المقاسات قبل الطلب.", At = day.AddDays(-1).AddHours(16.25), Icon = Icon("IconMessage"), Tone = "info", IsNew = true });
+        sample.Events.Add(new EventRow { Title = "أُرسل للمراجعة", At = now.AddMinutes(-90), Icon = Icon("IconShare"), Tone = "ok" });
+        sample.Events.Add(new EventRow { Title = "قيد المراجعة", Body = "يراجعه فريق الجودة الآن.", At = now.AddMinutes(-20), Icon = Icon("IconClock"), Tone = "warn", IsNow = true, IsNew = true });
+        sample.Events.Add(new EventRow { Title = "الاعتماد", Icon = Icon("IconCheck"), IsAhead = true });
+        var feed = view.GetLogicalDescendants().OfType<TimelineControl>().First();
+        feed.DayOf = item => ((EventRow)item!).At;
+        feed.DataContext = sample;
+        var buttons = view.GetLogicalDescendants().OfType<Button>().ToList();
+        buttons.First(b => b.Name == "ReadAll").Click += (_, _) => { foreach (var e in sample.Events) e.IsNew = false; };
+        buttons.First(b => b.Name == "Approve").Click += (_, _) =>
+        {
+            sample.Events[5].Tone = "ok";
+            sample.Events[5].IsNow = false;
+            sample.Events[6].IsAhead = false;
+            sample.Events[6].IsNow = true;
+        };
+    };
+
     public static PlayDef Timeline { get; } = new()
     {
         Id = "timeline",
@@ -69,6 +152,11 @@ public static class TimelinePlay
             Row("الأساس", "ins:Timeline", "قائمة الأحداث، لكل حدث فيها نقطة على الخط.", OptionKind.Element, true),
             Row("الحدث", "ins:TimelineItem", "الحدث، وعنوانه في `Header`.", OptionKind.Element),
             Row("الحدث", "At", "متى وقع الحدث، للوقت النسبي والتاريخ، ويظهر كاملًا في تلميحه.", OptionKind.Property),
+            Row("الحدث", "IsUnread", "حدث لم يُقرأ بعد: نقطة صغيرة بلون الهوية بعد عنوانه.", OptionKind.Property),
+            Row("من البيانات", "ItemsSource", "قائمة يصير كل عنصر فيها حدثًا، وتأخذ الأحداث عناوينها ونصوصها وأوقاتها وأيقوناتها من أعضائه بـ `HeaderBinding` و`ContentBinding` و`TimeBinding` أو `AtBinding` و`IconBinding`.", OptionKind.Property),
+            Row("من البيانات", "ToneBinding", "نبرة كل حدث من عضو في عنصره، `ok` أو `bad` أو `warn` أو `info`، فإذا تغير العضو تغير لون الحدث في مكانه.", OptionKind.Property),
+            Row("من البيانات", "IsCurrentBinding", "الحدث الجاري، ومثله `IsPendingBinding` لما لم يأت بعد و`IsUnreadBinding` لما لم يُقرأ.", OptionKind.Property),
+            Row("من البيانات", "DayOf", "من الشيفرة: دالة تعطي تاريخ كل عنصر، فيوضع عنوان قبل أول حدث من كل يوم: «اليوم» أو «أمس» أو التاريخ، أو ما تكتبه `DayHeader`.", OptionKind.Property),
         ],
         Axaml = s =>
         {

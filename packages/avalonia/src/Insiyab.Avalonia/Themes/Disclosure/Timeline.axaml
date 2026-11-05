@@ -48,7 +48,10 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+            <!-- A clipping frame that grows with the list, so the panel works out what is in view again as it grows; it reaches 40px past every side for halos and shadows -->
+            <Panel Name="PART_Reach" Margin="-40" ClipToBounds="True">
+              <ItemsPresenter Name="PART_ItemsPresenter" Margin="40" ItemsPanel="{TemplateBinding ItemsPanel}" />
+            </Panel>
           </ControlTemplate>
         </Setter>
       </ControlTheme>
@@ -80,6 +83,9 @@
         <Style Selector="^:split:first">
           <Setter Property="Padding" Value="0,4,0,14" />
         </Style>
+        <Style Selector="^:today">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+        </Style>
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type ins:TimelineItem}" TargetType="ins:TimelineItem">
@@ -100,11 +106,13 @@
                           Foreground="{DynamicResource InsToneBrandSoft}" />
               </ins:TemplateBorder>
               <StackPanel Name="PART_Text" Margin="28,0,0,22" Spacing="3">
-                <ContentPresenter Name="PART_HeaderPresenter"
-                                  Content="{TemplateBinding Header}"
-                                  ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                  FontWeight="Bold"
-                                  Foreground="{DynamicResource InsText1}" />
+                <ins:TimelineHead Name="PART_Head" DotBrush="{DynamicResource InsToneBrandSoft}">
+                  <ContentPresenter Name="PART_HeaderPresenter"
+                                    Content="{TemplateBinding Header}"
+                                    ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                    FontWeight="Bold"
+                                    Foreground="{DynamicResource InsText1}" />
+                </ins:TimelineHead>
                 <ins:TemplateText Name="PART_Time" Text="{TemplateBinding TimeText}" IsVisible="False" FontFeatures="+tnum"
                            FontSize="{DynamicResource InsFsXs}" Foreground="{DynamicResource InsText3}" />
                 <ContentPresenter Name="PART_ContentPresenter" Margin="0,4,0,0" IsVisible="False"
@@ -135,6 +143,9 @@
         </Style>
         <Style Selector="^:has-body /template/ ContentPresenter#PART_ContentPresenter">
           <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:unread /template/ ins|TimelineHead#PART_Head">
+          <Setter Property="Dot" Value="True" />
         </Style>
         <Style Selector="^:last">
           <Style Selector="^ /template/ :is(Border)#PART_Rail">
