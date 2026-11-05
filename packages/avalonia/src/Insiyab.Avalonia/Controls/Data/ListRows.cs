@@ -9,7 +9,8 @@ namespace Insiyab.Avalonia.Controls;
 /// <summary>Marks the row after a hovered or selected list row with the <c>after-hot</c> class, so its divider can step aside as the web's <c>.ins-list-item:hover + .ins-list-item</c> does, and the first row with <c>:first</c>, so it has no divider above it.</summary>
 internal static class ListRows
 {
-    private static readonly ConditionalWeakTable<ListBoxItem, Follow> s_following = new();
+    private static readonly ConditionalWeakTable<IChildIndexProvider, Tracker> s_lists = new();
+    private static readonly ConditionalWeakTable<ListBoxItem, Tracker> s_rows = new();
 
     /// <summary>Set by the ListBoxItem theme; turns the tracking on for that row.</summary>
     public static readonly AttachedProperty<bool> TrackProperty =
@@ -31,25 +32,25 @@ internal static class ListRows
             item.PropertyChanged += OnItemChanged;
             item.AttachedToLogicalTree += OnAttached;
             item.DetachedFromLogicalTree += OnDetached;
-            if (((ILogical)item).IsAttachedToLogicalTree) Follow.Start(item);
+            if (((ILogical)item).IsAttachedToLogicalTree) Tracker.Join(item);
         }
         else
         {
             item.PropertyChanged -= OnItemChanged;
             item.AttachedToLogicalTree -= OnAttached;
             item.DetachedFromLogicalTree -= OnDetached;
-            Follow.Stop(item);
+            Tracker.Leave(item);
         }
     }
 
     private static void OnAttached(object? sender, LogicalTreeAttachmentEventArgs e)
     {
-        if (sender is ListBoxItem item) Follow.Start(item);
+        if (sender is ListBoxItem item) Tracker.Join(item);
     }
 
     private static void OnDetached(object? sender, LogicalTreeAttachmentEventArgs e)
     {
-        if (sender is ListBoxItem item) Follow.Stop(item);
+        if (sender is ListBoxItem item) Tracker.Leave(item);
     }
 
     private static void OnItemChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
@@ -59,53 +60,56 @@ internal static class ListRows
         Refresh(item);
     }
 
-    // Watches the list's row indexes for as long as the row is in it, and unsubscribes when it leaves: an :nth-child rule in the theme held a removed row through its list. It reads the index the way that rule does, from the event the list raises for this row.
-    private sealed class Follow
+    // One watcher per list follows the indexes of all its tracked rows, so a shift costs one handler call, not one per row; a row leaves it when it leaves the list, which an :nth-child rule never did.
+    private sealed class Tracker
     {
-        private readonly ListBoxItem _item;
         private readonly IChildIndexProvider _list;
+        private readonly HashSet<ListBoxItem> _rows = [];
 
-        private Follow(ListBoxItem item, IChildIndexProvider list)
+        private Tracker(IChildIndexProvider list)
         {
-            _item = item;
             _list = list;
             list.ChildIndexChanged += OnChanged;
         }
 
-        public static void Start(ListBoxItem item)
+        public static void Join(ListBoxItem item)
         {
-            Unhook(item);
-            var list = ((ILogical)item).LogicalParent as IChildIndexProvider;
-            if (list is not null) s_following.AddOrUpdate(item, new Follow(item, list));
-            SetFirst(item, list?.GetChildIndex(item) == 0);
+            Leave(item);
+            if (((ILogical)item).LogicalParent is not IChildIndexProvider list) return;
+            if (!s_lists.TryGetValue(list, out var tracker))
+            {
+                tracker = new Tracker(list);
+                s_lists.Add(list, tracker);
+            }
+            tracker._rows.Add(item);
+            s_rows.AddOrUpdate(item, tracker);
+            SetFirst(item, list.GetChildIndex(item) == 0);
         }
 
-        public static void Stop(ListBoxItem item)
+        public static void Leave(ListBoxItem item)
         {
-            Unhook(item);
             SetFirst(item, false);
-        }
-
-        private static void Unhook(ListBoxItem item)
-        {
-            if (!s_following.TryGetValue(item, out var follow)) return;
-            follow._list.ChildIndexChanged -= follow.OnChanged;
-            s_following.Remove(item);
+            if (!s_rows.TryGetValue(item, out var tracker)) return;
+            s_rows.Remove(item);
+            tracker._rows.Remove(item);
+            if (tracker._rows.Count > 0) return;
+            tracker._list.ChildIndexChanged -= tracker.OnChanged;
+            s_lists.Remove(tracker._list);
         }
 
         private static void SetFirst(ListBoxItem item, bool first) => ((IPseudoClasses)item.Classes).Set(":first", first);
 
         private void OnChanged(object? sender, ChildIndexChangedEventArgs e)
         {
-            int index;
             if (e.Action == ChildIndexChangedAction.ChildIndexChanged)
             {
-                if (e.Child != _item) return;
-                index = e.Index >= 0 ? e.Index : _list.GetChildIndex(_item);
+                if (e.Child is ListBoxItem item && _rows.Contains(item))
+                    SetFirst(item, (e.Index >= 0 ? e.Index : _list.GetChildIndex(item)) == 0);
             }
-            else if (e.Action == ChildIndexChangedAction.ChildIndexesReset) index = _list.GetChildIndex(_item);
-            else return;
-            SetFirst(_item, index == 0);
+            else if (e.Action == ChildIndexChangedAction.ChildIndexesReset)
+            {
+                foreach (var row in _rows) SetFirst(row, _list.GetChildIndex(row) == 0);
+            }
         }
     }
 
