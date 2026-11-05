@@ -282,6 +282,10 @@
         <Style Selector="^.stat-hint">
           <Setter Property="FontSize" Value="11" />
           <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+          <!-- Two lines at most, the rest cut with an ellipsis (.ins-clamp-2): a long hint such as a news title keeps the tiles even -->
+          <Setter Property="TextWrapping" Value="Wrap" />
+          <Setter Property="MaxLines" Value="2" />
+          <Setter Property="TextTrimming" Value="CharacterEllipsis" />
           <Style Selector="^[FlowDirection=RightToLeft]">
             <Setter Property="LineHeight" Value="18.7" />
           </Style>

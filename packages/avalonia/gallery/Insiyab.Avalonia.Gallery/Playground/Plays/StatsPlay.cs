@@ -46,7 +46,8 @@ public static class StatsPlay
             Text("label", "التسمية", "الملفات"),
             Text("value", "القيمة", "128"),
             Switch("glass", "سطح قائم بذاته", "glass", "يجعل البطاقة سطحًا زجاجيًا قائمًا بذاته. ومن دونه ضعها داخل لوح.", on: true),
-            Switch("hint", "تلميح", "stat-hint", "على `TextBlock` تحت القيمة يبين سياقها."),
+            Switch("hint", "تلميح", "stat-hint", "على `TextBlock` تحت القيمة يبين سياقها، ويقف عند سطرين وتُقص بقيته بعلامة «…»، فتبقى البطاقات متساوية."),
+            Switch("long", "تلميح طويل"),
             Switch("trend", "التغير", "stat-trend", "على `StackPanel` تحت القيمة يضم `ins:Delta` و`TextBlock.delta-ref`."),
             Switch("link", "رابط", "stat-link", "على `Button` يحيط بالبطاقة: بطاقة تنقل إلى مكان، فتتحرك أيقونتها تحت المؤشر.", OptionKind.Class),
         ],
@@ -58,6 +59,7 @@ public static class StatsPlay
             Row("الأساس", "stat-label", "على `TextBlock`: ما يعنيه الرقم.", OptionKind.Class, true),
             Row("الأساس", "stat-value", "على `TextBlock`: الرقم نفسه، بخط Inter وأرقام متساوية العرض، وبلون النبرة.", OptionKind.Class, true),
         ],
+        Disable = s => s.On("hint") ? [] : ["long"],
         Axaml = s =>
         {
             var cls = string.Join(' ', new[] { "stat", s.On("glass") ? "glass" : null, s["tone"], s["size"] }.Where(c => !string.IsNullOrEmpty(c)));
@@ -71,7 +73,7 @@ public static class StatsPlay
                 $"      <TextBlock Classes=\"stat-label\" Text=\"{s["label"]}\" />",
                 $"      <TextBlock Classes=\"stat-value\" Text=\"{s["value"]}\" />",
             };
-            if (s.On("hint")) lines.Add("      <TextBlock Classes=\"stat-hint\" Text=\"هذا الشهر\" />");
+            if (s.On("hint")) lines.Add($"      <TextBlock Classes=\"stat-hint\" Text=\"{(s.On("long") ? "آخر ما أُضيف: تقرير المبيعات الربعي مع الجداول والملاحق كلها، ومعه ملخص للإدارة" : "هذا الشهر")}\" />");
             if (s.On("trend")) lines.Add("      <StackPanel Classes=\"stat-trend\"><ins:Delta Classes=\"up\" Content=\"12%\" /><TextBlock Classes=\"delta-ref\" Text=\"عن الشهر الماضي\" /></StackPanel>");
             lines.AddRange(["    </StackPanel>", "  </DockPanel>", "</Border>"]);
             var card = string.Join("\n", lines.Select(l => pad + l));
@@ -82,6 +84,7 @@ public static class StatsPlay
             var notes = new List<string>();
             if (s["tone"] == "zero") notes.Add("اجعل القيمة صفرًا مع `zero`، فهو للقيمة الصفرية.");
             if (s.On("link")) notes.Add("مرر المؤشر على البطاقة، فتتحرك أيقونتها.");
+            if (s.On("hint") && s.On("long")) notes.Add("التلميح الطويل يقف عند سطرين.");
             return notes;
         },
     };
