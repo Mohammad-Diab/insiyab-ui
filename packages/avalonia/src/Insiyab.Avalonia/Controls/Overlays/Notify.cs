@@ -373,6 +373,9 @@ public class Notify : ItemsControl
     {
         e.Handled = true;
         RaiseEvent(new RoutedEventArgs(FootClickEvent));
+        if (!CloseOnItemClick) return;
+        IsOpen = false;
+        _bell?.Focus();
     }
 
     // The panel is 22rem wide and 30rem tall at most, and never wider than the window less a margin.
