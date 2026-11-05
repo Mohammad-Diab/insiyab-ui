@@ -83,6 +83,7 @@ public static class FilePlay
                 Choice("2", "2"),
                 Choice("5", "5", "MaxCount=\"5\"", "أكبر عدد للملفات، مع `Multiple`.", OptionKind.Property)).In("الحدود"),
             Text("note", "السطر الصغير", ""),
+            Switch("pick", "اختيار وحسب", "ShowList=\"False\"", "منطقة تختار بها الملفات أو تُفلتها ولا تحتفظ بقائمة: يُطلق كل اختيار `FileAdded` لكل ملف ثم `FilesChanged`، وفي `Files` آخر اختيار وحده، ثم تعود المنطقة فارغة.", OptionKind.Property),
             Switch("upload", "يُرفع فورًا", "Upload=\"True\"", "يُطلق كل ملف تضيفه `FileAdded` فترفعه الصفحة، ثم تخبر الحقل بما جرى.", OptionKind.Property, "الرفع الفوري"),
             Switch("disabled", "معطل", "IsEnabled=\"False\"", "يبهت الحقل، فلا تُختار فيه ملفات ولا تُفلت.", OptionKind.Property),
         ],
@@ -93,13 +94,13 @@ public static class FilePlay
             Row("الرفع الفوري", "FileAdded", "يُطلق لكل ملف يُضاف، والملف في `Entry`، و`Upload` إن كان الرفع للصفحة.", OptionKind.Event),
             Row("الرفع الفوري", "Progress", "تخبر بها الصفحة الحقل كم بلغ الرفع، ثم `Done` بالمعرف أو `Fail` برسالة. ويبقى الحقل غير صالح ما دام ملف قيد الرفع أو تعذر رفعه.", OptionKind.Property),
         ],
-        Disable = s => s.On("multiple") ? [] : ["count"],
+        Disable = s => (s.On("multiple") ? [] : new[] { "count" }).Concat(s.On("pick") ? ["upload"] : Array.Empty<string>()),
         Axaml = s =>
         {
             var attrs = Classes(s.On("compact") ? "compact" : null) + (s.On("multiple") ? " Multiple=\"True\"" : "") +
                 (s.Has("accept") ? $" Accept=\"{s["accept"]}\"" : "") + (s.Has("max") ? $" MaxSize=\"{s["max"]}\"" : "") +
                 (s.Has("count") && s.On("multiple") ? $" MaxCount=\"{s["count"]}\"" : "") + (s.Has("note") ? $" Note=\"{s["note"]}\"" : "") +
-                (s.On("upload") ? " Upload=\"True\"" : "") + (s.On("disabled") ? " IsEnabled=\"False\"" : "");
+                (s.On("upload") ? " Upload=\"True\"" : "") + (s.On("pick") ? " ShowList=\"False\"" : "") + (s.On("disabled") ? " IsEnabled=\"False\"" : "");
             var hint = s["accept"] switch { "" => "أي نوع من الملفات.", "image/*" => "صور فقط.", _ => "ملفات PDF أو صور." };
             return "<StackPanel Classes=\"field\">\n" +
                 "  <TextBlock Classes=\"label\" Text=\"المرفقات\" />\n" +
@@ -112,6 +113,7 @@ public static class FilePlay
             var notes = new List<string>();
             if (s.On("upload")) notes.Add("هذه صورة أُضيفت للتو وهي تُرفع. والرفع هنا مصطنع، وكل ملف في اسمه «خطأ» يتعذر رفعه عمدًا.");
             if (!s.On("multiple")) notes.Add("الحقل لملف واحد، فلا معنى لأكبر عدد.");
+            if (s.On("pick")) notes.Add("اختر ملفات أو أفلتها، فيظهر هنا ما وصل، وتبقى المنطقة فارغة.");
             return notes;
         },
         Stage = (view, s, say) =>
@@ -123,7 +125,8 @@ public static class FilePlay
                     say($"حدث `FileAdded` على «{e.Entry.Name}»");
                     if (e.Upload) Pretend(field, e.Entry);
                 };
-                if (!s.On("upload") || s.On("disabled")) continue;
+                if (s.On("pick")) field.FilesChanged += (_, _) => say($"حدث `FilesChanged`، وفي `Files` الآن {field.Files.Count}");
+                if (!s.On("upload") || s.On("disabled") || s.On("pick")) continue;
                 var bytes = Convert.FromBase64String(Pixel);
                 field.AddFiles([new FileEntry("صورة.png", bytes.Length, () => Task.FromResult<Stream>(new MemoryStream(bytes)), new Bitmap(new MemoryStream(bytes)))]);
             }

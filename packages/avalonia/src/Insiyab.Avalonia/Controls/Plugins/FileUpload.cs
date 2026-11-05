@@ -51,6 +51,10 @@ public class FileUpload : TemplatedControl
     public static readonly StyledProperty<bool> UploadProperty =
         AvaloniaProperty.Register<FileUpload, bool>(nameof(Upload));
 
+    /// <summary>False makes it a pick-only zone: each pick, drop or paste is handed over through <see cref="FileAdded"/> and <see cref="FilesChanged"/>, <see cref="Files"/> holds only that last pick, and no list is drawn.</summary>
+    public static readonly StyledProperty<bool> ShowListProperty =
+        AvaloniaProperty.Register<FileUpload, bool>(nameof(ShowList), true);
+
     public static readonly StyledProperty<string?> LocaleProperty =
         AvaloniaProperty.Register<FileUpload, string?>(nameof(Locale));
 
@@ -114,6 +118,8 @@ public class FileUpload : TemplatedControl
     /// <summary>Each file added is the page's to upload on the spot (<c>data-ins-file-upload</c>); see <see cref="FileAdded"/>.</summary>
     public bool Upload { get => GetValue(UploadProperty); set => SetValue(UploadProperty, value); }
 
+    public bool ShowList { get => GetValue(ShowListProperty); set => SetValue(ShowListProperty, value); }
+
     public string? Locale { get => GetValue(LocaleProperty); set => SetValue(LocaleProperty, value); }
 
     public string DragText { get => _drag; private set => SetAndRaise(DragTextProperty, ref _drag, value); }
@@ -176,6 +182,7 @@ public class FileUpload : TemplatedControl
             if (change.Property == LocaleProperty || change.Property == FlowDirectionProperty) Render();
         }
         else if (change.Property == UploadProperty) Check();
+        else if (change.Property == ShowListProperty) Render();
     }
 
     private void UpdateTexts()
@@ -206,7 +213,7 @@ public class FileUpload : TemplatedControl
         var issues = new List<string>();
         var max = FileTypes.Bytes(MaxSize);
         var count = Multiple ? MaxCount : 1;
-        var next = Multiple ? _files.ToList() : [];
+        var next = Multiple && ShowList ? _files.ToList() : [];
         var added = new List<FileEntry>();
         foreach (var f in incoming)
         {
@@ -280,14 +287,16 @@ public class FileUpload : TemplatedControl
         _list?.Children.Clear();
         foreach (var f in _files)
         {
+            if (!ShowList) break;
             var item = new FileItem(f, IsEffectivelyEnabled);
             item.RemoveRequested += OnRemoveRequested;
             item.Refresh(Arabic);
             _items[f] = item;
             _list?.Children.Add(item);
         }
-        if (_list is not null) _list.IsVisible = _files.Count > 0;
-        PseudoClasses.Set(":has-files", _files.Count > 0);
+        var listed = ShowList && _files.Count > 0;
+        if (_list is not null) _list.IsVisible = listed;
+        PseudoClasses.Set(":has-files", listed);
         Check();
     }
 
