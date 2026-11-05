@@ -138,7 +138,7 @@
     </ResourceDictionary>
   </Styles.Resources>
 
-  <Style Selector="ins|StatusBar Separator">
+  <Style Selector="ins|StatusBar > Separator">
     <Setter Property="Width" Value="1" />
     <Setter Property="Height" Value="14" />
     <Setter Property="MinHeight" Value="0" />
@@ -146,14 +146,14 @@
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="Background" Value="{DynamicResource InsLine}" />
   </Style>
-  <Style Selector="ins|StatusBar ProgressBar">
+  <Style Selector="ins|StatusBar > ProgressBar">
     <Setter Property="Width" Value="96" />
     <Setter Property="Height" Value="4" />
     <Setter Property="MinWidth" Value="0" />
     <Setter Property="Margin" Value="4,0" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
-  <Style Selector="ins|StatusBar ins|SaveStatus">
+  <Style Selector="ins|StatusBar > ins|SaveStatus">
     <Setter Property="Margin" Value="6,0" />
     <Setter Property="MinHeight" Value="0" />
   </Style>
