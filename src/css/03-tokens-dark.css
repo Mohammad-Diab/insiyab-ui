@@ -43,6 +43,7 @@
   --ins-sh-sm: 0 1px 3px rgba(0, 0, 0, .40), 0 1px 2px rgba(0, 0, 0, .30);
   --ins-sh-md: 0 4px 8px -1px rgba(0, 0, 0, .45), 0 2px 4px -2px rgba(0, 0, 0, .35);
   --ins-sh-subtle: 0 2px 8px rgba(0, 0, 0, .30);
+  --ins-sh-panel: 0 1px 2px rgba(0, 0, 0, .30), 0 4px 14px rgba(0, 0, 0, .28);
   --ins-sh-bubble: 0 4px 16px rgba(0, 0, 0, .38);
   /* A white streak over a 6%-white fill does nothing; on dark the sweep is the
      light one, and the "dark sweep" for light-variant controls inverts too. */
@@ -68,6 +69,7 @@
   --ins-tone-warn: #FBBF24;
   --ins-tone-warn-bg: rgba(245, 158, 11, .18);
   --ins-tone-warn-bd: rgba(245, 158, 11, .28);
+  --ins-tone-warn-signal: #FB923C;
   --ins-tone-bad: #FCA5A5;
   --ins-tone-bad-bg: rgba(239, 68, 68, .18);
   --ins-tone-bad-bd: rgba(239, 68, 68, .28);
@@ -86,6 +88,32 @@
      is the label lifting to `--ins-text-1`, which is what every brand-tinted face
      in the library already does. */
   --ins-tone-brand-soft: var(--ins-primary-darker);
+
+  /* The categories on dark: the 400 shade as the mark, the 300 as the ink, the fills nearly doubled as the tones' are. */
+  --ins-cat-1: #2DD4BF;
+  --ins-cat-1-bg: rgba(20, 184, 166, .22);
+  --ins-cat-1-ink: #5EEAD4;
+  --ins-cat-2: #F472B6;
+  --ins-cat-2-bg: rgba(236, 72, 153, .22);
+  --ins-cat-2-ink: #F9A8D4;
+  --ins-cat-3: #818CF8;
+  --ins-cat-3-bg: rgba(99, 102, 241, .22);
+  --ins-cat-3-ink: #A5B4FC;
+  --ins-cat-4: #A3E635;
+  --ins-cat-4-bg: rgba(132, 204, 22, .22);
+  --ins-cat-4-ink: #BEF264;
+  --ins-cat-5: #E879F9;
+  --ins-cat-5-bg: rgba(217, 70, 239, .22);
+  --ins-cat-5-ink: #F0ABFC;
+  --ins-cat-6: #38BDF8;
+  --ins-cat-6-bg: rgba(14, 165, 233, .22);
+  --ins-cat-6-ink: #7DD3FC;
+  --ins-cat-7: #C29467;
+  --ins-cat-7-bg: rgba(168, 117, 69, .22);
+  --ins-cat-7-ink: #D7B899;
+  --ins-cat-8: #C084FC;
+  --ins-cat-8-bg: rgba(168, 85, 247, .22);
+  --ins-cat-8-ink: #D8B4FE;
 
   --ins-line: rgba(255, 255, 255, .08);
   --ins-hr: rgba(255, 255, 255, .16);

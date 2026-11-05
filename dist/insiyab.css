@@ -204,7 +204,8 @@
   --ins-glass-hover: rgba(255, 255, 255, .78);
   --ins-glass-inner: rgba(255, 255, 255, .50);
   --ins-glass-strong: rgba(255, 255, 255, .90);
-  --ins-rim: rgba(255, 255, 255, .85);
+  /* The rim's sides and bottom are the glass hairline; only its top keeps the bright highlight below. */
+  --ins-rim: rgba(255, 255, 255, .40);
   --ins-rim-top: rgba(255, 255, 255, .95);
   /* A selected segment, as three values rather than as a rule. Every switch in the
      library is the same component — the segmented control and the CSS-only theme
@@ -239,6 +240,8 @@
   --ins-sh-sm: 0 1px 3px rgba(15, 23, 42, .06), 0 1px 2px rgba(15, 23, 42, .04);
   --ins-sh-md: 0 4px 6px -1px rgba(15, 23, 42, .07), 0 2px 4px -2px rgba(15, 23, 42, .05);
   --ins-sh-subtle: 0 2px 8px rgba(15, 23, 42, .04);
+  /* A lower elevation for a large panel that fills the page. */
+  --ins-sh-panel: 0 1px 2px rgba(15, 23, 42, .04), 0 4px 14px rgba(15, 23, 42, .05);
   /* The app-bar islands. Softer and shorter than a panel's: a pill floating 12px
      from the top of the page reads as lifted, not as a card. */
   --ins-sh-bubble: 0 4px 16px rgba(15, 23, 42, .06);
@@ -288,6 +291,8 @@
   --ins-tone-warn: #92400E;
   --ins-tone-warn-bg: rgba(245, 158, 11, .12);
   --ins-tone-warn-bd: rgba(245, 158, 11, .22);
+  /* Warn as a mark: the brown above is for text and reads brown in an 8px dot, so dots take orange (3.5:1 on white). */
+  --ins-tone-warn-signal: #EA580C;
   --ins-tone-bad: #991B1B;
   --ins-tone-bad-bg: rgba(239, 68, 68, .10);
   --ins-tone-bad-bd: rgba(239, 68, 68, .20);
@@ -307,6 +312,32 @@
      was spent as a foreground rather than as a tint measured, on a real render,
      somewhere nobody could read it. */
   --ins-tone-brand-soft: var(--ins-primary);
+
+  /* Categories, not states: eight hues for groups and tags, each a solid mark, a soft fill and an ink that reads on that fill (AA). */
+  --ins-cat-1: #0D9488;
+  --ins-cat-1-bg: rgba(20, 184, 166, .14);
+  --ins-cat-1-ink: #115E59;
+  --ins-cat-2: #DB2777;
+  --ins-cat-2-bg: rgba(236, 72, 153, .14);
+  --ins-cat-2-ink: #9D174D;
+  --ins-cat-3: #4F46E5;
+  --ins-cat-3-bg: rgba(99, 102, 241, .14);
+  --ins-cat-3-ink: #3730A3;
+  --ins-cat-4: #65A30D;
+  --ins-cat-4-bg: rgba(132, 204, 22, .14);
+  --ins-cat-4-ink: #3F6212;
+  --ins-cat-5: #C026D3;
+  --ins-cat-5-bg: rgba(217, 70, 239, .14);
+  --ins-cat-5-ink: #86198F;
+  --ins-cat-6: #0284C7;
+  --ins-cat-6-bg: rgba(14, 165, 233, .14);
+  --ins-cat-6-ink: #075985;
+  --ins-cat-7: #8B5E34;
+  --ins-cat-7-bg: rgba(168, 117, 69, .14);
+  --ins-cat-7-ink: #5C3B1E;
+  --ins-cat-8: #9333EA;
+  --ins-cat-8-bg: rgba(168, 85, 247, .14);
+  --ins-cat-8-ink: #6B21A8;
 
   --ins-line: rgba(15, 23, 42, .08);
   --ins-hr: rgba(15, 23, 42, .18);
@@ -505,6 +536,7 @@ html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }
   --ins-sh-sm: 0 1px 3px rgba(0, 0, 0, .40), 0 1px 2px rgba(0, 0, 0, .30);
   --ins-sh-md: 0 4px 8px -1px rgba(0, 0, 0, .45), 0 2px 4px -2px rgba(0, 0, 0, .35);
   --ins-sh-subtle: 0 2px 8px rgba(0, 0, 0, .30);
+  --ins-sh-panel: 0 1px 2px rgba(0, 0, 0, .30), 0 4px 14px rgba(0, 0, 0, .28);
   --ins-sh-bubble: 0 4px 16px rgba(0, 0, 0, .38);
   /* A white streak over a 6%-white fill does nothing; on dark the sweep is the
      light one, and the "dark sweep" for light-variant controls inverts too. */
@@ -530,6 +562,7 @@ html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }
   --ins-tone-warn: #FBBF24;
   --ins-tone-warn-bg: rgba(245, 158, 11, .18);
   --ins-tone-warn-bd: rgba(245, 158, 11, .28);
+  --ins-tone-warn-signal: #FB923C;
   --ins-tone-bad: #FCA5A5;
   --ins-tone-bad-bg: rgba(239, 68, 68, .18);
   --ins-tone-bad-bd: rgba(239, 68, 68, .28);
@@ -548,6 +581,32 @@ html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }
      is the label lifting to `--ins-text-1`, which is what every brand-tinted face
      in the library already does. */
   --ins-tone-brand-soft: var(--ins-primary-darker);
+
+  /* The categories on dark: the 400 shade as the mark, the 300 as the ink, the fills nearly doubled as the tones' are. */
+  --ins-cat-1: #2DD4BF;
+  --ins-cat-1-bg: rgba(20, 184, 166, .22);
+  --ins-cat-1-ink: #5EEAD4;
+  --ins-cat-2: #F472B6;
+  --ins-cat-2-bg: rgba(236, 72, 153, .22);
+  --ins-cat-2-ink: #F9A8D4;
+  --ins-cat-3: #818CF8;
+  --ins-cat-3-bg: rgba(99, 102, 241, .22);
+  --ins-cat-3-ink: #A5B4FC;
+  --ins-cat-4: #A3E635;
+  --ins-cat-4-bg: rgba(132, 204, 22, .22);
+  --ins-cat-4-ink: #BEF264;
+  --ins-cat-5: #E879F9;
+  --ins-cat-5-bg: rgba(217, 70, 239, .22);
+  --ins-cat-5-ink: #F0ABFC;
+  --ins-cat-6: #38BDF8;
+  --ins-cat-6-bg: rgba(14, 165, 233, .22);
+  --ins-cat-6-ink: #7DD3FC;
+  --ins-cat-7: #C29467;
+  --ins-cat-7-bg: rgba(168, 117, 69, .22);
+  --ins-cat-7-ink: #D7B899;
+  --ins-cat-8: #C084FC;
+  --ins-cat-8-bg: rgba(168, 85, 247, .22);
+  --ins-cat-8-ink: #D8B4FE;
 
   --ins-line: rgba(255, 255, 255, .08);
   --ins-hr: rgba(255, 255, 255, .16);
@@ -612,6 +671,7 @@ html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }
     --ins-sh-sm: 0 1px 3px rgba(0, 0, 0, .40), 0 1px 2px rgba(0, 0, 0, .30);
     --ins-sh-md: 0 4px 8px -1px rgba(0, 0, 0, .45), 0 2px 4px -2px rgba(0, 0, 0, .35);
     --ins-sh-subtle: 0 2px 8px rgba(0, 0, 0, .30);
+    --ins-sh-panel: 0 1px 2px rgba(0, 0, 0, .30), 0 4px 14px rgba(0, 0, 0, .28);
     --ins-sh-bubble: 0 4px 16px rgba(0, 0, 0, .38);
     --ins-shimmer: linear-gradient(90deg, transparent, rgba(255, 255, 255, .14), transparent);
     --ins-shimmer-dark: linear-gradient(90deg, transparent, rgba(255, 255, 255, .09), transparent);
@@ -627,6 +687,7 @@ html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }
     --ins-tone-warn: #FBBF24;
     --ins-tone-warn-bg: rgba(245, 158, 11, .18);
     --ins-tone-warn-bd: rgba(245, 158, 11, .28);
+    --ins-tone-warn-signal: #FB923C;
     --ins-tone-bad: #FCA5A5;
     --ins-tone-bad-bg: rgba(239, 68, 68, .18);
     --ins-tone-bad-bd: rgba(239, 68, 68, .28);
@@ -639,6 +700,30 @@ html[dir="ltr"] { --ins-font-body: var(--ins-font-body-en); }
     --ins-tone-brand-bg: rgba(var(--ins-primary-rgb), .20);
     --ins-tone-brand-bd: rgba(var(--ins-primary-rgb), .32);
     --ins-tone-brand-soft: var(--ins-primary-darker);
+    --ins-cat-1: #2DD4BF;
+    --ins-cat-1-bg: rgba(20, 184, 166, .22);
+    --ins-cat-1-ink: #5EEAD4;
+    --ins-cat-2: #F472B6;
+    --ins-cat-2-bg: rgba(236, 72, 153, .22);
+    --ins-cat-2-ink: #F9A8D4;
+    --ins-cat-3: #818CF8;
+    --ins-cat-3-bg: rgba(99, 102, 241, .22);
+    --ins-cat-3-ink: #A5B4FC;
+    --ins-cat-4: #A3E635;
+    --ins-cat-4-bg: rgba(132, 204, 22, .22);
+    --ins-cat-4-ink: #BEF264;
+    --ins-cat-5: #E879F9;
+    --ins-cat-5-bg: rgba(217, 70, 239, .22);
+    --ins-cat-5-ink: #F0ABFC;
+    --ins-cat-6: #38BDF8;
+    --ins-cat-6-bg: rgba(14, 165, 233, .22);
+    --ins-cat-6-ink: #7DD3FC;
+    --ins-cat-7: #C29467;
+    --ins-cat-7-bg: rgba(168, 117, 69, .22);
+    --ins-cat-7-ink: #D7B899;
+    --ins-cat-8: #C084FC;
+    --ins-cat-8-bg: rgba(168, 85, 247, .22);
+    --ins-cat-8-ink: #D8B4FE;
     --ins-line: rgba(255, 255, 255, .08);
     --ins-hr: rgba(255, 255, 255, .16);
     --ins-line-glass: rgba(255, 255, 255, .10);

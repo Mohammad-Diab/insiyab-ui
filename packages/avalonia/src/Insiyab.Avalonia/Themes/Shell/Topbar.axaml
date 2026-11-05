@@ -6,7 +6,7 @@
     <ResourceDictionary>
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
-          <BoxShadows x:Key="InsTopbarFrostShadow">0 1 0 0 #D9FFFFFF, 0 1 3 0 #0F0F172A, 0 1 2 0 #0A0F172A</BoxShadows>
+          <BoxShadows x:Key="InsTopbarFrostShadow">0 1 0 0 #66FFFFFF, 0 1 3 0 #0F0F172A, 0 1 2 0 #0A0F172A</BoxShadows>
           <BoxShadows x:Key="InsZonePillShadow">0 4 16 0 #0F0F172A, inset 0 1 0 0 #38FFFFFF</BoxShadows>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">

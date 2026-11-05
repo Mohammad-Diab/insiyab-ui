@@ -63,7 +63,7 @@ public class DarkTintTests
 
     public static IEnumerable<object[]> TintKeys() => new[]
     {
-        "InsBrandTint", "InsChart1", "InsSelection", "InsScrollbarThumb", "InsScrollbarThumbHover", "InsScrollbarThumbPressed",
+        "InsBrandTint", "InsBrandTintBg", "InsBrandTintBd", "InsChart1", "InsSelection", "InsScrollbarThumb", "InsScrollbarThumbHover", "InsScrollbarThumbPressed",
         "InsButtonGhostBorder", "InsButtonGhostHover", "InsButtonGhostPressed", "InsButtonToggleOn", "InsButtonToggleOnBorder",
         "InsCheckBoxHoverBorder", "InsCheckBoxRing", "InsTileHoverBorder", "InsMatrixCardHover", "InsStatBrandBg",
         "InsTableRule", "InsTableGrip", "InsTableSortHover", "InsTableEditRing", "InsToolbarOn", "InsTabLineGlow", "InsTreeSelected",

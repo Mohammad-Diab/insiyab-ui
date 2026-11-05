@@ -8,8 +8,10 @@
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
           <SolidColorBrush x:Key="InsLinkHover" Color="{DynamicResource InsToneBrandSoftColor}" />
-          <!-- The brand as a tint takes it: the primary on light, its middle shade on dark -->
+          <!-- The brand as a tint takes it: the primary on light, its middle shade on dark; Bg and Bd are its soft fill and edge -->
           <SolidColorBrush x:Key="InsBrandTint" Color="{DynamicResource InsPrimaryColor}" />
+          <SolidColorBrush x:Key="InsBrandTintBg" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.12" />
+          <SolidColorBrush x:Key="InsBrandTintBd" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.20" />
           <SolidColorBrush x:Key="InsSelection" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.22" />
           <SolidColorBrush x:Key="InsScrollbarThumb" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.28" />
           <SolidColorBrush x:Key="InsScrollbarThumbHover" Color="{DynamicResource InsPrimaryRgbColor}" Opacity="0.40" />
@@ -18,6 +20,8 @@
         <ResourceDictionary x:Key="Dark">
           <SolidColorBrush x:Key="InsLinkHover" Color="{DynamicResource InsText1Color}" />
           <SolidColorBrush x:Key="InsBrandTint" Color="{DynamicResource InsPrimaryMidColor}" />
+          <SolidColorBrush x:Key="InsBrandTintBg" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.20" />
+          <SolidColorBrush x:Key="InsBrandTintBd" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.32" />
           <SolidColorBrush x:Key="InsSelection" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.22" />
           <SolidColorBrush x:Key="InsScrollbarThumb" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
           <SolidColorBrush x:Key="InsScrollbarThumbHover" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.65" />

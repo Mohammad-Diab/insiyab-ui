@@ -12,8 +12,8 @@
       <SolidColorBrush x:Key="InsGlassInner" Color="#80FFFFFF" />
       <Color x:Key="InsGlassStrongColor">#E6FFFFFF</Color>
       <SolidColorBrush x:Key="InsGlassStrong" Color="#E6FFFFFF" />
-      <Color x:Key="InsRimColor">#D9FFFFFF</Color>
-      <SolidColorBrush x:Key="InsRim" Color="#D9FFFFFF" />
+      <Color x:Key="InsRimColor">#66FFFFFF</Color>
+      <SolidColorBrush x:Key="InsRim" Color="#66FFFFFF" />
       <Color x:Key="InsRimTopColor">#F2FFFFFF</Color>
       <SolidColorBrush x:Key="InsRimTop" Color="#F2FFFFFF" />
       <Color x:Key="InsSegOnBgColor">#E0FFFFFF</Color>
@@ -25,6 +25,7 @@
       <BoxShadows x:Key="InsShSm">0 1 3 0 #0F0F172A, 0 1 2 0 #0A0F172A</BoxShadows>
       <BoxShadows x:Key="InsShMd">0 4 6 -1 #120F172A, 0 2 4 -2 #0D0F172A</BoxShadows>
       <BoxShadows x:Key="InsShSubtle">0 2 8 0 #0A0F172A</BoxShadows>
+      <BoxShadows x:Key="InsShPanel">0 1 2 0 #0A0F172A, 0 4 14 0 #0D0F172A</BoxShadows>
       <BoxShadows x:Key="InsShBubble">0 4 16 0 #0F0F172A</BoxShadows>
       <LinearGradientBrush x:Key="InsShimmer" StartPoint="0%,50%" EndPoint="100%,50%">
         <GradientStop Offset="0" Color="#00FFFFFF" />
@@ -60,6 +61,8 @@
       <SolidColorBrush x:Key="InsToneWarnBg" Color="#1FF59E0B" />
       <Color x:Key="InsToneWarnBdColor">#38F59E0B</Color>
       <SolidColorBrush x:Key="InsToneWarnBd" Color="#38F59E0B" />
+      <Color x:Key="InsToneWarnSignalColor">#FFEA580C</Color>
+      <SolidColorBrush x:Key="InsToneWarnSignal" Color="#FFEA580C" />
       <Color x:Key="InsToneBadColor">#FF991B1B</Color>
       <SolidColorBrush x:Key="InsToneBad" Color="#FF991B1B" />
       <Color x:Key="InsToneBadBgColor">#1AEF4444</Color>
@@ -78,6 +81,54 @@
       <SolidColorBrush x:Key="InsToneMuteBg" Color="#1A64748B" />
       <Color x:Key="InsToneMuteBdColor">#2664748B</Color>
       <SolidColorBrush x:Key="InsToneMuteBd" Color="#2664748B" />
+      <Color x:Key="InsCat1Color">#FF0D9488</Color>
+      <SolidColorBrush x:Key="InsCat1" Color="#FF0D9488" />
+      <Color x:Key="InsCat1BgColor">#2414B8A6</Color>
+      <SolidColorBrush x:Key="InsCat1Bg" Color="#2414B8A6" />
+      <Color x:Key="InsCat1InkColor">#FF115E59</Color>
+      <SolidColorBrush x:Key="InsCat1Ink" Color="#FF115E59" />
+      <Color x:Key="InsCat2Color">#FFDB2777</Color>
+      <SolidColorBrush x:Key="InsCat2" Color="#FFDB2777" />
+      <Color x:Key="InsCat2BgColor">#24EC4899</Color>
+      <SolidColorBrush x:Key="InsCat2Bg" Color="#24EC4899" />
+      <Color x:Key="InsCat2InkColor">#FF9D174D</Color>
+      <SolidColorBrush x:Key="InsCat2Ink" Color="#FF9D174D" />
+      <Color x:Key="InsCat3Color">#FF4F46E5</Color>
+      <SolidColorBrush x:Key="InsCat3" Color="#FF4F46E5" />
+      <Color x:Key="InsCat3BgColor">#246366F1</Color>
+      <SolidColorBrush x:Key="InsCat3Bg" Color="#246366F1" />
+      <Color x:Key="InsCat3InkColor">#FF3730A3</Color>
+      <SolidColorBrush x:Key="InsCat3Ink" Color="#FF3730A3" />
+      <Color x:Key="InsCat4Color">#FF65A30D</Color>
+      <SolidColorBrush x:Key="InsCat4" Color="#FF65A30D" />
+      <Color x:Key="InsCat4BgColor">#2484CC16</Color>
+      <SolidColorBrush x:Key="InsCat4Bg" Color="#2484CC16" />
+      <Color x:Key="InsCat4InkColor">#FF3F6212</Color>
+      <SolidColorBrush x:Key="InsCat4Ink" Color="#FF3F6212" />
+      <Color x:Key="InsCat5Color">#FFC026D3</Color>
+      <SolidColorBrush x:Key="InsCat5" Color="#FFC026D3" />
+      <Color x:Key="InsCat5BgColor">#24D946EF</Color>
+      <SolidColorBrush x:Key="InsCat5Bg" Color="#24D946EF" />
+      <Color x:Key="InsCat5InkColor">#FF86198F</Color>
+      <SolidColorBrush x:Key="InsCat5Ink" Color="#FF86198F" />
+      <Color x:Key="InsCat6Color">#FF0284C7</Color>
+      <SolidColorBrush x:Key="InsCat6" Color="#FF0284C7" />
+      <Color x:Key="InsCat6BgColor">#240EA5E9</Color>
+      <SolidColorBrush x:Key="InsCat6Bg" Color="#240EA5E9" />
+      <Color x:Key="InsCat6InkColor">#FF075985</Color>
+      <SolidColorBrush x:Key="InsCat6Ink" Color="#FF075985" />
+      <Color x:Key="InsCat7Color">#FF8B5E34</Color>
+      <SolidColorBrush x:Key="InsCat7" Color="#FF8B5E34" />
+      <Color x:Key="InsCat7BgColor">#24A87545</Color>
+      <SolidColorBrush x:Key="InsCat7Bg" Color="#24A87545" />
+      <Color x:Key="InsCat7InkColor">#FF5C3B1E</Color>
+      <SolidColorBrush x:Key="InsCat7Ink" Color="#FF5C3B1E" />
+      <Color x:Key="InsCat8Color">#FF9333EA</Color>
+      <SolidColorBrush x:Key="InsCat8" Color="#FF9333EA" />
+      <Color x:Key="InsCat8BgColor">#24A855F7</Color>
+      <SolidColorBrush x:Key="InsCat8Bg" Color="#24A855F7" />
+      <Color x:Key="InsCat8InkColor">#FF6B21A8</Color>
+      <SolidColorBrush x:Key="InsCat8Ink" Color="#FF6B21A8" />
       <Color x:Key="InsLineColor">#140F172A</Color>
       <SolidColorBrush x:Key="InsLine" Color="#140F172A" />
       <Color x:Key="InsHrColor">#2E0F172A</Color>
@@ -127,6 +178,7 @@
       <BoxShadows x:Key="InsShSm">0 1 3 0 #66000000, 0 1 2 0 #4D000000</BoxShadows>
       <BoxShadows x:Key="InsShMd">0 4 8 -1 #73000000, 0 2 4 -2 #59000000</BoxShadows>
       <BoxShadows x:Key="InsShSubtle">0 2 8 0 #4D000000</BoxShadows>
+      <BoxShadows x:Key="InsShPanel">0 1 2 0 #4D000000, 0 4 14 0 #47000000</BoxShadows>
       <BoxShadows x:Key="InsShBubble">0 4 16 0 #61000000</BoxShadows>
       <LinearGradientBrush x:Key="InsShimmer" StartPoint="0%,50%" EndPoint="100%,50%">
         <GradientStop Offset="0" Color="#00FFFFFF" />
@@ -162,6 +214,8 @@
       <SolidColorBrush x:Key="InsToneWarnBg" Color="#2EF59E0B" />
       <Color x:Key="InsToneWarnBdColor">#47F59E0B</Color>
       <SolidColorBrush x:Key="InsToneWarnBd" Color="#47F59E0B" />
+      <Color x:Key="InsToneWarnSignalColor">#FFFB923C</Color>
+      <SolidColorBrush x:Key="InsToneWarnSignal" Color="#FFFB923C" />
       <Color x:Key="InsToneBadColor">#FFFCA5A5</Color>
       <SolidColorBrush x:Key="InsToneBad" Color="#FFFCA5A5" />
       <Color x:Key="InsToneBadBgColor">#2EEF4444</Color>
@@ -180,6 +234,54 @@
       <SolidColorBrush x:Key="InsToneMuteBg" Color="#2994A3B8" />
       <Color x:Key="InsToneMuteBdColor">#3894A3B8</Color>
       <SolidColorBrush x:Key="InsToneMuteBd" Color="#3894A3B8" />
+      <Color x:Key="InsCat1Color">#FF2DD4BF</Color>
+      <SolidColorBrush x:Key="InsCat1" Color="#FF2DD4BF" />
+      <Color x:Key="InsCat1BgColor">#3814B8A6</Color>
+      <SolidColorBrush x:Key="InsCat1Bg" Color="#3814B8A6" />
+      <Color x:Key="InsCat1InkColor">#FF5EEAD4</Color>
+      <SolidColorBrush x:Key="InsCat1Ink" Color="#FF5EEAD4" />
+      <Color x:Key="InsCat2Color">#FFF472B6</Color>
+      <SolidColorBrush x:Key="InsCat2" Color="#FFF472B6" />
+      <Color x:Key="InsCat2BgColor">#38EC4899</Color>
+      <SolidColorBrush x:Key="InsCat2Bg" Color="#38EC4899" />
+      <Color x:Key="InsCat2InkColor">#FFF9A8D4</Color>
+      <SolidColorBrush x:Key="InsCat2Ink" Color="#FFF9A8D4" />
+      <Color x:Key="InsCat3Color">#FF818CF8</Color>
+      <SolidColorBrush x:Key="InsCat3" Color="#FF818CF8" />
+      <Color x:Key="InsCat3BgColor">#386366F1</Color>
+      <SolidColorBrush x:Key="InsCat3Bg" Color="#386366F1" />
+      <Color x:Key="InsCat3InkColor">#FFA5B4FC</Color>
+      <SolidColorBrush x:Key="InsCat3Ink" Color="#FFA5B4FC" />
+      <Color x:Key="InsCat4Color">#FFA3E635</Color>
+      <SolidColorBrush x:Key="InsCat4" Color="#FFA3E635" />
+      <Color x:Key="InsCat4BgColor">#3884CC16</Color>
+      <SolidColorBrush x:Key="InsCat4Bg" Color="#3884CC16" />
+      <Color x:Key="InsCat4InkColor">#FFBEF264</Color>
+      <SolidColorBrush x:Key="InsCat4Ink" Color="#FFBEF264" />
+      <Color x:Key="InsCat5Color">#FFE879F9</Color>
+      <SolidColorBrush x:Key="InsCat5" Color="#FFE879F9" />
+      <Color x:Key="InsCat5BgColor">#38D946EF</Color>
+      <SolidColorBrush x:Key="InsCat5Bg" Color="#38D946EF" />
+      <Color x:Key="InsCat5InkColor">#FFF0ABFC</Color>
+      <SolidColorBrush x:Key="InsCat5Ink" Color="#FFF0ABFC" />
+      <Color x:Key="InsCat6Color">#FF38BDF8</Color>
+      <SolidColorBrush x:Key="InsCat6" Color="#FF38BDF8" />
+      <Color x:Key="InsCat6BgColor">#380EA5E9</Color>
+      <SolidColorBrush x:Key="InsCat6Bg" Color="#380EA5E9" />
+      <Color x:Key="InsCat6InkColor">#FF7DD3FC</Color>
+      <SolidColorBrush x:Key="InsCat6Ink" Color="#FF7DD3FC" />
+      <Color x:Key="InsCat7Color">#FFC29467</Color>
+      <SolidColorBrush x:Key="InsCat7" Color="#FFC29467" />
+      <Color x:Key="InsCat7BgColor">#38A87545</Color>
+      <SolidColorBrush x:Key="InsCat7Bg" Color="#38A87545" />
+      <Color x:Key="InsCat7InkColor">#FFD7B899</Color>
+      <SolidColorBrush x:Key="InsCat7Ink" Color="#FFD7B899" />
+      <Color x:Key="InsCat8Color">#FFC084FC</Color>
+      <SolidColorBrush x:Key="InsCat8" Color="#FFC084FC" />
+      <Color x:Key="InsCat8BgColor">#38A855F7</Color>
+      <SolidColorBrush x:Key="InsCat8Bg" Color="#38A855F7" />
+      <Color x:Key="InsCat8InkColor">#FFD8B4FE</Color>
+      <SolidColorBrush x:Key="InsCat8Ink" Color="#FFD8B4FE" />
       <Color x:Key="InsLineColor">#14FFFFFF</Color>
       <SolidColorBrush x:Key="InsLine" Color="#14FFFFFF" />
       <Color x:Key="InsHrColor">#29FFFFFF</Color>
