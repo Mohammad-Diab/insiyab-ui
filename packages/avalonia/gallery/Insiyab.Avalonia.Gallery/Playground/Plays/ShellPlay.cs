@@ -182,6 +182,8 @@ public static class ShellPlay
         },
     };
 
+    public const string MarkExample = "<Border Classes=\"shell-mark xl\"><TextBlock Text=\"م\" /></Border>";
+
     public static PlayDef Sidebar { get; } = new()
     {
         Id = "sidebar",
@@ -203,6 +205,7 @@ public static class ShellPlay
             Row("الأساس", "shell-content", "على `Border` في العمود الرئيسي: المحتوى، يملأ ما بقي من العرض.", OptionKind.Class, true),
             Row("الأساس", "ins:Shell.FrostsTopbar", "على `ScrollViewer` المحتوى: إذا تمرر يصير الشريط العلوي بجانبه زجاجًا مصنفرًا.", OptionKind.Property, true),
             Row("الشريط الجانبي", "shell-brand", "على `Border` في أعلى الشريط: الهوية، وفيها `Border.shell-mark` واسم التطبيق `TextBlock.shell-brand-name`.", OptionKind.Class),
+            Row("الشريط الجانبي", "xl", "مع `shell-mark`: العلامة بقطر 100، بحرفها أو أيقونتها وزواياها على قدرها، لصفحة «حول» أو شاشة ترحيب.", OptionKind.Class),
             Row("الشريط الجانبي", "shell-nav", "على `ListBox`: روابط الشريط، كل رابط `ListBoxItem` تسبقه أيقونة، ويطير المؤشر من المختار إلى ما تختاره.", OptionKind.Class),
             Row("الشريط الجانبي", "shell-link", "على `Button`: رابط في الشريط خارج القائمة، كالخروج.", OptionKind.Class),
             Row("التصفية", "ins:Shell.FilterPlaceholderText", "النص الباهت في حقل التصفية، وهو «بحث» إن لم تذكره.", OptionKind.Property),

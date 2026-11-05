@@ -22,6 +22,14 @@
     <pg:PlayText Classes="p" Markup="تحمل `ins:Avatar` حرفين أو صورة، ويرص `ins:AvatarGroup` عدة صور يتداخل بعضها في بعض." />
     <pg:Playground Def="{x:Static pg:BadgesPlay.Avatar}" />
 
+    <TextBlock Classes="section" Text="شارة التاريخ" />
+    <pg:PlayText Classes="p" Markup="تضع `ins:DateBadge` اليوم فوق شهره، من `Date` بلغة الصفحة أو من `Day` و`Month` كما تكتبهما، وتأخذ نبرات الشارة ومعها `filled`." />
+    <pg:Playground Def="{x:Static pg:BadgesPlay.Date}" />
+
+    <TextBlock Classes="section" Text="ألوان الفئات" />
+    <pg:PlayText Classes="p" Markup="ثمانية ألوان للفئات لا للحالات، بالكلاسات `cat1` إلى `cat8` على الشارة والعدد والصورة الرمزية، في الوضع الفاتح وبجانبه الداكن." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:BadgesPlay.PaletteExample}" />
+
     <TextBlock Classes="section" Text="المبالغ" />
     <pg:PlayText Classes="p" Markup="يكتب `ins:Money` القيمة من `Value` وتليها العملة من `Currency`. ولأن اتجاه القيمة معزول عما حولها تبقى إشارة السالب في مكانها." />
     <pg:Playground Def="{x:Static pg:BadgesPlay.Money}" />

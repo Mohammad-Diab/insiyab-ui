@@ -21,6 +21,10 @@
     <pg:PlayText Classes="p" Markup="رأس الشريط ثابت، والروابط وحدها تتمرر تحته، كما يليق بتطبيق سطح المكتب. ومع `ins:Shell.HeadScrolls` يتمرر الرأس معها، كما في الويب." />
     <pg:Playground Def="{x:Static pg:ShellPlay.Sidebar}" />
 
+    <TextBlock Classes="section" Text="علامة كبيرة" />
+    <pg:PlayText Classes="p" Markup="مع `xl` تصير `shell-mark` بقطر 100، ويكبر معها حرفها أو أيقونتها وتستدير زواياها على قدرها." />
+    <pg:PlayExample Layout="Row" Code="{x:Static pg:ShellPlay.MarkExample}" />
+
     <TextBlock Classes="section" Text="الطي والدرج" />
     <pg:PlayText Classes="p" Markup="أي زر يحمل `ins:Shell.TogglesSidebar` يطوي الشريط على الحاسوب. فإذا ضاق الهيكل عن 900 صار الشريط درجًا مغلقًا يفتحه الزر نفسه، ويغلقه النقر على الخلفية أو مفتاح `Esc`. اضغط زر القائمة في هذا الهيكل الضيق فيفتح الدرج." />
     <pg:PlayExample Layout="Row" Code="{x:Static pg:ShellPlay.DrawerExample}" />

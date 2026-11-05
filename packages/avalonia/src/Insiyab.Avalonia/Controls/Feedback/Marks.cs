@@ -5,9 +5,17 @@ using Avalonia.Controls.Primitives;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>A status label, the web's <c>.ins-pill</c>. Tone classes <c>ok warn bad info brand</c> (none is neutral); <c>dot</c> adds the dot. A pressable one is a <c>Button</c> with the classes <c>pill</c>, a tone and <c>dot</c>.</summary>
+/// <summary>A status label, the web's <c>.ins-pill</c>. Tone classes <c>ok warn bad info brand mute</c> (none is neutral) or a category <c>cat1</c>…<c>cat8</c>; <c>dot</c> adds the dot, and an empty dot pill is the dot alone; <c>dot peek</c> shows only the dot and opens over its neighbours (<c>back</c> toward the start); <c>sm</c> fits a line of text; <c>outline</c> drops the fill. A pressable one is a <c>Button</c> with the classes <c>pill</c>, a tone and <c>dot</c>.</summary>
+[PseudoClasses(":empty")]
 public class Pill : ContentControl
 {
+    public Pill() => PseudoClasses.Set(":empty", true);
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == ContentProperty) PseudoClasses.Set(":empty", change.NewValue is null or string { Length: 0 });
+    }
 }
 
 /// <summary>A small count, the web's <c>.ins-badge</c>, in the brand tint or a tone class <c>ok warn bad mute</c>. It pops in when it appears and whenever its count changes.</summary>
@@ -28,7 +36,7 @@ public class Badge : ContentControl
     private void Pop() => Entrance.Play(this, EntranceEffect.Pop);
 }
 
-/// <summary>A brand disc with one or two letters or an image in it, the web's <c>.ins-avatar</c>. Classes <c>sm lg</c>, and <c>more</c> for the "+4" that ends a group.</summary>
+/// <summary>A disc with one or two letters, centred by their ink, or an image in it, the web's <c>.ins-avatar</c>. Classes <c>sm lg xl xxl</c>, a category <c>cat1</c>…<c>cat8</c>, and <c>more</c> for the "+4" that ends a group.</summary>
 [PseudoClasses(":grouped")]
 public class Avatar : ContentControl
 {

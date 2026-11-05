@@ -221,7 +221,7 @@ public class FeedbackTests
         Assert.True(Part<Ellipse>(a, "PART_Ring").IsVisible);
         Assert.False(Part<Ellipse>(sm, "PART_Ring").IsVisible);
         AssertBrush(more, "InsToneMuteBg", () => more.Background);
-        Assert.Equal(FlowDirection.LeftToRight, more.GetVisualDescendants().OfType<TextBlock>().First().FlowDirection);
+        Assert.Equal(FlowDirection.LeftToRight, more.GetVisualDescendants().OfType<AvatarInk>().First().FlowDirection);
         Assert.IsType<LinearGradientBrush>(a.Background);
         Assert.Equal(FlowDirection.LeftToRight, Part<Border>(a, "PART_Face").FlowDirection);
         window.Close();

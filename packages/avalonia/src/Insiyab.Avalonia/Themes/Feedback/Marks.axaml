@@ -14,6 +14,7 @@
           <SolidColorBrush x:Key="InsBadgeMuteInk" Color="{DynamicResource InsToneMuteColor}" />
           <SolidColorBrush x:Key="InsAvatarMoreBg" Color="{DynamicResource InsToneMuteBgColor}" />
           <SolidColorBrush x:Key="InsAvatarMoreInk" Color="{DynamicResource InsText2Color}" />
+          <SolidColorBrush x:Key="InsDateBadgeFilledInk" Color="#FFFFFFFF" />
           <LinearGradientBrush x:Key="InsAvatarFill" StartPoint="0%,0%" EndPoint="100%,100%">
             <GradientStop Offset="0" Color="{DynamicResource InsPrimaryColor}" />
             <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
@@ -28,6 +29,7 @@
           <SolidColorBrush x:Key="InsBadgeMuteInk" Color="{DynamicResource InsText1Color}" />
           <SolidColorBrush x:Key="InsAvatarMoreBg" Color="#1FFFFFFF" />
           <SolidColorBrush x:Key="InsAvatarMoreInk" Color="{DynamicResource InsText1Color}" />
+          <SolidColorBrush x:Key="InsDateBadgeFilledInk" Color="#FF0F172A" />
           <LinearGradientBrush x:Key="InsAvatarFill" StartPoint="0%,0%" EndPoint="100%,100%">
             <GradientStop Offset="0" Color="{DynamicResource InsPrimaryColor}" />
             <GradientStop Offset="1" Color="{DynamicResource InsPrimaryDarkColor}" />
@@ -35,7 +37,7 @@
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
-      <!-- Pill: 3px/12px, a 5px gap, .75rem at 700 -->
+      <!-- Pill: 3px/12px, a 5px gap, .75rem at 700; sm sits inside a line of text; an empty dot pill is the dot alone; dot peek opens over its neighbours -->
       <ControlTheme x:Key="{x:Type ctl:Pill}" TargetType="ctl:Pill">
         <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
         <Setter Property="Foreground" Value="{DynamicResource InsToneMute}" />
@@ -49,24 +51,175 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template">
           <ControlTemplate>
-            <ctl:TemplateBorder x:Name="PART_Face"
-                    Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="{TemplateBinding CornerRadius}"
-                    Padding="{TemplateBinding Padding}">
-              <StackPanel Orientation="Horizontal" Spacing="5">
-                <Ellipse x:Name="PART_Dot" Width="7" Height="7" VerticalAlignment="Center" IsVisible="False"
-                         Fill="{TemplateBinding Foreground}" />
-                <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
-                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                                  VerticalAlignment="Center" LineHeight="18" />
-              </StackPanel>
-            </ctl:TemplateBorder>
+            <ctl:PillPeek x:Name="PART_Peek">
+              <ctl:TemplateBorder x:Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      Padding="{TemplateBinding Padding}">
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                  <Ellipse x:Name="PART_Dot" Width="7" Height="7" VerticalAlignment="Center" IsVisible="False"
+                           Fill="{TemplateBinding Foreground}" />
+                  <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    VerticalAlignment="Center" LineHeight="18" />
+                  <Ellipse x:Name="PART_DotEnd" Width="8" Height="8" VerticalAlignment="Center" IsVisible="False"
+                           Fill="{TemplateBinding Foreground}" />
+                </StackPanel>
+              </ctl:TemplateBorder>
+            </ctl:PillPeek>
           </ControlTemplate>
         </Setter>
         <Style Selector="^.dot /template/ Ellipse#PART_Dot">
           <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^.sm">
+          <Setter Property="Padding" Value="7,1" />
+          <Setter Property="FontSize" Value="10" />
+          <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="LineHeight" Value="14" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_Dot">
+            <Setter Property="Width" Value="6" />
+            <Setter Property="Height" Value="6" />
+          </Style>
+        </Style>
+        <Style Selector="^.mute">
+          <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneMute}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneMuteBd}" />
+        </Style>
+        <!-- Categories, not states: a soft fill, an ink that reads on it, and the solid hue for the dot -->
+        <Style Selector="^.cat1">
+          <Setter Property="Background" Value="{DynamicResource InsCat1Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat1Ink}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCat1Bg}" />
+          <Style Selector="^ /template/ Ellipse">
+            <Setter Property="Fill" Value="{DynamicResource InsCat1}" />
+          </Style>
+        </Style>
+        <Style Selector="^.cat2">
+          <Setter Property="Background" Value="{DynamicResource InsCat2Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat2Ink}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCat2Bg}" />
+          <Style Selector="^ /template/ Ellipse">
+            <Setter Property="Fill" Value="{DynamicResource InsCat2}" />
+          </Style>
+        </Style>
+        <Style Selector="^.cat3">
+          <Setter Property="Background" Value="{DynamicResource InsCat3Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat3Ink}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCat3Bg}" />
+          <Style Selector="^ /template/ Ellipse">
+            <Setter Property="Fill" Value="{DynamicResource InsCat3}" />
+          </Style>
+        </Style>
+        <Style Selector="^.cat4">
+          <Setter Property="Background" Value="{DynamicResource InsCat4Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat4Ink}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCat4Bg}" />
+          <Style Selector="^ /template/ Ellipse">
+            <Setter Property="Fill" Value="{DynamicResource InsCat4}" />
+          </Style>
+        </Style>
+        <Style Selector="^.cat5">
+          <Setter Property="Background" Value="{DynamicResource InsCat5Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat5Ink}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCat5Bg}" />
+          <Style Selector="^ /template/ Ellipse">
+            <Setter Property="Fill" Value="{DynamicResource InsCat5}" />
+          </Style>
+        </Style>
+        <Style Selector="^.cat6">
+          <Setter Property="Background" Value="{DynamicResource InsCat6Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat6Ink}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCat6Bg}" />
+          <Style Selector="^ /template/ Ellipse">
+            <Setter Property="Fill" Value="{DynamicResource InsCat6}" />
+          </Style>
+        </Style>
+        <Style Selector="^.cat7">
+          <Setter Property="Background" Value="{DynamicResource InsCat7Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat7Ink}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCat7Bg}" />
+          <Style Selector="^ /template/ Ellipse">
+            <Setter Property="Fill" Value="{DynamicResource InsCat7}" />
+          </Style>
+        </Style>
+        <Style Selector="^.cat8">
+          <Setter Property="Background" Value="{DynamicResource InsCat8Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat8Ink}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsCat8Bg}" />
+          <Style Selector="^ /template/ Ellipse">
+            <Setter Property="Fill" Value="{DynamicResource InsCat8}" />
+          </Style>
+        </Style>
+        <!-- Warn reads orange at dot size; its words keep the brown -->
+        <Style Selector="^.warn /template/ Ellipse">
+          <Setter Property="Fill" Value="{DynamicResource InsToneWarnSignal}" />
+        </Style>
+        <Style Selector="^.outline /template/ :is(Border)#PART_Face">
+          <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <!-- An empty dot pill is the dot alone, 8px, in its tone -->
+        <Style Selector="^.dot:empty">
+          <Style Selector="^ /template/ :is(Border)#PART_Face">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+          </Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_Dot">
+            <Setter Property="Width" Value="8" />
+            <Setter Property="Height" Value="8" />
+          </Style>
+        </Style>
+        <Style Selector="^.brand.dot:empty /template/ Ellipse#PART_Dot">
+          <Setter Property="Fill" Value="{DynamicResource InsToneBrandSoft}" />
+        </Style>
+        <!-- dot peek: only the dot takes room; pointer or keyboard focus opens the whole pill over its neighbours -->
+        <Style Selector="^.peek">
+          <Setter Property="ClipToBounds" Value="False" />
+          <Setter Property="Focusable" Value="True" />
+          <Setter Property="FocusAdorner" Value="{x:Null}" />
+          <Setter Property="AutomationProperties.Name" Value="{Binding $self.Content}" />
+          <Style Selector="^ /template/ ctl|PillPeek#PART_Peek">
+            <Setter Property="IsPeek" Value="True" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_Dot">
+            <Setter Property="Width" Value="8" />
+            <Setter Property="Height" Value="8" />
+          </Style>
+          <Style Selector="^:not(:pointerover):not(:focus-visible)">
+            <Style Selector="^ /template/ :is(Border)#PART_Face">
+              <Setter Property="Background" Value="{x:Null}" />
+              <Setter Property="BorderBrush" Value="Transparent" />
+            </Style>
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter Property="Opacity" Value="0" />
+              <Setter Property="IsHitTestVisible" Value="False" />
+            </Style>
+          </Style>
+          <Style Selector="^:pointerover, ^:focus-visible">
+            <Setter Property="ZIndex" Value="1" />
+          </Style>
+          <Style Selector="^:focus-visible /template/ :is(Border)#PART_Face">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
+          </Style>
+        </Style>
+        <Style Selector="^.peek.back">
+          <Style Selector="^ /template/ ctl|PillPeek#PART_Peek">
+            <Setter Property="Back" Value="True" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_Dot">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_DotEnd">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
         </Style>
       </ControlTheme>
 
@@ -128,6 +281,28 @@
         <Style Selector="^.dot /template/ Ellipse#PART_Dot">
           <Setter Property="IsVisible" Value="True" />
         </Style>
+        <Style Selector="^.sm">
+          <Setter Property="Padding" Value="7,1" />
+          <Setter Property="FontSize" Value="10" />
+          <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="LineHeight" Value="14" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_Dot">
+            <Setter Property="Width" Value="6" />
+            <Setter Property="Height" Value="6" />
+          </Style>
+        </Style>
+        <Style Selector="^.mute">
+          <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneMute}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneMuteBd}" />
+        </Style>
+        <Style Selector="^.outline /template/ :is(Border)#PART_Face">
+          <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="^.warn /template/ Ellipse#PART_Dot">
+          <Setter Property="Fill" Value="{DynamicResource InsToneWarnSignal}" />
+        </Style>
         <Style Selector="^:pointerover">
           <Setter Property="RenderTransform" Value="translateY(-1px)" />
         </Style>
@@ -184,6 +359,38 @@
           <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
           <Setter Property="Foreground" Value="{DynamicResource InsBadgeMuteInk}" />
         </Style>
+        <Style Selector="^.cat1">
+          <Setter Property="Background" Value="{DynamicResource InsCat1Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat1Ink}" />
+        </Style>
+        <Style Selector="^.cat2">
+          <Setter Property="Background" Value="{DynamicResource InsCat2Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat2Ink}" />
+        </Style>
+        <Style Selector="^.cat3">
+          <Setter Property="Background" Value="{DynamicResource InsCat3Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat3Ink}" />
+        </Style>
+        <Style Selector="^.cat4">
+          <Setter Property="Background" Value="{DynamicResource InsCat4Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat4Ink}" />
+        </Style>
+        <Style Selector="^.cat5">
+          <Setter Property="Background" Value="{DynamicResource InsCat5Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat5Ink}" />
+        </Style>
+        <Style Selector="^.cat6">
+          <Setter Property="Background" Value="{DynamicResource InsCat6Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat6Ink}" />
+        </Style>
+        <Style Selector="^.cat7">
+          <Setter Property="Background" Value="{DynamicResource InsCat7Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat7Ink}" />
+        </Style>
+        <Style Selector="^.cat8">
+          <Setter Property="Background" Value="{DynamicResource InsCat8Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat8Ink}" />
+        </Style>
       </ControlTheme>
 
       <!-- Avatar: a brand-gradient disc; the gradient is physical, so the face is an LTR layer under the content -->
@@ -198,6 +405,7 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="ContentTemplate" Value="{x:Static ctl:AvatarInk.Template}" />
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
@@ -226,6 +434,48 @@
           <Setter Property="Height" Value="46" />
           <Setter Property="FontSize" Value="18" />
         </Style>
+        <Style Selector="^.xl">
+          <Setter Property="Width" Value="64" />
+          <Setter Property="Height" Value="64" />
+          <Setter Property="FontSize" Value="24" />
+        </Style>
+        <Style Selector="^.xxl">
+          <Setter Property="Width" Value="100" />
+          <Setter Property="Height" Value="100" />
+          <Setter Property="FontSize" Value="36" />
+        </Style>
+        <Style Selector="^.cat1">
+          <Setter Property="Background" Value="{DynamicResource InsCat1Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat1Ink}" />
+        </Style>
+        <Style Selector="^.cat2">
+          <Setter Property="Background" Value="{DynamicResource InsCat2Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat2Ink}" />
+        </Style>
+        <Style Selector="^.cat3">
+          <Setter Property="Background" Value="{DynamicResource InsCat3Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat3Ink}" />
+        </Style>
+        <Style Selector="^.cat4">
+          <Setter Property="Background" Value="{DynamicResource InsCat4Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat4Ink}" />
+        </Style>
+        <Style Selector="^.cat5">
+          <Setter Property="Background" Value="{DynamicResource InsCat5Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat5Ink}" />
+        </Style>
+        <Style Selector="^.cat6">
+          <Setter Property="Background" Value="{DynamicResource InsCat6Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat6Ink}" />
+        </Style>
+        <Style Selector="^.cat7">
+          <Setter Property="Background" Value="{DynamicResource InsCat7Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat7Ink}" />
+        </Style>
+        <Style Selector="^.cat8">
+          <Setter Property="Background" Value="{DynamicResource InsCat8Bg}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsCat8Ink}" />
+        </Style>
         <!-- "+4", not "4+": the count is its own LTR run -->
         <Style Selector="^.more">
           <Setter Property="Background" Value="{DynamicResource InsAvatarMoreBg}" />
@@ -241,6 +491,89 @@
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Center" />
+      </ControlTheme>
+
+      <!-- DateBadge: a day over its month in a small tile; tones as the pill's, filled for a solid tile -->
+      <ControlTheme x:Key="{x:Type ctl:DateBadge}" TargetType="ctl:DateBadge">
+        <Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsToneMuteBd}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="Padding" Value="8,5" />
+        <Setter Property="MinWidth" Value="48" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <ctl:TemplateBorder x:Name="PART_Face"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}">
+              <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ctl:TemplateText x:Name="PART_Day" Text="{TemplateBinding DayText}" HorizontalAlignment="Center"
+                           FlowDirection="LeftToRight" FontFamily="{DynamicResource InsFontBodyEn}" FontFeatures="+tnum"
+                           FontSize="20" FontWeight="ExtraBold" LineHeight="24" />
+                <ctl:TemplateText x:Name="PART_Month" Text="{TemplateBinding MonthText}" HorizontalAlignment="Center"
+                           FontSize="11" FontWeight="Bold" LineHeight="15" TextTrimming="CharacterEllipsis" />
+              </StackPanel>
+            </ctl:TemplateBorder>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^.ok">
+          <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneOkBd}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneOk}" />
+        </Style>
+        <Style Selector="^.warn">
+          <Setter Property="Background" Value="{DynamicResource InsToneWarnBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneWarnBd}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneWarn}" />
+        </Style>
+        <Style Selector="^.bad">
+          <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+        </Style>
+        <Style Selector="^.info">
+          <Setter Property="Background" Value="{DynamicResource InsToneInfoBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsToneInfoBd}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneInfo}" />
+        </Style>
+        <Style Selector="^.brand">
+          <Setter Property="Background" Value="{DynamicResource InsBrandTintBg}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource InsBrandTintBd}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsPillBrandInk}" />
+        </Style>
+        <Style Selector="^.filled">
+          <Setter Property="Background" Value="{DynamicResource InsToneMute}" />
+          <Setter Property="BorderBrush" Value="Transparent" />
+          <Setter Property="Foreground" Value="{DynamicResource InsDateBadgeFilledInk}" />
+        </Style>
+        <Style Selector="^.filled.ok"><Setter Property="Background" Value="{DynamicResource InsToneOk}" /></Style>
+        <Style Selector="^.filled.warn"><Setter Property="Background" Value="{DynamicResource InsToneWarn}" /></Style>
+        <Style Selector="^.filled.bad"><Setter Property="Background" Value="{DynamicResource InsToneBad}" /></Style>
+        <Style Selector="^.filled.info"><Setter Property="Background" Value="{DynamicResource InsToneInfo}" /></Style>
+        <Style Selector="^.filled.brand">
+          <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsOnPrimaryMid}" />
+        </Style>
+        <Style Selector="^.sm">
+          <Setter Property="MinWidth" Value="40" />
+          <Setter Property="Padding" Value="6,3" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Day"><Setter Property="FontSize" Value="16" /><Setter Property="LineHeight" Value="19" /></Style>
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Month"><Setter Property="FontSize" Value="10" /><Setter Property="LineHeight" Value="13" /></Style>
+        </Style>
+        <Style Selector="^.lg">
+          <Setter Property="MinWidth" Value="60" />
+          <Setter Property="Padding" Value="10,7" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Day"><Setter Property="FontSize" Value="26" /><Setter Property="LineHeight" Value="30" /></Style>
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Month"><Setter Property="FontSize" Value="12" /><Setter Property="LineHeight" Value="16" /></Style>
+        </Style>
       </ControlTheme>
 
       <!-- Money: the figure semibold in tabular Inter, the unit .68 of it in a quieter colour -->

@@ -602,6 +602,15 @@
             <Setter Property="TextElement.FontSize" Value="26" />
             <Setter Property="TextElement.FontWeight" Value="ExtraBold" />
           </Style>
+          <!-- xl: a 100px mark for an about page or a welcome screen; its letter or icon and its corners scale with it -->
+          <Style Selector="^.xl">
+            <Setter Property="Width" Value="100" />
+            <Setter Property="Height" Value="100" />
+            <Setter Property="CornerRadius" Value="{DynamicResource InsRLg}" />
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandMd}" />
+            <Setter Property="TextElement.FontSize" Value="40" />
+            <Setter Property="TextElement.FontWeight" Value="ExtraBold" />
+          </Style>
           <Style Selector="^[(ins|ShellLook.Hot)=True]">
             <Setter Property="RenderTransform" Value="scale(1.06) rotate(-4deg)" />
             <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandMd}" />
