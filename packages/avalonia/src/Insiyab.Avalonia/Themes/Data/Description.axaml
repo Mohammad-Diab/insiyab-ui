@@ -11,11 +11,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
         <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
-        <Setter Property="ContentTemplate">
-          <DataTemplate x:DataType="x:String">
-            <SelectableTextBlock Text="{Binding}" />
-          </DataTemplate>
-        </Setter>
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Template">
           <ControlTemplate>
             <ins:TemplateBorder BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
@@ -25,7 +21,13 @@
                                   VerticalAlignment="Top" TextElement.FontSize="{DynamicResource InsFsSm}"
                                   TextElement.FontWeight="Bold" TextElement.Foreground="{DynamicResource InsLabel}" TextBlock.TextWrapping="Wrap" />
                 <ContentPresenter x:Name="PART_Value" Grid.Column="1" VerticalAlignment="Top" TextBlock.TextWrapping="Wrap"
-                                  Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+                                  Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}">
+                  <ContentPresenter.DataTemplates>
+                    <DataTemplate x:DataType="x:String">
+                      <ins:DescriptionText Text="{Binding}" FocusAdorner="{x:Null}" Padding="6,2" Margin="-6,-2" />
+                    </DataTemplate>
+                  </ContentPresenter.DataTemplates>
+                </ContentPresenter>
               </Grid>
             </ins:TemplateBorder>
           </ControlTemplate>

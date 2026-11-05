@@ -319,15 +319,24 @@ public class Dialog : ContentControl
     // The control focus starts on when the caller knows better than the order below, as the cancel button of a question.
     internal Control? InitialFocus { get; set; }
 
-    // Where focus starts: the first field of the body, else the default button, else the first focusable thing.
+    // Where focus starts: the first field of the body, else the default button, else the first focusable thing; text that is only there to be read is passed over.
     internal Control? FocusTarget()
     {
         if (InitialFocus is { IsEffectivelyVisible: true, IsEffectivelyEnabled: true } initial && this.IsVisualAncestorOf(initial)) return initial;
         var body = this.GetVisualDescendants().OfType<ScrollViewer>().FirstOrDefault(s => s.Name == "PART_Scroll");
-        return (body is null ? null : FocusManager.FindFirstFocusableElement(body)) as Control
+        return (body is null ? null : FirstField(body))
             ?? DefaultButton()
             ?? FocusManager.FindFirstFocusableElement(this) as Control;
     }
+
+    private static Control? FirstField(Control root)
+    {
+        var first = FocusManager.FindFirstFocusableElement(root) as Control;
+        if (first is null || !IsReadOnlyText(first)) return first;
+        return root.GetVisualDescendants().OfType<InputElement>().FirstOrDefault(e => e.Focusable && e.IsEffectivelyVisible && e.IsEffectivelyEnabled && KeyboardNavigation.GetIsTabStop(e) && !IsReadOnlyText(e)) as Control;
+    }
+
+    private static bool IsReadOnlyText(InputElement e) => e is SelectableTextBlock or TextBox { IsReadOnly: true };
 
     // The foot button Enter presses: the one marked IsDefault, else the last main action.
     internal Button? DefaultButton()
