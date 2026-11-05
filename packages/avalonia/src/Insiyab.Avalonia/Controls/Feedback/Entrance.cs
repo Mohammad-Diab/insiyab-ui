@@ -3,9 +3,12 @@ using System.Runtime.CompilerServices;
 using Avalonia;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
@@ -20,6 +23,8 @@ public enum EntranceEffect
     Pop,
     /// <summary>Slides 10px in from the leading edge as it fades in, <c>ins-anim-slide</c>.</summary>
     Slide,
+    /// <summary>Its background lights up in the brand's soft tint and fades back over 1.8s, to draw the eye to a row that has just arrived or was brought into view.</summary>
+    Flash,
 }
 
 /// <summary>Entrance motion, the web's <c>data-ins-reveal</c> and <c>.ins-anim-*</c>. <c>Entrance.Reveal="True"</c> on a panel brings its children in one after another (the first ten 50ms apart, or as RevealCount and RevealStep say) as the panel fades in; <c>Entrance.Effect</c> brings one element in. Both run when the element appears, and <see cref="Replay"/> runs them again. The motion is laid over the element's own transform and opacity at animation priority for its duration only, so a control's own transitions are never touched.</summary>
@@ -41,25 +46,36 @@ public static class Entrance
 
     private static readonly Easing s_ease = new SplineEasing(0.22, 1, 0.36, 1);
     private static readonly Easing s_spring = new SplineEasing(0.34, 1.56, 0.64, 1);
-    private static readonly ConditionalWeakTable<Control, Arrival> s_running = new();
-    private static readonly List<Arrival> s_active = [];
+    private static readonly Easing s_fade = new SplineEasing(0.4, 0, 0.2, 1);
+    private static readonly ConditionalWeakTable<Control, Moving> s_running = new();
+    private static readonly ConditionalWeakTable<Control, Moving> s_flashing = new();
+    private static readonly List<Moving> s_active = [];
     private static readonly Stopwatch s_clock = Stopwatch.StartNew();
     private static readonly HashSet<TopLevel> s_frames = [];
 
     // For tests: the milliseconds every entrance is timed by, which a test can hold and step.
     internal static Func<double> Now { get; set; } = () => s_clock.Elapsed.TotalMilliseconds;
 
-    // One element's entrance: from-values that ease to rest (opacity 1, no offset, scale 1) after a delay.
-    private sealed class Arrival(Control target, double delay, double duration, Easing easing, double opacity, double x, double y, double scale)
+    // One running motion, stepped by the shared frame loop until it says it is done.
+    private abstract class Moving(Control target)
     {
         public readonly Control Target = target;
+
+        public abstract bool Step(double now, bool frame = true);
+
+        public abstract void Stop();
+    }
+
+    // One element's entrance: from-values that ease to rest (opacity 1, no offset, scale 1) after a delay.
+    private sealed class Arrival(Control target, double delay, double duration, Easing easing, double opacity, double x, double y, double scale) : Moving(target)
+    {
         private IDisposable? _opacity;
         private IDisposable? _transform;
 
         // Timed from its first frame, as a CSS animation is, so a slow first layout or render never eats the motion.
         private double _start = double.NaN;
 
-        public bool Step(double now, bool frame = true)
+        public override bool Step(double now, bool frame = true)
         {
             if (frame && double.IsNaN(_start)) _start = now;
             var t = double.IsNaN(_start) ? -delay : now - _start - delay;
@@ -81,13 +97,72 @@ public static class Entrance
             return true;
         }
 
-        public void Stop()
+        public override void Stop()
         {
             _opacity?.Dispose();
             _transform?.Dispose();
             _opacity = _transform = null;
         }
     }
+
+    // A flash: the tint laid over the element's own background at animation priority, up in 200ms, held, and gone by 1.8s, so its own background (and its hover) comes back untouched.
+    private sealed class Glow(Control target, double delay, StyledProperty<IBrush?> background) : Moving(target)
+    {
+        public const double Rise = 200, Hold = 900, Length = 1800;
+        private IDisposable? _set;
+        private Color? _tint;
+        private double _start = double.NaN;
+
+        public override bool Step(double now, bool frame = true)
+        {
+            if (frame && double.IsNaN(_start)) _start = now;
+            var t = double.IsNaN(_start) ? -delay : now - _start - delay;
+            if (t >= Length || Motion.IsStill(Target))
+            {
+                Stop();
+                return false;
+            }
+            var k = t <= 0 ? 0 : t < Rise ? s_ease.Ease(t / Rise) : t < Hold ? 1 : 1 - s_fade.Ease((t - Hold) / (Length - Hold));
+            _set?.Dispose();
+            _set = null;
+            if (k <= 0 || (_tint ??= Tint()) is not { } tint) return true;
+            var own = Target.GetValue(background) as ISolidColorBrush;
+            _set = Target.SetValue(background, new ImmutableSolidColorBrush(Mix(own?.Color ?? Colors.Transparent, tint, k)), BindingPriority.Animation);
+            return true;
+        }
+
+        private Color? Tint() => Target.TryFindResource("InsToneBrandBg", Target.ActualThemeVariant, out var found) && found is ISolidColorBrush b ? b.Color : null;
+
+        public override void Stop()
+        {
+            _set?.Dispose();
+            _set = null;
+        }
+    }
+
+    // The tint laid over the ground and blended in by k, in premultiplied colour, so a half-way flash never darkens.
+    private static Color Mix(Color ground, Color tint, double k)
+    {
+        double ga = ground.A / 255d, ta = tint.A / 255d;
+        double Over(byte t, byte g) => t / 255d * ta + g / 255d * ga * (1 - ta);
+        var oa = ta + ga * (1 - ta);
+        double Lerp(double from, double to) => from + (to - from) * k;
+        var a = Lerp(ga, oa);
+        if (a <= 0) return Colors.Transparent;
+        byte Channel(byte t, byte g) => (byte)Math.Round(Math.Clamp(Lerp(g / 255d * ga, Over(t, g)) / a, 0, 1) * 255);
+        return Color.FromArgb((byte)Math.Round(a * 255), Channel(tint.R, ground.R), Channel(tint.G, ground.G), Channel(tint.B, ground.B));
+    }
+
+    // The background a flash lights: the element's own, whatever kind of element it is.
+    private static StyledProperty<IBrush?>? Background(Control c) => c switch
+    {
+        Border => Border.BackgroundProperty,
+        Panel => Panel.BackgroundProperty,
+        TemplatedControl => TemplatedControl.BackgroundProperty,
+        TextBlock => TextBlock.BackgroundProperty,
+        ContentPresenter => ContentPresenter.BackgroundProperty,
+        _ => null,
+    };
 
     static Entrance()
     {
@@ -159,6 +234,9 @@ public static class Entrance
             case EntranceEffect.Slide:
                 Play(c, delay, 280, s_ease, opacity: 0, x: -10);
                 break;
+            case EntranceEffect.Flash:
+                Flash(c, delay);
+                break;
         }
     }
 
@@ -200,6 +278,23 @@ public static class Entrance
         RequestFrame(c);
     }
 
+    // A flash runs beside a moving entrance on the same element; a second flash starts it again.
+    private static void Flash(Control c, double delay)
+    {
+        if (s_flashing.TryGetValue(c, out var old))
+        {
+            old.Stop();
+            s_active.Remove(old);
+            s_flashing.Remove(c);
+        }
+        if (Motion.IsStill(c) || Background(c) is not { } background) return;
+        var glow = new Glow(c, delay, background);
+        s_flashing.AddOrUpdate(c, glow);
+        s_active.Add(glow);
+        glow.Step(Now(), frame: false);
+        RequestFrame(c);
+    }
+
     // Frames come from the element's top level, so the motion runs with the renderer and stops with it.
     private static void RequestFrame(Control c)
     {
@@ -219,7 +314,8 @@ public static class Entrance
             var motion = s_active[i];
             if (motion.Step(now)) continue;
             s_active.RemoveAt(i);
-            s_running.Remove(motion.Target);
+            if (motion is Glow) s_flashing.Remove(motion.Target);
+            else s_running.Remove(motion.Target);
         }
         foreach (var motion in s_active)
             RequestFrame(motion.Target);

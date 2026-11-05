@@ -73,5 +73,39 @@ public static class RevealPlay
         },
     };
 
-    public static PlayDef[] All { get; } = [Reveal, Anim];
+    public static PlayDef Flash { get; } = new()
+    {
+        Id = "flash",
+        Title = "ومضة تلفت النظر",
+        Wide = _ => true,
+        Controls =
+        [
+            Text("text", "نص السطر", "وصل للتو"),
+        ],
+        Extra =
+        [
+            Row("الأساس", "ins:Entrance.Effect=\"Flash\"", "تضيء خلفية العنصر بلون الهوية الخفيف ثم تخبو في نحو ثانيتين، فتلفت النظر إلى سطر وصل للتو أو انتقلت إليه الصفحة. ولا تجري إذا أطفأ المستخدم المؤثرات.", OptionKind.Property),
+            Row("من الشيفرة", "Entrance.Play(row, EntranceEffect.Flash)", "تومض بالسطر حين تريد، كأن تنقل الصفحة إليه بـ`BringIntoView`؛ وإن كان خارج النظر انتظر حتى يظهر.", OptionKind.Property),
+        ],
+        Axaml = s =>
+            "<StackPanel Spacing=\"4\">\n" +
+            "  <Border Padding=\"12,8\" CornerRadius=\"8\"><TextBlock Text=\"سطر سابق\" /></Border>\n" +
+            $"  <Border Padding=\"12,8\" CornerRadius=\"8\" ins:Entrance.Effect=\"Flash\"><TextBlock Text=\"{s["text"]}\" /></Border>\n" +
+            "  <Border Padding=\"12,8\" CornerRadius=\"8\"><TextBlock Text=\"سطر لاحق\" /></Border>\n" +
+            "</StackPanel>",
+        Notes = _ => ["تعيد المعاينة الومضة كل ثلاث ثوان، لأنها تجري مرة واحدة حين يظهر السطر."],
+        Stage = (view, _, _) =>
+        {
+            var loop = new DispatcherTimer { Interval = TimeSpan.FromSeconds(3) };
+            loop.Tick += (_, _) =>
+            {
+                if (TopLevel.GetTopLevel(view) is null) loop.Stop();
+                else Entrance.Replay(view);
+            };
+            view.DetachedFromVisualTree += (_, _) => loop.Stop();
+            loop.Start();
+        },
+    };
+
+    public static PlayDef[] All { get; } = [Reveal, Anim, Flash];
 }

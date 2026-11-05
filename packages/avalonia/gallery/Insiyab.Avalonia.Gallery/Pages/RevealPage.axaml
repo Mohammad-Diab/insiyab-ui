@@ -39,6 +39,10 @@
     <pg:PlayText Classes="p" Markup="تمنح `ins:Entrance.Effect` عنصرًا بمفرده حركة دخول من ثلاث." />
     <pg:Playground Def="{x:Static pg:RevealPlay.Anim}" />
 
+    <TextBlock Classes="section" Text="ومضة تلفت النظر" />
+    <pg:PlayText Classes="p" Markup="تضيء `ins:Entrance.Effect=&quot;Flash&quot;` خلفية سطر وصل للتو ثم تخبو، فتعرف العين أين تنظر. ومن الشيفرة تومض بسطر انتقلت إليه الصفحة." />
+    <pg:Playground Def="{x:Static pg:RevealPlay.Flash}" />
+
     <TextBlock Classes="section" Text="الخيارات" />
     <pg:PlayText Classes="p" Markup="كل ما في حركات الدخول من خصائص، لكل منها صندوق يفتح بالنقر." />
     <pg:OptionsList Defs="{x:Static pg:RevealPlay.All}" />
