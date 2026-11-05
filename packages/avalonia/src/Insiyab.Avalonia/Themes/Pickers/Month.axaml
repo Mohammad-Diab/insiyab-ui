@@ -274,10 +274,6 @@
   <Style Selector="ins|MonthCalendar ToggleButton.month-hours">
     <Setter Property="Margin" Value="0,0,8,0" />
   </Style>
-  <!-- With the whole day shown, the days above leave room for the hours' scroll bar so they stay in line. -->
-  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-bar-gap">
-    <Setter Property="Width" Value="{DynamicResource InsScrollbarSize}" />
-  </Style>
   <!-- The bands above and below the work hours, counting the events outside them. -->
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-band-gutter.before, ins|MonthCalendar ins|MonthBorder.week-band-cell.before">
     <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />

@@ -170,8 +170,7 @@ public class StylePartsTests : IDisposable
         month.WorkHoursOnly = false;
         Settle(300);
         Keep(w, month, $"parts-day-{theme}-{dir}");
-        var gap = First<Border>(month, "week-bar-gap");
-        Assert.Equal((double)Res(gap, "InsScrollbarSize"), gap.Width);
+        Assert.DoesNotContain(month.GetVisualDescendants().OfType<Border>(), b => b.Classes.Contains("week-bar-gap"));
 
         month.View = MonthCalendarView.Month;
         month.Width = 400;

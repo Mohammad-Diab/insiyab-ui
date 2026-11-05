@@ -491,7 +491,12 @@ public class MonthCalendar : TemplatedControl
         if (list.Count > 0)
         {
             var events = new MonthStack { Spacing = 2, Classes = { "month-events" } };
-            foreach (var ev in list.Take(list.Count > Shown ? Shown - 1 : Shown)) events.Children.Add(Chip(words, ev));
+            foreach (var ev in list.Take(list.Count > Shown ? Shown - 1 : Shown))
+            {
+                var chip = Chip(words, ev);
+                events.Children.Add(chip);
+                if (chip is Border shown) _chips.TryAdd(ev, shown);
+            }
             if (list.Count > Shown)
             {
                 var more = new MonthText { Text = "+" + PickerLocale.N(list.Count - Shown + 1), Classes = { "month-more" } };
@@ -533,14 +538,6 @@ public class MonthCalendar : TemplatedControl
             g.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto) { SharedSizeGroup = "WeekHours" });
             for (var d = 0; d < days; d++) g.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
         }
-        if (scrolls)
-        {
-            top.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-            var gap = new MonthBorder { Classes = { "week-bar-gap" } };
-            Grid.SetColumn(gap, days + 1);
-            Grid.SetRowSpan(gap, 2);
-            top.Children.Add(gap);
-        }
 
         var corner = new MonthBorder { Classes = { "week-corner" } };
         top.Children.Add(corner);
@@ -562,12 +559,11 @@ public class MonthCalendar : TemplatedControl
         Grid.SetColumnSpan(lines, days);
         body.Children.Add(lines);
 
-        static double StartOf(MonthEvent e) => e.Time!.Value.TotalMinutes;
-        static double EndOf(MonthEvent e) => StartOf(e) + Length(e).TotalMinutes;
         var from = startH * 60.0;
         var to = endH * 60.0;
-        var hiddenBefore = new List<MonthEvent>[days];
-        var hiddenAfter = new List<MonthEvent>[days];
+        var pieces = Pieces(first, days);
+        var hiddenBefore = new List<Piece>[days];
+        var hiddenAfter = new List<Piece>[days];
 
         for (var d = 0; d < days; d++)
         {
@@ -606,21 +602,21 @@ public class MonthCalendar : TemplatedControl
             top.Children.Add(allCell);
 
             var lane = new DayTimeline { HourHeight = hourH, From = startH * 60, To = endH * 60 };
-            var timed = list.Where(e => e.Time is not null).ToList();
-            var before = timed.Where(e => EndOf(e) <= from).ToList();
-            var after = timed.Where(e => StartOf(e) >= to).ToList();
-            var inside = timed.Where(e => !before.Contains(e) && !after.Contains(e)).ToList();
+            var timed = pieces.TryGetValue(day, out var dp) ? dp : [];
+            var before = timed.Where(e => e.End <= from).ToList();
+            var after = timed.Where(e => e.Start >= to).ToList();
+            var inside = timed.Where(e => e.End > from && e.Start < to).ToList();
             hiddenBefore[d] = before;
             hiddenAfter[d] = after;
-            var spans = inside.Select(e => Visible(e, lane, hourH)).ToList();
+            var spans = inside.Select(e => Visible(e.Start, e.End, lane, hourH)).ToList();
             var lanes = Lanes(spans);
             for (var i = 0; i < inside.Count; i++)
             {
-                var chip = TimedChip(words, inside[i]);
-                if (StartOf(inside[i]) < from) chip.Classes.Add("cut-start");
-                if (EndOf(inside[i]) > to) chip.Classes.Add("cut-end");
+                var chip = TimedChip(words, inside[i].Event);
+                if (inside[i].Start < from || inside[i].FromBefore) chip.Classes.Add("cut-start");
+                if (inside[i].End > to || inside[i].IntoNext) chip.Classes.Add("cut-end");
                 lane.Add(chip, spans[i].Start, spans[i].End, lanes[i].Lane, lanes[i].Lanes);
-                _chips[inside[i]] = chip;
+                _chips.TryAdd(inside[i].Event, chip);
             }
             if (isToday && LineAt(lane) is { } at)
             {
@@ -652,7 +648,7 @@ public class MonthCalendar : TemplatedControl
             _scrollKey = key;
             _scrollAt = y;
             _scrollReady = false;
-            var scroll = new ScrollViewer { Content = body, Height = Math.Clamp(we - ws, 4, 24) * hourH, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, VerticalScrollBarVisibility = ScrollBarVisibility.Visible, Classes = { "week-scroll" } };
+            var scroll = new ScrollViewer { Content = body, Height = Math.Clamp(we - ws, 4, 24) * hourH, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, VerticalScrollBarVisibility = ScrollBarVisibility.Visible, AllowAutoHide = true, Classes = { "week-scroll" } };
             scroll.ScrollChanged += (_, _) => { if (_scrollReady && scroll == _scroll) _scrollAt = scroll.Offset.Y; };
             void Place(object? s, EventArgs e)
             {
@@ -680,7 +676,7 @@ public class MonthCalendar : TemplatedControl
     }
 
     // The row above (row 0) or below (row 2) the hours: a label in the gutter and, in each day with hidden events, a pill counting them.
-    private void AddBands(PickerLocale words, Grid body, DateTime first, bool after, int hour, List<MonthEvent>[] lists)
+    private void AddBands(PickerLocale words, Grid body, DateTime first, bool after, int hour, List<Piece>[] lists)
     {
         var ar = words.IsArabic;
         var row = after ? 2 : 0;
@@ -700,14 +696,14 @@ public class MonthCalendar : TemplatedControl
         }
     }
 
-    private Border Band(PickerLocale words, DateTime day, List<MonthEvent> hidden, bool after, int hour)
+    private Border Band(PickerLocale words, DateTime day, List<Piece> hidden, bool after, int hour)
     {
         var ar = words.IsArabic;
         var at = words.FormatTime(TimeSpan.FromHours(hour));
         var band = new MonthBorder { Child = new MonthText { Text = "+" + PickerLocale.N(hidden.Count), Classes = { "week-band-count" } }, Classes = { "week-band", after ? "after" : "before" }, Focusable = true, Tag = day };
         AutomationProperties.SetName(band, ar ? $"{Count(true, hidden.Count)} {(after ? "بعد" : "قبل")} {at}" : $"{Count(false, hidden.Count)} {(after ? "after" : "before")} {at}");
-        ToolTip.SetTip(band, string.Join(ar ? "، " : ", ", hidden.Select(e => $"{words.FormatTime(e.Time!.Value)} {e.Title}")));
-        var first = hidden.Min(e => e.Time!.Value.TotalMinutes);
+        ToolTip.SetTip(band, string.Join(ar ? "، " : ", ", hidden.Select(p => $"{words.FormatTime(p.Event.Time!.Value)} {p.Event.Title}")));
+        var first = hidden.Min(p => p.Start);
         void Open(bool keyboard)
         {
             SetHours(false, first);
@@ -731,13 +727,44 @@ public class MonthCalendar : TemplatedControl
         return band;
     }
 
+    // A timed event as drawn on one day: its minutes there, and whether it goes on from the day before or into the next.
+    private readonly record struct Piece(MonthEvent Event, double Start, double End, bool FromBefore, bool IntoNext);
+
+    // Each shown day's timed pieces: an event past midnight goes on into the following days.
+    private Dictionary<DateTime, List<Piece>> Pieces(DateTime first, int days)
+    {
+        var map = new Dictionary<DateTime, List<Piece>>();
+        var last = first.AddDays(days);
+        foreach (var ev in Events ?? [])
+        {
+            if (ev.Time is not { } t) continue;
+            var start = t.TotalMinutes;
+            var end = start + Length(ev).TotalMinutes;
+            for (var k = 0; k < 32; k++)
+            {
+                var from = Math.Max(0, start - k * 1440);
+                var to = Math.Min(1440, end - k * 1440);
+                if (to <= from) break;
+                var day = ev.Date.Date.AddDays(k);
+                if (day >= first && day < last)
+                {
+                    if (!map.TryGetValue(day, out var list)) map[day] = list = [];
+                    list.Add(new Piece(ev, from, to, k > 0, end - k * 1440 > 1440));
+                }
+            }
+        }
+        foreach (var list in map.Values) list.Sort((a, b) => a.Start.CompareTo(b.Start));
+        return map;
+    }
+
+    /// <summary>The chip drawn for an event in the current view, to place a pop card on; null when the event is not shown.</summary>
+    public Control? ChipFor(MonthEvent ev) => _chips.TryGetValue(ev, out var chip) ? chip : null;
+
     private static TimeSpan Length(MonthEvent ev) => ev.Duration is { } d && d > TimeSpan.Zero ? d : TimeSpan.FromHours(1);
 
     // An event's minutes as drawn: inside the shown hours, and never shorter than a chip that can hold its title.
-    private static (double Start, double End) Visible(MonthEvent ev, DayTimeline lane, double hourH)
+    private static (double Start, double End) Visible(double start, double end, DayTimeline lane, double hourH)
     {
-        var start = ev.Time!.Value.TotalMinutes;
-        var end = Math.Min(24 * 60, start + Length(ev).TotalMinutes);
         var shortest = Shortest / hourH * 60;
         start = Math.Clamp(start, lane.From, lane.To - shortest);
         end = Math.Max(Math.Min(end, lane.To), start + shortest);
