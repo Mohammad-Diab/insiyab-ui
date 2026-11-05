@@ -1,17 +1,34 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Metadata;
 using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>Where you are in a sequence, the web's <c>ol.ins-steps</c>: numbered circles joined by a line, the done ones filled with the brand. Classes <c>dots</c> (small dots, no names) and <c>grid</c> (numbers that wrap, no lines, no names on show). Grid steps are one Tab stop: the arrows, Home and End move between them.</summary>
+/// <summary>Where you are in a sequence, the web's <c>ol.ins-steps</c>: numbered circles joined by a line, the done ones filled with the brand. Classes <c>dots</c> (small dots, no names), <c>grid</c> (numbers that wrap, no lines, no names on show) and <c>pulse</c> (a brand ring leaves the current step's circle). Grid steps are one Tab stop: the arrows, Home and End move between them.</summary>
 public class Steps : ItemsControl
 {
+    /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: whether each step is done.</summary>
+    [AssignBinding]
+    [InheritDataTypeFromItems(nameof(ItemsSource))]
+    public BindingBase? IsDoneBinding { get; set; }
+
+    /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: whether each step is the current one.</summary>
+    [AssignBinding]
+    [InheritDataTypeFromItems(nameof(ItemsSource))]
+    public BindingBase? IsCurrentBinding { get; set; }
+
+    /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: what each step's circle shows in place of its number.</summary>
+    [AssignBinding]
+    [InheritDataTypeFromItems(nameof(ItemsSource))]
+    public BindingBase? MarkerBinding { get; set; }
+
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey) => new StepsItem();
 
     protected override bool NeedsContainerOverride(object? item, int index, out object? recycleKey) =>
@@ -20,7 +37,15 @@ public class Steps : ItemsControl
     protected override void ContainerForItemPreparedOverride(Control container, object? item, int index)
     {
         base.ContainerForItemPreparedOverride(container, item, index);
+        if (container is StepsItem step && !ReferenceEquals(container, item)) Apply(step);
         Refresh();
+    }
+
+    private void Apply(StepsItem step)
+    {
+        if (IsDoneBinding is { } done) step.Bind(StepsItem.IsDoneProperty, done);
+        if (IsCurrentBinding is { } current) step.Bind(StepsItem.IsCurrentProperty, current);
+        if (MarkerBinding is { } marker) step.Bind(StepsItem.MarkerProperty, marker);
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
@@ -131,8 +156,8 @@ public class Steps : ItemsControl
     private Point Centre(StepsItem s) => s.TranslatePoint(new Point(s.Bounds.Width / 2, s.Bounds.Height / 2), this) ?? default;
 }
 
-/// <summary>One step. <see cref="IsDone"/>, <see cref="IsCurrent"/> (aria-current="step"), <see cref="IsFlagged"/> (an amber dot, left to come back to) and <see cref="IsError"/> (red, needs fixing) show as <c>:done :current :flagged :error</c>.</summary>
-[PseudoClasses(":done", ":current", ":flagged", ":error", ":first", ":last", ":after-done")]
+/// <summary>One step. <see cref="IsDone"/>, <see cref="IsCurrent"/> (aria-current="step"), <see cref="IsFlagged"/> (an amber dot, left to come back to) and <see cref="IsError"/> (red, needs fixing) show as <c>:done :current :flagged :error</c>. <see cref="Marker"/> replaces the number in its circle.</summary>
+[PseudoClasses(":done", ":current", ":flagged", ":error", ":first", ":last", ":after-done", ":marker")]
 public class StepsItem : ContentControl
 {
     public static readonly StyledProperty<bool> IsDoneProperty =
@@ -146,6 +171,9 @@ public class StepsItem : ContentControl
 
     public static readonly StyledProperty<bool> IsErrorProperty =
         AvaloniaProperty.Register<StepsItem, bool>(nameof(IsError));
+
+    public static readonly StyledProperty<object?> MarkerProperty =
+        AvaloniaProperty.Register<StepsItem, object?>(nameof(Marker));
 
     public static readonly DirectProperty<StepsItem, int> NumberProperty =
         AvaloniaProperty.RegisterDirect<StepsItem, int>(nameof(Number), o => o.Number);
@@ -162,6 +190,7 @@ public class StepsItem : ContentControl
         IsFlaggedProperty.Changed.AddClassHandler<StepsItem>((x, e) => x.PseudoClasses.Set(":flagged", e.GetNewValue<bool>()));
         IsErrorProperty.Changed.AddClassHandler<StepsItem>((x, e) => x.PseudoClasses.Set(":error", e.GetNewValue<bool>()));
         IsVisibleProperty.Changed.AddClassHandler<StepsItem>((x, _) => x.Owner?.Refresh());
+        MarkerProperty.Changed.AddClassHandler<StepsItem>((x, e) => x.PseudoClasses.Set(":marker", e.GetNewValue<object?>() is not null));
     }
 
     public bool IsDone { get => GetValue(IsDoneProperty); set => SetValue(IsDoneProperty, value); }
@@ -171,6 +200,9 @@ public class StepsItem : ContentControl
     public bool IsFlagged { get => GetValue(IsFlaggedProperty); set => SetValue(IsFlaggedProperty, value); }
 
     public bool IsError { get => GetValue(IsErrorProperty); set => SetValue(IsErrorProperty, value); }
+
+    /// <summary>What the step's circle shows in place of its number, a letter, a short word or an icon; null shows the number.</summary>
+    public object? Marker { get => GetValue(MarkerProperty); set => SetValue(MarkerProperty, value); }
 
     /// <summary>The step's number among the steps showing, written by <see cref="Steps"/>.</summary>
     public int Number { get => _number; internal set => SetAndRaise(NumberProperty, ref _number, value); }

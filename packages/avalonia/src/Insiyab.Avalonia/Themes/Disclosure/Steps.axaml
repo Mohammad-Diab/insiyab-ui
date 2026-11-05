@@ -53,6 +53,7 @@
               <ins:TemplateBorder Name="PART_LineEnd" Grid.Column="2" Height="2" Margin="6,0,0,0" CornerRadius="1,0,0,1"
                       VerticalAlignment="Center" Background="{DynamicResource InsLine}" />
               <Panel Name="PART_Dot" Grid.Column="1" Width="32" Height="32" RenderTransformOrigin="50%,50%">
+                <ins:StepsRing Name="PART_Pulse" Brush="{DynamicResource InsPrimaryMid}" />
                 <ins:TemplateBorder Name="PART_Circle" CornerRadius="16" BorderThickness="1"
                         BorderBrush="{DynamicResource InsCtlBd}"
                         Background="{DynamicResource InsSurface}"
@@ -63,6 +64,9 @@
                            FontFamily="{DynamicResource InsFontBodyEn}" FontSize="{DynamicResource InsFsSm}"
                            HorizontalAlignment="Center" VerticalAlignment="Center"
                            Foreground="{DynamicResource InsLabel}" />
+                <ContentPresenter Name="PART_Marker" Content="{TemplateBinding Marker}" IsVisible="False"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  FontSize="{DynamicResource InsFsSm}" Foreground="{DynamicResource InsLabel}" />
                 <ins:TemplateBorder Name="PART_FocusRing" CornerRadius="16" BoxShadow="{DynamicResource InsFocusRing}" IsVisible="False" />
                 <ins:TemplateBorder Name="PART_Flag" Width="14" Height="14" CornerRadius="7" BorderThickness="2"
                         BorderBrush="{DynamicResource InsGlassStrong}" Background="{DynamicResource InsToneWarn}"
@@ -121,6 +125,9 @@
           <Style Selector="^ /template/ :is(TextBlock)#PART_Number">
             <Setter Property="Foreground" Value="{DynamicResource InsOnPrimaryMid}" />
           </Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_Marker">
+            <Setter Property="Foreground" Value="{DynamicResource InsOnPrimaryMid}" />
+          </Style>
         </Style>
         <Style Selector="^:current">
           <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
@@ -129,6 +136,9 @@
             <Setter Property="BoxShadow" Value="{DynamicResource InsGlowRing}" />
           </Style>
           <Style Selector="^ /template/ :is(TextBlock)#PART_Number">
+            <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+          </Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_Marker">
             <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
           </Style>
         </Style>
@@ -143,9 +153,33 @@
           <Style Selector="^ /template/ :is(TextBlock)#PART_Number">
             <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
           </Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_Marker">
+            <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+          </Style>
         </Style>
         <Style Selector="^:flagged /template/ :is(Border)#PART_Flag">
           <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:marker">
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Number">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ ContentPresenter#PART_Marker">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+        </Style>
+        <!-- The pulse loops only while its ring is on, seen and in a window that is not still, so it never holds a removed step -->
+        <Style Selector="^ /template/ ins|StepsRing#PART_Pulse[IsOn=True]:ins-seen[(ins|ClassTheme.Still)=False]">
+          <Style.Animations>
+            <Animation Duration="0:0:1.6" IterationCount="Infinite" Easing="SineEaseOut">
+              <KeyFrame Cue="0%">
+                <Setter Property="Phase" Value="0" />
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Phase" Value="1" />
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
         </Style>
       </ControlTheme>
 
@@ -160,7 +194,7 @@
   <!-- dots: one small dot per step, done and current in the brand, current larger; names kept for screen readers only -->
   <Style Selector="ins|Steps.dots ins|StepsItem">
     <Setter Property="Width" Value="8" />
-    <Style Selector="^ /template/ :is(Border)#PART_LineStart, ^ /template/ :is(Border)#PART_LineEnd, ^ /template/ :is(TextBlock)#PART_Number, ^ /template/ ContentPresenter#PART_ContentPresenter, ^ /template/ :is(Border)#PART_Flag, ^ /template/ :is(Border)#PART_Fill">
+    <Style Selector="^ /template/ :is(Border)#PART_LineStart, ^ /template/ :is(Border)#PART_LineEnd, ^ /template/ :is(TextBlock)#PART_Number, ^ /template/ ContentPresenter#PART_ContentPresenter, ^ /template/ :is(Border)#PART_Flag, ^ /template/ :is(Border)#PART_Fill, ^ /template/ ContentPresenter#PART_Marker">
       <Setter Property="IsVisible" Value="False" />
     </Style>
     <Style Selector="^ /template/ Panel#PART_Dot">
@@ -198,6 +232,11 @@
     <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
       <Setter Property="IsVisible" Value="True" />
     </Style>
+  </Style>
+
+  <!-- pulse: the current step's circle sends out a brand ring -->
+  <Style Selector="ins|Steps.pulse ins|StepsItem:current /template/ ins|StepsRing#PART_Pulse">
+    <Setter Property="IsOn" Value="True" />
   </Style>
 
 </Styles>

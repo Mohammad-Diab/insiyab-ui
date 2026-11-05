@@ -14,6 +14,10 @@
     <pg:PlayText Classes="p" Markup="`ins:Steps` خطوات مرقمة، تميز فيها الخطوة المنجزة بـ `IsDone` والحالية بـ `IsCurrent`. وتصلح وحدها لمسار موزع على عدة شاشات، وتجد الخيارات كلها بشرحها في آخر الصفحة." />
     <pg:Playground Def="{x:Static pg:StepsPlay.Steps}" />
 
+    <TextBlock Classes="section" Text="من البيانات" />
+    <pg:PlayText Classes="p" Markup="اربط `ItemsSource` بقائمة الخطوات، فتأخذ كل خطوة اسمها وإنجازها وعلامتها من أعضاء عنصرها. والخطوات هنا تكمل مسارًا بدأ في صفحة سابقة، فتكتب كل دائرة رقمها في المسار كله، وتنبض الحالية بالكلاس `pulse`. جرّب الزرين." />
+    <pg:PlayExample Layout="Stack" Code="{x:Static pg:StepsPlay.DataExample}" Stage="{x:Static pg:StepsPlay.DataStage}" />
+
     <TextBlock Classes="section" Text="المعالج" />
     <pg:PlayText Classes="p" Markup="يُظهر `ins:Wizard` لوحًا واحدًا من ألواحه `ins:WizardPanel` في كل مرة، ويقود الخطوات فوقه. ولا ينتقل «التالي» حتى يتحقق من حقول الخطوة الحالية، ومفتاح `Enter` داخل الحقل يعمل عمل «التالي»، ثم ينتقل التركيز إلى الخطوة الجديدة." />
     <pg:Playground Def="{x:Static pg:StepsPlay.Wizard}" />

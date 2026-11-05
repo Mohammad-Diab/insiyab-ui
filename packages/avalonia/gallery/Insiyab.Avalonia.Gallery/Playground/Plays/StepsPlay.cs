@@ -1,7 +1,10 @@
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Insiyab.Avalonia.Controls;
 using static Insiyab.Avalonia.Gallery.Playground.Play;
+using StepsControl = Insiyab.Avalonia.Controls.Steps;
 
 namespace Insiyab.Avalonia.Gallery.Playground;
 
@@ -42,6 +45,56 @@ public static class StepsPlay
         """;
 
     private static readonly string[] Names = ["الأولى", "الثانية", "الثالثة", "الرابعة"];
+    private static readonly string[] Marks = ["أ", "ب", "ج", "د"];
+
+    public sealed class StepRow : INotifyPropertyChanged
+    {
+        private bool _isDone, _isCurrent;
+        public string Name { get; init; } = "";
+        public string? Mark { get; init; }
+        public bool IsDone { get => _isDone; set { if (_isDone == value) return; _isDone = value; PropertyChanged?.Invoke(this, new(nameof(IsDone))); } }
+        public bool IsCurrent { get => _isCurrent; set { if (_isCurrent == value) return; _isCurrent = value; PropertyChanged?.Invoke(this, new(nameof(IsCurrent))); } }
+        public event PropertyChangedEventHandler? PropertyChanged;
+    }
+
+    public sealed class StepSample
+    {
+        public ObservableCollection<StepRow> Stages { get; } = [new() { Name = "الشحن", Mark = "4" }, new() { Name = "التسليم", Mark = "5" }, new() { Name = "التركيب", Mark = "6" }, new() { Name = "التقييم", Mark = "7" }];
+    }
+
+    public const string DataExample =
+        """
+        <ins:Steps Classes="pulse"
+                   ItemsSource="{Binding Stages}"
+                   DisplayMemberBinding="{Binding Name}"
+                   IsDoneBinding="{Binding IsDone}"
+                   IsCurrentBinding="{Binding IsCurrent}"
+                   MarkerBinding="{Binding Mark}" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button x:Name="Back" Classes="secondary sm" Content="السابقة" />
+          <Button x:Name="Forward" Classes="secondary sm" Content="التالية" />
+        </StackPanel>
+        """;
+
+    public static Action<Control> DataStage { get; } = view =>
+    {
+        var sample = new StepSample();
+        var at = 0;
+        void Go(int to)
+        {
+            at = Math.Clamp(to, 0, sample.Stages.Count - 1);
+            for (var i = 0; i < sample.Stages.Count; i++)
+            {
+                sample.Stages[i].IsDone = i < at;
+                sample.Stages[i].IsCurrent = i == at;
+            }
+        }
+        Go(1);
+        view.GetLogicalDescendants().OfType<StepsControl>().First().DataContext = sample;
+        var buttons = view.GetLogicalDescendants().OfType<Button>().ToList();
+        buttons.First(b => b.Name == "Back").Click += (_, _) => Go(at - 1);
+        buttons.First(b => b.Name == "Forward").Click += (_, _) => Go(at + 1);
+    };
 
     public static PlayDef Steps { get; } = new()
     {
@@ -61,6 +114,8 @@ public static class StepsPlay
                 Choice("4", "4")),
             Switch("flagged", "خطوة مؤجلة", "IsFlagged=\"True\"", "نقطة صفراء على خطوة مؤجلة يعود إليها المستخدم، وتجتمع مع المنجزة والحالية.", OptionKind.Property, "حالات أخرى"),
             Switch("error", "خطوة فيها خطأ", "IsError=\"True\"", "دائرة حمراء على خطوة فيها ما يحتاج إلى إصلاح، وتجتمع مع المنجزة والحالية.", OptionKind.Property, "حالات أخرى"),
+            Switch("marker", "علامة بدل الرقم", "Marker", "على `ins:StepsItem`: ما تكتبه دائرة الخطوة بدل رقمها، حرفًا أو كلمة قصيرة أو أيقونة. وإن تركته كتبت رقمها.", OptionKind.Property, "حالات أخرى"),
+            Switch("pulse", "نبض الحالية", "pulse", "على `ins:Steps`: حلقة بلون الهوية تخرج من دائرة الخطوة الحالية وتتلاشى، مرة كل ثانية ونصف تقريبًا. ولا تنبض إذا خُففت المؤثرات أو لم تكن الخطوات ظاهرة."),
         ],
         Extra =
         [
@@ -68,11 +123,15 @@ public static class StepsPlay
             Row("الأساس", "ins:StepsItem", "عنصر الخطوة، واسمها في `Content`، ورقمها يكتبه `ins:Steps` بنفسه. وعلى الهاتف لا يظهر إلا اسم الحالية، وتبقى البقية لقارئ الشاشة.", OptionKind.Element),
             Row("الأساس", "IsDone=\"True\"", "خطوة منجزة، يمتلئ رقمها بلون الهوية.", OptionKind.Property),
             Row("الأساس", "IsCurrent=\"True\"", "الخطوة الحالية، ويعلنها قارئ الشاشة.", OptionKind.Property),
+            Row("من البيانات", "ItemsSource", "قائمة تصير كل عناصرها خطوات، واسم الخطوة من `DisplayMemberBinding` أو من قالب `ItemTemplate`.", OptionKind.Property),
+            Row("من البيانات", "IsDoneBinding", "ربط إنجاز كل خطوة بعضو من عنصرها، ومثله `IsCurrentBinding` للخطوة الحالية.", OptionKind.Property),
+            Row("من البيانات", "MarkerBinding", "ربط علامة كل خطوة بعضو من عنصرها، لمسار يكمل ما بدأ في صفحة أخرى فتكتب كل دائرة رقمها في المسار كله.", OptionKind.Property),
         ],
         Disable = s =>
         {
             var off = s["look"] == "dots" ? new List<string> { "flagged", "error" } : [];
             if (s["at"] == "1" && !off.Contains("error")) off.Add("error");
+            if (s["look"] != "") off.Add("marker");
             return off;
         },
         Axaml = s =>
@@ -83,8 +142,9 @@ public static class StepsPlay
                 $"  <ins:StepsItem Content=\"{(grid ? $"البند {i}" : Names[i - 1])}\"" +
                 (i < at ? " IsDone=\"True\"" : "") + (i == at ? " IsCurrent=\"True\"" : "") +
                 (s.On("flagged") && s["look"] != "dots" && i == 1 ? " IsFlagged=\"True\"" : "") +
-                (s.On("error") && s["look"] != "dots" && i == at - 1 ? " IsError=\"True\"" : "") + " />");
-            return $"<ins:Steps{Classes(s["look"])}>\n{string.Join("\n", rows)}\n</ins:Steps>";
+                (s.On("error") && s["look"] != "dots" && i == at - 1 ? " IsError=\"True\"" : "") +
+                (s.On("marker") && s["look"] == "" ? $" Marker=\"{Marks[i - 1]}\"" : "") + " />");
+            return $"<ins:Steps{Classes(s["look"], s.On("pulse") ? "pulse" : null)}>\n{string.Join("\n", rows)}\n</ins:Steps>";
         },
         Notes = s => s["look"] switch
         {
