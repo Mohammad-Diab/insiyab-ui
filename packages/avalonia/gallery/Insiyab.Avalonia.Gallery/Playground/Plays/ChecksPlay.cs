@@ -72,17 +72,18 @@ public static class ChecksPlay
             Switch("desc", "وصف", "ins:Choice.Description", "سطر وصف تحت التسمية، إن شئت.", OptionKind.Property),
             Switch("grid", "في شبكة", "switch-grid", "على `ins:ChoiceGrid`: يرتب المفاتيح في شبكة من البطاقات، تليق بشاشة الإعدادات."),
             Switch("card", "في بطاقة", "card", "يضع المفتاح الواحد في إطار، لإعداد هو سطر وحده."),
+            Switch("sm", "صغير", "sm", "مفتاح بارتفاع الزر الصغير، 30 بكسل، يصغر مساره وتسميته معًا، فيقف في رأس صفحة أو شريط بين أزرار `sm`."),
         ],
         Extra =
         [
             Row("الأساس", "ToggleSwitch", "لكل إعداد له حالتان، وتسميته في `Content`.", OptionKind.Element, true),
         ],
-        Disable = s => s.On("grid") ? ["card"] : [],
+        Disable = s => s.On("grid") ? ["card", "sm"] : [],
         Wide = s => s.On("grid"),
         Axaml = s =>
         {
             string One(string label, bool on, bool card) =>
-                $"<ToggleSwitch{Classes(card ? "card" : null)} Content=\"{label}\"{(on ? " IsChecked=\"True\"" : "")}{(s.On("desc") ? " ins:Choice.Description=\"وصف قصير\"" : "")} />";
+                $"<ToggleSwitch{Classes(card ? "card" : null, s.On("sm") ? "sm" : null)} Content=\"{label}\"{(on ? " IsChecked=\"True\"" : "")}{(s.On("desc") ? " ins:Choice.Description=\"وصف قصير\"" : "")} />";
             if (!s.On("grid")) return One(s["label"], s.On("checked"), s.On("card"));
             return "<ins:ChoiceGrid Classes=\"switch-grid\">\n" +
                 $"  {One(s["label"], s.On("checked"), false)}\n" +
@@ -120,6 +121,54 @@ public static class ChecksPlay
             return "<ins:ChoiceGrid Classes=\"tile-grid\" AutomationProperties.Name=\"الخيارات\">\n" +
                 Tile("الأول", false, false) + Tile("الثاني", true, false) + Tile("الثالث", false, s.On("disabled")) +
                 "</ins:ChoiceGrid>";
+        },
+    };
+
+    public static PlayDef Grid { get; } = new()
+    {
+        Id = "choice-grid",
+        Title = "الشبكة",
+        Wide = _ => true,
+        Controls =
+        [
+            Seg("mode", "الأعمدة", "",
+                Choice("", "تملأ الصف"),
+                Choice("fill", "بعرض ثابت", "Fill=\"True\"", "يعدّ الأعمدة من العرض وحده، فتبقى البطاقة الوحيدة بعرض عمود ولا تمتد على الصف كله (`auto-fill` في CSS).", OptionKind.Property),
+                Choice("masonry", "متراصة", "IsMasonry=\"True\"", "تحتفظ كل بطاقة بطولها وتنزل تحت أقصر عمود، أوله إن تساوت، فتُقرأ البطاقات عرضًا ثم نزولًا.", OptionKind.Property)),
+            Seg("count", "البطاقات", "5",
+                Choice("1", "واحدة"),
+                Choice("2", "اثنتان"),
+                Choice("5", "خمس")),
+            Switch("max", "عمودان على الأكثر", "MaxColumns=\"2\"", "أكثر عدد من الأعمدة مهما اتسعت الشبكة، و0 بلا حد.", OptionKind.Property),
+        ],
+        Extra =
+        [
+            Row("الأساس", "ins:ChoiceGrid", "أعمدة متساوية بقدر ما يتسع من `MinColumnWidth`، والمسافة بينها `Spacing`، وكل صف بطول أطول بطاقة فيه. والعدد يتبع البطاقات، فالبطاقة الوحيدة تملأ الصف.", OptionKind.Element, true),
+            Row("الأساس", "MinColumnWidth", "أضيق ما يصير إليه العمود قبل أن تنزل البطاقات إلى صف آخر.", OptionKind.Property),
+        ],
+        Axaml = s =>
+        {
+            string[] texts =
+            [
+                "ملخص قصير.",
+                "وصف أطول قليلًا يأخذ سطرين أو ثلاثة في هذا العرض.",
+                "سطر واحد.",
+                "وصف طويل يشرح البطاقة بتفصيل أكثر، فيلتف على عدة أسطر ويطول معها ارتفاعها.",
+                "ملاحظة.",
+            ];
+            var mode = s["mode"] switch { "fill" => " Fill=\"True\"", "masonry" => " Fill=\"True\" IsMasonry=\"True\"", _ => "" };
+            var max = s.On("max") ? " MaxColumns=\"2\"" : "";
+            var count = int.Parse(s["count"], System.Globalization.CultureInfo.InvariantCulture);
+            var cards = texts.Take(count).Select((t, i) =>
+                $"  <Border Classes=\"tile\" Padding=\"14,12\">\n    <StackPanel Spacing=\"4\">\n      <TextBlock FontWeight=\"Bold\" Text=\"البطاقة {i + 1}\" />\n      <TextBlock TextWrapping=\"Wrap\" Text=\"{t}\" />\n    </StackPanel>\n  </Border>");
+            return $"<ins:ChoiceGrid MinColumnWidth=\"200\" Spacing=\"10\"{mode}{max}>\n" + string.Join("\n", cards) + "\n</ins:ChoiceGrid>";
+        },
+        Notes = s => s["mode"] switch
+        {
+            "fill" when s["count"] == "1" => ["البطاقة الوحيدة بعرض عمود، ولو اتسع الصف لأكثر."],
+            "masonry" => ["البطاقات بأطوالها، وكل واحدة تحت أقصر عمود."],
+            _ when s["count"] == "1" => ["البطاقة الوحيدة تملأ الصف كله؛ جرّب «بعرض ثابت»."],
+            _ => [],
         },
     };
 
@@ -161,5 +210,5 @@ public static class ChecksPlay
         },
     };
 
-    public static PlayDef[] All { get; } = [Check, Toggle, Tile, SegBar];
+    public static PlayDef[] All { get; } = [Check, Toggle, Tile, Grid, SegBar];
 }

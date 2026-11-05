@@ -22,6 +22,10 @@
     <pg:PlayText Classes="p" Markup="إذا احتاج الخيار إلى أكثر من سطر فضع الكلاس `tile` على زر الاختيار أو مربع الاختيار نفسه، وما البطاقة إلا مظهر لحالته." />
     <pg:Playground Def="{x:Static pg:ChecksPlay.Tile}" />
 
+    <TextBlock Classes="section" Text="الشبكة" />
+    <pg:PlayText Classes="p" Markup="ترتب `ins:ChoiceGrid` البطاقات في أعمدة متساوية بقدر ما يتسع الصف. ومع `Fill` يُعدّ الأعمدة من العرض وحده فتبقى البطاقة الوحيدة بعرض عمود، و`MaxColumns` يحد عددها، ومع `IsMasonry` تنزل كل بطاقة بطولها تحت أقصر عمود." />
+    <pg:Playground Def="{x:Static pg:ChecksPlay.Grid}" />
+
     <TextBlock Classes="section" Text="الشريط المقسم" />
     <pg:PlayText Classes="p" Markup="الشريط المقسم `ins:Segmented` يختار منه المستخدم بديلًا واحدًا من بدائل قليلة قصيرة." />
     <pg:Playground Def="{x:Static pg:ChecksPlay.SegBar}" />
