@@ -18,7 +18,7 @@ public static class DropdownPlay
               <MenuItem Header="نسخ" />
               <MenuItem Header="نقل" IsEnabled="False" />
               <Separator />
-              <MenuItem Classes="bad" Header="حذف" />
+              <MenuItem Classes="danger" Header="حذف" />
             </ins:PopMenu>
           </Button.Flyout>
         </Button>
@@ -44,7 +44,7 @@ public static class DropdownPlay
             Switch("kbd", "اختصار", "InputGesture", "اختصار العنصر، يظهر في آخره.", OptionKind.Property, "العناصر"),
             Switch("disabled", "عنصر معطل", "IsEnabled=\"False\"", "يعطل العنصر فتتخطاه الأسهم.", OptionKind.Property, "العناصر"),
             Switch("sep", "فاصل", "Separator", "خط يفصل بين مجموعتين.", OptionKind.Element, "العناصر"),
-            Switch("bad", "إجراء خطير", "bad", "على `MenuItem`: لعنصر يحذف أو لا رجعة فيه.", group: "العناصر"),
+            Switch("danger", "إجراء خطير", "danger", "على `MenuItem`: لعنصر يحذف أو لا رجعة فيه، فيأخذ لون الخطر.", group: "العناصر"),
             Switch("split", "زر مقسوم", "btn-group", "ضع زر القائمة في `StackPanel` بالكلاس `btn-group` بجانب زر، فيكون الإجراء الأساسي بضغطة واحدة، وتبقى بدائله في القائمة.", group: "الزر المقسوم"),
         ],
         Extra =
@@ -52,13 +52,17 @@ public static class DropdownPlay
             Row("الأساس", "ins:PopMenu", "في `Button.Flyout`: قائمة تنفتح تحت زرها، يغلقها `Esc` والنقر خارجها، وتتنقل الأسهم بين عناصرها.", OptionKind.Element, true),
             Row("الأساس", "MenuItem", "عنصر القائمة، يغلقها إذا اخترته ويعيد التركيز إلى زرها. ونصه في `Header`، وأيقونته في `Icon`.", OptionKind.Element),
             Row("الأساس", "Click", "يُطلق على العنصر حين يُختار، ومنه العنصر القابل للتحديد، وحالته الجديدة في `IsChecked`.", OptionKind.Event),
+            Row("الحجم", "MaxCardHeight", "أقصى ارتفاع للبطاقة قبل أن يُمرَّر محتواها، وإن لم تضعه طالت البطاقة ما وسعتها النافذة.", OptionKind.Property),
+            Row("الحجم", "MatchTargetWidth=\"True\"", "على `ins:PopCard`: تأخذ البطاقة عرض زرها، فلا تقل عن 320 ولا تتجاوز النافذة.", OptionKind.Property),
+            Row("المحتوى", "pop-item", "على `Button` في البطاقة: صف كعنصر القائمة يغلقها إذا نُقر، ومعه `danger` لإجراء خطير."),
+            Row("المحتوى", "pop-label", "على `TextBlock`: عنوان صغير فوق مجموعة من الصفوف."),
             Row("المحتوى", "pop-title", "على `TextBlock`: عنوان محتوى البطاقة."),
             Row("المحتوى", "pop-text", "على `TextBlock`: نص البطاقة."),
             Row("عناصر قابلة للتحديد", "IsChecked=\"True\"", "العنصر محدد.", OptionKind.Property),
         ],
         Disable = s =>
         {
-            if (s["body"] == "card") return ["label", "kbd", "disabled", "sep", "bad", "check"];
+            if (s["body"] == "card") return ["label", "kbd", "disabled", "sep", "danger", "check"];
             return s.Has("check") ? ["kbd"] : [];
         },
         Axaml = s =>
@@ -87,7 +91,7 @@ public static class DropdownPlay
                         lines.Add($"<MenuItem Header=\"{words[i]}\"{(s.On("kbd") && i == 0 ? " InputGesture=\"E\"" : "")}{off} />");
                 }
                 if (s.On("sep")) lines.Add("<Separator />");
-                if (s.On("bad")) lines.Add("<MenuItem Classes=\"bad\" Header=\"حذف\" />");
+                if (s.On("danger")) lines.Add("<MenuItem Classes=\"danger\" Header=\"حذف\" />");
                 flyout = $"<ins:PopMenu{end}>\n" + string.Join("\n", lines.Select(l => p + "  " + l)) + $"\n{p}</ins:PopMenu>";
             }
             if (!s.On("split"))

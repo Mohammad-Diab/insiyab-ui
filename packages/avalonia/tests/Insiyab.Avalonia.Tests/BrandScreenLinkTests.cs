@@ -137,7 +137,7 @@ public class BrandScreenLinkTests
         Assert.Equal(new Thickness(0), link.Padding);
         Assert.Equal(new Thickness(0), link.BorderThickness);
         Assert.Equal(Colors.Transparent, ColorOf(link.Background));
-        AssertBrush(link, "InsPrimaryDarker", () => link.Foreground);
+        AssertBrush(link, "InsToneBrandSoft", () => link.Foreground);
         var text = link.GetVisualDescendants().OfType<TextBlock>().First();
         Assert.True(text.TextDecorations is null || text.TextDecorations.Count == 0);
         Assert.True(link.Bounds.Width < 200);
@@ -146,7 +146,7 @@ public class BrandScreenLinkTests
         Settle(100);
         Assert.Contains(":pointerover", link.Classes);
         AssertBrush(link, theme == "Dark" ? "InsText1" : "InsToneBrandSoft", () => link.Foreground);
-        Assert.True(text.TextDecorations is null || text.TextDecorations.Count == 0);
+        Assert.Equal(0.14, text.TextDecorations![0].StrokeOffset, 3);
     }
 
     [AvaloniaFact]

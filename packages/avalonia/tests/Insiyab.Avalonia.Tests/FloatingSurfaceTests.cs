@@ -54,7 +54,7 @@ public class FloatingSurfaceTests
         Show(new StackPanel { Margin = new Thickness(20), Spacing = 12, Children = { combo, auto } }, theme: Variant(theme));
         combo.IsDropDownOpen = true;
         Settle(300);
-        AssertGround(combo, "InsGlassStrong", ((Border)Part<Popup>(combo, "PART_Popup").Child!).Background);
+        AssertGround(combo, "InsGlassStrong", ((Border)((Border)Part<Popup>(combo, "PART_Popup").Child!).Child!).Background);
         combo.IsDropDownOpen = false;
         AssertGround(auto, "InsGlassStrong", ((Border)Part<Popup>(auto, "PART_Popup").Child!).Background);
     }

@@ -77,7 +77,7 @@ public static class TablesPlay
                         "  <ins:Table.RowContextMenu>",
                         "    <ContextMenu>",
                         "      <MenuItem Header=\"تعديل\" />",
-                        "      <MenuItem Header=\"حذف\" Classes=\"bad\" />",
+                        "      <MenuItem Header=\"حذف\" Classes=\"danger\" />",
                         "    </ContextMenu>",
                         "  </ins:Table.RowContextMenu>",
                     ]);
@@ -95,7 +95,7 @@ public static class TablesPlay
                             "        <Button.Flyout>",
                             "          <MenuFlyout>",
                             "            <MenuItem Header=\"تعديل\" />",
-                            "            <MenuItem Header=\"حذف\" Classes=\"bad\" />",
+                            "            <MenuItem Header=\"حذف\" Classes=\"danger\" />",
                             "          </MenuFlyout>",
                             "        </Button.Flyout>",
                             "      </Button>",

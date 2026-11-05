@@ -58,7 +58,7 @@ public static class CommentsPlay
                     "      <MenuItem Header=\"رد\" />\n" +
                     "      <MenuItem x:Name=\"CopyItem\" Header=\"نسخ\" InputGesture=\"Ctrl+C\" />\n" +
                     "      <Separator />\n" +
-                    "      <MenuItem Classes=\"bad\" Header=\"حذف\" />\n" +
+                    "      <MenuItem Classes=\"danger\" Header=\"حذف\" />\n" +
                     "    </ContextMenu>\n" +
                     "  </ins:Comment.ContextMenu>");
             return parts.Count == 0 ? head + " />" : head + ">\n" + string.Join("\n", parts) + "\n</ins:Comment>";

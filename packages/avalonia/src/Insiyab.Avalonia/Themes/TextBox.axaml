@@ -88,6 +88,13 @@
         </Style>
       </ControlTheme>
 
+      <!-- A text box's right-click menu: the pop menu, its words in the page's language -->
+      <ins:TextMenu x:Key="InsTextBoxFlyout">
+        <MenuItem Tag="cut" Command="{Binding $parent[TextBox].Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" InputGesture="{x:Static TextBox.CutGesture}" />
+        <MenuItem Tag="copy" Command="{Binding $parent[TextBox].Copy}" IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="{x:Static TextBox.CopyGesture}" />
+        <MenuItem Tag="paste" Command="{Binding $parent[TextBox].Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" InputGesture="{x:Static TextBox.PasteGesture}" />
+      </ins:TextMenu>
+
       <ControlTheme x:Key="InsTextBoxErrors" TargetType="DataValidationErrors">
         <Setter Property="Template">
           <ControlTemplate TargetType="DataValidationErrors">
@@ -161,7 +168,7 @@
         <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
-        <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
+        <Setter Property="ContextFlyout" Value="{DynamicResource InsTextBoxFlyout}" />
         <Setter Property="Template">
           <ControlTemplate>
             <DataValidationErrors Theme="{StaticResource InsTextBoxErrors}" ClipToBounds="False">

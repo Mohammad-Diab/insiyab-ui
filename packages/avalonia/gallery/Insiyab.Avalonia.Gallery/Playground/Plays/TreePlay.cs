@@ -94,7 +94,7 @@ public static class TreePlay
                   "      <MenuItem Header=\"فتح\" />\n" +
                   "      <MenuItem Header=\"إعادة تسمية\" />\n" +
                   "      <Separator />\n" +
-                  "      <MenuItem Classes=\"bad\" Header=\"حذف\" />\n" +
+                  "      <MenuItem Classes=\"danger\" Header=\"حذف\" />\n" +
                   "    </ContextMenu>\n" +
                   "  </TreeView.ContextMenu>\n"
                 : "";

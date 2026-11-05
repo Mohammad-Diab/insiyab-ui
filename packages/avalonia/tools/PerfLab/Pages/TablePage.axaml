@@ -44,7 +44,7 @@
           <MenuItem Header="فتح" />
           <MenuItem Header="تعديل" />
           <Separator />
-          <MenuItem Header="حذف" Classes="bad" />
+          <MenuItem Header="حذف" Classes="danger" />
         </ContextMenu>
       </ins:Table.RowContextMenu>
     </ins:Table>

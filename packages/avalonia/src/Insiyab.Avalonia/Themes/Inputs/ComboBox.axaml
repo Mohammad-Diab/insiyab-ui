@@ -131,26 +131,29 @@
                 <Popup x:Name="PART_Popup"
                        WindowManagerAddShadowHint="False"
                        IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
-                       MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
-                       MaxHeight="{TemplateBinding MaxDropDownHeight}"
                        PlacementTarget="Background"
-                       Placement="BottomEdgeAlignedLeft"
-                       VerticalOffset="6"
+                       Placement="Custom"
+                       CustomPopupPlacementCallback="{x:Static ins:Pop.Select}"
                        IsLightDismissEnabled="True"
                        InheritsTransform="True">
-                  <ins:TemplateBorder x:Name="PopupBorder"
-                          Background="{DynamicResource InsGlassStrongGround}"
-                          BorderBrush="{DynamicResource InsRim}"
-                          BorderThickness="1"
-                          HorizontalAlignment="Stretch"
-                          CornerRadius="{DynamicResource InsRMd}"
-                          BoxShadow="{DynamicResource InsShLg}">
-                    <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
-                                  IsScrollChainingEnabled="False"
-                                  VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
-                                  IsDeferredScrollingEnabled="{TemplateBinding (ScrollViewer.IsDeferredScrollingEnabled)}">
-                      <ItemsPresenter x:Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" Margin="6" />
-                    </ScrollViewer>
+                  <!-- Room for the list's shadow, which a popup's box would cut; Pop.Select puts the list 6px under the field, and a press in the room closes it -->
+                  <ins:TemplateBorder x:Name="PART_Room" Padding="40,16,40,64" Background="Transparent" Cursor="Arrow" ins:PopLook.RoomCloses="True">
+                    <ins:TemplateBorder x:Name="PopupBorder"
+                            Background="{DynamicResource InsGlassStrongGround}"
+                            BorderBrush="{DynamicResource InsRim}"
+                            BorderThickness="1"
+                            HorizontalAlignment="Stretch"
+                            CornerRadius="{DynamicResource InsRMd}"
+                            BoxShadow="{DynamicResource InsShLg}"
+                            MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+                            MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                      <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                    IsScrollChainingEnabled="False"
+                                    VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                    IsDeferredScrollingEnabled="{TemplateBinding (ScrollViewer.IsDeferredScrollingEnabled)}">
+                        <ItemsPresenter x:Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" Margin="6" />
+                      </ScrollViewer>
+                    </ins:TemplateBorder>
                   </ins:TemplateBorder>
                 </Popup>
               </Panel>

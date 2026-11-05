@@ -24,12 +24,18 @@ internal static class PopMotion
     public static readonly AttachedProperty<bool> StaggerProperty =
         AvaloniaProperty.RegisterAttached<Control, bool>("Stagger", typeof(PopMotion));
 
+    /// <summary>Set by a pop that places itself: its entrance waits for the placement, which knows the side, instead of playing on attach.</summary>
+    public static readonly AttachedProperty<bool> HeldProperty =
+        AvaloniaProperty.RegisterAttached<Control, bool>("Held", typeof(PopMotion));
+
     public static bool GetEnabled(Control c) => c.GetValue(EnabledProperty);
     public static void SetEnabled(Control c, bool value) => c.SetValue(EnabledProperty, value);
     public static bool GetFromAbove(Control c) => c.GetValue(FromAboveProperty);
     public static void SetFromAbove(Control c, bool value) => c.SetValue(FromAboveProperty, value);
     public static bool GetStagger(Control c) => c.GetValue(StaggerProperty);
     public static void SetStagger(Control c, bool value) => c.SetValue(StaggerProperty, value);
+    public static bool GetHeld(Control c) => c.GetValue(HeldProperty);
+    public static void SetHeld(Control c, bool value) => c.SetValue(HeldProperty, value);
 
     static PopMotion()
     {
@@ -42,7 +48,7 @@ internal static class PopMotion
 
     private static void OnAttached(object? sender, VisualTreeAttachmentEventArgs e)
     {
-        if (sender is Control c) Play(c);
+        if (sender is Control c && !GetHeld(c)) Play(c);
     }
 
     private static T Res<T>(Control c, string key, T fallback) =>

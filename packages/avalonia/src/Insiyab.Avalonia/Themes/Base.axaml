@@ -25,6 +25,11 @@
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
+      <!-- A link's underline under the pointer: a little below the font's own and 0.07em thick, so it clears Arabic's joining strokes -->
+      <TextDecorationCollection x:Key="InsLinkUnderline">
+        <TextDecoration Location="Underline" StrokeThickness="0.07" StrokeThicknessUnit="FontRenderingEmSize" StrokeOffset="0.14" StrokeOffsetUnit="FontRenderingEmSize" />
+      </TextDecorationCollection>
+
       <!-- The web's scrollbar: 5px, no arrows, a brand-tinted thumb, the track stopping 10px short of each end -->
       <x:Double x:Key="InsScrollbarSize">5</x:Double>
 
@@ -176,10 +181,11 @@
         </Style>
       </ControlTheme>
 
-      <MenuFlyout x:Key="InsSelectableTextFlyout" Placement="Bottom">
-        <MenuItem Header="{DynamicResource StringTextFlyoutCopyText}" Command="{Binding $parent[SelectableTextBlock].Copy}"
+      <!-- A selectable text's right-click menu: the pop menu, its word in the page's language -->
+      <ctl:TextMenu x:Key="InsSelectableTextFlyout">
+        <MenuItem Tag="copy" Command="{Binding $parent[SelectableTextBlock].Copy}"
                   IsEnabled="{Binding $parent[SelectableTextBlock].CanCopy}" InputGesture="{x:Static TextBox.CopyGesture}" />
-      </MenuFlyout>
+      </ctl:TextMenu>
 
       <!-- Selected text takes the web's ::selection tint -->
       <ControlTheme x:Key="{x:Type SelectableTextBlock}" TargetType="SelectableTextBlock">
@@ -190,9 +196,9 @@
         </Style>
       </ControlTheme>
 
-      <!-- An a: the darkest brand shade with no underline, lighter under the pointer; the focus ring is the shared one -->
+      <!-- An a: the brand's readable tone, InsLinkHover and the link underline under the pointer; the focus ring is the shared one -->
       <ControlTheme x:Key="{x:Type HyperlinkButton}" TargetType="HyperlinkButton">
-        <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+        <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
@@ -213,6 +219,9 @@
         </Setter>
         <Style Selector="^:pointerover">
           <Setter Property="Foreground" Value="{DynamicResource InsLinkHover}" />
+          <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Inline.TextDecorations" Value="{StaticResource InsLinkUnderline}" />
+          </Style>
         </Style>
         <Style Selector="^:disabled">
           <Setter Property="Opacity" Value="0.55" />

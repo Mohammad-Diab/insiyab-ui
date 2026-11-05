@@ -30,7 +30,7 @@
         <Setter Property="FontSize" Value="14" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="FocusAdorner" Value="{x:Null}" />
-        <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
+        <Setter Property="ContextFlyout" Value="{DynamicResource InsTextBoxFlyout}" />
         <Setter Property="Template">
           <ControlTemplate TargetType="TextBox">
             <ins:TemplateBorder Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" MinHeight="{TemplateBinding MinHeight}">

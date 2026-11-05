@@ -71,7 +71,7 @@
                     <MenuItem Header="المسودات" />
                   </MenuItem>
                   <Separator />
-                  <MenuItem Classes="bad" Header="حذف" />
+                  <MenuItem Classes="danger" Header="حذف" />
                 </ins:PopMenu>
               </Button.Flyout>
             </Button>
@@ -98,7 +98,7 @@
           <MenuItem Header="فتح" />
           <MenuItem Header="مشاركة" />
           <Separator />
-          <MenuItem Header="حذف" Classes="bad" />
+          <MenuItem Header="حذف" Classes="danger" />
         </ContextMenu>
       </Border.ContextMenu>
       <StackPanel Spacing="6">

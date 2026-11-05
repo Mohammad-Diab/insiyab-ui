@@ -101,7 +101,7 @@
         <Setter Property="Cursor" Value="IBeam" />
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="FocusAdorner" Value="{x:Null}" />
-        <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
+        <Setter Property="ContextFlyout" Value="{DynamicResource InsTextBoxFlyout}" />
         <Setter Property="Template">
           <ControlTemplate TargetType="ins:OtpBox">
             <!-- The message spans the field in the page's direction, as the web's .ins-error; the block stays at the start, its cells left to right -->

@@ -58,7 +58,7 @@ public class MenusTests
                 new MenuItem { Header = "نسخ" },
                 new MenuItem { Header = "نقل", IsEnabled = false },
                 new Separator(),
-                new MenuItem { Header = "حذف", Classes = { "bad" } },
+                new MenuItem { Header = "حذف", Classes = { "danger" } },
             },
         };
         var trigger = new Button { Content = "إجراءات", Classes = { "secondary" }, Flyout = menu, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(40) };
@@ -102,7 +102,7 @@ public class MenusTests
         menu.IsEnd = true;
         trigger.Margin = new Thickness(300, 40, 40, 40);
         var w = Show(new Panel { Children = { trigger } });
-        Assert.Equal(PlacementMode.BottomEdgeAlignedRight, menu.Placement);
+        Assert.Equal(PlacementMode.Custom, menu.Placement);
         Click(trigger, w);
         var tb = Physical(trigger, w);
         var bb = Physical(Box(Presenter(menu)), w);

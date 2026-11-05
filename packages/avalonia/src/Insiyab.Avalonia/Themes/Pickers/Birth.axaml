@@ -33,7 +33,7 @@
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="TextAlignment" Value="Center" />
         <Setter Property="Cursor" Value="IBeam" />
-        <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
+        <Setter Property="ContextFlyout" Value="{DynamicResource InsTextBoxFlyout}" />
         <Setter Property="Template">
           <ControlTemplate TargetType="TextBox">
             <ins:TemplateBorder Background="Transparent">

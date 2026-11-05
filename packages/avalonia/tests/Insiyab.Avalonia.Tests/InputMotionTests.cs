@@ -222,7 +222,7 @@ public class InputMotionTests
         Border? border = null;
         var samples = Sample(window, 400, () =>
         {
-            border ??= combo.GetVisualDescendants().OfType<Popup>().FirstOrDefault()?.Child as Border;
+            border ??= (combo.GetVisualDescendants().OfType<Popup>().FirstOrDefault()?.Child as Border)?.Child as Border;
             return border is null ? (Y: double.NaN, O: double.NaN) : (Y: border.RenderTransform?.Value.M32 ?? 0, O: border.Opacity);
         });
         var early = samples.First(s => !double.IsNaN(s.Value.Y));

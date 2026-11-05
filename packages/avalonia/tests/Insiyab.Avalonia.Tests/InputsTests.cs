@@ -697,7 +697,7 @@ public class InputsTests
         var window = Show(Page(combo), height: 500);
         combo.IsDropDownOpen = true;
         Settle();
-        var popup = ((Border)Part<Popup>(combo, "PART_Popup").Child!);
+        var popup = (Border)((Border)Part<Popup>(combo, "PART_Popup").Child!).Child!;
         AssertBrush(combo, "InsGlassStrongGround", () => popup.Background);
         Assert.Equal(Res(combo, "InsRMd"), popup.CornerRadius);
         var items = combo.GetRealizedContainers().OfType<ComboBoxItem>().ToList();
@@ -707,7 +707,7 @@ public class InputsTests
         Assert.Equal(1, Part<Icon>(chosen, "PART_Check").Opacity);
         Assert.Equal(0, Part<Icon>(items[0], "PART_Check").Opacity);
         Assert.Equal(Res(combo, "InsRXs"), chosen.CornerRadius);
-        Assert.True(((Border)Part<Popup>(combo, "PART_Popup").Child!).TranslatePoint(new Point(0, 0), combo)!.Value.Y >= 46 + 5);
+        Assert.True(((Border)((Border)Part<Popup>(combo, "PART_Popup").Child!).Child!).TranslatePoint(new Point(0, 0), combo)!.Value.Y >= 46 + 5);
     }
 
     // A long list's bar sits at the card's inner edge, its padding scrolling with the items.
@@ -728,7 +728,7 @@ public class InputsTests
         var window = Show(Page(combo, auto), height: 700);
         combo.IsDropDownOpen = true;
         Settle();
-        var list = (Border)Part<Popup>(combo, "PART_Popup").Child!;
+        var list = (Border)((Border)Part<Popup>(combo, "PART_Popup").Child!).Child!;
         AssertBarAtEdge(list);
         var first = combo.ContainerFromIndex(0)!;
         Assert.Equal(7, first.TranslatePoint(new Point(0, 0), list)!.Value.X, 0.5);

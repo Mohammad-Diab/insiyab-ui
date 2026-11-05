@@ -50,7 +50,8 @@ public class PopCardTests
         Assert.Equal(new Thickness(12, 8, 12, 4), label.Padding);
         Assert.Equal(FontWeight.Bold, label.FontWeight);
         AssertBrush(label, "InsLabel", () => label.Foreground);
-        Assert.Equal(new Thickness(12, 8), item.Padding);
+        Assert.Equal(new Thickness(22, 8), item.Padding);
+        Assert.Equal(new Thickness(-10, 0), item.Margin);
         Assert.Equal(14, item.FontSize);
         AssertBrush(item, "InsText1", () => item.Foreground);
         var rule = body.GetVisualDescendants().OfType<Separator>().First();

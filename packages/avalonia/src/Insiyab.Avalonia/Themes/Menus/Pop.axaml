@@ -33,6 +33,7 @@
         <Setter Property="Padding" Value="6" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="FontFamily" Value="{DynamicResource InsFontBody}" />
+        <Setter Property="Cursor" Value="Arrow" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="ins:PopMotion.Enabled" Value="True" />
@@ -49,7 +50,8 @@
                         CornerRadius="{TemplateBinding CornerRadius}"
                         BoxShadow="{DynamicResource InsShLg}"
                         MinWidth="192"
-                        MaxHeight="384">
+                        MaxHeight="{TemplateBinding (ins:PopLook.CardHeight)}"
+                        ins:PopLook.FitsWindow="True">
                   <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
                                 VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
                     <ItemsPresenter Name="PART_ItemsPresenter"
@@ -76,6 +78,7 @@
         <Setter Property="Padding" Value="6" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="FontFamily" Value="{DynamicResource InsFontBody}" />
+        <Setter Property="Cursor" Value="Arrow" />
         <Setter Property="Focusable" Value="True" />
         <Setter Property="WindowManagerAddShadowHint" Value="False" />
         <!-- The card keeps clear room for its shadow inside the popup's box, and the offsets take the room back out so the card still opens at the pointer -->
@@ -95,7 +98,8 @@
                         CornerRadius="{TemplateBinding CornerRadius}"
                         BoxShadow="{DynamicResource InsShLg}"
                         MinWidth="192"
-                        MaxHeight="384">
+                        MaxHeight="{TemplateBinding (ins:PopLook.CardHeight)}"
+                        ins:PopLook.FitsWindow="True">
                   <ScrollViewer HorizontalScrollBarVisibility="Disabled">
                     <ItemsPresenter Name="PART_ItemsPresenter"
                                     ItemsPanel="{TemplateBinding ItemsPanel}"
@@ -124,6 +128,7 @@
         <Setter Property="Padding" Value="6" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="FontFamily" Value="{DynamicResource InsFontBody}" />
+        <Setter Property="Cursor" Value="Arrow" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="ins:PopMotion.Enabled" Value="True" />
@@ -139,7 +144,8 @@
                         CornerRadius="{TemplateBinding CornerRadius}"
                         BoxShadow="{DynamicResource InsShLg}"
                         MinWidth="192"
-                        MaxHeight="384">
+                        MaxHeight="{TemplateBinding (ins:PopLook.CardHeight)}"
+                        ins:PopLook.FitsWindow="True">
                   <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
                                 VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
                     <ContentPresenter x:Name="PART_ContentPresenter"
@@ -162,9 +168,13 @@
         </Style>
         <Style Selector="^.card">
           <Setter Property="Padding" Value="16" />
+          <Setter Property="ins:PopLook.InCard" Value="True" />
         </Style>
         <Style Selector="^.card /template/ :is(Border)#LayoutRoot">
           <Setter Property="Width" Value="320" />
+        </Style>
+        <Style Selector="^.card.match /template/ :is(Border)#LayoutRoot">
+          <Setter Property="Width" Value="NaN" />
         </Style>
       </ControlTheme>
 
@@ -245,16 +255,15 @@
                   </Viewbox>
                 </Grid>
               </ins:TemplateBorder>
-              <!-- The submenu card 4px past the item, its top on the item's: the popup's box holds room for the shadow and the offsets take it back out -->
+              <!-- The submenu card 4px past the item, its top on the item's, toward the end or else the start: Pop.Submenu places the popup's box, room and all -->
               <Popup Name="PART_Popup"
                      WindowManagerAddShadowHint="False"
                      ShouldUseOverlayLayer="True"
-                     Placement="RightEdgeAlignedTop"
-                     HorizontalOffset="{TemplateBinding FlowDirection, Converter={x:Static ins:SubmenuOffset.Instance}}"
-                     VerticalOffset="-16"
+                     Placement="Custom"
+                     CustomPopupPlacementCallback="{x:Static ins:Pop.Submenu}"
                      IsLightDismissEnabled="False"
                      IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
-                <ins:TemplateBorder Name="PART_Room" Padding="40,16,40,64">
+                <ins:TemplateBorder Name="PART_Room" Padding="40,16,40,64" Cursor="Arrow">
                   <ins:TemplateBorder Name="PART_SubCard"
                           Background="{DynamicResource InsGlassStrongGround}"
                           BorderBrush="{DynamicResource InsRim}"
@@ -262,7 +271,8 @@
                           CornerRadius="{DynamicResource InsRMd}"
                           BoxShadow="{DynamicResource InsShLg}"
                           MinWidth="192"
-                          MaxHeight="384">
+                          MaxHeight="{TemplateBinding (ins:PopLook.CardHeight)}"
+                          ins:PopLook.FitsWindow="True">
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled">
                       <ItemsPresenter Name="PART_ItemsPresenter"
                                       ItemsPanel="{TemplateBinding ItemsPanel}"
@@ -292,10 +302,11 @@
           <Setter Property="RenderTransform" Value="translateX(3px)" />
         </Style>
 
-        <Style Selector="^.bad">
+        <!-- The web's ins-pop-item bad modifier: an item that deletes or cannot be undone -->
+        <Style Selector="^.danger">
           <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
         </Style>
-        <Style Selector="^.bad:selected">
+        <Style Selector="^.danger:selected">
           <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
           <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
         </Style>
@@ -384,12 +395,17 @@
           <Setter Property="Foreground" Value="{DynamicResource InsPopItemHoverFg}" />
           <Setter Property="RenderTransform" Value="translateX(3px)" />
         </Style>
-        <Style Selector="^.bad">
+        <Style Selector="^.danger">
           <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
         </Style>
-        <Style Selector="^.bad:pointerover, ^.bad:focus-visible">
+        <Style Selector="^.danger:pointerover, ^.danger:focus-visible">
           <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
           <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+        </Style>
+        <!-- In a card the row reaches out so its corners are concentric with the card's: 14 less its own 7 from the card's edge -->
+        <Style Selector="^[(ins|PopLook.InCard)=True]">
+          <Setter Property="Margin" Value="-10,0" />
+          <Setter Property="Padding" Value="22,8" />
         </Style>
         <Style Selector="^:disabled">
           <Setter Property="Opacity" Value="0.45" />
