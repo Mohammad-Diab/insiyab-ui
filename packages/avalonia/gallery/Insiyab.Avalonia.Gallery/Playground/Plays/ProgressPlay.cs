@@ -73,6 +73,7 @@ public static class ProgressPlay
         Controls =
         [
             Seg("size", "المقاس", "",
+                Choice("sm", "صغير", "sm", "حلقة صغيرة بلا نسبة في وسطها، لطرف صف في قائمة أو شريط."),
                 Choice("", "عادي"),
                 Choice("lg", "كبير", "lg", "حلقة أكبر، في بطاقة إحصائية أو بجوار عنوان.")),
             Text("value", "النسبة", "72"),

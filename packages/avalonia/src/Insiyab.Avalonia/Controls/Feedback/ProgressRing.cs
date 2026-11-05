@@ -1,12 +1,13 @@
 using Avalonia;
 using Avalonia.Automation.Peers;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>A percentage as a ring, for a figure in a tile or beside a heading: the web's <c>.ins-ring</c>. It fills clockwise in both directions, as a dial does. Class <c>lg</c>.</summary>
+/// <summary>A percentage as a ring, for a figure in a tile or beside a heading: the web's <c>.ins-ring</c>. It fills clockwise in both directions, as a dial does. Classes <c>sm</c> (24px, no label) and <c>lg</c>.</summary>
 public class ProgressRing : RangeBase
 {
     public static readonly StyledProperty<double> ThicknessProperty =
@@ -22,6 +23,7 @@ public class ProgressRing : RangeBase
         AvaloniaProperty.RegisterDirect<ProgressRing, string>(nameof(Label), o => o.Label);
 
     private string _label = "0%";
+    private TextBlock? _labelPart;
 
     static ProgressRing()
     {
@@ -50,6 +52,21 @@ public class ProgressRing : RangeBase
     }
 
     protected override AutomationPeer OnCreateAutomationPeer() => new ProgressRingAutomationPeer(this);
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        _labelPart = e.NameScope.Find<TextBlock>("PART_Label");
+    }
+
+    // A label wider than the ring's hole would sit on the stroke, so it fades out (a 22px ring has no room for "45%").
+    protected override Size ArrangeOverride(Size finalSize)
+    {
+        var size = base.ArrangeOverride(finalSize);
+        if (_labelPart is not null)
+            PseudoClasses.Set(":crowded", _labelPart.DesiredSize.Width > Math.Min(finalSize.Width, finalSize.Height) - 2 * Thickness - 4);
+        return size;
+    }
 
     public override void Render(DrawingContext context)
     {
