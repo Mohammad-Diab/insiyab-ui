@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -50,6 +51,14 @@ public class PopCard : Flyout
     public static readonly StyledProperty<bool> MatchTargetWidthProperty =
         AvaloniaProperty.Register<PopCard, bool>(nameof(MatchTargetWidth));
 
+    /// <summary>Opens the card beside its trigger, at its end side or else its start side, so the trigger stays in sight; below it, or else above it, only when neither side has room.</summary>
+    public static readonly StyledProperty<bool> OpensBesideProperty =
+        AvaloniaProperty.Register<PopCard, bool>(nameof(OpensBeside));
+
+    /// <summary>The card grows out of its trigger as it opens and shrinks back into it as it closes; still motion opens and closes it at once.</summary>
+    public static readonly StyledProperty<bool> GrowsFromTargetProperty =
+        AvaloniaProperty.Register<PopCard, bool>(nameof(GrowsFromTarget));
+
     public PopCard()
     {
         Pop.Init(this);
@@ -78,6 +87,32 @@ public class PopCard : Flyout
     public double MaxCardHeight { get => GetValue(MaxCardHeightProperty); set => SetValue(MaxCardHeightProperty, value); }
 
     public bool MatchTargetWidth { get => GetValue(MatchTargetWidthProperty); set => SetValue(MatchTargetWidthProperty, value); }
+
+    public bool OpensBeside { get => GetValue(OpensBesideProperty); set => SetValue(OpensBesideProperty, value); }
+
+    public bool GrowsFromTarget { get => GetValue(GrowsFromTargetProperty); set => SetValue(GrowsFromTargetProperty, value); }
+
+    internal PopGrow Grow => _grow ??= new PopGrow(this);
+
+    private PopGrow? _grow;
+
+    // A growing card that is asked to close shrinks into its trigger first and closes when it gets there.
+    protected override void OnClosing(CancelEventArgs args)
+    {
+        base.OnClosing(args);
+        if (!args.Cancel && GrowsFromTarget && Grow.Shrink()) args.Cancel = true;
+    }
+
+    /// <summary>Closes the card at once, cutting short a shrink that is under way.</summary>
+    internal void HideNow()
+    {
+        if (_grow is { } grow)
+        {
+            grow.Stop();
+            grow.LetGo();
+        }
+        if (IsOpen) Hide();
+    }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -212,13 +247,45 @@ internal static class Pop
 
     private static void Place(PopupFlyoutBase flyout, CustomPopupPlacement place, Entrance entrance)
     {
-        if (!Fit(place, IsEnd(flyout), true, out var fromAbove)) return;
+        var card = flyout as PopCard;
+        if (!(card is { OpensBeside: true } ? FitBeside(place, out var fromAbove) : Fit(place, IsEnd(flyout), true, out fromAbove))) return;
         entrance.Placed = true;
         if (flyout.Popup.Child is not Control body) return;
         PopMotion.SetFromAbove(body, fromAbove);
         if (!entrance.Pending || TopLevel.GetTopLevel(body) is null) return;
         entrance.Pending = false;
+        if (card is { GrowsFromTarget: true } && card.Grow.Open(body)) return;
         PopMotion.Play(body);
+    }
+
+    // Beside the trigger, its end side first, then its start side, its top on the trigger's and sliding to stay in the window; else below, else above, its start edge on the trigger's; else the side with more room.
+    private static bool FitBeside(CustomPopupPlacement place, out bool fromAbove)
+    {
+        fromAbove = true;
+        var box = place.PopupSize;
+        if (box.Width <= 0 || box.Height <= 0 || OverlayHost.Top(place.Target) is not { } top) return false;
+        var rtl = place.Target.FlowDirection == FlowDirection.RightToLeft;
+        var screen = new Size(OverlayHost.Width(top), OverlayHost.Height(top));
+        var at = place.AnchorRectangle;
+        var lift = place.Deflate;
+        var w = box.Width - lift.Left - lift.Right - Room.Left - Room.Right;
+        var h = box.Height - lift.Top - lift.Bottom - Room.Top - Room.Bottom;
+        var maxX = screen.Width - Edge - w;
+        var maxY = screen.Height - Edge - h;
+        var below = at.Bottom + Gap;
+        var above = at.Top - Gap - h;
+        var startX = Clamp(rtl ? at.Right - w : at.Left, Edge, maxX);
+        double x, y;
+        if (Side(at, w, rtl, Gap, maxX) is { } sideX) (x, y) = (sideX, Clamp(at.Top, Edge, maxY));
+        else if (below <= maxY) (x, y) = (startX, below);
+        else if (above >= Edge) (x, y, fromAbove) = (startX, above, false);
+        else
+        {
+            var up = at.Top > screen.Height - at.Bottom;
+            (x, y, fromAbove) = (startX, Clamp(up ? above : below, Edge, maxY), !up);
+        }
+        Put(place, x, y);
+        return true;
     }
 
     private static void PlaceSelect(CustomPopupPlacement place) => Fit(place, false, false, out _);

@@ -214,6 +214,13 @@ public static class Entrance
         else Seen.WhenSeen(c, () => PlayNow(c, effect, 0));
     }
 
+    // Slides x px in from the leading side (negative) or the trailing side (positive) as it fades in: content that moved back or on.
+    internal static void Slide(Control c, double x)
+    {
+        if (Motion.IsStill(c)) return;
+        Seen.WhenSeen(c, () => Play(c, 0, 280, s_ease, opacity: 0, x: x));
+    }
+
     // The same, starting after delay ms: the table's rows arrive one after another, and a row out of view simply appears.
     internal static void Play(Control c, EntranceEffect effect, double delay)
     {

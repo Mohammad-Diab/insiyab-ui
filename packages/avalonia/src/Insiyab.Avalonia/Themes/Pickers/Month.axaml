@@ -15,8 +15,17 @@
     </ResourceDictionary>
   </Styles.Resources>
 
-  <Style Selector="ins|MonthCalendar Grid.month-head">
+  <!-- The header: three groups a step apart, the date between its arrows truly centred -->
+  <Style Selector="ins|MonthCalendar ins|MonthHead.month-head">
     <Setter Property="Margin" Value="0,0,0,12" />
+    <Setter Property="Gap" Value="{DynamicResource InsSp3}" />
+  </Style>
+  <Style Selector="ins|MonthCalendar ins|MonthStack.month-middle">
+    <Setter Property="Spacing" Value="{DynamicResource InsSp2}" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ins|MonthCalendar ins|MonthStack.month-end">
+    <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthText.month-title">
     <Setter Property="VerticalAlignment" Value="Center" />
@@ -185,9 +194,7 @@
     <Setter Property="IsVisible" Value="True" />
   </Style>
 
-  <!-- The view switch sits before the arrows, a step away from them. -->
   <Style Selector="ins|MonthCalendar ins|Segmented.month-views">
-    <Setter Property="Margin" Value="0,0,8,0" />
     <Setter Property="Padding" Value="3" />
   </Style>
 
@@ -270,10 +277,6 @@
     <Setter Property="Background" Value="{DynamicResource InsZebra}" />
   </Style>
 
-  <!-- The work-hours toggle sits before the view switch, a step away from it. -->
-  <Style Selector="ins|MonthCalendar ToggleButton.month-hours">
-    <Setter Property="Margin" Value="0,0,8,0" />
-  </Style>
   <!-- The bands above and below the work hours, counting the events outside them. -->
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-band-gutter.before, ins|MonthCalendar ins|MonthBorder.week-band-cell.before">
     <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />

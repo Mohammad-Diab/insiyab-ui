@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
+using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -34,6 +35,15 @@ public enum MonthCalendarView
     Day,
 }
 
+/// <summary>How a <see cref="MonthCalendar"/> lays out its header.</summary>
+public enum MonthHeaderLayout
+{
+    /// <summary>Today and the work-hours switch at the start, the date between its arrows in the middle, the view switch at the end; when they do not fit on one line, the date takes its own line under the rest.</summary>
+    Centered,
+    /// <summary>The date at the start and every control together at the end, as the web's month header.</summary>
+    TitleStart,
+}
+
 /// <summary>One event in a <see cref="MonthCalendar"/>: its day, its words, and optionally its time, length, tone and link.</summary>
 public sealed class MonthEvent
 {
@@ -51,6 +61,9 @@ public sealed class MonthEvent
 
     /// <summary>A link: the event can be pressed, and fills with its tone under the pointer.</summary>
     public string? Href { get; set; }
+
+    /// <summary>Anything the page keeps with the event, such as its record, for its details card to show.</summary>
+    public object? Tag { get; set; }
 }
 
 /// <summary>The month calendar plugin (the web's <c>.ins-month</c>): a month as a table of weeks starting on the locale's first day, today marked, each day showing three events and a "+n" for the rest, dots instead of names when narrow, and a header that moves a month back, on, or to today. The desktop adds a week and a day view by the hour, the work hours only unless asked, with a switch between the three.</summary>
@@ -93,6 +106,15 @@ public class MonthCalendar : TemplatedControl, IWords
     public static readonly StyledProperty<double> HourHeightProperty =
         AvaloniaProperty.Register<MonthCalendar, double>(nameof(HourHeight), 48);
 
+    public static readonly StyledProperty<MonthHeaderLayout> HeaderLayoutProperty =
+        AvaloniaProperty.Register<MonthCalendar, MonthHeaderLayout>(nameof(HeaderLayout));
+
+    public static readonly StyledProperty<IDataTemplate?> EventDetailsProperty =
+        AvaloniaProperty.Register<MonthCalendar, IDataTemplate?>(nameof(EventDetails));
+
+    // How far a turn's new days slide in from the side they come from.
+    internal const double TurnSlide = 24;
+
     private const int Shown = 3;
     private const double Shortest = 22;
     private Decorator? _host;
@@ -102,18 +124,23 @@ public class MonthCalendar : TemplatedControl, IWords
     private readonly Dictionary<DateTime, Border> _cells = [];
     private readonly Dictionary<MonthEvent, Border> _chips = [];
     private StackPanel? _root;
-    private Grid? _head;
+    private MonthHead? _head;
+    private MonthHeaderLayout? _headLayout;
     private PickerLocale? _headWords;
     private TextBlock? _title;
     private Button? _prev;
     private Button? _next;
+    private Button? _today;
     private Segmented? _switch;
+    private PopCard? _card;
+    private MonthEvent? _cardEvent;
+    private Control? _cardAnchor;
     private DayTimeline? _nowPanel;
     private Control? _now;
     private DateTime _drawnToday;
     private DispatcherTimer? _clock;
     private bool _stale;
-    private ToggleButton? _hours;
+    private ToggleSwitch? _hours;
     private ScrollViewer? _scroll;
     private (DateTime First, MonthCalendarView View)? _scrollKey;
     private double _scrollAt;
@@ -139,7 +166,7 @@ public class MonthCalendar : TemplatedControl, IWords
     /// <summary>Raised when a day is pressed away from its events (<c>ins:month-day</c>); in the week and day views, with the time of the half hour pressed.</summary>
     public event EventHandler<DateTime>? DayInvoked;
 
-    /// <summary>Raised when a linked event is pressed.</summary>
+    /// <summary>Raised when an event that can be pressed is pressed: one with an <see cref="MonthEvent.Href"/>, or any event while <see cref="EventDetails"/> is set.</summary>
     public event EventHandler<MonthEvent>? EventInvoked;
 
     /// <summary>The month shown; any day in it will do.</summary>
@@ -176,6 +203,12 @@ public class MonthCalendar : TemplatedControl, IWords
     /// <summary>How tall an hour is in the week and day views.</summary>
     public double HourHeight { get => GetValue(HourHeightProperty); set => SetValue(HourHeightProperty, value); }
 
+    /// <summary>The header's order: <see cref="MonthHeaderLayout.Centered"/> (the default) or <see cref="MonthHeaderLayout.TitleStart"/>.</summary>
+    public MonthHeaderLayout HeaderLayout { get => GetValue(HeaderLayoutProperty); set => SetValue(HeaderLayoutProperty, value); }
+
+    /// <summary>What an event's details card shows, built with the <see cref="MonthEvent"/> as its data; while set, every event can be pressed and opens its card beside its chip, growing out of it.</summary>
+    public IDataTemplate? EventDetails { get => GetValue(EventDetailsProperty); set => SetValue(EventDetailsProperty, value); }
+
     internal IReadOnlyDictionary<DateTime, Border> Cells => _cells;
 
     internal IReadOnlyDictionary<MonthEvent, Border> Chips => _chips;
@@ -187,6 +220,12 @@ public class MonthCalendar : TemplatedControl, IWords
     internal ScrollViewer? HoursScroller => _scroll;
 
     internal static Func<DateTime> Now { get; set; } = () => DateTime.Now;
+
+    internal MonthHead? HeadRow => _head;
+
+    internal PopCard? DetailsCard => _card;
+
+    internal Control? Body => _root is { Children.Count: > 1 } root ? root.Children[1] : null;
 
     private PickerLocale Words => PickerLocale.For(Locale, FlowDirection);
 
@@ -227,7 +266,8 @@ public class MonthCalendar : TemplatedControl, IWords
         if (change.Property == MonthProperty || change.Property == DateProperty || change.Property == EventsProperty || change.Property == LocaleProperty
             || change.Property == FlowDirectionProperty || change.Property == ViewProperty || change.Property == ShowViewSwitchProperty
             || change.Property == DayStartHourProperty || change.Property == DayEndHourProperty || change.Property == HourHeightProperty
-            || change.Property == WorkHoursOnlyProperty || change.Property == ShowHoursSwitchProperty)
+            || change.Property == WorkHoursOnlyProperty || change.Property == ShowHoursSwitchProperty || change.Property == HeaderLayoutProperty
+            || change.Property == EventDetailsProperty)
             Draw();
         else if (change.Property == BoundsProperty)
         {
@@ -275,15 +315,18 @@ public class MonthCalendar : TemplatedControl, IWords
     public void Go(int by)
     {
         var now = DateCalendar.Today();
+        var was = Span(Words).First;
         if (View == MonthCalendarView.Month)
         {
-            var next = by == 0 ? First(now) : First(Month).AddMonths(by);
+            var from = First(Month);
+            var next = by == 0 ? First(now) : from.AddMonths(by);
             Hold(() =>
             {
                 SetCurrentValue(DateProperty, by == 0 ? now : next);
                 SetCurrentValue(MonthProperty, next);
             });
             Draw();
+            if (next != from) Arrive(next.CompareTo(from));
             MonthChanged?.Invoke(this, next);
             return;
         }
@@ -294,7 +337,17 @@ public class MonthCalendar : TemplatedControl, IWords
             SetCurrentValue(MonthProperty, First(day));
         });
         Draw();
+        var turned = Span(Words).First.CompareTo(was);
+        if (turned != 0) Arrive(turned);
         DateChanged?.Invoke(this, day);
+    }
+
+    // The new days slide in from the side they come from (back from the start, on from the end, mirrored in RTL); a switch of view rises in; still motion shows them at once.
+    private void Arrive(int toward)
+    {
+        if (Body is not { } body) return;
+        if (toward == 0) Entrance.Play(body, EntranceEffect.Rise);
+        else Entrance.Slide(body, toward > 0 ? TurnSlide : -TurnSlide);
     }
 
     private void SwitchTo(MonthCalendarView view, DateTime? day = null)
@@ -309,6 +362,7 @@ public class MonthCalendar : TemplatedControl, IWords
             SetCurrentValue(ViewProperty, view);
         });
         Draw();
+        Arrive(0);
         ViewChanged?.Invoke(this, view);
     }
 
@@ -327,6 +381,8 @@ public class MonthCalendar : TemplatedControl, IWords
         // Out of the tree (a page taken down) it draws when it comes back, as its resources are out of reach meanwhile.
         _stale = !this.IsAttachedToVisualTree();
         if (_stale) return;
+        // The chips are drawn again, so a details card hanging from one closes.
+        _card?.HideNow();
         _cells.Clear();
         _bands.Clear();
         _scroll = null;
@@ -359,16 +415,25 @@ public class MonthCalendar : TemplatedControl, IWords
     }
 
     // The header lives across draws, so the button that holds focus keeps it and the view switch keeps its place; only the body is built again.
-    private Grid Head(PickerLocale words, MonthCalendarView view)
+    private MonthHead Head(PickerLocale words, MonthCalendarView view)
     {
         if (_head is null || _headWords != words)
         {
             if (_head?.Parent is Panel p) p.Children.Remove(_head);
             _headWords = words;
-            _head = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), Classes = { "month-head" } };
+            _headLayout = null;
+            _head = new MonthHead
+            {
+                Classes = { "month-head" },
+                Children =
+                {
+                    new MonthStack { Orientation = Orientation.Horizontal, Spacing = 4, Classes = { "month-nav" } },
+                    new MonthStack { Orientation = Orientation.Horizontal, Classes = { "month-middle" } },
+                    new MonthStack { Orientation = Orientation.Horizontal, Spacing = 4, Classes = { "month-end" } },
+                },
+            };
+            foreach (var group in _head.Children) KeyboardNavigation.SetTabNavigation(group, KeyboardNavigationMode.Local);
             _title = new MonthText { Classes = { "month-title" } };
-            _head.Children.Add(_title);
-            var nav = new MonthStack { Orientation = Orientation.Horizontal, Spacing = 4, Classes = { "month-nav" } };
             _switch = new Segmented { Classes = { "month-views" } };
             _syncSwitch = true;
             _switch.ItemsSource = new[] { words.Words["month.month"], words.Words["month.week"], words.Words["month.day"] };
@@ -380,20 +445,14 @@ public class MonthCalendar : TemplatedControl, IWords
                 var to = (MonthCalendarView)_switch.SelectedIndex;
                 if (to != View) Dispatcher.UIThread.Post(() => SwitchTo(to));
             };
-            _hours = new ToggleButton { Content = words.Words["month.workHours"], Classes = { "secondary", "sm", "month-hours" }, Tag = "hours" };
+            _hours = new ToggleSwitch { Content = words.Words["month.workHours"], Classes = { "sm", "month-hours" }, Tag = "hours" };
             _hours.Click += (_, _) => SetHours(_hours.IsChecked == true, null);
-            nav.Children.Add(_hours);
-            nav.Children.Add(_switch);
             _prev = Arrow(false, () => Go(-1));
-            nav.Children.Add(_prev);
-            var today = new Button { Content = words.Today, Classes = { "secondary", "sm" }, Tag = "today" };
-            today.Click += (_, _) => Go(0);
-            nav.Children.Add(today);
+            _today = new Button { Content = words.Today, Classes = { "secondary", "sm" }, Tag = "today" };
+            _today.Click += (_, _) => Go(0);
             _next = Arrow(true, () => Go(1));
-            nav.Children.Add(_next);
-            Grid.SetColumn(nav, 1);
-            _head.Children.Add(nav);
         }
+        if (_headLayout != HeaderLayout) Lay(HeaderLayout);
 
         var greg = PickerCalendar.Gregorian;
         var (first, _) = Span(words);
@@ -424,6 +483,31 @@ public class MonthCalendar : TemplatedControl, IWords
         _switch.SelectedIndex = (int)view;
         _syncSwitch = false;
         return _head;
+    }
+
+    // Puts the header's parts in their groups: centred, Today and the hours at the start, the date between its arrows in the middle, the views at the end; or the date alone at the start and the rest at the end.
+    private void Lay(MonthHeaderLayout layout)
+    {
+        _headLayout = layout;
+        var (start, middle, end) = ((Panel)_head!.Children[0], (Panel)_head.Children[1], (Panel)_head.Children[2]);
+        start.Children.Clear();
+        middle.Children.Clear();
+        end.Children.Clear();
+        if (layout == MonthHeaderLayout.TitleStart)
+        {
+            _hours!.Margin = new Thickness(0, 0, 8, 0);
+            _switch!.Margin = new Thickness(0, 0, 8, 0);
+            start.Children.Add(_title!);
+            end.Children.AddRange([_hours, _switch, _prev!, _today!, _next!]);
+            middle.IsVisible = false;
+            return;
+        }
+        _hours!.Margin = new Thickness(10, 0, 0, 0);
+        _switch!.Margin = default;
+        start.Children.AddRange([_today!, _hours]);
+        middle.Children.AddRange([_prev!, _title!, _next!]);
+        end.Children.Add(_switch);
+        middle.IsVisible = true;
     }
 
     private void SetHours(bool workOnly, double? scrollTo)
@@ -514,7 +598,7 @@ public class MonthCalendar : TemplatedControl, IWords
         if (isToday) cell.Classes.Add("today");
         cell.PointerReleased += (_, e) =>
         {
-            if (e.InitialPressMouseButton != MouseButton.Left || e.Handled) return;
+            if (e.InitialPressMouseButton != MouseButton.Left || e.Handled || Dismissing) return;
             DayInvoked?.Invoke(this, day);
         };
         return cell;
@@ -629,7 +713,7 @@ public class MonthCalendar : TemplatedControl, IWords
             if (isToday) column.Classes.Add("today");
             column.PointerReleased += (_, e) =>
             {
-                if (e.InitialPressMouseButton != MouseButton.Left || e.Handled) return;
+                if (e.InitialPressMouseButton != MouseButton.Left || e.Handled || Dismissing) return;
                 var minutes = lane.From + Math.Floor(e.GetPosition(lane).Y / hourH * 2) * 30;
                 DayInvoked?.Invoke(this, day.AddMinutes(Math.Clamp(minutes, lane.From, lane.To - 30)));
             };
@@ -891,7 +975,7 @@ public class MonthCalendar : TemplatedControl, IWords
     private void Interact(Border chip, MonthEvent ev)
     {
         ToolTip.SetTip(chip, ev.Title);
-        if (ev.Href is not null)
+        if (ev.Href is not null || EventDetails is not null)
         {
             chip.Classes.Add("link");
             chip.Focusable = true;
@@ -900,19 +984,94 @@ public class MonthCalendar : TemplatedControl, IWords
             {
                 if (e.InitialPressMouseButton != MouseButton.Left) return;
                 e.Handled = true;
-                EventInvoked?.Invoke(this, ev);
+                Invoke(ev, chip);
             };
             chip.KeyDown += (_, e) =>
             {
                 if (e.Key is not (Key.Enter or Key.Space)) return;
                 e.Handled = true;
-                EventInvoked?.Invoke(this, ev);
+                Invoke(ev, chip);
             };
         }
         else
         {
             chip.PointerReleased += (_, e) => e.Handled = true;
         }
+    }
+
+    // A press on an event: its card opens beside it, or closes when it was already open on it (a second press on a trigger closes its pop).
+    private void Invoke(MonthEvent ev, Control chip)
+    {
+        EventInvoked?.Invoke(this, ev);
+        if (EventDetails is null) return;
+        if (_card is { IsOpen: true } card && _cardEvent == ev && _cardAnchor == chip)
+        {
+            if (!card.Grow.IsShrinking) card.Hide();
+            return;
+        }
+        Open(ev, chip);
+    }
+
+    /// <summary>Opens the event's details card (<see cref="EventDetails"/>) beside its chip, growing out of it; when the event is not drawn, beside its day, or else the calendar. Nothing opens while <see cref="EventDetails"/> is unset.</summary>
+    public void ShowDetails(MonthEvent ev)
+    {
+        if (EventDetails is null) return;
+        Control anchor = ChipFor(ev) ?? (_cells.TryGetValue(ev.Date.Date, out var cell) ? cell : this);
+        Open(ev, anchor);
+    }
+
+    /// <summary>Closes the details card, shrinking it back into its event.</summary>
+    public void HideDetails() => _card?.Hide();
+
+    private void Open(MonthEvent ev, Control anchor)
+    {
+        if (EventDetails?.Build(ev) is not { } view) return;
+        var card = _card ??= MakeCard();
+        card.HideNow();
+        view.DataContext = ev;
+        _cardEvent = ev;
+        _cardAnchor = anchor;
+        card.Content = view;
+        card.ShowAt(anchor.IsAttachedToVisualTree() ? anchor : this);
+    }
+
+    private PopCard MakeCard()
+    {
+        // A press outside closes the card and still reaches what it lands on, so another event opens its own card at once.
+        var card = new PopCard { OpensBeside = true, GrowsFromTarget = true, OverlayDismissEventPassThrough = true };
+        card.FlyoutPresenterClasses.Add("month-details");
+        // Focus goes into the card, to its first control that takes it, and Esc there closes it.
+        card.Opened += (_, _) =>
+        {
+            if (card.Popup.Child is not Control body) return;
+            body.RemoveHandler(KeyDownEvent, OnCardKey);
+            body.AddHandler(KeyDownEvent, OnCardKey, RoutingStrategies.Tunnel);
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (!card.IsOpen || card.Content is not Control view) return;
+                var first = view.GetSelfAndVisualDescendants().OfType<InputElement>().FirstOrDefault(c => c.Focusable && c.IsEffectivelyVisible && c.IsEffectivelyEnabled);
+                first?.Focus(NavigationMethod.Tab);
+            }, DispatcherPriority.Loaded);
+        };
+        // Closed, focus left in the card or lost goes back to the event it hung from.
+        card.Closed += (_, _) =>
+        {
+            var anchor = _cardAnchor;
+            var focused = TopLevel.GetTopLevel(this)?.FocusManager?.GetFocusedElement() as Visual;
+            var lost = focused is null || !focused.IsAttachedToVisualTree() || focused is TopLevel || (card.Popup.Child is Visual body && (focused == body || body.IsVisualAncestorOf(focused)));
+            if (lost && anchor is InputElement { Focusable: true, IsEffectivelyVisible: true } back && anchor.IsAttachedToVisualTree()) back.Focus(NavigationMethod.Tab);
+        };
+        return card;
+    }
+
+    // A press that only closed the details card is not also a press on an empty day.
+    private bool Dismissing => _card is { IsOpen: true };
+
+    private void OnCardKey(object? sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Escape || _card is not { IsOpen: true } card) return;
+        e.Handled = true;
+        card.Hide();
     }
 }
 

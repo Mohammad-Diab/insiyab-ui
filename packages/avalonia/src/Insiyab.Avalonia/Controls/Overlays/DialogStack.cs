@@ -293,26 +293,9 @@ internal sealed class DialogLayer : ThemeVariantScope
         if (!drawer) dialog.Opacity = inward ? 1 : 0;
     }
 
-    // The transform that lays the dialog over its anchor, about the dialog's centre, in the dialog's own space (so a mirrored layer needs nothing more); Avalonia applies the operations in the order written.
-    internal TransformOperations? GrowFrom(Dialog dialog)
-    {
-        if (Origin is not { IsEffectivelyVisible: true } origin || TopLevel.GetTopLevel(origin) != TopLevel.GetTopLevel(dialog)) return null;
-        var w = dialog.Bounds.Width;
-        var h = dialog.Bounds.Height;
-        if (w <= 0 || h <= 0 || origin.Bounds.Width <= 0 || origin.Bounds.Height <= 0) return null;
-        var keep = dialog.RenderTransform;
-        dialog.RenderTransform = null;
-        var p1 = origin.TranslatePoint(default, dialog);
-        var p2 = origin.TranslatePoint(new Point(origin.Bounds.Width, origin.Bounds.Height), dialog);
-        dialog.RenderTransform = keep;
-        if (p1 is not { } a1 || p2 is not { } a2) return null;
-        var anchor = new Rect(new Point(Math.Min(a1.X, a2.X), Math.Min(a1.Y, a2.Y)), new Point(Math.Max(a1.X, a2.X), Math.Max(a1.Y, a2.Y)));
-        var sx = Math.Max(0.02, anchor.Width / w);
-        var sy = Math.Max(0.02, anchor.Height / h);
-        var dx = anchor.Center.X - w / 2;
-        var dy = anchor.Center.Y - h / 2;
-        return TransformOperations.Parse(FormattableString.Invariant($"scale({sx:0.####}, {sy:0.####}) translate({dx:0.###}px, {dy:0.###}px)"));
-    }
+    // The transform that lays the dialog over its anchor.
+    internal TransformOperations? GrowFrom(Dialog dialog) =>
+        Origin is { IsEffectivelyVisible: true } origin && TopLevel.GetTopLevel(origin) == TopLevel.GetTopLevel(dialog) ? AnchorGrow.From(dialog, origin) : null;
 
     // A transform has no logical form on the web; here the layer's own mirroring turns "toward the start" into the right side in RTL.
     private TransformOperations DrawerAway(Dialog dialog)
