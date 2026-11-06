@@ -400,6 +400,10 @@
           <Setter Property="MinHeight" Value="0" />
           <Style Selector="^ /template/ :is(Border)#PART_Face">
             <Setter Property="ClipToBounds" Value="False" />
+            <Setter Property="Background" Value="{TemplateBinding Background}" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
+            <Setter Property="IsVisible" Value="False" />
           </Style>
           <Style Selector="^ /template/ :is(Border)#PART_Sweep">
             <Setter Property="IsVisible" Value="False" />
@@ -421,6 +425,10 @@
           <Setter Property="MinHeight" Value="0" />
           <Style Selector="^ /template/ :is(Border)#PART_Face">
             <Setter Property="ClipToBounds" Value="False" />
+            <Setter Property="Background" Value="{TemplateBinding Background}" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Fill">
+            <Setter Property="IsVisible" Value="False" />
           </Style>
           <Style Selector="^ /template/ :is(Border)#PART_Sweep">
             <Setter Property="IsVisible" Value="False" />
