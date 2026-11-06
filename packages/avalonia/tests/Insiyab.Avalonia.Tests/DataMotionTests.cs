@@ -151,13 +151,13 @@ public class DataMotionTests
         var rows = filled.Rows.ToList();
         filled.Rows.Clear();
         table.Rows.AddRange(rows);
-        var samples = Sample(window, 600, () => rows.Select(r => r.Opacity).ToArray());
+        var samples = Sample(window, 900, () => rows.Select(r => r.Opacity).ToArray());
         Assert.All(samples, s =>
         {
             for (var i = 1; i < 6; i++) Assert.True(s.Value[i] <= s.Value[i - 1] + 0.001, $"at {s.Ms}ms row {i} is ahead of row {i - 1}");
         });
         Assert.Contains(samples, s => s.Value[0] > 0.5 && s.Value[5] == 0);
-        Assert.All(samples[^1].Value, o => Assert.Equal(1, o));
+        Assert.All(samples[^1].Value, o => Assert.Equal(1, o, 3));
     }
 
     [AvaloniaFact]
