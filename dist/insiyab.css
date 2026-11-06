@@ -339,6 +339,14 @@
   --ins-cat-8-bg: rgba(168, 85, 247, .14);
   --ins-cat-8-ink: #6B21A8;
 
+  /* Media: a picture or a video sits on a dark stage in both themes, and the notes laid over it (a name, a caption) keep their own dark ground and light ink. */
+  --ins-media-stage: #000000;
+  --ins-media-edge: rgba(255, 255, 255, .25);
+  --ins-media-note: rgba(16, 19, 24, .70);
+  --ins-media-note-ink: #F2F4F7;
+  --ins-media-caption: rgba(0, 0, 0, .80);
+  --ins-media-caption-ink: #FFFFFF;
+
   --ins-line: rgba(15, 23, 42, .08);
   --ins-hr: rgba(15, 23, 42, .18);
   --ins-line-glass: rgba(255, 255, 255, .40);

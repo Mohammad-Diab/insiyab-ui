@@ -318,6 +318,18 @@
   <CornerRadius x:Key="InsRPill">999</CornerRadius>
   <BoxShadows x:Key="InsBevelDim">inset 0 1 0 0 #38FFFFFF</BoxShadows>
   <BoxShadows x:Key="InsGlowBad">0 0 0 4 #1FEF4444</BoxShadows>
+  <Color x:Key="InsMediaStageColor">#FF000000</Color>
+  <SolidColorBrush x:Key="InsMediaStage" Color="#FF000000" />
+  <Color x:Key="InsMediaEdgeColor">#40FFFFFF</Color>
+  <SolidColorBrush x:Key="InsMediaEdge" Color="#40FFFFFF" />
+  <Color x:Key="InsMediaNoteColor">#B3101318</Color>
+  <SolidColorBrush x:Key="InsMediaNote" Color="#B3101318" />
+  <Color x:Key="InsMediaNoteInkColor">#FFF2F4F7</Color>
+  <SolidColorBrush x:Key="InsMediaNoteInk" Color="#FFF2F4F7" />
+  <Color x:Key="InsMediaCaptionColor">#CC000000</Color>
+  <SolidColorBrush x:Key="InsMediaCaption" Color="#CC000000" />
+  <Color x:Key="InsMediaCaptionInkColor">#FFFFFFFF</Color>
+  <SolidColorBrush x:Key="InsMediaCaptionInk" Color="#FFFFFFFF" />
   <SplineEasing x:Key="InsEase" X1="0.22" Y1="1" X2="0.36" Y2="1" />
   <SplineEasing x:Key="InsEaseSpring" X1="0.34" Y1="1.56" X2="0.64" Y2="1" />
   <sys:TimeSpan x:Key="InsTExit">0:0:0.18</sys:TimeSpan>
