@@ -37,6 +37,7 @@ public static class SplitPlay
                 Choice("70", "70%")),
             Switch("limits", "حدود أضيق للسحب", "Min=\"60\"", "أصغر حصة للوح الأول، ولا تنزل عنها الحصة التي يبدأ بها. والأصل 20، ومعها `Max` لأكبر حصة، والأصل 80.", OptionKind.Property),
             Switch("v", "لوح فوق لوح", "Orientation=\"Vertical\"", "يضع اللوحين أحدهما فوق الآخر، فيصير المقبض أفقيًا.", OptionKind.Property),
+            Switch("joined", "لوحان في بطاقة", "joined", "اللوحان داخل بطاقة واحدة: بلا حشوة حولهما، وبينهما خط رفيع يأخذ لون الهوية تحت المؤشر وعند السحب، وتسحبه من الخط إلى داخل اللوح الثاني فلا يلمس شريط تمرير الأول. وإذا صار اللوحان أحدهما فوق الآخر بقي الخط بينهما. ومع `CornerRadius` تنحني زوايا اللوحين مع زوايا البطاقة.", OptionKind.Class),
         ],
         Extra =
         [
@@ -47,22 +48,27 @@ public static class SplitPlay
         ],
         Axaml = s =>
         {
-            var attrs = (s.On("v") ? " Height=\"320\" Orientation=\"Vertical\"" : " Height=\"192\" StackWidth=\"0\"") +
+            var joined = s.On("joined");
+            var attrs = (joined ? " Classes=\"joined\" CornerRadius=\"13\" Padding=\"16\"" : "") +
+                (s.On("v") ? " Height=\"320\" Orientation=\"Vertical\"" : " Height=\"192\" StackWidth=\"0\"") +
                 (s.Has("start") ? $" Share=\"{s["start"]}\" DefaultShare=\"{s["start"]}\"" : "") +
                 (s.On("limits") ? " Min=\"60\" Max=\"75\"" : "");
-            return $"<ins:Split{attrs}>\n" +
-                "  <ins:Split.First>\n" +
-                "    <Panel Classes=\"demo-box\"><Rectangle /><TextBlock Text=\"اللوح الأول\" /></Panel>\n" +
-                "  </ins:Split.First>\n" +
-                "  <ins:Split.Second>\n" +
-                "    <Panel Classes=\"demo-box\"><Rectangle /><TextBlock Text=\"اللوح الثاني\" /></Panel>\n" +
-                "  </ins:Split.Second>\n" +
-                "</ins:Split>";
+            var pad = joined ? "  " : "";
+            var split = $"{pad}<ins:Split{attrs}>\n" +
+                $"{pad}  <ins:Split.First>\n" +
+                $"{pad}    <Panel Classes=\"demo-box\"><Rectangle /><TextBlock Text=\"اللوح الأول\" /></Panel>\n" +
+                $"{pad}  </ins:Split.First>\n" +
+                $"{pad}  <ins:Split.Second>\n" +
+                $"{pad}    <Panel Classes=\"demo-box\"><Rectangle /><TextBlock Text=\"اللوح الثاني\" /></Panel>\n" +
+                $"{pad}  </ins:Split.Second>\n" +
+                $"{pad}</ins:Split>";
+            return joined ? "<Border Classes=\"card\">\n" + split + "\n</Border>" : split;
         },
         Notes = s =>
         {
             var notes = new List<string> { "اسحب الخط بين اللوحين، فيظهر هنا الحدث الذي يطلقه." };
             if (!s.On("v")) notes.Add("يبقي `StackWidth=\"0\"` اللوحين جنبًا إلى جنب في هذه المساحة الضيقة.");
+            if (s.On("joined")) notes.Add("مرر المؤشر على الخط بين اللوحين فيأخذ لون الهوية. وزوايا البطاقة 14 وحافتها 1، فزوايا اللوحين 13.");
             if (s.On("limits")) notes.Add("لا تخرج القسمة عن 60% و75%، حتى الحصة التي يبدأ بها اللوح الأول.");
             return notes;
         },

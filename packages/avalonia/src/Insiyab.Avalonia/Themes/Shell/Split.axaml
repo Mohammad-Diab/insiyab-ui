@@ -8,24 +8,28 @@
       <ControlTheme x:Key="{x:Type ins:Split}" TargetType="ins:Split">
         <Setter Property="Template">
           <ControlTemplate>
-            <Grid Name="PART_Grid" Background="{TemplateBinding Background}">
-              <ScrollViewer Name="PART_First" Padding="5,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                <ContentPresenter Content="{TemplateBinding First}" Padding="{TemplateBinding Padding}" />
-              </ScrollViewer>
-              <!-- The handle: a 14px strip with a pill that grows and takes the brand under the pointer, on focus and while dragged -->
-              <ins:TemplateBorder Name="PART_Handle" Width="14" Background="Transparent" Focusable="True" Cursor="SizeWestEast" AutomationProperties.Name="{TemplateBinding ResizeLabel}">
-                <ins:TemplateBorder Name="PART_Grip"
-                        Width="4"
-                        Height="40"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        CornerRadius="{DynamicResource InsRPill}"
-                        Background="{DynamicResource InsCtlBd}" />
-              </ins:TemplateBorder>
-              <ScrollViewer Name="PART_Second" Padding="5,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                <ContentPresenter Content="{TemplateBinding Second}" Padding="{TemplateBinding Padding}" />
-              </ScrollViewer>
-            </Grid>
+            <ins:TemplateBorder Name="PART_Frame" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+              <Grid Name="PART_Grid">
+                <ScrollViewer Name="PART_First" Padding="5,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                  <ContentPresenter Content="{TemplateBinding First}" Padding="{TemplateBinding Padding}" />
+                </ScrollViewer>
+                <!-- The handle: a 14px strip with a pill that grows and takes the brand under the pointer, on focus and while dragged -->
+                <ins:TemplateBorder Name="PART_Handle" Width="14" Background="Transparent" Focusable="True" Cursor="SizeWestEast" AutomationProperties.Name="{TemplateBinding ResizeLabel}">
+                  <ins:TemplateBorder Name="PART_Grip"
+                          Width="4"
+                          Height="40"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          CornerRadius="{DynamicResource InsRPill}"
+                          Background="{DynamicResource InsCtlBd}" />
+                </ins:TemplateBorder>
+                <ScrollViewer Name="PART_Second" Padding="5,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                  <ContentPresenter Content="{TemplateBinding Second}" Padding="{TemplateBinding Padding}" />
+                </ScrollViewer>
+                <!-- The hairline over the second pane when a joined split stacks -->
+                <ins:TemplateBorder Name="PART_Seam" Height="1" VerticalAlignment="Top" IsVisible="False" IsHitTestVisible="False" Background="{DynamicResource InsLine}" />
+              </Grid>
+            </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^ /template/ :is(Border)#PART_Grip">
@@ -64,6 +68,54 @@
         <!-- Stacked, each pane is as tall as its content, so the page scrolls rather than the panes -->
         <Style Selector="^:stacked /template/ ScrollViewer">
           <Setter Property="VerticalScrollBarVisibility" Value="Disabled" />
+        </Style>
+
+        <!-- joined: two panes in one card, no padding, corners from CornerRadius; an 8px grab strip from the hairline into the second pane only, the grip a 3px line that takes the brand -->
+        <Style Selector="^.joined">
+          <Style Selector="^ /template/ :is(Border)#PART_Frame">
+            <Setter Property="ClipToBounds" Value="True" />
+          </Style>
+          <Style Selector="^ /template/ ScrollViewer">
+            <Setter Property="Padding" Value="0" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Handle">
+            <Setter Property="Width" Value="8" />
+            <Setter Property="Margin" Value="0,0,-7,0" />
+            <Setter Property="ZIndex" Value="1" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Grip">
+            <Setter Property="IsHitTestVisible" Value="False" />
+            <Setter Property="Width" Value="3" />
+            <Setter Property="Height" Value="NaN" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Background" Value="{DynamicResource InsLine}" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Handle:pointerover > :is(Border)#PART_Grip, ^ /template/ :is(Border)#PART_Handle:focus-visible > :is(Border)#PART_Grip, ^ /template/ :is(Border)#PART_Handle.dragging > :is(Border)#PART_Grip">
+            <Setter Property="Height" Value="NaN" />
+            <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Handle:focus-visible > :is(Border)#PART_Grip">
+            <Setter Property="BoxShadow" Value="none" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Handle:focus-visible">
+            <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+          </Style>
+          <Style Selector="^:vertical /template/ :is(Border)#PART_Handle">
+            <Setter Property="Width" Value="NaN" />
+            <Setter Property="Height" Value="8" />
+            <Setter Property="Margin" Value="0,0,0,-7" />
+          </Style>
+          <Style Selector="^:vertical /template/ :is(Border)#PART_Grip, ^:vertical /template/ :is(Border)#PART_Handle:pointerover > :is(Border)#PART_Grip, ^:vertical /template/ :is(Border)#PART_Handle:focus-visible > :is(Border)#PART_Grip, ^:vertical /template/ :is(Border)#PART_Handle.dragging > :is(Border)#PART_Grip">
+            <Setter Property="Width" Value="NaN" />
+            <Setter Property="Height" Value="3" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+          </Style>
+          <Style Selector="^:stacked /template/ :is(Border)#PART_Seam">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
         </Style>
       </ControlTheme>
 

@@ -8,11 +8,12 @@ using Avalonia.Layout;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The web's <c>.ins-split</c>: two panes that share the width, each scrolling on its own, with a handle between them that the pointer drags and the keyboard moves.</summary>
+/// <summary>The web's <c>.ins-split</c>: two panes that share the width, each scrolling on its own, with a handle between them that the pointer drags and the keyboard moves. <c>joined</c> sets the two panes inside one card: no pane padding, a hairline between them, corners from <see cref="TemplatedControl.CornerRadius"/>.</summary>
 [TemplatePart("PART_Grid", typeof(Grid))]
 [TemplatePart("PART_First", typeof(Control))]
 [TemplatePart("PART_Handle", typeof(Control))]
 [TemplatePart("PART_Second", typeof(Control))]
+[TemplatePart("PART_Seam", typeof(Control))]
 [PseudoClasses(":vertical", ":stacked", ":dragging")]
 public class Split : TemplatedControl, IWords
 {
@@ -60,7 +61,7 @@ public class Split : TemplatedControl, IWords
 
     private const double HandleLength = 14;
     private Grid? _grid;
-    private Control? _first, _handle, _second;
+    private Control? _first, _handle, _second, _seam;
     private bool _dragging;
 
     public object? First { get => GetValue(FirstProperty); set => SetValue(FirstProperty, value); }
@@ -114,6 +115,7 @@ public class Split : TemplatedControl, IWords
         _first = e.NameScope.Find<Control>("PART_First");
         _handle = e.NameScope.Find<Control>("PART_Handle");
         _second = e.NameScope.Find<Control>("PART_Second");
+        _seam = e.NameScope.Find<Control>("PART_Seam");
         if (_handle is not null)
         {
             _handle.PointerPressed += OnHandlePressed;
@@ -168,6 +170,7 @@ public class Split : TemplatedControl, IWords
             _grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             Place(_first, 0, 0);
             Place(_second, 1, 0);
+            if (_seam is not null) Place(_seam, 1, 0);
             _handle.IsVisible = false;
             return;
         }
@@ -184,6 +187,7 @@ public class Split : TemplatedControl, IWords
             Place(_first, 0, 0);
             Place(_handle, 1, 0);
             Place(_second, 2, 0);
+            if (_seam is not null) Place(_seam, 2, 0);
         }
         else
         {
@@ -193,6 +197,7 @@ public class Split : TemplatedControl, IWords
             Place(_first, 0, 0);
             Place(_handle, 0, 1);
             Place(_second, 0, 2);
+            if (_seam is not null) Place(_seam, 0, 2);
         }
     }
 
