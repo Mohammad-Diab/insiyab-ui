@@ -525,6 +525,79 @@
         </Setter>
       </ControlTheme>
 
+      <!-- A tab of ListBox.nav: the sidebar link's face as a folder tab in a rail, a hairline under it (over a foot tab), flat and open in the content's own fill when chosen -->
+      <ControlTheme x:Key="InsNavTab" TargetType="ListBoxItem" BasedOn="{StaticResource InsShellLink}">
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="ToolTip.ServiceEnabled" Value="False" />
+        <Style Selector="^ /template/ :is(Border)#PART_Face">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+          <Setter Property="BorderThickness" Value="0,0,0,1" />
+        </Style>
+        <Style Selector="^.foot /template/ :is(Border)#PART_Face">
+          <Setter Property="BorderThickness" Value="0,1,0,0" />
+        </Style>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsLine}" />
+          <Setter Property="RenderTransform" Value="none" />
+        </Style>
+        <Style Selector="^:selected, ^:selected:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsSurface}" />
+        </Style>
+        <Style Selector="^:selected /template/ :is(Border)#PART_Face">
+          <Setter Property="BoxShadow" Value="none" />
+        </Style>
+        <!-- compact: the icon alone in a 48px square, the name as its tip -->
+        <Style Selector="^[(ins|NavLook.Compact)=True]">
+          <Setter Property="Padding" Value="0" />
+          <Setter Property="MinHeight" Value="48" />
+          <Setter Property="ToolTip.ServiceEnabled" Value="True" />
+          <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Width" Value="24" />
+            <Setter Property="Margin" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="ClipToBounds" Value="True" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <!-- ListBox.nav: tabs down a page's start edge, the sidebar links' look in a recessed rail; `foot` tabs stand apart at its foot, `compact` keeps the icons -->
+      <ControlTheme x:Key="InsNavTabs" TargetType="ListBox">
+        <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+        <Setter Property="BorderThickness" Value="0,0,1,0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="ItemContainerTheme" Value="{StaticResource InsNavTab}" />
+        <Setter Property="ins:ShellLook.FlyMarker" Value="True" />
+        <Setter Property="ItemsPanel">
+          <ItemsPanelTemplate>
+            <ins:NavStack />
+          </ItemsPanelTemplate>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <ins:TemplateBorder Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    ClipToBounds="True">
+              <ScrollViewer Name="PART_ScrollViewer"
+                            HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Auto">
+                <Panel>
+                  <ItemsPresenter Name="PART_ItemsPresenter"
+                                  ItemsPanel="{TemplateBinding ItemsPanel}"
+                                  Margin="{TemplateBinding Padding}" />
+                  <Canvas Name="PART_Flight" IsHitTestVisible="False" />
+                </Panel>
+              </ScrollViewer>
+            </ins:TemplateBorder>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^.compact">
+          <Setter Property="ins:NavLook.Compact" Value="True" />
+        </Style>
+      </ControlTheme>
+
       <!-- The text inside a mark and inside a link's badge, given by them: centred, and the badge's line is its own height -->
       <ControlTheme x:Key="InsShellMarkText" TargetType="TextBlock">
         <Style Selector="^[(ins|ClassTheme.Relayed)=True]">
@@ -662,6 +735,9 @@
           <Setter Property="TextElement.FontSize" Value="11" />
           <Setter Property="TextElement.FontWeight" Value="Bold" />
           <Setter Property="ins:ClassTheme.ChildTheme" Value="{StaticResource InsShellBadgeText}" />
+          <Style Selector="^[(ins|NavLook.Compact)=True]">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
         </Style>
       </ControlTheme>
 
@@ -708,6 +784,9 @@
   <Style Selector="Button.shell-link">
     <Setter Property="Theme" Value="{StaticResource InsShellLinkButton}" />
   </Style>
+  <Style Selector="ListBox.nav">
+    <Setter Property="Theme" Value="{StaticResource InsNavTabs}" />
+  </Style>
   <Style Selector="Button.shell-brand">
     <Setter Property="Theme" Value="{StaticResource InsShellBrandButton}" />
   </Style>
@@ -732,6 +811,32 @@
   </Style>
   <Style Selector="ListBox.shell-nav ListBoxItem:selected ins|Icon">
     <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+  </Style>
+  <!-- A tab's icon: a step larger than the sidebar's, the brand ink under the pointer with a smaller grow, the soft brand when chosen; 24 and alone when compact -->
+  <Style Selector="ListBox.nav ListBoxItem ins|Icon">
+    <Setter Property="Size" Value="20" />
+    <Setter Property="Margin" Value="0,0,10,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+    <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+    <Setter Property="RenderTransform" Value="none" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Foreground" Duration="0:0:0.25" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ListBox.nav ListBoxItem:pointerover ins|Icon">
+    <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+    <Setter Property="RenderTransform" Value="scale(1.05)" />
+  </Style>
+  <Style Selector="ListBox.nav ListBoxItem:selected ins|Icon">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBrandSoft}" />
+  </Style>
+  <Style Selector="ListBox.nav.compact ListBoxItem ins|Icon">
+    <Setter Property="Size" Value="24" />
+    <Setter Property="Margin" Value="0" />
   </Style>
   <!-- While the marker flies, the real markers hide, or the new one would be waiting before the bar arrived -->
   <Style Selector="ListBox.moving ListBoxItem /template/ :is(Border)#PART_Marker">

@@ -15,7 +15,7 @@
   <Style Selector=":is(TopLevel):ins-still ListBoxItem:pointerover, :is(TopLevel):ins-still ListBoxItem:selected, :is(TopLevel):ins-still MenuItem:selected, :is(TopLevel):ins-still ComboBoxItem:pointerover, :is(TopLevel):ins-still ComboBoxItem:focus-visible, :is(TopLevel):ins-still :is(Button).pop-item:focus-visible, :is(TopLevel):ins-still ins|PaletteBorder.palette-item.active">
     <Setter Property="RenderTransform" Value="none" />
   </Style>
-  <Style Selector=":is(TopLevel):ins-still ListBox.shell-nav ListBoxItem:pointerover ins|Icon, :is(TopLevel):ins-still Button.shell-link:pointerover ins|Icon">
+  <Style Selector=":is(TopLevel):ins-still ListBox.shell-nav ListBoxItem:pointerover ins|Icon, :is(TopLevel):ins-still ListBox.nav ListBoxItem:pointerover ins|Icon, :is(TopLevel):ins-still Button.shell-link:pointerover ins|Icon">
     <Setter Property="RenderTransform" Value="none" />
   </Style>
   <Style Selector=":is(TopLevel):ins-still :is(Button):pointerover ins|Icon.toolbar-icon, :is(TopLevel):ins-still :is(Button):pressed ins|Icon.toolbar-icon">

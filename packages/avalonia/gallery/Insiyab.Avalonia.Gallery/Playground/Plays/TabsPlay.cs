@@ -113,5 +113,69 @@ public static class TabsPlay
         },
     };
 
-    public static PlayDef[] All { get; } = [Tabs, Documents];
+    public static PlayDef Nav { get; } = new()
+    {
+        Id = "nav",
+        Title = "تبويبات جانبية",
+        Wide = _ => true,
+        Controls =
+        [
+            Switch("badge", "عدد على تبويب", "shell-link-badge", "عدد صغير في آخر التبويب، كعدد ما لم يُقرأ: `Border Classes=\"shell-link-badge\"` بجانب الاسم، وعليه `DockPanel.Dock=\"Right\"`.", OptionKind.Class),
+            Switch("foot", "تبويب في الأسفل", "foot", "على `ListBoxItem`: تبويب يقف وحده في أسفل العمود، فوقه خط رفيع، ويبقى في القائمة نفسها فتصل إليه الأسهم. وإن كانت عدة تبويبات في آخر القائمة بهذا الكلاس نزلت معًا.", OptionKind.Class, on: true),
+            Switch("compact", "أيقونات فقط", "compact", "تضيق التبويبات إلى أيقوناتها، أكبر قليلًا، كل واحدة في مربع، ويصير اسم التبويب تلميحًا يظهر تحت المؤشر، فاكتبه في `ToolTip.Tip`.", OptionKind.Class),
+        ],
+        Extra =
+        [
+            Row("الأساس", "ListBox.nav", "عمود تبويبات على طرف الصفحة بهيئة روابط الشريط الجانبي: أيقونة واسم، وشريط بلون الهوية ينتقل إلى المختار. والتبويب المختار مفتوح على المحتوى بلونه نفسه، وبين التبويبات خطوط رفيعة.", OptionKind.Class, true),
+            Row("الأساس", "ListBoxItem", "تبويب واحد: `DockPanel` فيه `ins:Icon` ثم اسم التبويب في `TextBlock`.", OptionKind.Element, true),
+            Row("الأساس", "CornerRadius", "زوايا العمود، لتنحني مع زوايا البطاقة التي هو فيها من جهة بدايتها.", OptionKind.Property),
+            Row("الأساس", "SelectionChanged", "يُطلق عند اختيار تبويب، والمختار في `SelectedItem`.", OptionKind.Event),
+        ],
+        Axaml = s =>
+        {
+            (string Icon, string Name, string Text)[] tabs =
+            [
+                ("IconUser", "الملف الشخصي", "الاسم والصورة وطريقة التواصل."),
+                ("IconBell", "الإشعارات", "ما يصلك من تنبيهات، وكيف يصلك."),
+                ("IconShield", "الأمان", "كلمة المرور والأجهزة التي دخلت منها."),
+                ("IconHelp", "المساعدة", "الأسئلة الشائعة وطريقة التواصل مع الدعم."),
+            ];
+            var lines = new List<string>
+            {
+                "<Border Classes=\"card\" Height=\"320\">",
+                "  <DockPanel>",
+                $"    <ListBox x:Name=\"Tabs\"{Classes("nav", s.On("compact") ? "compact" : null)} CornerRadius=\"13,0,0,13\" SelectedIndex=\"0\" AutomationProperties.Name=\"الإعدادات\">",
+            };
+            for (var i = 0; i < tabs.Length; i++)
+            {
+                var (icon, name, text) = tabs[i];
+                var foot = s.On("foot") && i == tabs.Length - 1 ? " Classes=\"foot\"" : "";
+                lines.Add($"      <ListBoxItem{foot} Tag=\"{text}\" ToolTip.Tip=\"{name}\">");
+                lines.Add("        <DockPanel>");
+                lines.Add($"          <ins:Icon Data=\"{{StaticResource {icon}}}\" />");
+                if (s.On("badge") && i == 1) lines.Add("          <Border Classes=\"shell-link-badge\" DockPanel.Dock=\"Right\"><TextBlock Text=\"3\" /></Border>");
+                lines.Add($"          <TextBlock Text=\"{name}\" />");
+                lines.Add("        </DockPanel>");
+                lines.Add("      </ListBoxItem>");
+            }
+            lines.Add("    </ListBox>");
+            lines.Add("    <TextBlock Margin=\"24\" TextWrapping=\"Wrap\" Text=\"{Binding #Tabs.SelectedItem.Tag}\" />");
+            lines.Add("  </DockPanel>");
+            lines.Add("</Border>");
+            return string.Join("\n", lines);
+        },
+        Notes = s =>
+        {
+            var notes = new List<string> { "اختر تبويبًا بالنقر أو بالأسهم، فينتقل إليه الشريط ويظهر هنا الحدث." };
+            if (s.On("compact")) notes.Add("مرر المؤشر على أيقونة فيظهر اسم تبويبها. ويختفي العدد مع الأسماء.");
+            return notes;
+        },
+        Stage = (view, _, say) =>
+        {
+            foreach (var tabs in view.GetLogicalDescendants().OfType<ListBox>())
+                tabs.Loaded += (_, _) => tabs.SelectionChanged += (_, _) => { if (tabs.SelectedItem is ListBoxItem t) say($"حدث `SelectionChanged`، والمختار «{ToolTip.GetTip(t)}»"); };
+        },
+    };
+
+    public static PlayDef[] All { get; } = [Tabs, Documents, Nav];
 }

@@ -18,6 +18,10 @@
     <pg:PlayText Classes="p" Markup="يعرض `ins:DocumentTabs` ما فتحه المستخدم من ملفات أو صفحات في تبويبات بهيئة علامات التبويب نفسها. يُغلق التبويب بزره، أو بـ`Ctrl+W`، أو بـ`Delete` إذا كان عليه التركيز، أو بالنقر بالزر الأوسط. ويُنقل بالسحب أو بـ`Ctrl+Shift+PageDown` و`Ctrl+Shift+PageUp`، وتتنقل `Ctrl+Tab` بين التبويبات. وإذا كثرت التبويبات مرّ الشريط بسهمين. والقائمة لتطبيقك: يسمع الأحداث ويضيف التبويبات بنفسه." />
     <pg:Playground Def="{x:Static pg:TabsPlay.Documents}" />
 
+    <TextBlock Classes="section" Text="تبويبات جانبية" />
+    <pg:PlayText Classes="p" Markup="يضع `ListBox` بالكلاس `nav` التبويبات عمودًا على طرف الصفحة من جهة بدايتها، بهيئة روابط الشريط الجانبي: أيقونة واسم، وعدد صغير إن شئت، وشريط بلون الهوية ينتقل إلى التبويب المختار. ويقف التبويب الذي عليه `foot` في أسفل العمود، وإذا ضاقت الصفحة أضف `compact` فتبقى الأيقونات وحدها." />
+    <pg:Playground Def="{x:Static pg:TabsPlay.Nav}" />
+
     <TextBlock Classes="section" Text="الخيارات" />
     <pg:PlayText Classes="p" Markup="كل ما في علامات التبويب من عناصر وكلاسات وخصائص وأحداث، في صندوق يفتح بالنقر." />
     <pg:OptionsList Defs="{x:Static pg:TabsPlay.All}" />

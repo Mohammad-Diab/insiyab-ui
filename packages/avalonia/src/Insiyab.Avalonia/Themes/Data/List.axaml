@@ -308,7 +308,7 @@
   </Style>
 
   <!-- The row's slots sit apart by the same gap everywhere but the sidebar -->
-  <Style Selector="ListBox:not(.shell-nav) ListBoxItem > DockPanel">
+  <Style Selector="ListBox:not(.shell-nav):not(.nav) ListBoxItem > DockPanel">
     <Setter Property="HorizontalSpacing" Value="12" />
   </Style>
 
