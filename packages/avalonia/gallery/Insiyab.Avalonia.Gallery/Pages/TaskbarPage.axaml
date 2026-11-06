@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ins="using:Insiyab.Avalonia.Controls"
              xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
+             xmlns:local="using:Insiyab.Avalonia.Gallery.Pages"
              x:Class="Insiyab.Avalonia.Gallery.Pages.TaskbarPage">
   <UserControl.Styles>
     <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
@@ -46,6 +47,22 @@
       <TextBlock Classes="p" Margin="0" Text="على ويندوز لكل نافذة شارتها على زرها، وإذا اجتمعت النوافذ في زر واحد ظهرت آخر شارة وُضعت. ولا تظهر إذا صغُرت أزرار شريط المهام أو أُطفئت الشارات من الإعدادات." />
       <TextBlock Classes="p" Margin="0" Text="على ماك تظهر على أيقونة التطبيق في Dock، ولا تظهر على لينكس ولا في المتصفح ولا على الهاتف، ولا يتعطل شيء." />
       <pg:PlayText Classes="p" Margin="0" Markup="يقرأ قارئ الشاشة العدد مع زر التطبيق، وتغيّر ما يقرؤه بـ `BadgeLabel`." />
+    </ins:ProseList>
+
+    <TextBlock Classes="section" Text="أيقونة منطقة الإشعارات" />
+    <pg:PlayText Classes="p" Markup="تعرض `TrayIcon` من Avalonia أيقونة بجانب الساعة، مع تلميح وقائمة. ويضيف `NotifyAreaIcon` على ويندوز ما ينقصها: فقاعات تظهر إشعارات في ويندوز 10 و11، ومعها نقرة تعرف بها أي فقاعة نُقرت، وقائمة فيها علامات اختيار وصفوف معطلة وتُفتح من اليمين في العربية، وأيقونة تعود وحدها إذا أُعيد تشغيل المستكشف." />
+    <Border Classes="dx">
+      <StackPanel Spacing="16" HorizontalAlignment="Center">
+        <ToggleSwitch x:Name="TrayOn" Content="أيقونة المعرض في منطقة الإشعارات" HorizontalAlignment="Center" IsCheckedChanged="OnTray" />
+        <Button x:Name="Balloon" Classes="secondary sm" Content="أرسل إشعارًا" HorizontalAlignment="Center" IsEnabled="False" Click="OnBalloon" />
+      </StackPanel>
+    </Border>
+    <TextBlock Classes="p" Text="انقر الأيقونة بالزر الأيمن لترى قائمتها، وتختفي الأيقونة حين تغادر الصفحة." />
+    <pg:PlayListing Code="{x:Static local:TaskbarPage.TrayCode}" Margin="0,0,0,24" />
+    <ins:ProseList>
+      <pg:PlayText Classes="p" Margin="0" Markup="لإبقاء التطبيق يعمل والنافذة مخفية، استعمل `NotifyAreaIcon.HideToTray(window)`: تُصغَّر النافذة ويختفي زرها من شريط المهام. ولا تخفها بـ `Hide()`، فقد تعود إطارًا فارغًا بعد مدة طويلة. وتعيدها `RestoreFromTray` كما كانت. ولا تخفها إلا و`IsAdded` صحيحة، وإلا لم يبق للمستخدم طريق إليها." />
+      <pg:PlayText Classes="p" Margin="0" Markup="يقص ويندوز التلميح عند 127 حرفًا، وعنوان الفقاعة عند 63 ونصها عند 255. وتسكت الفقاعات في أوقات الهدوء التي يضبطها المستخدم." />
+      <pg:PlayText Classes="p" Margin="0" Markup="وفي غير ويندوز لا تظهر الأيقونة ولا يتعطل شيء، فاستعمل هناك `TrayIcon` من Avalonia." />
     </ins:ProseList>
 
   </StackPanel>
