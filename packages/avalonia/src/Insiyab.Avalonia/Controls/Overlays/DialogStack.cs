@@ -94,6 +94,7 @@ internal sealed class DialogStack : Panel
         foreach (var below in _layers) below.Cover(true);
         var layer = new DialogLayer(this, dialog, from)
         {
+            Origin = anchor,
             FlowDirection = anchor.FlowDirection,
             RequestedThemeVariant = anchor.ActualThemeVariant,
         };
@@ -210,6 +211,9 @@ internal sealed class DialogLayer : ThemeVariantScope
 
     public Dialog Dialog { get; }
     public Control? From { get; }
+
+    /// <summary>The control the dialog was opened from, which a <see cref="Dialog.GrowsFromAnchor"/> dialog grows out of.</summary>
+    public Control? Origin { get; init; }
     public Border Scrim => _scrim;
 
     // A modal under another gives up its tint and its input: the page is dimmed once, by the top one.
@@ -257,8 +261,24 @@ internal sealed class DialogLayer : ThemeVariantScope
     private void Move(Dialog dialog, bool inward)
     {
         var drawer = dialog.IsDrawer;
+        var grows = !drawer && dialog.GrowsFromAnchor && !Motion.IsStill(this);
+        if (inward && grows)
+        {
+            // Its size and place are known only after a layout: hold it hidden, then grow it out of its anchor.
+            dialog.Transitions = null;
+            dialog.RenderTransform = TransformOperations.Identity;
+            dialog.Opacity = 0;
+            Dispatcher.UIThread.Post(() => { if (dialog.IsOpen && dialog.Parent == _panel) Run(dialog, true, GrowFrom(dialog)); }, DispatcherPriority.Loaded);
+            return;
+        }
+        Run(dialog, inward, grows ? GrowFrom(dialog) : null);
+    }
+
+    private void Run(Dialog dialog, bool inward, TransformOperations? from)
+    {
+        var drawer = dialog.IsDrawer;
         var duration = inward ? (drawer ? TimeSpan.FromMilliseconds(300) : Motion.Enter(this)) : Motion.Exit(this);
-        var away = drawer ? DrawerAway(dialog) : TransformOperations.Parse("translateY(10px) scale(0.98)");
+        var away = drawer ? DrawerAway(dialog) : from ?? TransformOperations.Parse("translateY(10px) scale(0.98)");
         var easing = Motion.Ease(this);
         if (inward)
         {
@@ -271,6 +291,27 @@ internal sealed class DialogLayer : ThemeVariantScope
         dialog.Transitions = transitions;
         dialog.RenderTransform = inward ? TransformOperations.Identity : away;
         if (!drawer) dialog.Opacity = inward ? 1 : 0;
+    }
+
+    // The transform that lays the dialog over its anchor, about the dialog's centre, in the dialog's own space (so a mirrored layer needs nothing more); Avalonia applies the operations in the order written.
+    internal TransformOperations? GrowFrom(Dialog dialog)
+    {
+        if (Origin is not { IsEffectivelyVisible: true } origin || TopLevel.GetTopLevel(origin) != TopLevel.GetTopLevel(dialog)) return null;
+        var w = dialog.Bounds.Width;
+        var h = dialog.Bounds.Height;
+        if (w <= 0 || h <= 0 || origin.Bounds.Width <= 0 || origin.Bounds.Height <= 0) return null;
+        var keep = dialog.RenderTransform;
+        dialog.RenderTransform = null;
+        var p1 = origin.TranslatePoint(default, dialog);
+        var p2 = origin.TranslatePoint(new Point(origin.Bounds.Width, origin.Bounds.Height), dialog);
+        dialog.RenderTransform = keep;
+        if (p1 is not { } a1 || p2 is not { } a2) return null;
+        var anchor = new Rect(new Point(Math.Min(a1.X, a2.X), Math.Min(a1.Y, a2.Y)), new Point(Math.Max(a1.X, a2.X), Math.Max(a1.Y, a2.Y)));
+        var sx = Math.Max(0.02, anchor.Width / w);
+        var sy = Math.Max(0.02, anchor.Height / h);
+        var dx = anchor.Center.X - w / 2;
+        var dy = anchor.Center.Y - h / 2;
+        return TransformOperations.Parse(FormattableString.Invariant($"scale({sx:0.####}, {sy:0.####}) translate({dx:0.###}px, {dy:0.###}px)"));
     }
 
     // A transform has no logical form on the web; here the layer's own mirroring turns "toward the start" into the right side in RTL.

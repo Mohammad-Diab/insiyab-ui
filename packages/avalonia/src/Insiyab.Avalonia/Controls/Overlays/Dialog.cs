@@ -61,6 +61,10 @@ public class Dialog : ContentControl, IWords
     public static readonly StyledProperty<CornerRadius> EdgeCornersProperty =
         AvaloniaProperty.Register<Dialog, CornerRadius>(nameof(EdgeCorners));
 
+    /// <summary>Opens out of the control that opened it and closes back into it, as a picture grows from its thumbnail; a drawer ignores it.</summary>
+    public static readonly StyledProperty<bool> GrowsFromAnchorProperty =
+        AvaloniaProperty.Register<Dialog, bool>(nameof(GrowsFromAnchor));
+
     public static readonly DirectProperty<Dialog, bool> IsOpenProperty =
         AvaloniaProperty.RegisterDirect<Dialog, bool>(nameof(IsOpen), d => d.IsOpen);
 
@@ -119,6 +123,8 @@ public class Dialog : ContentControl, IWords
     public string CloseLabel { get => GetValue(CloseLabelProperty); set => SetValue(CloseLabelProperty, value); }
 
     public CornerRadius EdgeCorners { get => GetValue(EdgeCornersProperty); private set => SetValue(EdgeCornersProperty, value); }
+
+    public bool GrowsFromAnchor { get => GetValue(GrowsFromAnchorProperty); set => SetValue(GrowsFromAnchorProperty, value); }
 
     public bool IsOpen { get => _isOpen; private set => SetAndRaise(IsOpenProperty, ref _isOpen, value); }
 

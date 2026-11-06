@@ -6,6 +6,9 @@
     <ResourceDictionary>
       <!-- The ::backdrop, rgba(15, 23, 42, .38) in both themes -->
       <SolidColorBrush x:Key="InsDialogScrim" Color="#610F172A" />
+      <!-- The picture viewer's zoom buttons -->
+      <StreamGeometry x:Key="InsPictureZoomIn">M3,11 A8,8 0 1 0 19,11 A8,8 0 1 0 3,11 Z M21 21l-4.35-4.35 M11 8v6 M8 11h6</StreamGeometry>
+      <StreamGeometry x:Key="InsPictureZoomOut">M3,11 A8,8 0 1 0 19,11 A8,8 0 1 0 3,11 Z M21 21l-4.35-4.35 M8 11h6</StreamGeometry>
 
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
