@@ -5,4 +5,5 @@
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Content/Countdown.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Content/Chart.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Content/Find.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Content/Media.axaml" />
 </Styles>

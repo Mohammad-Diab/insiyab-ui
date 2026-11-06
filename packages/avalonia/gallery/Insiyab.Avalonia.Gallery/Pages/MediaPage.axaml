@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.MediaPage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
+  </UserControl.Styles>
+
+  <StackPanel>
+    <TextBlock Classes="intro" Text="أجزاء تبني بها مشغلك للصوت أو الفيديو أو الكاميرا: شريط الوقت، وسطح الصورة، والبلاطة، وشريط الأزرار. والتشغيل نفسه لمشغلك." />
+    <pg:PlayExample x:Name="Player" Layout="Stack" Code="{x:Static pg:MediaPlay.Example}" />
+
+    <TextBlock Classes="section" Text="شريط الوقت" />
+    <pg:PlayText Classes="p" Markup="يُرسم `ins:MediaBar` من اليسار إلى اليمين في كل لغة، كما يجري الوقت في كل مشغل. تعطيه مكان التشغيل في `Value` من 0 إلى 1 وطول المقطع في `Duration`، فيتبع المؤشر بفقاعة فيها الوقت. وحين ينقر المستخدم أو يسحب أو يضغط الأسهم يُطلق `SeekRequested` بالمكان الجديد، وأثناء السحب يرسم الشريط مكان السحب ولا ينتظر المشغل." />
+    <pg:Playground Def="{x:Static pg:MediaPlay.MediaBarPlay}" />
+
+    <TextBlock Classes="section" Text="صف الوقت والبث المباشر" />
+    <pg:PlayText Classes="p" Markup="يضع `ins:MediaSeekRow` الوقت الذي شوهد والشريط والطول في صف واحد، وكل وقت في مكان بعرض أطول صيغة له، فلا يهتز الشريط حين تتغير الأرقام. وفي البث المباشر يصير الطول «مباشر»، وإذا رجع المستخدم إلى الوراء ظهر في مكانه زر يعيده إلى المباشر ومعه كم تأخر." />
+    <pg:Playground Def="{x:Static pg:MediaPlay.LivePlay}" />
+
+    <TextBlock Classes="section" Text="سطح الصورة" />
+    <pg:PlayText Classes="p" Markup="يعرض `ins:MediaSurface` صورة ثابتة في `Source`، أو إطارات الفيديو يكتبها المشغل بـ `WriteFrame`، على أرضية داكنة في الوضعين. ولا يقلبه اتجاه الصفحة، بل `IsMirrored` وحدها." />
+    <pg:Playground Def="{x:Static pg:MediaPlay.Surface}" />
+
+    <TextBlock Classes="section" Text="البلاطة" />
+    <pg:PlayText Classes="p" Markup="تحيط `ins:MediaTile` صورة بإطار مستدير، كبلاطة كاميرا في مكالمة، وتكتب `Caption` على ملاحظة داكنة في أسفلها." />
+    <pg:Playground Def="{x:Static pg:MediaPlay.Tile}" />
+
+    <TextBlock Classes="section" Text="شريط الأزرار" />
+    <pg:PlayText Classes="p" Markup="يأتي `ins:MediaControlBar` بأزرار المشغل المعتادة، كل زر مربوط بخاصية: `IsPlaying` و`Volume` و`IsMuted` و`Speed` و`IsSubtitlesOn` و`IsFillingFrame` و`IsFullScreen`، ويطلق الرجوع والتقديم `SkipRequested`. فتربط مشغلك بها ولا تبني الصف بيدك." />
+    <pg:PlayText Classes="p" Markup="وتضيف أزرارك إلى أي مجموعة بـ `StartItems` و`CenterItems` و`EndItems`، وعناصر قائمة «⋯» بـ `MoreItems`، وتخرج أي زر معتاد بخاصيته من `Show`، كما في المثال أعلاه: زر الفصول مضاف، وملء الشاشة مُخرج." />
+    <pg:Playground Def="{x:Static pg:MediaPlay.ControlRow}" />
+
+    <TextBlock Classes="section" Text="عارض الصور" />
+    <pg:PlayText Classes="p" Markup="يفتح `PictureViewer.ShowAsync` صورة في حوار إطاره نصف النافذة في كل اتجاه، فتدخل الصورة فيه كلها ولا تكبر فوق حجمها. تكبرها عجلة الفأرة حول المؤشر، و`+` و`−` والزران، و`0` يعيدها كاملة و`1` إلى حجمها الأصلي، وتسحبها أو تحركها الأسهم ما دامت أكبر من الإطار. ولا يتغير مقاس الحوار وأنت تكبر." />
+    <pg:PlayText Classes="p" Markup="وعلى زر، تجعله `ins:PictureViewer.Source` يفتح صورته، و`ins:PictureViewer.Title` عنوانها. وما دام بلا صورة فلا يُنقر ولا يأخذ التركيز، فتصل النقرة إلى ما تحته، كبطاقة صاحب الصورة." />
+    <pg:PlayExample x:Name="Pictures" Layout="Row" Code="{x:Static pg:MediaPlay.PictureExample}" />
+    <pg:PlayListing Code="{x:Static pg:MediaPlay.PictureCode}" Margin="0,0,0,24" />
+
+    <TextBlock Classes="section" Text="الخيارات" />
+    <pg:PlayText Classes="p" Markup="كل ما في أجزاء الوسائط من عناصر وكلاسات وخصائص وأحداث، لكل جزء صندوق يفتح بالنقر." />
+    <pg:OptionsList Defs="{x:Static pg:MediaPlay.All}" />
+  </StackPanel>
+</UserControl>

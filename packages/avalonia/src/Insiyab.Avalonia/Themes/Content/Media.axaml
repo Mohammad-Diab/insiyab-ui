@@ -1,0 +1,312 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+
+      <!-- The time bar: drawn in code, the marks above the track, the whole height takes the pointer -->
+      <ControlTheme x:Key="{x:Type ctl:MediaBar}" TargetType="ctl:MediaBar">
+        <Setter Property="Height" Value="28" />
+        <Setter Property="MinWidth" Value="80" />
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.5" />
+        </Style>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ctl:MediaSurface}" TargetType="ctl:MediaSurface">
+        <Setter Property="Background" Value="{DynamicResource InsMediaStage}" />
+      </ControlTheme>
+
+      <!-- A tile of the stage: rounded, a faint light edge, the caption on a dark note at its foot's start -->
+      <ControlTheme x:Key="{x:Type ctl:MediaTile}" TargetType="ctl:MediaTile">
+        <Setter Property="Background" Value="{DynamicResource InsMediaStage}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsMediaEdge}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <ctl:TemplateBorder Name="PART_Stage"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                ClipToBounds="True">
+              <Panel>
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  RenderTransformOrigin="50%,50%" />
+                <ctl:TemplateBorder Name="PART_Caption"
+                                    IsVisible="False"
+                                    IsHitTestVisible="False"
+                                    Margin="6"
+                                    Padding="8,2"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Background="{DynamicResource InsMediaNote}"
+                                    CornerRadius="{DynamicResource InsRSm}"
+                                    TextElement.Foreground="{DynamicResource InsMediaNoteInk}"
+                                    TextElement.FontSize="{DynamicResource InsFsXs}"
+                                    TextElement.FontWeight="SemiBold">
+                  <ContentPresenter Content="{TemplateBinding Caption}" TextBlock.TextTrimming="CharacterEllipsis" />
+                </ctl:TemplateBorder>
+              </Panel>
+            </ctl:TemplateBorder>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:captioned /template/ :is(Border)#PART_Caption">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:mirrored /template/ ContentPresenter#PART_ContentPresenter">
+          <Setter Property="RenderTransform" Value="scaleX(-1)" />
+        </Style>
+      </ControlTheme>
+
+      <StreamGeometry x:Key="InsMediaBackIcon">M3 12a9 9 0 1 0 3-6.7L3 8 M3 3v5h5</StreamGeometry>
+      <StreamGeometry x:Key="InsMediaForwardIcon">M21 12a9 9 0 1 1-3-6.7L21 8 M21 3v5h-5</StreamGeometry>
+      <StreamGeometry x:Key="InsMediaSubtitlesIcon">M3 5h18v14H3z M10.5 10H9a1.5 1.5 0 0 0-1.5 1.5v1A1.5 1.5 0 0 0 9 14h1.5 M16.5 10H15a1.5 1.5 0 0 0-1.5 1.5v1A1.5 1.5 0 0 0 15 14h1.5</StreamGeometry>
+      <StreamGeometry x:Key="InsMediaFillIcon">M4 7V4h3 M20 7V4h-3 M4 17v3h3 M20 17v3h-3 M8 8h8v8H8z</StreamGeometry>
+      <StreamGeometry x:Key="InsMediaMoreIcon">M4,12 A1,1 0 1 0 6,12 A1,1 0 1 0 4,12 Z M11,12 A1,1 0 1 0 13,12 A1,1 0 1 0 11,12 Z M18,12 A1,1 0 1 0 20,12 A1,1 0 1 0 18,12 Z</StreamGeometry>
+
+      <!-- The control row with its default buttons: the sound at the start; the speed, back, play and forward in the centre, the speed's twin side keeping play in the middle; the subtitles, fill, full screen and ⋯ at the end. The app's own items join each group -->
+      <ControlTheme x:Key="{x:Type ctl:MediaControlBar}" TargetType="ctl:MediaControlBar">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <ctl:MediaControls Name="PART_Row">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Border Name="PART_VolumeGroup" Classes="media-group">
+                  <SplitButton Name="PART_Volume" Classes="bare media-split">
+                    <ctl:Icon Name="PART_VolumeIcon" Classes="media-ico" />
+                  </SplitButton>
+                </Border>
+                <StackPanel Name="PART_StartItems" Orientation="Horizontal" Spacing="8" IsVisible="False" />
+              </StackPanel>
+              <Grid Name="PART_Center" ColumnSpacing="16" Grid.IsSharedSizeScope="True">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" MinWidth="72" SharedSizeGroup="side" />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="Auto" MinWidth="72" SharedSizeGroup="side" />
+                </Grid.ColumnDefinitions>
+                <Button Name="PART_Speed" Classes="bare media-speed" HorizontalAlignment="Right" MinWidth="48" />
+                <Button Name="PART_Back" Grid.Column="1" Classes="bare icon media-btn">
+                  <Panel>
+                    <ctl:Icon Classes="media-ico" Data="{StaticResource InsMediaBackIcon}" />
+                    <TextBlock Name="PART_BackSeconds" Classes="media-skip" />
+                  </Panel>
+                </Button>
+                <Button Name="PART_Play" Grid.Column="2" Classes="primary icon media-play">
+                  <ctl:Icon Name="PART_PlayIcon" Classes="media-ico" />
+                </Button>
+                <Button Name="PART_Forward" Grid.Column="3" Classes="bare icon media-btn">
+                  <Panel>
+                    <ctl:Icon Classes="media-ico" Data="{StaticResource InsMediaForwardIcon}" />
+                    <TextBlock Name="PART_ForwardSeconds" Classes="media-skip" />
+                  </Panel>
+                </Button>
+                <StackPanel Name="PART_CenterItems" Grid.Column="4" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Left" VerticalAlignment="Center" IsVisible="False" />
+              </Grid>
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Border Name="PART_SubtitlesGroup" Classes="media-group">
+                  <ToggleSplitButton Name="PART_Subtitles" Classes="bare media-split">
+                    <ctl:Icon Classes="media-ico" Data="{StaticResource InsMediaSubtitlesIcon}" />
+                  </ToggleSplitButton>
+                </Border>
+                <ToggleButton Name="PART_SubtitlesToggle" Classes="bare icon media-btn">
+                  <ctl:Icon Classes="media-ico" Data="{StaticResource InsMediaSubtitlesIcon}" />
+                </ToggleButton>
+                <ToggleButton Name="PART_Fit" Classes="bare icon media-btn">
+                  <ctl:Icon Classes="media-ico" Data="{StaticResource InsMediaFillIcon}" />
+                </ToggleButton>
+                <ToggleButton Name="PART_FullScreen" Classes="bare icon media-btn">
+                  <ctl:Icon Name="PART_FullScreenIcon" Classes="media-ico" />
+                </ToggleButton>
+                <StackPanel Name="PART_EndItems" Orientation="Horizontal" Spacing="8" IsVisible="False" />
+                <Button Name="PART_More" Classes="bare icon media-btn">
+                  <ctl:Icon Classes="media-ico" Data="{StaticResource InsMediaMoreIcon}" />
+                </Button>
+              </StackPanel>
+            </ctl:MediaControls>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <StreamGeometry x:Key="InsMediaLiveIcon">M5 4L15 12L5 20Z M19 5v14</StreamGeometry>
+
+      <!-- The seek row: the time played, the bar and the length (or the live slot), left to right in every language; the times sit 5px down, on the bar's track -->
+      <ControlTheme x:Key="{x:Type ctl:MediaSeekRow}" TargetType="ctl:MediaSeekRow">
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" FlowDirection="LeftToRight">
+              <Panel RenderTransform="translateY(5px)" VerticalAlignment="Center">
+                <ctl:TemplateText Name="PART_NowPattern" FontWeight="SemiBold" Opacity="0" />
+                <ctl:TemplateText Name="PART_Now" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{DynamicResource InsText1}" />
+              </Panel>
+              <ctl:MediaBar Name="PART_Bar" Grid.Column="1"
+                            Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                            Buffered="{TemplateBinding Buffered}"
+                            Duration="{TemplateBinding Duration}"
+                            Lead="{TemplateBinding Lead}"
+                            LeadTip="{TemplateBinding LeadTip}"
+                            Markers="{TemplateBinding Markers}"
+                            CurrentMarker="{TemplateBinding CurrentMarker}" />
+              <Panel Grid.Column="2" RenderTransform="translateY(5px)" VerticalAlignment="Center">
+                <Panel Name="PART_LengthSlot">
+                  <ctl:TemplateText Name="PART_LengthPattern" Opacity="0" />
+                  <ctl:TemplateText Name="PART_Length" HorizontalAlignment="Left" Foreground="{DynamicResource InsLabel}" />
+                </Panel>
+                <Panel Name="PART_LiveSlot" IsVisible="False" FlowDirection="{TemplateBinding FlowDirection}">
+                  <StackPanel Name="PART_AtLive" Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Ellipse Width="8" Height="8" Fill="{DynamicResource InsToneBad}" VerticalAlignment="Center" />
+                    <ctl:TemplateText Name="PART_LiveText" FontWeight="SemiBold" Foreground="{DynamicResource InsText1}" VerticalAlignment="Center" />
+                  </StackPanel>
+                  <Button Name="PART_BackToLive" Classes="sm" HorizontalAlignment="Center" FlowDirection="LeftToRight" Opacity="0" IsHitTestVisible="False">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                      <ctl:Icon Data="{StaticResource InsMediaLiveIcon}" VerticalAlignment="Center" />
+                      <Panel VerticalAlignment="Center">
+                        <ctl:TemplateText Name="PART_BehindPattern" Opacity="0" />
+                        <ctl:TemplateText Name="PART_Behind" HorizontalAlignment="Right" />
+                      </Panel>
+                    </StackPanel>
+                  </Button>
+                </Panel>
+              </Panel>
+            </Grid>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:live /template/ Panel#PART_LengthSlot">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:live /template/ Panel#PART_LiveSlot">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+      </ControlTheme>
+
+      <!-- The bar's time bubble: the tooltip's face, Latin digits -->
+      <ControlTheme x:Key="InsLookMediaTime" TargetType="Border" ctl:ClassTheme.For="media-time">
+        <Style Selector="^.media-time">
+          <Setter Property="Background" Value="{DynamicResource InsTipBg}" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+          <Setter Property="Padding" Value="8,3" />
+          <Setter Property="BoxShadow" Value="{DynamicResource InsShMd}" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsTipFg}" />
+          <Setter Property="TextElement.FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+          <Setter Property="TextElement.FontSize" Value="{DynamicResource InsFsXs}" />
+          <Setter Property="TextElement.FontWeight" Value="SemiBold" />
+        </Style>
+      </ControlTheme>
+
+      <!-- media-note: a dark note laid over a picture, as a name; the same in both themes -->
+      <ControlTheme x:Key="InsLookMediaNote" TargetType="Border" ctl:ClassTheme.For="media-note">
+        <Style Selector="^.media-note">
+          <Setter Property="Background" Value="{DynamicResource InsMediaNote}" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Setter Property="Padding" Value="12,6" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsMediaNoteInk}" />
+        </Style>
+      </ControlTheme>
+
+      <!-- media-caption: a subtitle over a video, darker and bolder than a note -->
+      <ControlTheme x:Key="InsLookMediaCaption" TargetType="Border" ctl:ClassTheme.For="media-caption">
+        <Style Selector="^.media-caption">
+          <Setter Property="Background" Value="{DynamicResource InsMediaCaption}" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Setter Property="Padding" Value="14,6" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource InsMediaCaptionInk}" />
+          <Setter Property="TextElement.FontWeight" Value="SemiBold" />
+          <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+          <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
+      </ControlTheme>
+
+      <!-- media-group: controls that belong together in the control row (the sound, the subtitles' split) in one hairline outline -->
+      <ControlTheme x:Key="InsLookMediaGroup" TargetType="Border" ctl:ClassTheme.For="media-group">
+        <Style Selector="^.media-group">
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="CornerRadius" Value="{DynamicResource InsRMd}" />
+          <Setter Property="Padding" Value="2" />
+        </Style>
+      </ControlTheme>
+
+      <!-- media-skip: the seconds written inside a skip button's circling arrow -->
+      <ControlTheme x:Key="InsLookMediaSkip" TargetType="TextBlock" ctl:ClassTheme.For="media-skip">
+        <Style Selector="^.media-skip">
+          <Setter Property="FontSize" Value="8" />
+          <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="HorizontalAlignment" Value="Center" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+      </ControlTheme>
+
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- The control row: one glyph size (22) and one control height (44) for every control; play is the one larger control -->
+  <Style Selector="ctl|Icon.media-ico">
+    <Setter Property="Size" Value="22" />
+  </Style>
+  <Style Selector=":is(Button).media-btn">
+    <Setter Property="Width" Value="44" />
+    <Setter Property="Height" Value="44" />
+    <Setter Property="Padding" Value="0" />
+  </Style>
+  <Style Selector="DropDownButton.media-dd, :is(SplitButton).media-split, Button.media-speed">
+    <Setter Property="Height" Value="44" />
+  </Style>
+  <Style Selector="DropDownButton.media-dd">
+    <Setter Property="Padding" Value="11,0" />
+  </Style>
+  <Style Selector=":is(SplitButton).media-split /template/ Button#PART_PrimaryButton">
+    <Setter Property="MinWidth" Value="40" />
+  </Style>
+  <!-- The play glyph is solid, triangle and bars alike -->
+  <Style Selector="Button.media-play ctl|Icon.media-ico">
+    <Setter Property="IsFilled" Value="True" />
+  </Style>
+  <Style Selector="Button.media-play">
+    <Setter Property="Width" Value="52" />
+    <Setter Property="Height" Value="52" />
+    <Setter Property="CornerRadius" Value="26" />
+  </Style>
+  <!-- The toolbar's command face: nothing at rest, a soft fill under the pointer or while a card is open; a toggle that is on takes the brand tint with the dark brand glyph -->
+  <Style Selector=":is(Button).bare.media-btn, DropDownButton.bare.media-dd">
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <Style Selector=":is(Button).bare.media-btn:pointerover, Button.bare.media-btn:flyout-open, Button.bare.media-speed:pointerover, Button.bare.media-speed:flyout-open, DropDownButton.bare.media-dd:flyout-open, :is(SplitButton).media-split /template/ Button.split-half:pointerover">
+    <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+  </Style>
+  <!-- The split's arrow half: as wide as a control's glyph room, its arrow in the middle of its fill, so the fill never hugs the arrow nor the group's edge -->
+  <Style Selector=":is(SplitButton).media-split /template/ Button#PART_SecondaryButton">
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="MinWidth" Value="28" />
+    <Setter Property="Padding" Value="6,0" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+  </Style>
+  <!-- A bare split pushes its arrow off its content; here the arrow has a half of its own, so it sits in that half's middle -->
+  <Style Selector=":is(SplitButton).media-split /template/ Viewbox#PART_Chevron">
+    <Setter Property="Margin" Value="0" />
+  </Style>
+  <Style Selector="ToggleButton.media-btn:checked, :is(SplitButton).media-split:checked /template/ Button#PART_PrimaryButton, Button.media-btn.on">
+    <Setter Property="Background" Value="{DynamicResource InsButtonToggleOn}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+  </Style>
+  <!-- Inside a group the controls are a step smaller, each with its own rounded face, a split's two halves too (only the group's own controls, never the cards they open) -->
+  <Style Selector="Border.media-group > :is(Button), Border.media-group > StackPanel > :is(Button), Border.media-group > :is(SplitButton) /template/ Button.split-half, Border.media-group > StackPanel > :is(SplitButton) /template/ Button.split-half">
+    <Setter Property="Height" Value="40" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+  </Style>
+  <Style Selector="Border.media-group > StackPanel > :is(Button).media-btn">
+    <Setter Property="Width" Value="40" />
+  </Style>
+
+</Styles>

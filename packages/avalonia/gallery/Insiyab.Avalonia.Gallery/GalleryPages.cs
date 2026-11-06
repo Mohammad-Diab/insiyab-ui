@@ -29,13 +29,13 @@ public static class GalleryPages
         ("التخطيط", ["shell", "titlebar", "toolbar", "statusbar", "taskbar", "split"]),
         ("المحتوى", ["typography", "surfaces", "tables", "description", "quote"]),
         ("النماذج", ["inputs", "checks", "input-group", "pickers", "chips", "matrix", "validation"]),
-        ("المكونات", ["buttons", "accordion", "tabs", "stats", "loading", "progress", "countdown", "save", "tooltips", "alerts", "dialog", "drawer", "toasts", "notify", "badges", "list", "comments", "dropdown", "steps", "pagination", "page-head"]),
+        ("المكونات", ["buttons", "accordion", "tabs", "stats", "loading", "progress", "countdown", "save", "tooltips", "alerts", "dialog", "drawer", "toasts", "notify", "badges", "list", "media", "comments", "dropdown", "steps", "pagination", "page-head"]),
         ("الإضافات", ["hijri", "palette", "otp", "phone", "birthdate", "file", "scrollspy", "timeline", "tree", "charts", "month"]),
         ("القوالب", ["login-simple", "login"]),
         ("الملحقات", ["carousel", "colorpicker", "reveal"]),
     ];
 
-    // Each link's icon, the web NAV's `icon`; tokens, fonts, window, words, titlebar, toolbar, statusbar and taskbar are Avalonia's own and borrow one from the sprite.
+    // Each link's icon, the web NAV's `icon`; tokens, fonts, window, words, titlebar, toolbar, statusbar, taskbar and media are Avalonia's own and borrow one from the sprite.
     private static readonly Dictionary<string, string> Icons = new()
     {
         ["color"] = "IconPalette", ["tokens"] = "IconSliders", ["fonts"] = "IconType", ["window"] = "IconWindow", ["words"] = "IconMessage",
@@ -44,7 +44,7 @@ public static class GalleryPages
         ["inputs"] = "IconEdit", ["checks"] = "IconCheckSquare", ["input-group"] = "IconLink", ["pickers"] = "IconCalendar", ["chips"] = "IconTag", ["matrix"] = "IconGrid", ["validation"] = "IconShield",
         ["buttons"] = "IconPointer", ["accordion"] = "IconChevrons", ["tabs"] = "IconTabs", ["stats"] = "IconChart", ["loading"] = "IconLoader", ["progress"] = "IconGauge",
         ["countdown"] = "IconClock", ["save"] = "IconCheck", ["tooltips"] = "IconMessage", ["alerts"] = "IconAlert", ["dialog"] = "IconWindow", ["drawer"] = "IconSidebar",
-        ["toasts"] = "IconBell", ["notify"] = "IconBell", ["badges"] = "IconTag", ["list"] = "IconList", ["comments"] = "IconInbox", ["dropdown"] = "IconMenuDown",
+        ["toasts"] = "IconBell", ["notify"] = "IconBell", ["badges"] = "IconTag", ["list"] = "IconList", ["media"] = "IconSlides", ["comments"] = "IconInbox", ["dropdown"] = "IconMenuDown",
         ["steps"] = "IconSteps", ["pagination"] = "IconPages", ["page-head"] = "IconRoute",
         ["hijri"] = "IconMoon", ["palette"] = "IconSearch", ["otp"] = "IconLock", ["phone"] = "IconPhone", ["birthdate"] = "IconCalendar", ["file"] = "IconUpload",
         ["scrollspy"] = "IconList", ["timeline"] = "IconClock", ["tree"] = "IconFolder", ["charts"] = "IconChart", ["month"] = "IconCalendar",
@@ -52,7 +52,7 @@ public static class GalleryPages
         ["carousel"] = "IconSlides", ["colorpicker"] = "IconDroplet", ["reveal"] = "IconSparkle",
     };
 
-    // Each page's English name, the web NAV's `en`; tokens, fonts, window, words, titlebar, toolbar, statusbar and taskbar are Avalonia's own.
+    // Each page's English name, the web NAV's `en`; tokens, fonts, window, words, titlebar, toolbar, statusbar, taskbar and media are Avalonia's own.
     internal static readonly Dictionary<string, string> English = new()
     {
         ["index"] = "Introduction", ["start"] = "Quick start", ["javascript"] = "JavaScript", ["faq"] = "FAQ", ["color"] = "Color & branding", ["dark"] = "Dark mode",
@@ -62,7 +62,7 @@ public static class GalleryPages
         ["pickers"] = "Pickers", ["chips"] = "Chips, tags & multi-select", ["matrix"] = "Choice matrix", ["validation"] = "Validation", ["buttons"] = "Buttons",
         ["accordion"] = "Accordion", ["tabs"] = "Tabs", ["stats"] = "Stat tiles", ["loading"] = "Loading & empty states", ["progress"] = "Progress",
         ["countdown"] = "Countdown timer", ["save"] = "Save status autosave", ["tooltips"] = "Tooltips", ["alerts"] = "Alerts", ["dialog"] = "Dialog",
-        ["drawer"] = "Drawer", ["toasts"] = "Toasts", ["notify"] = "Notification center", ["badges"] = "Badges & numbers", ["list"] = "Lists",
+        ["drawer"] = "Drawer", ["toasts"] = "Toasts", ["notify"] = "Notification center", ["badges"] = "Badges & numbers", ["list"] = "Lists", ["media"] = "Media",
         ["comments"] = "Comments & messages", ["dropdown"] = "Dropdowns", ["steps"] = "Steps & wizard", ["pagination"] = "Pagination",
         ["page-head"] = "Page header & breadcrumb", ["utilities"] = "Utilities", ["hijri"] = "Hijri calendar", ["palette"] = "Command palette", ["otp"] = "One-time code",
         ["phone"] = "Phone number", ["birthdate"] = "Birth date", ["file"] = "File upload", ["scrollspy"] = "Scrollspy", ["timeline"] = "Timeline", ["tree"] = "Tree",
@@ -76,7 +76,7 @@ public static class GalleryPages
     // The pages the web NAV flags `fresh`.
     private static readonly HashSet<string> Fresh =
     [
-        "titlebar", "toolbar", "statusbar", "taskbar", "split", "tables", "description", "quote", "inputs", "pickers", "chips", "matrix", "stats", "countdown", "save", "notify", "badges", "comments", "steps",
+        "titlebar", "toolbar", "statusbar", "taskbar", "split", "tables", "description", "quote", "inputs", "pickers", "chips", "matrix", "stats", "countdown", "save", "notify", "badges", "media", "comments", "steps",
         "birthdate", "charts", "month", "login-simple",
     ];
 

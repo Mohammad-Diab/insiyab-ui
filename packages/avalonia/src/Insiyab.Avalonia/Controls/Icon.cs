@@ -17,6 +17,10 @@ public class Icon : Control
     public static readonly StyledProperty<double> StrokeThicknessProperty =
         AvaloniaProperty.Register<Icon, double>(nameof(StrokeThickness), 2);
 
+    /// <summary>Fills the glyph's closed shapes with its colour as well as drawing its lines, as a solid play triangle.</summary>
+    public static readonly StyledProperty<bool> IsFilledProperty =
+        AvaloniaProperty.Register<Icon, bool>(nameof(IsFilled));
+
     public static readonly StyledProperty<IBrush?> ForegroundProperty =
         TextElement.ForegroundProperty.AddOwner<Icon>();
 
@@ -25,7 +29,7 @@ public class Icon : Control
 
     static Icon()
     {
-        AffectsRender<Icon>(DataProperty, StrokeThicknessProperty, ForegroundProperty);
+        AffectsRender<Icon>(DataProperty, StrokeThicknessProperty, ForegroundProperty, IsFilledProperty);
         AffectsMeasure<Icon>(SizeProperty, FontSizeProperty);
     }
 
@@ -38,6 +42,8 @@ public class Icon : Control
     public double Size { get => GetValue(SizeProperty); set => SetValue(SizeProperty, value); }
 
     public double StrokeThickness { get => GetValue(StrokeThicknessProperty); set => SetValue(StrokeThicknessProperty, value); }
+
+    public bool IsFilled { get => GetValue(IsFilledProperty); set => SetValue(IsFilledProperty, value); }
 
     public IBrush? Foreground { get => GetValue(ForegroundProperty); set => SetValue(ForegroundProperty, value); }
 
@@ -53,6 +59,6 @@ public class Icon : Control
         var scale = Side / 24;
         var pen = new Pen(Foreground, StrokeThickness, lineCap: PenLineCap.Round, lineJoin: PenLineJoin.Round);
         using (context.PushTransform(Matrix.CreateScale(scale, scale)))
-            context.DrawGeometry(null, pen, Data);
+            context.DrawGeometry(IsFilled ? Foreground : null, pen, Data);
     }
 }
