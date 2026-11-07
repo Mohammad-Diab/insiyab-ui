@@ -18,13 +18,53 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageReleaseNotes>First public release of Insiyab for Avalonia 12 (net10.0).
-- One theme in place of FluentTheme: the web library's glass, RTL-first look for Avalonia's own controls and dozens more (shell and sidebar, title bar and caption buttons, toolbar and status bar, tables with sticky headers, frozen columns, resizing and editing, tree, tabs and document tabs, dialogs, drawers, toasts, notifications, command palette, date, time, birth date, colour, phone, OTP and file fields, charts, timeline, steps, wizard and more).
-- Light and dark that follow the system or the app, with a theme sweep; SetPrimary re-derives every brand colour live.
-- Right to left first: mirrored layouts, Arabic-aware search and matching, caret and text direction that follow what is typed.
-- Desktop conventions: keyboard paths, focus rings, context menus, Mica or acrylic windows on Windows, a taskbar badge (Dock on macOS), and motion that respects the system's effects setting.
-- Trimming and Native AOT compatible; works in a single view.
-- One xmlns for everything: xmlns:ins="https://github.com/Mohammad-Diab/insiyab-ui". The package README lists the API.</PackageReleaseNotes>
+    <PackageReleaseNotes>0.3.0
+
+Breaking changes
+- MenuItem.bad and the pop card's pop-item bad are now danger; bad is gone.
+- List rows draw their background, selection mark and focus ring with an internal RowBack: a style on a ListBoxItem's PART_Back as a Border no longer matches. Every list row draws its focus ring inside (FocusAdorner is null).
+- Pops place themselves from their real size (Placement Custom): they slide along the window edge instead of flipping sideways, turn up only when needed, go beside a tall trigger, and fit the window's height (MaxCardHeight).
+- The text menus of TextBox and SelectableTextBlock are PopMenus.
+- A DescriptionItem shows a control as itself; only text takes the selectable template.
+- MonthCalendar's head has a new default order (HeaderLayout Centered: Today and the hours switch, then the date between its arrows, then the views); HeaderLayout TitleStart puts the date first. The hours toggle is a small switch.
+- Table.Rebuild keeps the row of every item still there (matched by Equals) and the sort stays in force after it; CellText cells do not follow an item's own changes (use CellBinding).
+- With Timeline.DayOf set, ItemsSource reads back the projection that holds the day headings.
+- Toc.Offset is measured below the new ScrollMargin.
+- Arabic search folds more: compatibility forms, all marks and direction marks, Persian yeh, keheh and alef wasla, repeated spaces.
+
+Changed
+- The light rim keeps its bright top and fades to the hairline on the sides and bottom; panel heads and feet use the hairline.
+- Links (HyperlinkButton and the new Button.link) take the brand-soft tone with an underline under the pointer.
+- Bare and link buttons keep their rounded face under the pointer and when on, and never clip their text's ink.
+- The close cross grows a little under the pointer and dips when pressed, instead of turning.
+- Words built into the library can follow the app's language: InsiyabTheme.SetLanguage(language, strings).
+
+Added
+- Fold (height motion for any content), Expander flush and a fold chevron; Accordion filled from data.
+- DescriptionList, Timeline (day headings, unread dot, live tones) and Steps (per-step marker, pulse) filled from data.
+- Pill sm, outline, mute, a bare dot, dot peek that grows into the pill, Pill.Icon; Avatar xl and xxl centred by ink; DateBadge; categorical colours cat1 to cat8.
+- Surfaces tile, sheet and desk; panel tones, band head, low and dense.
+- ListBox master, ruled and compact; ListRow headings and states; sticky headings; a flying selection mark; side tabs (ListBox.nav).
+- Table rows added, removed, replaced and moved one at a time; TableColumn.Width with star widths and CellBinding.
+- ComboBox.searchable with keywords and groups; public ArabicMatch.Normalize and Matches; public TextDirection.
+- TrailingRow; ChoiceGrid Fill, MaxColumns and masonry; Toolbar.AtEnd and chip rows with a +N menu; TextBox.grow; ProgressBar.grow; ProgressRing.sm; ToggleSwitch.sm; FileUpload ShowList False; stat-hint clamp.
+- CommandPalette Description, IsSearchOnly and Text; Notify HeadActions and a stacked head; Toc ScrollMargin and IsSticky.
+- RichText with selection across paragraphs, spans and links; prose for SelectableTextBlock and bound text; ProseList.Marker; the Flash entrance.
+- Media parts: MediaBar, MediaSeekRow (fixed time slots, live state, back to live), MediaSurface, MediaTile and MediaControlBar with default buttons that apps extend; PictureViewer that grows out of its thumbnail (Dialog.GrowsFromAnchor).
+- NotifyAreaIcon: a notification-area icon with balloons and a native menu on Windows.
+- MonthCalendar event cards placed beside their event and growing out of it (EventDetails, ShowDetails); day, week and month switches and steps animate; Split.joined; PopCard MatchTargetWidth, OpensBeside and GrowsFromTarget; Icon.IsFilled and Icon dir.
+
+Fixed
+- Submenus no longer open detached in right to left, and a quick reopen no longer crashes.
+- The ComboBox list keeps room for its shadow; pops no longer show the trigger's hand cursor.
+- A lifted button or card keeps its hit area under a resting pointer; only a button's leading icon nudges.
+- Choice.Description shows under a CheckBox or RadioButton label.
+- Calendar events past midnight continue on the next day in the week and day views; the week columns keep their width.
+- A compact Timeline's text clears its icon; the status bar's sizes stay with its own items; the bell closes from its foot.
+- A small ProgressRing hides a label that does not fit; the top bar's side zones never overlap the caption buttons.
+- The date calendar's footer puts its switch on its own line when the row does not fit.
+- A Timeline inside a page scroller shows every event; list row tracking no longer costs the square of the rows.
+- A dismiss button inside a pop card closes the card, not the window.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>mark-128.png</PackageIcon>
     <IsAotCompatible>true</IsAotCompatible>
