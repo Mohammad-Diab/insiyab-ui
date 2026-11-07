@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
@@ -43,9 +44,12 @@ public static class Dismiss
     {
         foreach (var v in from.GetVisualAncestors())
         {
-            if (v is Window or Popup or Alert) return (Control)v;
+            if (v is Popup or Alert) return (Control)v;
             if (v is PopupRoot root && root.Parent is Popup owner) return owner;
             if (v is Control c && Array.Exists(Closable, c.Classes.Contains)) return c;
+            // a popup in the overlay layer (a flyout, a pop card) has its popup among its logical ancestors only; the window must not close
+            if (v is OverlayPopupHost or Window)
+                return from.FindLogicalAncestorOfType<Popup>() is { } popup ? popup : v as Window;
         }
         return null;
     }

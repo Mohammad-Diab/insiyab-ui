@@ -227,7 +227,7 @@ public class ButtonsTests
     }
 
     [AvaloniaFact]
-    public void Close_button_draws_its_cross_and_turns_on_hover()
+    public void Close_button_draws_its_cross_and_grows_on_hover()
     {
         var close = new Button { Classes = { "close" } };
         var sm = new Button { Classes = { "close", "sm" } };
@@ -246,10 +246,12 @@ public class ButtonsTests
 
         window.MouseMove(Center(close, window));
         var closeRoot = Part<Panel>(close, "PART_Root");
-        WaitSteady(() => closeRoot.RenderTransform is { } t && Math.Abs(t.Value.M11) < 0.005);
+        // it grows a little on its ground, upright (no spin)
+        WaitSteady(() => closeRoot.RenderTransform is { } t && Math.Abs(t.Value.M11 - 1.08) < 0.005);
         AssertNear(close, "InsCtlBgHover", () => close.Background);
         AssertNear(close, "InsText1", () => close.Foreground);
-        Assert.Equal(0, closeRoot.RenderTransform!.Value.M11, 2);
+        Assert.Equal(1.08, closeRoot.RenderTransform!.Value.M11, 2);
+        Assert.Equal(0, closeRoot.RenderTransform!.Value.M12, 2);
     }
 
     [AvaloniaFact]
@@ -319,6 +321,27 @@ public class ButtonsTests
         Click(named, window);
         Assert.False(notice.IsVisible);
         Assert.Same(notice, closed);
+    }
+
+    [AvaloniaFact]
+    public void Dismiss_in_a_pop_card_closes_the_card_not_the_window()
+    {
+        var inside = new Button { Content = "تحديث" };
+        Dismiss.SetNearest(inside, true);
+        var card = new PopCard { Content = inside };
+        var opener = new Button { Content = "الحالة", Flyout = card };
+        var window = Show(new StackPanel { Margin = new Thickness(20), Children = { opener } });
+        var closed = false;
+        window.Closed += (_, _) => closed = true;
+
+        card.ShowAt(opener);
+        global::Avalonia.Threading.Dispatcher.UIThread.RunJobs();
+        Assert.True(card.IsOpen);
+        inside.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        global::Avalonia.Threading.Dispatcher.UIThread.RunJobs();
+
+        Assert.False(card.IsOpen);
+        Assert.False(closed);
     }
 
     [AvaloniaFact]

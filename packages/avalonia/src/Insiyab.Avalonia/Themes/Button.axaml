@@ -446,7 +446,7 @@
           </Style>
         </Style>
 
-        <!-- close: draws its own cross, and turns under the pointer -->
+        <!-- close: draws its own cross, and grows under the pointer -->
         <Style Selector="^.close">
           <Setter Property="Width" Value="{DynamicResource InsCtlSmH}" />
           <Setter Property="Height" Value="{DynamicResource InsCtlSmH}" />
@@ -482,16 +482,17 @@
           <Style Selector="^:focus-visible /template/ :is(Border)#PART_Outline">
             <Setter Property="IsVisible" Value="True" />
           </Style>
-          <Style Selector="^:pressed">
-            <Style Selector="^ /template/ Panel#PART_Root">
-              <Setter Property="RenderTransform" Value="none" />
-            </Style>
-          </Style>
+          <!-- under the pointer the cross grows a little on its ground (not a spin), and dips when pressed -->
           <Style Selector="^:pointerover">
             <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
             <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
             <Style Selector="^ /template/ Panel#PART_Root">
-              <Setter Property="RenderTransform" Value="rotate(90deg)" />
+              <Setter Property="RenderTransform" Value="scale(1.08)" />
+            </Style>
+          </Style>
+          <Style Selector="^:pressed">
+            <Style Selector="^ /template/ Panel#PART_Root">
+              <Setter Property="RenderTransform" Value="scale(0.92)" />
             </Style>
           </Style>
         </Style>
