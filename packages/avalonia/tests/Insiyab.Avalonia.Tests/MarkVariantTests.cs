@@ -122,10 +122,14 @@ public class MarkVariantTests
     {
         var (w, pill, after) = PeekRig(dir, "warn", "dot", "peek");
         var face = Part<Border>(pill, "PART_Face");
+        var ground = Part<Border>(pill, "PART_Ground");
+        var ring = Part<Border>(pill, "PART_Ring");
         var presenter = Part<ContentPresenter>(pill, "PART_ContentPresenter");
-        Assert.InRange(pill.Bounds.Width, 7.5, 8.5);
-        Assert.InRange(pill.Bounds.Height, 7.5, 8.5);
-        Assert.Null(face.Background);
+        Assert.InRange(pill.Bounds.Width, 15.5, 16.5);
+        Assert.InRange(pill.Bounds.Height, 15.5, 16.5);
+        Assert.True(ring.IsVisible);
+        Assert.Equal(1, ring.Opacity);
+        Assert.Equal(0, ground.Opacity);
         Assert.Equal(0, presenter.Opacity);
         var afterX = Box(after, w).X;
 
@@ -133,18 +137,25 @@ public class MarkVariantTests
         Settle();
         Assert.Contains(":pointerover", pill.Classes);
         Assert.Equal(1, presenter.Opacity);
+        Assert.Equal(1, ground.Opacity);
+        Assert.Equal(0, ring.Opacity);
         AssertBrush(pill, "InsToneWarnBg", () => face.Background);
         Assert.Equal(1, pill.ZIndex);
         Assert.InRange(Box(after, w).X, afterX - 0.5, afterX + 0.5);
         var fb = Box(face, w);
         var pb = Box(pill, w);
-        if (dir == "ltr") Assert.InRange(fb.Left, pb.Left - 13 - 1.5, pb.Left - 13 + 1.5);
-        else Assert.InRange(fb.Right, pb.Right + 13 - 1.5, pb.Right + 13 + 1.5);
         Assert.True(fb.Width > 40, $"face {fb}");
+        Assert.True(fb.Left < pb.Left && fb.Right > pb.Right, $"the face is laid over its neighbours: face {fb}, pill {pb}");
+        var dotAt = Box(Part<Ellipse>(pill, "PART_Dot"), w).Center;
+        var ringDotAt = Box(Part<Ellipse>(pill, "PART_RingDot"), w).Center;
+        Assert.InRange(dotAt.X, ringDotAt.X - 1, ringDotAt.X + 1);
+        Assert.InRange(dotAt.Y, ringDotAt.Y - 1, ringDotAt.Y + 1);
 
         w.MouseMove(new Point(1, 1));
         Settle();
         Assert.Equal(0, presenter.Opacity);
+        Assert.Equal(0, ground.Opacity);
+        Assert.Equal(1, ring.Opacity);
 
         pill.Focus(NavigationMethod.Tab);
         Settle();
@@ -162,13 +173,20 @@ public class MarkVariantTests
     {
         var (w, pill, _) = PeekRig(dir, "warn", "dot", "peek", "back");
         var face = Part<Border>(pill, "PART_Face");
+        Assert.InRange(pill.Bounds.Width, 15.5, 16.5);
         w.MouseMove(Center(pill, w));
         Settle();
         Assert.Contains(":pointerover", pill.Classes);
         var fb = Box(face, w);
         var pb = Box(pill, w);
-        if (dir == "ltr") Assert.InRange(fb.Right, pb.Right + 13 - 1.5, pb.Right + 13 + 1.5);
-        else Assert.InRange(fb.Left, pb.Left - 13 - 1.5, pb.Left - 13 + 1.5);
+        Assert.True(fb.Width > 40, $"face {fb}");
+        Assert.True(fb.Left < pb.Left && fb.Right > pb.Right, $"the face is laid over its neighbours: face {fb}, pill {pb}");
+        if (dir == "ltr") Assert.True(pb.Left - fb.Left > fb.Right - pb.Right, "it opens toward the start (left), its dot at its end");
+        else Assert.True(fb.Right - pb.Right > pb.Left - fb.Left, "it opens toward the start (right), its dot at its end");
+        var dotAt = Box(Part<Ellipse>(pill, "PART_DotEnd"), w).Center;
+        var ringDotAt = Box(Part<Ellipse>(pill, "PART_RingDot"), w).Center;
+        Assert.InRange(dotAt.X, ringDotAt.X - 1, ringDotAt.X + 1);
+        Assert.InRange(dotAt.Y, ringDotAt.Y - 1, ringDotAt.Y + 1);
         Assert.True(Part<Ellipse>(pill, "PART_DotEnd").IsVisible);
         Assert.False(Part<Ellipse>(pill, "PART_Dot").IsVisible);
     }

@@ -2,19 +2,27 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
+using Avalonia.Media;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>A status label, the web's <c>.ins-pill</c>. Tone classes <c>ok warn bad info brand mute</c> (none is neutral) or a category <c>cat1</c>…<c>cat8</c>; <c>dot</c> adds the dot, and an empty dot pill is the dot alone; <c>dot peek</c> shows only the dot and opens over its neighbours (<c>back</c> toward the start); <c>sm</c> fits a line of text; <c>outline</c> drops the fill. A pressable one is a <c>Button</c> with the classes <c>pill</c>, a tone and <c>dot</c>.</summary>
-[PseudoClasses(":empty")]
+/// <summary>A status label, the web's <c>.ins-pill</c>. Tone classes <c>ok warn bad info brand mute</c> (none is neutral) or a category <c>cat1</c>…<c>cat8</c>; <c>dot</c> adds the dot, and an empty dot pill is the dot alone; <c>dot peek</c> shows only the dot and opens over its neighbours (<c>back</c> toward the start); <see cref="Icon"/> takes the dot's place with a small glyph (a peeking pill shows the glyph alone); <c>sm</c> fits a line of text; <c>outline</c> drops the fill. A pressable one is a <c>Button</c> with the classes <c>pill</c>, a tone and <c>dot</c>.</summary>
+[PseudoClasses(":empty", ":icon")]
 public class Pill : ContentControl
 {
+    public static readonly StyledProperty<Geometry?> IconProperty =
+        AvaloniaProperty.Register<Pill, Geometry?>(nameof(Icon));
+
     public Pill() => PseudoClasses.Set(":empty", true);
+
+    /// <summary>A small glyph in the tone's ink where the dot would be (with <c>dot</c>); for <c>dot peek</c> the glyph alone is shown until the pill opens.</summary>
+    public Geometry? Icon { get => GetValue(IconProperty); set => SetValue(IconProperty, value); }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
         if (change.Property == ContentProperty) PseudoClasses.Set(":empty", change.NewValue is null or string { Length: 0 });
+        else if (change.Property == IconProperty) PseudoClasses.Set(":icon", change.NewValue is not null);
     }
 }
 
@@ -40,6 +48,9 @@ public class Badge : ContentControl
 [PseudoClasses(":grouped")]
 public class Avatar : ContentControl
 {
+    // Letters are centred by their ink through a data template: a ContentTemplate would make a control in the avatar lose the page's data
+    public Avatar() => DataTemplates.Add(AvatarInk.Template);
+
     protected override void OnAttachedToLogicalTree(global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e)
     {
         base.OnAttachedToLogicalTree(e);

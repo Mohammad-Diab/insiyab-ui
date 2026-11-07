@@ -52,27 +52,58 @@
         <Setter Property="Template">
           <ControlTemplate>
             <ctl:PillPeek x:Name="PART_Peek">
-              <ctl:TemplateBorder x:Name="PART_Face"
-                      Background="{TemplateBinding Background}"
-                      BorderBrush="{TemplateBinding BorderBrush}"
-                      BorderThickness="{TemplateBinding BorderThickness}"
-                      CornerRadius="{TemplateBinding CornerRadius}"
-                      Padding="{TemplateBinding Padding}">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                  <Ellipse x:Name="PART_Dot" Width="7" Height="7" VerticalAlignment="Center" IsVisible="False"
-                           Fill="{TemplateBinding Foreground}" />
-                  <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                    VerticalAlignment="Center" LineHeight="18" />
-                  <Ellipse x:Name="PART_DotEnd" Width="8" Height="8" VerticalAlignment="Center" IsVisible="False"
-                           Fill="{TemplateBinding Foreground}" />
-                </StackPanel>
-              </ctl:TemplateBorder>
+              <!-- the ground under the face: nothing for a plain pill; for dot peek the solid glass ground, so the face's see-through tint never shows what it opens over -->
+              <Border x:Name="PART_Ground" CornerRadius="{TemplateBinding CornerRadius}">
+                <ctl:TemplateBorder x:Name="PART_Face"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Padding="{TemplateBinding Padding}">
+                  <StackPanel Orientation="Horizontal" Spacing="5">
+                    <Ellipse x:Name="PART_Dot" Width="7" Height="7" VerticalAlignment="Center" IsVisible="False"
+                             Fill="{TemplateBinding Foreground}" />
+                    <ctl:Icon x:Name="PART_Glyph" Data="{TemplateBinding Icon}" Size="12" VerticalAlignment="Center" IsVisible="False"
+                              Foreground="{TemplateBinding Foreground}" />
+                    <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      Opacity="{Binding $parent[ctl:PillPeek].Words}"
+                                      VerticalAlignment="Center" LineHeight="18" />
+                    <Ellipse x:Name="PART_DotEnd" Width="8" Height="8" VerticalAlignment="Center" IsVisible="False"
+                             Fill="{TemplateBinding Foreground}" />
+                    <ctl:Icon x:Name="PART_GlyphEnd" Data="{TemplateBinding Icon}" Size="12" VerticalAlignment="Center" IsVisible="False"
+                              Foreground="{TemplateBinding Foreground}" />
+                  </StackPanel>
+                </ctl:TemplateBorder>
+              </Border>
+              <!-- dot peek at rest: a ring of the tone around the dot, the only part the pointer finds until the pill opens; the dot stays put as it grows -->
+              <Border x:Name="PART_Ring" IsVisible="False" Width="16" Height="16"
+                      CornerRadius="{TemplateBinding CornerRadius}" Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" />
+              <Panel x:Name="PART_RingMark" IsVisible="False" IsHitTestVisible="False">
+                <Ellipse x:Name="PART_RingDot" Width="8" Height="8" Fill="{TemplateBinding Foreground}" />
+                <ctl:Icon x:Name="PART_RingGlyph" Data="{TemplateBinding Icon}" Size="12" IsVisible="False" Foreground="{TemplateBinding Foreground}" />
+              </Panel>
             </ctl:PillPeek>
           </ControlTemplate>
         </Setter>
         <Style Selector="^.dot /template/ Ellipse#PART_Dot">
           <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <!-- an icon takes the dot's place, at the start, or at the end for peek back -->
+        <Style Selector="^.dot:icon">
+          <Style Selector="^ /template/ Ellipse#PART_Dot">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_RingDot">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ ctl|Icon#PART_Glyph">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+          <Style Selector="^ /template/ ctl|Icon#PART_RingGlyph">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
         </Style>
         <Style Selector="^.sm">
           <Setter Property="Padding" Value="7,1" />
@@ -186,25 +217,40 @@
           <Setter Property="Focusable" Value="True" />
           <Setter Property="FocusAdorner" Value="{x:Null}" />
           <Setter Property="AutomationProperties.Name" Value="{Binding $self.Content}" />
+          <!-- the pill grows out of the ring and then its words fade in; closing, the words go first and it shrinks back (PillPeek runs both) -->
           <Style Selector="^ /template/ ctl|PillPeek#PART_Peek">
             <Setter Property="IsPeek" Value="True" />
           </Style>
-          <Style Selector="^ /template/ Ellipse#PART_Dot">
+          <!-- the face's own dot keeps its room but the ring's dot is the one drawn, so the dot never moves -->
+          <Style Selector="^ /template/ Ellipse#PART_Dot, ^ /template/ Ellipse#PART_DotEnd">
             <Setter Property="Width" Value="8" />
             <Setter Property="Height" Value="8" />
+            <Setter Property="Opacity" Value="0" />
           </Style>
-          <Style Selector="^:not(:pointerover):not(:focus-visible)">
-            <Style Selector="^ /template/ :is(Border)#PART_Face">
-              <Setter Property="Background" Value="{x:Null}" />
-              <Setter Property="BorderBrush" Value="Transparent" />
-            </Style>
-            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-              <Setter Property="Opacity" Value="0" />
-              <Setter Property="IsHitTestVisible" Value="False" />
-            </Style>
+          <Style Selector="^ /template/ Border#PART_Ring">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+          <Style Selector="^ /template/ Panel#PART_RingMark">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+          <Style Selector="^ /template/ ctl|Icon#PART_Glyph, ^ /template/ ctl|Icon#PART_GlyphEnd">
+            <Setter Property="Opacity" Value="0" />
+          </Style>
+          <Style Selector="^ /template/ Border#PART_Ground">
+            <Setter Property="Background" Value="{DynamicResource InsGlassGround}" />
+          </Style>
+          <!-- the face clips its words to its capsule while it grows and shrinks -->
+          <Style Selector="^ /template/ :is(Border)#PART_Face">
+            <Setter Property="ClipToBounds" Value="True" />
+          </Style>
+          <Style Selector="^:not(:pointerover):not(:focus-visible) /template/ Border#PART_Ground">
+            <Setter Property="IsHitTestVisible" Value="False" />
           </Style>
           <Style Selector="^:pointerover, ^:focus-visible">
             <Setter Property="ZIndex" Value="1" />
+            <Style Selector="^ /template/ ctl|PillPeek#PART_Peek">
+              <Setter Property="IsOpen" Value="True" />
+            </Style>
           </Style>
           <Style Selector="^:focus-visible /template/ :is(Border)#PART_Face">
             <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
@@ -218,6 +264,27 @@
             <Setter Property="IsVisible" Value="False" />
           </Style>
           <Style Selector="^ /template/ Ellipse#PART_DotEnd">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
+        </Style>
+        <!-- a peeking pill with an icon: the glyph in its ring (bigger, to hold it) and in the face's place for it, never a dot -->
+        <Style Selector="^.peek:icon">
+          <Style Selector="^ /template/ Border#PART_Ring">
+            <Setter Property="Width" Value="22" />
+            <Setter Property="Height" Value="22" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_Dot">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ Ellipse#PART_DotEnd">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+        </Style>
+        <Style Selector="^.peek.back:icon">
+          <Style Selector="^ /template/ ctl|Icon#PART_Glyph">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ ctl|Icon#PART_GlyphEnd">
             <Setter Property="IsVisible" Value="True" />
           </Style>
         </Style>
@@ -405,7 +472,6 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="ContentTemplate" Value="{x:Static ctl:AvatarInk.Template}" />
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
