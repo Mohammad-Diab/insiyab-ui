@@ -345,7 +345,7 @@ public class TimelineDay : ContentControl
     }
 }
 
-/// <summary>One event: a dot on the rule, a title (<c>Header</c>), a time and a body (<c>Content</c>, text or a panel). Classes <c>ok bad warn info</c> for its tone; <see cref="IsCurrent"/> wears a halo and <see cref="IsPending"/> is hollow on a dashed rule; an <see cref="Icon"/> replaces the dot with a chip; <see cref="IsUnread"/> puts a brand dot after the title.</summary>
+/// <summary>One event: a dot on the rule, a title (<c>Header</c>), a time and a body (<c>Content</c>, text or a panel). Classes <c>ok bad warn info mute</c> for its tone (<c>mute</c>, grey, is for what is behind the reader); <see cref="IsCurrent"/> wears a halo and <see cref="IsPending"/> is hollow on a dashed rule; an <see cref="Icon"/> replaces the dot with a chip; <see cref="IsUnread"/> puts a brand dot after the title.</summary>
 [PseudoClasses(":current", ":pending", ":next-pending", ":last", ":icon", ":split", ":split-start", ":has-time", ":has-body", ":unread")]
 public class TimelineItem : HeaderedContentControl, IWords
 {

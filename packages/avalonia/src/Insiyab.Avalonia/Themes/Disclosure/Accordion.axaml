@@ -7,6 +7,8 @@
 
       <!-- The summary row of .ins-collapse: the title and a chevron that turns from down to up -->
       <ControlTheme x:Key="InsCollapseSummary" TargetType="ToggleButton">
+        <!-- a head may hold something that opens over its neighbours (a peeking status pill), so it does not clip -->
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="Padding" Value="16,14" />
@@ -100,6 +102,8 @@
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type Expander}" TargetType="Expander">
+        <!-- the body's fold clips itself while it moves; the expander itself lets its head's overlays show -->
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
@@ -113,6 +117,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Template">
           <ControlTemplate>
+            <Panel>
             <ins:TemplateBorder Name="PART_Root"
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
@@ -137,6 +142,10 @@
                 </ins:Fold>
               </DockPanel>
             </ins:TemplateBorder>
+            <!-- an accordion's divider: drawn here, not as the root's edge, so it stops short of the rounded heads' corners instead of running into them -->
+            <ins:TemplateBorder Name="PART_Rule" Height="1" VerticalAlignment="Top" Margin="10,0" IsVisible="False" IsHitTestVisible="False"
+                    Background="{TemplateBinding BorderBrush}" />
+            </Panel>
           </ControlTemplate>
         </Setter>
         <Style Selector="^.flush">
@@ -187,6 +196,16 @@
   </Style>
   <Style Selector="StackPanel.accordion > Expander:not(:nth-child(1))">
     <Setter Property="BorderThickness" Value="0,1,0,0" />
+  </Style>
+  <!-- the divider keeps its room but is drawn inset by the heads' corner radius, edge to edge in a panel where the heads are square -->
+  <Style Selector="StackPanel.accordion > Expander:not(:nth-child(1)) /template/ :is(Border)#PART_Root, Expander:ins-item:not(:ins-first) /template/ :is(Border)#PART_Root">
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="StackPanel.accordion > Expander:not(:nth-child(1)) /template/ :is(Border)#PART_Rule, Expander:ins-item:not(:ins-first) /template/ :is(Border)#PART_Rule">
+    <Setter Property="IsVisible" Value="True" />
+  </Style>
+  <Style Selector="Border.panel > StackPanel.accordion > Expander /template/ :is(Border)#PART_Rule, Expander:ins-item:ins-panel /template/ :is(Border)#PART_Rule">
+    <Setter Property="Margin" Value="0" />
   </Style>
   <Style Selector="Border.panel > StackPanel.accordion > Expander, Border.panel > Expander">
     <Setter Property="CornerRadius" Value="0" />

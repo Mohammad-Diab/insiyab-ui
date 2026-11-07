@@ -342,7 +342,7 @@ public class MonthCalendar : TemplatedControl, IWords
         DateChanged?.Invoke(this, day);
     }
 
-    // The new days slide in from the side they come from (back from the start, on from the end, mirrored in RTL); a switch of view rises in; still motion shows them at once.
+    // The new days slide in from the side they come from (back from the start, on from the end, mirrored in RTL); a switch of view or of the hours shown rises in; still motion shows them at once.
     private void Arrive(int toward)
     {
         if (Body is not { } body) return;
@@ -515,6 +515,8 @@ public class MonthCalendar : TemplatedControl, IWords
         Hold(() => SetCurrentValue(WorkHoursOnlyProperty, workOnly));
         _scrollTo = scrollTo;
         Draw();
+        // The hours' box keeps its height either way, so without motion the switch reads as nothing having changed: the hours rise in like a new view.
+        Arrive(0);
     }
 
     private static string Count(PickerLocale words, int n) => words.Words.Count("month.events", n, k =>

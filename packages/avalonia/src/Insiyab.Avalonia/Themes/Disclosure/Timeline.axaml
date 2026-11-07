@@ -180,6 +180,12 @@
           <Style Selector="^ /template/ :is(Border)#PART_Chip"><Setter Property="Background" Value="{DynamicResource InsTimelineChipInfo}" /></Style>
           <Style Selector="^ /template/ ins|Icon#PART_Icon"><Setter Property="Foreground" Value="{DynamicResource InsToneInfo}" /></Style>
         </Style>
+        <!-- mute: what is behind the reader (a past item), grey, so the eye goes to what is ahead -->
+        <Style Selector="^.mute">
+          <Style Selector="^ /template/ Ellipse#PART_Dot"><Setter Property="Fill" Value="{DynamicResource InsToneMute}" /></Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Chip"><Setter Property="Background" Value="{DynamicResource InsToneMuteBg}" /></Style>
+          <Style Selector="^ /template/ ins|Icon#PART_Icon"><Setter Property="Foreground" Value="{DynamicResource InsToneMute}" /></Style>
+        </Style>
 
         <Style Selector="^:current /template/ Ellipse#PART_Halo">
           <Setter Property="IsVisible" Value="True" />

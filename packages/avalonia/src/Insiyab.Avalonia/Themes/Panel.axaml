@@ -263,7 +263,8 @@
         <Style Selector="^.panel-head">
           <Setter Property="Padding" Value="20,14" />
           <Setter Property="BorderThickness" Value="0,0,0,1" />
-          <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+          <!-- The hairline, not the white glass line: since the light rim faded, a white rule under a head vanished on a light panel -->
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
           <!-- A band head: a faint fill that rounds with the panel inside its 1px rim -->
           <Style Selector="^.band">
             <Setter Property="CornerRadius" Value="21,21,0,0" />
@@ -410,7 +411,8 @@
         <Style Selector="^.panel-foot">
           <Setter Property="Padding" Value="18,12" />
           <Setter Property="BorderThickness" Value="0,1,0,0" />
-          <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+          <!-- The head's hairline, so the rules above and below a body match -->
+          <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
           <Style Selector="^[(ctl|PanelLook.Dense)=True]">
             <Setter Property="Padding" Value="14,8" />
           </Style>

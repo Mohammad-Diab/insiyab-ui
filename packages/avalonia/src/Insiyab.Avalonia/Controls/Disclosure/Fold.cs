@@ -101,11 +101,13 @@ public class Fold : Decorator
 
     private void Toggle(bool open)
     {
-        var from = IsVisible ? Bounds.Height : 0;
+        var hidden = !IsVisible;
+        var from = hidden ? 0 : Bounds.Height;
         if (_armed && !Motion.IsStill(this) && (open || from > 0))
         {
             Begin(from, !open, Fade);
-            if (_running && Seen.Now(this)) return;
+            // a fold that was hidden kept the bounds of its last close and was never drawn since, so it is judged by its parent (else a second opening jumped)
+            if (_running && Seen.Now(hidden && this.GetVisualParent() is { } parent ? parent : this)) return;
         }
         Finish();
     }
