@@ -8,7 +8,7 @@ using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>A player's control row of three groups, its children in order: the start group, the centre group and the end group. On one line the centre is truly centred while the sides leave room for it, else centred between them; narrower, the centre goes on its own line above the two sides; narrower still, each group takes a line. The row never turns with the page: like the time bar it runs left to right in every language, the start group on the left; only the cards and menus its buttons open read in the page's direction.</summary>
+/// <summary>A player's control row of three groups, its children in order: the start group, the centre group and the end group. On one line the centre is truly centred while the sides leave room for it, else centred between them; narrower, the centre goes on its own line above the two sides; narrower still, each group takes a line. The row reads in the page's direction (in Arabic the start group is on the right and the end group on the left), except the centre's transport, which runs left to right in every language as the time bar does (rewind on the left, forward on the right).</summary>
 public class MediaControls : Panel
 {
     public static readonly StyledProperty<double> SpacingProperty =
@@ -23,11 +23,8 @@ public class MediaControls : Panel
     static MediaControls()
     {
         AffectsMeasure<MediaControls>(SpacingProperty, RowSpacingProperty);
-        FlowDirectionProperty.OverrideDefaultValue<MediaControls>(global::Avalonia.Media.FlowDirection.LeftToRight);
         Popup.IsOpenProperty.Changed.AddClassHandler<Popup>((popup, e) => Turn(popup, e.NewValue is true));
     }
-
-    public MediaControls() => SetCurrentValue(FlowDirectionProperty, global::Avalonia.Media.FlowDirection.LeftToRight);
 
     /// <summary>The least room between the groups on one line.</summary>
     public double Spacing { get => GetValue(SpacingProperty); set => SetValue(SpacingProperty, value); }
@@ -40,7 +37,7 @@ public class MediaControls : Panel
     /// <summary>The direction of the page around the row.</summary>
     internal FlowDirection PageDirection => this.GetVisualParent() is { } parent ? parent.FlowDirection : global::Avalonia.Media.FlowDirection.LeftToRight;
 
-    // A card or a menu opened from a button in the row reads as the page does, though the row itself runs left to right.
+    // A card or a menu opened from a button in the row reads as the page does, even from the centre transport that runs left to right.
     private static void Turn(Popup popup, bool open)
     {
         if (s_turned.TryGetValue(popup, out var held))

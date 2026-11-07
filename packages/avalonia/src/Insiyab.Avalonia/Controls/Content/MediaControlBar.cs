@@ -22,7 +22,7 @@ public sealed class MediaSkipEventArgs : RoutedEventArgs
     public TimeSpan Offset { get; }
 }
 
-/// <summary>A player's control row with its default buttons wired to bindable state: the volume and its level card, the speed, back, play, forward, the subtitles, fill the frame, full screen and a «⋯» menu. An app adds its own items to each group and hides any default. The row runs left to right in every language; the cards and menus it opens read in the page's direction.</summary>
+/// <summary>A player's control row with its default buttons wired to bindable state: the volume and its level card, the speed, back, play, forward, the subtitles, fill the frame, full screen and a «⋯» menu. An app adds its own items to each group and hides any default. The row reads in the page's direction, but the centre transport (back, play, forward) runs left to right in every language as the time bar does; the cards and menus it opens read in the page's direction.</summary>
 [TemplatePart("PART_StartItems", typeof(Panel))]
 [TemplatePart("PART_CenterItems", typeof(Panel))]
 [TemplatePart("PART_EndItems", typeof(Panel))]
@@ -48,6 +48,9 @@ public class MediaControlBar : TemplatedControl, IWords
 
     public static readonly StyledProperty<object?> SubtitlesCardProperty =
         AvaloniaProperty.Register<MediaControlBar, object?>(nameof(SubtitlesCard));
+
+    public static readonly StyledProperty<object?> SubtitlesContentProperty =
+        AvaloniaProperty.Register<MediaControlBar, object?>(nameof(SubtitlesContent));
 
     public static readonly StyledProperty<bool> IsFillingFrameProperty =
         AvaloniaProperty.Register<MediaControlBar, bool>(nameof(IsFillingFrame), defaultBindingMode: BindingMode.TwoWay);
@@ -166,6 +169,18 @@ public class MediaControlBar : TemplatedControl, IWords
     /// <summary>The card the subtitles' arrow opens (a file to add, a language). Unset, the subtitles are a plain toggle with no arrow.</summary>
     public object? SubtitlesCard { get => GetValue(SubtitlesCardProperty); set => SetValue(SubtitlesCardProperty, value); }
 
+    /// <summary>Shown beside the subtitles' icon, inside its button: how far subtitles being made have come, say. A control here is one of the row's own.</summary>
+    public object? SubtitlesContent { get => GetValue(SubtitlesContentProperty); set => SetValue(SubtitlesContentProperty, value); }
+
+    /// <summary>Opens the subtitles' card (<see cref="SubtitlesCard"/>) on its arrow, as when the app has something to say there (nothing to show yet, a file refused).</summary>
+    public void ShowSubtitlesCard()
+    {
+        if (SubtitlesCard is not null && _subtitles is { IsEffectivelyVisible: true } at) _subtitlesCard.ShowAt(at);
+    }
+
+    /// <summary>Closes the subtitles' card, as after a choice made in it.</summary>
+    public void HideSubtitlesCard() => _subtitlesCard.Hide();
+
     /// <summary>Whether the picture fills its frame, cut at the edges, rather than showing whole: the fill button turns it.</summary>
     public bool IsFillingFrame { get => GetValue(IsFillingFrameProperty); set => SetValue(IsFillingFrameProperty, value); }
 
@@ -225,8 +240,13 @@ public class MediaControlBar : TemplatedControl, IWords
     private void Items(NotifyCollectionChangedEventArgs e, Panel? panel, global::Avalonia.Controls.Controls items)
     {
         Hosted.Adopt(LogicalChildren, e);
+        if (e.NewItems is not null)
+            foreach (var c in e.NewItems.OfType<Control>()) RunsLeftToRight(c);
         Fill(panel, items);
     }
+
+    // The app's own items run left to right (a split's arrow after its icon), unless the app says otherwise on the item.
+    private static void RunsLeftToRight(Control c) => c.SetValue(FlowDirectionProperty, FlowDirection.LeftToRight, BindingPriority.Style);
 
     private static void Fill(Panel? panel, global::Avalonia.Controls.Controls items)
     {
@@ -376,6 +396,16 @@ public class MediaControlBar : TemplatedControl, IWords
         else if (p == IsSubtitlesOnProperty || p == IsFillingFrameProperty) Sync();
         else if (p == SpeedProperty || p == SpeedsProperty) MakeSpeeds();
         else if (p == SkipStepProperty) Words();
+        else if (p == SubtitlesContentProperty)
+        {
+            // the content is the row's logical child, so its bindings read the row's data
+            if (change.OldValue is Control old) LogicalChildren.Remove(old);
+            if (change.NewValue is Control now)
+            {
+                LogicalChildren.Add(now);
+                RunsLeftToRight(now);
+            }
+        }
         else if (p == SubtitlesCardProperty)
         {
             _subtitlesCard.Content = change.NewValue;

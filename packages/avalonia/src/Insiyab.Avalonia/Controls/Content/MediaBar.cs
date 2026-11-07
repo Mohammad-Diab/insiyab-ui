@@ -114,7 +114,8 @@ public class MediaBar : Control
     public MediaBar()
     {
         SetCurrentValue(FlowDirectionProperty, FlowDirection.LeftToRight);
-        Markers = new AvaloniaList<MediaMarker>();
+        // a current value, not a local one: a local value beat the seek row's template binding, so a row's marks never reached its bar
+        SetCurrentValue(MarkersProperty, new AvaloniaList<MediaMarker>());
         Cursor = Hand;
         ActualThemeVariantChanged += (_, _) => InvalidateVisual();
     }

@@ -145,7 +145,7 @@ public class MediaPartsTests
     [AvaloniaTheory]
     [InlineData(FlowDirection.LeftToRight)]
     [InlineData(FlowDirection.RightToLeft)]
-    public void The_control_row_never_turns_with_the_page_but_its_cards_read_as_the_page_does(FlowDirection dir)
+    public void The_control_row_reads_as_the_page_but_its_transport_runs_left_to_right(FlowDirection dir)
     {
         var volume = new Button { Width = 44, Height = 44 };
         var sound = new Button { Width = 44, Height = 44 };
@@ -156,15 +156,17 @@ public class MediaPartsTests
         var words = new TextBlock { Text = "مستوى الصوت" };
         volume.Flyout = new PopCard { Content = words };
         var start = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Children = { volume, sound } };
-        var centre = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 16, Children = { back, play, forward } };
+        var centre = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 16, Children = { back, play, forward }, FlowDirection = FlowDirection.LeftToRight };
         var end = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Children = { full } };
         var row = new MediaControls { Width = 600, Children = { start, centre, end }, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Top };
         var window = Show(new Panel { Children = { row } }, dir, width: 700);
         double X(Control c) => ScreenBox(c, window).X;
-        Assert.Equal(FlowDirection.LeftToRight, row.FlowDirection);
-        Assert.True(X(volume) < X(sound), "the start group's own order never turns");
+        Assert.Equal(dir, row.FlowDirection);
         Assert.True(X(back) < X(play) && X(play) < X(forward), "back, play, forward run left to right");
-        Assert.True(X(start) < X(centre) && X(centre) < X(end), "the start group sits on the left in every language");
+        if (dir == FlowDirection.LeftToRight)
+            Assert.True(X(volume) < X(sound) && X(start) < X(centre) && X(centre) < X(end), "the start group on the left");
+        else
+            Assert.True(X(sound) < X(volume) && X(end) < X(centre) && X(centre) < X(start), "an Arabic page: the start group on the right");
         Assert.Equal(ScreenBox(row, window).Center.X, ScreenBox(centre, window).Center.X, 1);
         volume.Flyout.ShowAt(volume);
         Settle(120);

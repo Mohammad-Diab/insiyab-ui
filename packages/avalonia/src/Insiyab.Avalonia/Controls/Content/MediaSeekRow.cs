@@ -61,6 +61,10 @@ public class MediaSeekRow : TemplatedControl, IWords
     public static readonly StyledProperty<TimeSpan> LiveTargetProperty =
         AvaloniaProperty.Register<MediaSeekRow, TimeSpan>(nameof(LiveTarget));
 
+    /// <summary>What the end shows at the live edge in place of the red dot and «مباشر», as a connection's state; a control here is one of the row's own.</summary>
+    public static readonly StyledProperty<object?> LiveContentProperty =
+        AvaloniaProperty.Register<MediaSeekRow, object?>(nameof(LiveContent));
+
     /// <summary>Raised by the button back to live, with <see cref="LiveTarget"/>.</summary>
     public static readonly RoutedEvent<MediaLiveEventArgs> LiveRequestedEvent =
         RoutedEvent.Register<MediaSeekRow, MediaLiveEventArgs>(nameof(LiveRequested), RoutingStrategies.Bubble);
@@ -84,6 +88,12 @@ public class MediaSeekRow : TemplatedControl, IWords
         IsLiveProperty.Changed.AddClassHandler<MediaSeekRow>((r, _) => r.Live());
         BehindProperty.Changed.AddClassHandler<MediaSeekRow>((r, _) => r.Live());
         BehindFromProperty.Changed.AddClassHandler<MediaSeekRow>((r, _) => r.Live());
+        // the content is the row's logical child, so its bindings read the row's data
+        LiveContentProperty.Changed.AddClassHandler<MediaSeekRow>((r, e) =>
+        {
+            if (e.OldValue is Control old) r.LogicalChildren.Remove(old);
+            if (e.NewValue is Control now) r.LogicalChildren.Add(now);
+        });
     }
 
     public double Value { get => GetValue(ValueProperty); set => SetValue(ValueProperty, value); }
@@ -107,6 +117,8 @@ public class MediaSeekRow : TemplatedControl, IWords
     public TimeSpan BehindFrom { get => GetValue(BehindFromProperty); set => SetValue(BehindFromProperty, value); }
 
     public TimeSpan LiveTarget { get => GetValue(LiveTargetProperty); set => SetValue(LiveTargetProperty, value); }
+
+    public object? LiveContent { get => GetValue(LiveContentProperty); set => SetValue(LiveContentProperty, value); }
 
     /// <summary>True while a live stream plays further behind than <see cref="BehindFrom"/>: the button back to live shows.</summary>
     public bool IsBehind => IsLive && Behind > BehindFrom;

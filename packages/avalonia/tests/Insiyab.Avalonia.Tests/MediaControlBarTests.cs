@@ -162,7 +162,7 @@ public class MediaControlBarTests
     [AvaloniaTheory]
     [InlineData(FlowDirection.LeftToRight)]
     [InlineData(FlowDirection.RightToLeft)]
-    public void The_row_runs_left_to_right_in_every_language_and_its_cards_read_as_the_page(FlowDirection dir)
+    public void The_row_reads_as_the_page_its_transport_left_to_right_and_its_cards_as_the_page(FlowDirection dir)
     {
         var bar = Bar();
         var window = Show(bar, dir, width: 960, height: 400);
@@ -172,8 +172,11 @@ public class MediaControlBarTests
         var play = PartOf<Button>(bar, "PART_Play");
         var forward = PartOf<Button>(bar, "PART_Forward");
         var more = PartOf<Button>(bar, "PART_More");
-        Assert.True(X(volume) < X(back) && X(back) < X(play) && X(play) < X(forward) && X(forward) < X(more));
-        Assert.True(X(PartOf<ToggleSplitButton>(bar, "PART_Subtitles")) < X(PartOf<ToggleButton>(bar, "PART_Fit")));
+        Assert.True(X(back) < X(play) && X(play) < X(forward), "the transport runs left to right in every language");
+        if (dir == FlowDirection.LeftToRight)
+            Assert.True(X(volume) < X(back) && X(forward) < X(more) && X(PartOf<ToggleSplitButton>(bar, "PART_Subtitles")) < X(PartOf<ToggleButton>(bar, "PART_Fit")));
+        else // in Arabic the sides turn: the volume on the right, «⋯» on the left
+            Assert.True(X(more) < X(back) && X(forward) < X(volume) && X(PartOf<ToggleButton>(bar, "PART_Fit")) < X(PartOf<ToggleSplitButton>(bar, "PART_Subtitles")));
         Assert.Equal(ScreenBox(bar, window).Center.X, ScreenBox(play, window).Center.X, 1);
         volume.Flyout!.ShowAt(volume);
         Settle(120);
@@ -201,10 +204,10 @@ public class MediaControlBarTests
         var window = Show(bar, FlowDirection.RightToLeft, width: 960, height: 140);
         double X(Control c) => ScreenBox(c, window).X;
         Assert.Same(bar, mine.Parent);
-        Assert.True(X(PartOf<Border>(bar, "PART_VolumeGroup")) < X(mine));
+        Assert.True(X(mine) < X(PartOf<Border>(bar, "PART_VolumeGroup")));   // an Arabic page: the start group runs right to left
         Assert.True(X(PartOf<Button>(bar, "PART_Forward")) < X(live));
         Assert.Equal(ScreenBox(bar, window).Center.X, ScreenBox(PartOf<Button>(bar, "PART_Play"), window).Center.X, 1);
-        Assert.True(X(PartOf<ToggleButton>(bar, "PART_FullScreen")) < X(chapters) && X(chapters) < X(PartOf<Button>(bar, "PART_More")));
+        Assert.True(X(PartOf<Button>(bar, "PART_More")) < X(chapters) && X(chapters) < X(PartOf<ToggleButton>(bar, "PART_FullScreen")));
         Assert.False(PartOf<ToggleButton>(bar, "PART_Fit").IsVisible);
         Assert.Equal(new Size(44, 44), mine.Bounds.Size);
 
