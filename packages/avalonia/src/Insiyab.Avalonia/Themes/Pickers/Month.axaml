@@ -209,7 +209,7 @@
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-head">
     <Setter Property="Padding" Value="4,8" />
     <Setter Property="Background" Value="Transparent" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
     <Setter Property="BorderThickness" Value="1,0,0,1" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-head.link">
@@ -238,7 +238,7 @@
     <Setter Property="Foreground" Value="{DynamicResource InsLabel}" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-corner">
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthText.week-allday-label">
@@ -250,7 +250,7 @@
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-allday-cell">
     <Setter Property="MinHeight" Value="30" />
     <Setter Property="Padding" Value="2,3" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
     <Setter Property="BorderThickness" Value="1,0,0,1" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-hour-cell">
@@ -265,12 +265,12 @@
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-line">
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-day">
     <Setter Property="Background" Value="Transparent" />
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
     <Setter Property="BorderThickness" Value="1,0,0,0" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-day.today">
@@ -279,11 +279,11 @@
 
   <!-- The bands above and below the work hours, counting the events outside them. -->
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-band-gutter.before, ins|MonthCalendar ins|MonthBorder.week-band-cell.before">
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-band-gutter.after, ins|MonthCalendar ins|MonthBorder.week-band-cell.after">
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLineGlass}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
     <Setter Property="BorderThickness" Value="0,1,0,0" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-band-cell.before">

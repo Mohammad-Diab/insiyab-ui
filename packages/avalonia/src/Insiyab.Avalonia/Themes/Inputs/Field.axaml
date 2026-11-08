@@ -71,6 +71,11 @@
     <Setter Property="Height" Value="34" />
     <Setter Property="Padding" Value="0" />
   </Style>
+  <!-- The clear "x" keeps its own quiet size (InsTextBoxClearButton), not a group button's. -->
+  <Style Selector="TextBox /template/ ContentPresenter Button.clear">
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="Padding" Value="0" />
+  </Style>
 
   <!-- The message under a field, on its own: .ins-error and .ins-success, in the direction of its first letter. -->
   <Style Selector="ContentControl.error, ContentControl.success">

@@ -74,4 +74,10 @@
     </ResourceDictionary>
   </Styles.Resources>
 
+  <!-- A list of figures, as class num on the list: every pair's value as a .num pair's, the pairs made from ItemsSource too -->
+  <Style Selector="ins|DescriptionList.num ins|DescriptionItem /template/ ContentPresenter#PART_Value">
+    <Setter Property="FlowDirection" Value="LeftToRight" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+  </Style>
+
 </Styles>

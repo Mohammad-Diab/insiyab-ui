@@ -88,6 +88,51 @@
         </Style>
       </ControlTheme>
 
+      <!-- The clear "x" of a .clearButton field: the quiet icon-button look (soft fill on hover, a press that gives a little), inset from the field's end with the inner radius. -->
+      <ControlTheme x:Key="InsTextBoxClearButton" TargetType="Button">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Width" Value="28" />
+        <Setter Property="Height" Value="28" />
+        <Setter Property="Margin" Value="0,0,9,0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="RenderTransform" Value="none" />
+        <Setter Property="Transitions">
+          <Transitions>
+            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
+          </Transitions>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate TargetType="Button">
+            <ins:TemplateBorder Background="{TemplateBinding Background}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+              <ContentPresenter Content="{TemplateBinding Content}"
+                                Foreground="{TemplateBinding Foreground}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+            </ins:TemplateBorder>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        </Style>
+        <Style Selector="^:pressed">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
+          <Setter Property="RenderTransform" Value="scale(0.92)" />
+        </Style>
+        <Style Selector="^.sm">
+          <Setter Property="Width" Value="24" />
+          <Setter Property="Height" Value="24" />
+          <Setter Property="Margin" Value="0,0,7,0" />
+        </Style>
+      </ControlTheme>
+
       <!-- A text box's right-click menu: the pop menu, its words in the page's language -->
       <ins:TextMenu x:Key="InsTextBoxFlyout">
         <MenuItem Tag="cut" Command="{Binding $parent[TextBox].Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" InputGesture="{x:Static TextBox.CutGesture}" />
@@ -507,9 +552,18 @@
         <Style Selector="^.clearButton[AcceptsReturn=False][IsReadOnly=False]:focus:not(TextBox:empty)">
           <Setter Property="InnerRightContent">
             <Template>
-              <Button Theme="{DynamicResource FluentTextBoxButton}"
-                      Command="{Binding $parent[TextBox].Clear}"
-                      ClipToBounds="True">
+              <Button Theme="{StaticResource InsTextBoxClearButton}" Classes="clear"
+                      Command="{Binding $parent[TextBox].Clear}">
+                <PathIcon Data="{DynamicResource TextBoxClearButtonData}" Height="10" Width="10" />
+              </Button>
+            </Template>
+          </Setter>
+        </Style>
+        <Style Selector="^.clearButton.sm[AcceptsReturn=False][IsReadOnly=False]:focus:not(TextBox:empty)">
+          <Setter Property="InnerRightContent">
+            <Template>
+              <Button Theme="{StaticResource InsTextBoxClearButton}" Classes="clear sm"
+                      Command="{Binding $parent[TextBox].Clear}">
                 <PathIcon Data="{DynamicResource TextBoxClearButtonData}" Height="10" Width="10" />
               </Button>
             </Template>
