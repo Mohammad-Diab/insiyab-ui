@@ -4,6 +4,8 @@
 
 Insiyab for Avalonia 12: the same glass, RTL-first look as the web library, as Avalonia themes. App code stays plain Avalonia: `<Button Classes="primary">`.
 
+Try it: the gallery for Windows is attached to the [latest Insiyab.Avalonia release](https://github.com/Mohammad-Diab/insiyab-ui/releases/tag/avalonia-v0.3.1) (unzip and run, nothing to install).
+
 ```xml
 <Application.Styles>
   <ins:InsiyabTheme />   <!-- xmlns:ins="https://github.com/Mohammad-Diab/insiyab-ui", in place of FluentTheme -->
