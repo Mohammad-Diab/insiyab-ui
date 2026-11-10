@@ -8,10 +8,18 @@
         <ResourceDictionary x:Key="Light">
           <SolidColorBrush x:Key="InsSwitchHoverBorder" Color="{DynamicResource InsPrimaryColor}" Opacity="0.40" />
           <SolidColorBrush x:Key="InsSwitchRing" Color="{DynamicResource InsPrimaryColor}" Opacity="0.45" />
+          <!-- danger: the same parts in the "bad" tone -->
+          <SolidColorBrush x:Key="InsSwitchDangerFill" Color="{DynamicResource InsToneBadColor}" />
+          <SolidColorBrush x:Key="InsSwitchDangerHoverBorder" Color="{DynamicResource InsToneBadColor}" Opacity="0.40" />
+          <SolidColorBrush x:Key="InsSwitchDangerRing" Color="{DynamicResource InsToneBadColor}" Opacity="0.45" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
           <SolidColorBrush x:Key="InsSwitchHoverBorder" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.40" />
           <SolidColorBrush x:Key="InsSwitchRing" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.45" />
+          <!-- danger: the same parts in the "bad" tone -->
+          <SolidColorBrush x:Key="InsSwitchDangerFill" Color="{DynamicResource InsToneBadColor}" />
+          <SolidColorBrush x:Key="InsSwitchDangerHoverBorder" Color="{DynamicResource InsToneBadColor}" Opacity="0.40" />
+          <SolidColorBrush x:Key="InsSwitchDangerRing" Color="{DynamicResource InsToneBadColor}" Opacity="0.45" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
@@ -168,6 +176,20 @@
         </Style>
         <Style Selector="^:pointerover:checked /template/ :is(Border)#Brighten">
           <Setter Property="Opacity" Value="0.08" />
+        </Style>
+
+        <!-- danger: a destructive choice; its fill, halo, hover border and focus ring take the "bad" tone (before :checked, which still clears the border) -->
+        <Style Selector="^.danger">
+          <Style Selector="^ /template/ :is(Border)#SwitchKnobBounds">
+            <Setter Property="Background" Value="{DynamicResource InsSwitchDangerFill}" />
+            <Setter Property="BoxShadow" Value="{DynamicResource InsGlowBad}" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#FocusRing">
+            <Setter Property="BorderBrush" Value="{DynamicResource InsSwitchDangerRing}" />
+          </Style>
+          <Style Selector="^:pointerover /template/ :is(Border)#OuterBorder">
+            <Setter Property="BorderBrush" Value="{DynamicResource InsSwitchDangerHoverBorder}" />
+          </Style>
         </Style>
 
         <Style Selector="^:checked">
