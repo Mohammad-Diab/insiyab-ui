@@ -129,6 +129,63 @@
         </Style>
       </ControlTheme>
 
+      <!-- Progress icon: the icon shrinks to 60% inside a 2px ring 4px outside its box (taking no room), or the spinner's arc while waiting; both ease -->
+      <ControlTheme x:Key="{x:Type ctl:ProgressIcon}" TargetType="ctl:ProgressIcon">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <ctl:ProgressRing Name="PART_Ring" Template="{x:Null}" Width="NaN" Height="NaN" Margin="-4" Thickness="2"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="50%,50%" IsHitTestVisible="False" />
+              <ctl:LoadingSpinner Name="PART_Spinner" Width="NaN" Height="NaN" Margin="-4" Thickness="2"
+                                  Arc="{DynamicResource InsPrimaryMid}" Track="{DynamicResource InsCtlBgHover}"
+                                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="False" />
+              <ContentPresenter Name="PART_ContentPresenter"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                RenderTransformOrigin="50%,50%" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+          <Setter Property="RenderTransform" Value="scale(1)" />
+          <Setter Property="Transitions">
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.28" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ ctl|ProgressRing#PART_Ring">
+          <Setter Property="Opacity" Value="0" />
+          <Setter Property="RenderTransform" Value="scale(0.8)" />
+          <Setter Property="Transitions">
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:0.28" Easing="0.22,1,0.36,1" />
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.28" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^ /template/ ctl|LoadingSpinner#PART_Spinner">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:busy /template/ ContentPresenter#PART_ContentPresenter">
+          <Setter Property="RenderTransform" Value="scale(0.6)" />
+        </Style>
+        <Style Selector="^:progress /template/ ctl|ProgressRing#PART_Ring">
+          <Setter Property="Opacity" Value="1" />
+          <Setter Property="RenderTransform" Value="scale(1)" />
+        </Style>
+        <Style Selector="^:waiting /template/ ctl|LoadingSpinner#PART_Spinner">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+      </ControlTheme>
+
       <!-- .ins-loading: a waiting area that keeps a sensible height, its spinner in the middle -->
       <ControlTheme x:Key="InsLookLoading" TargetType="Border" ctl:ClassTheme.For="loading">
         <Style Selector="^.loading">

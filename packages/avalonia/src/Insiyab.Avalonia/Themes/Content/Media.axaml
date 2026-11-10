@@ -74,7 +74,7 @@
       <StreamGeometry x:Key="InsMediaFillIcon">M4 7V4h3 M20 7V4h-3 M4 17v3h3 M20 17v3h-3 M8 8h8v8H8z</StreamGeometry>
       <StreamGeometry x:Key="InsMediaMoreIcon">M4,12 A1,1 0 1 0 6,12 A1,1 0 1 0 4,12 Z M11,12 A1,1 0 1 0 13,12 A1,1 0 1 0 11,12 Z M18,12 A1,1 0 1 0 20,12 A1,1 0 1 0 18,12 Z</StreamGeometry>
 
-      <!-- The control row with its default buttons: the sound at the start; the speed, back, play and forward in the centre, the speed's twin side keeping play in the middle; the subtitles, fill, full screen and ⋯ at the end. The app's own items join each group -->
+      <!-- The control row with its default buttons: the sound at the start; the speed, back, play and forward in the centre, the speed's twin side keeping play in the middle; the subtitles (their icon inside a progress ring while they are made), fill, full screen and ⋯ at the end. The app's own items join each group -->
       <ControlTheme x:Key="{x:Type ctl:MediaControlBar}" TargetType="ctl:MediaControlBar">
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Template">
@@ -119,14 +119,18 @@
                 <Border Name="PART_SubtitlesGroup" Classes="media-group">
                   <ToggleSplitButton Name="PART_Subtitles" Classes="bare media-split">
                     <StackPanel Orientation="Horizontal" Spacing="6">
-                      <ctl:Icon Classes="media-ico" Data="{StaticResource InsMediaSubtitlesIcon}" VerticalAlignment="Center" />
+                      <ctl:ProgressIcon Value="{TemplateBinding SubtitlesProgress}" IsIndeterminate="{TemplateBinding IsSubtitlesWaiting}" VerticalAlignment="Center">
+                        <ctl:Icon Classes="media-ico" Data="{StaticResource InsMediaSubtitlesIcon}" />
+                      </ctl:ProgressIcon>
                       <ContentPresenter Content="{TemplateBinding SubtitlesContent}" VerticalAlignment="Center"
                                         IsVisible="{TemplateBinding SubtitlesContent, Converter={x:Static ObjectConverters.IsNotNull}}" />
                     </StackPanel>
                   </ToggleSplitButton>
                 </Border>
                 <ToggleButton Name="PART_SubtitlesToggle" Classes="bare icon media-btn">
-                  <ctl:Icon Classes="media-ico" Data="{StaticResource InsMediaSubtitlesIcon}" />
+                  <ctl:ProgressIcon Value="{TemplateBinding SubtitlesProgress}" IsIndeterminate="{TemplateBinding IsSubtitlesWaiting}">
+                    <ctl:Icon Classes="media-ico" Data="{StaticResource InsMediaSubtitlesIcon}" />
+                  </ctl:ProgressIcon>
                 </ToggleButton>
                 <ToggleButton Name="PART_Fit" Classes="bare icon media-btn">
                   <ctl:Icon Classes="media-ico" Data="{StaticResource InsMediaFillIcon}" />

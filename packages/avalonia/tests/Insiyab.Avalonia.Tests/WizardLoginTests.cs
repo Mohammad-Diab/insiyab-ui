@@ -412,13 +412,13 @@ public class WizardLoginTests
         Settle();
         Assert.False(wiz.IsBusy);
         Assert.Equal(1, next.Opacity);
-        Assert.Empty(next.GetVisualDescendants().OfType<LoadingSpinner>());
+        Assert.DoesNotContain(next.GetVisualDescendants().OfType<LoadingSpinner>(), s => s.IsEffectivelyVisible);
         Click(finish, w);
         Assert.True(wiz.IsBusy);
         Assert.Contains(finish.GetVisualDescendants().OfType<LoadingSpinner>(), s => s.IsEffectivelyVisible);
         wiz.Stay();
         Settle(100);
-        Assert.Empty(finish.GetVisualDescendants().OfType<LoadingSpinner>());
+        Assert.DoesNotContain(finish.GetVisualDescendants().OfType<LoadingSpinner>(), s => s.IsEffectivelyVisible);
         w.Close();
     }
 }

@@ -129,6 +129,13 @@
           <Setter Property="Opacity" Value="0.5" />
           <Setter Property="Cursor" Value="No" />
         </Style>
+        <!-- Busy (ins:Busy): as a busy button, dimmed less than disabled so the spinner reads -->
+        <Style Selector="^:busy">
+          <Setter Property="Cursor" Value="AppStarting" />
+        </Style>
+        <Style Selector="^:busy:disabled">
+          <Setter Property="Opacity" Value="0.75" />
+        </Style>
 
         <Style Selector="^.sm">
           <Setter Property="Padding" Value="10,4" />

@@ -149,6 +149,8 @@
                                       LineHeight="18.9"
                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    <!-- A busy button with no icon (ins:Busy) turns this in the content's middle as the content fades; hidden, it takes no room and never turns. -->
+                    <ins:LoadingSpinner x:Name="PART_Busy" Classes="sm" Arc="{x:Null}" Track="{x:Null}" IsVisible="False" IsHitTestVisible="False" />
                   </Panel>
                 </ins:TemplateBorder>
                 <ins:TemplateBorder x:Name="PART_Border"
@@ -178,6 +180,7 @@
           <Setter Property="Transitions">
             <Transitions>
               <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
+              <DoubleTransition Property="Opacity" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
@@ -226,6 +229,20 @@
           <Style Selector="^ /template/ :is(Border)#PART_Sweep">
             <Setter Property="IsVisible" Value="False" />
           </Style>
+        </Style>
+
+        <!-- Busy (ins:Busy): the disabled look, dimmed less so the spinner reads, and the working cursor. With no icon to turn, the content fades and the spinner turns in its place. -->
+        <Style Selector="^:busy">
+          <Setter Property="Cursor" Value="AppStarting" />
+        </Style>
+        <Style Selector="^:busy:disabled">
+          <Setter Property="Opacity" Value="0.75" />
+        </Style>
+        <Style Selector="^:busy-content /template/ ContentPresenter#PART_ContentPresenter">
+          <Setter Property="Opacity" Value="0" />
+        </Style>
+        <Style Selector="^:busy-content /template/ ins|LoadingSpinner#PART_Busy">
+          <Setter Property="IsVisible" Value="True" />
         </Style>
 
         <Style Selector="^.sm">
@@ -595,14 +612,17 @@
                               StrokeLineCap="Round"
                               StrokeJoin="Round" />
                       </Viewbox>
-                      <ContentPresenter x:Name="PART_ContentPresenter"
-                                        Content="{TemplateBinding Content}"
-                                        ContentTemplate="{TemplateBinding ContentTemplate}"
-                                        RecognizesAccessKey="True"
-                                        RenderTransform="none"
-                                        LineHeight="18.9"
-                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                      <Panel>
+                        <ContentPresenter x:Name="PART_ContentPresenter"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          RecognizesAccessKey="True"
+                                          RenderTransform="none"
+                                          LineHeight="18.9"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        <ins:LoadingSpinner x:Name="PART_Busy" Classes="sm" Arc="{x:Null}" Track="{x:Null}" IsVisible="False" IsHitTestVisible="False" />
+                      </Panel>
                     </DockPanel>
                   </Panel>
                 </ins:TemplateBorder>

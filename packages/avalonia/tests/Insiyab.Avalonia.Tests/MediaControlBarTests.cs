@@ -293,6 +293,42 @@ public class MediaControlBarTests
         Assert.True(source.Playing);
     }
 
+    [AvaloniaFact]
+    public void Subtitles_being_made_ring_their_icon_and_the_button_keeps_its_size()
+    {
+        var bar = Bar();
+        Assert.True(double.IsNaN(bar.SubtitlesProgress));
+        Assert.False(bar.IsSubtitlesWaiting);
+        var window = Show(bar, FlowDirection.RightToLeft, width: 960, height: 200);
+        var subtitles = PartOf<ToggleSplitButton>(bar, "PART_Subtitles");
+        var icon = subtitles.GetVisualDescendants().OfType<ProgressIcon>().Single();
+        var toggleIcon = Assert.IsType<ProgressIcon>(PartOf<ToggleButton>(bar, "PART_SubtitlesToggle").Content); // hidden beside the split, so read through its content
+        var size = subtitles.Bounds.Size;
+        var at = ScreenBox(PartOf<ToggleButton>(bar, "PART_Fit"), window);
+        Assert.DoesNotContain(":busy", icon.Classes);
+
+        bar.IsSubtitlesWaiting = true;
+        Settle(60);
+        Assert.Contains(":waiting", icon.Classes);
+        Assert.Contains(":waiting", toggleIcon.Classes);
+        Assert.Equal("الترجمة", ToolTip.GetTip(subtitles));
+
+        bar.IsSubtitlesWaiting = false;
+        bar.SubtitlesProgress = 24;
+        Settle(60);
+        Assert.Contains(":progress", icon.Classes);
+        Assert.Equal(24, Part<ProgressRing>(icon, "PART_Ring").Value);
+        Assert.Equal("الترجمة · 24%", ToolTip.GetTip(subtitles));
+        Assert.Equal(size, subtitles.Bounds.Size);
+        Assert.Equal(at, ScreenBox(PartOf<ToggleButton>(bar, "PART_Fit"), window));
+
+        bar.SubtitlesProgress = double.NaN;
+        Settle(60);
+        Assert.DoesNotContain(":busy", icon.Classes);
+        Assert.Equal("الترجمة", ToolTip.GetTip(subtitles));
+        Assert.Equal(size, subtitles.Bounds.Size);
+    }
+
     private sealed class TestState
     {
         public bool Playing { get; set; }

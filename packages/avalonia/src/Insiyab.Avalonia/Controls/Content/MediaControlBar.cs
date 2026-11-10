@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -51,6 +52,12 @@ public class MediaControlBar : TemplatedControl, IWords
 
     public static readonly StyledProperty<object?> SubtitlesContentProperty =
         AvaloniaProperty.Register<MediaControlBar, object?>(nameof(SubtitlesContent));
+
+    public static readonly StyledProperty<double> SubtitlesProgressProperty =
+        AvaloniaProperty.Register<MediaControlBar, double>(nameof(SubtitlesProgress), double.NaN);
+
+    public static readonly StyledProperty<bool> IsSubtitlesWaitingProperty =
+        AvaloniaProperty.Register<MediaControlBar, bool>(nameof(IsSubtitlesWaiting));
 
     public static readonly StyledProperty<bool> IsFillingFrameProperty =
         AvaloniaProperty.Register<MediaControlBar, bool>(nameof(IsFillingFrame), defaultBindingMode: BindingMode.TwoWay);
@@ -135,6 +142,9 @@ public class MediaControlBar : TemplatedControl, IWords
     public MediaControlBar()
     {
         _speedMenu = new PopMenu { ItemsSource = _speedItems };
+        // the menu opens on the speed in use: its item takes the focus (and so the highlight), not the first one
+        _speedMenu.Opened += (_, _) => global::Avalonia.Threading.Dispatcher.UIThread.Post(
+            () => _speedItems.FirstOrDefault(i => i.IsChecked)?.Focus(NavigationMethod.Directional), global::Avalonia.Threading.DispatcherPriority.Loaded);
         _moreMenu = new PopMenu { ItemsSource = MoreItems };
         var level = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), ColumnSpacing = 12, FlowDirection = FlowDirection.LeftToRight, Children = { _volumeSlider, _volumeText } };
         Grid.SetColumn(_volumeText, 1);
@@ -169,8 +179,14 @@ public class MediaControlBar : TemplatedControl, IWords
     /// <summary>The card the subtitles' arrow opens (a file to add, a language). Unset, the subtitles are a plain toggle with no arrow.</summary>
     public object? SubtitlesCard { get => GetValue(SubtitlesCardProperty); set => SetValue(SubtitlesCardProperty, value); }
 
-    /// <summary>Shown beside the subtitles' icon, inside its button: how far subtitles being made have come, say. A control here is one of the row's own.</summary>
+    /// <summary>Shown beside the subtitles' icon, inside its button, widening it (for how far subtitles being made have come, <see cref="SubtitlesProgress"/> keeps the button's size). A control here is one of the row's own.</summary>
     public object? SubtitlesContent { get => GetValue(SubtitlesContentProperty); set => SetValue(SubtitlesContentProperty, value); }
+
+    /// <summary>How far subtitles being made have come, 0 to 100: the subtitles' icon shrinks inside a ring that fills (a <see cref="ProgressIcon"/>), and the button's tip adds the percent. <c>NaN</c> (the default) shows no ring. The button keeps its size either way.</summary>
+    public double SubtitlesProgress { get => GetValue(SubtitlesProgressProperty); set => SetValue(SubtitlesProgressProperty, value); }
+
+    /// <summary>The subtitles wait to start being made: a turning arc in the ring's place around their icon, whatever <see cref="SubtitlesProgress"/> says.</summary>
+    public bool IsSubtitlesWaiting { get => GetValue(IsSubtitlesWaitingProperty); set => SetValue(IsSubtitlesWaitingProperty, value); }
 
     /// <summary>Opens the subtitles' card (<see cref="SubtitlesCard"/>) on its arrow, as when the app has something to say there (nothing to show yet, a file refused).</summary>
     public void ShowSubtitlesCard()
@@ -395,7 +411,7 @@ public class MediaControlBar : TemplatedControl, IWords
         }
         else if (p == IsSubtitlesOnProperty || p == IsFillingFrameProperty) Sync();
         else if (p == SpeedProperty || p == SpeedsProperty) MakeSpeeds();
-        else if (p == SkipStepProperty) Words();
+        else if (p == SkipStepProperty || p == SubtitlesProgressProperty || p == IsSubtitlesWaitingProperty) Words();
         else if (p == SubtitlesContentProperty)
         {
             // the content is the row's logical child, so its bindings read the row's data
@@ -489,11 +505,13 @@ public class MediaControlBar : TemplatedControl, IWords
             _speedItems.Clear();
             foreach (var s in speeds)
             {
-                var item = new MenuItem { Header = SpeedText(s), Tag = s };
+                var item = new MenuItem { Header = SpeedText(s), Tag = s, ToggleType = MenuItemToggleType.Radio };
                 item.Click += OnSpeed;
                 _speedItems.Add(item);
             }
         }
+        foreach (var item in _speedItems)
+            item.IsChecked = item.Tag is double s && s == Speed; // the speed in use carries the menu's radio mark
         if (_speed is not null) _speed.Content = SpeedText(Speed);
     }
 
@@ -513,8 +531,11 @@ public class MediaControlBar : TemplatedControl, IWords
         Say(_back, words.Count("media.back", seconds, n => "رجوع " + ArabicSeconds(n)));
         Say(_forward, words.Count("media.forward", seconds, n => "تقديم " + ArabicSeconds(n)));
         Say(_play, words[IsPlaying ? "media.pause" : "media.play"]);
-        Say(_subtitles, words["media.subtitles"]);
-        Say(_subtitlesToggle, words["media.subtitles"]);
+        var subtitles = words["media.subtitles"];
+        if (!IsSubtitlesWaiting && double.IsFinite(SubtitlesProgress))
+            subtitles += " · " + Math.Round(Math.Clamp(SubtitlesProgress, 0, 100)).ToString(CultureInfo.InvariantCulture) + "%"; // the ring's percent, in words
+        Say(_subtitles, subtitles);
+        Say(_subtitlesToggle, subtitles);
         Say(_fit, words["media.fill"]);
         Say(_fullScreen, words[IsFullScreen ? "media.exitFullScreen" : "media.fullScreen"]);
         Say(_more, words["media.more"]);

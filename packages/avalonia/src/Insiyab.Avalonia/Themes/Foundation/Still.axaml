@@ -33,6 +33,16 @@
     <Setter Property="Transitions" Value="{x:Null}" />
   </Style>
 
+  <!-- A progress icon shrinks and shows its ring at once -->
+  <Style Selector=":is(TopLevel):ins-still ins|ProgressIcon /template/ :is(Control)">
+    <Setter Property="Transitions" Value="{x:Null}" />
+  </Style>
+
+  <!-- A busy button with no icon swaps its content for the spinner at once -->
+  <Style Selector=":is(TopLevel):ins-still :is(Button) /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Transitions" Value="{x:Null}" />
+  </Style>
+
   <!-- A split button's keyboard press, and the tabs a dragged document tab passes, move at once -->
   <Style Selector=":is(TopLevel):ins-still SplitButton:pressed /template/ Panel#PART_Root">
     <Setter Property="RenderTransform" Value="none" />
