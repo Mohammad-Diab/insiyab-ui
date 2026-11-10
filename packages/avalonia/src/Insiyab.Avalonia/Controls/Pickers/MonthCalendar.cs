@@ -632,19 +632,12 @@ public class MonthCalendar : TemplatedControl, IWords
         Grid.SetRow(allLabel, 1);
         top.Children.Add(allLabel);
 
+        // the hour lines are drawn by each day's DayTimeline, broken under its events (an event's tint is see-through)
         var gutter = new MonthStack { Classes = { "week-hours" } };
-        var lines = new MonthStack { IsHitTestVisible = false, Classes = { "week-lines" } };
         for (var h = startH; h < endH; h++)
-        {
             gutter.Children.Add(new MonthBorder { Height = hourH, Classes = { "week-hour-cell" }, Child = new MonthText { Text = words.FormatTime(new TimeSpan(h, 0, 0)), Classes = { "week-hour" } } });
-            lines.Children.Add(new MonthBorder { Height = hourH, Classes = { "week-line" } });
-        }
         Grid.SetRow(gutter, 1);
         body.Children.Add(gutter);
-        Grid.SetRow(lines, 1);
-        Grid.SetColumn(lines, 1);
-        Grid.SetColumnSpan(lines, days);
-        body.Children.Add(lines);
 
         var from = startH * 60.0;
         var to = endH * 60.0;
@@ -1110,6 +1103,45 @@ internal sealed class DayTimeline : Panel
 
     private double Y(double minutes) => (Math.Clamp(minutes, From, To) - From) / 60 * HourHeight;
 
+    private readonly HourLines _hours;
+
+    public DayTimeline()
+    {
+        _hours = new HourLines(this) { IsHitTestVisible = false };
+        Children.Add(_hours);
+    }
+
+    /// <summary>The line under each hour (InsLine), broken where an event covers it: an event's tint is see-through.</summary>
+    private sealed class HourLines : Control
+    {
+        private readonly DayTimeline day;
+
+        public HourLines(DayTimeline day)
+        {
+            this.day = day;
+            ActualThemeVariantChanged += (_, _) => InvalidateVisual();
+        }
+
+        public override void Render(DrawingContext context)
+        {
+            if (!this.TryFindResource("InsLine", ActualThemeVariant, out var res) || res is not IBrush brush) return;
+            var pen = new Pen(brush, 1);
+            var width = Bounds.Width;
+            var covers = day.Children.Where(c => c.IsVisible && day._slots.ContainsKey(c)).Select(c => c.Bounds).ToList();
+            for (var h = 1; h <= (day.To - day.From) / 60; h++)
+            {
+                var y = h * day.HourHeight - 0.5;
+                var x = 0.0;
+                foreach (var (left, right) in covers.Where(r => r.Top < y && y < r.Bottom).Select(r => (r.Left, r.Right)).OrderBy(r => r.Left))
+                {
+                    if (left > x) context.DrawLine(pen, new Point(x, y), new Point(left, y));
+                    x = Math.Max(x, right);
+                }
+                if (x < width) context.DrawLine(pen, new Point(x, y), new Point(width, y));
+            }
+        }
+    }
+
     protected override Size MeasureOverride(Size availableSize)
     {
         var finite = double.IsFinite(availableSize.Width);
@@ -1120,6 +1152,10 @@ internal sealed class DayTimeline : Panel
             if (child == _line)
             {
                 child.Measure(new Size(width, 10));
+            }
+            else if (child == _hours)
+            {
+                child.Measure(new Size(finite ? width : 0, (To - From) / 60 * HourHeight));
             }
             else if (_slots.TryGetValue(child, out var s))
             {
@@ -1139,12 +1175,18 @@ internal sealed class DayTimeline : Panel
                 child.Arrange(new Rect(0, Y(_lineAt) - 5, finalSize.Width, 10));
                 continue;
             }
+            if (child == _hours)
+            {
+                child.Arrange(new Rect(finalSize));
+                continue;
+            }
             if (!_slots.TryGetValue(child, out var s)) continue;
             var top = Y(s.Start);
             var height = Math.Max(0, Y(s.End) - top);
             var width = finalSize.Width / s.Lanes;
             child.Arrange(new Rect(s.Lane * width + 1, top + 1, Math.Max(0, width - 2), Math.Max(0, height - 2)));
         }
+        _hours.InvalidateVisual(); // the hour lines break where the events now stand
         return finalSize;
     }
 }

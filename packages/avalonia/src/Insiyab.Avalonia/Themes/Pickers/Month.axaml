@@ -264,10 +264,6 @@
     <Setter Property="FontSize" Value="11" />
     <Setter Property="Foreground" Value="{DynamicResource InsText3}" />
   </Style>
-  <Style Selector="ins|MonthCalendar ins|MonthBorder.week-line">
-    <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
-    <Setter Property="BorderThickness" Value="0,0,0,1" />
-  </Style>
   <Style Selector="ins|MonthCalendar ins|MonthBorder.week-day">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BorderBrush" Value="{DynamicResource InsLine}" />
