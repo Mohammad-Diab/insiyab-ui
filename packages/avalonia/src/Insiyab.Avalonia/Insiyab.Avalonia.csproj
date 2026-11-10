@@ -18,14 +18,21 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageReleaseNotes>0.3.1
-
-Fixed
-- A text box's clear button takes the quiet icon-button look (a soft fill under the pointer, a small press), inset from the field's end with the inner radius, and keeps its own size inside an input group.
-- MonthCalendar's week and day grids draw their lines in the hairline.
+    <PackageReleaseNotes>0.3.2
 
 Added
-- DescriptionList num: every value reads as a figure (left to right, at the start), the pairs made from ItemsSource included.
+- Busy: ins:Busy.IsBusy on any button turns its leading icon into the small spinner (with no icon, the content fades for it) and holds the button disabled until the work ends, its own IsEnabled kept underneath; Busy.Disables="False" keeps it pressable. The size never changes.
+- ProgressIcon: an icon with work running for it. Value 0 to 100 shrinks it inside a thin ring that fills, IsIndeterminate turns an arc there; the ring takes no room.
+- ChoiceDialog and ChoicePicker: pick one item from a long list under a search that keeps the keyboard, with group headings, keywords, Arabic folding, loading skeletons, a failure with retry, and MaxRows for a picker in a pop.
+- Gutter.Shadow and Gutter.Ring: room for shadows and focus rings on the named sides of the content inside whatever clips at its edge.
+- ListRow.Invoked and ListRow.Command: a list row opens on a click, Enter or Space; headings, and a button, text box, combo box or slider inside a row, keep out of it.
+- ToggleSwitch danger: a destructive choice whose fill, halo, hover border and focus ring take the bad tone.
+- MediaControlBar SubtitlesProgress and IsSubtitlesWaiting: a progress ring around the subtitles' icon while they are made, the button keeping its size.
+
+Changed
+- MediaControlBar's speed menu marks the speed in use and opens on it.
+- MonthCalendar's week and day views break each hour line under the events that cover it.
+- A pinned list heading is square on top, flush with the list's edge.
 
 The full list of 0.3.0 changes is on the 0.3.0 release.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
