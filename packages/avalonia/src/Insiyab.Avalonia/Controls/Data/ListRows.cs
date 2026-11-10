@@ -22,6 +22,7 @@ internal static class ListRows
     static ListRows()
     {
         TrackProperty.Changed.AddClassHandler<ListBoxItem>(OnTrackChanged);
+        ListRow.EnsureListening();
     }
 
     // The row after a heading has no divider above it: the heading already parts the groups; index is the row's own.

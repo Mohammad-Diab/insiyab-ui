@@ -149,7 +149,7 @@ internal sealed class ListPin
         _pin.Margin = new Thickness(pad.Left, 0, pad.Right, 0);
         _pin.Height = heading.Height;
         _pin.Padding = heading.Padding;
-        _pin.CornerRadius = heading.Radius;
+        _pin.CornerRadius = new CornerRadius(0, 0, heading.Radius.BottomRight, heading.Radius.BottomLeft); // flush on the list's top edge: square on top
         _text.Text = heading.Text;
         var push = Math.Min(0, next - heading.Height);
         if (_pin.RenderTransform is not TranslateTransform { X: 0 } t || t.Y != push) _pin.RenderTransform = new TranslateTransform(0, push);

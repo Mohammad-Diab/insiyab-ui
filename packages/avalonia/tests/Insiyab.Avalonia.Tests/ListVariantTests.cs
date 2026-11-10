@@ -291,6 +291,11 @@ public class ListVariantTests
         Assert.True(pin.IsVisible);
         Assert.Equal("اليوم", text.Text);
         Assert.InRange(pin.Bounds.Height, heads[0].Bounds.Height - 0.5, heads[0].Bounds.Height + 0.5);
+        // flush on the list's top edge: square on top, the heading row's corners below
+        Assert.Equal(0, pin.CornerRadius.TopLeft);
+        Assert.Equal(0, pin.CornerRadius.TopRight);
+        Assert.Equal(heads[0].CornerRadius.BottomLeft, pin.CornerRadius.BottomLeft);
+        Assert.Equal(heads[0].CornerRadius.BottomRight, pin.CornerRadius.BottomRight);
         scroll.Offset = new Vector(0, 250);
         Settle(150);
         var at = heads[1].TranslatePoint(default, scroll)!.Value.Y;
