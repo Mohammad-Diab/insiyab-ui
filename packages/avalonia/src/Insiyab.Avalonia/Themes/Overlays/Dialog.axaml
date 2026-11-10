@@ -139,6 +139,11 @@
           <Setter Property="MaxWidth" Value="896" />
         </Style>
 
+        <!-- A choice dialog: only its picker's list scrolls, under a search that stays, so the body gives the picker its height rather than scrolling it -->
+        <Style Selector="^.choice /template/ ScrollViewer#PART_Scroll">
+          <Setter Property="VerticalScrollBarVisibility" Value="Disabled" />
+        </Style>
+
         <!-- The drawer: attached to the edge it came out of, so only its inner corners round and only its inner side has a rim -->
         <Style Selector="^.drawer">
           <Setter Property="MaxWidth" Value="384" />

@@ -215,6 +215,7 @@ internal static class Words
         ["tags.remove"] = ("إزالة", "Remove"),
         ["select.search"] = ("ابحث", "Search"),
         ["select.empty"] = ("لا نتائج", "No results"),
+        ["choice.retry"] = ("أعد المحاولة", "Try again"),
 
         ["find.placeholder"] = ("ابحث في الصفحة", "Find in page"),
         ["find.name"] = ("البحث في الصفحة", "Find in page"),

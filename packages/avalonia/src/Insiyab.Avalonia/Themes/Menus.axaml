@@ -6,4 +6,5 @@
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Menus/Chips.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Menus/Tags.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Menus/Palette.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Menus/Choice.axaml" />
 </Styles>

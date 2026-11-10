@@ -1,0 +1,37 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <!-- The choice picker: the search on top, the foot at the bottom, and between them the list (put in PART_Rows by the control), the skeleton rows, the failure or the empty line -->
+      <ControlTheme x:Key="{x:Type ins:ChoicePicker}" TargetType="ins:ChoicePicker">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+        <Setter Property="Template">
+          <ControlTemplate TargetType="ins:ChoicePicker">
+            <DockPanel VerticalSpacing="{DynamicResource InsSp2}" ClipToBounds="False">
+              <TextBox x:Name="PART_Search"
+                       DockPanel.Dock="Top"
+                       Classes="search clearButton"
+                       Text="{TemplateBinding SearchText, Mode=TwoWay}" />
+              <ContentPresenter x:Name="PART_Foot"
+                                DockPanel.Dock="Bottom"
+                                Content="{TemplateBinding Foot}"
+                                IsVisible="False" />
+              <Panel ClipToBounds="False">
+                <StackPanel x:Name="PART_Loading" IsVisible="False" />
+                <StackPanel x:Name="PART_Failure" Spacing="{DynamicResource InsSp2}" IsVisible="False">
+                  <TextBlock Classes="muted" Text="{TemplateBinding Error}" TextWrapping="Wrap" />
+                  <Button x:Name="PART_Retry" Classes="secondary sm" HorizontalAlignment="Left" Command="{TemplateBinding RetryCommand}" />
+                </StackPanel>
+                <TextBlock x:Name="PART_Empty" Classes="muted" TextWrapping="Wrap" IsVisible="False" />
+                <Decorator x:Name="PART_Rows" ClipToBounds="False" />
+              </Panel>
+            </DockPanel>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+</Styles>

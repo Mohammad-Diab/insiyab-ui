@@ -1,10 +1,30 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pages="using:Insiyab.Avalonia.Gallery.Pages"
              x:Class="Insiyab.Avalonia.Gallery.Pages.DialogPage">
   <UserControl.Styles>
     <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
   </UserControl.Styles>
+  <UserControl.Resources>
+    <!-- The choice dialog the section's buttons open; the code-behind gives its picker the items and the loading or failure. -->
+    <ins:ChoiceDialog x:Key="ProductDialog" Title="اختر منتجًا">
+      <ins:ChoicePicker PlaceholderText="ابحث بالاسم أو الرمز"
+                        TextBinding="{Binding Name, DataType=pages:GalleryProduct}"
+                        KeywordsBinding="{Binding Code, DataType=pages:GalleryProduct}"
+                        GroupBinding="{Binding Group, DataType=pages:GalleryProduct}">
+        <ins:ChoicePicker.ItemTemplate>
+          <DataTemplate x:DataType="pages:GalleryProduct">
+            <DockPanel>
+              <TextBlock DockPanel.Dock="Right" Classes="muted num" Text="{Binding Code}" VerticalAlignment="Center" />
+              <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+            </DockPanel>
+          </DataTemplate>
+        </ins:ChoicePicker.ItemTemplate>
+      </ins:ChoicePicker>
+    </ins:ChoiceDialog>
+  </UserControl.Resources>
 
   <StackPanel>
     <TextBlock Classes="intro" Text="لوح فوق النافذة المعتمة، يحبس التركيز ما دام مفتوحًا، ويغلقه Esc ويعيد التركيز إلى الزر الذي فتحه." />
@@ -19,6 +39,16 @@
     <TextBlock Classes="section" Text="التأكيد" />
     <pg:PlayText Classes="p" Markup="ضع `ins:Dialog.Confirm` على زر، فيسأل المستخدم قبل أن يمضي الإجراء. وإذا كان الزر من أزرار الخطر جاء زر التأكيد أحمر تلقائيًا. ومن الشيفرة تعيد `Dialog.ConfirmAsync` القيمة `true` أو `false`." />
     <pg:Playground Def="{x:Static pg:DialogPlay.Confirm}" />
+
+    <TextBlock Classes="section" Text="مربع الاختيار" />
+    <pg:PlayText Classes="p" Markup="لقائمة طويلة لا تتسع لها القائمة المنسدلة: `ins:ChoiceDialog` حوار في وسط النافذة متنه `ins:ChoicePicker`، بحث ثابت في أعلاه يبقى فيه التركيز، وتحته قائمة تتمرر وحدها بعناوين لمجموعاتها لا تُختار. الأسهم تنقل التظليل والكتابة في البحث، و`Enter` أو النقر يختار ويغلق الحوار بالعنصر المختار نتيجةً لـ`ShowAsync`، و`Esc` أو النقر خارجه يلغي. ويُبحث بكل كلمة في أي موضع من النص أو من `KeywordsBinding`، مع طي الحروف العربية." />
+    <pg:PlayText Classes="p" Markup="وإذا كانت العناصر في الطريق فـ`IsLoading` يضع صفوفًا هيكلية مكانها ويبقى ما كُتب في البحث، و`Error` يضع السبب وزر إعادة المحاولة (`RetryCommand`). و`MaxRows` يحدد عدد الصفوف الظاهرة حين يوضع المنتقي في `ins:PopCard` معلقًا من حقله." />
+    <WrapPanel ItemSpacing="12" LineSpacing="12" Margin="0,4,0,16">
+      <Button Classes="primary" Content="اختر منتجًا" Click="OnChooseProduct" />
+      <Button Classes="secondary" Content="قائمة تصل بعد لحظة" Click="OnChooseLate" />
+      <Button Classes="secondary" Content="قائمة تعذرت قراءتها" Click="OnChooseFailed" />
+      <TextBlock x:Name="Chosen" Classes="muted" VerticalAlignment="Center" />
+    </WrapPanel>
 
     <TextBlock Classes="section" Text="الخيارات" />
     <pg:PlayText Classes="p" Markup="كل ما في مربع الحوار والتأكيد من عناصر وكلاسات وخصائص، لكل منهما صندوق يفتح بالنقر." />

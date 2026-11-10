@@ -19,6 +19,19 @@
     <pg:PlayText Classes="p" Markup="يضع `ins:DrawerHost` الدرج بجوار المحتوى، فيأخذ عمودًا يدفع الصفحة، أو يطفو فوقها إذا ضاقت النافذة." />
     <pg:Playground Def="{x:Static pg:DrawerPlay.Host}" />
 
+    <TextBlock Classes="section" Text="هامش الظلال" />
+    <pg:PlayText Classes="p" Markup="ما يتمرر داخل الدرج أو الصفحة يقص ظل البطاقة وحلقة التركيز عند حافته. ضع `ins:Gutter.Shadow` على المحتوى الذي داخل الجزء القاص، بالجوانب التي يحتاجها (`All` أو `Inline,Bottom` أو `Top`)، فيترك له `InsSp4` لظل البطاقة، أما `ins:Gutter.Ring` فيترك `InsSp1` لحلقة التركيز وحدها. والبداية والنهاية تتبعان اتجاه القراءة." />
+    <Border Classes="card" Height="220" Margin="0,4,0,16">
+      <ScrollViewer>
+        <StackPanel Spacing="12" ClipToBounds="False" ins:Gutter.Shadow="All">
+          <Border Classes="tile hoverable" Padding="16"><TextBlock Text="بطاقة يظهر ظلها كاملًا عند حافة المتمرر" /></Border>
+          <Border Classes="tile hoverable" Padding="16"><TextBlock Text="بطاقة ثانية" /></Border>
+          <Border Classes="tile hoverable" Padding="16"><TextBlock Text="بطاقة ثالثة" /></Border>
+          <Border Classes="tile hoverable" Padding="16"><TextBlock Text="بطاقة رابعة" /></Border>
+        </StackPanel>
+      </ScrollViewer>
+    </Border>
+
     <TextBlock Classes="section" Text="الحوار أم الدرج؟" />
     <ins:ProseList>
       <TextBlock Classes="p" Margin="0"><Bold>الحوار</Bold> لسؤال أو نموذج يستوقفك عما كنت فيه.</TextBlock>
