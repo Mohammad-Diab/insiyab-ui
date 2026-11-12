@@ -9,7 +9,7 @@ using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The menu's entrance, set from a theme: the body fades and settles from 6px above (or below, flipped), then its first items rise in one after another.</summary>
+/// <summary>The menu's entrance, set from a theme: the body fades and settles from 6px above (or below, flipped), then its first items rise in one after another. Skipped while <see cref="Motion.IsStill"/>: the body and its items are simply there.</summary>
 internal static class PopMotion
 {
     /// <summary>Plays the entrance each time the element is shown.</summary>
@@ -54,9 +54,10 @@ internal static class PopMotion
     private static T Res<T>(Control c, string key, T fallback) =>
         c.TryFindResource(key, c.ActualThemeVariant, out var v) && v is T t ? t : fallback;
 
-    /// <summary>Plays the entrance now.</summary>
+    /// <summary>Plays the entrance now, or nothing while the window is still.</summary>
     public static void Play(Control body)
     {
+        if (Motion.IsStill(body)) return;
         var enter = Res(body, "InsTEnter", TimeSpan.FromMilliseconds(180));
         var pop = Res(body, "InsTPop", TimeSpan.FromMilliseconds(120));
         var ease = Res<Easing>(body, "InsEase", new CubicEaseOut());

@@ -361,6 +361,12 @@ public class Toc : ItemsControl
         var max = Math.Max(0, _scroller.Extent.Height - _scroller.Viewport.Height);
         var to = Math.Clamp(from + p.Y - LandAt(), 0, max);
         _tween?.Stop();
+        // a still window jumps to the section at once
+        if (Motion.IsStill(this))
+        {
+            _scroller.Offset = new Vector(_scroller.Offset.X, to);
+            return;
+        }
         var start = DateTime.UtcNow;
         var duration = TimeSpan.FromMilliseconds(360);
         var ease = new global::Avalonia.Animation.Easings.SplineEasing(0.22, 1, 0.36, 1);

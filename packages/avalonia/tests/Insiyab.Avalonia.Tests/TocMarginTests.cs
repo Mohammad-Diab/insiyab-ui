@@ -67,6 +67,20 @@ public class TocMarginTests
     }
 
     [AvaloniaFact]
+    public void In_a_still_window_a_click_jumps_to_the_section_at_once()
+    {
+        var x = Make(t => t.ScrollMargin = 40);
+        var window = Show(x.Root, FlowDirection.RightToLeft, height: 600);
+        Motion.SetStill(window, true);
+        var p = Center(x.Toc.Links.ElementAt(2), window);
+        window.MouseMove(p);
+        window.MouseDown(p, MouseButton.Left);
+        window.MouseUp(p, MouseButton.Left);
+        Dispatcher.UIThread.RunJobs();   // no settling: the scroll is already there
+        Assert.Equal(40, TopIn(x.Sections[2], x.Scroller), 1);
+    }
+
+    [AvaloniaFact]
     public void Under_a_frosted_top_bar_the_margin_clears_the_bar()
     {
         var x = Make(frosted: true, barHeight: 60);

@@ -54,6 +54,7 @@ public static class Motion
         ((IPseudoClasses)top.Classes).Set(StillPseudoClass, still);
         if (still) top.SetValue(ClassTheme.StillProperty, true);
         else top.ClearValue(ClassTheme.StillProperty);
+        StillShadows.Set(top, still);
     }
 
     // The motion tokens, read where the control is so a theme can retime them.

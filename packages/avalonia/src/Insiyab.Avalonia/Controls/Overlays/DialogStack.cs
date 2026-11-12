@@ -161,7 +161,7 @@ internal sealed class DialogStack : Panel
     {
         var blur = _blur;
         if (blur is null) return;
-        if (!Seen.WindowShown(_top))
+        if (!Seen.WindowShown(_top) || Motion.IsStill(this))
         {
             blur.Radius = to;
             done?.Invoke();
@@ -251,9 +251,10 @@ internal sealed class DialogLayer : ThemeVariantScope
         else Dialog.Focus();
     }
 
+    // In a still window the scrim changes at once.
     private static void Fade(Control control, double to, TimeSpan duration)
     {
-        control.Transitions = [new DoubleTransition { Property = OpacityProperty, Duration = duration, Easing = Motion.Ease(control) }];
+        control.Transitions = Motion.IsStill(control) ? null : [new DoubleTransition { Property = OpacityProperty, Duration = duration, Easing = Motion.Ease(control) }];
         control.Opacity = to;
     }
 
@@ -288,7 +289,7 @@ internal sealed class DialogLayer : ThemeVariantScope
         }
         var transitions = new Transitions { new TransformOperationsTransition { Property = RenderTransformProperty, Duration = duration, Easing = easing } };
         if (!drawer) transitions.Add(new DoubleTransition { Property = OpacityProperty, Duration = duration, Easing = easing });
-        dialog.Transitions = transitions;
+        dialog.Transitions = Motion.IsStill(this) ? null : transitions;
         dialog.RenderTransform = inward ? TransformOperations.Identity : away;
         if (!drawer) dialog.Opacity = inward ? 1 : 0;
     }

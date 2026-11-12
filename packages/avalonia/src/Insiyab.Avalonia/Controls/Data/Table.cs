@@ -1269,6 +1269,7 @@ public partial class Table : TemplatedControl, IWords
 
     private void Slide(Dictionary<TableRow, double> before)
     {
+        if (Motion.IsStill(this)) return;
         var y = 0.0;
         var duration = this.TryFindResource("InsTEnter", ActualThemeVariant, out var d) && d is TimeSpan t ? t : TimeSpan.FromSeconds(0.28);
         var easing = this.TryFindResource("InsEase", ActualThemeVariant, out var es) && es is Easing ease ? ease : new SplineEasing(0.2, 0.7, 0.2, 1);

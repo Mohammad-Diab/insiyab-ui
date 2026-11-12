@@ -128,7 +128,9 @@ public class SurfaceLookTests
         Settle();
         LookCheck.Keep(w, page, $"surface-still-{theme}-{dir}");
         Assert.False(Moved(glassHover));
-        Assert.Equal(2, glassHover.BoxShadow.Count);
+        // still: the soft drop goes, the inset highlight stays
+        Assert.Equal(1, glassHover.BoxShadow.Count);
+        Assert.True(glassHover.BoxShadow[0].IsInset);
     }
 
     [AvaloniaFact]

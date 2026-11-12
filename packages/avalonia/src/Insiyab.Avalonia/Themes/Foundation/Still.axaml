@@ -51,4 +51,41 @@
     <Setter Property="Transitions" Value="{x:Null}" />
   </Style>
 
+  <!-- The sidebar opens, closes and collapses at once, as does the drawer with its scrim -->
+  <Style Selector=":is(TopLevel):ins-still SplitView /template/ Panel#PART_PaneRoot, :is(TopLevel):ins-still SplitView /template/ :is(Border)#PART_PaneChrome, :is(TopLevel):ins-still SplitView /template/ Rectangle#LightDismissLayer">
+    <Setter Property="Transitions" Value="{x:Null}" />
+  </Style>
+
+  <!-- A tooltip shows where it lands, without rising in -->
+  <Style Selector=":is(TopLevel):ins-still ToolTip">
+    <Setter Property="Transitions" Value="{x:Null}" />
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+
+  <!-- A switch's thumb lands on its side at once; the track's colour still eases -->
+  <Style Selector=":is(TopLevel):ins-still ToggleSwitch">
+    <Setter Property="KnobTransitions" Value="{x:Null}" />
+  </Style>
+
+  <!-- A tick, a radio dot, a tile's mark and a menu item's check mark appear at their size, without the overshoot -->
+  <Style Selector=":is(TopLevel):ins-still CheckBox /template/ Path#CheckGlyph, :is(TopLevel):ins-still RadioButton /template/ Ellipse#CheckGlyph, :is(TopLevel):ins-still :is(ToggleButton).tile /template/ Panel#TileMark, :is(TopLevel):ins-still MenuItem /template/ Viewbox#PART_Mark">
+    <Setter Property="Transitions" Value="{x:Null}" />
+  </Style>
+
+  <!-- The palette's search icon takes its focus colour without growing -->
+  <Style Selector=":is(TopLevel):ins-still TextBox:focus /template/ ins|Icon#PART_SearchIcon">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+
+  <!-- The soft shadows set in templates rather than tokens drop too: toned buttons, TOC links, a field's halo, the knobs and the day/night orb -->
+  <Style Selector=":is(TopLevel):ins-still :is(Button) /template/ :is(Border)#PART_Shadow, :is(TopLevel):ins-still SplitButton /template/ :is(Border)#PART_Shadow, :is(TopLevel):ins-still ins|TocLink /template/ :is(Border)#PART_Shadow">
+    <Setter Property="BoxShadow" Value="none" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-still :is(TemplatedControl) /template/ :is(Border)#PART_Halo">
+    <Setter Property="BoxShadow" Value="none" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-still Slider /template/ Thumb /template/ :is(Border)#PART_Face, :is(TopLevel):ins-still ToggleSwitch /template/ :is(Border)#SwitchKnob, :is(TopLevel):ins-still ins|DayNight /template/ :is(Border)#PART_OrbFace">
+    <Setter Property="BoxShadow" Value="none" />
+  </Style>
+
 </Styles>
