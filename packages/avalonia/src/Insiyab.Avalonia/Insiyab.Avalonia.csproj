@@ -18,21 +18,12 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageReleaseNotes>0.3.2
-
-Added
-- Busy: ins:Busy.IsBusy on any button turns its leading icon into the small spinner (with no icon, the content fades for it) and holds the button disabled until the work ends, its own IsEnabled kept underneath; Busy.Disables="False" keeps it pressable. The size never changes.
-- ProgressIcon: an icon with work running for it. Value 0 to 100 shrinks it inside a thin ring that fills, IsIndeterminate turns an arc there; the ring takes no room.
-- ChoiceDialog and ChoicePicker: pick one item from a long list under a search that keeps the keyboard, with group headings, keywords, Arabic folding, loading skeletons, a failure with retry, and MaxRows for a picker in a pop.
-- Gutter.Shadow and Gutter.Ring: room for shadows and focus rings on the named sides of the content inside whatever clips at its edge.
-- ListRow.Invoked and ListRow.Command: a list row opens on a click, Enter or Space; headings, and a button, text box, combo box or slider inside a row, keep out of it.
-- ToggleSwitch danger: a destructive choice whose fill, halo, hover border and focus ring take the bad tone.
-- MediaControlBar SubtitlesProgress and IsSubtitlesWaiting: a progress ring around the subtitles' icon while they are made, the button keeping its size.
+    <PackageReleaseNotes>0.3.3
 
 Changed
-- MediaControlBar's speed menu marks the speed in use and opens on it.
-- MonthCalendar's week and day views break each hour line under the events that cover it.
-- A pinned list heading is square on top, flush with the list's edge.
+- A still window (Motion.Still, or the system's reduced motion) now opens and closes its pops, menus, dialogs, drawers, toasts, tooltips and sidebar at once; ticks, radio dots and switch thumbs land without easing; table rows and a TOC jump no longer slide; an alert closes at once.
+- A still window's skeletons are a plain fill without the shimmer; a spinner keeps turning.
+- A still window drops its soft shadows, keeping their inset highlights and blur-free lines, so focus rings and error glows stay.
 
 The full list of 0.3.0 changes is on the 0.3.0 release.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
