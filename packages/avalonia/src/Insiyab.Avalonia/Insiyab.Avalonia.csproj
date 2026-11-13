@@ -18,12 +18,10 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageReleaseNotes>0.3.3
+    <PackageReleaseNotes>0.3.4
 
-Changed
-- A still window (Motion.Still, or the system's reduced motion) now opens and closes its pops, menus, dialogs, drawers, toasts, tooltips and sidebar at once; ticks, radio dots and switch thumbs land without easing; table rows and a TOC jump no longer slide; an alert closes at once.
-- A still window's skeletons are a plain fill without the shimmer; a spinner keeps turning.
-- A still window drops its soft shadows, keeping their inset highlights and blur-free lines, so focus rings and error glows stay.
+Fixed
+- ChoiceGrid keeps the column count it was measured for when layout rounding (a display scale such as 150%) arranges it a hair wider or narrower at a column's edge, so its cards no longer overflow or leave a gap under the grid.
 
 The full list of 0.3.0 changes is on the 0.3.0 release.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
