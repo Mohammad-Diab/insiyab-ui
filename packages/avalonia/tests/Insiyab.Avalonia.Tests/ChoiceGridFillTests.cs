@@ -93,6 +93,22 @@ public class ChoiceGridFillTests
         Assert.Equal(400, text.Bounds.Width, 0.5);
     }
 
+    // 924 is three columns of 300 with 12 between; at 150% the measure can be handed a hair under it and the arrange 924 itself.
+    [AvaloniaTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void A_hair_under_a_column_edge_it_keeps_the_rows_it_was_measured_for(bool masonry)
+    {
+        var cards = Enumerable.Range(0, 6).Select(_ => Card()).ToArray();
+        var grid = new ChoiceGrid { Fill = true, IsMasonry = masonry, MinColumnWidth = 300, MaxColumns = 4, Spacing = 12 };
+        foreach (var c in cards) grid.Children.Add(c);
+        Show(new StackPanel { Width = 924, Children = { grid } }, width: 1000, height: 600);
+
+        grid.Measure(new Size(Math.BitDecrement(924.0), double.PositiveInfinity));
+        grid.Arrange(new Rect(0, 0, 924, grid.DesiredSize.Height));
+        Assert.Equal(grid.DesiredSize.Height, cards.Max(c => c.Bounds.Bottom), 0.5);
+    }
+
     [AvaloniaFact]
     public void Measured_with_no_width_it_keeps_the_width_it_was_given()
     {

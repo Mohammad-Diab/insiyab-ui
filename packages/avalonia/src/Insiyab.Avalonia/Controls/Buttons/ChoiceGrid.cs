@@ -25,7 +25,8 @@ public class ChoiceGrid : Panel
     public static readonly StyledProperty<bool> IsMasonryProperty =
         AvaloniaProperty.Register<ChoiceGrid, bool>(nameof(IsMasonry));
 
-    // The cell the cards were last measured at, and the arranged width a new measure was last asked for: once per width, so a parent that measures at one width and arranges at another never loops.
+    // The width and cell the cards were last measured at, and the arranged width a new measure was last asked for: once per width, so a parent that measures at one width and arranges at another never loops.
+    private double _measuredWidth = double.NaN;
     private double _measuredCell = double.NaN;
     private double _remeasuredFor = double.NaN;
 
@@ -62,6 +63,7 @@ public class ChoiceGrid : Panel
             availableSize = availableSize.WithWidth(Bounds.Width);
         var columns = Columns(availableSize.Width);
         var cell = double.IsInfinity(availableSize.Width) ? double.PositiveInfinity : ColumnWidth(availableSize.Width, columns);
+        _measuredWidth = availableSize.Width;
         _measuredCell = cell;
         return IsMasonry ? MeasureMasonry(availableSize, columns, cell) : MeasureRows(availableSize, columns, cell);
     }
@@ -101,7 +103,8 @@ public class ChoiceGrid : Panel
 
     protected override Size ArrangeOverride(Size finalSize)
     {
-        var columns = Columns(finalSize.Width);
+        // Within a pixel of the measured width (layout rounding at a scale such as 150%, a hair either side of a column's edge), the measured count: the cards keep the rows the grid's height was measured for.
+        var columns = Columns(Math.Abs(finalSize.Width - _measuredWidth) < 1 ? _measuredWidth : finalSize.Width);
         var cell = ColumnWidth(finalSize.Width, columns);
         // Arranged at another width than measured (a scroll bar came or went): the cards are measured again at their cells, and one more layout is asked for so the grid's own height follows.
         if (!(Math.Abs(cell - _measuredCell) <= 0.5))
