@@ -25,7 +25,7 @@ public static class GalleryPages
     // The web docs' NAV order (demo/src/site.mjs), plus the pages only Avalonia has.
     public static readonly (string Group, string[] Slugs)[] Nav =
     [
-        ("التخصيص", ["color", "tokens", "fonts", "window", "words"]),
+        ("التخصيص", ["color", "tokens", "fonts", "window", "mobile", "words"]),
         ("التخطيط", ["shell", "titlebar", "toolbar", "statusbar", "taskbar", "split"]),
         ("المحتوى", ["typography", "surfaces", "tables", "description", "quote"]),
         ("النماذج", ["inputs", "checks", "input-group", "pickers", "chips", "matrix", "validation"]),
@@ -35,10 +35,10 @@ public static class GalleryPages
         ("الملحقات", ["carousel", "colorpicker", "reveal"]),
     ];
 
-    // Each link's icon, the web NAV's `icon`; tokens, fonts, window, words, titlebar, toolbar, statusbar, taskbar and media are Avalonia's own and borrow one from the sprite.
+    // Each link's icon, the web NAV's `icon`; tokens, fonts, window, mobile, words, titlebar, toolbar, statusbar, taskbar and media are Avalonia's own and borrow one from the sprite.
     private static readonly Dictionary<string, string> Icons = new()
     {
-        ["color"] = "IconPalette", ["tokens"] = "IconSliders", ["fonts"] = "IconType", ["window"] = "IconWindow", ["words"] = "IconMessage",
+        ["color"] = "IconPalette", ["tokens"] = "IconSliders", ["fonts"] = "IconType", ["window"] = "IconWindow", ["mobile"] = "IconPhone", ["words"] = "IconMessage",
         ["shell"] = "IconLayout", ["titlebar"] = "IconWindow", ["toolbar"] = "IconWrench", ["statusbar"] = "IconInfo", ["taskbar"] = "IconBell", ["split"] = "IconSidebar",
         ["typography"] = "IconType", ["surfaces"] = "IconLayers", ["tables"] = "IconTable", ["description"] = "IconList", ["quote"] = "IconMessage",
         ["inputs"] = "IconEdit", ["checks"] = "IconCheckSquare", ["input-group"] = "IconLink", ["pickers"] = "IconCalendar", ["chips"] = "IconTag", ["matrix"] = "IconGrid", ["validation"] = "IconShield",
@@ -52,7 +52,7 @@ public static class GalleryPages
         ["carousel"] = "IconSlides", ["colorpicker"] = "IconDroplet", ["reveal"] = "IconSparkle",
     };
 
-    // Each page's English name, the web NAV's `en`; tokens, fonts, window, words, titlebar, toolbar, statusbar, taskbar and media are Avalonia's own.
+    // Each page's English name, the web NAV's `en`; tokens, fonts, window, mobile, words, titlebar, toolbar, statusbar, taskbar and media are Avalonia's own.
     internal static readonly Dictionary<string, string> English = new()
     {
         ["index"] = "Introduction", ["start"] = "Quick start", ["javascript"] = "JavaScript", ["faq"] = "FAQ", ["color"] = "Color & branding", ["dark"] = "Dark mode",
@@ -70,7 +70,7 @@ public static class GalleryPages
         ["tpl-dashboard"] = "Dashboard template", ["tpl-tickets"] = "List page template", ["tpl-order"] = "Detail page template", ["tpl-settings"] = "Settings template",
         ["tpl-review"] = "Criteria review template", ["tpl-booking"] = "Timed multi-step form template", ["tpl-error"] = "Error page template", ["navbar"] = "Navbar",
         ["carousel"] = "Carousel", ["colorpicker"] = "Color picker", ["reveal"] = "Entrance motion & scroll reveal", ["tokens"] = "Design tokens", ["fonts"] = "Fonts",
-        ["window"] = "Window", ["words"] = "Built-in words", ["titlebar"] = "Title bar", ["toolbar"] = "Toolbar", ["statusbar"] = "Status bar", ["taskbar"] = "Taskbar badge",
+        ["window"] = "Window", ["mobile"] = "On a phone", ["words"] = "Built-in words", ["titlebar"] = "Title bar", ["toolbar"] = "Toolbar", ["statusbar"] = "Status bar", ["taskbar"] = "Taskbar badge",
     };
 
     // The pages the web NAV flags `fresh`.

@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
+             xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
+             x:Class="Insiyab.Avalonia.Gallery.Pages.MobilePage">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Playground/PlayFrames.axaml" />
+    <StyleInclude Source="avares://Insiyab.Avalonia.Gallery/Pages/FoundationFrames.axaml" />
+    <Style Selector="TextBlock.p">
+      <Setter Property="FontSize" Value="{DynamicResource InsFsMd}" />
+      <Setter Property="LineHeight" Value="25.9" />
+      <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+      <Setter Property="Margin" Value="0,0,0,12" />
+    </Style>
+  </UserControl.Styles>
+
+  <StackPanel>
+
+    <TextBlock Classes="p" Text="تعمل المكتبة على أندرويد في عرض واحد بالشكل نفسه: الزجاج والظلال والحركة. وتضيف ما يحتاجه الهاتف: إبعاد المحتوى عن أشرطة النظام ولوحة المفاتيح، وزر الرجوع، ومؤثرات أخف للأجهزة الضعيفة." />
+
+    <TextBlock Classes="section" Text="الحواف الآمنة" />
+    <pg:PlayText Classes="p" Markup="يغطي شريط الحالة وشريط التنقل ونتوء الكاميرا أطراف الشاشة. ضع `ins:SafeArea.Edges` على عنصر فيبتعد محتواه عنها، وتبقى خلفيته ممتدة إلى حافة الشاشة. وتتغير المسافة وحدها حين يدور الهاتف." />
+    <Border Classes="dx">
+      <StackPanel Spacing="12" HorizontalAlignment="Center">
+        <Border x:Name="SafeSample" Classes="card" ins:SafeArea.Edges="Left,Right" Padding="16" HorizontalAlignment="Center">
+          <TextBlock Text="بطاقة تبتعد عن النتوء حين يكون الهاتف أفقيا" TextWrapping="Wrap" />
+        </Border>
+        <TextBlock x:Name="SafeNow" Classes="p" Margin="0" HorizontalAlignment="Center" />
+      </StackPanel>
+    </Border>
+    <pg:PlayListing Code="&lt;Border Classes=&quot;topbar&quot; ins:SafeArea.Edges=&quot;Top,Left,Right&quot;&gt;" Margin="0,0,0,24" />
+    <pg:PlayListing Code="&lt;Border ins:SafeArea.Edges=&quot;Bottom,Keyboard&quot;&gt; &lt;TextBox /&gt; &lt;/Border&gt;" Margin="0,0,0,24" />
+    <ins:ProseList>
+      <pg:PlayText Classes="p" Margin="0" Markup="تضاف المسافة إلى `Padding` العنصر إن كان له، وإلا إلى `Margin`. والجهتان `Left` و`Right` على الشاشة نفسها في العربية والإنجليزية، كأشرطة النظام." />
+      <pg:PlayText Classes="p" Margin="0" Markup="مع `Keyboard` يرتفع شريط في أسفل الصفحة فوق لوحة المفاتيح ما دامت مفتوحة، كخانة كتابة رسالة." />
+      <TextBlock Classes="p" Margin="0" Text="الحوارات والأدراج والإشعارات المنبثقة ولوحة الأوامر والقوائم تبتعد عن هذه الحواف وعن لوحة المفاتيح وحدها، والحقل الذي فيه المؤشر داخل منطقة تمرير يتحرك إلى ما فوق لوحة المفاتيح." />
+      <TextBlock Classes="p" Margin="0" Text="لا يتغير شيء في نوافذ سطح المكتب، فلا شيء يغطي حوافها." />
+    </ins:ProseList>
+
+    <TextBlock Classes="section" Text="زر الرجوع" />
+    <TextBlock Classes="p" Text="يغلق زر الرجوع في أندرويد آخر ما فُتح من المكتبة، طبقة بعد طبقة: قائمة أو بطاقة منبثقة، أو قائمة اختيار، أو حوار أو درج، أو لوحة الأوامر، أو الشريط الجانبي حين يكون درجا. وإذا لم يكن شيء مفتوحا تركه للتطبيق وللنظام. وزر الرجوع في الفأرة يفعل الشيء نفسه." />
+    <Border Classes="dx">
+      <StackPanel Spacing="16" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+          <Button x:Name="OpenLayers" Classes="secondary sm" Content="افتح حوارا" Click="OnOpenLayers" />
+          <Button Classes="primary sm" Content="رجوع" Click="OnBack" />
+        </StackPanel>
+        <TextBlock x:Name="BackNote" Classes="p" Margin="0" HorizontalAlignment="Center" TextWrapping="Wrap" Text="على الهاتف: افتح الحوار ثم القائمة التي فيه، واضغط زر الرجوع مرة بعد مرة." />
+      </StackPanel>
+    </Border>
+    <pg:PlayText Classes="p" Markup="يصل الرجوع إلى `TopLevel.BackRequested` في التطبيق حين لا يأخذه شيء من المكتبة، فينتقل به إلى الصفحة السابقة أو يتركه للنظام." />
+
+    <TextBlock Classes="section" Text="المؤثرات الخفيفة" />
+    <pg:PlayText Classes="p" Markup="على الأجهزة الضعيفة يخفف `InsiyabTheme.Effects = EffectsLevel.Light` ما يكلف الرسم: لا تموّه الصفحة خلف الحوار ولا تطلب النافذة خامة النظام، ويبقى لكل ظل طبقة واحدة أصغر. ويبقى التخطيط والألوان والحركة كما هي." />
+    <Border Classes="dx">
+      <StackPanel Spacing="16" HorizontalAlignment="Center">
+        <ins:Segmented x:Name="EffectsSeg" HorizontalAlignment="Center">
+          <ins:SegmentedItem Content="كاملة" />
+          <ins:SegmentedItem Content="خفيفة" />
+        </ins:Segmented>
+        <Border Classes="card" Padding="20" Width="260">
+          <StackPanel Spacing="6">
+            <TextBlock Classes="h4" Text="ملف المشروع" />
+            <TextBlock Classes="muted" Text="آخر تعديل قبل ساعتين" />
+          </StackPanel>
+        </Border>
+        <Button Classes="secondary sm" Content="افتح حوارا لترى الخلفية" HorizontalAlignment="Center" Click="OnPlainDialog" />
+      </StackPanel>
+    </Border>
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0" Text="يبدأ الهاتف الذي يبلغ النظام أن ذاكرته قليلة، أو ذاكرته 2 غيغابايت أو أقل، بالمؤثرات الخفيفة، ويستطيع التطبيق أن يختار غير ذلك في أي وقت." />
+      <pg:PlayText Classes="p" Margin="0" Markup="تحمل النافذة `:ins-light` ما دامت المؤثرات خفيفة، لتخفف أنماط التطبيق ما عندها بالطريقة نفسها." />
+    </ins:ProseList>
+
+    <TextBlock Classes="section" Text="الحركة من إعدادات النظام" />
+    <pg:PlayText Classes="p" Markup="خيار «إزالة الرسوم المتحركة» في أندرويد يجعل المكتبة ساكنة كما يفعل زر «تخفيف المؤثرات» في هذا المعرض، وكذلك إطفاء الحركة في ويندوز. يُقرأ الإعداد من جديد كلما عاد التطبيق إلى الواجهة." />
+    <TextBlock x:Name="MotionNow" Classes="p" />
+
+  </StackPanel>
+</UserControl>
