@@ -1,13 +1,21 @@
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Rendering;
 
 namespace Insiyab.Avalonia.Controls;
 
 // The Borders, TextBlocks and StackPanels the library builds in code: as with TemplateBorder, the app's Border.*, TextBlock.* and StackPanel.* styles and looks never reach them, and each control's parts carry only that control's own styles.
 
 /// <summary>A Border that <see cref="MonthCalendar"/> builds; its styles name it <c>ins|MonthBorder</c>.</summary>
-internal sealed class MonthBorder : Border
+internal class MonthBorder : Border
 {
     protected override Type StyleKeyOverride => typeof(MonthBorder);
+}
+
+/// <summary>An event chip <see cref="MonthCalendar"/> builds: a pressable one reaches a finger around it. Its styles name it <c>ins|MonthBorder</c>.</summary>
+internal sealed class MonthChip : MonthBorder, ICustomHitTest, IReach
+{
+    public bool HitTest(Point point) => new Rect(Bounds.Size).Contains(point) ? Reach.Inside(this) : Focusable && Reach.Claims(this, point);
 }
 
 /// <summary>A TextBlock that <see cref="MonthCalendar"/> builds; its styles name it <c>ins|MonthText</c>.</summary>

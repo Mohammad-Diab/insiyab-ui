@@ -600,7 +600,7 @@ public class MonthCalendar : TemplatedControl, IWords
         if (isToday) cell.Classes.Add("today");
         cell.PointerReleased += (_, e) =>
         {
-            if (e.InitialPressMouseButton != MouseButton.Left || e.Handled || Dismissing) return;
+            if (e.InitialPressMouseButton != MouseButton.Left || e.Handled || Dismissing || !Touch.IsTap(e)) return;
             DayInvoked?.Invoke(this, day);
         };
         return cell;
@@ -661,7 +661,7 @@ public class MonthCalendar : TemplatedControl, IWords
                 head.Classes.Add("link");
                 head.PointerReleased += (_, e) =>
                 {
-                    if (e.InitialPressMouseButton != MouseButton.Left) return;
+                    if (e.InitialPressMouseButton != MouseButton.Left || !Touch.IsTap(e)) return;
                     e.Handled = true;
                     SwitchTo(MonthCalendarView.Day, day);
                 };
@@ -708,7 +708,7 @@ public class MonthCalendar : TemplatedControl, IWords
             if (isToday) column.Classes.Add("today");
             column.PointerReleased += (_, e) =>
             {
-                if (e.InitialPressMouseButton != MouseButton.Left || e.Handled || Dismissing) return;
+                if (e.InitialPressMouseButton != MouseButton.Left || e.Handled || Dismissing || !Touch.IsTap(e)) return;
                 var minutes = lane.From + Math.Floor(e.GetPosition(lane).Y / hourH * 2) * 30;
                 DayInvoked?.Invoke(this, day.AddMinutes(Math.Clamp(minutes, lane.From, lane.To - 30)));
             };
@@ -792,7 +792,7 @@ public class MonthCalendar : TemplatedControl, IWords
         }
         band.PointerReleased += (_, e) =>
         {
-            if (e.InitialPressMouseButton != MouseButton.Left) return;
+            if (e.InitialPressMouseButton != MouseButton.Left || !Touch.IsTap(e)) return;
             e.Handled = true;
             Open(false);
         };
@@ -945,7 +945,7 @@ public class MonthCalendar : TemplatedControl, IWords
             row.Children.Add(time);
         }
         row.Children.Add(new MonthText { Text = ev.Title, Classes = { "month-event-title" } });
-        var chip = new MonthBorder { Child = row, Classes = { "month-event", ToneClass(ev.Tone) } };
+        var chip = new MonthChip { Child = row, Classes = { "month-event", ToneClass(ev.Tone) } };
         Interact(chip, ev);
         return chip;
     }
@@ -962,7 +962,7 @@ public class MonthCalendar : TemplatedControl, IWords
                 new MonthText { Text = $"{words.FormatTime(start)} – {words.FormatTime(end)}", Classes = { "week-event-time" } },
             },
         };
-        var chip = new MonthBorder { Child = stack, Classes = { "month-event", "timed", ToneClass(ev.Tone) } };
+        var chip = new MonthChip { Child = stack, Classes = { "month-event", "timed", ToneClass(ev.Tone) } };
         Interact(chip, ev);
         return chip;
     }
@@ -977,7 +977,7 @@ public class MonthCalendar : TemplatedControl, IWords
             AutomationProperties.SetName(chip, ev.Title);
             chip.PointerReleased += (_, e) =>
             {
-                if (e.InitialPressMouseButton != MouseButton.Left) return;
+                if (e.InitialPressMouseButton != MouseButton.Left || !Touch.IsTap(e)) return;
                 e.Handled = true;
                 Invoke(ev, chip);
             };

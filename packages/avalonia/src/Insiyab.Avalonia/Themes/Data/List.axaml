@@ -117,7 +117,8 @@
         <Style Selector="^:first /template/ :is(Border)#PART_Divider">
           <Setter Property="IsVisible" Value="False" />
         </Style>
-        <Style Selector="^:pointerover, ^:selected">
+        <!-- a finger has no hover: the row takes the hover's tint while it is pressed -->
+        <Style Selector="^:pointerover, ^:selected, ^:pressed">
           <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
           <Style Selector="^ /template/ :is(Border)#PART_Divider">
             <Setter Property="Opacity" Value="0" />

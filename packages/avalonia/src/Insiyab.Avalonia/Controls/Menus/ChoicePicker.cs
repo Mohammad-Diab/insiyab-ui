@@ -393,7 +393,8 @@ public class ChoicePicker : TemplatedControl
 
     private void OnListMoved(object? sender, PointerEventArgs e)
     {
-        if (RowOf(e.Source) is { Entry: { IsEnabled: true } entry }) SetHot(entry);
+        // the highlight follows a mouse; a finger moving over the list is scrolling it
+        if (e.Pointer.Type != PointerType.Touch && RowOf(e.Source) is { Entry: { IsEnabled: true } entry }) SetHot(entry);
     }
 
     private void OnListPressed(object? sender, PointerPressedEventArgs e) =>

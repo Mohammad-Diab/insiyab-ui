@@ -78,7 +78,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Panel>
+            <ins:ReachPanel>
               <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
               <ins:TemplateBorder x:Name="PART_Face"
                       Background="{TemplateBinding Background}"
@@ -91,7 +91,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center" />
               <ins:TemplateBorder x:Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BorderThickness="2" BorderBrush="{DynamicResource InsToneBrand}" IsVisible="False" />
-            </Panel>
+            </ins:ReachPanel>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover:not(.blocked)">

@@ -2,11 +2,12 @@ using System.Diagnostics;
 using Avalonia;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
+using Avalonia.Rendering;
 
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>The panel a pill's face sits in: as it is, or for <c>dot peek</c> measured as the dot's ring alone, the face growing out of the ring over its neighbours when open.</summary>
-internal sealed class PillPeek : Panel
+internal sealed class PillPeek : Panel, ICustomHitTest, IReach
 {
     public const double Dot = 8;
 
@@ -35,6 +36,9 @@ internal sealed class PillPeek : Panel
     private int _run;
 
     static PillPeek() => AffectsMeasure<PillPeek>(IsPeekProperty, BackProperty);
+
+    // Its parts answer for themselves; around a closed peek's ring a finger finds the pill too.
+    public bool HitTest(Point point) => !new Rect(Bounds.Size).Contains(point) && IsPeek && !IsOpen && Reach.Claims(this, point);
 
     public bool IsPeek { get => GetValue(IsPeekProperty); set => SetValue(IsPeekProperty, value); }
 

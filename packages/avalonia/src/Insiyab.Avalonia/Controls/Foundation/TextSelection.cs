@@ -18,6 +18,7 @@ internal sealed class TextSelection
     private IPointer? _pointer;
     private SelectableTextBlock? _anchor;
     private int _anchorAt;
+    private bool _anchored;
     private Reach? _span;
     private ScrollViewer? _scroller;
     private Point _scrollPoint;
@@ -96,12 +97,20 @@ internal sealed class TextSelection
         _pointer = e.Pointer;
         _anchor = block;
         _anchorAt = block.SelectionStart;
+        _anchored = e.Pointer.Type != PointerType.Touch;
     }
 
     // After the captured block has moved its own end: the block under the pointer decides what is selected, and past the edge of the scroller the page scrolls.
     private void OnMoved(object? sender, PointerEventArgs e)
     {
         if (_pointer is null || e.Pointer != _pointer || _anchor is null || !e.GetCurrentPoint(_host).Properties.IsLeftButtonPressed) return;
+        // a finger scrolls the text until a long press has picked a word, which then anchors the selection
+        if (!Touch.MaySelect(e)) return;
+        if (!_anchored)
+        {
+            _anchored = true;
+            if (_anchor.SelectionStart != _anchor.SelectionEnd) _anchorAt = Math.Min(_anchor.SelectionStart, _anchor.SelectionEnd);
+        }
         Extend(e.GetPosition(_host));
         Edge(e);
     }

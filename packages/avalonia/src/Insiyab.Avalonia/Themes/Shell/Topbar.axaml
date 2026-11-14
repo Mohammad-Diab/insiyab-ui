@@ -65,7 +65,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Panel x:Name="PART_Press">
+            <ins:ReachPanel x:Name="PART_Press">
               <ins:TemplateBorder Name="PART_FocusRing" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
               <ins:TemplateBorder Name="PART_Face"
                       Background="{TemplateBinding Background}"
@@ -80,7 +80,7 @@
                                   HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                   VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
               </ins:TemplateBorder>
-            </Panel>
+            </ins:ReachPanel>
           </ControlTemplate>
         </Setter>
         <Style Selector="^ /template/ :is(Border)#PART_Face">

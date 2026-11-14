@@ -457,7 +457,8 @@ public class StylePartsTests : IDisposable
         var texts = all.OfType<TextBlock>().Where(t => Own(t) || (t.Parent is Border p && Own(p))).ToList();
         Assert.NotEmpty(borders);
         Assert.NotEmpty(texts);
-        Assert.All(borders, b => Assert.Equal(border, b.GetType()));
+        // a part with a finger's reach (a month chip) is its own kind of the typed border
+        Assert.All(borders, b => Assert.IsAssignableFrom(border, b));
         Assert.All(texts, t => Assert.Equal(text, t.GetType()));
     }
 

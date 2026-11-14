@@ -465,7 +465,7 @@ public class CommandPalette : TemplatedControl, IWords
         }
         var row = new PaletteBorder { Classes = { "palette-item" }, Child = grid, Focusable = false, Tag = item };
         if (_active == item) row.Classes.Add("active");
-        row.PointerMoved += (_, _) => { if (_active != item) Activate(item, false); };
+        row.PointerMoved += (_, e) => { if (_active != item && e.Pointer.Type != PointerType.Touch) Activate(item, false); };
         row.PointerPressed += (_, e) => e.Handled = true;
         row.PointerReleased += (_, e) =>
         {

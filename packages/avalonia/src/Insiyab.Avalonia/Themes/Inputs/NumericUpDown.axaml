@@ -40,14 +40,14 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Panel x:Name="PART_Press">
+            <ins:ReachPanel x:Name="PART_Press">
               <ins:TemplateBorder Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
                 <Panel Width="12" Height="12">
                   <ins:TemplateBorder Width="12" Height="2" CornerRadius="1" Background="{TemplateBinding Foreground}" />
                   <ins:TemplateBorder x:Name="PART_Upright" Width="2" Height="12" CornerRadius="1" Background="{TemplateBinding Foreground}" IsVisible="False" />
                 </Panel>
               </ins:TemplateBorder>
-            </Panel>
+            </ins:ReachPanel>
           </ControlTemplate>
         </Setter>
         <Style Selector="^ /template/ Panel#PART_Press">

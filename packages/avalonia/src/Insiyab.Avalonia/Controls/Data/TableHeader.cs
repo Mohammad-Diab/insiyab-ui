@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 
 namespace Insiyab.Avalonia.Controls;
 
@@ -88,6 +89,7 @@ internal class TableHeader : ContentControl
         _startX = e.GetPosition(Parent as Visual).X;
         _startWidth = Bounds.Width;
         e.Pointer.Capture(_grip);
+        e.PreventGestureRecognition();
         Drag(true);
     }
 
@@ -102,7 +104,11 @@ internal class TableHeader : ContentControl
     private void OnGripReleased(object? sender, PointerReleasedEventArgs e)
     {
         e.Pointer.Capture(null);
+        var dragged = _drag;
         Drag(false);
+        // the grip's reach covers the heading's edge under a finger: a tap there still sorts
+        if (dragged && e.Pointer.Type == PointerType.Touch && Touch.IsTap(e) && Content is TableSortButton sort)
+            sort.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, sort));
     }
 
     private void OnGripCaptureLost(object? sender, PointerCaptureLostEventArgs e) { if (_drag) Drag(false); }

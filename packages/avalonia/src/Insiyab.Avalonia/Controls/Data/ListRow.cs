@@ -74,7 +74,7 @@ public static class ListRow
     {
         var pressed = list.GetValue(PressedProperty);
         list.ClearValue(PressedProperty);
-        if (e.InitialPressMouseButton != MouseButton.Left || pressed is null || RowOf(list, e.Source) != pressed) return;
+        if (e.InitialPressMouseButton != MouseButton.Left || pressed is null || RowOf(list, e.Source) != pressed || !Touch.IsTap(e)) return;
         // the pressed row holds the pointer, so the release comes from it wherever the pointer is: it counts only over the row
         if (!new Rect(pressed.Bounds.Size).Contains(e.GetPosition(pressed))) return;
         Invoke(list, pressed);

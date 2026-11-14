@@ -380,6 +380,11 @@
           <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
           <Setter Property="RenderTransform" Value="translateX(2px)" />
         </Style>
+        <!-- a finger has no hover: while it presses, the link takes the hover's colours without the nudge -->
+        <Style Selector="^:pressed">
+          <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
+          <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+        </Style>
         <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
           <Setter Property="Opacity" Value="1" />
         </Style>
@@ -539,6 +544,9 @@
         <Style Selector="^:pointerover">
           <Setter Property="Background" Value="{DynamicResource InsLine}" />
           <Setter Property="RenderTransform" Value="none" />
+        </Style>
+        <Style Selector="^:pressed">
+          <Setter Property="Background" Value="{DynamicResource InsLine}" />
         </Style>
         <Style Selector="^:selected, ^:selected:pointerover">
           <Setter Property="Background" Value="{DynamicResource InsSurface}" />

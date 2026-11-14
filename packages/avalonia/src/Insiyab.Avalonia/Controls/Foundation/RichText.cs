@@ -433,7 +433,7 @@ public partial class RichText : Prose
 
         private void OnReleased(object? sender, PointerReleasedEventArgs e)
         {
-            if (_pressed is not { } link || e.InitialPressMouseButton != MouseButton.Left) return;
+            if (_pressed is not { } link || e.InitialPressMouseButton != MouseButton.Left || !Touch.IsTap(e)) return;
             _pressed = null;
             var at = e.GetPosition(_block);
             if (Math.Abs(at.X - _pressAt.X) > 4 || Math.Abs(at.Y - _pressAt.Y) > 4 || LinkAt(at) != link) return;

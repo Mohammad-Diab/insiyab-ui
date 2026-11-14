@@ -229,6 +229,8 @@ public class Split : TemplatedControl, IWords
         if (_handle is null || !e.GetCurrentPoint(_handle).Properties.IsLeftButtonPressed) return;
         _handle.Focus(NavigationMethod.Pointer);
         e.Pointer.Capture(_handle);
+        // the grip keeps a finger's drag from the scroller around it
+        e.PreventGestureRecognition();
         SetDragging(true);
         e.Handled = true;
     }

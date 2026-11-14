@@ -2,14 +2,18 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
 /// <summary>A status label, the web's <c>.ins-pill</c>. Tone classes <c>ok warn bad info brand mute</c> (none is neutral) or a category <c>cat1</c>…<c>cat8</c>; <c>dot</c> adds the dot, and an empty dot pill is the dot alone; <c>dot peek</c> shows only the dot and opens over its neighbours (<c>back</c> toward the start); <see cref="Icon"/> takes the dot's place with a small glyph (a peeking pill shows the glyph alone); <c>sm</c> fits a line of text; <c>outline</c> drops the fill. A pressable one is a <c>Button</c> with the classes <c>pill</c>, a tone and <c>dot</c>.</summary>
-[PseudoClasses(":empty", ":icon")]
+[PseudoClasses(":empty", ":icon", ":open")]
 public class Pill : ContentControl
 {
+    private bool _open;
+
     public static readonly StyledProperty<Geometry?> IconProperty =
         AvaloniaProperty.Register<Pill, Geometry?>(nameof(Icon));
 
@@ -23,6 +27,35 @@ public class Pill : ContentControl
         base.OnPropertyChanged(change);
         if (change.Property == ContentProperty) PseudoClasses.Set(":empty", change.NewValue is null or string { Length: 0 });
         else if (change.Property == IconProperty) PseudoClasses.Set(":icon", change.NewValue is not null);
+    }
+
+    // A finger has no hover: a tap opens a peeking pill, and a tap on it again or anywhere else closes it.
+    protected override void OnPointerReleased(PointerReleasedEventArgs e)
+    {
+        base.OnPointerReleased(e);
+        if (e.Pointer.Type != PointerType.Touch || !Classes.Contains("peek") || !Touch.IsTap(e)) return;
+        Peek(!_open);
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        Peek(false);
+    }
+
+    private void Peek(bool open)
+    {
+        if (_open == open) return;
+        _open = open;
+        PseudoClasses.Set(":open", open);
+        if (open) Touch.FingerDown += OnFingerDown;
+        else Touch.FingerDown -= OnFingerDown;
+    }
+
+    private void OnFingerDown(TopLevel top, PointerPressedEventArgs e)
+    {
+        if (e.Source is Visual v && (v == this || this.IsVisualAncestorOf(v))) return;
+        Peek(false);
     }
 }
 

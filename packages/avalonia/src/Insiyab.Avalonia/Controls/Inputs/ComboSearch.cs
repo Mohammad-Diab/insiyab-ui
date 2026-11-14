@@ -315,7 +315,8 @@ internal sealed class ComboSearcher
 
     private void OnListMoved(object? sender, PointerEventArgs e)
     {
-        if (RowOf(e.Source) is { Entry: { IsEnabled: true } entry }) _list.SetHot(entry);
+        // the highlight follows a mouse; a finger moving over the list is scrolling it
+        if (e.Pointer.Type != PointerType.Touch && RowOf(e.Source) is { Entry: { IsEnabled: true } entry }) _list.SetHot(entry);
     }
 
     private void OnListReleased(object? sender, PointerReleasedEventArgs e)

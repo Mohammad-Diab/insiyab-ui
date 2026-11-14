@@ -114,7 +114,7 @@
         <Setter Property="Template">
           <ControlTemplate>
             <!-- The press, lift and turn move PART_Root, not the button (a transform set in the template survives styles that animate every panel child); PART_Press carries only the quick-click dip, so the two add up. -->
-            <Panel x:Name="PART_Press" Background="Transparent">
+            <ins:ReachPanel x:Name="PART_Press" Background="Transparent">
               <Panel x:Name="PART_Root" RenderTransformOrigin="50%,50%" RenderTransform="none">
                 <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
                 <ins:TemplateBorder x:Name="PART_FocusRing"
@@ -159,7 +159,7 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="{TemplateBinding CornerRadius}" />
               </Panel>
-            </Panel>
+            </ins:ReachPanel>
           </ControlTemplate>
         </Setter>
 
@@ -587,7 +587,7 @@
       <ControlTheme x:Key="{x:Type DropDownButton}" TargetType="DropDownButton" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Template">
           <ControlTemplate>
-            <Panel x:Name="PART_Press" Background="Transparent">
+            <ins:ReachPanel x:Name="PART_Press" Background="Transparent">
               <Panel x:Name="PART_Root" RenderTransformOrigin="50%,50%" RenderTransform="none">
                 <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
                 <ins:TemplateBorder x:Name="PART_FocusRing"
@@ -632,7 +632,7 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="{TemplateBinding CornerRadius}" />
               </Panel>
-            </Panel>
+            </ins:ReachPanel>
           </ControlTemplate>
         </Setter>
         <Style Selector="^ /template/ Viewbox#PART_Chevron">

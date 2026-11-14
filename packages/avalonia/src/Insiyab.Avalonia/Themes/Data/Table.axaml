@@ -138,7 +138,7 @@
                                   ContentTemplate="{TemplateBinding ContentTemplate}"
                                   HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                   VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                <ins:TemplateBorder x:Name="PART_Grip" Width="10" HorizontalAlignment="Right" Background="Transparent" Cursor="SizeWestEast" IsVisible="False">
+                <ins:ReachBorder x:Name="PART_Grip" IsGrip="True" Width="10" HorizontalAlignment="Right" Background="Transparent" Cursor="SizeWestEast" IsVisible="False">
                   <ins:TemplateBorder x:Name="PART_GripLine" Width="1" Height="18" CornerRadius="1.5" HorizontalAlignment="Right" VerticalAlignment="Center"
                           Background="{DynamicResource InsTableGrip}">
                     <ins:TemplateBorder.Transitions>
@@ -149,7 +149,7 @@
                       </Transitions>
                     </ins:TemplateBorder.Transitions>
                   </ins:TemplateBorder>
-                </ins:TemplateBorder>
+                </ins:ReachBorder>
               </Panel>
             </Panel>
           </ControlTemplate>

@@ -211,7 +211,7 @@
         <Style Selector="^.brand.dot:empty /template/ Ellipse#PART_Dot">
           <Setter Property="Fill" Value="{DynamicResource InsToneBrandSoft}" />
         </Style>
-        <!-- dot peek: only the dot takes room; pointer or keyboard focus opens the whole pill over its neighbours -->
+        <!-- dot peek: only the dot takes room; pointer or keyboard focus, or a tap of a finger (:open), opens the whole pill over its neighbours -->
         <Style Selector="^.peek">
           <Setter Property="ClipToBounds" Value="False" />
           <Setter Property="Focusable" Value="True" />
@@ -243,10 +243,10 @@
           <Style Selector="^ /template/ :is(Border)#PART_Face">
             <Setter Property="ClipToBounds" Value="True" />
           </Style>
-          <Style Selector="^:not(:pointerover):not(:focus-visible) /template/ Border#PART_Ground">
+          <Style Selector="^:not(:pointerover):not(:focus-visible):not(:open) /template/ Border#PART_Ground">
             <Setter Property="IsHitTestVisible" Value="False" />
           </Style>
-          <Style Selector="^:pointerover, ^:focus-visible">
+          <Style Selector="^:pointerover, ^:focus-visible, ^:open">
             <Setter Property="ZIndex" Value="1" />
             <Style Selector="^ /template/ ctl|PillPeek#PART_Peek">
               <Setter Property="IsOpen" Value="True" />
@@ -313,7 +313,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Panel x:Name="PART_Press">
+            <ctl:ReachPanel x:Name="PART_Press">
               <ctl:TemplateBorder x:Name="PART_Face"
                       Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
@@ -339,7 +339,7 @@
                                     VerticalAlignment="Center" LineHeight="18" RecognizesAccessKey="True" />
                 </StackPanel>
               </ctl:TemplateBorder>
-            </Panel>
+            </ctl:ReachPanel>
           </ControlTemplate>
         </Setter>
         <Style Selector="^ /template/ Panel#PART_Press">

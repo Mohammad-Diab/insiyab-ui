@@ -13,8 +13,8 @@
                 <ScrollViewer Name="PART_First" Padding="5,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                   <ContentPresenter Content="{TemplateBinding First}" Padding="{TemplateBinding Padding}" />
                 </ScrollViewer>
-                <!-- The handle: a 14px strip with a pill that grows and takes the brand under the pointer, on focus and while dragged -->
-                <ins:TemplateBorder Name="PART_Handle" Width="14" Background="Transparent" Focusable="True" Cursor="SizeWestEast" AutomationProperties.Name="{TemplateBinding ResizeLabel}">
+                <!-- The handle: a 14px strip with a pill that grows and takes the brand under the pointer, on focus and while dragged; it sits over the panes so a finger finds it beside its strip -->
+                <ins:ReachBorder Name="PART_Handle" IsGrip="True" ZIndex="1" Width="14" Background="Transparent" Focusable="True" Cursor="SizeWestEast" AutomationProperties.Name="{TemplateBinding ResizeLabel}">
                   <ins:TemplateBorder Name="PART_Grip"
                           Width="4"
                           Height="40"
@@ -22,7 +22,7 @@
                           VerticalAlignment="Center"
                           CornerRadius="{DynamicResource InsRPill}"
                           Background="{DynamicResource InsCtlBd}" />
-                </ins:TemplateBorder>
+                </ins:ReachBorder>
                 <ScrollViewer Name="PART_Second" Padding="5,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                   <ContentPresenter Content="{TemplateBinding Second}" Padding="{TemplateBinding Padding}" />
                 </ScrollViewer>

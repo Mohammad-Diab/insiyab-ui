@@ -39,7 +39,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate TargetType="Button">
-            <ins:TemplateBorder x:Name="PART_Face"
+            <ins:ReachBorder x:Name="PART_Face"
                     Background="{TemplateBinding Background}"
                     CornerRadius="{TemplateBinding CornerRadius}">
               <Viewbox Width="10" Height="10" FlowDirection="LeftToRight">
@@ -49,7 +49,7 @@
                       StrokeThickness="3.5"
                       StrokeLineCap="Round" />
               </Viewbox>
-            </ins:TemplateBorder>
+            </ins:ReachBorder>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover">
@@ -129,7 +129,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate TargetType="Button">
-            <Panel>
+            <ins:ReachPanel>
               <ins:TemplateBorder x:Name="PART_Ring" CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="{DynamicResource InsFocusRing}" IsVisible="False" />
               <ins:TemplateBorder x:Name="PART_Face"
                       Background="{TemplateBinding Background}"
@@ -161,7 +161,7 @@
                                     TextBlock.LineHeight="18" />
                 </StackPanel>
               </ins:TemplateBorder>
-            </Panel>
+            </ins:ReachPanel>
           </ControlTemplate>
         </Setter>
         <Style Selector="^:pointerover">

@@ -12,6 +12,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Rendering;
 
 namespace Insiyab.Avalonia.Controls;
 
@@ -50,7 +51,7 @@ public sealed class MediaSeekEventArgs : RoutedEventArgs
 
 /// <summary>A player's time bar: the played part, the buffered part, marks, a time bubble over the pointer, drag and keys. It always runs left to right, as time does on every player.</summary>
 [PseudoClasses(":dragging")]
-public class MediaBar : Control
+public class MediaBar : Control, ICustomHitTest, IReach
 {
     /// <summary>Where the media is, from 0 to 1; a press, a drag or a key moves it.</summary>
     public static readonly StyledProperty<double> ValueProperty =
@@ -100,6 +101,7 @@ public class MediaBar : Control
     private static Cursor? s_hand;
 
     private bool _dragging;
+    private bool _waiting;
     private double? _dragAt;
     private Popup? _bubble;
     private TextBlock? _bubbleText;
@@ -215,25 +217,44 @@ public class MediaBar : Control
         RaiseEvent(new MediaSeekEventArgs(SeekRequestedEvent, value, TimeAt(value), dragging));
     }
 
+    // Inside, the whole bar; around it, a finger's reach.
+    bool ICustomHitTest.HitTest(Point point) => new Rect(Bounds.Size).Contains(point) || Reach.Claims(this, point);
+
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         base.OnPointerPressed(e);
         if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed) return;
         Focus(NavigationMethod.Pointer);
-        IsDragging = true;
         e.Pointer.Capture(this);
-        var over = Over(e);
+        e.Handled = true;
+        // A finger may be scrolling the page: it seeks once it drags along the bar, or on a tap.
+        if (e.Pointer.Type == PointerType.Touch)
+        {
+            _waiting = true;
+            return;
+        }
+        StartDrag(Over(e));
+    }
+
+    private void StartDrag(double over)
+    {
+        _waiting = false;
+        IsDragging = true;
         _dragAt = At(over);
         InvalidateVisual();
         ShowBubble(over);
         Seek(_dragAt.Value, true);
-        e.Handled = true;
     }
 
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
         var over = Over(e);
+        if (e.Pointer.Type == PointerType.Touch)
+        {
+            if (_waiting && Touch.OwnsDrag(e)) StartDrag(over);
+            if (!_dragging) return;
+        }
         Cursor = over < LeadPart && !_dragging ? Cursor.Default : Hand;
         ShowBubble(_dragging ? At(over) : over);
         if (!_dragging) return;
@@ -245,6 +266,14 @@ public class MediaBar : Control
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
         base.OnPointerReleased(e);
+        if (_waiting)
+        {
+            _waiting = false;
+            e.Pointer.Capture(null);
+            if (Touch.IsTap(e)) Seek(At(Over(e)), false);
+            e.Handled = true;
+            return;
+        }
         if (!_dragging) return;
         var end = _dragAt ?? At(Over(e));
         e.Pointer.Capture(null);
@@ -256,6 +285,7 @@ public class MediaBar : Control
     protected override void OnPointerCaptureLost(PointerCaptureLostEventArgs e)
     {
         base.OnPointerCaptureLost(e);
+        _waiting = false;
         EndDrag();
     }
 

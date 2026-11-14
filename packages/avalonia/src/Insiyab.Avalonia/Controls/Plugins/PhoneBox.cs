@@ -625,7 +625,7 @@ public class PhoneBox : TemplatedControl, IWords
     // The highlight follows the pointer, so only one row is ever lit.
     private void OnListPointerMoved(object? sender, PointerEventArgs e)
     {
-        if (RowAt(e) is { } row && _list is not null && !ReferenceEquals(row, _list.SelectedItem)) _list.SelectedItem = row;
+        if (e.Pointer.Type != PointerType.Touch && RowAt(e) is { } row && _list is not null && !ReferenceEquals(row, _list.SelectedItem)) _list.SelectedItem = row;
     }
 
     private void Choose(PhoneCountryRow row)
