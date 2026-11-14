@@ -17,7 +17,7 @@
 
   <StackPanel>
 
-    <TextBlock Classes="p" Text="تعمل المكتبة على أندرويد في عرض واحد بالشكل نفسه: الزجاج والظلال والحركة. وتضيف ما يحتاجه الهاتف: إبعاد المحتوى عن أشرطة النظام ولوحة المفاتيح، وزر الرجوع، واللمس بالإصبع، ومؤثرات أخف للأجهزة الضعيفة." />
+    <TextBlock Classes="p" Text="تعمل المكتبة على أندرويد في عرض واحد بالشكل نفسه: الزجاج والظلال والحركة. وتضيف ما يحتاجه الهاتف: إبعاد المحتوى عن أشرطة النظام ولوحة المفاتيح، وزر الرجوع، واللمس بالإصبع، ومؤثرات أخف للأجهزة الضعيفة، وقطعا تُبنى منها شاشات الهاتف: شريط تنقل سفلي، وورقة تخرج من الأسفل، والسحب للتحديث، ومكدس صفحات." />
 
     <TextBlock Classes="section" Text="الحواف الآمنة" />
     <pg:PlayText Classes="p" Markup="يغطي شريط الحالة وشريط التنقل ونتوء الكاميرا أطراف الشاشة. ضع `ins:SafeArea.Edges` على عنصر فيبتعد محتواه عنها، وتبقى خلفيته ممتدة إلى حافة الشاشة. وتتغير المسافة وحدها حين يدور الهاتف." />
@@ -111,6 +111,79 @@
     <TextBlock Classes="section" Text="الحركة من إعدادات النظام" />
     <pg:PlayText Classes="p" Markup="خيار «إزالة الرسوم المتحركة» في أندرويد يجعل المكتبة ساكنة كما يفعل زر «تخفيف المؤثرات» في هذا المعرض، وكذلك إطفاء الحركة في ويندوز. يُقرأ الإعداد من جديد كلما عاد التطبيق إلى الواجهة." />
     <TextBlock x:Name="MotionNow" Classes="p" />
+
+    <TextBlock Classes="section" Text="شريط التنقل السفلي" />
+    <pg:PlayText Classes="p" Markup="يجمع `ins:BottomNav` صفحات التطبيق الرئيسية في أسفل الشاشة، من ثلاث إلى خمس، لكل منها أيقونة فوق اسمها. وخلف أيقونة المختارة شكل بلون العلامة ينتقل إلى ما تختاره بعدها، ويبتعد الشريط وحده عن شريط الإيماءات." />
+    <Border Classes="dx">
+      <Border Width="360" Height="300" HorizontalAlignment="Center" CornerRadius="24" ClipToBounds="True"
+              BorderThickness="1" BorderBrush="{DynamicResource InsLine}" Background="{DynamicResource InsWash1}">
+        <DockPanel>
+          <ins:BottomNav x:Name="NavSample" DockPanel.Dock="Bottom" SelectedIndex="0" ins:SafeArea.Edges="None">
+            <ins:BottomNavItem Icon="{StaticResource IconHome}" Label="الرئيسية" />
+            <ins:BottomNavItem Icon="{StaticResource IconCart}" Label="الطلبات" Badge="3" />
+            <ins:BottomNavItem Icon="{StaticResource IconFolder}" Label="الملفات" ShowDot="True" />
+            <ins:BottomNavItem Icon="{StaticResource IconUser}" Label="الحساب" />
+          </ins:BottomNav>
+          <TextBlock x:Name="NavNote" Classes="p" Margin="24" TextAlignment="Center" VerticalAlignment="Center" Text="أنت في الرئيسية." />
+        </DockPanel>
+      </Border>
+    </Border>
+    <pg:PlayListing Code="&lt;ins:BottomNav SelectedIndex=&quot;{Binding Page}&quot; Reselected=&quot;OnReselected&quot;&gt;&#10;  &lt;ins:BottomNavItem Icon=&quot;{StaticResource IconHome}&quot; Label=&quot;الرئيسية&quot; /&gt;&#10;  &lt;ins:BottomNavItem Icon=&quot;{StaticResource IconCart}&quot; Label=&quot;الطلبات&quot; Badge=&quot;3&quot; /&gt;&#10;  &lt;ins:BottomNavItem Icon=&quot;{StaticResource IconFolder}&quot; Label=&quot;الملفات&quot; ShowDot=&quot;True&quot; /&gt;&#10;&lt;/ins:BottomNav&gt;" Margin="0,0,0,24" />
+    <ins:ProseList>
+      <pg:PlayText Classes="p" Margin="0" Markup="يُربط الاختيار بـ`SelectedIndex` أو `SelectedItem`، ويصل `Reselected` حين تُضغط الصفحة المختارة مرة أخرى، فيعيد التطبيق صفحتها إلى أعلاها." />
+      <pg:PlayText Classes="p" Margin="0" Markup="`Badge` عدد فوق الأيقونة يصير 99+ بعد 99، و`ShowDot` نقطة لشيء جديد بلا عدد." />
+      <TextBlock Classes="p" Margin="0" Text="سطحه زجاج يشف قليلا وفي أعلاه خط رفيع، ويصير مصمتا مع المؤثرات الخفيفة. وتنتقل الأسهم بين صفحاته في اتجاه القراءة، ويسمعه قارئ الشاشة تبويبات لكل منها اسمها وعددها." />
+    </ins:ProseList>
+
+    <TextBlock Classes="section" Text="الورقة السفلية" />
+    <pg:PlayText Classes="p" Markup="الدرج السفلي `drawer bottom` على الهاتف ورقة كاملة: مقبض في أعلاها، وزوايا علوية مستديرة، وطول يتبع المحتوى حتى تسعة أعشار الشاشة ثم يتمرر جسمها وحده. وفي نافذة سطح المكتب تأخذ هذا الشكل مع الصنف `sheet`، كما في الأمثلة هنا." />
+    <Border Classes="dx">
+      <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+        <Button x:Name="ShortSheet" Classes="secondary sm" Content="تفاصيل قصيرة" Click="OnShortSheet" />
+        <Button x:Name="LongSheet" Classes="secondary sm" Content="قائمة طويلة" Click="OnLongSheet" />
+        <Button x:Name="FormSheet" Classes="secondary sm" Content="نموذج" Click="OnFormSheet" />
+      </StackPanel>
+    </Border>
+    <pg:PlayListing Code="&lt;ins:Dialog x:Key=&quot;Filters&quot; Title=&quot;التصفية&quot; Classes=&quot;drawer bottom sheet&quot;&gt; … &lt;/ins:Dialog&gt;" Margin="0,0,0,24" />
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0" Text="اسحب المقبض أو رأس الورقة إلى الأسفل لتغلقها، أو اسحب جسمها بالإصبع حين يكون في أعلاه. فإن تجاوز السحب ثلث طولها أو كان سريعا أُغلقت، وإلا عادت إلى مكانها." />
+      <TextBlock Classes="p" Margin="0" Text="تمتد خلفيتها تحت شريط الإيماءات ويبقى محتواها فوقه، وترتفع فوق لوحة المفاتيح حين تُفتح لحقل فيها." />
+      <TextBlock Classes="p" Margin="0" Text="يغلقها زر الرجوع والضغط على ما حولها كما يغلقان الدرج، ولا تموّه الصفحة خلفها مع المؤثرات الخفيفة." />
+    </ins:ProseList>
+
+    <TextBlock Classes="section" Text="السحب للتحديث" />
+    <pg:PlayText Classes="p" Markup="ضع `RefreshContainer` من Avalonia حول قائمة، فإذا سُحب أعلاها إلى الأسفل نزل من الأعلى قرص زجاجي صغير فيه حلقة الانتظار بلون العلامة، تكبر وتدور مع الإصبع، ثم يصل `RefreshRequested` إلى التطبيق." />
+    <Border Classes="dx">
+      <StackPanel Spacing="12" HorizontalAlignment="Center">
+        <Border Width="360" Height="320" CornerRadius="24" ClipToBounds="True"
+                BorderThickness="1" BorderBrush="{DynamicResource InsLine}" Background="{DynamicResource InsWash1}">
+          <RefreshContainer x:Name="RefreshSample" IsMouseEnabled="True" RefreshRequested="OnRefresh">
+            <ListBox x:Name="RefreshList" Classes="static" Background="Transparent" />
+          </RefreshContainer>
+        </Border>
+        <TextBlock x:Name="RefreshNote" Classes="p" Margin="0" HorizontalAlignment="Center" Text="اسحب القائمة إلى الأسفل بالإصبع أو بالفأرة." />
+      </StackPanel>
+    </Border>
+    <pg:PlayListing Code="&lt;RefreshContainer RefreshRequested=&quot;OnRefresh&quot;&gt;&#10;  &lt;ListBox ItemsSource=&quot;{Binding Files}&quot; /&gt;&#10;&lt;/RefreshContainer&gt;" Margin="0,0,0,24" />
+    <ins:ProseList>
+      <pg:PlayText Classes="p" Margin="0" Markup="يأخذ التطبيق `e.GetDeferral()` ثم يستدعي `Complete()` حين ينتهي، فيصعد القرص والقائمة إلى مكانهما. وتبقى الحلقة تدور ما دام التطبيق يعمل، كأي حلقة انتظار في المكتبة." />
+      <pg:PlayText Classes="p" Margin="0" Markup="يحدّث F5 القائمة من لوحة المفاتيح، و`RequestRefresh()` من الشيفرة." />
+    </ins:ProseList>
+
+    <TextBlock Classes="section" Text="مكدس الصفحات" />
+    <pg:PlayText Classes="p" Markup="يفتح `ins:PageStack` صفحة فوق الحالية تنزلق إليها من جهة النهاية، ويعود منها بزر الرجوع، أو بسحب الإصبع من حافة البداية، أو بـ`Pop()`. وتبقى الصفحات التي تحتها كما تُركت." />
+    <Border Classes="dx">
+      <Border Width="360" Height="380" HorizontalAlignment="Center" CornerRadius="24" ClipToBounds="True"
+              BorderThickness="1" BorderBrush="{DynamicResource InsLine}">
+        <ins:PageStack x:Name="PagesSample" />
+      </Border>
+    </Border>
+    <pg:PlayListing Code="&lt;ins:PageStack x:Name=&quot;Pages&quot;&gt; &lt;local:PlacesPage /&gt; &lt;/ins:PageStack&gt;&#10;Pages.Push(new PlacePage(place));" Margin="0,0,0,24" />
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0" Text="يرجع زر الرجوع صفحة واحدة بعد أن تُغلق كل الطبقات المفتوحة فوقها، ويُترك للتطبيق في الصفحة الأولى. وزر الرجوع في الفأرة يفعل الشيء نفسه على سطح المكتب." />
+      <pg:PlayText Classes="p" Margin="0" Markup="`Current` و`Depth` و`CanGoBack` قابلة للربط، و`Changed` يخبر بكل تغيير، و`PopToRoot()` يعود إلى الصفحة الأولى." />
+      <TextBlock Classes="p" Margin="0" Text="ينتقل التركيز إلى الصفحة الجديدة ويعود عند الرجوع إلى حيث كان، وتتبدل الصفحات فورا مع تخفيف المؤثرات." />
+    </ins:ProseList>
 
   </StackPanel>
 </UserControl>
