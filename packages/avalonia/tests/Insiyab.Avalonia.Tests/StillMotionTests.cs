@@ -55,6 +55,23 @@ public class StillMotionTests
     }
 
     [AvaloniaFact]
+    public void Every_item_in_sight_rises_and_a_rule_stays_put()
+    {
+        var rule = new Separator();
+        var list = new ItemsControl { ItemsSource = new object[] { "نسخ", "لصق", "حذف", rule, "تحديد الكل", "بحث", "استبدال", "طباعة", "مشاركة", "حفظ" } };
+        var body = new Border { Child = list };
+        PopMotion.SetStagger(body, true);
+        Show(new StackPanel { Children = { body } });
+        var items = list.GetVisualDescendants().OfType<ItemsPresenter>().First().Panel!;
+        PopMotion.Play(body);
+        Tick(40);
+        Assert.Equal(1, rule.Opacity);
+        Assert.True(items.Children[^1].Opacity < 1, "the tenth item should rise too, not wait already in place");
+        Tick(600);
+        Assert.All(items.Children, c => Assert.Equal(1, c.Opacity));
+    }
+
+    [AvaloniaFact]
     public void A_still_pop_and_its_items_are_there_at_once()
     {
         var body = PopBody(out var items);

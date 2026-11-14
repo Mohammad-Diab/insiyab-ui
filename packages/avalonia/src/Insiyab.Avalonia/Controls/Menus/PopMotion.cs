@@ -9,7 +9,7 @@ using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The menu's entrance, set from a theme: the body fades and settles from 6px above (or below, flipped), then its first items rise in one after another. Skipped while <see cref="Motion.IsStill"/>: the body and its items are simply there.</summary>
+/// <summary>The menu's entrance, set from a theme: the body fades and settles from 6px above (or below, flipped), then the items in sight rise in one after another (rules stay put). Skipped while <see cref="Motion.IsStill"/>: the body and its items are simply there.</summary>
 internal static class PopMotion
 {
     /// <summary>Plays the entrance each time the element is shown.</summary>
@@ -20,7 +20,7 @@ internal static class PopMotion
     public static readonly AttachedProperty<bool> FromAboveProperty =
         AvaloniaProperty.RegisterAttached<Control, bool>("FromAbove", typeof(PopMotion), true);
 
-    /// <summary>Whether the first items rise in after the body, as a menu's do.</summary>
+    /// <summary>Whether the items in sight rise in after the body, as a menu's do.</summary>
     public static readonly AttachedProperty<bool> StaggerProperty =
         AvaloniaProperty.RegisterAttached<Control, bool>("Stagger", typeof(PopMotion));
 
@@ -69,10 +69,21 @@ internal static class PopMotion
         var i = 0;
         foreach (var child in panel.Children)
         {
-            if (i > 4) break;
-            Run(child, pop, ease, TimeSpan.FromMilliseconds(30 * i), "translateY(6px)");
+            // every item in sight rises, one step after another up to the sixth, the rest with it; rules stay put and out-of-sight items are just there
+            if (!child.IsVisible || child is Separator || !InSight(body, child)) continue;
+            Run(child, pop, ease, TimeSpan.FromMilliseconds(30 * Math.Min(i, MaxStep)), "translateY(6px)");
             i++;
         }
+    }
+
+    private const int MaxStep = 5;
+
+    // Whether any of the item shows inside the menu's body; before the first layout everything counts.
+    private static bool InSight(Control body, Control item)
+    {
+        if (item.Bounds.Height <= 0 || body.Bounds.Height <= 0) return true;
+        var top = item.TranslatePoint(default, body);
+        return top is not { } p || (p.Y < body.Bounds.Height && p.Y + item.Bounds.Height > 0);
     }
 
     private static void Run(Visual target, TimeSpan duration, Easing ease, TimeSpan delay, string from)
