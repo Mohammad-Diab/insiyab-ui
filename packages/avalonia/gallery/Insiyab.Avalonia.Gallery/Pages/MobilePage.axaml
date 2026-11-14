@@ -17,7 +17,7 @@
 
   <StackPanel>
 
-    <TextBlock Classes="p" Text="تعمل المكتبة على أندرويد في عرض واحد بالشكل نفسه: الزجاج والظلال والحركة. وتضيف ما يحتاجه الهاتف: إبعاد المحتوى عن أشرطة النظام ولوحة المفاتيح، وزر الرجوع، واللمس بالإصبع، ومؤثرات أخف للأجهزة الضعيفة، وقطعا تُبنى منها شاشات الهاتف: شريط تنقل سفلي، وورقة تخرج من الأسفل، والسحب للتحديث، ومكدس صفحات." />
+    <TextBlock Classes="p" Text="تعمل المكتبة على أندرويد في عرض واحد بالشكل نفسه: الزجاج والظلال والحركة. وتضيف ما يحتاجه الهاتف: إبعاد المحتوى عن أشرطة النظام ولوحة المفاتيح، وزر الرجوع، واللمس بالإصبع، ومؤثرات أخف للأجهزة الضعيفة، وقطعا تُبنى منها شاشات الهاتف: شريط تنقل سفلي، وورقة تخرج من الأسفل، والسحب للتحديث، ومكدس صفحات. وتتهيأ بعض عناصرها لعرض الهاتف: التقويم الشهري، ولوحة الأوامر، والإشعارات المنبثقة، والمقاطع، وصف شرائح التصفية." />
 
     <TextBlock Classes="section" Text="الحواف الآمنة" />
     <pg:PlayText Classes="p" Markup="يغطي شريط الحالة وشريط التنقل ونتوء الكاميرا أطراف الشاشة. ضع `ins:SafeArea.Edges` على عنصر فيبتعد محتواه عنها، وتبقى خلفيته ممتدة إلى حافة الشاشة. وتتغير المسافة وحدها حين يدور الهاتف." />
@@ -133,6 +133,7 @@
       <pg:PlayText Classes="p" Margin="0" Markup="يُربط الاختيار بـ`SelectedIndex` أو `SelectedItem`، ويصل `Reselected` حين تُضغط الصفحة المختارة مرة أخرى، فيعيد التطبيق صفحتها إلى أعلاها." />
       <pg:PlayText Classes="p" Margin="0" Markup="`Badge` عدد فوق الأيقونة يصير 99+ بعد 99، و`ShowDot` نقطة لشيء جديد بلا عدد." />
       <TextBlock Classes="p" Margin="0" Text="سطحه زجاج يشف قليلا وفي أعلاه خط رفيع، ويصير مصمتا مع المؤثرات الخفيفة. وتنتقل الأسهم بين صفحاته في اتجاه القراءة، ويسمعه قارئ الشاشة تبويبات لكل منها اسمها وعددها." />
+      <TextBlock Classes="p" Margin="0" Text="على الهاتف تظهر الإشعارات المنبثقة في وسط أسفل الشاشة فوق هذا الشريط إذا كان في أسفل الصفحة، وتنزل إلى مكانه إذا اختفى، كما تبتعد عن شريط الحالة في أسفل النافذة." />
     </ins:ProseList>
 
     <TextBlock Classes="section" Text="الورقة السفلية" />
@@ -183,6 +184,73 @@
       <TextBlock Classes="p" Margin="0" Text="يرجع زر الرجوع صفحة واحدة بعد أن تُغلق كل الطبقات المفتوحة فوقها، ويُترك للتطبيق في الصفحة الأولى. وزر الرجوع في الفأرة يفعل الشيء نفسه على سطح المكتب." />
       <pg:PlayText Classes="p" Margin="0" Markup="`Current` و`Depth` و`CanGoBack` قابلة للربط، و`Changed` يخبر بكل تغيير، و`PopToRoot()` يعود إلى الصفحة الأولى." />
       <TextBlock Classes="p" Margin="0" Text="ينتقل التركيز إلى الصفحة الجديدة ويعود عند الرجوع إلى حيث كان، وتتبدل الصفحات فورا مع تخفيف المؤثرات." />
+    </ins:ProseList>
+
+    <TextBlock Classes="section" Text="التقويم على الهاتف" />
+    <pg:PlayText Classes="p" Markup="يعرض `ins:MonthCalendar` على الهاتف شبكة كتقويم الهاتف: في كل يوم موعدان، كل منهما في سطر واحد يُقص بـ«…»، وتحتهما «+2» لما بقي، فإذا ضُغط فتح اليوم كما يفتحه الضغط عليه. ويكون الأسبوع سبعة أعمدة ضيقة تُقرأ، بجانب عمود ساعات ضيق. وهذا هو الأصل في العرض الواحد على الهاتف، وفي نافذة سطح المكتب تختاره بـ`NarrowLayout=&quot;Compact&quot;` كما هنا." />
+    <Border Classes="dx">
+      <StackPanel Spacing="12" HorizontalAlignment="Center">
+        <Border Width="360" CornerRadius="24" ClipToBounds="True" Padding="8,12"
+                BorderThickness="1" BorderBrush="{DynamicResource InsLine}" Background="{DynamicResource InsWash1}">
+          <ins:MonthCalendar x:Name="PhoneMonth" NarrowLayout="Compact" DetailsPresentation="Sheet">
+            <ins:MonthCalendar.EventDetails>
+              <DataTemplate x:DataType="ins:MonthEvent">
+                <StackPanel Spacing="6">
+                  <TextBlock Classes="h4" Text="{Binding Title}" />
+                  <TextBlock Classes="muted" Text="{Binding Tag}" TextWrapping="Wrap" />
+                </StackPanel>
+              </DataTemplate>
+            </ins:MonthCalendar.EventDetails>
+          </ins:MonthCalendar>
+        </Border>
+        <TextBlock x:Name="PhoneMonthNote" Classes="p" Margin="0" HorizontalAlignment="Center" TextWrapping="Wrap" Text="اسحب الأيام إلى الجانب بالإصبع، أو اضغط موعدا." />
+      </StackPanel>
+    </Border>
+    <pg:PlayListing Code="&lt;ins:MonthCalendar NarrowLayout=&quot;Compact&quot; DetailsPresentation=&quot;Sheet&quot; EventDetails=&quot;{StaticResource EventCard}&quot; /&gt;" Margin="0,0,0,24" />
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0" Text="يسحب الإصبع الأيام إلى الجانب فينتقل إلى الشهر أو الأسبوع أو اليوم التالي أو السابق بالانزلاق نفسه، وتميل الأيام مع الإصبع أثناء السحب. والسحب نحو بداية السطر يأتي بالتالي، فينعكس في العربية. ولا يفتح السحب موعدا ولا يوما، والسحب القصير يعيد الأيام إلى مكانها." />
+      <pg:PlayText Classes="p" Margin="0" Markup="تفتح تفاصيل الموعد في ورقة سفلية بدل البطاقة التي بجانبه حين يكون `DetailsPresentation` على `Sheet`، أو على `Auto` وهو الأصل والتقويم بشكل الهاتف. وتغلقها بزر الرجوع أو بسحبها إلى الأسفل." />
+      <TextBlock Classes="p" Margin="0" Text="إذا ضاق الرأس انتقل التاريخ بين سهميه إلى سطر تحت الأزرار، وإذا لم تتسع الأزرار نفسها لسطر واحد انتقل مبدّل العرض إلى سطر وحده. ولا يتغير شيء في التقويم على سطح المكتب." />
+    </ins:ProseList>
+
+    <TextBlock Classes="section" Text="البحث بملء الشاشة" />
+    <pg:PlayText Classes="p" Markup="تفتح `ins:CommandPalette` على الهاتف بملء الشاشة ولوحة المفاتيح ظاهرة: الحقل في الأعلى وبجانبه زر للإغلاق، والنتائج تحته حتى لوحة المفاتيح، ويغلقها زر الرجوع. وفي نافذة سطح المكتب تبقى صندوقا في أعلى النافذة، إلا مع الصنف `full`، كما في هذا المثال." />
+    <Border Classes="dx">
+      <Button x:Name="FullSearch" Classes="secondary" HorizontalAlignment="Center" Content="ابحث في المتجر" Click="OnFullSearch" />
+    </Border>
+    <pg:PlayListing Code="&lt;ins:CommandPalette x:Name=&quot;Search&quot; Classes=&quot;full&quot; /&gt;&#10;Search.Open(this);" Margin="0,0,0,24" />
+
+    <TextBlock Classes="section" Text="مقاطع لا يتسع لها السطر" />
+    <pg:PlayText Classes="p" Markup="إذا لم يتسع السطر لمقاطع `ins:Segmented`، كأسماء عربية طويلة على الهاتف، مرّ الصف إلى الجانب بالإصبع بدل أن تُضغط الكلمات أو تُقص، ويبقى المقطع المختار ظاهرا ومعه طرف مما بعده. أما الصف الذي يتسع فيبقى كما هو." />
+    <Border Classes="dx">
+      <Border Width="360" HorizontalAlignment="Center" CornerRadius="24" Padding="16"
+              BorderThickness="1" BorderBrush="{DynamicResource InsLine}" Background="{DynamicResource InsWash1}">
+        <ins:Segmented x:Name="LongSeg" SelectedIndex="0">
+          <ins:SegmentedItem Content="الطلبات الجديدة" />
+          <ins:SegmentedItem Content="قيد التوصيل اليوم" />
+          <ins:SegmentedItem Content="المسلّمة هذا الأسبوع" />
+          <ins:SegmentedItem Content="الملغاة والمرتجعة" />
+        </ins:Segmented>
+      </Border>
+    </Border>
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0" Text="سحب الإصبع على الصف يمرره ولا يختار شيئا، واللمسة تختار. وتنتقل الأسهم بين المقاطع في اتجاه القراءة فيظهر المختار." />
+    </ins:ProseList>
+
+    <TextBlock Classes="section" Text="صف شرائح التصفية" />
+    <pg:PlayText Classes="p" Markup="الصنف `chips` على `ins:Segmented` يجعله صفا من شرائح التصفية: اختيار واحد، لكل خيار شريحة بشكل الشرائح في المكتبة، والمختارة بلون العلامة. ويمر إلى الجانب إذا لم يتسع، ويبقى المختار ظاهرا، ويُربط اختياره بـ`SelectedItem` كأي مقاطع." />
+    <Border Classes="dx">
+      <StackPanel Spacing="12" HorizontalAlignment="Center">
+        <Border Width="360" CornerRadius="24" Padding="12"
+                BorderThickness="1" BorderBrush="{DynamicResource InsLine}" Background="{DynamicResource InsWash1}">
+          <ins:Segmented x:Name="PlaceChips" Classes="chips" />
+        </Border>
+        <TextBlock x:Name="PlaceChipsNote" Classes="p" Margin="0" HorizontalAlignment="Center" />
+      </StackPanel>
+    </Border>
+    <pg:PlayListing Code="&lt;ins:Segmented Classes=&quot;chips&quot; ItemsSource=&quot;{Binding Kinds}&quot; SelectedItem=&quot;{Binding Kind}&quot; /&gt;" Margin="0,0,0,24" />
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0" Text="سحب الإصبع على الصف يمرره ولا يختار، واللمسة تختار. وتنتقل الأسهم بين الشرائح في اتجاه القراءة، ويسمعه قارئ الشاشة قائمة يُختار منها شيء واحد." />
     </ins:ProseList>
 
   </StackPanel>

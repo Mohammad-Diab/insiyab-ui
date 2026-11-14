@@ -22,6 +22,59 @@ public partial class MobilePage : UserControl
         NavSample.Reselected += (_, _) => NavNote.Text = "ضغطت «" + Chosen() + "» مرة أخرى، فيعيد التطبيق الصفحة هنا إلى أعلاها.";
         RefreshList.ItemsSource = _files;
         PagesSample.Root = PlacesPage();
+        PhoneMonth.Events = PhoneEvents();
+        PhoneMonth.DayInvoked += (_, day) => PhoneMonthNote.Text = $"فتحت يوم {day.Day}، فيعرض التطبيق مواعيده كلها.";
+        PhoneMonth.MonthChanged += (_, month) => PhoneMonthNote.Text = $"انتقلت إلى الشهر {month.Month} من {month.Year}.";
+        PlaceChips.ItemsSource = PlaceKinds;
+        PlaceChips.SelectedIndex = 0;
+        PlaceChips.SelectionChanged += (_, _) => PlaceChipsNote.Text = PlaceChips.SelectedIndex == 0 ? "تعرض القائمة الأماكن كلها." : $"تعرض القائمة {PlaceChips.SelectedItem} وحدها.";
+        PlaceChipsNote.Text = "تعرض القائمة الأماكن كلها.";
+    }
+
+    private static readonly string[] PlaceKinds = ["الكل", "المكاتب", "المستودعات", "المتاجر", "المطاعم", "الحدائق", "المتاحف"];
+
+    // This month's events around today, so the phone calendar opens on them.
+    private static List<MonthEvent> PhoneEvents()
+    {
+        var first = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+        MonthEvent At(int day, int hour, string title, string tag, MonthEventTone tone = MonthEventTone.Brand, int minutes = 60) =>
+            new() { Date = first.AddDays(day - 1), Time = hour < 0 ? null : TimeSpan.FromHours(hour), Duration = TimeSpan.FromMinutes(minutes), Title = title, Tag = tag, Tone = tone };
+        return
+        [
+            At(3, 9, "اجتماع الفريق", "في قاعة الاجتماعات، ساعة"),
+            At(3, 13, "توصيل الطلبية", "إلى المستودع الشمالي", MonthEventTone.Info),
+            At(3, 16, "مكالمة مع العميل", "مكالمة فيديو، نصف ساعة", minutes: 30),
+            At(8, -1, "رحلة إلى جدة", "طوال اليوم، العودة مساء", MonthEventTone.Ok),
+            At(12, 10, "زيارة المورد", "في مقر المورد، ساعة ونصف", minutes: 90),
+            At(12, 15, "مراجعة الأسعار", "مع فريق المبيعات"),
+            At(17, 11, "تسليم المنتج الجديد", "آخر موعد للتسليم", MonthEventTone.Bad),
+            At(21, 9, "ورشة عمل", "للفريق الجديد، ساعتان", minutes: 120),
+            At(21, 12, "غداء مع الشركاء", "في المطعم المجاور"),
+            At(21, 14, "جرد المخزون", "في المستودع", MonthEventTone.Info),
+            At(21, 17, "اجتماع المساء", "عن خطة الشهر القادم"),
+            At(26, 8, "رحلة مبكرة", "من المطار، ساعتان", minutes: 120),
+        ];
+    }
+
+    private CommandPalette? _search;
+
+    private void OnFullSearch(object? sender, RoutedEventArgs e)
+    {
+        _search ??= new CommandPalette
+        {
+            Classes = { "full" },
+            Items =
+            {
+                new PaletteItem { Label = "مصباح مكتب", Group = "المنتجات", Description = "120 ريالا" },
+                new PaletteItem { Label = "كرسي مريح", Group = "المنتجات", Description = "450 ريالا" },
+                new PaletteItem { Label = "طاولة قابلة للطي", Group = "المنتجات", Description = "300 ريال" },
+                new PaletteItem { Label = "المتجر في الرياض", Group = "الأماكن" },
+                new PaletteItem { Label = "المتجر في جدة", Group = "الأماكن" },
+                new PaletteItem { Label = "طلباتي", Group = "الصفحات" },
+                new PaletteItem { Label = "سلة الشراء", Group = "الصفحات" },
+            },
+        };
+        _search.Open(FullSearch);
     }
 
     private readonly System.Collections.ObjectModel.ObservableCollection<string> _files =
