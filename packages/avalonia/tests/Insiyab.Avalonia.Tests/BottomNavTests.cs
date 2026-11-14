@@ -233,6 +233,76 @@ public class BottomNavTests
             }
         });
     }
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void A_rail_stands_the_items_in_a_column_at_the_start_side_and_switches_back_live(string dir)
+    {
+        var fake = new FakeInsets();
+        fake.Set(new Thickness(40, 24, 0, 20));
+        FakeInsets.With(fake, () =>
+        {
+            var nav = Make();
+            var page = new Border();
+            var host = new DockPanel { FlowDirection = dir == "rtl" ? FlowDirection.RightToLeft : FlowDirection.LeftToRight, Children = { nav, page } };
+            DockPanel.SetDock(nav, Dock.Bottom);
+            var root = OverlaysTests.SingleView(host, 800, 380);
+            try
+            {
+                nav.SelectedIndex = 2;
+                nav.IsRail = true;
+                DockPanel.SetDock(nav, Dock.Left);
+                OverlaysTests.Pump(root, 100);
+                Assert.Equal(380, nav.Bounds.Height, 1);
+                var first = Item(nav, 0).TranslatePoint(default, root)!.Value;
+                var last = Item(nav, 3).TranslatePoint(default, root)!.Value;
+                Assert.True(first.Y < last.Y, "the items stand one under the other");
+                Assert.Equal(first.X, last.X, 1);
+                var navLeft = nav.TranslatePoint(default, root)!.Value.X;
+                Assert.True(dir == "rtl" ? navLeft > 400 : navLeft < 1, $"the rail is at the start side ({navLeft})");
+                // the screen's left inset pads the rail only where it stands on the left
+                Assert.Equal(dir == "rtl" ? new Thickness(0, 28, 0, 24) : new Thickness(40, 28, 0, 24), nav.Padding);
+                Assert.True(Part<TextBlock>(Item(nav, 0), "PART_Label").IsEffectivelyVisible, "four labelled items fit in 380");
+                Assert.Equal(1, Part<Border>(Item(nav, 2), "PART_Pill").Opacity);
+                Assert.Equal(0, OverlayHost.FootRoom(root));
+
+                nav.IsRail = false;
+                DockPanel.SetDock(nav, Dock.Bottom);
+                OverlaysTests.Pump(root, 100);
+                Assert.Equal(800, nav.Bounds.Width, 1);
+                Assert.Equal(dir == "rtl" ? new Thickness(4, 0, 44, 20) : new Thickness(44, 0, 4, 20), nav.Padding);
+                Assert.Equal(2, nav.SelectedIndex);
+                Assert.True(OverlayHost.FootRoom(root) > 0);
+            }
+            finally
+            {
+                root.StopRendering();
+            }
+        });
+    }
+
+    [AvaloniaFact]
+    public void A_short_rail_drops_its_labels_and_the_up_and_down_keys_move_along_it()
+    {
+        var nav = Make();
+        nav.IsRail = true;
+        var w = Show(new DockPanel { Children = { nav, new Border() } }.Also(d => DockPanel.SetDock(nav, Dock.Left)), FlowDirection.LeftToRight, width: 700, height: 240);
+        Settle(100);
+        Assert.False(Part<TextBlock>(Item(nav, 0), "PART_Label").IsEffectivelyVisible);
+        var bottom = Item(nav, 3).TranslatePoint(new Point(0, Item(nav, 3).Bounds.Height), w)!.Value.Y;
+        Assert.True(bottom <= 240, $"the four items fit in 240 ({bottom})");
+        Item(nav, 0).Focus(NavigationMethod.Tab);
+        w.KeyPress(Key.Down, RawInputModifiers.None, PhysicalKey.None, null);
+        Settle(100);
+        Assert.Equal(1, nav.SelectedIndex);
+        w.KeyPress(Key.Up, RawInputModifiers.None, PhysicalKey.None, null);
+        Settle(100);
+        Assert.Equal(0, nav.SelectedIndex);
+        w.KeyPress(Key.Right, RawInputModifiers.None, PhysicalKey.None, null);
+        Settle(100);
+        Assert.Equal(0, nav.SelectedIndex);
+    }
 }
 
 internal static class AlsoExtension

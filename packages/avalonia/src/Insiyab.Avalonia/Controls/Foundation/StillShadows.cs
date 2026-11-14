@@ -20,7 +20,7 @@ internal static class StillShadows
         "InsShSm", "InsShMd", "InsShLg", "InsShSubtle", "InsShPanel", "InsShGlass", "InsShBubble",
         "InsShBrandSm", "InsShBrandMd", "InsShBrandLg",
         "InsIslandShadow", "InsIslandShadowHover", "InsZonePillShadow", "InsTopbarFrostShadow",
-        "InsSegOnShadow", "InsShellLinkActiveShadow", "InsBottomNavShadow", "InsRefreshShadow",
+        "InsSegOnShadow", "InsShellLinkActiveShadow", "InsBottomNavShadow", "InsNavRailShadow", "InsRefreshShadow",
     ];
 
     // The most blur a light drop keeps.

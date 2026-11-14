@@ -129,6 +129,22 @@
       </Border>
     </Border>
     <pg:PlayListing Code="&lt;ins:BottomNav SelectedIndex=&quot;{Binding Page}&quot; Reselected=&quot;OnReselected&quot;&gt;&#10;  &lt;ins:BottomNavItem Icon=&quot;{StaticResource IconHome}&quot; Label=&quot;الرئيسية&quot; /&gt;&#10;  &lt;ins:BottomNavItem Icon=&quot;{StaticResource IconCart}&quot; Label=&quot;الطلبات&quot; Badge=&quot;3&quot; /&gt;&#10;  &lt;ins:BottomNavItem Icon=&quot;{StaticResource IconFolder}&quot; Label=&quot;الملفات&quot; ShowDot=&quot;True&quot; /&gt;&#10;&lt;/ins:BottomNav&gt;" Margin="0,0,0,24" />
+    <pg:PlayText Classes="p" Markup="وحين يُدار الهاتف على جنبه تقصر الشاشة، فيقف الشريط نفسه عمودًا في جهة البداية مع `IsRail`، وتبقى الأيقونات وحدها إذا ضاق العمود عن الأسماء." />
+    <Border Classes="dx">
+      <Border Width="520" Height="240" HorizontalAlignment="Center" CornerRadius="24" ClipToBounds="True"
+              BorderThickness="1" BorderBrush="{DynamicResource InsLine}" Background="{DynamicResource InsWash1}">
+        <DockPanel>
+          <ins:BottomNav DockPanel.Dock="Left" IsRail="True" SelectedIndex="1" ins:SafeArea.Edges="None">
+            <ins:BottomNavItem Icon="{StaticResource IconHome}" Label="الرئيسية" />
+            <ins:BottomNavItem Icon="{StaticResource IconCart}" Label="الطلبات" Badge="3" />
+            <ins:BottomNavItem Icon="{StaticResource IconFolder}" Label="الملفات" />
+            <ins:BottomNavItem Icon="{StaticResource IconUser}" Label="الحساب" />
+          </ins:BottomNav>
+          <TextBlock Classes="p" Margin="24" TextAlignment="Center" VerticalAlignment="Center" Text="الصفحة بجانب العمود." />
+        </DockPanel>
+      </Border>
+    </Border>
+    <pg:PlayListing Code="&lt;ins:BottomNav DockPanel.Dock=&quot;Left&quot; IsRail=&quot;{Binding IsWide}&quot;&gt;…&lt;/ins:BottomNav&gt;" Margin="0,0,0,24" />
     <ins:ProseList>
       <pg:PlayText Classes="p" Margin="0" Markup="يُربط الاختيار بـ`SelectedIndex` أو `SelectedItem`، ويصل `Reselected` حين تُضغط الصفحة المختارة مرة أخرى، فيعيد التطبيق صفحتها إلى أعلاها." />
       <pg:PlayText Classes="p" Margin="0" Markup="`Badge` عدد فوق الأيقونة يصير 99+ بعد 99، و`ShowDot` نقطة لشيء جديد بلا عدد." />

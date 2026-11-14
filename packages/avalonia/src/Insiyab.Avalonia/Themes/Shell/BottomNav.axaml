@@ -8,9 +8,11 @@
         <!-- The top bar's frost turned upward: a bright line, then a soft drop over the page above -->
         <ResourceDictionary x:Key="Light">
           <BoxShadows x:Key="InsBottomNavShadow">inset 0 1 0 0 #66FFFFFF, 0 -4 16 0 #0F0F172A</BoxShadows>
+          <BoxShadows x:Key="InsNavRailShadow">inset -1 0 0 0 #66FFFFFF, 4 0 16 0 #0F0F172A</BoxShadows>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
           <BoxShadows x:Key="InsBottomNavShadow">inset 0 1 0 0 #1AFFFFFF, 0 -4 16 0 #61000000</BoxShadows>
+          <BoxShadows x:Key="InsNavRailShadow">inset -1 0 0 0 #1AFFFFFF, 4 0 16 0 #61000000</BoxShadows>
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
@@ -41,6 +43,17 @@
             </Panel>
           </ControlTemplate>
         </Setter>
+
+        <!-- A rail: a frosted column at the start side, the hairline and the drop on its inner edge, its items in the middle -->
+        <Style Selector="^:rail">
+          <Setter Property="Padding" Value="0,4" />
+          <Setter Property="VerticalAlignment" Value="Stretch" />
+          <Setter Property="HorizontalAlignment" Value="Left" />
+          <Style Selector="^ /template/ :is(Border)#PART_Ground">
+            <Setter Property="BorderThickness" Value="0,0,1,0" />
+            <Setter Property="BoxShadow" Value="{DynamicResource InsNavRailShadow}" />
+          </Style>
+        </Style>
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type ins:BottomNavItem}" TargetType="ins:BottomNavItem">
@@ -138,6 +151,21 @@
   <!-- While the pill flies the chosen item draws none of its own -->
   <Style Selector="ins|BottomNav.moving ins|BottomNavItem:selected /template/ :is(Border)#PART_Pill">
     <Setter Property="Opacity" Value="0" />
+  </Style>
+
+  <!-- In a rail each item is a fixed width; while the column is short the labels go and the items close up -->
+  <Style Selector="ins|BottomNav:rail ins|BottomNavItem">
+    <Setter Property="Width" Value="80" />
+    <Setter Property="MinHeight" Value="64" />
+  </Style>
+  <Style Selector="ins|BottomNav:rail:bare ins|BottomNavItem">
+    <Setter Property="MinHeight" Value="52" />
+  </Style>
+  <Style Selector="ins|BottomNav:rail:bare ins|BottomNavItem /template/ :is(TextBlock)#PART_Label">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+  <Style Selector="ins|BottomNav:rail:bare ins|BottomNavItem /template/ StackPanel">
+    <Setter Property="Margin" Value="0,10" />
   </Style>
 
   <!-- Light effects: a solid strip, nothing shows through -->

@@ -11,13 +11,20 @@ using Avalonia.Threading;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>A phone's main pages at the foot of the screen: three to five <see cref="BottomNavItem"/>s, each an icon over its label, the chosen one with the brand pill behind its icon that flies to the next choice. Bind <c>SelectedIndex</c> or <c>SelectedItem</c>; <see cref="Reselected"/> comes when the chosen item is pressed again. It pads itself by the safe area at the foot and sides, and screen readers hear it as tabs.</summary>
+/// <summary>A phone's main pages at the foot of the screen: three to five <see cref="BottomNavItem"/>s, each an icon over its label, the chosen one with the brand pill behind its icon that flies to the next choice. Bind <c>SelectedIndex</c> or <c>SelectedItem</c>; <see cref="Reselected"/> comes when the chosen item is pressed again. It pads itself by the safe area at the foot and sides, and screen readers hear it as tabs. With <see cref="IsRail"/> the same items stand in a column at the start side instead (a phone on its side), their labels kept only while they fit.</summary>
 [TemplatePart("PART_Flight", typeof(Border))]
 public class BottomNav : SelectingItemsControl
 {
     /// <summary>Raised on the bar when its chosen item is pressed again (a tap, a click, Enter or Space), as an app scrolls its page back to the top.</summary>
     public static readonly RoutedEvent<RoutedEventArgs> ReselectedEvent =
         RoutedEvent.Register<BottomNav, RoutedEventArgs>(nameof(Reselected), RoutingStrategies.Bubble);
+
+    /// <summary>The items in a column at the start side instead of a row at the foot, for a short window such as a phone on its side; see the class summary.</summary>
+    public static readonly StyledProperty<bool> IsRailProperty =
+        AvaloniaProperty.Register<BottomNav, bool>(nameof(IsRail));
+
+    // The height an item takes in the rail with its label, under which every label goes.
+    internal const double RailItemWithLabel = 64;
 
     private static readonly FuncTemplate<Panel?> DefaultPanel = new(() => new BottomNavPanel());
 
@@ -32,6 +39,8 @@ public class BottomNav : SelectingItemsControl
         ItemsPanelProperty.OverrideDefaultValue<BottomNav>(DefaultPanel);
         KeyboardNavigation.TabNavigationProperty.OverrideDefaultValue(typeof(BottomNav), KeyboardNavigationMode.Once);
     }
+
+    public bool IsRail { get => GetValue(IsRailProperty); set => SetValue(IsRailProperty, value); }
 
     public event EventHandler<RoutedEventArgs>? Reselected
     {
@@ -72,6 +81,18 @@ public class BottomNav : SelectingItemsControl
         base.OnPropertyChanged(change);
         if (change.Property == SelectedIndexProperty)
             Fly(change.GetOldValue<int>(), change.GetNewValue<int>());
+        else if (change.Property == IsRailProperty || change.Property == FlowDirectionProperty)
+        {
+            if (change.Property == IsRailProperty)
+            {
+                _run?.Land();
+                PseudoClasses.Set(":rail", IsRail);
+                if (ItemsPanelRoot is BottomNavPanel panel) panel.Vertical = IsRail;
+            }
+            PadRail();
+            ToastStrip.Refit(this);
+            FabLook.Refit(this);
+        }
         else if (change.Property == BoundsProperty || change.Property == IsVisibleProperty)
         {
             ToastStrip.Refit(this);
@@ -83,6 +104,24 @@ public class BottomNav : SelectingItemsControl
     {
         base.OnAttachedToVisualTree(e);
         _top = TopLevel.GetTopLevel(this);
+    }
+
+    // The rail pads the top, the foot and the screen side it stands on (the safe area's edges are the screen's, whatever the reading direction); the bar keeps its theme's edges.
+    private void PadRail()
+    {
+        if (IsRail)
+            SafeArea.SetEdges(this, SafeAreaEdges.Top | SafeAreaEdges.Bottom | (FlowDirection == FlowDirection.RightToLeft ? SafeAreaEdges.Right : SafeAreaEdges.Left));
+        else
+            ClearValue(SafeArea.EdgesProperty);
+    }
+
+    // The rail drops every label while the column is too short for all of them with their labels, and takes them back when it grows.
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        var bare = IsRail && !double.IsInfinity(availableSize.Height)
+            && availableSize.Height - Padding.Top - Padding.Bottom < RailItemWithLabel * Math.Max(1, ItemCount);
+        if (PseudoClasses.Contains(":bare") != bare) PseudoClasses.Set(":bare", bare);
+        return base.MeasureOverride(availableSize);
     }
 
     // Toasts and floating buttons at the foot sit above the bar, and come back down when it goes.
@@ -120,18 +159,27 @@ public class BottomNav : SelectingItemsControl
     {
         if (_flight?.Parent is not Visual layer || from < 0 || to < 0 || from == to || !IsEffectivelyVisible) return;
         if (PillOf(from, layer) is not { } a || PillOf(to, layer) is not { } b) return;
-        var start = (a.X, a.Width);
+        var rail = IsRail;
+        var start = rail ? (a.Y, a.Height) : (a.X, a.Width);
         if (_run is { IsDone: false } previous)
         {
             start = (previous.Start, previous.Length);
             previous.Land();
         }
         MarkerFlight? run = null;
-        run = MarkerFlight.Run(this, start, (b.X, b.Width), Place, () => Land(run));
+        run = MarkerFlight.Run(this, start, rail ? (b.Y, b.Height) : (b.X, b.Width), rail ? PlaceDown : Place, () => Land(run));
         if (run is null) return;
         _run = run;
-        Canvas.SetTop(_flight, b.Y);
-        _flight.Height = b.Height;
+        if (rail)
+        {
+            Canvas.SetLeft(_flight, b.X);
+            _flight.Width = b.Width;
+        }
+        else
+        {
+            Canvas.SetTop(_flight, b.Y);
+            _flight.Height = b.Height;
+        }
         _flight.IsVisible = true;
         Classes.Add("moving");
     }
@@ -140,6 +188,12 @@ public class BottomNav : SelectingItemsControl
     {
         Canvas.SetLeft(_flight!, x);
         _flight!.Width = Math.Max(0, width);
+    }
+
+    private void PlaceDown(double y, double height)
+    {
+        Canvas.SetTop(_flight!, y);
+        _flight!.Height = Math.Max(0, height);
     }
 
     private void Land(MarkerFlight? run)
@@ -245,12 +299,42 @@ public class BottomNavItem : ListBoxItem
     protected override AutomationPeer OnCreateAutomationPeer() => new BottomNavItemAutomationPeer(this);
 }
 
-/// <summary>The bar's panel: equal columns side by side, and the arrow keys (mirrored in right to left) moving along them.</summary>
+/// <summary>The bar's panel: equal columns side by side, and the arrow keys (mirrored in right to left) moving along them; in a rail (<see cref="Vertical"/>) the items stacked in the middle of the column, and the up and down keys moving along them.</summary>
 internal sealed class BottomNavPanel : Panel, INavigableContainer
 {
+    private bool _vertical;
+
+    public bool Vertical
+    {
+        get => _vertical;
+        set
+        {
+            if (_vertical == value) return;
+            _vertical = value;
+            InvalidateMeasure();
+        }
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        if (TemplatedParent is BottomNav nav) Vertical = nav.IsRail;
+    }
+
     protected override Size MeasureOverride(Size availableSize)
     {
         var shown = Children.Where(c => c.IsVisible).ToList();
+        if (_vertical)
+        {
+            double tall = 0, wide = 0;
+            foreach (var child in shown)
+            {
+                child.Measure(new Size(availableSize.Width, double.PositiveInfinity));
+                tall += child.DesiredSize.Height;
+                wide = Math.Max(wide, child.DesiredSize.Width);
+            }
+            return new Size(wide, tall);
+        }
         var width = double.IsInfinity(availableSize.Width) ? double.PositiveInfinity : availableSize.Width / Math.Max(1, shown.Count);
         var height = 0d;
         var widest = 0d;
@@ -266,6 +350,17 @@ internal sealed class BottomNavPanel : Panel, INavigableContainer
     protected override Size ArrangeOverride(Size finalSize)
     {
         var shown = Children.Where(c => c.IsVisible).ToList();
+        if (_vertical)
+        {
+            var tall = shown.Sum(c => c.DesiredSize.Height);
+            var y = Math.Max(0, (finalSize.Height - tall) / 2);
+            foreach (var child in shown)
+            {
+                child.Arrange(new Rect(0, y, finalSize.Width, child.DesiredSize.Height));
+                y += child.DesiredSize.Height;
+            }
+            return finalSize;
+        }
         var width = finalSize.Width / Math.Max(1, shown.Count);
         for (var i = 0; i < shown.Count; i++)
             shown[i].Arrange(new Rect(i * width, 0, width, finalSize.Height));
@@ -280,8 +375,10 @@ internal sealed class BottomNavPanel : Panel, INavigableContainer
         var rtl = FlowDirection == FlowDirection.RightToLeft;
         var step = direction switch
         {
-            NavigationDirection.Left => rtl ? 1 : -1,
-            NavigationDirection.Right => rtl ? -1 : 1,
+            NavigationDirection.Up when _vertical => -1,
+            NavigationDirection.Down when _vertical => 1,
+            NavigationDirection.Left when !_vertical => rtl ? 1 : -1,
+            NavigationDirection.Right when !_vertical => rtl ? -1 : 1,
             NavigationDirection.Next => 1,
             NavigationDirection.Previous => -1,
             _ => 0,
