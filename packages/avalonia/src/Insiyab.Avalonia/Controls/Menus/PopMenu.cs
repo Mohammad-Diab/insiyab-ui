@@ -265,24 +265,25 @@ internal static class Pop
         var box = place.PopupSize;
         if (box.Width <= 0 || box.Height <= 0 || OverlayHost.Top(place.Target) is not { } top) return false;
         var rtl = place.Target.FlowDirection == FlowDirection.RightToLeft;
-        var screen = new Size(OverlayHost.Width(top), OverlayHost.Height(top));
+        var free = Free(top);
         var at = place.AnchorRectangle;
         var lift = place.Deflate;
         var w = box.Width - lift.Left - lift.Right - Room.Left - Room.Right;
         var h = box.Height - lift.Top - lift.Bottom - Room.Top - Room.Bottom;
-        var maxX = screen.Width - Edge - w;
-        var maxY = screen.Height - Edge - h;
+        var (minX, minY) = (free.Left + Edge, free.Top + Edge);
+        var maxX = free.Right - Edge - w;
+        var maxY = free.Bottom - Edge - h;
         var below = at.Bottom + Gap;
         var above = at.Top - Gap - h;
-        var startX = Clamp(rtl ? at.Right - w : at.Left, Edge, maxX);
+        var startX = Clamp(rtl ? at.Right - w : at.Left, minX, maxX);
         double x, y;
-        if (Side(at, w, rtl, Gap, maxX) is { } sideX) (x, y) = (sideX, Clamp(at.Top, Edge, maxY));
+        if (Side(at, w, rtl, Gap, minX, maxX) is { } sideX) (x, y) = (sideX, Clamp(at.Top, minY, maxY));
         else if (below <= maxY) (x, y) = (startX, below);
-        else if (above >= Edge) (x, y, fromAbove) = (startX, above, false);
+        else if (above >= minY) (x, y, fromAbove) = (startX, above, false);
         else
         {
-            var up = at.Top > screen.Height - at.Bottom;
-            (x, y, fromAbove) = (startX, Clamp(up ? above : below, Edge, maxY), !up);
+            var up = at.Top - free.Top > free.Bottom - at.Bottom;
+            (x, y, fromAbove) = (startX, Clamp(up ? above : below, minY, maxY), !up);
         }
         Put(place, x, y);
         return true;
@@ -297,24 +298,25 @@ internal static class Pop
         var box = place.PopupSize;
         if (box.Width <= 0 || box.Height <= 0 || OverlayHost.Top(place.Target) is not { } top) return false;
         var rtl = place.Target.FlowDirection == FlowDirection.RightToLeft;
-        var screen = new Size(OverlayHost.Width(top), OverlayHost.Height(top));
+        var free = Free(top);
         var at = place.AnchorRectangle;
         var lift = place.Deflate;
         var w = box.Width - lift.Left - lift.Right - Room.Left - Room.Right;
         var h = box.Height - lift.Top - lift.Bottom - Room.Top - Room.Bottom;
-        var maxX = screen.Width - Edge - w;
-        var maxY = screen.Height - Edge - h;
+        var (minX, minY) = (free.Left + Edge, free.Top + Edge);
+        var maxX = free.Right - Edge - w;
+        var maxY = free.Bottom - Edge - h;
         var below = at.Bottom + Gap;
         var above = at.Top - Gap - h;
-        var startX = Clamp(rtl != end ? at.Right - w : at.Left, Edge, maxX);
+        var startX = Clamp(rtl != end ? at.Right - w : at.Left, minX, maxX);
         double x, y;
         if (below <= maxY) (x, y) = (startX, below);
-        else if (above >= Edge) (x, y, fromAbove) = (startX, above, false);
-        else if (beside && Side(at, w, rtl, Gap, maxX) is { } sideX) (x, y) = (sideX, Clamp(at.Top, Edge, maxY));
+        else if (above >= minY) (x, y, fromAbove) = (startX, above, false);
+        else if (beside && Side(at, w, rtl, Gap, minX, maxX) is { } sideX) (x, y) = (sideX, Clamp(at.Top, minY, maxY));
         else
         {
-            var up = at.Top > screen.Height - at.Bottom;
-            (x, y, fromAbove) = (startX, Clamp(up ? above : below, Edge, maxY), !up);
+            var up = at.Top - free.Top > free.Bottom - at.Bottom;
+            (x, y, fromAbove) = (startX, Clamp(up ? above : below, minY, maxY), !up);
         }
         Put(place, x, y);
         return true;
@@ -326,26 +328,30 @@ internal static class Pop
         var box = place.PopupSize;
         if (box.Width <= 0 || box.Height <= 0 || OverlayHost.Top(place.Target) is not { } top) return;
         var rtl = place.Target.FlowDirection == FlowDirection.RightToLeft;
-        var screen = new Size(OverlayHost.Width(top), OverlayHost.Height(top));
+        var free = Free(top);
         var at = place.AnchorRectangle;
         var lift = place.Deflate;
         var w = box.Width - lift.Left - lift.Right - Room.Left - Room.Right;
         var h = box.Height - lift.Top - lift.Bottom - Room.Top - Room.Bottom;
-        var maxX = screen.Width - Edge - w;
-        var x = Side(at, w, rtl, SubGap, maxX) ?? Clamp(screen.Width - at.Right >= at.Left ? at.Right + SubGap : at.Left - SubGap - w, Edge, maxX);
-        Put(place, x, Clamp(at.Top, Edge, screen.Height - Edge - h));
+        var minX = free.Left + Edge;
+        var maxX = free.Right - Edge - w;
+        var x = Side(at, w, rtl, SubGap, minX, maxX) ?? Clamp(free.Right - at.Right >= at.Left - free.Left ? at.Right + SubGap : at.Left - SubGap - w, minX, maxX);
+        Put(place, x, Clamp(at.Top, free.Top + Edge, free.Bottom - Edge - h));
     }
 
     // Beside the anchor, its end side first, then its start side; null when neither fits.
-    private static double? Side(Rect at, double w, bool rtl, double gap, double maxX)
+    private static double? Side(Rect at, double w, bool rtl, double gap, double minX, double maxX)
     {
         var left = at.Left - gap - w;
         var right = at.Right + gap;
         var (first, second) = rtl ? (left, right) : (right, left);
-        if (first >= Edge && first <= maxX) return first;
-        if (second >= Edge && second <= maxX) return second;
+        if (first >= minX && first <= maxX) return first;
+        if (second >= minX && second <= maxX) return second;
         return null;
     }
+
+    // The window's room a pop keeps inside: all of it on a desktop, clear of the system bars and the keyboard on a phone.
+    private static Rect Free(TopLevel top) => Insets.For(top).Room;
 
     // The box goes exactly round the card at (x, y): anchored at its centre, so nothing is mirrored or adjusted.
     private static void Put(CustomPopupPlacement place, double x, double y)

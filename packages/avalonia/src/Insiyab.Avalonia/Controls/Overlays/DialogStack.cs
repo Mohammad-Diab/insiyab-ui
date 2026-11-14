@@ -31,7 +31,7 @@ internal sealed class DialogStack : Panel
         _top = top;
         ZIndex = 0;
         top.AddHandler(KeyDownEvent, OnKeyDown, RoutingStrategies.Bubble);
-        top.BackRequested += OnBack;
+        Insets.For(top).Changed += (_, _) => { foreach (var layer in Children.OfType<DialogLayer>()) layer.Refit(); };
     }
 
     internal IReadOnlyList<DialogLayer> Layers => _layers;
@@ -72,6 +72,7 @@ internal sealed class DialogStack : Panel
         var at = stack._layers.FindIndex(l => l.Dialog == dialog);
         if (at >= 0)
         {
+            BackStack.Remove(dialog);
             stack._layers.RemoveAt(at);
             if (stack._layers.Count > 0) stack._layers[^1].Cover(false);
             else stack.Blur(false);
@@ -100,6 +101,12 @@ internal sealed class DialogStack : Panel
         };
         _layers.Add(layer);
         Children.Add(layer);
+        BackStack.Push(_top, dialog, BackTier.Overlay, () =>
+        {
+            if (!_layers.Any(l => l.Dialog == dialog)) return false;
+            dialog.RequestClose(outside: false);
+            return true;
+        });
         layer.Enter();
         if (_layers.Count == 1) Blur(true);
         Dispatcher.UIThread.Post(() => layer.FocusFirst(), DispatcherPriority.Loaded);
@@ -110,6 +117,7 @@ internal sealed class DialogStack : Panel
         var at = _layers.FindIndex(l => l.Dialog == dialog);
         if (at < 0) return;
         var layer = _layers[at];
+        BackStack.Remove(dialog);
         _layers.RemoveAt(at);
         if (_layers.Count > 0) _layers[^1].Cover(false);
         else Blur(false);
@@ -126,19 +134,12 @@ internal sealed class DialogStack : Panel
         e.Handled = true;
     }
 
-    private void OnBack(object? sender, RoutedEventArgs e)
-    {
-        if (e.Handled || _layers.Count == 0) return;
-        _layers[^1].Dialog.RequestClose(outside: false);
-        e.Handled = true;
-    }
-
-    // The page behind goes out of focus, as the web's backdrop-filter: blur(3px), fading with the scrim; skipped when the content already has an effect.
+    // The page behind goes out of focus, as the web's backdrop-filter: blur(3px), fading with the scrim; skipped when the content already has an effect, and with light effects.
     private void Blur(bool on)
     {
         if (on)
         {
-            if (_blurred is not null) return;
+            if (_blurred is not null || Motion.IsLight(_top)) return;
             var content = _top.GetVisualDescendants().OfType<VisualLayerManager>().FirstOrDefault()?.Child;
             if (content is null || content.Effect is not null) return;
             _blurred = content;
@@ -211,6 +212,9 @@ internal sealed class DialogLayer : ThemeVariantScope
 
     public Dialog Dialog { get; }
     public Control? From { get; }
+
+    // The safe area or the keyboard moved.
+    public void Refit() => _panel.InvalidateMeasure();
 
     /// <summary>The control the dialog was opened from, which a <see cref="Dialog.GrowsFromAnchor"/> dialog grows out of.</summary>
     public Control? Origin { get; init; }
@@ -311,16 +315,18 @@ internal sealed class DialogLayer : ThemeVariantScope
     {
         public Size SizeFor(Size room)
         {
-            dialog.Measure(Slot(room, dialog));
-            return Place(room, dialog).Size;
+            var area = new Rect(room).Deflate(Clear()).Size;
+            dialog.Measure(Slot(area, dialog));
+            return Place(area, dialog).Size;
         }
 
         protected override Size MeasureOverride(Size availableSize)
         {
             var room = new Size(double.IsInfinity(availableSize.Width) ? 1024 : availableSize.Width, double.IsInfinity(availableSize.Height) ? 768 : availableSize.Height);
+            var area = new Rect(room).Deflate(Clear()).Size;
             foreach (var child in Children)
             {
-                if (child == dialog) dialog.Measure(Slot(room, dialog));
+                if (child == dialog) dialog.Measure(Slot(area, dialog));
                 else child.Measure(room);
             }
             return room;
@@ -328,12 +334,20 @@ internal sealed class DialogLayer : ThemeVariantScope
 
         protected override Size ArrangeOverride(Size finalSize)
         {
+            var area = new Rect(finalSize).Deflate(Clear());
             foreach (var child in Children)
             {
-                if (child == dialog) dialog.Arrange(Place(finalSize, dialog));
+                if (child == dialog) dialog.Arrange(Place(area.Size, dialog).Translate(area.Position));
                 else child.Arrange(new Rect(finalSize));
             }
             return finalSize;
+        }
+
+        // The scrim covers everything; the dialog keeps inside the safe area and above the keyboard (nothing on a desktop), the left and right taken in the layer's direction.
+        private Thickness Clear()
+        {
+            var covered = Insets.Of(this)?.Covered ?? default;
+            return FlowDirection == FlowDirection.RightToLeft ? new Thickness(covered.Right, covered.Top, covered.Left, covered.Bottom) : covered;
         }
 
         // The room the web's sizes leave: min(width, 100vw - 2rem) by min(max-height, 100vh - 3rem) for a dialog; min(24rem, 88vw) by the full height for a drawer.

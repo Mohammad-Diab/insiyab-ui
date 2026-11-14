@@ -122,6 +122,7 @@ internal sealed class ToastStrip
             if (e.Property == Visual.BoundsProperty) Fit();
             else if (e.Property == WindowActivity.IsInactiveProperty && e.NewValue is false) ResumeSoon();
         };
+        Insets.For(top).Changed += (_, _) => Fit();
         Fit();
     }
 
@@ -143,12 +144,13 @@ internal sealed class ToastStrip
         if (OverlayHost.Top(anchor) is { } top && Strips.TryGetValue(top, out var strip)) strip.Fit();
     }
 
-    // At a phone width the strip spans the bottom, clear of the system's gesture area and of a status bar along the window's foot.
+    // At a phone width the strip spans the bottom, clear of the system bars, the cutouts, the keyboard and a status bar along the window's foot.
     private void Fit()
     {
         OverlayHost.SetClass(Manager.Classes, "phone", OverlayHost.IsPhone(_top));
-        var inset = _top.InsetsManager?.SafeAreaPadding.Bottom ?? 0;
-        Manager.Margin = new Thickness(0, 0, 0, Math.Max(inset, StatusRoom()));
+        var covered = Insets.For(_top).Covered;
+        var (left, right) = Manager.FlowDirection == FlowDirection.RightToLeft ? (covered.Right, covered.Left) : (covered.Left, covered.Right);
+        Manager.Margin = new Thickness(left, covered.Top, right, Math.Max(covered.Bottom, StatusRoom()));
     }
 
     private double StatusRoom()

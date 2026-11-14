@@ -19,6 +19,8 @@ public partial class InsiyabTheme : Styles
         OnLoadedFrost();
         Reword();
         Controls.Motion.Register();
+        Controls.BackStack.Register();
+        Controls.KeyboardRoom.Register();
         Controls.WindowActivity.Register();
         Controls.TipKeyboard.Register();
         Controls.TextDirection.Register();

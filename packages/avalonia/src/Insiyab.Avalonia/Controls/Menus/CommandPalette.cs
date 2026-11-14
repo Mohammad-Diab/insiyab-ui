@@ -6,6 +6,7 @@ using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -125,6 +126,8 @@ public class CommandPalette : TemplatedControl, IWords
     private Control? _empty;
     private Control? _backdrop;
     private Control? _dialog;
+    private Insets? _insets;
+    private IDisposable? _clear;
     private OverlayLayer? _layer;
     private IInputElement? _returnFocus;
     private bool _open;
@@ -214,8 +217,21 @@ public class CommandPalette : TemplatedControl, IWords
         }
         Width = layer.Bounds.Width;
         Height = layer.Bounds.Height;
+        if (_insets != Insets.For(top!))
+        {
+            if (_insets is not null) _insets.Changed -= OnInsets;
+            _insets = Insets.For(top!);
+            _insets.Changed += OnInsets;
+        }
+        Clear();
         IsVisible = true;
         IsOpen = true;
+        BackStack.Push(top!, this, BackTier.Overlay, () =>
+        {
+            if (!IsOpen) return false;
+            Close();
+            return true;
+        });
         if (_input is not null) _input.Text = string.Empty;
         if (Text.Length > 0) SetCurrentValue(TextProperty, string.Empty);
         Render();
@@ -227,6 +243,7 @@ public class CommandPalette : TemplatedControl, IWords
     public void Close()
     {
         if (!IsOpen) return;
+        BackStack.Remove(this);
         IsVisible = false;
         IsOpen = false;
         _returnFocus?.Focus();
@@ -242,6 +259,18 @@ public class CommandPalette : TemplatedControl, IWords
     {
         if (IsOpen) Close();
         else Open(host);
+    }
+
+    private void OnInsets(object? sender, EventArgs e) => Clear();
+
+    // The box keeps clear of the system bars and the keyboard (nothing covers a desktop window); the backdrop still covers everything.
+    private void Clear()
+    {
+        _clear?.Dispose();
+        _clear = null;
+        if (_insets?.Covered is not { } covered || covered == default) return;
+        var rtl = FlowDirection == FlowDirection.RightToLeft;
+        _clear = SetValue(PaddingProperty, new Thickness(rtl ? covered.Right : covered.Left, covered.Top, rtl ? covered.Left : covered.Right, covered.Bottom), BindingPriority.Style);
     }
 
     private void OnLayerSized(object? sender, SizeChangedEventArgs e)

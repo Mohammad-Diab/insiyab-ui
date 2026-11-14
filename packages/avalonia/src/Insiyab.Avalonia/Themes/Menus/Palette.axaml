@@ -120,65 +120,68 @@
           <ControlTemplate TargetType="ins:CommandPalette">
             <Panel>
               <ins:TemplateBorder x:Name="PART_Backdrop" Background="{DynamicResource InsPaletteBackdrop}" />
-              <!-- High on the window rather than centred: the list grows downward as the person types, and a centred box would move its own field under them. -->
-              <Panel x:Name="PART_Dialog"
-                     HorizontalAlignment="Stretch"
-                     VerticalAlignment="Top"
-                     MaxWidth="576"
-                     MaxHeight="544"
-                     Margin="16,96,16,16"
-                     KeyboardNavigation.TabNavigation="Cycle">
-                <ins:TemplateBorder CornerRadius="{DynamicResource InsRXl}" BoxShadow="{DynamicResource InsShLg}" />
-                <ins:TemplateBorder FlowDirection="LeftToRight" CornerRadius="{DynamicResource InsRXl}" Background="{DynamicResource InsWash1}" />
-                <ins:TemplateBorder FlowDirection="LeftToRight"
-                        CornerRadius="{DynamicResource InsRXl}"
-                        BorderBrush="{DynamicResource InsRim}"
-                        BorderThickness="1">
-                  <ins:TemplateBorder.Background>
-                    <LinearGradientBrush StartPoint="20%,0%" EndPoint="80%,100%">
-                      <GradientStop Offset="0" Color="{DynamicResource InsGlassStrongColor}" />
-                      <GradientStop Offset="1" Color="{DynamicResource InsGlassHoverColor}" />
-                    </LinearGradientBrush>
-                  </ins:TemplateBorder.Background>
-                </ins:TemplateBorder>
-                <ins:TemplateBorder CornerRadius="{DynamicResource InsRXl}" ClipToBounds="True" Margin="1">
-                  <DockPanel>
-                    <ins:TemplateBorder DockPanel.Dock="Top" Padding="13,13,13,8">
-                      <TextBox x:Name="PART_Input"
-                               Theme="{StaticResource InsPaletteBox}"
-                               PlaceholderText="{TemplateBinding PlaceholderText}" />
-                    </ins:TemplateBorder>
-                    <ins:PaletteBorder DockPanel.Dock="Bottom" Classes="palette-foot">
-                      <WrapPanel ItemSpacing="20" LineSpacing="6">
-                        <StackPanel Orientation="Horizontal" Spacing="4">
-                          <Border Classes="kbd"><ins:PaletteText Classes="arrow" Text="↑" /></Border>
-                          <Border Classes="kbd"><ins:PaletteText Classes="arrow" Text="↓" /></Border>
-                          <ins:TemplateText Text="{TemplateBinding MoveText}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Spacing="4">
-                          <Border Classes="kbd"><ins:TemplateText Text="Enter" /></Border>
-                          <ins:TemplateText Text="{TemplateBinding ChooseText}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Spacing="4">
-                          <Border Classes="kbd"><ins:TemplateText Text="Esc" /></Border>
-                          <ins:TemplateText Text="{TemplateBinding CloseText}" />
-                        </StackPanel>
-                      </WrapPanel>
-                    </ins:PaletteBorder>
-                    <Panel>
-                      <ins:PaletteText x:Name="PART_Empty" Classes="palette-empty" Text="{TemplateBinding EmptyText}" IsVisible="False" />
-                      <ScrollViewer x:Name="PART_Scroll" HorizontalScrollBarVisibility="Disabled" Padding="8,4,8,8">
-                        <ItemsControl x:Name="PART_List">
-                          <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                              <VirtualizingStackPanel />
-                            </ItemsPanelTemplate>
-                          </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                      </ScrollViewer>
-                    </Panel>
-                  </DockPanel>
-                </ins:TemplateBorder>
+              <!-- Clear of the system bars and the keyboard on a phone (its Padding, set by the palette); nothing on a desktop -->
+              <Panel Margin="{TemplateBinding Padding}">
+                <!-- High on the window rather than centred: the list grows downward as the person types, and a centred box would move its own field under them. -->
+                <Panel x:Name="PART_Dialog"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Top"
+                       MaxWidth="576"
+                       MaxHeight="544"
+                       Margin="16,96,16,16"
+                       KeyboardNavigation.TabNavigation="Cycle">
+                  <ins:TemplateBorder CornerRadius="{DynamicResource InsRXl}" BoxShadow="{DynamicResource InsShLg}" />
+                  <ins:TemplateBorder FlowDirection="LeftToRight" CornerRadius="{DynamicResource InsRXl}" Background="{DynamicResource InsWash1}" />
+                  <ins:TemplateBorder FlowDirection="LeftToRight"
+                          CornerRadius="{DynamicResource InsRXl}"
+                          BorderBrush="{DynamicResource InsRim}"
+                          BorderThickness="1">
+                    <ins:TemplateBorder.Background>
+                      <LinearGradientBrush StartPoint="20%,0%" EndPoint="80%,100%">
+                        <GradientStop Offset="0" Color="{DynamicResource InsGlassStrongColor}" />
+                        <GradientStop Offset="1" Color="{DynamicResource InsGlassHoverColor}" />
+                      </LinearGradientBrush>
+                    </ins:TemplateBorder.Background>
+                  </ins:TemplateBorder>
+                  <ins:TemplateBorder CornerRadius="{DynamicResource InsRXl}" ClipToBounds="True" Margin="1">
+                    <DockPanel>
+                      <ins:TemplateBorder DockPanel.Dock="Top" Padding="13,13,13,8">
+                        <TextBox x:Name="PART_Input"
+                                 Theme="{StaticResource InsPaletteBox}"
+                                 PlaceholderText="{TemplateBinding PlaceholderText}" />
+                      </ins:TemplateBorder>
+                      <ins:PaletteBorder DockPanel.Dock="Bottom" Classes="palette-foot">
+                        <WrapPanel ItemSpacing="20" LineSpacing="6">
+                          <StackPanel Orientation="Horizontal" Spacing="4">
+                            <Border Classes="kbd"><ins:PaletteText Classes="arrow" Text="↑" /></Border>
+                            <Border Classes="kbd"><ins:PaletteText Classes="arrow" Text="↓" /></Border>
+                            <ins:TemplateText Text="{TemplateBinding MoveText}" />
+                          </StackPanel>
+                          <StackPanel Orientation="Horizontal" Spacing="4">
+                            <Border Classes="kbd"><ins:TemplateText Text="Enter" /></Border>
+                            <ins:TemplateText Text="{TemplateBinding ChooseText}" />
+                          </StackPanel>
+                          <StackPanel Orientation="Horizontal" Spacing="4">
+                            <Border Classes="kbd"><ins:TemplateText Text="Esc" /></Border>
+                            <ins:TemplateText Text="{TemplateBinding CloseText}" />
+                          </StackPanel>
+                        </WrapPanel>
+                      </ins:PaletteBorder>
+                      <Panel>
+                        <ins:PaletteText x:Name="PART_Empty" Classes="palette-empty" Text="{TemplateBinding EmptyText}" IsVisible="False" />
+                        <ScrollViewer x:Name="PART_Scroll" HorizontalScrollBarVisibility="Disabled" Padding="8,4,8,8">
+                          <ItemsControl x:Name="PART_List">
+                            <ItemsControl.ItemsPanel>
+                              <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                              </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                          </ItemsControl>
+                        </ScrollViewer>
+                      </Panel>
+                    </DockPanel>
+                  </ins:TemplateBorder>
+                </Panel>
               </Panel>
             </Panel>
           </ControlTemplate>
