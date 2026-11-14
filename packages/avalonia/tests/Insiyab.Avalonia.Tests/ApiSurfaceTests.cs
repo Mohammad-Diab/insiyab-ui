@@ -20,6 +20,7 @@ public class ApiSurfaceTests
         "Controls.PictureViewer",
         "Controls.ChoiceDialog", "Controls.ChoicePickedEventArgs", "Controls.ChoicePicker", "Controls.Gutter", "Controls.GutterSides",
         "Controls.NotifyAreaBalloonEventArgs", "Controls.NotifyAreaIcon", "Controls.NotifyAreaLevel", "Controls.NotifyAreaMenuItem",
+        "Controls.SafeArea", "Controls.SafeAreaEdges", "EffectsLevel",
     ];
 
     private static IEnumerable<Type> Exported() =>
@@ -64,7 +65,7 @@ public class ApiSurfaceTests
     [AvaloniaFact]
     public void Attached_property_holders_are_static()
     {
-        foreach (var type in new[] { typeof(Busy), typeof(Toast), typeof(Frost), typeof(Validate), typeof(InputCount), typeof(Taskbar), typeof(ListRow), typeof(ComboSearch), typeof(PictureViewer), typeof(Gutter) })
+        foreach (var type in new[] { typeof(Busy), typeof(Toast), typeof(Frost), typeof(Validate), typeof(InputCount), typeof(Taskbar), typeof(ListRow), typeof(ComboSearch), typeof(PictureViewer), typeof(Gutter), typeof(SafeArea) })
             Assert.True(type.IsAbstract && type.IsSealed, type.Name);
     }
 
