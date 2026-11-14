@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using Avalonia;
+using Avalonia.Automation;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -69,14 +70,15 @@ public class PaletteChoosingEventArgs : RoutedEventArgs
     public bool Cancel { get; set; }
 }
 
-/// <summary>The command palette plugin: one search for every page and command, in a dialog high on the window. Matching is Arabic-aware and ranked by where the words fall; with nothing typed it shows the recent choices, then every group. Open it with <see cref="Open"/>, or <see cref="AttachTo"/> a window for Ctrl/⌘+K and «/».</summary>
+/// <summary>The command palette plugin: one search for every page and command, in a dialog high on the window. Matching is Arabic-aware and ranked by where the words fall; with nothing typed it shows the recent choices, then every group. Open it with <see cref="Open"/>, or <see cref="AttachTo"/> a window for Ctrl/⌘+K and «/». On a phone (a single view at a phone's width), or anywhere with the class <c>full</c>, it opens full screen with the keyboard up and its results above it.</summary>
 [TemplatePart("PART_Backdrop", typeof(Control))]
 [TemplatePart("PART_Dialog", typeof(Control))]
 [TemplatePart("PART_Input", typeof(TextBox))]
 [TemplatePart("PART_List", typeof(ItemsControl))]
 [TemplatePart("PART_Scroll", typeof(ScrollViewer))]
 [TemplatePart("PART_Empty", typeof(Control))]
-[PseudoClasses(":searching")]
+[TemplatePart("PART_Close", typeof(Button))]
+[PseudoClasses(":searching", ":full")]
 public class CommandPalette : TemplatedControl, IWords
 {
     private static Words.Own[]? s_words;
@@ -126,6 +128,7 @@ public class CommandPalette : TemplatedControl, IWords
     private Control? _empty;
     private Control? _backdrop;
     private Control? _dialog;
+    private Button? _close;
     private Insets? _insets;
     private IDisposable? _clear;
     private OverlayLayer? _layer;
@@ -217,6 +220,7 @@ public class CommandPalette : TemplatedControl, IWords
         }
         Width = layer.Bounds.Width;
         Height = layer.Bounds.Height;
+        Fill(top!, layer.Bounds.Width);
         if (_insets != Insets.For(top!))
         {
             if (_insets is not null) _insets.Changed -= OnInsets;
@@ -277,7 +281,25 @@ public class CommandPalette : TemplatedControl, IWords
     {
         Width = e.NewSize.Width;
         Height = e.NewSize.Height;
+        if (TopLevel.GetTopLevel(this) is { } top) Fill(top, e.NewSize.Width);
     }
+
+    // Full screen in a single view at a phone's width (a desktop window keeps the box at any width), or anywhere with the class full.
+    private void Fill(TopLevel top, double width)
+    {
+        PseudoClasses.Set(":full", Classes.Contains("full") || top is not Window && width > 0 && width <= OverlayHost.PhoneWidth);
+        NameClose();
+    }
+
+    private void NameClose()
+    {
+        if (_close is null) return;
+        var name = Words.Of(this)["palette.closeSearch"];
+        AutomationProperties.SetName(_close, name);
+        ToolTip.SetTip(_close, name);
+    }
+
+    internal bool IsFull => PseudoClasses.Contains(":full");
 
     /// <summary>Listens on <paramref name="top"/> for <see cref="Gestures"/>, and «/» outside a text field; dispose the result to stop.</summary>
     public IDisposable AttachTo(TopLevel top)
@@ -326,6 +348,10 @@ public class CommandPalette : TemplatedControl, IWords
         }
         if (_backdrop is not null) _backdrop.PointerPressed -= OnBackdropPressed;
         if (_list is not null) _list.ContainerClearing -= OnContainerClearing;
+        if (_close is not null) _close.Click -= OnCloseClick;
+        _close = e.NameScope.Find<Button>("PART_Close");
+        if (_close is not null) _close.Click += OnCloseClick;
+        NameClose();
         _input = e.NameScope.Find<TextBox>("PART_Input");
         _list = e.NameScope.Find<ItemsControl>("PART_List");
         _scroll = e.NameScope.Find<ScrollViewer>("PART_Scroll");
@@ -350,6 +376,12 @@ public class CommandPalette : TemplatedControl, IWords
     private void OnContainerClearing(object? sender, ContainerClearingEventArgs e)
     {
         if (e.Container is ContentPresenter { Child: Border { Tag: PaletteItem item } row } && _rows.TryGetValue(item, out var kept) && kept == row) _rows.Remove(item);
+    }
+
+    private void OnCloseClick(object? sender, RoutedEventArgs e)
+    {
+        e.Handled = true;
+        Close();
     }
 
     private void OnBackdropPressed(object? sender, PointerPressedEventArgs e)
@@ -470,7 +502,7 @@ public class CommandPalette : TemplatedControl, IWords
         row.PointerReleased += (_, e) =>
         {
             e.Handled = true;
-            Choose(item);
+            if (Touch.IsTap(e)) Choose(item);
         };
         _rows[item] = row;
         return row;

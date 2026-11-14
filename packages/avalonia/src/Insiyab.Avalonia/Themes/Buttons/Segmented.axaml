@@ -20,21 +20,39 @@
             <ins:TemplateBorder Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="{TemplateBinding CornerRadius}"
-                    Padding="{TemplateBinding Padding}">
-              <Panel>
-                <Canvas IsHitTestVisible="False">
-                  <ins:TemplateBorder x:Name="PART_Flight"
-                          CornerRadius="{DynamicResource InsRSm}"
-                          Background="{DynamicResource InsSegOnBg}"
-                          BoxShadow="{DynamicResource InsSegOnShadow}"
-                          IsVisible="False" />
-                </Canvas>
-                <ItemsPresenter x:Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
-              </Panel>
+                    CornerRadius="{TemplateBinding CornerRadius}">
+              <!-- Scrolls sideways only when the items do not fit; the padding is inside it, so a ring at the row's ends stays whole -->
+              <ScrollViewer x:Name="PART_Scroll"
+                            ClipToBounds="False"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalScrollBarVisibility="Hidden"
+                            VerticalScrollBarVisibility="Disabled">
+                <Panel>
+                  <Canvas IsHitTestVisible="False">
+                    <ins:TemplateBorder x:Name="PART_Flight"
+                            CornerRadius="{DynamicResource InsRSm}"
+                            Background="{DynamicResource InsSegOnBg}"
+                            BoxShadow="{DynamicResource InsSegOnShadow}"
+                            IsVisible="False" />
+                  </Canvas>
+                  <ItemsPresenter x:Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                </Panel>
+              </ScrollViewer>
             </ins:TemplateBorder>
           </ControlTemplate>
         </Setter>
+        <!-- A row of filter chips: no track, each choice a chip apart from the next, room around them for a finger and a ring -->
+        <Style Selector="^.chips">
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="BorderThickness" Value="0" />
+          <Setter Property="CornerRadius" Value="0" />
+          <Setter Property="Padding" Value="4,7" />
+          <Setter Property="ItemsPanel">
+            <ItemsPanelTemplate>
+              <ins:SegmentedPanel Orientation="Horizontal" Spacing="8" />
+            </ItemsPanelTemplate>
+          </Setter>
+        </Style>
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type ins:SegmentedItem}" TargetType="ins:SegmentedItem">
@@ -68,6 +86,8 @@
                       IsVisible="False" />
               <ContentPresenter x:Name="PART_ContentPresenter"
                                 Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="{TemplateBinding CornerRadius}"
                                 Content="{TemplateBinding Content}"
                                 ContentTemplate="{TemplateBinding ContentTemplate}"
@@ -106,6 +126,45 @@
 
     </ResourceDictionary>
   </Styles.Resources>
+
+  <!-- Segmented.chips: each choice in the chip look, the chosen one in the brand's tint, as a chip that is on -->
+  <Style Selector="ins|Segmented.chips ins|SegmentedItem">
+    <Setter Property="MinHeight" Value="30" />
+    <Setter Property="Padding" Value="12,3" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRPill}" />
+    <Setter Property="Background" Value="{DynamicResource InsSurface}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
+    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
+      <Setter Property="LineHeight" Value="18" />
+    </Style>
+    <Style Selector="^ /template/ :is(Border)#PART_Outline">
+      <Setter Property="CornerRadius" Value="999" />
+    </Style>
+    <Style Selector="^:pointerover">
+      <Setter Property="BorderBrush" Value="{DynamicResource InsChipHoverBorder}" />
+      <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+      <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+    </Style>
+    <Style Selector="^:selected, ^:selected:pointerover">
+      <Setter Property="BorderBrush" Value="{DynamicResource InsToneBrandBd}" />
+      <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+      <Setter Property="Foreground" Value="{DynamicResource InsChipOnFg}" />
+      <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="BoxShadow" Value="{DynamicResource InsBevelDim}" />
+      </Style>
+    </Style>
+  </Style>
 
   <!-- While the face is in flight the chosen segment draws none of its own. -->
   <Style Selector="ins|Segmented.moving ins|SegmentedItem:selected">

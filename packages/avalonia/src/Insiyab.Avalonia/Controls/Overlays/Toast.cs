@@ -31,7 +31,7 @@ public enum ToastClose
     Button,
 }
 
-/// <summary>The web's <c>Insiyab.toast(text, tone)</c>: a short message in the bottom corner on the end side of the window, newest nearest the edge, that leaves on its own after five seconds, or, with <see cref="CloseProperty"/> set to <see cref="ToastClose.Button"/> (an error's default), stays until its × is pressed; a click on its body does nothing. Hovering or focusing a toast holds the timer; <see cref="FocusGesture"/> (F8) moves focus to the toasts and back, the arrows walk them, and Enter, Space, Delete or Escape dismisses one. At a phone's width the strip spans the bottom. It is Avalonia's own <see cref="WindowNotificationManager"/> and <see cref="NotificationCard"/>, themed, one manager per window, above any open dialog. On a button, <see cref="TextProperty"/> and <see cref="ToneProperty"/> show one on each click, as <c>data-ins-toast</c>.</summary>
+/// <summary>The web's <c>Insiyab.toast(text, tone)</c>: a short message in the bottom corner on the end side of the window, newest nearest the edge, that leaves on its own after five seconds, or, with <see cref="CloseProperty"/> set to <see cref="ToastClose.Button"/> (an error's default), stays until its × is pressed; a click on its body does nothing. Hovering or focusing a toast holds the timer; <see cref="FocusGesture"/> (F8) moves focus to the toasts and back, the arrows walk them, and Enter, Space, Delete or Escape dismisses one. At a phone's width the strip spans the bottom, above a bottom navigation bar or a status bar at the foot. It is Avalonia's own <see cref="WindowNotificationManager"/> and <see cref="NotificationCard"/>, themed, one manager per window, above any open dialog. On a button, <see cref="TextProperty"/> and <see cref="ToneProperty"/> show one on each click, as <c>data-ins-toast</c>.</summary>
 public static class Toast
 {
     public static readonly AttachedProperty<string?> TextProperty =
@@ -144,20 +144,21 @@ internal sealed class ToastStrip
         if (OverlayHost.Top(anchor) is { } top && Strips.TryGetValue(top, out var strip)) strip.Fit();
     }
 
-    // At a phone width the strip spans the bottom, clear of the system bars, the cutouts, the keyboard and a status bar along the window's foot.
+    // At a phone width the strip spans the bottom, clear of the system bars, the cutouts, the keyboard and a status bar or a bottom navigation bar along the window's foot.
     private void Fit()
     {
         OverlayHost.SetClass(Manager.Classes, "phone", OverlayHost.IsPhone(_top));
         var covered = Insets.For(_top).Covered;
         var (left, right) = Manager.FlowDirection == FlowDirection.RightToLeft ? (covered.Right, covered.Left) : (covered.Left, covered.Right);
-        Manager.Margin = new Thickness(left, covered.Top, right, Math.Max(covered.Bottom, StatusRoom()));
+        Manager.Margin = new Thickness(left, covered.Top, right, Math.Max(covered.Bottom, FootRoom()));
     }
 
-    private double StatusRoom()
+    // The height of the bars that run along the window's foot; a bottom bar's ground under the gesture bar is counted with it.
+    private double FootRoom()
     {
         var room = 0d;
         var height = _top.Bounds.Height;
-        foreach (var bar in _top.GetVisualDescendants().OfType<StatusBar>())
+        foreach (var bar in _top.GetVisualDescendants().OfType<Control>().Where(c => c is StatusBar or BottomNav))
         {
             if (!bar.IsEffectivelyVisible || bar.TranslatePoint(default, _top) is not { } at) continue;
             if (height - (at.Y + bar.Bounds.Height) <= 1) room = Math.Max(room, height - at.Y);

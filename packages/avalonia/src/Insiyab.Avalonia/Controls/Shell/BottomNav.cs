@@ -7,6 +7,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Threading;
 
 namespace Insiyab.Avalonia.Controls;
 
@@ -22,6 +23,7 @@ public class BottomNav : SelectingItemsControl
 
     private Border? _flight;
     private MarkerFlight? _run;
+    private TopLevel? _top;
 
     static BottomNav()
     {
@@ -70,6 +72,22 @@ public class BottomNav : SelectingItemsControl
         base.OnPropertyChanged(change);
         if (change.Property == SelectedIndexProperty)
             Fly(change.GetOldValue<int>(), change.GetNewValue<int>());
+        else if (change.Property == BoundsProperty || change.Property == IsVisibleProperty)
+            ToastStrip.Refit(this);
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        _top = TopLevel.GetTopLevel(this);
+    }
+
+    // Toasts at the foot sit above the bar, and come back down when it goes.
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        if (_top is { } top) Dispatcher.UIThread.Post(() => ToastStrip.Refit(top));
+        _top = null;
     }
 
     protected override void OnKeyDown(KeyEventArgs e)

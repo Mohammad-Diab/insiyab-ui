@@ -130,9 +130,10 @@
                        MaxHeight="544"
                        Margin="16,96,16,16"
                        KeyboardNavigation.TabNavigation="Cycle">
-                  <ins:TemplateBorder CornerRadius="{DynamicResource InsRXl}" BoxShadow="{DynamicResource InsShLg}" />
-                  <ins:TemplateBorder FlowDirection="LeftToRight" CornerRadius="{DynamicResource InsRXl}" Background="{DynamicResource InsWash1}" />
-                  <ins:TemplateBorder FlowDirection="LeftToRight"
+                  <ins:TemplateBorder x:Name="PART_Shade" CornerRadius="{DynamicResource InsRXl}" BoxShadow="{DynamicResource InsShLg}" />
+                  <ins:TemplateBorder x:Name="PART_Wash" FlowDirection="LeftToRight" CornerRadius="{DynamicResource InsRXl}" Background="{DynamicResource InsWash1}" />
+                  <ins:TemplateBorder x:Name="PART_Glass"
+                          FlowDirection="LeftToRight"
                           CornerRadius="{DynamicResource InsRXl}"
                           BorderBrush="{DynamicResource InsRim}"
                           BorderThickness="1">
@@ -143,14 +144,18 @@
                       </LinearGradientBrush>
                     </ins:TemplateBorder.Background>
                   </ins:TemplateBorder>
-                  <ins:TemplateBorder CornerRadius="{DynamicResource InsRXl}" ClipToBounds="True" Margin="1">
+                  <ins:TemplateBorder x:Name="PART_Clip" CornerRadius="{DynamicResource InsRXl}" ClipToBounds="True" Margin="1">
                     <DockPanel>
                       <ins:TemplateBorder DockPanel.Dock="Top" Padding="13,13,13,8">
-                        <TextBox x:Name="PART_Input"
-                                 Theme="{StaticResource InsPaletteBox}"
-                                 PlaceholderText="{TemplateBinding PlaceholderText}" />
+                        <DockPanel>
+                          <!-- Full screen on a phone, a way out beside the field as well as Back -->
+                          <Button x:Name="PART_Close" Classes="close" DockPanel.Dock="Right" Margin="10,0,0,0" VerticalAlignment="Center" IsVisible="False" />
+                          <TextBox x:Name="PART_Input"
+                                   Theme="{StaticResource InsPaletteBox}"
+                                   PlaceholderText="{TemplateBinding PlaceholderText}" />
+                        </DockPanel>
                       </ins:TemplateBorder>
-                      <ins:PaletteBorder DockPanel.Dock="Bottom" Classes="palette-foot">
+                      <ins:PaletteBorder x:Name="PART_Foot" DockPanel.Dock="Bottom" Classes="palette-foot">
                         <WrapPanel ItemSpacing="20" LineSpacing="6">
                           <StackPanel Orientation="Horizontal" Spacing="4">
                             <Border Classes="kbd"><ins:PaletteText Classes="arrow" Text="↑" /></Border>
@@ -188,6 +193,38 @@
         </Setter>
         <Style Selector="^ /template/ Panel#PART_Dialog">
           <Setter Property="ins:PopMotion.FromAbove" Value="False" />
+        </Style>
+        <!-- Full screen on a phone: the page's whole room above the keyboard, square, no shadow or rim, no key hints, and a close button beside the field -->
+        <Style Selector="^:full">
+          <Style Selector="^ /template/ :is(Border)#PART_Backdrop">
+            <Setter Property="Background" Value="{DynamicResource InsWash1}" />
+          </Style>
+          <Style Selector="^ /template/ Panel#PART_Dialog">
+            <Setter Property="MaxWidth" Value="Infinity" />
+            <Setter Property="MaxHeight" Value="Infinity" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Shade">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Wash">
+            <Setter Property="CornerRadius" Value="0" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Glass">
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="BorderThickness" Value="0" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Clip">
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Margin" Value="0" />
+          </Style>
+          <Style Selector="^ /template/ ins|PaletteBorder#PART_Foot">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ Button#PART_Close">
+            <Setter Property="IsVisible" Value="True" />
+          </Style>
         </Style>
       </ControlTheme>
 

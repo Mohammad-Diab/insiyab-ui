@@ -185,6 +185,7 @@ internal static class Words
         ["palette.move"] = ("للتنقل", "to move"),
         ["palette.choose"] = ("للاختيار", "to choose"),
         ["palette.close"] = ("للإغلاق", "to close"),
+        ["palette.closeSearch"] = ("إغلاق البحث", "Close search"),
 
         ["shell.filter"] = ("بحث", "Search"),
         ["shell.filterEmpty"] = ("لا نتائج", "No results"),
