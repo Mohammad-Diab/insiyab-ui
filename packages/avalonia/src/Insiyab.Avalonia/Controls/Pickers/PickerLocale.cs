@@ -230,5 +230,13 @@ internal sealed class PickerLocale
         return $"{N(h12)}:{t.Minutes:00} {(h < 12 ? Am : Pm)}";
     }
 
+    /// <summary>An hour on the clock without its minutes, as a narrow column of hours writes it: "9 AM".</summary>
+    public string ShortHour(int hour)
+    {
+        var h = hour % 24;
+        var h12 = h % 12 == 0 ? 12 : h % 12;
+        return $"{N(h12)} {(h < 12 ? Am : Pm)}";
+    }
+
     public static string N(int n) => n.ToString(CultureInfo.InvariantCulture);
 }

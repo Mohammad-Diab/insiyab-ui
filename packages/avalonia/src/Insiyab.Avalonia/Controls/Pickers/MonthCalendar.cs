@@ -44,6 +44,28 @@ public enum MonthHeaderLayout
     TitleStart,
 }
 
+/// <summary>How a narrow <see cref="MonthCalendar"/> (under 544 wide) shows its events.</summary>
+public enum MonthNarrowLayout
+{
+    /// <summary>Compact on a phone (a single view), dots in a desktop window.</summary>
+    Auto,
+    /// <summary>A day of the month shows a dot for each event, as the web's month does.</summary>
+    Dots,
+    /// <summary>A day of the month shows two events, each one line cut with «…», then «+N» for the rest; the week and day views show each event's title alone in smaller text, beside a narrow column of hours.</summary>
+    Compact,
+}
+
+/// <summary>Where a <see cref="MonthCalendar"/> opens an event's details card.</summary>
+public enum MonthDetailsPresentation
+{
+    /// <summary>In a bottom sheet while the calendar is compact (see <see cref="MonthNarrowLayout"/>), else beside the event.</summary>
+    Auto,
+    /// <summary>Beside the event, growing out of it.</summary>
+    Beside,
+    /// <summary>In a bottom sheet, whatever the width.</summary>
+    Sheet,
+}
+
 /// <summary>One event in a <see cref="MonthCalendar"/>: its day, its words, and optionally its time, length, tone and link.</summary>
 public sealed class MonthEvent
 {
@@ -68,7 +90,7 @@ public sealed class MonthEvent
 
 /// <summary>The month calendar plugin (the web's <c>.ins-month</c>): a month as a table of weeks starting on the locale's first day, today marked, each day showing three events and a "+n" for the rest, dots instead of names when narrow, and a header that moves a month back, on, or to today. The desktop adds a week and a day view by the hour, the work hours only unless asked, with a switch between the three.</summary>
 [TemplatePart("PART_Host", typeof(Decorator))]
-[PseudoClasses(":narrow", ":month", ":week", ":day")]
+[PseudoClasses(":narrow", ":compact", ":month", ":week", ":day")]
 public class MonthCalendar : TemplatedControl, IWords
 {
     void IWords.Reword() => Draw();
@@ -112,13 +134,24 @@ public class MonthCalendar : TemplatedControl, IWords
     public static readonly StyledProperty<IDataTemplate?> EventDetailsProperty =
         AvaloniaProperty.Register<MonthCalendar, IDataTemplate?>(nameof(EventDetails));
 
+    public static readonly StyledProperty<MonthNarrowLayout> NarrowLayoutProperty =
+        AvaloniaProperty.Register<MonthCalendar, MonthNarrowLayout>(nameof(NarrowLayout));
+
+    public static readonly StyledProperty<MonthDetailsPresentation> DetailsPresentationProperty =
+        AvaloniaProperty.Register<MonthCalendar, MonthDetailsPresentation>(nameof(DetailsPresentation));
+
     // How far a turn's new days slide in from the side they come from.
     internal const double TurnSlide = 24;
 
     private const int Shown = 3;
+    private const int CompactShown = 2;
     private const double Shortest = 22;
     private Decorator? _host;
     private bool _narrow;
+    private bool _compact;
+    private Dialog? _sheet;
+    private Swipe? _swipe;
+    private FrameTween? _springBack;
     private bool _hold;
     private bool _syncSwitch;
     private readonly Dictionary<DateTime, Border> _cells = [];
@@ -152,6 +185,10 @@ public class MonthCalendar : TemplatedControl, IWords
     {
         Events = new AvaloniaList<MonthEvent>();
         AddHandler(KeyDownEvent, OnTurnKey, RoutingStrategies.Tunnel);
+        AddHandler(PointerPressedEvent, OnSwipePressed, RoutingStrategies.Tunnel, handledEventsToo: true);
+        AddHandler(PointerMovedEvent, OnSwipeMoved, RoutingStrategies.Tunnel, handledEventsToo: true);
+        AddHandler(PointerReleasedEvent, OnSwipeReleased, RoutingStrategies.Tunnel, handledEventsToo: true);
+        AddHandler(PointerCaptureLostEvent, OnSwipeLost, RoutingStrategies.Bubble, handledEventsToo: true);
     }
 
     /// <summary>Raised when the header moves to another month (the web's <c>ins:month</c>), with its first day.</summary>
@@ -206,8 +243,19 @@ public class MonthCalendar : TemplatedControl, IWords
     /// <summary>The header's order: <see cref="MonthHeaderLayout.Centered"/> (the default) or <see cref="MonthHeaderLayout.TitleStart"/>.</summary>
     public MonthHeaderLayout HeaderLayout { get => GetValue(HeaderLayoutProperty); set => SetValue(HeaderLayoutProperty, value); }
 
-    /// <summary>What an event's details card shows, built with the <see cref="MonthEvent"/> as its data; while set, every event can be pressed and opens its card beside its chip, growing out of it.</summary>
+    /// <summary>What an event's details card shows, built with the <see cref="MonthEvent"/> as its data; while set, every event can be pressed and opens its card beside its chip, growing out of it, or in a bottom sheet as <see cref="DetailsPresentation"/> says.</summary>
     public IDataTemplate? EventDetails { get => GetValue(EventDetailsProperty); set => SetValue(EventDetailsProperty, value); }
+
+    /// <summary>How the calendar shows its events while narrower than 544: <see cref="MonthNarrowLayout.Auto"/> (the default) is compact on a phone and dots in a desktop window.</summary>
+    public MonthNarrowLayout NarrowLayout { get => GetValue(NarrowLayoutProperty); set => SetValue(NarrowLayoutProperty, value); }
+
+    /// <summary>Where an event's details open: <see cref="MonthDetailsPresentation.Auto"/> (the default) uses a bottom sheet while the calendar is compact and the card beside the event otherwise.</summary>
+    public MonthDetailsPresentation DetailsPresentation { get => GetValue(DetailsPresentationProperty); set => SetValue(DetailsPresentationProperty, value); }
+
+    /// <summary>Whether the narrow calendar is in its compact form now (<c>:compact</c>).</summary>
+    internal bool IsCompact => _compact;
+
+    internal Dialog? DetailsSheet => _sheet;
 
     internal IReadOnlyDictionary<DateTime, Border> Cells => _cells;
 
@@ -241,7 +289,8 @@ public class MonthCalendar : TemplatedControl, IWords
         base.OnAttachedToVisualTree(e);
         _clock ??= new DispatcherTimer(TimeSpan.FromSeconds(30), DispatcherPriority.Background, (_, _) => Tick());
         _clock.Start();
-        if (_stale) Draw();
+        if (Compact()) Draw();
+        else if (_stale) Draw();
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
@@ -269,7 +318,7 @@ public class MonthCalendar : TemplatedControl, IWords
             || change.Property == WorkHoursOnlyProperty || change.Property == ShowHoursSwitchProperty || change.Property == HeaderLayoutProperty
             || change.Property == EventDetailsProperty)
             Draw();
-        else if (change.Property == BoundsProperty)
+        else if (change.Property == BoundsProperty || change.Property == NarrowLayoutProperty)
         {
             var narrow = Bounds.Width > 0 && Bounds.Width < 544;
             if (narrow != _narrow)
@@ -277,7 +326,24 @@ public class MonthCalendar : TemplatedControl, IWords
                 _narrow = narrow;
                 PseudoClasses.Set(":narrow", narrow);
             }
+            // The compact form shows other parts (two events and a pressable «+N», shorter names), so it is drawn again after this layout.
+            if (Compact()) Dispatcher.UIThread.Post(Draw, DispatcherPriority.Render);
         }
+    }
+
+    // Works out the compact form; true when it changed.
+    private bool Compact()
+    {
+        var compact = _narrow && NarrowLayout switch
+        {
+            MonthNarrowLayout.Compact => true,
+            MonthNarrowLayout.Dots => false,
+            _ => OverlayHost.Top(this) is { } top && top is not Window,
+        };
+        if (compact == _compact) return false;
+        _compact = compact;
+        PseudoClasses.Set(":compact", compact);
+        return true;
     }
 
     private void Hold(Action set)
@@ -427,9 +493,9 @@ public class MonthCalendar : TemplatedControl, IWords
                 Classes = { "month-head" },
                 Children =
                 {
-                    new MonthStack { Orientation = Orientation.Horizontal, Spacing = 4, Classes = { "month-nav" } },
+                    new MonthStack { Orientation = Orientation.Horizontal, Spacing = 4, Wraps = true, Classes = { "month-nav" } },
                     new MonthStack { Orientation = Orientation.Horizontal, Classes = { "month-middle" } },
-                    new MonthStack { Orientation = Orientation.Horizontal, Spacing = 4, Classes = { "month-end" } },
+                    new MonthStack { Orientation = Orientation.Horizontal, Spacing = 4, Wraps = true, AtEnd = true, Classes = { "month-end" } },
                 },
             };
             foreach (var group in _head.Children) KeyboardNavigation.SetTabNavigation(group, KeyboardNavigationMode.Local);
@@ -499,6 +565,7 @@ public class MonthCalendar : TemplatedControl, IWords
             _switch!.Margin = new Thickness(0, 0, 8, 0);
             start.Children.Add(_title!);
             end.Children.AddRange([_hours, _switch, _prev!, _today!, _next!]);
+            ((MonthStack)end).KeepLast = 3;
             middle.IsVisible = false;
             return;
         }
@@ -507,6 +574,7 @@ public class MonthCalendar : TemplatedControl, IWords
         start.Children.AddRange([_today!, _hours]);
         middle.Children.AddRange([_prev!, _title!, _next!]);
         end.Children.Add(_switch);
+        ((MonthStack)end).KeepLast = 0;
         middle.IsVisible = true;
     }
 
@@ -542,7 +610,7 @@ public class MonthCalendar : TemplatedControl, IWords
         for (var d = 0; d < 7; d++)
         {
             var wd = (DayOfWeek)((start + d) % 7);
-            var th = new MonthText { Text = words.ShortDay(wd), Classes = { "month-wd" } };
+            var th = new MonthText { Text = _compact ? words.Narrow(wd) : words.ShortDay(wd), Classes = { "month-wd" } };
             AutomationProperties.SetName(th, words.LongDay(wd));
             Grid.SetColumn(th, d);
             grid.Children.Add(th);
@@ -578,17 +646,19 @@ public class MonthCalendar : TemplatedControl, IWords
         if (list.Count > 0)
         {
             var events = new MonthStack { Spacing = 2, Classes = { "month-events" } };
-            foreach (var ev in list.Take(list.Count > Shown ? Shown - 1 : Shown))
+            // Wide, three lines with the last one counting the rest; compact, two events and the count under them.
+            var take = _compact ? Math.Min(CompactShown, list.Count) : list.Count > Shown ? Shown - 1 : Shown;
+            foreach (var ev in list.Take(take))
             {
                 var chip = Chip(words, ev);
                 events.Children.Add(chip);
                 if (chip is Border shown) _chips.TryAdd(ev, shown);
             }
-            if (list.Count > Shown)
+            if (list.Count > take)
             {
-                var more = new MonthText { Text = "+" + PickerLocale.N(list.Count - Shown + 1), Classes = { "month-more" } };
-                ToolTip.SetTip(more, string.Join("، ", list.Skip(Shown - 1).Select(e => e.Title)));
-                events.Children.Add(more);
+                var more = new MonthText { Text = "+" + PickerLocale.N(list.Count - take), Classes = { "month-more" } };
+                ToolTip.SetTip(more, string.Join("، ", list.Skip(take).Select(e => e.Title)));
+                events.Children.Add(_compact ? More(words, day, list.Count, more) : more);
             }
             stack.Children.Add(events);
             var dots = new MonthStack { Orientation = Orientation.Horizontal, Spacing = 3, Classes = { "month-dots" } };
@@ -604,6 +674,20 @@ public class MonthCalendar : TemplatedControl, IWords
             DayInvoked?.Invoke(this, day);
         };
         return cell;
+    }
+
+    // The compact «+N»: a key stop that opens the whole day as a press on it does, named by the day and all its events.
+    private MonthBorder More(PickerLocale words, DateTime day, int count, MonthText text)
+    {
+        var more = new MonthBorder { Child = text, Classes = { "month-more-link" }, Focusable = true };
+        AutomationProperties.SetName(more, DayName(words, day) + (words.IsArabic ? "، " : ", ") + Count(words, count));
+        more.KeyDown += (_, e) =>
+        {
+            if (e.Key is not (Key.Enter or Key.Space)) return;
+            e.Handled = true;
+            DayInvoked?.Invoke(this, day);
+        };
+        return more;
     }
 
     private static string DayName(PickerLocale words, DateTime day) =>
@@ -635,7 +719,7 @@ public class MonthCalendar : TemplatedControl, IWords
         // the hour lines are drawn by each day's DayTimeline, broken under its events (an event's tint is see-through)
         var gutter = new MonthStack { Classes = { "week-hours" } };
         for (var h = startH; h < endH; h++)
-            gutter.Children.Add(new MonthBorder { Height = hourH, Classes = { "week-hour-cell" }, Child = new MonthText { Text = words.FormatTime(new TimeSpan(h, 0, 0)), Classes = { "week-hour" } } });
+            gutter.Children.Add(new MonthBorder { Height = hourH, Classes = { "week-hour-cell" }, Child = new MonthText { Text = _compact ? words.ShortHour(h) : words.FormatTime(new TimeSpan(h, 0, 0)), Classes = { "week-hour" } } });
         Grid.SetRow(gutter, 1);
         body.Children.Add(gutter);
 
@@ -651,7 +735,7 @@ public class MonthCalendar : TemplatedControl, IWords
             var list = byDay.TryGetValue(day, out var l) ? l : [];
             var isToday = day == today;
 
-            var name = new MonthText { Text = words.ShortDay(day.DayOfWeek), Classes = { "week-wd" } };
+            var name = new MonthText { Text = _compact && days > 1 ? words.Narrow(day.DayOfWeek) : words.ShortDay(day.DayOfWeek), Classes = { "week-wd" } };
             var num = new MonthBorder { Child = new MonthText { Text = PickerLocale.N(day.Day) }, Classes = { "month-num" } };
             var head = new MonthBorder { Child = new MonthStack { Children = { name, num } }, Classes = { "week-head" }, Tag = day };
             AutomationProperties.SetName(head, words.FullDay(PickerCalendar.Gregorian, day));
@@ -760,7 +844,7 @@ public class MonthCalendar : TemplatedControl, IWords
     {
         var row = after ? 2 : 0;
         var kind = after ? "after" : "before";
-        var at = words.FormatTime(TimeSpan.FromHours(hour));
+        var at = _compact ? words.ShortHour(hour) : words.FormatTime(TimeSpan.FromHours(hour));
         var label = words.Words.Format(after ? "month.after" : "month.before", at);
         var gutter = new MonthBorder { Classes = { "week-band-gutter", kind }, Child = new MonthText { Text = label, Classes = { "week-band-label" } } };
         Grid.SetRow(gutter, row);
@@ -938,7 +1022,7 @@ public class MonthCalendar : TemplatedControl, IWords
     private Control Chip(PickerLocale words, MonthEvent ev)
     {
         var row = new DockPanel();
-        if (ev.Time is { } t)
+        if (ev.Time is { } t && !_compact)
         {
             var time = new MonthText { Text = words.FormatTime(t), Classes = { "month-time" } };
             DockPanel.SetDock(time, Dock.Left);
@@ -999,7 +1083,7 @@ public class MonthCalendar : TemplatedControl, IWords
     {
         EventInvoked?.Invoke(this, ev);
         if (EventDetails is null) return;
-        if (_card is { IsOpen: true } card && _cardEvent == ev && _cardAnchor == chip)
+        if (!InSheet && _card is { IsOpen: true } card && _cardEvent == ev && _cardAnchor == chip)
         {
             if (!card.Grow.IsShrinking) card.Hide();
             return;
@@ -1007,7 +1091,7 @@ public class MonthCalendar : TemplatedControl, IWords
         Open(ev, chip);
     }
 
-    /// <summary>Opens the event's details card (<see cref="EventDetails"/>) beside its chip, growing out of it; when the event is not drawn, beside its day, or else the calendar. Nothing opens while <see cref="EventDetails"/> is unset.</summary>
+    /// <summary>Opens the event's details card (<see cref="EventDetails"/>) beside its chip, growing out of it (when the event is not drawn, beside its day, or else the calendar), or in a bottom sheet as <see cref="DetailsPresentation"/> says. Nothing opens while <see cref="EventDetails"/> is unset.</summary>
     public void ShowDetails(MonthEvent ev)
     {
         if (EventDetails is null) return;
@@ -1015,12 +1099,32 @@ public class MonthCalendar : TemplatedControl, IWords
         Open(ev, anchor);
     }
 
-    /// <summary>Closes the details card, shrinking it back into its event.</summary>
-    public void HideDetails() => _card?.Hide();
+    /// <summary>Closes the details card, shrinking it back into its event, or the sheet.</summary>
+    public void HideDetails()
+    {
+        _card?.Hide();
+        _sheet?.Close();
+    }
+
+    // The details go in a sheet when asked, or by default while the calendar is compact.
+    private bool InSheet => DetailsPresentation == MonthDetailsPresentation.Sheet || DetailsPresentation == MonthDetailsPresentation.Auto && _compact;
 
     private void Open(MonthEvent ev, Control anchor)
     {
         if (EventDetails?.Build(ev) is not { } view) return;
+        if (InSheet)
+        {
+            _card?.HideNow();
+            var sheet = _sheet ??= new Dialog { Classes = { "drawer", "bottom", "sheet", "month-details" } };
+            sheet.Close();
+            view.DataContext = ev;
+            _cardEvent = ev;
+            _cardAnchor = anchor;
+            sheet.FlowDirection = FlowDirection;
+            sheet.Content = view;
+            sheet.Open(anchor.IsAttachedToVisualTree() ? anchor : this);
+            return;
+        }
         var card = _card ??= MakeCard();
         card.HideNow();
         view.DataContext = ev;
@@ -1067,6 +1171,102 @@ public class MonthCalendar : TemplatedControl, IWords
         if (e.Key != Key.Escape || _card is not { IsOpen: true } card) return;
         e.Handled = true;
         card.Hide();
+    }
+
+    // How far a finger goes before a swipe picks its direction (under the scroller's own start), how far the days follow it, and how far or fast a swipe must go to turn.
+    internal const double SwipeDecide = 4;
+    internal const double SwipeFollow = 48;
+    internal const double SwipeTurn = 64;
+    internal const double SwipeFling = 400;
+
+    // A finger swiped sideways over the days turns to the next or the previous month, week or day: toward the start for the next, mirrored in RTL as the days come in from the end.
+    private sealed class Swipe(IPointer pointer, Point start, ulong time)
+    {
+        public IPointer Pointer { get; } = pointer;
+        public Point Start { get; } = start;
+        public bool Dragging { get; set; }
+        public Point Last { get; set; } = start;
+        public ulong LastTime { get; set; } = time;
+        public double Velocity { get; set; }
+        public Control? Body { get; set; }
+    }
+
+    private void OnSwipePressed(object? sender, PointerPressedEventArgs e)
+    {
+        _swipe = null;
+        if (e.Pointer.Type != PointerType.Touch || Body is not { } body || e.Source is not Visual source || !(body == source || body.IsVisualAncestorOf(source))) return;
+        // A swipe from a page stack's start edge is the page going back, not the calendar turning.
+        if (this.FindAncestorOfType<PageStack>() is { CanGoBack: true } pages && e.GetPosition(pages).X <= PageStack.EdgeWidth) return;
+        _swipe = new Swipe(e.Pointer, e.GetPosition(this), e.Timestamp);
+    }
+
+    private void OnSwipeMoved(object? sender, PointerEventArgs e)
+    {
+        if (_swipe is not { } s || s.Pointer != e.Pointer) return;
+        var at = e.GetPosition(this);
+        var d = at - s.Start;
+        if (!s.Dragging)
+        {
+            if (Math.Max(Math.Abs(d.X), Math.Abs(d.Y)) < SwipeDecide) return;
+            if (Math.Abs(d.X) <= Math.Abs(d.Y) || e.Pointer.Captured is Visual other && other != this && !this.IsVisualAncestorOf(other) || Body is not { } body)
+            {
+                _swipe = null;
+                return;
+            }
+            s.Dragging = true;
+            s.Body = body;
+            _springBack?.Stop();
+            e.Pointer.Capture(this);
+        }
+        e.PreventGestureRecognition();
+        e.Handled = true;
+        var dt = e.Timestamp > s.LastTime ? (e.Timestamp - s.LastTime) / 1000.0 : 0;
+        if (dt > 0) s.Velocity = (at.X - s.Last.X) / dt;
+        s.Last = at;
+        s.LastTime = e.Timestamp;
+        Follow(s.Body, d.X);
+    }
+
+    // The days lean after the finger, less the further it goes, and fade a little, as the turn's own slide begins.
+    private static void Follow(Control? body, double dx)
+    {
+        if (body is null) return;
+        var x = SwipeFollow * dx / (Math.Abs(dx) + SwipeFollow * 2);
+        body.RenderTransform = new TranslateTransform(x, 0);
+        body.Opacity = 1 - Math.Abs(x) / SwipeFollow * 0.4;
+    }
+
+    private void OnSwipeReleased(object? sender, PointerReleasedEventArgs e)
+    {
+        if (_swipe is not { Dragging: true } s || s.Pointer != e.Pointer) return;
+        e.Handled = true;
+        var dx = e.GetPosition(this).X - s.Start.X;
+        var turn = Math.Abs(dx) >= Math.Min(SwipeTurn, Bounds.Width / 4) || Math.Abs(s.Velocity) >= SwipeFling && Math.Sign(s.Velocity) == Math.Sign(dx);
+        _swipe = null;
+        e.Pointer.Capture(null);
+        if (turn) Go(dx < 0 ? 1 : -1);
+        else SpringBack(s.Body);
+    }
+
+    private void OnSwipeLost(object? sender, PointerCaptureLostEventArgs e)
+    {
+        if (_swipe is not { Dragging: true } s || s.Pointer != e.Pointer) return;
+        _swipe = null;
+        SpringBack(s.Body);
+    }
+
+    // A swipe too short to turn eases the days back; at once while still.
+    private void SpringBack(Control? body)
+    {
+        if (body is null) return;
+        var x = body.RenderTransform is TranslateTransform t ? t.X : 0;
+        var opacity = body.Opacity;
+        _springBack?.Stop();
+        _springBack = FrameTween.Run(this, Motion.Enter(this), Motion.Ease(this), k =>
+        {
+            body.RenderTransform = k >= 1 ? null : new TranslateTransform(x * (1 - k), 0);
+            body.Opacity = k >= 1 ? 1 : opacity + (1 - opacity) * k;
+        });
     }
 }
 
