@@ -200,6 +200,7 @@ internal static class Words
         ["toolbar.moreOptions"] = ("خيارات أخرى", "More options"),
         ["tabs.close"] = ("إغلاق التبويب", "Close tab"),
         ["tabs.new"] = ("تبويب جديد", "New tab"),
+        ["nav.new"] = ("جديد", "New"),
 
         ["wizard.previous"] = ("السابق", "Previous"),
         ["wizard.next"] = ("التالي", "Next"),

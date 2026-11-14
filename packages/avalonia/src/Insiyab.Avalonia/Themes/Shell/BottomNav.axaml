@@ -1,0 +1,148 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <!-- The top bar's frost turned upward: a bright line, then a soft drop over the page above -->
+        <ResourceDictionary x:Key="Light">
+          <BoxShadows x:Key="InsBottomNavShadow">inset 0 1 0 0 #66FFFFFF, 0 -4 16 0 #0F0F172A</BoxShadows>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <BoxShadows x:Key="InsBottomNavShadow">inset 0 1 0 0 #1AFFFFFF, 0 -4 16 0 #61000000</BoxShadows>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- A frosted strip at the foot: the glass ground let a little through, a hairline on top, its items above the gesture bar -->
+      <ControlTheme x:Key="{x:Type ins:BottomNav}" TargetType="ins:BottomNav">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Padding" Value="4,0" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="ins:SafeArea.Edges" Value="Left,Right,Bottom" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <ins:TemplateBorder Name="PART_Ground"
+                                  Background="{DynamicResource InsGlassStrongGround}"
+                                  BorderBrush="{DynamicResource InsLine}"
+                                  BorderThickness="0,1,0,0"
+                                  BoxShadow="{DynamicResource InsBottomNavShadow}"
+                                  Opacity="0.92" />
+              <Panel Margin="{TemplateBinding Padding}">
+                <Canvas IsHitTestVisible="False">
+                  <ins:TemplateBorder x:Name="PART_Flight"
+                                      CornerRadius="16"
+                                      Background="{DynamicResource InsToneBrandBg}"
+                                      IsVisible="False" />
+                </Canvas>
+                <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+              </Panel>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:BottomNavItem}" TargetType="ins:BottomNavItem">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+        <Setter Property="MinHeight" Value="68" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel Background="{TemplateBinding Background}">
+              <ins:TemplateBorder Name="PART_FocusRing" Margin="4,6" CornerRadius="{DynamicResource InsRMd}" BoxShadow="{DynamicResource InsFocusRing}" Opacity="0" />
+              <StackPanel Spacing="4" Margin="0,8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Panel Width="64" Height="32" HorizontalAlignment="Center">
+                  <ins:TemplateBorder Name="PART_Hover" CornerRadius="16" Background="{DynamicResource InsCtlBgHover}" Opacity="0" />
+                  <ins:TemplateBorder Name="PART_Pill" CornerRadius="16" Background="{DynamicResource InsToneBrandBg}" Opacity="0" />
+                  <ins:Icon Name="PART_Icon" Data="{TemplateBinding Icon}" Size="24" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  <ins:TemplateBorder Name="PART_Badge"
+                                      HorizontalAlignment="Left" VerticalAlignment="Top"
+                                      Margin="35,-2,0,0" MinWidth="16" Height="16" Padding="4,0"
+                                      CornerRadius="8"
+                                      Background="{DynamicResource InsNotifyCountBg}"
+                                      BorderBrush="{DynamicResource InsGlassStrongGround}" BorderThickness="1.5"
+                                      IsVisible="False">
+                    <ins:TemplateText Text="{TemplateBinding BadgeText}"
+                                      FontFamily="{DynamicResource InsFontBodyEn}"
+                                      FontSize="10" FontWeight="Bold" Foreground="White"
+                                      FlowDirection="LeftToRight"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </ins:TemplateBorder>
+                  <ins:TemplateBorder Name="PART_Dot"
+                                      HorizontalAlignment="Left" VerticalAlignment="Top"
+                                      Margin="38,2,0,0" Width="9" Height="9" CornerRadius="5"
+                                      Background="{DynamicResource InsNotifyCountBg}"
+                                      BorderBrush="{DynamicResource InsGlassStrongGround}" BorderThickness="1.5"
+                                      IsVisible="False" />
+                </Panel>
+                <ins:TemplateText Name="PART_Label"
+                                  Text="{TemplateBinding Label}"
+                                  FontSize="{DynamicResource InsFsXs}"
+                                  FontWeight="SemiBold"
+                                  Foreground="{TemplateBinding Foreground}"
+                                  HorizontalAlignment="Center"
+                                  TextTrimming="CharacterEllipsis"
+                                  MaxLines="1" />
+              </StackPanel>
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ :is(Border)#PART_Hover">
+          <Setter Property="Transitions">
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
+            </Transitions>
+          </Setter>
+        </Style>
+        <Style Selector="^:pointerover /template/ :is(Border)#PART_Hover, ^:pressed /template/ :is(Border)#PART_Hover">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:pointerover">
+          <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+        </Style>
+        <Style Selector="^:selected">
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+          <Style Selector="^ /template/ :is(Border)#PART_Pill">
+            <Setter Property="Opacity" Value="1" />
+          </Style>
+          <Style Selector="^ /template/ :is(Border)#PART_Hover">
+            <Setter Property="Opacity" Value="0" />
+          </Style>
+          <Style Selector="^ /template/ :is(TextBlock)#PART_Label">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+          </Style>
+        </Style>
+        <Style Selector="^:badge /template/ :is(Border)#PART_Badge">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:dot /template/ :is(Border)#PART_Dot">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ :is(Border)#PART_FocusRing">
+          <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:disabled">
+          <Setter Property="Opacity" Value="0.5" />
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- While the pill flies the chosen item draws none of its own -->
+  <Style Selector="ins|BottomNav.moving ins|BottomNavItem:selected /template/ :is(Border)#PART_Pill">
+    <Setter Property="Opacity" Value="0" />
+  </Style>
+
+  <!-- Light effects: a solid strip, nothing shows through -->
+  <Style Selector=":is(TopLevel):ins-light ins|BottomNav /template/ :is(Border)#PART_Ground">
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+
+</Styles>

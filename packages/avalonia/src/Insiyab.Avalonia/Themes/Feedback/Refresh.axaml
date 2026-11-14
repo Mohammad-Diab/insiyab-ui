@@ -1,0 +1,64 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <BoxShadows x:Key="InsRefreshShadow">0 4 12 0 #1F0F172A, inset 0 1 0 0 #E6FFFFFF</BoxShadows>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <BoxShadows x:Key="InsRefreshShadow">0 4 12 0 #73000000, inset 0 1 0 0 #1AFFFFFF</BoxShadows>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- Pull to refresh: the brand spinner in its own small glass disc, brought down from the top by the pull; Avalonia's own turning content is left empty -->
+      <ControlTheme x:Key="{x:Type RefreshVisualizer}" TargetType="RefreshVisualizer">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+        <Setter Property="Height" Value="80" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Content">
+          <Template>
+            <Panel Width="0" Height="0" />
+          </Template>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Grid Name="PART_Root" Background="{TemplateBinding Background}">
+              <ins:RefreshDisc Name="PART_Disc">
+                <ins:RefreshArc />
+              </ins:RefreshDisc>
+            </Grid>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:RefreshDisc}" TargetType="ins:RefreshDisc">
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Background" Value="{DynamicResource InsGlassStrongGround}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BoxShadow" Value="{DynamicResource InsRefreshShadow}" />
+        <Setter Property="Opacity" Value="0" />
+        <Setter Property="ZIndex" Value="1" />
+      </ControlTheme>
+
+      <ControlTheme x:Key="{x:Type ins:RefreshArc}" TargetType="ins:RefreshArc">
+        <Setter Property="Width" Value="22" />
+        <Setter Property="Height" Value="22" />
+        <Setter Property="Thickness" Value="2.5" />
+        <Setter Property="Arc" Value="{DynamicResource InsPrimaryMid}" />
+        <Setter Property="Track" Value="{DynamicResource InsSpinnerTrack}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+</Styles>

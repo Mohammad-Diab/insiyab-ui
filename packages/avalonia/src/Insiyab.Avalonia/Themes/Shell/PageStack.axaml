@@ -1,0 +1,14 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <!-- Each page lies on the window's own wash, so the one under a moving page never shows through -->
+      <ControlTheme x:Key="{x:Type ins:PageStack}" TargetType="ins:PageStack">
+        <Setter Property="Background" Value="{DynamicResource InsWash1}" />
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+</Styles>
