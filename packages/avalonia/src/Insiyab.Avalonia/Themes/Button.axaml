@@ -184,7 +184,7 @@
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^.icon:pointerover:not(:disabled) /template/ ContentPresenter#PART_ContentPresenter">
+        <Style Selector="^.icon:pointerover:not(:disabled) /template/ ContentPresenter#PART_ContentPresenter, ^.fab:pointerover:not(:disabled) /template/ ContentPresenter#PART_ContentPresenter">
           <Setter Property="RenderTransform" Value="scale(1.15)" />
         </Style>
         <Style Selector="^ /template/ :is(Border)#PART_Shadow">
@@ -279,7 +279,7 @@
           </Style>
         </Style>
 
-        <Style Selector="^.primary">
+        <Style Selector="^.primary, ^.fab">
           <Setter Property="Background" Value="{DynamicResource InsButtonPrimaryFill}" />
           <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
           <Style Selector="^ /template/ :is(Border)#PART_Shadow">
@@ -291,6 +291,32 @@
           <Style Selector="^:pointerover:not(:disabled) /template/ :is(Border)#PART_Shadow, ^:focus-visible /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandLg}" />
           </Style>
+        </Style>
+
+        <!-- A floating action button: round, the brand's fill and a drop that lifts it off the page, its icon at 24px; it sits at the end of its container's foot until placed otherwise and rises above the bars, a bottom navigation bar and the keyboard on its own -->
+        <Style Selector="^.fab">
+          <Setter Property="Width" Value="56" />
+          <Setter Property="Height" Value="56" />
+          <Setter Property="MinHeight" Value="0" />
+          <Setter Property="Padding" Value="0" />
+          <Setter Property="CornerRadius" Value="28" />
+          <Setter Property="FontSize" Value="24" />
+          <Setter Property="HorizontalAlignment" Value="Right" />
+          <Setter Property="VerticalAlignment" Value="Bottom" />
+          <Setter Property="Margin" Value="16" />
+          <Setter Property="ins:FabLook.IsOn" Value="True" />
+          <Style Selector="^ /template/ :is(Border)#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandLg}" />
+          </Style>
+          <Style Selector="^:pressed /template/ :is(Border)#PART_Shadow">
+            <Setter Property="BoxShadow" Value="{DynamicResource InsShBrandMd}" />
+          </Style>
+        </Style>
+        <Style Selector="^.fab.sm">
+          <Setter Property="Width" Value="44" />
+          <Setter Property="Height" Value="44" />
+          <Setter Property="CornerRadius" Value="22" />
+          <Setter Property="FontSize" Value="20" />
         </Style>
 
         <!-- filled tones: the ink never changes, only the face -->
@@ -326,7 +352,7 @@
         </Style>
 
         <!-- the neutral and ghost sets share the control fill, the subtle drop and the dark sweep; a button with no variant class looks like secondary -->
-        <Style Selector="^.secondary, ^.ghost, ^.ghost-danger, ^.ghost-success, ^.ghost-warning, ^.ghost-info, ^:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.link):not(.close)">
+        <Style Selector="^.secondary, ^.ghost, ^.ghost-danger, ^.ghost-success, ^.ghost-warning, ^.ghost-info, ^:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.link):not(.close):not(.fab)">
           <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
           <Style Selector="^ /template/ :is(Border)#PART_Shadow">
             <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />
@@ -342,7 +368,7 @@
           </Style>
         </Style>
 
-        <Style Selector="^.secondary, ^:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.link):not(.close)">
+        <Style Selector="^.secondary, ^:not(.primary):not(.success):not(.danger):not(.warning):not(.info):not(.ghost):not(.ghost-danger):not(.ghost-success):not(.ghost-warning):not(.ghost-info):not(.bare):not(.link):not(.close):not(.fab)">
           <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
           <Style Selector="^:pointerover:not(:disabled), ^:focus-visible">
             <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
@@ -674,7 +700,7 @@
       </Transitions>
     </Setter>
   </Style>
-  <Style Selector=":is(Button):pointerover:not(.icon):not(:disabled) ins|Icon[(ins|NudgeLook.IsOff)=False]:not(.toolbar-icon):not(.toolbar-chevron):not(.notify-icon):not(.trail)">
+  <Style Selector=":is(Button):pointerover:not(.icon):not(.fab):not(:disabled) ins|Icon[(ins|NudgeLook.IsOff)=False]:not(.toolbar-icon):not(.toolbar-chevron):not(.notify-icon):not(.trail)">
     <Setter Property="Margin" Value="2,0,-2,0" />
   </Style>
 

@@ -73,7 +73,10 @@ public class BottomNav : SelectingItemsControl
         if (change.Property == SelectedIndexProperty)
             Fly(change.GetOldValue<int>(), change.GetNewValue<int>());
         else if (change.Property == BoundsProperty || change.Property == IsVisibleProperty)
+        {
             ToastStrip.Refit(this);
+            FabLook.Refit(this);
+        }
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -82,11 +85,15 @@ public class BottomNav : SelectingItemsControl
         _top = TopLevel.GetTopLevel(this);
     }
 
-    // Toasts at the foot sit above the bar, and come back down when it goes.
+    // Toasts and floating buttons at the foot sit above the bar, and come back down when it goes.
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        if (_top is { } top) Dispatcher.UIThread.Post(() => ToastStrip.Refit(top));
+        if (_top is { } top) Dispatcher.UIThread.Post(() =>
+        {
+            ToastStrip.Refit(top);
+            FabLook.Refit(top);
+        });
         _top = null;
     }
 

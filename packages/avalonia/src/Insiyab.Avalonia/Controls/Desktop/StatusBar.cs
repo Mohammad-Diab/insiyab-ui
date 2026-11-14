@@ -38,11 +38,15 @@ public class StatusBar : TemplatedControl
     /// <summary>The items on the end side.</summary>
     public global::Avalonia.Controls.Controls End { get; } = new();
 
-    // Toasts in the window's corner sit above the bar.
+    // Toasts in the window's corner and floating buttons at its foot sit above the bar.
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == BoundsProperty || change.Property == IsVisibleProperty) ToastStrip.Refit(this);
+        if (change.Property == BoundsProperty || change.Property == IsVisibleProperty)
+        {
+            ToastStrip.Refit(this);
+            FabLook.Refit(this);
+        }
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -54,7 +58,11 @@ public class StatusBar : TemplatedControl
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        if (_top is { } top) Dispatcher.UIThread.Post(() => ToastStrip.Refit(top));
+        if (_top is { } top) Dispatcher.UIThread.Post(() =>
+        {
+            ToastStrip.Refit(top);
+            FabLook.Refit(top);
+        });
         _top = null;
     }
 

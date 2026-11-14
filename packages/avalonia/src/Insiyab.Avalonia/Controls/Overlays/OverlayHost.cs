@@ -49,6 +49,19 @@ internal static class OverlayHost
         }
     }
 
+    // The height of the bars that run along the TopLevel's foot, a status bar or a bottom navigation bar; a bottom bar's ground under the gesture bar is counted with it.
+    public static double FootRoom(TopLevel top)
+    {
+        var room = 0d;
+        var height = top.Bounds.Height;
+        foreach (var bar in top.GetVisualDescendants().OfType<Control>().Where(c => c is StatusBar or BottomNav))
+        {
+            if (!bar.IsEffectivelyVisible || bar.TranslatePoint(default, top) is not { } at) continue;
+            if (height - (at.Y + bar.Bounds.Height) <= 1) room = Math.Max(room, height - at.Y);
+        }
+        return room;
+    }
+
     public static bool IsPhone(Visual visual)
     {
         var w = Width(visual);

@@ -150,20 +150,7 @@ internal sealed class ToastStrip
         OverlayHost.SetClass(Manager.Classes, "phone", OverlayHost.IsPhone(_top));
         var covered = Insets.For(_top).Covered;
         var (left, right) = Manager.FlowDirection == FlowDirection.RightToLeft ? (covered.Right, covered.Left) : (covered.Left, covered.Right);
-        Manager.Margin = new Thickness(left, covered.Top, right, Math.Max(covered.Bottom, FootRoom()));
-    }
-
-    // The height of the bars that run along the window's foot; a bottom bar's ground under the gesture bar is counted with it.
-    private double FootRoom()
-    {
-        var room = 0d;
-        var height = _top.Bounds.Height;
-        foreach (var bar in _top.GetVisualDescendants().OfType<Control>().Where(c => c is StatusBar or BottomNav))
-        {
-            if (!bar.IsEffectivelyVisible || bar.TranslatePoint(default, _top) is not { } at) continue;
-            if (height - (at.Y + bar.Bounds.Height) <= 1) room = Math.Max(room, height - at.Y);
-        }
-        return room;
+        Manager.Margin = new Thickness(left, covered.Top, right, Math.Max(covered.Bottom, OverlayHost.FootRoom(_top)));
     }
 
     public void Show(string text, ToastTone tone, TimeSpan? duration, ToastClose? close, FlowDirection direction)
