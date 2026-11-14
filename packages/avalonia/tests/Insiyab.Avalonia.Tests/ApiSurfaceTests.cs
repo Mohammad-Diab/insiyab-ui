@@ -21,6 +21,7 @@ public class ApiSurfaceTests
         "Controls.ChoiceDialog", "Controls.ChoicePickedEventArgs", "Controls.ChoicePicker", "Controls.Gutter", "Controls.GutterSides",
         "Controls.NotifyAreaBalloonEventArgs", "Controls.NotifyAreaIcon", "Controls.NotifyAreaLevel", "Controls.NotifyAreaMenuItem",
         "Controls.SafeArea", "Controls.SafeAreaEdges", "EffectsLevel",
+        "Controls.BottomNav", "Controls.BottomNavItem", "Controls.PageStack", "Controls.PageStackChange", "Controls.PageStackChangedEventArgs",
     ];
 
     private static IEnumerable<Type> Exported() =>
