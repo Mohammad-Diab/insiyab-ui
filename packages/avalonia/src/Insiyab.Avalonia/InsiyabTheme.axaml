@@ -34,6 +34,7 @@
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Plugins.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Desktop.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Foundation/Still.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Foundation/Light.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Foundation/Inactive.axaml" />
 
 </Styles>

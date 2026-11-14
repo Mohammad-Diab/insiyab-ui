@@ -1,0 +1,15 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <!-- Light effects: no OS material behind the window, its own ground instead -->
+  <Style Selector=":is(Window):ins-light">
+    <Setter Property="TransparencyLevelHint" Value="None" />
+  </Style>
+
+  <!-- Light effects: the tab line keeps its bar and drops the blurred glow under it -->
+  <Style Selector=":is(TopLevel):ins-light TabItem /template/ :is(Border)#PART_PipeGlow, :is(TopLevel):ins-light TabStripItem /template/ :is(Border)#PART_PipeGlow">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+
+</Styles>
