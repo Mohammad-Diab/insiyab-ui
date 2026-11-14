@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The gallery on Android: the desktop gallery's pages and shell, built from its own files, in a single view. -->
+  <PropertyGroup>
+    <!-- 36.1 is the Android platform installed here; with API 36 installed, plain net10.0-android builds the same. -->
+    <TargetFramework>net10.0-android36.1</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <SupportedOSPlatformVersion>26</SupportedOSPlatformVersion>
+    <AssemblyName>Insiyab.Avalonia.Gallery</AssemblyName>
+    <RootNamespace>Insiyab.Avalonia.Gallery</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <ApplicationId>io.github.mohammaddiab.insiyab.gallery</ApplicationId>
+    <ApplicationTitle>انسياب</ApplicationTitle>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <GalleryDir>$(MSBuildThisFileDirectory)..\Insiyab.Avalonia.Gallery\</GalleryDir>
+  </PropertyGroup>
+
+  <!-- The playground builds XAML at run time, which reads these assemblies by reflection, so a trimmed build keeps them whole. -->
+  <ItemGroup>
+    <TrimmerRootAssembly Include="Insiyab.Avalonia" RootMode="All" />
+    <TrimmerRootAssembly Include="Avalonia.Base" RootMode="All" />
+    <TrimmerRootAssembly Include="Avalonia.Controls" RootMode="All" />
+    <TrimmerRootAssembly Include="Avalonia.Markup" RootMode="All" />
+    <TrimmerRootAssembly Include="Avalonia.Markup.Xaml" RootMode="All" />
+    <TrimmerRootAssembly Include="Avalonia.Markup.Xaml.Loader" RootMode="All" />
+  </ItemGroup>
+
+  <!-- The gallery's files are written against Avalonia's names, which Android's implicit usings would shadow (Application, Button). -->
+  <ItemGroup>
+    <Using Remove="Android.App" />
+    <Using Remove="Android.Widget" />
+    <Using Remove="Bundle" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="$(GalleryDir)**\*.cs" Exclude="$(GalleryDir)bin\**;$(GalleryDir)obj\**;$(GalleryDir)Program.cs" LinkBase="Gallery" />
+    <AvaloniaXaml Include="$(GalleryDir)**\*.axaml" Exclude="$(GalleryDir)bin\**;$(GalleryDir)obj\**" Link="%(RecursiveDir)%(Filename)%(Extension)" />
+    <AvaloniaResource Include="$(GalleryDir)Assets\gallery.ico" Link="Assets\gallery.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="$(AvaloniaVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Insiyab.Avalonia\Insiyab.Avalonia.csproj" />
+  </ItemGroup>
+
+</Project>
