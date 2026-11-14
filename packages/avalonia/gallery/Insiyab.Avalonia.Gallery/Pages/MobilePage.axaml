@@ -17,7 +17,7 @@
 
   <StackPanel>
 
-    <TextBlock Classes="p" Text="تعمل المكتبة على أندرويد في عرض واحد بالشكل نفسه: الزجاج والظلال والحركة. وتضيف ما يحتاجه الهاتف: إبعاد المحتوى عن أشرطة النظام ولوحة المفاتيح، وزر الرجوع، ومؤثرات أخف للأجهزة الضعيفة." />
+    <TextBlock Classes="p" Text="تعمل المكتبة على أندرويد في عرض واحد بالشكل نفسه: الزجاج والظلال والحركة. وتضيف ما يحتاجه الهاتف: إبعاد المحتوى عن أشرطة النظام ولوحة المفاتيح، وزر الرجوع، واللمس بالإصبع، ومؤثرات أخف للأجهزة الضعيفة." />
 
     <TextBlock Classes="section" Text="الحواف الآمنة" />
     <pg:PlayText Classes="p" Markup="يغطي شريط الحالة وشريط التنقل ونتوء الكاميرا أطراف الشاشة. ضع `ins:SafeArea.Edges` على عنصر فيبتعد محتواه عنها، وتبقى خلفيته ممتدة إلى حافة الشاشة. وتتغير المسافة وحدها حين يدور الهاتف." />
@@ -50,6 +50,41 @@
       </StackPanel>
     </Border>
     <pg:PlayText Classes="p" Markup="يصل الرجوع إلى `TopLevel.BackRequested` في التطبيق حين لا يأخذه شيء من المكتبة، فينتقل به إلى الصفحة السابقة أو يتركه للنظام." />
+
+    <TextBlock Classes="section" Text="اللمس" />
+    <TextBlock Classes="p" Text="تعمل عناصر المكتبة بالإصبع كما تعمل بالفأرة، وتفرق بينهما في السلوك وحده، فالشكل والحركة كما هما." />
+    <Border Classes="dx">
+      <StackPanel Spacing="16" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center">
+          <Button Classes="ghost icon sm" ToolTip.Tip="مشاركة" AutomationProperties.Name="مشاركة" Click="OnTouchAction">
+            <ins:Icon Data="{StaticResource IconShare}" />
+          </Button>
+          <Button Classes="ghost icon sm" ToolTip.Tip="نسخ" AutomationProperties.Name="نسخ" Click="OnTouchAction">
+            <ins:Icon Data="{StaticResource IconCopy}" />
+          </Button>
+          <Button Classes="ghost icon sm" ToolTip.Tip="حذف" AutomationProperties.Name="حذف" Click="OnTouchAction">
+            <ins:Icon Data="{StaticResource IconTrash}" />
+          </Button>
+          <Button Classes="close sm" ToolTip.Tip="إغلاق" AutomationProperties.Name="إغلاق" VerticalAlignment="Center" Click="OnTouchAction" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
+          <ins:Pill Classes="ok dot peek" Content="تم الشحن" />
+          <ToggleButton Classes="chip" Content="عاجل" />
+          <ToggleButton Classes="chip" Content="مع صور" />
+        </StackPanel>
+        <SelectableTextBlock Text="اضغط مطولا على كلمة في هذا السطر لتحديدها ونسخها." TextWrapping="Wrap" HorizontalAlignment="Center" />
+        <TextBlock x:Name="TouchNote" Classes="p" Margin="0" HorizontalAlignment="Center" TextWrapping="Wrap" Text="على الهاتف: المس بجانب زر صغير، واضغط مطولا على زر لترى اسمه." />
+      </StackPanel>
+    </Border>
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0" Text="لا يبقى أثر المرور على شيء بعد رفع الإصبع، ويظهر بدلا منه أثر ضغط قصير ما دام الإصبع على العنصر." />
+      <TextBlock Classes="p" Margin="0" Text="إذا تحرك الإصبع ليمرر الصفحة فلا يُضغط الصف أو البطاقة أو الشريحة أو الزر الذي بدأ عليه، ومنها أحداث التقويم الشهري." />
+      <TextBlock Classes="p" Margin="0" Text="تتسع منطقة اللمس حول العناصر الصغيرة إلى 44 في 44 على الأقل دون أن يتغير شكلها: زر الإغلاق الصغير، والأزرار ذات الأيقونة، ونقطة الحالة، والشرائح، وأيام التقويم. وإذا تجاور زران فاللمسة للأقرب منهما إلى الإصبع، أما ما يقع فوق حقل مجاور فيبقى للحقل. ولا يتغير شيء مع الفأرة." />
+      <TextBlock Classes="p" Margin="0" Text="الضغط المطول يفتح قائمة العنصر إن كانت له، ومنها قائمة النسخ واللصق في حقول النص، وإلا أظهر تلميحه، فهو الطريقة الوحيدة لمعرفة اسم الزر ذي الأيقونة باللمس. ولا يعد بعدها ضغطة على العنصر." />
+      <TextBlock Classes="p" Margin="0" Text="يتبع شريط الوسائط والمنزلق ومقبض التقسيم وحافة عمود الجدول الإصبع إذا سُحب على امتدادها، أما السحب في الاتجاه الآخر فيمرر الصفحة." />
+      <TextBlock Classes="p" Margin="0" Text="في النص القابل للتحديد يحدد الضغط المطول الكلمة ثم يمد السحب التحديد، أما السحب وحده فيمرر الصفحة. وتعرض حقول النص مقبضي التحديد كما يرسمهما Avalonia، ولا يوفر Avalonia هذين المقبضين للنص خارج الحقول." />
+      <pg:PlayText Classes="p" Margin="0" Markup="تحمل النافذة `:ins-touch` ما دام آخر مؤشر عليها إصبعا، ومن البداية على الهاتف، لتغير أنماط التطبيق ما تريد عند اللمس." />
+    </ins:ProseList>
 
     <TextBlock Classes="section" Text="المؤثرات الخفيفة" />
     <pg:PlayText Classes="p" Markup="على الأجهزة الضعيفة يخفف `InsiyabTheme.Effects = EffectsLevel.Light` ما يكلف الرسم: لا تموّه الصفحة خلف الحوار ولا تطلب النافذة خامة النظام، ويبقى لكل ظل طبقة واحدة أصغر. ويبقى التخطيط والألوان والحركة كما هي." />

@@ -46,6 +46,11 @@ public partial class MobilePage : UserControl
             : FormattableString.Invariant($"الحواف الآمنة الآن: أعلى {safe.Top:0}، أسفل {safe.Bottom:0}، يسار {safe.Left:0}، يمين {safe.Right:0}");
     }
 
+    private void OnTouchAction(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Control c) TouchNote.Text = "ضغطت: " + global::Avalonia.Automation.AutomationProperties.GetName(c);
+    }
+
     private void OnOpenLayers(object? sender, RoutedEventArgs e)
     {
         var menu = new PopMenu
