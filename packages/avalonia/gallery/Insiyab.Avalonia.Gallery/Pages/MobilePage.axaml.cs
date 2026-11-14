@@ -21,6 +21,7 @@ public partial class MobilePage : UserControl
         NavSample.SelectionChanged += (_, _) => NavNote.Text = "أنت في " + Chosen() + ".";
         NavSample.Reselected += (_, _) => NavNote.Text = "ضغطت «" + Chosen() + "» مرة أخرى، فيعيد التطبيق الصفحة هنا إلى أعلاها.";
         RefreshList.ItemsSource = _files;
+        FabList.ItemsSource = _fabFiles;
         PagesSample.Root = PlacesPage();
         PhoneMonth.Events = PhoneEvents();
         PhoneMonth.DayInvoked += (_, day) => PhoneMonthNote.Text = $"فتحت يوم {day.Day}، فيعرض التطبيق مواعيده كلها.";
@@ -128,6 +129,14 @@ public partial class MobilePage : UserControl
             },
         };
         NewSheet("جهة اتصال جديدة", body, new DialogFoot { Children = { cancel, save } }).Open(FormSheet);
+    }
+
+    private readonly System.Collections.ObjectModel.ObservableCollection<string> _fabFiles = ["الميزانية.xlsx", "العرض.pdf", "صور الرحلة.zip", "الملاحظات.txt"];
+
+    private void OnFabSample(object? sender, RoutedEventArgs e)
+    {
+        _fabFiles.Insert(0, "مستند جديد " + (_fabFiles.Count - 3).ToString(System.Globalization.CultureInfo.InvariantCulture) + ".docx");
+        FabNote.Text = "أُضيف مستند جديد في أعلى القائمة.";
     }
 
     private async void OnRefresh(object? sender, RefreshRequestedEventArgs e)

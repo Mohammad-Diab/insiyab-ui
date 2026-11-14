@@ -17,7 +17,7 @@
 
   <StackPanel>
 
-    <TextBlock Classes="p" Text="تعمل المكتبة على أندرويد في عرض واحد بالشكل نفسه: الزجاج والظلال والحركة. وتضيف ما يحتاجه الهاتف: إبعاد المحتوى عن أشرطة النظام ولوحة المفاتيح، وزر الرجوع، واللمس بالإصبع، ومؤثرات أخف للأجهزة الضعيفة، وقطعا تُبنى منها شاشات الهاتف: شريط تنقل سفلي، وورقة تخرج من الأسفل، والسحب للتحديث، ومكدس صفحات. وتتهيأ بعض عناصرها لعرض الهاتف: التقويم الشهري، ولوحة الأوامر، والإشعارات المنبثقة، والمقاطع، وصف شرائح التصفية." />
+    <TextBlock Classes="p" Text="تعمل المكتبة على أندرويد في عرض واحد بالشكل نفسه: الزجاج والظلال والحركة. وتضيف ما يحتاجه الهاتف: إبعاد المحتوى عن أشرطة النظام ولوحة المفاتيح، وزر الرجوع، واللمس بالإصبع، ومؤثرات أخف للأجهزة الضعيفة، وقطعا تُبنى منها شاشات الهاتف: شريط تنقل سفلي، وورقة تخرج من الأسفل، والسحب للتحديث، ومكدس صفحات، وزرا عائما. وتتهيأ بعض عناصرها لعرض الهاتف: التقويم الشهري، ولوحة الأوامر، والإشعارات المنبثقة، والمقاطع، وصف شرائح التصفية." />
 
     <TextBlock Classes="section" Text="الحواف الآمنة" />
     <pg:PlayText Classes="p" Markup="يغطي شريط الحالة وشريط التنقل ونتوء الكاميرا أطراف الشاشة. ضع `ins:SafeArea.Edges` على عنصر فيبتعد محتواه عنها، وتبقى خلفيته ممتدة إلى حافة الشاشة. وتتغير المسافة وحدها حين يدور الهاتف." />
@@ -134,6 +134,36 @@
       <pg:PlayText Classes="p" Margin="0" Markup="`Badge` عدد فوق الأيقونة يصير 99+ بعد 99، و`ShowDot` نقطة لشيء جديد بلا عدد." />
       <TextBlock Classes="p" Margin="0" Text="سطحه زجاج يشف قليلا وفي أعلاه خط رفيع، ويصير مصمتا مع المؤثرات الخفيفة. وتنتقل الأسهم بين صفحاته في اتجاه القراءة، ويسمعه قارئ الشاشة تبويبات لكل منها اسمها وعددها." />
       <TextBlock Classes="p" Margin="0" Text="على الهاتف تظهر الإشعارات المنبثقة في وسط أسفل الشاشة فوق هذا الشريط إذا كان في أسفل الصفحة، وتنزل إلى مكانه إذا اختفى، كما تبتعد عن شريط الحالة في أسفل النافذة." />
+    </ins:ProseList>
+
+    <TextBlock Classes="section" Text="الزر العائم" />
+    <pg:PlayText Classes="p" Markup="الصنف `fab` على `Button` زر مستدير بلون العلامة يطفو فوق الصفحة بظل يرفعه عنها، وفيه `ins:Icon`. يضعه التطبيق في `Panel` فوق صفحته، فيقف في زاوية النهاية من أسفلها، على اليسار في العربية وعلى اليمين في الإنجليزية." />
+    <Border Classes="dx">
+      <StackPanel Spacing="12" HorizontalAlignment="Center">
+        <Border Width="360" Height="320" CornerRadius="24" ClipToBounds="True"
+                BorderThickness="1" BorderBrush="{DynamicResource InsLine}" Background="{DynamicResource InsWash1}">
+          <DockPanel>
+            <ins:BottomNav DockPanel.Dock="Bottom" SelectedIndex="0" ins:SafeArea.Edges="None">
+              <ins:BottomNavItem Icon="{StaticResource IconFolder}" Label="الملفات" />
+              <ins:BottomNavItem Icon="{StaticResource IconShare}" Label="المشتركة" />
+              <ins:BottomNavItem Icon="{StaticResource IconUser}" Label="الحساب" />
+            </ins:BottomNav>
+            <Panel>
+              <ListBox x:Name="FabList" Classes="static" Background="Transparent" />
+              <Button x:Name="FabSample" Classes="fab" ToolTip.Tip="مستند جديد" Click="OnFabSample">
+                <ins:Icon Data="{StaticResource IconPlus}" />
+              </Button>
+            </Panel>
+          </DockPanel>
+        </Border>
+        <TextBlock x:Name="FabNote" Classes="p" Margin="0" HorizontalAlignment="Center" Text="اضغط الزر العائم لتضيف مستندا." />
+      </StackPanel>
+    </Border>
+    <pg:PlayListing Code="&lt;Panel&gt;&#10;  &lt;ListBox ItemsSource=&quot;{Binding Files}&quot; /&gt;&#10;  &lt;Button Classes=&quot;fab&quot; ToolTip.Tip=&quot;ملف جديد&quot; Click=&quot;OnNewFile&quot;&gt;&#10;    &lt;ins:Icon Data=&quot;{StaticResource IconPlus}&quot; /&gt;&#10;  &lt;/Button&gt;&#10;&lt;/Panel&gt;" Margin="0,0,0,24" />
+    <ins:ProseList>
+      <TextBlock Classes="p" Margin="0" Text="حين يكون في أسفل الشاشة يرتفع وحده فوق شريط الإيماءات، وفوق شريط التنقل السفلي أو شريط الحالة إذا كان أحدهما في أسفلها، وفوق لوحة المفاتيح حين تُفتح، ثم يعود إلى مكانه." />
+      <pg:PlayText Classes="p" Margin="0" Markup="`fab sm` أصغر منه، 44 بكسلا. ويضغط وينخفض ظله كأي زر، ويصير ظله أبسط مع المؤثرات الخفيفة ويختفي مع تخفيف الحركة." />
+      <TextBlock Classes="p" Margin="0" Text="يصل إليه التركيز بلوحة المفاتيح بحلقة التركيز المستديرة، ويسمعه قارئ الشاشة باسم تلميحه ما لم يُعطَ اسما آخر." />
     </ins:ProseList>
 
     <TextBlock Classes="section" Text="الورقة السفلية" />
