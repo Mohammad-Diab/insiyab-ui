@@ -69,7 +69,14 @@
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}"
                       CornerRadius="{TemplateBinding CornerRadius}">
-                <DockPanel>
+                <DockPanel Name="PART_Dock" Margin="{TemplateBinding SheetFoot}">
+                  <Panel Name="PART_Grip" DockPanel.Dock="Top" Height="22" Background="Transparent" IsVisible="False">
+                    <ctl:TemplateBorder Name="PART_Handle"
+                                        Width="36" Height="4" CornerRadius="2"
+                                        Margin="0,0,0,4"
+                                        HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                                        Background="{DynamicResource InsHr}" />
+                  </Panel>
                   <Border Name="PART_Head" Classes="dialog-head" DockPanel.Dock="Top">
                     <DockPanel>
                       <Button Name="PART_Close"
@@ -165,6 +172,19 @@
         <!-- Over a desktop window the drawer's corners meet the window's own -->
         <Style Selector="^.drawer:edge">
           <Setter Property="CornerRadius" Value="{Binding $self.EdgeCorners}" />
+        </Style>
+        <!-- The phone sheet: a grab handle over the head, rounded top corners whatever the window, at most 640 wide on a large screen -->
+        <Style Selector="^.drawer.bottom:sheet">
+          <Setter Property="MaxWidth" Value="640" />
+          <Setter Property="CornerRadius" Value="32,32,0,0" />
+          <Setter Property="BorderThickness" Value="1,1,1,0" />
+        </Style>
+        <Style Selector="^:sheet /template/ Panel#PART_Grip">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:sheet /template/ :is(Border)#PART_Head">
+          <Setter Property="Padding" Value="24,6,24,14" />
+          <Setter Property="Background" Value="Transparent" />
         </Style>
         <!-- Pinned beside the content: square, no shadow, the column decides the size -->
         <Style Selector="^.drawer:pinned">

@@ -33,7 +33,7 @@ public sealed class DialogClosedEventArgs : EventArgs
 
 /// <summary>The web's <c>dialog.ins-dialog</c> and <c>dialog.ins-drawer</c>: a modal panel over a dimmed window, with a head, a scrolling body and a foot. Classes: <c>sm</c>, <c>lg</c>; <c>drawer</c>, <c>drawer end</c>, <c>drawer bottom</c>. Declare it in <c>Resources</c> (or build it in code) and open it with <see cref="OpensProperty"/> on a button, <see cref="Open"/>, <see cref="ShowAsync(Control)"/> or <see cref="ShowAsWindowAsync"/>.</summary>
 [TemplatePart("PART_Close", typeof(Button))]
-[PseudoClasses(":open", ":titled", ":footed", ":pinned", ":window", ":edge")]
+[PseudoClasses(":open", ":titled", ":footed", ":pinned", ":window", ":edge", ":sheet")]
 public class Dialog : ContentControl, IWords
 {
     private static Words.Own[]? s_words;
@@ -64,6 +64,10 @@ public class Dialog : ContentControl, IWords
     /// <summary>Opens out of the control that opened it and closes back into it, as a picture grows from its thumbnail; a drawer ignores it.</summary>
     public static readonly StyledProperty<bool> GrowsFromAnchorProperty =
         AvaloniaProperty.Register<Dialog, bool>(nameof(GrowsFromAnchor));
+
+    // A sheet's room under its content for the gesture bar, while its ground runs to the screen's foot.
+    internal static readonly StyledProperty<Thickness> SheetFootProperty =
+        AvaloniaProperty.Register<Dialog, Thickness>(nameof(SheetFoot));
 
     public static readonly DirectProperty<Dialog, bool> IsOpenProperty =
         AvaloniaProperty.RegisterDirect<Dialog, bool>(nameof(IsOpen), d => d.IsOpen);
@@ -131,6 +135,13 @@ public class Dialog : ContentControl, IWords
     /// <summary>A drawer: the <c>drawer</c> class.</summary>
     internal bool IsDrawer => Classes.Contains("drawer");
 
+    internal Thickness SheetFoot { get => GetValue(SheetFootProperty); set => SetValue(SheetFootProperty, value); }
+
+    /// <summary>A bottom drawer in its phone form: in a single view, or anywhere with the <c>sheet</c> class; decided as it opens.</summary>
+    internal bool IsSheet { get; private set; }
+
+    private SheetDrag? _sheet;
+
     /// <summary>What actually closes it, with <see cref="DialogClosedBy.Auto"/> resolved.</summary>
     internal DialogClosedBy EffectiveClosedBy => ClosedBy != DialogClosedBy.Auto ? ClosedBy : IsDrawer ? DialogClosedBy.Any : DialogClosedBy.CloseRequest;
 
@@ -182,6 +193,9 @@ public class Dialog : ContentControl, IWords
         }
         if (IsOpen) return;
         if (Parent is not null && Parent is not Panel { Parent: DialogLayer }) throw new InvalidOperationException("Declare a Dialog in Resources or as a DrawerHost pane, not inside the page.");
+        IsSheet = IsDrawer && Classes.Contains("bottom") && (Classes.Contains("sheet") || OverlayHost.Top(anchor) is { } top && top is not Window);
+        PseudoClasses.Set(":sheet", IsSheet);
+        if (IsSheet) _sheet ??= new SheetDrag(this);
         if (!DialogStack.Open(this, anchor)) return;
         IsOpen = true;
         PseudoClasses.Set(":open", true);

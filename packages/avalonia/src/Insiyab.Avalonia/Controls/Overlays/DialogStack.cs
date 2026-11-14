@@ -228,6 +228,21 @@ internal sealed class DialogLayer : ThemeVariantScope
         Fade(_scrim, covered ? 0 : 1, covered ? Motion.Exit(this) : Motion.Enter(this));
     }
 
+    // A sheet held by a finger: the scrim clears as far as the sheet has been pulled down.
+    public void Hold(double share)
+    {
+        _scrim.Transitions = null;
+        _scrim.Opacity = 1 - Math.Clamp(share, 0, 1);
+    }
+
+    // A sheet let go short of closing goes back up, and the scrim with it.
+    public void SpringBack()
+    {
+        Fade(_scrim, 1, Motion.Enter(this));
+        Dialog.Transitions = Motion.IsStill(this) ? null : [new TransformOperationsTransition { Property = RenderTransformProperty, Duration = Motion.Enter(this), Easing = Motion.Ease(this) }];
+        Dialog.RenderTransform = TransformOperations.Identity;
+    }
+
     public void Enter()
     {
         Fade(_scrim, 1, Motion.Enter(this));
@@ -313,6 +328,9 @@ internal sealed class DialogLayer : ThemeVariantScope
 
     private sealed class LayerPanel(Dialog dialog) : Panel
     {
+        // A sheet grows with its content up to this share of the room, then only its body scrolls.
+        private const double Sheet = 0.9;
+
         public Size SizeFor(Size room)
         {
             var area = new Rect(room).Deflate(Clear()).Size;
@@ -324,6 +342,7 @@ internal sealed class DialogLayer : ThemeVariantScope
         {
             var room = new Size(double.IsInfinity(availableSize.Width) ? 1024 : availableSize.Width, double.IsInfinity(availableSize.Height) ? 768 : availableSize.Height);
             var area = new Rect(room).Deflate(Clear()).Size;
+            Foot();
             foreach (var child in Children)
             {
                 if (child == dialog) dialog.Measure(Slot(area, dialog));
@@ -343,11 +362,20 @@ internal sealed class DialogLayer : ThemeVariantScope
             return finalSize;
         }
 
-        // The scrim covers everything; the dialog keeps inside the safe area and above the keyboard (nothing on a desktop), the left and right taken in the layer's direction.
+        // The scrim covers everything; the dialog keeps inside the safe area and above the keyboard (nothing on a desktop), the left and right taken in the layer's direction. A sheet runs down under the gesture bar, its content kept above it.
         private Thickness Clear()
         {
-            var covered = Insets.Of(this)?.Covered ?? default;
+            var insets = Insets.Of(this);
+            var covered = insets?.Covered ?? default;
+            if (dialog.IsSheet && insets is { KeyboardOpen: false }) covered = new Thickness(covered.Left, covered.Top, covered.Right, 0);
             return FlowDirection == FlowDirection.RightToLeft ? new Thickness(covered.Right, covered.Top, covered.Left, covered.Bottom) : covered;
+        }
+
+        private void Foot()
+        {
+            var insets = Insets.Of(this);
+            var foot = dialog.IsSheet && insets is { KeyboardOpen: false } ? insets.SafeArea.Bottom : 0;
+            if (dialog.SheetFoot.Bottom != foot) dialog.SheetFoot = new Thickness(0, 0, 0, foot);
         }
 
         // The room the web's sizes leave: min(width, 100vw - 2rem) by min(max-height, 100vh - 3rem) for a dialog; min(24rem, 88vw) by the full height for a drawer.
@@ -355,6 +383,7 @@ internal sealed class DialogLayer : ThemeVariantScope
         {
             if (d.IsDrawer)
             {
+                if (d.IsSheet) return new Size(Math.Min(d.MaxWidth, room.Width), Math.Min(d.MaxHeight, room.Height * Sheet));
                 if (d.Classes.Contains("bottom")) return new Size(room.Width, Math.Min(d.MaxHeight, room.Height * 0.85));
                 return new Size(Math.Min(d.MaxWidth, room.Width * 0.88), room.Height);
             }
@@ -366,6 +395,11 @@ internal sealed class DialogLayer : ThemeVariantScope
             var slot = Slot(room, d);
             if (d.IsDrawer)
             {
+                if (d.IsSheet)
+                {
+                    var h = Math.Min(slot.Height, d.DesiredSize.Height);
+                    return new Rect((room.Width - slot.Width) / 2, room.Height - h, slot.Width, h);
+                }
                 if (d.Classes.Contains("bottom"))
                 {
                     var h = Math.Min(slot.Height, d.DesiredSize.Height);
