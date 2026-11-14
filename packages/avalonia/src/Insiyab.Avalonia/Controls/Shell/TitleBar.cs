@@ -56,7 +56,7 @@ public static class TitleBar
     public static void SetIsSystemMenuArea(Control control, bool value) => control.SetValue(IsSystemMenuAreaProperty, value);
 
     /// <summary>True while the window draws its own title bar: Extends is on, the OS is Windows and Avalonia has extended it.</summary>
-    internal static bool IsActive(Window window) => GetExtends(window) && OperatingSystem.IsWindows() && window.IsExtendedIntoWindowDecorations;
+    internal static bool IsActive(Window window) => GetExtends(window) && Os.IsWindows && window.IsExtendedIntoWindowDecorations;
 
     static TitleBar()
     {
@@ -101,7 +101,7 @@ public static class TitleBar
 
     private static void Apply(Window window, bool on)
     {
-        if (!OperatingSystem.IsWindows()) return;
+        if (!Os.IsWindows) return;
         if (on)
         {
             window.ExtendClientAreaToDecorationsHint = true;

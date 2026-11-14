@@ -68,7 +68,7 @@ public sealed class NotifyAreaIcon : IDisposable
     private object? _lastTag;
 
     /// <summary>Makes the shell's side of an icon from .ico bytes; null where there is none. Replaced by the tests.</summary>
-    internal static Func<byte[], INotifyAreaShell?> MakeShell { get; set; } = ico => OperatingSystem.IsWindows() ? WindowsNotifyArea.TryMake(ico) : null;
+    internal static Func<byte[], INotifyAreaShell?> MakeShell { get; set; } = ico => Os.IsWindows ? WindowsNotifyArea.TryMake(ico) : null;
 
     /// <summary>Adds the icon, made from the bytes of an .ico file (the picture nearest each size Windows asks for is taken), with <paramref name="tip"/> as its tooltip. Make it on the UI thread.</summary>
     public NotifyAreaIcon(byte[] ico, string tip)
@@ -90,7 +90,7 @@ public sealed class NotifyAreaIcon : IDisposable
     }
 
     /// <summary>True where the system has a notification area this icon can use: Windows.</summary>
-    public static bool IsSupported => OperatingSystem.IsWindows();
+    public static bool IsSupported => Os.IsWindows;
 
     /// <summary>True while the icon shows in the notification area; false off Windows, while the shell is not ready, and after <see cref="Dispose"/>. Hide a window to the tray only while it is true.</summary>
     public bool IsAdded { get; private set; }

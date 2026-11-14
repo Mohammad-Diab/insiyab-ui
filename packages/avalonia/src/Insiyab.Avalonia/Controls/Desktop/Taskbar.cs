@@ -31,9 +31,11 @@ public static class Taskbar
     /// <summary>Where the badge goes: the platform's own, picked once by OS, and replaced by the tests.</summary>
     internal static IBadgeSink Sink
     {
-        get => _sink ??= OperatingSystem.IsWindows() ? new WindowsBadge() : OperatingSystem.IsMacOS() ? new DockBadge() : new NoBadge();
+        get => _sink ??= Default();
         set => _sink = value;
     }
+
+    internal static IBadgeSink Default() => Os.IsWindows ? new WindowsBadge() : Os.IsMacOS ? new DockBadge() : new NoBadge();
 
     static Taskbar()
     {
