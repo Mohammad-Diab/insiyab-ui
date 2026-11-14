@@ -82,8 +82,24 @@
     <Style Selector="Button.site-custom:flyout-open ins|Icon.site-custom-chev">
       <Setter Property="RenderTransform" Value="rotate(180deg)" />
     </Style>
-    <Style Selector="SplitView.xnarrow TextBlock.site-custom-text">
+    <Style Selector="SplitView.xnarrow TextBlock.site-custom-text, SplitView.phone TextBlock.site-custom-text">
       <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <!-- The phone form: the menu or back, the title, notifications and the account; search floats at the foot and the theme goes into the account pop -->
+    <Style Selector="Button#BackButton">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="SplitView.phone.can-back Button#BackButton">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="SplitView.phone.can-back Button#MenuButton, SplitView.phone Button#SearchButton, SplitView.phone ins|DayNight#DayNightToggle, SplitView.phone Border.island.site-version, SplitView.phone Border.island.brand">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="Button#SearchFab">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="SplitView.phone Button#SearchFab">
+      <Setter Property="IsVisible" Value="True" />
     </Style>
     <Style Selector="Panel.site-swatches">
       <Setter Property="Margin" Value="4,4,4,12" />
@@ -128,8 +144,11 @@
       <Border Classes="topbar" VerticalAlignment="Top" ZIndex="1" ins:TitleBar.IsDragArea="True">
         <Grid ColumnDefinitions="*,Auto,*,Auto">
           <StackPanel Classes="zone start">
-            <Button Classes="island icon" ins:Shell.TogglesSidebar="True" ToolTip.Tip="القائمة" AutomationProperties.Name="القائمة">
+            <Button x:Name="MenuButton" Classes="island icon" ins:Shell.TogglesSidebar="True" ToolTip.Tip="القائمة" AutomationProperties.Name="القائمة">
               <ins:Icon Data="{StaticResource IconMenu}" />
+            </Button>
+            <Button x:Name="BackButton" Classes="island icon" ToolTip.Tip="رجوع" AutomationProperties.Name="رجوع">
+              <ins:Icon Classes="dir" Data="M19 12H5m6-6-6 6 6 6" />
             </Button>
             <Border Classes="island brand">
               <StackPanel>
@@ -186,6 +205,7 @@
                       <ins:SegmentedItem Content="من اليسار · LTR" />
                     </ins:Segmented>
                     <Separator />
+                    <Button x:Name="ThemeButton" Classes="pop-item" ins:ThemeToggle.Mode="Toggle" IsVisible="False" />
                     <Button x:Name="EffectsButton" Classes="pop-item" Content="تخفيف المؤثرات" />
                     <Button Classes="pop-item" ins:ThemeToggle.Mode="System" Content="اتبع وضع النظام" />
                     <Button x:Name="ResetButton" Classes="pop-item" Content="إعادة الضبط" />
@@ -198,10 +218,13 @@
         </Grid>
       </Border>
       <ScrollViewer x:Name="Scroller" ins:Shell.FrostsTopbar="True">
-        <Border Classes="shell-content" Margin="0,72,0,0">
+        <Border x:Name="ContentFrame" Classes="shell-content" Margin="0,72,0,0">
           <TransitioningContentControl x:Name="Host" Classes="shell-content" />
         </Border>
       </ScrollViewer>
+      <Button x:Name="SearchFab" Classes="fab" ZIndex="1" ToolTip.Tip="بحث">
+        <ins:Icon Data="{StaticResource IconSearch}" />
+      </Button>
     </Panel>
   </SplitView>
 </UserControl>

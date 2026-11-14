@@ -25,6 +25,13 @@ public partial class GalleryShell : UserControl
     // True from a page's opening until the person first touches it: what the page scrolls into view on its own must not move the page off its top.
     private bool _opening;
 
+    // The pages a search jumped from, newest last: the phone form's back button and Back return through them; a sidebar link starts again.
+    private readonly List<GalleryPage> _history = [];
+    private GalleryPage? _current;
+    private bool _jumping;
+    private bool _goingBack;
+    private TopLevel? _top;
+
     private readonly SwatchRing _ring;
     private readonly CommandPalette _palette = new() { SlashOpens = false };
     private IDisposable? _paletteKeys;
@@ -47,7 +54,12 @@ public partial class GalleryShell : UserControl
         {
             PaintSwatches();
             SyncBrand();
+            NameTheme();
         };
+        NameTheme();
+        BackButton.Click += (_, _) => GoBack();
+        SearchFab.Click += (_, _) => _palette.Open(SearchFab);
+        ShellView.Classes.CollectionChanged += (_, _) => ApplyPhone();
         foreach (var (hex, name) in Brands)
         {
             var swatch = new Button { Theme = (ControlTheme)Resources["SiteSwatch"]!, Background = new SolidColorBrush(Color.Parse(hex)), Tag = Color.Parse(hex) };
@@ -82,7 +94,7 @@ public partial class GalleryShell : UserControl
                 Keywords = page.En,
                 Icon = Application.Current!.TryFindResource(page.Icon, out var icon) ? icon as Geometry : null,
                 Key = page.Slug,
-                Run = () => Select(page.Slug),
+                Run = () => Jump(page.Slug),
             });
         SearchButton.Click += (_, _) => _palette.Open(SearchButton);
         Nav.SelectionChanged += (_, _) =>
@@ -101,9 +113,58 @@ public partial class GalleryShell : UserControl
         return true;
     }
 
+    /// <summary>True while the gallery shows its phone form: always in a single view, and in a window as narrow as a phone.</summary>
+    public bool IsPhone => ShellView.Classes.Contains("phone");
+
+    // Opens a page from search, remembering the one it leaves for the back button.
+    private void Jump(string slug)
+    {
+        _jumping = true;
+        try { Select(slug); }
+        finally { _jumping = false; }
+    }
+
+    /// <summary>Returns to the page a search left, as the phone form's back button does. False when there is none.</summary>
+    public bool GoBack()
+    {
+        if (_history.Count == 0) return false;
+        var page = _history[^1];
+        _history.RemoveAt(_history.Count - 1);
+        _goingBack = true;
+        try { Select(page.Slug); }
+        finally { _goingBack = false; }
+        ShowBack();
+        return true;
+    }
+
+    private void ShowBack() => ShellView.Classes.Set("can-back", _history.Count > 0);
+
+    // A phone's width is the shell's own phone class (544 or less); a single view is a phone screen at any width.
+    private void ApplyPhone()
+    {
+        var phone = (_top is not null && _top is not Window) || ShellView.Classes.Contains("xnarrow");
+        if (phone == IsPhone) return;
+        ShellView.Classes.Set("phone", phone);
+        ThemeButton.IsVisible = phone;
+        ContentFrame.Margin = new Thickness(0, 72, 0, phone ? 88 : 0);
+    }
+
+    // The account pop's theme row names the theme it turns to.
+    private void NameTheme() => ThemeButton.Content = ActualThemeVariant == ThemeVariant.Dark ? "الوضع الفاتح" : "الوضع الداكن";
+
+    // Back on a phone goes to the page a search left, once nothing is open over the page.
+    private void OnBack(object? sender, RoutedEventArgs e)
+    {
+        if (e.Handled || !IsPhone || _history.Count == 0) return;
+        e.Handled = GoBack();
+    }
+
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
+        _top = TopLevel.GetTopLevel(this);
+        _top?.AddHandler(TopLevel.BackRequestedEvent, OnBack);
+        ApplyPhone();
         ApplyDirection();
         PaintDot();
         if (Nav.SelectedItem is ListBoxItem { Tag: GalleryPage page }) ShowTitle(page);
@@ -114,6 +175,8 @@ public partial class GalleryShell : UserControl
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
+        _top?.RemoveHandler(TopLevel.BackRequestedEvent, OnBack);
+        _top = null;
         _paletteKeys?.Dispose();
         _paletteKeys = null;
         _palette.Close();
@@ -138,6 +201,13 @@ public partial class GalleryShell : UserControl
 
     private void Open(GalleryPage page)
     {
+        if (_jumping)
+        {
+            if (_current is { } from && from != page) _history.Add(from);
+        }
+        else if (!_goingBack) _history.Clear();
+        _current = page;
+        ShowBack();
         _opening = true;
         foreach (var item in _palette.Items) item.IsCurrent = item.Key == page.Slug;
         Host.Content = page.Create();
