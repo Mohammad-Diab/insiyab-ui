@@ -60,7 +60,7 @@ public class PickerField : Button
         Show();
     }
 
-    /// <summary>What the field picks («البرنامج»), quiet at its start; also its name for a screen reader while none is set.</summary>
+    /// <summary>What the field picks («المشروع»), quiet at its start; also its name for a screen reader while none is set.</summary>
     public string? Label { get => GetValue(LabelProperty); set => SetValue(LabelProperty, value); }
 
     /// <summary>The choice shown (or a placeholder while none is picked).</summary>
