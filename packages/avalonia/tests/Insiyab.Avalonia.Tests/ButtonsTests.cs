@@ -538,6 +538,75 @@ public class ButtonsTests
         AssertNear(third, "InsSegOnBg", () => third.Background);
     }
 
+    // With the effects off the chosen one's light face on a light track could hardly be told (a still window drops its shadow); its mark then is a soft line around the face (InsSegMark: its own ink softened), only on the chosen one, never on a chip (a chip that is on has its brand edge). With the effects on there is none, on the face or on the flying face: the face and its shadow show the choice as before
+    [AvaloniaTheory]
+    [InlineData("light")]
+    [InlineData("dark")]
+    public void The_chosen_segment_is_ringed_softly_only_with_the_effects_off(string theme)
+    {
+        Motion.SystemOverride = false;
+        try
+        {
+            var seg = new Segmented { Items = { new SegmentedItem { Content = "شهر" }, new SegmentedItem { Content = "أسبوع" }, new SegmentedItem { Content = "يوم" } } };
+            var chips = new Segmented { Classes = { "chips" }, Items = { new SegmentedItem { Content = "الكل" }, new SegmentedItem { Content = "الاجتماعات" } } };
+            var window = Show(new StackPanel { Margin = new Thickness(20), Spacing = 12, Children = { seg, chips } }, FlowDirection.RightToLeft, theme == "dark" ? ThemeVariant.Dark : ThemeVariant.Light);
+            var chosen = (SegmentedItem)seg.Items[0]!;
+            var other = (SegmentedItem)seg.Items[1]!;
+            var mark = Part<Border>(chosen, "PART_Mark");
+            Settle(100);
+            Assert.False(mark.IsEffectivelyVisible);
+            Assert.Equal(new Thickness(0), Part<Border>(seg, "PART_Flight").BorderThickness);
+
+            Motion.SetStill(window, true);
+            Settle(100);
+            Assert.True(mark.IsEffectivelyVisible);
+            Assert.Equal(new Thickness(1), mark.BorderThickness);
+            // a soft tone: the chosen one's ink, softened (not its text's full ink)
+            var line = Assert.IsAssignableFrom<ISolidColorBrush>(mark.BorderBrush);
+            Assert.Equal(ColorOf((IBrush)Res(chosen, "InsSegOnFg")), line.Color);
+            Assert.InRange(line.Opacity, 0.3, 0.8);
+            Assert.False(Part<Border>(other, "PART_Mark").IsEffectivelyVisible);
+            Assert.False(Part<Border>((SegmentedItem)chips.Items[0]!, "PART_Mark").IsEffectivelyVisible);
+            // the mark takes no room: the chosen one is as wide as when it was not
+            var width = other.Bounds.Width;
+            seg.SelectedIndex = 1;
+            Settle(300);
+            Assert.Equal(width, other.Bounds.Width, 0.5);
+            Assert.True(Part<Border>(other, "PART_Mark").IsEffectivelyVisible);
+
+            Motion.SetStill(window, false);
+            Settle(100);
+            Assert.False(Part<Border>(other, "PART_Mark").IsEffectivelyVisible);
+        }
+        finally { Motion.SystemOverride = null; }
+    }
+
+    [AvaloniaFact]
+    public void A_link_item_opens_and_is_never_the_chosen_one()
+    {
+        var opened = 0;
+        var link = new SegmentedItem { Content = "الملفات", IsLink = true };
+        link.Click += (_, _) => opened++;
+        var seg = new Segmented { Items = { new SegmentedItem { Content = "اليوم" }, new SegmentedItem { Content = "الأسبوع" }, link } };
+        var window = Show(new StackPanel { Margin = new Thickness(20), Children = { seg } });
+        seg.SelectedIndex = 1;
+        Settle(100);
+
+        var p = Center(link, window);
+        window.MouseMove(p);
+        window.MouseDown(p, MouseButton.Left);
+        window.MouseUp(p, MouseButton.Left);
+        Assert.Equal(1, opened);
+        Assert.Equal(1, seg.SelectedIndex);
+        Assert.False(link.IsSelected);
+        Assert.Contains(":link", link.Classes);
+
+        link.Focus(NavigationMethod.Tab);
+        PressSpace(window);
+        Assert.Equal(2, opened);
+        Assert.Equal(1, seg.SelectedIndex);
+    }
+
     [AvaloniaFact]
     public void Segmented_keyboard_tab_focuses_and_space_selects()
     {

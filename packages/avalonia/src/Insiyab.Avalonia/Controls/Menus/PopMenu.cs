@@ -59,6 +59,10 @@ public class PopCard : Flyout
     public static readonly StyledProperty<bool> GrowsFromTargetProperty =
         AvaloniaProperty.Register<PopCard, bool>(nameof(GrowsFromTarget));
 
+    /// <summary>The card grows out of its corner nearest the trigger as it opens, scaling up from 0.8 as it fades in (Material's and Android's menus), and shrinks back into that corner, quicker, as it closes; still motion opens and closes it at once.</summary>
+    public static readonly StyledProperty<bool> GrowsFromCornerProperty =
+        AvaloniaProperty.Register<PopCard, bool>(nameof(GrowsFromCorner));
+
     public PopCard()
     {
         Pop.Init(this);
@@ -92,6 +96,11 @@ public class PopCard : Flyout
 
     public bool GrowsFromTarget { get => GetValue(GrowsFromTargetProperty); set => SetValue(GrowsFromTargetProperty, value); }
 
+    public bool GrowsFromCorner { get => GetValue(GrowsFromCornerProperty); set => SetValue(GrowsFromCornerProperty, value); }
+
+    // Whether the card moves out of its trigger and back in, by either motion.
+    internal bool Grows => GrowsFromTarget || GrowsFromCorner;
+
     internal PopGrow Grow => _grow ??= new PopGrow(this);
 
     private PopGrow? _grow;
@@ -100,7 +109,7 @@ public class PopCard : Flyout
     protected override void OnClosing(CancelEventArgs args)
     {
         base.OnClosing(args);
-        if (!args.Cancel && GrowsFromTarget && Grow.Shrink()) args.Cancel = true;
+        if (!args.Cancel && Grows && Grow.Shrink()) args.Cancel = true;
     }
 
     /// <summary>Closes the card at once, cutting short a shrink that is under way.</summary>
@@ -254,7 +263,7 @@ internal static class Pop
         PopMotion.SetFromAbove(body, fromAbove);
         if (!entrance.Pending || TopLevel.GetTopLevel(body) is null) return;
         entrance.Pending = false;
-        if (card is { GrowsFromTarget: true } && card.Grow.Open(body)) return;
+        if (card is { Grows: true } && card.Grow.Open(body)) return;
         PopMotion.Play(body);
     }
 

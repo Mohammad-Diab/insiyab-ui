@@ -83,7 +83,7 @@
         <Style Selector="^ /template/ :is(Border)#PART_Circle">
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
               <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
@@ -108,6 +108,25 @@
         </Style>
         <Style Selector="^:last /template/ :is(Border)#PART_LineEnd">
           <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <!-- a window of steps (Steps.Window): an end with more steps beyond it keeps a short stub of the line, fading out toward the hidden ones; its colour is the line's own (a mask, so a done step's brand line fades too) -->
+        <Style Selector="^:more-before /template/ :is(Border)#PART_LineStart">
+          <Setter Property="IsVisible" Value="True" />
+          <Setter Property="OpacityMask">
+            <LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">
+              <GradientStop Offset="0" Color="#00000000" />
+              <GradientStop Offset="1" Color="#FF000000" />
+            </LinearGradientBrush>
+          </Setter>
+        </Style>
+        <Style Selector="^:more-after /template/ :is(Border)#PART_LineEnd">
+          <Setter Property="IsVisible" Value="True" />
+          <Setter Property="OpacityMask">
+            <LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">
+              <GradientStop Offset="0" Color="#FF000000" />
+              <GradientStop Offset="1" Color="#00000000" />
+            </LinearGradientBrush>
+          </Setter>
         </Style>
         <Style Selector="^:after-done /template/ :is(Border)#PART_LineStart">
           <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />

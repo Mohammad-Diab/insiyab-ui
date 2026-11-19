@@ -11,9 +11,18 @@ using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>Where you are in a sequence, the web's <c>ol.ins-steps</c>: numbered circles joined by a line, the done ones filled with the brand. Classes <c>dots</c> (small dots, no names), <c>grid</c> (numbers that wrap, no lines, no names on show) and <c>pulse</c> (a brand ring leaves the current step's circle). Grid steps are one Tab stop: the arrows, Home and End move between them.</summary>
+/// <summary>Where you are in a sequence, the web's <c>ol.ins-steps</c>: numbered circles joined by a line, the done ones filled with the brand. Classes <c>dots</c> (small dots, no names), <c>grid</c> (numbers that wrap, no lines, no names on show) and <c>pulse</c> (a brand ring leaves the current step's circle). Grid steps are one Tab stop: the arrows, Home and End move between them. <see cref="Window"/> shows only a few steps around the current one (a narrow row), the line fading out past each end that has more.</summary>
 public class Steps : ItemsControl
 {
+    /// <summary>At most this many steps show (a row too narrow for every step's name, a phone's stepper): the current one in the middle with its neighbours, the window shifting at the ends; with no current step, the last done one is the middle. The other steps are hidden (no sideways scroll); an end of the window with more steps beyond it draws a short stub of the line that fades out (<c>:more-before</c>, <c>:more-after</c>), and every step keeps its number. 0 (the default) shows every step.</summary>
+    public static readonly StyledProperty<int> WindowProperty =
+        AvaloniaProperty.Register<Steps, int>(nameof(Window));
+
+    /// <inheritdoc cref="WindowProperty"/>
+    public int Window { get => GetValue(WindowProperty); set => SetValue(WindowProperty, value); }
+
+    static Steps() => WindowProperty.Changed.AddClassHandler<Steps>((s, _) => s.Refresh());
+
     /// <summary>For items from <see cref="ItemsControl.ItemsSource"/>: whether each step is done.</summary>
     [AssignBinding]
     [InheritDataTypeFromItems(nameof(ItemsSource))]
@@ -80,16 +89,44 @@ public class Steps : ItemsControl
     private List<StepsItem> Shown() =>
         ItemsPanelRoot is { } panel ? panel.Children.OfType<StepsItem>().Where(s => s.IsVisible).ToList() : [];
 
-    /// <summary>Works out every step's number and its joins again: called whenever a step changes.</summary>
+    private bool _refreshing;
+
+    /// <summary>Works out every step's number and its joins again (and the window's steps): called whenever a step changes.</summary>
     internal void Refresh()
     {
-        var shown = Shown();
-        for (var i = 0; i < shown.Count; i++)
+        if (_refreshing) return;
+        _refreshing = true;
+        try
         {
-            shown[i].Number = i + 1;
-            shown[i].SetJoins(i == 0, i == shown.Count - 1, i > 0 && shown[i - 1].IsDone);
+            // the steps the app shows (a step the window hid still counts: it keeps its number)
+            var all = ItemsPanelRoot is { } panel ? panel.Children.OfType<StepsItem>().Where(s => s.IsVisible || s.OutOfWindow).ToList() : [];
+            var (start, count) = WindowOf(all);
+            for (var i = 0; i < all.Count; i++)
+            {
+                var step = all[i];
+                var inside = i >= start && i < start + count;
+                if (step.OutOfWindow == inside)
+                {
+                    step.OutOfWindow = !inside;
+                    step.SetCurrentValue(IsVisibleProperty, inside);
+                }
+                step.Number = i + 1;
+                step.SetJoins(i == start, i == start + count - 1, i > 0 && all[i - 1].IsDone, i == start && start > 0, i == start + count - 1 && start + count < all.Count);
+            }
+            if (Classes.Contains("grid")) Rove(Shown(), null);
         }
-        if (Classes.Contains("grid")) Rove(shown, null);
+        finally { _refreshing = false; }
+    }
+
+    // the first step of the window and how many show: every step without a window, else the current one (or the last done) in the middle, kept inside the steps
+    private (int Start, int Count) WindowOf(List<StepsItem> all)
+    {
+        var size = Window;
+        if (size <= 0 || size >= all.Count) return (0, all.Count);
+        var middle = all.FindIndex(s => s.IsCurrent);
+        if (middle < 0) middle = all.FindLastIndex(s => s.IsDone);
+        if (middle < 0) middle = 0;
+        return (Math.Clamp(middle - (size - 1) / 2, 0, all.Count - size), size);
     }
 
     private void Rove(List<StepsItem> shown, StepsItem? focused)
@@ -157,7 +194,7 @@ public class Steps : ItemsControl
 }
 
 /// <summary>One step. <see cref="IsDone"/>, <see cref="IsCurrent"/> (aria-current="step"), <see cref="IsFlagged"/> (an amber dot, left to come back to) and <see cref="IsError"/> (red, needs fixing) show as <c>:done :current :flagged :error</c>. <see cref="Marker"/> replaces the number in its circle.</summary>
-[PseudoClasses(":done", ":current", ":flagged", ":error", ":first", ":last", ":after-done", ":marker")]
+[PseudoClasses(":done", ":current", ":flagged", ":error", ":first", ":last", ":after-done", ":marker", ":more-before", ":more-after")]
 public class StepsItem : ContentControl
 {
     public static readonly StyledProperty<bool> IsDoneProperty =
@@ -186,7 +223,7 @@ public class StepsItem : ContentControl
     static StepsItem()
     {
         IsDoneProperty.Changed.AddClassHandler<StepsItem>((x, e) => { x.PseudoClasses.Set(":done", e.GetNewValue<bool>()); x.Owner?.Refresh(); });
-        IsCurrentProperty.Changed.AddClassHandler<StepsItem>((x, e) => x.PseudoClasses.Set(":current", e.GetNewValue<bool>()));
+        IsCurrentProperty.Changed.AddClassHandler<StepsItem>((x, e) => { x.PseudoClasses.Set(":current", e.GetNewValue<bool>()); x.Owner?.Refresh(); });
         IsFlaggedProperty.Changed.AddClassHandler<StepsItem>((x, e) => x.PseudoClasses.Set(":flagged", e.GetNewValue<bool>()));
         IsErrorProperty.Changed.AddClassHandler<StepsItem>((x, e) => x.PseudoClasses.Set(":error", e.GetNewValue<bool>()));
         IsVisibleProperty.Changed.AddClassHandler<StepsItem>((x, _) => x.Owner?.Refresh());
@@ -212,11 +249,16 @@ public class StepsItem : ContentControl
 
     private Steps? Owner => ItemsControl.ItemsControlFromItemContainer(this) as Steps;
 
-    internal void SetJoins(bool first, bool last, bool afterDone)
+    /// <summary>Hidden by its <see cref="Steps.Window"/> (not by the app): it still counts among the steps.</summary>
+    internal bool OutOfWindow { get; set; }
+
+    internal void SetJoins(bool first, bool last, bool afterDone, bool moreBefore = false, bool moreAfter = false)
     {
         PseudoClasses.Set(":first", first);
         PseudoClasses.Set(":last", last);
         PseudoClasses.Set(":after-done", afterDone);
+        PseudoClasses.Set(":more-before", moreBefore);
+        PseudoClasses.Set(":more-after", moreAfter);
     }
 
     protected override void OnPointerReleased(PointerReleasedEventArgs e)

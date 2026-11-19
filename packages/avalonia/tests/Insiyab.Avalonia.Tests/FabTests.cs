@@ -218,4 +218,25 @@ public class FabTests
         Assert.Equal(0, FabLook.LiftOf(fab));
         Assert.True(string.IsNullOrEmpty(AutomationProperties.GetName(fab)));
     }
+    // fab extended: the same pill as wide as its icon and its label, the label at a large label's size
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void An_extended_fab_holds_its_icon_and_its_label_in_the_same_pill(string dir)
+    {
+        var label = new TextBlock { Text = "رسالة جديدة" };
+        var fab = new Button { Classes = { "fab", "extended" }, Content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Children = { new Icon { Data = Plus }, label } } };
+        var round = Fab();
+        var w = Show(new Panel { Width = 360, Height = 300, Children = { new Panel { Children = { fab } }, new Panel { Children = { round } } } },
+            dir == "rtl" ? FlowDirection.RightToLeft : FlowDirection.LeftToRight, width: 360, height: 300);
+        Settle(300);
+        Assert.Equal(56, fab.Bounds.Height, 1);
+        Assert.Equal(28, fab.CornerRadius.TopLeft, 1);
+        Assert.True(fab.Bounds.Width > 56 + label.Bounds.Width, $"the pill is {fab.Bounds.Width} wide for a {label.Bounds.Width} label");
+        Assert.Equal(new Thickness(16, 0, 20, 0), fab.Padding);
+        Assert.True(label.TryFindResource("InsFsLg", out var lg) && lg is double size && Math.Abs(label.FontSize - size) < 0.01);
+        Assert.Equal(FontWeight.SemiBold, label.FontWeight);
+        Assert.Equal(56, round.Bounds.Width, 1); // a plain fab keeps its round 56
+        Assert.Equal(BoxOf(round, w).Bottom, BoxOf(fab, w).Bottom, 1); // both float at the foot
+    }
 }

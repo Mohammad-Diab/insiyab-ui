@@ -35,6 +35,12 @@ internal sealed class PopGrow(PopCard card)
         surface.Transitions = null;
         surface.RenderTransform = TransformOperations.Identity;
         surface.Opacity = 0;
+        surface.ClearValue(Visual.RenderTransformOriginProperty);
+        if (card.GrowsFromCorner && !card.GrowsFromTarget)
+        {
+            Dispatcher.UIThread.Post(() => FromCorner(surface, target), DispatcherPriority.Loaded);
+            return true;
+        }
         Dispatcher.UIThread.Post(() =>
         {
             if (!card.IsOpen || _shrinking || surface != _surface) return;
@@ -63,12 +69,21 @@ internal sealed class PopGrow(PopCard card)
         }
         if (_shrinking) return true;
         if (!card.IsOpen || _surface is not { } surface || card.Target is not Control target || !target.IsEffectivelyVisible || Motion.IsStill(target)
-            || AnchorGrow.From(surface, target) is not { } to)
+            || (IsCorner ? Corner(surface, target) is null : AnchorGrow.From(surface, target) is null))
         {
             Reset();
             return false;
         }
         _shrinking = true;
+        if (IsCorner)
+        {
+            var back = CornerExit(target);
+            surface.RenderTransformOrigin = Corner(surface, target)!.Value;
+            Move(surface, CornerStart, 0, back, target, back);
+            _landing = DispatcherTimer.RunOnce(Land, back + TimeSpan.FromMilliseconds(20));
+            return true;
+        }
+        var to = AnchorGrow.From(surface, target)!;
         var exit = Motion.Exit(target);
         Move(surface, to, 0, exit, target);
         _landing = DispatcherTimer.RunOnce(Land, exit + TimeSpan.FromMilliseconds(20));
@@ -106,13 +121,63 @@ internal sealed class PopGrow(PopCard card)
         surface.Opacity = 1;
     }
 
-    private static void Move(Control surface, TransformOperations to, double opacity, TimeSpan duration, Control at)
+    // ---- from the corner (PopCard.GrowsFromCorner): Material's menu, scaled from 0.8 about the corner nearest the trigger, fading in ----
+
+    /// <summary>The scale a corner-grown card starts from and shrinks back to (Material's menus).</summary>
+    internal const double CornerScale = 0.8;
+
+    private static readonly TransformOperations CornerStart = TransformOperations.Parse(FormattableString.Invariant($"scale({CornerScale})"));
+
+    private bool IsCorner => card.GrowsFromCorner && !card.GrowsFromTarget;
+
+    /// <summary>The point the last corner opening grew from, in the card's own space, for tests.</summary>
+    internal Point? CornerAt { get; private set; }
+
+    // Laid out but unseen: it starts at 0.8 about its corner by the trigger once a frame has shown that start, so a slow first frame on a weak phone does not eat the motion.
+    private void FromCorner(Control surface, Control target)
+    {
+        if (!card.IsOpen || _shrinking || surface != _surface) return;
+        if (Corner(surface, target) is not { } origin || TopLevel.GetTopLevel(surface) is not { } top)
+        {
+            surface.Opacity = 1;
+            return;
+        }
+        CornerAt = origin.Point;
+        surface.RenderTransformOrigin = origin;
+        surface.RenderTransform = CornerStart;
+        Start = CornerStart;
+        top.RequestAnimationFrame(_ =>
+        {
+            if (!card.IsOpen || _shrinking || surface != _surface) return;
+            var open = Motion.Pop(target);
+            Move(surface, TransformOperations.Identity, 1, open, target, TimeSpan.FromMilliseconds(open.TotalMilliseconds * 0.5));
+        });
+    }
+
+    // Closing is the opening backwards, quicker.
+    private static TimeSpan CornerExit(Control at) => TimeSpan.FromMilliseconds(Motion.Pop(at).TotalMilliseconds * 0.6);
+
+    // The surface's corner nearest the trigger's centre (the trigger's centre held inside the surface's box), in the surface's own space, so a mirrored layer needs nothing more.
+    internal static RelativePoint? Corner(Visual surface, Visual target)
+    {
+        var w = surface.Bounds.Width;
+        var h = surface.Bounds.Height;
+        if (w <= 0 || h <= 0 || target.Bounds.Width <= 0) return null;
+        var keep = surface.RenderTransform;
+        surface.RenderTransform = null;
+        var c = target.TranslatePoint(new Point(target.Bounds.Width / 2, target.Bounds.Height / 2), surface);
+        surface.RenderTransform = keep;
+        if (c is not { } p) return null;
+        return new RelativePoint(Math.Clamp(p.X, 0, w), Math.Clamp(p.Y, 0, h), RelativeUnit.Absolute);
+    }
+
+    private static void Move(Control surface, TransformOperations to, double opacity, TimeSpan duration, Control at, TimeSpan? fade = null)
     {
         var ease = Motion.Ease(at);
         surface.Transitions =
         [
             new TransformOperationsTransition { Property = Visual.RenderTransformProperty, Duration = duration, Easing = ease },
-            new DoubleTransition { Property = Visual.OpacityProperty, Duration = TimeSpan.FromMilliseconds(duration.TotalMilliseconds * 0.6), Easing = ease },
+            new DoubleTransition { Property = Visual.OpacityProperty, Duration = fade ?? TimeSpan.FromMilliseconds(duration.TotalMilliseconds * 0.6), Easing = ease },
         ];
         surface.RenderTransform = to;
         surface.Opacity = opacity;

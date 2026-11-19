@@ -105,9 +105,9 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Foreground" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Foreground" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
             <ins:BrushFade Property="Background" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
-            <BrushTransition Property="BorderBrush" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="BorderBrush" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
 
@@ -318,6 +318,11 @@
           <Setter Property="CornerRadius" Value="22" />
           <Setter Property="FontSize" Value="20" />
         </Style>
+        <!-- An extended floating button: its icon and its label side by side in the same pill, as wide as they need -->
+        <Style Selector="^.fab.extended">
+          <Setter Property="Width" Value="NaN" />
+          <Setter Property="Padding" Value="16,0,20,0" />
+        </Style>
 
         <!-- filled tones: the ink never changes, only the face -->
         <Style Selector="^.success, ^.danger, ^.warning, ^.info">
@@ -501,7 +506,7 @@
           <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
               <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
               <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
@@ -542,6 +547,16 @@
         <Style Selector="^.close.sm">
           <Setter Property="Width" Value="24" />
           <Setter Property="Height" Value="24" />
+        </Style>
+        <!-- close bad: the red ✕ that stops work under way (a download, a conversion) beside its progress: the cross in the bad tone on no ground, a soft red ground under the pointer. It takes no more of its line than a small icon (a 30 wide, 13 high box: its face reaches past the line above and below); under a finger (Touch) it takes its whole face. -->
+        <Style Selector="^.close.bad">
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+          <Setter Property="Margin" Value="0,-9,0,-8" />
+          <Style Selector="^:pointerover">
+            <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+            <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+          </Style>
         </Style>
         <Style Selector="^.close.bare">
           <Setter Property="Background" Value="Transparent" />
@@ -702,6 +717,18 @@
   </Style>
   <Style Selector=":is(Button):pointerover:not(.icon):not(.fab):not(:disabled) ins|Icon[(ins|NudgeLook.IsOff)=False]:not(.toolbar-icon):not(.toolbar-chevron):not(.notify-icon):not(.trail)">
     <Setter Property="Margin" Value="2,0,-2,0" />
+  </Style>
+
+  <!-- A trailing icon (class trail: the link arrow ↗ of a button that opens a page in the browser) is drawn in the button's own colour: on a filled button (primary, success, danger, warning, info), a bare or a link button, its text colour at full strength, as its words and its leading icon; on a secondary or ghost button (dark words on a light face) a step quieter, which still keeps 3:1 against the face in light and dark. A page never dims it itself (an Opacity of its own would win over this). -->
+  <Style Selector=":is(Button).secondary ins|Icon.trail, :is(Button).ghost ins|Icon.trail">
+    <Setter Property="Opacity" Value="0.75" />
+  </Style>
+
+  <!-- An extended floating button's label: the size of a large label beside the 24px icon -->
+  <Style Selector="Button.fab.extended TextBlock">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsLg}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
 
   <!-- An icon is physical; class dir makes it follow the page's direction, as an arrow along the line should -->

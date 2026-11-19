@@ -5,6 +5,16 @@
   <Styles.Resources>
     <ResourceDictionary>
 
+      <!-- The chosen one's line with the effects off: its own ink softened, a tone between the face and its text: the softest that keeps 3:1 against the darkest track (a desktop page over its backdrop) -->
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsSegMark" Color="{DynamicResource InsSegOnFgColor}" Opacity="0.7" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsSegMark" Color="{DynamicResource InsSegOnFgColor}" Opacity="0.5" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
       <ControlTheme x:Key="{x:Type ins:Segmented}" TargetType="ins:Segmented">
 
         <Setter Property="ClipToBounds" Value="False" />
@@ -71,13 +81,14 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Panel>
+            <!-- the press reaches a finger's box past the edges, inside the row's track (Reach) -->
+            <ins:ReachPanel>
               <ins:TemplateBorder x:Name="PART_Outline"
                       Margin="-4"
                       BorderThickness="2"
@@ -101,7 +112,14 @@
                   </Transitions>
                 </ContentPresenter.Transitions>
               </ContentPresenter>
-            </Panel>
+              <!-- the chosen one's mark with the effects off: a soft line around its face, drawn over it (no room taken), so the mark keeps 3:1 against the track where its light face alone does not (a still window drops the face's shadow; a glass island is flat); with the effects on, none -->
+              <ins:TemplateBorder x:Name="PART_Mark"
+                      BorderThickness="1"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      BorderBrush="{DynamicResource InsSegMark}"
+                      IsHitTestVisible="False"
+                      IsVisible="False" />
+            </ins:ReachPanel>
           </ControlTemplate>
         </Setter>
 
@@ -127,6 +145,11 @@
     </ResourceDictionary>
   </Styles.Resources>
 
+  <!-- With the effects off (a still window) the chosen one carries its soft line (PART_Mark); with them on its face and shadow show it, as on the web. A chip row (below) and a face in flight (last) draw none. -->
+  <Style Selector=":is(TopLevel):ins-still ins|SegmentedItem:selected /template/ :is(Border)#PART_Mark">
+    <Setter Property="IsVisible" Value="True" />
+  </Style>
+
   <!-- Segmented.chips: each choice in the chip look, the chosen one in the brand's tint, as a chip that is on -->
   <Style Selector="ins|Segmented.chips ins|SegmentedItem">
     <Setter Property="MinHeight" Value="30" />
@@ -139,9 +162,9 @@
     <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="Transitions">
       <Transitions>
-        <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-        <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-        <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <ins:BrushFade Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <ins:BrushFade Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
       </Transitions>
     </Setter>
     <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
@@ -150,6 +173,10 @@
     </Style>
     <Style Selector="^ /template/ :is(Border)#PART_Outline">
       <Setter Property="CornerRadius" Value="999" />
+    </Style>
+    <!-- a chip that is on has its own brand edge -->
+    <Style Selector="^ /template/ :is(Border)#PART_Mark">
+      <Setter Property="IsVisible" Value="False" />
     </Style>
     <Style Selector="^:pointerover">
       <Setter Property="BorderBrush" Value="{DynamicResource InsChipHoverBorder}" />
@@ -170,6 +197,9 @@
   <Style Selector="ins|Segmented.moving ins|SegmentedItem:selected">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="Transitions" Value="{x:Null}" />
+    <Style Selector="^ /template/ :is(Border)#PART_Mark">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
     <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
       <Setter Property="BoxShadow" Value="none" />
       <Setter Property="Transitions" Value="{x:Null}" />

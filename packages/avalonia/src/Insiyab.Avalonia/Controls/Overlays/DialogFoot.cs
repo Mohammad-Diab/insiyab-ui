@@ -5,8 +5,8 @@ using Avalonia.Layout;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The footer actions every footer shares, as the web's <c>.ins-dialog-foot</c>: at the end of the line with the main action outermost, 12px apart, each at least 5rem wide; a child with the <c>me-auto</c> class (Delete, Today) stands alone at the start. At a phone's width (34rem) the actions share the line equally at the field height, and the panel takes <c>:phone</c>.</summary>
-[PseudoClasses(":phone")]
+/// <summary>The footer actions every footer shares, as the web's <c>.ins-dialog-foot</c>: at the end of the line with the main action outermost, 12px apart, each at least 5rem wide; a child with the <c>me-auto</c> class (Delete, Today) stands alone at the start. At a phone's width (34rem) the actions share the line equally at the field height, and the panel takes <c>:phone</c>; when a label would be cut in its share, they stand one under the other at the full width instead, in their order (the main action last, nearest the thumb), and the panel takes <c>:stacked</c>.</summary>
+[PseudoClasses(":phone", ":stacked")]
 public class DialogFoot : Panel
 {
     public static readonly StyledProperty<double> SpacingProperty =
@@ -28,6 +28,9 @@ public class DialogFoot : Panel
     public double PhoneWidth { get => GetValue(PhoneWidthProperty); set => SetValue(PhoneWidthProperty, value); }
 
     internal bool IsPhone { get; private set; }
+
+    /// <summary>At a phone's width the actions did not fit their equal shares of the line: they stand one under the other.</summary>
+    internal bool IsStacked { get; private set; }
 
     private static bool Shares(Control c) => !c.Classes.Contains("icon");
 
@@ -71,14 +74,42 @@ public class DialogFoot : Panel
             height = Math.Max(height, child.DesiredSize.Height);
         }
         width += Math.Max(0, visible.Count - 1) * Spacing;
+        var stacked = phone && !double.IsInfinity(availableSize.Width) && !FitsShares(visible, availableSize.Width);
+        if (stacked != IsStacked)
+        {
+            IsStacked = stacked;
+            PseudoClasses.Set(":stacked", stacked);
+        }
+        if (stacked)
+            return new Size(availableSize.Width, visible.Sum(c => c.DesiredSize.Height) + Math.Max(0, visible.Count - 1) * Spacing);
         if (phone && !double.IsInfinity(availableSize.Width)) width = availableSize.Width;
         return new Size(width, height);
+    }
+
+    // Whether every sharing action keeps its whole label in an equal share of the line (an icon button keeps its own width).
+    private bool FitsShares(List<Control> visible, double room)
+    {
+        var sharing = visible.Where(Shares).ToList();
+        if (sharing.Count == 0) return true;
+        var share = (room - visible.Where(c => !Shares(c)).Sum(c => c.DesiredSize.Width) - (visible.Count - 1) * Spacing) / sharing.Count;
+        return sharing.All(c => c.DesiredSize.Width <= share + 0.5);
     }
 
     protected override Size ArrangeOverride(Size finalSize)
     {
         var visible = Children.Where(c => c.IsVisible).ToList();
         if (visible.Count == 0) return finalSize;
+
+        if (IsPhone && IsStacked)
+        {
+            var y = 0.0;
+            foreach (var child in visible)
+            {
+                child.Arrange(new Rect(0, y, finalSize.Width, child.DesiredSize.Height));
+                y += child.DesiredSize.Height + Spacing;
+            }
+            return finalSize;
+        }
 
         if (IsPhone)
         {

@@ -65,6 +65,7 @@ public class Segmented : SelectingItemsControl
 
     public override bool UpdateSelectionFromEvent(Control container, RoutedEventArgs eventArgs)
     {
+        if (container is SegmentedItem { IsLink: true }) return false; // a link item opens (SegmentedItem.Open), it is never the chosen one
         if (eventArgs is FocusChangedEventArgs { NavigationMethod: not NavigationMethod.Directional }) return false;
         return base.UpdateSelectionFromEvent(container, eventArgs);
     }
@@ -270,12 +271,68 @@ internal sealed class SegmentedAutomationPeer(Segmented owner) : SelectingItemsC
     protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.List;
 }
 
-/// <summary>One segment of a <see cref="Segmented"/>; <c>:selected</c> is the web's <c>is-active</c>.</summary>
+/// <summary>One segment of a <see cref="Segmented"/>; <c>:selected</c> is the web's <c>is-active</c>. A <see cref="IsLink"/> item (the row's last, a place the tabs lead out to, with a link arrow ↗ in its content) is never chosen: a click, a tap or Enter / Space raises <see cref="Click"/> and runs <see cref="Command"/>, and the chosen segment stays. It presses as the others do (<c>:pressed</c>, held by PressHold) and carries <c>:link</c>.</summary>
+[PseudoClasses(":link")]
 public class SegmentedItem : ListBoxItem
 {
+    public static readonly StyledProperty<bool> IsLinkProperty = AvaloniaProperty.Register<SegmentedItem, bool>(nameof(IsLink));
+
+    public static readonly StyledProperty<System.Windows.Input.ICommand?> CommandProperty =
+        AvaloniaProperty.Register<SegmentedItem, System.Windows.Input.ICommand?>(nameof(Command));
+
+    /// <summary>The item opens something instead of being chosen.</summary>
+    public bool IsLink { get => GetValue(IsLinkProperty); set => SetValue(IsLinkProperty, value); }
+
+    /// <summary>What a link item runs when opened.</summary>
+    public System.Windows.Input.ICommand? Command { get => GetValue(CommandProperty); set => SetValue(CommandProperty, value); }
+
+    /// <summary>A link item was opened.</summary>
+    public event EventHandler<RoutedEventArgs>? Click;
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == IsLinkProperty)
+        {
+            PseudoClasses.Set(":link", IsLink);
+            if (IsLink && IsSelected) IsSelected = false;
+        }
+        else if (change.Property == IsSelectedProperty && IsLink && IsSelected)
+            IsSelected = false; // never the chosen one, whatever asked
+    }
+
     protected override void OnGotFocus(FocusChangedEventArgs e)
     {
         base.OnGotFocus(e);
         UpdateSelectionFromEvent(e);
+    }
+
+    protected override void OnPointerReleased(PointerReleasedEventArgs e)
+    {
+        var opens = IsLink && e.InitialPressMouseButton == MouseButton.Left && new Rect(Bounds.Size).Contains(e.GetPosition(this))
+                    && (e.Pointer.Type != PointerType.Touch || Touch.IsTap(e));
+        base.OnPointerReleased(e);
+        if (opens)
+            Open();
+    }
+
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        if (IsLink && e.Key is Key.Enter or Key.Space && !e.Handled)
+        {
+            e.Handled = true;
+            Open();
+            return;
+        }
+        base.OnKeyDown(e);
+    }
+
+    /// <summary>Opens a link item: <see cref="Click"/>, then <see cref="Command"/>.</summary>
+    public void Open()
+    {
+        if (!IsLink || !IsEffectivelyEnabled) return;
+        Click?.Invoke(this, new RoutedEventArgs());
+        if (Command is { } command && command.CanExecute(null))
+            command.Execute(null);
     }
 }

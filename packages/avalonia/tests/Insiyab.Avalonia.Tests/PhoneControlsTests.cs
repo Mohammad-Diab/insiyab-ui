@@ -115,10 +115,10 @@ public class PhoneControlsTests
     }
 
     [AvaloniaFact]
-    public void A_desktop_window_keeps_the_palette_box_at_any_width_unless_asked_for_full()
+    public void A_desktop_window_keeps_the_palette_box_unless_it_is_as_narrow_as_a_phone_or_asked_for_full()
     {
         var opener = new Button { Content = "Search" };
-        var w = Show(new StackPanel { Children = { opener } }, width: 420, height: 640);
+        var w = Show(new StackPanel { Children = { opener } }, width: 620, height: 640);
         var palette = Palette();
         palette.Open(opener);
         Settle();
@@ -127,11 +127,22 @@ public class PhoneControlsTests
         Assert.Equal(96, BoxOf(Part<Panel>(palette, "PART_Dialog"), w).Top, 1);
         palette.Close();
 
-        palette.Classes.Add("full");
+        // a size class, not a kind of device: a desktop window as narrow as a phone opens it full screen too
+        w.Width = 420;
+        Settle();
         palette.Open(opener);
         Settle();
         Assert.True(palette.IsFull);
         Assert.Equal(new Rect(0, 0, 420, 640), BoxOf(Part<Panel>(palette, "PART_Dialog"), w));
+        palette.Close();
+
+        w.Width = 620;
+        Settle();
+        palette.Classes.Add("full");
+        palette.Open(opener);
+        Settle();
+        Assert.True(palette.IsFull);
+        Assert.Equal(new Rect(0, 0, 620, 640), BoxOf(Part<Panel>(palette, "PART_Dialog"), w));
         palette.Close();
     }
 

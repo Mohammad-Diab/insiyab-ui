@@ -463,6 +463,47 @@ public class DisclosureTests
         Assert.NotNull(w);
     }
 
+    // A narrow row (Steps.Window): the current step between its neighbours, the window shifted at the ends (no current step: the last done one), every step its own number, and a fading stub of the line at an end with more steps beyond it
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void Steps_window_shows_the_current_step_between_its_neighbours(string dir)
+    {
+        var steps = StepsOf(Step("1", done: true), Step("2", done: true), Step("3", current: true), Step("4"), Step("5"), Step("6"));
+        steps.Window = 3;
+        var w = Show(steps, dir == "rtl" ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);
+        int[] Shown() => [.. Enumerable.Range(0, 6).Where(i => StepAt(steps, i).IsVisible).Select(i => StepAt(steps, i).Number)];
+        Control Line(int i, string part) => Part<Control>(StepAt(steps, i), part);
+
+        Assert.Equal([2, 3, 4], Shown());
+        Assert.Contains(":first", StepAt(steps, 1).Classes);
+        Assert.Contains(":more-before", StepAt(steps, 1).Classes);
+        Assert.Contains(":more-after", StepAt(steps, 3).Classes);
+        Assert.True(Line(1, "PART_LineStart").IsEffectivelyVisible && Line(1, "PART_LineStart").OpacityMask is not null, "a stub before the window, fading out");
+        Assert.True(Line(3, "PART_LineEnd").IsEffectivelyVisible && Line(3, "PART_LineEnd").OpacityMask is not null, "a stub after the window, fading out");
+        Assert.Equal(steps.Bounds.Width / 3, StepAt(steps, 2).Bounds.Width, 1.0); // the three share the row (whole pixels)
+
+        StepAt(steps, 2).IsCurrent = false;
+        StepAt(steps, 0).IsCurrent = true;
+        Settle(50);
+        Assert.Equal([1, 2, 3], Shown());
+        Assert.DoesNotContain(":more-before", StepAt(steps, 0).Classes);
+        Assert.False(Line(0, "PART_LineStart").IsEffectivelyVisible);
+        Assert.True(Line(2, "PART_LineEnd").IsEffectivelyVisible);
+
+        StepAt(steps, 0).IsCurrent = false; // everything done: the last ones
+        foreach (var i in Enumerable.Range(0, 6)) StepAt(steps, i).IsDone = true;
+        Settle(50);
+        Assert.Equal([4, 5, 6], Shown());
+        Assert.False(Line(5, "PART_LineEnd").IsEffectivelyVisible);
+
+        steps.Window = 0; // the whole row again
+        Settle(50);
+        Assert.Equal([1, 2, 3, 4, 5, 6], Shown());
+        Assert.DoesNotContain(":more-before", StepAt(steps, 3).Classes);
+        Assert.NotNull(w);
+    }
+
     [AvaloniaTheory]
     [MemberData(nameof(Looks), MemberType = typeof(Ui))]
     public void Steps_states_take_the_web_colours(string theme, string dir)

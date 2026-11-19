@@ -284,10 +284,10 @@ public class CommandPalette : TemplatedControl, IWords
         if (TopLevel.GetTopLevel(this) is { } top) Fill(top, e.NewSize.Width);
     }
 
-    // Full screen in a single view at a phone's width (a desktop window keeps the box at any width), or anywhere with the class full.
+    // Full screen at a phone's width, in a single view or a desktop window made as narrow (a size class, not a kind of device), or anywhere with the class full.
     private void Fill(TopLevel top, double width)
     {
-        PseudoClasses.Set(":full", Classes.Contains("full") || top is not Window && width > 0 && width <= OverlayHost.PhoneWidth);
+        PseudoClasses.Set(":full", Classes.Contains("full") || width > 0 && width <= OverlayHost.PhoneWidth);
         NameClose();
     }
 

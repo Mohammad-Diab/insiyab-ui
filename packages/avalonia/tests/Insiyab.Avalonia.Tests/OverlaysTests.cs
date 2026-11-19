@@ -422,6 +422,29 @@ public class OverlaysTests
         Assert.Equal(buttons[0].Bounds.Width, buttons[1].Bounds.Width, 1);
         Assert.Equal(foot.Bounds.Width, buttons[0].Bounds.Width * 2 + 12, 1);
         Assert.All(buttons, b => Assert.Equal(46, b.Bounds.Height, 1));
+        Assert.False(foot.IsStacked);
+    }
+
+    // Three actions whose labels would be cut in a third of a phone's line stand one under the other, the main action last.
+    [AvaloniaTheory]
+    [InlineData(FlowDirection.RightToLeft)]
+    [InlineData(FlowDirection.LeftToRight)]
+    public void Foot_actions_stand_one_under_the_other_on_a_phone_when_a_label_would_be_cut(FlowDirection dir)
+    {
+        var dialog = MakeDialog();
+        ((DialogFoot)dialog.Foot!).Children.Insert(1, new Button { Content = "تعديل موعد الاجتماع", Classes = { "secondary" } });
+        var (window, opener) = Host(dialog, dir, width: 380);
+        Click(opener, window);
+        var foot = (DialogFoot)dialog.Foot!;
+        Assert.True(foot.IsPhone);
+        Assert.True(foot.IsStacked);
+        Assert.Contains(":stacked", foot.Classes);
+        var buttons = foot.Children.OfType<Button>().ToList();
+        Assert.All(buttons, b => Assert.Equal(foot.Bounds.Width, b.Bounds.Width, 1));
+        for (var i = 1; i < buttons.Count; i++)
+            Assert.Equal(buttons[i - 1].Bounds.Bottom + 12, buttons[i].Bounds.Top, 1);
+        Assert.Equal(foot.Bounds.Height, buttons[^1].Bounds.Bottom, 1);
+        Assert.Equal("موافق", buttons[^1].Content); // the main action at the foot, nearest the thumb
     }
 
     [AvaloniaFact]

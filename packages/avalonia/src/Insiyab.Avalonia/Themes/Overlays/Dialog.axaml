@@ -87,9 +87,11 @@
                               IsVisible="{TemplateBinding ShowClose}"
                               AutomationProperties.Name="{TemplateBinding CloseLabel}"
                               ToolTip.Tip="{TemplateBinding CloseLabel}" />
+                      <!-- a text title on one line, its start always shown: one that does not fit glides to its end and back (ctl:Marquee) -->
                       <ContentPresenter Name="PART_Title"
                                         Classes="dialog-title"
                                         Content="{TemplateBinding Title}"
+                                        ContentTemplate="{x:Static ctl:Marquee.TextTemplate}"
                                         VerticalAlignment="Center" />
                     </DockPanel>
                   </Border>
