@@ -79,15 +79,19 @@ public static class ProgressPlay
                 Choice("", "عادي"),
                 Choice("lg", "كبير", "lg", "حلقة أكبر، في بطاقة إحصائية أو بجوار عنوان.")),
             Text("value", "النسبة", "72"),
+            Text("text", "الرقم", ""),
+            Text("caption", "السطر", ""),
         ],
         Extra =
         [
             Row("الأساس", "ins:ProgressRing", "تعرض النسبة حين تضيق المساحة، وتدور مع عقارب الساعة في الاتجاهين كما يدور القرص.", OptionKind.Element, true),
             Row("الأساس", "Value", "القيمة، ومنها تمتلئ الحلقة بنسبتها بين `Minimum` و`Maximum`، وتكتب النسبة في وسطها.", OptionKind.Property),
             Row("الأساس", "AutomationProperties.Name", "اسم الحلقة، يقرؤه قارئ الشاشة مع قيمتها.", OptionKind.Property),
+            Row("الأساس", "Text", "رقم من عندك يُكتب في وسط الحلقة بدل النسبة، كالمهام المنجزة من الخطة، والقيمة تملأ الحلقة كما هي.", OptionKind.Property),
+            Row("الأساس", "Caption", "سطر صغير خافت تحت الرقم، مثل «منجزة».", OptionKind.Property),
             Row("الأساس", "Width=\"64\" Height=\"64\"", "قطر الحلقة إن أردت غير المقاسين.", OptionKind.Property),
         ],
-        Axaml = s => $"<ins:ProgressRing{Classes(s["size"])} Value=\"{s["value"]}\" AutomationProperties.Name=\"التقدم\" />",
+        Axaml = s => $"<ins:ProgressRing{Classes(s["size"])} Value=\"{s["value"]}\"{(s["text"] is { Length: > 0 } t ? $" Text=\"{Esc(t)}\"" : "")}{(s["caption"] is { Length: > 0 } c ? $" Caption=\"{Esc(c)}\"" : "")} AutomationProperties.Name=\"التقدم\" />",
     };
 
     public static PlayDef[] All { get; } = [Bar, Ring];

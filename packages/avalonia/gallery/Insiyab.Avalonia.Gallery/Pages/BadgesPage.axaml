@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:Insiyab.Avalonia.Controls"
              xmlns:pg="using:Insiyab.Avalonia.Gallery.Playground"
              x:Class="Insiyab.Avalonia.Gallery.Pages.BadgesPage">
   <UserControl.Styles>
@@ -13,6 +14,12 @@
     <TextBlock Classes="section" Text="شارات الحالة" />
     <pg:PlayText Classes="p" Markup="تجمع `ins:Pill` نقطة ونصًا، وتأتي بست نبرات. اختر من الخيارات فتتغير الشارة وشيفرتها معًا، وتجد الخيارات كلها بشرحها في آخر الصفحة." />
     <pg:Playground Def="{x:Static pg:BadgesPlay.Pill}" />
+    <pg:PlayText Classes="p" Markup="وإذا جاءت النبرة من البيانات فاربطها بـ`ins:Tone.Class=&quot;{Binding Tone}&quot;`، فتضع الكلاس الذي تسميه وتنزع الذي قبله، على الشارة والعدد وشريط التقدم وكل ما له كلاسات نبرة." />
+    <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,0,24">
+      <ins:Pill ins:Tone.Class="ok" Content="سُلّمت" />
+      <ins:Pill ins:Tone.Class="warn" Content="تنتهي غدًا" />
+      <ins:Pill ins:Tone.Class="bad" Content="فاتت" />
+    </StackPanel>
 
     <TextBlock Classes="section" Text="شارات العدد" />
     <pg:PlayText Classes="p" Markup="تحمل `ins:Badge` عددًا صغيرًا، فهي للعدد لا للحالة: بلا حد ولا نقطة، وتسكن على شيء آخر." />
@@ -25,6 +32,7 @@
     <TextBlock Classes="section" Text="شارة التاريخ" />
     <pg:PlayText Classes="p" Markup="تضع `ins:DateBadge` اليوم فوق شهره، من `Date` بلغة الصفحة أو من `Day` و`Month` كما تكتبهما، وتأخذ نبرات الشارة ومعها `filled`." />
     <pg:Playground Def="{x:Static pg:BadgesPlay.Date}" />
+    <pg:PlayText Classes="p" Markup="و`Day` و`Month` نصان، فتحمل الشارة أي رقم فوق كلمته، كالوقت الباقي «36» فوق «ساعة»." />
 
     <TextBlock Classes="section" Text="ألوان الفئات" />
     <pg:PlayText Classes="p" Markup="ثمانية ألوان للفئات لا للحالات، بالكلاسات `cat1` إلى `cat8` على الشارة والعدد والصورة الرمزية، في الوضع الفاتح وبجانبه الداكن." />

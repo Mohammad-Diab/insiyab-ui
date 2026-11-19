@@ -179,8 +179,35 @@
     <ins:ProseList>
       <TextBlock Classes="p" Margin="0" Text="حين يكون في أسفل الشاشة يرتفع وحده فوق شريط الإيماءات، وفوق شريط التنقل السفلي أو شريط الحالة إذا كان أحدهما في أسفلها، وفوق لوحة المفاتيح حين تُفتح، ثم يعود إلى مكانه." />
       <pg:PlayText Classes="p" Margin="0" Markup="`fab sm` أصغر منه، 44 بكسلا. ويضغط وينخفض ظله كأي زر، ويصير ظله أبسط مع المؤثرات الخفيفة ويختفي مع تخفيف الحركة." />
+      <pg:PlayText Classes="p" Margin="0" Markup="`fab extended` الزر نفسه بعرض أيقونته واسمها بجانبها، للإجراء الذي يحتاج كلمة، مثل «رسالة جديدة». ضع فيه `StackPanel` أفقيا فيه `ins:Icon` و`TextBlock`، فيأخذ الاسم مقاس العنوان الكبير." />
       <TextBlock Classes="p" Margin="0" Text="يصل إليه التركيز بلوحة المفاتيح بحلقة التركيز المستديرة، ويسمعه قارئ الشاشة باسم تلميحه ما لم يُعطَ اسما آخر." />
     </ins:ProseList>
+
+    <Border Classes="dx">
+      <Panel Width="360" Height="120">
+        <Button Classes="fab extended" ToolTip.Tip="رسالة جديدة">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <ins:Icon Data="{StaticResource IconEdit}" VerticalAlignment="Center" />
+            <TextBlock Text="رسالة جديدة" />
+          </StackPanel>
+        </Button>
+      </Panel>
+    </Border>
+    <pg:PlayListing Code="&lt;Button Classes=&quot;fab extended&quot;&gt;&#10;  &lt;StackPanel Orientation=&quot;Horizontal&quot; Spacing=&quot;8&quot;&gt;&#10;    &lt;ins:Icon Data=&quot;{StaticResource IconEdit}&quot; /&gt;&#10;    &lt;TextBlock Text=&quot;رسالة جديدة&quot; /&gt;&#10;  &lt;/StackPanel&gt;&#10;&lt;/Button&gt;" Margin="0,0,0,24" />
+
+    <TextBlock Classes="section" Text="نقطة الجديد" />
+    <pg:PlayText Classes="p" Markup="ضع `ins:Dot.IsShown` على زر أيقونة في الشريط العلوي، فتظهر عند زاويته العليا من جهة النهاية نقطة الجديد نفسها التي في شريط التنقل السفلي. تُرسم فوق الزر فلا تغير مقاسه ولا تأخذ النقر." />
+    <Border Classes="dx">
+      <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+        <Button Classes="island icon" ins:Dot.IsShown="True" ToolTip.Tip="الإشعارات" AutomationProperties.Name="الإشعارات، فيها جديد">
+          <ins:Icon Data="{StaticResource IconBell}" />
+        </Button>
+        <Button Classes="island icon" ToolTip.Tip="الإشعارات">
+          <ins:Icon Data="{StaticResource IconBell}" />
+        </Button>
+      </StackPanel>
+    </Border>
+    <pg:PlayListing Code="&lt;Button Classes=&quot;island icon&quot; ins:Dot.IsShown=&quot;{Binding HasUnread}&quot;&gt;&#10;  &lt;ins:Icon Data=&quot;{StaticResource IconBell}&quot; /&gt;&#10;&lt;/Button&gt;" Margin="0,0,0,24" />
 
     <TextBlock Classes="section" Text="الورقة السفلية" />
     <pg:PlayText Classes="p" Markup="الدرج السفلي `drawer bottom` على الهاتف ورقة كاملة: مقبض في أعلاها، وزوايا علوية مستديرة، وطول يتبع المحتوى حتى تسعة أعشار الشاشة ثم يتمرر جسمها وحده. وفي نافذة سطح المكتب تأخذ هذا الشكل مع الصنف `sheet`، كما في الأمثلة هنا." />
@@ -257,6 +284,8 @@
       <TextBlock Classes="p" Margin="0" Text="يسحب الإصبع الأيام إلى الجانب فينتقل إلى الشهر أو الأسبوع أو اليوم التالي أو السابق بالانزلاق نفسه، وتميل الأيام مع الإصبع أثناء السحب. والسحب نحو بداية السطر يأتي بالتالي، فينعكس في العربية. ولا يفتح السحب موعدا ولا يوما، والسحب القصير يعيد الأيام إلى مكانها." />
       <pg:PlayText Classes="p" Margin="0" Markup="تفتح تفاصيل الموعد في ورقة سفلية بدل البطاقة التي بجانبه حين يكون `DetailsPresentation` على `Sheet`، أو على `Auto` وهو الأصل والتقويم بشكل الهاتف. وتغلقها بزر الرجوع أو بسحبها إلى الأسفل." />
       <TextBlock Classes="p" Margin="0" Text="إذا ضاق الرأس انتقل التاريخ بين سهميه إلى سطر تحت الأزرار، وإذا لم تتسع الأزرار نفسها لسطر واحد انتقل مبدّل العرض إلى سطر وحده. ولا يتغير شيء في التقويم على سطح المكتب." />
+      <pg:PlayText Classes="p" Margin="0" Markup="وإذا كان للصفحة شريطها الذي ينقل التقويم ويبدل عرضه فاجعل `ShowHeader=&quot;False&quot;`، فيختفي رأس التقويم كله، وتحركه الصفحة بـ`Go` و`View` وتتبعه بـ`MonthChanged` و`DateChanged`." />
+      <TextBlock Classes="p" Margin="0" Text="وفي أعمدة الأسبوع الضيقة ينكسر عنوان الموعد بين كلماته وحدها، وإذا لم يتسع السطر لكلمة طويلة قُصت بـ«…» ولم تتقطع حرفا حرفا." />
     </ins:ProseList>
 
     <TextBlock Classes="section" Text="البحث بملء الشاشة" />
