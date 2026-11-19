@@ -1,0 +1,85 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <!-- Sizes for a finger. A host marked touch (a phone app's root, a desktop page shown on a touch screen) gives its controls the sizes the platforms advise: a small button, a link (Material's text button) and a choice of a segmented row as tall as an ordinary button (38), a small icon one as wide, menu and pop rows, check boxes and radio buttons 48 (Material's touch target), a small text field 44. Every press also reaches a 44 box past its edges under a finger (Reach), so a control drawn smaller is still easy to hit where it has room. Nothing changes outside such a host (a desktop page keeps its sizes). -->
+  <Styles.Resources>
+    <x:Double x:Key="InsTouchH">44</x:Double>
+    <x:Double x:Key="InsTouchRowH">48</x:Double>
+  </Styles.Resources>
+
+  <!-- :is(Button): a toggle button of a kind (a ghost ⌄ that unfolds a message's details) takes the same size as its plain twin -->
+  <Style Selector=".touch :is(Button).sm:not(.link):not(.bare):not(.close)">
+    <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
+  </Style>
+  <Style Selector=".touch :is(Button).icon.sm:not(.close)">
+    <Setter Property="Width" Value="{DynamicResource InsCtlH}" />
+  </Style>
+  <!-- the red ✕ beside a download's progress takes its whole face under a finger -->
+  <Style Selector=".touch Button.close.bad">
+    <Setter Property="Margin" Value="0" />
+  </Style>
+  <Style Selector=".touch Button.link, .touch Button.bare.sm:not(.icon)">
+    <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
+  </Style>
+  <Style Selector=".touch ins|SegmentedItem">
+    <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
+  </Style>
+  <!-- a picker field (a Button by its style key) as tall as a small text field; each half of a split button a finger's box wide -->
+  <Style Selector=".touch Button.picker-field">
+    <Setter Property="MinHeight" Value="{DynamicResource InsTouchH}" />
+  </Style>
+  <Style Selector=".touch Button.split-half">
+    <Setter Property="MinWidth" Value="{DynamicResource InsTouchH}" />
+  </Style>
+  <Style Selector=".touch MenuItem, .touch Button.pop-item">
+    <Setter Property="MinHeight" Value="{DynamicResource InsTouchRowH}" />
+  </Style>
+  <Style Selector=".touch CheckBox, .touch RadioButton">
+    <Setter Property="MinHeight" Value="{DynamicResource InsTouchRowH}" />
+    <Style Selector="^ /template/ Grid#RootGrid">
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+  </Style>
+  <Style Selector=".touch TextBox.sm">
+    <Setter Property="MinHeight" Value="{DynamicResource InsTouchH}" />
+  </Style>
+  <!-- a chip as tall as a small button; a toolbar's buttons as tall as an ordinary one -->
+  <Style Selector=".touch :is(Button).chip">
+    <Setter Property="MinHeight" Value="{DynamicResource InsCtlH}" />
+  </Style>
+  <Style Selector=".touch ins|ToolbarButton, .touch ins|ToolbarToggleButton, .touch ins|ToolbarSplitButton">
+    <Setter Property="Height" Value="{DynamicResource InsCtlH}" />
+  </Style>
+  <!-- a plain list of items clips to its box by default, which cut the reach of the buttons in its rows (a mail's suggestions); it never scrolls, so under a finger it lets the reach out -->
+  <Style Selector=".touch ItemsControl">
+    <Setter Property="ClipToBounds" Value="False" />
+  </Style>
+  <!-- a notification card's foot («show all») as tall as a finger's box -->
+  <Style Selector=".touch ins|Notify /template/ Button#PART_Foot">
+    <Setter Property="MinHeight" Value="{DynamicResource InsTouchH}" />
+  </Style>
+  <!-- the command palette's key hints («↑↓ … Enter … Esc») have no keys to name under a finger: its foot goes, at every width (a phone on its side, a tablet) -->
+  <Style Selector=".touch ins|CommandPalette /template/ ins|PaletteBorder#PART_Foot">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+  <!-- a dialog's or a sheet's foot («إلغاء», «حفظ») drawn a finger's box tall beside the form's fields, the words in its middle (a phone-wide foot keeps the field height it already has, :phone); after the small and bare sizes above, so it beats them -->
+  <Style Selector=".touch ins|DialogFoot:not(:phone) > Button:not(.icon)">
+    <Setter Property="MinHeight" Value="{DynamicResource InsTouchH}" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+  <!-- a folding section's head as tall as a finger's box -->
+  <Style Selector=".touch Expander /template/ ToggleButton#ExpanderHeader">
+    <Setter Property="MinHeight" Value="{DynamicResource InsTouchH}" />
+  </Style>
+  <!-- the seek row a finger's band tall: the bar takes the whole band with its track in the middle (the room even above and below, MediaBar.TrackY), and the times sit on the track's line (their 5 down, made for the bar's own 28, taken back by the room under them) -->
+  <Style Selector=".touch ins|MediaSeekRow">
+    <Setter Property="MinHeight" Value="{DynamicResource InsTouchH}" />
+    <Style Selector="^ /template/ ins|MediaBar#PART_Bar">
+      <Setter Property="Height" Value="{DynamicResource InsTouchH}" />
+    </Style>
+    <Style Selector="^ /template/ Grid > Panel">
+      <Setter Property="Margin" Value="0,0,0,10" />
+    </Style>
+  </Style>
+</Styles>

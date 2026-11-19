@@ -31,8 +31,9 @@ internal static class Reach
     {
         if (t_mode == Mode.Off || part == t_skip) return false;
         var size = part.Bounds.Size;
-        var dx = Math.Max(0, (Touch.Target - size.Width) / 2);
-        var dy = Math.Max(0, (Touch.Target - size.Height) / 2);
+        var target = Math.Max(Touch.Target, TouchTarget.GetSize(part));
+        var dx = Math.Max(0, (target - size.Width) / 2);
+        var dy = Math.Max(0, (target - size.Height) / 2);
         if (dx == 0 && dy == 0 || !new Rect(size).Inflate(new Thickness(dx, dy)).Contains(p) || !Touch.IsTouch(part)) return false;
         if (t_mode == Mode.Raw) return true;
         if (TopLevel.GetTopLevel(part) is not { } top || part.TranslatePoint(p, top) is not { } at) return false;
@@ -84,7 +85,8 @@ internal sealed class ReachPanel : Panel, ICustomHitTest, IReach
 {
     protected override Type StyleKeyOverride => typeof(Panel);
 
-    public bool HitTest(Point point) => new Rect(Bounds.Size).Contains(point) ? Background is not null : Reach.Claims(this, point);
+    // inside its box with no background (a choice whose face is a child) the reach still answers, so the edge a child's box leaves out is never a gap
+    public bool HitTest(Point point) => Background is not null && new Rect(Bounds.Size).Contains(point) || Reach.Claims(this, point);
 }
 
 /// <summary>A template border with a finger's reach: a grip, a small round button. Styles name it <c>:is(Border)</c>.</summary>
@@ -93,5 +95,5 @@ internal sealed class ReachBorder : TemplateBorder, ICustomHitTest, IReach
     /// <summary>A drag grip: its reach also covers the controls beside it.</summary>
     public bool IsGrip { get; set; }
 
-    public bool HitTest(Point point) => new Rect(Bounds.Size).Contains(point) ? Reach.Inside(this) : Reach.Claims(this, point, IsGrip);
+    public bool HitTest(Point point) => Reach.Inside(this) && new Rect(Bounds.Size).Contains(point) || Reach.Claims(this, point, IsGrip);
 }

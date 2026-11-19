@@ -22,9 +22,10 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="Focusable" Value="False" />
+        <Setter Property="ins:PressHold.Always" Value="True" />
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Background" Duration="0:0:0.15" />
+            <ins:BrushFade Property="Background" Duration="0:0:0.15" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
@@ -45,6 +46,12 @@
         </Setter>
         <Style Selector="^:pointerover">
           <Setter Property="Background" Value="{DynamicResource InsGlassHover}" />
+        </Style>
+        <!-- pressed: a step past the hover's glass (the close button's and a chip's pressed ground, Press.axaml), held a moment after the release as every pressable's (PressHold), so a click shows in light and dark -->
+        <Style Selector="^:pressed">
+          <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
+          <!-- at once (the glass hover fades in 150 ms; a press is shown as it lands, then fades back) -->
+          <Setter Property="Transitions" Value="{x:Null}" />
         </Style>
         <Style Selector="^.inactive:not(:pointerover) /template/ Path#PART_Glyph">
           <Setter Property="Opacity" Value="0.45" />
@@ -93,6 +100,16 @@
         </Style>
         <Style Selector="^:maximized /template/ Button#PART_Maximize">
           <Setter Property="Content" Value="{StaticResource InsCaptionGlyphRestore}" />
+        </Style>
+        <!-- in a top bar at its last fold steps (TopbarColumns, ShellLook.Fold 3 and 4) the island tightens as the zones' gaps do: its inset and gaps, and its buttons a little narrower (36), so the bar's other parts keep their room beside it -->
+        <Style Selector="^[(ins|ShellLook.Fold)=3] /template/ :is(Border)#PART_Island, ^[(ins|ShellLook.Fold)=4] /template/ :is(Border)#PART_Island">
+          <Setter Property="Padding" Value="2" />
+        </Style>
+        <Style Selector="^[(ins|ShellLook.Fold)=3] /template/ StackPanel, ^[(ins|ShellLook.Fold)=4] /template/ StackPanel">
+          <Setter Property="Spacing" Value="0" />
+        </Style>
+        <Style Selector="^[(ins|ShellLook.Fold)=3] /template/ Button, ^[(ins|ShellLook.Fold)=4] /template/ Button">
+          <Setter Property="Width" Value="36" />
         </Style>
       </ControlTheme>
     </ResourceDictionary>

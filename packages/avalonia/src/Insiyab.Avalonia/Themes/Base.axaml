@@ -234,6 +234,25 @@
     </ResourceDictionary>
   </Styles.Resources>
 
+  <!-- A phone's scrollbars under a finger (TouchScrollbars): over the content, shown only while it scrolls, fading after; a finger never takes them -->
+  <Style Selector=":is(TopLevel):ins-touch-scroll ScrollViewer">
+    <Setter Property="AllowAutoHide" Value="True" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-touch-scroll ScrollBar">
+    <Setter Property="IsHitTestVisible" Value="False" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-touch-scroll ScrollBar /template/ Thumb">
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.3" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector=":is(TopLevel):ins-touch-scroll ScrollBar.ins-shown /template/ Thumb">
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+
   <!-- Menus keep their own tight rule, as Fluent sizes it -->
   <Style Selector=":is(MenuFlyoutPresenter) Separator, ContextMenu Separator, MenuItem Separator">
     <Setter Property="Margin" Value="{DynamicResource MenuFlyoutSeparatorThemePadding}" />

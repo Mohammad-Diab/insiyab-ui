@@ -33,8 +33,10 @@
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Content.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Plugins.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Desktop.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Foundation/Press.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Foundation/Still.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Foundation/Light.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Foundation/Inactive.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Foundation/Touch.axaml" />
 
 </Styles>

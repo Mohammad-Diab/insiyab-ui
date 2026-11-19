@@ -49,12 +49,13 @@
         </Setter>
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <ins:TemplateBorder Background="{TemplateBinding Background}"
+            <!-- the press reaches a finger's box past the edges (Reach) -->
+            <ins:ReachBorder Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="{TemplateBinding CornerRadius}"
@@ -79,7 +80,7 @@
                           BoxShadow="inset 0 2 4 0 #140F172A">
                     <ins:TemplateBorder.Transitions>
                       <Transitions>
-                        <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                        <ins:BrushFade Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                       </Transitions>
                     </ins:TemplateBorder.Transitions>
                   </ins:TemplateBorder>
@@ -148,7 +149,7 @@
                   </Panel>
                 </StackPanel>
               </Grid>
-            </ins:TemplateBorder>
+            </ins:ReachBorder>
           </ControlTemplate>
         </Setter>
 

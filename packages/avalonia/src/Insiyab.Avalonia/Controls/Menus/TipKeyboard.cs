@@ -31,6 +31,7 @@ internal static class TipKeyboard
         InputElement.GotFocusEvent.AddClassHandler<Control>(OnGotFocus);
         InputElement.LostFocusEvent.AddClassHandler<Control>(OnLostFocus);
         InputElement.KeyDownEvent.AddClassHandler<Control>(OnKeyDown, RoutingStrategies.Tunnel);
+        ToolTip.ToolTipOpeningEvent.AddClassHandler<Control>(OnOpening);
         foreach (var type in Bases) Defaults(type);
         ToolTip.TipProperty.Changed.AddClassHandler<Control>((c, _) => Defaults(c.GetType()));
     }
@@ -58,8 +59,22 @@ internal static class TipKeyboard
     private static void OnGotFocus(Control c, FocusChangedEventArgs e)
     {
         if (!ReferenceEquals(e.Source, c) || ToolTip.GetTip(c) is null) return;
-        if (e.NavigationMethod is NavigationMethod.Tab or NavigationMethod.Directional)
+        // a control focused as a sheet or a card opens, under a finger with no key pressed, is not the keyboard's reach: no tip
+        if (e.NavigationMethod is NavigationMethod.Tab or NavigationMethod.Directional && Touch.StateOf(c) is not { IsTouch: true, Keys: false })
+        {
+            s_keyboardTip = new WeakReference<Control>(c);
             ToolTip.SetIsOpen(c, true);
+        }
+    }
+
+    private static WeakReference<Control>? s_keyboardTip; // the control the keyboard reached, whose tip it opened
+
+    // Under a finger a tip opens only by a long press on its control (Touch) or from the keyboard: a tap leaves no hover behind, so a tip it started would show far from the control and never close. A mouse (DeX, a desktop) keeps its hover tips.
+    private static void OnOpening(Control c, CancelRoutedEventArgs e)
+    {
+        if (!ReferenceEquals(e.Source, c) || Touch.StateOf(c) is not { IsTouch: true } st) return;
+        if (ReferenceEquals(st.Tip, c) || st.Keys || s_keyboardTip is { } k && k.TryGetTarget(out var reached) && ReferenceEquals(reached, c)) return;
+        e.Cancel = true;
     }
 
     private static void OnLostFocus(Control c, FocusChangedEventArgs e)

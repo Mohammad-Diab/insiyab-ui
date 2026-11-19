@@ -77,7 +77,7 @@ public class TouchTests
         var row = Assert.IsType<ListBoxItem>(list.ContainerFromIndex(1));
         t = Down(w, Center(row, w));
         Assert.Contains(":pressed", row.Classes);
-        AssertBrush(row, "InsCtlBg", () => row.Background);
+        AssertBrush(row, "InsPressLayer", () => row.Background); // the press's state layer (Press.axaml), clearer than the hover's tint
         Up(w, t, Center(row, w));
 
         Tap(w, Center(card, w));

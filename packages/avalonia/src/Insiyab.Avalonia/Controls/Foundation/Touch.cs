@@ -27,6 +27,7 @@ internal static class Touch
     internal sealed class State
     {
         public bool IsTouch;
+        public bool Keys;        // a key went down since the last press: a focus ring may show
         public IPointer? Pointer;
         public Point Start;
         public bool Moved;
@@ -56,6 +57,11 @@ internal static class Touch
         InputElement.PointerReleasedEvent.AddClassHandler<TopLevel>(OnReleased, RoutingStrategies.Tunnel, handledEventsToo: true);
         InputElement.HoldingEvent.AddClassHandler<TopLevel>(OnHolding, RoutingStrategies.Bubble, handledEventsToo: true);
         InputElement.PointerCaptureLostEvent.AddClassHandler<Slider>(OnSliderLost, RoutingStrategies.Bubble, handledEventsToo: true);
+        InputElement.KeyDownEvent.AddClassHandler<TopLevel>((top, _) => StateOf(top).Keys = true, RoutingStrategies.Tunnel, handledEventsToo: true);
+        // under a finger a focus ring shows only after a key (a sheet or a card that focuses its first control as it opens draws none); Avalonia has set the ring's pseudo-class in its own handler, which runs first
+        InputElement.GotFocusEvent.AddClassHandler<Control>(OnGotFocus);
+        MenuItem.IsSelectedProperty.Changed.AddClassHandler<MenuItem>(OnMenuItemSelected);
+        ScrollViewer.ScrollChangedEvent.AddClassHandler<ScrollViewer>(TouchScrollbars.OnScrolled);
         Control.LoadedEvent.AddClassHandler<TopLevel>((top, _) => Show(top, StateOf(top)));
     }
 
@@ -82,7 +88,28 @@ internal static class Touch
     public static bool MaySelect(PointerEventArgs e) =>
         e.Pointer.Type != PointerType.Touch || StateOf(e.Source as Visual) is { } st && st.Pointer == e.Pointer && st.Text;
 
-    private static void Show(TopLevel top, State st) => ((IPseudoClasses)top.Classes).Set(InsiyabTheme.TouchPseudoClass, st.IsTouch);
+    private static void Show(TopLevel top, State st)
+    {
+        ((IPseudoClasses)top.Classes).Set(InsiyabTheme.TouchPseudoClass, st.IsTouch);
+        ((IPseudoClasses)top.Classes).Set(TouchScrollbars.PseudoClass, st.IsTouch && Os.IsAndroid);
+    }
+
+    private static void OnGotFocus(Control c, FocusChangedEventArgs e)
+    {
+        if (!ReferenceEquals(e.Source, c) || StateOf(c) is not { IsTouch: true, Keys: false }) return;
+        if (c.Classes.Contains(":focus-visible")) ((IPseudoClasses)c.Classes).Set(":focus-visible", false);
+    }
+
+    // A menu that marks its first item as it opens marks it for the keyboard; under a finger with no key pressed the item is not drawn as chosen (a finger on it still shows its press).
+    private static void OnMenuItemSelected(MenuItem item, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.NewValue is not true || item.IsPointerOver || StateOf(item) is not { IsTouch: true, Keys: false }) return;
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (item.IsSelected && !item.IsPointerOver && StateOf(item) is { IsTouch: true, Keys: false })
+                ((IPseudoClasses)item.Classes).Set(":selected", false);
+        }, DispatcherPriority.Send);
+    }
 
     // Tests take a TopLevel as touch before any finger came, as a phone starts.
     internal static void SetTouch(TopLevel top, bool on) => SetMode(top, StateOf(top), on);
@@ -99,6 +126,7 @@ internal static class Touch
         var st = StateOf(top);
         var touch = e.Pointer.Type == PointerType.Touch;
         SetMode(top, st, touch);
+        st.Keys = false;
         CloseTip(st);
         st.Pointer = null;
         st.Slider = null;

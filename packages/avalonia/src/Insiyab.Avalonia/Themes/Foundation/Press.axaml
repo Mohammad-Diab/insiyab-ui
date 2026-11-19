@@ -1,0 +1,104 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ins="using:Insiyab.Avalonia.Controls">
+
+  <!-- The pressed look of the kinds that showed none, with effects on or off: a bare or link button (a whole row that is a button among them), a close button under a finger, a link chip, a menu row, a stat that leads somewhere, a notification row, a list row, the shown tab of a bottom bar. Their press is held a moment after the release in every window (PressHold.Always), so a quick tap's colour is drawn; the colour is a state layer over what is under them (InsPressLayer, the platforms' pressed tint) or the kind's own hover look where it has a clear one. The kinds that move on a press (the dip, the island's rise) keep that with the effects on; with them off their pressed colour is held the same way (PressHold, Still.axaml). -->
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsPressLayer" Color="#1F0F172A" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsPressLayer" Color="#24FFFFFF" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <Style Selector="Button.bare, Button.link, HyperlinkButton.link, Button.close, Button.chip, HyperlinkButton.chip, Button.pop-item, Button.stat-link, ins|NotifyItem, ins|BottomNavItem, ListBox:not(.static) ListBoxItem, ins|SegmentedItem, ins|MonthBorder, Button.shell-link">
+    <Setter Property="ins:PressHold.Always" Value="True" />
+  </Style>
+
+  <!-- a bare or link button: the state layer on its own face (a word's, an icon's, a whole row's) -->
+  <Style Selector="Button.bare:pressed, Button.link:pressed, HyperlinkButton.link:pressed">
+    <Setter Property="Background" Value="{DynamicResource InsPressLayer}" />
+  </Style>
+  <!-- the player's buttons: their own hover's disc, a step stronger -->
+  <Style Selector=":is(Button).bare.media-btn:pressed">
+    <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
+  </Style>
+  <Style Selector=".media-over :is(Button).bare.media-btn:pressed">
+    <Setter Property="Background" Value="#40FFFFFF" />
+  </Style>
+  <Style Selector=".media-over :is(Button).bare.media-btn.md:pressed, .media-over :is(Button).bare.media-btn.lg:pressed">
+    <Setter Property="Background" Value="#8C000000" />
+  </Style>
+
+  <!-- a close button: its ground a step darker (the secondary button's pressed ground); the red one its border tone; the bare one fully drawn on a state layer -->
+  <Style Selector="Button.close:pressed">
+    <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
+  </Style>
+  <Style Selector="Button.close.bad:pressed">
+    <Setter Property="Background" Value="{DynamicResource InsToneBadBd}" />
+  </Style>
+  <Style Selector="Button.close.bare:pressed">
+    <Setter Property="Background" Value="{DynamicResource InsPressLayer}" />
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+
+  <!-- a link chip: the secondary button's pressed ground -->
+  <Style Selector="Button.chip:pressed, HyperlinkButton.chip:pressed">
+    <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
+  </Style>
+
+  <!-- a menu row: its hover tint (a pressed row closes its menu) -->
+  <Style Selector="Button.pop-item:pressed">
+    <Setter Property="Background" Value="{DynamicResource InsPopItemHover}" />
+  </Style>
+  <Style Selector="Button.pop-item.danger:pressed">
+    <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+  </Style>
+
+  <!-- a stat that leads somewhere: the state layer on its face -->
+  <Style Selector="Button.stat-link:pressed /template/ :is(Border)#PART_Focus">
+    <Setter Property="Background" Value="{DynamicResource InsPressLayer}" />
+  </Style>
+
+  <!-- a bottom bar's (or rail's) tab: the state layer in its pill's place, over the chosen tab's pill too (a tap on the shown tab takes it to its top) -->
+  <Style Selector="ins|BottomNavItem:pressed /template/ :is(Border)#PART_Hover">
+    <Setter Property="Background" Value="{DynamicResource InsPressLayer}" />
+    <Setter Property="Opacity" Value="1" />
+    <Setter Property="ZIndex" Value="1" />
+  </Style>
+  <Style Selector="ins|BottomNavItem:pressed /template/ ins|Icon#PART_Icon, ins|BottomNavItem:pressed /template/ :is(Border)#PART_Badge, ins|BottomNavItem:pressed /template/ :is(Border)#PART_Dot">
+    <Setter Property="ZIndex" Value="2" />
+  </Style>
+
+  <!-- a sidebar link (a page of the shell's menu): the state layer, over the chosen one's face too (its hover tint is too faint to see under a finger, and a mouse's press of a page not chosen yet showed only the start of its selection) -->
+  <Style Selector="ListBox.shell-nav ListBoxItem:pressed, Button.shell-link:pressed">
+    <Setter Property="Background" Value="{DynamicResource InsPressLayer}" />
+  </Style>
+
+  <!-- a choice of a segmented control that is not the chosen one: the state layer (a chip's choice: the chip's pressed ground); the chosen one's face stays -->
+  <Style Selector="ins|SegmentedItem:pressed:not(:selected)">
+    <Setter Property="Background" Value="{DynamicResource InsPressLayer}" />
+  </Style>
+  <Style Selector="ins|Segmented.chips ins|SegmentedItem:pressed:not(:selected)">
+    <Setter Property="Background" Value="{DynamicResource InsCtlBd}" />
+  </Style>
+
+  <!-- the calendar's parts a press acts on (MonthBorder sets :pressed): a day, a linked event, a day's heading, the hidden hours' band, the compact «+N» take the state layer over their own fill and under their words (a day keeps its glass, an event its tone) -->
+  <Style Selector="ins|MonthBorder.month-day:pressed, ins|MonthBorder.link:pressed, ins|MonthBorder.week-band:pressed, ins|MonthBorder.month-more-link:pressed">
+    <Setter Property="PressLayer" Value="{DynamicResource InsPressLayer}" />
+  </Style>
+
+  <!-- a notification row and a list row: the state layer (their hover tint is too faint to see under a finger) -->
+  <Style Selector="ins|NotifyItem:pressed">
+    <Setter Property="Background" Value="{DynamicResource InsPressLayer}" />
+  </Style>
+  <Style Selector="ListBox:not(.static):not(.shell-nav):not(.nav) ListBoxItem:pressed">
+    <Setter Property="Background" Value="{DynamicResource InsPressLayer}" />
+  </Style>
+
+</Styles>

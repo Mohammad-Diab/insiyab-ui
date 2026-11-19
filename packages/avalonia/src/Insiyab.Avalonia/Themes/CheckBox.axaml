@@ -105,7 +105,9 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" Background="{TemplateBinding Background}">
+            <!-- the press reaches a finger's box past the edges (Reach); a host marked touch makes the row taller and centres the mark and the words in it -->
+            <ins:ReachPanel x:Name="PART_Press" Background="{TemplateBinding Background}">
+            <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
               <Panel x:Name="BoxHost" Width="18" Height="18" VerticalAlignment="Center">
                 <ins:TemplateBorder x:Name="FocusRing"
                         Margin="-5"
@@ -125,7 +127,7 @@
                         BoxShadow="{DynamicResource InsBevelDim}">
                   <ins:TemplateBorder.Transitions>
                     <Transitions>
-                      <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                      <ins:BrushFade Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                     </Transitions>
                   </ins:TemplateBorder.Transitions>
                 </ins:TemplateBorder>
@@ -174,6 +176,7 @@
                                 LineHeight="20.4"
                                 TextWrapping="Wrap" />
             </Grid>
+            </ins:ReachPanel>
           </ControlTemplate>
         </Setter>
 
@@ -247,8 +250,8 @@
           <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-              <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
@@ -271,7 +274,9 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
           <ControlTemplate>
-            <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" Background="{TemplateBinding Background}">
+            <!-- the press reaches a finger's box past the edges (Reach); a host marked touch makes the row taller and centres the mark and the words in it -->
+            <ins:ReachPanel x:Name="PART_Press" Background="{TemplateBinding Background}">
+            <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
               <Panel x:Name="BoxHost" Width="18" Height="18" VerticalAlignment="Center">
                 <ins:TemplateBorder x:Name="FocusRing"
                         Margin="-5"
@@ -291,7 +296,7 @@
                         BoxShadow="{DynamicResource InsBevelDim}">
                   <ins:TemplateBorder.Transitions>
                     <Transitions>
-                      <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                      <ins:BrushFade Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
                     </Transitions>
                   </ins:TemplateBorder.Transitions>
                 </ins:TemplateBorder>
@@ -328,6 +333,7 @@
                                 LineHeight="20.4"
                                 TextWrapping="Wrap" />
             </Grid>
+            </ins:ReachPanel>
           </ControlTemplate>
         </Setter>
 
@@ -394,8 +400,8 @@
           <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-              <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
