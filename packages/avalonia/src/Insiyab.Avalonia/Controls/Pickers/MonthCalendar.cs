@@ -11,6 +11,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Media.TextFormatting;
 using Avalonia.Metadata;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -113,6 +114,9 @@ public class MonthCalendar : TemplatedControl, IWords
     public static readonly StyledProperty<bool> ShowViewSwitchProperty =
         AvaloniaProperty.Register<MonthCalendar, bool>(nameof(ShowViewSwitch), true);
 
+    public static readonly StyledProperty<bool> ShowHeaderProperty =
+        AvaloniaProperty.Register<MonthCalendar, bool>(nameof(ShowHeader), true);
+
     public static readonly StyledProperty<int> DayStartHourProperty =
         AvaloniaProperty.Register<MonthCalendar, int>(nameof(DayStartHour), 6);
 
@@ -141,7 +145,7 @@ public class MonthCalendar : TemplatedControl, IWords
         AvaloniaProperty.Register<MonthCalendar, MonthDetailsPresentation>(nameof(DetailsPresentation));
 
     // How far a turn's new days slide in from the side they come from.
-    internal const double TurnSlide = 24;
+    internal const double TurnSlide = Entrance.TurnDistance;
 
     private const int Shown = 3;
     private const int CompactShown = 2;
@@ -224,6 +228,9 @@ public class MonthCalendar : TemplatedControl, IWords
 
     /// <summary>The month, week and day switch in the header.</summary>
     public bool ShowViewSwitch { get => GetValue(ShowViewSwitchProperty); set => SetValue(ShowViewSwitchProperty, value); }
+
+    /// <summary>The header (the period between its arrows, Today, the views and the hours); false for a page that moves the calendar from its own bar with <c>Go</c>, <c>View</c> and the change events.</summary>
+    public bool ShowHeader { get => GetValue(ShowHeaderProperty); set => SetValue(ShowHeaderProperty, value); }
 
     /// <summary>The hour the work hours start at, 6 unless set; kept within 0 to 23.</summary>
     public int DayStartHour { get => GetValue(DayStartHourProperty); set => SetValue(DayStartHourProperty, value); }
@@ -313,7 +320,7 @@ public class MonthCalendar : TemplatedControl, IWords
         else if (change.Property == DateProperty && !SameMonth(Date, Month))
             Hold(() => SetCurrentValue(MonthProperty, First(Date)));
         if (change.Property == MonthProperty || change.Property == DateProperty || change.Property == EventsProperty || change.Property == LocaleProperty
-            || change.Property == FlowDirectionProperty || change.Property == ViewProperty || change.Property == ShowViewSwitchProperty
+            || change.Property == FlowDirectionProperty || change.Property == ViewProperty || change.Property == ShowViewSwitchProperty || change.Property == ShowHeaderProperty
             || change.Property == DayStartHourProperty || change.Property == DayEndHourProperty || change.Property == HourHeightProperty
             || change.Property == WorkHoursOnlyProperty || change.Property == ShowHoursSwitchProperty || change.Property == HeaderLayoutProperty
             || change.Property == EventDetailsProperty)
@@ -321,14 +328,52 @@ public class MonthCalendar : TemplatedControl, IWords
         else if (change.Property == BoundsProperty || change.Property == NarrowLayoutProperty)
         {
             var narrow = Bounds.Width > 0 && Bounds.Width < 544;
+            var renamed = false;
             if (narrow != _narrow)
             {
                 _narrow = narrow;
                 PseudoClasses.Set(":narrow", narrow);
+                renamed = true; // the day view's date
+            }
+            var tight = TightNames();
+            if (tight != _tightNames)
+            {
+                _tightNames = tight;
+                renamed = true; // the days' names: the narrow ones where the short ones no longer fit a column (either form)
             }
             // The compact form shows other parts (two events and a pressable «+N», shorter names), so it is drawn again after this layout.
             if (Compact()) Dispatcher.UIThread.Post(Draw, DispatcherPriority.Render);
+            else if (renamed) Rename();
         }
+    }
+
+    // The short names (Arabic's are whole words) wider than a narrow calendar's columns: a dots-form desktop calendar cut «السبت» at 360; English's three letters still fit there.
+    private bool _tightNames;
+
+    private bool TightNames()
+    {
+        if (!_narrow) return false;
+        var words = Words;
+        var head = this.GetVisualDescendants().OfType<MonthText>().FirstOrDefault(t => t.Classes.Contains("month-wd") || t.Classes.Contains("week-wd"));
+        var face = head is null ? new Typeface(FontFamily, FontStyle, FontWeight) : new Typeface(head.FontFamily, head.FontStyle, head.FontWeight);
+        var size = head?.FontSize ?? FontSize;
+        var widest = 0.0;
+        foreach (var d in Enum.GetValues<DayOfWeek>())
+            using (var layout = new TextLayout(words.ShortDay(d), face, size, null))
+                widest = Math.Max(widest, layout.Width);
+        return widest > Bounds.Width / 7 - 12;
+    }
+
+    // A calendar that turned narrow or wide in the same form: the days' names and the day view's date change in place (the cells stay as they are).
+    private void Rename()
+    {
+        var words = Words;
+        foreach (var t in this.GetVisualDescendants().OfType<MonthText>())
+            if (t.Tag is DayOfWeek wd && (t.Classes.Contains("month-wd") || t.Classes.Contains("week-wd")))
+                t.Text = _compact || _tightNames ? words.Narrow(wd) : words.ShortDay(wd);
+        if (_title is not null && View == MonthCalendarView.Day)
+            _title.Text = _narrow ? words.FormatDay(PickerCalendar.Gregorian, Span(words).First) : words.FullDay(PickerCalendar.Gregorian, Span(words).First);
+        Steady(words);
     }
 
     // Works out the compact form; true when it changed.
@@ -411,9 +456,7 @@ public class MonthCalendar : TemplatedControl, IWords
     // The new days slide in from the side they come from (back from the start, on from the end, mirrored in RTL); a switch of view or of the hours shown rises in; still motion shows them at once.
     private void Arrive(int toward)
     {
-        if (Body is not { } body) return;
-        if (toward == 0) Entrance.Play(body, EntranceEffect.Rise);
-        else Entrance.Slide(body, toward > 0 ? TurnSlide : -TurnSlide);
+        if (Body is { } body) Entrance.Turn(body, toward);
     }
 
     private void SwitchTo(MonthCalendarView view, DateTime? day = null)
@@ -430,6 +473,21 @@ public class MonthCalendar : TemplatedControl, IWords
         Draw();
         Arrive(0);
         ViewChanged?.Invoke(this, view);
+    }
+
+    /// <summary>The period the header names for <paramref name="view"/> around <paramref name="date"/>, in this calendar's words (its month and year, its week's days with the shared month and year said once, its day without the weekday while the calendar is narrow), the same text as its header, for an app that names the period in a bar of its own while the header is hidden.</summary>
+    public string PeriodTitle(MonthCalendarView view, DateTime date)
+    {
+        var words = Words;
+        var greg = PickerCalendar.Gregorian;
+        var d = date.Date;
+        var first = d.AddDays(-(((int)d.DayOfWeek - (int)words.WeekStart + 7) % 7));
+        return view switch
+        {
+            MonthCalendarView.Week => words.FormatRange(greg, first, first.AddDays(6)),
+            MonthCalendarView.Day => _narrow ? words.FormatDay(greg, d) : words.FullDay(greg, d),
+            _ => words.MonthYear(greg, First(d)),
+        };
     }
 
     // The first day the view shows and how many: a week from the locale's first day, or the one day.
@@ -496,10 +554,19 @@ public class MonthCalendar : TemplatedControl, IWords
                     new MonthStack { Orientation = Orientation.Horizontal, Spacing = 4, Wraps = true, Classes = { "month-nav" } },
                     new MonthStack { Orientation = Orientation.Horizontal, Classes = { "month-middle" } },
                     new MonthStack { Orientation = Orientation.Horizontal, Spacing = 4, Wraps = true, AtEnd = true, Classes = { "month-end" } },
+                    new MonthStack { Orientation = Orientation.Horizontal, Spacing = 4, Classes = { "month-aside" } },
+                    // an app's own first action (an «add» button), before Today on one line and opening the first line when the head wraps; empty unless filled
+                    new MonthStack { Orientation = Orientation.Horizontal, Spacing = 4, Classes = { "month-lead" } },
                 },
             };
             foreach (var group in _head.Children) KeyboardNavigation.SetTabNavigation(group, KeyboardNavigationMode.Local);
-            _title = new MonthText { Classes = { "month-title" } };
+            _title = new MonthText { Classes = { "month-title" }, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, WholeWords = true };
+            // the date's steady width is measured in its own font, once the theme gave it (a first draw comes before the styles)
+            _title.PropertyChanged += (_, e) =>
+            {
+                if (e.Property == TextBlock.FontSizeProperty || e.Property == TextBlock.FontFamilyProperty || e.Property == TextBlock.FontWeightProperty)
+                    Steady(Words);
+            };
             _switch = new Segmented { Classes = { "month-views" } };
             _syncSwitch = true;
             _switch.ItemsSource = new[] { words.Words["month.month"], words.Words["month.week"], words.Words["month.day"] };
@@ -525,9 +592,11 @@ public class MonthCalendar : TemplatedControl, IWords
         _title!.Text = view switch
         {
             MonthCalendarView.Week => words.FormatRange(greg, first, first.AddDays(6)),
-            MonthCalendarView.Day => words.FullDay(greg, first),
+            // a narrow calendar's day: without the weekday (its column's head names it), so the date and its arrows stay on one line at 360
+            MonthCalendarView.Day => _narrow ? words.FormatDay(greg, first) : words.FullDay(greg, first),
             _ => words.MonthYear(greg, First(Month)),
         };
+        Steady(words);
         var say = words.Words;
         var (back, on) = view switch
         {
@@ -538,6 +607,7 @@ public class MonthCalendar : TemplatedControl, IWords
         AutomationProperties.SetName(_prev!, back);
         AutomationProperties.SetName(_next!, on);
         _switch!.IsVisible = ShowViewSwitch;
+        _head.IsVisible = ShowHeader;
         var (ws, we) = WorkHours();
         _hours!.IsVisible = view != MonthCalendarView.Month && ShowHoursSwitch && Trims;
         _hours.IsChecked = WorkHoursOnly;
@@ -551,14 +621,45 @@ public class MonthCalendar : TemplatedControl, IWords
         return _head;
     }
 
-    // Puts the header's parts in their groups: centred, Today and the hours at the start, the date between its arrows in the middle, the views at the end; or the date alone at the start and the rest at the end.
+    private (PickerLocale Words, int Year, double Size, FontFamily Family, FontWeight Weight, bool Narrow)? _steadyFor;
+    private double _steady;
+
+    // The date between its arrows keeps one width while the calendar pages (the widest title of a month, a week inside one month and a day of the year, in this language and font), its text centred: a longer one (a week across two months) wraps inside it. So the header's measure and form follow the row's width alone and never the date shown: paging never moves the arrows nor switches the form.
+    private void Steady(PickerLocale words)
+    {
+        if (_title is not { } title) return;
+        var key = (words, Date.Year, title.FontSize, title.FontFamily, title.FontWeight, _narrow);
+        if (_steadyFor != key)
+        {
+            _steadyFor = key;
+            var greg = PickerCalendar.Gregorian;
+            var face = new Typeface(title.FontFamily, title.FontStyle, title.FontWeight);
+            var year = new DateTime(Date.Year, 1, 1);
+            var titles = Enumerable.Range(0, 12).Select(m => words.MonthYear(greg, year.AddMonths(m)))
+                .Concat(Enumerable.Range(0, 54).Select(w => year.AddDays(7 * w - (((int)year.DayOfWeek - (int)words.WeekStart + 7) % 7)))
+                    .Where(first => first.Month == first.AddDays(6).Month).Select(first => words.FormatRange(greg, first, first.AddDays(6))))
+                .Concat(Enumerable.Range(0, 12 * 7).Select(k => year.AddMonths(k / 7).AddDays(21 + k % 7)) // each month's days 22 to 28: every weekday, two figures
+                    .Select(day => _narrow ? words.FormatDay(greg, day) : words.FullDay(greg, day)));
+            var widest = 0d;
+            foreach (var text in titles)
+            {
+                using var layout = new TextLayout(text, face, title.FontSize, null);
+                widest = Math.Max(widest, layout.WidthIncludingTrailingWhitespace);
+            }
+            _steady = Math.Ceiling(widest) + 8; // and the figures' even widths, which this measure leaves out
+        }
+        title.Width = _steady;
+    }
+
+    // Puts the header's parts in their groups: centred, Today and the hours (the aside group) at the start, the date between its arrows in the middle, the views at the end; or the date alone at the start and the rest at the end.
     private void Lay(MonthHeaderLayout layout)
     {
         _headLayout = layout;
-        var (start, middle, end) = ((Panel)_head!.Children[0], (Panel)_head.Children[1], (Panel)_head.Children[2]);
+        var (start, middle, end, aside) = ((Panel)_head!.Children[0], (Panel)_head.Children[1], (Panel)_head.Children[2], (Panel)_head.Children[3]);
         start.Children.Clear();
         middle.Children.Clear();
         end.Children.Clear();
+        aside.Children.Clear();
         if (layout == MonthHeaderLayout.TitleStart)
         {
             _hours!.Margin = new Thickness(0, 0, 8, 0);
@@ -569,9 +670,10 @@ public class MonthCalendar : TemplatedControl, IWords
             middle.IsVisible = false;
             return;
         }
-        _hours!.Margin = new Thickness(10, 0, 0, 0);
+        _hours!.Margin = default;
         _switch!.Margin = default;
-        start.Children.AddRange([_today!, _hours]);
+        start.Children.Add(_today!);
+        aside.Children.Add(_hours); // beside Today on one line; when the header wraps, it opens the second line, before the views
         middle.Children.AddRange([_prev!, _title!, _next!]);
         end.Children.Add(_switch);
         ((MonthStack)end).KeepLast = 0;
@@ -610,7 +712,7 @@ public class MonthCalendar : TemplatedControl, IWords
         for (var d = 0; d < 7; d++)
         {
             var wd = (DayOfWeek)((start + d) % 7);
-            var th = new MonthText { Text = _compact ? words.Narrow(wd) : words.ShortDay(wd), Classes = { "month-wd" } };
+            var th = new MonthText { Text = _compact || _tightNames ? words.Narrow(wd) : words.ShortDay(wd), Classes = { "month-wd" }, Tag = wd };
             AutomationProperties.SetName(th, words.LongDay(wd));
             Grid.SetColumn(th, d);
             grid.Children.Add(th);
@@ -735,7 +837,7 @@ public class MonthCalendar : TemplatedControl, IWords
             var list = byDay.TryGetValue(day, out var l) ? l : [];
             var isToday = day == today;
 
-            var name = new MonthText { Text = _compact && days > 1 ? words.Narrow(day.DayOfWeek) : words.ShortDay(day.DayOfWeek), Classes = { "week-wd" } };
+            var name = new MonthText { Text = (_compact || _tightNames) && days > 1 ? words.Narrow(day.DayOfWeek) : words.ShortDay(day.DayOfWeek), Classes = { "week-wd" }, Tag = days > 1 ? day.DayOfWeek : null };
             var num = new MonthBorder { Child = new MonthText { Text = PickerLocale.N(day.Day) }, Classes = { "month-num" } };
             var head = new MonthBorder { Child = new MonthStack { Children = { name, num } }, Classes = { "week-head" }, Tag = day };
             AutomationProperties.SetName(head, words.FullDay(PickerCalendar.Gregorian, day));

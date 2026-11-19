@@ -36,7 +36,8 @@ public class MonthHeadTests
         var w = Show(new Panel { Margin = new Thickness(20), Children = { month } }, Dir(dir), width: 1000, height: 700);
         var head = month.HeadRow!;
         var (start, middle, end) = ((Panel)head.Children[0], (Panel)head.Children[1], (Panel)head.Children[2]);
-        Assert.Equal(["today", "hours"], start.Children.Select(c => c.Tag as string));
+        Assert.Equal(["today"], start.Children.Select(c => c.Tag as string));
+        Assert.Equal(["hours"], ((Panel)head.Children[3]).Children.Select(c => c.Tag as string));
         Assert.Equal("prev", middle.Children[0].Tag);
         Assert.Contains("month-title", middle.Children[1].Classes);
         Assert.Equal("next", middle.Children[2].Tag);
@@ -74,20 +75,60 @@ public class MonthHeadTests
     [AvaloniaTheory]
     [InlineData("rtl")]
     [InlineData("ltr")]
-    public void A_narrow_head_gives_the_date_its_own_line_and_the_tab_order_follows(string dir)
+    public void A_narrow_head_puts_the_hours_and_the_views_first_and_today_with_the_date_under_them(string dir)
     {
         var month = Week(dir, 470);
         var w = Show(new Panel { Margin = new Thickness(20), Children = { month } }, Dir(dir), width: 520, height: 700);
         var head = month.HeadRow!;
-        var (start, middle, end) = ((Panel)head.Children[0], (Panel)head.Children[1], (Panel)head.Children[2]);
+        var (start, middle, end, aside) = ((Panel)head.Children[0], (Panel)head.Children[1], (Panel)head.Children[2], (Panel)head.Children[3]);
         Assert.True(head.IsWrapped);
-        Assert.Equal(Box(start, w).Center.Y, Box(end, w).Center.Y, 1);
-        Assert.True(Box(middle, w).Top >= Box(start, w).Bottom + 11);
-        Assert.InRange(Box(middle, w).Center.X - Box(head, w).Center.X, -1, 1);
-        Assert.Equal(0, KeyboardNavigation.GetTabIndex(start));
-        Assert.Equal(1, KeyboardNavigation.GetTabIndex(end));
-        Assert.Equal(2, KeyboardNavigation.GetTabIndex(middle));
+        Assert.False(head.IsStacked);
+        var row = Box(head, w);
+        // line 1, as a phone's head and Google Calendar group it: what is shown first, the hours and the views at the end
+        Assert.Equal(Box(aside, w).Center.Y, Box(end, w).Center.Y, 1);
+        Assert.Equal(row.Top, Box(end, w).Top, 1);
+        Assert.Equal(dir == "rtl" ? row.Left : row.Right, dir == "rtl" ? Box(end, w).Left : Box(end, w).Right, 1);
+        Assert.True(dir == "rtl" ? Box(aside, w).Left >= Box(end, w).Right + 11 : Box(aside, w).Right <= Box(end, w).Left - 11);
+        // line 2: Today, then the date between its arrows (in the row's middle while it clears Today)
+        Assert.Equal(Box(start, w).Center.Y, Box(middle, w).Center.Y, 1);
+        Assert.True(Box(start, w).Top >= Box(end, w).Bottom + 11);
+        Assert.Equal(dir == "rtl" ? row.Right : row.Left, dir == "rtl" ? Box(start, w).Right : Box(start, w).Left, 1);
+        Assert.True(dir == "rtl" ? Box(middle, w).Right <= Box(start, w).Left - 11 : Box(middle, w).Left >= Box(start, w).Right + 11);
+        Assert.Equal(1, KeyboardNavigation.GetTabIndex(aside));
+        Assert.Equal(2, KeyboardNavigation.GetTabIndex(end));
+        Assert.Equal(3, KeyboardNavigation.GetTabIndex(start));
+        Assert.Equal(4, KeyboardNavigation.GetTabIndex(middle));
         Capture(w, $"month-head-narrow-{dir}");
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void An_apps_lead_action_comes_first_and_opens_the_first_line_when_the_head_wraps(string dir)
+    {
+        var month = Week(dir, 960);
+        var w = Show(new Panel { Margin = new Thickness(20), Children = { month } }, Dir(dir), width: 1000, height: 700);
+        var head = month.HeadRow!;
+        var lead = (Panel)head.Children[4];
+        Assert.Contains("month-lead", lead.Classes);
+        Assert.Empty(lead.Children);
+        var add = new Button { Content = "Add event", Classes = { "primary", "sm" } };
+        lead.Children.Add(add);
+        Settle(100);
+        var row = Box(head, w);
+        var today = Box(Tagged(month, "today"), w);
+        Assert.False(head.IsWrapped);
+        Assert.Equal(dir == "rtl" ? row.Right : row.Left, dir == "rtl" ? Box(add, w).Right : Box(add, w).Left, 1);
+        Assert.Equal(12, dir == "rtl" ? Box(add, w).Left - today.Right : today.Left - Box(add, w).Right, 1);
+        Assert.Equal(0, KeyboardNavigation.GetTabIndex(lead));
+
+        month.Width = 560;
+        Settle(100);
+        Assert.True(head.IsWrapped);
+        var end = Box(head.Children[2], w);
+        Assert.Equal(Box(add, w).Center.Y, end.Center.Y, 1);
+        Assert.True(Box(Tagged(month, "today"), w).Top >= end.Bottom + 11);
+        Capture(w, $"month-head-lead-{dir}");
     }
 
     [AvaloniaTheory]
@@ -109,8 +150,51 @@ public class MonthHeadTests
 
         month.HeaderLayout = MonthHeaderLayout.Centered;
         Settle(200);
-        Assert.Equal(["today", "hours"], start.Children.Select(c => c.Tag as string));
+        Assert.Equal(["today"], start.Children.Select(c => c.Tag as string));
+        Assert.Equal(["hours"], ((Panel)head.Children[3]).Children.Select(c => c.Tag as string));
         Assert.True(middle.IsVisible);
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl", 760)]
+    [InlineData("ltr", 760)]
+    [InlineData("rtl", 1200)]
+    public void Paging_keeps_the_dates_width_and_the_heads_form_a_long_week_wraps_inside_it(string dir, double width)
+    {
+        // a week inside one month, then one across two months («31 تشرين الأول – 6 تشرين الثاني 2026»), then one inside a month again
+        var month = new MonthCalendar { View = MonthCalendarView.Week, Date = new DateTime(2026, 10, 21), Width = width, Locale = dir == "rtl" ? "ar" : "en" };
+        Show(new Panel { Margin = new Thickness(20), Children = { month } }, Dir(dir), width: width + 40, height: 700);
+        var head = month.HeadRow!;
+        var title = head.GetVisualDescendants().OfType<TextBlock>().Single(t => t.Classes.Contains("month-title"));
+        var (wrapped, titleWidth, prev) = (head.IsWrapped, title.Bounds.Width, Box(Tagged(month, "prev"), month).X);
+        foreach (var day in new[] { new DateTime(2026, 11, 2), new DateTime(2026, 11, 11), new DateTime(2026, 11, 30) })
+        {
+            month.Date = day;
+            Settle(50);
+            Assert.Equal(wrapped, head.IsWrapped);                                // the head's form follows the row's width only
+            Assert.Equal(titleWidth, title.Bounds.Width, 0.5);                    // the date keeps one width
+            Assert.Equal(prev, Box(Tagged(month, "prev"), month).X, 0.5);         // so the arrows never move
+        }
+        month.Date = new DateTime(2026, 9, 30);                                   // a week from September into October, whatever its first day
+        Settle(50);
+        Assert.Equal(titleWidth, title.Bounds.Width, 0.5);                        // a week across two months keeps the width too (wrapping inside it when longer)
+        Assert.Equal(wrapped, head.IsWrapped);
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl", 840)]
+    [InlineData("rtl", 1280)]
+    [InlineData("ltr", 840)]
+    public void Capture_paging_over_a_week_across_two_months(string dir, double width)
+    {
+        var month = new MonthCalendar { View = MonthCalendarView.Week, Date = new DateTime(2026, 9, 23), Width = width - 40, Locale = dir == "rtl" ? "ar" : "en", ShowHoursSwitch = true };
+        var w = Show(new Panel { Margin = new Thickness(20), Children = { month } }, Dir(dir), width: width, height: 260);
+        var k = 0;
+        foreach (var day in new[] { new DateTime(2026, 9, 23), new DateTime(2026, 9, 30), new DateTime(2026, 10, 7) })
+        {
+            month.Date = day;
+            Capture(w, $"month-paging-{dir}-{width}-{k++}");
+        }
     }
 
     [AvaloniaFact]

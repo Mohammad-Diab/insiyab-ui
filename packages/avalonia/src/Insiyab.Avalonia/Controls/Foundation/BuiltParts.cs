@@ -1,16 +1,104 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Rendering;
+using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
 // The Borders, TextBlocks and StackPanels the library builds in code: as with TemplateBorder, the app's Border.*, TextBlock.* and StackPanel.* styles and looks never reach them, and each control's parts carry only that control's own styles.
 
-/// <summary>A Border that <see cref="MonthCalendar"/> builds; its styles name it <c>ins|MonthBorder</c>.</summary>
+/// <summary>A Border that <see cref="MonthCalendar"/> builds; its styles name it <c>ins|MonthBorder</c>. The ones a press acts on (a day, a linked event or day heading, the hidden hours' band, the compact «+N») show <c>:pressed</c> while a finger or the left button is down on them, as a button does, so they draw the pressed colour (<c>Press.axaml</c>) and <see cref="PressHold"/> holds it a moment after a quick tap; only the innermost one under the press takes it (an event's chip, not its day), and a press that slides lets go of it. The pressed colour is a state layer laid OVER the part's own fill and under its words (<see cref="PressLayer"/>, set by a style; drawn by a clear part made the first time it is needed), so a day keeps its glass and an event its tone beneath it.</summary>
 internal class MonthBorder : Border
 {
+    private const string Pressed = ":pressed";
+    private const double Slop = 10;
+    private Point? _down;
+    private TemplateBorder? _layer;
+
+    /// <summary>The state layer over the part's fill while it is pressed (set by <c>Press.axaml</c>); none at rest.</summary>
+    public static readonly StyledProperty<IBrush?> PressLayerProperty =
+        AvaloniaProperty.Register<MonthBorder, IBrush?>(nameof(PressLayer));
+
+    public IBrush? PressLayer { get => GetValue(PressLayerProperty); set => SetValue(PressLayerProperty, value); }
+
     protected override Type StyleKeyOverride => typeof(MonthBorder);
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == PressLayerProperty)
+        {
+            if (_layer is null)
+            {
+                if (PressLayer is null) return;
+                // behind the content (the first visual child), over the part's own background, which Border draws before its children
+                _layer = new TemplateBorder { IsHitTestVisible = false, Transitions = [new BrushFade { Property = BackgroundProperty, Duration = Motion.StillFade }] };
+                _layer[!CornerRadiusProperty] = this[!CornerRadiusProperty];
+                VisualChildren.Insert(0, _layer);
+                InvalidateMeasure();
+            }
+            _layer.Background = PressLayer;
+        }
+    }
+
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        _layer?.Measure(availableSize);
+        return base.MeasureOverride(availableSize);
+    }
+
+    protected override Size ArrangeOverride(Size finalSize)
+    {
+        _layer?.Arrange(new Rect(finalSize));
+        return base.ArrangeOverride(finalSize);
+    }
+
+    public MonthBorder()
+    {
+        AddHandler(PointerPressedEvent, OnDown, RoutingStrategies.Bubble, handledEventsToo: true);
+        AddHandler(PointerMovedEvent, OnMove, RoutingStrategies.Bubble, handledEventsToo: true);
+        AddHandler(PointerReleasedEvent, (_, _) => Lift(), RoutingStrategies.Bubble, handledEventsToo: true);
+    }
+
+    // what a press on it does something with
+    private bool Presses => Classes.Contains("month-day") || Classes.Contains("link") || Classes.Contains("week-band") || Classes.Contains("month-more-link");
+
+    private void OnDown(object? sender, PointerPressedEventArgs e)
+    {
+        if (!Presses || !e.GetCurrentPoint(this).Properties.IsLeftButtonPressed || e.Source is not Visual source) return;
+        // a pressable part inside it (an event's chip in its day) takes the press itself
+        for (var v = source; v is not null && !ReferenceEquals(v, this); v = v.GetVisualParent())
+            if (v is MonthBorder { Presses: true }) return;
+        _down = e.GetPosition(this);
+        PseudoClasses.Set(Pressed, true);
+    }
+
+    private void OnMove(object? sender, PointerEventArgs e)
+    {
+        if (_down is { } at && Point.Distance(at, e.GetPosition(this)) > Slop) Lift();
+    }
+
+    private void Lift()
+    {
+        _down = null;
+        PseudoClasses.Set(Pressed, false);
+    }
+
+    protected override void OnPointerCaptureLost(PointerCaptureLostEventArgs e)
+    {
+        base.OnPointerCaptureLost(e);
+        Lift();
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        Lift();
+    }
 }
 
 /// <summary>An event chip <see cref="MonthCalendar"/> builds: a pressable one reaches a finger around it. Its styles name it <c>ins|MonthBorder</c>.</summary>
@@ -23,6 +111,75 @@ internal sealed class MonthChip : MonthBorder, ICustomHitTest, IReach
 internal sealed class MonthText : TextBlock
 {
     protected override Type StyleKeyOverride => typeof(MonthText);
+
+    /// <summary>Set by a style: the text breaks between whole words only, a word too long for a line standing alone and cut with «…» (Avalonia's own wrapping breaks it letter by letter).</summary>
+    public static readonly StyledProperty<bool> WholeWordsProperty =
+        AvaloniaProperty.Register<MonthText, bool>(nameof(WholeWords));
+
+    public bool WholeWords { get => GetValue(WholeWordsProperty); set => SetValue(WholeWordsProperty, value); }
+
+    private string? _words;  // the text as given, while it is laid out by lines
+    private double _laidFor = double.NaN;
+    private bool _laying;
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == TextProperty && !_laying)
+        {
+            _words = Text;
+            _laidFor = double.NaN;
+        }
+        else if (change.Property == WholeWordsProperty)
+        {
+            _laidFor = double.NaN;
+            if (!WholeWords && _words is not null) Show(_words);
+            InvalidateMeasure();
+        }
+    }
+
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        if (WholeWords && _words is { } words && double.IsFinite(availableSize.Width) && availableSize.Width != _laidFor)
+        {
+            _laidFor = availableSize.Width;
+            Show(Lines(words, Math.Max(0, availableSize.Width - Padding.Left - Padding.Right)));
+        }
+        return base.MeasureOverride(availableSize);
+    }
+
+    private void Show(string text)
+    {
+        if (text == Text) return;
+        _laying = true;
+        SetCurrentValue(TextProperty, text);
+        _laying = false;
+    }
+
+    // Packs the words into lines no wider than the room, as many to a line as fit.
+    private string Lines(string text, double room)
+    {
+        var face = new global::Avalonia.Media.Typeface(FontFamily, FontStyle, FontWeight, FontStretch);
+        double Width(string s)
+        {
+            using var layout = new global::Avalonia.Media.TextFormatting.TextLayout(s, face, FontSize, null);
+            return layout.Width;
+        }
+        var lines = new List<string>();
+        var line = "";
+        foreach (var word in text.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var longer = line.Length == 0 ? word : line + " " + word;
+            if (line.Length == 0 || Width(longer) <= room) line = longer;
+            else
+            {
+                lines.Add(line);
+                line = word;
+            }
+        }
+        if (line.Length > 0) lines.Add(line);
+        return string.Join('\n', lines);
+    }
 }
 
 /// <summary>A StackPanel that <see cref="MonthCalendar"/> builds; its styles name it <c>ins|MonthStack</c>. A header group (<see cref="Wraps"/>) given less room than its row needs goes on over more lines, each packed toward the group's side.</summary>

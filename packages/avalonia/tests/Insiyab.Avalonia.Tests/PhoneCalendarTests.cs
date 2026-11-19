@@ -214,7 +214,9 @@ public class PhoneCalendarTests
             for (var j = i + 1; j < parts.Count; j++)
                 if (!parts[i].IsVisualAncestorOf(parts[j]) && !parts[j].IsVisualAncestorOf(parts[i]))
                     Assert.False(BoxOf(parts[i], w).Intersects(BoxOf(parts[j], w)), $"{parts[i].GetType().Name} and {parts[j].GetType().Name} overlap");
-        if (layout == MonthHeaderLayout.Centered) Assert.True(head.IsStacked);
+        // centred: Today keeps the date beside it on the first line (Google Calendar's grouping) while the two fit together
+        if (layout == MonthHeaderLayout.Centered && !head.IsStacked)
+            Assert.Equal(BoxOf(Assert.Single(parts, p => p.Tag as string == "today"), w).Center.Y, BoxOf(Assert.Single(parts, p => p.Classes.Contains("month-title")), w).Center.Y, 1);
         Assert.True(BoxOf(month.Body!, w).Top >= row.Bottom);
         Capture(w, $"month-phone-head-{layout}-{dir}");
     }
@@ -333,5 +335,54 @@ public class PhoneCalendarTests
             Assert.False(sheet.IsOpen);
         }
         finally { root.StopRendering(); }
+    }
+    // A page that moves the calendar from its own bar drops the calendar's header; Go and View still drive it.
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void Without_its_header_the_calendar_starts_with_its_days_and_still_turns(string dir)
+    {
+        var month = Calendar(MonthCalendarView.Month, dir);
+        month.NarrowLayout = MonthNarrowLayout.Compact;
+        month.ShowHeader = false;
+        var w = Show(month, Dir(dir), width: 360, height: 900);
+        Settle(200);
+        Assert.False(month.HeadRow!.IsVisible);
+        var bare = BoxOf(month.Body!, w).Top - BoxOf(month, w).Top;
+        Assert.True(bare < 8, $"the days start {bare} under the calendar's top");
+        var turned = new List<DateTime>();
+        month.MonthChanged += (_, first) => turned.Add(first);
+        month.Go(1);
+        Settle(400);
+        Assert.Equal([new DateTime(2026, 10, 1)], turned);
+        month.ShowHeader = true;
+        Settle(200);
+        Assert.True(month.HeadRow!.IsVisible);
+        Assert.True(BoxOf(month.Body!, w).Top >= BoxOf(month.HeadRow, w).Bottom, "with its header the days start under it");
+    }
+
+    // A compact week's narrow column breaks a long title between whole words, cutting a too-long word with «…»; so does the desktop's week (its own wrapping broke «Informatio / n» letter by letter in a narrow column), its lines as wide as its column.
+    [AvaloniaFact]
+    public void A_compact_week_breaks_a_long_title_between_its_words_only()
+    {
+        var month = Calendar(MonthCalendarView.Week);
+        month.NarrowLayout = MonthNarrowLayout.Compact;
+        const string title = "Information System Security";
+        month.Events = [new MonthEvent { Date = Day, Time = new TimeSpan(9, 0, 0), Duration = TimeSpan.FromHours(2), Title = title }];
+        Show(month, FlowDirection.LeftToRight, width: 360, height: 900);
+        Settle(200);
+        var text = month.ChipFor(month.Events[0])!.GetVisualDescendants().OfType<TextBlock>().Single(t => t.Classes.Contains("week-event-title"));
+        Assert.Equal(TextTrimming.CharacterEllipsis, text.TextTrimming);
+        var lines = text.Text!.Split('\n');
+        Assert.True(lines.Length >= 2, "the title takes more than one line");
+        Assert.Equal(title, string.Join(' ', lines)); // whole words on each line, in their order
+        Assert.All(text.TextLayout.TextLines, line => Assert.True(line.Width <= text.Bounds.Width + 0.5, $"a line is {line.Width} wide in {text.Bounds.Width}"));
+
+        month.NarrowLayout = MonthNarrowLayout.Dots; // the desktop's week: whole words too, never a word broken inside itself
+        Settle(200);
+        var wide = month.ChipFor(month.Events[0])!.GetVisualDescendants().OfType<TextBlock>().Single(t => t.Classes.Contains("week-event-title"));
+        Assert.Equal(TextTrimming.CharacterEllipsis, wide.TextTrimming);
+        Assert.Equal(title, string.Join(' ', wide.Text!.Split('\n')));
+        Assert.All(wide.TextLayout.TextLines, line => Assert.True(line.Width <= wide.Bounds.Width + 0.5, $"a line is {line.Width} wide in {wide.Bounds.Width}"));
     }
 }

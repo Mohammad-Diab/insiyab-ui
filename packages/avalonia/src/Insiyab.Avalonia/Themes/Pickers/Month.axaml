@@ -33,6 +33,9 @@
     <Setter Property="FontWeight" Value="ExtraBold" />
     <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
   </Style>
+  <Style Selector="ins|MonthCalendar ins|MonthStack.month-aside">
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
   <Style Selector="ins|MonthCalendar ins|MonthStack.month-nav">
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
@@ -59,7 +62,7 @@
     <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
     <Setter Property="Transitions">
       <Transitions>
-        <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
       </Transitions>
     </Setter>
   </Style>
@@ -337,9 +340,12 @@
   <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.timed > :is(Control)">
     <Setter Property="ClipToBounds" Value="True" />
   </Style>
+  <!-- its title by whole words, a word too long for its column cut with «…» on its line, never broken letter by letter («Informatio / n» in a week's column), as the compact form's -->
   <Style Selector="ins|MonthCalendar ins|MonthText.week-event-title">
     <Setter Property="FontWeight" Value="Bold" />
-    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="TextWrapping" Value="NoWrap" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    <Setter Property="WholeWords" Value="True" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthText.week-event-time">
     <Setter Property="FontSize" Value="10" />
@@ -427,9 +433,13 @@
   <Style Selector="ins|MonthCalendar:compact ins|MonthBorder.month-event.timed">
     <Setter Property="Padding" Value="3,2" />
   </Style>
+  <!-- A narrow column wraps a title by its words and cuts the last line that fits with «…», never breaking a long word letter by letter -->
   <Style Selector="ins|MonthCalendar:compact ins|MonthText.week-event-title">
     <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="LineHeight" Value="13" />
+    <Setter Property="TextWrapping" Value="NoWrap" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    <Setter Property="WholeWords" Value="True" />
   </Style>
   <Style Selector="ins|MonthCalendar:compact ins|MonthText.week-event-time">
     <Setter Property="IsVisible" Value="False" />

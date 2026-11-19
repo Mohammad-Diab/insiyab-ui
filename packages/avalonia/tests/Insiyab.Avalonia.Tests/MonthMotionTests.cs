@@ -71,7 +71,8 @@ public class MonthMotionTests
             var month = new MonthCalendar { Month = new DateTime(2026, 9, 1), Width = 760 };
             Show(month, FlowDirection.RightToLeft, width: 820, height: 800);
             month.Go(1);
-            Settle(100);
+            // no slide; only the entrance's short fade (150 ms), over by then
+            Settle(300);
             Assert.Null(month.Body!.RenderTransform);
             Assert.Equal(1, month.Body.Opacity);
         }
