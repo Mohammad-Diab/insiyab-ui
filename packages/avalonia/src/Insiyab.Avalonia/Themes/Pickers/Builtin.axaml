@@ -30,7 +30,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
@@ -103,7 +103,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
@@ -165,7 +165,7 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
@@ -378,7 +378,7 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
@@ -429,8 +429,8 @@
                       BoxShadow="{DynamicResource InsBevelDim}">
                 <ins:TemplateBorder.Transitions>
                   <Transitions>
-                    <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
-                    <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                    <ins:BrushFade Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                    <ins:BrushFade Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                   </Transitions>
                 </ins:TemplateBorder.Transitions>
                 <ContentPresenter x:Name="PART_ContentPresenter"

@@ -59,8 +59,8 @@
         <Style Selector="^ /template/ :is(Border)#PART_Back">
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-              <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>
@@ -94,7 +94,7 @@
     <Setter Property="Background" Value="{DynamicResource InsGlassInner}" />
     <Setter Property="Transitions">
       <Transitions>
-        <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
       </Transitions>
     </Setter>
   </Style>

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Controls.Presenters;
@@ -72,19 +73,21 @@ public class StillMotionTests
     }
 
     [AvaloniaFact]
-    public void A_still_pop_and_its_items_are_there_at_once()
+    public void A_still_pop_only_fades_in_and_its_items_are_there_at_once()
     {
         var body = PopBody(out var items);
         Motion.SetStill((Window)TopLevel.GetTopLevel(body)!, true);
         PopMotion.Play(body);
         Tick(40);
-        Assert.Equal(1, body.Opacity);
+        // the body fades in briefly (a fade is not motion), nothing moves, the items do not rise one after another
         Assert.True(IsIdentity(body.RenderTransform));
         foreach (var item in items.Children)
         {
             Assert.Equal(1, item.Opacity);
             Assert.True(IsIdentity(item.RenderTransform));
         }
+        Tick(200);
+        Assert.Equal(1, body.Opacity);
     }
 
     [AvaloniaFact]
@@ -126,7 +129,7 @@ public class StillMotionTests
     }
 
     [AvaloniaFact]
-    public void A_still_toast_comes_and_goes_at_once()
+    public void A_still_toast_fades_in_and_out_in_place()
     {
         var button = new Button { Content = "معلومة" };
         var window = Show(new StackPanel { Children = { button } }, FlowDirection.RightToLeft, width: 900, height: 600);
@@ -134,12 +137,14 @@ public class StillMotionTests
         Toast.Show(button, "للعلم", ToastTone.Info, null, ToastClose.Button);
         Tick(40);
         var card = Toast.ManagerFor(button)!.GetVisualDescendants().OfType<NotificationCard>().Single();
+        Assert.True(IsIdentity(card.RenderTransform)); // no rise: only its opacity moves
+        Settle(300);
         Assert.Equal(1, card.Opacity, 2);
         Assert.True(IsIdentity(card.RenderTransform));
 
         card.Close();
-        Tick(40);
-        Assert.True(card.IsClosed, "a still toast should leave at once");
+        Settle(300);
+        Assert.True(card.IsClosed, "a still toast should be gone after its short fade");
     }
 
     [AvaloniaFact]
@@ -161,7 +166,7 @@ public class StillMotionTests
     }
 
     [AvaloniaFact]
-    public void A_still_dialog_and_its_scrim_arrive_at_once()
+    public void A_still_dialog_arrives_at_once_and_its_scrim_fades_in_150ms_at_most()
     {
         var dialog = new Dialog { Title = "عنوان الحوار", Content = new TextBlock { Text = "نص الحوار." } };
         var opener = new Button { Content = "فتح الحوار" };
@@ -171,7 +176,12 @@ public class StillMotionTests
         Tick(40);
         Assert.Equal(1, dialog.Opacity, 2);
         Assert.True(IsIdentity(dialog.RenderTransform));
-        Assert.Equal(1, DialogStack.Of(dialog)!.Layers.Single(l => l.Dialog == dialog).Scrim.Opacity, 2);
+        // a short fade is not motion: the scrim keeps one, no longer than 150 ms
+        var scrim = DialogStack.Of(dialog)!.Layers.Single(l => l.Dialog == dialog).Scrim;
+        var fade = (DoubleTransition)Assert.Single(scrim.Transitions!);
+        Assert.True(fade.Duration <= TimeSpan.FromMilliseconds(150));
+        Settle(300);
+        Assert.Equal(1, scrim.Opacity, 2);
     }
 
     [AvaloniaFact]
@@ -183,7 +193,11 @@ public class StillMotionTests
         Motion.SetStill(window, true);
         ToolTip.SetIsOpen(host, true);
         Tick(40);
-        Assert.Null(tip.Transitions);
+        // a short fade is not motion: the tooltip keeps a 150 ms opacity fade and nothing else
+        var fade = Assert.Single(tip.Transitions!);
+        Assert.Equal(Visual.OpacityProperty, ((DoubleTransition)fade).Property);
+        Assert.True(((DoubleTransition)fade).Duration <= TimeSpan.FromMilliseconds(150));
+        Settle(300);
         Assert.Equal(1, tip.Opacity, 2);
         Assert.True(IsIdentity(tip.RenderTransform));
         ToolTip.SetIsOpen(host, false);

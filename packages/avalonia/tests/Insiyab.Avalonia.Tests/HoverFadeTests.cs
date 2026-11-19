@@ -32,6 +32,37 @@ public class HoverFadeTests
         }
     }
 
+    // CL-2: a clear rest (Transparent is a clear WHITE) fades in as the target colour made clear: a dark ground never passes through grey or white
+    [Fact]
+    public void Fading_from_transparent_keeps_the_target_colour_all_the_way()
+    {
+        var dark = Color.Parse("#16181F");
+        var probe = new Probe();
+        for (var p = 0.05; p <= 1.0001; p += 0.05)
+        {
+            var c = ((ISolidColorBrush)probe.At(p, Brushes.Transparent, new SolidColorBrush(dark))!).Color;
+            Assert.Equal((dark.R, dark.G, dark.B), (c.R, c.G, c.B));
+            var back = ((ISolidColorBrush)probe.At(p, new SolidColorBrush(dark), Brushes.Transparent)!).Color;
+            if (back.A > 0)
+                Assert.Equal((dark.R, dark.G, dark.B), (back.R, back.G, back.B));
+        }
+    }
+
+    [Fact]
+    public void A_gradient_fades_stop_by_stop_from_a_clear_rest()
+    {
+        var gradient = new LinearGradientBrush
+        {
+            StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
+            EndPoint = new RelativePoint(1, 0, RelativeUnit.Relative),
+            GradientStops = { new GradientStop(Color.Parse("#4C1D95"), 0), new GradientStop(Color.Parse("#6D28D9"), 1) },
+        };
+        var half = Assert.IsAssignableFrom<ILinearGradientBrush>(new Probe().At(0.5, Brushes.Transparent, gradient));
+        Assert.Equal(2, half.GradientStops.Count);
+        Assert.Equal(Color.FromArgb(128, 0x4C, 0x1D, 0x95), half.GradientStops[0].Color);
+        Assert.Equal(Color.FromArgb(128, 0x6D, 0x28, 0xD9), half.GradientStops[1].Color);
+    }
+
     [AvaloniaFact]
     public void An_unread_notification_does_not_flash_darker_on_hover()
     {

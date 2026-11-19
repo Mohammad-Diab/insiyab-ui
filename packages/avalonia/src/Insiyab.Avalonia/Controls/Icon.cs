@@ -107,18 +107,19 @@ public class Icon : Control
         InvalidateMeasure();
     }
 
-    // The glyph eases to its new opacity: out on the exit time, back on the enter time; at once in a still window or where no one sees it.
+    // The glyph eases to its new opacity: out on the exit time, back on the enter time; a short fade in a still window (a fade is not motion); at once where no one sees it.
     private void Fade(double to)
     {
         _fade?.Cancel();
         _fade = null;
         var from = GlyphOpacity;
         SetValue(GlyphOpacityProperty, to);
-        if (from == to || Motion.IsStill(this) || !Seen.Now(this)) return;
+        if (from == to || !Seen.Now(this)) return;
         _fade = new CancellationTokenSource();
+        var length = to == 0 ? Motion.Exit(this) : Motion.Enter(this);
         var animation = new Animation
         {
-            Duration = to == 0 ? Motion.Exit(this) : Motion.Enter(this),
+            Duration = Motion.IsStill(this) && length > Motion.StillFade ? Motion.StillFade : length,
             Easing = Motion.Ease(this),
             Children =
             {

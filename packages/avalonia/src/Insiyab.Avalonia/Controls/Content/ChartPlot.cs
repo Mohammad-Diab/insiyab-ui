@@ -32,8 +32,11 @@ internal class ChartPlot : Control
 
     private sealed class Fade(double value)
     {
-        public double From = value, To = value, Start = double.MinValue;
+        public double From = value, To = value, Start = double.MinValue, Length = LitFade;
     }
+
+    // set at each draw-in: a still window shows the bars grown and the lines drawn at once, the slices fading in briefly (Motion.StillFade), all together
+    private bool _still;
 
     internal Chart? Owner { get; set; }
 
@@ -104,6 +107,7 @@ internal class ChartPlot : Control
 
     private void ReplayNow()
     {
+        _still = Motion.IsStill(this);
         _fades.Clear();
         _clock.Restart();
         Frame();
@@ -130,12 +134,13 @@ internal class ChartPlot : Control
     internal double FadeOf(int kind, int series, int index) =>
         _fades.TryGetValue((kind, series, index), out var f) ? FadeValue(f, _litClock.Elapsed.TotalMilliseconds) : double.NaN;
 
-    // A mark eases to its lit or dimmed look over 220ms, as the web's opacity and r transitions do.
+    // A mark eases to its lit or dimmed look over 220ms, as the web's opacity and r transitions do; in a still window an opacity eases over Motion.StillFade and a dot's radius (a growth) changes at once.
     private double Toward(int kind, int series, int index, double target)
     {
         var key = (kind, series, index);
         var now = _litClock.Elapsed.TotalMilliseconds;
-        if (!_fades.TryGetValue(key, out var f) || Motion.IsStill(this))
+        var still = Motion.IsStill(this);
+        if (!_fades.TryGetValue(key, out var f) || (still && kind == DotKind))
         {
             _fades[key] = new Fade(target);
             return target;
@@ -146,14 +151,15 @@ internal class ChartPlot : Control
             f.From = current;
             f.To = target;
             f.Start = now;
+            f.Length = still ? Motion.StillFade.TotalMilliseconds : LitFade;
         }
-        if (now - f.Start < LitFade) _fading = true;
+        if (now - f.Start < f.Length) _fading = true;
         return current;
     }
 
     private double FadeValue(Fade f, double now)
     {
-        var p = (now - f.Start) / LitFade;
+        var p = (now - f.Start) / f.Length;
         return p >= 1 ? f.To : p <= 0 ? f.From : f.From + (f.To - f.From) * _ease.Ease(p);
     }
 
@@ -170,6 +176,11 @@ internal class ChartPlot : Control
 
     private double Progress(double delay, double length)
     {
+        if (_still)
+        {
+            if (length != SliceFade) return 1;
+            (delay, length) = (0, Motion.StillFade.TotalMilliseconds);
+        }
         var t = (Elapsed - delay) / length;
         return t >= 1 ? 1 : t <= 0 ? 0 : _ease.Ease(t);
     }

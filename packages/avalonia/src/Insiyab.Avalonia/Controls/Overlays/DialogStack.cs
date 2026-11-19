@@ -270,12 +270,16 @@ internal sealed class DialogLayer : ThemeVariantScope
         else Dialog.Focus();
     }
 
-    // In a still window the scrim changes at once.
+    // In a still window the scrim keeps a short fade (150 ms at most): a fade is not motion.
     private static void Fade(Control control, double to, TimeSpan duration)
     {
-        control.Transitions = Motion.IsStill(control) ? null : [new DoubleTransition { Property = OpacityProperty, Duration = duration, Easing = Motion.Ease(control) }];
+        control.Transitions = Motion.IsStill(control)
+            ? [new DoubleTransition { Property = OpacityProperty, Duration = duration < StillFade ? duration : StillFade }]
+            : [new DoubleTransition { Property = OpacityProperty, Duration = duration, Easing = Motion.Ease(control) }];
         control.Opacity = to;
     }
+
+    private static readonly TimeSpan StillFade = TimeSpan.FromMilliseconds(150);
 
     // The entrance from the web's @starting-style: the dialog rises 10px and grows from 98%; a drawer slides in from its edge.
     private void Move(Dialog dialog, bool inward)
@@ -362,21 +366,26 @@ internal sealed class DialogLayer : ThemeVariantScope
             return finalSize;
         }
 
-        // The scrim covers everything; the dialog keeps inside the safe area and above the keyboard (nothing on a desktop), the left and right taken in the layer's direction. A sheet runs down under the gesture bar, its content kept above it.
+        // The scrim covers everything; the dialog keeps inside the safe area and above the keyboard (nothing on a desktop), the left and right taken in the layer's direction. A sheet runs down under the gesture bar, its content kept above it; a side drawer runs from the screen's top to its foot, its content kept between the bars.
         private Thickness Clear()
         {
             var insets = Insets.Of(this);
             var covered = insets?.Covered ?? default;
             if (dialog.IsSheet && insets is { KeyboardOpen: false }) covered = new Thickness(covered.Left, covered.Top, covered.Right, 0);
+            if (SideDrawer) covered = new Thickness(covered.Left, 0, covered.Right, insets is { KeyboardOpen: true } ? covered.Bottom : 0);
             return FlowDirection == FlowDirection.RightToLeft ? new Thickness(covered.Right, covered.Top, covered.Left, covered.Bottom) : covered;
         }
 
         private void Foot()
         {
             var insets = Insets.Of(this);
-            var foot = dialog.IsSheet && insets is { KeyboardOpen: false } ? insets.SafeArea.Bottom : 0;
-            if (dialog.SheetFoot.Bottom != foot) dialog.SheetFoot = new Thickness(0, 0, 0, foot);
+            var foot = (dialog.IsSheet || SideDrawer) && insets is { KeyboardOpen: false } ? insets.SafeArea.Bottom : 0;
+            var head = SideDrawer && insets is not null ? insets.SafeArea.Top : 0;
+            if (dialog.SheetFoot.Bottom != foot || dialog.SheetFoot.Top != head) dialog.SheetFoot = new Thickness(0, head, 0, foot);
         }
+
+        // A drawer at the start or the end edge: as Material's side sheet on a phone or a tablet, it runs the screen's whole height, under the status bar and the navigation bar, its content kept clear of them.
+        private bool SideDrawer => dialog.IsDrawer && !dialog.IsSheet && !dialog.Classes.Contains("bottom");
 
         // The room the web's sizes leave: min(width, 100vw - 2rem) by min(max-height, 100vh - 3rem) for a dialog; min(24rem, 88vw) by the full height for a drawer.
         private static Size Slot(Size room, Dialog d)

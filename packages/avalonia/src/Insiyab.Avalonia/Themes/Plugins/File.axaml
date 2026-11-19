@@ -118,7 +118,7 @@
                 <ins:TemplateBorder x:Name="PART_Zone" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Cursor="Hand" Padding="17.5,25.5">
                   <ins:TemplateBorder.Transitions>
                     <Transitions>
-                      <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                      <ins:BrushFade Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                     </Transitions>
                   </ins:TemplateBorder.Transitions>
                   <StackPanel x:Name="PART_ZoneContent" Spacing="6" HorizontalAlignment="Center">
@@ -145,7 +145,7 @@
                 <Rectangle x:Name="PART_Rim" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1.5" StrokeDashArray="3,2.5" RadiusX="22" RadiusY="22" IsHitTestVisible="False">
                   <Rectangle.Transitions>
                     <Transitions>
-                      <BrushTransition Property="Stroke" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+                      <ins:BrushFade Property="Stroke" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
                     </Transitions>
                   </Rectangle.Transitions>
                 </Rectangle>

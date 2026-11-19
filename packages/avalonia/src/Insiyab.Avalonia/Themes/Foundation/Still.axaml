@@ -38,9 +38,13 @@
     <Setter Property="Transitions" Value="{x:Null}" />
   </Style>
 
-  <!-- A busy button with no icon swaps its content for the spinner at once -->
+  <!-- A button's content keeps only its short fade (a busy button with no icon fades its content to the spinner in 150 ms); its hover growth goes -->
   <Style Selector=":is(TopLevel):ins-still :is(Button) /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Transitions" Value="{x:Null}" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
   </Style>
 
   <!-- A split button's keyboard press, and the tabs a dragged document tab passes, move at once -->
@@ -56,9 +60,13 @@
     <Setter Property="Transitions" Value="{x:Null}" />
   </Style>
 
-  <!-- A tooltip shows where it lands, without rising in -->
+  <!-- A tooltip shows where it lands, without rising in: a short fade only -->
   <Style Selector=":is(TopLevel):ins-still ToolTip">
-    <Setter Property="Transitions" Value="{x:Null}" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+      </Transitions>
+    </Setter>
     <Setter Property="RenderTransform" Value="none" />
   </Style>
 
@@ -86,6 +94,26 @@
   </Style>
   <Style Selector=":is(TopLevel):ins-still Slider /template/ Thumb /template/ :is(Border)#PART_Face, :is(TopLevel):ins-still ToggleSwitch /template/ :is(Border)#SwitchKnob, :is(TopLevel):ins-still ins|DayNight /template/ :is(Border)#PART_OrbFace">
     <Setter Property="BoxShadow" Value="none" />
+  </Style>
+
+
+  <!-- A press keeps its colour (PressHold holds :pressed a moment after the release, so a quick tap is seen). The kinds whose press was only movement take a pressed colour here: a filled button (the brand's and the tones', the floating one) a dark state layer over its fill, under its content, fading out in 150 ms; a top bar island the state layer for its glass; a pill button and a card that is a button a dimmed face. -->
+  <Style Selector=":is(TopLevel):ins-still :is(Button).primary /template/ ContentPresenter#PART_ContentPresenter, :is(TopLevel):ins-still :is(Button).fab /template/ ContentPresenter#PART_ContentPresenter, :is(TopLevel):ins-still :is(Button).success /template/ ContentPresenter#PART_ContentPresenter, :is(TopLevel):ins-still :is(Button).danger /template/ ContentPresenter#PART_ContentPresenter, :is(TopLevel):ins-still :is(Button).warning /template/ ContentPresenter#PART_ContentPresenter, :is(TopLevel):ins-still :is(Button).info /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Transitions">
+      <Transitions>
+        <ins:BrushFade Property="Background" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
+        <DoubleTransition Property="Opacity" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector=":is(TopLevel):ins-still :is(Button).primary:pressed /template/ ContentPresenter#PART_ContentPresenter, :is(TopLevel):ins-still :is(Button).fab:pressed /template/ ContentPresenter#PART_ContentPresenter, :is(TopLevel):ins-still :is(Button).success:pressed /template/ ContentPresenter#PART_ContentPresenter, :is(TopLevel):ins-still :is(Button).danger:pressed /template/ ContentPresenter#PART_ContentPresenter, :is(TopLevel):ins-still :is(Button).warning:pressed /template/ ContentPresenter#PART_ContentPresenter, :is(TopLevel):ins-still :is(Button).info:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#33000000" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-still Button.island:pressed">
+    <Setter Property="Background" Value="{DynamicResource InsPressLayer}" />
+  </Style>
+  <Style Selector=":is(TopLevel):ins-still Button.pill:pressed">
+    <Setter Property="Opacity" Value="0.7" />
   </Style>
 
 </Styles>

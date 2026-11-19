@@ -66,8 +66,8 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
@@ -115,8 +115,8 @@
     <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />
     <Setter Property="Transitions">
       <Transitions>
-        <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-        <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <ins:BrushFade Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
         <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
       </Transitions>
     </Setter>
@@ -160,7 +160,7 @@
     <Setter Property="Fill" Value="{DynamicResource InsCtlBd}" />
     <Setter Property="Transitions">
       <Transitions>
-        <BrushTransition Property="Fill" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+        <ins:BrushFade Property="Fill" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
       </Transitions>
     </Setter>
   </Style>
@@ -219,8 +219,8 @@
     <Setter Property="ClipToBounds" Value="False" />
     <Setter Property="Transitions">
       <Transitions>
-        <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
-        <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+        <ins:BrushFade Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+        <ins:BrushFade Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
       </Transitions>
     </Setter>
   </Style>

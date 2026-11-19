@@ -81,7 +81,7 @@
         <Setter Property="ctl:NudgeLook.IsOff" Value="True" />
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <ctl:BrushFade Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
@@ -219,7 +219,7 @@
             <Transitions>
               <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
               <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-              <BrushTransition Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ctl:BrushFade Property="BorderBrush" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
         </Style>

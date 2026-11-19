@@ -19,9 +19,9 @@
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
-            <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
-            <BrushTransition Property="Foreground" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+            <ctl:BrushFade Property="Background" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+            <ctl:BrushFade Property="BorderBrush" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
+            <ctl:BrushFade Property="Foreground" Duration="0:0:0.25" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">

@@ -9,7 +9,7 @@ using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The menu's entrance, set from a theme: the body fades and settles from 6px above (or below, flipped), then the items in sight rise in one after another (rules stay put). Skipped while <see cref="Motion.IsStill"/>: the body and its items are simply there.</summary>
+/// <summary>The menu's entrance, set from a theme: the body fades and settles from 6px above (or below, flipped), then the items in sight rise in one after another (rules stay put). While <see cref="Motion.IsStill"/> nothing moves: the body only fades in (<see cref="Motion.StillFade"/>) with its items in it.</summary>
 internal static class PopMotion
 {
     /// <summary>Plays the entrance each time the element is shown.</summary>
@@ -54,10 +54,14 @@ internal static class PopMotion
     private static T Res<T>(Control c, string key, T fallback) =>
         c.TryFindResource(key, c.ActualThemeVariant, out var v) && v is T t ? t : fallback;
 
-    /// <summary>Plays the entrance now, or nothing while the window is still.</summary>
+    /// <summary>Plays the entrance now; while the window is still, only a short fade.</summary>
     public static void Play(Control body)
     {
-        if (Motion.IsStill(body)) return;
+        if (Motion.IsStill(body))
+        {
+            Run(body, Motion.StillFade, new LinearEasing(), TimeSpan.Zero, "none");
+            return;
+        }
         var enter = Res(body, "InsTEnter", TimeSpan.FromMilliseconds(180));
         var pop = Res(body, "InsTPop", TimeSpan.FromMilliseconds(120));
         var ease = Res<Easing>(body, "InsEase", new CubicEaseOut());

@@ -35,7 +35,7 @@
         <Style Selector="^ /template/ :is(Border)#PART_Grip">
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
               <DoubleTransition Property="Height" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
               <DoubleTransition Property="Width" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
@@ -151,7 +151,7 @@
         <Style Selector="^ /template/ :is(Border)#PART_Grip">
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
               <DoubleTransition Property="Height" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
               <DoubleTransition Property="Width" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>

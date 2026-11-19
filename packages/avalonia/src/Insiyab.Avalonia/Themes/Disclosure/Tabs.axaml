@@ -31,7 +31,7 @@
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
       </ControlTheme>
@@ -73,7 +73,7 @@
         <Style Selector="^ /template/ :is(Border)#PART_LayoutRoot">
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
               <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
@@ -145,7 +145,7 @@
         <Style Selector="^ /template/ :is(Border)#PART_LayoutRoot">
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
               <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
@@ -265,8 +265,8 @@
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Transitions">
           <Transitions>
-            <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">

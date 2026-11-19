@@ -8,7 +8,7 @@ using Avalonia.Interactivity;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The web's «تخفيف المؤثرات» (<c>data-ins-fx="off"</c>) together with the system's reduced motion (Windows' animations off, Android's "Remove animations"): while a window is still, hovers and presses lose their movement and keep their colour, and motion run from code is skipped. A still window carries <c>:ins-still</c>.</summary>
+/// <summary>The web's «تخفيف المؤثرات» (<c>data-ins-fx="off"</c>) together with the system's reduced motion (Windows' animations off, Android's "Remove animations"): while a window is still, hovers and presses lose their movement and keep their colour (a released press holds it a moment, <see cref="PressHold"/>), and motion run from code is skipped. A still window carries <c>:ins-still</c>.</summary>
 public static class Motion
 {
     /// <summary>The pseudo-class a TopLevel carries while it is still.</summary>
@@ -47,6 +47,7 @@ public static class Motion
     {
         if (_registered) return;
         _registered = true;
+        PressHold.Register();
         StillProperty.Changed.AddClassHandler<TopLevel>((top, _) => Update(top));
         Control.LoadedEvent.AddClassHandler<TopLevel>((top, _) =>
         {
@@ -97,10 +98,14 @@ public static class Motion
     /// <summary>Whether the effects are light where this visual is (<see cref="InsiyabTheme.Effects"/>).</summary>
     internal static bool IsLight(Visual? visual) => InsiyabTheme.Effects == EffectsLevel.Light;
 
+    /// <summary>The longest fade a still window keeps (the light-feedback rule: effects off remove movement, never a short colour or opacity fade): a menu, an entrance's fade part, an icon's cross-fade and a chart's fades come in over this, with no movement.</summary>
+    internal static readonly TimeSpan StillFade = TimeSpan.FromMilliseconds(150);
+
     // The motion tokens, read where the control is so a theme can retime them.
     internal static TimeSpan Enter(Control at) => Time(at, "InsTEnter", 280);
     internal static TimeSpan Exit(Control at) => Time(at, "InsTExit", 180);
     internal static TimeSpan Pop(Control at) => Time(at, "InsTPop", 220);
+    internal static TimeSpan Base(Control at) => Time(at, "InsTBase", 250);
 
     internal static Easing Ease(Control at) =>
         at.TryFindResource("InsEase", at.ActualThemeVariant, out var value) && value is Easing easing ? easing : new SplineEasing(0.22, 1, 0.36, 1);
