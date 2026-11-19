@@ -6,18 +6,20 @@
     <ResourceDictionary>
       <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
-          <BoxShadows x:Key="InsRefreshShadow">0 4 12 0 #1F0F172A, inset 0 1 0 0 #E6FFFFFF</BoxShadows>
+          <BoxShadows x:Key="InsRefreshShadow">0 1 3 0 #330F172A, 0 4 10 0 #1F0F172A</BoxShadows>
+          <SolidColorBrush x:Key="InsRefreshChip" Color="#FFFFFFFF" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
-          <BoxShadows x:Key="InsRefreshShadow">0 4 12 0 #73000000, inset 0 1 0 0 #1AFFFFFF</BoxShadows>
+          <BoxShadows x:Key="InsRefreshShadow">0 1 3 0 #66000000, 0 4 12 0 #80000000</BoxShadows>
+          <SolidColorBrush x:Key="InsRefreshChip" Color="#FF2B2F38" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
-      <!-- Pull to refresh: the brand spinner in its own small glass disc, brought down from the top by the pull; Avalonia's own turning content is left empty -->
+      <!-- Pull to refresh: the brand ring in its own round chip (AndroidX CircularProgressDrawable in SwipeRefreshLayout's circle). Avalonia moves the visualizer and the list by the pull's share of PART_Root's height: 0, so neither moves and the disc lays itself as Android's SwipeRefreshLayout does (RefreshDisc); EdgePull tells the visualizer (160) a pull that crosses its refresh point (0.8) exactly where Android's does -->
       <ControlTheme x:Key="{x:Type RefreshVisualizer}" TargetType="RefreshVisualizer">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="IsHitTestVisible" Value="False" />
-        <Setter Property="Height" Value="80" />
+        <Setter Property="MinHeight" Value="160" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Content">
           <Template>
@@ -26,7 +28,7 @@
         </Setter>
         <Setter Property="Template">
           <ControlTemplate>
-            <Grid Name="PART_Root" Background="{TemplateBinding Background}">
+            <Grid Name="PART_Root" Height="0" VerticalAlignment="Bottom" Background="{TemplateBinding Background}">
               <ins:RefreshDisc Name="PART_Disc">
                 <ins:RefreshArc />
               </ins:RefreshDisc>
@@ -41,20 +43,20 @@
         <Setter Property="CornerRadius" Value="20" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Background" Value="{DynamicResource InsGlassStrongGround}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource InsRim}" />
-        <Setter Property="BorderThickness" Value="1" />
+        <!-- SwipeRefreshLayout's circle: an opaque chip (CIRCLE_BG_LIGHT) lifted by a soft shadow (its 4 dp elevation), no rim -->
+        <Setter Property="Background" Value="{DynamicResource InsRefreshChip}" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="BoxShadow" Value="{DynamicResource InsRefreshShadow}" />
         <Setter Property="Opacity" Value="0" />
         <Setter Property="ZIndex" Value="1" />
       </ControlTheme>
 
       <ControlTheme x:Key="{x:Type ins:RefreshArc}" TargetType="ins:RefreshArc">
-        <Setter Property="Width" Value="22" />
-        <Setter Property="Height" Value="22" />
-        <Setter Property="Thickness" Value="2.5" />
+        <!-- CircularProgressDrawable's DEFAULT ring (radius 7.5) with a 3 dp stroke, round caps, no track -->
+        <Setter Property="Width" Value="18" />
+        <Setter Property="Height" Value="18" />
+        <Setter Property="Thickness" Value="3" />
         <Setter Property="Arc" Value="{DynamicResource InsPrimaryMid}" />
-        <Setter Property="Track" Value="{DynamicResource InsSpinnerTrack}" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
       </ControlTheme>
