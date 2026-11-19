@@ -327,6 +327,85 @@ public class ShellTests
         Assert.Null(Part<Panel>(column, "PART_PaneRoot").Background);
     }
 
+    // An account's photo at the sidebar's foot, under a link with an icon, was an avatar of its own size (30): its name started 12 further in and its row stood taller than the links. A photo among the links takes an icon's box, whatever size class the app gave it.
+    [AvaloniaTheory]
+    [InlineData(FlowDirection.LeftToRight)]
+    [InlineData(FlowDirection.RightToLeft)]
+    public void A_photo_among_the_links_takes_an_icons_box_and_its_name_starts_on_their_line(FlowDirection direction)
+    {
+        var glyph = Geometry.Parse("M0,0 L24,24");
+        var linkText = new TextBlock { Text = "الرئيسية", VerticalAlignment = VerticalAlignment.Center };
+        var nav = new ListBox { Classes = { "shell-nav" } };
+        nav.Items.Add(new ListBoxItem { Content = new DockPanel { Children = { new Icon { Data = glyph }, linkText } } });
+        var bellText = new TextBlock { Text = "الإشعارات", VerticalAlignment = VerticalAlignment.Center };
+        var bellIcon = new Icon { Data = glyph };
+        var bell = new Button { Classes = { "shell-link" }, Content = new DockPanel { Children = { bellIcon, bellText } } };
+        var photo = new Avatar { Classes = { "sm" }, Content = "م" };
+        var nameText = new TextBlock { Text = "محمد", VerticalAlignment = VerticalAlignment.Center };
+        var account = new Button { Classes = { "shell-link" }, Content = new DockPanel { Children = { photo, nameText } } };
+        var foot = new Border { Classes = { "shell-bottom" }, Child = new StackPanel { Children = { bell, account } } };
+        DockPanel.SetDock(foot, Dock.Bottom);
+        var split = new SplitView { IsPaneOpen = true, Pane = new DockPanel { Children = { foot, nav } }, Content = new Panel() };
+        var window = Show(split, direction, width: 1200, height: 600);
+        var link = (ListBoxItem)nav.ContainerFromIndex(0)!;
+
+        Assert.Equal(new Size(18, 18), photo.Bounds.Size);
+        Assert.Equal(bellIcon.Bounds.Size, photo.Bounds.Size);
+        Assert.Equal(new Thickness(0, 0, 10, 0), photo.Margin);
+        Assert.Equal(link.Bounds.Height, account.Bounds.Height, 1);
+        Assert.Equal(bell.Bounds.Height, account.Bounds.Height, 1);
+        // the labels' start edges on one line, in the window's own units (the start is the right in a right-to-left window)
+        double Start(TextBlock t)
+        {
+            var r = new Rect(t.Bounds.Size).TransformToAABB(t.TransformToVisual(window)!.Value);
+            return direction == FlowDirection.RightToLeft ? r.Right : r.Left;
+        }
+        Assert.Equal(Start(bellText), Start(nameText), 1);
+        Assert.Equal(Start(linkText), Start(nameText), 1);
+
+        // the account's card hangs from the row: its own photo keeps its size
+        var cardPhoto = new Avatar { Classes = { "xl" }, Content = "م" };
+        var card = new Flyout { Content = new StackPanel { Children = { new DockPanel { Children = { cardPhoto, new TextBlock { Text = "محمد" } } } } } };
+        account.Flyout = card;
+        card.ShowAt(account);
+        Settle();
+        Assert.Equal(new Size(64, 64), cardPhoto.Bounds.Size);
+        card.Hide();
+    }
+
+    // The menu the account's link opens: its icons keep the menu's own size (the link's icon style reaches only the link's own row), and another account's photo among them takes the icons' box, so the names start on one line
+    [AvaloniaTheory]
+    [InlineData(FlowDirection.RightToLeft)]
+    [InlineData(FlowDirection.LeftToRight)]
+    public void A_menu_from_a_sidebar_link_keeps_its_icons_and_a_photo_takes_their_box(FlowDirection direction)
+    {
+        var glyph = Geometry.Parse("M0,0 L24,24");
+        var account = new Button { Classes = { "shell-link" }, Content = new DockPanel { Children = { new Avatar { Content = "م" }, new TextBlock { Text = "محمد" } } } };
+        var foot = new Border { Classes = { "shell-bottom" }, Child = account };
+        DockPanel.SetDock(foot, Dock.Bottom);
+        var split = new SplitView { IsPaneOpen = true, Pane = new DockPanel { Children = { foot, new Panel() } }, Content = new Panel() };
+        var window = Show(split, direction, width: 1200, height: 600);
+        var icon = new Icon { Data = glyph };
+        var photo = new Avatar { Classes = { "sm" }, Content = "ل" };
+        var settings = new MenuItem { Header = "الإعدادات", Icon = icon };
+        var other = new MenuItem { Header = "ليلى", Icon = photo };
+        var menu = new MenuFlyout { Items = { settings, other } };
+        menu.ShowAt(account);
+        Settle();
+        Assert.Equal(new Size(16, 16), icon.Bounds.Size);
+        Assert.Equal(new Size(16, 16), photo.Bounds.Size);
+        double Start(MenuItem m)
+        {
+            var head = m.GetVisualDescendants().OfType<ContentPresenter>().First(p => p.Name == "PART_HeaderPresenter");
+            // in the item's own units: the menu grows in from its corner, so its rows' places on the screen move for a moment
+            var r = new Rect(head.Bounds.Size).TransformToAABB(head.TransformToVisual(m)!.Value);
+            return direction == FlowDirection.RightToLeft ? r.Right : r.Left;
+        }
+        Assert.Equal(Start(settings), Start(other), 1);
+        menu.Hide();
+        Assert.NotNull(window);
+    }
+
     [AvaloniaFact]
     public void Shell_nav_marks_the_selected_link_and_skips_group_headings()
     {
@@ -470,7 +549,10 @@ public class ShellTests
         var title = bar.GetVisualDescendants().OfType<Border>().First(b => b.Classes.Contains("title"));
         var mid = title.TranslatePoint(new Point(title.Bounds.Width / 2, 0), bar)!.Value.X;
         Assert.Equal(bar.Bounds.Width / 2, mid, 1);
-        Assert.Equal(Brushes.Transparent, bar.Background);
+        // clear in the ground's own colour, so the fade to the ground never passes through grey (Transparent is white, clear)
+        var clear = Assert.IsAssignableFrom<ISolidColorBrush>(bar.Background).Color;
+        var ground = Assert.IsAssignableFrom<ISolidColorBrush>(Res(bar, "InsGlassGround")).Color;
+        Assert.Equal(Color.FromArgb(0, ground.R, ground.G, ground.B), clear);
 
         scroller.Offset = new Vector(0, 40);
         Settle();
@@ -507,6 +589,49 @@ public class ShellTests
         Assert.Equal(1.06 * Math.Cos(4 * Math.PI / 180), mark.RenderTransform!.Value.M11, 2);
         Assert.NotEqual(0, mark.RenderTransform!.Value.M12);
         Assert.Equal(Res(mark, "InsShBrandMd"), mark.BoxShadow);
+    }
+
+    [AvaloniaFact]
+    public void A_back_island_stands_first_after_the_menu_in_the_brands_place_and_both_enter_as_they_swap()
+    {
+        var shell = NewShell(out _, out var menu, out var bar);
+        var window = Show(shell, width: 1200, height: 600);
+        var zone = (StackPanel)menu.Parent!;
+        var back = new Button { Classes = { "island", "back" }, Content = "→ الوارد", IsVisible = false };
+        zone.Children.Insert(1, back);
+        Click(menu, window); // the column collapsed: the brand shows
+        Settle();
+        var brand = (Border)Find(bar, "Brand");
+        Assert.True(brand.IsVisible);
+
+        back.IsVisible = true;
+        Settle(60);
+        Assert.False(brand.IsVisible);
+        Assert.True(back.Opacity < 1); // the island entrance (the web's ins-island-in)
+        Settle();
+        Assert.Equal(1, back.Opacity, 2);
+
+        back.IsVisible = false;
+        Assert.True(brand.IsVisible);
+        Settle(60);
+        Assert.True(brand.Opacity < 1);
+        Settle();
+        Assert.Equal(1, brand.Opacity, 2);
+
+        // a still window swaps them with a short fade, no movement
+        Motion.SetStill(window, true);
+        back.IsVisible = true;
+        Settle(40);
+        Assert.False(brand.IsVisible);
+        Assert.True(back.RenderTransform is null || Math.Abs(back.RenderTransform.Value.M11 - 1) < 0.01);
+        Settle();
+        Assert.Equal(1, back.Opacity, 2);
+
+        // the column open again: the brand stays hidden whatever the back island does (the sidebar shows the brand)
+        back.IsVisible = false;
+        Click(menu, window);
+        Settle();
+        Assert.False(brand.IsVisible);
     }
 
     [AvaloniaFact]

@@ -194,6 +194,33 @@ public class ToolbarTests
         Assert.Equal(moved, shown);
     }
 
+    // A separator that folds into «⋯» is the menu's horizontal divider, as wide as the menu and one line tall, never the bar's short vertical line.
+    [AvaloniaTheory]
+    [InlineData("ltr")]
+    [InlineData("rtl")]
+    public void A_folded_separator_is_the_menu_s_divider(string dir)
+    {
+        var bar = Bar();
+        foreach (var c in bar.Items) Toolbar.SetOverflow(c, ToolbarOverflow.Always);
+        var window = Show(new StackPanel { Children = { bar } }, Dir(dir));
+        Click(bar.MoreButton!, window);
+        Settle(300);
+        var presenter = window.GetVisualDescendants().OfType<MenuFlyoutPresenter>().Single();
+        var line = presenter.GetVisualDescendants().OfType<Separator>().Single();
+        var item = presenter.GetVisualDescendants().OfType<MenuItem>().First(i => i.IsEffectivelyVisible);
+        Assert.True(line.Bounds.Height <= 1.5, $"divider {line.Bounds.Width}×{line.Bounds.Height}");
+        Assert.True(line.Bounds.Width >= item.Bounds.Width * 0.8, $"divider {line.Bounds.Width} wide, item {item.Bounds.Width}");
+        // the bar's own separator keeps its vertical line
+        var own = new Toolbar();
+        own.Items.Add(Cmd("جديد"));
+        own.Items.Add(new Separator());
+        own.Items.Add(Cmd("فتح"));
+        Show(new StackPanel { Children = { own } }, Dir(dir));
+        var rule = own.Items.OfType<Separator>().Single();
+        Assert.Equal(1, rule.Bounds.Width, 0.5);
+        Assert.Equal(18, rule.Bounds.Height, 0.5);
+    }
+
     [AvaloniaFact]
     public void Choosing_from_the_menu_clicks_the_command()
     {

@@ -85,4 +85,179 @@ public class TopbarFitTests
         Build(dir, "حسابي", out var grid, out _, out _, out _, out _);
         Assert.Equal(grid.ColumnDefinitions[0].ActualWidth, grid.ColumnDefinitions[2].ActualWidth, 0.5);
     }
+
+    // A bar as the apps build it: ☰ and a back island at the start, the page's name (gliding) with its line under it in the middle, the account (a picture and a name) and the bell at the end.
+    private static Window Folding(string dir, double width, out Grid grid, out TextBlock name, out TextBlock sub, out Button account, out Button back)
+    {
+        name = new TextBlock { Text = "سامي التجريبي" };
+        account = new Button { Classes = { "island", "folds" }, Content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Children = { new Border { Width = 28, Height = 28 }, name } } };
+        var title = new TextBlock { Classes = { "shell-title" }, Text = "أمن نظم المعلومات والشبكات الحاسوبية", TextTrimming = TextTrimming.CharacterEllipsis };
+        sub = new TextBlock { Classes = { "shell-sub" }, Text = "BIS601 · C1" };
+        back = new Button { Classes = { "island", "back", "folds-last" }, Content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Children = { new Border { Width = 18, Height = 18 }, new TextBlock { Text = "الفصل الحالي" } } } };
+        var g = new Grid
+        {
+            ColumnDefinitions = new ColumnDefinitions("*,Auto,*"),
+            Children =
+            {
+                new StackPanel { Classes = { "zone", "start" }, Children = { new Button { Classes = { "island", "icon" }, Content = "≡" }, back } },
+                new StackPanel { Classes = { "zone", "center" }, Children =
+                {
+                    new Border { Classes = { "island", "title" }, Child = new StackPanel { Classes = { "shell-head" }, Children = { new Marquee { Child = title }, sub } } },
+                } },
+                new StackPanel { Classes = { "zone", "end" }, Children = { account, new Button { Classes = { "island", "icon" }, Content = "◔" } } },
+            },
+        };
+        grid = g;
+        var w = Show(new Border { Classes = { "topbar" }, VerticalAlignment = VerticalAlignment.Top, Child = g }, Dir(dir), null, width, 400);
+        Settle(200);
+        return w;
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl", 360)]
+    [InlineData("ltr", 360)]
+    [InlineData("rtl", 600)]
+    [InlineData("ltr", 600)]
+    public void A_bar_too_narrow_for_its_parts_folds_them_and_keeps_every_island_inside(string dir, double width)
+    {
+        var w = Folding(dir, width, out var grid, out var name, out var sub, out _, out _);
+        Assert.True(ShellLook.GetFold(grid) >= 1, $"fold {ShellLook.GetFold(grid)} at {width}");
+        Assert.False(name.IsEffectivelyVisible, "the account shows its picture alone");
+        Assert.True(sub.Bounds.Width < 0.5 && sub.Bounds.Height < 0.5, "the title's second line goes");
+        foreach (var island in grid.GetVisualDescendants().OfType<Control>().Where(c => c.Classes.Contains("island") && c.IsEffectivelyVisible))
+        {
+            var box = Box(island, w);
+            Assert.True(box.Left >= -0.5 && box.Right <= width + 0.5, $"{island.GetType().Name} {box} in a {width} window (fold {ShellLook.GetFold(grid)})");
+        }
+        Capture(w, $"topbar-fold-{dir}-{width}");
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void A_wide_bar_folds_nothing_and_unfolds_when_the_window_grows_again(string dir)
+    {
+        var w = Folding(dir, 1280, out var grid, out var name, out _, out _, out var back);
+        Assert.Equal(0, ShellLook.GetFold(grid));
+        Assert.True(name.IsEffectivelyVisible);
+        w.Width = 360;
+        Settle(200);
+        Assert.True(ShellLook.GetFold(grid) >= 1);
+        w.Width = 1280;
+        Settle(200);
+        Assert.Equal(0, ShellLook.GetFold(grid));
+        Assert.True(name.IsEffectivelyVisible && back.IsEffectivelyVisible, "every label comes back");
+    }
+
+    // A views switch in the name's place (a calendar's month / week / day in a narrow desktop window) folds the bar as a name does: the head's cap no longer follows its own measure (a layout loop), the islands stay inside, and the switch comes back whole once the window is wide again
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void A_views_switch_in_the_names_place_folds_the_bar_without_a_layout_loop(string dir)
+    {
+        var views = new Segmented { ItemsSource = new[] { "الشهر", "الأسبوع", "اليوم", "جدول الأعمال" } };
+        var name = new TextBlock { Text = "سامي التجريبي" };
+        var account = new Button { Classes = { "island", "folds" }, Content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Children = { new Border { Width = 28, Height = 28 }, name } } };
+        var head = new StackPanel { Classes = { "shell-head" }, Children = { new ContentControl { Content = views } } };
+        var grid = new Grid
+        {
+            ColumnDefinitions = new ColumnDefinitions("*,Auto,*"),
+            Children =
+            {
+                new StackPanel { Classes = { "zone", "start" }, Children = { new Button { Classes = { "island", "icon" }, Content = "≡" } } },
+                new StackPanel { Classes = { "zone", "center" }, Children = { new Border { Classes = { "island", "title" }, Child = head } } },
+                new StackPanel { Classes = { "zone", "end" }, Children = { account, new Button { Classes = { "island", "icon" }, Content = "◔" } } },
+            },
+        };
+        var w = Show(new Border { Classes = { "topbar" }, VerticalAlignment = VerticalAlignment.Top, Child = grid }, Dir(dir), null, 1280, 400);
+        Settle(200);
+        var whole = head.Bounds.Width;
+        w.Width = 360;
+        Settle(300); // a layout loop throws here
+        Assert.Equal(TopbarColumns.MaxFold, ShellLook.GetFold(grid));
+        Assert.True(head.Bounds.Width < whole - 1, $"the switch keeps {head.Bounds.Width} of its {whole}");
+        foreach (var island in grid.GetVisualDescendants().OfType<Control>().Where(c => c.Classes.Contains("island") && c.IsEffectivelyVisible))
+        {
+            var box = Box(island, w);
+            Assert.True(box.Left >= -0.5 && box.Right <= 360.5, $"{island.GetType().Name} {box} in a 360 window");
+        }
+        w.Width = 1280;
+        Settle(300);
+        Assert.Equal(0, ShellLook.GetFold(grid));
+        Assert.Equal(whole, head.Bounds.Width, 0.5);
+    }
+    // The window's caption buttons are a part of the bar's fit at every width; at its last fold step their island tightens (inset, gaps and a narrower button) and gives the room back once the bar unfolds; every island, the caption island whole, stays inside the window
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void The_caption_buttons_tighten_at_the_last_fold_and_stay_whole_inside(string dir)
+    {
+        var views = new Segmented { ItemsSource = new[] { "شهر", "أسبوع", "يوم" } };
+        var head = new StackPanel { Classes = { "shell-head" }, Children = { new ContentControl { Content = views } } };
+        var caps = new CaptionButtons { Preview = CaptionPreview.Normal };
+        var grid = new Grid
+        {
+            ColumnDefinitions = new ColumnDefinitions("*,Auto,*,Auto"),
+            Children =
+            {
+                new StackPanel { Classes = { "zone", "start" }, Children = { new Button { Classes = { "island", "icon" }, Content = "≡" } } },
+                new StackPanel { Classes = { "zone", "center" }, Children = { new Border { Classes = { "island", "title" }, Child = head }, new Button { Classes = { "island", "icon", "folds-away" }, Content = "⌕" } } },
+                new StackPanel { Classes = { "zone", "end" } },
+                caps,
+            },
+        };
+        Grid.SetColumn(caps, 3);
+        var w = Show(new Border { Classes = { "topbar" }, VerticalAlignment = VerticalAlignment.Top, Child = grid }, Dir(dir), null, 1280, 400);
+        Settle(200);
+        var full = caps.Bounds.Width;
+        w.Width = 360;
+        Settle(300);
+        Assert.True(ShellLook.GetFold(grid) >= 3, $"fold {ShellLook.GetFold(grid)}: bar {grid.Bounds.Width}, " + string.Join(", ", grid.GetVisualDescendants().OfType<Control>().Where(c => (c.Classes.Contains("island") || c is CaptionButtons) && c.IsEffectivelyVisible).Select(c => $"{c.GetType().Name} {Box(c, w)}")));
+        Assert.True(caps.Bounds.Width < full - 10, $"the caption island keeps {caps.Bounds.Width} of its {full}");
+        foreach (var part in grid.GetVisualDescendants().OfType<Control>().Where(c => (c.Classes.Contains("island") || c is CaptionButtons) && c.IsEffectivelyVisible))
+        {
+            var box = Box(part, w);
+            Assert.True(box.Left >= -0.5 && box.Right <= 360.5, $"{part.GetType().Name} {box} in a 360 window");
+        }
+        w.Width = 1280;
+        Settle(300);
+        Assert.Equal(0, ShellLook.GetFold(grid));
+        Assert.Equal(full, caps.Bounds.Width, 0.5);
+    }
+
+    // An island marked folds-away-last goes only where the bar still lacks the room once the folds-away islands went and the bar tightened (step 4): a short name keeps it at 360, a long one takes its room
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void An_island_marked_to_fold_away_last_goes_only_where_the_tightened_bar_lacks_room(string dir)
+    {
+        var name = new TextBlock { Text = "الرئيسية" };
+        var head = new StackPanel { Classes = { "shell-head" }, Children = { new Marquee { Child = name } } };
+        var search = new Button { Classes = { "island", "icon", "folds-away-last" }, Content = "⌕" };
+        var pill = new Button { Classes = { "island", "folds-last", "folds-away" }, Content = new StackPanel { Orientation = Orientation.Horizontal, Children = { new TextBlock { Text = "●" }, new TextBlock { Text = "الفصل F25" } } } };
+        var caps = new CaptionButtons { Preview = CaptionPreview.Normal };
+        var grid = new Grid
+        {
+            ColumnDefinitions = new ColumnDefinitions("*,Auto,*,Auto"),
+            Children =
+            {
+                new StackPanel { Classes = { "zone", "start" }, Children = { new Button { Classes = { "island", "icon" }, Content = "≡" }, pill } },
+                new StackPanel { Classes = { "zone", "center" }, Children = { new Border { Classes = { "island", "title" }, Child = head }, search } },
+                new StackPanel { Classes = { "zone", "end" } },
+                caps,
+            },
+        };
+        Grid.SetColumn(caps, 3);
+        var w = Show(new Border { Classes = { "topbar" }, VerticalAlignment = VerticalAlignment.Top, Child = grid }, Dir(dir), null, 360, 400);
+        Settle(300);
+        Assert.False(pill.IsEffectivelyVisible, $"the pill goes first (fold {ShellLook.GetFold(grid)})");
+        Assert.True(search.IsEffectivelyVisible, $"a short name keeps the search (fold {ShellLook.GetFold(grid)})");
+        name.Text = "ملفي الشخصي ومعه اسم أطول من مكانه";
+        Settle(300);
+        Assert.Equal(TopbarColumns.MaxFold, ShellLook.GetFold(grid));
+        Assert.False(search.IsEffectivelyVisible, "a long name takes the search's room");
+        name.Text = "الرئيسية";
+        Settle(300);
+        Assert.True(search.IsEffectivelyVisible, $"the room back, the search back (fold {ShellLook.GetFold(grid)})");
+    }
 }

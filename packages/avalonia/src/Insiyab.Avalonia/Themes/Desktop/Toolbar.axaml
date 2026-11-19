@@ -37,7 +37,7 @@
         <Setter Property="Transitions">
           <Transitions>
             <ins:BrushFade Property="Background" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
-            <BrushTransition Property="Foreground" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Foreground" Duration="0:0:0.15" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
@@ -223,7 +223,8 @@
   <Style Selector="ins|Toolbar :is(Control).toolbar-overflowed">
     <Setter Property="IsVisible" Value="False" />
   </Style>
-  <Style Selector="ins|Toolbar Separator">
+  <!-- only the bar's own separators (its items: the toolbar is their logical parent); one that folds into «⋯» is a new Separator in the menu, which takes the menu's horizontal divider, never this short vertical line -->
+  <Style Selector="ins|Toolbar > Separator">
     <Setter Property="Width" Value="1" />
     <Setter Property="Height" Value="18" />
     <Setter Property="MinHeight" Value="0" />

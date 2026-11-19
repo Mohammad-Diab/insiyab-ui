@@ -86,7 +86,7 @@
         <Style Selector="^ /template/ :is(Border)#PART_Face">
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="Background" Duration="0:0:0.18" Easing="0.22,1,0.36,1" />
               <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
@@ -121,12 +121,13 @@
       <ControlTheme x:Key="InsLookTopbar" TargetType="Border" ins:ClassTheme.For="topbar">
         <Style Selector="^.topbar">
           <Setter Property="Padding" Value="16,12" />
-          <Setter Property="Background" Value="Transparent" />
-          <Setter Property="BoxShadow" Value="0 0 0 0 Transparent" />
+          <!-- clear in the ground's own colour: the colour fade from Transparent (white, clear) to a dark ground passed through grey (a white flash in dark mode) -->
+          <Setter Property="Background" Value="{DynamicResource InsGlassGroundClear}" />
+          <Setter Property="BoxShadow" Value="0 0 0 0 #00000000" />
           <Setter Property="ins:ClassTheme.ChildTheme" Value="{StaticResource InsTopbarGrid}" />
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.25" />
+              <ins:BrushFade Property="Background" Duration="0:0:0.25" />
               <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.25" />
             </Transitions>
           </Setter>
@@ -157,6 +158,10 @@
             <Setter Property="HorizontalAlignment" Value="Right" />
             <Setter Property="Grid.Column" Value="2" />
           </Style>
+          <!-- the bar's last fold steps (TopbarColumns): the gaps tighten -->
+          <Style Selector="^[(ins|ShellLook.Fold)=3], ^[(ins|ShellLook.Fold)=4]">
+            <Setter Property="Spacing" Value="4" />
+          </Style>
         </Style>
       </ControlTheme>
 
@@ -184,6 +189,10 @@
             <Style Selector="^[(ins|ShellLook.Narrow)=True]">
               <Setter Property="MaxWidth" Value="Infinity" />
               <Setter Property="Padding" Value="14,0" />
+            </Style>
+            <!-- the bar's last fold steps (TopbarColumns): less side room -->
+            <Style Selector="^[(ins|ShellLook.Fold)=3], ^[(ins|ShellLook.Fold)=4]">
+              <Setter Property="Padding" Value="10,0" />
             </Style>
           </Style>
           <!-- Brand: only while the sidebar is collapsed or a drawer, since an open sidebar already shows it -->
@@ -241,6 +250,11 @@
           <Style Selector="^[(ins|ShellLook.XNarrow)=True]">
             <Setter Property="IsVisible" Value="False" />
           </Style>
+          <!-- a folded bar (TopbarColumns): no width and no height (an app often binds its IsVisible, which a style cannot beat) -->
+          <Style Selector="^[(ins|ShellLook.Fold)=1], ^[(ins|ShellLook.Fold)=2], ^[(ins|ShellLook.Fold)=3], ^[(ins|ShellLook.Fold)=4]">
+            <Setter Property="MaxWidth" Value="0" />
+            <Setter Property="MaxHeight" Value="0" />
+          </Style>
         </Style>
       </ControlTheme>
     </ResourceDictionary>
@@ -286,6 +300,15 @@
   <Style Selector=":is(ContentControl).island.title">
     <Setter Property="ins:ShellLook.Enters" Value="True" />
   </Style>
+  <!-- An island that comes, goes or takes another's place (a page's head that changes with its state): the title island's entrance (the web's ins-island-in) each time it arrives or shows again; a still window fades it in briefly -->
+  <Style Selector=":is(Control).island.enters">
+    <Setter Property="ins:ShellLook.Enters" Value="True" />
+  </Style>
+  <!-- A back island («→ the page it came from»): it enters as an island does, and while it shows it stands first after the menu button in the brand island's place (the zone's brand yields, Shell.Yield; it enters again when the back island goes) -->
+  <Style Selector=":is(Control).island.back">
+    <Setter Property="ins:ShellLook.Enters" Value="True" />
+    <Setter Property="ins:ShellLook.Back" Value="True" />
+  </Style>
   <!-- Brand: only while the sidebar is collapsed or a drawer, since an open sidebar already shows it. Islands are buttons, content controls and borders; naming them keeps these rules off every other control, and off the visual-only parts Avalonia never takes out of the tree -->
   <Style Selector=":is(ContentControl).island.brand">
     <Setter Property="IsVisible" Value="False" />
@@ -301,6 +324,34 @@
   <Style Selector="SplitView.narrow :is(ContentControl).island.brand">
     <Setter Property="IsVisible" Value="False" />
   </Style>
+  <!-- Last of the brand's rules: a back island of its zone that shows takes its place (a style, so it wins over the brand's theme in a Border too) -->
+  <Style Selector=":is(Control).island.brand[(ins|ShellLook.Yielded)=True]">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+  <!-- A bar whose parts do not fit folds, a step at a time, as the new Outlook and Teams do (TopbarColumns sets ShellLook.Fold on the bar's grid): 1: an island marked `folds` (the account) shows its first part alone (the picture), square as an icon island; the title's second line and the brand go. 2: an island marked `folds-last` (a back island, a status pill) shows its first part alone (the arrow, the dot). 3: an island marked `folds-away` goes; the zones' gaps, the title's side room and the window's caption island tighten. 4: an island marked `folds-away-last` goes, only where the bar still has no room after step 3. Then the title takes what is left. A part after the first that binds its own IsVisible goes in a plain wrapper. -->
+  <Style Selector=":is(TemplatedControl).island.folds[(ins|ShellLook.Fold)=1], :is(TemplatedControl).island.folds[(ins|ShellLook.Fold)=2], :is(TemplatedControl).island.folds[(ins|ShellLook.Fold)=3],
+                   :is(TemplatedControl).island.folds[(ins|ShellLook.Fold)=4],
+                   :is(TemplatedControl).island.folds-last[(ins|ShellLook.Fold)=2], :is(TemplatedControl).island.folds-last[(ins|ShellLook.Fold)=3], :is(TemplatedControl).island.folds-last[(ins|ShellLook.Fold)=4]">
+    <Setter Property="MinWidth" Value="{DynamicResource InsAppbarH}" />
+    <Setter Property="Padding" Value="0" />
+  </Style>
+  <Style Selector=":is(Control).island.folds[(ins|ShellLook.Fold)=1] > StackPanel > :is(Control):nth-child(n+2),
+                   :is(Control).island.folds[(ins|ShellLook.Fold)=2] > StackPanel > :is(Control):nth-child(n+2),
+                   :is(Control).island.folds[(ins|ShellLook.Fold)=3] > StackPanel > :is(Control):nth-child(n+2),
+                   :is(Control).island.folds-last[(ins|ShellLook.Fold)=2] > StackPanel > :is(Control):nth-child(n+2),
+                   :is(Control).island.folds-last[(ins|ShellLook.Fold)=3] > StackPanel > :is(Control):nth-child(n+2),
+                   :is(Control).island.folds[(ins|ShellLook.Fold)=4] > StackPanel > :is(Control):nth-child(n+2),
+                   :is(Control).island.folds-last[(ins|ShellLook.Fold)=4] > StackPanel > :is(Control):nth-child(n+2)">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+  <Style Selector=":is(Control).island.folds-away[(ins|ShellLook.Fold)=3], :is(Control).island.folds-away[(ins|ShellLook.Fold)=4],
+                   :is(Control).island.folds-away-last[(ins|ShellLook.Fold)=4]">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+  <Style Selector=":is(Control).island.brand[(ins|ShellLook.Fold)=1], :is(Control).island.brand[(ins|ShellLook.Fold)=2], :is(Control).island.brand[(ins|ShellLook.Fold)=3],
+                   :is(Control).island.brand[(ins|ShellLook.Fold)=4]">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
   <Style Selector="SplitView.narrow Button.island.title, SplitView.narrow ContentControl.island.title">
     <Setter Property="MaxWidth" Value="Infinity" />
     <Setter Property="Padding" Value="14,0" />
@@ -308,5 +359,8 @@
   <Style Selector="SplitView.narrow StackPanel.zone > ins|Pill">
     <Setter Property="Padding" Value="12,0" />
   </Style>
-
+  <!-- The last fold steps, tightest: the title's side room shrinks (after the narrow rules, so it wins over them; a Border title's and the zones' gaps: in their themes) -->
+  <Style Selector="TemplatedControl.island.title[(ins|ShellLook.Fold)=3], TemplatedControl.island.title[(ins|ShellLook.Fold)=4]">
+    <Setter Property="Padding" Value="10,0" />
+  </Style>
 </Styles>

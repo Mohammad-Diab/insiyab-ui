@@ -308,6 +308,11 @@
     <Setter Property="Opacity" Value="1" />
   </Style>
 
+  <!-- A photo leading a row takes the icon tile's box (panel-ico: 36), so a list of accounts beside rows led by icon tiles («إضافة حساب») starts every name on one line; a photo given a size class keeps it -->
+  <Style Selector="ListBox:not(.shell-nav):not(.nav) ListBoxItem > DockPanel > ins|Avatar:not(.sm):not(.lg):not(.xl):not(.xxl)">
+    <Setter Property="Width" Value="36" />
+    <Setter Property="Height" Value="36" />
+  </Style>
   <!-- The row's slots sit apart by the same gap everywhere but the sidebar -->
   <Style Selector="ListBox:not(.shell-nav):not(.nav) ListBoxItem > DockPanel">
     <Setter Property="HorizontalSpacing" Value="12" />

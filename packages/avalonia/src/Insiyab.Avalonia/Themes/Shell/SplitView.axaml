@@ -323,7 +323,7 @@
         <Setter Property="Transitions">
           <Transitions>
             <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-            <BrushTransition Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+            <ins:BrushFade Property="Foreground" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
           </Transitions>
         </Setter>
         <Setter Property="Template">
@@ -361,7 +361,7 @@
         <Style Selector="^ /template/ :is(Border)#PART_Face">
           <Setter Property="Transitions">
             <Transitions>
-              <BrushTransition Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+              <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
               <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
             </Transitions>
           </Setter>
@@ -798,8 +798,8 @@
   <Style Selector="Button.shell-brand">
     <Setter Property="Theme" Value="{StaticResource InsShellBrandButton}" />
   </Style>
-  <!-- The link's icon: quiet at rest, the brand ink and a spring under the pointer, the soft brand when current -->
-  <Style Selector="ListBox.shell-nav ListBoxItem ins|Icon, Button.shell-link ins|Icon">
+  <!-- The link's icon: quiet at rest, the brand ink and a spring under the pointer, the soft brand when current. Only the icon in the link's own row (its content, or its content's panel): a card the link opens hangs from it, and the card's menu keeps its own icons -->
+  <Style Selector="ListBox.shell-nav ListBoxItem ins|Icon, Button.shell-link > ins|Icon, Button.shell-link > :is(Panel) > ins|Icon">
     <Setter Property="Size" Value="18" />
     <Setter Property="Margin" Value="0,0,10,0" />
     <Setter Property="VerticalAlignment" Value="Center" />
@@ -808,12 +808,20 @@
     <Setter Property="RenderTransform" Value="none" />
     <Setter Property="Transitions">
       <Transitions>
-        <BrushTransition Property="Foreground" Duration="0:0:0.25" />
+        <ins:BrushFade Property="Foreground" Duration="0:0:0.25" />
         <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
       </Transitions>
     </Setter>
   </Style>
-  <Style Selector="ListBox.shell-nav ListBoxItem:pointerover ins|Icon, Button.shell-link:pointerover ins|Icon">
+  <!-- A photo among the links (an account's, at the sidebar's foot) takes an icon's box: its label starts on the icons' line, and the row keeps the links' height (any size class an app gave the avatar yields to this). Only the photo in the link's own row (its content's panel): a card the link opens hangs from it, and the card's own photos keep their sizes -->
+  <Style Selector="ListBox.shell-nav ListBoxItem > :is(Panel) > ins|Avatar, Button.shell-link > :is(Panel) > ins|Avatar">
+    <Setter Property="Width" Value="18" />
+    <Setter Property="Height" Value="18" />
+    <Setter Property="FontSize" Value="9" />
+    <Setter Property="Margin" Value="0,0,10,0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ListBox.shell-nav ListBoxItem:pointerover ins|Icon, Button.shell-link:pointerover > ins|Icon, Button.shell-link:pointerover > :is(Panel) > ins|Icon">
     <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
     <Setter Property="RenderTransform" Value="scale(1.12)" />
   </Style>
@@ -830,7 +838,7 @@
     <Setter Property="RenderTransform" Value="none" />
     <Setter Property="Transitions">
       <Transitions>
-        <BrushTransition Property="Foreground" Duration="0:0:0.25" />
+        <ins:BrushFade Property="Foreground" Duration="0:0:0.25" />
         <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="0.34,1.56,0.64,1" />
       </Transitions>
     </Setter>

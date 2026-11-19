@@ -30,6 +30,10 @@ internal static class ShellLook
     public static readonly AttachedProperty<bool> XNarrowProperty =
         AvaloniaProperty.RegisterAttached<StyledElement, bool>("XNarrow", typeof(ShellLook), inherits: true);
 
+    /// <summary>Set on a top bar's grid while its parts do not fit at their full width (<see cref="TopbarColumns"/>), 0 to 4: 1 the account island shows its picture alone (<c>.island.folds</c>), the title's second line and the brand go; 2 the back and status islands show their mark alone (<c>.island.folds-last</c>); 3 an island marked <c>.folds-away</c> goes, and the gaps, the title's side room and the caption island tighten; 4 an island marked <c>.folds-away-last</c> goes (only where step 3 was not enough). Then the title takes what is left.</summary>
+    public static readonly AttachedProperty<int> FoldProperty =
+        AvaloniaProperty.RegisterAttached<StyledElement, int>("Fold", typeof(ShellLook), inherits: true);
+
     /// <summary>Set by the brand island of the top bar: its mark is the small one and its row runs horizontally.</summary>
     public static readonly AttachedProperty<bool> InBrandProperty =
         AvaloniaProperty.RegisterAttached<StyledElement, bool>("InBrand", typeof(ShellLook), inherits: true);
@@ -50,6 +54,14 @@ internal static class ShellLook
     public static readonly AttachedProperty<bool> EntersProperty =
         AvaloniaProperty.RegisterAttached<Control, bool>("Enters", typeof(ShellLook));
 
+    /// <summary>On a back island (<c>.island.back</c>, set by the topbar's styles): while it shows, the brand island of its zone yields its place to it.</summary>
+    public static readonly AttachedProperty<bool> BackProperty =
+        AvaloniaProperty.RegisterAttached<Control, bool>("Back", typeof(ShellLook));
+
+    /// <summary>On a brand island while a back island of its zone shows: it hides (the topbar's styles), and enters again when the back island goes.</summary>
+    public static readonly AttachedProperty<bool> YieldedProperty =
+        AvaloniaProperty.RegisterAttached<Control, bool>("Yielded", typeof(ShellLook));
+
     /// <summary>Turns a SplitView's OpenPaneLength into the drawer's closed offset, a little past its own width.</summary>
     public static IValueConverter DrawerOffset { get; } = new FuncValueConverter<double, ITransform>(len =>
         TransformOperations.Parse(string.Create(CultureInfo.InvariantCulture, $"translateX({-(len + 16)}px)")));
@@ -62,6 +74,7 @@ internal static class ShellLook
     {
         FlyMarkerProperty.Changed.AddClassHandler<ListBox>(Shell.FlyMarkerChanged);
         EntersProperty.Changed.AddClassHandler<Control>(Shell.EntersChanged);
+        BackProperty.Changed.AddClassHandler<Control>(Shell.BackChanged);
     }
 
     public static bool GetInSplitView(StyledElement element) => element.GetValue(InSplitViewProperty);
@@ -74,6 +87,8 @@ internal static class ShellLook
     public static void SetNarrow(StyledElement element, bool value) => element.SetValue(NarrowProperty, value);
     public static bool GetXNarrow(StyledElement element) => element.GetValue(XNarrowProperty);
     public static void SetXNarrow(StyledElement element, bool value) => element.SetValue(XNarrowProperty, value);
+    public static int GetFold(StyledElement element) => element.GetValue(FoldProperty);
+    public static void SetFold(StyledElement element, int value) => element.SetValue(FoldProperty, value);
     public static bool GetInBrand(StyledElement element) => element.GetValue(InBrandProperty);
     public static void SetInBrand(StyledElement element, bool value) => element.SetValue(InBrandProperty, value);
     public static bool GetInScreenBrand(StyledElement element) => element.GetValue(InScreenBrandProperty);
@@ -83,5 +98,9 @@ internal static class ShellLook
     public static bool GetFlyMarker(ListBox list) => list.GetValue(FlyMarkerProperty);
     public static void SetFlyMarker(ListBox list, bool value) => list.SetValue(FlyMarkerProperty, value);
     public static bool GetEnters(Control control) => control.GetValue(EntersProperty);
+    public static bool GetBack(Control control) => control.GetValue(BackProperty);
+    public static void SetBack(Control control, bool value) => control.SetValue(BackProperty, value);
+    public static bool GetYielded(Control control) => control.GetValue(YieldedProperty);
+    public static void SetYielded(Control control, bool value) => control.SetValue(YieldedProperty, value);
     public static void SetEnters(Control control, bool value) => control.SetValue(EntersProperty, value);
 }

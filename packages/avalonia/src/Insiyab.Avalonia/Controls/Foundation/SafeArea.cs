@@ -32,13 +32,20 @@ public static class SafeArea
     private static readonly AttachedProperty<Tracker?> TrackerProperty =
         AvaloniaProperty.RegisterAttached<Control, Tracker?>("Tracker", typeof(SafeArea));
 
+    /// <summary>On the view of a phone drawn edge to edge: the status bar gets a band of its own, a step darker than the app's ground (the theme's wash) in light and in dark, over everything the view shows (its pages, sheets and toasts), so the clock and the icons read on a strip apart from the content. Nothing on a desktop window or while the status bar is hidden.</summary>
+    public static readonly AttachedProperty<bool> StatusBandProperty =
+        AvaloniaProperty.RegisterAttached<Control, bool>("StatusBand", typeof(SafeArea));
+
     static SafeArea()
     {
         EdgesProperty.Changed.AddClassHandler<Control>((control, e) => Watch(control, e.GetNewValue<SafeAreaEdges>()));
+        StatusBandProperty.Changed.AddClassHandler<Control>((control, e) => StatusBand.Follow(control, e.GetNewValue<bool>()));
     }
 
     public static SafeAreaEdges GetEdges(Control control) => control.GetValue(EdgesProperty);
     public static void SetEdges(Control control, SafeAreaEdges value) => control.SetValue(EdgesProperty, value);
+    public static bool GetStatusBand(Control control) => control.GetValue(StatusBandProperty);
+    public static void SetStatusBand(Control control, bool value) => control.SetValue(StatusBandProperty, value);
 
     /// <summary>The safe area of the TopLevel the visual is in: zero on a desktop window or outside a TopLevel.</summary>
     public static Thickness Of(Visual visual) => Insets.Of(visual)?.SafeArea ?? default;

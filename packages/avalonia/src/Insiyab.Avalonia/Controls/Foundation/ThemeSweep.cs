@@ -35,12 +35,14 @@ internal static class ThemeSweep
         }
         s_current?.Land();
         s_waiting?.Apply();
-        if (ElementComposition.GetElementVisual(top) is { } visual) Capture(origin, top, layer, size, visual, apply);
-        else Start(origin, top, layer, size, Snapshot.Take(top, size, top.RenderScaling), apply);
+        // where the sweep starts is read now: the origin may be in a menu that closes before the picture arrives
+        var centre = RestCentre(origin, top);
+        if (ElementComposition.GetElementVisual(top) is { } visual) Capture(origin, centre, top, layer, size, visual, apply);
+        else Start(origin, centre, top, layer, size, Snapshot.Take(top, size, top.RenderScaling), apply);
     }
 
     // The render thread draws the picture, so the UI thread keeps its frames meanwhile; the theme changes when it arrives.
-    private static async void Capture(Visual origin, TopLevel top, AdornerLayer layer, Size size, CompositionVisual visual, Action apply)
+    private static async void Capture(Visual origin, Point centre, TopLevel top, AdornerLayer layer, Size size, CompositionVisual visual, Action apply)
     {
         var waiting = s_waiting = new Waiting(apply);
         Bitmap? bitmap = null;
@@ -63,13 +65,12 @@ internal static class ThemeSweep
             apply();
             return;
         }
-        Start(origin, top, layer, size, bitmap, apply);
+        Start(origin, centre, top, layer, size, bitmap, apply);
     }
 
-    private static void Start(Visual origin, TopLevel top, AdornerLayer layer, Size size, Bitmap bitmap, Action apply)
+    private static void Start(Visual origin, Point centre, TopLevel top, AdornerLayer layer, Size size, Bitmap bitmap, Action apply)
     {
         s_current?.Land();
-        var centre = RestCentre(origin, top);
         var far = new[] { new Point(0, 0), new Point(size.Width, 0), new Point(0, size.Height), new Point(size.Width, size.Height) }
             .Max(p => Math.Sqrt((p.X - centre.X) * (p.X - centre.X) + (p.Y - centre.Y) * (p.Y - centre.Y)));
         var picture = new Image
@@ -107,12 +108,22 @@ internal static class ThemeSweep
         top.RequestAnimationFrame(Frame);
     }
 
-    // From where the control rests, not where its hover lift or press dip has moved it this instant.
+    // From where the control rests, not where its hover lift or press dip has moved it this instant. A control in a popup (a menu, a card) lives in another visual root, so the point goes through the screen to reach the window.
     private static Point RestCentre(Visual origin, TopLevel top)
     {
         var parent = origin.GetVisualParent();
-        var at = parent is null ? null : parent.TranslatePoint(origin.Bounds.Center, top);
-        return at ?? new Point(top.Bounds.Width / 2, 0);
+        if (parent is null) return new Point(top.Bounds.Width / 2, 0);
+        if (parent.TranslatePoint(origin.Bounds.Center, top) is { } at) return at;
+        try
+        {
+            if (TopLevel.GetTopLevel(parent) is not null)
+                return top.PointToClient(parent.PointToScreen(origin.Bounds.Center));
+        }
+        catch (InvalidOperationException)
+        {
+            // not on a screen any more
+        }
+        return new Point(top.Bounds.Width / 2, 0);
     }
 
     private static Geometry Hole(Size size, Point centre, double radius) =>
@@ -122,7 +133,7 @@ internal static class ThemeSweep
         new(new Rect(centre.X - radius, centre.Y - radius, radius * 2, radius * 2));
 
     // An Image reads a scaled bitmap's DIP size as pixels and crops it, so the bitmap is shown in pixels: the whole of it, whatever its density, over the Image's own box.
-    private sealed class Pixels(Bitmap bitmap) : IImage
+    internal sealed class Pixels(Bitmap bitmap) : IImage
     {
         public Size Size => new(bitmap.PixelSize.Width, bitmap.PixelSize.Height);
 

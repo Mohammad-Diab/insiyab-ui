@@ -44,7 +44,7 @@ public static class Shell
     public static readonly AttachedProperty<SidebarState?> SidebarActionProperty =
         AvaloniaProperty.RegisterAttached<Button, SidebarState?>("SidebarAction", typeof(Shell));
 
-    /// <summary>On a ScrollViewer: past 8px of scroll the nearest <c>.topbar</c> beside it takes the <c>scrolled</c> class and frosts.</summary>
+    /// <summary>On a ScrollViewer: past 8px of scroll the nearest shown <c>.topbar</c> beside it takes the <c>scrolled</c> class and frosts.</summary>
     public static readonly AttachedProperty<bool> FrostsTopbarProperty =
         AvaloniaProperty.RegisterAttached<ScrollViewer, bool>("FrostsTopbar", typeof(Shell));
 
@@ -116,6 +116,42 @@ public static class Shell
         {
             if (ShellLook.GetEnters(c) && !Equals(e.OldValue, e.NewValue)) Replay(c);
         });
+        // an island shown again (a button that comes and goes with the page's state) enters as a new one does
+        Visual.IsVisibleProperty.Changed.AddClassHandler<Control>((c, e) =>
+        {
+            if (e.GetNewValue<bool>() && ShellLook.GetEnters(c) && c.IsAttachedToVisualTree()) Seen.WhenSeen(c, () => Enter(c));
+            if (ShellLook.GetBack(c)) Yield(c);
+        });
+    }
+
+    internal static void BackChanged(Control c, AvaloniaPropertyChangedEventArgs e)
+    {
+        c.AttachedToVisualTree -= OnBackAttached;
+        c.DetachedFromVisualTree -= OnBackAttached;
+        if (e.GetNewValue<bool>())
+        {
+            c.AttachedToVisualTree += OnBackAttached;
+            c.DetachedFromVisualTree += OnBackAttached;
+        }
+        Yield(c);
+    }
+
+    private static void OnBackAttached(object? sender, VisualTreeAttachmentEventArgs e)
+    {
+        if (sender is Control c) Yield(c);
+    }
+
+    // A back island that shows stands in the brand island's place, first after the menu button (the web's trail of one step back): the zone's brand yields, and enters again (the island entrance) when the back island goes. The back island itself enters as an island does (Enters, set by the topbar's styles).
+    private static void Yield(Control back)
+    {
+        if (back.GetVisualParent() is not Panel zone) return;
+        var shows = back.IsVisible && ShellLook.GetBack(back) && back.IsAttachedToVisualTree();
+        foreach (var brand in zone.Children)
+        {
+            if (brand == back || !brand.Classes.Contains("island") || !brand.Classes.Contains("brand") || ShellLook.GetYielded(brand) == shows) continue;
+            ShellLook.SetYielded(brand, shows);
+            if (!shows && brand.IsVisible && brand.IsAttachedToVisualTree()) Seen.WhenSeen(brand, () => Enter(brand));
+        }
     }
 
     private static Words.Own[]? s_filterWords;
@@ -229,22 +265,24 @@ public static class Shell
         if (Seen.Now(island)) Enter(island);
     }
 
+    // The web's ins-island-in: it fades in, settling from a little smaller and above; a still window keeps only the fade, short (Motion.StillFade).
     private static void Enter(Control c)
     {
         c.GetValue(EntranceProperty)?.Cancel();
         c.SetValue(EntranceProperty, null);
-        if (Motion.IsStill(c)) return;
+        var still = Motion.IsStill(c);
         var run = new CancellationTokenSource();
         c.SetValue(EntranceProperty, run);
         TransformOperationsAnimator.Ensure();
+        var from = TransformOperations.Parse(still ? "none" : "scale(0.88) translateY(-6px)");
         var animation = new Animation
         {
-            Duration = TimeSpan.FromMilliseconds(280),
-            Easing = new SplineEasing(0.22, 1, 0.36, 1),
+            Duration = still ? Motion.StillFade : TimeSpan.FromMilliseconds(280),
+            Easing = still ? new LinearEasing() : new SplineEasing(0.22, 1, 0.36, 1),
             FillMode = FillMode.Backward,
             Children =
             {
-                new KeyFrame { Cue = new Cue(0), Setters = { new Setter(Visual.OpacityProperty, 0d), new Setter(Visual.RenderTransformProperty, TransformOperations.Parse("scale(0.88) translateY(-6px)")) } },
+                new KeyFrame { Cue = new Cue(0), Setters = { new Setter(Visual.OpacityProperty, 0d), new Setter(Visual.RenderTransformProperty, from) } },
                 new KeyFrame { Cue = new Cue(1), Setters = { new Setter(Visual.OpacityProperty, 1d), new Setter(Visual.RenderTransformProperty, TransformOperations.Identity) } },
             },
         };
@@ -270,7 +308,8 @@ public static class Shell
         for (var node = from.Parent; node is not null; node = node.Parent)
             if (node is Panel panel)
                 foreach (var child in panel.Children)
-                    if (child != from && child.Classes.Contains("topbar")) return child;
+                    // a bar hidden there (a page's own, while a shell's one bar stands over it) is not the one the content scrolls under
+                    if (child != from && child.IsVisible && child.Classes.Contains("topbar")) return child;
         return null;
     }
 

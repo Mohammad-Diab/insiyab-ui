@@ -115,13 +115,39 @@ public class BottomNav : SelectingItemsControl
             ClearValue(SafeArea.EdgesProperty);
     }
 
-    // The rail drops every label while the column is too short for all of them with their labels, and takes them back when it grows.
+    // The rail drops every label while the column is too short for all of them with their labels, and takes them back when it grows. The labelled column's height is the one it measured last (a finger's items are taller than the nominal 64: five did not fit a phone on its side, 360 tall).
+    private double _labelled;
+
     protected override Size MeasureOverride(Size availableSize)
     {
-        var bare = IsRail && !double.IsInfinity(availableSize.Height)
-            && availableSize.Height - Padding.Top - Padding.Bottom < RailItemWithLabel * Math.Max(1, ItemCount);
+        var limited = IsRail && !double.IsInfinity(availableSize.Height);
+        var labelled = Math.Max(_labelled, Padding.Top + Padding.Bottom + RailItemWithLabel * Math.Max(1, ItemCount));
+        var bare = limited && availableSize.Height < labelled;
         if (PseudoClasses.Contains(":bare") != bare) PseudoClasses.Set(":bare", bare);
-        return base.MeasureOverride(availableSize);
+        var size = base.MeasureOverride(availableSize);
+        if (limited && !bare)
+        {
+            _labelled = size.Height;
+            if (size.Height > availableSize.Height + 0.5)
+            {
+                PseudoClasses.Set(":bare", true);
+                size = base.MeasureOverride(availableSize);
+            }
+        }
+        return size;
+    }
+
+    // The column's own measure can miss what stands above its items (the status bar's room the safe area gives it): an item drawn past the column's foot, once arranged, says the labelled column is taller than the window, so it drops its labels on the next measure (a phone on its side, 360 tall).
+    protected override Size ArrangeOverride(Size finalSize)
+    {
+        var size = base.ArrangeOverride(finalSize);
+        if (IsRail && !PseudoClasses.Contains(":bare") && ItemsPanelRoot is { } items && items.Children.LastOrDefault(c => c.IsVisible) is { } last
+            && last.TranslatePoint(new Point(0, last.Bounds.Height), this) is { } foot && foot.Y > finalSize.Height + 0.5)
+        {
+            _labelled = Math.Max(_labelled, finalSize.Height + foot.Y - finalSize.Height + 1);
+            Dispatcher.UIThread.Post(InvalidateMeasure);
+        }
+        return size;
     }
 
     // Toasts and floating buttons at the foot sit above the bar, and come back down when it goes.

@@ -438,6 +438,12 @@ internal class ToolbarPanel : Panel
         foreach (var c in Children)
         {
             if (c == More || !c.IsVisible) continue;
+            // in the «⋯» menu: no place in the row, even while the app's own IsVisible binding (which the overflow style cannot beat) keeps it shown
+            if (c.Classes.Contains(Toolbar.Overflowed))
+            {
+                c.Arrange(default);
+                continue;
+            }
             if (Toolbar.GetAtEnd(c))
             {
                 tail += c.DesiredSize.Width;
@@ -458,7 +464,7 @@ internal class ToolbarPanel : Panel
         }
         foreach (var c in Children)
         {
-            if (c == More || !c.IsVisible || !Toolbar.GetAtEnd(c)) continue;
+            if (c == More || !c.IsVisible || !Toolbar.GetAtEnd(c) || c.Classes.Contains(Toolbar.Overflowed)) continue;
             c.Arrange(new Rect(from, 0, c.DesiredSize.Width, finalSize.Height));
             from += c.DesiredSize.Width + gap;
         }

@@ -163,6 +163,30 @@ public class SafeAreaTests
         });
     }
 
+    // A side drawer on a phone or a tablet runs the screen's whole height, as Material's side sheet: under the status bar and the navigation bar, its head and its content kept between them (it ended above the navigation bar's band, cut).
+    [AvaloniaFact]
+    public void A_side_drawer_reaches_the_top_and_the_foot_with_its_content_between_the_bars()
+    {
+        var fake = new FakeInsets();
+        fake.Set(new Thickness(0, 24, 0, 32));
+        FakeInsets.With(fake, () =>
+        {
+            var opener = new Button { Content = "فتح" };
+            var window = Show(new StackPanel { Children = { opener } }, FlowDirection.RightToLeft, width: 800, height: 700);
+            var body = new TextBlock { Text = "محتوى" };
+            var drawer = new Dialog { Title = "درج", Classes = { "drawer", "end" }, Content = body };
+            drawer.Open(opener);
+            Settle(400);
+            var box = Box(drawer, window);
+            Assert.Equal(0, box.Top, 1);
+            Assert.Equal(700, box.Bottom, 1);
+            var head = drawer.GetVisualDescendants().OfType<Border>().First(b => b.Name == "PART_Head");
+            Assert.True(Box(head, window).Top >= 24 - 0.5, $"head at {Box(head, window)}");
+            drawer.Close();
+            Settle();
+        });
+    }
+
     [AvaloniaFact]
     public void A_toast_keeps_clear_of_the_gesture_bar()
     {
@@ -238,5 +262,38 @@ public class SafeAreaTests
         var a = c.TranslatePoint(default, root)!.Value;
         var b = c.TranslatePoint(new Point(c.Bounds.Width, c.Bounds.Height), root)!.Value;
         return new Rect(new Point(Math.Min(a.X, b.X), Math.Min(a.Y, b.Y)), new Point(Math.Max(a.X, b.X), Math.Max(a.Y, b.Y)));
+    }
+
+    [AvaloniaFact]
+    public void The_status_band_fills_the_top_inset_a_step_darker_than_the_ground_over_everything()
+    {
+        var fake = new FakeInsets();
+        fake.Set(new Thickness(0, 24, 0, 20));
+        FakeInsets.With(fake, () =>
+        {
+            var view = new Panel();
+            SafeArea.SetStatusBand(view, true);
+            var window = Show(view, width: 390, height: 700);
+            var band = StatusBand.Of(window);
+            Assert.NotNull(band);
+            Assert.False(band!.IsHitTestVisible);
+            Assert.True(band.ZIndex > 1, "over the dialogs and the toasts");
+            Assert.True(band.TryFindResource("InsWash1Color", band.ActualThemeVariant, out var lightFound) && lightFound is Color);
+            var wash = (Color)lightFound!;
+            var light = band.Shade();
+            Assert.True(light.R + light.G + light.B < wash.R + wash.G + wash.B, "darker than the ground in light");
+            Assert.True(light.R + light.G + light.B > wash.R + wash.G + wash.B - 60, "a step darker, not a dark bar");
+
+            window.RequestedThemeVariant = global::Avalonia.Styling.ThemeVariant.Dark;
+            Settle(50);
+            Assert.Equal(global::Avalonia.Styling.ThemeVariant.Dark, band.ActualThemeVariant);
+            Assert.True(band.TryFindResource("InsWash1Color", band.ActualThemeVariant, out var found) && found is Color);
+            var darkWash = (Color)found!;
+            var dark = band.Shade();
+            Assert.True(dark.R + dark.G + dark.B < darkWash.R + darkWash.G + darkWash.B, "darker than the dark ground");
+
+            SafeArea.SetStatusBand(view, false);
+            Assert.False(band.IsVisible);
+        });
     }
 }

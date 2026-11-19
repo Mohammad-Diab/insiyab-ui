@@ -275,4 +275,34 @@ public class ListLookTests
         found = found.Distinct().ToList();
         Assert.True(found.Count == 0, "found: " + string.Join(" ; ", found));
     }
+
+    // A photo leading a row takes the icon tile's box («حسابي»'s other accounts beside «إضافة حساب»), so the rows' names start on one line; a photo given a size class keeps it
+    [AvaloniaTheory]
+    [InlineData(FlowDirection.RightToLeft)]
+    [InlineData(FlowDirection.LeftToRight)]
+    public void A_photo_leading_a_row_takes_the_icon_tiles_box(FlowDirection direction)
+    {
+        var tileText = new TextBlock { Text = "إضافة حساب" };
+        var photoText = new TextBlock { Text = "ليلى" };
+        var photo = new Avatar { Content = "ل" };
+        var big = new Avatar { Classes = { "xl" }, Content = "م" };
+        var list = new ListBox
+        {
+            Items =
+            {
+                new ListBoxItem { Content = new DockPanel { Children = { new Border { Classes = { "panel-ico" }, Child = new Icon { Data = Geometry.Parse("M0,0 L24,24") } }, tileText } } },
+                new ListBoxItem { Content = new DockPanel { Children = { photo, photoText } } },
+                new ListBoxItem { Content = new DockPanel { Children = { big, new TextBlock { Text = "محمد" } } } },
+            },
+        };
+        var window = Show(list, direction);
+        Assert.Equal(new Size(36, 36), photo.Bounds.Size);
+        Assert.Equal(new Size(64, 64), big.Bounds.Size);
+        double Start(TextBlock t)
+        {
+            var r = new Rect(t.Bounds.Size).TransformToAABB(t.TransformToVisual(window)!.Value);
+            return direction == FlowDirection.RightToLeft ? r.Right : r.Left;
+        }
+        Assert.Equal(Start(tileText), Start(photoText), 1);
+    }
 }
