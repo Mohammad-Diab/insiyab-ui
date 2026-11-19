@@ -95,8 +95,27 @@ public class MediaBar : Control, ICustomHitTest, IReach
     public static readonly RoutedEvent<MediaSeekEventArgs> SeekRequestedEvent =
         RoutedEvent.Register<MediaBar, MediaSeekEventArgs>(nameof(SeekRequested), RoutingStrategies.Bubble);
 
-    // The track's centre sits this far above the bottom: the marks take the room above it.
+    /// <summary>The played part; unset, the brand's mid tone.</summary>
+    public static readonly StyledProperty<IBrush?> PlayedBrushProperty =
+        AvaloniaProperty.Register<MediaBar, IBrush?>(nameof(PlayedBrush));
+
+    /// <summary>The loaded part ahead of the played one; unset, the theme's rule colour.</summary>
+    public static readonly StyledProperty<IBrush?> BufferedBrushProperty =
+        AvaloniaProperty.Register<MediaBar, IBrush?>(nameof(BufferedBrush));
+
+    /// <summary>The rest of the track; unset, the theme's line colour.</summary>
+    public static readonly StyledProperty<IBrush?> TrackBrushProperty =
+        AvaloniaProperty.Register<MediaBar, IBrush?>(nameof(TrackBrush));
+
+    /// <summary>A solid thumb of this colour (over a picture: YouTube's, Google Photos'); unset, the surface's disc ringed in the played colour.</summary>
+    public static readonly StyledProperty<IBrush?> ThumbBrushProperty =
+        AvaloniaProperty.Register<MediaBar, IBrush?>(nameof(ThumbBrush));
+
+    // The track's centre sits this far above the bottom of the bar's own 28: the marks take the room above it.
     internal const double TrackFromBottom = 9;
+
+    // The bar's own height (the theme's): a taller bar (a finger's band) keeps its track in its middle, the room shared evenly above and below.
+    private const double OwnHeight = 28;
 
     private static Cursor? s_hand;
 
@@ -108,7 +127,8 @@ public class MediaBar : Control, ICustomHitTest, IReach
 
     static MediaBar()
     {
-        AffectsRender<MediaBar>(ValueProperty, BufferedProperty, LeadProperty, MarkersProperty, CurrentMarkerProperty);
+        AffectsRender<MediaBar>(ValueProperty, BufferedProperty, LeadProperty, MarkersProperty, CurrentMarkerProperty,
+            PlayedBrushProperty, BufferedBrushProperty, TrackBrushProperty, ThumbBrushProperty);
         FocusableProperty.OverrideDefaultValue<MediaBar>(true);
         FlowDirectionProperty.OverrideDefaultValue<MediaBar>(FlowDirection.LeftToRight);
     }
@@ -140,6 +160,17 @@ public class MediaBar : Control, ICustomHitTest, IReach
     public int CurrentMarker { get => GetValue(CurrentMarkerProperty); set => SetValue(CurrentMarkerProperty, value); }
 
     public TimeSpan SmallStep { get => GetValue(SmallStepProperty); set => SetValue(SmallStepProperty, value); }
+
+    public IBrush? PlayedBrush { get => GetValue(PlayedBrushProperty); set => SetValue(PlayedBrushProperty, value); }
+
+    public IBrush? BufferedBrush { get => GetValue(BufferedBrushProperty); set => SetValue(BufferedBrushProperty, value); }
+
+    public IBrush? TrackBrush { get => GetValue(TrackBrushProperty); set => SetValue(TrackBrushProperty, value); }
+
+    public IBrush? ThumbBrush { get => GetValue(ThumbBrushProperty); set => SetValue(ThumbBrushProperty, value); }
+
+    /// <summary>Where the track's centre is in a bar <paramref name="height"/> tall: 9 above the foot of the bar's own 28 (the marks above it); a taller bar keeps it in its middle.</summary>
+    internal static double TrackY(double height) => Math.Min(height - TrackFromBottom, Math.Max(height / 2, OwnHeight - TrackFromBottom));
 
     public TimeSpan LargeStep { get => GetValue(LargeStepProperty); set => SetValue(LargeStepProperty, value); }
 
@@ -371,7 +402,7 @@ public class MediaBar : Control, ICustomHitTest, IReach
         }
         _bubbleText!.Text = BubbleText(over);
         var x = over * Bounds.Width;
-        var y = Math.Max(0, Bounds.Height - TrackFromBottom - 18);
+        var y = Math.Max(0, TrackY(Bounds.Height) - 18);
         _bubble.PlacementRect = new Rect(x - 0.5, y, 1, 1);
         if (!_bubble.IsOpen) _bubble.IsOpen = true;
     }
@@ -396,11 +427,11 @@ public class MediaBar : Control, ICustomHitTest, IReach
     public override void Render(DrawingContext context)
     {
         var w = Bounds.Width;
-        var y = Bounds.Height - TrackFromBottom;
+        var y = TrackY(Bounds.Height);
         var shown = Shown;
-        var brand = Res("InsPrimaryMid", Brushes.Teal);
-        var track = Res("InsLine", Brushes.LightGray);
-        var loaded = Res("InsHr", Brushes.Gray);
+        var brand = PlayedBrush ?? Res("InsPrimaryMid", Brushes.Teal);
+        var track = TrackBrush ?? Res("InsLine", Brushes.LightGray);
+        var loaded = BufferedBrush ?? Res("InsHr", Brushes.Gray);
         var lead = LeadPart * w;
         var buffered = Math.Clamp(Buffered, 0, 1) * w;
         context.DrawRectangle(Brushes.Transparent, null, new Rect(Bounds.Size));
@@ -416,7 +447,10 @@ public class MediaBar : Control, ICustomHitTest, IReach
                 var current = i == CurrentMarker;
                 context.DrawRectangle(current ? brand : ToneBrush(marks[i].Tone), null, new RoundedRect(new Rect(x - 1.5, y - (current ? 16 : 14), 3, current ? 10 : 7), 1.5));
             }
-        context.DrawEllipse(Res("InsSurface", Brushes.White), new Pen(brand, 3), new Point(w * shown, y), 7, 7);
+        if (ThumbBrush is { } thumb)
+            context.DrawEllipse(thumb, null, new Point(w * shown, y), 7, 7);
+        else
+            context.DrawEllipse(Res("InsSurface", Brushes.White), new Pen(brand, 3), new Point(w * shown, y), 7, 7);
     }
 
     protected override AutomationPeer OnCreateAutomationPeer() => new MediaBarAutomationPeer(this);

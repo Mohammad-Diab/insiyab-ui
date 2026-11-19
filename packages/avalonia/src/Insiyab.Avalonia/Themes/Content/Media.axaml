@@ -259,6 +259,37 @@
           <Setter Property="FontWeight" Value="Bold" />
           <Setter Property="HorizontalAlignment" Value="Center" />
           <Setter Property="VerticalAlignment" Value="Center" />
+          <!-- md: the seconds inside the larger round skip over a picture (media-btn md), grown with its arrow; a variant of the look (a global rule may not target a look class) -->
+          <Style Selector="^.md">
+            <Setter Property="FontSize" Value="10" />
+          </Style>
+        </Style>
+      </ControlTheme>
+
+      <!-- media-scrim: the soft shade behind a player's controls laid over its picture (Google Photos', YouTube's): .top darkens down from the head, .bottom up from the foot, so white glyphs and times read on a light picture; the middle stays clear -->
+      <ControlTheme x:Key="InsLookMediaScrim" TargetType="Border" ctl:ClassTheme.For="media-scrim">
+        <Style Selector="^.media-scrim">
+          <Setter Property="IsHitTestVisible" Value="False" />
+          <Setter Property="Background">
+            <LinearGradientBrush StartPoint="50%,100%" EndPoint="50%,0%">
+              <GradientStop Offset="0" Color="#8C000000" />
+              <GradientStop Offset="0.45" Color="#4D000000" />
+              <GradientStop Offset="1" Color="#00000000" />
+            </LinearGradientBrush>
+          </Setter>
+          <Setter Property="VerticalAlignment" Value="Bottom" />
+          <Setter Property="Height" Value="168" />
+          <Style Selector="^.top">
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Height" Value="120" />
+            <Setter Property="Background">
+              <LinearGradientBrush StartPoint="50%,0%" EndPoint="50%,100%">
+                <GradientStop Offset="0" Color="#80000000" />
+                <GradientStop Offset="0.5" Color="#40000000" />
+                <GradientStop Offset="1" Color="#00000000" />
+              </LinearGradientBrush>
+            </Setter>
+          </Style>
         </Style>
       </ControlTheme>
 
@@ -322,6 +353,61 @@
   </Style>
   <Style Selector="Border.media-group > StackPanel > :is(Button).media-btn">
     <Setter Property="Width" Value="40" />
+  </Style>
+
+  <!-- The media button's sizes: regular (44, a 22 glyph) for back, ⋮ and the row; md (56, a 28 glyph) for the skips over a picture; lg (72, a 34 glyph) for play over a picture. md and lg are round, as a mobile player's middle buttons (YouTube, Google Photos) -->
+  <Style Selector=":is(Button).media-btn.md">
+    <Setter Property="Width" Value="56" />
+    <Setter Property="Height" Value="56" />
+    <Setter Property="CornerRadius" Value="28" />
+    <Style Selector="^ :is(ctl|Icon)">
+      <Setter Property="Size" Value="28" />
+    </Style>
+  </Style>
+  <Style Selector=":is(Button).media-btn.lg">
+    <Setter Property="Width" Value="72" />
+    <Setter Property="Height" Value="72" />
+    <Setter Property="CornerRadius" Value="36" />
+    <Style Selector="^ :is(ctl|Icon)">
+      <Setter Property="Size" Value="34" />
+      <Setter Property="IsFilled" Value="True" />
+    </Style>
+  </Style>
+
+  <!-- Over a picture (a host marked media-over: a mobile player's controls laid on the video, with media-scrim behind them), as YouTube's and Google Photos': every glyph and time white, the row's buttons round; a toggle that is on (the chat open, full screen) keeps its white glyph on a soft white disc (20%), a step stronger under the pointer, so what is on reads on the dark shade; the round middle buttons on a faint dark disc; the time bar's played part in the brand's light tone, a white thumb, the rest white at 30%. -->
+  <Style Selector=".media-over :is(Button).media-btn, .media-over DropDownButton.media-dd, .media-over Button.media-speed">
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector=".media-over :is(Button).media-btn:not(.md):not(.lg)">
+    <Setter Property="CornerRadius" Value="22" />
+  </Style>
+  <Style Selector=".media-over :is(Button).media-btn:pointerover">
+    <Setter Property="Background" Value="#26FFFFFF" />
+  </Style>
+  <Style Selector=".media-over ToggleButton.media-btn:checked, .media-over Button.media-btn.on">
+    <Setter Property="Background" Value="#33FFFFFF" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector=".media-over ToggleButton.media-btn:checked:pointerover, .media-over Button.media-btn.on:pointerover">
+    <Setter Property="Background" Value="#47FFFFFF" />
+  </Style>
+  <Style Selector=".media-over :is(Button).media-btn.md, .media-over :is(Button).media-btn.lg">
+    <Setter Property="Background" Value="#66000000" />
+  </Style>
+  <Style Selector=".media-over :is(Button).media-btn.md:pointerover, .media-over :is(Button).media-btn.lg:pointerover">
+    <Setter Property="Background" Value="#80000000" />
+  </Style>
+  <Style Selector=".media-over ctl|MediaSeekRow /template/ ctl|TemplateText#PART_Now">
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector=".media-over ctl|MediaSeekRow /template/ ctl|TemplateText#PART_Length">
+    <Setter Property="Foreground" Value="#E6FFFFFF" />
+  </Style>
+  <Style Selector=".media-over ctl|MediaBar">
+    <Setter Property="PlayedBrush" Value="{DynamicResource InsPrimaryMid}" />
+    <Setter Property="TrackBrush" Value="#4DFFFFFF" />
+    <Setter Property="BufferedBrush" Value="#80FFFFFF" />
+    <Setter Property="ThumbBrush" Value="White" />
   </Style>
 
 </Styles>
