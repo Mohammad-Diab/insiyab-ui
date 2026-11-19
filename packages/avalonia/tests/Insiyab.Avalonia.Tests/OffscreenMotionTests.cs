@@ -235,6 +235,27 @@ public class OffscreenMotionTests
         Assert.Null(box.RenderTransform);
     }
 
+    // A panel below the fold whose content is replaced: its first entrance must not run when the leave moves it into view (a month switch).
+    [AvaloniaFact]
+    public void A_leave_drops_an_entrance_still_waiting_out_of_view()
+    {
+        using var clock = new HeldEntrance();
+        var box = new Border { Width = 60, Height = 30, HorizontalAlignment = HorizontalAlignment.Center };
+        Entrance.SetEffect(box, EntranceEffect.Rise);
+        var (_, scroll) = Rig(box);
+        var done = false;
+
+        Entrance.Leave(box, 0, () => done = true);
+        clock.To(0);
+        clock.To(Entrance.LeaveLength);
+        clock.To(Entrance.LeaveLength + 20);
+        Assert.True(done);
+
+        ScrollIn(scroll, 100);
+        Assert.Equal(1, box.Opacity);
+        Assert.Null(box.RenderTransform);
+    }
+
     [AvaloniaFact]
     public void A_visible_entrance_keeps_its_timing()
     {

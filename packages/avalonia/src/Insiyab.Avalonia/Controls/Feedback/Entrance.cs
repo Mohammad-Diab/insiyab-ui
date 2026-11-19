@@ -105,6 +105,54 @@ public static class Entrance
         }
     }
 
+    // One element leaving: it fades out and drifts x px over the duration, then holds there until done runs (the caller hides it or swaps its content); the motion's values let go a frame later, so the element is never seen back at rest in between.
+    private sealed class Departure(Control target, double duration, Easing easing, double x, Action done) : Moving(target)
+    {
+        private IDisposable? _opacity;
+        private IDisposable? _transform;
+        private double _start = double.NaN;
+        private bool _done;
+
+        public override bool Step(double now, bool frame = true)
+        {
+            if (frame && double.IsNaN(_start)) _start = now;
+            var t = double.IsNaN(_start) ? 0 : now - _start;
+            if (_done)
+            {
+                Stop();
+                return false;
+            }
+            var p = t >= duration ? 1 : easing.Ease(t / duration);
+            _opacity?.Dispose();
+            _opacity = Target.SetValue(Visual.OpacityProperty, 1 - p, BindingPriority.Animation);
+            _transform?.Dispose();
+            _transform = Target.SetValue(Visual.RenderTransformProperty, new TranslateTransform(x * p, 0), BindingPriority.Animation);
+            if (t >= duration)
+            {
+                _done = true;
+                Finish();
+            }
+            return true;
+        }
+
+        // Runs the caller's step once, at most.
+        public void Finish()
+        {
+            var then = _then;
+            _then = null;
+            then?.Invoke();
+        }
+
+        private Action? _then = done;
+
+        public override void Stop()
+        {
+            _opacity?.Dispose();
+            _transform?.Dispose();
+            _opacity = _transform = null;
+        }
+    }
+
     // A flash: the tint laid over the element's own background at animation priority, up in 200ms, held, and gone by 1.8s, so its own background (and its hover) comes back untouched.
     private sealed class Glow(Control target, double delay, StyledProperty<IBrush?> background) : Moving(target)
     {
@@ -214,11 +262,48 @@ public static class Entrance
         else Seen.WhenSeen(c, () => PlayNow(c, effect, 0));
     }
 
-    // Slides x px in from the leading side (negative) or the trailing side (positive) as it fades in: content that moved back or on.
+    // How far content that turned slides in from the side it comes from.
+    internal const double TurnDistance = 24;
+
+    /// <summary>Content that turned to the period before (below 0) or after (above 0) slides in from that side as it fades in, mirrored in RTL; 0 rises in; still motion shows it at once.</summary>
+    public static void Turn(Control c, int toward)
+    {
+        if (toward == 0) Play(c, EntranceEffect.Rise);
+        else Slide(c, toward > 0 ? TurnDistance : -TurnDistance);
+    }
+
+    /// <summary>Content about to be replaced leaves: it fades out in 140ms, drifting a little toward the side the next content does not come from (<paramref name="toward"/> as <see cref="Turn"/> takes it; 0 fades only), then <paramref name="done"/> runs, where the caller swaps or hides it; the new content then comes in by <see cref="Turn"/>. Still motion, or an element out of sight, runs <paramref name="done"/> at once. A second leave or an entrance on the same element first runs the earlier leave's <paramref name="done"/>; an entrance still waiting for the element to be seen is dropped.</summary>
+    public static void Leave(Control c, int toward, Action done)
+    {
+        // an entrance still waiting to be seen (the element was below the fold) never runs once its content leaves: scrolled or moved into view mid-leave, it brought the leaving content back in
+        Seen.Forget(c);
+        if (s_running.TryGetValue(c, out var old))
+        {
+            old.Stop();
+            s_active.Remove(old);
+            s_running.Remove(c);
+            (old as Departure)?.Finish();
+        }
+        if (Motion.IsStill(c) || !c.IsEffectivelyVisible || !c.IsAttachedToVisualTree() || c.Bounds.Width <= 0)
+        {
+            done();
+            return;
+        }
+        var motion = new Departure(c, LeaveLength, s_fade, toward > 0 ? -TurnDistance / 2 : toward < 0 ? TurnDistance / 2 : 0, done);
+        s_running.AddOrUpdate(c, motion);
+        s_active.Add(motion);
+        motion.Step(Now(), frame: false);
+        RequestFrame(c);
+    }
+
+    // How long content that is replaced takes to leave.
+    internal const double LeaveLength = 140;
+
+    // Slides x px in from the leading side (negative) or the trailing side (positive) as it fades in: content that moved back or on; still, it only fades in.
     internal static void Slide(Control c, double x)
     {
-        if (Motion.IsStill(c)) return;
-        Seen.WhenSeen(c, () => Play(c, 0, 280, s_ease, opacity: 0, x: x));
+        if (Motion.IsStill(c)) Play(c, 0, 280, s_ease, opacity: 0, x: x);
+        else Seen.WhenSeen(c, () => Play(c, 0, 280, s_ease, opacity: 0, x: x));
     }
 
     // The same, starting after delay ms: the table's rows arrive one after another, and a row out of view simply appears.
@@ -268,7 +353,7 @@ public static class Entrance
         PlayNow(c, GetEffect(c), 0);
     }
 
-    // RTL mirrors the layout, so a negative x is the leading edge in both directions.
+    // RTL mirrors the layout, so a negative x is the leading edge in both directions. A still window keeps only the fade part (the light-feedback rule: no rise, slide, growth or stagger, over Motion.StillFade); an entrance with no fade part (Pop) shows at once.
     private static void Play(Control c, double delay, double duration, Easing easing, double opacity = 1, double x = 0, double y = 0, double scale = 1)
     {
         if (s_running.TryGetValue(c, out var old))
@@ -276,8 +361,15 @@ public static class Entrance
             old.Stop();
             s_active.Remove(old);
             s_running.Remove(c);
+            (old as Departure)?.Finish();
         }
-        if (Motion.IsStill(c)) return;
+        // out of any window nothing would step it (its frames come from its window): it is simply at rest when it gets there
+        if (TopLevel.GetTopLevel(c) is null) return;
+        if (Motion.IsStill(c))
+        {
+            if (opacity >= 1) return;
+            (delay, duration, easing, x, y, scale) = (0, Math.Min(duration, Motion.StillFade.TotalMilliseconds), s_fade, 0, 0, 1);
+        }
         var motion = new Arrival(c, delay, duration, easing, opacity, x, y, scale);
         s_running.AddOrUpdate(c, motion);
         s_active.Add(motion);
@@ -294,7 +386,7 @@ public static class Entrance
             s_active.Remove(old);
             s_flashing.Remove(c);
         }
-        if (Motion.IsStill(c) || Background(c) is not { } background) return;
+        if (Motion.IsStill(c) || Background(c) is not { } background || TopLevel.GetTopLevel(c) is null) return;
         var glow = new Glow(c, delay, background);
         s_flashing.AddOrUpdate(c, glow);
         s_active.Add(glow);
@@ -313,18 +405,32 @@ public static class Entrance
         });
     }
 
+    // An element that left the window or was hidden mid-motion (a page taken out, a table's row scrolled past and kept hidden for a scroll back) is let go at once: its frames come from its window, so out of it nothing would ever step it again, and it came back frozen half in or still waiting, a blank gap among the rows. Let go, it is at rest when it is back; a leave runs its done. The steps run over a copy, so a step whose done starts or ends another motion never makes the loop skip or drop the wrong one.
     private static void Tick()
     {
         var now = Now();
-        for (var i = s_active.Count - 1; i >= 0; i--)
+        foreach (var motion in s_active.ToArray())
         {
-            var motion = s_active[i];
-            if (motion.Step(now)) continue;
-            s_active.RemoveAt(i);
-            if (motion is Glow) s_flashing.Remove(motion.Target);
-            else s_running.Remove(motion.Target);
+            if (!s_active.Contains(motion)) continue;
+            if (Away(motion.Target))
+            {
+                motion.Stop();
+                Forget(motion);
+                (motion as Departure)?.Finish();
+                continue;
+            }
+            if (!motion.Step(now)) Forget(motion);
         }
-        foreach (var motion in s_active)
+        foreach (var motion in s_active.ToArray())
             RequestFrame(motion.Target);
+    }
+
+    private static bool Away(Control c) => !c.IsEffectivelyVisible || TopLevel.GetTopLevel(c) is null;
+
+    private static void Forget(Moving motion)
+    {
+        s_active.Remove(motion);
+        var table = motion is Glow ? s_flashing : s_running;
+        if (table.TryGetValue(motion.Target, out var current) && current == motion) table.Remove(motion.Target);
     }
 }

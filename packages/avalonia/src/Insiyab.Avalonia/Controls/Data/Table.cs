@@ -15,6 +15,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.Metadata;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 
@@ -375,10 +376,25 @@ public partial class Table : TemplatedControl, IWords
                 cell.Bind(ContentControl.ContentProperty, binding);
             }
             else cell = new TableCell { Content = column.CellText?.Invoke(item) };
+            if (column.Edit == TableEdit.None && PlainCell() is { } plain) cell.Theme = plain;
             row.Cells.Add(cell);
         }
         return row;
     }
+
+    private ControlTheme? _plainCell;
+
+    // The plain cell's theme (Table.axaml: no pencil, frozen shade or editor host): a cell that is never edited takes it until it is pinned (TableCell.SetPinned).
+    private ControlTheme? PlainCell()
+    {
+        if (_plainCell is null && (this.TryFindResource(PlainCellKey, ActualThemeVariant, out var found) || Application.Current?.TryFindResource(PlainCellKey, out found) == true))
+            _plainCell = found as ControlTheme;
+        return _plainCell;
+    }
+
+    internal const string PlainCellKey = "InsTableCellPlain";
+
+    internal ControlTheme? PlainTheme => _plainCell;
 
     // The same row takes the new item: its cells are updated where they changed, so its selection, the keyboard and a press on it all stay.
     private void Refresh(TableRow row, object? item)

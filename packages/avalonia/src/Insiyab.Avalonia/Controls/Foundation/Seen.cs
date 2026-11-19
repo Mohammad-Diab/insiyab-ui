@@ -73,6 +73,12 @@ internal static class Seen
         if (!request.IsDone) s_pending.AddOrUpdate(c, request);
     }
 
+    // Drops the play a control still waits to be seen for (its content left before it was ever seen: an entrance then would bring the old content in).
+    public static void Forget(Control c)
+    {
+        if (s_pending.TryGetValue(c, out var old)) old.Dispose();
+    }
+
     // A window changed state, or something in it was shown or hidden: the watchers of that window look again.
     private static void Recheck(Visual changed, bool visibility)
     {

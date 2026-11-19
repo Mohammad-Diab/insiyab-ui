@@ -65,6 +65,9 @@ public class TableCell : ContentControl
 
     internal void SetPinned(bool on, bool edge = false, bool flip = false)
     {
+        // a plain cell (Table.PlainCell) has no frozen shade: pinned, it takes the full template
+        if (on && Theme is { } theme && ReferenceEquals(theme, Row?.Owner?.PlainTheme))
+            ClearValue(ThemeProperty);
         PseudoClasses.Set(":pinned", on);
         PseudoClasses.Set(":pin-edge", edge);
         PseudoClasses.Set(":pin-flip", flip);
@@ -150,6 +153,13 @@ public class TableCell : ContentControl
     public void BeginEdit(string? text = null)
     {
         if (IsEditing || _column is null || _column.Edit == TableEdit.None) return;
+        // a column made editable after its cells were built: a plain cell takes the full template, which holds the editor
+        if (Theme is { } theme && ReferenceEquals(theme, Row?.Owner?.PlainTheme))
+        {
+            ClearValue(ThemeProperty);
+            Dispatcher.UIThread.Post(() => BeginEdit(text), DispatcherPriority.Loaded);
+            return;
+        }
         ApplyTemplate();
         if (_editorHost is null) return;
         var old = (Value ?? Text).Trim();

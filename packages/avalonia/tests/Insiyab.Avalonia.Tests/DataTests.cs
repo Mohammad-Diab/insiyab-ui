@@ -388,6 +388,30 @@ public class DataTests
     }
 
     [AvaloniaFact]
+    public void A_read_only_cell_is_plain_and_still_edits_once_its_column_allows_it()
+    {
+        var table = new Table();
+        table.Columns.Add(new TableColumn { Header = "الاسم", CellText = o => ((string[])o!)[0] });
+        table.Columns.Add(new TableColumn { Header = "المدينة", CellText = o => ((string[])o!)[1] });
+        table.ItemsSource = new[] { new[] { "ليلى", "الرياض" }, new[] { "عمر", "عمّان" } };
+        var window = Show(table, width: 700);
+        var cell = table.DisplayedRows[0].Cells[0];
+        Assert.NotNull(table.PlainTheme);
+        Assert.Same(table.PlainTheme, cell.Theme);
+        Assert.Empty(cell.GetVisualDescendants().OfType<Icon>());
+
+        table.Columns[0].Edit = TableEdit.Text;
+        cell.BeginEdit();
+        Settle(200);
+        Assert.Null(cell.Theme);
+        Assert.Contains(cell.GetVisualDescendants(), v => v is Panel { Name: "PART_EditorHost" });
+        Assert.True(cell.IsEditing);
+        Assert.Single(cell.GetVisualDescendants().OfType<TextBox>());
+        cell.EndEdit(false);
+        window.Close();
+    }
+
+    [AvaloniaFact]
     public void Table_cell_edit_can_be_refused()
     {
         var table = People(new TableColumn { Header = "الاسم" }, new TableColumn { Header = "المدينة" }, new TableColumn { Header = "القيمة", Edit = TableEdit.Number, Classes = "num" });

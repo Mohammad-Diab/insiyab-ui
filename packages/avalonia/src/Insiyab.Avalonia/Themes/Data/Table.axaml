@@ -439,6 +439,24 @@
         </Style>
       </ControlTheme>
 
+      <!-- A cell never edited and not pinned (the table sets it): the full look with only its fill, keyboard ring and content, a third of the elements, for read-only tables that build hundreds of cells -->
+      <ControlTheme x:Key="InsTableCellPlain" TargetType="ins:TableCell" BasedOn="{StaticResource {x:Type ins:TableCell}}">
+        <Setter Property="Template">
+          <ControlTemplate>
+            <Panel>
+              <ins:TemplateBorder x:Name="PART_Back" Background="{TemplateBinding Background}" />
+              <ins:TemplateBorder x:Name="PART_Focus" BorderThickness="2" BorderBrush="{DynamicResource InsTableEditRing}" Opacity="0" />
+              <ContentPresenter x:Name="PART_ContentPresenter" TextBlock.TextTrimming="CharacterEllipsis"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}" />
+            </Panel>
+          </ControlTemplate>
+        </Setter>
+      </ControlTheme>
+
       <!-- The bar a selection brings up: the count at the start, the actions at the end -->
       <ControlTheme x:Key="{x:Type ins:BulkBar}" TargetType="ins:BulkBar">
         <Setter Property="Margin" Value="0,12,0,0" />

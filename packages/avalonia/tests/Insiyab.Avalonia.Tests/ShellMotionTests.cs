@@ -75,7 +75,11 @@ public class ShellMotionTests
         try
         {
             title.Text = "الإعدادات";
-            Assert.Equal(1, Lowest(w, () => island.Opacity, 200));
+            // no rise or growth; only a short fade (150 ms), over by then
+            Settle(60);
+            Assert.True(island.RenderTransform is null || island.RenderTransform.Value.IsIdentity);
+            Settle(250);
+            Assert.Equal(1, island.Opacity);
         }
         finally { Still(w, false); }
     }
@@ -97,6 +101,46 @@ public class ShellMotionTests
         Settle();
         Assert.Equal(1, Holder().Opacity);
         Assert.True(page.IsEffectivelyVisible);
+    }
+
+    // A page whose first layout is slow (a calendar's first open: 440 ms on a modest PC): the frame it is built in read its clock before that work, so a motion timed from there was over before the page was first drawn. Its rise must still be seen once it is drawn.
+    private sealed class SlowPage : TextBlock
+    {
+        private bool _built;
+
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            if (!_built)
+            {
+                _built = true;
+                Thread.Sleep(400);
+            }
+            return base.MeasureOverride(availableSize);
+        }
+    }
+
+    [AvaloniaFact]
+    public void A_slow_page_still_rises_in_once_it_is_drawn()
+    {
+        var host = new TransitioningContentControl { Classes = { "shell-content" }, Content = new TextBlock { Text = "الأولى" } };
+        var w = Show(host, FlowDirection.RightToLeft);
+        Settle();
+
+        var page = new SlowPage { Text = "الثانية" };
+        host.Content = page;
+        Visual Holder() => (Visual?)page.GetVisualParent() ?? page;
+        var seen = new List<double>();
+        var clock = Stopwatch.StartNew();
+        while (clock.ElapsedMilliseconds < 900)
+        {
+            w.InvalidateVisual();
+            Dispatcher.UIThread.RunJobs();
+            AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+            if (page.IsArrangeValid && page.Bounds.Height > 0) seen.Add(Holder().Opacity);
+            Thread.Sleep(8);
+        }
+        Assert.True(seen.Count > 0 && seen.Min() < 0.6, $"opacity once drawn: {string.Join(" ", seen.Take(12).Select(o => o.ToString("0.00")))}");
+        Assert.Equal(1, seen[^1], 3);
     }
 
     [AvaloniaFact]

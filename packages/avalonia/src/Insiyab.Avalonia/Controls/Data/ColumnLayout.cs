@@ -262,7 +262,8 @@ internal class ColumnsPanel : Panel
         {
             var child = Children[i];
             child.Measure(new Size(double.PositiveInfinity, availableSize.Height));
-            natural[i] = child.IsVisible ? child.DesiredSize.Width : 0;
+            // whole pixels up: the arrange rounds each column's edges, and a cell given a fraction less than it asked for cuts its text with an ellipsis
+            natural[i] = child.IsVisible ? Math.Ceiling(child.DesiredSize.Width) : 0;
             height = Math.Max(height, child.DesiredSize.Height);
         }
         if (!natural.AsSpan().SequenceEqual(Natural))
