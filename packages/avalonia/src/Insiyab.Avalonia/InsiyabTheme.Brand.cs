@@ -87,12 +87,16 @@ public partial class InsiyabTheme
         {
             var target = (ResourceDictionary)brand.ThemeDictionaries[variant];
             var wash = (Color)target["InsWash1Color"]!;
+            // a count badge's ring in the page's colour, outside the badge (ins:Dot.Count)
+            target["InsCountRing"] = new BoxShadows(new BoxShadow { Spread = 2, Color = wash });
             foreach (var key in new[] { "InsGlass", "InsGlassStrong" })
             {
                 if (!Resources.TryGetResource(key + "Color", variant, out var value) || value is not Color glass) continue;
                 var ground = Over(glass, wash);
                 target[key + "Ground"] = new SolidColorBrush(ground);
                 target[key + "GroundColor"] = ground;
+                // the same colour fully clear: a bar fading to its ground starts from this, not Transparent (white, clear), so a dark ground does not pass through grey
+                target[key + "GroundClear"] = new SolidColorBrush(Color.FromArgb(0, ground.R, ground.G, ground.B));
             }
         }
     }

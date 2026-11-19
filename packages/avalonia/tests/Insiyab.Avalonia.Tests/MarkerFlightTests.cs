@@ -233,4 +233,33 @@ public class MarkerFlightTests
         Assert.InRange(widest.Value, start + 0.6 * (span - start), span + 0.5);
         Assert.False(face.IsVisible);
     }
+
+    // A mark the app draws itself glides with the same flight (MarkGlide): shown while it flies, from the old place to the new, hidden as it lands; none when still.
+    [AvaloniaFact]
+    public void An_app_drawn_mark_glides_with_the_same_flight_and_lands_hidden()
+    {
+        var mark = new Border { Background = Brushes.Purple, IsVisible = false };
+        var layer = new Canvas { Width = 300, Height = 60, Children = { mark } };
+        var window = Show(layer, FlowDirection.RightToLeft, width: 360, height: 120);
+        var landed = 0;
+        using (var clock = new HeldClock())
+        {
+            Assert.True(MarkGlide.Fly(mark, new Rect(0, 0, 40, 60), new Rect(200, 0, 40, 60), landed: () => landed++));
+            Assert.True(mark.IsVisible);
+            Assert.True(MarkGlide.IsFlying(mark));
+            var spans = clock.Step(window, 700, 50, () => (Canvas.GetLeft(mark), mark.Width));
+            var third = spans.First(s => s.Ms >= 200).Value;
+            Assert.True(third.Item1 < 20 && third.Item2 > 200, $"at a third the mark spans both places: {third}");
+        }
+        Settle(50);
+        Assert.False(mark.IsVisible);
+        Assert.False(MarkGlide.IsFlying(mark));
+        Assert.Equal(1, landed);
+        Assert.Equal(200, Canvas.GetLeft(mark), 1);
+
+        Motion.SetStill(window, true);
+        Assert.False(MarkGlide.Fly(mark, new Rect(200, 0, 40, 60), new Rect(0, 0, 40, 60), landed: () => landed++));
+        Assert.False(mark.IsVisible);
+        Assert.Equal(1, landed);
+    }
 }

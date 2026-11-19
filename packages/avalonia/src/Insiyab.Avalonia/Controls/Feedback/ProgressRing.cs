@@ -7,7 +7,7 @@ using Avalonia.Media.Immutable;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>A percentage as a ring, for a figure in a tile or beside a heading: the web's <c>.ins-ring</c>. It fills clockwise in both directions, as a dial does. Classes <c>sm</c> (24px, no label) and <c>lg</c>.</summary>
+/// <summary>A percentage as a ring, for a figure in a tile or beside a heading: the web's <c>.ins-ring</c>. It fills clockwise in both directions, as a dial does. Classes <c>sm</c> (24px, no label) and <c>lg</c>. The hole shows the percentage, or <see cref="Text"/> in its place (the tasks done of a plan, say) with an optional <see cref="Caption"/> under it.</summary>
 public class ProgressRing : RangeBase
 {
     public static readonly StyledProperty<double> ThicknessProperty =
@@ -22,8 +22,15 @@ public class ProgressRing : RangeBase
     public static readonly DirectProperty<ProgressRing, string> LabelProperty =
         AvaloniaProperty.RegisterDirect<ProgressRing, string>(nameof(Label), o => o.Label);
 
+    public static readonly StyledProperty<string?> TextProperty =
+        AvaloniaProperty.Register<ProgressRing, string?>(nameof(Text));
+
+    public static readonly StyledProperty<string?> CaptionProperty =
+        AvaloniaProperty.Register<ProgressRing, string?>(nameof(Caption));
+
     private string _label = "0%";
     private TextBlock? _labelPart;
+    private TextBlock? _captionPart;
 
     static ProgressRing()
     {
@@ -39,16 +46,24 @@ public class ProgressRing : RangeBase
 
     public IBrush? Fill { get => GetValue(FillProperty); set => SetValue(FillProperty, value); }
 
-    /// <summary>The value as a whole percentage, the ring's label.</summary>
+    /// <summary>What the hole shows: <see cref="Text"/> when set, else the value as a whole percentage.</summary>
     public string Label { get => _label; private set => SetAndRaise(LabelProperty, ref _label, value); }
+
+    /// <summary>A figure the hole shows in place of the percentage (the value still fills the ring and is what a screen reader hears); null or empty: the percentage.</summary>
+    public string? Text { get => GetValue(TextProperty); set => SetValue(TextProperty, value); }
+
+    /// <summary>A short line under the hole's figure, in a smaller muted face ("hours done"); null: none. It fades with the figure when the hole is too small for them.</summary>
+    public string? Caption { get => GetValue(CaptionProperty); set => SetValue(CaptionProperty, value); }
 
     private double Fraction => Maximum > Minimum ? Math.Clamp((Value - Minimum) / (Maximum - Minimum), 0, 1) : 0;
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == ValueProperty || change.Property == MinimumProperty || change.Property == MaximumProperty)
-            Label = Math.Round(Fraction * 100).ToString(System.Globalization.CultureInfo.InvariantCulture) + "%";
+        if (change.Property == ValueProperty || change.Property == MinimumProperty || change.Property == MaximumProperty || change.Property == TextProperty)
+            Label = Text is { Length: > 0 } text ? text : Math.Round(Fraction * 100).ToString(System.Globalization.CultureInfo.InvariantCulture) + "%";
+        else if (change.Property == CaptionProperty)
+            PseudoClasses.Set(":caption", !string.IsNullOrEmpty(change.GetNewValue<string?>()));
     }
 
     protected override AutomationPeer OnCreateAutomationPeer() => new ProgressRingAutomationPeer(this);
@@ -57,6 +72,7 @@ public class ProgressRing : RangeBase
     {
         base.OnApplyTemplate(e);
         _labelPart = e.NameScope.Find<TextBlock>("PART_Label");
+        _captionPart = e.NameScope.Find<TextBlock>("PART_Caption");
     }
 
     // A label wider than the ring's hole would sit on the stroke, so it fades out (a 22px ring has no room for "45%").
@@ -64,7 +80,10 @@ public class ProgressRing : RangeBase
     {
         var size = base.ArrangeOverride(finalSize);
         if (_labelPart is not null)
-            PseudoClasses.Set(":crowded", _labelPart.DesiredSize.Width > Math.Min(finalSize.Width, finalSize.Height) - 2 * Thickness - 4);
+        {
+            var widest = Math.Max(_labelPart.DesiredSize.Width, _captionPart is { IsVisible: true } caption ? caption.DesiredSize.Width : 0);
+            PseudoClasses.Set(":crowded", widest > Math.Min(finalSize.Width, finalSize.Height) - 2 * Thickness - 4);
+        }
         return size;
     }
 

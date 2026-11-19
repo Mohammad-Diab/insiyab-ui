@@ -10,7 +10,7 @@ using Avalonia.Styling;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The notched alert, the web's <c>.ins-alert</c>: a solid circle with the icon nested in a bite cut from the tinted message. Tone classes <c>ok info warn bad</c>.</summary>
+/// <summary>The alert, the web's <c>.ins-alert</c>: a tinted message with a solid circle holding the icon inside it at its start (never half past its edge, as the web's notch was). Tone classes <c>ok info warn bad</c>. Its <see cref="Action"/> (a retry, a way out) sits on the text's line at its end, centred on the text, and goes under the text only where the line is too narrow.</summary>
 [TemplatePart("PART_Message", typeof(Border))]
 [TemplatePart("PART_Close", typeof(Button))]
 public class Alert : ContentControl, IWords
@@ -23,9 +23,6 @@ public class Alert : ContentControl, IWords
 
     public Alert() => Words.Fill(this, OwnWords);
 
-    // The bite is 1.65rem, a little more than half the 2.75rem circle, which leaves the hairline gap.
-    private const double Bite = 26.4;
-
     public static readonly StyledProperty<Geometry?> IconProperty =
         AvaloniaProperty.Register<Alert, Geometry?>(nameof(Icon));
 
@@ -34,6 +31,9 @@ public class Alert : ContentControl, IWords
 
     public static readonly StyledProperty<IBrush?> IconForegroundProperty =
         AvaloniaProperty.Register<Alert, IBrush?>(nameof(IconForeground));
+
+    public static readonly StyledProperty<object?> ActionProperty =
+        AvaloniaProperty.Register<Alert, object?>(nameof(Action));
 
     public static readonly StyledProperty<bool> IsDismissibleProperty =
         AvaloniaProperty.Register<Alert, bool>(nameof(IsDismissible));
@@ -45,7 +45,6 @@ public class Alert : ContentControl, IWords
     public static readonly RoutedEvent<RoutedEventArgs> DismissedEvent =
         RoutedEvent.Register<Alert, RoutedEventArgs>(nameof(Dismissed), RoutingStrategies.Bubble);
 
-    private Border? _message;
     private Button? _close;
     private bool _going;
 
@@ -56,6 +55,9 @@ public class Alert : ContentControl, IWords
 
     /// <summary>The glyph's colour on the circle.</summary>
     public IBrush? IconForeground { get => GetValue(IconForegroundProperty); set => SetValue(IconForegroundProperty, value); }
+
+    /// <summary>What the alert offers (a button, or a few in a panel): on the text's line at its end, centred on the text, as Material's banner and Primer's banner place theirs; under the text, at its start, only where the text beside it would be squeezed. A hidden action takes no room.</summary>
+    public object? Action { get => GetValue(ActionProperty); set => SetValue(ActionProperty, value); }
 
     /// <summary>Shows the bare close button that dismisses the alert, the web's <c>ins-close</c> with <c>data-ins-dismiss</c>.</summary>
     public bool IsDismissible { get => GetValue(IsDismissibleProperty); set => SetValue(IsDismissibleProperty, value); }
@@ -68,11 +70,8 @@ public class Alert : ContentControl, IWords
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        if (_message is not null) _message.SizeChanged -= OnMessageSized;
         if (_close is not null) _close.Click -= OnCloseClick;
-        _message = e.NameScope.Find<Border>("PART_Message");
         _close = e.NameScope.Find<Button>("PART_Close");
-        if (_message is not null) _message.SizeChanged += OnMessageSized;
         if (_close is not null) _close.Click += OnCloseClick;
     }
 
@@ -84,16 +83,6 @@ public class Alert : ContentControl, IWords
     }
 
     private void OnCloseClick(object? sender, RoutedEventArgs e) => Dismiss();
-
-    // The bite is centred on the message's start edge, where the circle's centre sits; RTL mirrors it with the rest of the layout.
-    private void OnMessageSized(object? sender, SizeChangedEventArgs e)
-    {
-        if (_message is null) return;
-        var size = e.NewSize;
-        _message.Clip = new CombinedGeometry(GeometryCombineMode.Exclude,
-            new RectangleGeometry(new Rect(size)),
-            new EllipseGeometry(new Rect(-Bite, size.Height / 2 - Bite, Bite * 2, Bite * 2)));
-    }
 
     /// <summary>Fades the alert, closes its space and hides it; <c>IsVisible = true</c> brings it back.</summary>
     public async void Dismiss()

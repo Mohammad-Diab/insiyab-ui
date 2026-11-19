@@ -113,6 +113,12 @@
                                 IsVisible="{TemplateBinding ReadAllText, Converter={x:Static ObjectConverters.IsNotNull}}" />
                       </Grid>
                     </ctl:TemplateBorder>
+                    <!-- a line about the notifications themselves (the system blocking them), under the head -->
+                    <ContentPresenter Name="PART_Banner"
+                                      DockPanel.Dock="Top"
+                                      Margin="12,10,12,2"
+                                      Content="{TemplateBinding Banner}"
+                                      IsVisible="{TemplateBinding Banner, Converter={x:Static ObjectConverters.IsNotNull}}" />
                     <Button Name="PART_Foot"
                             DockPanel.Dock="Bottom"
                             Theme="{StaticResource InsNotifyFoot}"

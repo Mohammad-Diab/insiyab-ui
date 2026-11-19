@@ -1,0 +1,72 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <!-- a meter's tones: the brand piece stands apart from its neighbours (ok before it, mute after it) by 3:1 or more, and every piece (so every legend dot) by 3:1 or more from the card under it, a glass card and a page's tinted one alike. Light: the brand's deep shade with a green and a grey of the middle (each ≥ 3:1 both ways). Dark: the brand's middle shade let into the card (it keeps 3:1 against the card) with a light green and a light grey. Ok beside mute (a month with no hours) are told apart by the bar's gap, not by tone: no three tones keep 3:1 from each other and the card -->
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsMeterOk" Color="#FF15893F" />
+          <SolidColorBrush x:Key="InsMeterInfo" Color="#FF2563EB" />
+          <SolidColorBrush x:Key="InsMeterWarn" Color="#FFD97706" />
+          <SolidColorBrush x:Key="InsMeterBad" Color="#FFDC2626" />
+          <SolidColorBrush x:Key="InsMeterBrand" Color="{DynamicResource InsPrimaryDarkColor}" />
+          <SolidColorBrush x:Key="InsMeterMute" Color="#FF737D8C" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsMeterOk" Color="#FF8EF0B4" />
+          <SolidColorBrush x:Key="InsMeterInfo" Color="#FF60A5FA" />
+          <SolidColorBrush x:Key="InsMeterWarn" Color="#FFFBBF24" />
+          <SolidColorBrush x:Key="InsMeterBad" Color="#FFF87171" />
+          <SolidColorBrush x:Key="InsMeterBrand" Color="{DynamicResource InsPrimaryMidColor}" Opacity="0.8" />
+          <SolidColorBrush x:Key="InsMeterMute" Color="#FFDDE3EB" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- Meter: the bar (its pieces from the start edge, MeterBar), then the legend, its entries wrapping whole -->
+      <ControlTheme x:Key="{x:Type ctl:Meter}" TargetType="ctl:Meter">
+        <Setter Property="Track" Value="{DynamicResource InsCtlBgHover}" />
+        <Setter Property="BarHeight" Value="8" />
+        <Setter Property="ItemsPanel">
+          <ItemsPanelTemplate>
+            <WrapPanel ItemSpacing="14" LineSpacing="6" />
+          </ItemsPanelTemplate>
+        </Setter>
+        <Setter Property="Template">
+          <ControlTemplate>
+            <StackPanel Spacing="10">
+              <ctl:MeterBar x:Name="PART_Bar" Height="{TemplateBinding BarHeight}" />
+              <ItemsPresenter x:Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+            </StackPanel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^.lg">
+          <Setter Property="BarHeight" Value="12" />
+        </Style>
+      </ControlTheme>
+
+      <!-- a legend entry: its dot in the piece's fill, its name quiet, its figure bold in tabular digits -->
+      <ControlTheme x:Key="{x:Type ctl:MeterPart}" TargetType="ctl:MeterPart">
+        <Setter Property="Fill" Value="{DynamicResource InsPrimaryMid}" />
+        <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <ctl:TemplateBorder x:Name="PART_Dot" Width="10" Height="10" CornerRadius="5" VerticalAlignment="Center" Background="{TemplateBinding Fill}" />
+              <ctl:TemplateText x:Name="PART_Label" Text="{TemplateBinding Label}" VerticalAlignment="Center" Foreground="{DynamicResource InsText2}" />
+              <ctl:TemplateText x:Name="PART_Figure" Text="{TemplateBinding Figure}" VerticalAlignment="Center" FontWeight="Bold" FontFeatures="+tnum"
+                                Foreground="{DynamicResource InsText1}" />
+            </StackPanel>
+          </ControlTemplate>
+        </Setter>
+        <Style Selector="^.ok"><Setter Property="Fill" Value="{DynamicResource InsMeterOk}" /></Style>
+        <Style Selector="^.info"><Setter Property="Fill" Value="{DynamicResource InsMeterInfo}" /></Style>
+        <Style Selector="^.warn"><Setter Property="Fill" Value="{DynamicResource InsMeterWarn}" /></Style>
+        <Style Selector="^.bad"><Setter Property="Fill" Value="{DynamicResource InsMeterBad}" /></Style>
+        <Style Selector="^.brand"><Setter Property="Fill" Value="{DynamicResource InsMeterBrand}" /></Style>
+        <Style Selector="^.mute"><Setter Property="Fill" Value="{DynamicResource InsMeterMute}" /></Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+</Styles>

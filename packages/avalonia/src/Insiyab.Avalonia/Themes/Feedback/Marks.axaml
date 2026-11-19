@@ -578,16 +578,27 @@
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="{TemplateBinding CornerRadius}"
                     Padding="{TemplateBinding Padding}">
-              <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <ctl:TemplateText x:Name="PART_Day" Text="{TemplateBinding DayText}" HorizontalAlignment="Center"
+              <Grid RowDefinitions="Auto,Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ctl:TemplateText x:Name="PART_Day" Text="{TemplateBinding DayText}" HorizontalAlignment="Center" VerticalAlignment="Center"
                            FlowDirection="LeftToRight" FontFamily="{DynamicResource InsFontBodyEn}" FontFeatures="+tnum"
                            FontSize="20" FontWeight="ExtraBold" LineHeight="24" />
-                <ctl:TemplateText x:Name="PART_Month" Text="{TemplateBinding MonthText}" HorizontalAlignment="Center"
+                <ctl:Icon x:Name="PART_Glyph" Data="{TemplateBinding Icon}" Size="20" Margin="0,2" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False" />
+                <ctl:TemplateText x:Name="PART_Month" Grid.Row="1" Text="{TemplateBinding MonthText}" HorizontalAlignment="Center"
                            FontSize="11" FontWeight="Bold" LineHeight="15" TextTrimming="CharacterEllipsis" />
-              </StackPanel>
+              </Grid>
             </ctl:TemplateBorder>
           </ControlTemplate>
         </Setter>
+        <!-- no day to show: the icon stands in its place -->
+        <Style Selector="^:icon /template/ ctl|Icon#PART_Glyph"><Setter Property="IsVisible" Value="True" /></Style>
+        <Style Selector="^:icon /template/ :is(Control)#PART_Day"><Setter Property="IsVisible" Value="False" /></Style>
+        <!-- no month: the month's line kept empty (its line height), so the tile is as tall as with its month, and the day (or its icon) drawn half that line lower, in the middle -->
+        <Style Selector="^:no-month /template/ :is(Control)#PART_Month"><Setter Property="Opacity" Value="0" /><Setter Property="MinHeight" Value="15" /></Style>
+        <Style Selector="^.sm:no-month /template/ :is(Control)#PART_Month"><Setter Property="MinHeight" Value="13" /></Style>
+        <Style Selector="^.lg:no-month /template/ :is(Control)#PART_Month"><Setter Property="MinHeight" Value="16" /></Style>
+        <Style Selector="^:no-month /template/ :is(Control)#PART_Day, ^:no-month /template/ ctl|Icon#PART_Glyph"><Setter Property="RenderTransform" Value="translateY(7.5px)" /></Style>
+        <Style Selector="^.sm:no-month /template/ :is(Control)#PART_Day, ^.sm:no-month /template/ ctl|Icon#PART_Glyph"><Setter Property="RenderTransform" Value="translateY(6.5px)" /></Style>
+        <Style Selector="^.lg:no-month /template/ :is(Control)#PART_Day, ^.lg:no-month /template/ ctl|Icon#PART_Glyph"><Setter Property="RenderTransform" Value="translateY(8px)" /></Style>
         <Style Selector="^.ok">
           <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
           <Setter Property="BorderBrush" Value="{DynamicResource InsToneOkBd}" />
@@ -631,6 +642,7 @@
           <Setter Property="Padding" Value="6,3" />
           <Setter Property="CornerRadius" Value="{DynamicResource InsRXs}" />
           <Style Selector="^ /template/ :is(TextBlock)#PART_Day"><Setter Property="FontSize" Value="16" /><Setter Property="LineHeight" Value="19" /></Style>
+          <Style Selector="^ /template/ ctl|Icon#PART_Glyph"><Setter Property="Size" Value="16" /></Style>
           <Style Selector="^ /template/ :is(TextBlock)#PART_Month"><Setter Property="FontSize" Value="10" /><Setter Property="LineHeight" Value="13" /></Style>
         </Style>
         <Style Selector="^.lg">
@@ -728,6 +740,34 @@
 
   <Style Selector="ctl|Avatar.more TextBlock, ctl|Avatar.more ctl|TemplateText">
     <Setter Property="FlowDirection" Value="LeftToRight" />
+  </Style>
+
+  <!-- ins:Dot on a control: the bottom bar's dot, 9px in the count's red ringed by the glass, inset from the control's top end corner by Dot itself (further in on a round control) -->
+  <Style Selector="ctl|TemplateBorder.ins-dot">
+    <Setter Property="Width" Value="9" />
+    <Setter Property="Height" Value="9" />
+    <Setter Property="CornerRadius" Value="5" />
+    <Setter Property="Background" Value="{DynamicResource InsNotifyCountBg}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsGlassStrongGround}" />
+    <Setter Property="BorderThickness" Value="1.5" />
+  </Style>
+  <!-- ins:Dot.Count: the notification bell's count (Notify's PART_Count with its badge): a 20px pill in the count's red around the figure (one figure keeps it round), white bold 11px figures, ringed 2px by the page's colour OUTSIDE its box (InsCountRing, a shadow with no blur), so the badge itself is the 20px; Dot places it out at the corner -->
+  <Style Selector="ctl|TemplateBorder.ins-dot.count">
+    <Setter Property="Width" Value="NaN" />
+    <Setter Property="Height" Value="20" />
+    <Setter Property="MinWidth" Value="20" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="5,0" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="BoxShadow" Value="{DynamicResource InsCountRing}" />
+  </Style>
+  <Style Selector="TextBlock.ins-dot-count">
+    <Setter Property="FontFamily" Value="{DynamicResource InsFontBodyEn}" />
+    <Setter Property="FontFeatures" Value="+tnum" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="#FFFFFF" />
+    <Setter Property="LineHeight" Value="15.4" />
   </Style>
 
 

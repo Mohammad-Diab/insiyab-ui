@@ -54,7 +54,7 @@ public class FeedbackTests
         AssertBrush(alert, border, () => disc.BorderBrush);
         AssertBrush(alert, circle, () => disc.Background);
         Assert.Same(Res(alert, icon), alert.Icon);
-        Assert.Equal(44, disc.Bounds.Width);
+        Assert.Equal(28, disc.Bounds.Width);
         Assert.Equal(Res(alert, "InsRMd"), message.CornerRadius);
         Assert.Equal(14, alert.FontSize);
     }
@@ -75,7 +75,7 @@ public class FeedbackTests
     [AvaloniaTheory]
     [InlineData("rtl")]
     [InlineData("ltr")]
-    public void Alert_circle_sits_at_the_start_in_a_bite_cut_from_the_message(string dir)
+    public void Alert_circle_sits_inside_the_message_at_its_start(string dir)
     {
         var alert = new Alert { Classes = { "ok" }, Content = "تم الحفظ." };
         var window = ShowIn(alert, dir == "rtl" ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);
@@ -85,13 +85,19 @@ public class FeedbackTests
         var discX = Center(disc, window).X;
         var alertX = Center(alert, window).X;
         Assert.True(dir == "rtl" ? discX > alertX : discX < alertX, $"circle at {discX}, alert centre {alertX}");
+        // whole inside the message's box (the web's notch put half of it past the box's edge), the message the alert's whole width, no bite cut
+        var box = BoxOf(message, window);
+        var circle = BoxOf(disc, window);
+        Assert.True(circle.Left >= box.Left + 1 && circle.Right <= box.Right - 1 && circle.Top >= box.Top && circle.Bottom <= box.Bottom, $"circle {circle} in {box}");
+        Assert.Equal(BoxOf(alert, window).Width, box.Width, 0.5);
+        Assert.Null(message.Clip);
+    }
 
-        var clip = Assert.IsAssignableFrom<Geometry>(message.Clip);
-        var h = message.Bounds.Height;
-        Assert.False(clip.FillContains(new Point(2, h / 2)));
-        Assert.True(clip.FillContains(new Point(30, h / 2)));
-        Assert.True(clip.FillContains(new Point(60, 1)));
-        Assert.False(clip.FillContains(new Point(2, 1)));
+    private static Rect BoxOf(Visual c, Visual to)
+    {
+        var a = c.TranslatePoint(default, to)!.Value;
+        var b = c.TranslatePoint(new Point(c.Bounds.Width, c.Bounds.Height), to)!.Value;
+        return new Rect(new Point(Math.Min(a.X, b.X), Math.Min(a.Y, b.Y)), new Point(Math.Max(a.X, b.X), Math.Max(a.Y, b.Y)));
     }
 
     [AvaloniaFact]
@@ -122,6 +128,82 @@ public class FeedbackTests
         var alert = new Alert { Content = "تم" };
         ShowIn(alert);
         Assert.False(Part<Button>(alert, "PART_Close").IsVisible);
+    }
+
+    private static Alert ActionAlert(string text, double width, out Button action)
+    {
+        action = new Button { Classes = { "secondary", "sm" }, Content = "إعادة المحاولة" };
+        return new Alert
+        {
+            Classes = { "warn" },
+            Width = width,
+            HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left,
+            Content = new TextBlock { Text = text, TextWrapping = TextWrapping.Wrap },
+            Action = action,
+        };
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void Alert_action_sits_on_the_text_line_at_its_end(string dir)
+    {
+        var alert = ActionAlert("تعذرت قراءة الصفوف الآن.", 560, out var action);
+        var window = ShowIn(alert, dir == "rtl" ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);
+
+        var text = (Control)alert.Content!;
+        var message = Part<Border>(alert, "PART_Message");
+        Assert.True(Math.Abs(Center(action, window).Y - Center(text, window).Y) < 1, $"action {Center(action, window).Y}, text {Center(text, window).Y}");
+        // at the line's end: the message's left edge in a right-to-left alert, its right edge in a left-to-right one
+        var msgLeft = message.TranslatePoint(default, window)!.Value.X;
+        var msgRight = msgLeft + message.Bounds.Width;
+        var actionLeft = Center(action, window).X - action.Bounds.Width / 2;
+        var actionRight = actionLeft + action.Bounds.Width;
+        Assert.True(dir == "rtl" ? actionLeft - msgLeft < 30 : msgRight - actionRight < 30, $"action {actionLeft}..{actionRight}, message {msgLeft}..{msgRight}");
+        Assert.True(alert.Bounds.Height < 70, $"one line: {alert.Bounds.Height}");
+    }
+
+    [AvaloniaFact]
+    public void Alert_text_wraps_beside_its_action_while_it_has_room()
+    {
+        var alert = ActionAlert("تعذر عرض قائمة الموظفين الآن. قد يكون موقع المؤسسة مشغولاً، أعد المحاولة بعد قليل، أو افتح الموقع.", 520, out var action);
+        var window = ShowIn(alert, FlowDirection.RightToLeft);
+
+        var text = (Control)alert.Content!;
+        Assert.True(text.Bounds.Height > 30, $"the text wraps: {text.Bounds.Height}");
+        Assert.True(Math.Abs(Center(action, window).Y - Center(text, window).Y) < 1);
+    }
+
+    [AvaloniaFact]
+    public void Alert_action_goes_under_the_text_only_when_narrow()
+    {
+        var alert = ActionAlert("تعذر عرض قائمة الموظفين الآن. قد يكون موقع المؤسسة مشغولاً.", 330, out _);
+        ShowIn(alert, FlowDirection.RightToLeft);
+
+        // in the line's own (unmirrored) layout: the action under the text, at the line's start
+        var line = alert.GetVisualDescendants().OfType<AlertLine>().Single();
+        var text = Part<ContentPresenter>(alert, "PART_ContentPresenter");
+        var action = Part<ContentPresenter>(alert, "PART_Action");
+        Assert.True(line.IsUnder);
+        Assert.Equal(0, action.Bounds.X);
+        Assert.True(action.Bounds.Y >= text.Bounds.Bottom + AlertLine.Under - 0.5, $"action at {action.Bounds}, text {text.Bounds}");
+
+        // wider, the same alert keeps its action on the text's line
+        alert.Width = 590;
+        Settle();
+        Assert.False(line.IsUnder);
+    }
+
+    [AvaloniaFact]
+    public void Alert_hidden_action_takes_no_room()
+    {
+        var plain = new Alert { Classes = { "warn" }, Width = 560, Content = new TextBlock { Text = "تعذرت قراءة الصفوف الآن." } };
+        var hidden = ActionAlert("تعذرت قراءة الصفوف الآن.", 560, out var action);
+        action.IsVisible = false;
+        ShowIn(new StackPanel { Children = { plain, hidden } });
+
+        Assert.Equal(plain.Bounds.Height, hidden.Bounds.Height);
+        Assert.Equal(((Control)plain.Content!).Bounds.Width, ((Control)hidden.Content!).Bounds.Width);
     }
 
     // ---------------------------------------------------------------- pill, badge
@@ -392,6 +474,28 @@ public class FeedbackTests
         Assert.Equal(FlowDirection.LeftToRight, ring.FlowDirection);
         ring.Maximum = 200;
         Assert.Equal("36%", ring.Label);
+    }
+
+    [AvaloniaFact]
+    public void ProgressRing_shows_a_figure_and_a_caption_of_its_own_in_its_hole()
+    {
+        var ring = new ProgressRing { Classes = { "lg" }, Value = 59, Text = "96", Caption = "منجزة" };
+        Show(new StackPanel { Margin = new Thickness(20), Children = { ring } });
+
+        Assert.Equal("96", ring.Label);
+        Assert.Equal("96", Part<TextBlock>(ring, "PART_Label").Text);
+        var caption = Part<TextBlock>(ring, "PART_Caption");
+        Assert.True(caption.IsVisible);
+        Assert.Equal("منجزة", caption.Text);
+        Assert.Contains(":caption", ring.Classes);
+        Assert.DoesNotContain(":crowded", ring.Classes);
+        Assert.True(Part<TextBlock>(ring, "PART_Label").Bounds.Bottom <= caption.Bounds.Top + 0.5, "the caption sits under the figure");
+
+        ring.Text = null; // back to the percentage, and no caption once it is cleared
+        ring.Caption = null;
+        Settle(100);
+        Assert.Equal("59%", ring.Label);
+        Assert.False(caption.IsVisible);
     }
 
     // ---------------------------------------------------------------- save

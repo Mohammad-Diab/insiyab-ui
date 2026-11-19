@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -36,6 +37,7 @@ public sealed class NotifyReadEventArgs : RoutedEventArgs
 [TemplatePart("PART_Popup", typeof(Popup))]
 [TemplatePart("PART_ReadAll", typeof(Button))]
 [TemplatePart("PART_HeadActions", typeof(ContentPresenter))]
+[TemplatePart("PART_Banner", typeof(ContentPresenter))]
 [TemplatePart("PART_Foot", typeof(Button))]
 [PseudoClasses(":open", ":empty", ":unread")]
 public class Notify : ItemsControl, IWords
@@ -68,6 +70,10 @@ public class Notify : ItemsControl, IWords
     /// <summary>Controls of the page's own in the panel's head, before «mark all read» in visual and Tab order, such as a mute button; the class <c>stacked</c> puts the title on its own line over them.</summary>
     public static readonly StyledProperty<object?> HeadActionsProperty =
         AvaloniaProperty.Register<Notify, object?>(nameof(HeadActions));
+
+    /// <summary>A line under the panel's head, over the items: a state of the notifications themselves, such as the system blocking them (an <c>Alert</c>); none unless set.</summary>
+    public static readonly StyledProperty<object?> BannerProperty =
+        AvaloniaProperty.Register<Notify, object?>(nameof(Banner));
 
     public static readonly StyledProperty<Geometry?> IconProperty =
         AvaloniaProperty.Register<Notify, Geometry?>(nameof(Icon));
@@ -137,6 +143,8 @@ public class Notify : ItemsControl, IWords
     public bool IsOpen { get => GetValue(IsOpenProperty); set => SetValue(IsOpenProperty, value); }
 
     public object? HeadActions { get => GetValue(HeadActionsProperty); set => SetValue(HeadActionsProperty, value); }
+
+    public object? Banner { get => GetValue(BannerProperty); set => SetValue(BannerProperty, value); }
 
     /// <summary>The bell's geometry, a 24×24 stroked path; the theme gives the library's bell.</summary>
     public Geometry? Icon { get => GetValue(IconProperty); set => SetValue(IconProperty, value); }
@@ -278,19 +286,39 @@ public class Notify : ItemsControl, IWords
         _popup.Placement = IsEnd ? PlacementMode.BottomEdgeAlignedRight : PlacementMode.BottomEdgeAlignedLeft;
         _popup.HorizontalOffset = rtl ^ IsEnd ? Pop.Room.Right : -Pop.Room.Left;
         _popup.VerticalOffset = Pop.Gap - Pop.Room.Top;
+        // sideways the panel is placed by Fit alone: the positioner's own slide pushed its shadow room inside the window, the panel past its far edge (a 360 window)
+        _popup.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.SlideY | PopupPositionerConstraintAdjustment.ResizeY;
     }
 
     // Short of room, the panel slides by the shortfall alone, to the top bar's own inset from the window edge (8px outside a bar); its shadow room may pass the edge.
-    private void Fit(double width)
+    private double? Fit(double width)
     {
-        if (_popup is null || _bell is null || OverlayHost.Top(_bell) is not { } top) return;
-        if (_bell.TranslatePoint(default, top) is not { } a || _bell.TranslatePoint(new Point(_bell.Bounds.Width, 0), top) is not { } b) return;
-        var inset = _bell.GetVisualAncestors().OfType<Border>().FirstOrDefault(x => x.Classes.Contains("topbar"))?.Padding ?? new Thickness(8);
+        if (_popup is null || _bell is null || OverlayHost.Top(_bell) is not { } top) return null;
+        if (_bell.TranslatePoint(default, top) is not { } a || _bell.TranslatePoint(new Point(_bell.Bounds.Width, 0), top) is not { } b) return null;
+        var inset = Inset();
         var fromRight = FlowDirection == FlowDirection.RightToLeft ^ IsEnd;
         var from = fromRight ? Math.Max(a.X, b.X) - width : Math.Min(a.X, b.X);
         var to = Math.Max(inset.Left, Math.Min(from, OverlayHost.Width(top) - inset.Right - width));
         _popup.HorizontalOffset = (fromRight ? Pop.Room.Right : -Pop.Room.Left) + to - from;
+        return to;
     }
+
+    // Once placed, the panel's own place is read back and the rest of the way is moved: a popup drawn inside the window (Android's, the headless one) cannot pass its edge, so a panel with its shadow room wider than the window was squeezed and slid, ~28 px off its place in a 360 window.
+    private void Correct(Control panel, double to)
+    {
+        if (_popup is not { IsOpen: true } || _bell is null || OverlayHost.Top(_bell) is not { } top || TopLevel.GetTopLevel(panel) is not { } own
+            || panel.TransformToVisual(own) is not { } m)
+            return;
+        var left = new Rect(panel.Bounds.Size).TransformToAABB(m).Left;
+        if (!ReferenceEquals(own, top))
+            left += (own.PointToScreen(default).X - top.PointToScreen(default).X) / top.RenderScaling;
+        var off = to - left;
+        if (Math.Abs(off) > 0.5 && Math.Abs(off) < panel.Bounds.Width)
+            _popup.HorizontalOffset += off;
+    }
+
+    // the top bar's own inset from the window's edges (8px outside a bar)
+    private Thickness Inset() => _bell?.GetVisualAncestors().OfType<Border>().FirstOrDefault(x => x.Classes.Contains("topbar"))?.Padding ?? new Thickness(8);
 
     private IEnumerable<NotifyItem> Rows() => Items.OfType<NotifyItem>();
 
@@ -396,7 +424,7 @@ public class Notify : ItemsControl, IWords
         _bell?.Focus();
     }
 
-    // The panel is 22rem wide and 30rem tall at most, and never wider than the window less a margin.
+    // The panel is 22rem wide and 30rem tall at most, and never wider than the window less the bar's inset on both sides (a 360 window: it fits between them).
     private void OnPopupOpened(object? sender, EventArgs e)
     {
         if (_popup?.Child is FlyoutPresenter presenter)
@@ -409,9 +437,12 @@ public class Notify : ItemsControl, IWords
             }
             if (root is not null)
             {
-                root.Width = Math.Max(240, Math.Min(352, OverlayHost.Width(this) - 16));
+                var inset = Inset();
+                root.Width = Math.Max(240, Math.Min(352, OverlayHost.Width(this) - inset.Left - inset.Right));
                 root.MaxHeight = Math.Max(200, Math.Min(480, OverlayHost.Height(this) - 32));
-                Fit(root.Width);
+                // read back once the panel has grown in from its corner (its scale would skew the reading)
+                if (Fit(root.Width) is { } to)
+                    DispatcherTimer.RunOnce(() => Correct(root, to), TimeSpan.FromMilliseconds(Motion.IsStill(this) ? 1 : 300));
             }
         }
         Dispatcher.UIThread.Post(FocusFirst, DispatcherPriority.Loaded);

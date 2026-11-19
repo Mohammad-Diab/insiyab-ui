@@ -110,10 +110,18 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template">
           <ControlTemplate>
-            <ctl:TemplateText x:Name="PART_Label" Text="{TemplateBinding Label}" HorizontalAlignment="Center" VerticalAlignment="Center"
-                       FontFamily="{DynamicResource InsFontBodyEn}" FontFeatures="+tnum" />
+            <StackPanel x:Name="PART_Hole" HorizontalAlignment="Center" VerticalAlignment="Center">
+              <ctl:TemplateText x:Name="PART_Label" Text="{TemplateBinding Label}" HorizontalAlignment="Center"
+                         FontFamily="{DynamicResource InsFontBodyEn}" FontFeatures="+tnum" />
+              <ctl:TemplateText x:Name="PART_Caption" Text="{TemplateBinding Caption}" HorizontalAlignment="Center" IsVisible="False"
+                         FontSize="10" FontWeight="Normal" Foreground="{DynamicResource InsText2}" />
+            </StackPanel>
           </ControlTemplate>
         </Setter>
+        <!-- a caption under the figure: shown, and the pair kept centred in the hole -->
+        <Style Selector="^:caption /template/ :is(TextBlock)#PART_Caption">
+          <Setter Property="IsVisible" Value="True" />
+        </Style>
         <Style Selector="^.sm">
           <Setter Property="Width" Value="24" />
           <Setter Property="Height" Value="24" />
@@ -122,7 +130,7 @@
             <Setter Property="IsVisible" Value="False" />
           </Style>
         </Style>
-        <Style Selector="^:crowded /template/ :is(TextBlock)#PART_Label">
+        <Style Selector="^:crowded /template/ :is(TextBlock)#PART_Label, ^:crowded /template/ :is(TextBlock)#PART_Caption">
           <Setter Property="Opacity" Value="0" />
         </Style>
         <Style Selector="^.lg">

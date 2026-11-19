@@ -4,6 +4,7 @@
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Feedback/Marks.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Feedback/Loading.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Feedback/Progress.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Feedback/Meter.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Feedback/Save.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Feedback/Refresh.axaml" />
 </Styles>

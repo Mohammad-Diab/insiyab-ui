@@ -44,6 +44,22 @@ public class DateBadgeTests
     }
 
     [AvaloniaFact]
+    public void An_icon_stands_in_the_day_place_while_there_is_no_day()
+    {
+        var glyph = Geometry.Parse("M5 2h14M5 22h14");
+        var empty = new DateBadge { Day = "", Month = "لم تصدر", Icon = glyph };
+        var dated = new DateBadge { Day = "82", Month = "من 100", Icon = glyph };
+        Show(new StackPanel { Margin = new Thickness(20), Spacing = 8, Children = { empty, dated } }, FlowDirection.RightToLeft);
+        Assert.True(Part<Icon>(empty, "PART_Glyph").IsVisible);
+        Assert.False(Part<TextBlock>(empty, "PART_Day").IsVisible);
+        Assert.False(Part<Icon>(dated, "PART_Glyph").IsVisible);
+        Assert.True(Part<TextBlock>(dated, "PART_Day").IsVisible);
+        empty.Day = "40";
+        Settle(100);
+        Assert.False(Part<Icon>(empty, "PART_Glyph").IsVisible);
+    }
+
+    [AvaloniaFact]
     public void Day_and_month_text_win_over_the_date_and_locale_picks_the_language()
     {
         var written = new DateBadge { Date = new DateTime(2026, 9, 2), Month = "رمضان" };
@@ -88,5 +104,42 @@ public class DateBadgeTests
         Assert.Equal(16, Part<TextBlock>(sm, "PART_Day").FontSize);
         Assert.Equal(20, Part<TextBlock>(plain, "PART_Day").FontSize);
         Assert.Equal(26, Part<TextBlock>(lg, "PART_Day").FontSize);
+    }
+
+    // A word with no month («يومان») stands in the middle of a tile as tall as a captioned one, in every size.
+    [AvaloniaTheory]
+    [InlineData("")]
+    [InlineData("sm")]
+    [InlineData("lg")]
+    public void A_word_without_a_month_stands_in_the_middle_of_a_tile_as_tall_as_with_one(string size)
+    {
+        var word = new DateBadge { Day = "يومان" };
+        var captioned = new DateBadge { Day = "37", Month = "ساعة" };
+        if (size.Length > 0) { word.Classes.Add(size); captioned.Classes.Add(size); }
+        var w = Show(new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(20), Spacing = 8, Children = { word, captioned } }, FlowDirection.RightToLeft);
+        Assert.Equal(captioned.Bounds.Height, word.Bounds.Height, 1);
+        Assert.Equal(0, Part<TextBlock>(word, "PART_Month").Opacity);
+        var text = Part<TextBlock>(word, "PART_Day");
+        var day = Box(text, w); // as drawn (its shift included)
+        var tile = Box(word, w);
+        // an Arabic word's ink sits low in the Latin face's line box: the word is lifted by that much, so its ink (not its box) is in the middle
+        var lift = DateBadge.InkLift(text);
+        Assert.True(lift >= 1, $"lift {lift}");
+        Assert.Equal(tile.Center.Y, day.Center.Y + lift, 1);
+    }
+
+    // A Latin word or figures alone keep the line box's middle: the Latin face is made for it (English was right as it was).
+    [AvaloniaTheory]
+    [InlineData("")]
+    [InlineData("sm")]
+    [InlineData("lg")]
+    public void A_latin_word_without_a_month_keeps_its_line_in_the_middle(string size)
+    {
+        var word = new DateBadge { Day = "Today" };
+        if (size.Length > 0) word.Classes.Add(size);
+        var w = Show(new StackPanel { Margin = new Thickness(20), Children = { word } });
+        var text = Part<TextBlock>(word, "PART_Day");
+        Assert.Equal(default, text.Margin);
+        Assert.Equal(Box(word, w).Center.Y, Box(text, w).Center.Y, 1);
     }
 }
