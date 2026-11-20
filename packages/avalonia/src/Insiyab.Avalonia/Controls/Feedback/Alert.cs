@@ -10,7 +10,7 @@ using Avalonia.Styling;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The alert, the web's <c>.ins-alert</c>: a tinted message with a solid circle holding the icon inside it at its start (never half past its edge, as the web's notch was). Tone classes <c>ok info warn bad</c>. Its <see cref="Action"/> (a retry, a way out) sits on the text's line at its end, centred on the text, and goes under the text only where the line is too narrow.</summary>
+/// <summary>The notched alert, the web's <c>.ins-alert</c>: a solid circle with the icon nested in a bite cut from the tinted message; <c>inset</c> puts a smaller circle inside the message instead. Tone classes <c>ok info warn bad</c>. Its <see cref="Action"/> (a retry, a way out) sits on the text's line at its end, centred on the text, and goes under the text only where the line is too narrow.</summary>
 [TemplatePart("PART_Message", typeof(Border))]
 [TemplatePart("PART_Close", typeof(Button))]
 public class Alert : ContentControl, IWords
@@ -21,7 +21,17 @@ public class Alert : ContentControl, IWords
 
     void IWords.Reword() => Words.Refill(this, OwnWords);
 
-    public Alert() => Words.Fill(this, OwnWords);
+    public Alert()
+    {
+        Words.Fill(this, OwnWords);
+        Classes.CollectionChanged += (_, _) => Bite();
+    }
+
+    // The bite is 1.65rem, a little more than half the 2.75rem circle, which leaves the hairline gap.
+    private const double BiteRadius = 26.4;
+
+    /// <summary>The class that puts a small circle inside the message, with no bite.</summary>
+    internal const string InsetClass = "inset";
 
     public static readonly StyledProperty<Geometry?> IconProperty =
         AvaloniaProperty.Register<Alert, Geometry?>(nameof(Icon));
@@ -45,6 +55,7 @@ public class Alert : ContentControl, IWords
     public static readonly RoutedEvent<RoutedEventArgs> DismissedEvent =
         RoutedEvent.Register<Alert, RoutedEventArgs>(nameof(Dismissed), RoutingStrategies.Bubble);
 
+    private Border? _message;
     private Button? _close;
     private bool _going;
 
@@ -70,9 +81,25 @@ public class Alert : ContentControl, IWords
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
+        if (_message is not null) _message.SizeChanged -= OnMessageSized;
         if (_close is not null) _close.Click -= OnCloseClick;
+        _message = e.NameScope.Find<Border>("PART_Message");
         _close = e.NameScope.Find<Button>("PART_Close");
+        if (_message is not null) _message.SizeChanged += OnMessageSized;
         if (_close is not null) _close.Click += OnCloseClick;
+        Bite();
+    }
+
+    private void OnMessageSized(object? sender, SizeChangedEventArgs e) => Bite();
+
+    // The bite is centred on the message's start edge, where the circle's centre sits; RTL mirrors it with the rest of the layout; an inset alert has none.
+    private void Bite()
+    {
+        if (_message is null) return;
+        var size = _message.Bounds.Size;
+        _message.Clip = Classes.Contains(InsetClass) || size.Height <= 0 ? null : new CombinedGeometry(GeometryCombineMode.Exclude,
+            new RectangleGeometry(new Rect(size)),
+            new EllipseGeometry(new Rect(-BiteRadius, size.Height / 2 - BiteRadius, BiteRadius * 2, BiteRadius * 2)));
     }
 
     // It arrives from the leading edge: an interruption that slides in reads as one.

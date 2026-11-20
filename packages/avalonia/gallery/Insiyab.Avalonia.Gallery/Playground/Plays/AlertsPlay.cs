@@ -26,6 +26,7 @@ public static class AlertsPlay
                 Choice("warn", "تحذير", "warn", "لما يستحق الانتباه قبل المتابعة."),
                 Choice("bad", "خطأ", "bad", "لخطأ وقع، أو عملية تعذرت.")),
             Text("text", "النص", "رسالة قصيرة للاطلاع."),
+            Switch("inset", "دائرة داخل الرسالة", "inset", "دائرة أصغر داخل الرسالة عند بدايتها، بلا تجويف، لمكان ضيق أو لمن يريد التنبيه أهدأ.", OptionKind.Class),
             Switch("action", "مع رابط"),
             Switch("dismiss", "يمكن إغلاقه", "IsDismissible", "يظهر زر إغلاق في الرسالة، فيُغلق التنبيه بضغطة. ويُخفى التنبيه ولا يُحذف، فتعيده بـ`IsVisible=\"True\"`.", OptionKind.Property, "الإغلاق"),
         ],
@@ -38,7 +39,7 @@ public static class AlertsPlay
         ],
         Axaml = s =>
         {
-            var attrs = $" Classes=\"{s["tone"]}\"" + (s.On("dismiss") ? " IsDismissible=\"True\"" : "");
+            var attrs = $" Classes=\"{s["tone"]}{(s.On("inset") ? " inset" : "")}\"" + (s.On("dismiss") ? " IsDismissible=\"True\"" : "");
             if (!s.On("action")) return $"<ins:Alert{attrs} Content=\"{s["text"]}\" />";
             return $"<ins:Alert{attrs}>\n" +
                 "  <WrapPanel ItemSpacing=\"6\">\n" +

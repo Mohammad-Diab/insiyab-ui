@@ -54,7 +54,7 @@ public class FeedbackTests
         AssertBrush(alert, border, () => disc.BorderBrush);
         AssertBrush(alert, circle, () => disc.Background);
         Assert.Same(Res(alert, icon), alert.Icon);
-        Assert.Equal(28, disc.Bounds.Width);
+        Assert.Equal(44, disc.Bounds.Width);
         Assert.Equal(Res(alert, "InsRMd"), message.CornerRadius);
         Assert.Equal(14, alert.FontSize);
     }
@@ -75,7 +75,7 @@ public class FeedbackTests
     [AvaloniaTheory]
     [InlineData("rtl")]
     [InlineData("ltr")]
-    public void Alert_circle_sits_inside_the_message_at_its_start(string dir)
+    public void Alert_circle_sits_at_the_start_in_a_bite_cut_from_the_message(string dir)
     {
         var alert = new Alert { Classes = { "ok" }, Content = "تم الحفظ." };
         var window = ShowIn(alert, dir == "rtl" ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);
@@ -85,7 +85,37 @@ public class FeedbackTests
         var discX = Center(disc, window).X;
         var alertX = Center(alert, window).X;
         Assert.True(dir == "rtl" ? discX > alertX : discX < alertX, $"circle at {discX}, alert centre {alertX}");
-        // whole inside the message's box (the web's notch put half of it past the box's edge), the message the alert's whole width, no bite cut
+        Assert.Equal(44, disc.Bounds.Width, 0.5);
+
+        var clip = Assert.IsAssignableFrom<Geometry>(message.Clip);
+        var h = message.Bounds.Height;
+        Assert.False(clip.FillContains(new Point(2, h / 2)));
+        Assert.True(clip.FillContains(new Point(30, h / 2)));
+        Assert.True(clip.FillContains(new Point(60, 1)));
+        Assert.False(clip.FillContains(new Point(2, 1)));
+
+        alert.Classes.Add("inset");
+        Settle(50);
+        Assert.Null(message.Clip);
+        alert.Classes.Remove("inset");
+        Settle(50);
+        Assert.NotNull(message.Clip);
+    }
+
+    [AvaloniaTheory]
+    [InlineData("rtl")]
+    [InlineData("ltr")]
+    public void An_inset_alerts_circle_sits_inside_the_message_at_its_start(string dir)
+    {
+        var alert = new Alert { Classes = { "ok", "inset" }, Content = "تم الحفظ." };
+        var window = ShowIn(alert, dir == "rtl" ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);
+
+        var disc = Part<Border>(alert, "PART_Icon");
+        var message = Part<Border>(alert, "PART_Message");
+        var discX = Center(disc, window).X;
+        var alertX = Center(alert, window).X;
+        Assert.True(dir == "rtl" ? discX > alertX : discX < alertX, $"circle at {discX}, alert centre {alertX}");
+        // whole inside the message's box, the message the alert's whole width, no bite cut
         var box = BoxOf(message, window);
         var circle = BoxOf(disc, window);
         Assert.True(circle.Left >= box.Left + 1 && circle.Right <= box.Right - 1 && circle.Top >= box.Top && circle.Bottom <= box.Bottom, $"circle {circle} in {box}");
