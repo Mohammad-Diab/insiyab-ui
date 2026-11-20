@@ -4,7 +4,7 @@
 
 Insiyab for Avalonia 12: the same glass, RTL-first look as the web library, as Avalonia themes. App code stays plain Avalonia: `<Button Classes="primary">`.
 
-Try it: the gallery for Windows and for Android is attached to the [latest Insiyab.Avalonia release](https://github.com/Mohammad-Diab/insiyab-ui/releases/tag/avalonia-v0.4.0) (Windows: unzip and run, nothing to install; Android: install the APK). The Android gallery builds from `gallery/Insiyab.Avalonia.Gallery.Android` (`dotnet build -c Release` with the .NET Android workload and a JDK gives an APK to install on a phone or an emulator).
+Try it: the gallery for Windows and for Android is attached to the [latest Insiyab.Avalonia release](https://github.com/Mohammad-Diab/insiyab-ui/releases/tag/avalonia-v0.4.1) (Windows: unzip and run, nothing to install; Android: install the APK). The Android gallery builds from `gallery/Insiyab.Avalonia.Gallery.Android` (`dotnet build -c Release` with the .NET Android workload and a JDK gives an APK to install on a phone or an emulator).
 
 ```xml
 <Application.Styles>
