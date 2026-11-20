@@ -85,7 +85,9 @@ internal static class PressDip
     private static void Dip(Button button)
     {
         if (!button.IsEffectivelyEnabled || Motion.IsStill(button)) return;
-        var part = button.GetVisualDescendants().OfType<Control>().FirstOrDefault(c => c.TemplatedParent == button && GetDepth(c) is > 0 and < 1);
+        // a split button's half dips the split button's whole face (the halves press as one piece)
+        Control face = SplitFace.GetMirror(button) && button.TemplatedParent is Control split ? split : button;
+        var part = face.GetVisualDescendants().OfType<Control>().FirstOrDefault(c => c.TemplatedParent == face && GetDepth(c) is > 0 and < 1);
         if (part is null) return;
         var depth = GetDepth(part);
         part.GetValue(RunProperty)?.Cancel();

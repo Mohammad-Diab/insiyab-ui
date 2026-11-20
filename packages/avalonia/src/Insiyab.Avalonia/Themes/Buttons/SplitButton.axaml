@@ -26,6 +26,8 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
           <ControlTemplate>
+            <!-- As a button's: PART_Root carries the held press (a half pressed, or the keyboard's), PART_Press only a quick tap's dip, so the two add up -->
+            <Panel x:Name="PART_Press">
             <Panel x:Name="PART_Root" RenderTransformOrigin="50%,50%" RenderTransform="none">
               <ins:TemplateBorder x:Name="PART_Shadow" CornerRadius="{TemplateBinding CornerRadius}" />
               <ins:TemplateBorder x:Name="PART_FocusRing"
@@ -78,6 +80,7 @@
                         Background="{Binding #PART_SecondaryButton.Foreground}" />
               </Grid>
             </Panel>
+            </Panel>
           </ControlTemplate>
         </Setter>
 
@@ -104,8 +107,16 @@
             </Transitions>
           </Setter>
         </Style>
-        <Style Selector="^:pressed /template/ Panel#PART_Root">
+        <!-- the face presses as one piece under either half (SplitFace sets :half-pressed; the split button's own :pressed is the keyboard's) -->
+        <Style Selector="^:pressed /template/ Panel#PART_Root, ^:half-pressed /template/ Panel#PART_Root">
           <Setter Property="RenderTransform" Value="scale(0.97)" />
+        </Style>
+        <!-- a tap too quick to show the held press still dips the face once (PressDip, from either half) -->
+        <Style Selector="^ /template/ Panel#PART_Press">
+          <Setter Property="ins:PressDip.Depth" Value="0.97" />
+        </Style>
+        <Style Selector="^.bare /template/ Panel#PART_Press">
+          <Setter Property="ins:PressDip.Depth" Value="0" />
         </Style>
         <Style Selector="^ /template/ :is(Border)#PART_Shadow">
           <Setter Property="BoxShadow" Value="{DynamicResource InsShSubtle}" />

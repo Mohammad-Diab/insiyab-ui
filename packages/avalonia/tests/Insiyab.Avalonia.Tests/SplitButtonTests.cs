@@ -97,6 +97,51 @@ public class SplitButtonTests
     }
 
     [AvaloniaFact]
+    public void Either_half_held_presses_the_whole_face_and_a_quick_tap_dips_it()
+    {
+        var split = NewSplit("primary");
+        var window = Show(split);
+        var root = Part<Panel>(split, "PART_Root");
+        var press = Part<Panel>(split, "PART_Press");
+        foreach (var half in new[] { Primary(split), Arrow(split) })
+        {
+            var p = Center(half, window);
+            window.MouseMove(p);
+            Settle(300);
+            window.MouseDown(p, MouseButton.Left);
+            Settle(300);
+            Assert.Contains(":half-pressed", split.Classes);
+            Assert.Equal(0.97, root.RenderTransform!.Value.M11, 2);
+            window.MouseUp(p, MouseButton.Left);
+            Settle(300);
+            Assert.DoesNotContain(":half-pressed", split.Classes);
+            Assert.Equal(1, root.RenderTransform!.Value.M11, 2);
+            split.Flyout!.Hide();
+            Settle(300);
+
+            // a tap too quick to show the held press: the split button's face dips once, not the half's own part
+            var real = PressDip.Now;
+            var at = real();
+            PressDip.Now = () => at;
+            var dips = new List<Control>();
+            PressDip.Started = (c, _) => dips.Add(c);
+            try
+            {
+                window.MouseDown(p, MouseButton.Left);
+                window.MouseUp(p, MouseButton.Left);
+            }
+            finally
+            {
+                PressDip.Now = real;
+                PressDip.Started = null;
+            }
+            Assert.Same(press, Assert.Single(dips));
+            split.Flyout.Hide();
+            Settle(300);
+        }
+    }
+
+    [AvaloniaFact]
     public void An_unchecked_toggle_split_is_neutral_until_checked()
     {
         var toggle = new ToggleSplitButton { Content = "التدقيق", Flyout = Menu(), Classes = { "primary" } };

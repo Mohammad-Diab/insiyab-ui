@@ -19,6 +19,9 @@ internal static class SplitFace
 
     private static readonly string[] Sizes = ["sm", "lg"];
 
+    /// <summary>The split button's pseudo-class while one of its halves is held down.</summary>
+    internal const string HalfPressed = ":half-pressed";
+
     static SplitFace()
     {
         MirrorProperty.Changed.AddClassHandler<Button>((b, e) =>
@@ -104,7 +107,16 @@ internal static class SplitFace
             _owner = owner;
             owner.Classes.CollectionChanged += OnClasses;
             owner.PropertyChanged += OnOwnerChanged;
+            half.PropertyChanged += OnHalfChanged;
         }
+
+        // a half held down presses the whole face (the split button's own :pressed is set by the keyboard only, so a finger or a mouse on a half showed nothing)
+        private void OnHalfChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+        {
+            if (e.Property == Button.IsPressedProperty) Press(_half.IsPressed);
+        }
+
+        private void Press(bool on) => ((IPseudoClasses)_owner.Classes).Set(HalfPressed, on);
 
         private void OnClasses(object? sender, NotifyCollectionChangedEventArgs e) => Sync();
 
@@ -133,6 +145,8 @@ internal static class SplitFace
         {
             _owner.Classes.CollectionChanged -= OnClasses;
             _owner.PropertyChanged -= OnOwnerChanged;
+            _half.PropertyChanged -= OnHalfChanged;
+            if (_half.IsPressed) Press(false);
             foreach (var c in _added) _half.Classes.Remove(c);
             _added.Clear();
         }
