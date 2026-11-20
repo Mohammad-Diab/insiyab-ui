@@ -4,6 +4,15 @@
 
   <Styles.Resources>
     <ResourceDictionary>
+      <!-- the words on a linked event's fill under the pointer (its tone, solid): the brand's label colour on light; on dark the tones are light, so a dark ink -->
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="InsMonthEventHoverInk" Color="{DynamicResource InsOnPrimaryColor}" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="InsMonthEventHoverInk" Color="#FF0F172A" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
       <ControlTheme x:Key="{x:Type ins:MonthCalendar}" TargetType="ins:MonthCalendar">
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="Template">
@@ -130,10 +139,7 @@
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.link:pointerover">
     <Setter Property="Background" Value="{Binding $self.BorderBrush}" />
-    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsOnPrimary}" />
-  </Style>
-  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.link:pointerover ins|MonthText.month-time">
-    <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource InsMonthEventHoverInk}" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.link:focus-visible">
     <Setter Property="BoxShadow" Value="{DynamicResource InsFocusRing}" />
@@ -144,6 +150,10 @@
     <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
     <Setter Property="LineHeight" Value="17.6" />
+  </Style>
+  <!-- after the time's own tone: of two style rules the later one wins, so under the pointer the time takes its title's on-colour -->
+  <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.link:pointerover ins|MonthText.month-time">
+    <Setter Property="Foreground" Value="{DynamicResource InsMonthEventHoverInk}" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthText.month-event-title">
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
@@ -353,7 +363,7 @@
     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
   </Style>
   <Style Selector="ins|MonthCalendar ins|MonthBorder.month-event.link:pointerover ins|MonthText.week-event-time">
-    <Setter Property="Foreground" Value="{DynamicResource InsOnPrimary}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsMonthEventHoverInk}" />
   </Style>
 
   <!-- The now line across today, with a dot at its start. -->
