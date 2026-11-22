@@ -32,7 +32,7 @@
 
   <StackPanel>
 
-    <TextBlock Classes="p" Text="على ويندوز، يرسم التطبيق شريط العنوان بنفسه داخل إطار النافذة، فيصير شريطه العلوي هو شريط العنوان: منه تُسحب النافذة، وفي آخره أزرار التصغير والتكبير والإغلاق. وتأتي هذه الأزرار جزيرة زجاجية واحدة، لها ارتفاع جزر الشريط الأخرى وحافتها وظلها." />
+    <TextBlock Classes="p" Text="على ويندوز ولينكس، يرسم التطبيق شريط العنوان بنفسه داخل إطار النافذة، فيصير شريطه العلوي هو شريط العنوان: منه تُسحب النافذة، وفي آخره أزرار التصغير والتكبير والإغلاق. وتأتي هذه الأزرار جزيرة زجاجية واحدة، لها ارتفاع جزر الشريط الأخرى وحافتها وظلها." />
 
     <TextBlock Classes="section" Text="في النافذة" />
     <Border Classes="dx frame">
@@ -98,9 +98,17 @@
     </TextBlock>
     <pg:PlayListing Code="&lt;ins:CaptionButtons Preview=&quot;Maximized&quot; /&gt;" Margin="0,0,0,24" />
 
+    <TextBlock Classes="section" Text="على لينكس" />
+    <TextBlock Classes="p" Text="يرسم التطبيق شريطه على لينكس أيضًا إذا شغّل في إعداده خيار Avalonia للإطار المرسوم، وهو خيار تجريبي عندها في الإصدار 12. وإن لم يشغّله بقي شريط النظام كما هو:" />
+    <pg:PlayListing Code="AppBuilder.Configure&lt;App&gt;()&#10;    .UsePlatformDetect()&#10;#pragma warning disable AVALONIA_X11_CSD&#10;    .With(new X11PlatformOptions { EnableDrawnDecorations = true })&#10;#pragma warning restore AVALONIA_X11_CSD" Margin="0,0,0,12" />
+    <TextBlock Classes="p" Text="وتبقى للنافذة عادات سطح المكتب: تُسحب من الشريط وتلتصق بالحواف، ويكبّرها النقر المزدوج ويعيدها، ويتغير حجمها من أطرافها، ويفتح النقر بالزر الأيمن قائمة النافذة التي يعرضها النظام نفسه. جرّبناها على GNOME وKDE Plasma وXfce وCinnamon." />
+    <TextBlock Classes="p" Margin="0,0,0,24">
+      <Run Text="ولتظهر أيقونة التطبيق في شريط المهام على GNOME وKDE، أضف إلى ملف " /><Run Classes="code" Text="&#x2066;&#x202F;.desktop&#x202F;&#x2069;" /><Run Text=" الخاص به السطر " /><Run Classes="code" Text="&#x2066;&#x202F;StartupWMClass&#x202F;&#x2069;" /><Run Text=" باسم نافذته." />
+    </TextBlock>
+
     <TextBlock Classes="section" Text="ملاحظات" />
     <ins:ProseList>
-      <TextBlock Classes="p" Margin="0" Text="يرسم التطبيق شريط العنوان على ويندوز وحده، أما الأنظمة الأخرى فتبقي إطارها الأصلي ولا تظهر فيها الأزرار. وتختفي الأزرار كذلك في ملء الشاشة." />
+      <TextBlock Classes="p" Margin="0" Text="يرسم التطبيق شريط العنوان على ويندوز ولينكس، أما الأنظمة الأخرى فتبقي إطارها الأصلي ولا تظهر فيها الأزرار. وتختفي الأزرار كذلك في ملء الشاشة." />
       <TextBlock Classes="p" Margin="0" Text="لا تفقد النافذة شيئًا من ميزات ويندوز: يظهر مخطط الالتصاق (Snap layouts) حين يقف المؤشر على زر التكبير، وتلتصق النافذة بالحواف، ويتغير حجمها من أطرافها." />
       <TextBlock Classes="p" Margin="0" Text="تتبع الأزرار اتجاه الصفحة: في الواجهة العربية تقع في الزاوية اليسرى، وفي الإنجليزية في اليمنى، وزر الإغلاق في الطرف دائمًا." />
     </ins:ProseList>

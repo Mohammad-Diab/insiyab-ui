@@ -11,5 +11,8 @@ internal static class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
+#pragma warning disable AVALONIA_X11_CSD
+            .With(new X11PlatformOptions { EnableDrawnDecorations = true })
+#pragma warning restore AVALONIA_X11_CSD
             .LogToTrace();
 }

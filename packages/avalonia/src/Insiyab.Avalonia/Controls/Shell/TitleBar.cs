@@ -12,14 +12,14 @@ using static Insiyab.Avalonia.Controls.TitleBarNative;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>A title bar the app draws itself on Windows, so the caption buttons follow the window's direction and sit in the app's top bar.</summary>
+/// <summary>A title bar the app draws itself on Windows and Linux, so the caption buttons follow the window's direction and sit in the app's top bar. On Linux the app turns on Avalonia's drawn decorations (<c>X11PlatformOptions.EnableDrawnDecorations</c>, experimental in Avalonia 12); without them the system's bar stays.</summary>
 public static class TitleBar
 {
-    /// <summary>On a Window: on Windows the client area takes over the title bar (place a CaptionButtons and mark drag areas); elsewhere nothing changes.</summary>
+    /// <summary>On a Window: on Windows and Linux the client area takes over the title bar (place a CaptionButtons and mark drag areas); elsewhere nothing changes.</summary>
     public static readonly AttachedProperty<bool> ExtendsProperty =
         AvaloniaProperty.RegisterAttached<Window, bool>("Extends", typeof(TitleBar));
 
-    /// <summary>On any control: dragging it moves the window and a double-click maximises; focusable controls inside stay clickable. A right-click opens nothing.</summary>
+    /// <summary>On any control: dragging it moves the window and a double-click maximises; focusable controls inside stay clickable. A right-click opens nothing on Windows, and the window manager's window menu on Linux.</summary>
     public static readonly AttachedProperty<bool> IsDragAreaProperty =
         AvaloniaProperty.RegisterAttached<Control, bool>("IsDragArea", typeof(TitleBar));
 
@@ -56,14 +56,26 @@ public static class TitleBar
     public static void SetIsSystemMenuArea(Control control, bool value) => control.SetValue(IsSystemMenuAreaProperty, value);
 
     /// <summary>True while the window draws its own title bar: Extends is on, the OS is Windows and Avalonia has extended it.</summary>
-    internal static bool IsActive(Window window) => GetExtends(window) && Os.IsWindows && window.IsExtendedIntoWindowDecorations;
+    internal static bool IsActive(Window window) => GetExtends(window) && Draws && window.IsExtendedIntoWindowDecorations;
+
+    // the systems where the app draws its own title bar (Android's own Linux kernel aside: a phone has no windows)
+    private static bool Draws => Os.IsWindows || (Os.IsLinux && !Os.IsAndroid);
 
     static TitleBar()
     {
         ExtendsProperty.Changed.AddClassHandler<Window>((window, e) => Apply(window, e.GetNewValue<bool>()));
         IsDragAreaProperty.Changed.AddClassHandler<Control>((control, e) =>
         {
-            WindowDecorationProperties.SetElementRole(control, e.GetNewValue<bool>() ? WindowDecorationsElementRole.TitleBar : WindowDecorationsElementRole.None);
+            var on = e.GetNewValue<bool>();
+            // Windows moves the window from the caption role itself; on Linux that role takes the press before the app sees it, so a double-click never maximised: the library moves it there
+            WindowDecorationProperties.SetElementRole(control, on && Os.IsWindows ? WindowDecorationsElementRole.TitleBar : WindowDecorationsElementRole.None);
+            control.PointerPressed -= OnDragPressed;
+            control.PointerReleased -= OnDragReleased;
+            if (on && !Os.IsWindows)
+            {
+                control.PointerPressed += OnDragPressed;
+                control.PointerReleased += OnDragReleased;
+            }
             foreach (var inner in control.GetLogicalDescendants().OfType<Control>()) Keep(inner);
         });
         Control.LoadedEvent.AddClassHandler<Control>((control, _) => Keep(control));
@@ -101,13 +113,13 @@ public static class TitleBar
 
     private static void Apply(Window window, bool on)
     {
-        if (!Os.IsWindows) return;
+        if (!Draws) return;
         if (on)
         {
             window.ExtendClientAreaToDecorationsHint = true;
             window.ExtendClientAreaTitleBarHeightHint = BandHeight;
             window.WindowDecorationsTheme = Bare;
-            if (window.GetValue(HookProperty) is null)
+            if (Os.IsWindows && window.GetValue(HookProperty) is null)
             {
                 var hook = new MenuHook(window);
                 window.SetValue(HookProperty, hook);
@@ -119,7 +131,7 @@ public static class TitleBar
             window.ClearValue(Window.ExtendClientAreaToDecorationsHintProperty);
             window.ClearValue(Window.ExtendClientAreaTitleBarHeightHintProperty);
             window.ClearValue(Window.WindowDecorationsThemeProperty);
-            if (window.GetValue(HookProperty) is { } hook)
+            if (Os.IsWindows && window.GetValue(HookProperty) is { } hook)
             {
                 Win32Properties.RemoveWndProcHookCallback(window, hook.Proc);
                 window.ClearValue(HookProperty);
@@ -156,10 +168,40 @@ public static class TitleBar
         return new RECT { Left = Math.Min(a.X, b.X), Top = Math.Min(a.Y, b.Y), Right = Math.Max(a.X, b.X), Bottom = Math.Max(a.Y, b.Y) };
     }
 
+    // Off Windows a press on a drag area moves the window through the window manager (its snapping stays), and a double-click maximises or restores it
+    private static void OnDragPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is not Control area || TopLevel.GetTopLevel(area) is not Window window || !IsActive(window)) return;
+        if (!e.GetCurrentPoint(area).Properties.IsLeftButtonPressed || RoleAt(e.Source as Visual) != WindowDecorationsElementRole.None) return;
+        if (e.ClickCount == 2)
+        {
+            if (window.CanResize && window.CanMaximize) window.WindowState = window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+        else window.BeginMoveDrag(e);
+        e.Handled = true;
+    }
+
+    // Off Windows a right-click on the bar opens the window manager's own window menu, as a system title bar's does there
+    private static void OnDragReleased(object? sender, PointerReleasedEventArgs e)
+    {
+        if (e.InitialPressMouseButton != MouseButton.Right || sender is not Control area || TopLevel.GetTopLevel(area) is not Window window || !IsActive(window)) return;
+        if (RoleAt(e.Source as Visual) != WindowDecorationsElementRole.None) return;
+        if (ShowLinuxMenu(window, area, e)) e.Handled = true;
+    }
+
+    private static bool ShowLinuxMenu(Window window, Control at, PointerEventArgs e) =>
+        Os.IsLinux && !Os.IsAndroid && TitleBarX11.ShowMenu(window, at.PointToScreen(e.GetPosition(at)));
+
     private static void OnIconReleased(object? sender, PointerReleasedEventArgs e)
     {
         if (e.InitialPressMouseButton != MouseButton.Right || sender is not Control control) return;
-        if (TopLevel.GetTopLevel(control) is not Window window || !IsActive(window) || window.GetValue(HookProperty) is not { } hook) return;
+        if (TopLevel.GetTopLevel(control) is not Window window || !IsActive(window)) return;
+        if (!Os.IsWindows)
+        {
+            if (ShowLinuxMenu(window, control, e)) e.Handled = true;
+            return;
+        }
+        if (window.GetValue(HookProperty) is not { } hook) return;
         GetCursorPos(out var p);
         hook.ShowMenu(p.X, p.Y);
         e.Handled = true;

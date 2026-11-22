@@ -22,6 +22,9 @@ internal static class Os
     [SupportedOSPlatformGuard("macos")]
     public static bool IsMacOS => Fake is { } f ? f == OsKind.MacOS : OperatingSystem.IsMacOS();
 
+    [SupportedOSPlatformGuard("linux")]
+    public static bool IsLinux => Fake is { } f ? f == OsKind.Linux : OperatingSystem.IsLinux();
+
     [SupportedOSPlatformGuard("android")]
     public static bool IsAndroid => Fake is { } f ? f == OsKind.Android : OperatingSystem.IsAndroid();
 }

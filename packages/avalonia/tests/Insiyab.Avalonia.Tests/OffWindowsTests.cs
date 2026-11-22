@@ -1,6 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Chrome;
 using Avalonia.Headless.XUnit;
+using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Platform;
 using Insiyab.Avalonia.Controls;
 
@@ -8,7 +11,7 @@ using static Insiyab.Avalonia.Tests.Ui;
 
 namespace Insiyab.Avalonia.Tests;
 
-// The library as it runs on a phone: the Windows parts stay quiet and the system's "Remove animations" makes it still.
+// The library off Windows: on a phone the Windows parts stay quiet and "Remove animations" makes it still; on Linux the title bar is drawn as on Windows.
 public class OffWindowsTests
 {
     private static void As(OsKind os, Action action)
@@ -21,6 +24,32 @@ public class OffWindowsTests
             AndroidDevice.AnimatorScaleSource = null;
             Motion.Refresh();
         }
+    }
+
+    [AvaloniaFact]
+    public void On_linux_the_title_bar_is_drawn_and_the_library_moves_the_window()
+    {
+        As(OsKind.Linux, () =>
+        {
+            var button = new Button { Content = "بحث" };
+            var bar = new Border { Background = Brushes.Transparent, Child = new StackPanel { Children = { button, new TextBlock { Text = "العنوان" } } } };
+            TitleBar.SetIsDragArea(bar, true);
+            var window = new Window { Width = 640, Height = 400, Content = bar };
+            TitleBar.SetExtends(window, true);
+            window.Show();
+            Track(window);
+            Settle();
+            Assert.True(window.ExtendClientAreaToDecorationsHint);
+            Assert.Equal(40, window.ExtendClientAreaTitleBarHeightHint);
+            Assert.NotNull(window.WindowDecorationsTheme);
+            // no caption role on Linux: that role takes the press before the app sees it, so the library moves the window and maximises on a double-click
+            Assert.Equal(WindowDecorationsElementRole.None, WindowDecorationProperties.GetElementRole(bar));
+            Assert.Equal(WindowDecorationsElementRole.User, WindowDecorationProperties.GetElementRole(button));
+
+            TitleBar.SetExtends(window, false);
+            Assert.False(window.ExtendClientAreaToDecorationsHint);
+            Assert.Null(window.WindowDecorationsTheme);
+        });
     }
 
     [AvaloniaFact]
