@@ -167,13 +167,14 @@
                             LeadTip="{TemplateBinding LeadTip}"
                             Markers="{TemplateBinding Markers}"
                             CurrentMarker="{TemplateBinding CurrentMarker}" />
-              <Panel Grid.Column="2" RenderTransform="translateY(5px)" VerticalAlignment="Center">
-                <Panel Name="PART_LengthSlot">
+              <!-- the length and the at-live mark sit 5px down like the time played; the back-to-live button stays centred on the row, or its bottom is cut off -->
+              <Panel Grid.Column="2" VerticalAlignment="Center">
+                <Panel Name="PART_LengthSlot" RenderTransform="translateY(5px)">
                   <ctl:TemplateText Name="PART_LengthPattern" Opacity="0" />
                   <ctl:TemplateText Name="PART_Length" HorizontalAlignment="Left" Foreground="{DynamicResource InsLabel}" />
                 </Panel>
                 <Panel Name="PART_LiveSlot" IsVisible="False" FlowDirection="{TemplateBinding FlowDirection}">
-                  <Panel Name="PART_AtLive" HorizontalAlignment="Center" VerticalAlignment="Center">
+                  <Panel Name="PART_AtLive" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransform="translateY(5px)">
                     <StackPanel Orientation="Horizontal" Spacing="6"
                                 IsVisible="{TemplateBinding LiveContent, Converter={x:Static ObjectConverters.IsNull}}">
                       <Ellipse Width="8" Height="8" Fill="{DynamicResource InsToneBad}" VerticalAlignment="Center" />
