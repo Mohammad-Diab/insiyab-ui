@@ -268,9 +268,10 @@ public class OffscreenMotionTests
         Assert.Equal(6, box.RenderTransform!.Value.M32, 3);
 
         clock.To(140);
+        // a spline easing solves its curve to within 0.001 from its last answer, so the shared one can sit a hair off a fresh one: a tolerance, not rounding to 3 places
         var half = new SplineEasing(0.22, 1, 0.36, 1).Ease(0.5);
-        Assert.Equal(half, box.Opacity, 3);
-        Assert.Equal(6 * (1 - half), box.RenderTransform!.Value.M32, 3);
+        Assert.Equal(half, box.Opacity, 0.005);
+        Assert.Equal(6 * (1 - half), box.RenderTransform!.Value.M32, 0.03);
 
         clock.To(280);
         Assert.Equal(1, box.Opacity);
