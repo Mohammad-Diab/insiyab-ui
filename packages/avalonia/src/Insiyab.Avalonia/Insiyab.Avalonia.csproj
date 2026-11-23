@@ -18,12 +18,14 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageReleaseNotes>0.4.2
+    <PackageReleaseNotes>0.5.0
 
-Changed
-- The alert has its notched look back as the default, as on the web: the 44px circle holding the icon nested in a bite cut from the message. The small circle inside the message that 0.4.0 brought is now the `inset` class (`Classes="info inset"`); add it to keep that look.
+Added
+- The title bar on Linux: `TitleBar.Extends` now draws the bar on Linux too when the app turns on Avalonia's drawn decorations (`X11PlatformOptions.EnableDrawnDecorations`, experimental in Avalonia 12; see the README). The window moves and snaps from the bar, maximises and restores on a double-click, resizes from its edges, and a right-click on the empty bar or the icon opens the window manager's own window menu. Tried on GNOME, KDE Plasma, Xfce and Cinnamon.
+- The gallery now also comes for Linux (x64).
 
-The full list of 0.4.0 changes is on the 0.4.0 release.</PackageReleaseNotes>
+Fixed
+- The media seek row's back-to-live button stays centred on the row, so its bottom is no longer cut off.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>mark-128.png</PackageIcon>
     <IsAotCompatible>true</IsAotCompatible>
