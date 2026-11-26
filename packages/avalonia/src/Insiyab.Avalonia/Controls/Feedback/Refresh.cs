@@ -10,6 +10,16 @@ using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
+/// <summary>How far a pull to refresh's work has come, set on its <see cref="RefreshContainer"/> by the app: 0 to 1 turns the turning ring of a refresh under way into a ring that fills (<c>CircularProgressDrawable</c>'s trim from the top, clockwise), easing to each new value; <c>NaN</c> (the default) is the turning ring. Back to <c>NaN</c> while it refreshes, the ring keeps its last fill until the disc leaves.</summary>
+public static class RefreshProgress
+{
+    public static readonly AttachedProperty<double> ValueProperty =
+        AvaloniaProperty.RegisterAttached<RefreshContainer, double>("Value", typeof(RefreshProgress), double.NaN);
+
+    public static double GetValue(RefreshContainer container) => container.GetValue(ValueProperty);
+    public static void SetValue(RefreshContainer container, double value) => container.SetValue(ValueProperty, value);
+}
+
 /// <summary>The brand spinner's ring drawn by a pull to refresh, with Android's arrow at the arc's end while it follows the finger (<c>CircularProgressDrawable</c>).</summary>
 internal sealed class RefreshArc : LoadingSpinner
 {
@@ -90,6 +100,8 @@ internal sealed class RefreshDisc : Border
     private long _spin;
     private long _move;     // the running slide or scale (a newer one stops it)
     private long _fade;     // the running alpha change
+    private long _fill;     // the running fill of a determinate ring (RefreshProgress)
+    private double _filled = -1; // the determinate ring's fill as last drawn (turns); -1: the ring turns
     private double _alphaTo = -1;
     private double _top = -CircleDiameter; // the circle's top past the pull's edge (SwipeRefreshLayout's mCurrentTargetOffsetTop)
     private double _startTrim, _endTrim, _rotation, _group; // the ring's trims and rotation (turns) and the drawable's turn (degrees), as last drawn
@@ -120,6 +132,7 @@ internal sealed class RefreshDisc : Border
         _container = this.FindAncestorOfType<RefreshContainer>();
         if (_container is not null)
         {
+            _container.PropertyChanged += OnContainerChanged;
             // The disc sits at the visualizer's far edge from the pull, or fills it across a sideways pull.
             if (Parent is Control root)
             {
@@ -147,6 +160,7 @@ internal sealed class RefreshDisc : Border
         if (_visualizer is not null) _visualizer.PropertyChanged -= OnVisualizerChanged;
         if (_container is not null)
         {
+            _container.PropertyChanged -= OnContainerChanged;
             _container.RemoveHandler(InputElement.PullGestureEvent, OnPull);
             _container.RemoveHandler(KeyDownEvent, OnKey);
             _container.RemoveHandler(PointerPressedEvent, OnPress);
@@ -157,7 +171,46 @@ internal sealed class RefreshDisc : Border
         _spin++;
         _move++;
         _fade++;
+        _fill++;
     }
+
+    // The app's progress (RefreshProgress) while the disc spins: the ring fills to it; NaN before any fill turns as before, after one keeps it.
+    private void OnContainerChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property != RefreshProgress.ValueProperty || _state != RefreshVisualizerState.Refreshing || Arc is not { } arc) return;
+        if (double.IsFinite(Progress)) Fill(arc);
+    }
+
+    private double Progress => _container is { } c ? RefreshProgress.GetValue(c) : double.NaN;
+
+    // The determinate ring: from its fill now to the progress, from the top, clockwise (setStartEndTrim(0, p) turned a quarter back), over 300 ms; a sliver shows before anything is done, so the disc is never empty.
+    private void Fill(RefreshArc arc)
+    {
+        _spin++; // the turning ring stops where it is
+        arc.ArrowScale = 0;
+        var to = Math.Max(MinFill, Math.Clamp(Progress, 0, 1));
+        var from = _filled < 0 ? MinFill : _filled;
+        _filled = to;
+        var run = ++_fill;
+        if (Motion.IsStill(this) || TopLevel.GetTopLevel(this) is not { } top)
+        {
+            Ring(arc, 0, to, -0.25, 0);
+            return;
+        }
+        TimeSpan? first = null;
+        void Frame(TimeSpan now)
+        {
+            if (run != _fill) return;
+            first ??= now;
+            var t = Math.Clamp((now - first.Value).TotalMilliseconds / AlphaDuration, 0, 1);
+            Ring(arc, 0, from + (to - from) * FastOutSlowIn.Ease(t), -0.25, 0);
+            if (t < 1) top.RequestAnimationFrame(Frame);
+        }
+        top.RequestAnimationFrame(Frame);
+    }
+
+    // The sliver a determinate ring shows before anything is done (turns).
+    private const double MinFill = 0.03;
 
     private void OnPress(object? sender, PointerPressedEventArgs e)
     {
@@ -268,7 +321,8 @@ internal sealed class RefreshDisc : Border
             var from = _top;
             Animate(ToTriggerDuration, Decelerate, t => SetTop(from + (endTarget - from) * t), null);
         }
-        Spin(arc);
+        if (double.IsFinite(Progress)) Fill(arc);
+        else Spin(arc);
     }
 
     // Let go short of the trigger (finishSpinner): the ring empties, the arrow goes, and the circle slides back out of sight.
@@ -290,6 +344,8 @@ internal sealed class RefreshDisc : Border
         _spin++;
         _move++;
         _fade++;
+        _fill++;
+        _filled = -1;
         _alphaTo = -1;
         Opacity = 0;
         SetScale(1);

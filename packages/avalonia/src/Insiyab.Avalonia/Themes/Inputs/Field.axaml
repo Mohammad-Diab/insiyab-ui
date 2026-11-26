@@ -77,8 +77,8 @@
     <Setter Property="Padding" Value="0" />
   </Style>
 
-  <!-- The message under a field, on its own: .ins-error and .ins-success, in the direction of its first letter. -->
-  <Style Selector="ContentControl.error, ContentControl.success">
+  <!-- The message under a field, on its own: .ins-error, .ins-success and .warning (a caution, in the warn tone with the warn alert's triangle), in the direction of its first letter. -->
+  <Style Selector="ContentControl.error, ContentControl.success, ContentControl.warning">
     <Setter Property="FontSize" Value="{DynamicResource InsFsXs}" />
     <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="Template">
@@ -106,5 +106,11 @@
   </Style>
   <Style Selector="ContentControl.success /template/ Path#PART_Mark">
     <Setter Property="Data" Value="{DynamicResource InsTextBoxOkMark}" />
+  </Style>
+  <Style Selector="ContentControl.warning">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneWarn}" />
+  </Style>
+  <Style Selector="ContentControl.warning /template/ Path#PART_Mark">
+    <Setter Property="Data" Value="{DynamicResource InsAlertIconWarn}" />
   </Style>
 </Styles>

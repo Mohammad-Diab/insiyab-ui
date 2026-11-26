@@ -77,6 +77,28 @@ public class ErrorDirectionTests
         w.Close();
     }
 
+    // a caution under a field or a row (.warning): the error line's look in the warn tone, with the warn alert's triangle for its mark
+    [AvaloniaFact]
+    public void Warning_line_is_the_error_line_in_the_warn_tone()
+    {
+        var warning = new ContentControl { Content = Arabic };
+        warning.Classes.Add("warning");
+        var error = new ContentControl { Content = English };
+        error.Classes.Add("error");
+        var w = Show(new StackPanel { Width = 420, Children = { warning, error } }, FlowDirection.RightToLeft);
+        var message = MessageIn(warning, Arabic);
+        Assert.Equal(FlowDirection.RightToLeft, message.FlowDirection);
+        Assert.True(X(MarkBeside(message), w) > X(message, w));
+        Assert.Equal(error.FontSize, warning.FontSize);
+        Assert.Equal(error.FontWeight, warning.FontWeight);
+        Assert.True(warning.TryFindResource("InsToneWarn", warning.ActualThemeVariant, out var tone));
+        Assert.Equal(((ISolidColorBrush)tone!).Color, ((ISolidColorBrush)warning.Foreground!).Color);
+        var mark = MarkBeside(message).GetVisualDescendants().OfType<global::Avalonia.Controls.Shapes.Path>().First();
+        Assert.True(warning.TryFindResource("InsAlertIconWarn", warning.ActualThemeVariant, out var triangle));
+        Assert.Same(triangle, mark.Data);
+        w.Close();
+    }
+
     [AvaloniaFact]
     public void Otp_message_takes_its_own_direction()
     {

@@ -7,6 +7,7 @@ using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Input.TextInput;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
@@ -109,7 +110,7 @@ public class WizardMovedEventArgs : RoutedEventArgs
     public WizardPanel Panel { get; }
 }
 
-/// <summary>A form in steps, the web's <c>.ins-wizard</c>: the steps on top, one <see cref="WizardPanel"/> at a time, and back, next and finish below. "Next" (and Enter in a field) checks the step's fields first: their <see cref="Validate"/> rules, <see cref="RequiredProperty"/> ones that are empty, and any field already showing an error. Enter is next (finish on the last step), Alt and the arrow pointing back or forward and the mouse's back and forward buttons move between steps.</summary>
+/// <summary>A form in steps, the web's <c>.ins-wizard</c>: the steps on top, one <see cref="WizardPanel"/> at a time, and back, next and finish below. "Next" (and Enter in a field) checks the step's fields first: their <see cref="Validate"/> rules, <see cref="RequiredProperty"/> ones that are empty, and any field already showing an error. Enter is next (finish on the last step; with <see cref="EnterFillsFields"/> it first goes to the step's next empty required field, and <see cref="KeyboardEcho"/> lets a touch keyboard's echo go), Alt and the arrow pointing back or forward and the mouse's back and forward buttons move between steps.</summary>
 [TemplatePart("PART_Steps", typeof(Steps))]
 [TemplatePart("PART_Body", typeof(Border))]
 [TemplatePart("PART_ItemsPresenter", typeof(ItemsPresenter))]
@@ -171,6 +172,14 @@ public class Wizard : ItemsControl, IWords
     public static readonly StyledProperty<object?> CancelContentProperty =
         AvaloniaProperty.Register<Wizard, object?>(nameof(CancelContent));
 
+    /// <summary>Enter in a field goes to the step's next empty required field (<see cref="RequiredProperty"/>, or <see cref="Validate"/>'s) instead of checking the step; with none left after it, Enter is next (finish on the last step) as before. On, a step's one-line text fields also show a touch keyboard's "next" key, its last one "done" (where the app has not set one). Off (the default): Enter is next or finish at once.</summary>
+    public static readonly StyledProperty<bool> EnterFillsFieldsProperty =
+        AvaloniaProperty.Register<Wizard, bool>(nameof(EnterFillsFields));
+
+    /// <summary>How soon after a field was left by the keyboard (not the pointer) an Enter is the echo of a touch keyboard's "next" key and is ignored: Android's keyboard moves the focus on and then sends an Enter to the field it reached. Zero (the default): no Enter is ignored.</summary>
+    public static readonly StyledProperty<TimeSpan> KeyboardEchoProperty =
+        AvaloniaProperty.Register<Wizard, TimeSpan>(nameof(KeyboardEcho));
+
     public static readonly RoutedEvent<WizardLeavingEventArgs> LeavingEvent =
         RoutedEvent.Register<Wizard, WizardLeavingEventArgs>(nameof(Leaving), RoutingStrategies.Bubble);
 
@@ -193,6 +202,7 @@ public class Wizard : ItemsControl, IWords
     private bool _busy;
     private bool _going;
     private bool _focusOnArrival;
+    private long _leftAt = long.MinValue; // when the keyboard last left a field (ms, Environment.TickCount64): KeyboardEcho
     private CancellationTokenSource? _move;
 
     static Wizard()
@@ -211,6 +221,7 @@ public class Wizard : ItemsControl, IWords
         ItemsView.CollectionChanged += (_, _) => Rebuild();
         AddHandler(KeyDownEvent, OnFieldKey, RoutingStrategies.Bubble);
         AddHandler(PointerPressedEvent, OnPointerButton, RoutingStrategies.Tunnel);
+        AddHandler(LostFocusEvent, OnFieldLeft, RoutingStrategies.Bubble);
     }
 
     /// <summary>The step showing, counted among the panels that are not skipped.</summary>
@@ -237,6 +248,12 @@ public class Wizard : ItemsControl, IWords
 
     /// <summary>A bare cancel button at the start of the foot, back and next then together at the end: the web's wizard in a dialog. Null hides it.</summary>
     public object? CancelContent { get => GetValue(CancelContentProperty); set => SetValue(CancelContentProperty, value); }
+
+    /// <summary>Enter goes to the step's next empty required field first (<see cref="EnterFillsFieldsProperty"/>).</summary>
+    public bool EnterFillsFields { get => GetValue(EnterFillsFieldsProperty); set => SetValue(EnterFillsFieldsProperty, value); }
+
+    /// <summary>An Enter this soon after the keyboard left a field is a touch keyboard's echo and is ignored (<see cref="KeyboardEchoProperty"/>); zero: none.</summary>
+    public TimeSpan KeyboardEcho { get => GetValue(KeyboardEchoProperty); set => SetValue(KeyboardEchoProperty, value); }
 
     /// <summary>Waiting on a <see cref="Leaving"/> listener: the forward button spins and takes no second press.</summary>
     public bool IsBusy { get => _busy; private set { if (SetAndRaise(IsBusyProperty, ref _busy, value)) PseudoClasses.Set(":busy", value); } }
@@ -336,6 +353,38 @@ public class Wizard : ItemsControl, IWords
         if (_finish is not null) _finish.Click += OnFinish;
         if (_cancel is not null) _cancel.Click += OnCancel;
         Rebuild();
+        ReturnKeys();
+    }
+
+    // EnterFillsFields: each step's one-line text fields show a touch keyboard's "next" key, its last one "done", where the app has set none
+    private void ReturnKeys()
+    {
+        if (!EnterFillsFields) return;
+        foreach (var panel in All())
+        {
+            var boxes = panel.GetLogicalDescendants().OfType<TextBox>().Where(b => !b.AcceptsReturn).ToList();
+            for (var i = 0; i < boxes.Count; i++)
+                if (TextInputOptions.GetReturnKeyType(boxes[i]) == TextInputReturnKeyType.Default)
+                    TextInputOptions.SetReturnKeyType(boxes[i], i < boxes.Count - 1 ? TextInputReturnKeyType.Next : TextInputReturnKeyType.Done);
+        }
+    }
+
+    // a field left by the keyboard (a touch keyboard's "next", Tab), not the pointer: an Enter right after it may be the keyboard's echo (KeyboardEcho)
+    private void OnFieldLeft(object? sender, RoutedEventArgs e)
+    {
+        if (KeyboardEcho > TimeSpan.Zero && e.Source is TextBox && e is FocusChangedEventArgs { NavigationMethod: not NavigationMethod.Pointer })
+            _leftAt = Environment.TickCount64;
+    }
+
+    // EnterFillsFields: the first empty required field of the step after the one Enter was pressed in; null when every one after it is filled
+    private static Control? NextEmpty(Control field)
+    {
+        if (field.FindLogicalAncestorOfType<WizardPanel>() is not { } panel) return null;
+        var all = panel.GetLogicalDescendants().OfType<Control>().ToList();
+        var at = all.IndexOf(field);
+        if (at < 0) return null;
+        return all.Skip(at + 1).FirstOrDefault(c => c.IsEffectivelyEnabled && c.IsEffectivelyVisible && c.Focusable
+            && (GetRequired(c) || c is TextBox box && Validate.GetRequired(box)) && Missing(c));
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -349,6 +398,7 @@ public class Wizard : ItemsControl, IWords
             Apply(from, to);
         }
         else if (change.Property == CancelContentProperty) PseudoClasses.Set(":has-cancel", change.NewValue is not null);
+        else if (change.Property == EnterFillsFieldsProperty) ReturnKeys();
         else if (change.Property == StepsLookProperty) ApplyStepsLook();
     }
 
@@ -634,6 +684,16 @@ public class Wizard : ItemsControl, IWords
         if (e.Source is TextBox { AcceptsReturn: true }) return;
         if (Panels.Count == 0 || IsBusy) return;
         e.Handled = true;
+        // the echo of a touch keyboard's "next" key (it moved the focus, then sent an Enter to the field it reached): not the user's Enter
+        var left = _leftAt;
+        _leftAt = long.MinValue;
+        if (KeyboardEcho > TimeSpan.Zero && left != long.MinValue && Environment.TickCount64 - left is var since && since >= 0 && since < KeyboardEcho.TotalMilliseconds)
+            return;
+        if (EnterFillsFields && e.Source is Control field && NextEmpty(field) is { } next)
+        {
+            next.Focus(NavigationMethod.Tab);
+            return;
+        }
         if (CurrentIndex >= Panels.Count - 1) Finish();
         else Next();
     }

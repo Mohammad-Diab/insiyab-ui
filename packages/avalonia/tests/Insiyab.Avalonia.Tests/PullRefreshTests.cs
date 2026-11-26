@@ -260,6 +260,42 @@ public class PullRefreshTests
         Assert.Equal(RefreshVisualizerState.Idle, disc.State);
     }
 
+    // The app's progress turns the refresh's turning ring into one that fills (RefreshProgress): a sliver before anything is done, its share after, kept when the progress is cleared, and a turning ring again on the next refresh.
+    [AvaloniaFact]
+    public void A_progress_fills_the_ring_of_a_refresh_under_way()
+    {
+        var (container, _) = Make();
+        RefreshCompletionDeferral? deferral = null;
+        container.RefreshRequested += (_, e) => deferral = e.GetDeferral();
+        var w = Show(container, width: 360, height: 600);
+        Motion.SetStill(w, true);
+        RefreshProgress.SetValue(container, 0);
+        container.RequestRefresh();
+        Settle(300);
+        var disc = Disc(container);
+        var arc = (RefreshArc)disc.Child!;
+        Assert.Equal(RefreshVisualizerState.Refreshing, disc.State);
+        Assert.InRange(arc.ArcLength, 0.03 * 360 - 0.1, 0.03 * 360 + 0.1);
+        Assert.Equal(0, arc.ArrowScale);
+        RefreshProgress.SetValue(container, 0.4);
+        Settle(100);
+        Assert.InRange(arc.ArcLength, 0.4 * 360 - 0.1, 0.4 * 360 + 0.1);
+        // the ring's start stays at the top whatever its fill
+        Assert.InRange(arc.Angle - 90 - arc.ArcLength / 2, -90.1, -89.9);
+        RefreshProgress.SetValue(container, double.NaN);
+        Settle(100);
+        Assert.InRange(arc.ArcLength, 0.4 * 360 - 0.1, 0.4 * 360 + 0.1);
+        deferral!.Complete();
+        Settle(300);
+        Assert.Equal(RefreshVisualizerState.Idle, disc.State);
+
+        // no progress: the turning ring, as before
+        container.RequestRefresh();
+        Settle(300);
+        Assert.InRange(arc.ArcLength, 3.5, 0.8 * 360 + 0.1);
+        deferral!.Complete();
+    }
+
     // A stroke that lands scrolled and reaches the top on the way, or moves mostly across, never pulls: a pull starts only at the top, past a small dead zone.
     [AvaloniaFact]
     public void A_scroll_that_reaches_the_top_mid_stroke_or_a_sideways_move_never_pulls()
