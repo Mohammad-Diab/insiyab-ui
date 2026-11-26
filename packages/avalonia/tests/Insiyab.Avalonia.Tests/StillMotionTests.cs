@@ -52,7 +52,7 @@ public class StillMotionTests
         var body = PopBody(out var items);
         PopMotion.Play(body);
         Tick(40);
-        Assert.True(items.Children[^1].Opacity < 1, "the last item should still be waiting its turn");
+        Assert.True(PopMotion.Riser(items.Children[^1]).Opacity < 1, "the last item should still be waiting its turn");
     }
 
     [AvaloniaFact]
@@ -67,9 +67,9 @@ public class StillMotionTests
         PopMotion.Play(body);
         Tick(40);
         Assert.Equal(1, rule.Opacity);
-        Assert.True(items.Children[^1].Opacity < 1, "the tenth item should rise too, not wait already in place");
+        Assert.True(PopMotion.Riser(items.Children[^1]).Opacity < 1, "the tenth item should rise too, not wait already in place");
         Tick(600);
-        Assert.All(items.Children, c => Assert.Equal(1, c.Opacity));
+        Assert.All(items.Children, c => Assert.Equal(1, PopMotion.Riser(c).Opacity));
     }
 
     [AvaloniaFact]
@@ -83,8 +83,8 @@ public class StillMotionTests
         Assert.True(IsIdentity(body.RenderTransform));
         foreach (var item in items.Children)
         {
-            Assert.Equal(1, item.Opacity);
-            Assert.True(IsIdentity(item.RenderTransform));
+            Assert.Equal(1, PopMotion.Riser(item).Opacity);
+            Assert.True(IsIdentity(PopMotion.Riser(item).RenderTransform));
         }
         Tick(200);
         Assert.Equal(1, body.Opacity);

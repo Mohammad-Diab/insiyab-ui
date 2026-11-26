@@ -198,6 +198,8 @@
         <Setter Property="Template">
           <ControlTemplate>
             <Panel>
+              <!-- The item's reach 3px past its start edge: the hover nudge slides the item 3px toward its end, and a pointer resting on its start edge lost it and found it again in turn, so the row shook; with this the pointer stays on the row it nudged -->
+              <ins:TemplateBorder Name="PART_Reach" Background="Transparent" Margin="-3,0,0,0" />
               <ins:TemplateBorder Name="PART_LayoutRoot"
                       Padding="{TemplateBinding Padding}"
                       Background="{TemplateBinding Background}"
@@ -412,6 +414,10 @@
       <!-- A menu bar: the same items, side by side. -->
       <ControlTheme x:Key="InsMenuBarItem" TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
         <Setter Property="Padding" Value="12,6" />
+        <!-- side by side, a reach past the start edge would overlap the item before it -->
+        <Style Selector="^ /template/ :is(Border)#PART_Reach">
+          <Setter Property="IsVisible" Value="False" />
+        </Style>
         <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
         <Style Selector="^ /template/ Viewbox#PART_ChevronPath">
           <Setter Property="IsVisible" Value="False" />

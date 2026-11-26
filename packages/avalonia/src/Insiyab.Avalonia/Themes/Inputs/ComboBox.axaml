@@ -260,6 +260,8 @@
 
 
       <ControlTheme x:Key="{x:Type ComboBoxItem}" TargetType="ComboBoxItem">
+        <!-- unclipped, so its reach past the start edge (PART_Reach) takes the pointer -->
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
         <Setter Property="Background" Value="{DynamicResource InsPopItemRest}" />
         <Setter Property="RenderTransform" Value="none" />
@@ -277,33 +279,37 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
           <ControlTemplate>
-            <ins:TemplateBorder x:Name="PART_Face"
-                    Background="{TemplateBinding Background}"
-                    CornerRadius="{TemplateBinding CornerRadius}"
-                    Padding="{TemplateBinding Padding}">
-              <ins:TemplateBorder.Transitions>
-                <Transitions>
-                  <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
-                </Transitions>
-              </ins:TemplateBorder.Transitions>
-              <DockPanel>
-                <ins:Icon x:Name="PART_Check"
-                          DockPanel.Dock="Left"
-                          Size="14"
-                          StrokeThickness="2.5"
-                          Margin="0,0,8,0"
-                          VerticalAlignment="Center"
-                          Foreground="{DynamicResource InsToneBrandSoft}"
-                          Data="{StaticResource InsSelectCheckData}"
-                          Opacity="0" />
-                <ContentPresenter x:Name="PART_ContentPresenter"
-                                  Foreground="{TemplateBinding Foreground}"
-                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                                  Content="{TemplateBinding Content}"
-                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-              </DockPanel>
-            </ins:TemplateBorder>
+            <Panel>
+              <!-- the option's reach 3px past its start edge, so the hover nudge never slides it from under a pointer resting on that edge (it shook) -->
+              <ins:TemplateBorder x:Name="PART_Reach" Background="Transparent" Margin="-3,0,0,0" />
+              <ins:TemplateBorder x:Name="PART_Face"
+                      Background="{TemplateBinding Background}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      Padding="{TemplateBinding Padding}">
+                <ins:TemplateBorder.Transitions>
+                  <Transitions>
+                    <ins:BrushFade Property="Background" Duration="0:0:0.22" Easing="0.22,1,0.36,1" />
+                  </Transitions>
+                </ins:TemplateBorder.Transitions>
+                <DockPanel>
+                  <ins:Icon x:Name="PART_Check"
+                            DockPanel.Dock="Left"
+                            Size="14"
+                            StrokeThickness="2.5"
+                            Margin="0,0,8,0"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource InsToneBrandSoft}"
+                            Data="{StaticResource InsSelectCheckData}"
+                            Opacity="0" />
+                  <ContentPresenter x:Name="PART_ContentPresenter"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    Content="{TemplateBinding Content}"
+                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                </DockPanel>
+              </ins:TemplateBorder>
+            </Panel>
           </ControlTemplate>
         </Setter>
 

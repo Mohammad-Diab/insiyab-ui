@@ -75,10 +75,13 @@ internal static class PopMotion
         {
             // every item in sight rises, one step after another up to the sixth, the rest with it; rules stay put and out-of-sight items are just there
             if (!child.IsVisible || child is Separator || !InSight(body, child)) continue;
-            Run(child, pop, ease, TimeSpan.FromMilliseconds(30 * Math.Min(i, MaxStep)), "translateY(6px)");
+            Run(Riser(child), pop, ease, TimeSpan.FromMilliseconds(30 * Math.Min(i, MaxStep)), "translateY(6px)");
             i++;
         }
     }
+
+    /// <summary>What rises for an item: its template's root, not the item, whose own transform is its hover nudge (a menu row slides 3px toward its end). An entrance on the item's transform fought the nudge's transition when the pointer crossed a menu still opening: the rows shook, and a row could keep the entrance's 6px drop for good.</summary>
+    internal static Visual Riser(Control item) => item.GetVisualChildren().FirstOrDefault() ?? item;
 
     private const int MaxStep = 5;
 

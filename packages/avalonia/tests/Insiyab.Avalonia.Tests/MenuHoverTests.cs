@@ -105,4 +105,43 @@ public class MenuHoverTests
         var second = rows[1];
         Hover(w, second, () => second.Background, () => second.GetValue(TextElement.ForegroundProperty));
     }
+
+    // The nudge slides a row 3px toward its end; a pointer resting just inside its start edge keeps it (it lost the row and found it again in turn: the row shook)
+    private static void Rest(Window w, Control item, bool rtl)
+    {
+        var at = item.TranslatePoint(new Point(rtl ? item.Bounds.Width - 1 : 1, item.Bounds.Height / 2), w)!.Value;
+        w.MouseMove(at);
+        Settle(50);
+        for (var i = 0; i < 60; i++)
+        {
+            Dispatcher.UIThread.RunJobs();
+            AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+            Thread.Sleep(5);
+            w.MouseMove(at);
+            Assert.True(item.IsPointerOver, $"frame {i}: the row slid from under the pointer");
+        }
+        Assert.Equal(3, item.RenderTransform!.Value.M31, 1);
+    }
+
+    [AvaloniaTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void A_row_keeps_a_pointer_resting_on_its_start_edge(bool rtl)
+    {
+        var direction = rtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+        var edit = new MenuItem { Header = "تعديل" };
+        var menu = new PopMenu { Items = { new MenuItem { Header = "نسخ" }, edit } };
+        var trigger = new Button { Content = "إجراءات", Flyout = menu, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(40) };
+        var w = Show(new StackPanel { Children = { trigger } }, direction, null, 800, 600);
+        Click(trigger, w);
+        Rest(w, edit, rtl);
+        menu.Hide();
+        Settle(300);
+
+        var combo = new ComboBox { Items = { "الأول", "الثاني", "الثالث" }, SelectedIndex = 0, Width = 300, HorizontalAlignment = HorizontalAlignment.Left };
+        w = Show(new StackPanel { Margin = new Thickness(20), Children = { combo } }, direction, null, 800, 600);
+        combo.IsDropDownOpen = true;
+        Settle();
+        Rest(w, (ComboBoxItem)combo.ContainerFromIndex(2)!, rtl);
+    }
 }
