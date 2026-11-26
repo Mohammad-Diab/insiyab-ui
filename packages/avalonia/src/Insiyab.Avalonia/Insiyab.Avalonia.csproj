@@ -18,14 +18,18 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageReleaseNotes>0.5.0
+    <PackageReleaseNotes>0.5.1
 
 Added
-- The title bar on Linux: `TitleBar.Extends` now draws the bar on Linux too when the app turns on Avalonia's drawn decorations (`X11PlatformOptions.EnableDrawnDecorations`, experimental in Avalonia 12; see the README). The window moves and snaps from the bar, maximises and restores on a double-click, resizes from its edges, and a right-click on the empty bar or the icon opens the window manager's own window menu. Tried on GNOME, KDE Plasma, Xfce and Cinnamon.
-- The gallery now also comes for Linux (x64).
+- Wizard: `EnterFillsFields` makes Enter in a field go to the step's next empty required field before it moves on or finishes, and gives the step's one-line text fields a touch keyboard's "next" key (the last one "done"). `KeyboardEcho` ignores the Enter that a touch keyboard sends right after its "next" key moved the focus, as Android's keyboard does.
+- Pull to refresh: `RefreshProgress.Value` on the `RefreshContainer` (0 to 1) turns the turning ring of a refresh under way into a ring that fills to the work done; `NaN` (the default) keeps the turning ring.
+- The `warning` class on the message under a field: the error line's look in the warn tone, with the warn alert's triangle.
 
 Fixed
-- The media seek row's back-to-live button stays centred on the row, so its bottom is no longer cut off.</PackageReleaseNotes>
+- A menu or select row no longer shakes when the pointer rests on its start edge, where the hover nudge slid the row from under the pointer.
+- A menu's items rise in through their template, so their entrance no longer fights the hover nudge when the pointer crosses a menu that is still opening; a row could keep the entrance's 6px drop.
+
+The full list of 0.5.0 changes is on the 0.5.0 release.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>mark-128.png</PackageIcon>
     <IsAotCompatible>true</IsAotCompatible>
