@@ -359,8 +359,18 @@ public class Dialog : ContentControl, IWords
     private static Control? FirstField(Control root)
     {
         var first = FocusManager.FindFirstFocusableElement(root) as Control;
-        if (first is null || !IsReadOnlyText(first)) return first;
-        return root.GetVisualDescendants().OfType<InputElement>().FirstOrDefault(e => e.Focusable && e.IsEffectivelyVisible && e.IsEffectivelyEnabled && KeyboardNavigation.GetIsTabStop(e) && !IsReadOnlyText(e)) as Control;
+        if (first is null || !IsReadOnlyText(first)) return Chosen(first);
+        return Chosen(root.GetVisualDescendants().OfType<InputElement>().FirstOrDefault(e => e.Focusable && e.IsEffectivelyVisible && e.IsEffectivelyEnabled && KeyboardNavigation.GetIsTabStop(e) && !IsReadOnlyText(e)) as Control);
+    }
+
+    // An item of a list of choices (a Segmented, a ListBox) is entered at its chosen item, as Tab enters it: focus never rings one that is not the chosen one.
+    private static Control? Chosen(Control? first)
+    {
+        if (first is null || first.FindLogicalAncestorOfType<SelectingItemsControl>() is not { SelectedIndex: >= 0 } list
+            || list.ContainerFromIndex(list.SelectedIndex) is not Control chosen || ReferenceEquals(chosen, first)
+            || !list.IsVisualAncestorOf(first) || !chosen.Focusable || !chosen.IsEffectivelyVisible || !chosen.IsEffectivelyEnabled)
+            return first;
+        return chosen;
     }
 
     private static bool IsReadOnlyText(InputElement e) => e is SelectableTextBlock or TextBox { IsReadOnly: true };

@@ -195,6 +195,32 @@ public class OverlaysTests
         Assert.Empty(DialogStack.Of(opener)!.Children);
     }
 
+    // a dialog whose first field is a row of choices opens with focus on the CHOSEN one (as Tab enters it), never ringing another; the choice stays as it was
+    [AvaloniaTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void A_dialog_opening_on_a_row_of_choices_focuses_the_chosen_one(bool sheet)
+    {
+        var count = new Segmented();
+        foreach (var n in new[] { "20", "40", "60" })
+            count.Items.Add(new SegmentedItem { Content = n });
+        count.SelectedIndex = 1;
+        var minutes = new Segmented();
+        foreach (var n in new[] { "15", "30", "60", "75" })
+            minutes.Items.Add(new SegmentedItem { Content = n });
+        minutes.SelectedIndex = 3;
+        var host = new Border();
+        var window = Show(host, FlowDirection.RightToLeft, width: sheet ? 360 : 900, height: 800);
+        var dialog = new Dialog { Title = "t", Content = new StackPanel { Children = { count, minutes } } };
+        if (sheet)
+            dialog.Classes.AddRange(["drawer", "bottom"]);
+        _ = dialog.ShowAsync(host);
+        Settle(600);
+        Assert.Same(count.ContainerFromIndex(1), window.FocusManager!.GetFocusedElement());
+        Assert.Equal(1, count.SelectedIndex);
+        Assert.Equal(3, minutes.SelectedIndex);
+    }
+
     [AvaloniaFact]
     public void Tab_stays_inside_the_dialog()
     {
