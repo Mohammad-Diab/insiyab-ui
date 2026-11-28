@@ -8,5 +8,7 @@ internal static class WindowCorner
     // For tests: a restored window's radius on this OS.
     internal static double Os { get; set; } = OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000) ? 8 : OperatingSystem.IsMacOS() ? 10 : 0;
 
-    public static double Of(TopLevel? top) => top is not Window w ? double.NaN : w.WindowState is WindowState.Maximized or WindowState.FullScreen ? 0 : Os;
+    // on Linux the window's frame rounds the corners of a window that draws its own title bar (WindowFrame)
+    public static double Of(TopLevel? top) => top is not Window w ? double.NaN : w.WindowState is WindowState.Maximized or WindowState.FullScreen ? 0
+        : Controls.Os.IsLinux && !Controls.Os.IsAndroid ? WindowFrame.RadiusOf(w) : Os;
 }

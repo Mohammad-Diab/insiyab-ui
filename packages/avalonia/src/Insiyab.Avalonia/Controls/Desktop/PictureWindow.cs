@@ -13,7 +13,7 @@ namespace Insiyab.Avalonia.Controls;
 /// <summary>Where a <see cref="PictureWindow"/> stood: its top-left corner in screen pixels and its size in device-independent units.</summary>
 public sealed record PicturePlace(int X, int Y, double Width, double Height);
 
-/// <summary>A small window kept over the others, for a picture watched beside other work (a video, a call, a meeting): picture in picture on the desktop. It has no title bar and no buttons of its own; on Windows it keeps the system's frame (its rounded corners on Windows 11, its shadow, the resize edges). Any press that no control takes drags it; its edges resize it keeping <see cref="AspectRatio"/> (the picture's width over its height) as they are dragged. <see cref="Picture"/> fills it; <see cref="Overlay"/> (the app's buttons) shows over the picture while the pointer is on the window, fading unless <see cref="Motion"/> is still, and a tap shows it under a finger. With <see cref="PlaceKey"/> it opens where it was last left at the size it had (<see cref="LoadPlace"/>, <see cref="SavePlace"/>; kept for the run when the app keeps nothing); first, or when that place is off every screen, at the working area's bottom corner on the reading end. It never maximises. Put the content in <see cref="Picture"/>, not in <c>Content</c>. <see cref="ShowNote"/> shows a short note at its foot for a few seconds whatever the pointer does (a message that came, say), then fades it (at once when still); it sits over the picture, under the overlay, rising by <see cref="NoteLift"/> while the overlay shows so it never hides the overlay's own foot.</summary>
+/// <summary>A small window kept over the others, for a picture watched beside other work (a video, a call, a meeting): picture in picture on the desktop. It has no title bar and no buttons of its own; on Windows it keeps the system's frame (its rounded corners on Windows 11, its shadow, the resize edges). On Linux (X11 and XWayland, with Avalonia's drawn decorations on, as for <see cref="TitleBar"/>) it has the frame every window that draws its own title bar has there (a shadow, a hairline and the desktop's rounded corners, a 1 px line with no compositor), stays above the others through the window manager, resizes from its edges and corners through the window manager with the shape asked as aspect hints (WM_NORMAL_HINTS, the frame as the base size), and is set back to the shape once a resize rests if the window manager did not keep it; its sizes and places are the inside's, the frame's room added round it. Without drawn decorations the system's title bar stays. Any press that no control takes drags it; its edges resize it keeping <see cref="AspectRatio"/> (the picture's width over its height) as they are dragged. <see cref="Picture"/> fills it; <see cref="Overlay"/> (the app's buttons) shows over the picture while the pointer is on the window, fading unless <see cref="Motion"/> is still, and a tap shows it under a finger. With <see cref="PlaceKey"/> it opens where it was last left at the size it had (<see cref="LoadPlace"/>, <see cref="SavePlace"/>; kept for the run when the app keeps nothing); first, or when that place is off every screen, at the working area's bottom corner on the reading end. It never maximises. Put the content in <see cref="Picture"/>, not in <c>Content</c>. <see cref="ShowNote"/> shows a short note at its foot for a few seconds whatever the pointer does (a message that came, say), then fades it (at once when still); it sits over the picture, under the overlay, rising by <see cref="NoteLift"/> while the overlay shows so it never hides the overlay's own foot.</summary>
 public class PictureWindow : Window
 {
     /// <summary>The picture's width over its height; the window's inside keeps it while resized. 0: any shape.</summary>
@@ -70,12 +70,23 @@ public class PictureWindow : Window
     private bool _overlayShown;
     private bool _placed;
 
+    /// <summary>The least size of the inside (the picture).</summary>
+    internal static readonly Size Least = new(192, 108);
+
+    /// <summary>Linux: how long a resize rests before the shape is set back.</summary>
+    internal static readonly TimeSpan SettleTime = TimeSpan.FromMilliseconds(300);
+
+    // Linux: the drawn frame's room round the inside (DIP), and the inside's size last kept
+    private Thickness _inset;
+    private Size _settled;
+    private readonly global::Avalonia.Threading.DispatcherTimer _settle = new() { Interval = SettleTime };
+
     public PictureWindow()
     {
         Topmost = true;
         CanMaximize = false;
-        MinWidth = 192;
-        MinHeight = 108;
+        MinWidth = Least.Width;
+        MinHeight = Least.Height;
         Background = Brushes.Black;
         WindowStartupLocation = WindowStartupLocation.Manual;
         _picture[!ContentPresenter.ContentProperty] = this[!PictureProperty];
@@ -101,7 +112,15 @@ public class PictureWindow : Window
                 ShowOverlay(false);
         };
         Closing += (_, _) => Keep();
+        _settle.Tick += (_, _) => Settle();
     }
+
+    // the systems where the window draws its own frame (Linux's drawn decorations)
+    private static bool DrawsFrame => Os.IsLinux && !Os.IsAndroid;
+
+    // the inside: the window less the frame's room
+    private Size Inside(double width, double height) =>
+        new(Math.Max(0, width - _inset.Left - _inset.Right), Math.Max(0, height - _inset.Top - _inset.Bottom));
 
     public double AspectRatio { get => GetValue(AspectRatioProperty); set => SetValue(AspectRatioProperty, value); }
     public object? Picture { get => GetValue(PictureProperty); set => SetValue(PictureProperty, value); }
@@ -201,6 +220,7 @@ public class PictureWindow : Window
     protected override void OnClosed(EventArgs e)
     {
         _noteTimer.Stop();
+        _settle.Stop();
         if (_hook is not null)
             Win32Properties.RemoveWndProcHookCallback(this, _hook.Proc);
         _hook = null;
@@ -213,8 +233,90 @@ public class PictureWindow : Window
         // a picture of another shape: the window takes it, keeping its width
         if (change.Property == NoteLiftProperty)
             PlaceNote();
-        if (change.Property == AspectRatioProperty && _placed && AspectRatio > 0 && Math.Abs(Width / Height - AspectRatio) > 0.005)
-            Height = Math.Max(MinHeight, Width / AspectRatio);
+        if (change.Property == AspectRatioProperty && _placed)
+        {
+            var inside = Inside(Width, Height);
+            if (AspectRatio > 0 && inside.Height > 0 && Math.Abs(inside.Width / inside.Height - AspectRatio) > 0.005)
+                Height = Math.Max(MinHeight, inside.Width / AspectRatio + _inset.Top + _inset.Bottom);
+            Hint();
+        }
+        if (!DrawsFrame || !_placed)
+            return;
+        if (change.Property == WindowDecorationMarginProperty || change.Property == ActualTransparencyLevelProperty)
+            Reinset();
+        else if (change.Property == ClientSizeProperty)
+        {
+            // a resize: once it rests, the shape is set back if the window manager did not keep it
+            _settle.Stop();
+            _settle.Start();
+        }
+    }
+
+    // Linux: the frame came, went or changed (a compositor started, the scale changed): the inside stays where it was and as large
+    private void Reinset()
+    {
+        var inset = WindowFrame.InsetOf(this);
+        if (inset == _inset)
+            return;
+        var old = _inset;
+        _inset = inset;
+        var scaling = DesktopScaling;
+        MinWidth = Least.Width + inset.Left + inset.Right;
+        MinHeight = Least.Height + inset.Top + inset.Bottom;
+        Width += inset.Left + inset.Right - old.Left - old.Right;
+        Height += inset.Top + inset.Bottom - old.Top - old.Bottom;
+        Position = new PixelPoint(Position.X - (int)Math.Round((inset.Left - old.Left) * scaling), Position.Y - (int)Math.Round((inset.Top - old.Top) * scaling));
+        Hint();
+    }
+
+    // Linux: the shape asked of the window manager again (after Avalonia wrote its own size hints over it)
+    private void Hint()
+    {
+        if (!DrawsFrame)
+            return;
+        global::Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (!OperatingSystem.IsLinux() || !IsVisible)
+                return;
+            var scaling = RenderScaling;
+            TitleBarX11.SetAspect(this, AspectRatio, new PixelSize((int)Math.Round((_inset.Left + _inset.Right) * scaling), (int)Math.Round((_inset.Top + _inset.Bottom) * scaling)));
+        }, global::Avalonia.Threading.DispatcherPriority.Background);
+    }
+
+    // Linux: a resize rested
+    private void Settle()
+    {
+        _settle.Stop();
+        if (!_placed || WindowState != WindowState.Normal)
+            return;
+        var inside = Inside(ClientSize.Width, ClientSize.Height);
+        if (Settled(_settled, inside, AspectRatio, Least) is { } kept)
+        {
+            Width = kept.Width + _inset.Left + _inset.Right;
+            Height = kept.Height + _inset.Top + _inset.Bottom;
+            inside = kept;
+        }
+        _settled = inside;
+        Hint();
+    }
+
+    /// <summary>The inside's size once a resize rests off its shape (more than 1% off <paramref name="aspect"/>), or null when it is on it: the side that changed more (against <paramref name="before"/>) leads, as an edge drag does on Windows, and the inside is never under <paramref name="least"/>.</summary>
+    internal static Size? Settled(Size before, Size now, double aspect, Size least)
+    {
+        if (aspect <= 0 || now.Width <= 0 || now.Height <= 0 || Math.Abs(now.Width / now.Height - aspect) / aspect <= 0.01)
+            return null;
+        var widthLeads = before.Width <= 0 || before.Height <= 0
+            || Math.Abs(now.Width - before.Width) / before.Width >= Math.Abs(now.Height - before.Height) / before.Height;
+        double w = now.Width, h = now.Height;
+        if (widthLeads)
+            h = w / aspect;
+        else
+            w = h * aspect;
+        if (w < least.Width)
+            (w, h) = (least.Width, least.Width / aspect);
+        if (h < least.Height)
+            (w, h) = (least.Height * aspect, least.Height);
+        return new Size(Math.Round(w), Math.Round(h));
     }
 
     // A press nothing took drags the window; under a finger, the first tap only shows the overlay.
@@ -247,18 +349,26 @@ public class PictureWindow : Window
         var saved = PlaceKey is { } key ? LoadPlace is { } load ? load(key) : Kept.GetValueOrDefault(key) : null;
         var areas = Screens.All.Select(s => s.WorkingArea).ToList();
         var home = (Screens.ScreenFromWindow(this) ?? Screens.Primary)?.WorkingArea ?? new PixelRect(0, 0, 1920, 1040);
-        var (position, size) = Placing(saved, areas, home, scaling, AspectRatio, DefaultWidth, new Size(MinWidth, MinHeight), FlowDirection == FlowDirection.RightToLeft);
-        Width = size.Width;
-        Height = size.Height;
-        Position = position;
+        // Linux: the drawn frame's room goes round the inside, so the inside lands where it is kept and as large
+        _inset = DrawsFrame ? WindowFrame.InsetOf(this) : default;
+        var (position, size) = Placing(saved, areas, home, scaling, AspectRatio, DefaultWidth, Least, FlowDirection == FlowDirection.RightToLeft);
+        MinWidth = Least.Width + _inset.Left + _inset.Right;
+        MinHeight = Least.Height + _inset.Top + _inset.Bottom;
+        Width = size.Width + _inset.Left + _inset.Right;
+        Height = size.Height + _inset.Top + _inset.Bottom;
+        Position = new PixelPoint(position.X - (int)Math.Round(_inset.Left * scaling), position.Y - (int)Math.Round(_inset.Top * scaling));
+        _settled = size;
         _placed = true;
+        Hint();
     }
 
     private void Keep()
     {
         if (!_placed || PlaceKey is not { } key)
             return;
-        var place = new PicturePlace(Position.X, Position.Y, Width, Height);
+        var scaling = DesktopScaling;
+        var inside = Inside(Width, Height);
+        var place = new PicturePlace(Position.X + (int)Math.Round(_inset.Left * scaling), Position.Y + (int)Math.Round(_inset.Top * scaling), inside.Width, inside.Height);
         if (SavePlace is { } save)
             save(key, place);
         else

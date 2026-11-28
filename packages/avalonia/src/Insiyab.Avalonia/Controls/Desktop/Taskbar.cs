@@ -7,7 +7,7 @@ using Avalonia.Threading;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>A count on the app's taskbar button (the Dock icon on macOS), set on a window; Linux, the browser and single views show nothing and never fail.</summary>
+/// <summary>A count on the app's taskbar button (the Dock icon on macOS, the dock's icon on Linux through Unity's launcher entry API), set on a window; the browser and single views show nothing and never fail.</summary>
 public static class Taskbar
 {
     /// <summary>On a window: the count on its taskbar button; 0 clears it and anything above 99 shows 99+.</summary>
@@ -23,6 +23,9 @@ public static class Taskbar
 
     private static IBadgeSink? _sink;
 
+    /// <summary>Linux: the file name of the app's menu entry (as <c>my-app.desktop</c>), which names the app to the docks for the badge. Unset, the entry the app was started from (<c>GIO_LAUNCHED_DESKTOP_FILE</c>), else the program's name with <c>.desktop</c>. Set it before the first badge.</summary>
+    public static string? LinuxDesktopFile { get; set; }
+
     public static int GetBadge(TopLevel top) => top.GetValue(BadgeProperty);
     public static void SetBadge(TopLevel top, int value) => top.SetValue(BadgeProperty, value);
     public static string? GetBadgeLabel(TopLevel top) => top.GetValue(BadgeLabelProperty);
@@ -35,7 +38,8 @@ public static class Taskbar
         set => _sink = value;
     }
 
-    internal static IBadgeSink Default() => Os.IsWindows ? new WindowsBadge() : Os.IsMacOS ? new DockBadge() : new NoBadge();
+    internal static IBadgeSink Default() =>
+        Os.IsWindows ? new WindowsBadge() : Os.IsMacOS ? new DockBadge() : Os.IsLinux && !Os.IsAndroid && OperatingSystem.IsLinux() ? new LauncherBadge() : new NoBadge();
 
     static Taskbar()
     {
@@ -98,7 +102,8 @@ public static class Taskbar
         if (state.Closed) return;
         var text = TextFor(GetBadge(top));
         var label = text is null ? null : GetBadgeLabel(top) ?? text;
-        var now = new Sent(text, label, BadgeIcon.Pixels(top.RenderScaling), FillFor(top));
+        var sink = Sink;
+        var now = new Sent(text, label, BadgeIcon.Pixels(top.RenderScaling), FillFor(top), sink.Counts ? GetBadge(top) : 0);
         var same = state.Last is { } last ? last == now : text is null;
         Watch(top, state, text is not null);
         if (same && !state.Force) return;
@@ -106,7 +111,7 @@ public static class Taskbar
         state.Last = text is null ? null : now;
         try
         {
-            Sink.Apply(top, text, label);
+            sink.Apply(top, text, label);
         }
         catch (Exception)
         {
@@ -148,7 +153,7 @@ public static class Taskbar
         }
     }
 
-    private readonly record struct Sent(string? Text, string? Label, int Pixels, Color Fill);
+    private readonly record struct Sent(string? Text, string? Label, int Pixels, Color Fill, int Count);
 
     private sealed class State
     {
@@ -162,6 +167,9 @@ public static class Taskbar
 
 internal interface IBadgeSink
 {
+    /// <summary>The sink shows the count itself (a Linux dock), so a new count above 99 is sent though the text stays 99+.</summary>
+    bool Counts => false;
+
     void Apply(TopLevel top, string? text, string? label);
     void Forget(TopLevel top);
 }

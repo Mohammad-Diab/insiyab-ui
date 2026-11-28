@@ -48,6 +48,25 @@ public static class TitleBar
         },
     };
 
+    // Linux: Avalonia's X11 backend asks for a shadow, a frame and resize grips round a drawn title bar. Their room is set here (the grips cover it) and WindowFrame draws them in the window's own template: a see-through shadow margin and a 1 px frame with a compositor, else a grip band over the content's edge
+    internal static readonly ControlTheme LinuxSeeThrough = Linux(frame: 1, shadow: WindowFrame.ShadowRoom);
+    internal static readonly ControlTheme LinuxSolid = Linux(frame: WindowFrame.SolidGrip, shadow: 0);
+
+    private static ControlTheme Linux(double frame, double shadow) => new(typeof(WindowDrawnDecorations))
+    {
+        Setters =
+        {
+            new Setter(WindowDrawnDecorations.TemplateProperty, new BareDecorations()),
+            new Setter(WindowDrawnDecorations.DefaultTitleBarHeightProperty, BandHeight),
+            new Setter(WindowDrawnDecorations.DefaultFrameThicknessProperty, new Thickness(frame)),
+            new Setter(WindowDrawnDecorations.DefaultShadowThicknessProperty, new Thickness(shadow)),
+        },
+    };
+
+    /// <summary>The decorations for a Linux window: a shadow only where a compositor shows see-through pixels (X11 reports none as the None level).</summary>
+    internal static ControlTheme LinuxDecorations(Window window) =>
+        window.ActualTransparencyLevel == WindowTransparencyLevel.None ? LinuxSolid : LinuxSeeThrough;
+
     public static bool GetExtends(Window window) => window.GetValue(ExtendsProperty);
     public static void SetExtends(Window window, bool value) => window.SetValue(ExtendsProperty, value);
     public static bool GetIsDragArea(Control control) => control.GetValue(IsDragAreaProperty);
@@ -118,7 +137,12 @@ public static class TitleBar
         {
             window.ExtendClientAreaToDecorationsHint = true;
             window.ExtendClientAreaTitleBarHeightHint = BandHeight;
-            window.WindowDecorationsTheme = Bare;
+            window.WindowDecorationsTheme = Os.IsWindows ? Bare : LinuxDecorations(window);
+            if (!Os.IsWindows)
+            {
+                window.PropertyChanged -= OnLinuxWindowChanged;
+                window.PropertyChanged += OnLinuxWindowChanged;
+            }
             if (Os.IsWindows && window.GetValue(HookProperty) is null)
             {
                 var hook = new MenuHook(window);
@@ -131,12 +155,20 @@ public static class TitleBar
             window.ClearValue(Window.ExtendClientAreaToDecorationsHintProperty);
             window.ClearValue(Window.ExtendClientAreaTitleBarHeightHintProperty);
             window.ClearValue(Window.WindowDecorationsThemeProperty);
+            window.PropertyChanged -= OnLinuxWindowChanged;
             if (Os.IsWindows && window.GetValue(HookProperty) is { } hook)
             {
                 Win32Properties.RemoveWndProcHookCallback(window, hook.Proc);
                 window.ClearValue(HookProperty);
             }
         }
+    }
+
+    // a compositor started or stopped: the shadow's room comes or goes with it
+    private static void OnLinuxWindowChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == TopLevel.ActualTransparencyLevelProperty && sender is Window window && GetExtends(window))
+            window.WindowDecorationsTheme = LinuxDecorations(window);
     }
 
     internal static WindowDecorationsElementRole RoleAt(Visual? visual)

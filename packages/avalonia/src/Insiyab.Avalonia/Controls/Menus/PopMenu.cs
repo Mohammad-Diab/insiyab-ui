@@ -137,7 +137,7 @@ public class PopCard : Flyout
             body.ClearValue(Layoutable.WidthProperty);
             return;
         }
-        var room = OverlayHost.Width(target) - 2 * Pop.Edge;
+        var room = (OverlayHost.Top(target) is { } top ? OverlayHost.LayerBox(top).Width : OverlayHost.Width(target)) - 2 * Pop.Edge;
         var width = Math.Max(0, Math.Min(Math.Max(CardWidth, target.Bounds.Width), room));
         body.Width = width + Pop.Room.Left + Pop.Room.Right;
     }
@@ -250,8 +250,10 @@ internal static class Pop
     private static void Offset(PopupFlyoutBase flyout)
     {
         var rtl = flyout.Target?.FlowDirection == FlowDirection.RightToLeft;
-        flyout.HorizontalOffset = rtl ^ IsEnd(flyout) ? Room.Right : -Room.Left;
-        flyout.VerticalOffset = Gap - Room.Top;
+        // the pointer is in the TopLevel's coordinates and the popup is set in the overlay layer's (inset inside a Linux window's frame)
+        var layer = OverlayHost.Top(flyout.Target) is { } top ? OverlayHost.LayerBox(top).Position : default;
+        flyout.HorizontalOffset = (rtl ^ IsEnd(flyout) ? Room.Right : -Room.Left) - layer.X;
+        flyout.VerticalOffset = Gap - Room.Top - layer.Y;
     }
 
     private static void Place(PopupFlyoutBase flyout, CustomPopupPlacement place, Entrance entrance)
@@ -359,15 +361,21 @@ internal static class Pop
         return null;
     }
 
-    // The window's room a pop keeps inside: all of it on a desktop, clear of the system bars and the keyboard on a phone.
-    private static Rect Free(TopLevel top) => Insets.For(top).Room;
+    // The window's room a pop keeps inside, in the TopLevel's coordinates (the anchor's): all of it on a desktop, clear of the system bars and the keyboard on a phone, and inside the frame (not its see-through shadow margin) of a window that draws its own on Linux, where the overlay layer is cut.
+    private static Rect Free(TopLevel top)
+    {
+        var room = Insets.For(top).Room;
+        var layer = OverlayHost.LayerBox(top);
+        return room.Intersects(layer) ? room.Intersect(layer) : room;
+    }
 
-    // The box goes exactly round the card at (x, y): anchored at its centre, so nothing is mirrored or adjusted.
+    // The box goes exactly round the card at (x, y), given in the TopLevel's coordinates and set in the overlay layer's: anchored at its centre, so nothing is mirrored or adjusted.
     private static void Put(CustomPopupPlacement place, double x, double y)
     {
         var box = place.PopupSize;
         var lift = place.Deflate;
-        place.AnchorRectangle = new Rect(x - Room.Left, y - Room.Top, box.Width - lift.Left - lift.Right, box.Height - lift.Top - lift.Bottom);
+        var layer = OverlayHost.Top(place.Target) is { } top ? OverlayHost.LayerBox(top).Position : default;
+        place.AnchorRectangle = new Rect(x - Room.Left - layer.X, y - Room.Top - layer.Y, box.Width - lift.Left - lift.Right, box.Height - lift.Top - lift.Bottom);
         place.Anchor = PopupAnchor.None;
         place.Gravity = PopupGravity.None;
         place.Offset = default;

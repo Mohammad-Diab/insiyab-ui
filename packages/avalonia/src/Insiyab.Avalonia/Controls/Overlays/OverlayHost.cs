@@ -23,6 +23,18 @@ internal static class OverlayHost
         return manager is null ? null : AdornerLayer.GetAdornerLayer(manager.Child ?? (Visual)manager);
     }
 
+    /// <summary>The TopLevel's part its overlay layer covers, in the TopLevel's coordinates: all of it, except in a window that draws its own frame on Linux (WindowFrame), whose layer starts inside the see-through shadow margin and is clipped there. Avalonia gives a popup's anchor in the TopLevel's coordinates but sets the popup in the layer's, so a pop placed by the library keeps inside this box and is moved by its corner.</summary>
+    public static Rect LayerBox(TopLevel top)
+    {
+        // the layer fills its manager; it is made at the first popup and laid out only after it, so the manager's box answers before then
+        Visual? layer = OverlayLayer.GetOverlayLayer(top) is { Bounds: { Width: > 0, Height: > 0 } } laid ? laid : null;
+        layer ??= top.GetVisualDescendants().OfType<VisualLayerManager>().FirstOrDefault(m => m.Bounds is { Width: > 0, Height: > 0 });
+        // both corners: a right-to-left window mirrors the layer, so its own origin is its right edge in the window
+        if (layer is not null && layer.TranslatePoint(default, top) is { } a && layer.TranslatePoint(new Point(layer.Bounds.Width, layer.Bounds.Height), top) is { } b)
+            return new Rect(new Point(Math.Min(a.X, b.X), Math.Min(a.Y, b.Y)), new Point(Math.Max(a.X, b.X), Math.Max(a.Y, b.Y)));
+        return new Rect(top.Bounds.Width > 0 ? top.Bounds.Size : top.ClientSize);
+    }
+
     public static double Width(Visual visual)
     {
         var top = Top(visual);

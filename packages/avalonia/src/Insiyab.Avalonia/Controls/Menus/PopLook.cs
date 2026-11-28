@@ -59,7 +59,8 @@ internal static class PopLook
     private static void OnShown(object? sender, VisualTreeAttachmentEventArgs e)
     {
         if (sender is not Control part || part.TemplatedParent is not Control owner) return;
-        var room = Math.Max(MinCard, OverlayHost.Height(part) - 2 * Pop.Edge);
+        var height = OverlayHost.Top(part) is { } top ? OverlayHost.LayerBox(top).Height : OverlayHost.Height(part); // inside a Linux window's frame
+        var room = Math.Max(MinCard, height - 2 * Pop.Edge);
         var cap = owner.GetValue(CardMaxProperty);
         owner.SetValue(CardHeightProperty, double.IsNaN(cap) ? room : Math.Min(cap, room));
     }

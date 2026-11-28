@@ -54,7 +54,7 @@ public sealed class NotifyAreaBalloonEventArgs : EventArgs
     public object? Tag { get; }
 }
 
-/// <summary>An icon in the Windows notification area with what Avalonia's <c>TrayIcon</c> lacks: balloons (Windows 10 and 11 show them as notifications) with a click that says which one, a native menu with ticks and greyed rows laid out right to left for Arabic, and the icon added again when Explorer restarts. Its events come on the UI thread. On other systems it does nothing and never fails (<see cref="IsAdded"/> stays false); use Avalonia's <c>TrayIcon</c> there.</summary>
+/// <summary>An icon in the Windows notification area with what Avalonia's <c>TrayIcon</c> lacks: balloons (Windows 10 and 11 show them as notifications) with a click that says which one, a native menu with ticks and greyed rows laid out right to left for Arabic, and the icon added again when Explorer restarts. On Linux the same icon is a StatusNotifierItem on the session bus (KDE Plasma; GNOME with the AppIndicator extension, which Ubuntu ships), with the same menu handed to the desktop (ticks, greyed rows, right to left for Arabic) and the tip as its tooltip; it is added once the desktop's StatusNotifierWatcher has a host, so <see cref="IsAdded"/> turns true a moment after it is made (follow <see cref="IsAddedChanged"/>), and turns false and back when the desktop's panel restarts. Balloons are Windows only: on Linux show the desktop's own notifications. Its events come on the UI thread. On other systems it does nothing and never fails (<see cref="IsAdded"/> stays false).</summary>
 public sealed class NotifyAreaIcon : IDisposable
 {
     // Windows keeps a tip to 127 characters, a balloon's title to 63 and its text to 255.
@@ -68,9 +68,9 @@ public sealed class NotifyAreaIcon : IDisposable
     private object? _lastTag;
 
     /// <summary>Makes the shell's side of an icon from .ico bytes; null where there is none. Replaced by the tests.</summary>
-    internal static Func<byte[], INotifyAreaShell?> MakeShell { get; set; } = ico => Os.IsWindows ? WindowsNotifyArea.TryMake(ico) : null;
+    internal static Func<byte[], INotifyAreaShell?> MakeShell { get; set; } = ico => Os.IsWindows ? WindowsNotifyArea.TryMake(ico) : Os.IsLinux ? LinuxNotifyArea.TryMake(ico) : null;
 
-    /// <summary>Adds the icon, made from the bytes of an .ico file (the picture nearest each size Windows asks for is taken), with <paramref name="tip"/> as its tooltip. Make it on the UI thread.</summary>
+    /// <summary>Adds the icon, made from the bytes of an .ico file (the picture nearest each size Windows asks for is taken; on Linux its 32-bit pictures, which the desktop scales), with <paramref name="tip"/> as its tooltip. Make it on the UI thread.</summary>
     public NotifyAreaIcon(byte[] ico, string tip)
     {
         ArgumentNullException.ThrowIfNull(ico);
@@ -89,10 +89,10 @@ public sealed class NotifyAreaIcon : IDisposable
         IsAdded = _shell.Add(Cut(_tip, TipLength));
     }
 
-    /// <summary>True where the system has a notification area this icon can use: Windows.</summary>
-    public static bool IsSupported => Os.IsWindows;
+    /// <summary>True where the system has a notification area this icon can use: Windows; on Linux, once an icon found the desktop's StatusNotifierWatcher with a host (false before any icon looked, and while none is there).</summary>
+    public static bool IsSupported => Os.IsWindows || (Os.IsLinux && LinuxNotifyArea.HostSeen);
 
-    /// <summary>True while the icon shows in the notification area; false off Windows, while the shell is not ready, and after <see cref="Dispose"/>. Hide a window to the tray only while it is true.</summary>
+    /// <summary>True while the icon shows in the notification area; false where there is none, while the shell is not ready (on Linux until the desktop took the icon), and after <see cref="Dispose"/>. Hide a window to the tray only while it is true.</summary>
     public bool IsAdded { get; private set; }
 
     /// <summary>The tooltip; cut at 127 characters.</summary>
@@ -115,16 +115,16 @@ public sealed class NotifyAreaIcon : IDisposable
     /// <summary>A click on the icon, or Enter on it from the keyboard.</summary>
     public event EventHandler? Activated;
 
-    /// <summary>Raised before the menu opens, to write its rows again (a new language, a tick).</summary>
+    /// <summary>Raised before the menu opens, to write its rows again (a new language, a tick). On Linux also once when the icon is added, so the desktop has the rows before its first menu.</summary>
     public event EventHandler? MenuOpening;
 
     /// <summary>A click on the last balloon shown; its args carry that balloon's tag.</summary>
     public event EventHandler<NotifyAreaBalloonEventArgs>? BalloonClicked;
 
-    /// <summary>The icon was added or taken away by the shell, as when Explorer restarts.</summary>
+    /// <summary>The icon was added or taken away by the shell, as when Explorer or the Linux desktop's panel restarts.</summary>
     public event EventHandler? IsAddedChanged;
 
-    /// <summary>Shows a balloon from the icon (a notification on Windows 10 and 11) with the icon <paramref name="level"/> picks; nothing while the icon is not added. Windows keeps quiet hours. <paramref name="tag"/> comes back with <see cref="BalloonClicked"/>.</summary>
+    /// <summary>Shows a balloon from the icon (a notification on Windows 10 and 11) with the icon <paramref name="level"/> picks; nothing while the icon is not added, and nothing on Linux (its desktop's notifications are the app's own). Windows keeps quiet hours. <paramref name="tag"/> comes back with <see cref="BalloonClicked"/>.</summary>
     public void ShowBalloon(string title, string text, NotifyAreaLevel level = NotifyAreaLevel.Info, object? tag = null)
     {
         if (!IsAdded || _shell is null) return;
@@ -205,6 +205,12 @@ public sealed class NotifyAreaIcon : IDisposable
                 IsAdded = _shell is not null && _shell.Add(Cut(_tip, TipLength));
                 if (was != IsAdded || IsAdded) IsAddedChanged?.Invoke(this, EventArgs.Empty);
                 break;
+            case NotifyAreaEvent.Added:
+                // a shell that adds the icon later (Linux: once the desktop's watcher has a host) says when it shows and when it went
+                if (IsAdded == (x != 0)) break;
+                IsAdded = x != 0;
+                IsAddedChanged?.Invoke(this, EventArgs.Empty);
+                break;
         }
     }
 
@@ -226,21 +232,24 @@ internal enum NotifyAreaEvent
     Menu,
     BalloonClicked,
     ShellRestarted,
+
+    /// <summary>The shell added the icon (x = 1) or lost it (x = 0) by itself, some time after <see cref="INotifyAreaShell.Add"/>.</summary>
+    Added,
 }
 
-/// <summary>The shell's side of one icon: the Win32 notification area, or a recorder in the tests.</summary>
+/// <summary>The shell's side of one icon: the Win32 notification area, a Linux StatusNotifierItem, or a recorder in the tests.</summary>
 internal interface INotifyAreaShell : IDisposable
 {
     /// <summary>Where the shell's events go: what happened and, for the menu, the screen point.</summary>
     Action<NotifyAreaEvent, int, int>? Raised { get; set; }
 
-    /// <summary>Adds the icon with its tip; false when the shell refused.</summary>
+    /// <summary>Adds the icon with its tip; false when the shell refused, or (Linux) when it adds it later and raises <see cref="NotifyAreaEvent.Added"/> then.</summary>
     bool Add(string tip);
 
     void SetTip(string tip);
 
     void ShowBalloon(string title, string text, NotifyAreaLevel level);
 
-    /// <summary>Shows the menu at a screen point and gives the picked row's number from 1, or 0.</summary>
+    /// <summary>Shows the menu at a screen point and gives the picked row's number from 1, or 0. On Linux the desktop shows the menu: the rows are handed to it, 0 comes back, and a row picked there raises its own click.</summary>
     int ShowMenu(IReadOnlyList<NotifyAreaMenuItem> rows, int x, int y, bool rightToLeft);
 }

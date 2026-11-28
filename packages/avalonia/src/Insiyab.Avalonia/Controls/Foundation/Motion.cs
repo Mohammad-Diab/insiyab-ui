@@ -8,7 +8,7 @@ using Avalonia.Interactivity;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>The web's «تخفيف المؤثرات» (<c>data-ins-fx="off"</c>) together with the system's reduced motion (Windows' animations off, Android's "Remove animations"): while a window is still, hovers and presses lose their movement and keep their colour (a released press holds it a moment, <see cref="PressHold"/>), and motion run from code is skipped. A still window carries <c>:ins-still</c>.</summary>
+/// <summary>The web's «تخفيف المؤثرات» (<c>data-ins-fx="off"</c>) together with the system's reduced motion (Windows' animations off, Android's "Remove animations", a Linux desktop's animations off): while a window is still, hovers and presses lose their movement and keep their colour (a released press holds it a moment, <see cref="PressHold"/>), and motion run from code is skipped. A still window carries <c>:ins-still</c>.</summary>
 public static class Motion
 {
     /// <summary>The pseudo-class a TopLevel carries while it is still.</summary>
@@ -26,7 +26,7 @@ public static class Motion
     public static bool GetStill(TopLevel top) => top.GetValue(StillProperty);
     public static void SetStill(TopLevel top, bool value) => top.SetValue(StillProperty, value);
 
-    /// <summary>Whether the system asks for less motion: Windows' "Show animations in Windows" turned off, or Android's animator duration scale at 0 ("Remove animations"). False on other systems.</summary>
+    /// <summary>Whether the system asks for less motion: Windows' "Show animations in Windows" turned off, Android's animator duration scale at 0 ("Remove animations"), or on Linux the desktop portal's reduced-motion, GNOME's animations turned off or KDE's animation speed at "Instant" (read without waiting; followed while the app runs). False on other systems.</summary>
     public static bool SystemReducesMotion => SystemOverride ?? (s_system ??= ReadSystem());
 
     // Tests stand in for the system setting.
@@ -36,11 +36,24 @@ public static class Motion
     public static bool IsStill(Visual? visual) =>
         SystemReducesMotion || (OverlayHost.Top(visual) is { } top && GetStill(top));
 
+    /// <summary>Raised on the UI thread when the system's setting changed while the app runs and the library saw it (on Linux, the desktop portal said so); every window has followed already.</summary>
+    public static event EventHandler? SystemChanged;
+
     /// <summary>Reads the system setting again, after the user changed it, and updates the given windows.</summary>
     public static void Refresh(params TopLevel[] tops)
     {
         s_system = null;
         foreach (var top in tops) Update(top);
+    }
+
+    // Linux: the desktop portal told of a change (on the UI thread)
+    internal static void SystemSettingChanged()
+    {
+        var before = s_system;
+        s_system = null;
+        if (SystemReducesMotion == before) return;
+        UpdateAll();
+        SystemChanged?.Invoke(null, EventArgs.Empty);
     }
 
     internal static void Register()
@@ -116,6 +129,7 @@ public static class Motion
     private static bool ReadSystem()
     {
         if (Os.IsAndroid) return AndroidDevice.AnimatorScale == 0;
+        if (Os.IsLinux) return OperatingSystem.IsLinux() && LinuxMotion.Read();
         if (!Os.IsWindows) return false;
         try { return SystemParametersInfo(SpiGetClientAreaAnimation, 0, out var on, 0) != 0 && on == 0; }
         catch (Exception) { return false; }
