@@ -33,6 +33,11 @@
     <Setter Property="Transitions" Value="{x:Null}" />
   </Style>
 
+  <!-- A scrollbar grows under the pointer at once -->
+  <Style Selector=":is(TopLevel):ins-still ScrollBar /template/ :is(Control)">
+    <Setter Property="Transitions" Value="{x:Null}" />
+  </Style>
+
   <!-- A progress icon shrinks and shows its ring at once -->
   <Style Selector=":is(TopLevel):ins-still ins|ProgressIcon /template/ :is(Control)">
     <Setter Property="Transitions" Value="{x:Null}" />

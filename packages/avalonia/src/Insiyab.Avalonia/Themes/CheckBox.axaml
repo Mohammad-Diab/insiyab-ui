@@ -69,7 +69,35 @@
               <Ellipse x:Name="TileDot" Width="5" Height="5" Fill="{DynamicResource InsOnPrimaryMid}" IsVisible="False" />
             </Panel>
           </Panel>
-          <StackPanel Margin="44,14,16,14" Spacing="3">
+          <!-- a verdict (class ok or bad): a tick or a cross at the trailing edge, in the tone's ink -->
+          <Panel x:Name="TileVerdict"
+                 FlowDirection="LeftToRight"
+                 Width="18"
+                 Height="18"
+                 Margin="0,0,16,0"
+                 HorizontalAlignment="Right"
+                 VerticalAlignment="Center"
+                 IsVisible="False">
+            <Path x:Name="VerdictTick"
+                  Width="18"
+                  Height="18"
+                  Data="M15 4.5 6.75 12.75 3 9"
+                  Stroke="{DynamicResource InsToneOk}"
+                  StrokeThickness="2"
+                  StrokeLineCap="Round"
+                  StrokeJoin="Round"
+                  IsVisible="False" />
+            <Path x:Name="VerdictCross"
+                  Width="18"
+                  Height="18"
+                  Data="M13.5 4.5 4.5 13.5M4.5 4.5l9 9"
+                  Stroke="{DynamicResource InsToneBad}"
+                  StrokeThickness="2"
+                  StrokeLineCap="Round"
+                  StrokeJoin="Round"
+                  IsVisible="False" />
+          </Panel>
+          <StackPanel x:Name="TileText" Margin="44,14,16,14" Spacing="3">
             <ContentPresenter x:Name="PART_ContentPresenter"
                               Content="{TemplateBinding Content}"
                               ContentTemplate="{TemplateBinding ContentTemplate}"
@@ -460,12 +488,85 @@
       </Style>
     </Style>
   </Style>
+  <!-- A tile's verdict, once a choice is judged: ok (the right one, green with a tick) or bad (a wrong pick, red with a cross), from the ok and bad tones. Locked (disabled) it keeps its full ink, so the verdict reads while the other choices dim. -->
+  <Style Selector=":is(ToggleButton).tile.ok, :is(ToggleButton).tile.bad">
+    <Style Selector="^ /template/ Panel#TileVerdict">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^ /template/ StackPanel#TileText">
+      <Setter Property="Margin" Value="44,14,44,14" />
+    </Style>
+    <Style Selector="^:disabled">
+      <Setter Property="Opacity" Value="1" />
+    </Style>
+  </Style>
+  <Style Selector=":is(ToggleButton).tile.ok">
+    <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneOk}" />
+    <Style Selector="^ /template/ Path#VerdictTick">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Foreground" Value="{DynamicResource InsToneOk}" />
+    </Style>
+    <Style Selector="^ /template/ :is(Border)#TileRing">
+      <Setter Property="BorderBrush" Value="{DynamicResource InsToneOk}" />
+    </Style>
+    <Style Selector="^ /template/ :is(Border)#CheckFill">
+      <Setter Property="Background" Value="{DynamicResource InsToneOk}" />
+    </Style>
+    <Style Selector="^ /template/ :is(Border)#TileOutline">
+      <Setter Property="BorderBrush" Value="{DynamicResource InsToneOkBd}" />
+    </Style>
+    <Style Selector="^:pointerover:not(:disabled), ^:checked">
+      <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource InsToneOk}" />
+    </Style>
+  </Style>
+  <Style Selector=":is(ToggleButton).tile.bad">
+    <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
+    <Style Selector="^ /template/ Path#VerdictCross">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+    </Style>
+    <Style Selector="^ /template/ :is(Border)#TileRing">
+      <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
+    </Style>
+    <Style Selector="^ /template/ :is(Border)#CheckFill">
+      <Setter Property="Background" Value="{DynamicResource InsToneBad}" />
+    </Style>
+    <Style Selector="^ /template/ :is(Border)#TileOutline">
+      <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+    </Style>
+    <Style Selector="^:pointerover:not(:disabled), ^:checked">
+      <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource InsToneBad}" />
+    </Style>
+  </Style>
   <Style Selector="RadioButton.tile">
     <Style Selector="^ /template/ Path#TileTick">
       <Setter Property="IsVisible" Value="False" />
     </Style>
     <Style Selector="^ /template/ Ellipse#TileDot">
       <Setter Property="IsVisible" Value="True" />
+    </Style>
+  </Style>
+  <!-- A dense tile (a short screen's list of choices): less room around its words and mark, yet never under a finger's row (InsTouchRowH, 48) -->
+  <Style Selector=":is(ToggleButton).tile.dense">
+    <Setter Property="MinHeight" Value="{DynamicResource InsTouchRowH}" />
+    <Style Selector="^ /template/ StackPanel#TileText">
+      <Setter Property="Margin" Value="40,11,14,11" />
+    </Style>
+    <Style Selector="^ /template/ Panel#BoxHost">
+      <Setter Property="Margin" Value="12,15,0,0" />
+    </Style>
+  </Style>
+  <Style Selector=":is(ToggleButton).tile.dense.ok, :is(ToggleButton).tile.dense.bad">
+    <Style Selector="^ /template/ StackPanel#TileText">
+      <Setter Property="Margin" Value="40,11,40,11" />
     </Style>
   </Style>
 </Styles>

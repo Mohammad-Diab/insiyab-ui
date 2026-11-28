@@ -5,4 +5,5 @@
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Data/Description.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Data/Stat.axaml" />
   <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Data/Matrix.axaml" />
+  <StyleInclude Source="avares://Insiyab.Avalonia/Themes/Data/NumberList.axaml" />
 </Styles>

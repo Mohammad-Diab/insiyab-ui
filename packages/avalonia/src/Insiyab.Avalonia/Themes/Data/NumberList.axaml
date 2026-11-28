@@ -1,0 +1,175 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="using:Insiyab.Avalonia.Controls">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <!-- NumberList: a head (its title, then the fold button at its end), the rows in their own scroller, a foot; horizontal: the strip alone -->
+      <ControlTheme x:Key="{x:Type ctl:NumberList}" TargetType="ctl:NumberList">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+          <ControlTemplate>
+            <DockPanel x:Name="PART_Root" ClipToBounds="False">
+              <DockPanel x:Name="PART_Head" DockPanel.Dock="Top" Margin="0,0,0,8">
+                <Button x:Name="PART_Toggle" DockPanel.Dock="Right" Classes="ghost icon sm" VerticalAlignment="Center">
+                  <ctl:Icon x:Name="PART_ToggleIcon" />
+                </Button>
+                <ContentPresenter x:Name="PART_Header" Content="{TemplateBinding Header}" VerticalAlignment="Center" Margin="0,0,8,0" />
+              </DockPanel>
+              <ContentPresenter x:Name="PART_Footer" DockPanel.Dock="Bottom" Content="{TemplateBinding Footer}" Margin="0,10,0,0" />
+              <ScrollViewer x:Name="PART_Scroller" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <Border x:Name="PART_Host" ClipToBounds="False" />
+              </ScrollViewer>
+            </DockPanel>
+          </ControlTemplate>
+        </Setter>
+
+        <!-- folded: the fold button alone -->
+        <Style Selector="^:closed">
+          <Style Selector="^ /template/ ContentPresenter#PART_Header, ^ /template/ ContentPresenter#PART_Footer, ^ /template/ ScrollViewer#PART_Scroller">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+          <Style Selector="^ /template/ DockPanel#PART_Head">
+            <Setter Property="Margin" Value="0" />
+          </Style>
+        </Style>
+
+        <!-- the vertical list in a card: its bar runs along the card's own edge, the card's padding inside the rows' scroll -->
+        <Style Selector="^:not(:horizontal) /template/ ScrollViewer#PART_Scroller">
+          <Setter Property="ctl:ScrollEdge.Card" Value="True" />
+        </Style>
+
+        <!-- the strip: no head, no foot, the numbers in a row with room for their rings and flags -->
+        <Style Selector="^:horizontal">
+          <Style Selector="^ /template/ DockPanel#PART_Head, ^ /template/ ContentPresenter#PART_Footer">
+            <Setter Property="IsVisible" Value="False" />
+          </Style>
+        </Style>
+      </ControlTheme>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- a row of the list: the number's badge, then its line; the current row on the brand's tint -->
+  <Style Selector="ctl|NumberList Button.number-cell">
+    <Setter Property="Padding" Value="6,4" />
+    <Setter Property="MinHeight" Value="36" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+    <Setter Property="FontWeight" Value="Normal" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText2}" />
+  </Style>
+  <Style Selector="ctl|NumberList Button.number-cell.current">
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+  <Style Selector="ctl|NumberList Button.number-cell:pointerover:not(.current)">
+    <Setter Property="Background" Value="{DynamicResource InsCtlBgHover}" />
+  </Style>
+  <!-- the line keeps its room from the badge itself: a spacing would stay when the line is hidden (the strip), widening the cell past its number -->
+  <Style Selector="ctl|NumberList TextBlock.number-line">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+    <Setter Property="Margin" Value="10,0,0,0" />
+  </Style>
+
+  <!-- the badge: a rounded square with the number; done in the brand's tint, right and wrong in the ok and bad tones, the current one ringed in the brand -->
+  <Style Selector="ctl|NumberList Border.number-badge">
+    <Setter Property="Width" Value="28" />
+    <Setter Property="Height" Value="28" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Background" Value="{DynamicResource InsCtlBg}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsCtlBd}" />
+  </Style>
+  <Style Selector="ctl|NumberList TextBlock.number-text">
+    <Setter Property="FontSize" Value="{DynamicResource InsFsSm}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource InsText1}" />
+  </Style>
+  <Style Selector="ctl|NumberList Button.done Border.number-badge">
+    <Setter Property="Background" Value="{DynamicResource InsToneBrandBg}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsPrimaryMid}" />
+  </Style>
+  <Style Selector="ctl|NumberList Button.done TextBlock.number-text">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBrand}" />
+  </Style>
+  <Style Selector="ctl|NumberList Button.right Border.number-badge">
+    <Setter Property="Background" Value="{DynamicResource InsToneOkBg}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneOkBd}" />
+  </Style>
+  <Style Selector="ctl|NumberList Button.right TextBlock.number-text">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneOk}" />
+  </Style>
+  <Style Selector="ctl|NumberList Button.wrong Border.number-badge">
+    <Setter Property="Background" Value="{DynamicResource InsToneBadBg}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsToneBadBd}" />
+  </Style>
+  <Style Selector="ctl|NumberList Button.wrong TextBlock.number-text">
+    <Setter Property="Foreground" Value="{DynamicResource InsToneBad}" />
+  </Style>
+  <Style Selector="ctl|NumberList Button.current Border.number-badge">
+    <Setter Property="BorderThickness" Value="2" />
+    <Setter Property="BorderBrush" Value="{DynamicResource InsPrimaryMid}" />
+  </Style>
+  <!-- the current one not done yet: the brand's fill -->
+  <Style Selector="ctl|NumberList Button.current:not(.done):not(.right):not(.wrong) Border.number-badge">
+    <Setter Property="Background" Value="{DynamicResource InsPrimaryMid}" />
+  </Style>
+  <Style Selector="ctl|NumberList Button.current:not(.done):not(.right):not(.wrong) TextBlock.number-text">
+    <Setter Property="Foreground" Value="{DynamicResource InsOnPrimaryMid}" />
+  </Style>
+  <!-- the flag: solid, in the badge's top right corner on the screen (either direction), inside the badge so no edge clips it; the number makes room for it. It reads on every badge (331zr): a halo of the surface's colour around it sets it apart from the badge's fill and ring (the same glyph under it, its stroke about 1.5 px wider on each side at this size); on the current badge's brand fill the flag is light, outlined in the brand's darker shade -->
+  <Style Selector="ctl|NumberList ctl|Icon.number-flag, ctl|NumberList ctl|Icon.number-flag-halo">
+    <Setter Property="Size" Value="11" />
+    <Setter Property="StrokeThickness" Value="1.6" />
+    <Setter Property="Margin" Value="0,3,3,0" />
+    <Setter Property="Foreground" Value="{DynamicResource InsToneWarn}" />
+  </Style>
+  <Style Selector="ctl|NumberList ctl|Icon.number-flag-halo">
+    <Setter Property="StrokeThickness" Value="8" />
+    <Setter Property="Foreground" Value="{DynamicResource InsSurface}" />
+  </Style>
+  <Style Selector="ctl|NumberList Button.current:not(.done):not(.right):not(.wrong) ctl|Icon.number-flag">
+    <Setter Property="Foreground" Value="{DynamicResource InsOnPrimaryMid}" />
+  </Style>
+  <Style Selector="ctl|NumberList Button.current:not(.done):not(.right):not(.wrong) ctl|Icon.number-flag-halo">
+    <Setter Property="Foreground" Value="{DynamicResource InsPrimaryDarker}" />
+    <Setter Property="StrokeThickness" Value="6" />
+  </Style>
+  <Style Selector="ctl|NumberList Button.flagged TextBlock.number-text">
+    <Setter Property="Margin" Value="0,5,7,0" />
+  </Style>
+
+  <!-- the press layer over the badge: none until the strip's number is pressed -->
+  <Style Selector="ctl|NumberList Border.number-press">
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+
+  <!-- the strip: a cell is its badge alone, a finger's square; its press is drawn on the badge, exactly its box -->
+  <Style Selector="ctl|NumberList:horizontal Button.number-cell">
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="MinWidth" Value="0" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="CornerRadius" Value="{DynamicResource InsRSm}" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+  </Style>
+  <Style Selector="ctl|NumberList:horizontal Button.number-cell:pressed Border.number-press">
+    <Setter Property="Background" Value="{DynamicResource InsPressLayer}" />
+  </Style>
+  <!-- a mouse over a number: the same layer, lighter (the layer is see-through, so the number stays) -->
+  <Style Selector="ctl|NumberList:horizontal Button.number-cell:pointerover:not(:pressed) Border.number-press">
+    <Setter Property="Background" Value="{DynamicResource InsPressLayer}" />
+    <Setter Property="Opacity" Value="0.5" />
+  </Style>
+  <Style Selector="ctl|NumberList:horizontal Border.number-badge">
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Height" Value="40" />
+  </Style>
+  <Style Selector=".touch ctl|NumberList:horizontal Border.number-badge">
+    <Setter Property="Width" Value="{DynamicResource InsTouchH}" />
+    <Setter Property="Height" Value="{DynamicResource InsTouchH}" />
+  </Style>
+  <Style Selector=".touch ctl|NumberList:not(:horizontal) Button.number-cell">
+    <Setter Property="MinHeight" Value="{DynamicResource InsTouchH}" />
+  </Style>
+</Styles>

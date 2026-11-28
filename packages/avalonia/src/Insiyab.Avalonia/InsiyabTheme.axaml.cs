@@ -25,6 +25,7 @@ public partial class InsiyabTheme : Styles
         Controls.BackStack.Register();
         Controls.KeyboardRoom.Register();
         Controls.Touch.Register();
+        Controls.ScrollBarDrag.Register();
         Controls.WindowActivity.Register();
         Controls.TipKeyboard.Register();
         Controls.TextDirection.Register();
