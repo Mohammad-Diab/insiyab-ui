@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Headless;
@@ -5,6 +6,7 @@ using Avalonia.Headless.XUnit;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Rendering.Composition;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Insiyab.Avalonia.Controls;
 using static Insiyab.Avalonia.Tests.Ui;
@@ -35,6 +37,22 @@ public class PullRefreshTests
     private static Point DiscCenter(RefreshContainer c, Window w) => Center(Disc(c), w);
 
     private static double ListY(ScrollViewer s) => ElementComposition.GetElementVisual((Visual)s.Content!)!.Offset.Y;
+
+    // What a reading gives frame by frame for that long (real time, as the headless clock is).
+    private static List<T> Sample<T>(Window window, int milliseconds, Func<T> read)
+    {
+        var samples = new List<T>();
+        var clock = Stopwatch.StartNew();
+        while (clock.ElapsedMilliseconds < milliseconds)
+        {
+            window.InvalidateVisual();
+            Dispatcher.UIThread.RunJobs();
+            AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+            samples.Add(read());
+            Thread.Sleep(6);
+        }
+        return samples;
+    }
 
     [AvaloniaTheory]
     [InlineData("rtl")]
@@ -260,7 +278,7 @@ public class PullRefreshTests
         Assert.Equal(RefreshVisualizerState.Idle, disc.State);
     }
 
-    // The app's progress turns the refresh's turning ring into one that fills (RefreshProgress): a sliver before anything is done, its share after, kept when the progress is cleared, and a turning ring again on the next refresh.
+    // The app's progress turns the refresh's spinning ring into one that fills (RefreshProgress); in a still window: a short arc before anything is done, its share after, each at once, and still turning (a ring standing still reads as a hang), kept when the progress is cleared, and a spinning ring again on the next refresh.
     [AvaloniaFact]
     public void A_progress_fills_the_ring_of_a_refresh_under_way()
     {
@@ -275,13 +293,13 @@ public class PullRefreshTests
         var disc = Disc(container);
         var arc = (RefreshArc)disc.Child!;
         Assert.Equal(RefreshVisualizerState.Refreshing, disc.State);
-        Assert.InRange(arc.ArcLength, 0.03 * 360 - 0.1, 0.03 * 360 + 0.1);
+        Assert.InRange(arc.ArcLength, TurningFill.MinShare * 360 - 0.1, TurningFill.MinShare * 360 + 0.1);
         Assert.Equal(0, arc.ArrowScale);
+        Assert.True(Sample(w, 300, () => arc.Angle).Distinct().Count() > 3, "the short arc turns in a still window too");
         RefreshProgress.SetValue(container, 0.4);
-        Settle(100);
-        Assert.InRange(arc.ArcLength, 0.4 * 360 - 0.1, 0.4 * 360 + 0.1);
-        // the ring's start stays at the top whatever its fill
-        Assert.InRange(arc.Angle - 90 - arc.ArcLength / 2, -90.1, -89.9);
+        Settle(30);
+        Assert.InRange(arc.ArcLength, 0.4 * 360 - 0.1, 0.4 * 360 + 0.1);                 // at once, no ease
+        Assert.True(Sample(w, 300, () => arc.Angle).Distinct().Count() > 3, "it turns on at its share");
         RefreshProgress.SetValue(container, double.NaN);
         Settle(100);
         Assert.InRange(arc.ArcLength, 0.4 * 360 - 0.1, 0.4 * 360 + 0.1);
@@ -294,6 +312,130 @@ public class PullRefreshTests
         Settle(300);
         Assert.InRange(arc.ArcLength, 3.5, 0.8 * 360 + 0.1);
         deferral!.Complete();
+    }
+
+    // A refresh whose parts are never counted (everything was read a moment ago): the pull's spinning ring takes the app's 0 when its run starts, turns as a short arc whatever the count, and completes before it leaves, also when the run is over within a few frames.
+    [AvaloniaFact]
+    public void A_refresh_with_no_counted_parts_turns_and_completes()
+    {
+        Motion.SystemOverride = false;
+        try
+        {
+            var (container, _) = Make();
+            RefreshCompletionDeferral? deferral = null;
+            container.RefreshRequested += (_, e) => deferral = e.GetDeferral();
+            var w = Show(container, width: 360, height: 600);
+            container.RequestRefresh(); // no value yet: the spinning ring
+            Settle(400);
+            var disc = Disc(container);
+            var arc = (RefreshArc)disc.Child!;
+            RefreshProgress.SetValue(container, 0); // the run started: nothing counted, nothing done
+            var turns = Sample(w, 500, () => (arc.Angle, arc.ArcLength));
+            Assert.True(turns.Select(s => s.Angle).Distinct().Count() > 5, "the ring turns with no part counted");
+            Assert.InRange(turns[^1].ArcLength, TurningFill.MinShare * 360 - 0.5, TurningFill.MinShare * 360 + 0.5);
+            // the run is over at once: the ring completes, turning, then the disc leaves
+            RefreshProgress.SetValue(container, double.NaN);
+            deferral!.Complete();
+            var end = Sample(w, 900, () => (arc.ArcLength, disc.Scale, arc.Angle));
+            var full = end.FindIndex(s => s.ArcLength > 359);
+            Assert.True(full >= 0, "the ring completes");
+            Assert.True(end.Take(full).Select(s => s.Angle).Distinct().Count() > 3, "it turns while it completes");
+            Assert.True(end.FindIndex(s => s.Scale < 0.99) > full, "the disc shrinks only once the ring is complete");
+            Settle(100);
+            Assert.Equal(RefreshVisualizerState.Idle, disc.State);
+        }
+        finally
+        {
+            Motion.SystemOverride = null;
+        }
+    }
+
+    // The filling ring's own clock (TurningFill), frame by frame: a short arc at 0, an eased growth over 300 ms, a steady turn, and no jump after frames stopped.
+    [Fact]
+    public void A_turning_fill_eases_its_arc_and_turns_at_a_steady_pace()
+    {
+        var fill = new TurningFill();
+        var at = TimeSpan.FromSeconds(10);
+        fill.Aim(0);
+        fill.Step(at);
+        Assert.Equal(TurningFill.MinShare, fill.Length, 6);
+        fill.Step(at += TimeSpan.FromMilliseconds(500));
+        Assert.Equal(TurningFill.MinShare, fill.Length, 6);
+        Assert.Equal(500 * TurningFill.TurnsPerMs, fill.Turn, 6);
+        // about a turn in 1.6 s, as CircularProgressDrawable turns its ring
+        Assert.InRange(1 / TurningFill.TurnsPerMs, 1500, 1800);
+        fill.Aim(0.6);
+        fill.Step(at);
+        Assert.Equal(TurningFill.MinShare, fill.Length, 6);
+        fill.Step(at += TimeSpan.FromMilliseconds(100));
+        var early = fill.Length;
+        fill.Step(at += TimeSpan.FromMilliseconds(100));
+        Assert.InRange(early, TurningFill.MinShare + 0.01, fill.Length - 0.01);
+        Assert.True(fill.IsEasing);
+        fill.Step(at += TimeSpan.FromMilliseconds(100));
+        Assert.Equal(0.6, fill.Length, 6);
+        Assert.False(fill.IsEasing);
+        // a new share mid-way eases on from where the arc is
+        fill.Aim(0.9);
+        fill.Step(at += TimeSpan.FromMilliseconds(16));
+        Assert.Equal(0.6, fill.Length, 6);
+        var turn = fill.Turn;
+        fill.Pause();
+        fill.Step(at += TimeSpan.FromSeconds(5));
+        Assert.Equal(turn, fill.Turn, 6);
+        // a still window: the share at once, from where it is told
+        fill.Settle(-0.25);
+        Assert.Equal(0.9, fill.Length, 6);
+        Assert.Equal(-0.25, fill.Turn, 6);
+    }
+
+    // With motion the filling ring never stands still, as the Play Store's install ring: it turns all the time, a short arc before anything is done, its arc easing to each new share; when the refresh ends short of full it completes first, still turning, and only then shrinks away.
+    [AvaloniaFact]
+    public void A_progress_ring_keeps_turning_eases_to_each_share_and_completes_before_it_leaves()
+    {
+        Motion.SystemOverride = false;
+        try
+        {
+            var (container, _) = Make();
+            RefreshCompletionDeferral? deferral = null;
+            container.RefreshRequested += (_, e) => deferral = e.GetDeferral();
+            var w = Show(container, width: 360, height: 600);
+            RefreshProgress.SetValue(container, 0);
+            container.RequestRefresh();
+            Settle(700);
+            var disc = Disc(container);
+            var arc = (RefreshArc)disc.Child!;
+            Assert.Equal(RefreshVisualizerState.Refreshing, disc.State);
+            Assert.InRange(arc.ArcLength, TurningFill.MinShare * 360 - 0.5, TurningFill.MinShare * 360 + 0.5);
+            var turns = Sample(w, 300, () => arc.Angle);
+            Assert.True(turns.Distinct().Count() > 3, "the short arc turns before anything is done");
+            Assert.True(Sample(w, 100, () => arc.ArcLength).All(l => Math.Abs(l - TurningFill.MinShare * 360) < 0.5), "its length holds while it turns");
+
+            RefreshProgress.SetValue(container, 0.5);
+            var lengths = Sample(w, 700, () => arc.ArcLength);
+            Assert.Contains(lengths, l => l > TurningFill.MinShare * 360 + 5 && l < 175);
+            Assert.True(lengths.Zip(lengths.Skip(1)).All(p => p.Second >= p.First - 1e-6), "the arc only grows to a higher share");
+            Assert.Equal(180, lengths[^1], 0.5);
+            turns = Sample(w, 300, () => arc.Angle);
+            Assert.True(turns.Distinct().Count() > 3, "the ring turns on between shares");
+
+            // the app clears its progress as the refresh ends: the ring fills to the whole, then the disc shrinks and leaves
+            RefreshProgress.SetValue(container, double.NaN);
+            deferral!.Complete();
+            var end = Sample(w, 900, () => (arc.ArcLength, disc.Scale));
+            var full = end.FindIndex(s => s.ArcLength > 359);
+            var shrinking = end.FindIndex(s => s.Scale < 0.99);
+            Assert.True(full >= 0, "the ring completes");
+            Assert.True(shrinking > full, "the disc shrinks only once the ring is complete");
+            Settle(100);
+            Assert.Equal(RefreshVisualizerState.Idle, disc.State);
+            Assert.Equal(0, disc.Opacity);
+            Assert.Equal(1, disc.Scale);
+        }
+        finally
+        {
+            Motion.SystemOverride = null;
+        }
     }
 
     // A stroke that lands scrolled and reaches the top on the way, or moves mostly across, never pulls: a pull starts only at the top, past a small dead zone.

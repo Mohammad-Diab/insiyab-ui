@@ -317,7 +317,8 @@ public class MediaControlBarTests
         bar.SubtitlesProgress = 24;
         Settle(60);
         Assert.Contains(":progress", icon.Classes);
-        Assert.Equal(24, Part<ProgressRing>(icon, "PART_Ring").Value);
+        Settle(400); // the ring's arc eases to its value
+        Assert.Equal(24, Part<ProgressRing>(icon, "PART_Ring").Value, 1);
         Assert.Equal("الترجمة · 24%", ToolTip.GetTip(subtitles));
         Assert.Equal(size, subtitles.Bounds.Size);
         Assert.Equal(at, ScreenBox(PartOf<ToggleButton>(bar, "PART_Fit"), window));

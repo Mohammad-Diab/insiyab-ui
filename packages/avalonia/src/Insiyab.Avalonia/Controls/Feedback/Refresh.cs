@@ -10,7 +10,7 @@ using Avalonia.VisualTree;
 
 namespace Insiyab.Avalonia.Controls;
 
-/// <summary>How far a pull to refresh's work has come, set on its <see cref="RefreshContainer"/> by the app: 0 to 1 turns the turning ring of a refresh under way into a ring that fills (<c>CircularProgressDrawable</c>'s trim from the top, clockwise), easing to each new value; <c>NaN</c> (the default) is the turning ring. Back to <c>NaN</c> while it refreshes, the ring keeps its last fill until the disc leaves.</summary>
+/// <summary>How far a pull to refresh's work has come, set on its <see cref="RefreshContainer"/> by the app: 0 to 1 turns the spinning ring of a refresh under way into a ring that fills and keeps turning, as the Play Store's install ring does: its arc eases to each new value and is never shorter than a short arc, so work waiting between its parts never looks stopped (a still window: each value at once, still turning: a ring that stands still reads as a hang). <c>NaN</c> (the default) is the spinning ring. Back to <c>NaN</c> while it refreshes, the ring keeps its last fill and turns until the refresh ends; then it completes and the disc leaves.</summary>
 public static class RefreshProgress
 {
     public static readonly AttachedProperty<double> ValueProperty =
@@ -101,7 +101,8 @@ internal sealed class RefreshDisc : Border
     private long _move;     // the running slide or scale (a newer one stops it)
     private long _fade;     // the running alpha change
     private long _fill;     // the running fill of a determinate ring (RefreshProgress)
-    private double _filled = -1; // the determinate ring's fill as last drawn (turns); -1: the ring turns
+    private readonly TurningFill _filling = new(); // the determinate ring's fill and turn; not started: the ring spins
+    private bool _leaveWhenFull; // the refresh is over: the determinate ring completes, then the disc shrinks away
     private double _alphaTo = -1;
     private double _top = -CircleDiameter; // the circle's top past the pull's edge (SwipeRefreshLayout's mCurrentTargetOffsetTop)
     private double _startTrim, _endTrim, _rotation, _group; // the ring's trims and rotation (turns) and the drawable's turn (degrees), as last drawn
@@ -174,7 +175,7 @@ internal sealed class RefreshDisc : Border
         _fill++;
     }
 
-    // The app's progress (RefreshProgress) while the disc spins: the ring fills to it; NaN before any fill turns as before, after one keeps it.
+    // The app's progress (RefreshProgress) while the disc spins: the ring fills to it and turns; NaN before any fill spins as before, after one keeps the fill, turning.
     private void OnContainerChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (e.Property != RefreshProgress.ValueProperty || _state != RefreshVisualizerState.Refreshing || Arc is not { } arc) return;
@@ -183,34 +184,49 @@ internal sealed class RefreshDisc : Border
 
     private double Progress => _container is { } c ? RefreshProgress.GetValue(c) : double.NaN;
 
-    // The determinate ring: from its fill now to the progress, from the top, clockwise (setStartEndTrim(0, p) turned a quarter back), over 300 ms; a sliver shows before anything is done, so the disc is never empty.
-    private void Fill(RefreshArc arc)
+    // The determinate ring (TurningFill): it takes over the spinning ring where it is (its arc and turn), its arc easing to the progress, a short arc before anything is done, and keeps turning until the disc leaves, whatever the progress. A still window turns it too (as the spinner keeps turning there: it says the app is busy), its arc taking each value at once.
+    private void Fill(RefreshArc arc) => Fill(arc, Progress);
+
+    private void Fill(RefreshArc arc, double share)
     {
-        _spin++; // the turning ring stops where it is
+        _spin++; // the spinning ring stops where it is
         arc.ArrowScale = 0;
-        var to = Math.Max(MinFill, Math.Clamp(Progress, 0, 1));
-        var from = _filled < 0 ? MinFill : _filled;
-        _filled = to;
-        var run = ++_fill;
-        if (Motion.IsStill(this) || TopLevel.GetTopLevel(this) is not { } top)
+        if (!_filling.IsStarted)
+            _filling.Begin(Math.Max(0, _endTrim - _startTrim), _startTrim + _rotation + _group / 360);
+        _filling.Aim(share);
+        if (Motion.IsStill(this))
+            _filling.Reach();
+        if (TopLevel.GetTopLevel(this) is not { } top)
         {
-            Ring(arc, 0, to, -0.25, 0);
+            _fill++;
+            _filling.Settle(-0.25);
+            Ring(arc, 0, _filling.Length, _filling.Turn, 0);
+            if (_leaveWhenFull) Leave();
             return;
         }
-        TimeSpan? first = null;
+        Turning(arc, top);
+    }
+
+    // The determinate ring's frames: one run at a time, the fill keeping its place across a new value; it turns until Reset (a still window too, its arc at each value at once).
+    private void Turning(RefreshArc arc, TopLevel top)
+    {
+        if (_turnRun == _fill) return;
+        var run = _turnRun = ++_fill;
+        _filling.Pause();
         void Frame(TimeSpan now)
         {
             if (run != _fill) return;
-            first ??= now;
-            var t = Math.Clamp((now - first.Value).TotalMilliseconds / AlphaDuration, 0, 1);
-            Ring(arc, 0, from + (to - from) * FastOutSlowIn.Ease(t), -0.25, 0);
-            if (t < 1) top.RequestAnimationFrame(Frame);
+            if (Motion.IsStill(this))
+                _filling.Reach();
+            _filling.Step(now);
+            Ring(arc, 0, _filling.Length, _filling.Turn, 0);
+            if (_leaveWhenFull && !_filling.IsEasing) Leave();
+            top.RequestAnimationFrame(Frame);
         }
         top.RequestAnimationFrame(Frame);
     }
 
-    // The sliver a determinate ring shows before anything is done (turns).
-    private const double MinFill = 0.03;
+    private long _turnRun = -1; // the run of the determinate ring's frames: running while it is _fill
 
     private void OnPress(object? sender, PointerPressedEventArgs e)
     {
@@ -306,6 +322,9 @@ internal sealed class RefreshDisc : Border
     {
         if (Arc is not { } arc) return;
         var endTarget = SpinnerOffsetEnd - CircleDiameter;
+        _leaveWhenFull = false;
+        _fill++; // each refresh's ring starts afresh
+        _filling.Clear();
         arc.ArrowScale = 0;
         FadeArc(1);
         Opacity = 1;
@@ -336,8 +355,24 @@ internal sealed class RefreshDisc : Border
         Animate(ToStartDuration, Decelerate, t => SetTop(from + (-CircleDiameter - from) * t), Reset);
     }
 
-    // The refresh is done (startScaleDownAnimation): the circle shrinks away where it is, then is put back out of sight (reset).
-    private void ScaleDown() => Animate(ScaleDownDuration, AccelerateDecelerate, t => SetScale(1 - t), Reset);
+    // The refresh is done (startScaleDownAnimation): the circle shrinks away where it is, then is put back out of sight (reset). A determinate ring first completes (still turning), then shrinks.
+    private void ScaleDown()
+    {
+        if (_filling.IsStarted && Arc is { } arc)
+        {
+            _leaveWhenFull = true;
+            Fill(arc, 1);
+            return;
+        }
+        Animate(ScaleDownDuration, AccelerateDecelerate, t => SetScale(1 - t), Reset);
+    }
+
+    // The completed determinate ring shrinks away, turning on until Reset.
+    private void Leave()
+    {
+        _leaveWhenFull = false;
+        Animate(ScaleDownDuration, AccelerateDecelerate, t => SetScale(1 - t), Reset);
+    }
 
     private void Reset()
     {
@@ -345,7 +380,8 @@ internal sealed class RefreshDisc : Border
         _move++;
         _fade++;
         _fill++;
-        _filled = -1;
+        _filling.Clear();
+        _leaveWhenFull = false;
         _alphaTo = -1;
         Opacity = 0;
         SetScale(1);
@@ -494,6 +530,8 @@ internal sealed class RefreshDisc : Border
     private void Spin(RefreshArc arc)
     {
         if (TopLevel.GetTopLevel(this) is not { } top) return;
+        _fill++; // a determinate ring left from the last refresh stops
+        _filling.Clear();
         var run = ++_spin;
         var finishing = Math.Abs(_endTrim - _startTrim) > 1e-6;
         var (from, to, turn) = finishing ? (_startTrim, _endTrim, _rotation) : (0.0, 0.0, 0.0);

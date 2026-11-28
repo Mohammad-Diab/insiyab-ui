@@ -28,13 +28,17 @@ public class ProgressRing : RangeBase
     public static readonly StyledProperty<string?> CaptionProperty =
         AvaloniaProperty.Register<ProgressRing, string?>(nameof(Caption));
 
+    // Where the fill starts, in degrees clockwise from twelve: a ProgressIcon turns its ring while work runs (TurningFill).
+    internal static readonly StyledProperty<double> TurnProperty =
+        AvaloniaProperty.Register<ProgressRing, double>(nameof(Turn));
+
     private string _label = "0%";
     private TextBlock? _labelPart;
     private TextBlock? _captionPart;
 
     static ProgressRing()
     {
-        AffectsRender<ProgressRing>(ValueProperty, MinimumProperty, MaximumProperty, ThicknessProperty, TrackProperty, FillProperty);
+        AffectsRender<ProgressRing>(ValueProperty, MinimumProperty, MaximumProperty, ThicknessProperty, TrackProperty, FillProperty, TurnProperty);
         MaximumProperty.OverrideDefaultValue<ProgressRing>(100);
     }
 
@@ -54,6 +58,9 @@ public class ProgressRing : RangeBase
 
     /// <summary>A short line under the hole's figure, in a smaller muted face ("hours done"); null: none. It fades with the figure when the hole is too small for them.</summary>
     public string? Caption { get => GetValue(CaptionProperty); set => SetValue(CaptionProperty, value); }
+
+    /// <summary>Where the fill starts, in degrees clockwise from twelve (0, twelve, unless a <see cref="ProgressIcon"/> turns it).</summary>
+    internal double Turn { get => GetValue(TurnProperty); set => SetValue(TurnProperty, value); }
 
     private double Fraction => Maximum > Minimum ? Math.Clamp((Value - Minimum) / (Maximum - Minimum), 0, 1) : 0;
 
@@ -104,12 +111,12 @@ public class ProgressRing : RangeBase
             return;
         }
         var sweep = fraction * 2 * Math.PI;
-        var from = -Math.PI / 2;
+        var from = (Turn - 90) * Math.PI / 180;
         var to = from + sweep;
         var geometry = new StreamGeometry();
         using (var g = geometry.Open())
         {
-            g.BeginFigure(new Point(center.X, center.Y - r), false);
+            g.BeginFigure(new Point(center.X + r * Math.Cos(from), center.Y + r * Math.Sin(from)), false);
             g.ArcTo(new Point(center.X + r * Math.Cos(to), center.Y + r * Math.Sin(to)), new Size(r, r), 0, sweep > Math.PI, SweepDirection.Clockwise);
             g.EndFigure(false);
         }
