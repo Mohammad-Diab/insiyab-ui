@@ -152,6 +152,10 @@
         <Style Selector="^.choice /template/ ScrollViewer#PART_Scroll">
           <Setter Property="VerticalScrollBarVisibility" Value="Disabled" />
         </Style>
+        <!-- The picture viewer filling the window: the body does not scroll, so the picture's view takes the dialog's whole room (it zooms and pans itself) -->
+        <Style Selector="^.picture /template/ ScrollViewer#PART_Scroll">
+          <Setter Property="VerticalScrollBarVisibility" Value="Disabled" />
+        </Style>
 
         <!-- The drawer: attached to the edge it came out of, so only its inner corners round and only its inner side has a rim -->
         <Style Selector="^.drawer">
